@@ -20,11 +20,11 @@ Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lis
 - JavaScript (NodeJS)
 - Python
 - Go
-- PHP
 - Ruby
 - C++
+- PHP
 
-Você pode usar qualquer _framework_. Se a sua escolhar for por um _framework_ que resulte em _boilerplate code_, por favor descreva no README qual pedaço de código foi escrito por você.
+Você pode usar qualquer _framework_. Se a sua escolhar for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você.
 
 ## Requisitos
 - Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
