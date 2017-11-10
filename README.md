@@ -30,10 +30,11 @@ Você pode usar qualquer _framework_. Se a sua escolhar for por um _framework_ q
 - Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
 - O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
 - Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-forkseu-fork
+  - git clone $seu-fork
+  - cd $seu-fork
   - comando para instalar dependências
   - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo.
+- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 
 
 
