@@ -33,6 +33,7 @@ Você pode usar qualquer _framework_. Se a sua escolhar for por um _framework_ q
   - git clone $seu-forkseu-fork
   - comando para instalar dependências
   - comando para executar a aplicação
+- A API precisa suportar um volume de 1000 requisições por segundo.
 
 
 
