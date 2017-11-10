@@ -1,14 +1,18 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio β
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+
 A API deve conseguir converter entre as seguintes moedas:
 - USD
 - BRL
 - BTC
 - ETH
+
+
 Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
 A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+
 Ex: `?from=USD&to=ETH&amount=123.45`
 
 Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
