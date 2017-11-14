@@ -1,4 +1,4 @@
-from quote import Quote
+from currency_conversion.api.quote import Quote
 
 class Conversion:
 
