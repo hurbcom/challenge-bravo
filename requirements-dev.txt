@@ -1,2 +1,4 @@
 -r requirements.txt
+flake8==3.3.0
+coverage==4.4.1
 -e .
