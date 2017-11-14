@@ -20,7 +20,7 @@ class Quote:
         else:
             result = self.format_quote(self.convert_from_to_quote())
 
-        return self.from_to + ': ' + str(result)
+        return result
 
     def convert_ballast_to(self):
         return 1 / quotes[self.from_coin]
