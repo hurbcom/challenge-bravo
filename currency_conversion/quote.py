@@ -1,11 +1,10 @@
-quotes = {
-    'BRL': 3.2781,
-    'EUR': 0.8576,
-    'BTC': 0.00017,
-    'ETH': 303.21
-}
+import requests
+
 
 class Quote:
+
+    BRL_EUR = 'https://api.fixer.io/latest?base=USD'
+    ETH_BTC = 'https://cex.io/api/last_price/{}/USD'
 
     def __init__(self, from_coin, to_coin):
         self.from_coin = from_coin
@@ -23,13 +22,30 @@ class Quote:
         return result
 
     def convert_ballast_to(self):
-        return 1 / quotes[self.from_coin]
+        quote_from_value = self.get_json_api_quote(self.from_coin)
+        return 1 / quote_from_value
 
     def convert_ballast_from(self):
-        return quotes[self.to_coin]
+        quote_to_value = self.get_json_api_quote(self.to_coin)
+        return quote_to_value
 
     def convert_from_to_quote(self):
-        return quotes[self.from_coin] / quotes[self.to_coin]
+        quote_from_value = self.get_json_api_quote(self.from_coin)
+        quote_to_value = self.get_json_api_quote(self.to_coin)
+
+        return quote_from_value / quote_to_value
+
+    def get_json_api_quote(self, type):
+        if type in('BRL', 'EUR'):
+            get_json = requests.get(self.BRL_EUR)
+            coin_json = get_json.json()
+            value = self.format_quote(coin_json['rates'][type])
+        else:
+            get_json = requests.get(self.ETH_BTC.format(type))
+            coin_json = get_json.json()
+            value = self.format_quote(float(coin_json['lprice']))
+
+        return value
 
     def format_quote(self, quote):
         return float("{0:4.4f}".format(quote))
@@ -37,4 +53,3 @@ class Quote:
     @property
     def from_to(self):
         return self.from_coin + '_' + self.to_coin
-
