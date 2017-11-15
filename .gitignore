@@ -3,3 +3,4 @@ __pycache__/
 *.swp
 .cache/
 .coverage
+currency_conversion.egg-info
