@@ -32,7 +32,7 @@ class GetJson:
 
 json_get = GetJson()
 
-class TestConversion(unittest.TestCase):
+class TestIntegrationConversion(unittest.TestCase):
 
     def test_usd_brl(self):
         conversion = Conversion('USD', 'BRL', 1)
