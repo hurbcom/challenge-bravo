@@ -39,3 +39,16 @@ class TestIntegrationConversion(unittest.TestCase):
         value = conversion.get()
         self.assertEqual(value, json_get.json_quotes['BRL'])
 
+    def test_eth_btc(self):
+        conversion = Conversion('ETH', 'BTC', 1)
+        value = conversion.get()
+        expected = float("{0:4.4f}".format(json_get.json_quotes['ETH'] / json_get.json_quotes['BTC']))
+        self.assertEqual(value, expected)
+
+    def test_eur_brl(self):
+        conversion = Conversion('EUR', 'BRL', 1)
+        value = conversion.get()
+        expected = float("{0:4.4f}".format(json_get.json_quotes['EUR'] / json_get.json_quotes['BRL']))
+        self.assertEqual(value, expected)
+
+
