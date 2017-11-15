@@ -1,4 +1,5 @@
 import requests
+from redis import Redis
 
 
 class Quote:
@@ -10,6 +11,7 @@ class Quote:
         self.from_coin = from_coin
         self.to_coin = to_coin
         self.ballast = 'USD'
+        self.redis = Redis(host='redis')
 
     def get(self):
         if self.to_coin == self.ballast:
@@ -32,18 +34,31 @@ class Quote:
     def convert_from_to_quote(self):
         quote_from_value = self.get_json_api_quote(self.from_coin)
         quote_to_value = self.get_json_api_quote(self.to_coin)
-
         return quote_from_value / quote_to_value
 
     def get_json_api_quote(self, type):
         if type in('BRL', 'EUR'):
-            get_json = requests.get(self.BRL_EUR)
-            coin_json = get_json.json()
-            value = self.format_quote(coin_json['rates'][type])
+            if self.redis.get(self.from_to):
+                value = self.format_quote(float(self.redis.get(self.from_to)))
+            else:
+                get_json = requests.get(self.BRL_EUR)
+                coin_json = get_json.json()
+                self.redis.set(
+                    self.from_to,
+                    str(coin_json['rates'][type]),
+                    ex=100)
+                value = self.format_quote(coin_json['rates'][type])
         else:
-            get_json = requests.get(self.ETH_BTC.format(type))
-            coin_json = get_json.json()
-            value = self.format_quote(float(coin_json['lprice']))
+            if self.redis.get(self.from_to):
+                value = self.format_quote(float(self.redis.get(self.from_to)))
+            else:
+                get_json = requests.get(self.ETH_BTC.format(type))
+                coin_json = get_json.json()
+                self.redis.set(
+                    self.from_to,
+                    str(coin_json['lprice']),
+                    ex=100)
+                value = self.format_quote(float(coin_json['lprice']))
 
         return value
 
