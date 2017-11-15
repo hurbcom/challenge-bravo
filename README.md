@@ -1,61 +1,85 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Conversor de moedas
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Uma API com objetivo de realizar a conversão entre diferentes moedas e utilizando como moeda de lastro (USD)
 
-A API deve converter entre as seguintes moedas:
+**As cotações são tiradas das seguintes APIs:**
+ - USD_BRL = https://api.fixer.io/latest?base=USD
+ - USD_EUR = https://api.fixer.io/latest?base=USD
+ - USD_ETH = https://cex.io/api/last_price/ETH/USD
+ - USD_BTC = 'https://cex.io/api/last_price/BTC/USD'
+
+**Só é possivel realizar a conversão entre as seguintes moedas:**
 - USD
 - BRL
 - EUR
 - BTC
 - ETH
 
+## API Endpoints
+GET /api/conversion?from=USD&to=BRL&amount=1
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+### Parametros
+- from = Moeda de origem
+- to = Moeda que deseja converter
+- amount = Valor a ser convertido
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
-
-Ex: `?from=BTC&to=EUR&amount=123.45`
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
-
-Você pode usar qualquer _framework_. Se a sua escolhar for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você.
+```
+{
+    "data": {
+        "amount": 1,
+        "converted_amount": 3.2508,
+        "from": {
+            "coin": "USD",
+            "quote": 3.2508
+        },
+        "to": {
+            "coin": "BRL",
+            "quote": 0.3076
+        }
+    }
+}
+```
 
 ## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+ - Docker
+ - Docker Compose
 
+## Desenvolvimento
 
+### Instalação
+```
+git clone https://github.com/gusttavoaguiarr/challenge-bravo challenge-bravo
+cd challenge-bravo
+```
 
-## Critério de avaliação
+### Executa a Aplicação
+```
+docker-compose up
+```
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Acertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Acesso: http://localhost:5000/api/conversion?from=USD&to=BRL&amount=1
 
-## Dúvidas
+### Executa o Flake8
+```
+make docker-flake8
+```
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+### Executa todos os testes
+```
+make docker-test-all
+```
 
-Boa sorte e boa viagem! ;)
+### Executa os testes unitários
+```
+make docker-test-unit
+```
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+### Executa os testes de integração
+```
+make docker-test-integration
+```
+
+### Executa a cobertura de testes
+```
+make docker-coverage
+```
