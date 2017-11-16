@@ -3,12 +3,12 @@
 Uma API com objetivo de realizar a conversão entre diferentes moedas e utilizando como moeda de lastro (USD)
 
 **As cotações são tiradas das seguintes APIs:**
- - USD_BRL = https://api.fixer.io/latest?base=USD
- - USD_EUR = https://api.fixer.io/latest?base=USD
+ - USD_BRL = http://api.fixer.io/latest?base=USD
+ - USD_EUR = http://api.fixer.io/latest?base=USD
  - USD_ETH = https://cex.io/api/last_price/ETH/USD
- - USD_BTC = 'https://cex.io/api/last_price/BTC/USD'
+ - USD_BTC = https://cex.io/api/last_price/BTC/USD
 
-**Só é possivel realizar a conversão entre as seguintes moedas:**
+**É apenas possível realizar a conversão entre as seguintes moedas:**
 - USD
 - BRL
 - EUR
