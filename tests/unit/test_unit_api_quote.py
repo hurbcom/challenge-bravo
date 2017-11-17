@@ -4,7 +4,7 @@ import requests
 
 class TestUnitApiQuote(unittest.TestCase):
 
-    BRL_EUR = 'https://api.fixer.io/latest?base=USD'
+    BRL_EUR = 'http://api.fixer.io/latest?base=USD'
     ETH = 'https://cex.io/api/last_price/ETH/USD'
     BTC = 'https://cex.io/api/last_price/BTC/USD'
 
