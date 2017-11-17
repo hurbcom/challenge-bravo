@@ -41,8 +41,8 @@ class Quote:
         return quote_from_value / quote_to_value
 
     def get_json_api_quote(self, type):
-        get_value_redis = float(current_app.redis.get(type))
-        get_get_from_type = type[:3]
+        get_value_redis = current_app.redis.get(type)
+        get_from_type = type[:3]
 
         if get_value_redis:
             value = get_value_redis
@@ -52,7 +52,7 @@ class Quote:
                 coin_json = get_json.json()
                 current_app.redis.set(
                     type,
-                    str(coin_json['rates'][type[2]]),
+                    str(coin_json['rates'][get_from_type]),
                     ex=30000)
                 value = self.format_quote(coin_json['rates'][get_from_type])
             else:
@@ -64,7 +64,7 @@ class Quote:
                     ex=30000)
                 value = self.format_quote(float(coin_json['lprice']))
 
-        return value
+        return float(value)
 
     def format_quote(self, quote):
         return float("{0:4.4f}".format(quote))

@@ -1,10 +1,12 @@
 import unittest
 import requests
 from currency_conversion.api.conversion import Conversion
+from currency_conversion import app
+import json
 
 
 class GetJson:
-    BRL_EUR = 'https://api.fixer.io/latest?base=USD'
+    BRL_EUR = 'http://api.fixer.io/latest?base=USD'
     ETH_BTC = 'https://cex.io/api/last_price/{}/USD'
 
     def __init__(self):
@@ -33,22 +35,19 @@ class GetJson:
 json_get = GetJson()
 
 class TestIntegrationConversion(unittest.TestCase):
+    def setUp(self):
+        self.app = app
+        self.client = self.app.test_client()
 
     def test_usd_brl(self):
-        conversion = Conversion('USD', 'BRL', 1)
-        value = conversion.get()
-        self.assertEqual(value, json_get.json_quotes['BRL'])
-
-    def test_eth_btc(self):
-        conversion = Conversion('ETH', 'BTC', 1)
-        value = conversion.get()
-        expected = float("{0:4.4f}".format(json_get.json_quotes['ETH'] / json_get.json_quotes['BTC']))
-        self.assertEqual(value, expected)
+        response = self.client.get(
+            '/api/conversion?from=USD&to=BRL&amount=1')
+        response = json.loads(response.data.decode())
+        self.assertEqual(response['data']['from']['quote'], json_get.json_quotes['BRL'])
 
     def test_eur_brl(self):
-        conversion = Conversion('EUR', 'BRL', 1)
-        value = conversion.get()
+        response = self.client.get(
+            '/api/conversion?from=EUR&to=BRL&amount=1')
+        response = json.loads(response.data.decode())
         expected = float("{0:4.4f}".format(json_get.json_quotes['EUR'] / json_get.json_quotes['BRL']))
-        self.assertEqual(value, expected)
-
-
+        self.assertEqual(response['data']['from']['quote'], expected)
