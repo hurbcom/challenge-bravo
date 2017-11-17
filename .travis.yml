@@ -4,4 +4,4 @@ python:
 install:
   - pip install -r requirements-dev.txt
 script:
-  - make coverage
+  - make test-unit
