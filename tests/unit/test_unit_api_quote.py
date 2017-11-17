@@ -21,4 +21,3 @@ class TestUnitApiQuote(unittest.TestCase):
         self.assertEqual(response_eur_brl.status_code, 200)
         self.assertEqual(response_eth.status_code, 200)
         self.assertEqual(response_btc.status_code, 200)
-

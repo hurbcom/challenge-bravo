@@ -1,7 +1,5 @@
 from currency_conversion import app
 import unittest
-import requests
-from currency_conversion.api.conversion import Conversion
 
 
 class TestUnitConversion(unittest.TestCase):
@@ -28,4 +26,3 @@ class TestUnitConversion(unittest.TestCase):
         response = self.client.get(
             '/api/conversion?from=USD&to=BRL')
         self.assertEqual(response.headers['content-type'], 'application/json')
-

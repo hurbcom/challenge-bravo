@@ -1,9 +1,10 @@
 from flask import Blueprint, request, jsonify
 from currency_conversion.api.conversion import Conversion
-from currency_conversion.api.validate import *
+from currency_conversion.api.validate import validate_from, validate_to, validate_amount
 
 
 conversion = Blueprint('conversion', __name__)
+
 
 # ?from=BRL&to=USD&amount=1
 @conversion.route('/conversion', methods=['GET'])
@@ -12,8 +13,7 @@ def get_conversion():
     coin_to = request.args.get('to')
     amount = request.args.get('amount')
 
-    if not all((validate_from(coin_from),
-        validate_to(coin_to), validate_amount(amount))):
+    if not all((validate_from(coin_from), validate_to(coin_to), validate_amount(amount))):
         return jsonify({'message': 'Invalid data'}), 400
     else:
         conversion = Conversion(coin_from, coin_to, float(amount))
@@ -32,4 +32,3 @@ def get_conversion():
                     'converted_amount': value
                 }
             }), 200
-

@@ -1,6 +1,5 @@
 import unittest
-import requests
-from currency_conversion.api.validate import *
+from currency_conversion.api.validate import validate_from, validate_amount
 
 
 class TestUnitValidate(unittest.TestCase):
@@ -23,4 +22,3 @@ class TestUnitValidate(unittest.TestCase):
         value = 'test'
         expected = validate_amount(value)
         self.assertEqual(False, expected)
-

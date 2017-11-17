@@ -1,6 +1,5 @@
 import unittest
 import requests
-from currency_conversion.api.conversion import Conversion
 from currency_conversion import app
 import json
 
@@ -32,7 +31,9 @@ class GetJson:
     def format_quote(self, quote):
         return float("{0:4.4f}".format(quote))
 
+
 json_get = GetJson()
+
 
 class TestIntegrationConversion(unittest.TestCase):
     def setUp(self):

@@ -1,4 +1,4 @@
-from flask import Flask, current_app
+from flask import Flask
 from currency_conversion.api.views import conversion
 from redis import Redis
 
