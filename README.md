@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/gusttavoaguiarr/challenge-bravo.svg?branch=master)](https://travis-ci.org/gusttavoaguiarr/challenge-bravo)
+
 # Conversor de moedas
 
 Uma API com objetivo de realizar a conversão entre diferentes moedas e utilizando como moeda de lastro (USD)
