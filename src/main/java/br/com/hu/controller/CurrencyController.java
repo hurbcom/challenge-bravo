@@ -22,7 +22,7 @@ public class CurrencyController {
 			@RequestParam String amount) {
 		try {
 			Double conversion = service.conversion(to, from, amount);
-			return new ResponseEntity<Double>(conversion, HttpStatus.ACCEPTED);
+			return new ResponseEntity<Double>(conversion, HttpStatus.OK);
 		} catch (NumberFormatException e) {
 			return new ResponseEntity<String>("The amount format is wrong", HttpStatus.BAD_REQUEST);
 		} catch (NullPointerException e) {
