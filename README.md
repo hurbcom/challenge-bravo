@@ -1,61 +1,110 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+#currency-converter
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Conversor de moedas
 
-A API deve converter entre as seguintes moedas:
-- USD
-- BRL
-- EUR
-- BTC
-- ETH
+## Executando a aplicação
 
+Existem 3 diferentes maneiras para execuar a aplicação, explicarei cada uma delas.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+## 1 - Rodar o dockerfile diretamente
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+### Pré requisitos
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Possuir o docker instalado.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+### Execução
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+1 - Construir a imagem do docker
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+```
+docker build -t hu/currency .
+```
+
+2 - Rodar o comando
+
+```
+docker run -it \
+    -p 8080:8080 \
+    hu/currency
+
+```
 
 
+## 2 - Construção da imagem(docker) via Maven
 
-## Critério de avaliação
+### Pré requisitos
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Acertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Possuir java8, maven 3+ e o docker instalado.
 
-## Dúvidas
+### Execução
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+1- Rodar o comando
 
-Boa sorte e boa viagem! ;)
+```
+mvn clean package dockerfile:build
+```
+2 - Após a execução do comando, será criada uma imagem no seu docker com o nome hu/currency-converter-app
+Rodar o comando do docker para rodar a aplicação
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+```
+docker run -it \
+    -p 8080:8080 \
+    hu/currency-converter-app
+
+```
+
+## 3 - Execução Direta
+
+### Pré requisitos
+
+Possuir o java8 instalado.
+
+### Execução
+
+1 - Dentro da pasta target do projeto
+
+```
+java -jar currency-converter-0.0.1-SNAPSHOT.jar 
+```
+
+## Rodando os testes
+
+### Pré requisitos
+
+Possuir o java8 e o maven 3+ instalados.
+
+### Execução
+
+```
+mvn clean install
+```
+
+## Decisões e frameworks utilizados
+
+Desenvolvimento foi em java, utilizando o spring-boot
+
+O spring boot facilita a criação de APIs abstraindo a questão de compatibilidade de libs, contendo um servidor web já em sua estrutura (Pode ser alterado).
+ 
+* [SpringBoot](https://projects.spring.io/spring-boot/)
+
+Para conversões utilizei uma lib chamada javamoney
+* [JavaMoney](http://javamoney.github.io/)
+
+
+## TODO
+
+Não foi realizado a conversão para BTC (Bitcoin).
+A proposta para essa conversão seria, consultar de x em x tempos seu valor, pois é uma moeda bastante mutável, e armazenar isso em cache ou diretamente em memória RAM e realizar a conversão quando solicitado ou A lib do JavaMoney da a opção de criação de uma moeda, então poderiamos criar essa moeda pela lib após realizar a consulta.
+
+OBS
+A cotação do bitcoin tem variação de acordo com a moeda, por exemplo, não necessáriamente 1 dolar será o mesmo valor em bitcoin, do que o valor em reais que representa 1 dolar.
+
+Segue um endpoint de consulta:
+
+* [Cryptocurrency Market Capitalizations](https://coinmarketcap.com/api/)
+
+
+## Construido com
+
+* [Maven](https://maven.apache.org/) - Dependency Management
+
