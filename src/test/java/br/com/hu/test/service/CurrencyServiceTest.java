@@ -10,4 +10,6 @@ import br.com.hu.App;
 @SpringBootTest(classes = App.class)
 public class CurrencyServiceTest {
 
+	
+	
 }
