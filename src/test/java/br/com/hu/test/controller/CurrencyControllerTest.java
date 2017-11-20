@@ -36,17 +36,34 @@ public class CurrencyControllerTest {
 		mockMvc.perform(get("/v1/currency?from=BRL&to=EUR&amount=123.45")).andExpect(status().is2xxSuccessful());
 	}
 	
+	@Test
 	public void getCurrencyNullAmount() throws Exception {
 		mockMvc.perform(get("/v1/currency?from=BRL&to=EUR&amount=")).andExpect(status().is4xxClientError());
 	}
 	
-	public void getCurrencyNull()  throws Exception{
+	@Test
+	public void getCurrencyNullTo()  throws Exception{
 		mockMvc.perform(get("/v1/currency?from=BRL&to=&amount=110.0")).andExpect(status().is4xxClientError());
 	}
 	
+	@Test
+	public void getCurrencyNullFrom()  throws Exception{
+		mockMvc.perform(get("/v1/currency?from=&to=BRL&amount=110.0")).andExpect(status().is4xxClientError());
+	}
 	
-	public void getCurrencyBcd() throws Exception {
-		mockMvc.perform(get("/v1/currency?from=BTC&to=EUR&amount=123.45")).andExpect(status().is2xxSuccessful());
+	@Test
+	public void getCurrencyNullBoth()  throws Exception{
+		mockMvc.perform(get("/v1/currency?from=&to=&amount=110.0")).andExpect(status().is4xxClientError());
+	}
+	
+	@Test
+	public void getCurrencyInvalidUri()  throws Exception{
+		mockMvc.perform(get("/v1/currency?from=&to=")).andExpect(status().is4xxClientError());
+	}
+	
+	@Test
+	public void getCurrencyBTC() throws Exception {
+		mockMvc.perform(get("/v1/currency?from=BTC&to=EUR&amount=123.45")).andExpect(status().is4xxClientError());
 	}
 	
 	
