@@ -108,3 +108,13 @@ Segue um endpoint de consulta:
 
 * [Maven](https://maven.apache.org/) - Dependency Management
 
+## Considerações finais
+
+Não coloco o /target no projeto, por causa do tamanho do jar, coloquei apenas para facilitar a execução.
+
+Fui desatento e não dei o fork do projeto e sim um clone, por isso tudo ficou em apenas 1 commit, se necessário posso enviar o meu projeto compactado por email, assim com a pasta .git seria possível ver o histórico.
+
+
+
+
+
