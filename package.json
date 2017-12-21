@@ -1,0 +1,22 @@
+{
+  "name": "currency-converter",
+  "version": "1.0.0",
+  "description": "Project to currency convertion",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Raul Pereira <raul.pereira@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "accounting": "^0.4.1",
+    "body-parser": "^1.18.2",
+    "consign": "^0.1.6",
+    "express": "^4.16.2",
+    "express-validator": "^4.3.0",
+    "morgan": "^1.9.0",
+    "restify-clients": "^1.5.2",
+    "winston": "^2.4.0"
+  }
+}
