@@ -4,8 +4,8 @@
   "description": "Project to currency convertion",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "node node_modules/mocha/bin/mocha",
+    "start": "node server"
   },
   "author": "Raul Pereira <raul.pereira@gmail.com>",
   "license": "ISC",
@@ -18,5 +18,12 @@
     "morgan": "^1.9.0",
     "restify-clients": "^1.5.2",
     "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1",
+    "supertest": "^3.0.0"
+  },
+  "engines": {
+    "node": "9.3.0"
   }
 }
