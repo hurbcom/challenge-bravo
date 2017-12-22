@@ -14,7 +14,7 @@ Um pequeno projeto para testar minhas habilidades.
 > - [X] Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
 > - [X] O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
 > - [X] Para executar seu código, deve ser preciso apenas rodar os seguintes comandos: git clone $seu-fork, cd $seu-fork, comando para instalar dependências, comando para executar a aplicação.
-> - [X] A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+> - [ ] A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 >
 > ...
 
@@ -25,7 +25,6 @@ Um pequeno projeto para testar minhas habilidades.
 Ter instalado localmente (apenas p/ Desenvolvimento e Teste):
 - [Git](https://git-scm.com/)
 - [Node.js](https://nodejs.org/)
-- [nodemon](https://nodemon.io/)
 
 ### Instalando dependências
 
@@ -64,7 +63,7 @@ Acesse => *[https://currencyconverter-rp.herokuapp.com/](https://currencyconvert
 
 ### Serviço
 
-**[https://openexchangerates.org/](https://openexchangerates.org/)**: Foi escolhido este serviço para consumir as últimas taxas de conversão de moeda, ela já possui por padrão uma moeda de lastro. Apenas consumo este Endpoint e realizo o devido calculo da taxa de conversão para as moedas escolhidas.
+**[https://openexchangerates.org/](https://openexchangerates.org/)**: Foi escolhido este serviço para consumir as últimas taxas de conversão de moeda, ela já possui por padrão uma moeda de lastro. Como utilizo? Consumo este endpoint e realizo o devido calculo da taxa de conversão para as moedas escolhidas. Além de listar no cliente as moedas possíveis na combo de seleção.
 
 ### Backend
 
@@ -86,6 +85,6 @@ Acesse => *[https://currencyconverter-rp.herokuapp.com/](https://currencyconvert
 
 ## Conclusão
 
-O desafio foi bem bacana de ser realizado, primeiro desafio foi encontrar um serviço grátis para pegar as taxas de conversão de moeda, testes vários mas a escolha foi decidida pela serviço que possuia a melhor documentação. Usar novamente [Node.js](https://nodejs.org/) em um desafio foi bacana para realizar uma atualização do conhecimento que possuia, por fim, fiquei devendo uma cobertura melhor nos testes, uma interface não somente mais elegante, mas que também trate os erros enviados pelo servidor corretamente. Outra divida foi não utilizar uma estrutura em Docker para a aplicação ser instalada, talvez fosse a maneira adequada para não deixar a chave de acesso ao serviço consumido no [GitHub](https://github.com/), poderia fazer um controle de scripts? Sim, mas a pessoa que irá avaliar teria passos a mais para realizar a instalação.
+O desafio foi bem bacana de ser realizado, primeiro desafio foi encontrar um serviço grátis para pegar as taxas de conversão de moeda, testei vários mas a escolha foi decidida pela serviço que possuía a melhor documentação. Usar novamente [Node.js](https://nodejs.org/) em um desafio foi bacana para realizar uma atualização do conhecimento que tenho, por fim, fiquei devendo 3 pontos, são eles: (1) Uma cobertura melhor nos testes, principalmente no quesito volume de requisições. (2) Uma interface mais elegante e que trate os erros enviados pelo servidor corretamente. (3) E não tive tempo para configurar e utilizar uma estrutura em [Docker](https://docker.com/) para a aplicação ser instalada, talvez fosse a maneira adequada para não deixar a chave de acesso ao serviço consumido no [GitHub](https://github.com/), poderia fazer um controle de scripts? Sim, mas a pessoa que irá avaliar teria passos a mais para realizar a instalação.
 
 **AVANTEs!** :muscle:
