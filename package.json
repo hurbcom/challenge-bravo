@@ -1,0 +1,30 @@
+{
+  "name": "currency-converter",
+  "version": "1.0.0",
+  "description": "Project to currency convertion",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha \"test/**/*.spec.js\"",
+    "start": "node index"
+  },
+  "author": "Raul Pereira <raul.pereira@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "accounting": "^0.4.1",
+    "body-parser": "^1.18.2",
+    "consign": "^0.1.6",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-validator": "^4.3.0",
+    "morgan": "^1.9.0",
+    "restify-clients": "^1.5.2",
+    "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1",
+    "supertest": "^3.0.0"
+  },
+  "engines": {
+    "node": "9.3.0"
+  }
+}
