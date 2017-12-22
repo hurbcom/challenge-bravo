@@ -1,61 +1,91 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Currency Converter (vlab for [https://hotelurbano.com/](https://hotelurbano.com/))
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Um pequeno projeto para testar minhas habilidades.
 
-A API deve converter entre as seguintes moedas:
-- USD
-- BRL
-- EUR
-- BTC
-- ETH
+![frontend-scshot](../master/scshot/frontend-scshot.png)
 
+## Desafio
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+> ...
+>
+> Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+>
+> - [X] Conveter entre as seguintes moedas (USD, BRL, EUR, ...)
+> - [X] Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
+> - [X] O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
+> - [X] Para executar seu código, deve ser preciso apenas rodar os seguintes comandos: git clone $seu-fork, cd $seu-fork, comando para instalar dependências, comando para executar a aplicação.
+> - [X] A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+>
+> ...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+## Instalação
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+### Pré-requisitos
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+Ter instalado localmente (apenas p/ Desenvolvimento e Teste):
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/)
+- [nodemon](https://nodemon.io/)
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+### Instalando dependências
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+```bash
+$ git clone git@github.com:raulpe7eira/currency-converter.git
+$ cd currency-converter
+$ npm install
+```
 
+## Subir & Rodar
 
+### Ambiente de desenvolvimento
 
-## Critério de avaliação
+```bash
+$ npm start
+```
+![dsv-scshot](../master/scshot/dsv-scshot.png)
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Acertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+### Ambiente de teste
 
-## Dúvidas
+```bash
+$ npm test
+```
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+![tst-scshot](../master/scshot/tst-scshot.png)
 
-Boa sorte e boa viagem! ;)
+### Ambiente de produção
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Acesse => *[https://currencyconverter-rp.herokuapp.com/](https://currencyconverter-rp.herokuapp.com/)* :clap:
+
+## Considerações
+
+### Plataforma
+
+**[Node.js](https://nodejs.org/)**: Foi uma escolha pessoal, resolvi encarar o desafio com uma plataforma que não tenho experiência profissional, fora que facilitaria ter tanto no backend quanto no frontend, o uso da mesma linguagem em todas as camadas da aplicação.
+
+### Serviço
+
+**[https://openexchangerates.org/](https://openexchangerates.org/)**: Foi escolhido este serviço para consumir as últimas taxas de conversão de moeda, ela já possui por padrão uma moeda de lastro. Apenas consumo este Endpoint e realizo o devido calculo da taxa de conversão para as moedas escolhidas.
+
+### Backend
+
+#### Web Server
+
+**[Express.js](https://expressjs.com/)**: Foi escolhido pela popularidade e pela vasta gama de material na web, facilitando a meta de cumprir com o prazo de entrega.
+
+### Frontend
+
+**[HTML](https://w3.org/html/)** + **[Bootstrap](http://getbootstrap.com/)**: Como o foco do desafio era o backend, resolvi utilizar o mínimo apresentável para a interface cliente do serviço de conversão.
+
+### Testes
+
+**[Mocha](https://mochajs.org/)** + **[SuperTest](https://github.com/visionmedia/supertest)**: Essa dupla foi utilizada para testar todos os endpoints do backend. Porém ficou faltando realizar os teste para o frontend, além de um teste E2E, necessários para orquestrar todo processo de implantação em ambiente de produção.
+
+### Servidores de produção
+
+**[Heroku](https://heroku.com)** (PAAS): Foi escolhido pela facilidade de uso e seu pacote gratuito. Além de ser facil de integrar com o [GitHub](https://github.com/), que é responsável pelo versionamento do código.
+
+## Conclusão
+
+O desafio foi bem bacana de ser realizado, primeiro desafio foi encontrar um serviço grátis para pegar as taxas de conversão de moeda, testes vários mas a escolha foi decidida pela serviço que possuia a melhor documentação. Usar novamente [Node.js](https://nodejs.org/) em um desafio foi bacana para realizar uma atualização do conhecimento que possuia, por fim, fiquei devendo uma cobertura melhor nos testes, uma interface não somente mais elegante, mas que também trate os erros enviados pelo servidor corretamente. Outra divida foi não utilizar uma estrutura em Docker para a aplicação ser instalada, talvez fosse a maneira adequada para não deixar a chave de acesso ao serviço consumido no [GitHub](https://github.com/), poderia fazer um controle de scripts? Sim, mas a pessoa que irá avaliar teria passos a mais para realizar a instalação.
+
+**AVANTEs!** :muscle:
