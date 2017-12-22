@@ -4,7 +4,7 @@
   "description": "Project to currency convertion",
   "main": "index.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha \"test/**/*.spec.js",
+    "test": "node node_modules/mocha/bin/mocha \"test/**/*.spec.js\"",
     "start": "node index"
   },
   "author": "Raul Pereira <raul.pereira@gmail.com>",
