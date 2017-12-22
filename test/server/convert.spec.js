@@ -1,10 +1,19 @@
-const express = require('../config/express')();
+const express = require('../../config/express')();
 const request = require('supertest')(express);
 
 describe('#ConvertController', () => {
 
-    it('#convert w/ success', done => {
+    it('#convert accept html w/ success', done => {
         request.get('/convert?from=USD&to=BRL&amount=1')
+            .set('Accept', 'text/html')
+            .expect('Content-Type', /html/)
+            .expect(200)
+            .end(done);
+    });
+
+    it('#convert accept json w/ success', done => {
+        request.get('/convert?from=USD&to=BRL&amount=1')
+            .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200)
             .expect(res => {
@@ -15,8 +24,10 @@ describe('#ConvertController', () => {
             .end(done);
     });
 
-    it('#convert w/o query from', done => {
+
+    it('#convert accept json w/o query from', done => {
         request.get('/convert?to=BRL&amount=1')
+            .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(422)
             .expect(res => {
@@ -25,8 +36,9 @@ describe('#ConvertController', () => {
             .end(done);
     });
 
-    it('#convert w/o query to', done => {
+    it('#convert accept json w/o query to', done => {
         request.get('/convert?from=USD&amount=1')
+            .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(422)
             .expect(res => {
@@ -35,8 +47,9 @@ describe('#ConvertController', () => {
             .end(done);
     });
 
-    it('#convert w/o query amount', done => {
+    it('#convert accept json w/o query amount', done => {
         request.get('/convert?from=USD&amount=1')
+            .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(422)
             .expect(res => {
