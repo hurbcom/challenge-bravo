@@ -19,7 +19,8 @@ class ExchangeRateService {
     {
       params : {
         "app_id" : process.env.oerAppId,
-        "symbols" : "USD,BRL,EUR,BTC,ETH"
+        "symbols" : "USD,BRL,EUR,BTC,ETH",
+				"show_alternative" : 1
       }
     })
     .then(response => {

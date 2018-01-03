@@ -3,16 +3,16 @@
     <table class="table" *ngIf="exchangeRecords.length > 0">
       <thead>
         <tr>
-          <th>TO</th>
           <th>FROM</th>
+          <th>TO</th>
           <th>Amount</th>
           <th>Converted Amount</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let record of exchangeRecords">
-          <td>{{record.to}}</td>
           <td>{{record.from}}</td>
+          <td>{{record.to}}</td>
           <td>{{record.amount}}</td>
           <td>{{record.convertedAmount}}</td>
         </tr>
