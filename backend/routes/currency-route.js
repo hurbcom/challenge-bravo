@@ -30,6 +30,9 @@ function(req, res) {
   exchageRateController.getCurrencyExchangeRate(convert)
     .then( rates => {
       res.json(rates);
+    })
+    .catch(errors => {
+      res.status(401).json({ errors: errors })
     });
 });
 

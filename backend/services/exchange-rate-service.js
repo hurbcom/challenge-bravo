@@ -25,8 +25,8 @@ class ExchangeRateService {
     .then(response => {
       return response.data.rates;
     })
-    .catch(error => {
-      return error
+    .catch(errors => {
+    	throw new Error('Invalid Api Id', errors.response.status);
     });
   }
 }

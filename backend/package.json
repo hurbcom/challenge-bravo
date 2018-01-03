@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel-node server.js",
-    "test-integration": "NODE_ENV=test mocha --opts test/integration/mocha.opts test/integration/**/*.js"
+    "test-integration": "NODE_ENV=test&oerAppId=5ad9cd0caf8e4c4489f4d7daf91e19dc mocha --opts test/integration/mocha.opts test/integration/**/*.js"
   },
   "author": "",
   "license": "ISC",

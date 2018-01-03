@@ -13,6 +13,10 @@ class ExchageRateController {
       let convertedAmount = dolarAmount * rates[convert.to]
 
       return { convertedAmount : convertedAmount };
+    })
+    .catch(error => {
+      console.info('controller')
+      throw new Error(error);
     });
   }
 }
