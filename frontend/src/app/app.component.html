@@ -1,0 +1,15 @@
+
+<div class="container">
+  <header>
+    <h2 class="text-muted">HU Exchange</h2>
+  </header>
+
+  <main>
+    <exchange-rate (convertedEvent)="receiveConvertedMessage($event)"></exchange-rate>
+    <exchange-records [exchangeRecords]="exchangeRecords"> </exchange-records>
+  </main>
+
+  <footer>
+
+  </footer>
+</div>

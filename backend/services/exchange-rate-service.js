@@ -1,0 +1,34 @@
+import axios from 'axios';
+import moment from 'moment';
+
+import { throttleAdapterEnhancer } from 'axios-extensions';
+
+const http = axios.create({
+	baseURL: '/',
+	headers: { 'Cache-Control': 'no-cache' },
+	adapter: throttleAdapterEnhancer(axios.defaults.adapter, 10 * 1000)//10 seconds cache
+});
+
+class ExchangeRateService {
+
+  constructor(){
+  }
+
+  getCurrencyExchangeRate(currencies){
+    return http.get('https://openexchangerates.org/api/latest.json',
+    {
+      params : {
+        "app_id" : process.env.oerAppId,
+        "symbols" : "USD,BRL,EUR,BTC,ETH"
+      }
+    })
+    .then(response => {
+      return response.data.rates;
+    })
+    .catch(error => {
+      return error
+    });
+  }
+}
+
+export default ExchangeRateService;
