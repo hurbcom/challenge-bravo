@@ -1,0 +1,29 @@
+{
+  "name": "docker-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node server.js",
+    "test-integration": "NODE_ENV=test&oerAppId=5ad9cd0caf8e4c4489f4d7daf91e19dc mocha --opts test/integration/mocha.opts test/integration/**/*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "axios-extensions": "^1.1.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "express-validator": "^4.3.0",
+    "moment": "^2.20.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "mocha": "^4.1.0",
+    "supertest": "^3.0.0"
+  }
+}

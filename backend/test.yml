@@ -1,0 +1,9 @@
+config:
+  target: 'http://localhost:8081'
+  phases:
+    - duration: 5
+      arrivalRate: 200
+scenarios:
+  - flow:
+    - get:
+        url: "/exchange-rate?from=EUR&amount=3.2&to=USD"

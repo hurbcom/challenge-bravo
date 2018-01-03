@@ -1,3 +1,36 @@
+Para conseguir as cotações usei o serviço openexchangerates.org, mas nos testes já me alertaram da cota de uso. Se a api não responder tem que criar uma nova AppId no serviço com um novo e-mail e trocar no arquivo:
+ - ./backend/env.list.
+
+### Frontend
+- Angular 4
+- Bootstrap
+
+### Backend
+- NodeJS
+- Babel (Habilita features do ES6)
+- Express
+- Axios (chamada http com suporte a cache)
+
+#### Testes backend
+- Mocha
+- Chai
+- artillery - Teste de carga
+
+## Comandos
+
+## /frontend
+- npm install
+- docker build -t exchange-angular .
+- docker run -d -p 8080:80 exchange-angular
+
+## /backend
+- npm install
+- npm run test - Executa teste de integração
+- docker build -t exchange-node .
+- docker run -d --env-file ./env.list  -p 8081:8080 exchange-node
+- artillery run test.yml - Executa testes de carga
+
+
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
