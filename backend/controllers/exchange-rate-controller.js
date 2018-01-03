@@ -15,7 +15,6 @@ class ExchageRateController {
       return { convertedAmount : convertedAmount };
     })
     .catch(error => {
-      console.info('controller')
       throw new Error(error);
     });
   }

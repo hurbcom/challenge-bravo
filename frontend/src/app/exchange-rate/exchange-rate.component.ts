@@ -34,12 +34,10 @@ export class ExchangeRateComponent implements OnInit {
      ];
   }
 
-
   getExchangeRate(){
     this.exchangeRateService.getExchangeRate(this.exchange.from, this.exchange.to, this.exchange.amount).subscribe( res => {
       this.exchange.convertedAmount = res.convertedAmount;
       this.convertedEvent.emit(this.exchange);
     });
   }
-
 }
