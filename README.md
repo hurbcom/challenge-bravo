@@ -5,8 +5,8 @@
 - API local Consumindo dados da API externa;
 - API local está realizando a conversão de USD para BRL;
 - Formato para requisições via API local 
-    - <localhost>/api/currencyConversion/getCurrenciesQuotation/{currencySymbol}
-    - <localhost>/api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/
+    - /api/currencyConversion/getCurrenciesQuotation/{currencySymbol}
+    - /api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
 
