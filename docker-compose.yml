@@ -1,0 +1,20 @@
+version: '3'
+services:
+  currency-convert:
+    build: .
+    ports:
+    - "8000:8000"
+    depends_on:
+    - redis
+  redis:
+    image: redis
+  swagger:
+    image: swaggerapi/swagger-ui
+    environment:
+    - API_URL=/app/swagger.json&validatorUrl=null
+    volumes:
+    - ./swagger.json:/app/swagger.json
+    ports:
+    - "8080:8080"
+    links:
+    - currency-convert
