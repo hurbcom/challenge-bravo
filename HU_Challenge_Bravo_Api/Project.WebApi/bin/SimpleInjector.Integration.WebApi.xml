@@ -1,0 +1,320 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SimpleInjector.Integration.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:SimpleInjector.Integration.WebApi.DependencyResolverScopeOption">
+            <summary>
+            Provides additional options for creating the <see cref="T:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver"/>.
+            </summary>
+        </member>
+        <member name="F:SimpleInjector.Integration.WebApi.DependencyResolverScopeOption.UseAmbientScope">
+            <summary>
+            When <see cref="M:System.Web.Http.Dependencies.IDependencyResolver.BeginScope"/> is called, an ambient 
+            <see cref="T:SimpleInjector.Lifestyles.AsyncScopedLifestyle"/> scope is used, if one already exists. Otherwise, it 
+            creates a new <see cref="T:SimpleInjector.Lifestyles.AsyncScopedLifestyle"/> scope before returning. 
+            This is the default value.
+            </summary>
+        </member>
+        <member name="F:SimpleInjector.Integration.WebApi.DependencyResolverScopeOption.RequiresNew">
+            <summary>
+            A new <see cref="T:SimpleInjector.Lifestyles.AsyncScopedLifestyle"/> scope  is always created by 
+            <see cref="M:System.Web.Http.Dependencies.IDependencyResolver.BeginScope"/> before returning.
+            </summary>
+        </member>
+        <member name="T:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver">
+             <summary>Simple Injector <see cref="T:System.Web.Http.Dependencies.IDependencyResolver"/> implementation.</summary>
+             <example>
+             The following example shows the usage of the <b>SimpleInjectorWebApiDependencyResolver</b> in an
+             Web API application:
+             <code lang="cs"><![CDATA[
+             using System.Web.Http;
+             using SimpleInjector;
+             using SimpleInjector.Integration.WebApi;
+             
+             public static class WebApiConfig
+             {
+                 public static void Register(HttpConfiguration config)
+                 {
+                     var container = new Container();
+             
+                     // Make the container registrations, example:
+                     // container.Register<IUserRepository, SqlUserRepository>();
+             
+                     container.RegisterWebApiControllers(config);
+                     container.RegisterWebApiFilterProvider(config);
+            
+                     // Create a new SimpleInjectorDependencyResolver that wraps the,
+                     // container, and register that resolver in MVC.
+             
+                     container.Verify();
+             
+                     config.DependencyResolver = new SimpleInjectorWebApiDependencyResolver(container);
+             
+                     config.Routes.MapHttpRoute(
+                         name: "DefaultApi",
+                         routeTemplate: "api/{controller}/{id}",
+                         defaults: new { id = RouteParameter.Optional }
+                     );
+                 }
+             }
+             ]]></code>
+             The previous example show the use of the 
+             <see cref="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiControllers(SimpleInjector.Container,System.Web.Http.HttpConfiguration)">RegisterWebApiControllers</see> 
+             extension methods and how the <b>SimpleInjectorWebApiDependencyResolver</b> can be used to set the created
+             <see cref="T:SimpleInjector.Container"/> instance as default dependency resolver in Web API.
+             </example>
+        </member>
+        <member name="M:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver.#ctor(SimpleInjector.Container)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver"/> class with
+            the default scope option (i.e. to use an ambient <see cref="T:SimpleInjector.Lifestyles.AsyncScopedLifestyle"/> 
+            scope if one already exists).
+            </summary>
+            <param name="container">The container.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="container"/> parameter is
+            a null reference (Nothing in VB).</exception>
+        </member>
+        <member name="M:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver.#ctor(SimpleInjector.Container,SimpleInjector.Integration.WebApi.DependencyResolverScopeOption)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver"/> class.
+            </summary>
+            <param name="container">The container.</param>
+            <param name="scopeOption">The scoping option.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="container"/> parameter is
+            a null reference (Nothing in VB).</exception>
+            <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">Thrown when the 
+            <paramref name="scopeOption"/> contains an invalid value.</exception>
+        </member>
+        <member name="M:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver.System#Web#Http#Dependencies#IDependencyResolver#BeginScope">
+            <summary>Starts a resolution scope.</summary>
+            <returns>The dependency scope.</returns>
+        </member>
+        <member name="M:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver.System#Web#Http#Dependencies#IDependencyScope#GetService(System.Type)">
+            <summary>Retrieves a service from the scope.</summary>
+            <param name="serviceType">The service to be retrieved.</param>
+            <returns>The retrieved service.</returns>
+        </member>
+        <member name="M:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver.System#Web#Http#Dependencies#IDependencyScope#GetServices(System.Type)">
+            <summary>Retrieves a collection of services from the scope.</summary>
+            <param name="serviceType">The collection of services to be retrieved.</param>
+            <returns>The retrieved collection of services.</returns>
+        </member>
+        <member name="M:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged 
+            resources.
+            </summary>
+        </member>
+        <member name="T:SimpleInjector.Integration.WebApi.WebApiRequestLifestyle">
+            <summary>
+            Defines a lifestyle that caches instances during the execution of a single ASP.NET Web API Request.
+            Unless explicitly stated otherwise, instances created by this lifestyle will be disposed at the end
+            of the Web API request. Do note that this lifestyle requires the 
+            <see cref="T:SimpleInjector.Integration.WebApi.SimpleInjectorWebApiDependencyResolver"/> to be registered in the Web API configuration.
+            </summary>
+            <example>
+            The following example shows the usage of the <b>WebApiRequestLifestyle</b> class:
+            <code lang="cs"><![CDATA[
+            var container = new Container();
+            container.Options.DefaultScopedLifestyle = new WebApiRequestLifestyle();
+            container.Register<IUnitOfWork, EntityFrameworkUnitOfWork>(Lifestyle.Scoped);
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:SimpleInjector.Integration.WebApi.WebApiRequestLifestyle.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:SimpleInjector.Integration.WebApi.WebApiRequestLifestyle"/> class.
+            The created and cached instance will be disposed when the Web API request ends, and when the 
+            created object implements <see cref="T:System.IDisposable"/>.
+            </summary>
+        </member>
+        <member name="M:SimpleInjector.Integration.WebApi.WebApiRequestLifestyle.#ctor(System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:SimpleInjector.Integration.WebApi.WebApiRequestLifestyle"/> class.</summary>
+            <param name="disposeInstanceWhenScopeEnds">
+            Specifies whether the created and cached instance will be disposed when the Web API request ends,
+            and when the created object implements <see cref="T:System.IDisposable"/>. 
+            </param>
+        </member>
+        <member name="T:SimpleInjector.SimpleInjectorWebApiExtensions">
+            <summary>
+            Extension methods for integrating Simple Injector with ASP.NET Web API applications.
+            </summary>
+            <content>Deprecated methods.</content>>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiControllers(SimpleInjector.Container,System.Web.Http.HttpConfiguration)">
+            <summary>
+            Registers the Web API <see cref="T:System.Web.Http.Controllers.IHttpController"/> types that available for the application. This
+            method uses the configured <see cref="T:System.Web.Http.Dispatcher.IAssembliesResolver"/> and 
+            <see cref="T:System.Web.Http.Dispatcher.IHttpControllerTypeResolver"/> to determine which controller types to register.
+            </summary>
+            <param name="container">The container the controllers should be registered in.</param>
+            <param name="configuration">The <see cref="T:System.Web.Http.HttpConfiguration"/> to use to get the Controller
+            types to register.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when one of the arguments is a null 
+            reference (Nothing in VB).</exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiControllers(SimpleInjector.Container,System.Web.Http.HttpConfiguration,System.Reflection.Assembly[])">
+            <summary>
+            Registers the Web API <see cref="T:System.Web.Http.Controllers.IHttpController"/> types that available for the application. This
+            method uses the configured <see cref="T:System.Web.Http.Dispatcher.IHttpControllerTypeResolver"/> to determine which controller
+            types to register.
+            </summary>
+            <param name="container">The container the controllers should be registered in.</param>
+            <param name="configuration">The <see cref="T:System.Web.Http.HttpConfiguration"/> to use to get the Controller
+            types to register.</param>
+            <param name="assemblies">The assemblies to search.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when one of the arguments is a null 
+            reference (Nothing in VB).</exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiControllers(SimpleInjector.Container,System.Web.Http.HttpConfiguration,System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
+            <summary>
+            Registers the Web API <see cref="T:System.Web.Http.Controllers.IHttpController"/> types that available for the application. This
+            method uses the configured <see cref="T:System.Web.Http.Dispatcher.IHttpControllerTypeResolver"/> to determine which controller
+            types to register.
+            </summary>
+            <param name="container">The container the controllers should be registered in.</param>
+            <param name="configuration">The <see cref="T:System.Web.Http.HttpConfiguration"/> to use to get the Controller
+            types to register.</param>
+            <param name="assemblies">The assemblies to search.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when one of the arguments is a null 
+            reference (Nothing in VB).</exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.EnableHttpRequestMessageTracking(SimpleInjector.Container,System.Web.Http.HttpConfiguration)">
+            <summary>
+            Makes the current <see cref="T:System.Net.Http.HttpRequestMessage" /> resolvable by calling
+            <see cref="M:SimpleInjector.SimpleInjectorWebApiExtensions.GetCurrentHttpRequestMessage(SimpleInjector.Container)">GetCurrentHttpRequestMessage</see>.
+            </summary>
+            <param name="container">The container instance for which HttpRequestMessageTracking should be
+            enabled.</param>
+            <param name="configuration">The application's configuration.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when one of the arguments is a null reference 
+            (Nothing in VB).</exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.GetCurrentHttpRequestMessage(SimpleInjector.Container)">
+            <summary>
+            Retrieves the <see cref="T:System.Net.Http.HttpRequestMessage"/> instance for the current request.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>The <see cref="T:System.Net.Http.HttpRequestMessage"/> for the current request.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown when this method is called before 
+            <see cref="M:SimpleInjector.SimpleInjectorWebApiExtensions.EnableHttpRequestMessageTracking(SimpleInjector.Container,System.Web.Http.HttpConfiguration)"/> is called.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="container"/> argument
+            is a null reference (Nothing in VB).</exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiRequest``1(SimpleInjector.Container)">
+            <summary>
+            Registers that a single instance of <typeparamref name="TConcrete"/> will be returned within the
+            Web API request. When the Web API request ends and 
+            <typeparamref name="TConcrete"/> implements <see cref="T:System.IDisposable"/>, the cached instance will be 
+            disposed.
+            </summary>
+            <typeparam name="TConcrete">The concrete type that will be registered.</typeparam>
+            <param name="container">The container to make the registrations in.</param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when the <paramref name="container"/> is a null reference.</exception>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when this container instance is locked and can not be altered, or when an 
+            the <typeparamref name="TConcrete"/> has already been registered.
+            </exception>
+            <exception cref="T:System.ArgumentException">Thrown when the <typeparamref name="TConcrete"/> is a type
+            that can not be created by the container.</exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiRequest``2(SimpleInjector.Container)">
+            <summary>
+            Registers that a single instance of <typeparamref name="TImplementation"/> will be returned  will 
+            be returned within the Web API request. When the Web API request ends and 
+            <typeparamref name="TImplementation"/> implements <see cref="T:System.IDisposable"/>, the cached instance 
+            will be disposed.
+            </summary>
+            <typeparam name="TService">The interface or base type that can be used to retrieve the instances.</typeparam>
+            <typeparam name="TImplementation">The concrete type that will be registered.</typeparam>
+            <param name="container">The container to make the registrations in.</param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when the <paramref name="container"/> is a null reference.</exception>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when this container instance is locked and can not be altered, or when an 
+            the <typeparamref name="TService"/> has already been registered.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when the given <typeparamref name="TImplementation"/> 
+            type is not a type that can be created by the container.
+            </exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiRequest``1(SimpleInjector.Container,System.Func{``0})">
+            <summary>
+            Registers the specified delegate that allows returning instances of <typeparamref name="TService"/>,
+            and returned instances are cached during the lifetime of a Web API request. When the Web API
+            request ends, and the cached instance implements <see cref="T:System.IDisposable"/>, that cached instance 
+            will be disposed.
+            </summary>
+            <typeparam name="TService">The interface or base type that can be used to retrieve instances.</typeparam>
+            <param name="container">The container to make the registrations in.</param>
+            <param name="instanceCreator">The delegate that allows building or creating new instances.</param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when either the <paramref name="container"/>, or <paramref name="instanceCreator"/> are
+            null references.</exception>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when this container instance is locked and can not be altered, or when the
+            <typeparamref name="TService"/> has already been registered.</exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiRequest``1(SimpleInjector.Container,System.Boolean)">
+            <summary>
+            Registers that a single instance of <typeparamref name="TConcrete"/> will be returned for
+            each Web API request. When the Web API request ends, and <typeparamref name="TConcrete"/> 
+            implements <see cref="T:System.IDisposable"/>, the cached instance will be disposed.
+            Scopes can be nested, and each scope gets its own instance.
+            </summary>
+            <typeparam name="TConcrete">The concrete type that will be registered.</typeparam>
+            <param name="container">The container to make the registrations in.</param>
+            <param name="disposeWhenScopeEnds">If set to <c>true</c> the cached instance will be
+            disposed at the end of its lifetime.</param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when the <paramref name="container"/> is a null reference.</exception>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when this container instance is locked and can not be altered, or when an 
+            the <typeparamref name="TConcrete"/> has already been registered.
+            </exception>
+            <exception cref="T:System.ArgumentException">Thrown when the <typeparamref name="TConcrete"/> is a type
+            that can not be created by the container.</exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiRequest``2(SimpleInjector.Container,System.Boolean)">
+            <summary>
+            Registers that a single instance of <typeparamref name="TImplementation"/> will be returned for
+            the duration of a single Web API request. When the Web API request ends, 
+            <paramref name="disposeWhenScopeEnds"/> is set to <b>true</b>, and the cached instance
+            implements <see cref="T:System.IDisposable"/>, that cached instance will be disposed.
+            </summary>
+            <typeparam name="TService">The interface or base type that can be used to retrieve the instances.</typeparam>
+            <typeparam name="TImplementation">The concrete type that will be registered.</typeparam>
+            <param name="container">The container to make the registrations in.</param>
+            <param name="disposeWhenScopeEnds">If set to <c>true</c> the cached instance will be
+            disposed at the end of its lifetime.</param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when the <paramref name="container"/> is a null reference.</exception>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when this container instance is locked and can not be altered, or when an 
+            the <typeparamref name="TService"/> has already been registered.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when the given <typeparamref name="TImplementation"/> 
+            type is not a type that can be created by the container.
+            </exception>
+        </member>
+        <member name="M:SimpleInjector.SimpleInjectorWebApiExtensions.RegisterWebApiRequest``1(SimpleInjector.Container,System.Func{``0},System.Boolean)">
+            <summary>
+            Registers the specified delegate that allows returning instances of <typeparamref name="TService"/>,
+            and returned instances are cached during the lifetime of single Web API request. When the Web API
+            request ends, <paramref name="disposeWhenScopeEnds"/> is set to <b>true</b>, and the cached 
+            instance implements <see cref="T:System.IDisposable"/>, that cached instance will be disposed.
+            </summary>
+            <typeparam name="TService">The interface or base type that can be used to retrieve instances.</typeparam>
+            <param name="container">The container to make the registrations in.</param>
+            <param name="instanceCreator">The delegate that allows building or creating new instances.</param>
+            <param name="disposeWhenScopeEnds">If set to <c>true</c> the cached instance will be
+            disposed at the end of its lifetime.</param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when either the <paramref name="container"/>, or <paramref name="instanceCreator"/> are
+            null references.</exception>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when this container instance is locked and can not be altered, or when the
+            <typeparamref name="TService"/> has already been registered.</exception>
+        </member>
+    </members>
+</doc>
