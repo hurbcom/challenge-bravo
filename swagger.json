@@ -1,0 +1,80 @@
+swagger: "2.0"
+info:
+  description: "Esta API destina-se a realizar operações de conversão entre as seguintes moedas: BRL, USD, EUR, BTC e ETH."
+  version: "1.0.0"
+  title: "Currency Conversion Service"
+  contact:
+    url: "https://github.com/fabriciopf/challenge-bravo"
+    email: "fabriciopf@gmail.com"
+  termsOfService: "http://swagger.io/terms/"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8000"
+basePath: "/"
+tags:
+- name: "currency"
+  description: "Operações com moedas"
+schemes:
+- "http"
+paths:
+  /convert:
+    get:
+      tags:
+      - "convert"
+      summary: "Converte o valor de uma moeda para outra"
+      description: ""
+      operationId: "convertCurrency"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "from"
+        description: "Moeda com valor original"
+        required: true
+        type: "string"
+      - in: "query"
+        name: "to"
+        description: "Moeda com valor de destino"
+        required: true
+        type: "string"
+      - in: "query"
+        name: "amount"
+        description: "Quantidade da moeda original a ser convertida"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "Conversão realizada com sucesso"
+          schema:
+            $ref: '#/definitions/Conversion'
+        400:
+          description: "Requisição inválida"
+        404:
+          description: "Serviço indisponível"
+        500:
+          description: "Exceção inesperada"
+definitions:
+  Conversion:
+    type: object
+    required:
+      - from
+      - to
+      - amount
+    properties:
+      from:
+        type: string
+        example: BRL
+      to:
+        type: string
+        example: USD
+      amount:
+        type: number
+        example: 99.0
+      value:
+        type: number
+        description: Valor convertido
+        example: 31.45
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
