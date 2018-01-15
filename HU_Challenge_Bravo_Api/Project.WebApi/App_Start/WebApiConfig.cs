@@ -16,8 +16,18 @@ namespace Project.WebApi
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "api/{controller}/{currencySymbol}",
+                defaults: new { currencySymbol = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "CurrencyConversionApi",
+                routeTemplate: "api/{controller}/{from}/{to}/{amount}",
+                defaults: new {
+                    from = RouteParameter.Optional,
+                    to = RouteParameter.Optional,
+                    amount = RouteParameter.Optional
+                }
             );
         }
     }
