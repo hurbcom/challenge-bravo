@@ -2,7 +2,7 @@
 
 ## Anotações do desenvolvedor:
 
-- API Consumindo dados da API externa;
+- API local Consumindo dados da API externa;
 - API local está realizando a conversão de USD para BRL;
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
