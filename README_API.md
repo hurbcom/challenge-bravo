@@ -13,6 +13,6 @@
         "To_Currency": "BRL",
         "Orinigal_Value": 4580.25,
         "Converted_Value": 14731.02,
-        "Last_Updated_Converted": "16/01/2018 07:34:23"
+        "Quotation_Last_Update": "16/01/2018 07:34:23"
     }
     ```
