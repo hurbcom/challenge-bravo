@@ -7,7 +7,7 @@
     - /api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/
 
 ## Retornos da API:
- - Quando solicitado o método de conversão da moeda **GetCurrencyConverted(fromCurrencySymbol, toCurrencySymbol, amount)**:
+ - Quando solicitado o método de conversão da moeda **GetCurrencyConverted(string fromCurrencySymbol, string toCurrencySymbol, decimal amount)**:
     ```json
     {
         "From_Currency": "USD",
