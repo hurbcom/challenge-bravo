@@ -5,8 +5,9 @@
 - Formato para requisições via API local 
     - /api/currencyConversion/getCurrenciesQuotation/{currencySymbol}
     - /api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/
-- Retorno da API
- - Quando solicitado o método de conversão da moeda:
+
+## Retornos da API:
+ - Quando solicitado o método de conversão da moeda (GetCurrencyConverted):
     ```json
     {
         "From_Currency": "USD",
