@@ -5,8 +5,8 @@
 - API local está realizando a conversão de USD e BRL para qualquer moeda (USD, BRL, EUR, BTC e ETH);
 
 ## Formato para requisições via API local:
-- /api/currencyConversion/getCurrenciesQuotation/{currencySymbol}
-- /api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/
+- ```/api/currencyConversion/getCurrenciesQuotation/{currencySymbol}```
+- ```/api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/```
 
 ## Retornos da API:
  - Quando solicitado o método de conversão da moeda **GetCurrencyConverted(string fromCurrencySymbol, string toCurrencySymbol, decimal amount)**:
