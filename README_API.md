@@ -3,6 +3,7 @@
 - API local Consumindo dados da API externa;
 - A API externa utilizada é a [Coin Market Cap](https://coinmarketcap.com/api/);
 - API local está realizando a conversão de USD para qualquer moeda (USD, BRL, EUR, BTC e ETH);
+- API local está realizando a conversão de BRL para as moedas -> BRL, EUR e USD;
 
 ## Formato para requisições via API local:
 - /api/currencyConversion/getCurrenciesQuotation/{currencySymbol}
