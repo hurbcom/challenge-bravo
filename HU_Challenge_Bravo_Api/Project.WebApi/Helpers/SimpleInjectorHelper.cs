@@ -12,7 +12,7 @@ namespace Project.WebApi.Helpers
         {
             var container = new Container();
 
-            container.Register<ICurrencyConversionFacade, CurrencyConversionFacade>(Lifestyle.Singleton);
+            container.Register<ICurrencyConversionBusinessFacade, CurrencyConversionBusinessFacade>(Lifestyle.Singleton);
 
             container.RegisterWebApiControllers(GlobalConfiguration.Configuration);
 

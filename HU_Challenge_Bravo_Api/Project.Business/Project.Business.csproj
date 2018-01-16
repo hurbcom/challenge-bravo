@@ -36,6 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,11 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\ConvertedCurrencyDTO.cs" />
     <Compile Include="DTOs\CurrencyDTO.cs" />
     <Compile Include="Enums\CurrencyTypes.cs" />
     <Compile Include="Exceptions\ServiceException.cs" />
-    <Compile Include="Facades\Concrete\CurrencyConversionFacade.cs" />
-    <Compile Include="Facades\Interface\ICurrcencyConversionFacade.cs" />
+    <Compile Include="Facades\Concrete\CurrencyConversionBusinessFacade.cs" />
+    <Compile Include="Facades\Interface\ICurrcencyConversionBusinessFacade.cs" />
     <Compile Include="Helpers\CurrencyConversionRoutersHelper.cs" />
     <Compile Include="HttpConnector\ExternalApiConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

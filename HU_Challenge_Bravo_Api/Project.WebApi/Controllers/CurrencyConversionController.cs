@@ -14,9 +14,9 @@ namespace Project.WebApi.Controllers
     [RoutePrefix("api/currencyConversion")]
     public class CurrencyConversionController : ApiController
     {
-        private ICurrencyConversionFacade _currencyConversionFacade = null;
+        private ICurrencyConversionBusinessFacade _currencyConversionFacade = null;
 
-        public CurrencyConversionController(ICurrencyConversionFacade currencyConversionFacade)
+        public CurrencyConversionController(ICurrencyConversionBusinessFacade currencyConversionFacade)
         {
             _currencyConversionFacade = currencyConversionFacade;
         }
@@ -49,18 +49,18 @@ namespace Project.WebApi.Controllers
         [Route("convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}")]
         public async Task<HttpResponseMessage> Convert([FromUri] string fromCurrency, string toCurrency, decimal amount)
         {
-            decimal x = 0M;
+            ConvertedCurrencyDTO response = null;
 
             try
             {
-                x = await _currencyConversionFacade.GetCurrencyConverted(fromCurrency.ToUpper(), toCurrency.ToUpper(), amount);
+                response = await _currencyConversionFacade.GetCurrencyConverted(fromCurrency.ToUpper(), toCurrency.ToUpper(), amount);
             }
             catch (Exception ex)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, x);
+            return Request.CreateResponse(HttpStatusCode.OK, response);
         }
     }
 }

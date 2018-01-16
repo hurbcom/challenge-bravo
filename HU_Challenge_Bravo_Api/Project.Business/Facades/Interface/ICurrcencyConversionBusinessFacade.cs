@@ -5,10 +5,9 @@ namespace Project.Business.Facades.Interface
 {
     //ToDo: Refactoring - Review the name of the interface to be more legible/semantic (make more sense)
     //ToDo: Refactoring - Review the name of the methods to be more legible/semantic (make more sense)
-    public interface ICurrencyConversionFacade
+    public interface ICurrencyConversionBusinessFacade
     {
         Task<CurrencyDTO> GetCurrencyQuotation(string currencyTicker);
-        Task<decimal> GetCurrencyConverted(string fromCurrency, string toCurrency, decimal amount);
-        decimal Convert(string fromCurrency, CurrencyDTO fromCurrencyQuotation, CurrencyDTO toCurrencyQuotation, decimal amount); 
+        Task<ConvertedCurrencyDTO> GetCurrencyConverted(string fromCurrency, string toCurrency, decimal amount);
     }
 }
