@@ -1,14 +1,14 @@
-## Anotações do desenvolvedor:
+## 1. Anotações do desenvolvedor:
 
 - API local Consumindo dados da API externa;
 - A API externa utilizada é a [Coin Market Cap](https://coinmarketcap.com/api/);
-- API local está realizando a conversão de USD e BRL para qualquer moeda (USD, BRL, EUR, BTC e ETH);
+- API do projeto está realizando a conversão de todas as moedas;
 
-## Formato para requisições via API local:
+## 2. Formato para requisições via API local:
 - ```/api/currencyConversion/getCurrenciesQuotation/{currencySymbol}```
 - ```/api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/```
 
-## Retornos da API:
+## 3. Retornos da API:
  - Quando solicitado o método de conversão da moeda **GetCurrencyConverted(string fromCurrencySymbol, string toCurrencySymbol, decimal amount)**:
     ```json
     {
@@ -19,3 +19,8 @@
         "Quotation_Last_Update": "16/01/2018 07:34:23"
     }
     ```
+## 4. Um pouco mais sobre o que foi utilizado na arquitetura do projeto (API side):
+- Simple Injector (Para aplicar o conceito de Injeção de dependência);
+- Utilização do pattern Facade (Na camada Business);
+- NLog (Framework para captura de logs no runtime da aplicação e armazenamento dos mesmos em arquivo txt);
+- Utilização do conceito de URLs amigáveis (conforme mostrado no item 2 deste documento);
