@@ -20,14 +20,15 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 ## Como usar
 
-- Para executar o código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone git@github.com:fabriciopf/challenge-bravo.git
+- Pré-requisito: Docker Compose
+
+- Para testar localmente, precisa rodar os seguintes comandos apenas:
+  - git clone https://github.com/fabriciopf/challenge-bravo.git
   - cd challenge-bravo
   - sudo docker-compose up 		# demora um pouco :(
   
-- Pronto! Agora você pode mandar requisições para a API através de `http://localhost:8000/convert`
+- Pronto! Agora você pode mandar requisições para a API. A documentação em Swagger pode ser acessada através de `http://localhost:8080/?validatorUrl=null`
 
-- A *documentação* em Swagger deve ser acessada através de `http://localhost:8080/?validatorUrl=null`
 
 ## Performance
   
@@ -45,7 +46,11 @@ Transfer/sec:      1.80MB
 
 ## Backlog
 
+- Readme: Explicar como rodar testes unitários e de estresse.
+
 - Polling: Inicialmente, pensei numa estratégia de TTL no Redis (cache da aplicação em memória) e quando não consigo encontrar faço uma requisição http para um site que fornece cotações em tempo real. Porém, quando a moeda (chave) expira no Redis podem chegar várias requisições simultâneas dessa mesma moeda, causando uma sobrecarga desnecessária no site de cotações, além de deixar o tempo de resposta da API mais lento também. 
+
+- Resiliência: Utilizar mais de uma API externa para realizar requisições de cotaçao das moedas.  
 
 - Memory Leak: Ainda não rodei o Valgrind pra verificar se serviço está gerando memory leak.
 
@@ -56,6 +61,10 @@ Transfer/sec:      1.80MB
 - Segurança: A API está vulnerável a ataques DDoS. Vou colocar um NGINX na frente da API para controlar o fluxo de requisições. `https://www.nginx.com/blog/rate-limiting-nginx/`
 
 - Redis: Garantir alta disponibilidade do Redis usando Redis Sentinel: `https://redis.io/topics/sentinel`
+
+- Monitoramento: enviar dados do SO (cpu, memória, espaço em disco) e do serviço (count de requisições realizadas e http-status retornado) para o Graylog
+
+- Docker: Criar um Docker específico para desenvolvimento (geração de pacote de instalação, testes unitários, teste de estresse, etc.) e outro para deploy, contendo apenas o que é essencial para rodar o serviço em produção.  
 
 <p align="center">
   <img src="mdmc.jpg" alt="Missão dada, parceiro, é missão cumprida!" />
