@@ -20,7 +20,7 @@
     }
     ```
 ## 4. Um pouco mais sobre o que foi utilizado na arquitetura do projeto (API side):
-- Simple Injector (Para aplicar o conceito de Injeção de dependência);
+- Simple Injector (Para aplicar o conceito de Injeção de Dependência);
 - Utilização do pattern Facade (Na camada Business);
 - NLog (Framework para captura de logs no runtime da aplicação e armazenamento dos mesmos em arquivo txt);
-- Utilização do conceito de URLs amigáveis (conforme mostrado no item 2 deste documento);
+- Utilização do conceito de URLs amigáveis (Conforme mostrado no item 2 deste documento);
