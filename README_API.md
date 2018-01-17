@@ -13,7 +13,7 @@
 
  - Método de conversão de moedas na API: 
     ```csharp
-    public async Task<HttpResponseMessage> Convert([FromUri] string fromCurrency, string toCurrency, decimal amount)
+    public async Task<HttpResponseMessage> Convert([FromUri] string fromCurrency, string toCurrency, decimal amount){ ... }
     ```
     
  - Retorno do método de conversão de moedas (em formato json):    
