@@ -30,9 +30,9 @@
     
 ## 4. Um pouco mais sobre o que foi utilizado na arquitetura do projeto (no lado da API):
     
-- Simple Injector (Para aplicar o conceito de Injeção de Dependência);
-- Utilização do pattern Facade (Na camada Business);
-- NLog (Lib para captura/armazenamento de logs durante o runtime da aplicação);
-- Utilização do conceito de URLs amigáveis (Conforme mostrado no item 2 deste documento);
-- Métodos assíncronos (Utilizando async/await);
-- AutoMapper (Lib para mapeamento entre objetos, tornando mais prática a manipulação dos mesmos);
+- **Simple Injector** (Para aplicar o conceito de Injeção de Dependência);
+- Utilização do **pattern Facade** (Na camada Business);
+- **NLog** (Lib para captura/armazenamento de logs durante o runtime da aplicação);
+- Utilização do conceito de **URLs amigáveis** (Conforme mostrado no item 2 deste documento);
+- **Métodos assíncronos** (Utilizando async/await);
+- **AutoMapper** (Lib para mapeamento entre objetos, tornando mais prática a manipulação dos mesmos);
