@@ -11,7 +11,12 @@
 
 ## 3. Retornos da API:
 
- - Ao realizar a chamada do seriço referente a rota **Convert**, o método **public async Task<HttpResponseMessage> Convert([FromUri] string fromCurrency, string toCurrency, decimal amount)** é executado e apresenta o seguinte retorno:
+ - Método de conversão de moedas na API: 
+ ```csharp
+ public async Task<HttpResponseMessage> Convert([FromUri] string fromCurrency, string toCurrency, decimal amount)
+ ```
+    
+ - Retorno do método de conversão de moedas (em formato json):    
     ```json
     {
         "From_Currency": "USD",
