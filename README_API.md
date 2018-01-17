@@ -10,7 +10,7 @@
 - ```/api/currencyConversion/getCurrenciesQuotation/{currencySymbol}```
 - ```/api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/```
  - ***Observação:*** 
-    - *A segunda rota mencionada acima, está apresentando problemas quando é passado um número decimal com vírgula (,) e não com ponto (.). Estou decidindo o que é melhor, resolver isso no front ou transformar o decimal em string e realizar o tratamento no método de conversão de moedas da API.*
+    - *A segunda rota mencionada acima, está apresentando problemas quando é passado um número decimal com vírgula ( , ) e não com ponto ( . ). Estou decidindo o que é melhor, resolver isso no front ou transformar o decimal em string e realizar o tratamento no método de conversão de moedas da API.*
     - *Outro ponto de observação/melhoria, é que esta rota mencionada no item anterior precisa que seja incluída a barra após o último parâmetro. As propostas de melhoria mencionadas acima podem resolver esta questão.*
 
 ## 3. Retornos da API:
