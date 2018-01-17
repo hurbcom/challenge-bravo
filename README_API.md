@@ -5,11 +5,13 @@
 - API do projeto está realizando a conversão de todas as moedas;
 
 ## 2. Formato para requisições via API local:
+
 - ```/api/currencyConversion/getCurrenciesQuotation/{currencySymbol}```
 - ```/api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/```
 
 ## 3. Retornos da API:
- - Quando solicitado o método de conversão da moeda **GetCurrencyConverted(string fromCurrencySymbol, string toCurrencySymbol, decimal amount)**:
+
+ - Ao realizar a chamada do seriço referente a rota **Convert**, o método **public async Task<HttpResponseMessage> Convert([FromUri] string fromCurrency, string toCurrency, decimal amount)** é executado e apresenta o seguinte retorno:
     ```json
     {
         "From_Currency": "USD",
@@ -19,8 +21,12 @@
         "Quotation_Last_Update": "16/01/2018 07:34:23"
     }
     ```
+    
 ## 4. Um pouco mais sobre o que foi utilizado na arquitetura do projeto (API side):
+    
 - Simple Injector (Para aplicar o conceito de Injeção de Dependência);
 - Utilização do pattern Facade (Na camada Business);
-- NLog (Framework para captura de logs no runtime da aplicação e armazenamento dos mesmos em arquivo txt);
+- NLog (Lib para captura/armazenamento de logs durante o runtime da aplicação);
 - Utilização do conceito de URLs amigáveis (Conforme mostrado no item 2 deste documento);
+- Métodos assíncronos (utilizando async/await);
+- AutoMapper (Lib para mapeamento entre objetos, tornando mais prática a manipulação de objetos);
