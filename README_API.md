@@ -12,7 +12,7 @@
 
 ## 3. Retornos da API:
 
- - Método de conversão de moedas na API: 
+ - Método de conversão de moedas na API (disponível na camada de controllers): 
     ```csharp
     public async Task<HttpResponseMessage> Convert([FromUri] string fromCurrency, string toCurrency, decimal amount){ ... }
     ```
