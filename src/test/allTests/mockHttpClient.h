@@ -6,6 +6,6 @@
 class mockHttpClient : public HttpClient {
 public:
 	MOCK_METHOD1(get, http_response(string));
-	mockHttpClient() : HttpClient("http://127.0.1.1") {};
+	mockHttpClient() : HttpClient("http://localhost") {};
 	virtual ~mockHttpClient() {};
 };
