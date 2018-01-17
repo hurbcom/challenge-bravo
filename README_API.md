@@ -1,8 +1,7 @@
 ## 1. Anotações do desenvolvedor:
 
 - Pessoal, primeiramente me desculpem, sei que no [Readme.md](https://github.com/HotelUrbano/challenge-bravo/blob/master/README.md) do desafio vocês citam as tecnologias que tem mais afinidade, porém, optei por utilizar o Asp.Net C# por ser a tecnolgia que tenho maior nível de conhcimento atualmente. Em tempo, na entrevista com o [Zanaca](https://github.com/zanaca), fui informado de que poderia definir a stack a ser utilizada; :relaxed:
-- A API do projeto está consumindo com sucesso os dados da API externa e realizando a conversão de todas as moedas;
-- A API externa utilizada é a [Coin Market Cap](https://coinmarketcap.com/api/);
+- A API do projeto está consumindo com sucesso os dados da API externa ([Coin Market Cap](https://coinmarketcap.com/api/)) e realizando a conversão de todas as moedas;
 - Como a API externa não oferecia o resultado das conversões de moedas, tive que implementar toda a lógica com base nas informações disponibilizadas por esta API. Este ponto do projeto demandou bastante tempo até que a lógica de conversão fosse finalizada.
 - Não foi pedido, mas achei interessante retornar a informação 'data de última atualização das cotações' para que o usuário tenha uma idéia de valor/tempo na hora de analisar as cotações.
 
