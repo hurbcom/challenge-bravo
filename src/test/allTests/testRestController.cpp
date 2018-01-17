@@ -1,7 +1,7 @@
 #include "../allTests/testRestController.h"
 
 testRestController::testRestController() {
-	server.setEndpoint("http://host_auto_ip4:8000");
+	server.setEndpoint("http://localhost:8001");
 	server.accept().wait();
 }
 
@@ -11,7 +11,7 @@ testRestController::~testRestController() {
 
 TEST_F(testRestController, GetHandlerIsFilteringPath) {
 	http_response response;
-	http_client client("http://127.0.1.1:8000");
+	http_client client("http://localhost:8001");
 
 	response = client.request(methods::GET, uri_builder("/convert").append_query("from", "USD").append_query("to", "BRL").append_query("amount", "99.99").to_string()).get();
 	EXPECT_EQ(response.status_code(), 200);
@@ -28,7 +28,7 @@ TEST_F(testRestController, GetHandlerIsFilteringPath) {
 
 TEST_F(testRestController, GetHandlerIsFilteringQueryArguments) {
 	http_response response;
-	http_client client("http://127.0.1.1:8000");
+	http_client client("http://localhost:8001");
 
 	response = client.request(methods::GET, uri_builder("/convert").append_query("from", "USD").append_query("to", "BRL").append_query("amount", "99.99").to_string()).get();
 	EXPECT_EQ(response.status_code(), 200);
@@ -66,7 +66,7 @@ TEST_F(testRestController, GetHandlerIsFilteringQueryArguments) {
 
 TEST_F(testRestController, GetHandlerIsReturningExpectedFields) {
 	http_response response;
-	http_client client("http://127.0.1.1:8000");
+	http_client client("http://localhost:8001");
 
 	response = client.request(methods::GET, uri_builder("/convert").append_query("from", "USD").append_query("to", "BRL").append_query("amount", "99.99").to_string()).get();
 	auto json = response.extract_json().get();
