@@ -29,6 +29,8 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
   
 - Pronto! Agora você pode mandar requisições para a API. A documentação em Swagger pode ser acessada através de `http://localhost:8080/?validatorUrl=null`
 
+- Para rodar os testes (os containers precisam estar de pé: docker-compose up):
+  - sudo docker-compose exec currency-convert /src/build/test/allTests/allTests --gtest_shuffle
 
 ## Performance
   
@@ -46,7 +48,7 @@ Transfer/sec:      1.80MB
 
 ## Backlog
 
-- Readme: Explicar como rodar testes unitários e de estresse.
+- Readme: Explicar como rodar o teste de estresse.
 
 - Polling: Inicialmente, pensei numa estratégia de TTL no Redis (cache da aplicação em memória) e quando não consigo encontrar faço uma requisição http para um site que fornece cotações em tempo real. Porém, quando a moeda (chave) expira no Redis podem chegar várias requisições simultâneas dessa mesma moeda, causando uma sobrecarga desnecessária no site de cotações, além de deixar o tempo de resposta da API mais lento também. 
 
@@ -65,6 +67,8 @@ Transfer/sec:      1.80MB
 - Monitoramento: enviar dados do SO (cpu, memória, espaço em disco) e do serviço (count de requisições realizadas e http-status retornado) para o Graylog
 
 - Docker: Criar um Docker específico para desenvolvimento (geração de pacote de instalação, testes unitários, teste de estresse, etc.) e outro para deploy, contendo apenas o que é essencial para rodar o serviço em produção.  
+
+- Mock: Mockar o Redis pra não precisar dele quando for rodar os testes unitários.
 
 <p align="center">
   <img src="mdmc.jpg" alt="Missão dada, parceiro, é missão cumprida!" />
