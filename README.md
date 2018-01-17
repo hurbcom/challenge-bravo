@@ -1,61 +1,74 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Currency Conversion API
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
 
-A API deve converter entre as seguintes moedas:
+O propósito deste projeto é mostrar que em C++ também é possível criar um serviço http de forma simples, rápida, com código legível e a já esperada alta performance. O framework usado é o CppRestSDK criado pela Microsoft. Ele fornece diversas funcionalidades, tais como: json, streaming assíncrono, cliente WebSocket, oAuth e PPL Tasks - um modelo de composiçao de operações assíncronas que usa promise/future. O framework para testes unitários é o Google Tests/Mocks. 
+
+A única parte do código que não foi criada por mim está na pasta src/3rd-party.
+
+Esta API limita-se a converter valor entre as seguintes moedas:
 - USD
 - BRL
 - EUR
 - BTC
 - ETH
 
-
 Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+A requisição recebe como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+## Como usar
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+- Pré-requisito: Docker Compose
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+- Para testar localmente, precisa rodar os seguintes comandos apenas:
+  - git clone https://github.com/fabriciopf/challenge-bravo.git
+  - cd challenge-bravo
+  - sudo docker-compose up 		# demora um pouco :(
+  
+- Pronto! Agora você pode mandar requisições para a API. A documentação em Swagger pode ser acessada através de `http://localhost:8080/?validatorUrl=null`
 
+- Para rodar os testes (os containers precisam estar de pé: docker-compose up):
+  - sudo docker-compose exec currency-convert run-unit-tests
+  - sudo docker-compose exec currency-convert run-stress-test
 
+## Performance
+  
+- A API suporta um volume de +10K requisições por segundo em um teste de estresse rodando fora do Docker. Rodando pelo Docker chegou a um pouco +8K.
 
-## Critério de avaliação
+```
+$ sudo docker-compose exec currency-convert run-stress-test
+Running 30s test @ http://currency-convert:8000/convert?from=BRL&to=EUR&amount=359.99
+  9 threads and 1000 connections
+  308960 requests in 30.01s, 53.98MB read
+  Socket errors: connect 0, read 0, write 0, timeout 285
+Requests/sec:  10295.79
+Transfer/sec:      1.80MB
+```
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Acertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+## Backlog
 
-## Dúvidas
+- Polling: Inicialmente, pensei numa estratégia de TTL no Redis (cache da aplicação em memória) e quando não consigo encontrar faço uma requisição http para um site que fornece cotações em tempo real. Porém, quando a moeda (chave) expira no Redis podem chegar várias requisições simultâneas dessa mesma moeda, causando uma sobrecarga desnecessária no site de cotações, além de deixar o tempo de resposta da API mais lento também. 
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+- Resiliência: Utilizar mais de uma API externa para realizar requisições de cotaçao das moedas.  
 
-Boa sorte e boa viagem! ;)
+- Memory Leak: Ainda não rodei o Valgrind pra verificar se serviço está gerando memory leak.
+
+- Variáveis: Algumas variáveis estão hardcoded, devendo ser convertidas para constante e/ou variável de configuração.
+
+- Testes Unitários: Preciso terminar de criar alguns testes unitários pra aumentar a cobertura de código. Desejável: 100%.
+
+- Segurança: A API está vulnerável a ataques DDoS. Vou colocar um NGINX na frente da API para controlar o fluxo de requisições. `https://www.nginx.com/blog/rate-limiting-nginx/`
+
+- Redis: Garantir alta disponibilidade do Redis usando Redis Sentinel: `https://redis.io/topics/sentinel`
+
+- Monitoramento: enviar dados do SO (cpu, memória, espaço em disco) e do serviço (count de requisições realizadas e http-status retornado) para o Graylog
+
+- Docker: Criar um Docker específico para desenvolvimento (geração de pacote de instalação, testes unitários, teste de estresse, etc.) e outro para deploy, contendo apenas o que é essencial para rodar o serviço em produção.  
+
+- Mock: Mockar o Redis pra não precisar dele quando for rodar os testes unitários.
 
 <p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
+  <img src="mdmc.jpg" alt="Missão dada, parceiro, é missão cumprida!" />
 </p>
