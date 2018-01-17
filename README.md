@@ -30,15 +30,16 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 - Pronto! Agora você pode mandar requisições para a API. A documentação em Swagger pode ser acessada através de `http://localhost:8080/?validatorUrl=null`
 
 - Para rodar os testes (os containers precisam estar de pé: docker-compose up):
-  - sudo docker-compose exec currency-convert /src/build/test/allTests/allTests --gtest_shuffle
+  - sudo docker-compose exec currency-convert run-unit-tests
+  - sudo docker-compose exec currency-convert run-stress-test
 
 ## Performance
   
 - A API suporta um volume de +10K requisições por segundo em um teste de estresse rodando fora do Docker. Rodando pelo Docker chegou a um pouco +8K.
 
 ```
-$ ./wrk -t9 -c1000 -R13000 -d30s "http://127.0.1.1:8000/convert?from=BRL&to=EUR&amount=359.99"
-Running 30s test @ http://127.0.1.1:8000/convert?from=BRL&to=EUR&amount=359.99
+$ sudo docker-compose exec currency-convert run-stress-test
+Running 30s test @ http://currency-convert:8000/convert?from=BRL&to=EUR&amount=359.99
   9 threads and 1000 connections
   308960 requests in 30.01s, 53.98MB read
   Socket errors: connect 0, read 0, write 0, timeout 285
@@ -47,8 +48,6 @@ Transfer/sec:      1.80MB
 ```
 
 ## Backlog
-
-- Readme: Explicar como rodar o teste de estresse.
 
 - Polling: Inicialmente, pensei numa estratégia de TTL no Redis (cache da aplicação em memória) e quando não consigo encontrar faço uma requisição http para um site que fornece cotações em tempo real. Porém, quando a moeda (chave) expira no Redis podem chegar várias requisições simultâneas dessa mesma moeda, causando uma sobrecarga desnecessária no site de cotações, além de deixar o tempo de resposta da API mais lento também. 
 
