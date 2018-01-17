@@ -10,7 +10,6 @@ using System.Web.Http;
 
 namespace Project.WebApi.Controllers
 {
-    //ToDo: Refactoring - Review the name of the controlllers to be more legible/semantic (make more sense)
     [RoutePrefix("api/currencyConversion")]
     public class CurrencyConversionController : ApiController
     {
@@ -21,7 +20,7 @@ namespace Project.WebApi.Controllers
             _currencyConversionFacade = currencyConversionFacade;
         }
 
-        #region ' API Testing Request to External API '
+        #region ' External API - Resquest to get the Currency Quotation '
 
         [HttpGet]
         [Route("getCurrenciesQuotation/{currencySymbol}")]
@@ -45,6 +44,8 @@ namespace Project.WebApi.Controllers
 
         #endregion
 
+        #region ' Internal API - Request to convert currency value '
+
         [HttpGet]
         [Route("convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}")]
         public async Task<HttpResponseMessage> Convert([FromUri] string fromCurrency, string toCurrency, decimal amount)
@@ -62,5 +63,7 @@ namespace Project.WebApi.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
+
+        #endregion
     }
 }
