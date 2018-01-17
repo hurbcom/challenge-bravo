@@ -5,7 +5,7 @@
 - Como a API externa não oferecia o resultado das conversões de moedas, tive que implementar toda a lógica com base nas informações disponibilizadas por esta API. Este ponto do projeto demandou bastante tempo até que a lógica de conversão fosse finalizada.
 - Não foi pedido, mas achei interessante retornar a informação 'data de última atualização das cotações' para que o usuário tenha uma idéia de valor/tempo na hora de analisar as cotações.
 
-## 2. Formato para requisições via API local:
+## 2. Formato para requisições via API do Projeto:
 
 - ```/api/currencyConversion/getCurrenciesQuotation/{currencySymbol}```
 - ```/api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/```
@@ -28,7 +28,7 @@
     }
     ```
     
-## 4. Um pouco mais sobre o que foi utilizado na arquitetura do projeto (API side):
+## 4. Um pouco mais sobre o que foi utilizado na arquitetura do projeto (no lado da API):
     
 - Simple Injector (Para aplicar o conceito de Injeção de Dependência);
 - Utilização do pattern Facade (Na camada Business);
