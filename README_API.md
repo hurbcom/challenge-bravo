@@ -29,4 +29,4 @@
 - NLog (Lib para captura/armazenamento de logs durante o runtime da aplicação);
 - Utilização do conceito de URLs amigáveis (Conforme mostrado no item 2 deste documento);
 - Métodos assíncronos (utilizando async/await);
-- AutoMapper (Lib para mapeamento entre objetos, tornando mais prática a manipulação de objetos);
+- AutoMapper (Lib para mapeamento entre objetos, tornando mais prática a manipulação dos mesmos);
