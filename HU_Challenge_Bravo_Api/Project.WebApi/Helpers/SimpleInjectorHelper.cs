@@ -2,6 +2,7 @@
 using Project.Business.Facades.Interface;
 using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
+using SimpleInjector.Lifestyles;
 using System.Web.Http;
 
 namespace Project.WebApi.Helpers
@@ -19,7 +20,9 @@ namespace Project.WebApi.Helpers
         {
             var container = new Container();
 
-            container.Register<ICurrencyConversionBusinessFacade, CurrencyConversionBusinessFacade>(Lifestyle.Singleton);
+            container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
+
+            container.Register<ICurrencyConversionBusinessFacade, CurrencyConversionBusinessFacade>(Lifestyle.Scoped);
 
             container.RegisterWebApiControllers(GlobalConfiguration.Configuration);
 

@@ -65,13 +65,20 @@
         </member>
         <member name="T:Project.WebApi.WebApiApplication">
             <summary>
-            adadadad
+            This class is used to setup general configurations to the application.
             </summary>
         </member>
         <member name="M:Project.WebApi.WebApiApplication.Application_Start">
             <summary>
-            asdadasd
+            This method will be executed during the application startup, implementing some configurations to the app.
             </summary>
+        </member>
+        <member name="M:Project.WebApi.WebApiApplication.Application_BeginRequest(System.Object,System.EventArgs)">
+            <summary>
+            This method is used to setup HTTP request types available to the users.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="T:Project.WebApi.Helpers.AutoMepperHelper">
             <summary>
