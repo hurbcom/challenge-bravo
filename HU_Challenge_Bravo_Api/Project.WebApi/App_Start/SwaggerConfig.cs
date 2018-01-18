@@ -6,12 +6,13 @@ using Swashbuckle.Application;
 namespace Project.WebApi
 {
     /// <summary>
-    /// asdadasd
+    /// Class responsible for swagger configuration.
     /// </summary>
     public class SwaggerConfig
     {
         /// <summary>
-        /// asdasdas
+        /// This method is used to register the XML that will deliver all the API documentation 
+        /// and also define the project in the solution that will keep the API documentation.
         /// </summary>
         public static void Register()
         {
@@ -37,7 +38,7 @@ namespace Project.WebApi
         }
 
         /// <summary>
-        /// asdasdadasd
+        /// This method is responsible to get the XML file that will bring all API documentation.
         /// </summary>
         /// <returns></returns>
         protected static string GetXmlCommentsPath()

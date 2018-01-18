@@ -124,10 +124,10 @@
     </Compile>
     <Compile Include="Helpers\AutoMepperHelper.cs" />
     <Compile Include="Helpers\SimpleInjectorHelper.cs" />
-    <Compile Include="Mappers\DomainToViewModelMap.cs" />
+    <Compile Include="Mappers\DtoToViewModelMap.cs" />
     <Compile Include="Mappers\ViewModelToDomainMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\CryptoCurrencyViewModel.cs" />
+    <Compile Include="ViewModels\CurrencyDataViewModel.cs" />
     <Compile Include="ViewModels\CurrencyQuotationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,12 +7,19 @@ using System.Threading.Tasks;
 
 namespace Project.Business.Facades.Concrete
 {
+    /// <summary>
+    /// This class represent the concrete facade to the currency conversion process.
+    /// </summary>
     public class CurrencyConversionBusinessFacade : ICurrencyConversionBusinessFacade
     {
+        /// <summary>
+        /// This async method is used to get the currency data from the external API.
+        /// </summary>
+        /// <param name="currencySymbol">string</param>
+        /// <returns>json object</returns>
         public async Task<CurrencyDTO> GetCurrencyQuotation(string currencySymbol)
         {
             var currencyQuotation = new CurrencyDTO();
-
             var httpConnector = new ExternalApiConnector(currencySymbol);
 
             currencyQuotation = await httpConnector.GetCurrencyQuotation();
@@ -20,33 +27,50 @@ namespace Project.Business.Facades.Concrete
             return currencyQuotation;
         }
 
+        /// <summary>
+        /// This method is used to get the converted currenvy value and deliver it to the controller layer.
+        /// </summary>
+        /// <param name="fromCurrencySymbol">string</param>
+        /// <param name="toCurrencySymbol">string</param>
+        /// <param name="amount">decimal</param>
+        /// <returns>json object</returns>
         public async Task<ConvertedCurrencyDTO> GetCurrencyConverted(string fromCurrencySymbol, string toCurrencySymbol, decimal amount)
         {
             var convertedCurrencyData = new ConvertedCurrencyDTO();
-
+            
+            // get data from external API to start the conversion calc
             CurrencyDTO fromCurrencyQuotation = await GetCurrencyQuotation(fromCurrencySymbol);
             CurrencyDTO toCurrencyQuotation = await GetCurrencyQuotation(toCurrencySymbol);
 
+            // get the convert value
             var convertedValue = Convert(fromCurrencySymbol, fromCurrencyQuotation, toCurrencyQuotation, amount);
 
+            // set other json object info about the currency conversion
             convertedCurrencyData.From_Currency = fromCurrencySymbol;
             convertedCurrencyData.To_Currency = toCurrencySymbol;
             convertedCurrencyData.Orinigal_Value = amount;
-
-            if (toCurrencySymbol == "BTC" || toCurrencySymbol == "ETH")
-            {
-                convertedCurrencyData.Converted_Value = Decimal.Round(convertedValue, 8);
-            }
-            else
-            {
-                convertedCurrencyData.Converted_Value = Decimal.Round(convertedValue, 2);
-            }
-
             convertedCurrencyData.Quotation_Last_Update = GetDateTimeForLastUpdatedQuotation(toCurrencyQuotation);
 
+            // if target currency is BTC or ETH, use eight decimal places to represent correctly the currency price
+            if (toCurrencySymbol == "BTC" || toCurrencySymbol == "ETH")
+                convertedCurrencyData.Converted_Value = Decimal.Round(convertedValue, 8); //eight decimal places
+            // else use two decimal places to represent real currencies
+            else
+                convertedCurrencyData.Converted_Value = Decimal.Round(convertedValue, 2); //two decimal places
+            
             return convertedCurrencyData;
         }
 
+        /// <summary>
+        /// This method is the first orchestrator in the currency convertion process. It defines what's the base currency
+        /// and the target currency, then pass the correct parameters to the 
+        /// second orchestrator (GetConvertedValueForAnyCurrency()).
+        /// </summary>
+        /// <param name="fromCurrency">string</param>
+        /// <param name="fromCurrencyQuotation">object</param>
+        /// <param name="toCurrencyQuotation">object</param>
+        /// <param name="amount">decimal</param>
+        /// <returns>decimal</returns>
         public decimal Convert(string fromCurrency, CurrencyDTO fromCurrencyQuotation, CurrencyDTO toCurrencyQuotation, decimal amount)
         {
             decimal result = 0M;
@@ -58,27 +82,22 @@ namespace Project.Business.Facades.Concrete
 
                     // usd to brl
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.BRL.ToString())
-                        //result = GetConvertedValueFromUsdToOtherCurrencies(toCurrencyQuotation.UnitPrice_Brl_in_Usd, amount);
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, toCurrencyQuotation.UnitPrice_Brl_in_Usd, amount);
 
                     // usd to eur
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.EUR.ToString())
-                        //result = GetConvertedValueFromUsdToOtherCurrencies(toCurrencyQuotation.UnitPrice_Eur_in_Usd, amount);
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, toCurrencyQuotation.UnitPrice_Eur_in_Usd, amount);
 
                     // usd to usd
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.USD.ToString())
-                        //result = amount;
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, toCurrencyQuotation.UnitPrice_Usd_in_Usd, amount);
 
                     // usd to btc
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.BTC.ToString())
-                        //result = GetConvertedValueFromUsdToOtherCurrencies(toCurrencyQuotation.UnitPrice_Btc_in_Usd, amount);
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, toCurrencyQuotation.UnitPrice_Btc_in_Usd, amount);
 
                     // usd to eth
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.ETH.ToString())
-                        //result = GetConvertedValueFromUsdToOtherCurrencies(toCurrencyQuotation.UnitPrice_Eth_in_Usd, amount);
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, toCurrencyQuotation.UnitPrice_Eth_in_Usd, amount);
 
                     #endregion
@@ -88,7 +107,6 @@ namespace Project.Business.Facades.Concrete
 
                     // brl to brl
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.BRL.ToString())
-                        //result = amount;
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, 0M, amount);
 
                     // brl to eur
@@ -97,7 +115,6 @@ namespace Project.Business.Facades.Concrete
                     
                     // brl to usd
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.USD.ToString())
-                        //result = amount / fromCurrencyQuotation.UnitPrice_Brl_in_Usd;
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, 0M, amount);
 
                     // brl to btc
@@ -119,12 +136,10 @@ namespace Project.Business.Facades.Concrete
 
                     // eur to eur
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.EUR.ToString())
-                        //result = amount;
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, 0M, amount);
 
                     // eur to usd
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.USD.ToString())
-                        //result = amount / fromCurrencyQuotation.UnitPrice_Eur_in_Usd;
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, 0M, amount);
 
                     // eur to btc
@@ -150,12 +165,10 @@ namespace Project.Business.Facades.Concrete
 
                     // btc to usd
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.USD.ToString())
-                        //result = amount / fromCurrencyQuotation.UnitPrice_Btc_in_Usd;
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, 0M, amount);
 
                     // btc to btc
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.BTC.ToString())
-                        //result = amount;
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, 0M, amount);
 
                     // btc to eth
@@ -177,7 +190,6 @@ namespace Project.Business.Facades.Concrete
 
                     // eth to usd
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.USD.ToString())
-                        //result = amount / fromCurrencyQuotation.UnitPrice_Eth_in_Usd;
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, 0M, amount);
 
                     // eth to btc
@@ -186,7 +198,6 @@ namespace Project.Business.Facades.Concrete
 
                     // eth to eth
                     if (toCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.ETH.ToString())
-                        //result = amount;
                         result = GetConvertedValueForAnyCurrency(fromCurrencyQuotation, toCurrencyQuotation, 0M, amount);
 
                     #endregion
@@ -198,6 +209,15 @@ namespace Project.Business.Facades.Concrete
             return result;
         }
 
+        /// <summary>
+        /// This method is the second orchestrator in the currency conversion process.It defines 
+        /// what calculation must be done based on the base or target currencies.
+        /// </summary>
+        /// <param name="fromCurrencyQuotation">object</param>
+        /// <param name="toCurrencyQuotation">object</param>
+        /// <param name="toCurrencyUnitPriceInUsd">decimal</param>
+        /// <param name="amount">decimal</param>
+        /// <returns>decimal</returns>
         public decimal GetConvertedValueForAnyCurrency(CurrencyDTO fromCurrencyQuotation, CurrencyDTO toCurrencyQuotation, decimal toCurrencyUnitPriceInUsd, decimal amount)
         {
             if (fromCurrencyQuotation.TargetCurrencySymbol == CurrencyTypes.USD.ToString())
@@ -234,14 +254,18 @@ namespace Project.Business.Facades.Concrete
             }
         }
 
+        /// <summary>
+        /// This method is used to get the currency value in USD based on informed amount.
+        /// </summary>
+        /// <param name="currencyData">object</param>
+        /// <param name="amount">decimal</param>
+        /// <returns>decimal</returns>
         public decimal GetAmountValueInUsdCurrency(CurrencyDTO currencyData, decimal amount)
         {
             switch (currencyData.TargetCurrencySymbol)
             {
                 case "BRL":
                     return currencyData.UnitPrice_Brl_in_Usd * amount;
-                //case "USD":
-                //    return currencyData.UnitPrice_Usd_in_Usd * amount;
                 case "EUR":
                     return currencyData.UnitPrice_Eur_in_Usd * amount;
                 case "BTC":
@@ -253,6 +277,12 @@ namespace Project.Business.Facades.Concrete
             }
         }
 
+        /// <summary>
+        /// This method is used to get the datetime from the external API tha comes in timestamp format.
+        /// A conversion is made in orther to get a legible datimetime info.
+        /// </summary>
+        /// <param name="toCurrencyQuotation">object</param>
+        /// <returns>datetime as string</returns>
         private string GetDateTimeForLastUpdatedQuotation(CurrencyDTO toCurrencyQuotation)
         {
             double timestamp = toCurrencyQuotation.Last_updated;

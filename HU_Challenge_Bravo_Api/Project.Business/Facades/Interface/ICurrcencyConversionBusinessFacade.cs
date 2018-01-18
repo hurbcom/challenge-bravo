@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace Project.Business.Facades.Interface
 {
+    /// <summary>
+    /// Thie interface represents all the facade contracts to be implemented on the concrete facade classes.
+    /// </summary>
     public interface ICurrencyConversionBusinessFacade
     {
         Task<CurrencyDTO> GetCurrencyQuotation(string currencySymbol);

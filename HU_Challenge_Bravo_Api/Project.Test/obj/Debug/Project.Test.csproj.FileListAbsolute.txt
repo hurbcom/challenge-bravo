@@ -7,6 +7,5 @@ C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Proje
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
-C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\obj\Debug\Project.Test.csprojResolveAssemblyReference.cache
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\obj\Debug\Project.Test.dll
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\obj\Debug\Project.Test.pdb

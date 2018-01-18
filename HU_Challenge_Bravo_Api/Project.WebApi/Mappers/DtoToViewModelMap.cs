@@ -4,9 +4,15 @@ using Project.WebApi.ViewModels;
 
 namespace Project.WebApi.Mappers
 {
-    public class DomainToViewModelMap : Profile
+    /// <summary>
+    /// This class is used to map all the properties from Dto to ViewModel classes.
+    /// </summary>
+    public class DtoToViewModelMap : Profile
     {
-        public DomainToViewModelMap()
+        /// <summary>
+        /// This constructor is used to implement the mapping between Dto and ViewModels properties.
+        /// </summary>
+        public DtoToViewModelMap()
         {
             CreateMap<CurrencyDTO, CurrencyDataViewModel>()
                 .ForMember(

@@ -5,18 +5,17 @@ using System.Web.Http;
 namespace Project.WebApi
 {
     /// <summary>
-    /// asdadas
+    /// Class where all the API configurations are made, including routes, response formats, the registration of
+    /// swagger (lib used to document all the API) and other stuff.
     /// </summary>
     public static class WebApiConfig
     {
         /// <summary>
-        /// dasdadad
+        /// This method is responsible to register all the API configurations.
         /// </summary>
         /// <param name="config"></param>
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -28,14 +27,14 @@ namespace Project.WebApi
                 constraints: null,
                 handler: new RedirectHandler((message => message.RequestUri.ToString()), "swagger"));
 
-            //default route
+            // Default route
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{currencySymbol}",
                 defaults: new { currencySymbol = RouteParameter.Optional }
             );
 
-            //adding customized route
+            // Adding customized route
             config.Routes.MapHttpRoute(
                 name: "CurrencyConversionApi",
                 routeTemplate: "api/{controller}/{from}/{to}/{amount}",
@@ -46,11 +45,11 @@ namespace Project.WebApi
                 }
             );
 
-            //Adding this code in order to allow the API response be compatible with json format.
+            // Adding this code in order to allow the API response be compatible with json format.
             config.Formatters.JsonFormatter.SupportedMediaTypes
                 .Add(new MediaTypeHeaderValue("text/html"));
 
-            //Calling swagger into app startup
+            // Calling swagger into app startup
             SwaggerConfig.Register();
         }
     }
