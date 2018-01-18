@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html ng-app="appCurrencyConversion">
+<head>
+    <title>Currency Conversion API 1.0</title>
+    
+    <meta charset="utf-8" />
+
+    <!-- CSS -->
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/bootstrap-theme.min.css" rel="stylesheet" />
+
+    <!-- JS -->
+    <script src="Scripts/jquery-1.9.1.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+
+    <!-- ANGULAR JS -->
+    <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/angular-route.min.js"></script>
+
+    <!-- ANGULAR APP FILES -->
+    <script src="app/app.js"></script>
+    <script src="app/routes.js"></script>
+
+    <!-- CONTROLLERS -->
+    <script src="app/controllers/currency/currency-conversion-controller.js"> </script>
+
+</head>
+<body class="container-fluid">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Currency Conversion</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#currency/conversion">Convert</a></li>
+                    <li><a href="http://localhost:52995/swagger/ui/index" target="_blank">API Documentation</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div ng-view>
+
+        </div>
+    </main>
+</body>
+</html>
