@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Project.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:Project.WebApi.SwaggerConfig">
+            <summary>
+            asdadasd
+            </summary>
+        </member>
+        <member name="M:Project.WebApi.SwaggerConfig.Register">
+            <summary>
+            asdasdas
+            </summary>
+        </member>
+        <member name="M:Project.WebApi.SwaggerConfig.GetXmlCommentsPath">
+            <summary>
+            asdasdadasd
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Project.WebApi.WebApiConfig">
+            <summary>
+            asdadas
+            </summary>
+        </member>
+        <member name="M:Project.WebApi.WebApiConfig.Register(System.Web.Http.HttpConfiguration)">
+            <summary>
+            dasdadad
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="T:Project.WebApi.Controllers.CurrencyConversionController">
+            <summary>
+            asdadasd
+            </summary>
+        </member>
+        <member name="M:Project.WebApi.Controllers.CurrencyConversionController.#ctor(Project.Business.Facades.Interface.ICurrencyConversionBusinessFacade)">
+            <summary>
+            asdasdasd
+            </summary>
+            <param name="currencyConversionFacade"></param>
+        </member>
+        <member name="M:Project.WebApi.Controllers.CurrencyConversionController.GetCurrenciesQuotation(System.String)">
+            <summary>
+            asdad
+            </summary>
+            <param name="currencySymbol"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Project.WebApi.Controllers.CurrencyConversionController.Convert(System.String,System.String,System.Decimal)">
+            <summary>
+            asdasdadd
+            </summary>
+            <param name="fromCurrency"></param>
+            <param name="toCurrency"></param>
+            <param name="amount"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Project.WebApi.WebApiApplication">
+            <summary>
+            adadadad
+            </summary>
+        </member>
+        <member name="M:Project.WebApi.WebApiApplication.Application_Start">
+            <summary>
+            asdadasd
+            </summary>
+        </member>
+        <member name="T:Project.WebApi.ViewModels.CurrencyDataViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.BaseCurrencySymbol">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.TargetCurrencySymbol">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Project.WebApi.ViewModels.CurrencyDataViewModel.last_updated">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.Last_updated_converted">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.Price_usd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.Price_btc">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.Price_brl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.Price_eth">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.Price_eur">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Usd_in_Brl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Usd_in_Eth">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Usd_in_Btc">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Usd_in_Eur">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Usd_in_Usd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Brl_in_Brl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Brl_in_Usd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Eur_in_Eur">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Eur_in_Usd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Btc_in_Btc">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Btc_in_Usd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Eth_in_Eth">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyDataViewModel.UnitPrice_Eth_in_Usd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Project.WebApi.ViewModels.CurrencyQuotationViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyQuotationViewModel.Symbol">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyQuotationViewModel.TargetCurrencySymbol">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyQuotationViewModel.Last_updated">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyQuotationViewModel.Price_usd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyQuotationViewModel.Price_btc">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyQuotationViewModel.Price_brl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyQuotationViewModel.Price_eth">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Project.WebApi.ViewModels.CurrencyQuotationViewModel.Price_eur">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -10,11 +10,18 @@ using System.Web.Http;
 
 namespace Project.WebApi.Controllers
 {
+    /// <summary>
+    /// asdadasd
+    /// </summary>
     [RoutePrefix("api/currencyConversion")]
     public class CurrencyConversionController : ApiController
     {
         private ICurrencyConversionBusinessFacade _currencyConversionFacade = null;
 
+        /// <summary>
+        /// asdasdasd
+        /// </summary>
+        /// <param name="currencyConversionFacade"></param>
         public CurrencyConversionController(ICurrencyConversionBusinessFacade currencyConversionFacade)
         {
             _currencyConversionFacade = currencyConversionFacade;
@@ -22,6 +29,11 @@ namespace Project.WebApi.Controllers
 
         #region ' External API - Resquest to get the Currency Quotation '
 
+        /// <summary>
+        /// asdad
+        /// </summary>
+        /// <param name="currencySymbol"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("getCurrenciesQuotation/{currencySymbol}")]
         public async Task<HttpResponseMessage> GetCurrenciesQuotation([FromUri] string currencySymbol)
@@ -37,15 +49,22 @@ namespace Project.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
 
-            var responseData = Mapper.Map<CurrencyDTO, CurrencyDataViewModel>(currencyData);
+            var responseData = Mapper.Map<CurrencyDTO, CurrencyQuotationViewModel>(currencyData);
 
             return Request.CreateResponse(HttpStatusCode.OK, responseData);
         }
 
         #endregion
 
-        #region ' Internal API - Request to convert currency value '
+        #region ' Internal API - Request to convert the currency price '
 
+        /// <summary>
+        /// asdasdadd
+        /// </summary>
+        /// <param name="fromCurrency"></param>
+        /// <param name="toCurrency"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}")]
         public async Task<HttpResponseMessage> Convert([FromUri] string fromCurrency, string toCurrency, decimal amount)
