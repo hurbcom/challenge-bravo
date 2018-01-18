@@ -4,6 +4,8 @@ namespace Project.Business.DTOs
 {
     public class CurrencyDTO
     {
+        #region ' External API Data '
+
         public string Symbol { get; set; }
         public string TargetCurrencySymbol { get; set; }
 
@@ -15,7 +17,9 @@ namespace Project.Business.DTOs
         public decimal Price_eth { get; set; }
         public decimal Price_eur { get; set; }
 
-        #region ' dollar unit '
+        #endregion
+
+        #region ' dollar (usd) unit price '
 
         public decimal UnitPrice_Brl_in_Usd { get { return Price_brl / Price_usd; } }
         public decimal UnitPrice_Eth_in_Usd { get { return Price_eth / Price_usd; } }
@@ -25,29 +29,29 @@ namespace Project.Business.DTOs
 
         #endregion
 
-        #region ' real (brl) unit '
+        #region ' real (brl) unit price '
 
         public decimal UnitPrice_Brl_in_Brl { get { return 1M; } }
         public decimal UnitPrice_Usd_in_Brl { get { return Price_usd / Price_brl; } }
 
         #endregion
 
-        #region ' euro unit '
+        #region ' euro (eur) unit price '
 
         public decimal UnitPrice_Eur_in_Eur { get { return 1M; } }
         public decimal UnitPrice_Usd_in_Eur { get { return Price_usd / Price_eur; } }
 
         #endregion
 
-        #region ' bitcoin unit (satoshi) '
-        
+        #region ' bitcoin (btc) unit (satoshi) price '
+
         public decimal UnitPrice_Btc_in_Btc { get { return 1M; } }
         public decimal UnitPrice_Usd_in_Btc { get { return Price_usd / Price_btc; } }
 
         #endregion
 
-        #region ' ethereum unit (ether) '
-        
+        #region ' ethereum (eth) unit (ether) price '
+
         public decimal UnitPrice_Eth_in_Eth { get { return 1M; } }
         public decimal UnitPrice_Usd_in_Eth { get { return Price_usd / Price_eth; } }
 

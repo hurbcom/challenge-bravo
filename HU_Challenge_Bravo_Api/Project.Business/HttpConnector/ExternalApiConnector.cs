@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Project.Business.HttpConnector
 {
+    /// <summary>
+    /// This class has the objective to enable httpclient connection.
+    /// </summary>
     public class ExternalApiConnector
     {
         private readonly HttpClient client = null;
@@ -18,6 +21,11 @@ namespace Project.Business.HttpConnector
         private CurrencyDTO currencyData = null;
         private string requestedCurrencySymbol = null;
         
+        /// <summary>
+        /// This constructor is used to setup the http client instance, set the route from the external API and also 
+        /// setup the timeout limite for the connection with the external API.
+        /// </summary>
+        /// <param name="currencySymbol"></param>
         public ExternalApiConnector(string currencySymbol)
         {
             currencyData = new CurrencyDTO();
@@ -25,10 +33,7 @@ namespace Project.Business.HttpConnector
             client = new HttpClient();
             client.DefaultRequestHeaders.ConnectionClose = true;
 
-            //if(currencySymbol != "ETH")
-                route = String.Format(@"{0}?convert={1}", CurrencyConversionRoutersHelper.GET_BITCOIN_QUOTATION, currencySymbol);
-            //else
-            //    route = String.Format(@"{0}?convert={1}", CurrencyConversionRoutersHelper.GET_ETHEREUM_QUOTATION, currencySymbol);
+            route = String.Format(@"{0}?convert={1}", CurrencyConversionRoutersHelper.GET_BITCOIN_QUOTATION, currencySymbol);
 
             servicePointManager = ServicePointManager.FindServicePoint(new Uri(CurrencyConversionRoutersHelper.GET_BITCOIN_QUOTATION));
             servicePointManager.ConnectionLeaseTimeout = 60 * 1000; //1 min
@@ -36,6 +41,10 @@ namespace Project.Business.HttpConnector
             requestedCurrencySymbol = currencySymbol;
         }
 
+        /// <summary>
+        /// This method is used to get the currency data from the external API.
+        /// </summary>
+        /// <returns></returns>
         public async Task<CurrencyDTO> GetCurrencyQuotation()
         {
             var apiResponseResult = await client.GetStringAsync(route);

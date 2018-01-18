@@ -5,8 +5,14 @@ using System.Web.Http;
 
 namespace Project.WebApi
 {
+    /// <summary>
+    /// adadadad
+    /// </summary>
     public class WebApiApplication : System.Web.HttpApplication
     {
+        /// <summary>
+        /// asdadasd
+        /// </summary>
         protected void Application_Start()
         {
             AutoMepperHelper.RegisterMappings();
