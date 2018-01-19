@@ -1,2 +1,5 @@
 ﻿
-var app = angular.module('appCurrencyConversion', [ 'ngRoute' ]);
+var app = angular.module('appCurrencyConversion',
+    [
+        'ngRoute'
+    ]);

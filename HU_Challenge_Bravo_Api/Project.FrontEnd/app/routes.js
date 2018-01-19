@@ -6,7 +6,7 @@ app.config(function ($routeProvider) {
         '/currency/conversion', //URL
         {
             templateUrl: '/app/views/currency/conversion.html',
-            controller: 'currencyConversionController'
+            controller: 'CurrencyConversionController'
         }
         );
 });
