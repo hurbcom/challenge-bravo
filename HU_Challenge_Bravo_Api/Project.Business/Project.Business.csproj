@@ -48,7 +48,6 @@
     <Compile Include="DTOs\ConvertedCurrencyDTO.cs" />
     <Compile Include="DTOs\CurrencyDTO.cs" />
     <Compile Include="Enums\CurrencyTypes.cs" />
-    <Compile Include="Exceptions\ServiceException.cs" />
     <Compile Include="Facades\Concrete\CurrencyConversionBusinessFacade.cs" />
     <Compile Include="Facades\Interface\ICurrcencyConversionBusinessFacade.cs" />
     <Compile Include="Helpers\CurrencyConversionRoutersHelper.cs" />

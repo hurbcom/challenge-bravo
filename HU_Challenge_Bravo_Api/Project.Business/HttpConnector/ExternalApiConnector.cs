@@ -15,7 +15,7 @@ namespace Project.Business.HttpConnector
     /// </summary>
     public class ExternalApiConnector
     {
-        private readonly HttpClient client = null;
+        private static HttpClient client = new HttpClient();
         private readonly ServicePoint servicePointManager = null;
         private readonly string route = null;
         private CurrencyDTO currencyData = null;
@@ -30,13 +30,10 @@ namespace Project.Business.HttpConnector
         {
             currencyData = new CurrencyDTO();
 
-            client = new HttpClient();
+            //client = new HttpClient();
             client.DefaultRequestHeaders.ConnectionClose = true;
 
             route = String.Format(@"{0}?convert={1}", CurrencyConversionRoutersHelper.GET_BITCOIN_QUOTATION, currencySymbol);
-
-            servicePointManager = ServicePointManager.FindServicePoint(new Uri(CurrencyConversionRoutersHelper.GET_BITCOIN_QUOTATION));
-            servicePointManager.ConnectionLeaseTimeout = 60 * 1000; //1 min
 
             requestedCurrencySymbol = currencySymbol;
         }
