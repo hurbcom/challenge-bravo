@@ -39,6 +39,11 @@
             and also the connection with the external API.
             </summary>
         </member>
+        <member name="F:Project.WebApi.Controllers.CurrencyConversionController.logger">
+            <summary>
+            Adding NLog to capture exceptions and 
+            </summary>
+        </member>
         <member name="M:Project.WebApi.Controllers.CurrencyConversionController.#ctor(Project.Business.Facades.Interface.ICurrencyConversionBusinessFacade)">
             <summary>
             This is the constructor of the controller class. Used in the process of dependency inversion 
@@ -79,6 +84,11 @@
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
+        </member>
+        <member name="M:Project.WebApi.WebApiApplication.Application_Error">
+            <summary>
+            This method is used by Nlog to capture the exception events in the server
+            </summary>
         </member>
         <member name="T:Project.WebApi.Helpers.AutoMepperHelper">
             <summary>

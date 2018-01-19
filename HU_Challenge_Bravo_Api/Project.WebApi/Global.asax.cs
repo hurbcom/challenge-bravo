@@ -1,4 +1,5 @@
-﻿using Project.WebApi.Helpers;
+﻿using NLog;
+using Project.WebApi.Helpers;
 using System;
 using System.Net;
 using System.Web;
@@ -36,6 +37,17 @@ namespace Project.WebApi
                 HttpContext.Current.Response.AddHeader("Access-Control-Max-Age", "1728000");
                 HttpContext.Current.Response.End();
             }
+        }
+
+        /// <summary>
+        /// This method is used by Nlog to capture the exception events in the server
+        /// </summary>
+        protected void Application_Error()
+        {
+            Logger logger = LogManager.GetLogger("CurrencyConversionAPI");
+            Exception lastException = Server.GetLastError();
+
+            logger.Fatal(lastException);
         }
     }
 }

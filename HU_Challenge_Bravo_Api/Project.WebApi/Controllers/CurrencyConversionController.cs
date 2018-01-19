@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NLog;
 using Project.Business.DTOs;
 using Project.Business.Facades.Interface;
 using Project.WebApi.ViewModels;
@@ -19,6 +20,11 @@ namespace Project.WebApi.Controllers
     public class CurrencyConversionController : ApiController
     {
         private ICurrencyConversionBusinessFacade _currencyConversionFacade = null;
+
+        /// <summary>
+        /// Adding NLog to capture exceptions and 
+        /// </summary>
+        protected readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// This is the constructor of the controller class. Used in the process of dependency inversion 
@@ -50,6 +56,7 @@ namespace Project.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                logger.Error(ex);
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
 
@@ -81,6 +88,7 @@ namespace Project.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                logger.Error(ex);
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
 
