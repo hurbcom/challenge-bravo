@@ -29,6 +29,5 @@ C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Proje
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.FrontEnd\bin\Project.FrontEnd.pdb
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.FrontEnd\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.FrontEnd\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.FrontEnd\obj\Debug\Project.FrontEnd.csprojResolveAssemblyReference.cache
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.FrontEnd\obj\Debug\Project.FrontEnd.dll
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.FrontEnd\obj\Debug\Project.FrontEnd.pdb

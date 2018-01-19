@@ -19,9 +19,6 @@ namespace Project.WebApi
             AutoMepperHelper.RegisterMappings();
             SimpleInjectorHelper.RegisterInjector();
             GlobalConfiguration.Configure(WebApiConfig.Register);
-
-            var servicePoint = ServicePointManager.FindServicePoint(new Uri("https://api.coinmarketcap.com/"));
-            servicePoint.ConnectionLeaseTimeout = 60 * 1000; // 1 minute
         }
 
         /// <summary>
