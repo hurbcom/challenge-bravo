@@ -23,7 +23,7 @@ namespace Project.Business.HttpConnector
         
         /// <summary>
         /// This constructor is used to setup the http client instance, set the route from the external API and also 
-        /// setup the timeout limite for the connection with the external API.
+        /// setup the timeout limit for the connection with the external API.
         /// </summary>
         /// <param name="currencySymbol"></param>
         public ExternalApiConnector(string currencySymbol)

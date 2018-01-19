@@ -2,6 +2,6 @@ C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Proje
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Business\bin\Debug\Project.Business.pdb
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Business\bin\Debug\Newtonsoft.Json.dll
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Business\bin\Debug\Newtonsoft.Json.xml
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Business\obj\Debug\Project.Business.csprojResolveAssemblyReference.cache
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Business\obj\Debug\Project.Business.dll
 C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Business\obj\Debug\Project.Business.pdb
-C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Business\obj\Debug\Project.Business.csprojResolveAssemblyReference.cache
