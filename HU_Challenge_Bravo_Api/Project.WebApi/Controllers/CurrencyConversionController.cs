@@ -14,6 +14,7 @@ namespace Project.WebApi.Controllers
     /// This Controller is responsible to deliver the API methods where the currency converion are made
     /// and also the connection with the external API.
     /// </summary>
+    [AllowAnonymous]
     [RoutePrefix("api/currencyConversion")]
     public class CurrencyConversionController : ApiController
     {

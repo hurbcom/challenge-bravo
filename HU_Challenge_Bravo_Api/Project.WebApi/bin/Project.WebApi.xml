@@ -65,17 +65,17 @@
         </member>
         <member name="T:Project.WebApi.WebApiApplication">
             <summary>
-            This class is used to setup general configurations to the application.
+            This class is responsible to register global configuration for the appliction
             </summary>
         </member>
         <member name="M:Project.WebApi.WebApiApplication.Application_Start">
             <summary>
-            This method will be executed during the application startup, implementing some configurations to the app.
+            This method execute some actions when the app is building up
             </summary>
         </member>
         <member name="M:Project.WebApi.WebApiApplication.Application_BeginRequest(System.Object,System.EventArgs)">
             <summary>
-            This method is used to setup HTTP request types available to the users.
+            This method make the API accept GET requests from other networks
             </summary>
             <param name="sender"></param>
             <param name="e"></param>

@@ -7,12 +7,12 @@ using System.Web.Http;
 namespace Project.WebApi
 {
     /// <summary>
-    /// This class is responsible to register global configuration for the appliction
+    /// This class is used to setup general configurations to the application.
     /// </summary>
     public class WebApiApplication : System.Web.HttpApplication
     {
         /// <summary>
-        /// This method execute some actions when the app is building up
+        /// This method will be executed during the application startup, implementing some configurations to the app.
         /// </summary>
         protected void Application_Start()
         {
@@ -25,18 +25,22 @@ namespace Project.WebApi
         }
 
         /// <summary>
-        /// This method make the API accept GET requests from other networks
+        /// This method is used to setup HTTP request types available to the users.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "*");
+
             if (HttpContext.Current.Request.HttpMethod == "OPTIONS")
             {
                 HttpContext.Current.Response.AddHeader("Access-Control-Allow-Methods", "GET");
+
                 HttpContext.Current.Response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+
                 HttpContext.Current.Response.AddHeader("Access-Control-Max-Age", "1728000");
+
                 HttpContext.Current.Response.End();
             }
         }
