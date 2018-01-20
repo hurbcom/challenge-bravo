@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace Project.Business.DTOs
+{
+    /// <summary>
+    /// This class is used to build the response object after currency conversion. 
+    /// It represents the API response after the user request.
+    /// </summary>
+    public class ConvertedCurrencyDTO
+    {
+        public string From_Currency { get; set; }
+        public string To_Currency { get; set; }
+        public decimal Orinigal_Value { get; set; }
+        public decimal Converted_Value { get; set; }
+        public string Quotation_Last_Update { get; set; }
+    }
+}

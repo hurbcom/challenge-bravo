@@ -1,0 +1,16 @@
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Project.Test.dll
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Project.Test.pdb
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Project.Business.dll
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Newtonsoft.Json.dll
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Project.Business.pdb
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\bin\Debug\Newtonsoft.Json.xml
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\obj\Debug\Project.Test.csprojResolveAssemblyReference.cache
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\obj\Debug\Project.Test.dll
+C:\Users\gmnat\OneDrive\Documentos\GitHubSourceTree\HU_Challenge_Bravo_Api\Project.Test\obj\Debug\Project.Test.pdb
