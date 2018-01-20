@@ -64,3 +64,10 @@
 
 - **Angular JS 1.6**;
 - **BootStrap CSS**;
+
+## 6. Status final:
+
+- Front-end funcional;
+- Back-end funcional;
+- Acesso a API externa funcional;
+- Docker (pendente).
