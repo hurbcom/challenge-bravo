@@ -57,6 +57,7 @@
 - Utilização do conceito de **URLs amigáveis** (Conforme mostrado no item 2 deste documento);
 - **Métodos assíncronos** (Utilizando async/await);
 - **AutoMapper** (Lib para mapeamento entre objetos, tornando mais prática a manipulação dos mesmos);
+- **MS Test** (Lib para desenvolvimeneto de testes unitários).
 
 ## 5. Tecnologias utilizadas na arquitetura do projeto (no lado Front-end):
 
