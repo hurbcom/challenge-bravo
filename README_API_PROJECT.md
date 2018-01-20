@@ -10,7 +10,7 @@
 - Após muitas tentativas de gerar a imagem (a partir do Dockerfile) no docker, a mensagem de erro abaixo foi exibida: 
 
 <img src="https://github.com/nmaia/challenge-bravo/blob/develop/imgs/docker/erro_docker_build.png" />
-
+    
 - Tentei achar a solução através de pesquisas, mas não consegui solucionar o problema.
 
 ## 1. Anotações diversas:
