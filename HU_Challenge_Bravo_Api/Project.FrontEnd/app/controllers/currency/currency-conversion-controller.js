@@ -3,17 +3,27 @@
 
         $scope.formData = {};
 
-        $scope.convert = function () {
+        $scope.convert = function (scope) {
 
-            $currencyConversionService.convert($scope.formData)
-                .then(function (d) {
+            if (!scope.fromCurrency || !scope.toCurrency || !scope.amount) {
 
-                    $scope.data = d.data;
-                })
-                .catch(function (e) {
+                return;
+            }
+            else {
 
-                    $scope.message = e.data;
-                });
+                $scope.message = "Sending data...";
+
+                $currencyConversionService.convert($scope.formData)
+                    .then(function (d) {
+
+                        $scope.data = d.data;
+                        $scope.message = "";
+                    })
+                    .catch(function (e) {
+
+                        $scope.message = e.data;
+                    });
+            }
         }
     }
 );
