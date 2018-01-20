@@ -13,7 +13,7 @@
 
 - Tentei achar a solução através de pesquisas, mas não consegui solucionar o problema.
 
-## 1. Anotações do desenvolvedor:
+## 1. Anotações diversas:
 
 - Pessoal, primeiramente me desculpem, sei que no [Readme.md](https://github.com/HotelUrbano/challenge-bravo/blob/master/README.md) do desafio vocês citam as tecnologias que tem mais afinidade, porém, optei por utilizar o Asp.Net C# por ser a tecnolgia que tenho maior nível de conhcimento atualmente. Em tempo, na entrevista com o [Zanaca](https://github.com/zanaca), fui informado de que poderia definir a stack a ser utilizada; :relaxed:
 - A API do projeto está consumindo com sucesso os dados da API externa ([Coin Market Cap](https://coinmarketcap.com/api/)) e realizando a conversão de todas as moedas;
