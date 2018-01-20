@@ -4,7 +4,7 @@
 
 - Tentei seguir os steps para criação do container:
     - Criação do ```Dockerfile```;
-    - Geração de uma imagem através do comando ```build``` - [fonte - github Microsoft](https://github.com/Microsoft/dotnet-framework-docker-samples/tree/master/dotnetapp-4.6.2);
+    - Geração de uma imagem através do comando ```build``` - [[fonte - github Microsoft](https://github.com/Microsoft/dotnet-framework-docker-samples/tree/master/dotnetapp-4.6.2)];
     - Subir o container através do comando ```Run```.
     
 - Após muitas tentativas de gerar a imagem (a partir do Dockerfile) no docker, a mensagem de erro abaixo foi exibida: 
@@ -19,7 +19,7 @@
 - A API do projeto está consumindo com sucesso os dados da API externa ([Coin Market Cap](https://coinmarketcap.com/api/)) e realizando a conversão de todas as moedas;
 - Como a API externa não oferecia o resultado das conversões de moedas, tive que implementar toda a lógica com base nas informações disponibilizadas por esta API. Este ponto do projeto demandou bastante tempo até que a lógica de conversão fosse finalizada.
 - Não foi pedido, mas achei interessante retornar a informação 'data de última atualização das cotações' para que o usuário tenha uma idéia de valor/tempo na hora de analisar as cotações.
-- Na documentação da API (Swagger), identiquei um bug da ferramenta ([fonte 1 - GitHub Issue](https://github.com/swagger-api/swagger-ui/issues/1983) e [fonte 2 - GitHub Issue ](https://github.com/metosin/compojure-api/issues/110)). Para burlar este bug, deve-se passar a barra manualmente junto ao valor decimal, conforme evidência abaixo:
+- Na documentação da API (Swagger), identiquei um bug da ferramenta ([[fonte 1 - GitHub Issue](https://github.com/swagger-api/swagger-ui/issues/1983)] e [[fonte 2 - GitHub Issue ](https://github.com/metosin/compojure-api/issues/110)]). Para contornar este bug, deve-se passar a barra manualmente junto ao valor decimal, conforme evidência abaixo:
 
 ![erro client swagger](imgs/erro/swagger/erro_client_swagger.png)
 
