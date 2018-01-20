@@ -12,6 +12,7 @@
 <img src="https://github.com/nmaia/challenge-bravo/blob/develop/imgs/docker/erro_docker_build.png" />
     
 - Tentei achar a solução através de pesquisas, mas não consegui solucionar o problema.
+- **De qualquer forma, continuarei os estudos aqui sobre o docker para solucionar este problema!** 
 
 ## 1. Anotações diversas:
 
