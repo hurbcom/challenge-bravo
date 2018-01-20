@@ -1,16 +1,34 @@
+## 0. Considerações sobre a configuração do Dockerfile e criação do Container: 
+
+:disappointed:
+
+- Tentei seguir os steps para criação do container:
+    - Criação do ```Dockerfile```;
+    - Geração de uma imagem através do comando ```build``` - [fonte - github Microsoft](https://github.com/Microsoft/dotnet-framework-docker-samples/tree/master/dotnetapp-4.6.2);
+    - Subir o container através do comando ```Run```.
+    
+- Após muitas tentativas de gerar a imagem (a partir do Dockerfile) no docker, a mensagem de erro abaixo foi exibida: 
+
+![erro docker build](imgs/erro/docker/erro_docker_build.png)
+
+- Tentei achar a solução através de pesquisas, mas não consegui solucionar o problema.
+
 ## 1. Anotações do desenvolvedor:
 
 - Pessoal, primeiramente me desculpem, sei que no [Readme.md](https://github.com/HotelUrbano/challenge-bravo/blob/master/README.md) do desafio vocês citam as tecnologias que tem mais afinidade, porém, optei por utilizar o Asp.Net C# por ser a tecnolgia que tenho maior nível de conhcimento atualmente. Em tempo, na entrevista com o [Zanaca](https://github.com/zanaca), fui informado de que poderia definir a stack a ser utilizada; :relaxed:
 - A API do projeto está consumindo com sucesso os dados da API externa ([Coin Market Cap](https://coinmarketcap.com/api/)) e realizando a conversão de todas as moedas;
 - Como a API externa não oferecia o resultado das conversões de moedas, tive que implementar toda a lógica com base nas informações disponibilizadas por esta API. Este ponto do projeto demandou bastante tempo até que a lógica de conversão fosse finalizada.
 - Não foi pedido, mas achei interessante retornar a informação 'data de última atualização das cotações' para que o usuário tenha uma idéia de valor/tempo na hora de analisar as cotações.
+- Na documentação da API (Swagger), identiquei um bug da ferramenta ([fonte 1 - GitHub Issue](https://github.com/swagger-api/swagger-ui/issues/1983) e [fonte 2 - GitHub Issue ](https://github.com/metosin/compojure-api/issues/110)). Para burlar este bug, deve-se passar a barra manualmente junto ao valor decimal, conforme evidência abaixo:
+
+![erro client swagger](imgs/erro/swagger/erro_client_swagger.png)
 
 ## 2. Formato para requisições via API do Projeto:
 
 - ```/api/currencyConversion/getCurrenciesQuotation/{currencySymbol}```
 - ```/api/convert/from/{fromCurrency}/to/{toCurrency}/amount/{amount:decimal}/```
  - ***Observações:*** 
-    - *A segunda rota mencionada acima, está apresentando problemas quando é passado um número decimal com vírgula ( , ) e não com ponto ( . ). Estou decidindo o que é melhor, resolver isso no front ou transformar o decimal em string e realizar o tratamento no método de conversão de moedas da API.*
+    - *A segunda rota mencionada acima, está apresentando problemas quando é passado um número decimal com vírgula ( , ) e não com ponto ( . ). Estou decidindo o que é melhor, resolver isso no front ou transformar o decimal em string e realizar o tratamento no método de conversão de moedas da API.* -> ```Resolvido através de Regex e validações de form via front-end.```
     - *Outro ponto de observação/melhoria, é que esta rota mencionada no item anterior precisa que seja incluída a barra após o último parâmetro. As propostas de melhoria mencionadas acima podem resolver esta questão.*
 
 ## 3. Consumo e Retorno da API:
@@ -31,7 +49,7 @@
     }
     ```
     
-## 4. Um pouco mais sobre o que foi utilizado na arquitetura do projeto (no lado da API):
+## 4. Tecnologias utilizadas na arquitetura do projeto (no lado da API/Back-end):
     
 - **Simple Injector** (Para aplicar o conceito de Injeção de Dependência);
 - Utilização do **pattern Facade** (Na camada Business);
@@ -39,3 +57,8 @@
 - Utilização do conceito de **URLs amigáveis** (Conforme mostrado no item 2 deste documento);
 - **Métodos assíncronos** (Utilizando async/await);
 - **AutoMapper** (Lib para mapeamento entre objetos, tornando mais prática a manipulação dos mesmos);
+
+## 5. Tecnologias utilizadas na arquitetura do projeto (no lado Front-end):
+
+- **Angular JS 1.6**;
+- **BootStrap CSS**;
