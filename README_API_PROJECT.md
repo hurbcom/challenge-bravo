@@ -9,7 +9,7 @@
     
 - Após muitas tentativas de gerar a imagem (a partir do Dockerfile) no docker, a mensagem de erro abaixo foi exibida: 
 
-![erro docker build](imgs/erro/docker/erro_docker_build.png)
+<img src="https://github.com/nmaia/challenge-bravo/blob/develop/imgs/docker/erro_docker_build.png" />
 
 - Tentei achar a solução através de pesquisas, mas não consegui solucionar o problema.
 
@@ -21,7 +21,7 @@
 - Não foi pedido, mas achei interessante retornar a informação 'data de última atualização das cotações' para que o usuário tenha uma idéia de valor/tempo na hora de analisar as cotações.
 - Na documentação da API (Swagger), identiquei um bug da ferramenta ([[fonte 1 - GitHub Issue](https://github.com/swagger-api/swagger-ui/issues/1983)] e [[fonte 2 - GitHub Issue ](https://github.com/metosin/compojure-api/issues/110)]). Para contornar este bug, deve-se passar a barra manualmente junto ao valor decimal, conforme evidência abaixo:
 
-![erro client swagger](imgs/erro/swagger/erro_client_swagger.png)
+<img src="https://github.com/nmaia/challenge-bravo/blob/develop/imgs/swagger/erro_client_swagger.png" />
 
 ## 2. Formato para requisições via API do Projeto:
 
