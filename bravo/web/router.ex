@@ -5,7 +5,8 @@ defmodule Bravo.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", Bravo do
+  scope "/", Bravo do
     pipe_through :api
+    get "/quotations", QuotationController, :index
   end
 end

@@ -1,0 +1,14 @@
+; Para todos os arquivos
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = false
+indent_style = space
+indent_size = 2
+
+; Para todos os arquivos HTML
+[*.html]
+indent_size = 4
+; Para todos os arquivos HTML
+[*.html.erb]
+indent_size = 4
