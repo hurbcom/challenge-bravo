@@ -18,8 +18,8 @@ defmodule Bravo do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Bravo.Supervisor]
     Supervisor.start_link(children, opts)
-    Bravo.QuotationUpdater.start_link
-    Bravo.Cache.start_link
+    Bravo.Cache.start_link()
+    Bravo.QuotationUpdater.start_link()
   end
 
   # Tell Phoenix to update the endpoint configuration

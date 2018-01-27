@@ -2,7 +2,7 @@ defmodule Bravo.QuotationUpdater do
   use GenServer
   require Logger
 
-  def start_link, do: GenServer.start_link(__MODULE__, %{})
+  def start_link(state \\ %{}), do: GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
 
   def init(state) do
     Logger.info(fn () -> "Bravo.QuotationUpdater: Start"  end)
