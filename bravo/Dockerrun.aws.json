@@ -1,0 +1,23 @@
+{
+  "AWSEBDockerrunVersion": 1,
+  "volumes": [
+    {
+      "name": "bravo",
+      "host": {
+        "sourcePath": "/opt/app"
+      }
+    }
+  ],
+  "containerDefinitions": [
+    {
+      "name": "bravo",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 4000
+        }
+      ]
+    }
+  ]
+}
