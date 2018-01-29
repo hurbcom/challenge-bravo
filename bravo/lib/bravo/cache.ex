@@ -1,12 +1,16 @@
 defmodule Bravo.Cache do
   use GenServer
 
-  # public interface
+  @moduledoc """
+  Esta GenServer tem o objetivo de criar um cache "in-memory" evitando utilizar serviços estermos sem necessidade.
+  """
+
+  # Public Interface
 
   def get(key), do: GenServer.call(__MODULE__, {:get, key})
   def set(key, value), do: GenServer.cast(__MODULE__, {:set, {key, value}})
 
-  # private interface
+  # Private Interface
 
   def start_link(state \\ %{}), do: GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   def init(state), do: {:ok, state}

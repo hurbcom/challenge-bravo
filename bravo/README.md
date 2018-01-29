@@ -28,7 +28,7 @@ Foi utilizado o docker para construir o ambiente de deployment da aplicação.
 
 ### Docker Image Base
 
-A imagem base foi construida separadamente para poder ser re-utilizada entre diversos projetos e utilizaremos a versao 0.2 pois é a versão mais lite e já possui todos os recursos necessários para ser utilizado no projeto.
+A imagem base foi construida separadamente para poder ser re-utilizada entre diversos projetos e utilizaremos a versao 0.6 pois é a versão mais lite e  possui todos os recursos necessários para ser utilizado no projeto.
 
 [source](https://bitbucket.org/allanbatista/docker-images/src/5ec696deec12ec1c033b227fb08a098f1fb9bde4/phoenix/0.2/Dockerfile?at=master&fileviewer=file-view-default)
 

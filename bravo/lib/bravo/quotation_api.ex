@@ -11,10 +11,5 @@ defmodule Bravo.QuotationApi do
     |> Enum.map(fn({k, v}) -> {String.to_atom(k), v} end)
   end
 
-  def request_quotations do
-    case Bravo.QuotationApi.get("/data/price?fsym=USD&tsyms=BTC,USD,EUR,ETH,BRL") do
-      {:ok, response} -> { :ok, response.body }
-      error -> error
-    end
-  end
+  def request_quotations(), do: Bravo.QuotationApi.get("/data/price?fsym=USD&tsyms=BTC,USD,EUR,ETH,BRL")
 end

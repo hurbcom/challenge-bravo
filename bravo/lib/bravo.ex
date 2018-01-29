@@ -14,12 +14,21 @@ defmodule Bravo do
       # worker(Bravo.Worker, [arg1, arg2, arg3]),
     ]
 
+    # Criação dos serviços da aplicação e monitoramento das threads
+    children = if Mix.env != :test do
+      children ++ [
+        supervisor(Bravo.Cache, []),
+        supervisor(Bravo.QuotationUpdater, [])
+      ]
+    else
+      children
+    end
+
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Bravo.Supervisor]
+
     Supervisor.start_link(children, opts)
-    Bravo.Cache.start_link()
-    Bravo.QuotationUpdater.start_link()
   end
 
   # Tell Phoenix to update the endpoint configuration

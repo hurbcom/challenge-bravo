@@ -32,7 +32,9 @@ defmodule Bravo.Mixfile do
      {:phoenix_pubsub, "~> 1.0"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
-     {:httpoison, "~> 1.0"}
+     {:httpoison, "~> 1.0"},
+     {:mock, "~> 0.3.0", only: :test},
+     {:decimal, "~> 1.0"}
     ]
   end
 end
