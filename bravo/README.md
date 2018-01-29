@@ -2,11 +2,11 @@
 
 O objetivo deste projeto é o desenvolvimento do desafio de programação do Hotelurbano.
 
-Para facilitar a utilização fiz o deploy na AWS utilizando o Elasticbeanstalk com Docker, ficando disponível em: http://bravo.sa-east-1.elasticbeanstalk.com
+Para facilitar a utilização fiz o deploy na AWS utilizando o Elasticbeanstalk com Docker, ficando disponível em: bravo.us-east-1.elasticbeanstalk.com
 
     # Exemplo
 
-    GET http://bravo.sa-east-1.elasticbeanstalk.com/quotations?from=BRL&to=ETH,BTC,EUR,USD,BRL,UNKNOWN&amount=15.0
+    GET bravo.us-east-1.elasticbeanstalk.com/quotations?from=BRL&to=ETH,BTC,EUR,USD,BRL,UNKNOWN&amount=15.0
 
     {
       "USD": 4.70219436,
@@ -16,6 +16,15 @@ Para facilitar a utilização fiz o deploy na AWS utilizando o Elasticbeanstalk 
       "BTC": 4.1036e-4,
       "BRL": 15.0
     }
+
+
+# Teste de Stress da aplicação
+
+O teste de stress foi executado em uma instância com 2 cores.
+
+O resultado pode ser consultado em: http://bit.ly/2GqEJKv.
+
+![Print do Resultado](https://screenshots.firefox.com/sckDjuC3T4uhmg51/loader.io)
 
 ## Documentação da utilização da api
 
@@ -119,7 +128,7 @@ O deploy foi configurado utilizando o Elasticbeanstalk. Para mais informações 
 
 ### Criação do ambiente
 
-    $ eb create -c bravo -r sa-east-1 -i c4.large --elb-type application bravo
+    $ eb create -c bravo -r us-east-1 -i c5.large --elb-type application bravo
 
 ## Docker
 

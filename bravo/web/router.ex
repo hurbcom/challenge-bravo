@@ -8,7 +8,7 @@ defmodule Bravo.Router do
   scope "/", Bravo do
     pipe_through :api
     get "/", ApplicationController, :health
-    get "/loaderio-d43fb2ea1570ad6f17c67d5ec6eff738", ApplicationController, :loaderio
+    get "/loaderio-ed5f9ad54a418488ee96b0377f26b944", ApplicationController, :loaderio
     get "/quotations", QuotationController, :index
   end
 end

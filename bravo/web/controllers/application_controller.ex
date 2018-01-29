@@ -11,7 +11,7 @@ defmodule Bravo.ApplicationController do
   def loaderio(conn, _params) do
     conn
     |> put_status(200)
-    |> text("loaderio-d43fb2ea1570ad6f17c67d5ec6eff738")
+    |> text("loaderio-ed5f9ad54a418488ee96b0377f26b944")
     |> halt
   end
 
