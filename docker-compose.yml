@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  api:
+    # restart: always
+    hostname: api
+    build: ./src/api/.
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    # volumes:
+    #   - /usr/src/app/project/static
+    # command: ["/usr/local/bin/gunicorn", "-w", "2", "-b", ":8000", "project:app"]
+    depends_on:
+      - redis
+      - worker
+  worker:
+    restart: always
+    hostname: worker
+    build: ./src/worker/.
+    command: ["/usr/local/bin/gunicorn", "-w", "1", "-b", ":5555", "worker:app"]
+    depends_on:
+      - redis
+  redis:
+    image: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    restart: always

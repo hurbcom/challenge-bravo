@@ -1,0 +1,4 @@
+Flask==0.12.2
+flask-restplus==0.10.1
+gunicorn==19.7.1
+redis==2.10.6
