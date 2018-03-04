@@ -1,7 +1,7 @@
 import redis
 import requests
 import json
-pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
+pool = redis.ConnectionPool(host='redis', port=6379, db=0)
 rd = redis.Redis(connection_pool=pool)
 
 # try:
@@ -187,9 +187,12 @@ myjs = json.loads('''{
   }
 }''')
 
-# print myjs["quotes"]
-for quote in myjs["quotes"]:
-    # print('%s:%s'%(quote,myjs["quotes"][quote]))
-    rd.setex(quote, myjs["quotes"][quote],14800)
-
-print(rd.get('USDBRL'))
+# # print myjs["quotes"]
+# for quote in myjs["quotes"]:
+#     # print('%s:%s'%(quote,myjs["quotes"][quote]))
+#     rd.setex(quote, myjs["quotes"][quote],14800)
+rate = rd.get('USDBTC')
+if (rate is not None):
+  print('ok')
+else:
+  print(float(2)*12000)
