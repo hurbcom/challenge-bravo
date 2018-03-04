@@ -18,6 +18,6 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 ## Arquitetura
 <p align="center">
-  <img src="architecture.jpg" alt="Architecture" />
+  <img src="architecture.png" alt="Architecture" />
 </p>
 
