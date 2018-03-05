@@ -37,12 +37,13 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 - Realiza cache (com TTL) da resposta da API conforme a query_string assim, a API não precisará processar duas vezes a mesma requição no mesmo espaço de tempo.
 
 ## EXECUTANDO
+- Pré-requisito: docker-compose
 ```bash
   $> git clone https://github.com/maypimentel/challenge-bravo.git
   $> cd challenge-bravo
   $> ./run.sh
 ```
-Ex: http://localhost:3333/api/?from=USD&to=EUR&amount=564.3
+Ex: `http://localhost:3333/api/?from=USD&to=EUR&amount=564.3`
 
 ## Bônus
 ### SWAGGER
