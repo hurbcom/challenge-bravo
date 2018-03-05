@@ -31,7 +31,7 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 - Possibilita cache de cotações para disponibilizar para a API.
 
 ### API:
-- Responde aos requests http de converções dos usuários e processa as requisições entregando o resultado da cotação pocessada no formato **JSON**.
+- Responde aos requests http de converções dos usuários e processa as requisições entregando o resultado da cotação processada no formato **JSON**.
 
 ### NGIX:
 - Realiza cache (com TTL) da resposta da API conforme a query_string assim, a API não precisará processar duas vezes a mesma requição no mesmo espaço de tempo.
