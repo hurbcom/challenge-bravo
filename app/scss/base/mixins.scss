@@ -1,0 +1,41 @@
+@mixin break-min($breakpoint) {
+	@media only screen and ( min-width: #{$breakpoint}){
+		@content;
+	}
+}
+@mixin break-max($breakpoint) {
+	@media only screen and ( max-width: #{$breakpoint}){
+		@content;
+	}
+}
+@mixin break-and($breakpoint-min,$breakpoint-max) {
+	@media only screen and ( min-width: #{$breakpoint-min} ) and ( max-width: #{$breakpoint-max}){
+		@content;
+	}
+}
+//after end before
+@mixin before-icon($width,$height) {
+	&:before {
+		content: "";
+		width: $width;
+		height: $height;
+		@content;
+	}
+}
+@mixin after-icon($width,$height) {
+	&:after {
+		content: "";
+		width: $width;
+		height: $height;
+		@content;
+	}
+}
+
+@mixin before-after($width,$height) {
+	&:before, &:after {
+		content: "";
+		width: $width;
+		height: $height;
+		@content;
+	}
+}

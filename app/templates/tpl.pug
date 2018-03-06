@@ -1,0 +1,13 @@
+block var
+doctype html
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no")
+		meta(name="theme-color" content="#143a7c")
+		link(rel="stylesheet" href="css/main.css")
+		title #{title}
+	body(class=bodyClass)
+		block content
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="js/main.js")
