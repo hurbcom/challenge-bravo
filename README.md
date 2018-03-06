@@ -43,7 +43,80 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
   $> cd challenge-bravo
   $> ./run.sh
 ```
-Ex: `http://localhost:3333/api/?from=USD&to=EUR&amount=564.3`
+Ex: `http://localhost:3333/python_api/?from=USD&to=EUR&amount=564.3` or
+
+`http://localhost:3333/go_api/?from=USD&to=EUR&amount=564.3`
+
+## TESTES de carga
+### API em GOLANG
+- Atendeu mais de 5mil requisições por segundo
+```bash
+maycon@maycon-VirtualBox:~/challenge-bravo$ wrk -t9 -c1000 -R13000 -d30s "http://localhost:8000/converter/?from=USD&to=eur&amount=56565.2"
+Running 30s test @ http://localhost:8000/converter/?from=USD&to=eur&amount=56565.2
+  9 threads and 1000 connections
+  Thread calibration: mean lat.: 3225.231ms, rate sampling interval: 11526ms
+  Thread calibration: mean lat.: 2684.706ms, rate sampling interval: 10362ms
+  Thread calibration: mean lat.: 3288.142ms, rate sampling interval: 11812ms
+  Thread calibration: mean lat.: 3029.865ms, rate sampling interval: 10878ms
+  Thread calibration: mean lat.: 3222.366ms, rate sampling interval: 11403ms
+  Thread calibration: mean lat.: 3157.311ms, rate sampling interval: 11493ms
+  Thread calibration: mean lat.: 2711.585ms, rate sampling interval: 10436ms
+  Thread calibration: mean lat.: 3321.223ms, rate sampling interval: 11649ms
+  Thread calibration: mean lat.: 3163.072ms, rate sampling interval: 11698ms
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    11.69s     3.63s   19.45s    60.73%
+    Req/Sec   601.33     30.24   637.00     55.56%
+  160725 requests in 30.00s, 30.50MB read
+Requests/sec:   5357.19
+Transfer/sec:      1.02MB
+```
+### API em PYTHON
+- Atendeu a pouco mais de 600 requisições por segundo
+```bash
+maycon@maycon-VirtualBox:~/challenge-bravo$ wrk -t9 -c1000 -R13000 -d30s "http://localhost:8888/converter/?from=USD&to=eur&amount=56565.2"
+Running 30s test @ http://localhost:8888/converter/?from=USD&to=eur&amount=56565.2
+  9 threads and 1000 connections
+  Thread calibration: mean lat.: 3995.608ms, rate sampling interval: 16990ms
+  Thread calibration: mean lat.: 4522.102ms, rate sampling interval: 15376ms
+  Thread calibration: mean lat.: 4577.954ms, rate sampling interval: 13795ms
+  Thread calibration: mean lat.: 3477.261ms, rate sampling interval: 12689ms
+  Thread calibration: mean lat.: 3713.810ms, rate sampling interval: 14426ms
+  Thread calibration: mean lat.: 4011.517ms, rate sampling interval: 14688ms
+  Thread calibration: mean lat.: 4481.127ms, rate sampling interval: 15327ms
+  Thread calibration: mean lat.: 3818.135ms, rate sampling interval: 15081ms
+  Thread calibration: mean lat.: 3708.798ms, rate sampling interval: 14131ms
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    18.29s     5.05s   29.43s    58.59%
+    Req/Sec    67.00     39.98   127.00     55.56%
+  20691 requests in 30.24s, 5.27MB read
+  Socket errors: connect 0, read 0, write 0, timeout 9342
+Requests/sec:    684.13
+Transfer/sec:    178.39KB
+```
+### NGINX com qualquer API
+- Atendeu a mais de 12 mil requisições por segundo
+```bash
+maycon@maycon-VirtualBox:~/challenge-bravo$ wrk -t9 -c1000 -R13000 -d30s "http://localhost:3333/python_api/?from=USD&to=eur&amount=56565.2"
+Running 30s test @ http://localhost:3333/python_api/?from=USD&to=eur&amount=56565.2
+  9 threads and 1000 connections
+  Thread calibration: mean lat.: 236.036ms, rate sampling interval: 694ms
+  Thread calibration: mean lat.: 230.232ms, rate sampling interval: 659ms
+  Thread calibration: mean lat.: 242.501ms, rate sampling interval: 664ms
+  Thread calibration: mean lat.: 295.256ms, rate sampling interval: 2297ms
+  Thread calibration: mean lat.: 311.887ms, rate sampling interval: 2494ms
+  Thread calibration: mean lat.: 297.582ms, rate sampling interval: 2158ms
+  Thread calibration: mean lat.: 216.182ms, rate sampling interval: 869ms
+  Thread calibration: mean lat.: 334.815ms, rate sampling interval: 2496ms
+  Thread calibration: mean lat.: 313.218ms, rate sampling interval: 2453ms
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.09s     1.18s    5.82s    84.49%
+    Req/Sec     1.36k   305.63     3.69k    88.19%
+  364134 requests in 29.96s, 93.40MB read
+  Socket errors: connect 0, read 0, write 0, timeout 356
+Requests/sec:  12155.89
+Transfer/sec:      3.12MB
+```
+- Justificando que a arquitetura defida com um cache frontal foi acertada.
 
 ## Bônus
 ### SWAGGER
