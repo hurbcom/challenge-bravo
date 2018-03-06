@@ -1,0 +1,32 @@
+block var
+doctype html
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no")
+		meta(name="theme-color" content="#143a7c")
+		meta(name="description" content="Desafio Bravo HU")
+		meta(meta name="author" content="Lucio Ariel do Vale Furtado")
+		link(rel="stylesheet" href="css/main.css")
+		title #{title}
+	body(class=bodyClass)
+		header(id="header")
+			.wrapper
+				h1.title_primary 
+					strong HU
+					span Conversão de moedas
+		main(id="main")
+			block content
+		footer(id="footer")
+			.wrapper
+				.block_left
+					.footer_media
+						img(src="images/icon-hu-white.svg", alt="")
+					span Desafio Bravo
+				.block_right
+					a(href="https://www.linkedin.com/in/lucio-ariel-b9422b91/" target="_blank")
+						img(src="images/linkedin.png", alt="")
+						span.author Lucio Ariel
+				
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="js/main.js")

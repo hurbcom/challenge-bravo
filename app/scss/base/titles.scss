@@ -1,0 +1,36 @@
+.title_primary {
+    color: white;
+    text-align: center;
+    display: block;
+    strong {
+        display: block;
+        font-size: 80px;
+        letter-spacing: 5px;
+        font-weight: 400;
+        @include break-max(1200px) {
+            font-size: 60px;
+        }
+        @include break-max(640px) {
+            font-size: 45px;
+        }
+    }
+    span {
+        font-weight: 400;
+        font-size: 30px;
+        letter-spacing: 1px;
+        @include break-max(1200px) {
+            font-size: 26px;
+        }
+        @include break-max(640px) {
+            font-size: 20px;
+            font-weight: 300;
+        }
+    }
+}
+.title_aux{
+    color: #ff7900;
+    text-align: center;
+    font-size: 24px;  
+    font-weight: normal;
+    margin-bottom: 25px;
+}

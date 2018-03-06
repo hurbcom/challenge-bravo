@@ -1,0 +1,10 @@
+{
+  "source":"USD",
+  "quotes":{
+    "USDUSD":1,
+    "USDBRL":3.25182,
+    "USDEUR":0.81153,
+    "USDBTC":0.00009,
+    "USDETH":865.82
+  }
+}
