@@ -3,3 +3,32 @@ block var
 	- var title = "Home";
 	- var bodyClass = "home";
 block content
+		header(id="header")
+			.wrapper
+				h1.title_primary HU
+				h2.title_secondary Conversão de moedas
+		section(class="money_currency")
+			.wrapper
+				.form_area
+					form(action="" id="form_currency")
+						.form_group
+							.form_item
+								h3.title_aux Moeda local:
+								.select_wrap
+									select(class="select_from")
+										option(value="USD") USD
+										option(value="BRL") BRL
+										option(value="EUR") EUR
+										option(value="BTC") BTC
+										option(value="ETH") ETH
+								input(type="text" class="input_text value_from")
+							.form_item
+								h3.title_aux Moeda destino:
+								.select_wrap
+									select(class="select_to")
+										option(value="USD") USD
+										option(value="BRL") BRL
+										option(value="EUR") EUR
+										option(value="BTC") BTC
+										option(value="ETH") ETH
+								input(type="text" class="input_text value_to")
