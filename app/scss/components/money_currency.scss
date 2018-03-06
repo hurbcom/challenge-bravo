@@ -1,0 +1,41 @@
+.money_currency {
+    .form_area {
+        .form_group{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 60vh;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+            margin-top: 5%;
+            border-radius: 10px;
+        }
+        .input_text {
+            border: 1px solid rgba($color1, 0.5);
+            padding: 10px;
+            margin-top: 15px;
+            outline: 1px solid rgba($color1, 0.1);
+            font-size: 16px;
+            color: $textColor;
+        }
+        .select_wrap{
+            background: url('../images/arrow.png') no-repeat  95% center;
+            select {
+                width: 100%;
+                font-size: 18px;
+                font-weight: 300;
+                padding: 15px;
+                appearance: none;
+                background: transparent;
+                outline: 1px solid rgba($color1, 0.1);
+                color: $textColor;
+                &::-ms-expand {
+                    display: none;
+                }
+            }
+        }
+        .form_item {
+            
+        }
+    }
+}

@@ -1,9 +1,15 @@
 body {
     font-family: 'Lato', sans-serif;
-
+    background: #f0f0f0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 .wrapper {
     max-width: 1200px;
     padding: 0 15px;
     margin: 0 auto;
+}
+#main {
+    flex: 1;
 }
