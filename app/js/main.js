@@ -1,3 +1,4 @@
+// função para pegar parametros da url
 var get_url = function get_url(obj) {
     var url = decodeURIComponent(window.location.search.substring(1)),
     var_url = url.split('&'),
@@ -13,6 +14,8 @@ var get_url = function get_url(obj) {
 };
 
 $(document).ready(function () {
+
+    // no evento de keyup já faz a conversão entre as moedas
     $('#form_currency').on('keyup', 'input' , function (e) { 
         $(this).val($(this).val().replace(/[^0-9\.]/g,''));
         var select_parent = $(this).parents('.form_item').find('select'),
@@ -33,11 +36,13 @@ $(document).ready(function () {
             }
         }});
     });
+    // caso o select mude, altera os valores com um evento de trigger
     $('#form_currency').on('change', 'select' , function (e) {
         $('.value_from').trigger(
             jQuery.Event( 'keyup', { keyCode: 13, which: 13 } )
         );
     });
+    // Faz o switch entre os valores
     $('#form_currency .toggle_form').click(function (e) { 
         e.preventDefault();
         var aux;
@@ -49,6 +54,8 @@ $(document).ready(function () {
         );
         
     });
+
+    // pega os parametros da url
     if(get_url('from')) {
         $('.select_from').val(get_url('from'));
     }
@@ -61,6 +68,7 @@ $(document).ready(function () {
             jQuery.Event( 'keyup', { keyCode: 13, which: 13 } )
         );
     }
+    // Gera uma nova url
     $('.form_submit').click(function (e) { 
         e.preventDefault();
         var url_origin = window.location.origin,
