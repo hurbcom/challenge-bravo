@@ -10,13 +10,18 @@ cache = Cache()
 CACHE_TYPE = 'simple'
 
 @app.route("/converter/")
-def api():
+def converter():
     fr= str(request.args.get('from')).upper()
     to = str(request.args.get('to')).upper()
     amount = float(request.args.get('amount'))
     try:
+        ballast_coin = 'USD'
         # GET rate convertion on redis and multiply per amount
         rate = rd.get('%s%s' % (fr, to))
+        if ballast_coin == fr:
+            ballast = 1
+        else:
+            ballast = float(rd.get('%sUSD' % (fr)))
         if (rate is not None):
             rate = float(rate)
             converted = float(rate) * amount
@@ -26,17 +31,19 @@ def api():
             if (rate_reverse is not None):
                 rate = float(1 / float(rate_reverse))
                 converted = amount * rate
-                rd.setex('%s%s'%(to, fr), rate, 1800)
+                rd.setex('%s%s'%(fr, to), rate, 1800)
             else:
                 api.abort(404, "Base currency %s not found" % (to.upper()))
         return jsonify(
-            {
+            [{
                 'from': fr,
                 'to': to,
+                # 'ballast_coin': 'USD',
+                # 'ballast_rate': ballast,
                 'rate': rate,
                 'amount': amount,
                 'converted_amount': converted
-            }
+            }]
         ), 200
 
     except Exception as e:

@@ -16,19 +16,24 @@ A requisição deve receber como parâmetros: A moeda de origem, o valor a ser c
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
+# Resposta ao Desafio Bravo
+Foram construídas 2 APIs, respondesndo em JSON. Uma feito em python com flask e a outra em golang com mux.
+Como pode ser visto abaixo, na arquitetura escolhida, é usado um worker que é capaz de buscar cotações atuais entre diversas moedas e de fontes diversas além de ser responsável por atualizá-las a cada 30 min. Por isso, não foi usada uma moeda de lastro para as conversões.
+
 ## Arquitetura
 <p align="center">
   <img src="architecture.png" alt="Architecture" />
 </p>
 
 ### Worker:
+- Faz carga inicial das moedas no redis no formato *FROMTO* Ex: `From USD To BRL -> USDBRL:3.258`
 - Resposável por manter as cotações sempre atualizadas.
-- Ele foi construído com um scheduler que a cada 30 minutos busca as cotações atualizadas em algumas fontes na internet e as salva no redis.
-- Permite diminuir o tempo de resposta da API já que não irá precisar consultar a atualização na internet.
+- Foi construído com um scheduler que a cada 30 minutos busca as cotações atualizadas em algumas fontes na internet e as salva no redis no formato mencionado acima.
+- Permite diminuir o tempo de resposta da API já que não necessitará consultar a atualização na internet.
 
 ### Redis:
-- Banco NoSql chave valor e in_memory, extremamente rápido.
-- Possibilita cache de cotações para disponibilizar para a API.
+- Banco NoSql chave valor in_memory, extremamente rápido.
+- Possibilita cache de cotações para consultas da API.
 
 ### API:
 - Responde aos requests http de converções dos usuários e processa as requisições entregando o resultado da cotação processada no formato **JSON**.
