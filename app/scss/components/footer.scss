@@ -1,0 +1,28 @@
+#footer {
+    background: $color1;
+    box-shadow: 0px 0px 10px rgba(#000, 0.7);
+    padding: 15px 0;
+    margin-top: 5%;
+    .wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .block_left{
+        color: white;
+        text-align: center;
+        font-size: 16px;
+        span {
+            display: block;
+            margin-top: 5px;
+        }
+    }
+    .block_right {
+        text-align: center;
+        color: white;
+        span {
+            display: block;
+            margin-top: 5px;
+        }
+    }
+}

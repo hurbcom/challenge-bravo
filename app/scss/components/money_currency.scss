@@ -1,14 +1,50 @@
 .money_currency {
     .form_area {
+        min-height: 60vh;
+        background: white;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+        margin-top: 5%;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        position: relative;
+        @include break-max(768px) {
+            padding: 40px 0;
+        }
+        .form{
+            width: 100%;
+        }
+        .form_submit{
+            @extend %button_primary;
+        }
+        .form_action{
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            @include break-max(768px) {
+                display: none;
+            }
+        }
         .form_group{
             display: flex;
             justify-content: space-around;
             align-items: center;
-            height: 60vh;
-            background: white;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
-            margin-top: 5%;
-            border-radius: 10px;
+            width: 100%;
+            @include break-max(768px) {
+                flex-direction: column;
+            }
+        }
+        .toggle_form {
+            width: 64px;
+            height: 64px;
+            background: url('../images/switch.png') no-repeat;
+            background-size: cover;
+            @include break-max(768px) {
+                width: 48px;
+                height: 48px;
+                margin: 20px;
+            }
         }
         .input_text {
             border: 1px solid rgba($color1, 0.5);
@@ -16,6 +52,7 @@
             margin-top: 15px;
             outline: 1px solid rgba($color1, 0.1);
             font-size: 16px;
+            width: 100%;
             color: $textColor;
         }
         .select_wrap{
@@ -32,10 +69,19 @@
                 &::-ms-expand {
                     display: none;
                 }
+                @include break-max(768px) {
+                    font-size: 16px;
+                }
             }
         }
         .form_item {
-            
+            width: 280px;
+            @include break-max(768px) {
+                width: 240px;
+            }
+            @include break-max(480px) {
+                width: 70%;
+            }
         }
     }
 }
