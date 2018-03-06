@@ -17,8 +17,8 @@ A requisição deve receber como parâmetros: A moeda de origem, o valor a ser c
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
 # Resposta ao Desafio Bravo
-Foram construídas 2 APIs, respondesndo em JSON. Uma feito em python com flask e a outra em golang com mux.
-Como pode ser visto abaixo, na arquitetura escolhida, é usado um worker que é capaz de buscar cotações atuais entre diversas moedas e de fontes diversas além de ser responsável por atualizá-las a cada 30 min. Por isso, não foi usada uma moeda de lastro para as conversões.
+Foram construídas 2 APIs, respondesndo em JSON. Uma feita em *python* com flask e a outra em *golang* com mux.
+Como pode ser visto abaixo, para a arquitetura escolhida, é usado um worker que é capaz de buscar cotações atuais entre diversas moedas e à partir de fontes diversas além de ser responsável por atualizá-las a cada 30 min. Por isso, não foi usada uma moeda de lastro para as conversões.
 
 ## Arquitetura
 <p align="center">
@@ -39,7 +39,7 @@ Como pode ser visto abaixo, na arquitetura escolhida, é usado um worker que é 
 - Responde aos requests http de converções dos usuários e processa as requisições entregando o resultado da cotação processada no formato **JSON**.
 
 ### NGIX:
-- Realiza cache (com TTL) da resposta da API conforme a query_string assim, a API não precisará processar duas vezes a mesma requição no mesmo espaço de tempo.
+- Realiza cache (com TTL 2minutos) da resposta da API conforme a query_string assim, a API não precisará processar mais de uma vez a mesma requição dentro do prazo do cache.
 
 ## EXECUTANDO
 - Pré-requisito: docker-compose
@@ -48,7 +48,7 @@ Como pode ser visto abaixo, na arquitetura escolhida, é usado um worker que é 
   $> cd challenge-bravo
   $> ./run.sh
 ```
-Ex: `http://localhost:3333/python_api/?from=USD&to=EUR&amount=564.3` or
+Ex: `http://localhost:3333/python_api/?from=USD&to=EUR&amount=564.3` ou
 
 `http://localhost:3333/go_api/?from=USD&to=EUR&amount=564.3`
 
