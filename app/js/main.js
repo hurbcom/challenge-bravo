@@ -25,7 +25,6 @@ $(document).ready(function () {
         $.ajax({url: "js/money.json", success: function(result){            
             select_from = result.quotes['USD' + select_value_from];
             select_to = result.quotes['USD' + select_value_to];
-            console.log(((1/select_from)*select_to)*count);
             if(select_parent.hasClass('select_from')) {
                 $('.value_to').val((1/select_from)*select_to*count);
             }
@@ -62,4 +61,15 @@ $(document).ready(function () {
             jQuery.Event( 'keyup', { keyCode: 13, which: 13 } )
         );
     }
+    $('.form_submit').click(function (e) { 
+        e.preventDefault();
+        var url_origin = window.location.origin,
+            from  =  $('.select_from').val(),
+            to  =  $('.select_to').val(),
+            amount  =  $('.value_from').val(),
+            url_gerada = url_origin + '/?from=' + from + '&to='+to+ '&amount=' + amount;
+
+        window.location = url_gerada;
+
+    });
 });
