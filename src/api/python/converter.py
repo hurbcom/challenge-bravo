@@ -9,7 +9,7 @@ app = Flask(__name__)
 cache = Cache()
 CACHE_TYPE = 'simple'
 
-@app.route("/api/")
+@app.route("/converter/")
 def api():
     fr= str(request.args.get('from')).upper()
     to = str(request.args.get('to')).upper()
@@ -29,15 +29,15 @@ def api():
                 rd.setex('%s%s'%(to, fr), rate, 1800)
             else:
                 api.abort(404, "Base currency %s not found" % (to.upper()))
-        return jsonify({
-            'data': {
+        return jsonify(
+            {
                 'from': fr,
                 'to': to,
                 'rate': rate,
                 'amount': amount,
                 'converted_amount': converted
             }
-        }), 200
+        ), 200
 
     except Exception as e:
         print(dict(error_message=str(e)))
