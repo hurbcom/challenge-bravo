@@ -1,3 +1,4 @@
+// mixins para responsivo
 @mixin break-min($breakpoint) {
 	@media only screen and ( min-width: #{$breakpoint}){
 		@content;
