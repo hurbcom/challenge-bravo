@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  python_api:
+  pythonapi:
     restart: always
     hostname: python_api
     build: ./src/api/python/.
@@ -13,7 +13,8 @@ services:
     depends_on:
       - redis
       - worker
-  go_api:
+
+  goapi:
     build: ./src/api/golang/.
     hostname: go_api
     restart: always
@@ -24,6 +25,7 @@ services:
     depends_on:
       - redis
       - worker
+
   worker:
     restart: always
     hostname: worker
@@ -31,6 +33,7 @@ services:
     command: ["/usr/local/bin/gunicorn", "-w", "1", "-b", ":5555", "worker:app"]
     depends_on:
       - redis
+
   redis:
     image: redis
     command: ["redis-server", "--appendonly", "yes"]
@@ -40,14 +43,20 @@ services:
     expose:
       - "6379"
     restart: always
+
   nginx:
     image: nginx
     restart: always
     hostname: nginx
     depends_on:
-      - go_api
-      - python_api
+      - goapi
+      - pythonapi
     ports:
       - "3333:80"
     volumes:
       - "./confs/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+      - "./scripts:/scripts"
+  tester:
+    build: ./src/tester/.
+    volumes:
+      - "./src/tester/scripts:/scripts"
