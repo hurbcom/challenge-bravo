@@ -18,7 +18,7 @@ func init() {
     // port 6379 of the redis machine.
     db, err = pool.New("tcp", "redis:6379", 20)
     if err != nil {
-        log.Panic(err)
+        log.Panic("Error to connect a redis server: %s", err)
     }
 }
 
@@ -30,26 +30,49 @@ func GetConverter(w http.ResponseWriter, r *http.Request) {
 	to := strings.ToUpper(r.URL.Query()["to"][0])
 	amount, err := strconv.ParseFloat(r.URL.Query()["amount"][0], 64)
 	if err != nil {
-		log.Println("Error in convertion type")
+		log.Panic("Error in convertion type from %s. Error: %s", from, err)
+		w.WriteHeader(http.StatusInternalServerError)
+
+		return
+	}
+
+	conn, err := db.Get()
+    if err != nil {
+		log.Panic("Error get redis connection")
+		w.WriteHeader(http.StatusInternalServerError)
+
+		return
 	}
 
 	key_arr := []string{from, to}
 	key := strings.Join(key_arr, "")
-
-	conn, err := db.Get()
-    if err != nil {
-        log.Panic("Error get redis connection")
-	}
-	// Importantly, use defer and the connection pool's Put() method to ensure
-    // that the connection is always put back in the pool before FindAlbum()
-    // exits.
-    defer db.Put(conn)
-
+	// Get on redis atual cotation based on fromto
 	rate, err := conn.Cmd("GET", key).Float64()
 	if err != nil {
-		log.Println("Fail to get Key from redis")
+		log.Println("Fail to get Key from redis. Try reverse")
+		// If cotation not found on redis, try a reverse cotation
+		key_arr := []string{to, from}
+		key := strings.Join(key_arr, "")
+		rate, err := conn.Cmd("GET", key).Float64()
+		if err != nil {
+			log.Panic("Fail to get reverse from redis.")
+
+			return
+		}
+		converted := amount*(1/rate)
+		_ = converted
 	}
-	converter = append(converter, Converter{From: from, To: to, Rate: rate, Amount: amount, ConvertedAmount: amount*rate})
+	converted := amount*rate
+	_ = converted
+
+	converter = append(converter, Converter{ From: from, To: to, Rate: rate, Amount: amount, ConvertedAmount: converted })
 	w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(converter)
+	json.NewEncoder(w).Encode(converter)
+	
+	// Importantly, use defer and the connection pool's Put() method to ensure
+    // that the connection is always put back in the pool before GetConverter()
+    // exits.
+	defer db.Put(conn)
+	
+	return
 }

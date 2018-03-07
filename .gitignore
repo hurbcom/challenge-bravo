@@ -1,2 +1,4 @@
 *.pyc
 .editorconfig
+**/vendor
+converter
