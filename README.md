@@ -42,38 +42,52 @@ Como pode ser visto abaixo, para a arquitetura escolhida, é usado um worker que
 - Realiza cache (com TTL 2minutos) da resposta da API conforme a query_string assim, a API não precisará processar mais de uma vez a mesma requição dentro do prazo do cache.
 
 ## EXECUTANDO
-- Pré-requisito: docker-compose
+- Pré-requisitos: docker, docker-compose e make
 ```bash
   $> git clone https://github.com/maypimentel/challenge-bravo.git
   $> cd challenge-bravo
-  $> ./run.sh
+  $> make up
 ```
 Ex: `http://localhost:3333/python_api/?from=USD&to=EUR&amount=564.3` ou
 
 `http://localhost:3333/go_api/?from=USD&to=EUR&amount=564.3`
 
+#### make up
+Levanta toda arquitetura de infra do projeto
+#### make down
+Desliga toda a infra do projeto
+#### make stress-test-all
+Roda testes de stress nos 3 endpoints
+#### make stress-test-goapi
+Roda testes de stress no endpoint da API em Go 
+#### make stress-test-pythonapi
+Roda testes de stress no endpoint da API em Python
+#### make stress-test-nginx
+Roda testes de stress no endpoint com o NGINX (proxy cache)
+
+
 ## TESTES de carga
 ### API em GOLANG
 - Atendeu mais de 5mil requisições por segundo
 ```bash
-maycon@maycon-VirtualBox:~/challenge-bravo$ wrk -t9 -c1000 -R13000 -d30s "http://localhost:8000/converter/?from=USD&to=eur&amount=56565.2"
-Running 30s test @ http://localhost:8000/converter/?from=USD&to=eur&amount=56565.2
+maycon@maycon-VirtualBox:~/challenge-bravo$ wrk -t9 -c1000 -R13000 -d30s 
+Running 30s test @ http://goapi:8000/converter/?from=USD&to=eur&amount=56565.2
   9 threads and 1000 connections
-  Thread calibration: mean lat.: 3225.231ms, rate sampling interval: 11526ms
-  Thread calibration: mean lat.: 2684.706ms, rate sampling interval: 10362ms
-  Thread calibration: mean lat.: 3288.142ms, rate sampling interval: 11812ms
-  Thread calibration: mean lat.: 3029.865ms, rate sampling interval: 10878ms
-  Thread calibration: mean lat.: 3222.366ms, rate sampling interval: 11403ms
-  Thread calibration: mean lat.: 3157.311ms, rate sampling interval: 11493ms
-  Thread calibration: mean lat.: 2711.585ms, rate sampling interval: 10436ms
-  Thread calibration: mean lat.: 3321.223ms, rate sampling interval: 11649ms
-  Thread calibration: mean lat.: 3163.072ms, rate sampling interval: 11698ms
+  Thread calibration: mean lat.: 1807.231ms, rate sampling interval: 6574ms
+  Thread calibration: mean lat.: 1845.180ms, rate sampling interval: 6615ms
+  Thread calibration: mean lat.: 1991.234ms, rate sampling interval: 6918ms
+  Thread calibration: mean lat.: 1383.391ms, rate sampling interval: 6328ms
+  Thread calibration: mean lat.: 1469.831ms, rate sampling interval: 6754ms
+  Thread calibration: mean lat.: 1841.249ms, rate sampling interval: 6701ms
+  Thread calibration: mean lat.: 1429.321ms, rate sampling interval: 6664ms
+  Thread calibration: mean lat.: 1400.337ms, rate sampling interval: 6516ms
+  Thread calibration: mean lat.: 1868.011ms, rate sampling interval: 6602ms
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    11.69s     3.63s   19.45s    60.73%
-    Req/Sec   601.33     30.24   637.00     55.56%
-  160725 requests in 30.00s, 30.50MB read
-Requests/sec:   5357.19
-Transfer/sec:      1.02MB
+    Latency     5.72s     2.99s   19.94s    67.39%
+    Req/Sec     0.99k   116.61     1.22k    68.42%
+  245135 requests in 29.99s, 46.76MB read
+Requests/sec:   8172.81
+Transfer/sec:      1.56MB
 ```
 ### API em PYTHON
 - Atendeu a pouco mais de 600 requisições por segundo

@@ -7,6 +7,8 @@ try:
     db = redis.Redis(connection_pool=pool)
 except Exception as e:
     print('Redis connection error: %s' % (str(e)) )
+
+# Infinity loop to update rates every 30 minutes
 while True:
     print("\nUpdating rates\n")
     try:
