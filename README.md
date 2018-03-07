@@ -52,19 +52,12 @@ Ex: `http://localhost:3333/python_api/?from=USD&to=EUR&amount=564.3` ou
 
 `http://localhost:3333/go_api/?from=USD&to=EUR&amount=564.3`
 
-#### make up
-Levanta toda arquitetura de infra do projeto
-#### make down
-Desliga toda a infra do projeto
-#### make stress-test-all
-Roda testes de stress nos 3 endpoints
-#### make stress-test-goapi
-Roda testes de stress no endpoint da API em Go 
-#### make stress-test-pythonapi
-Roda testes de stress no endpoint da API em Python
-#### make stress-test-nginx
-Roda testes de stress no endpoint com o NGINX (proxy cache)
-
+`$> make up` - Levanta toda arquitetura de infra do projeto
+`$> make down` - Desliga toda a infra do projeto
+`$> make stress-test-all` - Roda testes de stress nos 3 endpoints
+`$> make stress-test-goapi` - Roda testes de stress no endpoint da API em Go 
+`$> make stress-test-pythonapi` - Roda testes de stress no endpoint da API em Python
+`$> make stress-test-nginx` - Roda testes de stress no endpoint com o NGINX (proxy cache)
 
 ## TESTES de carga
 ### API em GOLANG
