@@ -1,5 +1,2 @@
-Flask==0.12.2
-gunicorn==19.7.1
 redis==2.10.6
-APScheduler==3.5.1
 requests==2.9.1
