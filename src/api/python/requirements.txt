@@ -3,3 +3,5 @@ gunicorn==19.7.1
 redis==2.10.6
 Werkzeug==0.14.1
 webargs==2.0.0
+pytest==3.4.2
+pytest-cov==2.5.1

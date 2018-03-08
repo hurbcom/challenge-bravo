@@ -20,7 +20,7 @@ def converter(args):
     
     # Make a convertion 
     converted, rate = Converter(from_cur, to_cur, amount).get()
-    if converted == 0:
+    if rate == 0:
        return jsonify({'Erro': 'Base currency %s or destination currency %s not found' % (from_cur, to_cur)}), 400
     return jsonify([{'from': from_cur, 'to': to_cur, 'rate': rate, 'amount': amount, 'converted_amount': converted }])
 

@@ -1,4 +1,3 @@
-# from flask import current_app
 from api import db
 
 class GetRates:
@@ -14,7 +13,7 @@ class GetRates:
             rate = db.get("%s%s" % (self.from_cur, self.to_cur))
             if rate is None:
                 rate = self.get_reverse()
-                
+
         return float(rate)
 
     def get_reverse(self):
