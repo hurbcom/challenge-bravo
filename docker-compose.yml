@@ -53,7 +53,6 @@ services:
       - "3333:3333"
     volumes:
       - "./confs/nginx/default.conf:/etc/nginx/conf.d/default.conf"
-      - "./scripts:/scripts"
   
   tester:
     restart: "no"

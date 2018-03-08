@@ -48,9 +48,7 @@ Como pode ser visto abaixo, para a arquitetura escolhida, é usado um worker que
   $> cd challenge-bravo
   $> make up
 ```
-Ex: `http://localhost:3333/python_api/?from=USD&to=EUR&amount=564.3` ou
-
-`http://localhost:3333/go_api/?from=USD&to=EUR&amount=564.3`
+Ex: `http://localhost:3333/converter/?from=USD&to=EUR&amount=564.3` 
 
 `$> make up` - Levanta toda arquitetura de infra do projeto
 
