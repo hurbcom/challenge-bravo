@@ -64,6 +64,8 @@ Ex: `http://localhost:3333/python_api/?from=USD&to=EUR&amount=564.3` ou
 
 `$> make stress-test-nginx` - Roda testes de stress no endpoint com o NGINX (proxy cache)
 
+`$> make pythonapi-test` - Roda testes unitários na api em python
+
 
 ## TESTES de carga
 ### API em GOLANG

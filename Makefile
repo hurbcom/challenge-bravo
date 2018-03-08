@@ -17,3 +17,6 @@ stress-test-nginx:
 	docker-compose stop tester
 
 stress-test-all: stress-test-goapi stress-test-pythonapi stress-test-nginx
+
+pythonapi-test:
+	docker-compose exec pythonapi pytest
