@@ -1,4 +1,4 @@
-from app.get_rates import Get_rates
+from get_rates import Get_rates
 
 class Converter:
     def __init__(self, from_cur, to_cur, amount):

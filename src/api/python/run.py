@@ -1,28 +1,17 @@
-from flask_caching import Cache
 from flask import request, jsonify
-from app.converter import Converter
+from api.converter import Converter
 from webargs import fields
 from webargs.flaskparser import use_args
-from flask import Flask
-from redis import Redis
+from api import app
 
-
-app = Flask(__name__)
-
-with app.app_context():
-    app.redis = Redis(host='redis')
-
-# This cache improve a better performance on equals requests
-cache = Cache(config={'CACHE_TYPE': 'simple'})
-
+# Query string validators
 converter_args = {
     'to': fields.Str(required=True),
     'from': fields.Str(required=True),
     'amount': fields.Float(required=True)
 }
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
-# Improve better performance caching de same requests
-@cache.cached(timeout=50)
 @app.route("/converter/")
 @use_args(converter_args)
 def converter(args):
@@ -31,9 +20,8 @@ def converter(args):
     amount = float(args['amount'])
     converted, rate = Converter(from_cur, to_cur, amount).get()
     if converted == 0:
-       return jsonify({'Erro': 'Base currency %s not found' % (from_cur)}), 400
+       return jsonify({'Erro': 'Base currency %s or destination currency %s not found' % (from_cur, to_cur)}), 400
     return jsonify([{'from': from_cur, 'to': to_cur, 'rate': rate, 'amount': amount, 'converted_amount': converted }])
 
 if __name__ == "__main__":
-    cache.init_app(app)
     app.run()
