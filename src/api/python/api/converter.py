@@ -1,10 +1,10 @@
-from get_rates import Get_rates
+from get_rates import GetRates
 
 class Converter:
     def __init__(self, from_cur, to_cur, amount):
         self.from_cur = from_cur
         self.to_cur = to_cur
-        self.rate = Get_rates(from_cur, to_cur).get()
+        self.rate = GetRates(from_cur, to_cur).get()
         self.amount = amount
     
     def get(self):

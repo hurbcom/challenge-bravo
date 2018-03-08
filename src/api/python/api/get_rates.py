@@ -1,16 +1,20 @@
 # from flask import current_app
 from api import db
 
-class Get_rates:
+class GetRates:
 
     def __init__(self, from_cur, to_cur):
         self.from_cur = from_cur
         self.to_cur = to_cur
 
     def get(self):
-        rate = db.get("%s%s" % (self.from_cur, self.to_cur))
-        if rate is None:
-            rate = self.get_reverse()
+        if self.from_cur == self.to_cur:
+            rate = 1
+        else:
+            rate = db.get("%s%s" % (self.from_cur, self.to_cur))
+            if rate is None:
+                rate = self.get_reverse()
+                
         return float(rate)
 
     def get_reverse(self):

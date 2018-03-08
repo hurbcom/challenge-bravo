@@ -17,6 +17,8 @@ def converter(args):
     from_cur= str(args['from']).upper()
     to_cur = str(args['to']).upper()
     amount = float(args['amount'])
+    
+    # Make a convertion 
     converted, rate = Converter(from_cur, to_cur, amount).get()
     if converted == 0:
        return jsonify({'Erro': 'Base currency %s or destination currency %s not found' % (from_cur, to_cur)}), 400
