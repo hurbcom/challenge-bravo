@@ -10,7 +10,6 @@ converter_args = {
     'from': fields.Str(required=True),
     'amount': fields.Float(required=True)
 }
-cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 @app.route("/converter/")
 @use_args(converter_args)
