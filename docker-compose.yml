@@ -9,7 +9,6 @@ services:
       - "8888"
     ports:
       - "8888:8888"
-    command: ["/usr/local/bin/gunicorn", "-w", "8", "-b", ":8888", "converter:app"]
     depends_on:
       - redis
       - worker

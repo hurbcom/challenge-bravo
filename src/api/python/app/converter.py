@@ -1,0 +1,12 @@
+from app.get_rates import Get_rates
+
+class Converter:
+    def __init__(self, from_cur, to_cur, amount):
+        self.from_cur = from_cur
+        self.to_cur = to_cur
+        self.rate = Get_rates(from_cur, to_cur).get()
+        self.amount = amount
+    
+    def get(self):
+        converted = float(self.rate * self.amount)
+        return converted, self.rate
