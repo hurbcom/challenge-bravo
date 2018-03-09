@@ -2,14 +2,38 @@ const Koa = require('koa')
 const uuidv1 = require('uuid/v1')
 const Router = require('koa-router')
 const converter = require('./converter')
+const fetch = require('node-fetch')
 
+const quote = {}
 const router = new Router({})
+const notifications = new Array()
+
+
+const update_quote = async () => {
+    let now = Date.now
+    console.info('Updating quotation.')
+    try{
+        let address = 'http://api.promasters.net.br/cotacao/v1/valores'
+        let result = await fetch(address, {method: 'get'})
+        let json = await result.json()
+        for (let key of Object.keys(json.valores)){
+            quote[key] = json.valores[key].valor
+        }
+        return true
+    } catch (e) {
+        console.error(e.message, e.stack)
+    }
+    console.info('Finished to update quotation.', {execution_ms: Date.now() - start})
+}
+
+setInterval(update_quote, 15000)
+
+
 const is_valid = (v) => {
     if (v == undefined || v == null || v == '')
         return false
     return true
 }
-const notifications = new Array()
 
 router.get('convert', '/convert', ctx => {
     console.info(`${ctx.request.id}`)
@@ -32,7 +56,7 @@ router.get('convert', '/convert', ctx => {
         return
     }
 
-    ctx.body = {response: converter(from, to, amount)}
+    ctx.body = {response: converter(from, to, amount, quote)}
 })
 
 const app = new Koa()
