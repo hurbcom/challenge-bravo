@@ -11,6 +11,7 @@ import (
 
 // Declare a global db variable to store the Redis connection pool.
 var db *pool.Pool
+const ballast_cur string = "USD"
 
 func init() {
     var err error
@@ -23,7 +24,7 @@ func init() {
 }
 
 // Display all from the converter var
-func GetConverter(w http.ResponseWriter, r *http.Request) {
+func GetConvertion(w http.ResponseWriter, r *http.Request) {
 	var converter []Converter
 
 	from := strings.ToUpper(r.URL.Query()["from"][0])
@@ -35,32 +36,11 @@ func GetConverter(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-
-	conn, err := db.Get()
-    if err != nil {
-		log.Panic("Error get redis connection")
+	rate := GetRate(from, to)
+	if rate == 0 {
+		log.Panic("Error in convertion type")
 		w.WriteHeader(http.StatusInternalServerError)
-
 		return
-	}
-
-	key_arr := []string{from, to}
-	key := strings.Join(key_arr, "")
-	// Get on redis atual cotation based on fromto
-	rate, err := conn.Cmd("GET", key).Float64()
-	if err != nil {
-		log.Println("Fail to get Key from redis. Try reverse")
-		// If cotation not found on redis, try a reverse cotation
-		key_arr := []string{to, from}
-		key := strings.Join(key_arr, "")
-		rate, err := conn.Cmd("GET", key).Float64()
-		if err != nil {
-			log.Panic("Fail to get reverse from redis.")
-
-			return
-		}
-		converted := amount*(1/rate)
-		_ = converted
 	}
 	converted := amount*rate
 	_ = converted
@@ -69,10 +49,79 @@ func GetConverter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(converter)
 	
+	return
+}
+
+func GetRate(from, to string) float64{
+	conn, err := db.Get()
+    if err != nil {
+		log.Panic("Error get redis connection")
+		return 0
+	}
+	key_arr := []string{from, to}
+	key := strings.Join(key_arr, "")
+	// Get on redis atual cotation based on fromto
+	rate, err := conn.Cmd("GET", key).Float64()
+
 	// Importantly, use defer and the connection pool's Put() method to ensure
     // that the connection is always put back in the pool before GetConverter()
     // exits.
 	defer db.Put(conn)
-	
-	return
+
+	if err != nil {
+		return GetRateReverse(from, to)
+	}
+	return rate
+
+}
+
+func GetRateReverse(from, to string) float64{
+	conn, err := db.Get()
+    if err != nil {
+		log.Panic("Error get redis connection")
+		return 0
+	}
+	key_arr := []string{to, from}
+	key := strings.Join(key_arr, "")
+	// Get on redis atual cotation based on fromto
+	rate, err := conn.Cmd("GET", key).Float64()
+
+	// Importantly, use defer and the connection pool's Put() method to ensure
+    // that the connection is always put back in the pool before GetConverter()
+    // exits.
+	defer db.Put(conn)
+
+	if err != nil {
+		return GetRateByBallast(from, to)
+	}
+	return 1/rate
+}
+
+func GetRateByBallast(from, to string) float64{
+	conn, err := db.Get()
+    if err != nil {
+		log.Panic("Error get redis connection")
+		return 0
+	}
+	key_arr := []string{ballast_cur, from}
+	key_from := strings.Join(key_arr, "")
+	// Get on redis atual cotation based on fromto
+	rate_from, err := conn.Cmd("GET", key_from).Float64()
+
+	key_arr = []string{ballast_cur, to}
+	key_to := strings.Join(key_arr, "")
+	// Get on redis atual cotation based on fromto
+	rate_to, err := conn.Cmd("GET", key_to).Float64()
+
+	// Importantly, use defer and the connection pool's Put() method to ensure
+    // that the connection is always put back in the pool before GetConverter()
+    // exits.
+	defer db.Put(conn)
+	if err != nil {
+		return 0
+	} 
+	key_arr = []string{from, to}
+	key := strings.Join(key_arr, "")
+	conn.Cmd("SET", key, rate_from/rate_to)
+	return rate_from/rate_to
 }

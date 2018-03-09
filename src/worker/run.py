@@ -1,6 +1,6 @@
 import redis
 import time
-from getrates import GetRates
+from get_online_rates import GetOnlineRates
 
 try:
     pool = redis.ConnectionPool(host='redis', port=6379, max_connections=2, db=0)
@@ -12,7 +12,7 @@ except Exception as e:
 while True:
     print("\nUpdating rates\n")
     try:
-        new_rates = GetRates()
+        new_rates = GetOnlineRates()
         for new_rate in new_rates.rates:
             db.set(new_rate[0], new_rate[1])
             print(new_rate)

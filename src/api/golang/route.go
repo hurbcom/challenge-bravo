@@ -7,7 +7,7 @@ import (
 func NewRouter() *mux.Router {
 
     router := mux.NewRouter().StrictSlash(true)
-    router.HandleFunc("/converter/", GetConverter).Methods("GET")
+    router.HandleFunc("/converter/", GetConvertion).Methods("GET")
 
     return router
 }

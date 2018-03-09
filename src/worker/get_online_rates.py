@@ -1,6 +1,6 @@
 import requests
 
-class GetRates:
+class GetOnlineRates:
     def __init__(self):
         self.rates = []
         self.get_rates_from_coinmarketcap('EUR')
