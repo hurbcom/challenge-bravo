@@ -11,7 +11,7 @@ const update_quote = async () => {
             quote[key] = json.valores[key].valor
         }
     } catch (e) {
-        console.log(e.message, e.stack)
+        console.error(e.message, e.stack)
     }
     
 }
@@ -20,7 +20,14 @@ update_quote()
 setInterval(update_quote, 15000)
 
 const converter = (from, to, amount) => {
-    return quote[from]
+    var result = 0.0
+    
+    if (from == 'BRL') 
+       result = quote[to]
+    else 
+        result = quote[to]/quote[from]
+    
+    return result
 }
 
 module.exports = converter
