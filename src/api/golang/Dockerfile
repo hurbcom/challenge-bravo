@@ -1,5 +1,7 @@
 FROM golang
-ADD . /go/src/converter
+RUN mkdir -p "$GOPATH/src/github.com/maypimentel/challenge-bravo/src/api/golang"
+WORKDIR "/go/src/github.com/maypimentel/challenge-bravo/src/api/golang"
+ADD . /go/src/github.com/maypimentel/challenge-bravo/src/api/golang
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-RUN cd /go/src/converter && dep ensure &&go build
-CMD "/go/src/converter/converter"
+RUN dep ensure &&go build
+CMD "./converter"

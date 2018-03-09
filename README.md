@@ -18,7 +18,8 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 # Resposta ao Desafio Bravo
 Foram construídas 2 APIs, respondesndo em JSON. Uma feita em **python** com flask e a outra em **golang** com mux.
-Como pode ser visto abaixo, para a arquitetura escolhida, é usado um worker que é capaz de buscar cotações atuais entre diversas moedas e à partir de fontes diversas além de ser responsável por atualizá-las a cada 30 min. Por isso, não foi usada uma moeda de lastro para as conversões.
+Como pode ser visto abaixo, para a arquitetura escolhida, é usado um worker que é capaz de buscar cotações atuais entre diversas moedas e à partir de fontes diversas além de ser responsável por atualizá-las a cada 30 min. 
+Caso não seja encontrada a taxa no redis, será usada uma moeda de lastro para as conversões, neste caso, o dólar (USD).
 
 ## Arquitetura
 <p align="center">
@@ -62,8 +63,9 @@ Ex: `http://localhost:3333/converter/?from=USD&to=EUR&amount=564.3`
 
 `$> make stress-test-nginx` - Roda testes de stress no endpoint com o NGINX (proxy cache)
 
-`$> make pythonapi-test` - Roda testes unitários na api em python
+`$> make pythonapi-test` - Roda testes na api em python
 
+`$> make goapi-test` - Roda testes na api em golang
 
 ## TESTES de carga
 ### API em GOLANG
