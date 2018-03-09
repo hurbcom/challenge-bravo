@@ -29,6 +29,6 @@ class GetRates:
         if ((ballast_from_rate is None) or (ballast_to_rate is None)):
             return 0
         else:
-            rate_from_ballast = float(ballast_from_rate) / float(ballast_to_rate)
-            db.set("%s%s" % (self.from_cur, self.to_cur), rate_from_ballast, 900)
+            rate_from_ballast = float(ballast_to_rate) / float(ballast_from_rate)
+            db.setex("%s%s" % (self.from_cur, self.to_cur), rate_from_ballast, 900)
             return rate_from_ballast

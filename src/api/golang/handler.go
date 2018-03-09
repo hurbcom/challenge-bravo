@@ -11,7 +11,7 @@ import (
 
 // Declare a global db variable to store the Redis connection pool.
 var db *pool.Pool
-const ballast_cur string = "USD"
+const ballastCur string = "USD"
 
 func init() {
     var err error
@@ -42,7 +42,6 @@ func GetConvertion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	converted := amount*rate
-	_ = converted
 
 	converter := Converter{ From: from, To: to, Rate: rate, Amount: amount, ConvertedAmount: converted }
 	w.Header().Set("Content-Type", "application/json")
@@ -57,8 +56,8 @@ func GetRate(from, to string) float64{
 		log.Panic("Error get redis connection")
 		return 0
 	}
-	key_arr := []string{from, to}
-	key := strings.Join(key_arr, "")
+	keyArr := []string{from, to}
+	key := strings.Join(keyArr, "")
 	// Get on redis atual cotation based on fromto
 	rate, err := conn.Cmd("GET", key).Float64()
 
@@ -80,8 +79,8 @@ func GetRateReverse(from, to string) float64{
 		log.Panic("Error get redis connection")
 		return 0
 	}
-	key_arr := []string{to, from}
-	key := strings.Join(key_arr, "")
+	keyArr := []string{to, from}
+	key := strings.Join(keyArr, "")
 	// Get on redis atual cotation based on tofrom
 	rate, err := conn.Cmd("GET", key).Float64()
 
@@ -99,23 +98,25 @@ func GetRateByBallast(from, to string) float64{
 		log.Panic("Error get redis connection")
 		return 0
 	}
-	key_arr := []string{ballast_cur, from}
-	key_from := strings.Join(key_arr, "")
+	keyArrFrom := []string{ballastCur, from}
+	keyFrom := strings.Join(keyArrFrom, "")
 	// Get on redis atual cotation based on USDfrom
-	rate_from, err := conn.Cmd("GET", key_from).Float64()
+	rateFrom, err := conn.Cmd("GET", keyFrom).Float64()
 
-	key_arr = []string{ballast_cur, to}
-	key_to := strings.Join(key_arr, "")
+	keyArrTo := []string{ballastCur, to}
+	keyTo := strings.Join(keyArrTo, "")
 	// Get on redis atual cotation based on USDto
-	rate_to, err := conn.Cmd("GET", key_to).Float64()
+	rateTo, err := conn.Cmd("GET", keyTo).Float64()
 
 	defer db.Put(conn)
 
 	if err != nil {
 		return 0
 	} 
-	key_arr = []string{from, to}
-	key := strings.Join(key_arr, "")
-	conn.Cmd("SET", key, rate_from/rate_to)
-	return rate_from/rate_to
+
+	keyArr := []string{from, to}
+	key := strings.Join(keyArr, "")
+	ballastRate := (rateTo / rateFrom)
+	conn.Cmd("SET", key, ballastRate)
+	return ballastRate
 }

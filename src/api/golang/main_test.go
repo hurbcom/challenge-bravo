@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"time"
+	"math"
 )
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
@@ -28,7 +29,7 @@ func TestRigthConvertion(t *testing.T) {
 	conn.Cmd("SET", "USDBRL", 4)
 	defer db.Put(conn)
 	conv := new(Converter)
-	t.Log(getJson("http://localhost:8000/converter/?from=USD&to=BRL&amount=5", conv))
+	getJson("http://localhost:8000/converter/?from=USD&to=BRL&amount=5", conv)
 	if converted_amount := conv.ConvertedAmount; converted_amount != 20 {
 		t.Errorf("Expected converted_amount of 20, but it was %f instead.", converted_amount)
 	}
@@ -41,15 +42,16 @@ func TestConvertionByBallast(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error on Redis")
 	}
-	conn.Cmd("SET", "USDBRL", 4)
-	conn.Cmd("SET", "USDEUR", 0.8)
+	conn.Cmd("SET", "USDBRL", 3.2414)
+	conn.Cmd("SET", "USDEUR", 0.80509)
 	conn.Cmd("DEL", "BRLEUR")
 	conn.Cmd("DEL", "EURBRL")
 	defer db.Put(conn)
 	conv := new(Converter)
-	t.Log(getJson("http://localhost:8000/converter/?from=BRL&to=EUR&amount=5", conv))
-	if converted_amount := conv.ConvertedAmount; converted_amount != (4/0.8)*5 {
-		t.Errorf("Expected converted_amount of %f, but it was %f instead.", (4/0.8)*5, converted_amount)
+	getJson("http://localhost:8000/converter/?from=BRL&to=EUR&amount=5", conv)
+	ballastRate := math.Round((0.80509/3.2414)*5)
+	if converted_amount := math.Round(conv.ConvertedAmount); converted_amount != ballastRate {
+		t.Errorf("Expected converted_amount of %f, but it was %f instead.", ballastRate, converted_amount)
 	}
 
 }

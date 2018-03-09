@@ -138,9 +138,6 @@ Transfer/sec:      3.12MB
 ```
 - Justificando que a arquitetura defida com um cache frontal foi acertada.
 
-## Bônus
-### SWAGGER
-- Interface do SWAGGER para testes e documentação
-```javascript
-http://127.0.0.1:3333/swagger/
-```
+
+## BACKLOG
+- Incluir mais testes para cobrir todos os cenários
