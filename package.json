@@ -19,6 +19,7 @@
   "homepage": "https://github.com/andersonribeir0/challenge-bravo#readme",
   "dependencies": {
     "koa": "^2.5.0",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "uuid": "^3.2.1"
   }
 }
