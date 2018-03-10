@@ -19,10 +19,10 @@ O serviço roda na porta 5000. Portanto, caso a aplicação seja executada local
 ## Docker
 Executar o seguintes comandos no diretório raiz do projeto:
 1. Criar a imagem NOME_DA_IMAGEM a partir do dockerfile. <br/>
-docker build -t NOME_DA_IMAGEM .
+`docker build -t NOME_DA_IMAGEM .`
 
 2. Criar uma instância de container e associar a porta 5000 da sua máquina local para a porta 5000 exposta pelo container.<br/>
-docker run -p 5000:5000 -d NOME_DA_IMAGEM
+`docker run -p 5000:5000 -d NOME_DA_IMAGEM`
 
 Após isso, execute um GET http na porta 5000 passando os parâmetros desejados.
 
