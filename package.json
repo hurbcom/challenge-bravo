@@ -1,0 +1,30 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andersonribeir0/challenge-bravo.git"
+  },
+  "author": "anderson_ribeiro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andersonribeir0/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/andersonribeir0/challenge-bravo#readme",
+  "dependencies": {
+    "koa": "^2.5.0",
+    "koa-router": "^7.4.0",
+    "node-fetch": "^2.1.1",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.0.4",
+    "should": "^13.2.1"
+  }
+}
