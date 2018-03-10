@@ -21,6 +21,12 @@ Foram construídas 2 APIs, respondesndo em JSON. Uma feita em **python** com fla
 Como pode ser visto abaixo, para a arquitetura escolhida, é usado um worker que é capaz de buscar cotações atuais entre diversas moedas e à partir de fontes diversas além de ser responsável por atualizá-las a cada 30 min. 
 Caso não seja encontrada a taxa no redis, será usada uma moeda de lastro para as conversões, neste caso, o dólar (USD).
 
+## Fontes de cotação on-line
+ - https://coinmarketcap.com/
+ - https://fixer.io/
+ - https://openexchangerates.org/
+ - https://apilayer.com/
+
 ## Arquitetura
 <p align="center">
   <img src="architecture.png" alt="Architecture" />
@@ -37,6 +43,7 @@ Caso não seja encontrada a taxa no redis, será usada uma moeda de lastro para 
 - Possibilita cache de cotações para consultas da API.
 
 ### API:
+- Foram contruídas **2** APIs, uma em **PYTHON** e a outra em **GOLANG**
 - Responde aos requests http de converções dos usuários e processa as requisições entregando o resultado da cotação processada no formato **JSON**.
 
 ### NGIX:
@@ -140,4 +147,6 @@ Transfer/sec:      3.12MB
 
 
 ## BACKLOG
-- Incluir mais testes para cobrir todos os cenários
+- Incluir mais testes para cobrir todos os cenários;
+- Implementar o Swagger para ajudar a documentar os endpoints;
+- Incluir monitoramento de requests, Statsd + Graphana podem ser uma opção.
