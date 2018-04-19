@@ -42,7 +42,7 @@ Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ qu
 
 - **Organização do código**: Separação de módulos, view e model, back-end e front-end
 - **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Acertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
+- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
 - **Legibilidade do código** (incluindo comentários)
 - **Segurança**: Existe alguma vulnerabilidade clara?
 - **Cobertura de testes** (Não esperamos cobertura completa)
