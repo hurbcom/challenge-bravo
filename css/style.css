@@ -1,0 +1,58 @@
+body, html {
+  height: 100%;
+  text-align: left;
+}
+
+.container{
+  width: 70%;
+  max-width: 500px;
+  margin: 0 auto;
+  height: 310px;
+  background-color: #1d487c;
+  text-align: center;
+}
+
+.logo{
+  margin: 0 auto;
+  position: relative;
+  margin-top: 4%;
+}
+
+.inputText{
+  width: 90%;
+  height: 12%;
+  max-height: 33px;
+  margin-top: 5px;
+  border: 1px solid #fff;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 3px;
+}
+
+.botaoPesquisa {
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #fff;
+  height: 14%;
+  max-height: 40px;
+  width: 90%;
+  margin-top: 4px;
+  background: #c5c034;
+  border: none;
+  border-radius: 5px;
+}
+
+.divCidade{
+  white-space: nowrap;
+  background-color: #fff;
+  margin: 0 auto;
+  height: 40px;
+  width: 90%;
+  margin-top: 5%;
+}
+
+.nomeCidade{
+  position: relative;
+  top: 12px;
+}

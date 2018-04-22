@@ -1,0 +1,13 @@
+{
+  "success":true,
+  "terms":"https:\/\/currencylayer.com\/terms",
+  "privacy":"https:\/\/currencylayer.com\/privacy",
+  "timestamp":1524424983,
+  "source":"USD",
+  "quotes":{
+    "USDUSD":1,
+    "USDBRL":3.4054,
+    "USDEUR":0.814601,
+    "USDBTC":0.000112
+  }
+}
