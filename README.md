@@ -42,9 +42,8 @@ Foi elaborada uma API, respondendo JSON, utilizando a linguagem de programação
   $> service cron restart
   $> cd /var/www/html
   $> git clone https://github.com/dougrhishu/challenge-bravo.git
-  $> cd challenge-bravo
 ```
-Ex: `http://localhost/challenge-bravo`
+Para executar o projeto entre no navegador com a URL após os comandos acima `http://localhost/challenge-bravo`
 
 ## TESTES DE ESTRESSE
 - Após realizar do teste de estresse, obteve o resultado esperado nas 1000 requisições por segundo.
