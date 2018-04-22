@@ -48,6 +48,3 @@ Ex: `http://localhost/challenge-bravo`
 
 ## TESTES DE ESTRESSE
 - Após realizar do teste de estresse, obteve o resultado esperado nas 1000 requisições por segundo.
-<p align="center">
-  <img src="resultado-teste.png" alt="Resultado" />
-</p>
