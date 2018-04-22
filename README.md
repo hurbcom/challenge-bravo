@@ -36,7 +36,7 @@ Foi elaborada uma API, respondendo JSON, utilizando a linguagem de programação
   $> crontab -e
 ```
   inserir o seguinte comando dentro do cron:
-  - */30 * * * * curl --request GET 'http://localhost/challenge-bravo/job.php'
+  - `*/30 * * * * curl --request GET 'http://localhost/challenge-bravo/job.php'`
 
   ```bash
   $> service cron restart
