@@ -47,3 +47,10 @@ Para executar o projeto entre no navegador com a URL após os comandos acima `ht
 
 ## TESTES DE ESTRESSE
 - Após realizar do teste de estresse, obteve o resultado esperado nas 1000 requisições por segundo.
+
+
+Boa sorte e boa viagem! ;)
+
+<p align="center">
+  <img src="ca.jpg" alt="Challange accepted" />
+</p>
