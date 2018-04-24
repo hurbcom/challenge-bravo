@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Challenge-Bravo</title>
+  <!-- start include library css -->
+  <link href="css/style.css" rel='stylesheet' type='text/css'>
+  <!-- end include library css -->
+</head>
+<body>
+  <!-- start container page -->
+  <div class="container">
+    <img class="logo" src="img/logo.png">
+    <br>
+    <select id="from" class="inputText">
+      <option value="USD">USD</option>
+      <option value="BRL">BRL</option>
+      <option value="EUR">EUR</option>
+      <option value="BTC">BTC</option>
+    </select>
+
+    <select id="to" class="inputText">
+      <option value="USD">USD</option>
+      <option value="BRL">BRL</option>
+      <option value="EUR">EUR</option>
+      <option value="BTC">BTC</option>
+    </select>
+
+    <input type="number" id="valor" class="inputText">
+    <input type="button" id="pesquisar" value="PESQUISAR" class="botaoPesquisa">
+
+    <div class="divCidade">
+      <!-- location result -->
+      <p class="nomeCidade" id="resultado"></p>
+    </div>
+  </div>
+  <!-- end container page -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

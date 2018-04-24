@@ -16,43 +16,38 @@ A requisição deve receber como parâmetros: A moeda de origem, o valor a ser c
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+# Resposta ao Desafio Bravo
+Foi elaborada uma API, respondendo JSON, utilizando a linguagem de programação **PHP** com consulta externa em **GmbH**.
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+## Fontes de cotação on-line
+ - http://apilayer.net
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+### Funcionamento:
+- Inicialmente é executado o arquivo json.php para buscar as informações das moedas via JSON de uma API externa que é salva em um arquivo .txt
+- Através de um cron os valores são atualizados a cada 30 min.
+- Ao clicar no botão **PESQUISAR** um jquery é executado passando os parâmetros informados pelo usuário no formulário para o arquivo json.php que é responsável por pegar as informações do TXT e realizar o cálculo dando retorno para o Javascript.
 
+### API:
+- Foi desenvolvida uma API em **PHP**, sendo que contem dois arquivos o primeiro é o **job.php** é responsável pela captura de informação do servidor externo a cada 30 mim e o **json.php** realiza a comunicação com a solicitação o **JavaScript**.
 
+## EXECUTANDO
+- Pré-requisitos: Apache, PHP e o cron
+```bash
+  $> crontab -e
+```
+  inserir o seguinte comando dentro do cron:
+  - `*/30 * * * * curl --request GET 'http://localhost/challenge-bravo/job.php'`
 
-## Critério de avaliação
+  ```bash
+  $> service cron restart
+  $> cd /var/www/html
+  $> git clone https://github.com/dougrhishu/challenge-bravo.git
+```
+Para executar o projeto entre no navegador com a URL após os comandos acima `http://localhost/challenge-bravo`
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+## TESTES DE ESTRESSE
+- Após realizar do teste de estresse, obteve o resultado esperado nas 1000 requisições por segundo.
 
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
 
 Boa sorte e boa viagem! ;)
 
