@@ -1,0 +1,27 @@
+{
+  "name": "challange-bravo",
+  "version": "0.0.1",
+  "description": "A simple Node converter",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "memory-cache": "^0.2.0"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "devDependencies": {
+    "nodemon": "^1.17.4"
+  }
+}
