@@ -4,7 +4,8 @@
   "description": "A simple Node converter",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "express": "^4.16.3"
@@ -16,5 +17,8 @@
   "keywords": [
     "node",
     "express"
-  ]
+  ],
+  "devDependencies": {
+    "nodemon": "^1.17.4"
+  }
 }
