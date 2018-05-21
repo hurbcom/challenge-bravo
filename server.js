@@ -6,6 +6,23 @@ require('dotenv').config()
 
 app.use(express.static('public'));
 
+function loadRates(request, response) {
+  const from = request.query.from;
+  const to = request.query.to;
+  const amount = request.query.amount;
+  axios.get(`http://data.fixer.io/api/latest?access_key=${process.env.API_KEY}`)
+      .then((res) => {
+          const rates = res.data.rates;
+          // Cache Rates
+          cache.put('rates', JSON.stringify(rates));
+          // Conversion
+          response.json((amount / (1 / rates[to])) * (1 / rates[from]));
+      })
+      .catch((e) => {
+          response.sendStatus(404);
+      });
+}
+
 app.get("/api*", function(request, response) {
     const from = request.query.from;
     const to = request.query.to;
@@ -16,30 +33,10 @@ app.get("/api*", function(request, response) {
 
     if (cache.get('lastTime') === null) {
         cache.put('lastTime', current);
-        axios.get(`http://data.fixer.io/api/latest?access_key=${process.env.API_KEY}`)
-            .then((res) => {
-                const rates = res.data.rates;
-                // Cache Rates
-                cache.put('rates', JSON.stringify(rates));
-                // Conversion
-                response.json((amount / (1 / rates[to])) * (1 / rates[from]));
-            })
-            .catch((e) => {
-                response.sendStatus(404);
-            });
-    } else if (current - cache.get('lastTime') > 60) {
+        loadRates(request, response);
+    } else if (current - cache.get('lastTime') > 120) {
         cache.put('lastTime', current);
-        axios.get(`http://data.fixer.io/api/latest?access_key=${process.env.API_KEY}`)
-            .then((res) => {
-                const rates = res.data.rates;
-                // Cache Rates
-                cache.put('rates', JSON.stringify(rates));
-                // Conversion
-                response.json((amount / (1 / rates[to])) * (1 / rates[from]));
-            })
-            .catch((e) => {
-                response.sendStatus(404);
-            });
+        loadRates(request, response);
     } else {
       let rates = JSON.parse(cache.get('rates'));
       response.json((amount / (1 / rates[to])) * (1 / rates[from]));
