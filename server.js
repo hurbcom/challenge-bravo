@@ -3,8 +3,8 @@ var app = express();
 
 app.use(express.static('public'));
 
-app.get("/", function (request, response) {
-  response.json({});
+app.get("/api*", function (request, response) {
+  response.json(request.query);
 });
 
 var listener = app.listen(8080, function () {
