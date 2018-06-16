@@ -2,20 +2,20 @@
 
 namespace App\Services;
 
-use App\Repositories\RatesRepository;
+use App\Repositories\RateRepository;
 
 final class ConverterService
 {
-    private $ratesRepository;
+    private $rateRepository;
 
-    public function __construct(RatesRepository $ratesRepository)
+    public function __construct(RateRepository $rateRepository)
     {
-        $this->ratesRepository = $ratesRepository;
+        $this->rateRepository = $rateRepository;
     }
 
     public function getConversionWith(string $currencyCodeOfFrom, string $currencyCodeOfTo, float $amount): string {
-        $fromRate = $this->ratesRepository->getBallastRateFor($currencyCodeOfFrom);
-        $toRate = $this->ratesRepository->getBallastRateFor($currencyCodeOfTo);
+        $fromRate = $this->rateRepository->getBallastRateFor($currencyCodeOfFrom);
+        $toRate = $this->rateRepository->getBallastRateFor($currencyCodeOfTo);
 
         return ($amount / $fromRate) * $toRate;
     }

@@ -1,6 +1,6 @@
 <?php
 
-use \App\Repositories\RatesRepository as RatesRepository;
+use \App\Repositories\RateRepository as RateRepository;
 use \App\Services\ConverterService as ConverterService;
 
 class ConverterServiceTest extends TestCase
@@ -15,13 +15,13 @@ class ConverterServiceTest extends TestCase
         $brlRate = 3.736404;
         $cadRate = 1.317830;
 
-        $ratesRepository = $this->createMock(RatesRepository::class);
+        $rateRepository = $this->createMock(RateRepository::class);
 
-        $ratesRepository->expects($this->exactly(2))
+        $rateRepository->expects($this->exactly(2))
             ->method('getBallastRateFor')
             ->will($this->onConsecutiveCalls($brlRate, $cadRate));
 
-        $converterService = new ConverterService($ratesRepository);
+        $converterService = new ConverterService($rateRepository);
 
         // execution
         $actual = $converterService->getConversionWith($from, $to, $amount);

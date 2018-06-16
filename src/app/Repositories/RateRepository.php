@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 
-interface RatesRepository
+interface RateRepository
 {
     public function getBallastRateFor(string $currencyCode): float;
 }
