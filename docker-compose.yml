@@ -5,6 +5,8 @@ services:
     image: "php:7-fpm-alpine"
     volumes:
       - "./src:/var/www/html"
+    environment:
+      APILAYER_REPOSITORY_URL: "http://www.apilayer.net/api/live?access_key=accefec5fe748ba3266852b781ec5ea6&currencies=%s"
   nginx:
     image: "nginx"
     volumes:

@@ -78,7 +78,8 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\HelperServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -96,5 +97,13 @@ $app->router->group([
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
 });
+
+/*
+|--------------------------------------------------------------------------
+| Load Configs
+|--------------------------------------------------------------------------
+*/
+
+$app->configure('repositories');
 
 return $app;
