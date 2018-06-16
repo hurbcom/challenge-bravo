@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\RateRepository;
+use App\Exceptions\ConversionException;
 
 final class ConverterService
 {
@@ -14,9 +15,13 @@ final class ConverterService
     }
 
     public function getConversionWith(string $currencyCodeOfFrom, string $currencyCodeOfTo, float $amount): string {
-        $fromRate = $this->rateRepository->getBallastRateFor($currencyCodeOfFrom);
-        $toRate = $this->rateRepository->getBallastRateFor($currencyCodeOfTo);
+        try {
+            $fromRate = $this->rateRepository->getBallastRateFor($currencyCodeOfFrom);
+            $toRate = $this->rateRepository->getBallastRateFor($currencyCodeOfTo);
 
-        return ($amount / $fromRate) * $toRate;
+            return ($amount / $fromRate) * $toRate;
+        } catch(\Exception $e) {
+            throw new ConversionException();
+        }
     }
 }

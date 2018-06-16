@@ -1,7 +1,8 @@
 <?php
 
-use \App\Repositories\RateRepository as RateRepository;
-use \App\Services\ConverterService as ConverterService;
+use \App\Repositories\RateRepository;
+use \App\Services\ConverterService;
+use \App\Exceptions\ConversionException;
 
 class ConverterServiceTest extends TestCase
 {
@@ -28,5 +29,25 @@ class ConverterServiceTest extends TestCase
 
         // assertions
         $this->assertEquals(0.35270008275336395, $actual);
+    }
+
+    public function testConversionException()
+    {
+        // setup
+        $this->expectException(ConversionException::class);
+        $from = "BRL";
+        $to = "CAD";
+        $amount = 1.0;
+
+        $rateRepository = $this->createMock(RateRepository::class);
+
+        $rateRepository
+            ->method('getBallastRateFor')
+            ->will($this->throwException(new \Exception()));
+
+        $converterService = new ConverterService($rateRepository);
+
+        // execution
+        $converterService->getConversionWith($from, $to, $amount);
     }
 }
