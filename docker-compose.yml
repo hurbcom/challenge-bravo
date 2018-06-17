@@ -12,6 +12,7 @@ services:
       APILAYER_SUPPORTED_CURRENCIES: 'USD|BRL|EUR|BTC'
       CRYPTOCOMPARE_REPOSITORY_URL: "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=%s"
       CRYPTOCOMPARE_SUPPORTED_CURRENCIES: 'USD|BRL|EUR|BTC|ETH'
+
   nginx:
     image: "nginx"
     volumes:
@@ -20,7 +21,13 @@ services:
         - "php"
     ports:
       - "80"
+
   redis:
     image: "redis:alpine"
-    ports:
-        - "6379:6379"
+
+  benchmark:
+    build: "benchmark/."
+    links:
+      - "nginx"
+    volumes:
+      - "./benchmark/run.sh:/data/run.sh"
