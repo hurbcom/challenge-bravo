@@ -25,6 +25,11 @@ services:
   redis:
     image: "redis:alpine"
 
+  warmup:
+    build: "warmup/."
+    links:
+      - "nginx"
+
   benchmark:
     build: "benchmark/."
     links:

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Services\ConverterService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use App\Repositories\RateRepository;
 
 class QuotationController extends Controller
 {
@@ -20,6 +22,12 @@ class QuotationController extends Controller
             $to = $request->input('to');
             $amount = (float)$request->input('amount');
 
+            $this->validate($request, [
+                'from' => 'required',
+                'to' => 'required',
+                'amount' => 'required',
+            ]);
+
             $convertedAmount = $this->converterService->getConversionWith($from, $to, $amount);
 
             $response = [
@@ -30,9 +38,31 @@ class QuotationController extends Controller
             ];
 
             return response()->json($response, 200);
+        } catch (ValidationException $e) {
+            return response('', 400);
         } catch (\Exception $e) {
-            return response("", 400);
+            return response('', 500);
         }
 
+    }
+
+    public function renewCache(Request $request, RateRepository $rateRepository) {
+
+        try {
+            $code = $request->input('code');
+
+
+            $this->validate($request, [
+                'code' => 'required'
+            ]);
+
+            $rateRepository->getBallastRateFor($code);
+
+            return response('', 200);
+        } catch (ValidationException $e) {
+            return response('', 400);
+        } catch (\Exception $e) {
+            return response('', 500);
+        }
     }
 }

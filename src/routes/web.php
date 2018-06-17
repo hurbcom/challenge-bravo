@@ -13,4 +13,5 @@
 
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/convert', ['uses' => 'QuotationController@convert']);
+    $router->get('/renewcache', ['uses' => 'QuotationController@renewCache']);
 });

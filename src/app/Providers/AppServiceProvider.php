@@ -13,11 +13,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->call([$this, 'processRegister']);
+    }
+
+    public function processRegister()
+    {
 
         $this->app->bind('App\Repositories\RedisRateRepository', function () {
+
+            $request = app(\Illuminate\Http\Request::class);
+            $renewRedisCache = (bool) $request->input('force', 0);
+
             return new \App\Repositories\RedisRateRepository(
                 app('App\Helpers\CacheClient'),
-                app('App\Repositories\ApilayerRateRepository')
+                app('App\Repositories\ApilayerRateRepository'),
+                $renewRedisCache
             );
         });
 

@@ -8,17 +8,19 @@ final class RedisRateRepository implements RateRepository
 {
     private $cacheClient;
     private $rateRepository;
+    private $renewCache;
 
-    public function __construct(CacheClient $cacheClient, RateRepository $rateRepository)
+    public function __construct(CacheClient $cacheClient, RateRepository $rateRepository, $renewCache=false)
     {
         $this->rateRepository = $rateRepository;
         $this->cacheClient = $cacheClient;
+        $this->renewCache = $renewCache;
     }
 
     public function getBallastRateFor(string $currencyCode): float
     {
         $redisKey = $this->makeRedisKey($currencyCode);
-        if(!$this->cacheClient->isSet($redisKey)){
+        if($this->renewCache === true || !$this->cacheClient->isSet($redisKey)){
             $this->cacheClient->setWith(
                 $redisKey,
                 $this->rateRepository->getBallastRateFor($currencyCode),
