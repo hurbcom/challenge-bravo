@@ -13,6 +13,13 @@ class HelperServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind('App\Helpers\RedisCacheClient', function () {
+            return new \App\Helpers\RedisCacheClient(
+                app('redis')
+            );
+        });
+
         $this->app->bind('App\Helpers\HttpClient','App\Helpers\GuzzleHttpClient');
+        $this->app->bind('App\Helpers\CacheClient','App\Helpers\RedisCacheClient');
     }
 }

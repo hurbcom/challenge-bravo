@@ -5,7 +5,7 @@ namespace App\Helpers;
 use App\Exceptions\UnableToProcessRequestException as UnableToProcessRequestException;
 use GuzzleHttp;
 
-class GuzzleHttpClient implements HttpClient
+final class GuzzleHttpClient implements HttpClient
 {
     private $client;
 

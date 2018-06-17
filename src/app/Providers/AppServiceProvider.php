@@ -14,6 +14,13 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
 
+        $this->app->bind('App\Repositories\RedisRateRepository', function () {
+            return new \App\Repositories\RedisRateRepository(
+                app('App\Helpers\CacheClient'),
+                app('App\Repositories\ApilayerRateRepository')
+            );
+        });
+
         $this->app->bind('App\Repositories\ApilayerRateRepository', function () {
             return new \App\Repositories\ApilayerRateRepository(
                 app('App\Helpers\HttpClient'),
@@ -21,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind('App\Repositories\RateRepository','App\Repositories\ApilayerRateRepository');
+        $this->app->bind('App\Repositories\RateRepository','App\Repositories\RedisRateRepository');
     }
 }
