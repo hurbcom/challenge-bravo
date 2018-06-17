@@ -5,6 +5,8 @@ services:
     image: "php:7-fpm-alpine"
     volumes:
       - "./src:/var/www/html"
+    links:
+      - "redis"
     environment:
       APILAYER_REPOSITORY_URL: "http://www.apilayer.net/api/live?access_key=accefec5fe748ba3266852b781ec5ea6&currencies=%s"
   nginx:
@@ -15,3 +17,7 @@ services:
         - "php"
     ports:
       - "80"
+  redis:
+    image: "redis:alpine"
+    ports:
+        - "6379:6379"

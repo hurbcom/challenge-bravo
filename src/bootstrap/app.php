@@ -80,6 +80,7 @@ $app->singleton(
 
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\HelperServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -105,5 +106,6 @@ $app->router->group([
 */
 
 $app->configure('repositories');
+$app->configure('database');
 
 return $app;
