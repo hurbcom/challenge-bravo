@@ -20,7 +20,14 @@ class QuotationController extends Controller
             $to = $request->input('to');
             $amount = (float)$request->input('amount');
 
-            $response = $this->converterService->getConversionWith($from, $to, $amount);
+            $convertedAmount = $this->converterService->getConversionWith($from, $to, $amount);
+
+            $response = [
+                'from' => $from,
+                'to' => $to,
+                'amount' => $amount,
+                'converted_amount' => $convertedAmount
+            ];
 
             return response()->json($response, 200);
         } catch (\Exception $e) {
