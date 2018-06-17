@@ -9,6 +9,9 @@ services:
       - "redis"
     environment:
       APILAYER_REPOSITORY_URL: "http://www.apilayer.net/api/live?access_key=accefec5fe748ba3266852b781ec5ea6&currencies=%s"
+      APILAYER_SUPPORTED_CURRENCIES: 'USD|BRL|EUR|BTC'
+      CRYPTOCOMPARE_REPOSITORY_URL: "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=%s"
+      CRYPTOCOMPARE_SUPPORTED_CURRENCIES: 'USD|BRL|EUR|BTC|ETH'
   nginx:
     image: "nginx"
     volumes:
