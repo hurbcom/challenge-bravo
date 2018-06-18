@@ -1,0 +1,38 @@
+version: "2"
+services:
+  php:
+    user: "$ID:root"
+    image: "php:7-fpm-alpine"
+    volumes:
+      - "./src:/var/www/html"
+    links:
+      - "redis"
+    environment:
+      APILAYER_REPOSITORY_URL: "http://www.apilayer.net/api/live?access_key=accefec5fe748ba3266852b781ec5ea6&currencies=%s"
+      APILAYER_SUPPORTED_CURRENCIES: 'USD|BRL|EUR|BTC'
+      CRYPTOCOMPARE_REPOSITORY_URL: "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=%s"
+      CRYPTOCOMPARE_SUPPORTED_CURRENCIES: 'USD|BRL|EUR|BTC|ETH'
+
+  nginx:
+    image: "nginx"
+    volumes:
+      - "./configs/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+    links:
+        - "php"
+    ports:
+      - "80"
+
+  redis:
+    image: "redis:alpine"
+
+  warmup:
+    build: "warmup/."
+    links:
+      - "nginx"
+
+  benchmark:
+    build: "benchmark/."
+    links:
+      - "nginx"
+    volumes:
+      - "./benchmark/run.sh:/data/run.sh"
