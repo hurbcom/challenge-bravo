@@ -27,8 +27,7 @@ A solução também conta com 2 caches. Um cache de FastCGI no Nginx e outro um 
 ```
 $ git clone https://github.com/mabrahao/challenge-bravo.git
 $ cd challenge-bravo
-$ composer install
-$ make up
+$ make run
 ```
 
 Após os containers subirem, utilize o comando `make show_host` para saber o host da API.
