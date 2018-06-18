@@ -16,7 +16,36 @@ A requisição recebe como parâmetros: A moeda de origem, o valor a ser convert
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
+## Descrição
+
+A API foi desenvolvida em PHP, com framework Lumen. 
+Ela utiliza uma estratégia de fallback com design pattern Chain of Responsibility para buscar as cotações em N APIs de terceiros. 
+A solução também conta com 2 caches. Um cache de FastCGI no Nginx e outro um cache de cotações no Redis. O Redis é "alimentado" de duas formas: por um Decorator na Chain of Responsibility e por um endpoint que força a sobrescrita do cache; atualmente sendo chamado por um cron. 
+
+#### Como utilizar:
+
+```
+$ git clone https://github.com/mabrahao/challenge-bravo.git
+$ cd challenge-bravo
+$ composer install
+$ make up
+```
+
+Após os containers subirem, utilize o comando `make show_host` para saber o host da API.
+Em seguida é só acessar o endpoint. 
+
+Ex: `http://localhost:32787/api/convert?from=BTC&to=USD&amount=2.5`
+
+##### APIs de cotações:
+
+http://www.apilayer.net
+
+https://www.cryptocompare.com
+
 ## Benchmark
+
+O benchmark é executado por 30 segundos com 8 threads, mantendo 1000 requisições abertas, simultaneamente, com um throughput constante de 6000 requisições por segundo.
+Com esses parâmetros a API aguenta uma média 4200 a 5000 requisições por segundo.
 
 #### Como executar:
 
@@ -45,5 +74,14 @@ Running 30s test @ http://nginx/api/convert?from=BTC&to=BRL&amount=1
   Socket errors: connect 0, read 349, write 0, timeout 3365
 Requests/sec:   4347.90
 Transfer/sec:      1.33MB
+```
+
+## Testes
+
+#### Como executar:
+
+```
+$ make up
+$ make tests
 ```
 
