@@ -1,0 +1,9 @@
+from node:10.8.0-alpine
+RUN mkdir /app
+ADD api/package.json /app
+ADD api/package-lock.json /app
+WORKDIR /app
+RUN npm install --production
+ADD currencyManager /app
+
+CMD ["node", "index.js"]
