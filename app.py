@@ -96,10 +96,18 @@ def treatmentofValues(from_,to,amount,verify,):
                 if from_.decode('utf-8').lower() != 'usd' and to.decode('utf-8').lower() != 'usd' and verify == False:
                     rate_to = data[1][to.decode('utf-8').lower()]['rate']
                     rate_from = data[1][from_.decode('utf-8').lower()]['rate']
-    return calculateConversion(amount,rate_to,rate_from)
+    return calculateConversion(amount,rate_to,rate_from,from_.decode('utf-8').upper(),to.decode('utf-8').upper())
 
-def calculateConversion(amount,rate_to,rate_from):
+def calculateConversion(amount,rate_to,rate_from,rate_from_name,rate_to_name):
     converted = float(amount) * (rate_to / rate_from)
+    converted = """{
+    "data": {
+        "from": """+ str(rate_from_name) +""",
+        "to": """+ str(rate_to_name) +""",
+        "amount": """+ str(amount) +""",
+        "converted_amount": """+ str(converted) +"""
+    }
+} """
     return str(converted)
 
 
