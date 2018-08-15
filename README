@@ -1,0 +1,10 @@
+This is a simple currency converter that uses apis from yahoo finances and api.fixer.io. You could check a several
+kinds of currency including currencies like 'BTC' and 'ETH'.
+
+For use you just need to download the zip file and install the requirements.txt and then on your IDE terminal or CMD type
+first:
+>> python
+>> from currency import converter
+>> convert('USD', 'BTC', amount=..., date=... )
+value
+>>
