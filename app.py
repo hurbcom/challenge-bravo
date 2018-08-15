@@ -6,35 +6,30 @@ import requests,os,json,time
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
-Database = 'coins.txt'
+Database = 'coins.db'
 
 
 @app.route('/api', methods=['GET'])
 def index():
+    #pego parametros
     from_ = request.args.get('from')
     to = request.args.get('to')
     amount = request.args.get('amount')
-    # verifica se colocou dolar como entrada e saida
-    if from_.decode('utf-8').lower() == 'usd' and to.decode('utf-8').lower() == 'usd':
+    # converto tudo para caixa baixa
+    from_ = from_.decode('utf-8').lower()
+    to = to.decode('utf-8').lower()
+
+    # verifica se colocou a mesma moeda como entrada e saida.
+    if from_ == 'usd' and to == 'usd':
         verify = True
-    elif from_.decode('utf-8').lower() == 'btc' and to.decode('utf-8').lower() == 'btc':
+    elif from_ == 'btc' and to == 'btc':
         verify = True
-    elif from_.decode('utf-8').lower() == 'eth' and to.decode('utf-8').lower() == 'eth':
+    elif from_ == 'eth' and to == 'eth':
         verify = True
     else:
         verify = False
-    if validate(from_, to) == False:
-        validate_ =  'error'
-    else:
-        validate_ = treatmentofValues(from_, to, amount, verify)
-    return validate_
+    return treatmentofValues(from_, to, amount, verify)
 
-def validate(from_, to):
-    if from_.decode('utf-8').lower() == 'usd' or 'eur' or 'brl' or 'eth' or 'btc' and to.decode('utf-8').lower() == 'usd' or 'eur' or 'brl' or 'eth' or 'btc':
-        validate_ = True
-    else:
-        validate_ = False
-    return validate_
 
 def treatmentofValues(from_,to,amount,verify,):
     try:
@@ -43,59 +38,59 @@ def treatmentofValues(from_,to,amount,verify,):
     except Exception as e:
         getvaluesJob()
 
-    with open(Database) as file: #lê as moedas
+    with open(Database) as file: #lê as moedas no Database
         data = file.read()
         data = json.loads(data)
 
-    if verify == True: # verificando que colocou o dolar como entrada e saida seta dolar como 1
+    if verify == True: # verificando se colocou usd/btc/eth como entrada e saida. caso verdadeiro seta como 1 pois um dolar vale um dolar e na api não tem isso
         rate_to = 1
         rate_from = 1
-
-    if from_.decode('utf-8').lower() == 'btc' and to.decode('utf-8').lower() == 'usd' and verify == False:
+    #aqui começo uma série de verificaçoes para não dar erros. Essa macumba poderia ser feita de outras formas mas foi a que consegui pensar no momento.
+    if from_ == 'btc' and to == 'usd' and verify == False:
         rate_from = 1
         rate_to = data[0]['BTC']['USD']
-    elif from_.decode('utf-8').lower() == 'eth' and to.decode('utf-8').lower() == 'usd' and verify == False:
+    elif from_ == 'eth' and to == 'usd' and verify == False:
         rate_from = 1
         rate_to = data[0]['ETH']['USD']
-    elif from_.decode('utf-8').lower() == 'btc' and to.decode('utf-8').lower() == 'eth' and verify == False:
+    elif from_ == 'btc' and to == 'eth' and verify == False:
         rate_from = 1
         rate_to = data[0]['ETH']['BTC']
-    elif from_.decode('utf-8').lower() == 'eth' and to.decode('utf-8').lower() == 'btc' and verify == False:
+    elif from_ == 'eth' and to == 'btc' and verify == False:
         rate_from = 1
         rate_to = data[0]['BTC']['ETH']
     else:
-        if to.decode('utf-8').lower() == 'btc' and from_.decode('utf-8').lower() == 'usd' and verify == False:
+        if to == 'btc' and from_ == 'usd' and verify == False:
             rate_from = 1
             rate_to = 1 / data[0]['BTC']['USD']
-        elif to.decode('utf-8').lower() == 'eth' and from_.decode('utf-8').lower() == 'usd' and verify == False:
+        elif to == 'eth' and from_ == 'usd' and verify == False:
             rate_from = 1
             rate_to = 1 / data[0]['ETH']['USD']
         else:
-            if from_.decode('utf-8').lower() == 'btc' and verify == False:
+            if from_ == 'btc' and verify == False:
                 rate_from = 1
                 rate_to = data[0]['BTC']['USD'] * data[1][to]['rate']
-            elif from_.decode('utf-8').lower() == 'eth' and verify == False:
+            elif from_ == 'eth' and verify == False:
                 rate_from = 1
-                rate_to = data[1][to.decode('utf-8').lower()]['rate'] * data[0]['ETH']['USD']
-            elif to.decode('utf-8').lower() == 'eth' and verify == False:
+                rate_to = data[1][to]['rate'] * data[0]['ETH']['USD']
+            elif to == 'eth' and verify == False:
                 rate_from = 1
-                rate_to = data[1][from_.decode('utf-8').lower()]['inverseRate'] / data[0]['ETH']['USD']
-            elif to.decode('utf-8').lower() == 'btc' and verify == False:
+                rate_to = data[1][from_]['inverseRate'] / data[0]['ETH']['USD']
+            elif to == 'btc' and verify == False:
                 rate_from = 0.1
-                rate_to = data[1][from_.decode('utf-8').lower()]['inverseRate'] / data[0]['BTC']['USD']
+                rate_to = data[1][from_]['inverseRate'] / data[0]['BTC']['USD']
             else:
                 # aqui verifico se dolar for a saida(to) eu pego o valor de inverseRate
-                if to.decode('utf-8').lower() == 'usd' and verify == False:
+                if to == 'usd' and verify == False:
                     rate_from = 1
-                    rate_to = data[1][from_.decode('utf-8').lower()]['inverseRate']
+                    rate_to = data[1][from_]['inverseRate']
                 #aqui verifico se dolar for a entrada, seto dolar valendo 1 e pego o valor da outra moeda(to) e faço a conta
-                if from_.decode('utf-8').lower() == 'usd' and verify == False:
+                if from_ == 'usd' and verify == False:
                     rate_from = 1
-                    rate_to = data[1][to.decode('utf-8').lower()]['rate']
+                    rate_to = data[1][to]['rate']
                 #aqui verifico se from e to forem diferente de dolar faz a conta
-                if from_.decode('utf-8').lower() != 'usd' and to.decode('utf-8').lower() != 'usd' and verify == False:
-                    rate_to = data[1][to.decode('utf-8').lower()]['rate']
-                    rate_from = data[1][from_.decode('utf-8').lower()]['rate']
+                if from_ != 'usd' and to != 'usd' and verify == False:
+                    rate_to = data[1][to]['rate']
+                    rate_from = data[1][from_]['rate']
     return calculateConversion(amount,rate_to,rate_from,from_.decode('utf-8').upper(),to.decode('utf-8').upper())
 
 def calculateConversion(amount,rate_to,rate_from,rate_from_name,rate_to_name):
@@ -110,13 +105,16 @@ def calculateConversion(amount,rate_to,rate_from,rate_from_name,rate_to_name):
 } """
     return str(converted)
 
-
+# função job que atualiza a Database
 def getvaluesJob():
-    request = requests.get('http://www.floatrates.com/daily/usd.json')
-    request_BTC = requests.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH,BTC&tsyms=USD,BTC,ETH')
-    file = open(Database, 'w')
-    file.write("["+request_BTC.text+","+request.text+"]")
-    file.close
+    try:
+        request = requests.get('http://www.floatrates.com/daily/usd.json')
+        request_BTC = requests.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH,BTC&tsyms=USD,BTC,ETH')
+        file = open(Database, 'w')
+        file.write("["+request_BTC.text+","+request.text+"]")
+        file.close
+    except Exception as e:
+        raise
     return str('Updating Database')
 
 sched = BackgroundScheduler(daemon=True)
