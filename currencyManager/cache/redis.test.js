@@ -1,5 +1,7 @@
 const redis = require('redis')
 
+process.env['PUBSUB_CHANNEL_NAME'] = 'notifyChange'
+
 redis.mockGetResult = (result) => this.mockedGetResult = result
 redis.getMocketGetResult = (key) => this.mockedGetResult[key] || "nil"
 
