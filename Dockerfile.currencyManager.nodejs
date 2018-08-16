@@ -1,4 +1,4 @@
-from node:10.8.0-alpine
+FROM node:10.9-slim
 RUN mkdir /app
 ADD api/package.json /app
 ADD api/package-lock.json /app
