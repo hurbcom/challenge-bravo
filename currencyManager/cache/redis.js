@@ -1,12 +1,12 @@
 const redis = require("redis")
 
 const dataClient = redis.createClient(
-  process.env.REDIS_DATA_POST || 6379,
+  parseInt(process.env.REDIS_DATA_PORT) || 6379,
   process.env.REDIS_DATA_HOST || "redis")
 
 const pubClient = redis.createClient(
-  process.env.REDIS_PUBSUB_HOST || 6379,
-  process.env.REDIS_PUBSUB_PORT || "redis")
+  parseInt(process.env.REDIS_PUBSUB_PORT) || 6379,
+  process.env.REDIS_PUBSUB_HOST || "redis")
 
 const notificationChannel = process.env.PUBSUB_CHANNEL_NAME
 

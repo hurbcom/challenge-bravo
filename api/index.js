@@ -4,18 +4,19 @@ const currencies = require("./currency/currency")
 const redis = require("redis")
 
 const dataClient = redis.createClient(
-  process.env.REDIS_DATA_POST || 6379,
+  parseInt(process.env.REDIS_DATA_PORT) || 6379,
   process.env.REDIS_DATA_HOST || "redis")
 
 const subClient = redis.createClient(
-  process.env.REDIS_PUBSUB_HOST || 6379,
-  process.env.REDIS_PUBSUB_PORT || "redis")
+  parseInt(process.env.REDIS_PUBSUB_PORT) || 6379,
+  process.env.REDIS_PUBSUB_HOST || "redis")
 
 const notificationChannel = process.env.PUBSUB_CHANNEL_NAME
 
 dataClient.keys("symbol:*", (err, keys) => {
   if (err) throw err
-  console.log(keys)
+  console.log("keys found", keys)
+  if (keys.length == 0) return
   dataClient.mget(keys, (err, result) => {
     if (err) throw err
     for (var i = 0; i < keys.length; i++) {
