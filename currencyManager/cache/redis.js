@@ -32,7 +32,9 @@ module.exports = {
   }
 }
 
-/*
-dataClient.quit()
-pubClient.quit()
-*/
+process.on('SIGTERM', function () {
+  console.log("Terminando...")
+  dataClient.quit()
+  pubClient.quit()
+  process.exit(0)
+})
