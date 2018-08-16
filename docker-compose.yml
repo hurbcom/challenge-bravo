@@ -13,6 +13,10 @@ services:
       - REDIS_PUBSUB_HOST=redis
       - REDIS_PUBSUB_PORT=6379
       - PUBSUB_CHANNEL_NAME=notifyChange
+    depends_on:
+      - redis
+      - manager
+
   manager:
     build:
       dockerfile: Dockerfile.currencyManager.nodejs
@@ -26,6 +30,9 @@ services:
       - REDIS_PUBSUB_PORT=6379
       - PUBSUB_CHANNEL_NAME=notifyChange
       # - FIXER_APIKEY=Olhar o README
+    depends_on:
+      - redis
+
   redis:
     image: redis:4-alpine
     ports:
