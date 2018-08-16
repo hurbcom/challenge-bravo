@@ -60,13 +60,11 @@ var server = http.createServer(function (request, response) {
   response.end()
 }).listen(3000)
 
-
-
 process.on('SIGTERM', function () {
   console.log("Terminando...")
   server.close(function () {
     dataClient.quit()
     subClient.quit()
     process.exit(0)
-  });
-});
+  })
+})
