@@ -38,7 +38,7 @@ subClient.on("message", (channel, message) => {
 
 subClient.subscribe(notificationChannel)
 
-http.createServer(function (request, response) {
+var server = http.createServer(function (request, response) {
   var queryData = url.parse(request.url, true).query || {};
 
   from = queryData.from
@@ -59,3 +59,14 @@ http.createServer(function (request, response) {
   response.write(JSON.stringify(result))
   response.end()
 }).listen(3000)
+
+
+
+process.on('SIGTERM', function () {
+  console.log("Terminando...")
+  server.close(function () {
+    dataClient.quit()
+    subClient.quit()
+    process.exit(0)
+  });
+});
