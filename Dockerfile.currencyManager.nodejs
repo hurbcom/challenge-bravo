@@ -1,0 +1,9 @@
+FROM node:10.9-slim
+RUN mkdir /app
+ADD api/package.json /app
+ADD api/package-lock.json /app
+WORKDIR /app
+RUN npm install --production
+ADD currencyManager /app
+
+CMD ["node", "index.js"]

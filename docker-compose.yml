@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  api:
+    build:
+      dockerfile: Dockerfile.api.nodejs
+      context: .
+    ports:
+      - "8080:3000"
+    environment:
+      - REDIS_DATA_HOST=redis
+      - REDIS_DATA_PORT=6379
+      - REDIS_PUBSUB_HOST=redis
+      - REDIS_PUBSUB_PORT=6379
+      - PUBSUB_CHANNEL_NAME=notifyChange
+    depends_on:
+      - redis
+      - manager
+
+  manager:
+    build:
+      dockerfile: Dockerfile.currencyManager.nodejs
+      context: .
+    ports:
+      - "5959:5959"
+    environment:
+      - REDIS_DATA_HOST=redis
+      - REDIS_DATA_PORT=6379
+      - REDIS_PUBSUB_HOST=redis
+      - REDIS_PUBSUB_PORT=6379
+      - PUBSUB_CHANNEL_NAME=notifyChange
+      # - FIXER_APIKEY=Olhar o README
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:4-alpine
+    ports:
+      - "6379:6379"
