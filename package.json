@@ -4,7 +4,8 @@
   "description": "A Currency Conversion API",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest"
   },
   "author": {
     "name": "Guilherme Moura",
@@ -15,6 +16,11 @@
     "autocannon": "^2.4.1",
     "axios": "^0.18.0",
     "ejs": "^2.6.1",
-    "express": "^4.16.3"
+    "expect": "^23.5.0",
+    "express": "^4.16.3",
+    "jest": "^23.5.0"
+  },
+  "devDependencies": {
+    "supertest": "^3.1.0"
   }
 }
