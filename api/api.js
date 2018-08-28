@@ -25,7 +25,7 @@ api.get('/api', (request, response) => {
   /* verifica-se se os parâmetros necessários foram passados */
   if (from && to && amount) {
     try {
-      /* verifica se algum parametro fornecido é invalido */
+      /* verifica-se se algum parametro fornecido é invalido */
       if (!QUOTATIONS[from].quotes[to]) throw new Error();
       /* result recebe o produto de 'amount' pela cotação atual */
       let result = amount * QUOTATIONS[from].quotes[to]
