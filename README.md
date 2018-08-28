@@ -12,50 +12,43 @@ A API deve converter entre as seguintes moedas:
 
 Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+# API
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+## Como começar
+```
+$ git clone https://github.com/mouraggui/challenge-bravo.git
+$ cd challenge-bravo
+$ npm install
+$ npm start
+``` 
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+## Testes de carga
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+Duração de 10 segundos:
+```
+$ autocannon -c 1000 -d 10 -p 10 "http://localhost:3000/api?from=USD&to=BRL&amount=1"
+Running 10s test @ http://localhost:3000/api?from=USD&to=BRL&amount=1
+1000 connections with 10 pipelining factor
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+Stat         Avg     Stdev   Max
+Latency (ms) 209.71  641.11  2493.98
+Req/Sec      4228.3  2524.07 7753
+Bytes/Sec    1.13 MB 676 kB  2.05 MB
 
+42k requests in 10s, 11.2 MB read
+```
 
+Duração de 20 segundos:
 
-## Critério de avaliação
+```
+$ autocannon -c 1000 -d 20 -p 10 "http://localhost:3000/api?from=BTC&to=BRL&amount=1"
+Running 20s test @ http://localhost:3000/api?from=BTC&to=BRL&amount=1
+1000 connections with 10 pipelining factor
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Stat         Avg     Stdev   Max
+Latency (ms) 194.65  597.75  2575.56
+Req/Sec      5030.55 3114.57 10000
+Bytes/Sec    1.36 MB 842 kB  2.68 MB
 
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+101k requests in 20s, 27 MB read
+```
