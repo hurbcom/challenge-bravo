@@ -1,12 +1,15 @@
 {
   "name": "test_bravo",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A Currency Conversion API",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "author": "",
+  "author": {
+    "name": "Guilherme Moura",
+    "email": "mouraggui@gmail.com"
+  },
   "license": "ISC",
   "dependencies": {
     "autocannon": "^2.4.1",
