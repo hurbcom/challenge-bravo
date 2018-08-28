@@ -1,0 +1,38 @@
+.all {
+  max-width: 700px;
+}
+
+.code {
+  background-color: #2d2d2d;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+  white-space: nowrap;
+  font-size: 15pt;
+}
+
+.table {
+  text-align: center;
+}
+
+.params {
+  margin: 10px 0px;
+}
+
+.param {
+  color: #ec8ab1;
+}
+
+.title {
+  text-align: center;
+}
+
+.sub-title {
+  margin: 20px auto;
+}
+
+code {
+  width: 500px;
+  height: 170px;
+  color: white;
+}
