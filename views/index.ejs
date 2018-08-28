@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Finance API</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/css/index.css">
+</head>
+
+<body>
+  <div class="container all">
+    <h1 class="title">Finance API</h1>
+    <div class="instructions">
+      <p>
+        <h4 class="sub-title">Como acessar a API:</h4>
+        <div class="code">
+          <code>
+            http://localhost:3000/api?<span class="param">from</span>=USD&<span class="param">to</span>=BRL&<span class="param">amount</span>=1
+          </code>
+        </div>
+      </p>
+      <p>
+        <h4 class="sub-title">Parâmetros: </h4>
+        <div class="params">
+          <strong>from:</strong> Código da moeda cujo o valor você deseja converter
+        </div>
+        <div class="params">
+          <strong>to:</strong> Código da moeda para a qual o valor deve ser convertido
+        </div>
+        <div class="params">
+          <strong>amount:</strong> Valor a ser convertido
+        </div>
+      </p>
+      <p>
+        <H4 class="sub-title">Códigos disponíveis:</H4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>CÓDIGO</th>
+              <th>MOEDA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>USD</th>
+              <td>Dólar americano</td>
+            </tr>
+            <tr>
+              <th>EUR</th>
+              <td>Euro</td>
+            </tr>
+            <tr>
+              <th>BRL</th>
+              <td>Real brasileiro</td>
+            </tr>
+            <tr>
+              <th>BTC</th>
+              <td>Bitcoin</td>
+            </tr>
+            <tr>
+              <th>ETH</th>
+              <td>Ethereum</td>
+            </tr>
+          </tbody>
+        </table>
+      </p>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
