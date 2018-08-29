@@ -22,6 +22,14 @@ $ npm install
 $ npm start
 ``` 
 
+## Rodando testes
+
+```
+$ cd challenge-bravo
+$ npm install
+$ npm test
+```
+
 ## Testes de carga
 
 Duração de 10 segundos:
