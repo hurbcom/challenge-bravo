@@ -1,4 +1,4 @@
-const api = require('./api');
+const api = require('../api/api');
 const request = require('supertest');
 const expect = require('expect');
 
