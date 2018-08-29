@@ -19,7 +19,6 @@ const QUOTATIONS = {
  * função que atualiza os valores do objeto de cotações
  */
 let updateQuotes = async function () {
-  console.time('end');
   /*
    * aqui é utilizado dois 'for' para atualizar o objeto de cotações
    */
@@ -57,8 +56,6 @@ let updateQuotes = async function () {
       }
     }
   }
-
-  console.timeEnd('end');
 }
 
 module.exports = {
