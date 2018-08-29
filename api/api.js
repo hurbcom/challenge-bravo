@@ -1,7 +1,7 @@
 const express = require('express');
 const { QUOTATIONS, updateQuotes } = require('./quotation');
-const api = express();
 
+const api = express();
 api.set('view engine', 'ejs');
 api.use(express.static(__dirname + '/../public'));
 
@@ -23,7 +23,7 @@ api.get('/api', (request, response) => {
   let { from, to, amount } = request.query;
 
   /* verifica-se se os parâmetros necessários foram passados */
-  if (from && to && amount) {
+  if (from && to && !isNaN(Number(amount))) {
     try {
       /* verifica-se se algum parametro fornecido é invalido */
       if (!QUOTATIONS[from].quotes[to]) throw new Error();
@@ -75,8 +75,8 @@ api.use((error, request, response, next) => {
 })
 
 /*
- * aqui é definido que a cada 20 segundos as cotações serão atualizadas
+ * aqui é definido que a cada 5 minutos as cotações serão atualizadas
  */
-setInterval(updateQuotes, 20000);
+setInterval(updateQuotes, 300000);
 
 module.exports = api;
