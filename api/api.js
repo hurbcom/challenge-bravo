@@ -30,7 +30,7 @@ api.get('/api', (request, response) => {
       /* verifica-se se algum parametro fornecido é invalido */
       if (!QUOTATIONS[from].quotes[to]) throw new Error();
       /* result recebe o produto de 'amount' pela cotação atual */
-      let result = amount * QUOTATIONS[from].quotes[to]
+      let result = amount * QUOTATIONS[from].quotes[to];
       /* retorno result */
       response
         .status(200)
@@ -60,7 +60,7 @@ api.use((request, response) => {
     .send({
       response: 'Error',
       message: 'Page not found',
-      path: request.path,
+      path: request.path
     });
 });
 
@@ -73,7 +73,7 @@ api.use((error, request, response, next) => {
     .send({
       response: 'Error',
       message: error.message,
-      path: request.path,
+      path: request.path
     });
 })
 
