@@ -52,7 +52,7 @@ api.get('/api', (request, response) => {
 })
 
 /*
- * rota que tratará de paths não encontrados
+ * rota que tratará de paths não existentes
  */
 api.use((request, response) => {
   response
@@ -65,7 +65,7 @@ api.use((request, response) => {
 });
 
 /*
- * rota que tratará dos erros no servidor
+ * rota que tratará de erros no servidor
  */
 api.use((error, request, response, next) => {
   response
