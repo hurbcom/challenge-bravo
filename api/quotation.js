@@ -6,7 +6,8 @@ const axios = require('axios');
 const COINS = ['ETH', 'USD', 'EUR', 'BTC', 'BRL'];
 
 /*
- * objeto que contem todas as cotações para as moedas disponÍveis na API
+ * objeto que contem todas as cotações para as moedas disponíveis na API, e que será atualizado
+ * periodicamente pela função 'updateQuotes'
  */
 const QUOTATIONS = {
   USD: { quotes: { USD: 1, BRL: 4.09, EUR: 0.8535, BTC: 0.0001418, ETH: 0.003466 } },
@@ -22,8 +23,8 @@ let updateQuotes = async function () {
   /*
    * aqui é utilizado dois 'for' para atualizar o objeto de cotações
    */
-  for (let idx1 = 0;idx1 < COINS.length;idx1++) {
-    for (let idx2 = 0;idx2 < COINS.length;idx2++) {
+  for (let idx1 = 0; idx1 < COINS.length; idx1++) {
+    for (let idx2 = 0; idx2 < COINS.length; idx2++) {
       if (COINS[idx1] != COINS[idx2]) {
         /*
          * a API que utilizo para buscar as cotações não tem suporte para a conversão do Real para
