@@ -22,8 +22,10 @@ api.get('/api', (request, response) => {
 
   let { from, to, amount } = request.query;
 
+  amount = Number(amount);
+
   /* verifica-se se os parâmetros necessários foram passados */
-  if (from && to && !isNaN(Number(amount))) {
+  if (from && to && !isNaN(amount)) {
     try {
       /* verifica-se se algum parametro fornecido é invalido */
       if (!QUOTATIONS[from].quotes[to]) throw new Error();
@@ -33,6 +35,7 @@ api.get('/api', (request, response) => {
       response
         .status(200)
         .send({ from, to, amount, result });
+        
     } catch (error) {
       /*
        * caso o código da moeda fornecido por parametro seja inválido, será lançado um erro
