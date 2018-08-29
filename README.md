@@ -14,13 +14,21 @@ Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
 # API
 
-## Como começar
+## Como iniciar
+
+### Instalando depedências e rodando o Servidor
 ```
 $ git clone https://github.com/mouraggui/challenge-bravo.git
 $ cd challenge-bravo
 $ npm install
 $ npm start
 ``` 
+
+### Acessando API
+
+```
+http://localhost:3000/api?from=USD&to=BRL&amount=1
+```
 
 ## Rodando testes
 
