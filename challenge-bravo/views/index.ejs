@@ -1,1 +1,55 @@
 
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div>
+       <h1><%= title %></h1>
+    </div>
+    
+    <div>   
+      <form action="/convert" method="GET">
+          <input type="text" name="amount" class="amount-input" placeholder="How much?? "/>
+          <label>To:</label>
+          <select name="from" class="soflow">
+<%
+            var options = [ "USD", "BRL", "EUR", "BTC", "ETH" ];
+            for ( var i = 0; i < options.length; i++ )
+            {
+%>
+               <option value="<%=options[ i ] %>" <%=options[ i ] %>><%=options[ i ]  %></option>
+<%
+            }
+%>
+          </select>
+          <label>From:</label>
+          <select name="to" class="soflow">
+<%
+            var options = [ "USD", "BRL", "EUR", "BTC", "ETH" ];
+            for ( var i = 0; i < options.length; i++ )
+            {
+%>
+              <option value="<%=options[ i ] %>" <%=options[ i ] %>><%=options[ i ]  %></option>
+<%
+            }
+%>
+          </select>
+        
+          <a><input type="submit" value="Convert" class="button"/></a>
+
+      </form>
+    </div>  
+<%  if (amount != null) 
+  {
+%>  
+    <h1><%= amount %></h1>
+
+
+<%
+  }
+%>
+  </body>
+</html>
