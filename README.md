@@ -36,8 +36,6 @@ Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ qu
   - comando para executar a aplicação
 - A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 
-
-
 ## Critério de avaliação
 
 - **Organização do código**: Separação de módulos, view e model, back-end e front-end
@@ -59,3 +57,15 @@ Boa sorte e boa viagem! ;)
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
 </p>
+
+##Desenvolvimento
+
+Uso de Node.js com express. 
+Utilização da api diponibilizada pelo cryptocompare (https://www.cryptocompare.com/)
+
+Comandos para utilização da API
+
+ - cd challenge-bravo
+ - npm install
+ - curl request GET localhost:3000
+
