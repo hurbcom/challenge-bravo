@@ -48,22 +48,16 @@ a {
 }
 
 
-.amount-input {
+.single-input {
   display: block;
-  margin: 0;
-  padding: var(--inputPaddingV) var(--inputPaddingH);
-  color: inherit;
-  width: 100%;
-  font-family: inherit;
-  font-size: var(--inputFontSize);
-  font-weight: inherit;
-  line-height: var(--inputLineHeight);
+  width: 20%;
+  line-height: 40px;
   border: none;
-  border-radius: 0.4rem;
-  transition: box-shadow var(--transitionDuration);
+  outline: none;
+  background: #f9f9ff;
+  padding: 0 20px;
 }
 
-.amount-input:focus {
+.single-input:focus {
   outline: none;
-  box-shadow: 0.2rem 0.8rem 1.6rem var(--colorPrimary600);
 }

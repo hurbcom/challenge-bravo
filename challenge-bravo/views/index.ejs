@@ -1,55 +1,121 @@
-
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <div>
-       <h1><%= title %></h1>
-    </div>
-    
-    <div>   
-      <form action="/convert" method="GET">
-          <input type="text" name="amount" class="amount-input" placeholder="How much?? "/>
-          <label>To:</label>
-          <select name="from" class="soflow">
-<%
-            var options = [ "USD", "BRL", "EUR", "BTC", "ETH" ];
-            for ( var i = 0; i < options.length; i++ )
-            {
-%>
-               <option value="<%=options[ i ] %>" <%=options[ i ] %>><%=options[ i ]  %></option>
-<%
-            }
-%>
-          </select>
-          <label>From:</label>
-          <select name="to" class="soflow">
-<%
-            var options = [ "USD", "BRL", "EUR", "BTC", "ETH" ];
-            for ( var i = 0; i < options.length; i++ )
-            {
-%>
-              <option value="<%=options[ i ] %>" <%=options[ i ] %>><%=options[ i ]  %></option>
-<%
-            }
-%>
-          </select>
-        
-          <a><input type="submit" value="Convert" class="button"/></a>
+<html lang="zxx" class="no-js">
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<link rel="shortcut icon" href="img/fav.png">
+	<!-- Author Meta -->
+	<meta name="author" content="CodePixar">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Challenge Bravo</title>
 
-      </form>
-    </div>  
-<%  if (amount != null) 
-  {
-%>  
-    <h1><%= amount %></h1>
+	<link href="https://fonts.googleapis.com/css?family=Poppins:100,300,500" rel="stylesheet">
+		<!--
+		CSS
+		============================================= -->
+		<link rel="stylesheet" href="/stylesheets/linearicons.css">
+		<link rel="stylesheet" href="/stylesheets/owl.carousel.css">
+		<link rel="stylesheet" href="/stylesheets/font-awesome.min.css">
+		<link rel="stylesheet" href="/stylesheets/nice-select.css">
+		<link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+		<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+		<link rel="stylesheet" href="/stylesheets/main.css">
+	</head>
+	<body class="dup-body">
+		<div class="dup-body-wrap">
+			<!-- Start Header Area -->
+			<header class="default-header"/>
+			<section class="sample-text-area">
+				<div class="container">
+					<h3 class="text-heading">Convert Coins - Challenge Bravo</h3>
+					<div class="section-top-border">
+						<div class="row">
+							<div >
+      							<form action="/convert" method="GET" id="convertForm" name="convertForm">
+									<div class="mt-10">
+										<input type="text" name="amount" placeholder="Amount" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Amount'" required class="single-input">
+									</div>
+									
+									<div class="input-group-icon mt-10">
+										<div class="form-select">
+											<select name="from">
 
+												<%
+										            var options = [ "USD", "BRL", "EUR", "BTC", "ETH" ];
+										            for ( var i = 0; i < options.length; i++ )
+										            {
+												%>
+												    	<option value="<%=options[ i ] %>" <%=options[ i ] %>><%=options[ i ]  %></option>
+												<%
+												    }
+												%>
+												
+											</select>
+										</div>
+									</div>
 
-<%
-  }
-%>
-  </body>
+									<div class="input-group-icon mt-10">
+										<div class="form-select">
+											<select name="to">
+
+												<%
+										            var options = [ "USD", "BRL", "EUR", "BTC", "ETH" ];
+										            for ( var i = 0; i < options.length; i++ )
+										            {
+												%>
+												    	<option value="<%=options[ i ] %>" <%=options[ i ] %>><%=options[ i ]  %></option>
+												<%
+												    }
+												%>
+												
+											</select>
+										</div>
+									</div>
+
+									<div class="button-group-area mt-10">
+										<a href="#" onclick="document.getElementById('convertForm').submit()" class="genric-btn info-border">Convert</a>
+									</div>
+								</form>
+							</div>
+
+							<% if(data) 
+						    	{ 
+						    %>
+						    	<div>
+						    	<% include result %>
+						    	</div>
+						    <% 
+								}
+						    %>
+							</div>
+						</div>
+				</div>
+			</section>
+
+		<!-- Strat Footer Area -->
+		<footer class="section-gap footer-widget-area">
+			<div class="footer-bottom d-flex justify-content-between align-items-center flex-wrap">
+				<p class="footer-text m-0">Copyright &copy; 2018 All rights reserved   |   This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com/">Colorlib</a></p>
+				
+			</div>
+		</footer>
+		<!-- End Footer Area -->
+		</div>
+
+		<script src="/javascripts/vendor/jquery-2.2.4.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+		<script src="/javascripts/vendor/bootstrap.min.js"></script>
+		<script src="/javascripts/jquery.ajaxchimp.min.js"></script>
+		<script src="/javascripts/owl.carousel.min.js"></script>
+		<script src="/javascripts/jquery.nice-select.min.js"></script>
+		<script src="/javascripts/jquery.magnific-popup.min.js"></script>
+		<script src="/javascripts/main.js"></script>
+	</body>
 </html>
