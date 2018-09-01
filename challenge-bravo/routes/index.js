@@ -7,7 +7,7 @@ var http = require('http');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Convert Coins - Bravo Challenge', data: null });
+  res.render('index', {data: null });
 });
 
  
@@ -21,7 +21,13 @@ router.get('/convert', function(req, res, next) {
   //moeda de origem
   var from_coin = req.query.from;
 
-  console.log(amount);
+  //parâmetro para identificar forma de retorno
+  var isJson = req.query.isjson;
+  if (isJson == "") {
+    isJson = true; 
+  }
+
+  //caso o campo do valor não tenha sido preenchido, ele recebe o valor de 1
   if(amount===""){
   	amount = 1;
   }
@@ -53,22 +59,22 @@ router.get('/convert', function(req, res, next) {
 	request(url, function (error, response, body) {
 		var jsonData = {};
 
-		try {
-			var j = JSON.parse(body);
-			converted_value = parseFloat(j[to_coin]);  			 //valor da moeda destino após conversão
-			total_amount = converted_value * parseFloat(amount); //calculo total da conversão do valor informado
+		var j = JSON.parse(body);
+		converted_value = parseFloat(j[to_coin]);  			 //valor da moeda destino após conversão
+		total_amount = converted_value * parseFloat(amount); //calculo total da conversão do valor informado
 
-			jsonData["total_amount"] = total_amount;
-			jsonData["converted_value"] = converted_value;
-			jsonData["to"] = jsonCoins[to_coin];
-			jsonData["from"] = jsonCoins[from_coin];
-			jsonData["amount"] = parseFloat(amount);
+		jsonData["total_amount"] = total_amount.toFixed(2);
+		jsonData["converted_value"] = converted_value;
+		jsonData["to"] = jsonCoins[to_coin];
+		jsonData["from"] = jsonCoins[from_coin];
 
-     		res.render('index', { title: 'Convert Coins - Bravo Challenge', data: jsonData});
-     	} catch(error) {
-     		jsonData["error"] = "Não foi possível realizar a conversão. Por favor tente novamente. " 
-     		res.render('index', { title: 'Convert Coins - Bravo Challenge', data: jsonData})
-     	}	
+
+    if(isJson){
+   		res.send({data: jsonData});
+    } else {  
+   		res.render('index', {data: jsonData});
+   	}
+   
     });
 });
 
