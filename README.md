@@ -60,12 +60,16 @@ Boa sorte e boa viagem! ;)
 
 ##Desenvolvimento
 
-Uso de Node.js com express. 
-Utilização da api diponibilizada pelo cryptocompare (https://www.cryptocompare.com/)
+- Uso de Node.js com express. 
+- Utilização da api diponibilizada pelo cryptocompare (https://www.cryptocompare.com/)
+  - exemplo de url => https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BTC,USD,EUR,ETH
+  - parâmetros => fsym  - moeda de origem
+  				  tsyms - moeda(s) de destino 
 
 Comandos para utilização da API
 
  - cd challenge-bravo
  - npm install
- - curl request GET localhost:3000
+ - curl -X GET 'http://localhost:3000/convert?amount=105&from=BTC&to=EUR'
+
 
