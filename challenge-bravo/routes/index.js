@@ -21,12 +21,6 @@ router.get('/convert', function(req, res, next) {
   //moeda de origem
   var from_coin = req.query.from;
 
-  //parâmetro para identificar forma de retorno
-  var isJson = req.query.isjson;
-  if (isJson == "") {
-    isJson = true; 
-  }
-
   //caso o campo do valor não tenha sido preenchido, ele recebe o valor de 1
   if(amount===""){
   	amount = 1;
@@ -57,10 +51,18 @@ router.get('/convert', function(req, res, next) {
 
   //request da api cryptocompare (https://www.cryptocompare.com/)
 	request(url, function (error, response, body) {
+
+    var json = JSON.parse(body);
+
+    if(json["Response"] == "Error"){
+      console.log(json["Message"]);
+      res.status(500).send({errorMessage: json["Message"]});
+      return;
+    }
+    console.log(json);
 		var jsonData = {};
 
-		var j = JSON.parse(body);
-		converted_value = parseFloat(j[to_coin]);  			 //valor da moeda destino após conversão
+		converted_value = parseFloat(json[to_coin]);  			 //valor da moeda destino após conversão
 		total_amount = converted_value * parseFloat(amount); //calculo total da conversão do valor informado
 
 		jsonData["total_amount"] = total_amount.toFixed(2);
@@ -69,11 +71,11 @@ router.get('/convert', function(req, res, next) {
 		jsonData["from"] = jsonCoins[from_coin];
 
 
-    if(isJson){
-   		res.send({data: jsonData});
-    } else {  
-   		res.render('index', {data: jsonData});
-   	}
+   	res.status(200).send({data: jsonData});
+
+    /* trecho a ser utilizado caso seja necessário usar a interface criada */
+    //res.render('index', {data: jsonData});
+   
    
     });
 });

@@ -14,26 +14,38 @@ Foi desenvolvida uma API que retorna em JSON conversões entre diferentes moedas
 
 ##Parâmetros enviados
 
-Exemplo de url: http://localhost:3000/convert?from=USD&to=EUR&amount=123.45&isjson=true
+Exemplo de url: http://localhost:3000/convert?from=USD&to=EUR&amount=123.45
 
  - from: moeda de origem;
  - to: moeda final;
  - amount: valor a ser convertido:
- - isjson: define a forma de exibição do retorno. 
 
 
 ##Retorno da API
 
 Ao ser chamada, a API retorna um JSON contendo o cálculo final da conversão, o valor convertido entre as moedas (por exemplo: 1 Bitcoin vale 6180.21 euros ), a moeda de origem e a moeda final. 
 
-{
-  "data": {
-    "total_amount": 648922.05,  // cálculo final
-    "converted_value": 6180.21, //valor convertido
-    "to": "Euro",				//moeda de origem
-    "from": "Bitcoin"			//moeda final
-    }
-}
+Exemplo caso de sucesso - STATUS 200 : retorna o valor final do cálculo
+
+	GET http://localhost:3000/convert?amount=105&from=BRL&to=EUR
+
+	{
+	  "data": {
+	    "total_amount": 648922.05,  // cálculo final
+	    "converted_value": 6180.21, //valor convertido
+	    "to": "Euro",				//moeda de origem
+	    "from": "Bitcoin"			//moeda final
+	    }
+	}
+
+Exemplo caso de erro - STATUS 500 : retorna mensagem de erro. 
+
+	GET http://localhost:3000/convert?amount=105&from=BRL&to=EURdasd
+
+	{
+		"errorMessage":"There is no data for the symbol EUROSDA ."
+	}
+
 
 
 ##Comandos para utilização da API
@@ -43,8 +55,8 @@ Ao ser chamada, a API retorna um JSON contendo o cálculo final da conversão, o
  - npm start
 
  - executar via terminal
- 	 - curl -X GET 'http://localhost:3000/convert?from=<moeda_de_origem>&to=<moeda_final>&amount=<valor_a_ser_convertido>&isjson=true'
- 	 Exemplo de url: http://localhost:3000/convert?from=USD&to=EUR&amount=123.45&isjson=true
+ 	 - curl -X GET 'http://localhost:3000/convert?from=<moeda_de_origem>&to=<moeda_final>&amount=<valor_a_ser_convertido>'
+ 	 Exemplo de url: http://localhost:3000/convert?from=USD&to=EUR&amount=123.45&
  
  - executar via browser
  	- Acessar localhost:3000 no browser
