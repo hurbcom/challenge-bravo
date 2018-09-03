@@ -19,12 +19,12 @@ import (
 	"github.com/yagotome/challenge-bravo/utils/sliceutil"
 )
 
-// OpenExchangeRatesResponse ...
+// OpenExchangeRatesResponse Response model for rates extracting from openexchangerates
 type OpenExchangeRatesResponse struct {
 	Rates map[string]float64 `json:"rates"`
 }
 
-// CoinMarketCapResponse ...
+// CoinMarketCapResponse Response model to extract ETH price from coinmarketcap
 type CoinMarketCapResponse struct {
 	PriceUsd string `json:"price_usd"`
 }
@@ -32,7 +32,6 @@ type CoinMarketCapResponse struct {
 const ethSymbol = "ETH"
 
 var (
-	// supportedCurrencies have all supported currency symbols
 	supportedCurrencies = []string{
 		"USD",
 		"BRL",
@@ -81,16 +80,6 @@ func request(url string) ([]byte, error) {
 	}
 	defer response.Body.Close()
 	return ioutil.ReadAll(response.Body)
-}
-
-func getJSONObject(url string) (map[string]interface{}, error) {
-	buf, err := request(url)
-	if err != nil {
-		return nil, err
-	}
-	var data map[string]interface{}
-	err = json.Unmarshal(buf, &data)
-	return data, err
 }
 
 func getCoinOpenExchangeRates(url string) (*OpenExchangeRatesResponse, error) {
