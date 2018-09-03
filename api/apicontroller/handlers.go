@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo"
+	"github.com/yagotome/challenge-bravo/worker"
 )
 
 // Response is the api success response
@@ -26,6 +27,12 @@ func handleConvert(c echo.Context) error {
 	amount, err := strconv.ParseFloat(c.QueryParam("amount"), 64)
 	if from == "" || to == "" || err != nil {
 		return c.JSON(http.StatusBadRequest, ErrorResponse{"Invalid query params"})
+	}
+	if !worker.IsSupported(from) {
+		return c.JSON(http.StatusBadRequest, ErrorResponse{"Unsupported from currency"})
+	}
+	if !worker.IsSupported(to) {
+		return c.JSON(http.StatusBadRequest, ErrorResponse{"Unsupported to currency"})
 	}
 	return c.JSON(http.StatusOK, Response{
 		From:   from,

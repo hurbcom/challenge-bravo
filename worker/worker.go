@@ -16,6 +16,7 @@ import (
 
 	"github.com/yagotome/challenge-bravo/config"
 	"github.com/yagotome/challenge-bravo/currency"
+	"github.com/yagotome/challenge-bravo/utils/sliceutil"
 )
 
 // OpenExchangeRatesResponse ...
@@ -31,6 +32,7 @@ type CoinMarketCapResponse struct {
 const ethSymbol = "ETH"
 
 var (
+	// supportedCurrencies have all supported currency symbols
 	supportedCurrencies = []string{
 		"USD",
 		"BRL",
@@ -140,4 +142,9 @@ func updateFromCoinMarketCap(p *currency.Price, conf *config.Config) error {
 	}
 	p.Save(ethSymbol, currency.InvertPrice(price))
 	return nil
+}
+
+// IsSupported returns if a currency is supported by the worker
+func IsSupported(curSymb string) bool {
+	return sliceutil.Contains(supportedCurrencies, curSymb)
 }
