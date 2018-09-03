@@ -36,6 +36,9 @@ func (p *Price) Convert(from, to string, amount float64) float64 {
 	priceFrom := p.data[from]
 	priceTo := p.data[to]
 	p.mutex.Unlock()
+	if priceFrom == 0 {
+		return 0
+	}
 	fromInBallast := amount / priceFrom
 	return priceTo * fromInBallast
 }
