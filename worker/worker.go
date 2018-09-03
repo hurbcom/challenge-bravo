@@ -42,13 +42,26 @@ var (
 )
 
 // Run is the function that runs worker task
-func Run(p *currency.Price, c config.Config) {
+func Run(p *currency.Price, c config.Config, wgFirstUpdated *sync.WaitGroup) {
+	runTasks(p, &c, treatErrorFirstUpdate)
+	wgFirstUpdated.Done()
 	for {
-		wg.Add(2)
-		go treatError(updateFromOpenExchangeRates(p, &c))
-		go treatError(updateFromCoinMarketCap(p, &c))
-		wg.Wait()
+		runTasks(p, &c, treatError)
 		time.Sleep(time.Millisecond * time.Duration(c.WorkerUpdateInterval))
+	}
+}
+
+func runTasks(p *currency.Price, c *config.Config, errorHanler func(error)) {
+	wg.Add(2)
+	go errorHanler(updateFromOpenExchangeRates(p, c))
+	go errorHanler(updateFromCoinMarketCap(p, c))
+	wg.Wait()
+}
+
+func treatErrorFirstUpdate(e error) {
+	defer wg.Done()
+	if e != nil {
+		log.Panic(e)
 	}
 }
 
@@ -92,7 +105,6 @@ func getCoinOpenExchangeRates(url string) (*OpenExchangeRatesResponse, error) {
 // That API gives value of 1 USD in each supported currency
 func updateFromOpenExchangeRates(p *currency.Price, conf *config.Config) error {
 	url := fmt.Sprintf("%s?app_id=%s", conf.QuotesAPIURL.OpenExchangeRates, conf.APIKeys.OpenExchangeRates)
-	fmt.Println("url", url)
 	resp, err := getCoinOpenExchangeRates(url)
 	if err != nil {
 		return err
