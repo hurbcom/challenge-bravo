@@ -7,12 +7,18 @@ package currency
 // to its price in a ballast currency.
 // This encapsulation gives flexibility to change inner data structure later if necessary
 type Price struct {
-	data map[string]float64
+	data Quotes
 }
 
+// Quotes is the inner data structure
+type Quotes map[string]float64
+
 // NewPrice returns a new instace of Price
-func NewPrice() *Price {
-	return &Price{data: make(map[string]float64)}
+func NewPrice(quotes Quotes) *Price {
+	if quotes == nil {
+		quotes = make(Quotes)
+	}
+	return &Price{data: quotes}
 }
 
 // Convert converts and amount of a "from" currency to a "to" one
