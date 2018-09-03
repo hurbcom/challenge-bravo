@@ -32,8 +32,10 @@ func NewPrice(quotes Quotes) *Price {
 
 // Convert converts and amount of a "from" currency to a "to" one
 func (p *Price) Convert(from, to string, amount float64) float64 {
+	p.mutex.Lock()
 	priceFrom := p.data[from]
 	priceTo := p.data[to]
+	p.mutex.Unlock()
 	fromInBallast := amount / priceFrom
 	return priceTo * fromInBallast
 }
