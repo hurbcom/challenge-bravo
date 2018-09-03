@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -15,6 +14,9 @@ type Config struct {
 		OpenExchangeRates string `json:"openexchangerates"`
 		CoinMarketCap     string `json:"coinmarketcap"`
 	} `json:"quotes_api_url"`
+	APIKeys struct {
+		OpenExchangeRates string
+	}
 }
 
 var config *Config
@@ -32,18 +34,22 @@ func Load() Config {
 	if json.Unmarshal(file, config) != nil {
 		log.Fatalf("Error while parsing config file: %v\n", e)
 	}
+	config.APIKeys.OpenExchangeRates = getOpenExchangeRatesAPIKey()
 	return *config
 }
 
 func getFilename() string {
-	return fmt.Sprintf("./config/config.%s.json", loadGoEnv())
+	configPath, exists := os.LookupEnv("GOCONFIGPATH")
+	if !exists {
+		panic("GOCONFIGPATH environment variable not set")
+	}
+	return configPath
 }
 
-func loadGoEnv() string {
-	env, exists := os.LookupEnv("GOENV")
+func getOpenExchangeRatesAPIKey() string {
+	apiKey, exists := os.LookupEnv("OXRAPIKEY")
 	if !exists {
-		env = "dev"
+		panic("OXRAPIKEY environment variable not set")
 	}
-	log.Println("Envoriment loaded:", env)
-	return env
+	return apiKey
 }

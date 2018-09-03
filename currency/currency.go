@@ -2,7 +2,11 @@
 // USD is going to be used as ballast currency here
 package currency
 
-import "sync"
+import (
+	"bytes"
+	"fmt"
+	"sync"
+)
 
 // Price is a data structure that encapsulates a hash table which maps currency symbol
 // to its price in a ballast currency.
@@ -39,4 +43,21 @@ func (p *Price) Save(symbol string, price float64) {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 	p.data[symbol] = price
+}
+
+// InvertPrice inverts the price of one currency by the other
+func InvertPrice(price float64) float64 {
+	return 1 / price
+}
+
+func (quotes *Quotes) String() string {
+	b := new(bytes.Buffer)
+	for symb, price := range *quotes {
+		fmt.Fprintf(b, "%s=\"%f\"\n", symb, price)
+	}
+	return b.String()
+}
+
+func (p *Price) String() string {
+	return p.data.String()
 }
