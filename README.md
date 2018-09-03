@@ -53,12 +53,10 @@ Exemplo caso de erro - STATUS 500 : retorna mensagem de erro.
  - cd challenge-bravo
  - npm install
  - npm start
-
- - executar via terminal
- 	 - curl -X GET 'http://localhost:3000/convert?from=<moeda_de_origem>&to=<moeda_final>&amount=<valor_a_ser_convertido>'
- 	 Exemplo de url: http://localhost:3000/convert?from=USD&to=EUR&amount=123.45&
- 
+ - sudo docker-compose up --build
  - executar via browser
  	- Acessar localhost:3000 no browser
+ 	 	Exemplo de url: http://localhost:3000/convert?from=USD&to=EUR&amount=123.45
+
 
 
