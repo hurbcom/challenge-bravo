@@ -3,5 +3,8 @@
     "quotes_api_url": {
         "openexchangerates": "https://openexchangerates.org/api/latest.json",
         "coinmarketcap": "https://api.coinmarketcap.com/v1/ticker/ethereum/"
+    },
+    "api": {
+        "port": 8314
     }
 }

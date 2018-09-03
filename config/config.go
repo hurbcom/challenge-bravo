@@ -14,6 +14,9 @@ type Config struct {
 		OpenExchangeRates string `json:"openexchangerates"`
 		CoinMarketCap     string `json:"coinmarketcap"`
 	} `json:"quotes_api_url"`
+	API struct {
+		Port int `json:"port"`
+	} `json:"api"`
 	APIKeys struct {
 		OpenExchangeRates string
 	}
