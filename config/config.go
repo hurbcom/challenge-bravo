@@ -42,17 +42,17 @@ func Load() Config {
 }
 
 func getFilename() string {
-	configPath, exists := os.LookupEnv("GOCONFIGPATH")
-	if !exists {
-		panic("GOCONFIGPATH environment variable not set")
-	}
-	return configPath
+	return getEnvVar("GOCONFIGPATH")
 }
 
 func getOpenExchangeRatesAPIKey() string {
-	apiKey, exists := os.LookupEnv("OXRAPIKEY")
+	return getEnvVar("OXRAPIKEY")
+}
+
+func getEnvVar(name string) string {
+	apiKey, exists := os.LookupEnv(name)
 	if !exists {
-		panic("OXRAPIKEY environment variable not set")
+		log.Panic(name + " environment variable not set")
 	}
 	return apiKey
 }
