@@ -3,15 +3,19 @@ var request = require('request');
 var router = express.Router();
 var app = express();
 var http = require('http');
+var convert_func = require('../controllers/convert_functions');
 
 
-/* GET home page. */
+/* GET home page. 
+  direciona para a página web criada que mostra a conversão das moedas
+*/
 router.get('/', function(req, res, next) {
   res.render('index', {data: null });
 });
 
  
 router.get('/convert', function(req, res, next) {
+
  //valor para conversao 		
   var amount = req.query.amount;
 
@@ -21,63 +25,39 @@ router.get('/convert', function(req, res, next) {
   //moeda de origem
   var from_coin = req.query.from;
 
+  //status da requisição
+  var status = 200;
+
   //caso o campo do valor não tenha sido preenchido, ele recebe o valor de 1
   if(amount===""){
   	amount = 1;
+  } else if (isNaN(amount)) {
+    //caso o campo amount não esteja preenchido por números
+    var msg = "Amount value is incorrect";
+    status = 400;
+    res.status(status).send({data: msg});
+    return;
   }
 
-  //Criação de um json com os reais nomes de cada moeda
-  var jsonCoins = {};
-  jsonCoins["ETH"] = 'Ethereum';
-  jsonCoins["USD"] = 'Dólar Americano';
-  jsonCoins["BRL"] = 'Real Brasileiro';
-  jsonCoins["BTC"] = 'Bitcoin';
-  jsonCoins["EUR"] = 'Euro';
-
   /*
-
-  api utilizada => cryptocompare (https://www.cryptocompare.com/)
-  exemplo de url => https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BTC,USD,EUR,ETH
-  parâmetros => fsym  - moeda de origem
-  				tsyms - moeda(s) de destino 
-
+    realiza o request para consulta da API e retorna o valor final, após o cálculo
   */
+  convert_func.get_quotes_convertion(amount, to_coin, from_coin, function(val){
+    var jsonData = val;
 
-  //montagem da url
-  var url_root = 'https://min-api.cryptocompare.com/data/price?';
-  var url = url_root + 'fsym=' + from_coin + '&tsyms='+ to_coin;
-  var total_amount = 0;
-  var converted_value = 0; 
+    /* altera o status de acordo com a mensagem retornada */
+    status = 200; 
 
-  //request da api cryptocompare (https://www.cryptocompare.com/)
-	request(url, function (error, response, body) {
+    if(jsonData["errorMessage"]){
+      status = 400;
+    } 
 
-    var json = JSON.parse(body);
+    res.status(status).send({data: jsonData});
 
-    if(json["Response"] == "Error"){
-      console.log(json["Message"]);
-      res.status(500).send({errorMessage: json["Message"]});
-      return;
-    }
-    console.log(json);
-		var jsonData = {};
-
-		converted_value = parseFloat(json[to_coin]);  			 //valor da moeda destino após conversão
-		total_amount = converted_value * parseFloat(amount); //calculo total da conversão do valor informado
-
-		jsonData["total_amount"] = total_amount.toFixed(2);
-		jsonData["converted_value"] = converted_value;
-		jsonData["to"] = jsonCoins[to_coin];
-		jsonData["from"] = jsonCoins[from_coin];
-
-
-   	res.status(200).send({data: jsonData});
-
-    /* trecho a ser utilizado caso seja necessário usar a interface criada */
     //res.render('index', {data: jsonData});
+  });
    
-   
-    });
+
 });
 
 module.exports = router;
