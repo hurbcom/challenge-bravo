@@ -1,0 +1,7 @@
+{
+    "worker_update_interval": 1800000,
+    "quotes_api_url": {
+        "openexchangerates": "https://openexchangerates.org/api/latest.json",
+        "coinmarketcap": "https://api.coinmarketcap.com/v1/ticker/ethereum/"
+    }
+}
