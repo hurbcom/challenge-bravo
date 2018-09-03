@@ -1,6 +1,5 @@
 var request = require('request');
 
-
 /* Retorna os nomes reais das moedas usadas */ 
 get_coins_names = function() {
   var jsonCoins = {};
@@ -51,7 +50,7 @@ exports.get_quotes_convertion = function(amount, to_coin, from_coin, callback) {
 
 
 /* método que realiza o cálculo de conversão das moedas */
-var convert_coin = function(json, amount, to_coin, from_coin) {
+convert_coin = function(json, amount, to_coin, from_coin) {
 
 	//Criação de um json com os reais nomes de cada moeda
   	var jsonCoins = get_coins_names();
