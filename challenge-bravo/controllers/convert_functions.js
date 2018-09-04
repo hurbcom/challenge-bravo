@@ -1,7 +1,7 @@
 var request = require('request');
 
 /* Retorna os nomes reais das moedas usadas */ 
-get_coins_names = function() {
+exports.get_coins_names = function() {
   var jsonCoins = {};
   jsonCoins["ETH"] = 'Ethereum';
   jsonCoins["USD"] = 'Dólar Americano';
@@ -11,6 +11,7 @@ get_coins_names = function() {
 
   return jsonCoins;
 }
+
 
 /*
 Função criada para fazer o request da api escolhida para fazer as consultas 
@@ -42,7 +43,7 @@ exports.get_quotes_convertion = function(amount, to_coin, from_coin, callback) {
 	      return callback(jsonData);
 	    }
 
-		jsonData = convert_coin(jsonBody, amount, to_coin, from_coin);
+		jsonData = exports.convert_coin(jsonBody, amount, to_coin, from_coin);
    
    		return callback(jsonData);
     });
@@ -50,10 +51,10 @@ exports.get_quotes_convertion = function(amount, to_coin, from_coin, callback) {
 
 
 /* método que realiza o cálculo de conversão das moedas */
-convert_coin = function(json, amount, to_coin, from_coin) {
+exports.convert_coin = function(json, amount, to_coin, from_coin) {
 
 	//Criação de um json com os reais nomes de cada moeda
-  	var jsonCoins = get_coins_names();
+  	var jsonCoins = exports.get_coins_names();
 
 	var converted_value = parseFloat(json[to_coin]);  			 //valor da moeda destino após conversão
 	var total_amount = converted_value * parseFloat(amount); 	 //calculo total da conversão do valor informado
@@ -66,3 +67,4 @@ convert_coin = function(json, amount, to_coin, from_coin) {
 
 	return jsonData;
 }
+
