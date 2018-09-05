@@ -17,6 +17,7 @@ func Serve(p *currency.Price, conf config.Config) {
 	// Middleware
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
+	e.Use(middleware.CORS())
 
 	apicontroller.SetupRoutes(e, p)
 
