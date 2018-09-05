@@ -3,8 +3,7 @@
 package currency
 
 import (
-	"bytes"
-	"fmt"
+	"encoding/json"
 	"sync"
 )
 
@@ -66,13 +65,14 @@ func InvertPrice(price float64) float64 {
 }
 
 func (quotes *Quotes) String() string {
-	b := new(bytes.Buffer)
-	for symb, price := range *quotes {
-		fmt.Fprintf(b, "%s=\"%f\"\n", symb, price)
-	}
-	return b.String()
+	m := map[string]float64(*quotes)
+	b, _ := json.Marshal(m)
+	return string(b)
 }
 
+// String returns JSON string of prices data
 func (p *Price) String() string {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
 	return p.data.String()
 }
