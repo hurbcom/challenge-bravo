@@ -1,10 +1,7 @@
 const rates = require('./index')
 const mock = require('../mock/rates')
 
-const callApi = (url) => {
-  return Promise.resolve(mock)
-}
-
+const callApi = (url) => Promise.resolve({ json: () => mock })
 const fetch = jest.fn(callApi)
 
 it('request rates', () =>
@@ -14,10 +11,10 @@ it('request rates', () =>
 
 it('get rate after update', () =>
   rates.update(fetch).then(res => {
-    expect(rates.get('BRL')).toBe(mock.BRL)
+    expect(rates.get('BRL')).toBe(mock.rates.BRL)
   }))
 
 it('get all rates after update', () =>
   rates.update(fetch).then(res => {
-    expect(rates.get()).toBe(mock)
+    expect(rates.get()).toEqual(mock.rates)
   }))
