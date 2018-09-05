@@ -1,61 +1,62 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Challenge Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Este projeto é a solução do desafio explicado em [CHALLENGE.md](CHALLENGE.md)
 
-A API deve converter entre as seguintes moedas:
-- USD
-- BRL
-- EUR
-- BTC
-- ETH
+Ele foi desenvolvido em [Go](https://golang.org/) com framework [echo](https://echo.labstack.com/) para HTTP
 
+## Arquitetura
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Foram implementadas 2 arquiteturas:
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+- Com [nginx](https://www.nginx.com/)
+![Arquitetura com nginx](imgs/arquitetura_nginx.jpg)
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+- Sem [nginx](https://www.nginx.com/)
+![Arquitetura sem nginx](imgs/arquitetura.jpg)
+ 
+ Após adicionar nginx na frente da API para caching foi percebido uma perda de performance. Portanto, a arquitetura recomendada é a sem nginx.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+ ### Componentes da arquitura
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+ #### API
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+A API é um servidor HTTP contendo a rota `/convert` para conversão de moedas.
 
+Para garantir uma resposta rápida, o servidor não faz nenhum acesso a recursos externos no tempo de um request, para evitar um possível gargalo de rede ou até do provedor do recurso externo (redis/memcached ou outra API). Ela possui as cotações das moedas (com relação a moeda lastro USD) em uma estrutura de dados in-memory sendo atualizada pelo Slave Worker. Portanto, em um request o servidor apenas consulta a RAM para fazer o cálculo da conversão e entregar uma resposta rápida.
 
+Exemplo de request à API:
 
-## Critério de avaliação
+GET /convert?from=BTC&to=USD&amount=1
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Resposta:
+```
+{
+    "from": "BTC",
+    "to": "USD",
+    "amount": 1,
+    "result": 6981.319336849224
+}
+```
 
-## Dúvidas
+#### Slave Worker
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+O Slave Worker é uma goroutine que roda dentro do servidor para atualizar as cotações do servidor. Ele consulta uma API do Master Worker para atualizar o estado do servidor.
 
-Boa sorte e boa viagem! ;)
+#### Master Worker
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+O Master Worker consome 2 APIs de cotações ([openexchangerates](https://openexchangerates.org) e [coinmarketcap](https://api.coinmarketcap.com/)). Ele atualiza suas cotações em uma estrutura de dados in-memory e prover uma rota HTTP (`/prices`) para servir essas cotações ao Slave Worker.
+
+Exemplo de request:
+
+GET /prices
+
+Resposta:
+```
+{
+    "BRL": 4.15725,
+    "BTC": 0.000135659526,
+    "ETH": 0.003514403291365063,
+    "EUR": 0.862571,
+    "USD": 1
+}
+```
