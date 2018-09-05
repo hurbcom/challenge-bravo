@@ -1,0 +1,29 @@
+# github.com/davecgh/go-spew v1.1.1
+github.com/davecgh/go-spew/spew
+# github.com/dgrijalva/jwt-go v3.2.0+incompatible
+github.com/dgrijalva/jwt-go
+# github.com/labstack/echo v3.2.1+incompatible
+github.com/labstack/echo
+github.com/labstack/echo/middleware
+# github.com/labstack/gommon v0.2.1
+github.com/labstack/gommon/color
+github.com/labstack/gommon/log
+github.com/labstack/gommon/bytes
+github.com/labstack/gommon/random
+# github.com/mattn/go-colorable v0.0.9
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.4
+github.com/mattn/go-isatty
+# github.com/pmezard/go-difflib v1.0.0
+github.com/pmezard/go-difflib/difflib
+# github.com/stretchr/testify v1.2.2
+github.com/stretchr/testify/assert
+# github.com/valyala/bytebufferpool v0.0.0-20160817181652-e746df99fe4a
+github.com/valyala/bytebufferpool
+# github.com/valyala/fasttemplate v0.0.0-20170224212429-dcecefd839c4
+github.com/valyala/fasttemplate
+# golang.org/x/crypto v0.0.0-20180830192347-182538f80094
+golang.org/x/crypto/acme/autocert
+golang.org/x/crypto/acme
+# golang.org/x/sys v0.0.0-20180903190138-2b024373dcd9
+golang.org/x/sys/unix
