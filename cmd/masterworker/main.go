@@ -11,6 +11,7 @@ import (
 func main() {
 	price := currency.NewPrice(nil)
 	conf := config.Load()
+	conf.LoadAPIKey()
 
 	wgFirstUpdate := &sync.WaitGroup{}
 	wgFirstUpdate.Add(1)

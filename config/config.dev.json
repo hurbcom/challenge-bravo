@@ -9,7 +9,7 @@
     },
     "slave_worker": {
         "update_interval": 5000,
-        "master_worker_url": "http://localhost:9000/"
+        "master_worker_url": "http://localhost:9000/prices"
     },
     "api": {
         "port": 8314,

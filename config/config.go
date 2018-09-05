@@ -49,8 +49,12 @@ func Load() Config {
 	if json.Unmarshal(file, config) != nil {
 		log.Fatalf("Error while parsing config file: %v\n", e)
 	}
-	config.MasterWorker.APIKeys.OpenExchangeRates = getOpenExchangeRatesAPIKey()
 	return *config
+}
+
+// LoadAPIKey loads API Key for OpenExchangeRates
+func (config *Config) LoadAPIKey() {
+	config.MasterWorker.APIKeys.OpenExchangeRates = getOpenExchangeRatesAPIKey()
 }
 
 func getFilename() string {

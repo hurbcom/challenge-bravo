@@ -28,13 +28,13 @@ func Run(p *currency.Price, c config.Config, wgFirstUpdated *sync.WaitGroup) {
 	}
 }
 
-func getPrices(url string) (*currency.Price, error) {
+func getPrices(url string) (map[string]float64, error) {
 	buf, err := httputil.Get(url)
 	if err != nil {
 		return nil, err
 	}
-	data := &currency.Price{}
-	err = json.Unmarshal(buf, data)
+	data := make(map[string]float64)
+	err = json.Unmarshal(buf, &data)
 	return data, err
 }
 
@@ -46,7 +46,7 @@ func updatePrices(p *currency.Price, conf *config.Config) error {
 		return err
 	}
 	for _, c := range worker.SupportedCurrencies {
-		if price, ok := resp.Get(c); ok {
+		if price, ok := resp[c]; ok {
 			p.Save(c, price)
 		}
 	}
