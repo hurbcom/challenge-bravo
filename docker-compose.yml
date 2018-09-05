@@ -1,0 +1,26 @@
+version: '3'
+services:
+  api:
+    hostname: api
+    restart: unless-stopped
+    build:
+      context: .
+      args:
+        - appname=api
+    env_file: .env_api
+    ports:
+      - "8314:8314"
+      - "80:80"
+      - "443:443"
+    links:
+      - masterworker
+  masterworker:
+    hostname: masterworker
+    restart: unless-stopped
+    build:
+      context: .
+      args:
+        - appname=masterworker
+    env_file: .env_masterworker
+    ports:
+      - "9000:9000"

@@ -17,3 +17,6 @@
 
 # Editor config files
 .vscode/
+
+# Envorinment
+.env*
