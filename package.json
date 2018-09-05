@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/zerodois/challenge-bravo#readme",
   "devDependencies": {
-    "jest": "^23.5.0"
+    "jest": "^23.5.0",
+    "supertest": "^3.1.0"
   },
   "dependencies": {
     "express": "^4.16.3",
