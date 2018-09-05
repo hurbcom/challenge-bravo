@@ -12,7 +12,7 @@ services:
       - "8314:8314"
       - "80:80"
       - "443:443"
-    links:
+    depends_on:
       - masterworker
   masterworker:
     hostname: masterworker
@@ -22,5 +22,16 @@ services:
       args:
         - appname=masterworker
     env_file: .env_masterworker
+    expose:
+      - "9000"
+  nginx:
+    image: nginx
+    restart: unless-stopped
+    hostname: nginx
+    depends_on:
+      - api
+      - masterworker
     ports:
-      - "9000:9000"
+      - "4000:4000"
+    volumes:
+      - "./config/nginx/default.conf:/etc/nginx/conf.d/default.conf"
