@@ -9,22 +9,29 @@ import (
 
 // Config represents the worker's config file
 type Config struct {
-	WorkerUpdateInterval int `json:"worker_update_interval"`
-	QuotesAPIURL         struct {
-		OpenExchangeRates string `json:"openexchangerates"`
-		CoinMarketCap     string `json:"coinmarketcap"`
-	} `json:"quotes_api_url"`
+	MasterWorker struct {
+		UpdateInterval int `json:"update_interval"`
+		Port           int `json:"port"`
+		QuotesAPIURL   struct {
+			OpenExchangeRates string `json:"openexchangerates"`
+			CoinMarketCap     string `json:"coinmarketcap"`
+		} `json:"quotes_api_url"`
+		APIKeys struct {
+			OpenExchangeRates string
+		}
+	} `json:"master_worker"`
+	SlaveWorker struct {
+		UpdateInterval  int    `json:"update_interval"`
+		MasterWorkerURL string `json:"master_worker_url"`
+	} `json:"slave_worker"`
 	API struct {
 		Port int `json:"port"`
 		TLS  struct {
 			Enabled  bool   `json:"enabled"`
 			CertPath string `json:"cert_path"`
 			KeyPath  string `json:"key_path"`
-		}
+		} `json:"api"`
 	} `json:"api"`
-	APIKeys struct {
-		OpenExchangeRates string
-	}
 }
 
 var config *Config
@@ -42,7 +49,7 @@ func Load() Config {
 	if json.Unmarshal(file, config) != nil {
 		log.Fatalf("Error while parsing config file: %v\n", e)
 	}
-	config.APIKeys.OpenExchangeRates = getOpenExchangeRatesAPIKey()
+	config.MasterWorker.APIKeys.OpenExchangeRates = getOpenExchangeRatesAPIKey()
 	return *config
 }
 
