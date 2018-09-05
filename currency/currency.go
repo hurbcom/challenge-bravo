@@ -49,6 +49,16 @@ func (p *Price) Save(symbol string, price float64) {
 	p.data[symbol] = price
 }
 
+// Get retrieves price of a currency
+func (p *Price) Get(symbol string) (float64, bool) {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
+	if value, ok := p.data[symbol]; ok {
+		return value, true
+	}
+	return 0, false
+}
+
 // InvertPrice inverts the price of one currency by the other
 func InvertPrice(price float64) float64 {
 	return 1 / price
