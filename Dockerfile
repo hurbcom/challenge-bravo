@@ -12,6 +12,6 @@ ENV GO111MODULE=on
 ENV GOCONFIGPATH ${wdir}/config/config.${env}.json
 
 # Build (go v1.11 installs all dependencies in go.mod file)
-RUN go build -o $GOPATH/bin/server cmd/server/main.go
+RUN go build -mod=vendor -o $GOPATH/bin/server cmd/server/main.go
 
 CMD ["server"]
