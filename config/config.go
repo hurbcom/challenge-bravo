@@ -16,6 +16,11 @@ type Config struct {
 	} `json:"quotes_api_url"`
 	API struct {
 		Port int `json:"port"`
+		TLS  struct {
+			Enabled  bool   `json:"enabled"`
+			CertPath string `json:"cert_path"`
+			KeyPath  string `json:"key_path"`
+		}
 	} `json:"api"`
 	APIKeys struct {
 		OpenExchangeRates string

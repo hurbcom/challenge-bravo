@@ -5,6 +5,11 @@
         "coinmarketcap": "https://api.coinmarketcap.com/v1/ticker/ethereum/"
     },
     "api": {
-        "port": 80
+        "port": 443,
+        "tls": {
+            "enabled": true,
+            "cert_path": "config/tls/server.crt",
+            "key_path": "config/tls/server.key"
+        }
     }
 }

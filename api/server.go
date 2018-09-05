@@ -21,5 +21,11 @@ func Serve(p *currency.Price, conf config.Config) {
 
 	apicontroller.SetupRoutes(e, p)
 
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", conf.API.Port)))
+	url := fmt.Sprintf(":%d", conf.API.Port)
+	if conf.API.TLS.Enabled {
+		e.Pre(middleware.HTTPSRedirect())
+		e.Logger.Fatal(e.StartTLS(url, conf.API.TLS.CertPath, conf.API.TLS.KeyPath))
+	} else {
+		e.Logger.Fatal(e.Start(url))
+	}
 }
