@@ -12,11 +12,11 @@
         "master_worker_url": "http://masterworker:9000/prices"
     },
     "api": {
-        "port": 443,
+        "port": 8314,
         "tls": {
-            "enabled": true,
-            "cert_path": "config/tls/server.crt",
-            "key_path": "config/tls/server.key"
+            "enabled": false,
+            "cert_path": "",
+            "key_path": ""
         }
     }
 }

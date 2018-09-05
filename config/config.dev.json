@@ -1,6 +1,6 @@
 {
     "master_worker": {
-        "update_interval": 30000,
+        "update_interval": 15000,
         "port": 9000,
         "quotes_api_url": {
             "openexchangerates": "https://openexchangerates.org/api/latest.json",
