@@ -1,5 +1,22 @@
-const API = 'https://openexchangerates.org/api/latest.json?app_id=7c785382c5e840f6808c4f884560051b&show_alternative=true&symbols=USD,BRL,EUR,BTC,ETH'
-const rates = {}
+const rates = {
+  USD: null,
+  BRL: null,
+  EUR: null,
+  BTC: null,
+  ETH: null
+}
+// API symbols
+const symbols = Object
+  .entries(rates)
+  .reduce((prev, curr, index) => prev + `${index ? ',' : ''}` + curr[0], '')
+
+/**
+ * @description Retorna a URL para requisição da API
+ * @param {String} appId
+ * @returns {String}
+ */
+const API = (appId) =>
+  `https://openexchangerates.org/api/latest.json?app_id=${appId}&show_alternative=true&symbols=${symbols}`
 
 /**
  * @description Atualiza as cotações das moedas através de uma chamada de API
@@ -7,8 +24,8 @@ const rates = {}
  * @param {FetchFunction} fetch
  * @returns {<Promise>}
  */
-const update = (fetch) => {
-  return fetch(API)
+const update = (fetch, process) => {
+  return fetch(API(process.env.APP_ID))
     .then(res => res.json())
     .then(res => Object.assign(rates, res.rates))
 }

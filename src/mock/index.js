@@ -1,7 +1,7 @@
 module.exports = {
   process: {
     env: {
-      API_ID: 'api1234'
+      APP_ID: 'api1234'
     }
   },
   rates: {
