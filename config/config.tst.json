@@ -1,0 +1,22 @@
+{
+    "master_worker": {
+        "update_interval": 60000,
+        "port": 9000,
+        "quotes_api_url": {
+            "openexchangerates": "https://openexchangerates.org/api/latest.json",
+            "coinmarketcap": "https://api.coinmarketcap.com/v1/ticker/ethereum/"
+        }
+    },
+    "slave_worker": {
+        "update_interval": 5000,
+        "master_worker_url": "http://localhost:9000/prices"
+    },
+    "api": {
+        "port": 8314,
+        "tls": {
+            "enabled": false,
+            "cert_path": "",
+            "key_path": ""
+        }
+    }
+}
