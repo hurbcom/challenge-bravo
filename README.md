@@ -84,6 +84,13 @@ $ export GOCONFIGPATH=config/config.dev.json
 $ ./server
 ```
 
+### Usando a API
+
+Após levantar o servidor, basta acessar fazer um GET com seus parâmetros, como no exemplo:
+
+http://localhost:8314/convert?from=BTC&to=BRL&amount=12.5
+
+
 ## Arquitetura
 
 O projeto suporta 3 arquiteturas:
@@ -147,4 +154,60 @@ Resposta:
     "EUR": 0.862571,
     "USD": 1
 }
+```
+
+## Decisões
+
+### Linguagem
+
+Inicialmente, a linguagem escolhida foi Go pela performance que a mesma traz. O mesmo critério foi usado para a escolha do framework, o echo é um framework minimalista que atendia bem a demanda.
+
+### Arquitetura
+
+Sobre a arquitetura, foi decidido inicialmente que o servidor da API não poderia acessar nenhum recurso externo no tempo de um request, para garantir a entrega de 1000 requests por segundo.
+
+Então, foi pensada uma abordagem inicial em que o servidor teria uma goroutine (light-weight process) com o papel de atualizar uma estrutura de dados in-memory para guardar as cotações das moedas suportadas. Portanto, para levantar o servidor esse worker teria que ter tido a primeira execução para que o servidor levantasse já possuindo dados. Então, caso uma das APIs externas consumidas para consultar as cotações tivesse down, o servidor não poderia subir, ou seja, não poderia escalar.
+
+Por isso, foi introduzido o Worker Master, que vai ter a disponibilidade garantida/gerênciada internamente, podendo até ter redundância para garantir disponibilidade.
+
+### TLS/SSL
+
+Foi implementado TLS no servidor com certificado auto-assinado. Nos arquivos de configuração do sistema é possível habilitar esse recurso e o caminho do certificado e da key. (Foi decidido não commitar esses arquivos, mesmo que auto-assinado. Pois compreendo que por questões de segurança, certificado de criptografia não deve estar no source control)
+
+### API Key da openexchangerates
+
+Foi decidido, pelo mesmo motivo de não commitar os certificados da TLS, não commitar a API Key usada em desenvolvimento. O ideal é manter chaves de acesso em um vault.
+
+### Pasta `vendor`
+
+Foi commitada a pasta `vendor`, apesar de já ter o `go.mod` descrevendo as dependências fixadas nas versões usadas em desenvolvimento, porque caso uma das dependências deixe de existir, ou seja, o repositório do github dela seja removido ou renomeado, o build desse projeto seria quebrado.
+
+### API e Master Worker no mesmo repositório
+
+Para manter todo o código nesse repositório (oficial do desafio), foi mantido ambos nesse repositório. Não houve uma separação inicial de pastas para ganhar um reuso maior. Por exemplo, um único `Dockerfile` pode buildar a imagem para qualquer executável do projeto.
+
+
+## Benchmarking
+
+Foi feito um teste de carga com um [script]((cmd/loadtest/main.go)) que desenvolvi nesse projeto. Nele, é possível modificar alguns parâmetros para variar os testes.
+
+Resultados obtidos:
+
+1. ~205ms para responder 1000 requests quase simultâneos
+![Teste de carga com 1000 requests](imgs/loadtest.png)
+
+2. ~909ms para responder 4000 requests quase simultâneos
+![Teste de carga com 4000 requests](imgs/loadtest_4000.png)
+
+Esse teste foi feito em sistema operacional Ubuntu.
+
+Detalhes da máquina usada:
+
+- AMD FX 4300 quad core
+- 8GB de RAM
+- HDD 500GB
+
+Para rodar o script de teste de carga:
+```
+$ go run cmd/loadtest/main.go
 ```
