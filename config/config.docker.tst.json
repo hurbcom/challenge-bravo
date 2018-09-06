@@ -1,6 +1,6 @@
 {
     "master_worker": {
-        "update_interval": 15000,
+        "update_interval": 60000,
         "port": 9000,
         "quotes_api_url": {
             "openexchangerates": "https://openexchangerates.org/api/latest.json",
@@ -9,7 +9,7 @@
     },
     "slave_worker": {
         "update_interval": 5000,
-        "master_worker_url": "http://localhost:9000/prices"
+        "master_worker_url": "http://masterworker:9000/prices"
     },
     "api": {
         "port": 8314,
