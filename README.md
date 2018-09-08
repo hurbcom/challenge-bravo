@@ -42,6 +42,25 @@ Sei que poderia ter criado um .env e ter adicionado o pacote `dotenv` pra config
 cd caminho-do-clone
 docker-compose up -d
 ```
+## Requisições
+A api apresenta apenas uma rota (a raiz `"/"`) e recebe os parâmetros `"from"`, `"to"` e `"amount"`, enviados via _query string_. A api retorna o json de resposta:
+```shell
+$ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X GET "http://localhost:3000/?from=BTC&to=ETH&amount=1" 
+```
+```json
+{  
+   "from":"BTC",
+   "to":"ETH",
+   "amount":"1",
+   "result":31.959606435736177
+}
+```
+Além disso, a API retorna os status code `400` e `401` para requisições inválidas, junto a uma mensagem de erro. Segue uma referência dos erros que a API retorna.
+
+| status code   | mensagem do erro                          |
+| ------------- | ------------------------------------------|
+| 400           | required params "from", "to" and "amount" |
+| 401           | Invalid currency. Currency must be USD, BRL, EUR, BTC or ETH |
 
 ## Testes
 A aplicação foi desenvolvida com base em testes, sendo assim, quase tudo desenvolvido possui testes. Para executar estes testes, basta executar `npm test`. Para o teste de stress, utilizei duas ferramentas. A primeira é instalada com o as dependências do projeto, e fornece resultados mais simples, para caso você queira rodar um teste de stress sem adicionar nada em sua máquina. Para executá-la, rode o comando `npm run test:stress`. Você deve obter resultados semelhantes aos meus:
@@ -77,6 +96,7 @@ Transfer/sec:      2.30MB
 ```
 
 Node.JS POWER :sunglasses:
+
 Por fim, as especificações da minha máquina são estas:
 ```
 Processador: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
