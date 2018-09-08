@@ -19,13 +19,13 @@ const convert = (from, to, value) => {
  *  Por exemplo: (['a', 'b'], fn).a().b()
  * @param {String[]} props
  * @param {Function} curried
- * @param {Number} index
  */
-let append = (props, curried, index = 0) => {
+let append = (props, curried) => {
+  if (!props.length) {
+    return curried
+  }
   let ret = {}
-  ret[props[index]] = (param) => index < props.length - 1
-    ? append(props, curried(param), index + 1)
-    : curried(param)
+  ret[props[0]] = (param) => append(props.slice(1, props.length), curried(param))
   return ret
 }
 
