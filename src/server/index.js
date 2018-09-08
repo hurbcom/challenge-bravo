@@ -18,6 +18,12 @@ const controller = function (req, res) {
 }
 app.get('/', controller)
 
+/**
+ * @description Inicia o servidor na porta passada via process
+ * @author Felipe Rita <felipelopesrita@gmail.com>
+ * @param {{ env: {} }} process
+ * @returns {ExpressServer}
+ */
 const init = (process) => app.listen(process.env.PORT || 3000)
 
 module.exports = Object.assign({}, {
