@@ -1,0 +1,37 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.1",
+  "description": "Desafio HU backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:stress": "artillery run test.yml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodois/challenge-bravo.git"
+  },
+  "keywords": [
+    "desafio",
+    "HU",
+    "backend"
+  ],
+  "author": "Felipe Rita <felipelopesrita@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zerodois/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/zerodois/challenge-bravo#readme",
+  "devDependencies": {
+    "artillery": "^1.6.0-23",
+    "jest": "^23.5.0",
+    "supertest": "^3.1.0"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "node-fetch": "^2.2.0",
+    "ramda": "^0.25.0"
+  }
+}

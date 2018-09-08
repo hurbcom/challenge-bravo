@@ -1,0 +1,8 @@
+version: "3"
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - APP_ID=7c785382c5e840f6808c4f884560051b
