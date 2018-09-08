@@ -8,7 +8,7 @@ describe('Converter tests', () => {
 
   it('convert BRL to BTC', () => {
     let val = converter.from('BRL').to('BTC').value(1)
-    expect(val).toBe(0.00003257879)
+    expect(val).toEqual(0.00003257879238383911)
   })
 
   it('convert BRL to USD', () => {
@@ -18,6 +18,6 @@ describe('Converter tests', () => {
 
   it('convert BTC to ETH', () => {
     let val = converter.from('BTC').to('ETH').value(2)
-    expect(val).toBe(51.344458291)
+    expect(val).toEqual(51.34445829095639)
   })
 })
