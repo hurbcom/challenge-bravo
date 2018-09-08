@@ -18,8 +18,9 @@ describe('Server tests', () => {
       .set('Accept', 'application/json')
       .expect(res => {
         expect(res.status).toBe(200)
-        expect(res.body.data).not.toBeNaN()
-        expect(res.body.data).not.toBeNull()
+        expect(res.body.result).not.toBeUndefined()
+        expect(res.body.result).not.toBeNaN()
+        expect(res.body.result).not.toBeNull()
       }))
 
   it('Incorret params', () =>

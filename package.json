@@ -1,10 +1,10 @@
 {
   "name": "challenge-bravo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Desafio HU backend",
   "main": "index.js",
   "scripts": {
-    "start": "APP_ID=7c785382c5e840f6808c4f884560051b node src/index.js",
+    "start": "node src/index.js",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:stress": "artillery run test.yml"

@@ -7,7 +7,7 @@ const rates = Object
   .entries(get())
   .map(entry => entry[0])
 const symbols = rates.reduce((prev, curr, index, arr) =>
-  `${prev}${index < arr.lenght - 1 ? ',' : ' or'} ${curr}`, '')
+  `${prev}${index < arr.length - 1 ? ',' : ' or'} ${curr}`, '').substr(2)
 
 /**
  * @description Rota de controle de conversão de moedas
@@ -27,10 +27,10 @@ const controller = function (req, res) {
   params.to = params.to.toUpperCase()
   // Verifica se a moeda é valida
   if (!rates.some(rate => rate === params.from) || ! rates.some(rate => rate === params.to)) {
-    res.status(400).send({ error: `Invalid currency. Currency must be ${symbols}` })
+    res.status(401).json({ error: `Invalid currency. Currency must be ${symbols}` })
   }
-  let data = converter.from(params.from).to(params.to).value(params.amount)
-  res.send({ data })
+  let result = converter.from(params.from).to(params.to).value(params.amount)
+  res.json({ ...params, result })
 }
 app.get('/', controller)
 
