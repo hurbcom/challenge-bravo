@@ -19,7 +19,7 @@ describe('Server tests', () => {
 
   it('Incorret params', () =>
     request(app)
-      .get('/?from=BTC&to=EUR&amount=123.45')
+      .get('/?from=BTS&to=EUR&amount=123.45')
       .set('Accept', 'application/json')
       .expect(400))
 })
