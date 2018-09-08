@@ -4,8 +4,10 @@
   "description": "Desafio HU backend",
   "main": "index.js",
   "scripts": {
+    "start": "APP_ID=7c785382c5e840f6808c4f884560051b node src/index.js",
     "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "test:stress": "artillery run test.yml"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,7 @@
   },
   "homepage": "https://github.com/zerodois/challenge-bravo#readme",
   "devDependencies": {
+    "artillery": "^1.6.0-23",
     "jest": "^23.5.0",
     "supertest": "^3.1.0"
   },
