@@ -1,3 +1,6 @@
+const { COINS } = require('../constants');
+
+
 const ruleHasAllParams = (req, res, next) => {
   const { from, to, amount } = req.query;
   const hasAllParams = !!(from && to && amount);
@@ -7,8 +10,7 @@ const ruleHasAllParams = (req, res, next) => {
 
 const ruleFromAndToAreValid = (req, res, next) => {
   const { from, to } = req.query;
-  const coins = ['USD', 'BRL', 'EUR', 'BTC', 'ETH'];
-  if (coins.includes(from) && coins.includes(to)) next();
+  if (COINS.includes(from) && COINS.includes(to)) next();
   else res.sendStatus(400);
 };
 
