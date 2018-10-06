@@ -6,6 +6,14 @@
     "src"
   ],
   "env": {
+    "CRYPTOCOMPARE_URL": "https://min-api.cryptocompare.com/data/price?fsym={{from}}&tsyms={{to}}",
+    "CRYPTOCOMPARE_RETRY_DELAY": 100,
+    "CRYPTOCOMPARE_RETRY_TIMES": 1,
+    "CRYPTOCOMPARE_TIMEOUT": 3000,
+    "EXCHANGERATESAPI_URL": "https://api.exchangeratesapi.io/latest?base={{from}}&symbols={{to}}",
+    "EXCHANGERATESAPI_RETRY_DELAY": 100,
+    "EXCHANGERATESAPI_RETRY_TIMES": 1,
+    "EXCHANGERATESAPI_TIMEOUT": 3000,
     "PORT": 3000
   }
 }
