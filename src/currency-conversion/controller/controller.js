@@ -1,4 +1,5 @@
 const express = require('express');
+const rules = require('../rules');
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ const conversion = (_req, res) => {
   });
 };
 
-router.get('/', conversion);
+router.get('/', [...rules], conversion);
 
 
 module.exports = router;
