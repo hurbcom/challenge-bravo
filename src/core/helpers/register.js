@@ -1,1 +1,4 @@
-module.exports = (...middlewares) => app => middlewares.forEach(middleware => app.use(middleware));
+module.exports = (...middlewares) => (app) => {
+  const appFn = middleware => app.use(...middleware);
+  return middlewares.forEach(appFn);
+};

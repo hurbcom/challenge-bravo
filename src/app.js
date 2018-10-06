@@ -4,7 +4,7 @@ const routers = require('./core/routers');
 
 
 register(
-  routers,
+  [routers],
 )(app);
 
 
