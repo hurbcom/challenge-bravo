@@ -1,9 +1,24 @@
 const COINS = [
-  'USD',
-  'BRL',
-  'EUR',
-  'BTC',
-  'ETH',
+  {
+    code: 'USD',
+    crypto: false,
+  },
+  {
+    code: 'BRL',
+    crypto: false,
+  },
+  {
+    code: 'EUR',
+    crypto: false,
+  },
+  {
+    code: 'BTC',
+    crypto: true,
+  },
+  {
+    code: 'ETH',
+    crypto: true,
+  },
 ];
 
 

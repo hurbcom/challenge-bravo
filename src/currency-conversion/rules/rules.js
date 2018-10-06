@@ -10,7 +10,8 @@ const ruleHasAllParams = (req, res, next) => {
 
 const ruleFromAndToAreValid = (req, res, next) => {
   const { from, to } = req.query;
-  if (COINS.includes(from) && COINS.includes(to)) next();
+  const coinsCodes = COINS.map(({ code }) => code);
+  if (coinsCodes.includes(from) && coinsCodes.includes(to)) next();
   else res.sendStatus(400);
 };
 
