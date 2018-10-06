@@ -1,3 +1,4 @@
+const { split } = require('ramda');
 const { COINS } = require('../constants');
 
 
@@ -10,8 +11,10 @@ const ruleHasAllParams = (req, res, next) => {
 
 const ruleFromAndToAreValid = (req, res, next) => {
   const { from, to } = req.query;
-  const coinsCodes = COINS.map(({ code }) => code);
-  if (coinsCodes.includes(from) && coinsCodes.includes(to)) next();
+  const toSplited = split(',', to);
+  const isFromOk = COINS.includes(from);
+  const isToOk = toSplited.every(coin => COINS.includes(coin));
+  if (isFromOk && isToOk) next();
   else res.sendStatus(400);
 };
 
