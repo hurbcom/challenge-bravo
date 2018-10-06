@@ -4,7 +4,7 @@
   "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
   "main": "server.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "start": "node server.js",
     "start-dev": "nodemon server.js"
   },
