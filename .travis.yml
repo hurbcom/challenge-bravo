@@ -1,0 +1,13 @@
+language: node_js
+
+cache:
+  yarn: true
+
+stages:
+  - lint
+
+jobs:
+  include:
+    - stage: lint
+      script:
+        - yarn run lint
