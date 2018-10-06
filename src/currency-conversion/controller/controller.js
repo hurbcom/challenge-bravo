@@ -1,22 +1,21 @@
 const express = require('express');
 const { split } = require('ramda');
 const rules = require('../rules');
-const { cryptoCompare, exchangeRatesApi } = require('../../core/integrations');
+const { cryptoCompare } = require('../../core/integrations');
 
 const router = express.Router();
 
 
 const conversion = async (req, res) => {
   const { from, to } = req.query;
-  Promise.all([
-    cryptoCompare({ from, to: split(',', to) }),
-    exchangeRatesApi({ from: 'BTC', to: split(',', 'ETH') }),
-  ]).then(([result, result2]) => {
+  try {
+    const result = await cryptoCompare({ from, to: split(',', to) });
     res.json({
       result,
-      result2,
     });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 
