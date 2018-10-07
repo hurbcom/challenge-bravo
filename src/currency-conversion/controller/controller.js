@@ -35,7 +35,6 @@ const conversion = async (req, res) => {
     const response = _formatResponse(from, ratesByCoins, amount);
     res.json(response);
   } catch (err) {
-    console.log(err);
     res.sendStatus(500);
   }
 };
