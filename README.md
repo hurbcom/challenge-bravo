@@ -1,61 +1,82 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Desafio Bravo [![Build Status](https://travis-ci.org/felippemauricio/challenge-bravo.svg?branch=master)](https://travis-ci.org/felippemauricio/challenge-bravo)
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Esse projeto consiste em uma API que faz a converção monetária entre algumas moedas.
 
-A API deve converter entre as seguintes moedas:
-- USD
+Até o momento, esse projeto aceita apenas as seguintes moedas:
 - BRL
-- EUR
 - BTC
 - ETH
+- EUR
+- USD
 
+![](https://e.rpp-noticias.io/normal/2017/08/02/021602_457141.jpg)
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+## O que você precisa instalar para trabalhar neste projeto?
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+- docker
+- git
+- make
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+## Como instalar as dependências?
+```
+make install
+```
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+## Como rodar o projeto em ambiente de desenvolvimento?
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+```
+make start
+```
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+## Como rodar o lint?
+```
+make lint
+```
 
+## Como rodar os testes?
+```
+TODO
+```
 
+## Quais são os endpoints?
 
-## Critério de avaliação
+### Saúde da Api
+get `/health`.
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Response:
+```
+{
+  "api": true
+}
+```
 
-## Dúvidas
+### Conversor de moedas
+get `/currency-conversion?from=BTC&to=EUR&amount=123.45`.
+get `/currency-conversion?from=BTC&to=EUR,BRL&amount=123.45`.
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+Response:
+```
+{
+  "amount": 123.45,
+  "base": "BTC",
+  "date": "2018-10-07",
+  "rates": {
+    "EUR": 5711.39
+  },
+  "converted": {
+    "EUR": 705071.0955
+  }
+}
+```
 
-Boa sorte e boa viagem! ;)
+## Variaveis de Ambiente
+Em todos os ambientes, você pode configurar as seguintes váriaveis de ambiente:
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+| VARIAVEL                     | DEFAULT                | DESCRICAO                                               |
+|------------------------------|:----------------------:|---------------------------------------------------------|
+| CRYPTOCOMPARE_URL            |                        | Url para acessar a CryptoCompare API                    |
+| CRYPTOCOMPARE_RETRY_DELAY    | 100                    | Delay entre uma requisição e sua retentativa            |
+| CRYPTOCOMPARE_RETRY_TIMES    | 1                      | Retentativas em caso de falha                           |
+| CRYPTOCOMPARE_TIMEOUT        | 3000                   | Timeout da requisição                                   |
+| NODE_ENV                     | development            | Ambiente                                                |
+| PORT                         | 3000                   | Porta em que a API irá ser executada                    |
