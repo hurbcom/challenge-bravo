@@ -8,6 +8,7 @@ stages:
 
 jobs:
   include:
+
     - stage: lint
       script:
         - yarn run lint
