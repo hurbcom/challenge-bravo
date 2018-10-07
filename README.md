@@ -52,6 +52,7 @@ Response:
 
 ### Conversor de moedas
 get `/currency-conversion?from=BTC&to=EUR&amount=123.45`.
+
 get `/currency-conversion?from=BTC&to=EUR,BRL&amount=123.45`.
 
 Response:
@@ -72,7 +73,7 @@ Response:
 ## Variaveis de Ambiente
 Em todos os ambientes, você pode configurar as seguintes váriaveis de ambiente:
 
-| VARIAVEL                     | DEFAULT                | DESCRICAO                                               |
+| VARIÁVEL                     | DEFAULT                | DESCRIÇÃO                                               |
 |------------------------------|:----------------------:|---------------------------------------------------------|
 | CRYPTOCOMPARE_URL            |                        | Url para acessar a CryptoCompare API                    |
 | CRYPTOCOMPARE_RETRY_DELAY    | 100                    | Delay entre uma requisição e sua retentativa            |
