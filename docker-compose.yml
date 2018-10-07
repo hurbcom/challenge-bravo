@@ -1,0 +1,16 @@
+version: '3'
+services:
+  node:
+    image: node:latest
+    container_name: node
+    volumes:
+      - .:/var/application/current
+    working_dir: /var/application/current
+    networks:
+      - challenge-bravo-network
+    command: yarn run start-dev
+    ports:
+      - 3000:3000
+networks:
+  challenge-bravo-network:
+    driver: bridge
