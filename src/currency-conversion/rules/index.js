@@ -6,7 +6,7 @@ const ruleHasAllParams = (req, res, next) => {
   const { from, to, amount } = req.query;
   const hasAllParams = !!(from && to && amount);
   if (hasAllParams) next();
-  else res.sendStatus(412);
+  else res.sendStatus(422);
 };
 
 const ruleFromAndToAreValid = (req, res, next) => {
