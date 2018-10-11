@@ -5,6 +5,7 @@ cache:
 
 stages:
   - lint
+  - test
 
 jobs:
   include:
@@ -12,3 +13,7 @@ jobs:
     - stage: lint
       script:
         - yarn run lint
+
+    - stage: test
+      script:
+        - yarn run test-system
