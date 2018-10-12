@@ -6,6 +6,7 @@ cache:
 stages:
   - lint
   - test
+  - docker
 
 jobs:
   include:
@@ -17,3 +18,14 @@ jobs:
     - stage: test
       script:
         - yarn run test
+
+    - stage: docker
+      sudo: required
+      services:
+        - docker
+      script:
+        - docker build -t felippemauricio/challenge-bravo .
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push felippemauricio/challenge-bravo
+      on:
+        branch: master
