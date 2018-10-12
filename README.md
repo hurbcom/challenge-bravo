@@ -62,7 +62,10 @@ get `/health`.
 Response:
 ```
 {
-  "api": true
+  "api": true,
+  "integrations": {
+    "cryptoCompare": true
+  }
 }
 ```
 

@@ -19,7 +19,7 @@ const conversion = async (req, res) => {
   const { from, to, amount } = req.query;
   const toSplited = split(',', to);
   try {
-    const ratesByCoins = await cryptoCompare({ from, to: toSplited });
+    const ratesByCoins = await cryptoCompare.request({ from, to: toSplited });
     const convertedByRates = converter.calcAmountByRates(ratesByCoins, amount);
     const response = _formatResponse(amount, from, ratesByCoins, convertedByRates);
     res.json(response);

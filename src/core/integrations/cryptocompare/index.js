@@ -34,16 +34,22 @@ const verifyAndRemoveExceededCoins = (res, to) => {
   return newRes;
 };
 
-const request = ({ from = '', to = [] }) => {
+const makeRequest = ({ from = '', to = [] }) => {
   const {
     CRYPTOCOMPARE_URL: url,
-    CRYPTOCOMPARE_RETRY_DELAY: delay,
-    CRYPTOCOMPARE_RETRY_TIMES: times,
     CRYPTOCOMPARE_TIMEOUT: timeout,
   } = env;
   const urlParsed = urlParser({ url, from, to });
   const requestOptions = { method: 'GET', timeout: Number(timeout) };
-  const requestFn = () => fetch(urlParsed, requestOptions);
+  return () => fetch(urlParsed, requestOptions);
+};
+
+const request = ({ from = '', to = [] }) => {
+  const {
+    CRYPTOCOMPARE_RETRY_DELAY: delay,
+    CRYPTOCOMPARE_RETRY_TIMES: times,
+  } = env;
+  const requestFn = makeRequest({ from, to });
   return retry(requestFn, times, delay)
     .then(res => res.json())
     .then(res => verifyAndRemoveExceededCoins(res, to))
@@ -52,4 +58,7 @@ const request = ({ from = '', to = [] }) => {
 };
 
 
-module.exports = request;
+module.exports = {
+  makeRequest,
+  request,
+};
