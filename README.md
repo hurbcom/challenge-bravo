@@ -1,4 +1,4 @@
-# Desafio Bravo [![Build Status](https://travis-ci.org/felippemauricio/challenge-bravo.svg?branch=master)](https://travis-ci.org/felippemauricio/challenge-bravo)
+# Desafio Bravo [![Build Status](https://travis-ci.org/felippemauricio/challenge-bravo.svg?branch=master)](https://travis-ci.org/felippemauricio/challenge-bravo) [![JavaScript Style Guide: Good Parts](https://img.shields.io/badge/code%20style-goodparts-brightgreen.svg?style=flat)](https://github.com/felippemauricio/challenge-bravo "JavaScript The Good Parts") [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/felippemauricio/challenge-bravo)
 
 Esse projeto consiste em uma API que faz a converção monetária entre algumas moedas.
 
