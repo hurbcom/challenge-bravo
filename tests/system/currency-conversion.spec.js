@@ -73,56 +73,154 @@ describe('Currency Conversion', () => {
   });
 
   describe('# Body', () => {
-    it('Should response contains amount', async (done) => {
-      const { body } = await await request(app)
-        .get('/currency-conversion')
-        .query({ from: fromParam, to: toParam, amount: amountParam });
-      expect(body).toHaveProperty('amount');
-      done();
+    describe('- Amount', () => {
+      it('Should response contains amount', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        expect(body).toHaveProperty('amount');
+        done();
+      });
+      it('Should response contains a valid amount', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        const { amount } = body;
+        expect(amount).toBe(amountParam);
+        done();
+      });
     });
-    it('Should response contains a valid amount', async (done) => {
-      const { body } = await await request(app)
-        .get('/currency-conversion')
-        .query({ from: fromParam, to: toParam, amount: amountParam });
-      const { amount } = body;
-      expect(amount).toBe(amountParam);
-      done();
+
+    describe('- Base', () => {
+      it('Should response contains base', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        expect(body).toHaveProperty('base');
+        done();
+      });
+      it('Should response contains a valid base', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        const { base } = body;
+        expect(base).toBe(fromParam);
+        done();
+      });
     });
-    it('Should response contains base', async (done) => {
-      const { body } = await await request(app)
-        .get('/currency-conversion')
-        .query({ from: fromParam, to: toParam, amount: amountParam });
-      expect(body).toHaveProperty('base');
-      done();
+
+    describe('- Date', () => {
+      it('Should response contains date', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        expect(body).toHaveProperty('date');
+        done();
+      });
+      it('Should response contains a valid date', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        const { date } = body;
+        const dateTest = new Date();
+        const yearTest = dateTest.getFullYear();
+        const monthAux = dateTest.getMonth() + 1;
+        const monthTest = monthAux >= 10 ? monthAux : `0${monthAux}`;
+        const dayAux = dateTest.getDate();
+        const dayTest = dayAux >= 10 ? dayAux : `0${dayAux}`;
+        expect(date).toBe(`${yearTest}-${monthTest}-${dayTest}`);
+        done();
+      });
     });
-    it('Should response contains a valid base', async (done) => {
-      const { body } = await await request(app)
-        .get('/currency-conversion')
-        .query({ from: fromParam, to: toParam, amount: amountParam });
-      const { base } = body;
-      expect(base).toBe(fromParam);
-      done();
+
+    describe('- Rates', () => {
+      it('Should response contains rates', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        expect(body).toHaveProperty('rates');
+        done();
+      });
+      it('Should response contains one rate when I send a simple to', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        const { rates } = body;
+        const totRates = Object.keys(rates);
+        expect(totRates).toHaveLength(1);
+        done();
+      });
+      it('Should response contains five rate when I send five to params', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toCompoundParam, amount: amountParam });
+        const { rates } = body;
+        const totRates = Object.keys(rates);
+        expect(totRates).toHaveLength(5);
+        done();
+      });
+      it('Should response contains the same rate code as to param', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        const { rates } = body;
+        expect(rates).toHaveProperty(toParam);
+        done();
+      });
+      it('Should response contains the correct rate value', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        const { rates } = body;
+        const value = rates[toParam];
+        expect(value).toBe(3.84);
+        done();
+      });
     });
-    it('Should response contains date', async (done) => {
-      const { body } = await await request(app)
-        .get('/currency-conversion')
-        .query({ from: fromParam, to: toParam, amount: amountParam });
-      expect(body).toHaveProperty('date');
-      done();
-    });
-    it('Should response contains a valid date', async (done) => {
-      const { body } = await await request(app)
-        .get('/currency-conversion')
-        .query({ from: fromParam, to: toParam, amount: amountParam });
-      const { date } = body;
-      const dateTest = new Date();
-      const yearTest = dateTest.getFullYear();
-      const monthAux = dateTest.getMonth() + 1;
-      const monthTest = monthAux >= 10 ? monthAux : `0${monthAux}`;
-      const dayAux = dateTest.getDate();
-      const dayTest = dayAux >= 10 ? dayAux : `0${dayAux}`;
-      expect(date).toBe(`${yearTest}-${monthTest}-${dayTest}`);
-      done();
+
+    describe('- Converted', () => {
+      it('Should response contains converted', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        expect(body).toHaveProperty('converted');
+        done();
+      });
+      it('Should response contains one converted when I send a simple to', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        const { converted } = body;
+        const totConverted = Object.keys(converted);
+        expect(totConverted).toHaveLength(1);
+        done();
+      });
+      it('Should response contains five converted when I send five to params', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toCompoundParam, amount: amountParam });
+        const { converted } = body;
+        const totConverted = Object.keys(converted);
+        expect(totConverted).toHaveLength(5);
+        done();
+      });
+      it('Should response contains the same converted code as to param', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        const { converted } = body;
+        expect(converted).toHaveProperty(toParam);
+        done();
+      });
+      it('Should response contains the correct converted value', async (done) => {
+        const { body } = await request(app)
+          .get('/currency-conversion')
+          .query({ from: fromParam, to: toParam, amount: amountParam });
+        const { converted } = body;
+        const value = converted[toParam];
+        expect(value).toBe(3.84 * amountParam);
+        done();
+      });
     });
   });
 });
