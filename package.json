@@ -7,6 +7,7 @@
     "lint": "eslint . --fix",
     "start": "node server.js",
     "start-dev": "nodemon server.js",
+    "test": "jest tests",
     "test-system": "jest tests/system --forceExit --detectOpenHandles",
     "test-stress": "artillery quick --count 1000 -n 10 'http://localhost:3000/currency-conversion?from=BTC&to=EUR&amount=123.45'",
     "test-unit": "jest tests/unit"

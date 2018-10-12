@@ -34,8 +34,19 @@ make lint
 ```
 
 ## Como rodar os testes?
+
+Esse código, rodará todos os testes unitários e os de sistema.
+
 ```
-TODO
+make test
+```
+
+Você pode também, rodar cada tipo de teste separadamente.
+
+```
+make test-unit // Para testes unitários
+make test-system // Para testes de sistema
+make test-stress // Para testes de estresse
 ```
 
 ## Quais são os endpoints?
