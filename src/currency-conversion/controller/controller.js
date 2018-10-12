@@ -1,30 +1,18 @@
 const express = require('express');
 const { split } = require('ramda');
-const { getToday } = require('../helpers');
+const { converter, getToday } = require('../helpers');
 const rules = require('../rules');
 const { cryptoCompare } = require('../../core/integrations');
 
 const router = express.Router();
 
 
-const _calcAmountByRates = (rates, amount) => {
-  const amountObj = {};
-  Object.keys(rates).forEach((coin) => {
-    amountObj[coin] = rates[coin] * amount;
-  });
-  return amountObj;
-};
-
-const _formatResponse = (from, rates, amount) => ({
+const _formatResponse = (amount, from, rates, converted) => ({
   amount: Number(amount),
   base: from,
   date: getToday(),
-  rates: {
-    ...rates,
-  },
-  converted: {
-    ..._calcAmountByRates(rates, amount),
-  },
+  rates,
+  converted,
 });
 
 const conversion = async (req, res) => {
@@ -32,7 +20,8 @@ const conversion = async (req, res) => {
   const toSplited = split(',', to);
   try {
     const ratesByCoins = await cryptoCompare({ from, to: toSplited });
-    const response = _formatResponse(from, ratesByCoins, amount);
+    const convertedByRates = converter.calcAmountByRates(ratesByCoins, amount);
+    const response = _formatResponse(amount, from, ratesByCoins, convertedByRates);
     res.json(response);
   } catch (err) {
     res.sendStatus(500);
@@ -41,5 +30,4 @@ const conversion = async (req, res) => {
 
 
 router.get('/', [...rules], conversion);
-
 module.exports = router;
