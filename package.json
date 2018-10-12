@@ -24,6 +24,7 @@
   "homepage": "https://github.com/felippemauricio/challenge-bravo#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "helmet": "^3.14.0",
     "node-cache": "^4.2.0",
     "node-fetch": "^2.2.0",
     "ramda": "^0.25.0",

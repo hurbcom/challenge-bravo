@@ -1,4 +1,5 @@
 const app = require('express')();
+const helmet = require('helmet');
 const uuidv4 = require('uuid/v4');
 const { register } = require('./core/helpers');
 const routers = require('./core/routers');
@@ -12,6 +13,7 @@ const addRequestId = (req, _res, next) => {
 
 register(
   [addRequestId],
+  [helmet()],
   [routers],
 )(app);
 
