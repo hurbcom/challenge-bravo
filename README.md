@@ -49,6 +49,7 @@ make test-system // Para testes de sistema
 ```
 
 Existe ainda um outro tipo de teste que esse projeto aborda, o teste de estresse. Para roda-lo, é necessário que você inicie esta API no seu terminal, e em outra janela de terminal, que o seguinte código seja executado.
+
 ```
 make test-stress
 ```
@@ -84,6 +85,16 @@ Response:
   }
 }
 ```
+
+## Informações importantes
+Para pegar a taxa de conversão entre as moedas, esse projeto utiliza a *CRYPTOCOMPARE*, que é uma API gratuita que fornece os valores de conversão entre as moedas. Confesso que esse desenvolvedor ficou um pouco em dúvida, porque ao comparar com a taxa de conversão do Google, os valores da API se mostraram proxímos, mas não iguais. Achei outras APIs, porém ora eram pagas, ou não funcionavam com as criptomoedas. Assumi que como esse projeto se trata mais de uma demonstração de como eu organizaria o projeto, não teria tanta importancia a utilização da mesma.
+
+Outro ponto importante, agora assumindo o pressuposto de que se trata de aplicação com fins monetários, e que quando o assunto é dinheiro, a API tem que estar sempre em pé, as taxas de conversão são salvas em memória, a cada request. Se em algum momento, algum request falhar, a idéia é utilizar a taxa de conversão da mesma moeda salva em memória, onde existe uma grande chance de estarmos retornando um valor atual para o usuário.
+
+Um improvement interessante seria utilizar a memória mais vezes, em vez de a cada request o projeto consultar em outra API a taxa de conversão.
+
+Outro improvement seria formatar os valores retornados no formato de dinheiro, por exemplo: `23.87653` -> `23.88`. Mas isso já depende do front que estará consumindo a API.
+
 
 ## Variaveis de Ambiente
 Em todos os ambientes, você pode configurar as seguintes váriaveis de ambiente:
