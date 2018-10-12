@@ -26,7 +26,8 @@
     "express": "^4.16.3",
     "node-cache": "^4.2.0",
     "node-fetch": "^2.2.0",
-    "ramda": "^0.25.0"
+    "ramda": "^0.25.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "artillery": "^1.6.0-24",
