@@ -46,7 +46,11 @@ Você pode também, rodar cada tipo de teste separadamente.
 ```
 make test-unit // Para testes unitários
 make test-system // Para testes de sistema
-make test-stress // Para testes de estresse
+```
+
+Existe ainda um outro tipo de teste que esse projeto aborda, o teste de estresse. Para roda-lo, é necessário que você inicie esta API no seu terminal, e em outra janela de terminal, que o seguinte código seja executado.
+```
+make test-stress
 ```
 
 ## Quais são os endpoints?
