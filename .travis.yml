@@ -27,5 +27,7 @@ jobs:
         - docker build -t felippemauricio/challenge-bravo .
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker push felippemauricio/challenge-bravo
+        - docker tag felippemauricio/challenge-bravo felippemauricio/challenge-bravo:$TRAVIS_COMMIT
+        - docker push felippemauricio/challenge-bravo:$TRAVIS_COMMIT
       on:
         branch: master
