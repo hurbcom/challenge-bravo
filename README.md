@@ -1,13 +1,13 @@
 # Desafio Bravo [![Build Status](https://travis-ci.org/felippemauricio/challenge-bravo.svg?branch=master)](https://travis-ci.org/felippemauricio/challenge-bravo) [![JavaScript Style Guide: Good Parts](https://img.shields.io/badge/code%20style-goodparts-brightgreen.svg?style=flat)](https://github.com/felippemauricio/challenge-bravo "JavaScript The Good Parts") [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/felippemauricio/challenge-bravo)
 
-Esse projeto consiste em uma API que faz a converção monetária entre algumas moedas.
+Esse projeto consiste em uma API desenvolvida em **node** que faz a converção monetária entre algumas moedas.
 
 Até o momento, esse projeto aceita apenas as seguintes moedas:
-- BRL
-- BTC
-- ETH
-- EUR
-- USD
+- BRL - Real Brasileiro
+- BTC - Bitcoin
+- ETH - Ethereum
+- EUR - Euro
+- USD - Dollar Americano
 
 ![](https://e.rpp-noticias.io/normal/2017/08/02/021602_457141.jpg)
 
@@ -57,7 +57,8 @@ make test-stress
 ## Quais são os endpoints?
 
 ### Saúde da Api
-get `/health`.
+
+  - get `/health`.
 
 Response:
 ```
@@ -70,9 +71,9 @@ Response:
 ```
 
 ### Conversor de moedas
-get `/currency-conversion?from=BTC&to=EUR&amount=123.45`.
 
-get `/currency-conversion?from=BTC&to=EUR,BRL&amount=123.45`.
+  - get `/currency-conversion?from=BTC&to=EUR&amount=123.45`.
+  - get `/currency-conversion?from=BTC&to=EUR,BRL&amount=123.45`.
 
 Response:
 ```
@@ -91,7 +92,7 @@ Response:
 
 ## Imagem de produção
 
-A cada versão do código que entrar na `master`, o sistema gera uma imagem docker via `Travis-ci`. Essa imagem está disponível no `Docker Hub`.
+A cada versão do código que é mergeada para a `master`, o sistema gera uma nova imagem docker via `Travis-CI`. Essa imagem está disponível no `Docker Hub`.
 
 ```
 docker run -p 8080:3000 felippemauricio/challenge-bravo
@@ -99,9 +100,9 @@ docker run -p 8080:3000 felippemauricio/challenge-bravo
 
 ## Produção
 
-A cada versão do código que entrar na `master`, o sistema faz o deploy da aplicação no `Heroku`, usando a imagem docker da aplicação.
+A cada versão do código que é mergeada para a `master`, o sistema faz o deploy da aplicação no `Heroku`, usando a imagem docker da aplicação.
 
-Assim, o sistema está disponível no host `https://challenge-bravo.herokuapp.com/`;
+Assim, o sistema está disponível no host `https://challenge-bravo.herokuapp.com`;
 
 Exemplos de Requests:
 ```
@@ -117,7 +118,7 @@ get https://challenge-bravo.herokuapp.com/currency-conversion?from=BTC&to=EUR&am
 - A cada request, as taxas de conversão são salvas em memória. Se em algum momento, algum request falhar, a idéia é utilizar a taxa de conversão da mesma moeda salva em memória, onde existe uma grande chance de estarmos retornando um valor atual para o usuário.
 
 
-## Improvements
+## Sugestões de melhorias
 
 - Utilizar a memória mais vezes, em vez de apenas utiliza-la em casos de falha. Isto aumentaria significamente a performance da API.
 
