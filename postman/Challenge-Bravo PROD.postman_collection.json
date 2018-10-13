@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "be7cdf93-561d-44f8-ae6c-858cadb97a10",
-		"name": "Challenge-Bravo DEV",
+		"_postman_id": "aa63fb69-7f5d-4b35-9e52-fc2e148f031e",
+		"name": "Challenge-Bravo PROD",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -86,6 +86,28 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2ce54b7f-8105-402d-b9ef-9a5bc0834ef4",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7375a6f4-18a7-4fb0-b4bb-1f7823830c80",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
