@@ -6,7 +6,8 @@ cache:
 stages:
   - lint
   - test
-  - docker
+  - docker-hub
+  - deploy-on-heroku
 
 jobs:
   include:
@@ -19,7 +20,7 @@ jobs:
       script:
         - yarn run test
 
-    - stage: docker
+    - stage: docker-hub
       sudo: required
       services:
         - docker
@@ -29,5 +30,17 @@ jobs:
         - docker push felippemauricio/challenge-bravo
         - docker tag felippemauricio/challenge-bravo felippemauricio/challenge-bravo:$TRAVIS_COMMIT
         - docker push felippemauricio/challenge-bravo:$TRAVIS_COMMIT
+      on:
+        branch: master
+
+    - stage: deploy-on-heroku
+      sudo: required
+      provider: heroku
+      services:
+        - docker
+      script:
+        - heroku container:login
+        - heroku container:push web -a challenge-bravo
+        - heroku container:release web -a challenge-bravo
       on:
         branch: master
