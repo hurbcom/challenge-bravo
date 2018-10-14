@@ -6,17 +6,22 @@ const { register } = require('./core/helpers');
 const routers = require('./core/routers');
 
 
-const addRequestId = (req, _res, next) => {
+const assignId = (req, _res, next) => {
   req.id = uuidv4();
   next();
 };
 
+const undefinedRouter = (_req, res) => {
+  res.sendStatus(404);
+};
+
 
 register(
-  [addRequestId],
+  [assignId],
   [morgan('dev')],
   [helmet()],
   [routers],
+  [undefinedRouter],
 )(app);
 
 
