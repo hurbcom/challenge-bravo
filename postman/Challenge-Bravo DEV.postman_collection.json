@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "be7cdf93-561d-44f8-ae6c-858cadb97a10",
+		"name": "Challenge-Bravo DEV",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{host}}/health",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/currency-conversion",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{host}}/currency-conversion?from=BTC&to=EUR&amount=123.45",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"currency-conversion"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "BTC"
+						},
+						{
+							"key": "to",
+							"value": "EUR"
+						},
+						{
+							"key": "amount",
+							"value": "123.45"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL",
+					"protocol": "https",
+					"host": [
+						"min-api",
+						"cryptocompare",
+						"com"
+					],
+					"path": [
+						"data",
+						"price"
+					],
+					"query": [
+						{
+							"key": "fsym",
+							"value": "USD"
+						},
+						{
+							"key": "tsyms",
+							"value": "BRL"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

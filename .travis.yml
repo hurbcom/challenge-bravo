@@ -1,0 +1,46 @@
+language: node_js
+
+cache:
+  yarn: true
+
+stages:
+  - lint
+  - test
+  - docker-hub
+  - deploy-on-heroku
+
+jobs:
+  include:
+
+    - stage: lint
+      script:
+        - yarn run lint
+
+    - stage: test
+      script:
+        - yarn run test
+
+    - stage: docker-hub
+      sudo: required
+      services:
+        - docker
+      script:
+        - docker build -t felippemauricio/challenge-bravo .
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push felippemauricio/challenge-bravo
+        - docker tag felippemauricio/challenge-bravo felippemauricio/challenge-bravo:$TRAVIS_COMMIT
+        - docker push felippemauricio/challenge-bravo:$TRAVIS_COMMIT
+      on:
+        branch: master
+
+    - stage: deploy-on-heroku
+      sudo: required
+      provider: heroku
+      services:
+        - docker
+      script:
+        - heroku container:login
+        - heroku container:push web -a challenge-bravo
+        - heroku container:release web -a challenge-bravo
+      on:
+        branch: master

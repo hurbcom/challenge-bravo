@@ -1,0 +1,49 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
+  "main": "server.js",
+  "scripts": {
+    "lint": "eslint . --fix",
+    "start": "node server.js",
+    "start-dev": "nodemon server.js",
+    "test": "jest tests --forceExit --detectOpenHandles",
+    "test-system": "jest tests/system --forceExit --detectOpenHandles",
+    "test-stress": "artillery quick --count 1000 -n 10 'http://localhost:3000/currency-conversion?from=BTC&to=EUR&amount=123.45'",
+    "test-unit": "jest tests/unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felippemauricio/challenge-bravo.git"
+  },
+  "author": "Felippe Maurício",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felippemauricio/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/felippemauricio/challenge-bravo#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "express-request-id": "^1.4.1",
+    "helmet": "^3.14.0",
+    "morgan": "^1.9.1",
+    "node-cache": "^4.2.0",
+    "node-fetch": "^2.2.0",
+    "ramda": "^0.25.0"
+  },
+  "devDependencies": {
+    "artillery": "^1.6.0-24",
+    "eslint": "^5.6.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "jest": "^23.6.0",
+    "nock": "^10.0.1",
+    "nodemon": "^1.18.4",
+    "supertest": "^3.3.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "./tests/setup/setupFiles.js"
+    ]
+  }
+}

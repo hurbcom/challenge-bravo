@@ -1,0 +1,113 @@
+{
+	"info": {
+		"_postman_id": "aa63fb69-7f5d-4b35-9e52-fc2e148f031e",
+		"name": "Challenge-Bravo PROD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{host}}/health",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/currency-conversion",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{host}}/currency-conversion?from=BTC&to=EUR&amount=123.45",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"currency-conversion"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "BTC"
+						},
+						{
+							"key": "to",
+							"value": "EUR"
+						},
+						{
+							"key": "amount",
+							"value": "123.45"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL",
+					"protocol": "https",
+					"host": [
+						"min-api",
+						"cryptocompare",
+						"com"
+					],
+					"path": [
+						"data",
+						"price"
+					],
+					"query": [
+						{
+							"key": "fsym",
+							"value": "USD"
+						},
+						{
+							"key": "tsyms",
+							"value": "BRL"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2ce54b7f-8105-402d-b9ef-9a5bc0834ef4",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7375a6f4-18a7-4fb0-b4bb-1f7823830c80",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

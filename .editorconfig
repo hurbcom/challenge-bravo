@@ -1,13 +1,18 @@
 # EditorConfig is awesome: http://EditorConfig.org
 
-# top-most EditorConfig file
 root = true
 
-# Style for every file
 [*]
 end_of_line = lf
-insert_final_newline = false
+insert_final_newline = true
 charset = utf-8
 indent_style = space
-indent_size = 4
+indent_size = 2
 trim_trailing_whitespace = true
+
+[Makefile]
+indent_style = tab
+
+[*.{json,yml}]
+indent_style = space
+indent_size = 2
