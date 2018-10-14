@@ -24,12 +24,12 @@
   "homepage": "https://github.com/felippemauricio/challenge-bravo#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "express-request-id": "^1.4.1",
     "helmet": "^3.14.0",
     "morgan": "^1.9.1",
     "node-cache": "^4.2.0",
     "node-fetch": "^2.2.0",
-    "ramda": "^0.25.0",
-    "uuid": "^3.3.2"
+    "ramda": "^0.25.0"
   },
   "devDependencies": {
     "artillery": "^1.6.0-24",
