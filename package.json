@@ -1,0 +1,28 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Desafio backend HU",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "DEV=true nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leonardo-Tozato/challenge-bravo.git"
+  },
+  "keywords": [
+    "desafio",
+    "backend",
+    "HU"
+  ],
+  "author": "Leonardo Tozato <leo.muniztozato@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Leonardo-Tozato/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/Leonardo-Tozato/challenge-bravo#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
