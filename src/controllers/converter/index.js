@@ -1,16 +1,17 @@
+
 const controller = {}
+const rates = require('../../services/rates')
 
+
+/**
+ * @description Método do controlador para o processo da requisição de conversão de moedas.
+ * @author Leonardo Tozato <leo.muniztozato@gmail.com>
+ * @param {Request} req
+ * @param {Response} res
+ */
 controller.convert = (req, res) => {
-    console.log("Vai converter aqui.")
-    res.send({data : "res"})
-    // let [err, resp] = await to(service.interval(req.query))
-
-    // if (err) {
-    //     console.log('Erro ao calcular intervalado:', err)
-    //     return res.send({ error: true })
-    // }
-
-    // res.send(resp)
+    
+    rates.updateRates().then(res.send({data:'sucesso'}))
 }
 
 module.exports = controller
