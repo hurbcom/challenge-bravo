@@ -1,7 +1,7 @@
 {
   "name": "challenge-bravo",
   "version": "1.0.0",
-  "description": "Desafio backend HU",
+  "description": "HU backend challenge",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/Leonardo-Tozato/challenge-bravo.git"
   },
   "keywords": [
-    "desafio",
+    "challenge",
     "backend",
     "HU"
   ],
@@ -23,9 +23,12 @@
   },
   "homepage": "https://github.com/Leonardo-Tozato/challenge-bravo#readme",
   "dependencies": {
+    "async-redis": "^1.1.4",
     "axios": "^0.18.0",
     "dotenv": "^6.1.0",
-    "express": "^4.16.4",
-    "redis": "^2.8.0"
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
   }
 }
