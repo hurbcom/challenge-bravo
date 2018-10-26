@@ -33,3 +33,5 @@ rateService.updateRates(process.env.API_KEY)
 setInterval(() => rateService.updateRates(process.env.API_KEY), 360000)
 
 app.get('/', router)
+
+module.exports = app

@@ -24,6 +24,7 @@ controller.convert = (req, res) => {
         
         if(missingParams){
             res.status(400).send({error: `Required params "from", "to" and "amount". Missing params ${missingParams}.`})
+            return
         }
 
         // Checa se a quantidade é numérica 
