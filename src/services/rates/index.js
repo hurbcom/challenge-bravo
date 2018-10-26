@@ -15,19 +15,21 @@ const openExchangesLast = key =>
 
 /**
  * @description Atualiza a cotação das moedas, persistindo elas através do redis.
- * @author Leonardo Tozato <leo.muniztozato@gmail.com> 
+ * @author Leonardo Tozato <leo.muniztozato@gmail.com>
+ * @returns {Promise} 
  */
-rates.updateRates = () => {
+rates.updateRates = () =>
     axios.get(openExchangesLast(process.env.API_KEY))
-        .then(res => {
+        .then(async res => {
             let currentRates = res.data.rates
+            let promises = []
             for(let key in currentRates){
-                redisClient.set(key, currentRates[key])
+               redisClient.set(key, currentRates[key])
             }
+            await Promise.all(promises)
         })
         .catch(error => {
             throw error
         })
-}
 
 module.exports = rates

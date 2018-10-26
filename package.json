@@ -4,7 +4,7 @@
   "description": "HU backend challenge",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "mocha -- src/tests/*.js",
     "dev": "DEV=true nodemon src/index.js"
   },
   "repository": {
@@ -29,6 +29,8 @@
     "express": "^4.16.4"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.4"
   }
 }
