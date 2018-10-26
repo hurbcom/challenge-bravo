@@ -18,8 +18,8 @@ const openExchangesLast = key =>
  * @author Leonardo Tozato <leo.muniztozato@gmail.com>
  * @returns {Promise} 
  */
-rates.updateRates = () =>
-    axios.get(openExchangesLast(process.env.API_KEY))
+rates.updateRates = (key) =>
+    axios.get(openExchangesLast(key))
         .then(async res => {
             let currentRates = res.data.rates
             let promises = []

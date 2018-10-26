@@ -29,7 +29,7 @@ server.listen(port, () => {
   console.log(`express up on ${port}!`)
 })
 
-rateService.updateRates()
-setInterval(() => rateService.updateRates(), 360000)
+rateService.updateRates(process.env.API_KEY)
+setInterval(() => rateService.updateRates(process.env.API_KEY), 360000)
 
 app.get('/', router)
