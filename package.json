@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -- src/tests/*.js",
+    "stress-test": "artillery run stress-test.yml",
     "dev": "DEV=true nodemon src/index.js"
   },
   "repository": {
@@ -29,8 +30,8 @@
     "express": "^4.16.4"
   },
   "devDependencies": {
+    "artillery": "^1.6.0-24",
     "chai": "^4.2.0",
-    "chai-http": "^4.2.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.4",
     "supertest": "^3.3.0"

@@ -1,0 +1,13 @@
+config:
+  target: 'http://127.0.0.1:3000'
+  http:
+    tls:
+      rejectUnauthorized: false
+  phases:
+    - duration: 1
+      arrivalRate: 1000
+  defaults:
+scenarios:
+  - flow:
+    - get:
+        url: "/?from=USD&to=BRL&amount=1"
