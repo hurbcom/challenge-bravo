@@ -7,7 +7,6 @@ const port = process.env.PORT
 const router = require('./routes')
 const rateService = require('./services/rates')
 const redisClient = require('./redis')
-
 /**
  * @description Chamado para desligar o server fechando a conexão com o redis.
  * @author Leonardo Tozato <leo.muniztozato@gmail.com>

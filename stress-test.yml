@@ -1,5 +1,5 @@
 config:
-  target: 'http://127.0.0.1:3000'
+  target: 'http://127.0.0.1:6660'
   http:
     tls:
       rejectUnauthorized: false
@@ -10,4 +10,4 @@ config:
 scenarios:
   - flow:
     - get:
-        url: "/?from=USD&to=BRL&amount=1"
+        url: "/?from=USD&to=BRL&amount=1000"

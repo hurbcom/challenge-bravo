@@ -4,6 +4,7 @@
   "description": "HU backend challenge",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index.js",
     "test": "mocha -- src/tests/*.js",
     "stress-test": "artillery run stress-test.yml",
     "dev": "DEV=true nodemon src/index.js"
