@@ -15,7 +15,7 @@ class Cache {
     getLastCurrency(){
        //TODO: Pegar os valores do master worker
         return new Promise((resolve,reject)=>{
-            let url = `${config.openexchangerates.api_url}?app_id=8f0b010d875c4ad5822472c1edeb8870&show_alternative=true&symbols=USD,BRL,EUR,BTC,ETH`
+            let url = `${config.worker_url}/currency`
 
             request(url, (error, response, body) => {
                 

@@ -1,6 +1,6 @@
 const express           = require('express');
 const router            = express.Router();
-const ConverterClass    = require('./converter')
+const ConverterClass    = require('../services/converter')
 const CONVERTER         = new ConverterClass()
 
 router.get('/', function(req, res, next) {

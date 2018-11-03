@@ -17,6 +17,7 @@ class Converter {
         return currency_value / values[currency] 
     }
 
+    //TODO: melhorar descricoes
     /**
      * @description convertUSDToCurrency Converts the dollar value to another currency
      * @param {string} currency 
