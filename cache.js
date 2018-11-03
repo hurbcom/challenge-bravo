@@ -8,15 +8,13 @@ class Cache {
         this.getLastCurrency()
     }
 
-    //TODO: melhorar desc
-    //TODO:
     /**
      * @description getLastCurrency Get the latest updated result from currencies from "Master Worker"
      * @returns Object
      */
     getLastCurrency(){
         return new Promise((resolve,reject)=>{
-            let url = `${config.openexchangerates.api_url}?app_id=${process.env.API_KEY}&show_alternative=true&symbols=USD,BRL,EUR,BTC,ETH`
+            let url = `${config.openexchangerates.api_url}?app_id=8f0b010d875c4ad5822472c1edeb8870&show_alternative=true&symbols=USD,BRL,EUR,BTC,ETH`
 
             request(url, (error, response, body) => {
                 
@@ -34,7 +32,7 @@ class Cache {
         })
     }
 
-    //TODO: melhorar desc
+    
     /**
      * @description getValues Returns the last saved values
      * @returns {Object}
