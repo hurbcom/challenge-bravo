@@ -7,8 +7,6 @@ services:
     container_name: cache
     networks: 
       - cache
-    ports:
-      - "6379:6379"
   worker:
     build: ./worker
     container_name: worker
