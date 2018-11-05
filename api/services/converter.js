@@ -1,7 +1,7 @@
 let Cache = require('./cache')
 
 class Converter {
-
+    //TODO: criar testes de unidade
     constructor(){
         this.cache = new Cache()
     }

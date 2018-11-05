@@ -2,6 +2,8 @@ const redis     = require("redis");
 const config    = require("config");
 
 class Cache {
+
+    //TODO: criar testes de unidade
     constructor(){
         this.redisClient = redis.createClient()
 
