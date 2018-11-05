@@ -1,18 +1,23 @@
-const redis     = require("redis");
-const config    = require("config");
 
+const redis     = require("redis");
+//TODO: nao esta conseguindo pegar as variaveis do arquivo de config
+const config    = require("config");
 class Cache {
 
     //TODO: criar testes de unidade
     constructor(){
-        this.redisClient = redis.createClient()
+        this.redisClient = redis.createClient(process.env.REDIS_HOST)
 
-        this.redisClient.on("error", function (err) {
-            console.log("Error " + err);
+        this.redisClient.on("error", (e) => {
+            console.log("Error " + e);
         });
 
-        this.getLastCurrencies()
+        this.redisClient.on("ready",()=>{
+            this.updateCurrencies()
+        });
 
+        this.values = {}
+        
     }
 
     setKey(key,value){
@@ -41,11 +46,23 @@ class Cache {
     }
 
     async getLastCurrencies(){
-        let currencies = config.currencies
+        //TODO: colocar moedas em variavel de ambiente
+        let currencies = ["USD","BRL","EUR","BTC","ETH"]
         for(let c of currencies){
-            this.values[c] = await this.getKey(c)
+           try {
+                this.values[c] = await this.getKey(c)
+           } catch (error) {    
+               console.log(error)
+           }
         }
-        return this.values
+
+        console.log("Currencies atualizadas com sucesso!")
+    }
+
+    updateCurrencies(){
+        this.getLastCurrencies()
+        //TODO: colocar variavel de ambiente
+        setInterval(()=>this.getLastCurrencies(), 30 * 1000)
     }
 }
 

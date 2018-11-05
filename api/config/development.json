@@ -1,0 +1,6 @@
+{
+    "openexchangerates":{
+        "api_url": "https://openexchangerates.org/api/latest.json"
+    },
+    "currencies": ["USD","BRL","EUR","BTC","ETH"]
+}

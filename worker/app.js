@@ -25,7 +25,8 @@ function startRoutine(){
                 }
                 console.log("Cache atualizado com sucesso!")
             } else {
-                console.log(`Sem modificação de valores, buscando novamente em: ${config.minutesRefreshCurrencies} segundos`)
+                console.log(receivedValues.rates)
+                console.log(`Sem modificação de valores, buscando novamente em: ${config.secondsRefreshCurrencies} segundos`)
             }
         }).catch((e)=>{
             console.log(e)

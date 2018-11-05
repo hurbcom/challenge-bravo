@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
   
     if(!CONVERTER.isConvertionAvailable()){
         res.status(500).send({error:"There was an error while trying to convert. Try again"})
+        return
     }
 
     if(!CONVERTER.hasConversionFields(req.query)) {

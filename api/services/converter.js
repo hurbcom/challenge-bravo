@@ -90,15 +90,10 @@ class Converter {
      * @returns {boolean}
     */
     isConvertionAvailable(){
-        if(this.cache.values) {
+        if(this.cache.values != {}) {
             return true
         } else {
-            this.getAvailableCurrencies().then((r)=>{
-                if(r) return true;
-                else return false
-            }).catch(()=>{
-                return false
-            })
+            return false
         }
     }
 
