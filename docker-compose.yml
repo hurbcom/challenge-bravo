@@ -1,0 +1,15 @@
+version: "3"
+services:
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+    - 6379
+  worker:
+    build: ./worker
+    container_name: worker
+    env_file: .env_worker
+    depends_on:
+      - redis
+    links:
+      - redis
