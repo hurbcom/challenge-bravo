@@ -1,38 +1,50 @@
-const config    = require('config')
-const request   = require('request')
+const redis     = require("redis");
+const config    = require("config");
 
 class Cache {
-
     constructor(){
-        this.getLastCurrency()
+        this.client = redis.createClient()
+
+        this.client.on("error", function (err) {
+            console.log("Error " + err);
+        });
+
+        this.getLastCurrencies()
+
     }
 
-    //TODO: terminar descricao do método
-    /**
-     * @description getLastCurrency Get the latest updated result from currencies from "Master Worker"
-     * @returns Object
-     */
-    getLastCurrency(){
-       //TODO: Pegar os valores do master worker
+    setKey(key,value){
         return new Promise((resolve,reject)=>{
-            let url = `${config.worker_url}/currency`
-
-            request(url, (error, response, body) => {
-                
-                //TODO: Tratar status code erros > response && response.statusCode
-                if(error) {
-                    reject(error)
-                    return 
-                } else if(body){
-                    body = JSON.parse(body)
-                    if(body) this.values = body.rates;
-                    setTimeout(()=>this.getLastCurrency(), 10 * 1000)
-                    resolve(body)
-                }
+            this.client.set(key, value, (err,r)=>{
+                redis.print
+                resolve()
             });
         })
     }
 
+    getKey(key){
+        return new Promise((resolve,reject)=>{
+            this.client.get(key, function(err,r){
+                if(r){
+                    resolve(r)
+                    return
+                }
+
+                if(err){
+                    reject(err)
+                    return
+                }
+            })
+        })
+    }
+
+    async getLastCurrencies(){
+        let currencies = config.currencies
+        for(let c of currencies){
+            this.values[c] = await this.getKey(c)
+        }
+        return this.values
+    }
 }
 
-module.exports = Cache;
+module.exports = Cache

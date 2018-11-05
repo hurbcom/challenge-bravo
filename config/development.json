@@ -2,5 +2,6 @@
     "openexchangerates":{
         "api_url": "https://openexchangerates.org/api/latest.json"
     },
-    "worker_url":"http://localhost:3001"
+    "currencies": ["USD","BRL","EUR","BTC","ETH"],
+    "minutesRefreshCurrencies": 1
 }

@@ -3,34 +3,39 @@ const request       = require('request')
 const config        = require('config');
 
 class Currency {
+
     constructor(){
-        this.getCurrencyFromOpenExchangesRates()
+        this.values = {}
     }
 
     getCurrencyFromOpenExchangesRates(){
         return new Promise((resolve,reject)=>{
-            let URL = `${config.openexchangerates.api_url}?app_id=${API_KEY}&show_alternative=true&symbols=USD,BRL,EUR,BTC,ETH`
+            let currencies = config.currencies.toString();
+            let URL = `${config.openexchangerates.api_url}?app_id=${API_KEY}&show_alternative=true&symbols=${currencies}`
+            
             request(URL, (error, response, body) => {        
-                if(error) this.getCurrencyFromOpenExchangesRates()
-                else if(body) this.CURRENCIES = JSON.parse(body)
+                if(error) {
+                    reject(error)
+                    return 
+                }
+
+                 if(body){
+                    resolve(JSON.parse(body))
+                    return    
+                }
+
             });
         })
     }
 
-    getLocalCurrencies(){
-        if(this.isCurrenciesAvailable()){
-            return this.CURRENCIES
-        }
+    isCurrencyValuesChanged(currencies){
+        if(JSON.stringify(this.values) == JSON.stringify(currencies)) return false
+        else return true
     }
 
-    isCurrenciesAvailable(){
-        if(!this.CURRENCIES){
-            return false
-        }
-
-        return true;
+    updateCurrencyValues(newValues){
+        this.values = newValues
     }
-
 
 }
 
