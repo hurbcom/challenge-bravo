@@ -3,9 +3,9 @@ const config    = require("config");
 
 class Cache {
     constructor(){
-        this.client = redis.createClient()
+        this.redisClient = redis.createClient()
 
-        this.client.on("error", function (err) {
+        this.redisClient.on("error", function (err) {
             console.log("Error " + err);
         });
 
@@ -15,7 +15,7 @@ class Cache {
 
     setKey(key,value){
         return new Promise((resolve,reject)=>{
-            this.client.set(key, value, (err,r)=>{
+            this.redisClient.set(key, value, (err,r)=>{
                 redis.print
                 resolve()
             });
@@ -24,7 +24,7 @@ class Cache {
 
     getKey(key){
         return new Promise((resolve,reject)=>{
-            this.client.get(key, function(err,r){
+            this.redisClient.get(key, function(err,r){
                 if(r){
                     resolve(r)
                     return

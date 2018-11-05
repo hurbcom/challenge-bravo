@@ -1,9 +1,9 @@
-let CacheClass = require('./cache')
+let Cache = require('./cache')
 
 class Converter {
 
     constructor(){
-        this.CACHE = new CacheClass()
+        this.cache = new Cache()
     }
 
     /**
@@ -13,7 +13,7 @@ class Converter {
      * @returns number value converted into dollars
      */
     convertCurrencyToUSD(currency,currency_value){
-        let values = this.CACHE.values
+        let values = this.cache.values
         return currency_value / values[currency] 
     }
 
@@ -25,7 +25,7 @@ class Converter {
      * @returns {float}
      */
     convertUSDToCurrency(currency,dolar_value){
-        let values = this.CACHE.values
+        let values = this.cache.values
         return dolar_value * values[currency]
     }
 
@@ -66,7 +66,7 @@ class Converter {
      * @returns {boolean}
      */
     isValidCurrency(body){
-        let values = this.CACHE.values
+        let values = this.cache.values
         let from = body.from.toUpperCase()
         let to = body.to.toUpperCase()
 
@@ -80,7 +80,7 @@ class Converter {
      * @returns {string}
     */
     getAvailableCurrencies(){
-       let values = this.CACHE.values
+       let values = this.cache.values
        let currencies = Object.keys(values).toString()
        return currencies
     }
@@ -90,7 +90,7 @@ class Converter {
      * @returns {boolean}
     */
     isConvertionAvailable(){
-        if(this.CACHE.values) {
+        if(this.cache.values) {
             return true
         } else {
             this.getAvailableCurrencies().then((r)=>{
