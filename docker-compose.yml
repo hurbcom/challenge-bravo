@@ -1,10 +1,12 @@
 version: "3"
+networks:
+  cache:
 services:
   redis:
     image: redis
     container_name: cache
-    expose:
-    - 6379
+    networks: 
+      - cache
   worker:
     build: ./worker
     container_name: worker
@@ -13,3 +15,5 @@ services:
       - redis
     links:
       - redis
+    networks:
+      - cache

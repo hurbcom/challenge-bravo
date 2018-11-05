@@ -2,7 +2,7 @@ const redis     = require("redis");
 
 class Redis {
     constructor(){
-        this.client = redis.createClient()
+        this.client = redis.createClient(process.env.REDIS_HOST)
         this.client.on("error", function (err) {
             console.log("Error " + err);
         });

@@ -1,3 +1,5 @@
+const config = require('config')
+
 const Redis = require('./services/redis')
 const Currency = require('./services/currency')
 
@@ -7,7 +9,7 @@ const CACHE     = new Redis()
 startRoutine()
 
 function startRoutine(){
-    // setTimeout(()=>{
+    setInterval(()=>{
         CURRENCY.getCurrencyFromOpenExchangesRates().then(async (receivedValues)=>{
             if(CURRENCY.isCurrencyValuesChanged(receivedValues.rates)){
                 
@@ -21,14 +23,14 @@ function startRoutine(){
                         console.log(error)
                     }
                 }
-
+                console.log("Cache atualizado com sucesso!")
             } else {
-                console.log(`Sem modificação de valores, buscando novamente em: ${config.minutesRefreshCurrencies}`)
+                console.log(`Sem modificação de valores, buscando novamente em: ${config.minutesRefreshCurrencies} segundos`)
             }
         }).catch((e)=>{
             console.log(e)
         })
-    // }, config.minutesRefreshCurrencies)
+    }, config.secondsRefreshCurrencies * 1000)
 }
 
 
