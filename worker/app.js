@@ -9,7 +9,7 @@ const CACHE     = new Redis()
 startRoutine()
 
 function startRoutine(){
-    setInterval(()=>{
+    // setInterval(()=>{
         CURRENCY.getCurrencyFromOpenExchangesRates().then(async (receivedValues)=>{
             if(CURRENCY.isCurrencyValuesChanged(receivedValues.rates)){
                 
@@ -31,7 +31,7 @@ function startRoutine(){
         }).catch((e)=>{
             console.log(e)
         })
-    }, config.secondsRefreshCurrencies * 1000)
+    // }, config.secondsRefreshCurrencies * 1000)
 }
 
 

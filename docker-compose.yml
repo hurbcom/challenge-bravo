@@ -29,4 +29,4 @@ services:
     networks:
       - cache
     ports:
-      - "3000:3000"
+      - "3000:8080"
