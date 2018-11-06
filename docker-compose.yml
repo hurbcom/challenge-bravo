@@ -20,7 +20,6 @@ services:
   api:
     build: ./api
     container_name: api
-    env_file: .env_api
     depends_on:
       - redis
       - worker
@@ -28,5 +27,8 @@ services:
       - redis
     networks:
       - cache
+    environment:
+      - PORT=3000
+      - REDIS_HOST=redis://cache
     ports:
-      - "3000:8080"
+      - "3000:80"
