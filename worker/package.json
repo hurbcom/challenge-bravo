@@ -1,22 +1,21 @@
 {
-    "name": "worker-currency",
-    "version": "1.0.0",
-    "description": "Responsável por buscar as cotações da openexchanges e salvar dados em cache",
-    "main": "app.js",
-    "dependencies": {
-      "config": "^2.0.1",
-      "redis": "^2.8.0",
-      "request": "^2.88.0"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/EmanoelFaria/challenge-bravo.git"
-    },
-    "author": "Emanoel Faria <emanoel-faria@hotmail.com>",
-    "license": "ISC",
-    "bugs": {
-      "url": "https://github.com/EmanoelFaria/challenge-bravo/issues"
-    },
-    "homepage": "https://github.com/EmanoelFaria/challenge-bravo#readme"
-  }
-  
+  "name": "worker-currency",
+  "version": "1.0.0",
+  "description": "Responsável por buscar as cotações da openexchanges e salvar dados em cache",
+  "main": "app.js",
+  "dependencies": {
+    "config": "^2.0.1",
+    "redis": "^2.8.0",
+    "request": "^2.88.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmanoelFaria/challenge-bravo.git"
+  },
+  "author": "Emanoel Faria <emanoel-faria@hotmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EmanoelFaria/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/EmanoelFaria/challenge-bravo#readme"
+}
