@@ -127,7 +127,7 @@ async function getLastCurrencies(){
     }
     console.log("Currencies atualizadas com sucesso!")
 
-    setTimeout(()=> this.getLastCurrencies(), config.currencies_cache_time_minutes * 60 * 1000)
+    setTimeout(()=> getLastCurrencies(), config.currencies_cache_time_minutes * 60 * 1000)
 }
 
 getLastCurrencies()
