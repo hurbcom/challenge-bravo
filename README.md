@@ -32,9 +32,9 @@ Response
 	
 
 ## Arquitetura
-![arquitetura](http://i66.tinypic.com/2lia63o.jpg)
+![arquitetura](imgs/arquitetura.jpg)
 
- 
+![arquitetura_autoscaling](imgs/arquitetura_as.jpg)
 
  **Worker**
 Responsável por buscar os dados da Open Exchange Rates e salva-los no Redis. Uma vez atualizado os valores ele só irá buscar novamente os valores das cotações na API da OEX quando se passar o tempo de update baseado em minutos que são parametrizáveis no arquivo de configuração da aplicação. Assim, mantemos uma base integra, robusta e atualizada de dados da OEX disponíveis para nossa API consultar sempre que sua rotina ordenar ou quando a estrutura escalar, evitando assim buscas excessivas na API da OEX.
