@@ -1,5 +1,5 @@
 config:
-  target: 'http://127.0.0.1:3000/converter'
+  target: 'http://127.0.0.1:4000/converter'
   phases:
     - duration: 1
       arrivalRate: 1000

@@ -20,8 +20,12 @@ services:
     environment:
       - REDIS_HOST=redis://cache
   api:
+    hostname: api
     container_name: api
-    build: ./api
+    build: 
+      context: ./api
+      args:
+        - appname=api
     depends_on:
       - redis
       - worker
@@ -34,3 +38,15 @@ services:
     environment:
       - PORT=3000
       - REDIS_HOST=redis://cache
+  nginx:
+      image: nginx
+      hostname: nginx
+      depends_on:
+        - api
+        - worker
+      ports:
+        - "4000:4000"
+      volumes:
+        - "./nginx/default.conf:/etc/nginx/conf.d/default.conf"
+      networks:
+      - cache
