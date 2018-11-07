@@ -32,7 +32,8 @@ Response
 	
 
 ## Arquitetura
-![arquitetura](imgs/arquitetura.jpg)
+
+![arquitetura](imgs/arquitetura1.jpg)
 
 ![arquitetura_autoscaling](imgs/arquitetura_as.jpg)
 
