@@ -1,5 +1,5 @@
 const express           = require('express');
-const converterRouter   = require('./routes/converter')
+const { converterRouter }   = require('./routes/converter')
 const app               = express();
 
 //TODO: Adicionar tratamentos de erros genericos

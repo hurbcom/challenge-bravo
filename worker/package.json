@@ -5,8 +5,8 @@
   "main": "app.js",
   "dependencies": {
     "config": "^2.0.1",
-    "redis": "^2.8.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "redis": "^2.8.0"
   },
   "repository": {
     "type": "git",

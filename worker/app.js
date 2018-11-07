@@ -1,6 +1,6 @@
 const config = require('config')
 
-const Redis = require('./services/redis')
+const Redis = require('./services/cache')
 const Currency = require('./services/currency')
 
 const CURRENCY  = new Currency()
@@ -14,7 +14,9 @@ function startRoutine(){
             if(CURRENCY.isCurrencyValuesChanged(receivedValues.rates)){
                 
                 CURRENCY.updateCurrencyValues(receivedValues.rates)
+
                 let currencyKeys = Object.keys(CURRENCY.values)
+
                 for(let key of currencyKeys){
                     try {
                         let key_value = CURRENCY.values[key]
@@ -23,6 +25,7 @@ function startRoutine(){
                         console.log(error)
                     }
                 }
+                
                 console.log("Cache atualizado com sucesso!")
             } else {
                 console.log(receivedValues.rates)

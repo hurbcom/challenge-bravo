@@ -1,9 +1,9 @@
 let Cache = require('./cache')
 
 class Converter {
-    //TODO: criar testes de unidade
+
     constructor(){
-        this.cache = new Cache()
+        
     }
 
     /**
@@ -12,9 +12,8 @@ class Converter {
      * @param {string} currency_value value of the currency you want to convert to dollars
      * @returns number value converted into dollars
      */
-    convertCurrencyToUSD(currency,currency_value){
-        let values = this.cache.values
-        return currency_value / values[currency] 
+    convertCurrencyToUSD(currency_key,currency_value,currencies){
+        return currency_value / currencies[currency_key] 
     }
 
     //TODO: melhorar descricoes
@@ -24,9 +23,8 @@ class Converter {
      * @param {string} dolar_value 
      * @returns {float}
      */
-    convertUSDToCurrency(currency,dolar_value){
-        let values = this.cache.values
-        return dolar_value * values[currency]
+    convertUSDToCurrency(currency_key,dolar_value,currencies){
+        return dolar_value * currencies[currency_key]
     }
 
     /**
@@ -36,32 +34,10 @@ class Converter {
      * @param {string} value
      * @returns {float} 
      */
-    convertfromToCurrency(from,to,value){
-        let usd = this.convertCurrencyToUSD(from,value)
-        let result = this.convertUSDToCurrency(to,usd)
+    convertfromToCurrency(from,to,value,currencies){
+        let usd = this.convertCurrencyToUSD(from,value,currencies)
+        let result = this.convertUSDToCurrency(to,usd,currencies)
         return result
-    }
-
-    /** 
-     * @description getAvailableCurrencies returns what currencies are available
-     * @returns {string}
-    */
-    getAvailableCurrencies(){
-       let values = this.cache.values
-       let currencies = Object.keys(values)
-       return currencies
-    }
-    
-    /** 
-     * @description isConvertionAvailable Check if currencies already exist for conversions
-     * @returns {boolean}
-    */
-    isConvertionAvailable(){
-        if(JSON.stringify(this.cache.values) != JSON.stringify({})) {
-            return true
-        } else {
-            return false
-        }
     }
 
 }

@@ -6,8 +6,8 @@
   "dependencies": {
     "config": "^2.0.1",
     "express": "^4.16.4",
-    "redis": "^2.8.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "redis": "^2.8.0"
   },
   "repository": {
     "type": "git",

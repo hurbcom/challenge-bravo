@@ -1,4 +1,3 @@
-const API_KEY       = process.env.API_KEY
 const request       = require('request')
 const config        = require('config');
 
@@ -11,7 +10,8 @@ class Currency {
     getCurrencyFromOpenExchangesRates(){
         return new Promise((resolve,reject)=>{
             let currencies = config.currencies.toString();
-            let URL = `${config.openexchangerates.api_url}?app_id=${API_KEY}&show_alternative=true&symbols=${currencies}`
+            console.log("Buscando: ",currencies)
+            let URL = `${config.openexchangerates.api_url}?app_id=${process.env.API_KEY_OEX}&show_alternative=true&symbols=${currencies}`
             
             request(URL, (error, response, body) => {        
                 if(error) {
