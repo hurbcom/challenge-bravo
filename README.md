@@ -56,8 +56,13 @@ Exemplo de resposta:
 	}
 	
 
+<<<<<<< HEAD
 # Arquitetura
 Modelo 1
+=======
+## Arquitetura
+
+>>>>>>> 523041cf0265798e148d1e043edbafbf929ff186
 ![arquitetura](imgs/arquitetura1.jpg)
 
 Modelo 2 com autoscaling e loadbalancer
