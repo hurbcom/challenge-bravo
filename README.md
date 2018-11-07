@@ -56,13 +56,8 @@ Exemplo de resposta:
 	}
 	
 
-<<<<<<< HEAD
 # Arquitetura
 Modelo 1
-=======
-## Arquitetura
-
->>>>>>> 523041cf0265798e148d1e043edbafbf929ff186
 ![arquitetura](imgs/arquitetura1.jpg)
 
 Modelo 2 com autoscaling e loadbalancer
@@ -84,7 +79,7 @@ Como este não é um processo que precisa se escalado baseado na quantidade de r
 
 Para criar uma solução que possa ser escalada futuramente, foi utilizando o Redis como banco de dados Cache de nossas cotações. Assim garantimos que com o aumento de número de usuários/requisições teremos uma base sólida para disponibilizar os dados sempre atualizados, sem ter que fazer requisições diretamente API da Open Exchange sempre que consultarem nosso serviço. 
 
-**API**
+### LoadBalancer
 
 A api foi desenvolvida pensando em atender no mínimo 1000 requisições por nó, podendo ser escalada quando necessário. 
 
