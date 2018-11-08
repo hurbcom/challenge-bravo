@@ -41,10 +41,12 @@ O serviço de conversão é feito por um request do tipo `GET` no path `/convert
 | to | moeda destino da conversão |
 
 
-Exemplo de requisição - GET Request:
+Exemplo de requisição - *GET* 
+
 ```
-http://localhost:3000/converter?from=BRL&to=ETH&amount=10
+http://localhost:4000/converter?from=BRL&to=ETH&amount=10
 ```
+
 Exemplo de resposta:
 
     
@@ -57,12 +59,11 @@ Exemplo de resposta:
 	
 
 # Arquitetura
-Modelo 1
+### Modelo 1
 ![arquitetura](imgs/arquitetura1.jpg)
 
-Modelo 2 com autoscaling e loadbalancer
+### Modelo 2
 ![arquitetura_autoscaling](imgs/arquitetura_as.jpg)
-
 
 A arquitetura escolhida para solução do challenge foi a primeira, mas também está pronta para atender o segundo modelo.
 
@@ -75,12 +76,10 @@ Ele tem uma rotina de atualização baseada em tempo(minutos), que pode ser alte
 
 Como este não é um processo que precisa se escalado baseado na quantidade de requisições/usuários, é aconselhavel que se tenha pelo menos 2 processos do worker rodando para garantir a disponibilidade dos dados sempre atualizados para nossa API, mesmo que um dos processos sofra falha. (conforme o Modelo 2).
 
-### Redis
-
+#### Redis
 Para criar uma solução que possa ser escalada futuramente, foi utilizando o Redis como banco de dados Cache de nossas cotações. Assim garantimos que com o aumento de número de usuários/requisições teremos uma base sólida para disponibilizar os dados sempre atualizados, sem ter que fazer requisições diretamente API da Open Exchange sempre que consultarem nosso serviço. 
 
-### LoadBalancer
-
+#### API
 A api foi desenvolvida pensando em atender no mínimo 1000 requisições por nó, podendo ser escalada quando necessário. 
 
 Ela também tem uma rotina de atualização de dados, só que diferente do worker não consulta diretamente a API da Open Exchanges e sim o REDIS. 
@@ -88,13 +87,40 @@ Ela também tem uma rotina de atualização de dados, só que diferente do worke
 Para garantir a velocidade de resposta das requisições ela guarda em memória o valor das ultimas cotações, assim ela também não precisa consultar o REDIS sempre que uma nova consulta é feita.
 
 
- 
+#### Nginx - Load Balancer 
 
-Como Load Balancer podemos utilizar serviços como [*AWS Elastic Load Balancer*](https://aws.amazon.com/pt/elasticloadbalancing/), [*Nginx*](https://www.nginx.com/) ou [*Swarm*](https://docs.docker.com/engine/swarm/)
+Escolhi utilizar o [*Nginx*](https://www.nginx.com/) como Load Balancer pois é uma solução gratuita ja validada que atenderia muito bem a aplicação. Apesar disso poderiamos utilizar aplicações de terceiros como [*AWS Elastic Load Balancer*](https://aws.amazon.com/pt/elasticloadbalancing/) ou o prório [*Swarm*](https://docs.docker.com/engine/swarm/) do Docker.
 
-Responsável por disponibilizar rota convert para conversão entre cotações
-A estrutura é responsável por buscar as ultimas cotações salvas no redis, guarda as mesmas na memória para não precisar consultar o redis a cada request feito a ela. Apesar disso tem uma rotina de atulização de dados em memoria baseada em minutos que são parametrizáveis.
+# Testes
 
-**Load Balancer & Servidor Escalável**
-A solução desenvolvida está preparada para ser escalada. Podendo utilizar tanto serviços como AutoScaling e LoadBalancer da AWS e/ou o Swarm do próprio docker.
+## Teste de unidade e integração
+
+Para rodar os testes basta excutar o seguinte comando:
+	
+	$ npm test
+
+
+## Teste de Stress
+
+Foi executado também um teste de stress, utilizando duas ferramentas diferentes, [*Artillery*](https://artillery.io/) e o [*LoadTest*](https://www.npmjs.com/package/loadtest)
+
+### LoadTest
+Para rodar o teste de stress com o LoadTest basta executar os seguintes comandos:
+
+	$ sudo npm install -g loadtest
+	$ loadtest -n 1000 -c 100 --rps 100 http://localhost:4000/converter?from=BRL&to=ETH&amount=10
+
+Resultados obtidos no teste acima:
+
+### Artillery
+Para rodar o teste de stress com o Artillery foi criado um script chamado load_test.yml, que é executado com os seguintes comandos:
+
+	$ npm install -g artillery
+	$ artillery run load_test.yml
+
+Resultados obtidos no teste acima:
+
+
+
+
 
