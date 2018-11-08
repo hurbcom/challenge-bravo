@@ -111,6 +111,7 @@ Para rodar o teste de stress com o LoadTest basta executar os seguintes comandos
 	$ loadtest -n 1000 -c 100 --rps 100 http://localhost:4000/converter?from=BRL&to=ETH&amount=10
 
 Resultados obtidos no teste acima:
+![loadtest](imgs/loadtest.jpg)
 
 ### Artillery
 Para rodar o teste de stress com o Artillery foi criado um script chamado load_test.yml, que é executado com os seguintes comandos:
@@ -119,7 +120,7 @@ Para rodar o teste de stress com o Artillery foi criado um script chamado load_t
 	$ artillery run load_test.yml
 
 Resultados obtidos no teste acima:
-
+![artillery](imgs/artillery.jpg)
 
 
 
