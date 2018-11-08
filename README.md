@@ -91,18 +91,17 @@ Para garantir a velocidade de resposta das requisições ela guarda em memória 
 
 Escolhi utilizar o [*Nginx*](https://www.nginx.com/) como Load Balancer pois é uma solução gratuita ja validada que atenderia muito bem a aplicação. Apesar disso poderiamos utilizar aplicações de terceiros como [*AWS Elastic Load Balancer*](https://aws.amazon.com/pt/elasticloadbalancing/) ou o prório [*Swarm*](https://docs.docker.com/engine/swarm/) do Docker.
 
-# Testes
 
-## Teste de unidade e integração
+# Teste de unidade e integração
 
 Para rodar os testes basta excutar o seguinte comando:
 	
 	$ npm test
 
 
-## Teste de Stress
+# Teste de Stress
 
-Foi executado também um teste de stress, utilizando duas ferramentas diferentes, [*Artillery*](https://artillery.io/) e o [*LoadTest*](https://www.npmjs.com/package/loadtest)
+Foi executado também um teste de stress, utilizando duas ferramentas diferentes, [*Artillery*](https://artillery.io/) e o [*LoadTest*](https://www.npmjs.com/package/loadtest). Ambos foram executados em uma EC2 da AWS do tipo `C4.4xlarge`
 
 ### LoadTest
 Para rodar o teste de stress com o LoadTest basta executar os seguintes comandos:
@@ -110,7 +109,7 @@ Para rodar o teste de stress com o LoadTest basta executar os seguintes comandos
 	$ sudo npm install -g loadtest
 	$ loadtest -n 1000 -c 100 --rps 100 http://localhost:4000/converter?from=BRL&to=ETH&amount=10
 
-Resultados obtidos no teste acima:
+#### Resultados:
 ![loadtest](imgs/loadtest.jpg)
 
 ### Artillery
@@ -119,8 +118,10 @@ Para rodar o teste de stress com o Artillery foi criado um script chamado load_t
 	$ npm install -g artillery
 	$ artillery run load_test.yml
 
-Resultados obtidos no teste acima:
+#### Resultados
+
 ![artillery](imgs/artillery.jpg)
+
 
 
 
