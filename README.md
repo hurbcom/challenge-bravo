@@ -1,6 +1,6 @@
 # Bem vindo - Solução Challenge Bravo
 
-Segue a aplicação para resolver o [Challenge Bravo](https://github.com/hurbcom/challenge-bravo) desenvolvida com [Node.js](nodejs.org) utilizando a **API** de cotações da [Open Exchange Rates](https://openexchangerates.org).
+Segue a aplicação para resolver o [Challenge Bravo](https://github.com/hurbcom/challenge-bravo) desenvolvida com [Node.js](nodejs.org) utilizando a API de cotações da [Open Exchange Rates](https://openexchangerates.org).
 
 ## Requisitos
 
@@ -16,7 +16,7 @@ Para iniciar o projeto basta clonar o repositório e mover até a branch develop
     $ cd challenge-bravo/
 	$ git checkout develop
 
-Crie um arquivo chamado .env na raiz do projeto e adicione a chave da API da Open Exchanges Rates.
+Crie um arquivo chamado `.env` na raiz do projeto e adicione a chave da API da Open Exchanges Rates.
 	
 	API_KEY_OEX=<sua chave aqui, apenas numeros>
 
@@ -77,7 +77,7 @@ Ele tem uma rotina de atualização baseada em tempo(minutos), que pode ser alte
 Como este não é um processo que precisa se escalado baseado na quantidade de requisições/usuários, é aconselhavel que se tenha pelo menos 2 processos do worker rodando para garantir a disponibilidade dos dados sempre atualizados para nossa API, mesmo que um dos processos sofra falha. (conforme o Modelo 2).
 
 #### Redis
-Para criar uma solução que possa ser escalada futuramente, foi utilizando o Redis como banco de dados Cache de nossas cotações. Assim garantimos que com o aumento de número de usuários/requisições teremos uma base sólida para disponibilizar os dados sempre atualizados, sem ter que fazer requisições diretamente API da Open Exchange sempre que consultarem nosso serviço. 
+Para criar uma solução que possa ser escalada futuramente, foi utilizando o Redis como banco de dados e servidor cache de nossas cotações. Assim garantimos que com o aumento do número de usuários/requisições teremos uma base sólida para disponibilizar os dados sempre atualizados, sem ter que fazer requisições diretamente API da Open Exchange sempre que consultarem nosso serviço. 
 
 #### API
 A api foi desenvolvida pensando em atender no mínimo 1000 requisições por nó, podendo ser escalada quando necessário. 

@@ -3,5 +3,5 @@
         "api_url": "https://openexchangerates.org/api/latest.json"
     },
     "currencies": ["USD","BRL","EUR","BTC","ETH"],
-    "secondsRefreshCurrencies": 5
+    "currencies_cache_time_minutes":30
 }

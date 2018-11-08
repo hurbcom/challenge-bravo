@@ -7,6 +7,10 @@ class Currency {
         this.values = {}
     }
 
+    /**
+     * @description getCurrencyFromOpenExchangesRates is responsible for directly searching the Open Exchanges Rates API for the quotes entered in the application configuration files.
+     * @returns {Object}
+     */
     getCurrencyFromOpenExchangesRates(){
         return new Promise((resolve,reject)=>{
             let currencies = config.currencies.toString();
@@ -28,11 +32,19 @@ class Currency {
         })
     }
 
+    /**
+     * @description isCurrencyValuesChanged is responsible for checking whether the received quote object is different from the object of quotations in memory
+     * @param {Object} currencies - currencies object, probably received by the getCurrencyFromOpenExchangesRates
+     */
     isCurrencyValuesChanged(currencies){
         if(JSON.stringify(this.values) == JSON.stringify(currencies)) return false
         else return true
     }
 
+    /**
+     * @description updateCurrencyValues is responsible for updating the quotations data in memory with the data received by parameter
+     * @param {Object} newValues - currencies object, probably received by the getCurrencyFromOpenExchangesRates
+     */
     updateCurrencyValues(newValues){
         this.values = newValues
     }

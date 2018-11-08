@@ -115,8 +115,7 @@ function getAvailableCurrencies(){
  * @description getLastCurrencies refresh at configured time currencies values in our cache
  */
 async function getLastCurrencies(){
-    //TODO: colocar moedas em variavel de ambiente
-    // let currencies = ["USD","BRL","EUR","BTC","ETH"]
+
     let currencies = config.currencies
     for(let c of currencies){
        try {

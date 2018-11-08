@@ -2,7 +2,6 @@
 const redis     = require("redis");
 class Cache {
 
-    //TODO: criar testes de unidade
     constructor(cb){
         this.redisClient = redis.createClient(process.env.REDIS_HOST)
 
@@ -18,6 +17,11 @@ class Cache {
         
     }
 
+    /**
+     * @description setKey is responsible for saving to the Redis database a key and value associated with it specified in the parameters
+     * @param {String} key - Name of key 
+     * @param {Object} value - Value of Key
+     */
     setKey(key,value){
         return new Promise((resolve,reject)=>{
             this.redisClient.set(key, value, (err,r)=>{
@@ -30,6 +34,11 @@ class Cache {
         })
     }
 
+    /**
+     * @description getKey is responsible for searching the Redis database for the value of the key specified in the parameters
+     * @param {String} key - Name of the key you want to redeem
+     * @returns {Object} 
+     */
     getKey(key){
         return new Promise((resolve,reject)=>{
             this.redisClient.get(key, function(err,r){

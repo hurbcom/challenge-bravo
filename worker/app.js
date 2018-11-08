@@ -1,15 +1,16 @@
-const config = require('config')
-
-const Redis = require('./services/cache')
-const Currency = require('./services/currency')
-
+const config    = require('config')
+const Redis     = require('./services/cache')
+const Currency  = require('./services/currency')
 const CURRENCY  = new Currency()
 const CACHE     = new Redis()
 
-startRoutine()
+startUpdateRoutine()
 
-function startRoutine(){
-    // setInterval(()=>{
+/**
+ * @description getCurrenciesAndUpdateCache é responsável por buscar os dados da API Open Exchanges Rates e
+ * atualizar o banco de dados Redis.
+ */
+function getCurrenciesAndUpdateCache(){
         CURRENCY.getCurrencyFromOpenExchangesRates().then(async (receivedValues)=>{
             if(CURRENCY.isCurrencyValuesChanged(receivedValues.rates)){
                 
@@ -34,7 +35,15 @@ function startRoutine(){
         }).catch((e)=>{
             console.log(e)
         })
-    // }, config.secondsRefreshCurrencies * 1000)
+}
+
+/**
+ * @description startUpdateRoutine é responsável pela primeira inicialização dos dados da API OEX
+ * e criar uma rotina de atulização baseada no tempo definido no arquivo de configuração.
+ */
+function startUpdateRoutine(){   
+    getCurrenciesAndUpdateCache()
+    setInterval(()=> getCurrenciesAndUpdateCache(), config.currencies_cache_time_minutes * 60 * 1000)
 }
 
 
