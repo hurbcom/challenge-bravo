@@ -101,7 +101,7 @@ Para rodar os testes basta excutar o seguinte comando:
 
 # Teste de Stress
 
-Foi executado também um teste de stress, utilizando duas ferramentas diferentes, [*Artillery*](https://artillery.io/) e o [*LoadTest*](https://www.npmjs.com/package/loadtest). Ambos foram executados em uma EC2 da AWS do tipo `C4.4xlarge`
+Foi executado também um teste de stress, utilizando o [*LoadTest*](https://www.npmjs.com/package/loadtest). executado em uma EC2 da AWS do tipo `C4.4xlarge`
 
 ### LoadTest
 Para rodar o teste de stress com o LoadTest basta executar os seguintes comandos:

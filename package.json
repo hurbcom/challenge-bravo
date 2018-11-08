@@ -1,19 +1,22 @@
 {
-    "name": "challenge-bravo",
-    "version": "1.0.0",
-    "description": "Projeto responsável por disponibilizar uma api para conversão de valores entre moedas",
-    "scripts": {
-        "start":" node ./worker/app.js && node./api/app.js"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/EmanoelFaria/challenge-bravo.git"
-    },
-    "author": "Emanoel Faria <emanoel-faria@hotmail.com>",
-    "license": "ISC",
-    "bugs": {
-      "url": "https://github.com/EmanoelFaria/challenge-bravo/issues"
-    },
-    "homepage": "https://github.com/EmanoelFaria/challenge-bravo#readme"
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Projeto responsável por disponibilizar uma api para conversão de valores entre moedas",
+  "scripts": {
+    "start": " node ./worker/app.js && node./api/app.js",
+    "test": "node ./node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmanoelFaria/challenge-bravo.git"
+  },
+  "author": "Emanoel Faria <emanoel-faria@hotmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EmanoelFaria/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/EmanoelFaria/challenge-bravo#readme",
+  "dependencies": {
+    "mocha": "^5.2.0"
   }
-  
+}
