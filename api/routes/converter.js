@@ -94,7 +94,7 @@ function isValidCurrency(from,to){
  * @returns {boolean}
  * */
 function isConvertionAvailable(){
-    if(JSON.stringify(cache.values) != JSON.stringify({})) {
+    if(JSON.stringify(cache.values) != "{}") {
         return true
     } else {
         return false

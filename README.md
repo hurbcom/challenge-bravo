@@ -112,16 +112,6 @@ Para rodar o teste de stress com o LoadTest basta executar os seguintes comandos
 #### Resultados:
 ![loadtest](imgs/loadtest.jpg)
 
-### Artillery
-Para rodar o teste de stress com o Artillery foi criado um script chamado load_test.yml, que é executado com os seguintes comandos:
-
-	$ npm install -g artillery
-	$ artillery run load_test.yml
-
-#### Resultados
-
-![artillery](imgs/artillery.jpg)
-
 
 
 
