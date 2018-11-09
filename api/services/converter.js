@@ -1,5 +1,3 @@
-let Cache = require('./cache')
-
 class Converter {
 
     constructor(){
@@ -13,7 +11,7 @@ class Converter {
      * @returns number value converted into dollars
      */
     convertCurrencyToUSD(currency_key,currency_value,currencies){
-        return (currency_value / currencies[currency_key]).toFixed(1) 
+        return (currency_value / currencies[currency_key]).toFixed(3) 
     }
 
     /**
@@ -23,7 +21,7 @@ class Converter {
      * @returns {float}
      */
     convertUSDToCurrency(currency_key,dolar_value,currencies){
-        return (dolar_value * currencies[currency_key]).toFixed(1)
+        return (dolar_value * currencies[currency_key]).toFixed(3)
     }
 
     /**

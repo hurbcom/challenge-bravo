@@ -1,10 +1,10 @@
-const express           = require('express');
 const config            = require('config')
-const router            = express.Router();
+const express           = require('express');
 const ConverterClass    = require('../services/converter')
 const CacheClass        = require('../services/cache')
 const converter         = new ConverterClass()
 const cache             = new CacheClass();
+const router            = express.Router();
 
 router.get('/', function(req, res, next) {
     
@@ -128,12 +128,4 @@ async function getLastCurrencies(){
 getLastCurrencies()
 
 
-module.exports = {
-        converterRouter:router,
-        hasConversionFields,
-        isValidNumber,
-        isValidCurrency,
-        isConvertionAvailable,
-        getAvailableCurrencies,
-        getLastCurrencies
-    };
+module.exports = router

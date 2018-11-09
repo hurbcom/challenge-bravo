@@ -92,16 +92,18 @@ Para garantir a velocidade de resposta das requisições ela guarda em memória 
 Escolhi utilizar o [*Nginx*](https://www.nginx.com/) como Load Balancer pois é uma solução gratuita ja validada que atenderia muito bem a aplicação. Apesar disso poderiamos utilizar aplicações de terceiros como [*AWS Elastic Load Balancer*](https://aws.amazon.com/pt/elasticloadbalancing/) ou o prório [*Swarm*](https://docs.docker.com/engine/swarm/) do Docker.
 
 
-# Teste de unidade e integração
+# Testes de unidade
 
 Para rodar os testes basta excutar o seguinte comando:
 	
+	$ cd <raiz do projeto>
+	$ npm install
 	$ npm test
 
 
 # Teste de Stress
 
-Foi executado também um teste de stress, utilizando o [*LoadTest*](https://www.npmjs.com/package/loadtest). executado em uma EC2 da AWS do tipo `C4.4xlarge`
+Foi executado um teste de stress, utilizando o [*LoadTest*](https://www.npmjs.com/package/loadtest) em uma EC2 da AWS do tipo `C4.4xlarge`
 
 ### LoadTest
 Para rodar o teste de stress com o LoadTest basta executar os seguintes comandos:

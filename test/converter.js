@@ -16,8 +16,8 @@ describe('API Service Converter', function() {
         const conversions = [
             { key: 'BRL', value: 10, converted:2.5},
             { key: 'BTC', value: 10, converted:50},
-            { key: 'ETH', value: 10, converted:14.3},
-            { key: 'EUR', value: 10, converted:6.7},
+            { key: 'ETH', value: 10, converted:14.286},
+            { key: 'EUR', value: 10, converted:6.667},
             { key: 'USD', value: 10, converted:10},
         ]
 
@@ -43,7 +43,7 @@ describe('API Service Converter', function() {
     describe('convertfromToCurrency', function() {
         const conversions = [
             { from: 'BRL', to:"USD", value: 10, converted:2.5},
-            { from: 'EUR', to:"BTC", value: 10, converted:1.3},
+            { from: 'EUR', to:"BTC", value: 10, converted:1.333},
             { from: 'ETH', to:"ETH", value: 10, converted:10.0},
             { from: 'BTC', to:"EUR", value: 10, converted:75.0},
             { from: 'USD', to:"USD", value: 10, converted:10},
