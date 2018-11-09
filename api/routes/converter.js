@@ -93,8 +93,8 @@ function isValidCurrency(from,to){
  * @description isConvertionAvailable Check if any currencies already exists in out cache for some conversions
  * @returns {boolean}
  * */
-function isConvertionAvailable(){
-    return (JSON.stringify(cache.values) != "{}") 
+function isConvertionAvailable(){    
+    return Object.keys(cache.values).length > 0
 }
 
 /** 
