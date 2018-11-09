@@ -94,7 +94,7 @@ Escolhi utilizar o [*Nginx*](https://www.nginx.com/) como Load Balancer pois é 
 
 # Testes de unidade
 
-Para rodar os testes basta excutar o seguinte comando:
+Para rodar os testes basta excutar os seguintes comandos:
 	
 	$ cd <raiz do projeto>
 	$ npm install
@@ -103,18 +103,20 @@ Para rodar os testes basta excutar o seguinte comando:
 
 # Teste de Stress
 
-Foi executado um teste de stress, utilizando o [*LoadTest*](https://www.npmjs.com/package/loadtest) em uma EC2 da AWS do tipo `C4.4xlarge`
+Utilizei o [*LoadTest*](https://www.npmjs.com/package/loadtest) para executar os testes. Eles foram feitos em uma EC2 da AWS do tipo `C4.4xlarge` para garantir que não sofreriam influência de outros processos.
 
 ### LoadTest
 Para rodar o teste de stress com o LoadTest basta executar os seguintes comandos:
 
 	$ sudo npm install -g loadtest
-	$ loadtest -n 1000 -c 100 --rps 100 http://localhost:4000/converter?from=BRL&to=ETH&amount=10
+	$ loadtest -n 5000 -c 100 --rps 100 http://localhost:4000/converter?from=BRL&to=ETH&amount=10
 
 #### Resultados:
 ![loadtest](imgs/loadtest.jpg)
 
 
+# Observações:
 
+1. Para manter o código simples optei por duplicar o código *cache.js* pois ficaria mais simples para revisão e não precisaria consultar nenhum outro repositório ou modulo fora do projeto.
 
 
