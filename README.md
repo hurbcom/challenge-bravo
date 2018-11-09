@@ -109,7 +109,7 @@ Utilizei o [*LoadTest*](https://www.npmjs.com/package/loadtest) para executar os
 Para rodar o teste de stress com o LoadTest basta executar os seguintes comandos:
 
 	$ sudo npm install -g loadtest
-	$ loadtest -n 5000 -c 100 --rps 100 http://localhost:4000/converter?from=BRL&to=ETH&amount=10
+	$ loadtest -n 5000 -c 100 --rps 5000 http://localhost:4000/converter?from=BRL&to=ETH&amount=10
 
 #### Resultados:
 ![loadtest](imgs/loadtest.jpg)
