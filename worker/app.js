@@ -30,7 +30,7 @@ function getCurrenciesAndUpdateCache(){
                 console.log("Cache atualizado com sucesso!")
             } else {
                 console.log(receivedValues.rates)
-                console.log(`Sem modificação de valores, buscando novamente em: ${config.secondsRefreshCurrencies} segundos`)
+                console.log(`Sem modificação de valores, buscando novamente em: ${config.currencies_cache_time_minutes} minutos`)
             }
         }).catch((e)=>{
             console.log(e)

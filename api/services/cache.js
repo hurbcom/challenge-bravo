@@ -2,17 +2,17 @@
 const redis     = require("redis");
 class Cache {
 
-    constructor(cb){
+    constructor(){
         this.redisClient = redis.createClient(process.env.REDIS_HOST)
 
         this.redisClient.on("error", (e) => {
             console.log("Error " + e);
         });
-
+    
         this.redisClient.on("ready",()=>{
             console.log("Redis ready")
         });
-
+        
         this.values = {}
         
     }

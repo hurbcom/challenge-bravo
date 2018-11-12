@@ -1,9 +1,8 @@
 const config            = require('config')
 const express           = require('express');
-const ConverterClass    = require('../services/converter')
-const CacheClass        = require('../services/cache')
-const converter         = new ConverterClass()
-const cache             = new CacheClass();
+const Converter         = require('../services/converter')
+const Cache             = require('../services/cache')
+const cache             = new Cache();
 const router            = express.Router();
 
 router.get('/', function(req, res, next) {
@@ -35,7 +34,7 @@ router.get('/', function(req, res, next) {
     let amount = req.query.amount
     let currencies = cache.values
     
-    let result = converter.convertfromToCurrency(from,to,amount,currencies)
+    let result = Converter.convertfromToCurrency(from,to,amount,currencies)
 
     if(!result) {
         res.status(500).send({error:"There was an error while trying to convert. Try again"})
@@ -93,7 +92,7 @@ function isValidCurrency(from,to){
  * @description isConvertionAvailable Check if any currencies already exists in out cache for some conversions
  * @returns {boolean}
  * */
-function isConvertionAvailable(){    
+function isConvertionAvailable(){  
     return Object.keys(cache.values).length > 0
 }
 
@@ -111,14 +110,14 @@ function getAvailableCurrencies(){
  * @description getLastCurrencies refresh at configured time currencies values in our cache
  */
 async function getLastCurrencies(){
-
+    
     let currencies = config.currencies
     for(let c of currencies){
-       try {
+        try {
             cache.values[c] = await cache.getKey(c)
-       } catch (error) {    
-           console.log(error)
-       }
+        } catch (error) {    
+            console.log(error)
+        }
     }
     console.log("Currencies atualizadas com sucesso!")
 

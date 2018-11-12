@@ -1,6 +1,5 @@
 const assert = require('assert');
-const converterClass = require('../api/services/converter');
-const converter = new converterClass()
+const Converter = require('../api/services/converter');
 
 const currencies = {
     "BRL": 4,
@@ -22,7 +21,7 @@ describe('API Service Converter', function() {
         ]
 
         for(let c of conversions){
-            it(c.key, () => assert.equal(converter.convertCurrencyToUSD(c.key,c.value,currencies), c.converted));
+            it(c.key, () => assert.equal(Converter.convertCurrencyToUSD(c.key,c.value,currencies), c.converted));
         }
     });
     
@@ -36,7 +35,7 @@ describe('API Service Converter', function() {
         ]
 
         for(let c of conversions){
-            it(c.key, () => assert.equal(converter.convertUSDToCurrency(c.key,c.value,currencies), c.converted));
+            it(c.key, () => assert.equal(Converter.convertUSDToCurrency(c.key,c.value,currencies), c.converted));
         }
     });
 
@@ -50,7 +49,7 @@ describe('API Service Converter', function() {
         ]
 
         for(let c of conversions){
-            it(`${c.from} -> ${c.to} `, () => assert.equal(converter.convertfromToCurrency(c.from,c.to,c.value,currencies), c.converted));
+            it(`${c.from} -> ${c.to} `, () => assert.equal(Converter.convertfromToCurrency(c.from,c.to,c.value,currencies), c.converted));
         }
     });
   

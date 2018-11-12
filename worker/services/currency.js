@@ -37,7 +37,7 @@ class Currency {
      * @param {Object} currencies - currencies object, probably received by the getCurrencyFromOpenExchangesRates
      */
     isCurrencyValuesChanged(currencies){
-        return JSON.stringify(this.values).some(key => this.values[key] != currencies[key])
+        return JSON.stringify(this.values) != JSON.stringify(currencies)
     }
 
     /**
