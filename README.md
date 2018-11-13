@@ -22,11 +22,11 @@ Crie um arquivo chamado `.env` na raiz do projeto e adicione a chave da API da O
 
 Para iniciar o serviço de conversão basta executar o seguinte comando na raiz do projeto:
 
-    $ docker-compose up -d 
+    $ sudo docker-compose up -d 
 
 Para parar o serviço basta executar o seguinte comando:
 
-	$ docker-compose down
+	$ sudo docker-compose down
 
 ### Utilizando a API 
 
