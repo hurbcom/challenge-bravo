@@ -20,7 +20,7 @@ Crie um arquivo chamado `.env` na raiz do projeto e adicione a chave da API da O
 	
 	API_KEY_OEX=<sua chave aqui, apenas numeros>
 
-Para iniciar o serviço de conversão basta executar o seguinte comando na raiz do projeto:
+Para iniciar o serviço de conversão basta executar o seguinte comando na raiz do projeto (dependendo da forma que tenha sido instalado o docker/docker-compose o comando sudo deverá ser retirado):
 
     $ sudo docker-compose up -d 
 
