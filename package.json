@@ -1,0 +1,26 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "API de conversão monetária",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test",
+    "dev" : "nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hurbcom/challenge-bravo.git"
+  },
+  "keywords": [
+    "Hurb",
+    "challenge-bravo",
+    "hotel-urbano"
+  ],
+  "author": "Cleyson Leal Braga",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hurbcom/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/hurbcom/challenge-bravo#readme"
+}
