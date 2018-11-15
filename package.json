@@ -4,8 +4,9 @@
   "description": "API de conversão monetária",
   "main": "server.js",
   "scripts": {
+    "lint": "eslint",
     "test": "npm test",
-    "dev" : "nodemon server.js",
+    "dev": "nodemon server.js",
     "start": "node server.js"
   },
   "repository": {
@@ -27,5 +28,10 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
   }
 }
