@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "lint": "eslint",
+    "stress-test": "artillery quick --count 1000 -n 10 'http://localhost:3000/api/v1/currency_quotes?from=USD&to=BRL&amount=123'",
     "test": "mocha -- ./test/**/*.js --timeout 1000",
     "dev": "nodemon server.js",
     "start": "node server.js"
@@ -25,9 +26,11 @@
   },
   "homepage": "https://github.com/hurbcom/challenge-bravo#readme",
   "dependencies": {
+    "artillery": "^1.6.0-25",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
+    "dotenv": "^6.1.0",
     "express": "^4.16.4"
   },
   "devDependencies": {
