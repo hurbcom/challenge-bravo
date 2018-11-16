@@ -6,9 +6,9 @@
   "scripts": {
     "lint": "eslint",
     "stress-test": "artillery quick --count 1000 -n 10 'http://localhost:3000/api/v1/currency_quotes?from=USD&to=BRL&amount=123'",
-    "test": "mocha -- ./test/**/*.js --timeout 1000",
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "test": "PORT=3001 mocha --exit -- ./test/**/*.js",
+    "dev": "NODE_ENV=3000 nodemon server.js",
+    "start": "NODE_ENV=3000 node server.js"
   },
   "repository": {
     "type": "git",
