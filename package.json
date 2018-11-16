@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "lint": "eslint",
-    "test": "npm test",
+    "test": "mocha -- ./test/**/*.js --timeout 1000",
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
@@ -31,8 +31,14 @@
     "express": "^4.16.4"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0"
+    "eslint-plugin-import": "^2.14.0",
+    "mocha": "^5.2.0",
+    "nock": "^10.0.2",
+    "node-mocks-http": "^1.7.3",
+    "should": "^13.2.3"
   }
 }
