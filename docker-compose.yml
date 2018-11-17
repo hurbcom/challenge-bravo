@@ -1,0 +1,19 @@
+version: '3'
+services:
+  node:
+    image: node:latest
+    container_name: node
+    volumes:
+      - .:/app
+    working_dir: /app
+    networks:
+      - challenge-bravo-network
+    command: >
+      sh -c "npm install &&
+             npm run test &&
+             npm start"
+    ports:
+      - 3000:3000
+networks:
+  challenge-bravo-network:
+    driver: bridge
