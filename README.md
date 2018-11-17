@@ -1,61 +1,64 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Challenge Bravo - Conversão Monetária
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
-
-A API deve converter entre as seguintes moedas:
-- USD
-- BRL
-- EUR
-- BTC
-- ETH
+![](https://media.giphy.com/media/67ThRZlYBvibtdF9JH/giphy.gif)
 
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+API construida com NodeJs para conversão monetária entre moedas
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
-
-Ex: `?from=BTC&to=EUR&amount=123.45`
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
-
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
-
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+Moedas aceitas como parametro:
+- BRL - Real 
+- USD - Dollar
+- EUR - Euro
+- BTC - Bitcoin
+- ETH - Ethereum
 
 
 
-## Critério de avaliação
+## Rodando o projeto
+Após clonar o projeto rode o seguinte comando `docker-compose up`, este comando irá:
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+- instalar as dependencias
+- rodar a suite de testes
+- iniciar a aplicação
 
-## Dúvidas
+## Rodando o stress test na API
+Com o servidor rodando, abra um terminal e rode o seguinte comando `npm run stress-test` para rodar o teste de estresse na API.
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+## Endpoints da API
+A url para conversão é a `/currency_quotes` aceitando como parametro:
+- **From**: moeda de origem a ser convertida
+- **to**: moeda para qual o valor será convertido
+- **amount**: valor a ser convertido
 
-Boa sorte e boa viagem! ;)
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+### Exemplo
+
+  - get `/currency_quotes?from=USD&to=BRL&amount=135.30`.
+  - get `/currency_quotes?from=BRL&to=BRL&amount=123`.
+ 
+**Response**:
+
+```
+{
+  date: '2018-11-17',
+  from: 'USD',
+  to: 'BRL',
+  amount: '123',
+  converted: 200,
+}
+```
+
+
+
+## Informações
+
+- Foi utilizado no teste a API [CryptoCompare](https://min-api.cryptocompare.com) que fornece a cotação atualizada das moedas.
+- Foi utlizado o express como framework junto ao node para criação da aplicação, mas a implementação das ` controllers, helpers, services, e configs` foram implementações genuinas sem frameworks, somente utilizando artificios da linguagem.
+
+
+## Pontos de melhorias
+
+- A utilização de um banco de cache como redis ou até mesmo um SQLite para guardar valores em caso de falha ou consulta repetida em um espaço de tempo de 24 horas, tirando a necessidade de requisitar a API [CryptoCompare](https://min-api.cryptocompare.com).
+
+- Adicionar CI&CD como o [TravisCi](https://travis-ci.org/)
+- Melhorar o helper que valida os parametros vindos da requisição, utilizando por exemplo um [Express-Validator](https://github.com/express-validator/express-validator).
