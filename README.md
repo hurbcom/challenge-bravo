@@ -25,7 +25,7 @@ Após clonar o projeto rode o seguinte comando `docker-compose up`, este comando
 Com o servidor rodando, abra um terminal e rode o seguinte comando `npm run stress-test` para rodar o teste de estresse na API.
 
 ## Endpoints da API
-A url para conversão é a `/currency_quotes` aceitando como parametro:
+A url para conversão é a `/api/v1/currency_quotes` aceitando como parametro:
 - **From**: moeda de origem a ser convertida
 - **to**: moeda para qual o valor será convertido
 - **amount**: valor a ser convertido
@@ -33,8 +33,8 @@ A url para conversão é a `/currency_quotes` aceitando como parametro:
 
 ### Exemplo
 
-  - get `/currency_quotes?from=USD&to=BRL&amount=135.30`.
-  - get `/currency_quotes?from=BRL&to=BRL&amount=123`.
+  - get `/api/v1/currency_quotes?from=USD&to=BRL&amount=135.30`.
+  - get `/api/v1/currency_quotes?from=BRL&to=BRL&amount=123`.
  
 **Response**:
 
