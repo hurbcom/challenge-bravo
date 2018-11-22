@@ -8,7 +8,7 @@ describe('pass request and calculate result to result parser helper', () => {
     const object = { from: 'USD', to: 'BRL', amount: '123' };
     const calculateResult = 200;
     const resultObject = {
-      date: '2018-11-17',
+      date: new Date().toISOString().split('T')[0],
       from: 'USD',
       to: 'BRL',
       amount: '123',
