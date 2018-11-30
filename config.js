@@ -1,7 +1,7 @@
 /**
  * Arquivo: config.js
  * Author: Fernanda Souza
- * Descrição: arquivo responsável por setar as configurações iniciais do app
+ * Descrição: arquivo responsável por setar as configurações iniciais da api
  * Data: 30/11/2018
  */ 
 
