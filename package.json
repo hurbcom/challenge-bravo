@@ -1,0 +1,20 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
+  "main": "index.js",
+  "scripts": {
+    "start": "",
+    "test":""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NandaSouza/challenge-bravo.git"
+  },
+  "author": "Fernanda Souza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NandaSouza/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/NandaSouza/challenge-bravo#readme"
+}
