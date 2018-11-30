@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "",
-    "test":""
+    "test": ""
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/NandaSouza/challenge-bravo/issues"
   },
-  "homepage": "https://github.com/NandaSouza/challenge-bravo#readme"
+  "homepage": "https://github.com/NandaSouza/challenge-bravo#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "http": "0.0.0"
+  },
+  "devDependencies": {
+    "artillery": "^1.6.0-26"
+  }
 }
