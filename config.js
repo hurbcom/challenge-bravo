@@ -16,5 +16,5 @@ exports.express = {
 exports.api = {
     url: process.env.OPENEXCHANGERATES_API,
     key: process.env.KEY_API,
-    coins: ["USD", "BRL", "EUR", "BTC", "ETH"]
+    coins: ['USD', 'BRL', 'EUR', 'BTC', 'ETH']
 }
