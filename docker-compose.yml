@@ -1,0 +1,10 @@
+version: '3'
+services:
+  api:
+    build:
+      dockerfile: ./dockerfile
+      context: .
+    image: fernandasilva/desafio
+    container_name: desafio-bravo
+    ports: 
+      - "3000:3000"
