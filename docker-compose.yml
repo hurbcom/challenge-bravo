@@ -2,7 +2,7 @@ version: '3'
 services:
   api:
     build:
-      dockerfile: ./dockerfile
+      dockerfile: ./Dockerfile
       context: .
     image: fernandasilva/desafio
     container_name: desafio-bravo
