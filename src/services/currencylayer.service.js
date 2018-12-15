@@ -10,7 +10,19 @@ export const currencyLayerConvert = async () => {
 
     try {
         const response = await axios.get(currencyLayerUri);
-        return response.data;
+
+        if (response.data.error) {
+            return response.data;
+        }
+
+        const { quotes } = response.data;
+        const defaultQuotes = {
+            BRL: quotes.USDBRL,
+            EUR: quotes.USDEUR,
+            BTC: quotes.USDBTC,
+            USD: quotes.USDUSD,
+        };
+        return defaultQuotes;
     } catch (error) {
         return error;
     }

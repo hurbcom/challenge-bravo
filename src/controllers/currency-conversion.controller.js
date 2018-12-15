@@ -1,7 +1,3 @@
-import { currencyLayerConvert } from '../services/currencylayer.service';
-import { openExchangeratesConvert } from '../services/openexchangerates.service';
-import { coinmarketcapConvert } from '../services/coinmarketcap.service';
-
 // eslint-disable-next-line import/prefer-default-export
 export const convert = async (req, res) => {
     const { query } = req;
@@ -24,9 +20,5 @@ export const convert = async (req, res) => {
         return;
     };
 
-    const currencyLayerResult = await currencyLayerConvert();
-    const openExchangeratesResult = await openExchangeratesConvert();
-    const coinmarketcapResult = await coinmarketcapConvert();
-
-    res.json({ currencyLayerResult, openExchangeratesResult, coinmarketcapResult });
+    res.json({ msg: 'em breve' });
 };

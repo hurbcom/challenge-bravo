@@ -11,8 +11,8 @@ export const openExchangeratesConvert = async () => {
 
     try {
         const response = await axios.get(openExchangeratesUri);
-        return response.data;
+        return response.data.rates;
     } catch (error) {
-        return error;
+        return error.response.data;
     }
 };
