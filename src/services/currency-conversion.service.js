@@ -3,6 +3,7 @@ import fs from 'fs';
 
 import { openExchangeratesConvert } from './openexchangerates.service';
 import { currencyLayerConvert } from './currencylayer.service';
+import { coinmarketcapConvert } from './coinmarketcap.service';
 
 const getRate = async () => {
     const openExchangeratesResult = await openExchangeratesConvert();
@@ -19,7 +20,18 @@ const getRate = async () => {
 
     console.log('Erro no servico currencyLayerConvert');
 
-    return { error: 'Serviços indisponíveis, por favor tente mais tarde' };
+    return { USD: 0 };
+};
+
+const getRateCoin = async () => {
+    const coinmarketcapResult = await coinmarketcapConvert();
+    if (coinmarketcapResult.status.error_code !== 0) {
+        return 0;
+    }
+
+    const ETHUSD = coinmarketcapResult.data.ETH.quote.USD.price;
+    const eth = 1 / ETHUSD;
+    return eth;
 };
 
 export const updateExchangeRate = async (filePath) => {
@@ -30,8 +42,11 @@ export const updateExchangeRate = async (filePath) => {
         return;
     }
 
+    const coin = await getRateCoin();
+
     const exRate = {
         updateDate: new Date(),
+        ETH: coin,
         ...money,
     };
 
@@ -41,7 +56,7 @@ export const updateExchangeRate = async (filePath) => {
             return false;
         };
 
-        console.log('The file has been saved!');
+        console.log('-> The quote was updated');
         return true;
     });
 };
