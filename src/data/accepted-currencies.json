@@ -1,0 +1,18 @@
+{ 
+    "accept-coins": [
+        "USD",
+        "BRL",
+        "EUR",
+        "BTC"
+    ],
+    "accept-crypto-coins": [
+        "ETH"
+    ],
+    "accept": [
+        "USD",
+        "BRL",
+        "EUR",
+        "BTC",
+        "ETH"
+    ]
+}

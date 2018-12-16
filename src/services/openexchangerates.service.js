@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-// eslint-disable-next-line import/prefer-default-export
-export const openExchangeratesConvert = async () => {
+const openExchangeratesQuotation = async (acceptCoins = null) => {
     const appId = '46208269135b4a18812f848f2172e459';
     const uri = 'https://openexchangerates.org/api/latest.json';
-    const symbols = 'USD,BRL,EUR,BTC,ETH';
+    const symbols = acceptCoins || 'USD, BRL, EUR, BTC';
     const base = 'USD';
 
     const openExchangeratesUri = `${uri}?app_id=${appId}&symbols=${symbols}&base=${base}&format=1`;
@@ -16,3 +15,5 @@ export const openExchangeratesConvert = async () => {
         return error.response.data;
     }
 };
+
+export { openExchangeratesQuotation as default };
