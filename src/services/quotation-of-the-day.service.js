@@ -3,11 +3,11 @@ import fs from 'fs';
 import openExchangeratesQuotation from './openexchangerates.service';
 import currencyLayerQuotation from './currencylayer.service';
 import coinmarketcapQuotation from './coinmarketcap.service';
+import cryptoCompareQuotation from './cryptocompare.service';
+
 import acceptedCurrencies from '../data/accepted-currencies.json';
 
-const convertETHtoUSD = (ETHUSD) => {
-    return 1 / ETHUSD;
-};
+const convertETHtoUSD = ETHUSD => 1 / ETHUSD;
 
 const getRateCoin = async () => {
     const openExchangeratesResult = await openExchangeratesQuotation(acceptedCurrencies['accept-coins'].join());
@@ -15,25 +15,29 @@ const getRateCoin = async () => {
         return openExchangeratesResult;
     }
 
-    console.log('Erro no servico openExchangeratesConvert');
-
     const currencyLayerResult = await currencyLayerQuotation(acceptedCurrencies['accept-coins'].join());
     if (!currencyLayerResult.error) {
         return currencyLayerResult;
     }
-
-    console.log('Erro no servico currencyLayerConvert');
 
     return { USD: 0 };
 };
 
 const getRateCryptoCoin = async () => {
     const coinmarketcapResult = await coinmarketcapQuotation();
-    if (coinmarketcapResult.status.error_code !== 0) {
-        return 0;
+
+    if (coinmarketcapResult.status.error_code === 0) {
+        const ETH = convertETHtoUSD(coinmarketcapResult.data.ETH.quote.USD.price);
+        return { ETH };
     }
-    const ETH = convertETHtoUSD(coinmarketcapResult.data.ETH.quote.USD.price)
-    return { ETH };
+
+    const cryptoCompareResult = await cryptoCompareQuotation();
+    if (!cryptoCompareResult.error) {
+        const ETH = convertETHtoUSD(cryptoCompareResult.USD);
+        return { ETH };
+    }
+
+    return { ETH: 0 };
 };
 
 const updateExchangeRate = async (filePath) => {
@@ -48,7 +52,6 @@ const updateExchangeRate = async (filePath) => {
 
     fs.writeFile(filePath, JSON.stringify(exRate), 'utf8', (err) => {
         if (err) {
-            console.log(err);
             return false;
         };
 

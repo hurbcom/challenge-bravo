@@ -21,21 +21,21 @@ const convert = async (req, res) => {
         res.send({ error: true, message: 'Bad request: missing paramentreo FROM in query' });
         return false;
     };
-    from = from.toUpperCase();
 
     if (!to) {
         res.statusCode = 417;
         res.send({ error: true, message: 'Bad request: missing paramentreo TO in query' });
         return false;
     };
-    to = to.toUpperCase();
 
+    from = from.toUpperCase();
     if (!accept.includes(from)) {
         res.statusCode = 417;
         res.send({ error: true, message: `The ${from} currency sent to conversion is not accepted. Use one of the following currencies: ${acceptedCurrencies.accept.join()}` });
         return false;
     }
 
+    to = to.toUpperCase();
     if (!accept.includes(to)) {
         res.statusCode = 417;
         res.send({ error: true, message: `The ${to} currency sent to conversion is not accepted. Use one of the following currencies: ${acceptedCurrencies.accept.join()}` });
