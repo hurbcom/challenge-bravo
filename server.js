@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParse from 'body-parser';
 
 import routes from './src/routes/routes';
-import updateExchangeRate from './src/services/quotation-of-the-day.service';
+import { updateExchangeRate } from './src/services/quotation-of-the-day.service';
 
 const app = express();
 const PORT = process.env.PORT || 3000;

@@ -7,7 +7,12 @@ import cryptoCompareQuotation from './cryptocompare.service';
 
 import acceptedCurrencies from '../data/accepted-currencies.json';
 
-const convertETHtoUSD = ETHUSD => 1 / ETHUSD;
+const convertETHtoUSD = (ETHUSD) => {
+    if (ETHUSD === 0 || typeof (ETHUSD) === 'string') {
+        return 0;
+    }
+    return 1 / ETHUSD;
+};
 
 const getRateCoin = async () => {
     const openExchangeratesResult = await openExchangeratesQuotation(acceptedCurrencies['accept-coins'].join());
@@ -60,4 +65,6 @@ const updateExchangeRate = async (filePath) => {
     });
 };
 
-export { updateExchangeRate as default };
+const getExchangeRate = async filePath => JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+export { updateExchangeRate, getExchangeRate, convertETHtoUSD };

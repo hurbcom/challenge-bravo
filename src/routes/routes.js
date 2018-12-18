@@ -1,4 +1,4 @@
-import convert from '../controllers/currency-conversion.controller';
+import { convert } from '../controllers/currency-conversion.controller';
 
 const routes = (app) => {
     app.route('/api/conversion')

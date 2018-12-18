@@ -1,15 +1,20 @@
-import exchangeate from '../data/exchange-rate.json';
 import acceptedCurrencies from '../data/accepted-currencies.json';
+import { getExchangeRate } from '../services/quotation-of-the-day.service';
 
 const calculateExchange = (from, to, amount) => {
+    if (from <= 0 || to <= 0 || amount <= 0) {
+        return {
+            error: true,
+            convertedValue: '0',
+        };
+    }
+
     const amountUSD = (amount / from);
     const amountTo = (amountUSD * to).toFixed(2);
-    const result = {
+    return {
         error: false,
         convertedValue: amountTo,
     };
-
-    return result;
 };
 
 const convert = async (req, res) => {
@@ -30,14 +35,14 @@ const convert = async (req, res) => {
 
     from = from.toUpperCase();
     if (!accept.includes(from)) {
-        res.statusCode = 417;
+        res.statusCode = 404;
         res.send({ error: true, message: `The ${from} currency sent to conversion is not accepted. Use one of the following currencies: ${acceptedCurrencies.accept.join()}` });
         return false;
     }
 
     to = to.toUpperCase();
     if (!accept.includes(to)) {
-        res.statusCode = 417;
+        res.statusCode = 404;
         res.send({ error: true, message: `The ${to} currency sent to conversion is not accepted. Use one of the following currencies: ${acceptedCurrencies.accept.join()}` });
         return false;
     }
@@ -55,17 +60,19 @@ const convert = async (req, res) => {
         return false;
     }
 
-    const exchangeResult = calculateExchange(exchangeate[`${from}`], exchangeate[`${to}`], amount);
+    const rate = await getExchangeRate('src/data/exchange-rate.json');
+
+    const exchangeResult = calculateExchange(rate[`${from}`], rate[`${to}`], amount);
 
     if (exchangeResult.error) {
-        res.statusCode = 417;
+        res.statusCode = 503;
         res.send(exchangeResult.error);
         return false;
     }
 
     const conversion = {
         error: false,
-        updateDate: exchangeate.updateDate,
+        updateDate: rate.updateDate,
         amountToBeConverted: amount,
         from,
         to,
@@ -76,4 +83,4 @@ const convert = async (req, res) => {
     return true;
 };
 
-export { convert as default };
+export { convert, calculateExchange };
