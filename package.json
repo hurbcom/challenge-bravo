@@ -4,8 +4,7 @@
   "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
-    "test-w": "jest --watchAll",
+    "test": "mocha --require babel-polyfill --require babel-register --exit",
     "eslint": "./node_modules/.bin/eslint server.js src/**",
     "babel-node": "babel-node --presets=/*a*/",
     "start": "nodemon ./server.js --exec babel-node -e js"
@@ -28,14 +27,17 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "chai": "^4.2.0",
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "jest": "^23.6.0",
-    "nodemon": "^1.18.7"
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.7",
+    "supertest": "^3.3.0"
   },
   "bugs": {
     "url": "https://github.com/rodrigobmuniz/challenge-bravo/issues"
