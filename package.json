@@ -25,6 +25,7 @@
     "express": "^4.16.4",
     "express-status-monitor": "^1.2.3",
     "mongoose": "^5.3.14",
+    "node-cron": "^2.0.3",
     "request": "^2.88.0"
   },
   "devDependencies": {

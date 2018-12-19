@@ -47,6 +47,7 @@ API, que responde JSON, para conversão monetária.
 ### Principais características
 - Moeda de lastro (USD)
 - Faz conversões entre diferentes moedas com cotações de verdade e atuais.
+- Taxa de câmbio atualizado de hora em hora.
 - converter entre as seguintes moedas:
 -> USD
 -> BRL

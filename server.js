@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParse from 'body-parser';
 import dotenv from 'dotenv';
+import cron from 'node-cron';
 import status from 'express-status-monitor';
 
 import routes from './src/routes/routes';
@@ -22,7 +23,12 @@ updateExchangeRate(process.env.EXCHANGE_RATE_PATH);
 routes(app);
 
 app.listen(PORT, () => {
+    // eslint-disable-next-line no-console
     console.log(`server running on ${PORT}`);
+});
+
+cron.schedule('* */1 * * *', () => {
+    updateExchangeRate(process.env.EXCHANGE_RATE_PATH);
 });
 
 module.exports = app;
