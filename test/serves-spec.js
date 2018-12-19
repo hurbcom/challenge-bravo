@@ -80,9 +80,33 @@ describe('Teste de integração: API conversion - /api/conversion', () => {
             }, done);
     });
 
-    it('Deve realzar a chamada com sucesso e receber o json com os dados da conversão', (done) => {
+    it('Deve realzar a chamada com sucesso e receber o json com os dados da conversão de BRL para EUR', (done) => {
         request(app)
-            .get('/api/conversion?from=BRL&to=EUR&amount=1')
+            .get('/api/conversion?from=BRL&to=EUR&amount=10')
+            .expect('content-type', 'application/json; charset=utf-8')
+            .expect('Content-Type', /json/)
+            .expect(200, done);
+    });
+
+    it('Deve realzar a chamada com sucesso e receber o json com os dados da conversão de EUR para USD', (done) => {
+        request(app)
+            .get('/api/conversion?from=BRL&to=EUR&amount=150')
+            .expect('content-type', 'application/json; charset=utf-8')
+            .expect('Content-Type', /json/)
+            .expect(200, done);
+    });
+
+    it('Deve realzar a chamada com sucesso e receber o json com os dados da conversão de ETH para BRL', (done) => {
+        request(app)
+            .get('/api/conversion?from=ETH&to=BRL&amount=0.1')
+            .expect('content-type', 'application/json; charset=utf-8')
+            .expect('Content-Type', /json/)
+            .expect(200, done);
+    });
+
+    it('Deve realzar a chamada com sucesso e receber o json com os dados da conversão de BTC para EUR', (done) => {
+        request(app)
+            .get('/api/conversion?from=BTC&to=EUR&amount=10')
             .expect('content-type', 'application/json; charset=utf-8')
             .expect('Content-Type', /json/)
             .expect(200, done);

@@ -16,46 +16,42 @@ A requisição deve receber como parâmetros: A moeda de origem, o valor a ser c
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+# Projeto
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+## Teste de carga:
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+### Rodar o teste de carga:
 
+`
+node_modules/.bin/loadtest http://127.0.0.1:3000/api/conversion\?from\=ETH\&to\=BRL\&amount\=100 -t 20 -c 1000 --rps 1000
+`
 
-
-## Critério de avaliação
-
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
-
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+```
+[Wed Dec 19 2018 01:34:51 GMT-0200 (Brasilia Summer Time)] INFO Requests: 0, requests per second: 0, mean latency:0 ms
+[Wed Dec 19 2018 01:34:56 GMT-0200 (Brasilia Summer Time)] INFO Requests: 5000, requests per second: 1001, mean latency: 3.3 ms
+[Wed Dec 19 2018 01:35:01 GMT-0200 (Brasilia Summer Time)] INFO Requests: 10000, requests per second: 1000, mean latency: 2 ms
+[Wed Dec 19 2018 01:35:06 GMT-0200 (Brasilia Summer Time)] INFO Requests: 15000, requests per second: 1000, mean latency: 2 ms
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Target URL:          http://127.0.0.1:3000/api/conversion?from=ETH&to=BRL&amount=100
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Max time (s):        20
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Concurrency level:   1000
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Agent:               none
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 1000
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Completed requests:  18211
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Total errors:        1
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Total time:          20.000364915 s
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 911
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Mean latency:        2.5 ms
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Percentage of the requests served within a certaintime
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO   50%      1 ms
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO   90%      3 ms
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO   95%      6 ms
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO   99%      16 ms
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO  100%      108 ms (longest request)
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO  100%      108 ms (longest request)
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO    -1:   1 errors
+```
