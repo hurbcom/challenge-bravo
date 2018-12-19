@@ -88,9 +88,12 @@ Utilize o endereço `http://127.0.0.1:3000/` para monitorar o sistema em tempo r
 
 ## Testes automatizados:
 1. Acessar a raiz do projeto
-2. Certifique-se que o `server` do projeto não está rodando 
+2. Certifique-se que o `server` do projeto NÃO está rodando. Se estiver finaliza o mesmo com `Ctrl + C`
+
 3. Rode os testes:
-`npm test`
+```
+npm test
+```
 
 Exemplo do resultado dos testes automatizados:
 
@@ -127,13 +130,17 @@ server running on 3000
 
 
 1. Inciar o server:
-`npm start`
+``` 
+npm start
+```
 
-2. Acessar a págians de status do servidor
-`http://127.0.0.1:3000/`
+2. Acessar a págians de monitoramento do servidor
+`http://127.0.0.1:3000/` para acompanhar o teste de carga
 
 3. Rodar o comando para o teste de carga:
-`node_modules/.bin/loadtest http://127.0.0.1:3000/api/conversion\?from\=ETH\&to\=BRL\&amount\=100 -t 20 -c 100 --rps 1000`
+```
+node_modules/.bin/loadtest http://127.0.0.1:3000/api/conversion\?from\=ETH\&to\=BRL\&amount\=100 -t 20 -c 100 --rps 1000
+```
 
 
 Exemplo do resultado do teste de carga:
