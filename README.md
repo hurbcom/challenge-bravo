@@ -44,12 +44,19 @@ Recebe como parâmetros: A moeda de origem, o valor a ser convertido e a moeda f
 
 Ex: 
 
-Solicitação:
+#### Solicitação:
 ```
-/api/conversion?from=BRL&to=EUR&amount=10.35
+http://127.0.0.1:3000/api/conversion?from=BRL&to=EUR&amount=10.35
 ```
 
-Resposta:
+| Parâmetro | Tipo | Descrição |
+|--|--|--|
+| from | string | moeda do valor a ser convertido |
+| to | string| moeda destino da conversão |
+| amount | float | valor que deseja converter |
+
+
+#### Resposta:
 ```json
 {
     "error": false,
@@ -61,11 +68,15 @@ Resposta:
 }
 ```
 
-| Parâmetro  | Descrição |
-|--|--|
-| amount | valor que deseja converter |
-| from | moeda do valor a ser convertido |
-| to | moeda destino da conversão |
+| Parâmetro | Tipo | Descrição |
+|--|--|--|
+| error | boolean | indicativo se API retornou com sucesso |
+| updateDate | string | data de atualizaão da taxa de conversão |
+| amountToBeConverted | float | valer que deve ser convertido |
+| from | string | moeda a ser convertido |
+| to | string| moeda destino da conversão |
+| convertedValue | string | valor convertido |
+
 
 ## Monitore o sistema
 Utilize o endereço `http://127.0.0.1:3000/` para monitorar o sistema em tempo real
