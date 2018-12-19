@@ -71,7 +71,7 @@ http://127.0.0.1:3000/api/conversion?from=BRL&to=EUR&amount=10.35
 | to | string| moeda destino da conversão |
 | amount | float | valor que deseja converter |
 
-| Moéda | Código da moeda para API | 
+| Código da moeda para API | Moéda | 
 |--|--|
 | USD | Dólar americano |
 |  BRL | Real brasileiro |
