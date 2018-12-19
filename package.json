@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "express-status-monitor": "^1.2.3",
     "mongoose": "^5.3.14",
     "request": "^2.88.0"
   },
