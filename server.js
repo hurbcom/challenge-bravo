@@ -1,16 +1,18 @@
 import express from 'express';
 import bodyParse from 'body-parser';
+import dotenv from 'dotenv';
 
 import routes from './src/routes/routes';
 import { updateExchangeRate } from './src/services/quotation-of-the-day.service';
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParse.urlencoded({ extended: true }));
 app.use(bodyParse.json());
 
-updateExchangeRate('src/data/exchange-rate.json');
+updateExchangeRate(process.env.EXCHANGE_RATE_PATH);
 
 routes(app);
 

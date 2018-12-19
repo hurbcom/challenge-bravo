@@ -60,7 +60,7 @@ const convert = async (req, res) => {
         return false;
     }
 
-    const rate = await getExchangeRate('src/data/exchange-rate.json');
+    const rate = await getExchangeRate(process.env.EXCHANGE_RATE_PATH);
 
     const exchangeResult = calculateExchange(rate[`${from}`], rate[`${to}`], amount);
 

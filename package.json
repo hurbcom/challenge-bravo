@@ -4,7 +4,8 @@
   "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --require babel-polyfill --require babel-register --exit",
+    "test": "mocha --require babel-polyfill --require babel-register --recursive  --exit",
+    "test-w": "mocha --require babel-polyfill --require babel-register --watch",
     "eslint": "./node_modules/.bin/eslint server.js src/**",
     "babel-node": "babel-node --presets=/*a*/",
     "start": "nodemon ./server.js --exec babel-node -e js"
