@@ -48,6 +48,7 @@ API, que responde JSON, para conversão monetária.
 - Moeda de lastro (USD)
 - Faz conversões entre diferentes moedas com cotações de verdade e atuais.
 - Taxa de câmbio atualizado de hora em hora.
+- Tendo em vista que o ponto mais crítico da API é buscar a taxa na API de terceiros, temos redundância para as taxas de cambios das moédas e cripto-moédas (2 para cada)
 - converter entre as seguintes moedas:
 -> USD
 -> BRL
