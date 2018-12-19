@@ -62,6 +62,12 @@ const convert = async (req, res) => {
 
     const rate = await getExchangeRate(process.env.EXCHANGE_RATE_PATH);
 
+    if (rate.error) {
+        res.statusCode = 503;
+        res.send(rate.message);
+        return false;
+    }
+
     const exchangeResult = calculateExchange(rate[`${from}`], rate[`${to}`], amount);
 
     if (exchangeResult.error) {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const cryptoCompareQuotation = async (acceptCoins = null) => {
-    const apiKey = 'f9b55379ec5b8f95bd1376aae858083d548d06b7c0b3ee15fcf1699477c2e5b3';
+    const apiKey = process.env.CRYPTO_C_API_KEY;
     const uri = 'https://min-api.cryptocompare.com/data/price';
     const fsym = acceptCoins || 'ETH';
     const tsyms = 'USD';

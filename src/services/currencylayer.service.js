@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const currencyLayerQuotation = async (acceptCoins = null) => {
-    const apiKey = '77a212831646cff6cc9bc9b167af4d05';
+    const apiKey = process.env.CURRENCY_L_API_KEY;
     const uri = 'http://apilayer.net/api/live';
     const currencies = acceptCoins || 'USD,BRL,EUR,BTC';
     const source = 'USD';

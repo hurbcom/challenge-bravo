@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const openExchangeratesQuotation = async (acceptCoins = null) => {
-    const appId = '46208269135b4a18812f848f2172e459';
+    const appId = process.env.OPEN_E_API_KEY;
     const uri = 'https://openexchangerates.org/api/latest.json';
     const symbols = acceptCoins || 'USD,BRL,EUR,BTC';
     const base = 'USD';

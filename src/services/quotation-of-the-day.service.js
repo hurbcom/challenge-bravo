@@ -65,6 +65,16 @@ const updateExchangeRate = async (filePath) => {
     });
 };
 
-const getExchangeRate = async filePath => JSON.parse(fs.readFileSync(filePath, 'utf8'));
+const getExchangeRate = async (filePath) => {
+    const rate = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    if (!rate.BRL || !rate.EUR || !rate.BTC || !rate.USD || !rate.ETH) {
+        return {
+            error: true,
+            message: 'Error fetching conversion rate. Please try again.',
+        };
+    }
+    rate.error = false;
+    return rate;
+};
 
 export { updateExchangeRate, getExchangeRate, convertETHtoUSD };

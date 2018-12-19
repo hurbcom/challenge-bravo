@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const coinmarketcapQuotation = async () => {
-    const apiKey = '5ce9ebb6-d0b8-4825-82cd-823cf6e30f32';
+    const apiKey = process.env.COIN_M_T_API_KEY;
     const uri = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
     const symbol = 'ETH';
     const convert = 'USD';
