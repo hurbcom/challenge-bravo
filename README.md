@@ -1,37 +1,74 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
-
-A API deve converter entre as seguintes moedas:
-- USD
-- BRL
-- EUR
-- BTC
-- ETH
-
-
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
-
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
-
-Ex: `?from=BTC&to=EUR&amount=123.45`
+API, que responda JSON, para conversão monetária. 
 
 # Projeto
 
 ## Baixar, instalar e rodar:
 
 1. clone o projeto:
-`git clone https://github.com/rodrigobmuniz/challenge-bravo.git`
+```git clone https://github.com/rodrigobmuniz/challenge-bravo.git```
 
 2. acessar a pasta do projeto:
-`cd  challenge-bravo`
+```cd  challenge-bravo```
 
 3. instalar dependências
-`npm install`
+```npm install```
 ou
-`yarn install`
+```yarn install```
 
-Feito ;)
+4. Rode o projeto:
+
+``` npm start ```
+ou
+``` yarn start ```
+
+Feito. Projeto está rodando no endereço:
+``` http://127.0.0.1:3000/ ```
+
+## Uso da API api/conversion
+
+API, que responde JSON, para conversão monetária. 
+
+### Principais características
+- Moeda de lastro (USD)
+- Faz conversões entre diferentes moedas com cotações de verdade e atuais.
+- converter entre as seguintes moedas:
+-> USD
+-> BRL
+-> EUR
+-> BTC
+-> ETH
+
+Recebe como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+
+Ex: 
+
+Solicitação:
+```
+/api/conversion?from=BRL&to=EUR&amount=10.35
+```
+
+Resposta:
+```json
+{
+    "error": false,
+    "updateDate": "2018-12-19T04:02:17.093Z",
+    "amountToBeConverted": 10.35,
+    "from": "BRL",
+    "to": "EUR",
+    "convertedValue": "2.32"
+}
+```
+
+| Parâmetro  | Descrição |
+|--|--|
+| amount | valor que deseja converter |
+| from | moeda do valor a ser convertido |
+| to | moeda destino da conversão |
+
+## Monitore o sistema
+Utilize o endereço `http://127.0.0.1:3000/` para monitorar o sistema em tempo real
 
 ## Testes automatizados:
 1. Acessar a raiz do projeto
