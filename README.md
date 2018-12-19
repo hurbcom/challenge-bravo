@@ -81,6 +81,11 @@ http://127.0.0.1:3000/api/conversion?from=BRL&to=EUR&amount=10.35
 ## Monitore o sistema
 Utilize o endereço `http://127.0.0.1:3000/` para monitorar o sistema em tempo real
 
+<p align="center">
+  <img src="tela_status.png" alt="Tela de monitoramento do sistema" />
+</p>
+
+
 ## Testes automatizados:
 1. Acessar a raiz do projeto
 2. Certifique-se que o `server` do projeto não está rodando 
@@ -117,7 +122,9 @@ server running on 3000
 
 ## Teste de carga:
 
+
 ### Rodar o teste de carga:
+
 
 1. Inciar o server:
 `npm start`
