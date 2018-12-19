@@ -19,7 +19,8 @@ type AppConfig struct {
 		}
 	} `json:"externalApis"`
 	API struct {
-		Port int `json:"port"`
+		Host string `json:"host"`
+		Port int    `json:"port"`
 	} `json:"api"`
 	Redis struct {
 		Host     string `json:"host"`
@@ -36,7 +37,7 @@ var (
 func getConfigFilePath() string {
 	val, found := os.LookupEnv("CFGPATH")
 	if !found {
-		return "config.json" //The default config file path.
+		return "config/config.json" //The default config file path.
 	}
 	return val
 }
