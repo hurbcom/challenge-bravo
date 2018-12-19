@@ -19,9 +19,8 @@ var (
 	})
 )
 
-func Publish(key string, message interface{}) error {
-	_, err := redisClient.Publish(key, message).Result()
-	return err
+func Publish(key string, message interface{}) (int64, error) {
+	return redisClient.Publish(key, message).Result()
 }
 
 func Subscribe(keys ...string) (*redis.PubSub, error) {
