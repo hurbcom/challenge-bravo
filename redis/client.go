@@ -26,16 +26,12 @@ func Publish(key string, message interface{}) error {
 
 func Subscribe(keys ...string) (*redis.PubSub, error) {
 	pubSub := redisClient.Subscribe(keys...)
-	if _, err := pubSub.Receive(); err != nil {
-		return nil, err
-	}
-	return pubSub, nil
+	_, err := pubSub.Receive()
+	return pubSub, err
 }
 
 func PSubscribe(keys ...string) (*redis.PubSub, error) {
 	pubSub := redisClient.PSubscribe(keys...)
-	if _, err := pubSub.Receive(); err != nil {
-		return nil, err
-	}
-	return pubSub, nil
+	_, err := pubSub.Receive()
+	return pubSub, err
 }
