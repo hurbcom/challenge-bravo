@@ -7,24 +7,38 @@ API, que responda JSON, para conversão monetária.
 ## Baixar, instalar e rodar:
 
 1. clone o projeto:
-```git clone https://github.com/rodrigobmuniz/challenge-bravo.git```
+```
+git clone https://github.com/rodrigobmuniz/challenge-bravo.git
+```
 
 2. acessar a pasta do projeto:
-```cd  challenge-bravo```
+```
+cd  challenge-bravo
+```
 
 3. instalar dependências
-```npm install```
+```
+npm install
+```
 ou
-```yarn install```
+```
+yarn install
+```
 
 4. Rode o projeto:
 
-``` npm start ```
+``` 
+npm start 
+```
 ou
-``` yarn start ```
+``` 
+yarn start 
+```
 
 Feito. Projeto está rodando no endereço:
-``` http://127.0.0.1:3000/ ```
+``` 
+http://127.0.0.1:3000/ 
+```
 
 ## Uso da API api/conversion
 
