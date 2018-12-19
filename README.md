@@ -18,40 +18,92 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 # Projeto
 
+## Baixar, instalar e rodar:
+
+1. clone o projeto:
+`git clone https://github.com/rodrigobmuniz/challenge-bravo.git`
+
+2. acessar a pasta do projeto:
+`cd  challenge-bravo`
+
+3. instalar dependências
+`npm install`
+ou
+`yarn install`
+
+Feito ;)
+
+## Testes automatizados:
+1. Acessar a raiz do projeto
+2. Certifique-se que o `server` do projeto não está rodando 
+3. Rode os testes:
+`npm test`
+
+Exemplo do resultado dos testes automatizados:
+
+```
+server running on 3000
+  Teste unitário: currency-conversion.controller
+    calculateExchange(from, to, amount)
+      ✓ Deve realizar a conversão e retornar um json: { convertedValue: 10.00, error: false }
+      ✓ Deve retornar ERROR pelo fato do valor de FROM ser menor ou igual ZERO
+      ✓ Deve retornar ERROR pelo fato do valor de TO ser menor ou igual ZERO
+      ✓ Deve retornar ERROR pelo fato do valor de AMOUT ser menor ou igual ZERO
+
+  Teste de integração: API conversion - /api/conversion
+    ✓ Deve retornar 417 e a mensagem de erro por faltar o parametro FROM na QUERY (124ms)
+    ✓ Deve retornar 417 e a mensagem de erro por faltar o parametro TO na QUERY
+    ✓ Deve retornar 417 e a mensagem de erro por faltar o parametro AMOUNT na QUERY
+    ✓ Deve retornar 404 e a mensagem de erro por solicitar conversão de FROM para moeda não suportada
+    ✓ Deve retornar 404 e a mensagem de erro por solicitar conversão de TO para moeda não suportada
+    ✓ Deve retornar 417 e a mensagem de erro pois o parametro AMOUNT deve ser um número maior que ZERO e foi enviado 0
+    ✓ Deve retornar 417 e a mensagem de erro pois o parametro AMOUNT deve ser um número maior que ZERO e foi enviado RIO
+    ✓ Deve realzar a chamada com sucesso e receber o json com os dados da conversão de BRL para EUR
+    ✓ Deve realzar a chamada com sucesso e receber o json com os dados da conversão de EUR para USD
+    ✓ Deve realzar a chamada com sucesso e receber o json com os dados da conversão de ETH para BRL
+    ✓ Deve realzar a chamada com sucesso e receber o json com os dados da conversão de BTC para EUR
+
+
+  15 passing (305ms)
+```
+
 ## Teste de carga:
 
 ### Rodar o teste de carga:
 
-`
-node_modules/.bin/loadtest http://127.0.0.1:3000/api/conversion\?from\=ETH\&to\=BRL\&amount\=100 -t 20 -c 1000 --rps 1000
-`
+1. Inciar o server:
+`npm start`
 
+2. Acessar a págians de status do servidor
+`http://127.0.0.1:3000/`
+
+3. Rodar o comando para o teste de carga:
+`node_modules/.bin/loadtest http://127.0.0.1:3000/api/conversion\?from\=ETH\&to\=BRL\&amount\=100 -t 20 -c 100 --rps 1000`
+
+
+Exemplo do resultado do teste de carga:
 ```
-[Wed Dec 19 2018 01:34:51 GMT-0200 (Brasilia Summer Time)] INFO Requests: 0, requests per second: 0, mean latency:0 ms
-[Wed Dec 19 2018 01:34:56 GMT-0200 (Brasilia Summer Time)] INFO Requests: 5000, requests per second: 1001, mean latency: 3.3 ms
-[Wed Dec 19 2018 01:35:01 GMT-0200 (Brasilia Summer Time)] INFO Requests: 10000, requests per second: 1000, mean latency: 2 ms
-[Wed Dec 19 2018 01:35:06 GMT-0200 (Brasilia Summer Time)] INFO Requests: 15000, requests per second: 1000, mean latency: 2 ms
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Target URL:          http://127.0.0.1:3000/api/conversion?from=ETH&to=BRL&amount=100
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Max time (s):        20
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Concurrency level:   1000
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Agent:               none
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 1000
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Completed requests:  18211
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Total errors:        1
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Total time:          20.000364915 s
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 911
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Mean latency:        2.5 ms
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO Percentage of the requests served within a certaintime
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO   50%      1 ms
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO   90%      3 ms
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO   95%      6 ms
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO   99%      16 ms
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO  100%      108 ms (longest request)
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO  100%      108 ms (longest request)
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO
-[Wed Dec 19 2018 01:35:11 GMT-0200 (Brasilia Summer Time)] INFO    -1:   1 errors
+[Wed Dec 19 2018 01:42:52 GMT-0200 (Brasilia Summer Time)] INFO Requests: 0, requests per second: 0, mean latency: 0 ms
+[Wed Dec 19 2018 01:42:56 GMT-0200 (Brasilia Summer Time)] INFO Requests: 4532, requests per second: 907, mean latency: 2.9 ms
+[Wed Dec 19 2018 01:43:01 GMT-0200 (Brasilia Summer Time)] INFO Requests: 9516, requests per second: 997, mean latency: 2.2 ms
+[Wed Dec 19 2018 01:43:06 GMT-0200 (Brasilia Summer Time)] INFO Requests: 14373, requests per second: 971, mean latency: 73.5 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Target URL:          http://127.0.0.1:3000/api/conversion?from=ETH&to=BRL&amount=100
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Max time (s):        20
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Concurrency level:   100
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Agent:               none
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 1000
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Completed requests:  17358
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Total errors:        0
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Total time:          20.08130635 s
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 864
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Mean latency:        52.4 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Percentage of the requests served within a certain time
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   50%      1 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   90%      7 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   95%      32 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   99%      2200 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO  100%      4205 ms (longest request)
 ```
