@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	log.Infof("Starting server node...")
+	log.Infof("Starting api node...")
 	api.ServeRoutes()
 }

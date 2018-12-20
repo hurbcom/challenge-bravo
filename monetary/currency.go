@@ -11,14 +11,6 @@ import (
   Currency related logic.
 */
 
-const (
-	USD = "USD"
-	BRL = "BRL"
-	ETH = "ETH"
-	EUR = "EUR"
-	BTC = "BTC"
-)
-
 /**
   Convert any amount from one currency to another, based on it's quotas
   stored in database. These will be updated as of the update interval in

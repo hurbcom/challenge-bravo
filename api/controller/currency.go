@@ -1,4 +1,4 @@
-package api
+package controller
 
 import (
 	"github.com/labstack/echo"
@@ -28,7 +28,7 @@ type ConversionError struct {
 	Error  string `json:"error"`
 }
 
-func handleCurrencyConversion(context echo.Context) error {
+func HandleCurrencyConversion(context echo.Context) error {
 	request := ConversionRequest{}
 
 	err := context.Bind(&request)
