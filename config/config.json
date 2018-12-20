@@ -1,10 +1,11 @@
 {
-    "externalApis": {
-
-    },
     "api": {
         "host": "",
         "port": 8080
+    },
+    "worker": {
+        "externalApis": {
+        }
     },
     "redis": {
         "host": "localhost",

@@ -12,16 +12,21 @@ import (
 )
 
 type AppConfig struct {
-	ExternalAPIs struct {
-		Currency struct {
-			URL    string `json:"url"`
-			APIKey string `json:"apiKey"`
-		}
-	} `json:"externalApis"`
 	API struct {
 		Host string `json:"host"`
 		Port int    `json:"port"`
 	} `json:"api"`
+	Worker struct {
+		Host           string `json:"host"`
+		Port           int    `json:"port"`
+		UpdateInterval int32  `json:"updateInterval"`
+		ExternalAPIs   struct {
+			Currency struct {
+				URL    string `json:"url"`
+				APIKey string `json:"apiKey"`
+			}
+		} `json:"externalApis"`
+	}
 	Redis struct {
 		Host     string `json:"host"`
 		Port     int    `json:"port"`
@@ -37,7 +42,7 @@ var (
 func getConfigFilePath() string {
 	val, found := os.LookupEnv("CFGPATH")
 	if !found {
-		return "config/config.json" //The default config file path.
+		return "/home/xuma/Programming/go/src/schonmann/challenge-bravo/config/config.json" //The default config file path.
 	}
 	return val
 }
