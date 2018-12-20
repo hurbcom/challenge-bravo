@@ -8,5 +8,4 @@ import (
 func main() {
 	log.Infof("Starting worker node...")
 	worker.StartWorker()
-
 }

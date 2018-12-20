@@ -8,10 +8,6 @@ import (
 )
 
 /**
-  Currency related logic.
-*/
-
-/**
   Convert any amount from one currency to another, based on it's quotas
   stored in database. These will be updated as of the update interval in
   the worker node.
