@@ -29,7 +29,7 @@ app.listen(PORT, () => {
     log(1, 'server.js', `server running on ${PORT}`);
 });
 
-cron.schedule('0 0 */2 * * *', () => {
+cron.schedule('0 0 */1 * * *', () => {
     updateExchangeRate(process.env.EXCHANGE_RATE_PATH);
 });
 
