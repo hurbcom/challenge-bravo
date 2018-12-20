@@ -1,7 +1,4 @@
 node_modules/
 
-# exclude everything
 log/*
-
-# exception to the rule
 !log/.gitkeep 
