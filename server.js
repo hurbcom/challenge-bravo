@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cron from 'node-cron';
 import status from 'express-status-monitor';
 
+import log from './src/services/logger.service';
 import routes from './src/routes/routes';
 import { updateExchangeRate } from './src/services/quotation-of-the-day.service';
 import serverStatusConfig from './src/data/express-status-monitor.json';
@@ -25,6 +26,7 @@ routes(app);
 app.listen(PORT, () => {
     // eslint-disable-next-line no-console
     console.log(`server running on ${PORT}`);
+    log(1, 'server.js', `server running on ${PORT}`);
 });
 
 cron.schedule('0 0 */2 * * *', () => {

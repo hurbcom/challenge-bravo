@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import log from './logger.service';
+
 const coinmarketcapQuotation = async () => {
     const apiKey = process.env.COIN_M_T_API_KEY;
     const uri = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
@@ -13,6 +15,7 @@ const coinmarketcapQuotation = async () => {
         const response = await axios.get(currencyLayerUri);
         return response.data;
     } catch (error) {
+        log(3, 'currency-conversion.controller.js', JSON.stringify(error));
         return error;
     }
 };

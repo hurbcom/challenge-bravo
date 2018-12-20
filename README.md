@@ -6,17 +6,17 @@ API, que responda JSON, para conversão monetária.
 
 ## Baixar, instalar e rodar:
 
-1. clone o projeto:
+1. Clonar o projeto:
 ```
 git clone https://github.com/rodrigobmuniz/challenge-bravo.git
 ```
 
-2. acessar a pasta do projeto:
+2. Acessar a pasta do projeto:
 ```
 cd  challenge-bravo
 ```
 
-3. instalar dependências
+3. Instalar dependências:
 ```
 npm install
 ```
@@ -25,7 +25,7 @@ ou
 yarn install
 ```
 
-4. Rode o projeto:
+4. Rodar o projeto:
 
 ``` 
 npm start 
@@ -46,19 +46,20 @@ API, que responde JSON, para conversão monetária.
 
 ### Principais características
 - Moeda de lastro (USD)
-- Faz conversões entre diferentes moedas com cotações de verdade e atuais.
-- Taxa de câmbio atualizado de hora em hora.
-- Tendo em vista que o ponto mais crítico da API é buscar a taxa na API de terceiros, temos redundância para as taxas de cambios das moédas e cripto-moédas (2 para cada)
-- converter entre as seguintes moedas:
+- Faz conversões entre diferentes moedas com cotações reais e atuais.
+- Taxa de câmbio atualizada de hora em hora.
+- Tendo em vista que o ponto mais crítico da API é buscar a taxa na API de terceiros, temos redundância para as taxas de câmbio das moedas e cripto-moedas (2 para cada).
+- Converter entre as seguintes moedas:
 -> USD
 -> BRL
 -> EUR
 -> BTC
 -> ETH
-
-Recebe como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+- Sistema simples de LOG em arquivo para identificar possíveis erros.
+- Monitoramento do sistema em tempo real no endereço `http://127.0.0.1:3000/`
 
 Ex: 
+Recebe como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
 
 #### Solicitação:
 ```
@@ -71,10 +72,10 @@ http://127.0.0.1:3000/api/conversion?from=BRL&to=EUR&amount=10.35
 | to | string| moeda destino da conversão |
 | amount | float | valor que deseja converter |
 
-| Código da moeda para API | Moéda | 
+| Código da moeda para API | Moeda | 
 |--|--|
 | USD | Dólar americano |
-|  BRL | Real brasileiro |
+|  BRL | Real |
 | EUR | Euro |
 | BTC | Bitcoin |
 | ETH | Ethereum |
@@ -95,9 +96,9 @@ http://127.0.0.1:3000/api/conversion?from=BRL&to=EUR&amount=10.35
 | Parâmetro | Tipo | Descrição |
 |--|--|--|
 | error | boolean | indicativo se API retornou com sucesso |
-| updateDate | string | data de atualizaão da taxa de conversão |
-| amountToBeConverted | float | valer que deve ser convertido |
-| from | string | moeda a ser convertido |
+| updateDate | string | data de atualização da taxa de conversão |
+| amountToBeConverted | float | valor que deve ser convertido |
+| from | string | moeda a ser convertida |
 | to | string| moeda destino da conversão |
 | convertedValue | string | valor convertido |
 
@@ -112,7 +113,7 @@ Utilize o endereço `http://127.0.0.1:3000/` para monitorar o sistema em tempo r
 
 ## Testes automatizados:
 1. Acessar a raiz do projeto
-2. Certifique-se que o `server` do projeto NÃO está rodando. Se estiver finaliza o mesmo com `Ctrl + C`
+2. Certifique-se que o `server` do projeto NÃO está rodando. Se estiver, finaliza o mesmo com `Ctrl + C`
 
 3. Rode os testes:
 ```
@@ -158,12 +159,12 @@ server running on 3000
 npm start
 ```
 
-2. Acessar a págians de monitoramento do servidor
+2. Acessar a página de monitoramento do servidor
 `http://127.0.0.1:3000/` para acompanhar o teste de carga
 
 3. Rodar o comando para o teste de carga:
 ```
-node_modules/.bin/loadtest http://127.0.0.1:3000/api/conversion\?from\=ETH\&to\=BRL\&amount\=100 -t 20 -c 100 --rps 1000
+node_modules/.bin/loadtest http://127.0.0.1:3000/api/conversion\?from\=ETH\&to\=BRL\&amount\=100 -t 20 -c 10 --rps 1000
 ```
 
 

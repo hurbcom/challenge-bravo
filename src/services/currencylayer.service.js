@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import log from './logger.service';
+
 const currencyLayerQuotation = async (acceptCoins = null) => {
     const apiKey = process.env.CURRENCY_L_API_KEY;
     const uri = 'http://apilayer.net/api/live';
@@ -11,6 +13,7 @@ const currencyLayerQuotation = async (acceptCoins = null) => {
         const response = await axios.get(currencyLayerUri);
 
         if (response.data.error) {
+            log(3, 'currency-conversion.controller.js', JSON.stringify(response.data));
             return response.data;
         }
 
