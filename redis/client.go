@@ -1,36 +1,30 @@
 package redis
 
 /**
-  Redis implementation exposing pub/sub api only.
+  Consuming redis API.
 */
 
 import (
-	"fmt"
 	"github.com/go-redis/redis"
 	"schonmann/challenge-bravo/config"
+	"schonmann/challenge-bravo/util"
 )
 
 var (
 	redisConfig = config.Get().Redis
 	redisClient = redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", redisConfig.Host, redisConfig.Port),
+		Addr:     util.FormatAddress(redisConfig.Host, redisConfig.Port),
 		Password: redisConfig.Password,
 		DB:       redisConfig.Database,
 	})
 )
 
-func Publish(key string, message interface{}) (int64, error) {
-	return redisClient.Publish(key, message).Result()
+//MSet sets pairs of keys and values to database.
+func MSet(pairs ...interface{}) (string, error) {
+	return redisClient.MSet(pairs...).Result()
 }
 
-func Subscribe(keys ...string) (*redis.PubSub, error) {
-	pubSub := redisClient.Subscribe(keys...)
-	_, err := pubSub.Receive()
-	return pubSub, err
-}
-
-func PSubscribe(keys ...string) (*redis.PubSub, error) {
-	pubSub := redisClient.PSubscribe(keys...)
-	_, err := pubSub.Receive()
-	return pubSub, err
+//MGet gets multiple values from database.
+func MGet(key ...string) ([]interface{}, error) {
+	return redisClient.MGet(key...).Result()
 }

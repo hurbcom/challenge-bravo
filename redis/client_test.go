@@ -2,21 +2,24 @@ package redis
 
 import (
 	"fmt"
-	"schonmann/challenge-bravo/currency"
+	"strconv"
 	"testing"
 )
 
-func TestPubSub(t *testing.T) {
-	pubSub, errSub := PSubscribe(CurrencyQuotaKey("*"))
-	if errSub != nil {
+func TestMGetMSet(t *testing.T) {
+	_, err := MSet("martino", 9, "metheny", 10)
+	if err != nil {
 		t.Fail()
 	}
-	errPub := Publish(CurrencyQuotaKey(currency.EUR), 3.141519)
-	if errPub != nil {
+	vals, err := MGet("martino", "metheny")
+	if err != nil {
 		t.Fail()
 	}
-	for update := range pubSub.Channel() {
-		fmt.Printf("New quota => Coin: %v, Value: %v\n", update.Channel, update.Payload)
-		break
+	for _, v := range vals {
+		fl, err := strconv.ParseFloat(v.(string), 64)
+		if err != nil {
+			t.Fail()
+		}
+		fmt.Println(fl + 1)
 	}
 }
