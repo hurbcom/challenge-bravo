@@ -5,6 +5,10 @@
     },
     "worker": {
         "externalApis": {
+            "openExchangeRates": {
+                "apiKey": "8aea4fee41864eb1a150efd84cbe2817",
+                "url": "https://openexchangerates.org/api/"
+            }
         }
     },
     "redis": {

@@ -21,10 +21,10 @@ type AppConfig struct {
 		Port           int    `json:"port"`
 		UpdateInterval int32  `json:"updateInterval"`
 		ExternalAPIs   struct {
-			Currency struct {
+			OpenExchangeRates struct {
 				URL    string `json:"url"`
 				APIKey string `json:"apiKey"`
-			}
+			} `json:"openExchangeRates"`
 		} `json:"externalApis"`
 	}
 	Redis struct {
