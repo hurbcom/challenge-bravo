@@ -7,5 +7,5 @@ import (
 
 func main() {
 	log.Infof("Starting api node...")
-	api.ServeRoutes()
+	api.ServeApi()
 }

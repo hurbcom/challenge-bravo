@@ -12,7 +12,7 @@ import (
   Routing and serving logic.
 */
 
-func ServeRoutes() {
+func ServeApi() {
 	ech := echo.New()
 
 	ech.Use(middleware.Recover())
