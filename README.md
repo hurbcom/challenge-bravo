@@ -103,6 +103,9 @@ http://127.0.0.1:3000/api/conversion?from=BRL&to=EUR&amount=10.35
 | convertedValue | string | valor convertido |
 
 
+## LOG do sistema
+Para acessar o arquivo de log, acessar a pasta `log` na raiz do projeto. O sistema vai gerar um arquivo de log por dia.
+
 ## Monitore o sistema
 Utilize o endereço `http://127.0.0.1:3000/` para monitorar o sistema em tempo real
 
@@ -110,6 +113,49 @@ Utilize o endereço `http://127.0.0.1:3000/` para monitorar o sistema em tempo r
   <img src="tela_status.png" alt="Tela de monitoramento do sistema" />
 </p>
 
+## Teste de carga:
+
+### Rodar o teste de carga:
+
+1. Inciar o server:
+``` 
+npm start
+```
+
+2. Acessar a página de monitoramento do servidor
+`http://127.0.0.1:3000/` para acompanhar o teste de carga
+
+3. Rodar o comando para o teste de carga:
+```
+node_modules/.bin/loadtest http://127.0.0.1:3000/api/conversion\?from\=ETH\&to\=BRL\&amount\=100 -t 20 -c 10 --rps 1000
+```
+
+Exemplo do resultado do teste de carga:
+```
+[Wed Dec 19 2018 01:42:52 GMT-0200 (Brasilia Summer Time)] INFO Requests: 0, requests per second: 0, mean latency: 0 ms
+[Wed Dec 19 2018 01:42:56 GMT-0200 (Brasilia Summer Time)] INFO Requests: 4532, requests per second: 907, mean latency: 2.9 ms
+[Wed Dec 19 2018 01:43:01 GMT-0200 (Brasilia Summer Time)] INFO Requests: 9516, requests per second: 997, mean latency: 2.2 ms
+[Wed Dec 19 2018 01:43:06 GMT-0200 (Brasilia Summer Time)] INFO Requests: 14373, requests per second: 971, mean latency: 73.5 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Target URL:          http://127.0.0.1:3000/api/conversion?from=ETH&to=BRL&amount=100
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Max time (s):        20
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Concurrency level:   100
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Agent:               none
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 1000
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Completed requests:  17358
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Total errors:        0
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Total time:          20.08130635 s
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 864
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Mean latency:        52.4 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Percentage of the requests served within a certain time
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   50%      1 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   90%      7 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   95%      32 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   99%      2200 ms
+[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO  100%      4205 ms (longest request)
+```
 
 ## Testes automatizados:
 1. Acessar a raiz do projeto
@@ -146,51 +192,4 @@ server running on 3000
 
 
   15 passing (305ms)
-```
-
-## Teste de carga:
-
-
-### Rodar o teste de carga:
-
-
-1. Inciar o server:
-``` 
-npm start
-```
-
-2. Acessar a página de monitoramento do servidor
-`http://127.0.0.1:3000/` para acompanhar o teste de carga
-
-3. Rodar o comando para o teste de carga:
-```
-node_modules/.bin/loadtest http://127.0.0.1:3000/api/conversion\?from\=ETH\&to\=BRL\&amount\=100 -t 20 -c 10 --rps 1000
-```
-
-
-Exemplo do resultado do teste de carga:
-```
-[Wed Dec 19 2018 01:42:52 GMT-0200 (Brasilia Summer Time)] INFO Requests: 0, requests per second: 0, mean latency: 0 ms
-[Wed Dec 19 2018 01:42:56 GMT-0200 (Brasilia Summer Time)] INFO Requests: 4532, requests per second: 907, mean latency: 2.9 ms
-[Wed Dec 19 2018 01:43:01 GMT-0200 (Brasilia Summer Time)] INFO Requests: 9516, requests per second: 997, mean latency: 2.2 ms
-[Wed Dec 19 2018 01:43:06 GMT-0200 (Brasilia Summer Time)] INFO Requests: 14373, requests per second: 971, mean latency: 73.5 ms
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Target URL:          http://127.0.0.1:3000/api/conversion?from=ETH&to=BRL&amount=100
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Max time (s):        20
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Concurrency level:   100
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Agent:               none
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 1000
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Completed requests:  17358
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Total errors:        0
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Total time:          20.08130635 s
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Requests per second: 864
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Mean latency:        52.4 ms
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO Percentage of the requests served within a certain time
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   50%      1 ms
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   90%      7 ms
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   95%      32 ms
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO   99%      2200 ms
-[Wed Dec 19 2018 01:43:12 GMT-0200 (Brasilia Summer Time)] INFO  100%      4205 ms (longest request)
 ```
