@@ -19,7 +19,7 @@ type AppConfig struct {
 	Worker struct {
 		Host           string `json:"host"`
 		Port           int    `json:"port"`
-		UpdateInterval int32  `json:"updateInterval"`
+		UpdateInterval int64  `json:"updateInterval"`
 		ExternalAPIs   struct {
 			OpenExchangeRates struct {
 				URL    string `json:"url"`
