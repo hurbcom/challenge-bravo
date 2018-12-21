@@ -6,22 +6,22 @@ import (
 	"github.com/schonmann/challenge-bravo/util"
 )
 
-type RetrieveRatesStrategy interface {
-	RetrieveRates() (*RatesResponse, error)
+type RetrieveQuotasStrategy interface {
+	RetrieveRates() (*QuotasResponse, error)
 }
 
-type RatesResponse struct {
+type QuotasResponse struct {
 	Timestamp int64              `json:"timestamp"`
 	Base      string             `json:"base"`
-	Rates     map[string]float64 `json:"rates"`
+	Quotas    map[string]float64 `json:"rates"`
 }
 
 type OpenExchangeRatesStrategy struct{}
 
-func (o OpenExchangeRatesStrategy) RetrieveRates() (*RatesResponse, error) {
+func (o OpenExchangeRatesStrategy) RetrieveRates() (*QuotasResponse, error) {
 	apiConfig := config.Get().Worker.ExternalAPIs.OpenExchangeRates
 	apiUrl := fmt.Sprintf("%slatest.json?app_id=%s&show_alternative=1", apiConfig.URL, apiConfig.APIKey)
-	response := RatesResponse{}
+	response := QuotasResponse{}
 	if err := util.GetAndParseJSON(apiUrl, &response); err != nil {
 		return nil, err
 	}
@@ -33,6 +33,6 @@ func (o OpenExchangeRatesStrategy) RetrieveRates() (*RatesResponse, error) {
   OpenExchangeRatesStrategy for now.
 */
 
-func GetRetrieveRatesStrategy() RetrieveRatesStrategy {
+func GetRetrieveRatesStrategy() RetrieveQuotasStrategy {
 	return OpenExchangeRatesStrategy{}
 }

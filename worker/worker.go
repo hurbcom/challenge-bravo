@@ -30,11 +30,11 @@ func StartWorker() {
 			continue
 		}
 
-		log.Infof("Keys to be set: %v", response.Rates)
+		log.Infof("Keys to be set: %v", response.Quotas)
 
 		newQuotas := make([]interface{}, 0)
 
-		for currency, quota := range response.Rates {
+		for currency, quota := range response.Quotas {
 			newQuotas = append(newQuotas, keys.QuotaKey(currency), quota)
 		}
 
