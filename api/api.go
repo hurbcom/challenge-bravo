@@ -16,7 +16,7 @@ func ServeApi() {
 	ech := echo.New()
 
 	ech.Use(middleware.Recover())
-	ech.Use(middleware.Logger())
+	//ech.Use(middleware.Logger())
 	ech.Use(middleware.CORS())
 	ech.Use(middleware.CSRF())
 	ech.Use(middleware.Secure())
