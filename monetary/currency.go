@@ -18,26 +18,39 @@ func ConvertCurrency(amount float64, from, to string) (float64, error) {
 	if err != nil {
 		return 0, errors.New("Error retrieving quota info.")
 	}
-
-	fromQuotaRaw, toQuotaRaw := currencies[0], currencies[1]
-	if fromQuotaRaw == nil {
-		return 0, errors.New("'From' quota not found in database.")
-	}
-
-	if toQuotaRaw == nil {
-		return 0, errors.New("'To' quota not found in database.")
-	}
-
-	fromQuota, err := strconv.ParseFloat(fromQuotaRaw.(string), 64)
+	fromQuota, err := parseRawQuota(currencies[0])
 	if err != nil {
-		return 0, errors.New("Error parsing 'From' quota value from database.")
+		return 0, errors.New("error parsing 'from' quota: " + err.Error())
 	}
-
-	toQuota, err := strconv.ParseFloat(toQuotaRaw.(string), 64)
+	toQuota, err := parseRawQuota(currencies[1])
 	if err != nil {
-		return 0, errors.New("Error parsing 'To' quota value from database.")
+		return 0, errors.New("error parsing 'to' quota: " + err.Error())
 	}
+	return calculateConversion(amount, fromQuota, toQuota), nil
+}
 
+/**
+  Parses float64 quota from string.
+*/
+func parseRawQuota(quotaRaw interface{}) (float64, error) {
+	if quotaRaw == nil {
+		return 0, errors.New("quota is nil")
+	}
+	quotaStr, ok := quotaRaw.(string)
+	if !ok {
+		return 0, errors.New("quota parsing error (not a string)")
+	}
+	quota, err := strconv.ParseFloat(quotaStr, 64)
+	if err != nil {
+		return 0, errors.New("quota parsing error")
+	}
+	return quota, nil
+}
+
+/**
+  Do the conversion math.
+*/
+func calculateConversion(amount, fromQuota, toQuota float64) float64 {
 	ratio := toQuota / fromQuota
-	return ratio * amount, nil
+	return ratio * amount
 }
