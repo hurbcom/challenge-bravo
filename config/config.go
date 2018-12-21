@@ -6,8 +6,8 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -42,7 +42,7 @@ var (
 func getConfigFilePath() string {
 	val, found := os.LookupEnv("CFGPATH")
 	if !found {
-		return "/home/xuma/Programming/go/src/github.com/schonmann/challenge-bravo/config/config.json" //The default config file path.
+		return "config/config.json" //The default config file path.
 	}
 	return val
 }
@@ -50,11 +50,11 @@ func getConfigFilePath() string {
 func init() {
 	file, err := ioutil.ReadFile(getConfigFilePath())
 	if err != nil {
-		log.Fatalf("Config file reading error: %v\n", err)
+		panic(fmt.Sprintf("Config file reading error: %v\n", err))
 	}
 	appConfig = &AppConfig{}
 	if json.Unmarshal(file, appConfig) != nil {
-		log.Fatalf("Config file serialization error: %v\n", err)
+		panic(fmt.Sprintf("Config file reading error: %v\n", err))
 	}
 }
 
