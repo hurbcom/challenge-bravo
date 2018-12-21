@@ -2,8 +2,8 @@ package controller
 
 import (
 	"github.com/labstack/echo"
+	"github.com/schonmann/challenge-bravo/monetary"
 	"net/http"
-	"schonmann/challenge-bravo/monetary"
 )
 
 /**

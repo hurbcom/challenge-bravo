@@ -2,8 +2,8 @@ package external
 
 import (
 	"fmt"
-	"schonmann/challenge-bravo/config"
-	"schonmann/challenge-bravo/util"
+	"github.com/schonmann/challenge-bravo/config"
+	"github.com/schonmann/challenge-bravo/util"
 )
 
 type RetrieveRatesStrategy interface {

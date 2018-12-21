@@ -3,9 +3,9 @@ package api
 import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"schonmann/challenge-bravo/api/controller"
-	"schonmann/challenge-bravo/config"
-	"schonmann/challenge-bravo/util"
+	"github.com/schonmann/challenge-bravo/api/controller"
+	"github.com/schonmann/challenge-bravo/config"
+	"github.com/schonmann/challenge-bravo/util"
 )
 
 /**

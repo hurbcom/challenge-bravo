@@ -2,10 +2,10 @@ package worker
 
 import (
 	"github.com/labstack/gommon/log"
-	"schonmann/challenge-bravo/config"
-	"schonmann/challenge-bravo/keys"
-	"schonmann/challenge-bravo/redis"
-	"schonmann/challenge-bravo/worker/external"
+	"github.com/schonmann/challenge-bravo/config"
+	"github.com/schonmann/challenge-bravo/keys"
+	"github.com/schonmann/challenge-bravo/redis"
+	"github.com/schonmann/challenge-bravo/worker/external"
 	"time"
 )
 

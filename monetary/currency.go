@@ -2,8 +2,8 @@ package monetary
 
 import (
 	"github.com/pkg/errors"
-	"schonmann/challenge-bravo/keys"
-	"schonmann/challenge-bravo/redis"
+	"github.com/schonmann/challenge-bravo/keys"
+	"github.com/schonmann/challenge-bravo/redis"
 	"strconv"
 )
 

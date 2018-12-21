@@ -42,7 +42,7 @@ var (
 func getConfigFilePath() string {
 	val, found := os.LookupEnv("CFGPATH")
 	if !found {
-		return "/home/xuma/Programming/go/src/schonmann/challenge-bravo/config/config.json" //The default config file path.
+		return "/home/xuma/Programming/go/src/github.com/schonmann/challenge-bravo/config/config.json" //The default config file path.
 	}
 	return val
 }
