@@ -32,13 +32,13 @@ func StartWorker() {
 
 		log.Infof("Keys to be set: %v", response.Rates)
 
-		keysToSet := make([]interface{}, 0)
+		newQuotas := make([]interface{}, 0)
 
 		for currency, quota := range response.Rates {
-			keysToSet = append(keysToSet, keys.QuotaKey(currency), quota)
+			newQuotas = append(newQuotas, keys.QuotaKey(currency), quota)
 		}
 
-		if _, err := redis.MSet(keysToSet...); err != nil {
+		if _, err := redis.MSet(newQuotas...); err != nil {
 			log.Fatalf("Error setting new rates from external API: %v", err)
 		}
 
