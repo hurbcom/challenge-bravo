@@ -33,7 +33,7 @@ func (o OpenExchangeRatesStrategy) RetrieveRates() (*QuotasResponse, error) {
 	return &response, nil
 }
 
-//GetRetrieveQuotasStrategy returns the configured strategy
+//GetRetrieveQuotasStrategy returns the configured strategy.
 func GetRetrieveQuotasStrategy() RetrieveQuotasStrategy {
 	return OpenExchangeRatesStrategy{}
 }

@@ -12,7 +12,8 @@ import (
 /**
   Worker that run's periodically as of it's configured
   update interval. It will find current rates using any
-  retrieve strategy and save these on Redis right after.
+  implemented retrieve strategy and save these on Redis
+  right after.
 */
 
 func StartWorker(cfg *config.AppConfig) {
@@ -40,6 +41,8 @@ func StartWorker(cfg *config.AppConfig) {
 		if _, err := redis.MSet(newQuotas...); err != nil {
 			log.Fatalf("Error setting new rates from external API: %v", err)
 		}
+
+		log.Info("Updated %d quotations in Redis!", len(response.Quotas))
 
 		time.Sleep(intervalTime)
 	}

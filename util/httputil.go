@@ -8,6 +8,11 @@ import (
 	"net/http"
 )
 
+/**
+  Utility function to do a GET Request to the specified
+  URL and parse response content JSON to a struct.
+*/
+
 func GetAndParseJSON(url string, structPointer interface{}) error {
 	spaceClient := http.Client{}
 	req, err := http.NewRequest(http.MethodGet, url, nil)
