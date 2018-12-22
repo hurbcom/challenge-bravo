@@ -108,7 +108,7 @@ O Worker roda periodicamente como configurado via propriedade `UpdateInterval` n
 
 * Descendo aplicação
 
-        docker-compose down -d
+        docker-compose down
 
 ### Swarm Mode
 
@@ -145,5 +145,5 @@ Para estes testes, foi utilizada uma máquina Inspiron-7572 (i7 U + 16GB), rodan
 
 ## Observações
 
-* As API keys foram commitadas no controle de versão apenas por conveniência, e considerando o fato de serem chaves gratuitas. Entendo que não é uma boa prática nem faria em caso de desenvolvimento produtivo.
+* As API keys foram commitadas no controle de versão apenas por conveniência, e considerando o fato de serem chaves gratuitas. Entendo que não é uma boa prática e nem faria em caso de desenvolvimento produtivo.
 * Tive alguns problemas pra executar em uma máquina windows utilizando swarm mode (não conseguia fazer requisições outbound para as API's de cotação de dentro das containers). Por tanto, sugiro que seja utilizado o docker-compose na avaliação.
