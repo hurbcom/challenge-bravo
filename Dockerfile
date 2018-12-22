@@ -13,19 +13,22 @@ ENV CFGPATH=config/config.docker.json
 WORKDIR /go/src/github.com/schonmann/challenge-bravo
 COPY . .
 
-# use git to get dep and remove it right after to save space.
+# get dep.
 
 RUN apk add --no-cache git mercurial \
-    && go get github.com/golang/dep/cmd/dep \
-    && apk del git mercurial
+    && go get github.com/golang/dep/cmd/dep
 
 # ensure vendor folder in correct state and install.
 
-RUN dep ensure && rm $GOPATH/bin/dep
+RUN dep ensure
 
 # build and set run command.
 
 RUN go install ./...
 RUN go build -o main ./entry/${role}/
+
+# clear image to save space.
+
+RUN apk del git mercurial && rm $GOPATH/bin/dep
 
 CMD ["./main"]
