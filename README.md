@@ -20,11 +20,11 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 ## Arquitetura
 
-A arquitetura foi dividida em três componentes:
+Dados os requisitos de performance, a arquitetura foi dividida em três componentes:
 
 - Redis, banco chave/valor in-memory;
 - Nó worker em Golang, que periodicamente recebe as cotações baseado em uma estratégia qualquer, salvando estes dados no Redis;
-- Nó api em Golang, que levanta o servidor HTTP e converte baseado nas cotações armazenadas no Redis.
+- Nó api em Golang, que levanta o servidor HTTP e serve rota de conversão, devolvendo um resultado baseado nas cotações armazenadas no Redis.
 
 ### Redis
 
@@ -42,11 +42,51 @@ Frameworks/Libs/Ferramentas:
 * [Go Redis](https://github.com/go-redis/redis) para conexão com o banco;
 * [dep](https://github.com/golang/dep/cmd/dep) para gerenciamento de dependências.
 
-Cogitei utilizar uma lib para gerenciamento de configuração (Ex. Configor), mas para manter a simplicidade utilizei o padrão da linguagem.
+Cogitei utilizar uma lib para gerenciamento de configuração (Ex. Configor) para facilitar a passagem de configurações via variáveis de ambiente ao rodar as containers, mas para manter a simplicidade e evitar qualquer bug relacionado à ferramentas de terceiros, utilizei o padrão da linguagem.
 
 ### Load Balancer
 
 Tendo em vista que o próprio Routing Mesh interno do Docker Swarm já realiza roteamento round-robin, optei por não incluir qualquer load balancer. No entanto, seria possível incluir facilmente na arquitetura. Não entendo que o caching das requisições seja tão crucial nesse use case, dado que tanto os valores convertidos quanto as cotações são dados extremamente mutáveis.
+
+## Implementação
+
+### API
+
+A API serve um método `GET /currency/convert` para as requisições, recebendo os parâmetros:
+
+* `from`, a moeda base.
+* `to`, a moeda alvo.
+* `amount`, a quantidade de unidades monetárias da moeda base.
+
+Exemplo:
+
+    GET http://localhost:8080/currency/convert?amount=1&from=USD&to=BRL
+    
+    {
+        "amount":1,
+        "from":"USD",
+        "to":"BRL",
+        "resultingAmount":3.9041
+    }
+
+
+Neste método, as taxas de conversão são encontradas no Redis, o cálculo é feito, e o resultado devolvido.
+
+Nas respostas são devolvidos os mesmos parâmetros, adicionando:
+
+* `resultingAmount`, a quantidade resultante da conversão.
+
+Para casos de erro, foi respeitada a semântica http, com os status code corretos sendo enviados em cada caso.
+
+Por padrão, a API serve na porta `8080`, podendo ser alterada no arquivo de configurações, ou até no mapeamento de porta `host:container`, em caso de container.
+
+### Worker
+
+O Worker roda periodicamente como configurado via propriedade `UpdateInterval` nas configurações da aplicação. Seu funcionamento é resumido a:
+* Requisitar novas taxas de cambio, via `RequestQuotasStrategy` implementada.
+* Salvar taxas de cambio no Redis.
+* Aguardar por `UpdateInterval` milissegundos e executar novamente.
+
 ## Requisitos
 
 - Docker-CLI/Engine (versão 18.0.9)
@@ -57,31 +97,39 @@ Tendo em vista que o próprio Routing Mesh interno do Docker Swarm já realiza r
 ### Clonando repositório
 
 
-`git clone https://github.com/schonmann/challenge-bravo.git`
-
-`cd challenge-bravo`
+    git clone https://github.com/schonmann/challenge-bravo.git
+    cd challenge-bravo
 
 ### Via docker-compose (recomendado)
 
-`docker-compose up -d` (levanta nós)
+* Levantando aplicação
+    
+        docker-compose up -d
 
-`docker-compose down -d` (desce nós)
+* Descendo aplicação
+
+        docker-compose down -d
 
 ### Swarm Mode
 
 * Manager 
     
-    `docker swarm init` (inicializa swarm como manager)
+    * Levantando stack
+        
+            docker swarm init
+            docker stack deploy -c docker-compose.yml currency-conversion
     
-    `docker stack deploy -c docker-compose.yml currency-conversion` (levanta stack)
-    
-    `docker service scale currency-conversion_api=<N>` (escala para N nós de api)
-    
-    `docker stack rm currency-conversion-api` (desce stack)
+    * Escalando nós da API (Ex: 3)
+        
+            docker service scale currency-conversion_api=3    
+            
+    * Descendo stack
+        
+            docker stack rm currency-conversion-api
     
 * Worker
     
-    `docker swarm join --token <SWARM_TOKEN>` (joina swarm como worker)
+        docker swarm join --token <SWARM_TOKEN>
 
 ## Performance
 
@@ -89,8 +137,13 @@ Para **2500** reqs/s nível de concorrência **100**, a latência média das req
 
 ![2500/rps](https://i.imgur.com/rHljN3u.png)
 
-Aumentando o nível de concorrência **1000**, a latência média sobe para **31.9 ms**:
+Aumentando o nível de concorrência **1000**, a latência média sobe para **31.9 ms**, o que parece não comprometer os resultados:
 
 ![2500/rps](https://i.imgur.com/gI5tlMZ.png)
 
-O que parece não comprometer os resultados. Para estes testes, foi utilizada uma máquina Inspiron-7572 (i7 U + 16GB).
+Para estes testes, foi utilizada uma máquina Inspiron-7572 (i7 U + 16GB), rodando Ubuntu 18.04.
+
+## Observações
+
+* As API keys foram commitadas no controle de versão apenas por conveniência, e considerando o fato de serem chaves gratuitas. Entendo que não é uma boa prática nem faria em caso de desenvolvimento produtivo.
+* Tive alguns problemas pra executar em uma máquina windows utilizando swarm mode (não conseguia fazer requisições outbound para as API's de cotação de dentro das containers). Por tanto, sugiro que seja utilizado o docker-compose na avaliação.
