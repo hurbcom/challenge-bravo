@@ -26,7 +26,7 @@ Dados os requisitos de performance, a arquitetura foi dividida em três componen
 
 - Redis, banco chave/valor in-memory;
 - Nó worker em Golang, que periodicamente recebe as cotações baseado em uma estratégia qualquer, salvando estes dados no Redis;
-- Nó api em Golang, que levanta o servidor HTTP e serve rota de conversão, devolvendo um resultado baseado nas cotações armazenadas no Redis.
+- Nó api em Golang, que levanta o servidor HTTP e serve rota de conversão, calculando o resultado baseado nas cotações atualmente no Redis.
 
 ### Redis
 
