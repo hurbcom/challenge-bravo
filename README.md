@@ -60,6 +60,8 @@ A API serve um método `GET /currency/convert` para as requisições, recebendo 
 * `to`, a moeda alvo.
 * `amount`, a quantidade de unidades monetárias da moeda base.
 
+Neste método, as taxas de conversão são encontradas no Redis, o cálculo é feito, e o resultado devolvido.
+
 Exemplo:
 
     GET http://localhost:8080/currency/convert?amount=1&from=USD&to=BRL
@@ -70,13 +72,6 @@ Exemplo:
         "to":"BRL",
         "resultingAmount":3.9041
     }
-
-
-Neste método, as taxas de conversão são encontradas no Redis, o cálculo é feito, e o resultado devolvido.
-
-Nas respostas são devolvidos os mesmos parâmetros, adicionando:
-
-* `resultingAmount`, a quantidade resultante da conversão.
 
 Para casos de erro, foi respeitada a semântica http, com os status code corretos sendo enviados em cada caso.
 
