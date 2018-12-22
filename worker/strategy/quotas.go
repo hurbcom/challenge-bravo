@@ -1,4 +1,4 @@
-package external
+package strategy
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 
 /**
   Strategy implemented to give flexibility over
-  external APIs used for currency rates retrieving.
+  strategy APIs used for currency rates retrieving.
 */
 
 type RetrieveQuotasStrategy interface {

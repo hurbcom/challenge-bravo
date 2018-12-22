@@ -5,7 +5,7 @@ import (
 	"github.com/schonmann/challenge-bravo/config"
 	"github.com/schonmann/challenge-bravo/keys"
 	"github.com/schonmann/challenge-bravo/redis"
-	"github.com/schonmann/challenge-bravo/worker/external"
+	"github.com/schonmann/challenge-bravo/worker/strategy"
 	"time"
 )
 
@@ -21,11 +21,9 @@ func StartWorker(cfg *config.AppConfig) {
 	intervalTime := time.Millisecond * time.Duration(cfg.Worker.UpdateInterval)
 
 	for {
-		strategy := external.GetRetrieveQuotasStrategy()
-		response, err := strategy.RetrieveRates()
-
+		response, err := strategy.GetRetrieveQuotasStrategy().RetrieveRates()
 		if err != nil || len(response.Quotas) == 0 {
-			log.Fatalf("Error getting/parsing json from external API: %v", err)
+			log.Fatalf("Error getting/parsing json from strategy API: %v", err)
 			time.Sleep(intervalTime)
 			continue
 		}
@@ -39,7 +37,7 @@ func StartWorker(cfg *config.AppConfig) {
 		}
 
 		if _, err := redis.MSet(newQuotas...); err != nil {
-			log.Fatalf("Error setting new rates from external API: %v", err)
+			log.Fatalf("Error setting new rates from strategy API: %v", err)
 		}
 
 		log.Infof("Updated %d quotations in Redis!", len(response.Quotas))
