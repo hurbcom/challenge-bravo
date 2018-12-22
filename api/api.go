@@ -12,7 +12,7 @@ import (
   Routing and serving logic.
 */
 
-func ServeApi() {
+func ServeApi(cfg *config.AppConfig) {
 	ech := echo.New()
 
 	ech.Use(middleware.Recover())
@@ -23,9 +23,7 @@ func ServeApi() {
 
 	ech.GET("/currency/convert", controller.HandleCurrencyConversion)
 
-	cfg := config.Get().API
-
-	if err := ech.Start(util.FormatAddress(cfg.Host, cfg.Port)); err != nil {
+	if err := ech.Start(util.FormatAddress(cfg.API.Host, cfg.API.Port)); err != nil {
 		panic("Unable to start API! :(")
 	}
 }

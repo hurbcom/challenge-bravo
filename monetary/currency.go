@@ -16,7 +16,7 @@ import (
 func ConvertCurrency(amount float64, from, to string) (float64, error) {
 	currencies, err := redis.MGet(keys.QuotaKey(from), keys.QuotaKey(to))
 	if err != nil {
-		return 0, errors.New("Error retrieving quota info.")
+		return 0, errors.New("Error retrieving quota info in database.")
 	}
 	fromQuota, err := parseRawQuota(currencies[0])
 	if err != nil {

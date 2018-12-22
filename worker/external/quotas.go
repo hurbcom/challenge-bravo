@@ -6,6 +6,11 @@ import (
 	"github.com/schonmann/challenge-bravo/util"
 )
 
+/**
+  Strategy implemented to give flexibility over
+  external APIs used for currency rates retrieving.
+*/
+
 type RetrieveQuotasStrategy interface {
 	RetrieveRates() (*QuotasResponse, error)
 }
@@ -28,11 +33,7 @@ func (o OpenExchangeRatesStrategy) RetrieveRates() (*QuotasResponse, error) {
 	return &response, nil
 }
 
-/**
-  Strategy implemented to give API flexibility. Just returning
-  OpenExchangeRatesStrategy for now.
-*/
-
-func GetRetrieveRatesStrategy() RetrieveQuotasStrategy {
+//GetRetrieveQuotasStrategy returns the configured strategy
+func GetRetrieveQuotasStrategy() RetrieveQuotasStrategy {
 	return OpenExchangeRatesStrategy{}
 }

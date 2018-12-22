@@ -9,22 +9,21 @@ import (
 	"time"
 )
 
-func getWorkerInterval(interval int64) time.Duration {
-	if interval != 0 {
-		return time.Second * time.Duration(interval)
-	}
-	return time.Minute * 30
-}
+/**
+  Worker that run's periodically as of it's configured
+  update interval. It will find current rates using any
+  retrieve strategy and save these on Redis right after.
+*/
 
-func StartWorker() {
-	workerConfig := config.Get().Worker
-	intervalTime := getWorkerInterval(workerConfig.UpdateInterval)
+func StartWorker(cfg *config.AppConfig) {
+
+	intervalTime := time.Millisecond * time.Duration(cfg.Worker.UpdateInterval)
 
 	for {
-		strategy := external.GetRetrieveRatesStrategy()
+		strategy := external.GetRetrieveQuotasStrategy()
 		response, err := strategy.RetrieveRates()
 
-		if err != nil {
+		if err != nil || len(response.Quotas) == 0 {
 			log.Fatalf("Error getting/parsing json from external API: %v", err)
 			time.Sleep(intervalTime)
 			continue
