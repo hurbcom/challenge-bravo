@@ -28,9 +28,8 @@ func Test_calculateConversion(t *testing.T) {
 	amount, from, to := 1340.14, 1.00, 3.141519
 	expected := 4210.07527266
 
-	result := calculateConversion(amount, from, to)
-
-	if expected != result {
+	result, err := calculateConversion(amount, from, to)
+	if err != nil || expected != result {
 		t.Fail()
 	}
 }

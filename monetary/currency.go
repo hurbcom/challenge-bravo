@@ -26,12 +26,13 @@ func ConvertCurrency(amount float64, from, to string) (float64, error) {
 	if err != nil {
 		return 0, errors.New("error parsing 'to' quota: " + err.Error())
 	}
-	return calculateConversion(amount, fromQuota, toQuota), nil
+	return calculateConversion(amount, fromQuota, toQuota)
 }
 
 /**
   Parses float64 quota from string.
 */
+
 func parseRawQuota(quotaRaw interface{}) (float64, error) {
 	if quotaRaw == nil {
 		return 0, errors.New("quota is nil")
@@ -50,7 +51,11 @@ func parseRawQuota(quotaRaw interface{}) (float64, error) {
 /**
   Do the conversion math.
 */
-func calculateConversion(amount, fromQuota, toQuota float64) float64 {
+
+func calculateConversion(amount, fromQuota, toQuota float64) (float64, error) {
+	if fromQuota == 0 {
+		return 0, errors.New("'from' quota equals zero")
+	}
 	ratio := toQuota / fromQuota
-	return ratio * amount
+	return ratio * amount, nil
 }
