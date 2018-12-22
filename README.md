@@ -47,27 +47,27 @@ Cogitei utilizar uma lib para gerenciamento de configuração (Ex. Configor), ma
 ### Load Balancer
 
 Tendo em vista que o próprio Routing Mesh interno do Docker Swarm já realiza roteamento round-robin, optei por não incluir qualquer load balancer. No entanto, seria possível incluir facilmente na arquitetura. Não entendo que o caching das requisições seja tão crucial nesse use case, dado que tanto os valores convertidos quanto as cotações são dados extremamente mutáveis.
-### Requisitos
+## Requisitos
 
 - Docker-CLI/Engine (versão 18.0.9)
 - Ferramenta docker-compose (versão 1.23.x)
 
-### Rodando
+## Rodando
 
-##### Clonando repositório
+### Clonando repositório
 
 
 `git clone https://github.com/schonmann/challenge-bravo.git`
 
 `cd challenge-bravo`
 
-##### Via docker-compose (recomendado)
+### Via docker-compose (recomendado)
 
 `docker-compose up -d` (levanta nós)
 
 `docker-compose down -d` (desce nós)
 
-##### Swarm Mode
+### Swarm Mode
 
 * Manager 
     
@@ -83,7 +83,7 @@ Tendo em vista que o próprio Routing Mesh interno do Docker Swarm já realiza r
     
     `docker swarm join --token <SWARM_TOKEN>` (joina swarm como worker)
 
-### Performance
+## Performance
 
 Para **2500** reqs/s nível de concorrência **100**, a latência média das requisições foi de **9.7 ms**:
 
