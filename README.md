@@ -99,18 +99,18 @@ O Worker roda periodicamente como configurado via propriedade `UpdateInterval` n
 ### Clonando repositório
 
 
-    git clone https://github.com/schonmann/challenge-bravo.git
-    cd challenge-bravo
+    $ git clone https://github.com/schonmann/challenge-bravo.git
+    $ cd challenge-bravo
 
 ### Via docker-compose (recomendado)
 
 * Levantando aplicação
     
-        docker-compose up -d
+        $ docker-compose up -d
 
 * Descendo aplicação
 
-        docker-compose down
+        $ docker-compose down
 
 ### Swarm Mode
 
@@ -118,20 +118,20 @@ O Worker roda periodicamente como configurado via propriedade `UpdateInterval` n
     
     * Levantando stack
         
-            docker swarm init
-            docker stack deploy -c docker-compose.yml currency-conversion
+            $ docker swarm init
+            $ docker stack deploy -c docker-compose.yml currency-conversion
     
     * Escalando nós da API (Ex: 3)
         
-            docker service scale currency-conversion_api=3    
+            $ docker service scale currency-conversion_api=3    
             
     * Descendo stack
         
-            docker stack rm currency-conversion-api
+            $ docker stack rm currency-conversion-api
     
 * Worker
     
-        docker swarm join --token <SWARM_TOKEN>
+        $ docker swarm join --token <SWARM_TOKEN>
 
 ## Performance
 
