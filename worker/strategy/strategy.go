@@ -8,7 +8,7 @@ import (
 
 /**
   Strategy implemented to give flexibility over
-  strategy APIs used for currency rates retrieving.
+  APIs used for currency rates retrieving.
 */
 
 type RetrieveQuotasStrategy interface {
@@ -26,6 +26,18 @@ type OpenExchangeRatesStrategy struct{}
 func (o OpenExchangeRatesStrategy) RetrieveRates() (*QuotasResponse, error) {
 	apiConfig := config.Get().Worker.ExternalAPIs.OpenExchangeRates
 	apiUrl := fmt.Sprintf("%slatest.json?app_id=%s&show_alternative=1", apiConfig.URL, apiConfig.APIKey)
+	response := QuotasResponse{}
+	if err := util.GetAndParseJSON(apiUrl, &response); err != nil {
+		return nil, err
+	}
+	return &response, nil
+}
+
+type FixerStrategy struct{}
+
+func (o FixerStrategy) RetrieveRates() (*QuotasResponse, error) {
+	apiConfig := config.Get().Worker.ExternalAPIs.Fixer
+	apiUrl := fmt.Sprintf("%slatest?access_key=%s", apiConfig.URL, apiConfig.APIKey)
 	response := QuotasResponse{}
 	if err := util.GetAndParseJSON(apiUrl, &response); err != nil {
 		return nil, err

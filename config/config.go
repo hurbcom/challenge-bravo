@@ -25,6 +25,10 @@ type AppConfig struct {
 				URL    string `json:"url"`
 				APIKey string `json:"apiKey"`
 			} `json:"openExchangeRates"`
+			Fixer struct {
+				URL    string `json:"url"`
+				APIKey string `json:"apiKey"`
+			} `json:"fixer"`
 		} `json:"externalApis"`
 	}
 	Redis struct {

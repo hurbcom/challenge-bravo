@@ -49,7 +49,7 @@ func parseRawQuota(quotaRaw interface{}) (float64, error) {
 }
 
 /**
-  Do the conversion math.
+  Do the conversion keeping floating point precision untouched.
 */
 
 func calculateConversion(amount, fromQuota, toQuota float64) (float64, error) {
