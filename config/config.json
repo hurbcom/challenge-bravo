@@ -21,5 +21,6 @@
         "port": 6379,
         "password": "",
         "database": 0
-    }
+    },
+    "baseCurrency": "USD"
 }

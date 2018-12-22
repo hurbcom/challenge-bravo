@@ -37,6 +37,7 @@ type AppConfig struct {
 		Password string `json:"password"`
 		Database int    `json:"database"`
 	} `json:"redis"`
+	BaseCurrency string `json:"baseCurrency"`
 }
 
 var (
