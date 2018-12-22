@@ -18,7 +18,7 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 # Solução
 
-<img src="https://i.imgur.com/hBoARWH.png=250" width="600"></img>
+<img src="https://i.imgur.com/Ti2453E.png=250" width="600"></img>
 
 ## Arquitetura
 
