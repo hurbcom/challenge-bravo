@@ -16,9 +16,9 @@ A requisição deve receber como parâmetros: A moeda de origem, o valor a ser c
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
-## Solução
+# Solução
 
-### Arquitetura
+## Arquitetura
 
 A arquitetura foi dividida em três componentes:
 
@@ -26,7 +26,7 @@ A arquitetura foi dividida em três componentes:
 - Nó worker em Golang, que periodicamente recebe as cotações baseado em uma estratégia qualquer, salvando estes dados no Redis;
 - Nó api em Golang, que levanta o servidor HTTP e converte baseado nas cotações armazenadas no Redis.
 
-##### Redis
+### Redis
 
 Escolhi o Redis, nessa arquitetura, por alguns motivos: 
 * Por ser um banco com consultas extremamente rápidas em suas chaves, o que ajuda a escalar em cenários de muitas requisições;
@@ -34,7 +34,7 @@ Escolhi o Redis, nessa arquitetura, por alguns motivos:
 * Pela flexibilidade no caso de escalar a arquitetura, podendo utilizar as facilidades do Redis Cluster.
 * Por evitar qualquer tratamento de concorrência na aplicação, caso fosse utilizada uma abordagem de armazenamento in-memory.
 
-##### Golang
+### Golang
 
 Pelos requisitos de performance e simplicidade da linguagem, optei por escolher Go como linguagem de ambos os componentes API e Worker. 
 Frameworks/Libs/Ferramentas:
@@ -44,17 +44,17 @@ Frameworks/Libs/Ferramentas:
 
 Cogitei utilizar uma lib para gerenciamento de configuração (Ex. Configor), mas para manter a simplicidade utilizei o padrão da linguagem.
 
-##### Load Balancer
+### Load Balancer
 
 Tendo em vista que o próprio Routing Mesh interno do Docker Swarm já realiza roteamento round-robin, optei por não incluir qualquer load balancer. No entanto, seria possível incluir facilmente na arquitetura. Não entendo que o caching das requisições seja tão crucial nesse use case, dado que tanto os valores convertidos quanto as cotações são dados extremamente mutáveis.
 ### Requisitos
 
-- **docker-ce** (18.0.9)
-- **docker-compose** (1.23.x)
+- Docker-CLI/Engine (versão 18.0.9)
+- Ferramenta docker-compose (versão 1.23.x)
 
 ### Rodando
 
-##### Clonando repositório e levantando aplicação
+##### Clonando repositório
 
 
 `git clone https://github.com/schonmann/challenge-bravo.git`
@@ -93,8 +93,4 @@ Aumentando o nível de concorrência **1000**, a latência média sobe para **31
 
 ![2500/rps](https://i.imgur.com/gI5tlMZ.png)
 
-O que parece não comprometer os resultados.
-
-##### Máquina utilizada
-
-Para estes testes, foi utilizada uma máquina Inspiron-7572 (i7 U + 16GB).
+O que parece não comprometer os resultados. Para estes testes, foi utilizada uma máquina Inspiron-7572 (i7 U + 16GB).
