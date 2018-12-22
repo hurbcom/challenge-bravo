@@ -13,7 +13,7 @@
         "updateInterval": 1800000
     },
     "redis": {
-        "host": "localhost",
+        "host": "redis",
         "port": 6379,
         "password": "",
         "database": 0

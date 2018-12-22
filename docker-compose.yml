@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+    api:
+        image: bravo-api
+        hostname: api
+        build:
+            context: ./
+            dockerfile: Dockerfile
+            args:
+                - role=api
+        ports:
+            - '8080:8080'
+        depends_on:
+            - worker
+            - redis
+    worker:
+        image: bravo-worker
+        hostname: worker
+        build:
+            context: ./
+            dockerfile: Dockerfile
+            args:
+                - role=worker
+        depends_on:
+            - redis
+    redis:
+        image: redis:latest
+        hostname: redis
+        ports:
+            - '6379:6379'
