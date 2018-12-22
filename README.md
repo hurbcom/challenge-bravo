@@ -16,46 +16,85 @@ A requisição deve receber como parâmetros: A moeda de origem, o valor a ser c
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+## Solução
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+### Arquitetura
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+A arquitetura foi dividida em três componentes:
+
+- Redis, banco chave/valor in-memory;
+- Nó worker em Golang, que periodicamente recebe as cotações baseado em uma estratégia qualquer, salvando estes dados no Redis;
+- Nó api em Golang, que levanta o servidor HTTP e converte baseado nas cotações armazenadas no Redis.
+
+##### Redis
+
+Escolhi o Redis, nessa arquitetura, por alguns motivos: 
+* Por ser um banco com consultas extremamente rápidas em suas chaves, o que ajuda a escalar em cenários de muitas requisições;
+* Por ser chave e valor, mantendo o código simples, natural, e direto;
+* Pela flexibilidade no caso de escalar a arquitetura, podendo utilizar as facilidades do Redis Cluster.
+* Por evitar qualquer tratamento de concorrência na aplicação, caso fosse utilizada uma abordagem de armazenamento in-memory.
+
+##### Golang
+
+Pelos requisitos de performance e simplicidade da linguagem, optei por escolher Go como linguagem de ambos os componentes API e Worker. 
+Frameworks/Libs/Ferramentas:
+* [Echo](https://github.com/labstack/echo), para simplificar a API e aumentar a segurança via middlewares incluídos (Anti-CSRF, XSS, etc);
+* [Go Redis](https://github.com/go-redis/redis) para conexão com o banco;
+* [dep](https://github.com/golang/dep/cmd/dep) para gerenciamento de dependências.
+
+Cogitei utilizar uma lib para gerenciamento de configuração (Ex. Configor), mas para manter a simplicidade utilizei o padrão da linguagem.
+
+##### Load Balancer
+
+Tendo em vista que o próprio Routing Mesh interno do Docker Swarm já realiza roteamento round-robin, optei por não incluir qualquer load balancer. No entanto, seria possível incluir facilmente na arquitetura. Não entendo que o caching das requisições seja tão crucial nesse use case, dado que tanto os valores convertidos quanto as cotações são dados extremamente mutáveis.
+### Requisitos
+
+- **docker-ce** (18.0.9)
+- **docker-compose** (1.23.x)
+
+### Rodando
+
+##### Clonando repositório e levantando aplicação
 
 
+`git clone https://github.com/schonmann/challenge-bravo.git`
 
-## Critério de avaliação
+`cd challenge-bravo`
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+##### Via docker-compose (recomendado)
 
-## Dúvidas
+`docker-compose up -d` (levanta nós)
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+`docker-compose down -d` (desce nós)
 
-Boa sorte e boa viagem! ;)
+##### Swarm Mode
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+* Manager 
+    
+    `docker swarm init` (inicializa swarm como manager)
+    
+    `docker stack deploy -c docker-compose.yml currency-conversion` (levanta stack)
+    
+    `docker service scale currency-conversion_api=<N>` (escala para N nós de api)
+    
+    `docker stack rm currency-conversion-api` (desce stack)
+    
+* Worker
+    
+    `docker swarm join --token <SWARM_TOKEN>` (joina swarm como worker)
+
+### Performance
+
+Para **2500** reqs/s nível de concorrência **100**, a latência média das requisições foi de **9.7 ms**:
+
+![2500/rps](https://i.imgur.com/rHljN3u.png)
+
+Aumentando o nível de concorrência **1000**, a latência média sobe para **31.9 ms**:
+
+![2500/rps](https://i.imgur.com/gI5tlMZ.png)
+
+O que parece não comprometer os resultados.
+
+##### Máquina utilizada
+
+Para estes testes, foi utilizada uma máquina Inspiron-7572 (i7 U + 16GB).
