@@ -42,7 +42,7 @@ func StartWorker(cfg *config.AppConfig) {
 			log.Fatalf("Error setting new rates from external API: %v", err)
 		}
 
-		log.Info("Updated %d quotations in Redis!", len(response.Quotas))
+		log.Infof("Updated %d quotations in Redis!", len(response.Quotas))
 
 		time.Sleep(intervalTime)
 	}
