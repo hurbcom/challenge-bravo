@@ -18,6 +18,8 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 # Solução
 
+![](https://i.imgur.com/hBoARWH.png)
+
 ## Arquitetura
 
 Dados os requisitos de performance, a arquitetura foi dividida em três componentes:
