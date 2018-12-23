@@ -130,11 +130,11 @@ O Worker roda periodicamente como configurado via propriedade `UpdateInterval` n
 
 ## Performance
 
-Para **2500** reqs/s nível de concorrência **100**, a latência média das requisições foi de **9.7 ms**:
+Para **2500** reqs/s e nível de concorrência **100**, a latência média das requisições foi de **9.7 ms**:
 
 ![2500/rps](https://i.imgur.com/rHljN3u.png)
 
-Aumentando o nível de concorrência **1000**, a latência média sobe para **31.9 ms**, o que parece não comprometer os resultados:
+Aumentando o nível de concorrência para **1000**, a latência média sobe para **31.9 ms**, o que parece não comprometer os resultados:
 
 ![2500/rps](https://i.imgur.com/gI5tlMZ.png)
 
