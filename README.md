@@ -34,7 +34,7 @@ Escolhi o Redis, nessa arquitetura, por alguns motivos:
 * Por ser um banco com consultas extremamente rápidas em suas chaves, o que ajuda a escalar em cenários de muitas requisições;
 * Por ser chave e valor, mantendo o código simples, natural, e direto;
 * Pela flexibilidade no caso de escalar a arquitetura, podendo utilizar as facilidades do Redis Cluster.
-* Por evitar qualquer tratamento de concorrência na aplicação, caso fosse utilizada uma abordagem de armazenamento in-memory.
+* Por evitar qualquer tratamento de concorrência no caso de uma abordagem de armazenamento in-memory dentro da aplicação.
 
 ### Golang
 
