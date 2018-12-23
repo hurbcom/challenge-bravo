@@ -22,19 +22,19 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 ## Arquitetura
 
-Dados os requisitos de performance, a arquitetura foi dividida em três componentes:
+A arquitetura foi dividida em três componentes:
 
 - Redis, banco chave/valor in-memory;
-- Nó worker em Golang, que periodicamente recebe as cotações baseado em uma estratégia qualquer, salvando estes dados no Redis;
+- Nó worker em Golang, que periodicamente recebe as cotações baseado em uma estratégia qualquer e salva os dados no Redis;
 - Nó api em Golang, que levanta o servidor HTTP e serve rota de conversão, calculando o resultado baseado nas cotações atualmente no Redis.
 
 ### Redis
 
-Escolhi o Redis, nessa arquitetura, por alguns motivos: 
-* Por ser um banco com consultas extremamente rápidas em suas chaves, o que ajuda a escalar em cenários de muitas requisições;
-* Por ser chave e valor, mantendo o código simples, natural, e direto;
+Escolhi o Redis nessa arquitetura por alguns motivos: 
+* É um banco com consultas extremamente rápidas, o que ajuda a escalar em cenários de muitas requisições;
+* Chave/valor, mantendo o código simples, natural e direto;
 * Pela flexibilidade no caso de escalar a arquitetura, podendo utilizar as facilidades do Redis Cluster.
-* Por evitar qualquer tratamento de concorrência no caso de uma abordagem de armazenamento in-memory dentro da aplicação.
+* Para evitar qualquer tratamento de concorrência no caso de uma abordagem de armazenamento in-memory dentro da aplicação.
 
 ### Golang
 
@@ -48,7 +48,7 @@ Cogitei utilizar uma lib para gerenciamento de configuração (Ex. Configor) par
 
 ### Load Balancer
 
-Tendo em vista que o próprio Routing Mesh interno do Docker Swarm já realiza roteamento round-robin, optei por não incluir qualquer load balancer. No entanto, seria possível incluir facilmente na arquitetura. Não entendo que o caching das requisições seja tão crucial nesse use case, dado que tanto os valores convertidos quanto as cotações são dados extremamente mutáveis.
+Tendo em vista que o próprio routing mesh interno do Docker Swarm já realiza roteamento round-robin, optei por não incluir qualquer load balancer. No entanto, seria possível incluir facilmente na arquitetura. Não entendo que o caching das requisições seja tão crucial nesse use case, dado que tanto os valores convertidos quanto as cotações são dados extremamente mutáveis.
 
 ## Implementação
 
@@ -60,7 +60,7 @@ A API serve um método `GET /currency/convert` para as requisições, recebendo 
 * `to`, a moeda alvo.
 * `amount`, a quantidade de unidades monetárias da moeda base.
 
-Neste método, as taxas de conversão são encontradas no Redis, o cálculo é feito, e o resultado devolvido.
+O cálculo é feito a partir das taxas de conversão encontradas no Redis.
 
 Exemplo:
 
@@ -73,9 +73,7 @@ Exemplo:
         "resultingAmount":3.9041
     }
 
-Para casos de erro, foi respeitada a semântica http, com os status code corretos sendo enviados em cada caso.
-
-Por padrão, a API serve na porta `8080`, podendo ser alterada no arquivo de configurações, ou até no mapeamento de porta `host:container`, em caso de container.
+Para casos de erro foi respeitada a semântica http, com os status code corretos sendo enviados em cada caso.
 
 ### Worker
 
@@ -97,7 +95,7 @@ O Worker roda periodicamente como configurado via propriedade `UpdateInterval` n
     $ git clone https://github.com/schonmann/challenge-bravo.git
     $ cd challenge-bravo
 
-### Via docker-compose (recomendado)
+### Docker-compose
 
 * Levantando aplicação
     
