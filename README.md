@@ -18,13 +18,15 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 # Solução
 
+<img src="https://i.imgur.com/Ti2453E.png=250" width="600"></img>
+
 ## Arquitetura
 
 Dados os requisitos de performance, a arquitetura foi dividida em três componentes:
 
 - Redis, banco chave/valor in-memory;
 - Nó worker em Golang, que periodicamente recebe as cotações baseado em uma estratégia qualquer, salvando estes dados no Redis;
-- Nó api em Golang, que levanta o servidor HTTP e serve rota de conversão, devolvendo um resultado baseado nas cotações armazenadas no Redis.
+- Nó api em Golang, que levanta o servidor HTTP e serve rota de conversão, calculando o resultado baseado nas cotações atualmente no Redis.
 
 ### Redis
 
@@ -58,6 +60,8 @@ A API serve um método `GET /currency/convert` para as requisições, recebendo 
 * `to`, a moeda alvo.
 * `amount`, a quantidade de unidades monetárias da moeda base.
 
+Neste método, as taxas de conversão são encontradas no Redis, o cálculo é feito, e o resultado devolvido.
+
 Exemplo:
 
     GET http://localhost:8080/currency/convert?amount=1&from=USD&to=BRL
@@ -68,13 +72,6 @@ Exemplo:
         "to":"BRL",
         "resultingAmount":3.9041
     }
-
-
-Neste método, as taxas de conversão são encontradas no Redis, o cálculo é feito, e o resultado devolvido.
-
-Nas respostas são devolvidos os mesmos parâmetros, adicionando:
-
-* `resultingAmount`, a quantidade resultante da conversão.
 
 Para casos de erro, foi respeitada a semântica http, com os status code corretos sendo enviados em cada caso.
 
@@ -97,18 +94,18 @@ O Worker roda periodicamente como configurado via propriedade `UpdateInterval` n
 ### Clonando repositório
 
 
-    git clone https://github.com/schonmann/challenge-bravo.git
-    cd challenge-bravo
+    $ git clone https://github.com/schonmann/challenge-bravo.git
+    $ cd challenge-bravo
 
 ### Via docker-compose (recomendado)
 
 * Levantando aplicação
     
-        docker-compose up -d
+        $ docker-compose up -d
 
 * Descendo aplicação
 
-        docker-compose down
+        $ docker-compose down
 
 ### Swarm Mode
 
@@ -116,20 +113,20 @@ O Worker roda periodicamente como configurado via propriedade `UpdateInterval` n
     
     * Levantando stack
         
-            docker swarm init
-            docker stack deploy -c docker-compose.yml currency-conversion
+            $ docker swarm init
+            $ docker stack deploy -c docker-compose.yml currency-conversion
     
     * Escalando nós da API (Ex: 3)
         
-            docker service scale currency-conversion_api=3    
+            $ docker service scale currency-conversion_api=3    
             
     * Descendo stack
         
-            docker stack rm currency-conversion-api
+            $ docker stack rm currency-conversion-api
     
 * Worker
     
-        docker swarm join --token <SWARM_TOKEN>
+        $ docker swarm join --token <SWARM_TOKEN>
 
 ## Performance
 
