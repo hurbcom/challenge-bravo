@@ -52,6 +52,18 @@ func getConfigFilePath() string {
 	return val
 }
 
+func overrideConfigWithEnv(appConfig *AppConfig) {
+	if apiKey, found := os.LookupEnv("OPENXCHANGEAPIKEY"); found {
+		appConfig.Worker.ExternalAPIs.OpenExchangeRates.APIKey = apiKey
+	}
+	if apiKey, found := os.LookupEnv("FIXERAPIKEY"); found {
+		appConfig.Worker.ExternalAPIs.Fixer.APIKey = apiKey
+	}
+	if baseCurrency, found := os.LookupEnv("BASECURRENCY"); found {
+		appConfig.BaseCurrency = baseCurrency
+	}
+}
+
 func init() {
 	file, err := ioutil.ReadFile(getConfigFilePath())
 	if err != nil {
@@ -61,6 +73,7 @@ func init() {
 	if json.Unmarshal(file, appConfig) != nil {
 		panic(fmt.Sprintf("Config file reading error: %v\n", err))
 	}
+	overrideConfigWithEnv(appConfig)
 }
 
 func Get() AppConfig {
