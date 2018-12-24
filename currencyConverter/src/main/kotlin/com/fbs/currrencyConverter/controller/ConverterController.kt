@@ -16,6 +16,7 @@ class ConverterController(private val converterService: ConverterService) {
         if (!converterService.validParameters(from, to, amount)) {
             return ResponseEntity.badRequest().build()
         }
+
         val result = converterService.converts(from, to, amount)
         return ResponseEntity.ok(result)
     }

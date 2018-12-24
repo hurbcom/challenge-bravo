@@ -13,13 +13,13 @@ class ConverterService(private val exchangeRateService: ExchangeRateService){
 
     fun converts(from: String, to: String, amount: Double): ResultConverter {
 
-        if (rates.isEmpty() || expiration < LocalDateTime.now().minusSeconds(30)) {
+        if (rates.isEmpty() || expiration < LocalDateTime.now().minusSeconds(60)) {
             rates = exchangeRateService.fetchRates() as HashMap<String, Double>
             expiration = LocalDateTime.now()
         }
 
-        var rateFrom = rates.get(from)
-        var rateTo = rates.get(to)
+        var rateFrom = rates.get(from.toUpperCase())
+        var rateTo = rates.get(to.toUpperCase())
         var result = 0.0
 
         if (rateFrom != null && rateTo != null) {
@@ -30,6 +30,12 @@ class ConverterService(private val exchangeRateService: ExchangeRateService){
     }
 
     fun validParameters(from: String, to: String, amount: Double): Boolean {
+        val currencies = arrayListOf<String>("USD", "BRL", "EUR", "BTC", "ETH")
+
+        if(!currencies.contains(from.toUpperCase())) return false
+        if(!currencies.contains(to.toUpperCase())) return false
+        if(amount.isNaN()) return false
+
         return true
     }
 }
