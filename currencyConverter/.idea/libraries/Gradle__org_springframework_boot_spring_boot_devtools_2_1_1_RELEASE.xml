@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: org.springframework.boot:spring-boot-devtools:2.1.1.RELEASE" type="kotlin.js">
+  <library name="Gradle: org.springframework.boot:spring-boot-devtools:2.1.1.RELEASE">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-devtools/2.1.1.RELEASE/feb0ca510d5398a3f8bfdeb35d9f9a267138b5e2/spring-boot-devtools-2.1.1.RELEASE.jar!/" />
     </CLASSES>

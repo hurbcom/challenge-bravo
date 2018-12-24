@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="currrencyConverter:jar">
+    <output-path>$PROJECT_DIR$/classes/artifacts/currrencyConverter_jar</output-path>
+    <root id="archive" name="currrencyConverter.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>
