@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Start-Class: com.fbs.currrencyConverter.CurrrencyConverterApplicationK
+ t
+Main-Class: org.springframework.boot.loader.JarLauncher
+
