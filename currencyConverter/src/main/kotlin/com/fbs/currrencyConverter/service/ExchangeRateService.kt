@@ -10,7 +10,8 @@ class ExchangeRateService(
         @Value("\${url.api.exchange.rates}") private val url: String ) {
 
     fun fetchRates(): HashMap<String, Double>? {
-        val ratesMap = restTemplate.getForObject(url, HashMap<String, Double>()::class.java)
+        var ratesMap = restTemplate.getForObject(url, HashMap<String, Double>()::class.java)
+        //ratesMap!!["USD"] = (1).toDouble()
         return ratesMap
     }
 }

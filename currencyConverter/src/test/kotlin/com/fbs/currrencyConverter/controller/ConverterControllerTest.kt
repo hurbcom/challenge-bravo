@@ -26,7 +26,7 @@ class ConverterControllerTest {
     @Test
     fun get_a_conversion_value() {
         val rates = hashMapOf<String, Double>("BRL" to 2.0, "USD" to 1.0)
-        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=USD,BRL,EUR,BTC,ETH"
+        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL,EUR,BTC,ETH"
         val from = "BRL"
         val to = "USD"
         val amount = "20"
@@ -46,7 +46,7 @@ class ConverterControllerTest {
     @Test
     fun get_a_conversion_value_with_currency_uppercase_or_not() {
         val rates = hashMapOf<String, Double>("BRL" to 2.0, "USD" to 1.0)
-        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=USD,BRL,EUR,BTC,ETH"
+        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL,EUR,BTC,ETH"
         val from = "bRl"
         val to = "UsD"
         val amount = "20"
@@ -66,7 +66,7 @@ class ConverterControllerTest {
     @Test
     fun get_a_conversion_with_invalid_currency_from() {
         val rates = hashMapOf<String, Double>("BRL" to 2.0, "USD" to 1.0)
-        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=USD,BRL,EUR,BTC,ETH"
+        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL,EUR,BTC,ETH"
         val from = "XXX"
         val to = "USD"
         val amount = "20"
@@ -81,7 +81,7 @@ class ConverterControllerTest {
     @Test
     fun get_a_conversion_with_invalid_currency_to() {
         val rates = hashMapOf<String, Double>("BRL" to 2.0, "USD" to 1.0)
-        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=USD,BRL,EUR,BTC,ETH"
+        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL,EUR,BTC,ETH"
         val from = "BRL"
         val to = "XXX"
         val amount = "20"
@@ -96,7 +96,7 @@ class ConverterControllerTest {
     @Test
     fun get_a_conversion_with_invalid_currency_amount() {
         val rates = hashMapOf<String, Double>("BRL" to 2.0, "USD" to 1.0)
-        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=USD,BRL,EUR,BTC,ETH"
+        val url = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL,EUR,BTC,ETH"
         val from = "BRL"
         val to = "USD"
         val amount = "XXX"

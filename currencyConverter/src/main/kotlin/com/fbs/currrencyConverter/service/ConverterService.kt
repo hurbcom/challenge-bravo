@@ -4,6 +4,7 @@ import com.fbs.currrencyConverter.model.ResultConverter
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
+import java.util.logging.Logger
 import kotlin.collections.HashMap
 
 @Service
@@ -19,8 +20,8 @@ class ConverterService(private val exchangeRateService: ExchangeRateService){
             expiration = LocalDateTime.now()
         }
 
-        var rateFrom = rates.get(from.toUpperCase())
-        var rateTo = rates.get(to.toUpperCase())
+        var rateFrom = if (from == "USD") 1.0 else rates[from.toUpperCase()]
+        var rateTo =  if (to == "USD") 1.0 else rates[to.toUpperCase()]
         var result = 0.0
 
         if (rateFrom != null && rateTo != null) {

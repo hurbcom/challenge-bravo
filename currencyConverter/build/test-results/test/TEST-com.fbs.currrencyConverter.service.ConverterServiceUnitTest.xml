@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.fbs.currrencyConverter.service.ConverterServiceUnitTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2018-12-26T00:39:25" hostname="FBSCorp" time="0.76">
+<testsuite name="com.fbs.currrencyConverter.service.ConverterServiceUnitTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2018-12-26T23:47:32" hostname="FBSCorp" time="0.639">
   <properties/>
-  <testcase name="converter_service_should_calculate_correct_conversion" classname="com.fbs.currrencyConverter.service.ConverterServiceUnitTest" time="0.756"/>
-  <testcase name="fetchRates_should_be_called_one_time_until_cache_expiration" classname="com.fbs.currrencyConverter.service.ConverterServiceUnitTest" time="0.002"/>
+  <testcase name="converter_service_should_calculate_correct_conversion" classname="com.fbs.currrencyConverter.service.ConverterServiceUnitTest" time="0.637"/>
+  <testcase name="fetchRates_should_be_called_one_time_until_cache_expiration" classname="com.fbs.currrencyConverter.service.ConverterServiceUnitTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
