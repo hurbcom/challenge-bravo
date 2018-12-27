@@ -14,15 +14,15 @@ import (
 */
 
 func ConvertCurrency(amount float64, from, to string) (float64, error) {
-	currencies, err := redis.MGet(keys.QuotaKey(from), keys.QuotaKey(to))
+	rawQuotas, err := redis.MGet(keys.QuotaKey(from), keys.QuotaKey(to))
 	if err != nil {
 		return 0, errors.New("Error retrieving quota info in database.")
 	}
-	fromQuota, err := parseRawQuota(currencies[0])
+	fromQuota, err := parseRawQuota(rawQuotas[0])
 	if err != nil {
 		return 0, errors.New("error parsing 'from' quota: " + err.Error())
 	}
-	toQuota, err := parseRawQuota(currencies[1])
+	toQuota, err := parseRawQuota(rawQuotas[1])
 	if err != nil {
 		return 0, errors.New("error parsing 'to' quota: " + err.Error())
 	}
