@@ -25,6 +25,6 @@ func MSet(pairs ...interface{}) (string, error) {
 }
 
 //MGet gets multiple values from database.
-func MGet(key ...string) ([]interface{}, error) {
-	return redisClient.MGet(key...).Result()
+func MGet(keys ...string) ([]interface{}, error) {
+	return redisClient.MGet(keys...).Result()
 }
