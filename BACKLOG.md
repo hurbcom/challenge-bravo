@@ -5,4 +5,4 @@
 - [x] Teste do `endpoint` da API
 - [ ] Teste de integração da API
 - [ ] Teste de estresse da API
-- [ ] Documentação
+- [x] Documentação
