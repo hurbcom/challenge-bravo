@@ -68,7 +68,7 @@ func TestContentCurrencyLayerApi(t *testing.T) {
 					USDBRL float64
 					USDBTC float64
 					USDETH float64
-				}
+				} `json:"quotes"`
 			}
 
 			if err := json.NewDecoder(resp.Body).Decode(&d); err != nil {
