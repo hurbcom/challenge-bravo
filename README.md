@@ -83,6 +83,18 @@ Boa sorte e boa viagem! ;)
 http://localhols:8000/api/convert?from=USD&to=BRL&amount=100
 ```
 
+**Resposta:**
+
+```
+{
+  "From":"USD",
+  "To":"BRL",
+  "Amount":100,
+  "Quote":3.715204, // representa a cotação USD-BRL
+  "Result":371.5204 // representa o valor convertido
+}
+```
+
 ### Setup
 
 Para instalar biblieoteca `gorilla/mux`
