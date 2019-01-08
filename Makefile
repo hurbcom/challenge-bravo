@@ -48,11 +48,11 @@ run-dev: ## Run Docker image in Development environment
 	@echo "\n${GREEN} Running Docker image in development environment.. ${NO_COLOR}\n"
 	@HOST_PORT=$(HOST_PORT) TIMEOUT=${TIMEOUT} docker run -p ${HOST_PORT}:8080 -it ${IMAGE}:${TAG} /curapi -d -t ${TIMEOUT}
 
-run-live: ## Run service in Development environment with live reload
+run-dev-live: ## Run service in Development environment with live reload
 	@echo "\n${GREEN} Running service in local environment.. ${NO_COLOR}\n"
 	@HOST_PORT=$(HOST_PORT) docker-compose up
 
-stop-live: ## Stop service in Development environment with live reload
+stop-dev-live: ## Stop service in Development environment with live reload
 	@echo "\n${GREEN} Stopping service in local environment.. ${NO_COLOR}\n"
 	@docker-compose down
 
