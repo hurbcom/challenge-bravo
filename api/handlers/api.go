@@ -4,7 +4,6 @@ import (
 	"curapi/converter"
 	"curapi/logger"
 	"curapi/util"
-	"encoding/json"
 	"net/http"
 	"strconv"
 	"strings"
@@ -45,7 +44,7 @@ type CurrencyResponse struct {
 
 // HealthCheck :: Simple healthcheck endpoint that returns HTTP 200
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(HeartbeatResponse{Status: "OK", Code: 200})
+	jsoniter.NewEncoder(w).Encode(HeartbeatResponse{Status: "OK", Code: 200})
 }
 
 // GetRate :: Get rate value for given currencies and amounts
@@ -60,7 +59,7 @@ func GetRate(w http.ResponseWriter, r *http.Request) {
 			log.Error(err)
 			w.Header().Set("Content-Type", "application/json; charset=utf-8")
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(OneErrorResponse{Error: "Invalid amount. Please use dots instead commas."})
+			jsoniter.NewEncoder(w).Encode(OneErrorResponse{Error: "Invalid amount. Please use dots instead commas."})
 			return
 		}
 
@@ -83,7 +82,7 @@ func GetRate(w http.ResponseWriter, r *http.Request) {
 		// Things messed, report in
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(OneErrorResponse{Error: "Could not convert currency data", Message: err.Error()})
+		jsoniter.NewEncoder(w).Encode(OneErrorResponse{Error: "Could not convert currency data", Message: err.Error()})
 		return
 	}
 }
