@@ -1,7 +1,7 @@
 package util
 
 import (
-	"curapi/logger"
+	"challenge-bravo/logger"
 	"io"
 	"io/ioutil"
 	"math"

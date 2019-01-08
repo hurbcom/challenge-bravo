@@ -1,9 +1,9 @@
 package converter
 
 import (
-	"curapi/cache"
-	"curapi/logger"
-	"curapi/util"
+	"challenge-bravo/cache"
+	"challenge-bravo/logger"
+	"challenge-bravo/util"
 	"strconv"
 	"strings"
 

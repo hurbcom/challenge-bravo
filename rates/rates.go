@@ -2,9 +2,9 @@ package rates
 
 import (
 	"bytes"
-	"curapi/cache"
-	"curapi/logger"
-	"curapi/util"
+	"challenge-bravo/cache"
+	"challenge-bravo/logger"
+	"challenge-bravo/util"
 	"errors"
 	"io/ioutil"
 	"strconv"

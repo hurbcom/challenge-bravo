@@ -1,8 +1,8 @@
 package cache
 
 import (
-	"curapi/logger"
-	"curapi/util"
+	"challenge-bravo/logger"
+	"challenge-bravo/util"
 	"time"
 
 	"github.com/allegro/bigcache"

@@ -1,9 +1,9 @@
 package worker
 
 import (
-	"curapi/logger"
-	"curapi/rates"
-	"curapi/util"
+	"challenge-bravo/logger"
+	"challenge-bravo/rates"
+	"challenge-bravo/util"
 	"fmt"
 
 	"github.com/robfig/cron"

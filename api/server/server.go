@@ -1,9 +1,9 @@
 package api
 
 import (
-	api "curapi/api/handlers"
-	"curapi/logger"
-	"curapi/util"
+	api "challenge-bravo/api/handlers"
+	"challenge-bravo/logger"
+	"challenge-bravo/util"
 	"net/http"
 	"strconv"
 	"time"

@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"curapi/config"
+	"challenge-bravo/config"
 
 	"github.com/sirupsen/logrus"
 )

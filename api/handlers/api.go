@@ -1,10 +1,10 @@
 package api
 
 import (
-	"curapi/cache"
-	"curapi/converter"
-	"curapi/logger"
-	"curapi/util"
+	"challenge-bravo/cache"
+	"challenge-bravo/converter"
+	"challenge-bravo/logger"
+	"challenge-bravo/util"
 	"net/http"
 	"strconv"
 	"strings"
