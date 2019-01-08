@@ -1,0 +1,8 @@
+.dockerignore
+*.txt
+*.log
+curapi
+target
+.dpl
+tmp
+vendor
