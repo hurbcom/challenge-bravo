@@ -65,7 +65,7 @@ func main() {
 		newLogger.Formatter = &logrus.JSONFormatter{}
 	}
 
-	// Initiate config and logger things
+	// Initiate app modules
 	config.StartConfig(newLogger)
 	logger.SetupLogger()
 	cache.StartCache()
