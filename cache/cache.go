@@ -3,6 +3,7 @@ package cache
 import (
 	"challenge-bravo/logger"
 	"challenge-bravo/util"
+	"errors"
 	"time"
 
 	"github.com/allegro/bigcache"
@@ -69,5 +70,8 @@ func GetAll() (*uint64, map[string]string, error) {
 			return nil, nil, err
 		}
 	}
-	return &t, keys, nil
+	if len(keys) > 1 {
+		return &t, keys, nil
+	}
+	return nil, nil, errors.New("• Cache is empty")
 }
