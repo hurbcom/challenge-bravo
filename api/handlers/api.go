@@ -1,6 +1,7 @@
 package api
 
 import (
+	"curapi/cache"
 	"curapi/converter"
 	"curapi/logger"
 	"curapi/util"
@@ -16,6 +17,8 @@ import (
 var getLogger = logger.Log
 var err error
 
+const curBase = "USD"
+
 // HeartbeatResponse :: Struct for Healthcheck
 type HeartbeatResponse struct {
 	Status string `json:"status"`
@@ -26,6 +29,12 @@ type HeartbeatResponse struct {
 type OneErrorResponse struct {
 	Error   string `json:"error"`
 	Message string `json:"message"`
+}
+
+// RatesResponse :: Struct for All rates response
+type RatesResponse struct {
+	Base  string            `json:"base"`
+	Rates map[string]string `json:"rates"`
 }
 
 // CurrencyResponse :: Struct for Currency converted response
@@ -67,7 +76,7 @@ func GetRate(w http.ResponseWriter, r *http.Request) {
 		value, err := converter.CurrencyConverter(amount, from, to)
 		if value != nil && err == nil {
 
-			c := &CurrencyResponse{Base: "USD"}
+			c := &CurrencyResponse{Base: curBase}
 			c.From.Symbol = from
 			c.From.Label = converter.GetCurrencyLabel(from)
 			c.To.Symbol = to
@@ -83,6 +92,30 @@ func GetRate(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusInternalServerError)
 		jsoniter.NewEncoder(w).Encode(OneErrorResponse{Error: "Could not convert currency data", Message: err.Error()})
+		return
+	}
+}
+
+// GetAllRates :: Get all currently available rates
+func GetAllRates(w http.ResponseWriter, r *http.Request) {
+	var log = getLogger.WithFields(logrus.Fields{"method": util.GetPrefixName()})
+
+	rates, err := cache.GetAll()
+	if err != nil {
+		log.Error(err)
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusInternalServerError)
+		jsoniter.NewEncoder(w).Encode(OneErrorResponse{Error: "Rates currently unavailable. Please try again."})
+		return
+	}
+
+	if rates != nil && len(rates) > 1 {
+		rr := &RatesResponse{Base: curBase}
+		rr.Rates = rates
+
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		jsoniter.NewEncoder(w).Encode(rr)
 		return
 	}
 }
