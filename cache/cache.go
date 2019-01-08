@@ -53,8 +53,9 @@ func Set(key, value string) error {
 }
 
 // GetAll :: Shortcut function to Get all keys:values in cache
-func GetAll() (map[string]string, error) {
+func GetAll() (*uint64, map[string]string, error) {
 	var log = getLogger.WithFields(logrus.Fields{"method": util.GetPrefixName()})
+	var t uint64
 	keys := make(map[string]string)
 	iterator := Cache.Iterator()
 
@@ -62,10 +63,11 @@ func GetAll() (map[string]string, error) {
 		current, err := iterator.Value()
 		if err == nil {
 			keys[current.Key()] = string(current.Value())
+			t = current.Timestamp()
 		} else {
 			log.Error(err)
-			return nil, err
+			return nil, nil, err
 		}
 	}
-	return keys, nil
+	return &t, keys, nil
 }

@@ -33,8 +33,9 @@ type OneErrorResponse struct {
 
 // RatesResponse :: Struct for All rates response
 type RatesResponse struct {
-	Base  string            `json:"base"`
-	Rates map[string]string `json:"rates"`
+	Base      string            `json:"base"`
+	Timestamp time.Time         `json:"updated_at"`
+	Rates     map[string]string `json:"rates"`
 }
 
 // CurrencyResponse :: Struct for Currency converted response
@@ -100,7 +101,7 @@ func GetRate(w http.ResponseWriter, r *http.Request) {
 func GetAllRates(w http.ResponseWriter, r *http.Request) {
 	var log = getLogger.WithFields(logrus.Fields{"method": util.GetPrefixName()})
 
-	rates, err := cache.GetAll()
+	timestamp, rates, err := cache.GetAll()
 	if err != nil {
 		log.Error(err)
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -109,8 +110,10 @@ func GetAllRates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if rates != nil && len(rates) > 1 {
+	if rates != nil && len(rates) > 1 && timestamp != nil {
+		t := time.Unix(int64(*timestamp), 0)
 		rr := &RatesResponse{Base: curBase}
+		rr.Timestamp = t
 		rr.Rates = rates
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
