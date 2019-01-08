@@ -28,7 +28,7 @@ func StartAPIService(serverPort int) {
 	// Configure router and server routes
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/health", api.HealthCheck).Methods("GET")
-	router.HandleFunc("/api/v1/public/rate", api.GetRate).Queries("from", "{from}", "to", "{to}", "amount", "{amount}").Methods("GET", "OPTIONS", "HEAD")
+	router.HandleFunc("/api/v1/public/convert", api.GetRate).Queries("from", "{from}", "to", "{to}", "amount", "{amount}").Methods("GET", "OPTIONS", "HEAD")
 	// router.HandleFunc("/api/v1/public/rates", api.GetAllRates).Methods("GET", "OPTIONS", "HEAD")
 	router.Use(api.LoggingMiddleware)
 
