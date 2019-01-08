@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	api "curapi/api/server"
+	"curapi/cache"
 	"curapi/config"
 	"curapi/logger"
+	"curapi/rates"
 	"curapi/util"
+	"curapi/worker"
 	"os"
 	"os/signal"
 	"time"
@@ -15,9 +18,10 @@ import (
 )
 
 var opts struct {
-	Debug       bool `short:"v" long:"verbose" description:"Enable verbose mode (debug)"`
-	Port        *int `short:"p" long:"port" description:"Port to listen on" default:"8080"`
-	Development bool `short:"d" long:"dev" description:"Enable development environment"`
+	Debug        bool `short:"v" long:"verbose" description:"Enable verbose mode (debug)"`
+	Port         *int `short:"p" long:"port" description:"Port to listen on" default:"8080"`
+	Development  bool `short:"d" long:"dev" description:"Enable development environment"`
+	TimeInterval *int `short:"t" long:"time" description:"Update timeout, in minutes" default:"30"`
 }
 
 var newLogger = logrus.New()
@@ -64,7 +68,15 @@ func main() {
 	// Initiate config and logger things
 	config.StartConfig(newLogger)
 	logger.SetupLogger()
+	cache.StartCache()
+	rates.UpdateRates()
 	api.StartAPIService(*opts.Port)
+
+	// Run Worker Manager in another goroutine after 10 secs
+	go func() {
+		time.Sleep(time.Second * time.Duration(10))
+		go worker.StartWorkerManager(*opts.TimeInterval)
+	}()
 
 	// We'll accept graceful shutdowns when quit via SIGINT (Ctrl+C)
 	c := make(chan os.Signal, 1)
