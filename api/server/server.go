@@ -28,6 +28,7 @@ func StartAPIService(serverPort int) {
 	// Configure router and server routes
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/health", api.HealthCheck).Methods("GET")
+	router.Use(api.LoggingMiddleware)
 
 	// Configure CORS (allow all origins, and some methods for now)
 	corsOrigins := handlers.AllowedOrigins([]string{"*"})

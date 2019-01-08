@@ -76,3 +76,12 @@ func GetPrefixName(depthList ...int) string {
 	fncNameSlice := strings.Split(fncName, ".")
 	return fncNameSlice[1]
 }
+
+// GetRemoteIPAddress :: Simple function to parse IP address from given string
+func GetRemoteIPAddress(r string) (ip string) {
+	if strings.Contains(r, "[::1]") {
+		return "localhost"
+	}
+	ip = strings.Split(r, ":")[0]
+	return ip
+}
