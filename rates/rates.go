@@ -63,6 +63,9 @@ func UpdateRates() {
 		mRates[k] = v
 	}
 
+	// Add USD unit to reuse converter logic
+	mRates["USD"] = "1"
+
 	// Save rates values in cache
 	for k, v := range mRates {
 		err := cache.Set(k, v)
