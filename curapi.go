@@ -55,4 +55,8 @@ func main() {
 		// Set JSON formatter for production environment (send to centralized log solution?)
 		newLogger.Formatter = &logrus.JSONFormatter{}
 	}
+
+	// Initiate config and logger things
+	config.StartConfig(newLogger)
+	logger.SetupLogger()
 }
