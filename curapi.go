@@ -1,14 +1,14 @@
 package main
 
 import (
+	api "challenge-bravo/api/server"
+	"challenge-bravo/cache"
+	"challenge-bravo/config"
+	"challenge-bravo/logger"
+	"challenge-bravo/rates"
+	"challenge-bravo/util"
+	"challenge-bravo/worker"
 	"context"
-	api "curapi/api/server"
-	"curapi/cache"
-	"curapi/config"
-	"curapi/logger"
-	"curapi/rates"
-	"curapi/util"
-	"curapi/worker"
 	"os"
 	"os/signal"
 	"time"
