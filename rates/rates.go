@@ -70,7 +70,8 @@ func UpdateRates() {
 	for k, v := range mRates {
 		err := cache.Set(k, v)
 		if err != nil {
-			log.Error(err)
+			log.Errorf("• Error updating rates: %v", err)
+			return
 		}
 	}
 
