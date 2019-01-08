@@ -13,6 +13,8 @@ This project is written in Go and use these thirdy-party libraries:
 
 ## Architeture
 
+![curapi-arch](https://i.imgur.com/ZsLx1e7.jpg)
+
 The architeture was constructed only using Golang and have three main modules:
 
 * **API Service**
