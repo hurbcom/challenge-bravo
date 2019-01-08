@@ -28,7 +28,7 @@ type HeartbeatResponse struct {
 // OneErrorResponse :: Struct for error message
 type OneErrorResponse struct {
 	Error   string `json:"error"`
-	Message string `json:"message"`
+	Message string `json:"message,omitempty"`
 }
 
 // RatesResponse :: Struct for All rates response
@@ -103,6 +103,7 @@ func GetAllRates(w http.ResponseWriter, r *http.Request) {
 
 	timestamp, rates, err := cache.GetAll()
 	if err != nil {
+		// Cache is empty?
 		log.Error(err)
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusInternalServerError)
