@@ -34,7 +34,7 @@ type CoinbaseResponse struct {
 }
 
 // UpdateRates :: Function responsible to get, collect and update rates in Cache service
-func UpdateRates() {
+func UpdateRates() bool {
 	var log = getLogger.WithFields(logrus.Fields{"method": util.GetPrefixName()})
 	log.Info("• Fetching currency rates..")
 
@@ -71,11 +71,12 @@ func UpdateRates() {
 		err := cache.Set(k, v)
 		if err != nil {
 			log.Errorf("• Error updating rates: %v", err)
-			return
+			return false
 		}
 	}
 
 	log.Info("• Rates updated!")
+	return true
 }
 
 // GetRatesFromRatesAPI :: Function to get rates from RatesAPI service
