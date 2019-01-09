@@ -121,5 +121,3 @@ func TestGetRateWithUnsupportedCurrency(t *testing.T) {
 	assert.Equal(t, 500, response.Code, "Internal Server error response is expected")
 	assert.Contains(t, response.Body.String(), `Could not convert currency data`, "Should respond with error about 'Could not convert currency data'")
 }
-
-// var log = getLogger.WithFields(logrus.Fields{"method": util.GetPrefixName()})
