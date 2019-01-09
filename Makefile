@@ -39,6 +39,7 @@ help: ## Show this help
 .DEFAULT_GOAL := help
 
 test: ## Run Go unit tests
+	@${GOPATH}/bin/dep ensure -vendor-only -v
 	@go test -short -coverprofile ${PKG_LIST}
 
 build: ## Build Docker image for service
