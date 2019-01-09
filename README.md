@@ -240,6 +240,32 @@ This endpoint accepts **_THREE_** parameters (**passed as querystring**), and **
 "CHF","RUB","CAD","AUD","GBP","INR","NOK","SEK","DKK","MYR","JPY","EUR","TRY","CZK","ZAR","IDR","BGN"
 ```
 
-## Todo
+## Tests
 
-- [ ] Write the tests for all APIs.
+CurAPI service has some unit tests. It uses some testing libraries, including **testify**, **httpmock** and of course, standard testing packages.
+
+Below you can see the packages that have tests and actual coverage percent.
+
+* **api/handlers** - `Coverage: 100.0% of statements`
+* **cache** - `Coverage: 84.8% of statements`
+* **converter** - `Coverage: 76.0% of statements`
+* **rates** - `Coverage: 84.1% of statements`
+
+## How Run Tests
+
+To run CurAPI tests you need **Golang** installed in system. You need **Go dep** (dependency management tool) too.
+Can be download here: <https://golang.org/doc/install> and <https://github.com/golang/dep>
+
+Also, you need that **project dir** is in `$GOPATH/src/` directory.
+
+```bash
+# Enter in project dir:
+cd $GOPATH/src/challenge-bravo
+
+# Run make test command:
+make test
+```
+
+## Feedback
+
+Feedback is greatly appreciated. Feel free to contact me at thiago@thiagomorales.com ;)
