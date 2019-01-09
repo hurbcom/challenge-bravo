@@ -39,7 +39,7 @@ help: ## Show this help
 .DEFAULT_GOAL := help
 
 test: ## Run Go unit tests
-	@go test -short ${PKG_LIST}
+	@go test -short -coverprofile ${PKG_LIST}
 
 build: ## Build Docker image for service
 	docker build -f Dockerfile -t $(IMAGE):$(TAG) .
