@@ -1,0 +1,1 @@
+sudo apt install cmake git openssl libcpprest-dev libboost-log1.65-dev libboost-program-options1.65-dev
