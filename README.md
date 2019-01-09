@@ -266,6 +266,20 @@ cd $GOPATH/src/challenge-bravo
 make test
 ```
 
+## Benchmark Results
+
+**Test I:** _Concurrency level_: **100**, _Requests per second:_ **2500**
+
+**Results:** _Average latency:_ **1.8ms**
+
+![benchmark-one](https://i.imgur.com/VxRN0iv.jpg)
+
+**Test II:** _Concurrency level_: **1000**, _Requests per second:_ **2500**
+
+**Results:** _Average latency:_ **2.7ms**
+
+![benchmark-two](https://i.imgur.com/Gf4z9I8.png)
+
 ## Feedback
 
 Feedback is greatly appreciated. Feel free to contact me at thiago@thiagomorales.com ;)
