@@ -2,6 +2,11 @@ Docker:
 sudo docker build . --tag=microservive:latest
 sudo docker run -it microservice:latest
 
+Ex de URL de Teste:
+http://127.0.0.1:6502/v1/service/api/convert?from=USD&to=EUR&amount=123.45
+
+Obs: o IP no Docker pode ser diferente!
+
 Instalação (Ubuntu Bionic):
 
 sudo apt install build-essential cmake git openssl libcpprest-dev libboost-log1.65-dev libboost-program-options1.65-dev sqlite3 libsqlite3-dev
