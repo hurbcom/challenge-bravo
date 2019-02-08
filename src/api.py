@@ -8,4 +8,4 @@ app.route('/')
 api = Api(app)
 api.add_resource(Convert, '/convert/')
 
-app.run()
+app.run(threaded=True)
