@@ -1,6 +1,7 @@
 
 from flask_restful import Resource
 from flask import request
+from exchange_rates import usd_rates
 
 class Convert(Resource):
 
@@ -10,5 +11,5 @@ class Convert(Resource):
         target = request.args.get('target', str)
         value = float(request.args.get('value', float))
 
-        return 200
+        return usd_rates
 
