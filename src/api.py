@@ -13,6 +13,5 @@ api = Api(app)
 api.add_resource(Convert, '/convert/')
 
 #Para expor aplicação remotamente no Linux
-app.run(host='0.0.0.0', threaded=True)
-
-#app.run(threaded=True)
+# app.run(host='0.0.0.0', threaded=True)
+app.run()
