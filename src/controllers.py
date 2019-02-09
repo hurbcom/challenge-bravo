@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+import sys, os
+
 import json, re, datetime
 from flask_restful import Resource
 from flask import request
