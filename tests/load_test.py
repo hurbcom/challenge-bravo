@@ -9,12 +9,15 @@ threads = 1000
 sucessful = []
 
 def test_request_load(t_queue, base, target, value):
-    url = "http://192.168.1.103:5000/convert"
+    url = "http://192.168.1.103:5000/api/convert"
     querystring = {"base":base,"target":target,"value":value}
-    response = requests.request("GET", url, params=querystring)
     
-    if response.status_code == 200:
-        sucessful.append(response)
+    try: 
+        response = requests.request("GET", url, params=querystring) 
+        if response.status_code == 200:
+            sucessful.append(response)
+    except:
+        pass
 
 elapsed_time = 0.00
 
@@ -27,7 +30,7 @@ def execute_requests():
     for i in range(threads):
         base = coins[random.randint(0, len(coins) - 1)]
         target = coins[random.randint(0, len(coins) - 1)]
-        value = random.randint(i, 1000000)
+        value = random.randint(i + 1, 100000)
 
         t = threading.Thread(target=test_request_load, args=(q, base, target, value))
         thread_list.append(t)

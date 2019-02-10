@@ -33,7 +33,7 @@
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">http://192.168.1.103:5000/convert?base=USD&amp;target=BRL&amp;value=10</stringProp>
+          <stringProp name="HTTPSampler.path">http://192.168.1.103:5000/api/convert?base=USD&amp;target=BRL&amp;value=10</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
