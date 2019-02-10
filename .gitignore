@@ -1,2 +1,5 @@
 src/__pycache__/
 .vscode/
+src/api.pyc
+src/controllers.pyc
+src/exchange_rates.pyc

@@ -7,11 +7,11 @@ from flask_restful import Api
 from controllers import Convert
 
 app = Flask(__name__)
-
 app.route('/')
+app.host = '0.0.0.0'
+
 api = Api(app)
 api.add_resource(Convert, '/convert/')
 
-#Para expor aplicação remotamente no Linux
-# app.run(host='0.0.0.0', threaded=True)
-app.run()
+if __name__ == '__main__':
+    api.init_app(app)
