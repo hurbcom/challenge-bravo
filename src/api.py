@@ -8,10 +8,9 @@ from controllers import Convert
 
 app = Flask(__name__)
 app.route('/')
-app.host = '0.0.0.0'
 
 api = Api(app)
-api.add_resource(Convert, '/convert/')
+api.add_resource(Convert, '/api/convert/')
 
 if __name__ == '__main__':
-    api.init_app(app)
+    app.run(host='0.0.0.0', threaded=True)
