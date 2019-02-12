@@ -1,6 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+import sys, os
+
 import json, re, datetime
 from flask_restful import Resource
-from flask import request
+from flask import request, Flask
 from exchange_rates import usd_rates
 
 class Convert(Resource):
@@ -8,10 +12,11 @@ class Convert(Resource):
     #GET da api que retorna a moeda convertida
     def get(self):
         coins_regex = "(\AUSD\Z)|(\ABRL\Z)|(\AEUR\Z)|(\ABTC\Z)|(\AETH\Z)"
-        base = request.args.get('base', str)
-        target = request.args.get('target', str)
-        value = float(request.args.get('value', float))
         try:
+            base = request.args.get('base', str)
+            target = request.args.get('target', str)
+            value = float(request.args.get('value', float))
+            
             if base is None or target is None:   
                 return json.dumps({'erro':'Consulta Invalida.'}), 400
             if base is None or target is None:   
@@ -32,5 +37,3 @@ class Convert(Resource):
     # Reliza a conversão
     def __get_exchange(self, base, target):
         return (1 / usd_rates[base]) / (1 / usd_rates[target])
-
-
