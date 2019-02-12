@@ -8,7 +8,7 @@ threads = 1000
 sucessful = []
 
 def test_request_load(t_queue, base, target, value):
-    url = "http://192.168.1.103:5000/api/convert"
+    url = "http://challengebravohurb.sa-east-1.elasticbeanstalk.com/api/convert/?base=EUR&target=BRL&value=10" 
     querystring = {"base":base,"target":target,"value":value}
     try: 
         response = requests.request("GET", url, params=querystring) 
