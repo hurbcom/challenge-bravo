@@ -15,7 +15,7 @@ class Convert(Resource):
         try:
             base = request.args.get('base', str)
             target = request.args.get('target', str)
-            value = request.args.get('value', float)
+            value = float(request.args.get('value', float))
             
             if base is None or target is None:   
                 return json.dumps({'erro':'Consulta Invalida.'}), 400

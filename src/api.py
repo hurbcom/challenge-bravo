@@ -6,11 +6,10 @@ from flask import Flask
 from flask_restful import Api
 from controllers import Convert
 
-app = Flask(__name__)
-app.route('/')
+application = Flask(__name__)
 
-api = Api(app)
+api = Api(application)
 api.add_resource(Convert, '/api/convert/')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', threaded=True)
+    application.run(host='0.0.0.0', threaded=True)
