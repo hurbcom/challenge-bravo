@@ -25,7 +25,7 @@ class Convert(Resource):
                 value = 1
 
             exchangePrice = self.__get_exchange(base, target)
-            data = { f'Valor de Cambio {base.upper()} para {target.upper()})': exchangePrice, 'Valor Total Convertido': exchangePrice * value, 'Data': str(datetime.datetime.today()) }
+            data = { f'Valor de Cambio {base.upper()} para {target.upper()}': exchangePrice, 'Valor Total Convertido': exchangePrice * value, 'Data': str(datetime.datetime.today()) }
             
             return data
 

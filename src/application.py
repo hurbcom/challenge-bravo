@@ -3,15 +3,12 @@
 import sys, os
 
 from api import application
-from flask import render_template_string
+from flask import render_template
 
 @application.route('/')
 @application.route('/index')
 def index():
-    html_index_str = """
-        <h1>API em Funcionamento</h1>
-    """
-    return render_template_string(html_index_str)
+    return render_template('index.html')
 
 #################### Usar este para deploy local ####################
 if __name__ == '__main__':

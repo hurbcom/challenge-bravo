@@ -6,13 +6,13 @@ from queue import Queue
 # É recomendado que o host da aplicação rode num host separado dos testes 
 # pois há um pico de utilização de CPU que pode comprometer o resultado dos testes
 
-url = "http://challengebravohurb.sa-east-1.elasticbeanstalk.com/api/convert/" 
-# url = "http://192.168.1.9:5000/api/convert/" 
+# url = "http://challengebravohurb.sa-east-1.elasticbeanstalk.com/api/convert/" 
+url = "http://192.168.1.9:5000/api/convert/" 
 
 coins = ['USD', 'BRL', 'EUR', 'BTC', 'ETH']
 
 batch = 1000 ## Quantidade de requests
-loop = 5 ## Quntas vezes o teste irá se repetir
+loop = 10 ## Quntas vezes o teste irá se repetir
 
 current_sucessful_requests = []
 batch_times = []
@@ -32,7 +32,7 @@ def test_request_load(t_queue, base, target, value):
         pass
     return 
 
-#Esse método estabelece uma conexão inicial o servidor a mantem aberta, para o tempo de busca não comprometer o teste
+#Esse método estabelece uma conexão inicial e o servidor, por otimização a mantem aberta por um tempo, para otimizar o teste
 def set_up(base, target, value):
     querystring = {"base":base,"target":target,"value":value}
     try: 
@@ -66,6 +66,7 @@ def execute_requests():
 
 try:
     set_up('USD', 'BRL', 1)
+    print('Executando testes...')
 
     for i in range(0, loop):
         execute_requests()
