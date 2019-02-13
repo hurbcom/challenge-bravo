@@ -9,8 +9,8 @@
     <p> Você já pode fazer seus requests pela rota /api/convert através de Query String </p>
     
     <p>    Exemplo:  </p>
-    <p>http://<endereço do host>/api/convert**?base=EUR&target=BRL&value=150**</p>
-    <p>http://<endereço do host>/api/convert**?base=USD&target=ETH**</p>
+    <p>http://HOST_ADDRESS/api/convert?base=EUR&target=BRL&value=150</p>
+    <p>http://HOST_ADDRESS/api/convert?base=USD&target=ETH</p>
     
     </br></br>
     
@@ -45,7 +45,7 @@
             var result = $('#result')
             var settings = {
                 "crossDomain": true,
-                "url": "http://localhost:5000/api/convert/?base="+ base + "&target="+ target + "&value=" + value,
+                "url": "http://" + window.location.host + "/api/convert/?base="+ base + "&target="+ target + "&value=" + value,
                 "method": "GET",
             }
             $.ajax(settings).done(function (response) {
