@@ -16,10 +16,14 @@ A API suporta  as seguintes moedas:
  
  - As bibliotecas utilizadas, além das internas do Python, são:
 
-> **Flask** 
+> **Flask 
+
 > **Flask_restful** 
+
 > **Flask_Cors** 
+
 > **requests** 
+
 > **uWSGI**
 
  - Para instalação dos bibliotecas e dependências usadas nesse projeto,  executar ***pip install -r requirements.txt*** (Se houver as duas versões do Python na máquina usar ***pip3***)
