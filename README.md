@@ -16,7 +16,7 @@ A API suporta  as seguintes moedas:
  
  - As bibliotecas utilizadas, além das internas do Python, são:
 
-> **Flask 
+> **Flask**
 
 > **Flask_restful** 
 
