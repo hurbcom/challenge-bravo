@@ -18,9 +18,9 @@ class Convert(Resource):
             value = float(request.args.get('value', 1))
             
             if base == '' or target == '':   
-                return {'Erro': 'Consulta inválida', 'Exemplo válido':'<url>/api/convert?base=USD&target=BRL&value=1'}, 400
+                return {'Erro': 'Consulta invalida', 'Exemplo valido':'<url>/api/convert?base=USD&target=BRL&value=1'}, 400
             if not re.match(coins_regex, base.upper()) or not re.match(coins_regex, target.upper()):
-                return {'Erro': 'Moedas não suportadas'}, 400
+                return {'Erro': 'Moedas nao suportadas'}, 400
             if value == 0:
                 value = 1
 
@@ -30,7 +30,7 @@ class Convert(Resource):
             return data
 
         except:
-            return {'Erro': 'Moedas não suportadas'}, 400
+            return {'Error': 'Request failed'}, 400
     
     # Reliza a conversão
     def __get_exchange(self, base, target):
