@@ -13,27 +13,25 @@ class Convert(Resource):
     def get(self):
         coins_regex = "(\AUSD\Z)|(\ABRL\Z)|(\AEUR\Z)|(\ABTC\Z)|(\AETH\Z)"
         try:
-            base = request.args.get('base', str)
-            target = request.args.get('target', str)
-            value = float(request.args.get('value', float))
+            base = request.args.get('base', '')
+            target = request.args.get('target', '')
+            value = float(request.args.get('value', 1))
             
-            if base is None or target is None:   
-                return json.dumps({'erro':'Consulta Invalida.'}), 400
-            if base is None or target is None:   
-                return json.dumps({'erro':'Consulta Invalida.'}), 400
-            if not re.match(coins_regex, base) or not re.match(coins_regex, target):
-                return json.dumps({'erro':'Moedas nao suportadas'}), 400
-            if value == 0 or value is None:
+            if base == '' or target == '':   
+                return {'Erro': 'Consulta inválida', 'Exemplo válido':'<url>/api/convert?base=USD&target=BRL&value=1'}, 400
+            if not re.match(coins_regex, base.upper()) or not re.match(coins_regex, target.upper()):
+                return {'Erro': 'Moedas não suportadas'}, 400
+            if value == 0:
                 value = 1
 
             exchangePrice = self.__get_exchange(base, target)
-            data = { "Valor Total Convertido": exchangePrice * value, "Valor de Cambio": exchangePrice, "Data": str(datetime.datetime.today()) }
-
-            return json.dumps(data)
+            data = { f'Valor de Cambio {base.upper()} para {target.upper()}': exchangePrice, 'Valor Total Convertido': exchangePrice * value, 'Data': str(datetime.datetime.today()) }
+            
+            return data
 
         except:
-            return json.dumps({"erro":"Falha de servidor, tente novamente"}), 400
+            return {'Erro': 'Moedas não suportadas'}, 400
     
     # Reliza a conversão
     def __get_exchange(self, base, target):
-        return (1 / usd_rates[base]) / (1 / usd_rates[target])
+        return (1 / usd_rates[base.upper()]) / (1 / usd_rates[target.upper()])

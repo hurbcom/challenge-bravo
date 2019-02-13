@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversão Monetária - Challenge-Bravo Hurb</title>
+</head>
+<body>
+    <h1>API em Funcionamento</h1>
+    <p> Você já pode fazer seus requests pela rota /api/convert através de Query String </p>
+    
+    <p>    Exemplo:  </p>
+    <p>http://HOST_ADDRESS/api/convert?base=EUR&target=BRL&value=150</p>
+    <p>http://HOST_ADDRESS/api/convert?base=USD&target=ETH</p>
+    
+    </br></br>
+    
+    <h2>Ou teste aqui: </h2>
+    <p>De:</p>
+    <select id="base">
+        <option>USD</option>
+        <option>EUR</option>
+        <option>BRL</option>
+        <option>BTC</option>
+        <option>ETH</option>
+    </select>
+    <input id="value" type="number"/>
+    <p>Para:</p>
+    <select id="target">
+        <option>USD</option>
+        <option>EUR</option>
+        <option>BRL</option>
+        <option>BTC</option>
+        <option>ETH</option>
+    </select>
+    <input id="result" type="number" readonly/>
+    <input id="submit" type="button" value="Converter"  /> 
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('submit').onclick = doRequest;
+        function doRequest(){
+            var base = $('#base').val()
+            var target = $('#target').val()
+            var value = $('#value').val()
+            var result = $('#result')
+            var settings = {
+                "crossDomain": true,
+                "url": "http://" + window.location.host + "/api/convert/?base="+ base + "&target="+ target + "&value=" + value,
+                "method": "GET",
+            }
+            $.ajax(settings).done(function (response) {
+            result.val(response["Valor Total Convertido"])
+        });
+        }
+    </script>
+    
+</body>
+</html>
