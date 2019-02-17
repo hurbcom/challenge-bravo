@@ -1,8 +1,12 @@
+# Requisitos
+
+  - Docker instalado (https://www.docker.com/products/docker-desktop)
+
 # Setup
 
 Para executar o código, execute os seguintes comandos:
 
-  - git clone git@bitbucket.org:brunoguedao/bravo.git
+  - git clone git@github.com:brunoguedao/challenge-bravo.git
   - cd bravo
   - docker compose up
 
