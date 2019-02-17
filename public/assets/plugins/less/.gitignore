@@ -1,0 +1,24 @@
+# OS and IDE
+.emacs*
+*.flymake
+*~
+.#*
+.idea
+*.iml
+*.sublime-*
+
+# npm
+node_modules
+package-lock.json
+npm-debug.log
+
+# project-specific
+tmp
+test/browser/less.js
+test/sourcemaps/**/*.map
+test/sourcemaps/*.map
+test/sourcemaps/*.css
+test/less-bom
+
+# grunt
+.grunt
