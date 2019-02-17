@@ -7,7 +7,7 @@
 Para executar o código, execute os seguintes comandos:
 
   - git clone git@github.com:brunoguedao/challenge-bravo.git
-  - cd bravo
+  - cd challenge-bravo
   - docker compose up
 
 # Frontend
