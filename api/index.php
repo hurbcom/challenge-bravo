@@ -8,6 +8,24 @@ $from = strtolower($_GET['from']);
 $to = strtolower($_GET['to']);
 $amount = $_GET['amount'];
 
+if (!in_array($from,array('usd','brl','eur','btc','eth')) || !in_array($to,array('usd','brl','eur','btc','eth'))) {
+    $result = array(
+        "error" => "one of the currencies is not available for conversion",
+        "timestamp" => time(),
+        "msg" => "error"
+    );
+    echo json_encode($result); return;
+}
+
+if (!is_numeric($amount)) {
+    $result = array(
+        "error" => "the amount format must be numeric with periods separating the decimals",
+        "timestamp" => time(),
+        "msg" => "error"
+    );
+    echo json_encode($result); return;
+}
+
 // all conversion will be based on the dollar value
 $rates = array('USD'=> 1);
 
@@ -31,7 +49,7 @@ $result = array(
     "from_value" => $amount,
     "to_symbol" => $conversionFunctions->getCurrencySymbol($to),
     "to_value" => $value,
-    "timestamp" => "1",
+    "timestamp" => time(),
     "msg" => "OK"
 );
 
