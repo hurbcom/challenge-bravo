@@ -8,7 +8,7 @@ Para executar o código, execute os seguintes comandos:
 
   - git clone git@github.com:brunoguedao/challenge-bravo.git
   - cd challenge-bravo
-  - docker compose up
+  - docker-compose up
 
 # Frontend
 
