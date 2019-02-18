@@ -46,7 +46,7 @@ function convertCurrency() {
     $('.toCurrency').val('');
 
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         dataType: 'json',
         url: 'api/?from='+from+'&to='+to+'&amount='+amount,
         async: true,
