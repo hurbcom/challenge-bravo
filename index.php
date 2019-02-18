@@ -6,7 +6,6 @@
     <title>Conversor de Moedas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="public/assets/plugins/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="public/assets/css/main.css">
     <link rel="stylesheet/less" type="text/css" href="public/assets/css/styles.less" />
     <script src="public/assets/js/jquery-3.0.0.min.js"></script>
     <script src="public/assets/js/popper.min.js"></script>
