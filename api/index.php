@@ -11,8 +11,8 @@ $amount = $_GET['amount'];
 if (!in_array($from,array('usd','brl','eur','btc','eth')) || !in_array($to,array('usd','brl','eur','btc','eth'))) {
     $result = array(
         "error" => "one of the currencies is not available for conversion",
-        "timestamp" => time(),
-        "msg" => "error"
+        "msg" => "bad request",
+        "status" => 400
     );
     echo json_encode($result); return;
 }
@@ -20,8 +20,8 @@ if (!in_array($from,array('usd','brl','eur','btc','eth')) || !in_array($to,array
 if (!is_numeric($amount)) {
     $result = array(
         "error" => "the amount format must be numeric with periods separating the decimals",
-        "timestamp" => time(),
-        "msg" => "error"
+        "msg" => "bad request",
+        "status" => 400
     );
     echo json_encode($result); return;
 }
@@ -50,7 +50,8 @@ $result = array(
     "to_symbol" => $conversionFunctions->getCurrencySymbol($to),
     "to_value" => $value,
     "timestamp" => time(),
-    "msg" => "OK"
+    "msg" => "OK",
+    "status" => 200
 );
 
 echo json_encode($result);
