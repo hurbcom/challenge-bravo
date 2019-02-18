@@ -1,6 +1,6 @@
 <?php
 // class with the conversion functions
-include("../src/Classes/currency.php");
+include("../src/classes/currency.php");
 $conversionFunctions = new currencyClass();
 
 // declaration of initial variables 
