@@ -23,4 +23,4 @@ Para executar o código, execute os seguintes comandos:
 
 # Ambiente de Produção
 
-  - Para testar em um ambiente de produção é só acessar: http://www.imagemvida.com.br/challenge-bravo/
+  - Para testar em um ambiente de produção é só acessar: http://www.imagemvida.com.br/challenge-bravo/ ou http://www.imagemvida.com.br/challenge-bravo/api?from=MOEDA&to=MOEDA&amount=VALOR
