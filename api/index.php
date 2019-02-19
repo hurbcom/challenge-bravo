@@ -37,6 +37,15 @@ $conversionFunctions->getCryptoRates($from,$to,$rates);
 $fromRate = $conversionFunctions->getCurrencyRate($from,$rates,1);
 $toRate = $conversionFunctions->getCurrencyRate($to,$rates,$amount);
 
+if ($fromRate == 0 || $toRate == 0) {
+    $result = array(
+        "error" => "API url can not be reached",
+        "msg" => "not found",
+        "status" => 404
+    );
+    echo json_encode($result); return;
+}
+
 $converted = bcdiv($toRate,$fromRate,6);
 $value = number_format($converted, 6, '.', '');
 $amount = number_format($amount, 2, '.', '');
