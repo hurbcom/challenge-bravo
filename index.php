@@ -73,6 +73,10 @@
             </div>
             <div class="col-1"></div>
         </div>
+        <div class="row justify-content-center msg-box">
+            <div class="col-sm-11 msg-text"></div>
+            <div class="col-sm-1"><span class="close-btn">x</span></div>
+        </div>
     </div>
 </body>
 </html>

@@ -51,7 +51,13 @@ function convertCurrency() {
         url: 'api/?from='+from+'&to='+to+'&amount='+amount,
         async: true,
         success: function(response) {
-            $('.toCurrency').val(response.to_value);
+            if (response.status == 200) {
+                $('.toCurrency').val(response.to_value);
+                $('.msg-box').css("display", "none");
+            } else {
+                $('.msg-text').text('ERROR: '+response.error);
+                $('.msg-box').css("display", "flex");
+            }
         }
     });
 }
@@ -60,4 +66,7 @@ $( document ).ready(function() {
     convertCurrency();
     $('input').bind('keypress',mask.money);
     $('input').bind('keyup',mask.money);
+    $('.close-btn').click(function () {
+        $('.msg-box').css("display", "none");
+    });
 });
