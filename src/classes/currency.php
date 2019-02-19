@@ -11,9 +11,11 @@ class currencyClass {
             $rate_usd = file_get_contents('http://api.openrates.io/latest?base=USD');
         }
 
-        $json_usd = json_decode($rate_usd);
-        $rates['EUR'] = round($json_usd->rates->EUR,6); // euro
-        $rates['BRL'] = round($json_usd->rates->BRL,6); // brazilian real
+        if (!empty($rate_usd)) {
+            $json_usd = json_decode($rate_usd);
+            $rates['EUR'] = round($json_usd->rates->EUR,6); // euro
+            $rates['BRL'] = round($json_usd->rates->BRL,6); // brazilian real
+        }
     }
 
     public function getCryptoRates($from,$to,&$rates) {
@@ -24,8 +26,10 @@ class currencyClass {
             // if API is out it will try another
             if (empty($rate_btc)) {
                 $rate_btc = file_get_contents('https://api.cryptonator.com/api/ticker/usd-btc');
-                $json_btc = json_decode($rate_btc);
-                $rates['BTC'] = round($json_btc->ticker->price,6); // bitcoin
+                if (!empty($rate_usd)) {
+                    $json_btc = json_decode($rate_btc);
+                    $rates['BTC'] = round($json_btc->ticker->price,6); // bitcoin
+                }
             } else {
                 $json_btc = json_decode($rate_btc);
                 $rates['BTC'] = round(1/$json_btc->USDT_BTC->last,6); // bitcoin
@@ -37,8 +41,10 @@ class currencyClass {
             // if API is out it will try another
             if (empty($rate_eth)) {
                 $rate_eth = file_get_contents('https://api.cryptonator.com/api/ticker/usd-eth');
-                $json_eth = json_decode($rate_eth);
-                $rates['ETH'] = round($json_eth->ticker->price,6); // ethereum
+                if (!empty($rate_usd)) {
+                    $json_eth = json_decode($rate_eth);
+                    $rates['ETH'] = round($json_eth->ticker->price,6); // ethereum
+                }
             } else {
                 $json_eth = json_decode($rate_eth);
                 $rates['ETH'] = round(1/$json_eth->USDT_ETH->last,6); // ethereum
@@ -87,7 +93,11 @@ class currencyClass {
                 break;
         }
 
-        return $rate;
+        if (!isset($rates[strtoupper($currency)])) {
+            return 'error';
+        } else {
+            return $rate;
+        }
     }
 }
 

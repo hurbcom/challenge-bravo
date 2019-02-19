@@ -37,7 +37,7 @@ $conversionFunctions->getCryptoRates($from,$to,$rates);
 $fromRate = $conversionFunctions->getCurrencyRate($from,$rates,1);
 $toRate = $conversionFunctions->getCurrencyRate($to,$rates,$amount);
 
-if ($fromRate == 0 || $toRate == 0) {
+if (!is_numeric($toRate)) {
     $result = array(
         "error" => "API url can not be reached",
         "msg" => "not found",
