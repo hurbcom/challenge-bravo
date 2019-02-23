@@ -26,7 +26,8 @@ class currencyClass {
             // if API is out it will try another
             if (empty($rate_btc)) {
                 $rate_btc = file_get_contents('https://api.cryptonator.com/api/ticker/usd-btc');
-                if (!empty($rate_usd)) {
+                if (!empty($rate_btc)) {
+                    print '<pre>';print_r(1);die;
                     $json_btc = json_decode($rate_btc);
                     $rates['BTC'] = round($json_btc->ticker->price,6); // bitcoin
                 }
@@ -41,7 +42,7 @@ class currencyClass {
             // if API is out it will try another
             if (empty($rate_eth)) {
                 $rate_eth = file_get_contents('https://api.cryptonator.com/api/ticker/usd-eth');
-                if (!empty($rate_usd)) {
+                if (!empty($rate_eth)) {
                     $json_eth = json_decode($rate_eth);
                     $rates['ETH'] = round($json_eth->ticker->price,6); // ethereum
                 }
