@@ -27,7 +27,6 @@ class currencyClass {
             if (empty($rate_btc)) {
                 $rate_btc = file_get_contents('https://api.cryptonator.com/api/ticker/usd-btc');
                 if (!empty($rate_btc)) {
-                    print '<pre>';print_r(1);die;
                     $json_btc = json_decode($rate_btc);
                     $rates['BTC'] = round($json_btc->ticker->price,6); // bitcoin
                 }
