@@ -17,8 +17,7 @@
     <div class="container">
         <h1>Conversor de Moedas</h1>
         <div class="row justify-content-center main">
-            <div class="col-1"></div>
-            <div class="col-4">
+            <div class="col-sm-5">
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <div class="dropdown">
@@ -44,8 +43,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2 arrow">&rarr;</div>
-            <div class="col-4">
+            <div class="col-sm-2 arrow">&rarr;</div>
+            <div class="col-sm-5">
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <div class="dropdown">
@@ -71,7 +70,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-1"></div>
         </div>
         <div class="row justify-content-center msg-box">
             <div class="col-sm-11 msg-text"></div>
