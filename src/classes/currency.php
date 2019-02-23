@@ -4,11 +4,11 @@ class currencyClass {
 
     public function getRegularRates(&$rates) {
         // this function takes the values of the normal currencies based on the dollar
-        $rate_usd = file_get_contents('https://api.exchangeratesapi.io/latest?base=USD');
+        $rate_usd = @file_get_contents('https://api.exchangeratesapi.io/latest?base=USD');
         
         // if API is out it will try another
         if (empty($rate_usd)) {
-            $rate_usd = file_get_contents('http://api.openrates.io/latest?base=USD');
+            $rate_usd = @file_get_contents('http://api.openrates.io/latest?base=USD');
         }
 
         if (!empty($rate_usd)) {
@@ -22,10 +22,10 @@ class currencyClass {
         // this function takes the values of the crypto-currencies based on the dollar
         // to avoid calling the API twice, let's check if some crypto-currency is dropped as a parameter
         if ($from == 'btc' || $to == 'btc') { 
-            $rate_btc = file_get_contents('https://poloniex.com/public?command=returnTicker');
+            $rate_btc = @file_get_contents('https://poloniex.com/public?command=returnTicker');
             // if API is out it will try another
             if (empty($rate_btc)) {
-                $rate_btc = file_get_contents('https://api.cryptonator.com/api/ticker/usd-btc');
+                $rate_btc = @file_get_contents('https://api.cryptonator.com/api/ticker/usd-btc');
                 if (!empty($rate_btc)) {
                     $json_btc = json_decode($rate_btc);
                     $rates['BTC'] = round($json_btc->ticker->price,6); // bitcoin
@@ -37,10 +37,10 @@ class currencyClass {
         }
         
         if ($from == 'eth' || $to == 'eth') {
-            $rate_eth = file_get_contents('https://poloniex.com/public?command=returnTicker');
+            $rate_eth = @file_get_contents('https://poloniex.com/public?command=returnTicker');
             // if API is out it will try another
             if (empty($rate_eth)) {
-                $rate_eth = file_get_contents('https://api.cryptonator.com/api/ticker/usd-eth');
+                $rate_eth = @file_get_contents('https://api.cryptonator.com/api/ticker/usd-eth');
                 if (!empty($rate_eth)) {
                     $json_eth = json_decode($rate_eth);
                     $rates['ETH'] = round($json_eth->ticker->price,6); // ethereum
