@@ -35,5 +35,5 @@ As taxas de conversão são armazenadas em um arquivo de banco de dados sqlite3 
 ## Execução
 
 1. Rodar a aplicação: `python app.py`
-2. Acessar a url `http://localhost:5000/currency?from=FROM_CURRENCY&to=TO_CURRENCY&amount=AMOUNT`, onde FROM_CURRENCY é a moeda de origem, TO_CURRENCY é a moeda de destino e AMOUNT é um valor na moeda de origem a ser convertido para a moeda de destino (é necessário estar logado no site do CrytoCurrency).
+2. Acessar a url `http://localhost:5000/currency?from=FROM_CURRENCY&to=TO_CURRENCY&amount=AMOUNT`, onde FROM_CURRENCY é a moeda de origem, TO_CURRENCY é a moeda de destino e AMOUNT é um valor na moeda de origem a ser convertido para a moeda de destino (é necessário estar logado no site do CryptoCompare).
 3. Para executar os testes: `python -m unittest test_app`
