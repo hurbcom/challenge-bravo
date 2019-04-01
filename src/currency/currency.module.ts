@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
 
-@Module({})
+import { ConverterController } from './controllers/converter/converter.controller';
+
+@Module({
+    controllers: [ConverterController],
+})
 export class CurrencyModule {}
