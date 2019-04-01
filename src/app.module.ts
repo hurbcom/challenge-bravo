@@ -3,8 +3,6 @@ import { Module } from '@nestjs/common';
 import { CurrencyModule } from './currency/currency.module';
 
 @Module({
-  imports: [CurrencyModule],
-  controllers: [],
-  providers: [],
+    imports: [CurrencyModule],
 })
 export class AppModule {}
