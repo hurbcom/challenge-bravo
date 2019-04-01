@@ -10,7 +10,10 @@ export class ConverterController {
     ) {}
 
     @Get()
-    async convert(@Query() { from, to, amount }: CurrencyDto): Promise<number> {
-        return this.converter.convert(from, to, amount);
+    async convert(@Query() { from, to, amount }: CurrencyDto): Promise<{
+        convertedAmount: number;
+    }> {
+        const convertedAmount = await this.converter.convert(from, to, amount);
+        return { convertedAmount };
     }
 }

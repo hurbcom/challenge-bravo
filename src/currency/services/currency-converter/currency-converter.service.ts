@@ -1,4 +1,5 @@
-import { Currency, ICurrencyConverter } from '../../definitions/currency';
+import { Currency } from '../../definitions/currency';
+import { ICurrencyConverter } from '../../interfaces/currency-converter.interface';
 
 export class CurrencyConverterService implements ICurrencyConverter {
     async convert(
