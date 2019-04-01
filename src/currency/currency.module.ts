@@ -1,14 +1,19 @@
-import { Module } from '@nestjs/common';
-import { ConverterController } from './controllers/converter/converter.controller';
+import { HttpModule, Module } from '@nestjs/common';
 
+import { ConverterController } from './controllers/converter/converter.controller';
 import { CurrencyConverterService } from './services/currency-converter/currency-converter.service';
+import { CurrencyRatesService } from './services/currency-rates/currency-rates.service';
 
 @Module({
     controllers: [ConverterController],
+    imports: [HttpModule],
     providers: [
+        CurrencyRatesService,
         {
             provide: 'currencyConverter',
-            useClass: CurrencyConverterService,
+            useFactory: (currencyRatesService: CurrencyRatesService) =>
+                new CurrencyConverterService(currencyRatesService),
+            inject: [CurrencyRatesService],
         },
     ],
 })

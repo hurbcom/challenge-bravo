@@ -1,15 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
-
 import { CurrencyDto } from '../../dto/currency.dto';
 import { CurrencyConverterService } from '../../services/currency-converter/currency-converter.service';
+import { CurrencyRatesServiceMock } from '../../services/currency-rates/currency-rates.mock';
+import { CurrencyRatesService } from '../../services/currency-rates/currency-rates.service';
 import { ConverterController } from './converter.controller';
 
 describe('Converter Controller', () => {
     let converterController: ConverterController;
     let currencyConverterService: CurrencyConverterService;
+    let currencyRatesServiceMock: CurrencyRatesServiceMock;
 
     beforeEach(async () => {
-        currencyConverterService = new CurrencyConverterService();
+        currencyRatesServiceMock = new CurrencyRatesServiceMock();
+        currencyConverterService = new CurrencyConverterService(
+            currencyRatesServiceMock as CurrencyRatesService,
+        );
         converterController = new ConverterController(currencyConverterService);
     });
 
