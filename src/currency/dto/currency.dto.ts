@@ -1,14 +1,15 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsNumber, IsPositive } from 'class-validator';
 
+import { Currency } from '../definitions/currency';
 import { CURRENCY } from '../providers/currency';
 
 export class CurrencyDto {
     @IsIn(CURRENCY)
-    from: string;
+    from: Currency;
 
     @IsIn(CURRENCY)
-    to: string;
+    to: Currency;
 
     @IsNumber()
     @IsPositive()

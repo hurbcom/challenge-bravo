@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConverterController } from './controllers/converter/converter.controller';
-import { CurrencyConverterService } from './services/currency-converter/currency-converter.service';
 
+import { CurrencyConverterService } from './services/currency-converter/currency-converter.service';
 
 @Module({
     controllers: [ConverterController],
-    providers: [CurrencyConverterService],
+    providers: [
+        {
+            provide: 'currencyConverter',
+            useClass: CurrencyConverterService,
+        },
+    ],
 })
 export class CurrencyModule {}
