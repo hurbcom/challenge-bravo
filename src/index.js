@@ -4,6 +4,7 @@ require('dotenv').config()
 const app = express()
 const server = http.createServer(app)
 const port = process.env.PORT
+const routes = require('./routes')
 const rateService = require('./services/rates')
 
 /**
@@ -15,5 +16,7 @@ server.listen(port, () => {
 })
 
 rateService.update()
+
+app.use('/', routes);
 
 module.exports = app
