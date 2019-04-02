@@ -1,5 +1,6 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common';
 
+import { Currency } from '../../definitions/currency';
 import { CurrencyDto } from '../../dto/currency.dto';
 import { ICurrencyConverter } from '../../interfaces/currency-converter.interface';
 
@@ -11,9 +12,11 @@ export class ConverterController {
 
     @Get()
     async convert(@Query() { from, to, amount }: CurrencyDto): Promise<{
+        from: Currency;
+        to: Currency;
         convertedAmount: number;
     }> {
         const convertedAmount = await this.converter.convert(from, to, amount);
-        return { convertedAmount };
+        return { from, to, convertedAmount };
     }
 }

@@ -26,6 +26,8 @@ describe('Converter Controller', () => {
         const convertedAmount = 387;
 
         const expectedResponse = {
+            from: query.from,
+            to: query.to,
             convertedAmount,
         };
 
