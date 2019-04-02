@@ -2,7 +2,7 @@ import { Cache, ExpirationStrategy, MemoryStorage } from 'node-ts-cache';
 import { HttpService, Injectable } from '@nestjs/common';
 
 import { ICurrencyRatesList } from '../../definitions/currency';
-import { RatesTransformer } from '../../transformers/rates.transformer';
+import { RatesTransformer } from '../../transformers/rates/rates.transformer';
 
 @Injectable()
 export class CurrencyRatesService {
@@ -10,6 +10,7 @@ export class CurrencyRatesService {
 
     constructor(private readonly httpService: HttpService) {}
 
+    // TODO: Need tests
     @Cache(new ExpirationStrategy(new MemoryStorage()), {
         ttl: 3600,
     })

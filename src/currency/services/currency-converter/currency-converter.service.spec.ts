@@ -30,7 +30,7 @@ describe('Currency Converter Service', () => {
         );
     });
 
-    fit('should test a conversion', async () => {
+    it('should test a conversion', async () => {
         const from = 'USD';
         const to = 'BRL';
         const amount = 100;
