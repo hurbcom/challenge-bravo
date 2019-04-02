@@ -19,14 +19,14 @@ export class CurrencyRatesService extends NestSchedule {
 
     @Cacheable({
         cacheKey: 'rates',
-        client: userClient as any,
+        client: userClient as any /* TODO: Fix me */,
         ttlSeconds: 0,
     })
     async getRates(): Promise<ICurrencyRatesList> {
         return this.getRatesWithoutCache();
     }
 
-    async getRatesWithoutCache() {
+    async getRatesWithoutCache(): Promise<ICurrencyRatesList> {
         const {
             data: { data },
         } = await this.httpService.get(this.externalApiRatesUrl).toPromise();
@@ -37,7 +37,7 @@ export class CurrencyRatesService extends NestSchedule {
     }
 
     @Interval(60000 * 20)
-    async syncRates() {
+    async syncRates(): Promise<void> {
         userClient.set('rates', this.getRatesWithoutCache());
     }
 }
