@@ -26,6 +26,8 @@
     "@nestjs/platform-fastify": "^6.0.5",
     "class-transformer": "^0.2.0",
     "class-validator": "^0.9.1",
+    "node-ts-cache": "^2.0.0",
+    "redis": "^2.8.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "rxjs": "^6.3.3"
