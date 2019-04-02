@@ -31,6 +31,7 @@ Now you're ready to play in your local machine.
 npm run start
 ```
 
+
 ## Running the tests
 
 ```
@@ -67,18 +68,12 @@ node_modules/.bin/loadtest http://127.0.0.1:3000/converter\?from\=USD\&to\=BRL\&
 
 ## Documentation
 
-To generate packages documentation:
+Go to `http://localhost:3000/api` after api is initialized to work with swagger or run `npm run compodoc` to have a full overview of project structure.
 
-```
-npm run compodoc
-```
-
-Also, you can go to swagger endpoint when application is started, just follow the address:
-`http://localhost:3000/api`
 
 # Style
 
-This project contains prettier + linter.
+This project is using prettier + linter.
 
 ```
 # To apply linter and search for issues
@@ -88,15 +83,31 @@ npm run list
 npm run format
 ```
 
+
+# Backlog
+
+- Dockerize
+- Improve chart workflow
+- Benchmark tests results
+- Auto recover
+- Error responses more friendly
+- Error logs
+- Requirements
+- Observations
+- Quick explanation how currencies works
+
+
 ## Built With
 
 * [nestjs](https://docs.nestjs.com) - The framework used for api
+
 
 ## Authors
 
 * **Lucas Silva** - *Developer* - [github](https://github.com/luqezman)
 
 See also the list of [contributors](https://github.com/luqezman/challenge-bravo/contributors) who participated in this project.
+
 
 ## Acknowledgments
 
