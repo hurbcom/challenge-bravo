@@ -1,7 +1,7 @@
 import { RatesTransformer } from './rates.transformer';
 
 describe('Rates Transformer', () => {
-    fit('should transform data', async () => {
+    it('should transform data', async () => {
         const untransformedRates = [
             {
                 id: 'united-states-dollar',
