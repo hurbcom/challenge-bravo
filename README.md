@@ -96,7 +96,7 @@ npm run format
 
 * **Lucas Silva** - *Developer* - [github](https://github.com/luqezman)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/luqezman/challenge-bravo/contributors) who participated in this project.
 
 ## Acknowledgments
 
