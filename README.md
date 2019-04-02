@@ -99,8 +99,12 @@ npm run format
 
 ## Built With
 
-* [nestjs](https://docs.nestjs.com) - The framework used for api
-
+* [nestjs](https://docs.nestjs.com) - Base framework used to create the api
+* [jest](https://jestjs.io) - Framework for tests
+* [chai](https://www.chaijs.com/) - Second option for tests
+* [swagger](https://swagger.io) - Swagger documentation
+* [prettier](https://prettier.io) - Code formatter
+* [tslint](https://palantir.github.io/tslint) - Linter
 
 ## Authors
 
