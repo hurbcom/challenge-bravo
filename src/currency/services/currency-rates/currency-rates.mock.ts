@@ -1,3 +1,5 @@
 export class CurrencyRatesServiceMock {
-    async getAllRates() {}
+    readonly externalApiRatesUrl = '';
+
+    async getRates() {}
 }

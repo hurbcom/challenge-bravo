@@ -1,7 +1,6 @@
 import { CurrencyDto } from '../../dto/currency.dto';
 import { CurrencyConverterService } from '../../services/currency-converter/currency-converter.service';
 import { CurrencyRatesServiceMock } from '../../services/currency-rates/currency-rates.mock';
-import { CurrencyRatesService } from '../../services/currency-rates/currency-rates.service';
 import { ConverterController } from './converter.controller';
 
 describe('Converter Controller', () => {
@@ -12,7 +11,7 @@ describe('Converter Controller', () => {
     beforeEach(async () => {
         currencyRatesServiceMock = new CurrencyRatesServiceMock();
         currencyConverterService = new CurrencyConverterService(
-            currencyRatesServiceMock as CurrencyRatesService,
+            currencyRatesServiceMock as any,
         );
         converterController = new ConverterController(currencyConverterService);
     });
