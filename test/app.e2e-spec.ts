@@ -1,23 +1,43 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ValidationPipe } from '@nestjs/common';
+
 import { AppModule } from './../src/app.module';
 
-describe('AppController (e2e)', () => {
-  let app;
+describe('ConverterController (e2e)', () => {
+    let app;
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+    beforeEach(async () => {
+        const moduleFixture: TestingModule = await Test.createTestingModule({
+            imports: [AppModule],
+        }).compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
-  });
+        app = moduleFixture.createNestApplication();
+        app.useGlobalPipes(new ValidationPipe({ transform: true }));
+        await app.init();
+    });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
-  });
+    it('/converter (GET) - Empty data', () => {
+        return request(app.getHttpServer())
+            .get('/converter')
+            .expect(400);
+    });
+
+    it('/converter?from=invalidFrom&to=invalidTo&amount=nan (GET) - Invalid data', () => {
+        return request(app.getHttpServer())
+            .get('/converter?from=invalidFrom&to=invalidTo&amount=nan')
+            .expect(400);
+    });
+
+    it('/converter?from=USD&to=USD&amount=100 (GET) - Equal currencies', () => {
+        return request(app.getHttpServer())
+            .get('/converter?from=USD&to=USD&amount=100')
+            .expect(400);
+    });
+
+    it('/converter?from=USD&to=BRL&amount=100 (GET) - Valid data', () => {
+        return request(app.getHttpServer())
+            .get('/converter?from=USD&to=BRL&amount=100')
+            .expect(200);
+    });
 });
