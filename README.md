@@ -6,8 +6,6 @@ HCC is a currency converter api developed by the [hurb](https://www.hurb.com/) t
 
 ![Architecture](./docs/api-workflow.png)
 
-Below you can see how the things works:
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
