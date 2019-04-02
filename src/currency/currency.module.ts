@@ -1,4 +1,4 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { HttpModule, Module, OnModuleInit } from '@nestjs/common';
 
 import { ConverterController } from './controllers/converter/converter.controller';
 import { CurrencyConverterService } from './services/currency-converter/currency-converter.service';
@@ -17,4 +17,10 @@ import { CurrencyRatesService } from './services/currency-rates/currency-rates.s
         },
     ],
 })
-export class CurrencyModule {}
+export class CurrencyModule implements OnModuleInit {
+    constructor(private currencyRatesService: CurrencyRatesService) {}
+
+    async onModuleInit(): Promise<void> {
+        await this.currencyRatesService.syncRates();
+    }
+}
