@@ -77,7 +77,7 @@ This project is using prettier + linter.
 
 ```
 # To apply linter and search for issues
-npm run list
+npm run lint
 
 # To apply prettier and format the code
 npm run format
