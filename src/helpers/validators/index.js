@@ -24,11 +24,11 @@ validator.missingParams = (requiredParams, reqParams) =>
  * @returns {String} Caso seja válido retorna uma string vazia, caso contrário retornara o erro encontrado
  */
 validator.validateCurrencies = (from, to) => {
-    if (!ratesService.currencies.some(currency => currency === from.toUpperCase())) {
+    if (ratesService.currencies.some(currency => currency !== from.toUpperCase())) {
         return `Moeda de origem "from". Aceitamos apenas conversões das seguintes moedas: ${ratesService.currencies.toString()}`
     }
 
-    if (!ratesService.currencies.some(currency => currency === to.toUpperCase())) {
+    if (ratesService.currencies.some(currency => currency !== to.toUpperCase())) {
         return `Moeda de destino "to". Aceitamos apenas conversões das seguintes moedas: ${ratesService.currencies.toString()}`
     }
 
