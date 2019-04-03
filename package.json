@@ -7,7 +7,7 @@
     "scripts": {
         "start": "node src/index.js",
         "performance-test": "artillery run src/tests/performance/performance-test.yml",
-        "test": "docker start cache && mocha src/tests/services/*.js"
+        "test": "docker start cache && mocha src/tests/services/index.js"
     },
     "license": "ISC",
     "keywords": [
