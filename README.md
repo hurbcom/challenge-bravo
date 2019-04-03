@@ -8,6 +8,66 @@ HCC is a currency converter api developed by the [hurb](https://www.hurb.com/) t
 ![Architecture](./docs/api-workflow.png)
 
 
+## Project structure
+```
+.
+├── Dockerfile
+├── README.md
+├── docker-compose.yml
+├── docs
+│   └── api-workflow.png
+├── nest-cli.json
+├── nodemon-debug.json
+├── nodemon.json
+├── package-lock.json
+├── package.json
+├── src
+│   ├── app.module.ts
+│   ├── currency
+│   │   ├── controllers
+│   │   │   └── converter
+│   │   │       ├── converter.controller.spec.ts
+│   │   │       └── converter.controller.ts
+│   │   ├── currency.module.ts
+│   │   ├── definitions
+│   │   │   └── currency.ts
+│   │   ├── dto
+│   │   │   └── currency.dto.ts
+│   │   ├── exceptions
+│   │   │   └── bad-request.exception.ts
+│   │   ├── interfaces
+│   │   │   └── currency-converter.interface.ts
+│   │   ├── providers
+│   │   │   └── currency.ts
+│   │   ├── services
+│   │   │   ├── currency-converter
+│   │   │   │   ├── currency-converter.service.spec.ts
+│   │   │   │   └── currency-converter.service.ts
+│   │   │   └── currency-rates
+│   │   │       ├── currency-rates.mock.ts
+│   │   │       └── currency-rates.service.ts
+│   │   ├── transformers
+│   │   │   ├── bad-request-exception
+│   │   │   │   └── bad-request-exception.transformer.ts
+│   │   │   └── rates
+│   │   │       ├── rates.transformer.spec.ts
+│   │   │       └── rates.transformer.ts
+│   │   └── validators
+│   │       └── is-not-equal-to
+│   │           ├── is-not-equal-to.constraint.ts
+│   │           └── is-not-equal-to.validator.ts
+│   └── main.ts
+├── test
+│   ├── app.e2e-spec.ts
+│   └── jest-e2e.json
+├── tsconfig.build.json
+├── tsconfig.json
+└── tslint.json
+
+19 directories, 33 files
+```
+
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
