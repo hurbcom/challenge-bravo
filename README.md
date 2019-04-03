@@ -123,6 +123,7 @@ npm run format
 ## Backlog
 
 - Improve chart workflow
+- Improve swagger documentation
 - Quick explanation how currencies works
 
 
