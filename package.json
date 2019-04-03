@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "pre-install": "npm install mocha && cd node_modules\\mocha && npm update js-yaml && cd ..\\..",
+    "pre-install": "npm install --save-dev mocha && cd node_modules\\mocha && npm update js-yaml && cd ..\\..",
     "start": "babel-node src/index.js",
     "start-nodemon": "nodemon --inspect --exec babel-node src/index.js",
     "test": "mocha --timeout 10000 --require @babel/register src/tests/*.js --exit"
