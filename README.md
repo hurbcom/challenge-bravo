@@ -122,7 +122,6 @@ npm run format
 
 ## Backlog
 
-- Dockerize
 - Improve chart workflow
 - Quick explanation how currencies works
 
