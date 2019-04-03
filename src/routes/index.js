@@ -1,5 +1,8 @@
-import currency from './currency';
+import { Router } from 'express';
+import CurrencyController from './currencyController';
 
-export default {
-    currency
-};
+const routes = Router();
+
+routes.get('/currency', CurrencyController.getCurrencyExchange);
+
+export default routes;

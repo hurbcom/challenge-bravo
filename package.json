@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "pre-install": "npm install mocha && cd node_modules\\mocha && npm update js-yaml && cd ..\\..",
     "start": "babel-node src/index.js",
     "start-nodemon": "nodemon --inspect --exec babel-node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --timeout 10000 --require @babel/register src/tests/*.js --exit"
   },
   "repository": {
     "type": "git",
@@ -14,14 +15,21 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/register": "^7.4.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "mocha": "^6.0.2",
     "nodemon": "^1.18.10"
   },
   "dependencies": {
-    "@babel/core": "^7.4.0",
-    "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.4.2",
+    "@babel/runtime": "^7.4.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dotenv": "^7.0.0",

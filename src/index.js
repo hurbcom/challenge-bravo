@@ -20,10 +20,12 @@ app.use(async (req, res, next) => {
     next();
 });
 
-app.use('/currency', routes.currency);
+app.use('/', routes);
 
 connectDb().then(async () => {
     app.listen(process.env.PORT, () =>
         console.log(`Example app listening on port ${process.env.PORT}!`),
     );
 });
+
+export default app;
