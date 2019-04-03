@@ -3,8 +3,9 @@ import {
     BadRequestException,
     Catch,
     ExceptionFilter,
-    HttpException,
 } from '@nestjs/common';
+
+import { BadRequestExceptionTransformer } from '../transformers/bad-request-exception/bad-request-exception.transformer';
 
 @Catch(BadRequestException)
 export class BadRequestExceptionFilter implements ExceptionFilter {
@@ -12,25 +13,10 @@ export class BadRequestExceptionFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const status = exception.getStatus();
-        const errors = {};
-        const exceptionErrors = exception.getResponse()['message'];
+        const badRequestExceptionTransformed = BadRequestExceptionTransformer.transform(
+            exception,
+        );
 
-        for (const exceptionError of exceptionErrors) {
-            const property = exceptionError['property'];
-            const constraints = exceptionError['constraints'];
-
-            if (!errors.hasOwnProperty(property)) {
-                errors[property] = {};
-            }
-
-            for (const constraintKey of Object.keys(constraints)) {
-                const constraintMessage = constraints[constraintKey];
-                errors[property][constraintKey] = constraintMessage;
-            }
-        }
-
-        response.status(status).send({
-            errors,
-        });
+        response.status(status).send(badRequestExceptionTransformed);
     }
 }
