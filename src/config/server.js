@@ -11,7 +11,7 @@ const allowCors = require('./cors')
 // Configurando servidor
 const app = express()
 const server = http.createServer(app)
-server.listen(port)
+server.listen(port, () => console.log('Aplicação iniciada'))
 
 // Config Middlewares
 app.use(bodyParser.urlencoded({
