@@ -32,23 +32,32 @@ Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ qu
 - Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
   - git clone $seu-fork
   - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
+  - ~~comando para instalar dependências~~
+  - comando para executar a aplicação: **Apenas executar docker-compose up na raiz do projeto**
 - A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 
 
 
 ## Critério de avaliação
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+- **Organização do código**: Separação de módulos, view e model, back-end e front-end  
+  O código ficou simples dada a simplicidade da solução
+- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?  
+  Sim.
+- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?  
+  Sim. Atende os requisitos solicitados.
+- **Legibilidade do código** (incluindo comentários)  
+  Pela simplicidade dos objetos e do desafio, os métodos ficaram autoexplicativos não necessitando de comentários
+- **Segurança**: Existe alguma vulnerabilidade clara?  
+  A versão atual do pacote mocha apresenta uma vulnerabilidade em uma de suas dependências: js-yaml. Será corrigida na versão 6.1.0, a atual é a 6.0.2. Coloquei uma forma de forçar a atualização deste pacote vulneravável na rotina de pre-install.
+- **Cobertura de testes** (Não esperamos cobertura completa)  
+  Não sei o número exato que ficou, pois não cheguei a rodar o istanbul. Porém poderia ser um pouco falho, pois estou compreendendo todos os métodos expostos e acredito que os principais cenários de validação, que a ferramenta não conseguiria mapear.
+- **Histórico de commits** (estrutura e qualidade)  
+ Ficaram apenas três commits pois parti de um projeto base que já possuia express + mongoose. Depois criei os outros commits para os tests e docker.
+- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?  
+  Sim.
+- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?  
+  As bibliotecas sim, porém já vi performances melhores utilizando Go. Decidi fazer por node por ter mais familiaridade e por isso ser mais produtivo. O banco de dados suporta se a aplicação, mas não recomendo a utilização de banco de dados em containers para ambientes de produção. Os bancos possuem algoritmos otimizados para leitura e escrita em disco, quando se trata da virtualização dos mesmos, isto pode gerar perda de performance e até mesmo falhas em alguns cenários. Quanto a arquitetura, o serviço vale a pena manter conteinizado para uma melhor escalabilidade, mas quanto ao BD utilizaria numa infra externa.
 
 ## Dúvidas
 
