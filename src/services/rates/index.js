@@ -1,6 +1,6 @@
 const axios = require('axios')
 const rates = {}
-const redisClient = require('../../redis')
+const redisClient = require('../../config/redis')
 
 rates.currencies = ['USD', 'BRL', 'EUR', 'BTC', 'ETH']
 
