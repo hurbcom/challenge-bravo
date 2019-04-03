@@ -90,7 +90,6 @@ npm run format
 - Improve chart workflow
 - Benchmark tests results
 - Auto recover
-- Error responses more friendly
 - Error logs
 - Requirements
 - Observations

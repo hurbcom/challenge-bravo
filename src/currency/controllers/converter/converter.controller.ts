@@ -1,9 +1,11 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common';
+import { Controller, Get, Inject, Query, UseFilters } from '@nestjs/common';
 
 import { Currency } from '../../definitions/currency';
 import { CurrencyDto } from '../../dto/currency.dto';
+import { BadRequestExceptionFilter } from '../../exceptions/bad-request.exception';
 import { ICurrencyConverter } from '../../interfaces/currency-converter.interface';
 
+@UseFilters(new BadRequestExceptionFilter())
 @Controller('converter')
 export class ConverterController {
     constructor(

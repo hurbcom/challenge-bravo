@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsIn, IsNumber, IsPositive } from 'class-validator';
+import { IsIn, IsNumber, IsPositive, IsBase64 } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
 import { Currency } from '../definitions/currency';
