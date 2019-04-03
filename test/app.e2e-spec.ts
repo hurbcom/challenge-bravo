@@ -33,7 +33,23 @@ describe('ConverterController (e2e)', () => {
                 method: 'GET',
                 url: '/converter',
             })
-            .then(({ statusCode }) => expect(statusCode).to.equal(400));
+            .then(({ payload, statusCode }) => {
+                const payloadAsJson = JSON.parse(payload);
+                expect(statusCode).to.equal(400);
+                expect(payloadAsJson.errors).to.have.nested.property(
+                    'from.isIn',
+                );
+                expect(payloadAsJson.errors).to.have.nested.property('to.isIn');
+                expect(payloadAsJson.errors).to.have.nested.property(
+                    'to.isNotEqualTo',
+                );
+                expect(payloadAsJson.errors).to.have.nested.property(
+                    'amount.isPositive',
+                );
+                expect(payloadAsJson.errors).to.have.nested.property(
+                    'amount.isNumber',
+                );
+            });
     });
 
     it('/converter?from=invalidFrom&to=invalidTo&amount=nan (GET) - Invalid data', () => {
@@ -42,7 +58,20 @@ describe('ConverterController (e2e)', () => {
                 method: 'GET',
                 url: '/converter?from=invalidFrom&to=invalidTo&amount=nan',
             })
-            .then(({ statusCode }) => expect(statusCode).to.equal(400));
+            .then(({ payload, statusCode }) => {
+                const payloadAsJson = JSON.parse(payload);
+                expect(statusCode).to.equal(400);
+                expect(payloadAsJson.errors).to.have.nested.property(
+                    'from.isIn',
+                );
+                expect(payloadAsJson.errors).to.have.nested.property('to.isIn');
+                expect(payloadAsJson.errors).to.have.nested.property(
+                    'amount.isPositive',
+                );
+                expect(payloadAsJson.errors).to.have.nested.property(
+                    'amount.isNumber',
+                );
+            });
     });
 
     it('/converter?from=USD&to=USD&amount=100 (GET) - Equal currencies', () => {
@@ -51,7 +80,13 @@ describe('ConverterController (e2e)', () => {
                 method: 'GET',
                 url: '/converter?from=USD&to=USD&amount=100',
             })
-            .then(({ statusCode }) => expect(statusCode).to.equal(400));
+            .then(({ payload, statusCode }) => {
+                const payloadAsJson = JSON.parse(payload);
+                expect(statusCode).to.equal(400);
+                expect(payloadAsJson.errors).to.have.nested.property(
+                    'to.isNotEqualTo',
+                );
+            });
     });
 
     it('/converter?from=USD&to=BRL&amount=100 (GET) - Valid data', () => {
@@ -60,6 +95,14 @@ describe('ConverterController (e2e)', () => {
                 method: 'GET',
                 url: '/converter?from=USD&to=BRL&amount=100',
             })
-            .then(({ statusCode }) => expect(statusCode).to.equal(200));
+            .then(({ payload, statusCode }) => {
+                const payloadAsJson = JSON.parse(payload);
+                expect(statusCode).to.equal(200);
+                expect(payloadAsJson).to.have.nested.property('from');
+                expect(payloadAsJson).to.have.nested.property('to');
+                expect(payloadAsJson).to.have.nested.property(
+                    'convertedAmount',
+                );
+            });
     });
 });
