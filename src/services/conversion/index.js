@@ -1,5 +1,5 @@
 const conversion = {}
-const redisClient = require('../../redis')
+const redisClient = require('../../config/redis')
 
 /**
  * @description Recupera as cotações do Redis e executa a conversão
