@@ -2,20 +2,24 @@
 
 HCC is a currency converter api developed by the [hurb](https://www.hurb.com/) team.
 
+
 ## Architecture
 
 ![Architecture](./docs/api-workflow.png)
+
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-### Prerequisites
+
+## Prerequisites
 
 First of all you need to have nodejs + npm installed in your local machine.
 You can follow a google tutorial and make sure you have everything installed.
 
-### Installing
+
+## Installing
 
 Installing npm packages:
 
@@ -25,7 +29,8 @@ npm i
 
 Now you're ready to play in your local machine.
 
-# Start application
+
+## Start application
 
 ```
 npm run start
@@ -45,11 +50,13 @@ npm run test:cov
 npm run test:debug
 ```
 
+
 ### Break down into end to end tests
 
 ```
 npm run test:e2e
 ```
+
 
 ## Latency / Performance
 
@@ -100,7 +107,7 @@ node_modules/.bin/loadtest http://127.0.0.1:3000/converter\?from\=USD\&to\=BRL\&
 Go to `http://localhost:3000/api` after api is initialized to work with swagger or run `npm run compodoc` to have a full overview of project structure.
 
 
-# Style
+## Style
 
 This project is using prettier + linter.
 
@@ -113,7 +120,7 @@ npm run format
 ```
 
 
-# Backlog
+## Backlog
 
 - Dockerize
 - Improve chart workflow
@@ -132,6 +139,7 @@ npm run format
 * [swagger](https://swagger.io) - Swagger documentation
 * [prettier](https://prettier.io) - Code formatter
 * [tslint](https://palantir.github.io/tslint) - Linter
+
 
 ## Authors
 
