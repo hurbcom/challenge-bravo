@@ -1,7 +1,8 @@
 import { ValidationArguments, ValidatorConstraint } from 'class-validator';
 
-@ValidatorConstraint()
+@ValidatorConstraint({ name: 'isNotEqualTo' })
 export class IsNotEqualToConstraint {
+    // TODO: Add tests
     async validate(
         value: string,
         { constraints, object }: ValidationArguments,
