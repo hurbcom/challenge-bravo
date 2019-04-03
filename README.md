@@ -13,7 +13,7 @@ HCC is a currency converter api developed by the [hurb](https://www.hurb.com/) t
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 
-## Prerequisites
+## Requirements
 
 First of all you need to have nodejs + npm installed in your local machine.
 You can follow a google tutorial and make sure you have everything installed.
@@ -124,10 +124,6 @@ npm run format
 
 - Dockerize
 - Improve chart workflow
-- Auto recover
-- Error logs
-- Requirements
-- Observations
 - Quick explanation how currencies works
 
 
