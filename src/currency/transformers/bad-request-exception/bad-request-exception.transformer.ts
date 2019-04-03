@@ -27,5 +27,5 @@ export abstract class BadRequestExceptionTransformer {
 }
 
 interface BadRequestExceptionResponse {
-    errors: any;
+    errors: { [key: string]: string };
 }
