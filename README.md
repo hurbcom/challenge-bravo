@@ -66,6 +66,35 @@ node dist/main.js
 node_modules/.bin/loadtest http://127.0.0.1:3000/converter\?from\=USD\&to\=BRL\&amount\=100 -t 20 -c 10 --rps 1000
 ```
 
+### Performance logs
+
+```shell
+node_modules/.bin/loadtest http://127.0.0.1:3000/converter\?from\=USD\&to\=BRL\&amount\=100 -t 20 -c 10 --rps 1000
+[Wed Apr 03 2019 12:03:37 GMT+0100 (WEST)] INFO Requests: 0, requests per second: 0, mean latency: 0 ms
+[Wed Apr 03 2019 12:03:42 GMT+0100 (WEST)] INFO Requests: 4470, requests per second: 895, mean latency: 3.7 ms
+[Wed Apr 03 2019 12:03:47 GMT+0100 (WEST)] INFO Requests: 9470, requests per second: 1000, mean latency: 2.9 ms
+[Wed Apr 03 2019 12:03:52 GMT+0100 (WEST)] INFO Requests: 14471, requests per second: 1000, mean latency: 2.8 ms
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO 
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Target URL:          http://127.0.0.1:3000/converter?from=USD&to=BRL&amount=100
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Max time (s):        20
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Concurrency level:   10
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Agent:               none
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Requests per second: 1000
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO 
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Completed requests:  17881
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Total errors:        0
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Total time:          20.001925518 s
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Requests per second: 894
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Mean latency:        3.1 ms
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO 
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO Percentage of the requests served within a certain time
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO   50%      2 ms
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO   90%      4 ms
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO   95%      6 ms
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO   99%      23 ms
+[Wed Apr 03 2019 12:03:57 GMT+0100 (WEST)] INFO  100%      177 ms (longest request)
+````
+
 ## Documentation
 
 Go to `http://localhost:3000/api` after api is initialized to work with swagger or run `npm run compodoc` to have a full overview of project structure.
@@ -88,7 +117,6 @@ npm run format
 
 - Dockerize
 - Improve chart workflow
-- Benchmark tests results
 - Auto recover
 - Error logs
 - Requirements
