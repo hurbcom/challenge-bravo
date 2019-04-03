@@ -1,7 +1,6 @@
 const controller = {}
 const validator = require('./../../helpers/validators');
 const convertService = require('./../../services/conversion')
-const ratesService = require('./../../services/rates')
 
 /**
  * @description Controlador para executar a requisição de conversão de moedas
