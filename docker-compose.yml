@@ -18,7 +18,7 @@ services:
     networks:
       - coins-api-network
     command: >
-      sh -c "npm install &&
+      sh -c "npm install ./ &&
              npm start"
     ports:
       - 3000:3000
