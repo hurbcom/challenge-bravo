@@ -1,0 +1,21 @@
+  {
+      "mongo":
+      {
+              "hurb":
+              {
+                  "mongo_user"          : "iamgilvan",
+                  "mongo_password"      : "",
+                  "mongo_address"       : "ds131676.mlab.com",
+                  "mongo_port"          : "31676",
+                  "mongo_database"      : "hurb",
+                  "mongo_collection"    : "cotation",
+                  "mongo_query"         : "{}"
+              }
+      },
+      "logger":
+      {
+          "logger_output_path"  : "./log/",
+          "logger_filename"     : "logger_hurb_bravo.txt",
+          "logger_name"         : "logger_hurb_bravo"
+      }
+  }

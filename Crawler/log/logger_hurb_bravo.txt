@@ -1,0 +1,2 @@
+2019-04-04 00:27:49,293 - logger_hurb_bravo - CRITICAL - [2019-04-04 00:27:29] Error to open mongo connection (read or write collection)
+2019-04-04 00:33:34,353 - logger_hurb_bravo - INFO - [2019-04-04 00:33:25] mongoBD connection was  successful
