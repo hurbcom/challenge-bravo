@@ -21,10 +21,10 @@ type data struct {
 }
 
 type quote struct {
-	USD usd `json:"USD"`
+	EUR eur `json:"EUR"`
 }
 
-type usd struct {
+type eur struct {
 	Price float64 `json:"price"`
 }
 

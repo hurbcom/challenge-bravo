@@ -17,7 +17,7 @@ func (c *CoinMarketCap) GetRates() (RatesResponse, error) {
 	path := "cryptocurrency/quotes/latest"
 	formValues := map[string]string{
 		"symbol":  "ETH,BTC",
-		"convert": "USD",
+		"convert": "EUR",
 	}
 	response, err := c.Caller.CallAPI(http.MethodGet, path, formValues)
 	if err != nil {
