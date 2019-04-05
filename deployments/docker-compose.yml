@@ -7,25 +7,9 @@ services:
             context: ../
             dockerfile: deployments/go.Dockerfile
         ports:
-            - '8081:8081'
-        env_file:
-            - app.env
-        command: "go run cmd/api/main.go"
-        networks:
-            - internal_net
-        depends_on:
-            - worker
-            - redis_db
-        restart: unless-stopped
-
-    api2:
-        container_name: api2
-        hostname: api2
-        build:
-            context: ../
-            dockerfile: deployments/go.Dockerfile
-        ports:
-            - '8081:8082'
+            - "8083:8083"
+        environment:
+          API_PORT: 8083
         env_file:
             - app.env
         command: "go run cmd/api/main.go"
@@ -59,19 +43,5 @@ services:
             - internal_net
         restart: unless-stopped
 
-    nginx:
-        image: nginx
-        ports:
-            - 3000:3000
-        restart: always
-        networks:
-          - internal_net
-          - external_net
-        volumes:
-            - "./data/nginx.conf:/etc/nginx/conf.d/default.conf"
-            - "./data/autocert.crt:/etc/ssl/certs/autocert.crt"
-            - "./data/autokey.key:/etc/ssl/private/autokey.key"
 networks:
     internal_net:
-        internal: true
-    external_net:
