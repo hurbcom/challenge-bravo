@@ -35,6 +35,8 @@ Sem o Nginx, uma única instancia da API é acessada diretamente, conforme mostr
   <img src="arq1.png" />
 </p>
 
+## Operação
+
 #### Variáveis de ambiente
 **FIXER_ENDPOINT**: endereço da API do Fixer
 **FIXER_ACCESS_KEY**: chave de acesso a API do Fixer
@@ -55,12 +57,12 @@ Sem o Nginx, uma única instancia da API é acessada diretamente, conforme mostr
 #### Iniciando a aplicação
 Para iniciar o sistema, clone este repositório:
 ```bash
-	git clone https://github.com/vitoriario2/challenge-bravo
+git clone https://github.com/vitoriario2/challenge-bravo
 ```
 
 Rode o seguinte comando a partir da raiz do projeto:
 ```bash
-	make install
+make install
 ```
 
 Os containers poderão ser visualizados da seguinte forma:
@@ -78,6 +80,14 @@ f8bf3f6058ea  redis               "docker-entrypoint.s…"   7 seconds ago     U
 ```
 
 Neste ponto, a API já estará pronta para receber requisições na porta 8083.
+
+Caso queira iniciar a aplicação com Nginx, rode o comando:
+
+```bash
+make install-loadbalancer
+```
+
+Neste caso, a API poderá receber requisições seguras na porta 3000 e inseguras na porta 3001.
 
 ## Interoperabilidade
 
@@ -154,8 +164,6 @@ Content-Length: 32
 
 {"result":33.67,"success":true}
 ```
-
-## Benchmarking
 
 ## Benchmarking
 
