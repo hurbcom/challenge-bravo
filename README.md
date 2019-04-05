@@ -1,60 +1,149 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+## Arquitetura
+APIs utilizadas para consulta de cotação:
+- [Fixer](https://fixer.io/)
+- [CoinMarketCap](https://coinmarketcap.com/api/)
 
-A API deve converter entre as seguintes moedas:
-- USD
-- BRL
-- EUR
-- BTC
-- ETH
+Tecnologias utilizadas no desenvolvimento:
+- Docker
+- Golang
+- Redis
 
+Para suportar uma grande quantidade de requisições simultâneas a idéia foi cachear as informações de cotação em uma banco de dados em memória, no caso, um Redis.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Um worker é responsável por buscar as cotações nas APIs e atualizar de tempos em tempos os valores no banco de dados, deixando a API com a única função de buscar o dado e processar a requisição.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
-
-Ex: `?from=BTC&to=EUR&amount=123.45`
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
-
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
-
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+                                                                           get quotes     +-------------------+
+                                                                           +------------->+                   |
+                                                                           |              | CryptoCurrencyAPI |
+                                                                           |              |                   |
+                                                   +-------+         +-----+--+           +-+-----------------+
+                                                   |       |         |        |             |
+                                                   | Redis +<--------+ Worker +<------------+
+                                                   |       |         |        |
+                                                   +--+----+         +-----+--+<-------------+
+                                                      |                    |                 |
+                                                      | get quotes:        |                 |
+                                                      |  BRL,BTC           |               +-+---------+
+                                                      v                    +-------------->+           |
+                                                   +--+--+                  get quotes     | CryptoAPI |
+     /convert?amount=12&from=BRL&toBTC ----------->+     |                                 |           |
+                                                   | API |                                 +-----------+
+       {"success":true, "result": 123} <-----------+     |
+                                                   +-----+
 
 
 
-## Critério de avaliação
+## Operação
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
 
-## Dúvidas
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+Para iniciar o sistema clone este repositório:
+```bash
+	git clone https://github.com/vitoriario2/challenge-bravo
+```
 
-Boa sorte e boa viagem! ;)
+Rode o seguinte comando a partir da raiz do projeto:
+```bash
+	make install
+```
+
+Os containers poderão ser visualizados da seguinte forma:
+
+```bash
+$ docker ps
+
+CONTAINER ID  IMAGE               COMMAND                  CREATED           STATUS          PORTS                    NAMES
+
+d954bd5f0503  deployments_api     "go run cmd/api/main…"   5 seconds ago     Up 3 seconds    0.0.0.0:8081->8081/tcp   api
+
+243c155c3df6  deployments_worker  "go run cmd/worker/m…"   6 seconds ago     Up 4 seconds                             deployments_worker_1
+
+f8bf3f6058ea  redis               "docker-entrypoint.s…"   7 seconds ago     Up 5 seconds    6379/tcp                 redis_db
+```
+
+Neste ponto, a API já estará pronta para receber requisições na porta 8081.
+
+## Interoperabilidade
+
+
+### (GET) /healthcheck
+
+#### Descrição
+verifica o status da API
+
+#### Resposta
+Em caso de sucesso a API irá retornar uma simples resposta em texto claro "OK" com status code 200.
+
+Qualquer retorno diferente do especificado significa que a API não está funcionando corretamente.
+
+#### Exemplo
+```bash
+$ curl 'localhost:8081/healthcheck' -i
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Content-Type: text/plain; charset=UTF-8
+Vary: Origin
+Date: Fri, 05 Apr 2019 15:34:23 GMT
+Content-Length: 2
+
+OK
+```
+
+
+### (GET) /convert
+
+#### Descrição
+Converte uma determinada quantia de uma moeda para outra
+
+#### Parâmetros
+Os seguintes parâmetros devem ser passados como parâmetros da url:
+- **amount** - float: quantia que se deseja converter
+- **from** - string: símbolo da moeda de origem
+- **to** - string: símbolo da moeda de destino
+
+#### Resposta
+
+Em caso de sucesso a API retornará um JSON no seguinte formato com status code 200:
+```json
+{
+	"success": true,
+	"result": <float_number>
+}
+```
+
+Caso algum erro tenha ocorrido uma resposta JSON também será retornada com o status code 400:
+```json
+{
+	"success": false,
+	"message": <string_message>
+}
+```
+
+As possíveis mensagens de erro são:
+- **error on getting currency quotes**: Erro ao obter informações do banco de dados
+- **currency symbol not found**: O símbolo passado não existe na base de dados
+
+
+#### Exemplo
+```bash
+$ curl 'localhost:8081/convert?amount=1&from=BRL&to=ETH' -i
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=UTF-8
+Vary: Origin
+Date: Fri, 05 Apr 2019 15:35:19 GMT
+Content-Length: 32
+
+{"result":33.67,"success":true}
+```
+
+## Benchmarking
+
+
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
