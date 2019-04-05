@@ -38,18 +38,18 @@ Sem o Nginx, uma única instancia da API é acessada diretamente, conforme mostr
 ## Operação
 
 #### Variáveis de ambiente
-**FIXER_ENDPOINT**: endereço da API do Fixer
-**FIXER_ACCESS_KEY**: chave de acesso a API do Fixer
-**COINMARKET_ACCESS_KEY**: chave de acesso a API do CoinMarketCap
-**COINMARKET_ENDPOINT**: endereço do CoinMarketCap
-**CURRENCY_SYMBOLS**: lista de símbolos de moedas que serão buscadas na API de cotação, separadas por vírgula. Ex: "BRL,USD"
-**CRYPTO_CURRENCY_SYMBOLS**: lista de símbolos de criptomoedas que serão buscadas na API de cotação, separadas por vírgula. Ex: "BTC,ETH"
-**DB_HASH**: nome do hashset do redis
-**DB_PORT**: porta do redis
-**DB_ADDRESS**: endereço do redis
-**ALLOW_ORIGINS**: esta variável pode ser definida caso a API seja utilizada por um sistema específico. Caso seja aberta, recomenda-se defini-la como "\*"
-**API_PORT**: porta onde a API irá rodar
-**REFRESH_INTERVAL**: intervalo de tempo para atualizar a cotação de moedas
+ - **FIXER_ENDPOINT**: endereço da API do Fixer
+ - **FIXER_ACCESS_KEY**: chave de acesso a API do Fixer
+ - **COINMARKET_ACCESS_KEY**: chave de acesso a API do CoinMarketCap
+ - **COINMARKET_ENDPOINT**: endereço do CoinMarketCap
+ - **CURRENCY_SYMBOLS**: lista de símbolos de moedas que serão buscadas na API de cotação, separadas por vírgula. Ex: "BRL,USD"
+ - **CRYPTO_CURRENCY_SYMBOLS**: lista de símbolos de criptomoedas que serão buscadas na API de cotação, separadas por vírgula. Ex: "BTC,ETH"
+ - **DB_HASH**: nome do hashset do redis
+ - **DB_PORT**: porta do redis
+ - **DB_ADDRESS**: endereço do redis
+ - **ALLOW_ORIGINS**: esta variável pode ser definida caso a API seja utilizada por um sistema específico. Caso seja aberta, recomenda-se defini-la como "\*"
+ - **API_PORT**: porta onde a API irá rodar
+ - **REFRESH_INTERVAL**: intervalo de tempo para atualizar a cotação de moedas
 
 
 **Obs:** Para que os avaliadores possam rodar o programa sem nenhum problema um arquivo app.env foi disponibilizado com estas variáveis definidas. Em um cenário real este arquivo não existiria em hipótese alguma.
