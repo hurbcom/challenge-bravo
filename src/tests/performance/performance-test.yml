@@ -1,0 +1,21 @@
+config:
+  target: 'http://127.0.0.1:3000'
+  http:
+    tls:
+      rejectUnauthorized: false
+  phases:
+    - duration: 60
+      arrivalRate: 50
+      name: "Carga Inicial"
+    - duration: 60
+      arrivalRate: 50
+      rampTo: 100
+      name: "Carga Média"
+    - duration: 60
+      arrivalRate: 2000
+      name: "Carga máxima"
+  defaults:
+scenarios:
+  - flow:
+    - get:
+        url: "/api/convert?from=BRL&to=EUR&amount=1000.05"

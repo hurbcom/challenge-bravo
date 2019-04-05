@@ -1,0 +1,31 @@
+version: '3'
+services:
+  redis:
+    image: redis:latest
+    container_name: cache
+    networks:
+      - coins-api-network
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+  node:
+    image: node:latest
+    container_name: node
+    volumes:
+      - .:/src
+    working_dir: /src
+    networks:
+      - coins-api-network
+    command: >
+      sh -c "npm install ./ &&
+             npm start"
+    ports:
+      - 3000:3000
+    links: 
+      - redis
+    environment:
+      - REDIS_URL=redis://cache
+networks:
+  coins-api-network:
+    driver: bridge

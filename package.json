@@ -1,0 +1,38 @@
+{
+    "name": "converter-coins",
+    "version": "1.0.0",
+    "description": "Coins Converter",
+    "author": "Mateus Schenatto <mateus.sche@gmail.com>",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "performance-test": "artillery run src/tests/performance/performance-test.yml",
+        "test": "docker start cache && mocha src/tests/services/index.js"
+    },
+    "license": "ISC",
+    "keywords": [
+        "challenge",
+        "backend",
+        "HU",
+        "convert",
+        "coins"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mateusschenatto/challenge-bravo.git"
+    },
+    "homepage": "https://github.com/mateusschenatto/challenge-bravo#readme",
+    "dependencies": {
+        "async-redis": "^1.1.7",
+        "axios": "^0.18.0",
+        "body-parser": "^1.18.3",
+        "dotenv": "^7.0.0",
+        "express": "^4.16.4"
+    },
+    "devDependencies": {
+        "artillery": "^1.6.0-27",
+        "chai": "^4.2.0",
+        "mocha": "^6.0.2",
+        "supertest": "^4.0.2"
+    }
+}
