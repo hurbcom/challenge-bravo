@@ -286,7 +286,7 @@ O gráfico a seguir ilustra resumidamente os resultados obtidos para os demais t
   <img src="result.png" />
 </p>
 
-É importante destacar que partir de 900 conexões simultâneas, algumas requisições podem falhar.
+É importante destacar que partir de 600 conexões simultâneas, algumas requisições podem falhar.
 
 ## Considerações finais
 
