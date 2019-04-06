@@ -34,6 +34,7 @@ func Run() {
 	redis := db.Redis{
 		Address: config.Config["DB_ADDRESS"],
 		Port:    config.Config["DB_PORT"],
+		Pass:    config.Config["DB_PASS"],
 	}
 
 	redis.Connect()
