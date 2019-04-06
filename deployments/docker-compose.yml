@@ -93,6 +93,10 @@ services:
         networks:
           - internal_net
           - external_net
+        depends_on:
+            - api
+            - api2
+            - api3
         volumes:
             - "./data/nginx.conf:/etc/nginx/nginx.conf"
             - "./data/autocert.crt:/etc/ssl/certs/autocert.crt"
