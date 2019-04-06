@@ -28,10 +28,10 @@ services:
             dockerfile: deployments/go.Dockerfile
         ports:
             - '8082'
-        environment:
-          API_PORT: 8082
         env_file:
             - app.env
+        environment:
+          API_PORT: 8082
         command: "go run cmd/api/main.go"
         networks:
             - internal_net
@@ -47,10 +47,10 @@ services:
             dockerfile: deployments/go.Dockerfile
         ports:
             - '8083'
-        environment:
-          API_PORT: 8083
         env_file:
             - app.env
+        environment:
+          API_PORT: 8083
         command: "go run cmd/api/main.go"
         networks:
             - internal_net
