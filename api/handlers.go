@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/hurbcom/challenge-bravo/controller"
+	"github.com/hurbcom/challenge-bravo/log"
 	"github.com/labstack/echo"
 )
 
@@ -29,7 +30,8 @@ func (h Handler) Healthcheck(c echo.Context) error {
 func (h Handler) Converter(c echo.Context) error {
 	request := ConverterRequest{}
 	if err := c.Bind(&request); err != nil {
-		return err
+		log.Error(err.Error(), "api")
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{"success": false, "message": "invalid parameters"})
 	}
 	response, err := calculate(h.DBController, request)
 	if err != nil {
