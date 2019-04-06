@@ -50,14 +50,15 @@ func TestConvertAmount(t *testing.T) {
 		},
 	}
 
-	expectedResponse, _ := json.Marshal(map[string]interface{}{
+	expectedResponse := map[string]interface{}{
 		"success": true,
-		"result":  51.39,
-	})
+		"result":  51.39}
 	if assert.NoError(t, h.Converter(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		body, _ := ioutil.ReadAll(rec.Body)
-		assert.Equal(t, expectedResponse, body)
+		mapResp := make(map[string]interface{})
+		json.Unmarshal(body, &mapResp)
+		assert.ObjectsAreEqual(expectedResponse, mapResp)
 	}
 }
 
@@ -82,13 +83,17 @@ func TestConvertAmountWrongParameters(t *testing.T) {
 		},
 	}
 
-	expectedResponse, _ := json.Marshal(map[string]interface{}{
+	expectedResponse := map[string]interface{}{
 		"success": false,
 		"message": errParameter.Error(),
-	})
+	}
+
 	if assert.NoError(t, h.Converter(c)) {
+		mapResp := make(map[string]interface{})
+		body, _ := ioutil.ReadAll(rec.Body)
+		json.Unmarshal(body, &mapResp)
 		assert.Equal(t, http.StatusBadRequest, rec.Code)
-		assert.Equal(t, string(expectedResponse), rec.Body.String())
+		assert.ObjectsAreEqual(expectedResponse, mapResp)
 	}
 }
 
@@ -112,12 +117,15 @@ func TestConvertAmountErrDB(t *testing.T) {
 		},
 	}
 
-	expectedResponse, _ := json.Marshal(map[string]interface{}{
+	expectedResponse := map[string]interface{}{
 		"success": false,
 		"message": errDb.Error(),
-	})
+	}
 	if assert.NoError(t, h.Converter(c)) {
+		mapResp := make(map[string]interface{})
+		body, _ := ioutil.ReadAll(rec.Body)
+		json.Unmarshal(body, &mapResp)
 		assert.Equal(t, http.StatusBadRequest, rec.Code)
-		assert.Equal(t, string(expectedResponse), rec.Body.String())
+		assert.ObjectsAreEqual(expectedResponse, mapResp)
 	}
 }
