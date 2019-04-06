@@ -32,7 +32,7 @@ A moeda base para consulta nas duas APIs e armazenada no Redis é o Euro. Isso s
 
 Como todas as moedas estão na mesma base, o cálculo da conversão é feito da seguinte forma:
 
-$( \frac{to}{from} ) * amount$
+(to/from) * amount
 
 Onde *to* é a moeda origem, *from* a moeda destino e *amount* o valor que se deseja converter.
 
