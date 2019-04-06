@@ -3,3 +3,5 @@
 Homestead.json
 Homestead.yaml
 .env
+docker/nginx/logs
+docker/php-fpm/logs
