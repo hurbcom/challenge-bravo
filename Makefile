@@ -10,19 +10,12 @@ COLOR_RED = \033[31m
 PROJECT := Bravo
 
 ## Installs a development environment using docker-compose
-install-loadbalancer:compose2
-
-install:compose1
-
+install:compose
 
 ## Runs project using docker-compose
-compose1:
+compose:
 	docker-compose -f deployments/docker-compose.yml down -v
 	docker-compose -f deployments/docker-compose.yml up -d --build --force-recreate
-
-compose2:
-	docker-compose -f deployments/docker-compose2.yml down -v
-	docker-compose -f deployments/docker-compose2.yml up -d --build --force-recreate
 
 ## Prints help message
 help:
