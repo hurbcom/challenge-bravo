@@ -21,7 +21,7 @@ func (r *Redis) Connect() {
 		MaxIdle:   80,
 		MaxActive: 1000,
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.DialURL(fmt.Sprintf("redis://:secret@%s:%s", r.Address, r.Port))
+			c, err := redis.DialURL(fmt.Sprintf("redis://:%s@%s:%s", r.Pass, r.Address, r.Port))
 			if err != nil {
 				panic(err.Error())
 			}
