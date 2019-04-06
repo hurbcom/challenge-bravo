@@ -34,7 +34,7 @@ Como todas as moedas estão na mesma base, o cálculo da conversão é feito da 
 
 (to/from) * amount
 
-Onde *to* é a moeda origem, *from* a moeda destino e *amount* o valor que se deseja converter.
+Onde *to* é a moeda destino, *from* a moeda origem e *amount* o valor que se deseja converter.
 
 #### Nginx como load balancer
 
