@@ -35,8 +35,9 @@ services:
         restart: unless-stopped
 
     redis_db:
-        image: redis
+        image: 'redis:4-alpine'
         container_name: redis_db
+        command: redis-server --requirepass secret
         expose:
             - 6379
         networks:
