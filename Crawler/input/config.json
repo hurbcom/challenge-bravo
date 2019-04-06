@@ -3,7 +3,7 @@
       {
               "hurb":
               {
-                  "mongo_user"          : "iamgilvan",
+                  "mongo_user"          : "gilvan",
                   "mongo_password"      : "",
                   "mongo_address"       : "ds131676.mlab.com",
                   "mongo_port"          : "31676",
@@ -17,5 +17,6 @@
           "logger_output_path"  : "./log/",
           "logger_filename"     : "logger_hurb_bravo.txt",
           "logger_name"         : "logger_hurb_bravo"
-      }
+      },
+      "hurb_key": "c5f60f97ef23b425dd0eda24429c644b04fa2edd34625325737eeeb7512566c2"
   }

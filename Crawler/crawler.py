@@ -4,14 +4,18 @@ import sys
 import time
 from time import sleep
 import logging
+import requests
 
-from datetime       import datetime, timedelta
+from datetime import datetime
 
 from utils import mongo_utils as mu
+from utils.error_utils import ErrorUtils
 
 global logger
 global config
-configuration_file     = "./input/config.json"
+
+cryptopain         = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL,EUR,BTC,ETH&api_key={}"
+configuration_file = "./input/config.json"
 
 
 def build_config_params(full_path):
@@ -45,11 +49,41 @@ def init_logger():
     logger.addHandler(handler)
 
 
-def main():
-    while True:
-        print("Estou aqui...")
-        sleep(60)
+def write_on_mongo(collection, result):
+    try:
+        collection.insert_one(result)
+        log_msg("Data inserted on database", logging.INFO)
+    except Exception as ex:
+        log_msg(ex.message)
 
+
+def main(collection):
+    while True:
+        result = {}
+        # Get request
+        response = requests.get(cryptopain.format(config['hurb_key']))
+
+        # sanity check
+        if response.ok is True:
+            log_msg("Get request successful", logging.DEBUG)
+
+            # Gets json from response
+            result["coins"] = response.json()
+            result["updatedAt"] = datetime.utcnow()
+
+            write_on_mongo(collection, result)
+        else:
+            code = response.status_code
+            if code == 400:
+                log_msg(ErrorUtils.get_message(100), logging.ERROR)
+            elif code == 401:
+                log_msg(ErrorUtils.get_message(101), logging.WARN)
+            elif code == 403:
+                log_msg(ErrorUtils.get_message(102), logging.CRITICAL)
+            elif code == 500:
+                log_msg(ErrorUtils.get_message(998), logging.WARN)
+
+        sleep(3600)
 
 if __name__ == "__main__":
     # Reads nlp configuration file
@@ -58,14 +92,13 @@ if __name__ == "__main__":
     # Initialize logger
     init_logger()
 
-
     # Open Mongo Connection
     collection, result = mu.open_mongo_connection(config['mongo']['hurb'])
 
     if result == False:
         log_msg('Error to open mongo connection', logging.CRITICAL)
         sys.exit(1)
-    else:
-        log_msg('mongoBD connection was  successful', logging.INFO)
 
-    main()
+    log_msg('MongoBD connection successful', logging.INFO)
+
+    main(collection)

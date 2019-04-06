@@ -1,2 +1,30 @@
 2019-04-04 00:27:49,293 - logger_hurb_bravo - CRITICAL - [2019-04-04 00:27:29] Error to open mongo connection (read or write collection)
 2019-04-04 00:33:34,353 - logger_hurb_bravo - INFO - [2019-04-04 00:33:25] mongoBD connection was  successful
+2019-04-04 23:55:16,164 - logger_hurb_bravo - INFO - [2019-04-04 23:55:16] MongoBD connection successful
+2019-04-04 23:56:53,049 - logger_hurb_bravo - INFO - [2019-04-04 23:56:53] MongoBD connection successful
+2019-04-05 00:03:14,820 - logger_hurb_bravo - INFO - [2019-04-05 00:03:14] MongoBD connection successful
+2019-04-05 00:04:50,378 - logger_hurb_bravo - INFO - [2019-04-05 00:04:50] MongoBD connection successful
+2019-04-05 00:05:57,945 - logger_hurb_bravo - INFO - [2019-04-05 00:05:57] MongoBD connection successful
+2019-04-05 00:37:32,305 - logger_hurb_bravo - INFO - [2019-04-05 00:37:32] MongoBD connection successful
+2019-04-05 00:37:38,766 - logger_hurb_bravo - DEBUG - [2019-04-05 00:37:38] Get request successful
+2019-04-05 00:45:40,670 - logger_hurb_bravo - CRITICAL - [2019-04-05 00:45:40] Error to open mongo connection
+2019-04-05 00:46:42,247 - logger_hurb_bravo - CRITICAL - [2019-04-05 00:46:42] Error to open mongo connection
+2019-04-05 00:52:04,066 - logger_hurb_bravo - CRITICAL - [2019-04-05 00:52:04] Error to open mongo connection
+2019-04-05 22:19:40,280 - logger_hurb_bravo - INFO - [2019-04-05 22:19:40] MongoBD connection successful
+2019-04-05 22:19:52,117 - logger_hurb_bravo - DEBUG - [2019-04-05 22:19:52] Get request successful
+2019-04-05 22:46:06,295 - logger_hurb_bravo - INFO - [2019-04-05 22:46:06] MongoBD connection successful
+2019-04-05 22:46:42,240 - logger_hurb_bravo - DEBUG - [2019-04-05 22:46:42] Get request successful
+2019-04-05 22:53:48,845 - logger_hurb_bravo - INFO - [2019-04-05 22:53:48] MongoBD connection successful
+2019-04-05 22:53:54,947 - logger_hurb_bravo - DEBUG - [2019-04-05 22:53:54] Get request successful
+2019-04-05 22:56:35,980 - logger_hurb_bravo - INFO - [2019-04-05 22:56:35] MongoBD connection successful
+2019-04-05 22:56:39,933 - logger_hurb_bravo - DEBUG - [2019-04-05 22:56:39] Get request successful
+2019-04-06 00:34:30,525 - logger_hurb_bravo - INFO - [2019-04-06 00:34:30] MongoBD connection successful
+2019-04-06 00:41:34,776 - logger_hurb_bravo - DEBUG - [2019-04-06 00:41:34] Get request successful
+2019-04-06 00:41:34,979 - logger_hurb_bravo - INFO - [2019-04-06 00:41:34] Data inserted on database
+2019-04-06 00:42:36,333 - logger_hurb_bravo - DEBUG - [2019-04-06 00:42:36] Get request successful
+2019-04-06 00:42:36,547 - logger_hurb_bravo - INFO - [2019-04-06 00:42:36] Data inserted on database
+2019-04-06 00:49:52,986 - logger_hurb_bravo - INFO - [2019-04-06 00:49:52] MongoBD connection successful
+2019-04-06 00:50:52,461 - logger_hurb_bravo - INFO - [2019-04-06 00:50:52] MongoBD connection successful
+2019-04-06 00:51:50,725 - logger_hurb_bravo - INFO - [2019-04-06 00:51:50] MongoBD connection successful
+2019-04-06 00:54:03,650 - logger_hurb_bravo - INFO - [2019-04-06 00:54:03] MongoBD connection successful
+2019-04-06 00:54:13,962 - logger_hurb_bravo - ERROR - [2019-04-06 00:54:13] INVALID REQUEST
