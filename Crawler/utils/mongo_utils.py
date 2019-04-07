@@ -19,6 +19,7 @@ def get_collection(db, collection_name):
 
 def open_mongo_connection(config): #type='read'
     res = True
+    col = None
     try:
         client = create_client(config['mongo_address'], int(config['mongo_port']))
         db     = get_database(client, config['mongo_database'])

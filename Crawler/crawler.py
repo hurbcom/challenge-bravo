@@ -14,7 +14,7 @@ from utils.error_utils import ErrorUtils
 global logger
 global config
 
-cryptopain         = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=BRL,EUR,BTC,ETH&api_key={}"
+cryptopain         = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,USD,EUR&tsyms=BTC,ETH,USD,EUR,BRL&api_key={}"
 configuration_file = "./input/config.json"
 
 
@@ -52,7 +52,7 @@ def init_logger():
 def write_on_mongo(collection, result):
     try:
         collection.insert_one(result)
-        log_msg("Data inserted on database", logging.INFO)
+        log_msg("Inserted data on database", logging.INFO)
     except Exception as ex:
         log_msg(ex.message)
 
