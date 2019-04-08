@@ -5,3 +5,4 @@ Homestead.yaml
 .env
 docker/nginx/logs
 docker/php-fpm/logs
+storage/rates/
