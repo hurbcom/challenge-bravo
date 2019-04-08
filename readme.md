@@ -55,7 +55,6 @@ $ docker-compose up
 <code class="language-sh">-n : número de requests</code>
 <code class="language-sh">-c : conexões concorrentes</code>
 </pre>
-</pre>
 
 
 #[API Docs](api.md)
