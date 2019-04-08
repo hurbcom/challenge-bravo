@@ -11,9 +11,6 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
 
 $router->group(['as' => 'api.converter','prefix' => 'api'],function() use($router){
     $router->get('/convert','ConverterController@runConversion');
