@@ -21,7 +21,7 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+ $app->withFacades();
 
 // $app->withEloquent();
 
@@ -79,6 +79,7 @@ $app->singleton(
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(Appzcoder\LumenRoutesList\RoutesCommandServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -92,7 +93,7 @@ $app->singleton(
 */
 
 $app->router->group([
-    'namespace' => 'App\Http\Controllers',
+    'namespace' => 'App\Api\Http\Controllers',
 ], function ($router) {
     require __DIR__ . '/../routes/web.php';
 });
