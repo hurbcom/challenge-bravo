@@ -23,7 +23,9 @@ $ composer install
 <code class="language-sh">
 $ <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span> cbravo.local
 </code>
-
+<code class="language-sh">
+$ <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span> redis
+</code>
 </pre>
 
 Instale o <a href="https://www.docker.com/get-started">Docker</a> e a partir da raiz da aplicação :
@@ -36,7 +38,7 @@ $ docker-compose up
  
 #Unit Test
 <p>Unit Test</p>
-<pre><code class="language-sh">$ php artisan passport:client --personal
+<pre><code class="language-sh">$ vendor/bin/phpunit 
 </code></pre>
 
 #Stress test
@@ -45,9 +47,15 @@ $ docker-compose up
 <pre>
 <code class="language-sh">docker exec -it cbravo_nginx bash</code>
 </pre>
-<p>Execute o teste de stress</p>
+<p>Execute o teste de stress (customize como quiser)</p>
 <pre>
-<code class="language-sh">ab -n 1000 -c 10 http://localhost/api/convert?from=BRL&to=USD&amount=100.00</code>
+<code class="language-sh">ab -n 1000 -c 50 http://localhost/api/convert?from=BRL&to=USD&amount=100.00</code>
+<p>Parâmetros</p>
+<pre>
+<code class="language-sh">-n : número de requests</code>
+<code class="language-sh">-c : conexões concorrentes</code>
 </pre>
+</pre>
+
 
 #[API Docs](api.md)
