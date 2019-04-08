@@ -26,7 +26,7 @@ func (fc *FixerCaller) CallAPI(method, path string, body []byte) ([]byte, error)
 	url := fmt.Sprintf("%s/%s&access_key=%s", fc.Endpoint, path, fc.AccessKey)
 	request, err := http.NewRequest(method, url, bytes.NewBuffer(body))
 	if err != nil {
-		return nil, ErrRequest
+		return nil, err
 	}
 
 	response, err := client.Do(request)

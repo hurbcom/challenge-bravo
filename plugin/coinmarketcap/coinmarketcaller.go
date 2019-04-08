@@ -40,7 +40,7 @@ func (cc *CoinMarketCaller) CallAPI(method, path string, formValues map[string]s
 	response, err := client.Do(request)
 
 	if err != nil {
-		return nil, ErrRequest
+		return nil, err
 	}
 	if response.StatusCode >= 500 {
 		return nil, ErrRequest
