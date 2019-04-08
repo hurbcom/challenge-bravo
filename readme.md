@@ -49,3 +49,5 @@ $ docker-compose up
 <pre>
 <code class="language-sh">ab -n 1000 -c 10 http://localhost/api/convert?from=BRL&to=USD&amount=100.00</code>
 </pre>
+
+#[API Docs](api.md)
