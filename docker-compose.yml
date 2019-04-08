@@ -32,4 +32,17 @@ services:
       PHP_UPLOAD_MAX_FILESIZE: 1G
       PHP_MAX_INPUT_VARS: 1G
 
+  redis:
+    image: redis:latest
+    container_name: cbravo_redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+    volumes:
+      - ./docker/redis/:/usr/local/etc/redis/
+      - ./docker/redis/logs:/usr/local/var/log/redis
+
+
 
