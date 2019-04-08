@@ -5,6 +5,8 @@ services:
   nginx:
     image: nginx:latest
     container_name: cbravo_nginx
+    build:
+      context: docker/nginx
     ports:
       - 80:80
     expose:
