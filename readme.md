@@ -48,11 +48,13 @@ $ docker-compose up
 <code class="language-sh">docker exec -it cbravo_nginx bash</code>
 </pre>
 <p>Execute o teste de stress (customize como quiser)</p>
-<pre>
+
 <code class="language-sh">ab -n 1000 -c 50 http://localhost/api/convert?from=BRL&to=USD&amount=100.00</code>
 <p>Parâmetros</p>
+
 <pre>
 <code class="language-sh">-n : número de requests</code>
+
 <code class="language-sh">-c : conexões concorrentes</code>
 </pre>
 
