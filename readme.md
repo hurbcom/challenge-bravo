@@ -35,9 +35,9 @@ $ docker-compose up
 </code>
 </pre>
 
-Moedas e moeda de lastro :
+Configurações do converversor :
 <p>
-    é possível alterar as moedas disponiveis para conversão e a moeda de lastro facilmente através do arquivo .env modificando os parâmetros <b>AVAILABLE_CURRENCIES</b> e <b>BASE_CURRENCY</b>.
+    é possível alterar as moedas disponiveis para conversão, moeda de lastro e o tempo de atualização das cotações facilmente através do arquivo .env modificando os parâmetros <b>AVAILABLE_CURRENCIES</b>, <b>BASE_CURRENCY</b> e <b>CURRENCIES_REFRESH_IN</b> respectivamente.
 </p>
 
  
