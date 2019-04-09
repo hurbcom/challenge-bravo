@@ -47,6 +47,7 @@ class Convert {
             $currencies = env('AVAILABLE_CURRENCIES');
             $baseCurrency = env('BASE_CURRENCY');
             $ratesAppId = env('OPEN_EXCHANGE_RATES_APP_ID');
+            $currenciesRefreshIn = env('CURRENCIES_REFRESH_IN');
 
             $queryString = http_build_query([
                 "app_id" => $ratesAppId,
@@ -67,7 +68,7 @@ class Convert {
 
             $json = json_decode($data);
 
-            $redisStore->put('currencies', json_encode($json->rates), 3600);
+            $redisStore->put('currencies', json_encode($json->rates), $currenciesRefreshIn);
 
         }
 
