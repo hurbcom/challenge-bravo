@@ -44,10 +44,14 @@ class Convert {
 
         if(!$redisStore->has('currencies')) {
 
+            $currencies = env('AVAILABLE_CURRENCIES');
+            $baseCurrency = env('BASE_CURRENCY');
+            $ratesAppId = env('OPEN_EXCHANGE_RATES_APP_ID');
+
             $queryString = http_build_query([
-                "app_id" => env('OPEN_EXCHANGE_RATES_APP_ID'),
-                "base" => "USD",
-                "symbols" => "USD,BRL,EUR,BTC,ETH",
+                "app_id" => $ratesAppId,
+                "base" => $baseCurrency,
+                "symbols" => $currencies,
                 "show_alternative" => 1
             ]);
 

@@ -19,11 +19,12 @@ class ConverterController extends BaseController
 {
     public function runConversion(Convert $convert,Request $request) : JsonResponse{
 
+        $currencies = env('AVAILABLE_CURRENCIES');
 
         //request validation
         $this->validate($request, [
-           'from' => 'required|alpha|size:3|in:USD,BRL,EUR,BTC,ETH', // alpha chars, must have 3 chars in USD,BRL,EUR,BTC,ETH
-            'to' => 'required|alpha|size:3|in:USD,BRL,EUR,BTC,ETH',
+           'from' => 'required|alpha|size:3|in:' . $currencies, // alpha chars, must have 3 chars in USD,BRL,EUR,BTC,ETH
+            'to' => 'required|alpha|size:3|in:' . $currencies,
             'amount' => 'required|regex:^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$^' //2 decimal float regex
         ]);
 
