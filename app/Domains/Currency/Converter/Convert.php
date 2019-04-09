@@ -38,9 +38,11 @@ class Convert {
 
     private static function getRates(){
 
+        $redisStore = Cache::store('redis');
+
         // creates/updates rates cache after 1 hour, if file doesnt exists or file size is equal 0. I've did this to control how many exchange rates would be request per day to save $$$, could be more, less or realtime
 
-        if(!Cache::store('redis')->has('currencies')) {
+        if(!$redisStore->has('currencies')) {
 
             $queryString = http_build_query([
                 "app_id" => env('OPEN_EXCHANGE_RATES_APP_ID'),
@@ -61,11 +63,11 @@ class Convert {
 
             $json = json_decode($data);
 
-            Cache::store('redis')->put('currencies', json_encode($json->rates), 3600);
+            $redisStore->put('currencies', json_encode($json->rates), 3600);
 
         }
 
-        $rates =  Cache::store('redis')->get('currencies');
+        $rates =  $redisStore->get('currencies');
 
         return json_decode($rates,true);
     }
