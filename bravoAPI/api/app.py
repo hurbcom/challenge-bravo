@@ -78,10 +78,10 @@ def bravo():
         value = float(args['AMOUNT']) * float(record['coins'][args['FROM']][args['TO']])
         response['Converted'] = round(value,2)
     elif args['FROM'] == 'BRL':
-        value = float(args['AMOUNT']) / float(record['coins'][args['FROM']][args['TO']])
+        value = float(args['AMOUNT']) / float(record['coins'][args['TO']][args['FROM']])
         response['Converted'] = round(value,2)
     else:
-        value = float(args['AMOUNT']) * float(record['coins'][args['TO']][args['FROM']])
+        value = float(args['AMOUNT']) * float(record['coins'][args['FROM']][args['TO']])
         response['Converted'] = round(value,2)
 
     return  json.dumps(response)
