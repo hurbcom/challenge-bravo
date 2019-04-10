@@ -83,7 +83,7 @@ def main(collection):
             elif code == 500:
                 log_msg(ErrorUtils.get_message(998), logging.WARN)
 
-        sleep(3600)
+        sleep(config['timeout'])
 
 if __name__ == "__main__":
     # Reads nlp configuration file

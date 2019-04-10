@@ -4,7 +4,7 @@
               "hurb":
               {
                   "mongo_user"          : "gilvan",
-                  "mongo_password"      : "",
+                  "mongo_password"      : "gil6mec",
                   "mongo_address"       : "ds131676.mlab.com",
                   "mongo_port"          : "31676",
                   "mongo_database"      : "hurb",
@@ -18,5 +18,6 @@
           "logger_filename"     : "logger_hurb_bravo.txt",
           "logger_name"         : "logger_hurb_bravo"
       },
-      "hurb_key": "c5f60f97ef23b425dd0eda24429c644b04fa2edd34625325737eeeb7512566c2"
+      "hurb_key": "c5f60f97ef23b425dd0eda24429c644b04fa2edd34625325737eeeb7512566c2",
+      "timeout": 3600
   }
