@@ -49,9 +49,9 @@ def analyzeInput(args):
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return 'I am very well and alive . Thanks'
 
-@app.route('/bravo')
+@app.route('/api/v1/bravo')
 def bravo():
     # Process request arguments
     args = process_args()
