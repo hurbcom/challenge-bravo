@@ -1,6 +1,7 @@
 from flask import Flask, request, json
 from config import *
 import pymongo as pym
+import os
 
 from utils import mongo_utils as mu
 from utils import utils
@@ -87,5 +88,5 @@ def bravo():
 
 
 if __name__ == '__main__':
-    app.run()
-    app.run(debug=DEBUG)
+    port = int(os.environ.get("PORT", PORT))
+    app.run(host='0.0.0.0', port=port)
