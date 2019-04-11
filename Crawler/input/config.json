@@ -5,11 +5,11 @@
               {
                   "mongo_user"          : "gilvan",
                   "mongo_password"      : "gil6mec",
+                  "_comment"            : "Este arquivo de configuração nunca deve ser comitado. Esta sendo apenas para os avaliadores utilizarem caso necessário",
                   "mongo_address"       : "ds131676.mlab.com",
                   "mongo_port"          : "31676",
                   "mongo_database"      : "hurb",
-                  "mongo_collection"    : "cotation",
-                  "mongo_query"         : "{}"
+                  "mongo_collection"    : "cotation"
               }
       },
       "logger":

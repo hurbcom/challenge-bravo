@@ -59,3 +59,6 @@
 2019-04-10 22:02:05,128 - logger_hurb_bravo - INFO - [2019-04-10 22:02:05] MongoBD connection successful
 2019-04-10 22:02:06,659 - logger_hurb_bravo - DEBUG - [2019-04-10 22:02:06] Get request successful
 2019-04-10 22:02:06,779 - logger_hurb_bravo - INFO - [2019-04-10 22:02:06] Inserted data on database
+2019-04-10 22:15:41,713 - logger_hurb_bravo - INFO - [2019-04-10 22:15:41] MongoBD connection successful
+2019-04-10 22:15:43,183 - logger_hurb_bravo - DEBUG - [2019-04-10 22:15:43] Get request successful
+2019-04-10 22:15:43,308 - logger_hurb_bravo - INFO - [2019-04-10 22:15:43] Inserted data on database

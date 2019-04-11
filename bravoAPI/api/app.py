@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, request, json
 from config import *
 import pymongo as pym
@@ -78,6 +80,7 @@ def bravo():
     response['Updated At']  = record['updatedAt'].strftime("%Y-%m-%d %H:%M:%S")
     response['From']        = args['FROM']
     response['To']          = args['TO']
+    response['Amount']      = args['AMOUNT']
 
     # Se a entrada for a mesma moeda não é necessário converter
     if args['FROM'] == args['TO']:

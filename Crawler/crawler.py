@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 import os
 import sys
@@ -50,7 +51,7 @@ def init_logger():
 
 
 def write_on_mongo(collection, result):
-    ''' Método para inserir os dados no mongo'''
+    ''' Metodo para inserir os dados no mongo'''
     try:
         collection.insert_one(result)
         log_msg("Inserted data on database", logging.INFO)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class ErrorUtils():
     __errors = dict([
         # Error genéricos
