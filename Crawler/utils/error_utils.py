@@ -1,12 +1,10 @@
 class ErrorUtils():
     __errors = dict([
-        # GENERIC ERROR
-        (1200, 'THE \"TEXT\" PARAMETER IS EMPTY OR NONE'),
+        # Error genéricos
         (100, 'INVALID REQUEST'),
         (101, 'ACCESS DENIED'),
         (102, 'FINANCIAL PROBLEM'),
-        (998, 'INTERNAL SERVER ERROR'),
-        (999, 'UNCATEGORIZED')
+        (998, 'INTERNAL SERVER ERROR')
     ])
 
     @staticmethod

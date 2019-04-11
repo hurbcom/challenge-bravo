@@ -1,5 +1,5 @@
 def is_int_or_float(s):
-    ''' return 1 for int, 2 for float, -1 for not a number '''
+    ''' retorna 1 para tipo int, 2 para float e -1 se não é numero'''
     try:
         float(s)
         return 1 if s.count('.') == 0 else 2

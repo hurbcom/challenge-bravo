@@ -28,3 +28,34 @@
 2019-04-06 00:51:50,725 - logger_hurb_bravo - INFO - [2019-04-06 00:51:50] MongoBD connection successful
 2019-04-06 00:54:03,650 - logger_hurb_bravo - INFO - [2019-04-06 00:54:03] MongoBD connection successful
 2019-04-06 00:54:13,962 - logger_hurb_bravo - ERROR - [2019-04-06 00:54:13] INVALID REQUEST
+2019-04-10 01:22:51,575 - logger_hurb_bravo - CRITICAL - [2019-04-10 01:22:51] Error to open mongo connection
+2019-04-10 01:23:03,746 - logger_hurb_bravo - INFO - [2019-04-10 01:23:03] MongoBD connection successful
+2019-04-10 01:23:05,289 - logger_hurb_bravo - DEBUG - [2019-04-10 01:23:05] Get request successful
+2019-04-10 01:23:05,429 - logger_hurb_bravo - INFO - [2019-04-10 01:23:05] Inserted data on database
+2019-04-10 01:23:16,677 - logger_hurb_bravo - DEBUG - [2019-04-10 01:23:16] Get request successful
+2019-04-10 01:23:16,796 - logger_hurb_bravo - INFO - [2019-04-10 01:23:16] Inserted data on database
+2019-04-10 01:23:27,998 - logger_hurb_bravo - DEBUG - [2019-04-10 01:23:27] Get request successful
+2019-04-10 01:23:28,117 - logger_hurb_bravo - INFO - [2019-04-10 01:23:28] Inserted data on database
+2019-04-10 20:05:46,974 - logger_hurb_bravo - INFO - [2019-04-10 20:05:46] MongoBD connection successful
+2019-04-10 20:05:48,328 - logger_hurb_bravo - DEBUG - [2019-04-10 20:05:48] Get request successful
+2019-04-10 20:05:48,448 - logger_hurb_bravo - INFO - [2019-04-10 20:05:48] Inserted data on database
+2019-04-10 20:06:32,204 - logger_hurb_bravo - INFO - [2019-04-10 20:06:32] MongoBD connection successful
+2019-04-10 20:06:33,307 - logger_hurb_bravo - DEBUG - [2019-04-10 20:06:33] Get request successful
+2019-04-10 20:06:33,427 - logger_hurb_bravo - INFO - [2019-04-10 20:06:33] Inserted data on database
+2019-04-10 21:06:35,184 - logger_hurb_bravo - DEBUG - [2019-04-10 21:06:35] Get request successful
+2019-04-10 21:06:35,337 - logger_hurb_bravo - INFO - [2019-04-10 21:06:35] Inserted data on database
+2019-04-10 21:19:35,001 - logger_hurb_bravo - INFO - [2019-04-10 21:19:34] MongoBD connection successful
+2019-04-10 21:19:37,273 - logger_hurb_bravo - DEBUG - [2019-04-10 21:19:37] Get request successful
+2019-04-10 21:23:36,502 - logger_hurb_bravo - INFO - [2019-04-10 21:23:36] MongoBD connection successful
+2019-04-10 21:23:38,000 - logger_hurb_bravo - DEBUG - [2019-04-10 21:23:37] Get request successful
+2019-04-10 21:26:22,440 - logger_hurb_bravo - INFO - [2019-04-10 21:26:22] MongoBD connection successful
+2019-04-10 21:26:24,022 - logger_hurb_bravo - DEBUG - [2019-04-10 21:26:24] Get request successful
+2019-04-10 21:27:55,900 - logger_hurb_bravo - INFO - [2019-04-10 21:27:55] MongoBD connection successful
+2019-04-10 21:27:57,281 - logger_hurb_bravo - DEBUG - [2019-04-10 21:27:57] Get request successful
+2019-04-10 21:33:17,637 - logger_hurb_bravo - INFO - [2019-04-10 21:33:17] MongoBD connection successful
+2019-04-10 21:33:19,285 - logger_hurb_bravo - DEBUG - [2019-04-10 21:33:19] Get request successful
+2019-04-10 21:49:52,337 - logger_hurb_bravo - INFO - [2019-04-10 21:49:52] MongoBD connection successful
+2019-04-10 21:49:53,947 - logger_hurb_bravo - DEBUG - [2019-04-10 21:49:53] Get request successful
+2019-04-10 22:02:05,128 - logger_hurb_bravo - INFO - [2019-04-10 22:02:05] MongoBD connection successful
+2019-04-10 22:02:06,659 - logger_hurb_bravo - DEBUG - [2019-04-10 22:02:06] Get request successful
+2019-04-10 22:02:06,779 - logger_hurb_bravo - INFO - [2019-04-10 22:02:06] Inserted data on database

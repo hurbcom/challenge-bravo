@@ -37,19 +37,20 @@ def init_logger():
     logger.setLevel(logging.DEBUG)
     logger.propagate = True
 
-    # Create a file handler
+    # Criando o arquivo
     handler = logging.FileHandler(os.path.join(config['logger']['logger_output_path'], config['logger']['logger_filename']))
     handler.setLevel(logging.DEBUG)
 
-    # Create a logging format
+    # Criando o formato de log
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
 
-    # Adds the handlers to the logger
+    # Adicionando para o log
     logger.addHandler(handler)
 
 
 def write_on_mongo(collection, result):
+    ''' Método para inserir os dados no mongo'''
     try:
         collection.insert_one(result)
         log_msg("Inserted data on database", logging.INFO)
@@ -60,19 +61,21 @@ def write_on_mongo(collection, result):
 def main(collection):
     while True:
         result = {}
-        # Get request
+        # Realizando um requisição get
         response = requests.get(cryptopain.format(config['hurb_key']))
 
-        # sanity check
+        # Verificando resposta da requisição
         if response.ok is True:
             log_msg("Get request successful", logging.DEBUG)
 
-            # Gets json from response
+            # pegando o json da resposta
             result["coins"] = response.json()
-            result["updatedAt"] = datetime.utcnow()
-
+            # gruardando a data de captura
+            result["updatedAt"] = datetime.now()
+            # inserindo os dados no mongo
             write_on_mongo(collection, result)
         else:
+            # mapeando os erros
             code = response.status_code
             if code == 400:
                 log_msg(ErrorUtils.get_message(100), logging.ERROR)
@@ -82,19 +85,20 @@ def main(collection):
                 log_msg(ErrorUtils.get_message(102), logging.CRITICAL)
             elif code == 500:
                 log_msg(ErrorUtils.get_message(998), logging.WARN)
-
+        #  dormindo para a próxia requisição
         sleep(config['timeout'])
 
 if __name__ == "__main__":
-    # Reads nlp configuration file
+    # Lendo parametros do arquivo json
     build_config_params(configuration_file)
 
-    # Initialize logger
+    # Inicializa o logger
     init_logger()
 
-    # Open Mongo Connection
+    # Abrindo conexão com o mongo
     collection, result = mu.open_mongo_connection(config['mongo']['hurb'])
 
+    # verificando o resultado da conexão
     if result == False:
         log_msg('Error to open mongo connection', logging.CRITICAL)
         sys.exit(1)
