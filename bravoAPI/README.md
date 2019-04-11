@@ -29,11 +29,17 @@ COLLECTON   = "cotation"
 ***
 ### Informações
 
-Com o objetivo de facilitar o lado dos avaliadores, a API está hospedada na plataforma do [heroku](https://www.heroku.com/). 
-Para de certificar que a url esta de pé, basta acessar. 
+Com o objetivo de facilitar o lado dos avaliadores, hospedei a API na plataforma do [heroku](https://www.heroku.com/). 
+Para de certificar que a API está de pé, basta acessar. 
 ```
 https://challengerhurb.herokuapp.com/
 ```
+
+***
+### Testes de estresse
+
+Foi-se utilizado o software [JMeter](https://jmeter.apache.org/) para realização dos testes testes iniciais de estresse. O cenário configurado foi de 5 usuário em um intervalo de 1s realizando 1000 requisição. A aplicação de comportou muito bem, com uma média de resposta em sua requisições de 25ms.
+
 ***
 ### Endpoints
 
