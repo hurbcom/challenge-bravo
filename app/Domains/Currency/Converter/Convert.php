@@ -14,35 +14,35 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
 
-
-
-class Convert {
+class Convert
+{
     /**
      * @return JsonResponse
      */
-    public function run($request) : JsonResponse
+    public function run($request): JsonResponse
     {
 
         $rates = $this->getRates();
 
 
-        $amount = floatval($request->amount);
-        $from = floatval($rates[$request->from]);
-        $to = floatval($rates[$request->to]);
+        $amount = (float)$request->amount;
+        $from = (float)$rates[$request->from];
+        $to = (float)$rates[$request->to];
         $value = $amount * ($to / $from);
 
 
-        return JsonResponse::create(['value' => number_format( $value , 2, ',', '.')],200);
+        return JsonResponse::create(['value' => number_format($value, 2, ',', '.')], 200);
 
     }
 
-    private static function getRates(){
+    private static function getRates()
+    {
 
         $redisStore = Cache::store('redis');
 
         // creates/updates rates cache after 1 hour, if file doesnt exists or file size is equal 0. I've did this to control how many exchange rates would be request per day to save $$$, could be more, less or realtime
 
-        if(!$redisStore->has('currencies')) {
+        if (!$redisStore->has('currencies')) {
 
             $currencies = env('AVAILABLE_CURRENCIES');
             $baseCurrency = env('BASE_CURRENCY');
@@ -56,9 +56,9 @@ class Convert {
                 "show_alternative" => 1
             ]);
 
-            $oxr_url = "https://openexchangerates.org/api/latest.json?" . $queryString;
+            $oxrUrl = "https://openexchangerates.org/api/latest.json?" . $queryString;
 
-            $ch = curl_init($oxr_url);
+            $ch = curl_init($oxrUrl);
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
@@ -72,8 +72,8 @@ class Convert {
 
         }
 
-        $rates =  $redisStore->get('currencies');
+        $rates = $redisStore->get('currencies');
 
-        return json_decode($rates,true);
+        return json_decode($rates, true);
     }
 }

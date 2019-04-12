@@ -27,7 +27,7 @@ class ConverterController extends BaseController
             'amount'    => 'required|regex:^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$^' //2 decimal float regex
         ];
 
-        $Messages = [
+        $messages = [
             'required'  => 'The :attribute parameter is required.',
             'alpha'     => 'The :attribute parameter should contain only alpha characters.',
             'size'      => 'The :attribute must be exactly :size.',
@@ -36,7 +36,7 @@ class ConverterController extends BaseController
         ];
 
         //request validation
-        $this->validate($request, $rules, $Messages);
+        $this->validate($request, $rules, $messages);
 
 
 
