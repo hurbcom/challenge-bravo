@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Exceptions;
+namespace Hurb\Api\Exceptions;
 
 use Exception;
+use Hurb\CurrencyConverter\CurrencyConverterException;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -17,24 +16,9 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        AuthorizationException::class,
-        HttpException::class,
-        ModelNotFoundException::class,
-        ValidationException::class,
+        CurrencyConverterException::class,
+        ValidationException::class
     ];
-
-    /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception  $exception
-     * @return void
-     */
-    public function report(Exception $exception)
-    {
-        parent::report($exception);
-    }
 
     /**
      * Render an exception into an HTTP response.
@@ -45,6 +29,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof ValidationException) {
+            $exception->response->setData([
+                'result' => null,
+                'errors' => $exception->response->getData()
+            ]);
+        }
+
         return parent::render($request, $exception);
     }
 }
