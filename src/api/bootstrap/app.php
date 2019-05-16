@@ -35,6 +35,10 @@ $app->singleton(
 | Register Middleware
 |--------------------------------------------------------------------------
 */
+$app->middleware([
+    Hurb\CurrencyConverter\Frameworks\Lumen\ConversionResultCacheMiddleware::class
+]);
+
 $app->register(Hurb\CurrencyConverter\Frameworks\Lumen\CurrencyConverterServiceProvider::class);
 
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
