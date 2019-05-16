@@ -19,6 +19,9 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./converter</directory>
+            <exclude>
+                <directory suffix=".php">./converter/Frameworks</directory>
+            </exclude>
         </whitelist>
     </filter>
 

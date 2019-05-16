@@ -1,29 +1,30 @@
 <?php
 
-namespace App\Console;
+namespace Hurb\Api\Console;
 
+use Hurb\CurrencyConverter\Frameworks\Lumen\RateProviderCacheCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
     /**
-     * The Artisan commands provided by your application.
+     * Registered Commands for console usage
      *
      * @var array
      */
     protected $commands = [
-        //
+        RateProviderCacheCommand::class
     ];
 
     /**
-     * Define the application's command schedule.
+     * Scheduled Commands
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        $schedule->command(RateProviderCacheCommand::class)->everyMinute();
     }
 }

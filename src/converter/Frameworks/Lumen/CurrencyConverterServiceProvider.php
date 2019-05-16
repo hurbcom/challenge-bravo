@@ -53,5 +53,17 @@ class CurrencyConverterServiceProvider extends ServiceProvider
                 );
             }
         );
+
+        $this->app->singleton(
+            RateProviderCacheHandler::class,
+            function ($app) {
+                return new RateProviderCacheHandler(
+                    $app->make(ProviderInterface::class),
+                    $app->make(RepositoryInterface::class),
+                    getenv('CACHE_EXPIRE_TIME_KEY'),
+                    (int) getenv('CACHE_TIME_IN_SECONDS')
+                );
+            }
+        );
     }
 }
