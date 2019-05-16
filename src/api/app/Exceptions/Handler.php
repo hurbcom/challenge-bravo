@@ -6,6 +6,7 @@ use Exception;
 use Hurb\CurrencyConverter\CurrencyConverterException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -29,7 +30,10 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof ValidationException) {
-            //
+            $exception->response->setData([
+                'result' => null,
+                'errors' => $exception->response->getData()
+            ]);
         }
 
         return parent::render($request, $exception);
