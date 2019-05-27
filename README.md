@@ -1,61 +1,59 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Conversão de moedas
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+API que converte moedas usando como fonte o Open Exchange Rates, usando sempre uma moeda como lastro (por padrão, USD).
 
-A API deve converter entre as seguintes moedas:
-- USD
-- BRL
-- EUR
-- BTC
-- ETH
+O cadastro gratuito no Open Exchange Rates atualiza as cotações das moedas a cada hora fechada (0h a.m., 1h a.m., 2h a.m., etc), então esse projeto atualiza suas informações com o OpenExchangeRates sempre que o projeto é iniciado e sempre 5 minutos após a hora fechada (00:05 a.m., 01:05 a.m., 02:05 a.m., etc) 
 
+## Executando
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Para rodar o projeto, você pode usar o Dockerfile contido aqui, ou:
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+```bash
+cp sample.env .env
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+```
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+## Exemplo de uso
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+Existem dois principais usos para a API:
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+### Visualizar informações sobre uma moeda
 
+Para visualizar informações sobre uma moeda específica, deve-se acessar o endpoint `/api/currencies/<symbol>`, por exemplo:
 
+http://localhost:8000/api/currencies/USD irá retornar:
+```json
+{
+    "symbol": "USD",
+    "is_base": true,
+    "value": "1.000000000000",
+    "last_updated": "2019-01-01T00:00:00Z"
+}
+```
+Já que USD é a moeda de lastro, ela recebe `is_base=True` e tem `value=1`
 
-## Critério de avaliação
+### Ver conversões entre moedas
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Para fazer uma conversão, basta acessar o endpoint `/api/currencies/<symbol>/<amount>/to/<destiny_symbol>`, por exemplo, para converter 10 BTC para BRL:
 
-## Dúvidas
+http://127.0.0.1:8000/api/currencies/BTC/10/to/BRL/ irá retornar:
+```json
+{
+    "value": "355700.4350080097021043743600",
+}
+```
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+## Testes
 
-Boa sorte e boa viagem! ;)
+Para executar a suíte de testes, após instalar as dependẽncias, basta executar:
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+```bash
+python manage.py test
+```
+
+## Boilerplate
+
+Conforme pedido a ser especificado, os boilerplates nesse projeto são a maior parte do `currencies/settings.py` e a migração 0001 da app core (`core/migrations/0001_initial.py`)
