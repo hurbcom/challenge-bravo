@@ -3,7 +3,6 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const {port} = require('./config')
 
 var currencyRouter = require('./src/currency_conversion/view/conversor_view');
 
@@ -34,11 +33,6 @@ app.use(function (err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-});
-
-
-app.listen(port, () => {
-    console.log(`server running on port ${port}`)
 });
 
 module.exports = app;
