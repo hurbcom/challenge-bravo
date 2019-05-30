@@ -1,15 +1,21 @@
-const unidadesDeMoeda = ['BTC', 'EUR', 'USD', 'BRL',  'ETH'];
+const unidadesDeMoeda = ['BTC', 'EUR', 'USD', 'BRL', 'ETH'];
 
-exports.validar = function(params) {
+/**
+ * Valida request
+ * @param params Parametros passados para o request: from, to, amount
+ * @returns {string} Mensagem de erro caso invalido, vazio caso valido
+ */
+exports.validar = function (params) {
 
-    let valido = true;
-    if(!params.from || !unidadesDeMoeda.includes(params.from.toUpperCase())){
-        valido = false
-    } else if (!params.to || !unidadesDeMoeda.includes(params.to.toUpperCase())){
-        valido = false;
-    } else if (!params.amount || typeof params.amount == 'number'){
-        valido = false;
+    let mensagem = '';
+    if (!params.from || !unidadesDeMoeda.includes(params.from.toUpperCase())) {
+        mensagem = 'Parametro enviado em "from" nao corresponde as moedas aceitas';
+    } else if (!params.to || !unidadesDeMoeda.includes(params.to.toUpperCase())) {
+        mensagem = 'Parametro enviado em "to" nao corresponde as moedas aceitas';
+    }
+    else if (!params.amount || parseFloat(params.amount) == NaN) {
+        mensagem = 'Parametro enviado em "amount" nao corresponde a um numero.';
     }
 
-    return valido;
+    return mensagem;
 };

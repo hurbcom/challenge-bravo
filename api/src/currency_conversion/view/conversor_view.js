@@ -6,23 +6,21 @@ const router = express.Router();
 /* Processa request. */
 router.get('/', function (req, res) {
 
-    if(!validator.validar(req.query)) {
+    const badRequest = validator.validar(req.query);
+    if (badRequest) {
         res.send({
-            sucess: false,
-            message: 'Os parâmetros necessários não foram enviados corretamente.'
+            success: false,
+            message: badRequest
         });
     } else {
         conversor.converter(req.query.from, req.query.to, req.query.amount)
             .then(
                 function (converted_value) {
-                    console.log(converted_value);
-
                     res.send({
                         value: converted_value
                     });
                 })
             .catch(function (error) {
-                console.log(error);
                 res.send({
                     sucess: false,
                     message: error
