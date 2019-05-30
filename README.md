@@ -16,7 +16,7 @@ A requisição deve receber como parâmetros: A moeda de origem, o valor a ser c
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
-# Sobre o desafio
+### Sobre o desafio
 
 O desafio foi desenvolvido em NodeJS com Express. Testes unitarios foram feitos usando Mocha, Chai e Sinon. O arquivo bin/www foi autogerado, assim como grande parte do app.js.
 
@@ -25,7 +25,7 @@ Esta API foi escolhida pois possui todas as moedas necessárias, é atualizada f
 
 
 
-# Como executar:
+### Como executar:
 
 Instalar NodeJS e NPM. Exemplo no Ubuntu: 'sudo apt-get install -y nodejs npm'. 
 Instalar dependencias usando: (a partir da pasta clonada)
