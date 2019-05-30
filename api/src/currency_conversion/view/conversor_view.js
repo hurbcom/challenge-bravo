@@ -3,10 +3,12 @@ const conversor = require('../controller/conversor_controller.js');
 const validator = require('./validator.js');
 const router = express.Router();
 
-/* Processa request. */
+/**
+ * Processa request
+ */
 router.get('/', function (req, res) {
 
-    const badRequest = validator.validar(req.query);
+    const badRequest = validator.validate(req.query);
     if (badRequest) {
         res.send({
             success: false,

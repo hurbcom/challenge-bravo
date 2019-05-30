@@ -5,7 +5,7 @@ const unidadesDeMoeda = ['BTC', 'EUR', 'USD', 'BRL', 'ETH'];
  * @param params Parametros passados para o request: from, to, amount
  * @returns {string} Mensagem de erro caso invalido, vazio caso valido
  */
-exports.validar = function (params) {
+exports.validate = function (params) {
 
     let mensagem = '';
     if (!params.from || !unidadesDeMoeda.includes(params.from.toUpperCase())) {
