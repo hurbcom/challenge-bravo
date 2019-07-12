@@ -1,0 +1,11 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 1000
+scenarios:
+  -
+    name: 'Conversão de Moeda'
+    flow:
+    - get:
+        url: "/api?from=usd&to=BRL&amount=100"

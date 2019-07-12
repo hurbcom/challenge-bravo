@@ -1,61 +1,52 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Conversão de moedas
+API em NodeJS que converte moedas utilizando a API do Crypto Compare (cryptocompare.com)
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+## Iniciar o projeto
+Para iniciar o projeto basta digitar o seguinte comando:
 
-A API deve converter entre as seguintes moedas:
-- USD
-- BRL
-- EUR
-- BTC
-- ETH
+```
+docker-compose up -d
+```
 
+E acessar:
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+```
+http://localhost:3000/api
+```
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+E passar os parametros via querystring (exemplo):
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+```
+?from=USD&to=BRL&amount=1000.00
+```
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+Que irá retornar:
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+```js
+{
+"from": "USD",
+"to": "BRL",
+"amount": "1000.00",
+"conversion": "3827.00"
+}
+```
+nota: o valor de 'conversion' é da cotação do dia que estou executando o projeto, podendo ser diferente do dia que você estiver executando
 
-## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+## Teste Unitário
 
+No terminal, basta acessar a pasta "app" e executar:
 
+```js
+npm run test
+```
 
-## Critério de avaliação
+## Teste de Estresse
+Obs.: O teste de estresse está configurado para 1000 requisições/segundo por 60 segundos (1000*60).
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Para realizar o teste de estresse, utilizo o Artillery (https://artillery.io/).
 
-## Dúvidas
+No terminal, basta acessar a pasta "app" e executar:
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HotelUrbano/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+```js
+npm run stress
+```

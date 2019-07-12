@@ -1,0 +1,32 @@
+{
+    "name": "challenge-bravo",
+    "version": "1.0.0",
+    "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "./node_modules/.bin/mocha './!(node_modules)/**/*.spec.js'",
+        "stress": "./node_modules/.bin/artillery run artillery.yml"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ErickGledson/challenge-bravo.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ErickGledson/challenge-bravo/issues"
+    },
+    "homepage": "https://github.com/ErickGledson/challenge-bravo#readme",
+    "dependencies": {
+        "consign": "^0.1.6",
+        "express": "^4.17.1",
+        "redis": "^2.8.0",
+        "request": "^2.88.0"
+    },
+    "devDependencies": {
+        "artillery": "^1.6.0-28",
+        "mocha": "^6.1.4"
+    }
+}
