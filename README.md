@@ -53,22 +53,10 @@ nota: o valor de 'conversion' é da cotação do dia que estou executando o proj
 
 ## Teste Unitário
 
-Obtenha o container id com o comando:
-
-```
-docker container ls
-```
-
-Acesse o container com os comandos:
-
-```
-docker exec -it <CONTAINER_ID> /bin/bash
-```
-
 No terminal, basta digitar e executar:
 
 ```js
-npm run test
+docker-compose exec api npm test
 ```
 
 ## Teste de Estresse
@@ -77,20 +65,8 @@ Obs.: O teste de estresse está configurado para 1000 requisições/segundo por 
 
 Para realizar o teste de estresse, utilizo o Artillery (https://artillery.io/).
 
-Obtenha o container id com o comando:
-
-```
-docker container ls
-```
-
-Acesse o container com os comandos:
-
-```
-docker exec -it <CONTAINER_ID> /bin/bash
-```
-
 No terminal, basta digitar e executar:
 
 ```js
-npm run stress
+docker-compose exec api npm run stress
 ```
