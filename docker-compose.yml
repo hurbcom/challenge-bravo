@@ -3,9 +3,7 @@ services:
     api:
         build:
             context: ./
-            dockerfile: docker/api/api.dockerfile
-            args:
-                - HOST_UID=${UID}
+            dockerfile: api.dockerfile
         working_dir: /usr/src/app
         volumes:
             - "./app:/usr/src/app"

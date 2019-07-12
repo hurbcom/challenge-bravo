@@ -4,7 +4,7 @@ module.exports = app => {
     const { currency: cache } = app.src.cache;
 
     const model = {
-        _requestAPI: async () => {
+        _requestAPI: async (from, to) => {
             // Buscando a conversão na API
             return new Promise((resolve, reject) => {
                 const URL = `https://min-api.cryptocompare.com/data/price?fsym=${from}&tsyms=${to}`;
@@ -37,7 +37,7 @@ module.exports = app => {
 
             if (cacheHitVerification) return cacheHitVerification;
 
-            return await model._requestAPI();
+            return await model._requestAPI(from, to);
         }
     };
 

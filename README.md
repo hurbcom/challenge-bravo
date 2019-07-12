@@ -94,9 +94,3 @@ No terminal, basta digitar e executar:
 ```js
 npm run stress
 ```
-
-## Problemas que podem ser encontrados
-
-O Docker pode apresentar problemas ao rodar em máquinas Windows e MacOS.
-
-Motivo: nas configurações de container, eu utilizo o UID do usuário (obtendo automaticamente em máquinas Linux) que deve ser obtido e setado nas variáveis de ambiente dos sistemas (Windows e MacOS).
