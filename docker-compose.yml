@@ -5,7 +5,7 @@ services:
             context: ./
             dockerfile: docker/api/api.dockerfile
             args:
-                - HOST_UID:${UID}
+                - HOST_UID=${UID}
         working_dir: /usr/src/app
         volumes:
             - "./app:/usr/src/app"
@@ -15,7 +15,7 @@ services:
             - redis
     redis:
         container_name: bravo-redis
-        image: 'redis:4.0.11'
+        image: "redis:4.0.11"
         ports:
             - "6379:6379"
         volumes:

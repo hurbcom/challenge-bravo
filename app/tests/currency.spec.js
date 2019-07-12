@@ -1,47 +1,179 @@
-const assert = require('assert');
-const request = require('request');
+const expect = require("chai").expect;
 
-describe('Currency.js', () => {
-    it('Resultado de conversão da requisição da API (cryptocompare)', async () => {
-        const from = 'USD';
-        const to = 'BRL';
-        /**
-         *  Apesar de não ser uma boa prática a utilização de testes de unidade
-         *  para requisições, faço aqui só checar o código de obtenção, parse e resultado do valor.
-         */
-        const URL = `https://min-api.cryptocompare.com/data/price?fsym=${from}&tsyms=${to}`;
+const validators = require("../src/validators/currency")();
+const currencyCache = require("../src/cache/currency")(null);
+const currencyModel = require("../src/models/currency")({
+    src: {
+        cache: {
+            currency: currencyCache
+        }
+    }
+});
+const currencyController = require("../src/controllers/currency")({
+    src: {
+        models: {
+            currency: currencyModel
+        }
+    }
+});
 
-        const promiseResult = new Promise((resolve, reject) => {
-            request(URL, {}, (error, response, body) => {
-                if (error) reject(error);
+describe("Currency.js", () => {
+    it("verifica a existência de todos os campos na requisição", () => {
+        const request = {
+            query: {}
+        };
 
-                try {
-                    resolve(JSON.parse(body));
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        })
-
-        const result = await promiseResult;
-        assert.equal(!isNaN(result[to]), true);
+        try {
+            validators.convert_parameters(request);
+        } catch (error) {
+            expect(error.message).to.equal(
+                "Ops! Incomplete parameters (from, to or amount). :("
+            );
+        }
     });
 
-    it('Validação dos campos e transformação', () => {
-        const VALID_CURRENCY = ['USD', 'BRL', 'EUR', 'BTC', 'ETH'];
+    it("verifica a existência do campo 'amount' na requisição", () => {
+        const request = {
+            query: {
+                from: "usd",
+                to: "brl"
+            }
+        };
 
-        let from = 'usd';
-        let to = 'brl';
-        const amount = "1,00"
+        try {
+            validators.convert_parameters(request);
+        } catch (error) {
+            expect(error.message).to.equal(
+                "Ops! Incomplete parameters (from, to or amount). :("
+            );
+        }
+    });
 
-        from = from.toUpperCase();
-        to = to.toUpperCase();
+    it("verifica a existência do campo 'from' na requisição", () => {
+        const request = {
+            query: {
+                to: "brl",
+                amount: 1000
+            }
+        };
 
-        assert.equal(from, 'USD');
-        assert.equal(to, 'BRL');
+        try {
+            validators.convert_parameters(request);
+        } catch (error) {
+            expect(error.message).to.equal(
+                "Ops! Incomplete parameters (from, to or amount). :("
+            );
+        }
+    });
 
-        assert.equal(!VALID_CURRENCY.includes(from), false);
-        assert.equal(!VALID_CURRENCY.includes(to), false);
-        assert.equal(!(/^[0-9]+(\.[0-9]{1,2})?$/gm.test(amount)), true);
+    it("verifica a existência do campo 'to' na requisição", () => {
+        const request = {
+            query: {
+                from: "usd",
+                amount: 1000
+            }
+        };
+
+        try {
+            validators.convert_parameters(request);
+        } catch (error) {
+            expect(error.message).to.equal(
+                "Ops! Incomplete parameters (from, to or amount). :("
+            );
+        }
+    });
+
+    it("verifica se a moeda no campo 'from' é aceita para conversão", () => {
+        const request = {
+            query: {
+                from: "not",
+                to: "brl",
+                amount: 1000
+            }
+        };
+
+        try {
+            validators.convert_parameters(request);
+        } catch (error) {
+            expect(error.message).to.equal(
+                `Ops! ${request.query.from.toUpperCase()} is not a valid currency. :(`
+            );
+        }
+    });
+
+    it("verifica se a moeda no campo 'to' é aceita para conversão", () => {
+        const request = {
+            query: {
+                from: "usd",
+                to: "not",
+                amount: 1000
+            }
+        };
+
+        try {
+            validators.convert_parameters(request);
+        } catch (error) {
+            expect(error.message).to.equal(
+                `Ops! ${request.query.to.toUpperCase()} is not a valid currency. :(`
+            );
+        }
+    });
+
+    it("verifica se o valor no campo 'amount' é aceito para conversão", () => {
+        const request = {
+            query: {
+                from: "usd",
+                to: "brl",
+                amount: "money"
+            }
+        };
+
+        try {
+            validators.convert_parameters(request);
+        } catch (error) {
+            expect(error.message).to.equal(
+                `Ops! ${
+                    request.query.amount
+                } is not a valid value (eg.: 100 or 100.00 or 1000.00). :(`
+            );
+        }
+    });
+
+    it("verifica se o valor do campo 'from' retornado pelo validador está em maiúsculo", () => {
+        const request = {
+            query: {
+                from: "usd",
+                to: "brl",
+                amount: 10
+            }
+        };
+
+        const result = validators.convert_parameters(request);
+
+        expect(result.query.from).to.equal("USD");
+    });
+
+    it("verifica se o valor do campo 'to' retornado pelo validador está em maiúsculo", () => {
+        const request = {
+            query: {
+                from: "usd",
+                to: "brl",
+                amount: 10
+            }
+        };
+
+        const result = validators.convert_parameters(request);
+
+        expect(result.query.to).to.equal("BRL");
+    });
+
+    it("verifica retorno do model (requisição ao site cryptocompare.com e/ou cache)", async () => {
+        const result = await currencyModel.convert("USD", "BRL");
+        expect(result).is.not.null;
+    });
+
+    it("verifica retorno da função de cálculo de conversão", () => {
+        const result = currencyController._calculate(1, 3.8);
+        expect(result).to.equal("3.80");
     });
 });
