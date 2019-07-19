@@ -82,6 +82,10 @@ Para subir a aplicação basta executar o seguinte comando:
 
 ### Testando a aplicação
 
+O endereço do endpoint e os parâmetros esperados ficaram definidos como:
+
+`/api?from=BTC&to=BRL&amount=2`
+
 #### Client
 
 ```
