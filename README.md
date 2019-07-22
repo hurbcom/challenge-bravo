@@ -71,8 +71,10 @@ A porta usada pelo servidor ficou fixada como 6543.
 
 Para executar é necessário instalar as bibliotecas: pyramid e requests.
 
-`pip install pyramid`
-`pip install requests`
+```
+pip install pyramid
+pip install requests
+```
 
 ### Executando
 
