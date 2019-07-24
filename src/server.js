@@ -8,6 +8,11 @@ class App {
     this.express = express()
     this.isDev = process.env.NODE_ENV !== 'production'
     this.routes()
+    this.middlewares()
+  }
+
+  middlewares () {
+    this.express.use(express.json())
   }
 
   routes () {
