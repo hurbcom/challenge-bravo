@@ -1,0 +1,35 @@
+{
+    "name": "challenge-bravo",
+    "version": "1.0.0",
+    "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
+    "main": "src/index.js",
+    "scripts": {
+        "dev": "nodemon src/index"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/prjThiago/challenge-bravo.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/prjThiago/challenge-bravo/issues"
+    },
+    "homepage": "https://github.com/prjThiago/challenge-bravo#readme",
+    "dependencies": {
+        "axios": "^0.19.0",
+        "dotenv": "^8.0.0",
+        "express": "^4.17.1",
+        "require-dir": "^1.2.0"
+    },
+    "devDependencies": {
+        "eslint": "^6.1.0",
+        "eslint-config-standard": "^13.0.1",
+        "eslint-plugin-import": "^2.18.2",
+        "eslint-plugin-node": "^9.1.0",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-standard": "^4.0.0",
+        "nodemon": "^1.19.1"
+    }
+}
