@@ -29,7 +29,7 @@ async function bootstrap() {
     app.enableCors();
 
     app.useStaticAssets(join(__dirname, '..', 'public'));
-    
+
     await app.listen(port, host);
     const server = clc.green(`http://${host}:${port}`)
     console.log(`Servidor iniciado em ${server} `)
