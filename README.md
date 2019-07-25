@@ -68,6 +68,10 @@ http://127.0.0.1:3000/api/
 Documentação:
 execute o comando:
 ```bash
-$ npm start:doc:server
+$ npm run start:doc:server
+```
+yarn
+```bash
+$ yarn start:doc:server
 ```
 link para a documentação: http://127.0.0.1:3010
