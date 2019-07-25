@@ -7,7 +7,6 @@ import { ExtApisService } from '../external-apis/ext-apis.service';
 
 
 
-
 describe('Crypto Controller', () => {
   let controller: CryptoController;
 
@@ -22,13 +21,9 @@ describe('Crypto Controller', () => {
   });
 
 
-
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
-
-
-
 
 
 
