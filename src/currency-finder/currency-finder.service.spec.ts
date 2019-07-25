@@ -3,6 +3,7 @@ import { HttpModule } from '@nestjs/common';
 import { CurrencyFinderService } from './currency-finder.service';
 import { ExtApisService } from '../external-apis/ext-apis.service'
 
+
 describe('CurrencyFinderService', () => {
   let service: CurrencyFinderService;
 
@@ -15,15 +16,34 @@ describe('CurrencyFinderService', () => {
     service = module.get<CurrencyFinderService>(CurrencyFinderService);
   });
 
-  
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+
+  it("Deve estar definido", () => {
+      expect(service).toBeDefined();
   });
 
 
-  it('should be defined', () => {
-    expect(service.ListAll('USD')).toBeDefined()
+  it("ListAll('USD') Não pode retornar Null", () => {
+      expect(service.ListAll('USD')).not.toBeNull()
   });
+
+
+  it("Deve retornar um Objeto", () => {
+      expect(service.ListAll('USD')).toBeInstanceOf(Object)
+  });
+
+
+  it("Deve retornar uma Promisse", () => {
+      expect(service.All()).toBeInstanceOf(Promise);
+  });
+
+
+    it("find Deve retornar um Objeto", () => {
+        expect(service.find('USD', 'BRL')).toBeInstanceOf(Object);
+    });
 
 
 });
+
+
+
+

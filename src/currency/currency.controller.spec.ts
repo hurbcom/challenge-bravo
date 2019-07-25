@@ -32,4 +32,3 @@ describe('Currency Controller', () => {
 
 
 
-//providers: [CurrencyService, CurrencyFinderService, ExtApisService, HttpService ]

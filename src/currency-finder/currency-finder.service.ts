@@ -83,7 +83,6 @@ export class CurrencyFinderService {
                 date: data.date
             }
         }
-
     }//
 
 
