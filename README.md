@@ -9,7 +9,7 @@
 
 
 
-## Descrição
+# Descrição
 
 A API faz busca em diferentes fontes na internet
 
@@ -27,34 +27,37 @@ https://alternative.me
 para crypto moedas
 
 
-## Instalação das dependências
+# Instalação das dependências
 ```bash
 $ npm install
 ```
 
-## Iniciando a aplicação em modo de desenvolvimento
-```bash
+# Iniciando a aplicação em modo de desenvolvimento
+
 # development
+```bash
 $ npm run start
+```
 # ou watch mode
+```bash
 $ npm run start:dev
 ```
 
-## Executando a aplicação em modo de produção
+# Executando a aplicação em modo de produção
 ```bash
-# production mode
 $ npm run start:prod
 ```
 
-## Execução de Testes
+# Execução de testes unitários
 ```bash
-# unit tests
 $ npm run test
-# test coverage
+```
+# Cobertura de testes
+```bash
 $ npm run test:cov
 ```
 
-## Especificações
+# Especificações
  A aplicação foi desenvolvida com NestJs como Framework para Node.js
 utilizando a linguagem TypeScript.
 a interface web foi desenvovida como SPA utilizando VueJs
