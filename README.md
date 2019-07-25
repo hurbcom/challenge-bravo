@@ -1,19 +1,19 @@
-#Projeto
+# Projeto
 
 Projeto do desafio da HURB
 
-#Autor
+# Autor
 
 Rodrigo Marques - marques.coti@gmail.com
 
-#Pré-Requisitos
+# Pré-Requisitos
 PHP 7.1\
 Apache\
 Docker Opcional
 
 Foi utilizado no projeto o GraphQL com o PHP para gerar as APIs
 
-#Instalação
+# Instalação
 
 composer install  
 docker-composer run
@@ -28,21 +28,21 @@ DB_PASSWORD=
 
 php artisan migrate
 
-#Test
+# Test
 php artisan migrate --database=testing
 
 vendor/bin/phpunit
 
-#Querys
+# Querys
 Fazer uma requisição do tipo POST com as querys como parametros, programa recomendado:\
 Altair\
 Postman
-###Query de verificação do projeto
+### Query de verificação do projeto
 query{
   currentVersion
 }
 
-###Query de conversão de moeda
+### Query de conversão de moeda
 query{
   convertCurrency(from: "USD", to: "BRL", amount: 100)
 }
