@@ -38,6 +38,8 @@ $ npm install
 ```bash
 $ npm run start
 ```
+Link: http://127.0.0.1:3000
+
 # ou watch mode
 ```bash
 $ npm run start:dev
