@@ -20,11 +20,33 @@ describe('Currency Controller', () => {
 
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+    it('should be defined', () => {
+       expect(controller).toBeDefined();
+    });
 
 
+    it('should be instance of Object', () => {
+        expect(controller.All()).toBeInstanceOf(Object);
+    });
+
+
+    it('should not be Null', () => {
+        expect(controller.All()).not.toBeNull();
+    });
+
+
+    it('should be instance of Object', () => {
+        expect(controller.AllCoins('USD')).toBeInstanceOf(Object);
+    });
+
+    it('should be instance of Object', () => {
+        expect(controller.ConvertCurrency('USD', 'BRL')).toBeInstanceOf(Object);
+    });
+
+
+    it('should be instance of Object', () => {
+        expect(controller.ConvertCurrencyQty('USD', 'BRL', 10)).toBeInstanceOf(Object);
+    });
 
 
 
