@@ -3,6 +3,7 @@
 /node_modules
 
 /public
+
 # Logs
 logs
 *.log

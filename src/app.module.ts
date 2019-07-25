@@ -14,6 +14,7 @@ import { CurrencyService } from './currency/currency.service';
 
 
 
+
 @Module({
     imports: [
     HttpModule.register({
@@ -23,7 +24,7 @@ import { CurrencyService } from './currency/currency.service';
     CurrencyModule,
     CryptoModule,
     ExternalApisModule,
-    CurrencyFinderModule
+    CurrencyFinderModule,
 ],
   controllers: [
       AppController,
