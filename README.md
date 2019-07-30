@@ -59,3 +59,13 @@ Boa sorte e boa viagem! ;)
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
 </p>
+
+
+Steps:
+1 - Simple app
+2 - Documentation
+3 - Validation
+4 - Tested API
+5 - Dockerized
+6 - Functional app (https://currencylayer.com/documentation)
+7 - Embedded stress Tests
