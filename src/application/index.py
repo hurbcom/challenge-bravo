@@ -1,24 +1,37 @@
 from flask import Flask, jsonify, request
+from marshmallow import ValidationError
 
-# from src.model.Conversion import Conversion, ConversionSchema
-from model.currency.conversion import Conversion, ConversionSchema
-from application.httputils.response import getOkResponseObj, getErrorResponseObj
+from model.currency.conversion import Conversion
 
 app = Flask(__name__)
 
-@app.route('/currency/convert', methods=['POST'])
+# Temporary forward declaration
+CurrencyIntegration = {}
+CurrencyIntegration['validCurrencies'] = ['USD', 'BRL', 'EUR', 'BTC', 'ETH']
+
+@app.route('/currency/convert', methods=['GET'])
 def convert():
-    try:
-        # json parse
-        json = request.get_json()
+    # Exception handling is decorated so any exception thrown during validation would result
+    # in an automatic catch and be sent to user
 
-        # Validation
-        conversion = ConversionSchema().load(json)
+    # Inserts the current available currencies into the schemaValidation
+    requestArgs = {'validCurrencies': CurrencyIntegration['validCurrencies']}
+    requestArgs.update(request.args) 
 
-        return getOkResponseObj('')
+    # Validation
+    
+    errors = Conversion.is_valid(requestArgs, CurrencyIntegration['validCurrencies'] )
 
-    except Exception as ex:
-        return getErrorResponseObj(ex)
+    if errors:
+        return {
+            'success':False,
+            'errors': errors
+        }, 400
+
+    return return {
+            'success':True,
+            'data': {}
+        }, 200
 
 if __name__ == "__main__":
     app.run()
