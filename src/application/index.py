@@ -28,7 +28,7 @@ def convert():
             'errors': errors
         }, 400
 
-    return return {
+    return {
             'success':True,
             'data': {}
         }, 200
