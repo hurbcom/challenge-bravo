@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-from marshmallow import ValidationError
 
 from model.currency.conversion import Conversion
 
