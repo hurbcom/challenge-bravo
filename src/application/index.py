@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 
-from model.currency.conversion import Conversion
+from domain.model.currency.conversion import Conversion
 
 app = Flask(__name__)
 
