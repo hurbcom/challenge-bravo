@@ -1,12 +1,25 @@
 from flask import Flask, jsonify, request
 
 from domain.model.currency.conversion import Conversion
+from domain.model.currency.conversion import Conversion
+
+from integrations.currencyconversion.currencyconversionmockapi import CurrencyConversionMockApi
+from integrations.currencyconversion.currencylayerapi import CurrencyLayerApi
 
 app = Flask(__name__)
 
-# Temporary forward declaration
-CurrencyIntegration = {}
-CurrencyIntegration['validCurrencies'] = ['USD', 'BRL', 'EUR', 'BTC', 'ETH']
+
+# Integrations
+currencyIntegrationApi = None
+# TODO: envvar
+MockCurrencyConversionApi = False
+
+if MockCurrencyConversionApi:
+    currencyIntegrationApi = CurrencyConversionMockApi()
+else:
+    currencyIntegrationApi = CurrencyLayerApi()
+assert not currencyIntegrationApi is None, 'currencyIntegrationApi can''t be None!'
+
 
 @app.route('/currency/convert', methods=['GET'])
 def convert():
@@ -14,12 +27,12 @@ def convert():
     # in an automatic catch and be sent to user
 
     # Inserts the current available currencies into the schemaValidation
-    requestArgs = {'validCurrencies': CurrencyIntegration['validCurrencies']}
+    requestArgs = {'validCurrencies': currencyIntegrationApi.validCurrencies}
     requestArgs.update(request.args) 
 
     # Validation
     
-    errors = Conversion.is_valid(requestArgs, CurrencyIntegration['validCurrencies'] )
+    errors = Conversion.is_valid(requestArgs, currencyIntegrationApi.validCurrencies)
 
     if errors:
         return {
