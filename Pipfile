@@ -8,6 +8,7 @@ pylint = "*"
 
 [packages]
 flask = "*"
+flask-restplus = "*"
 
 [requires]
 python_version = "3.7"

@@ -62,15 +62,15 @@ class Conversion():
     def is_valid(conversionDict, validCurrencies):
         errors = {}
 
-        fromValidation = Conversion._validate_currency(conversionDict, 'from', validCurrencies, errors)
+        fromValidation = Conversion._validate_currency(conversionDict, 'from', validCurrencies, isRequired=True)
         if not fromValidation['valid']:
             errors['from'] = fromValidation['error']
 
-        toValidation = Conversion._validate_currency(conversionDict, 'to',   validCurrencies, errors)
+        toValidation = Conversion._validate_currency(conversionDict, 'to',   validCurrencies, isRequired=True)
         if not toValidation['valid']:
             errors['to'] = toValidation['error']
 
-        amountValidation = Conversion._validate_amount(conversionDict,   'amount', errors)
+        amountValidation = Conversion._validate_amount(conversionDict,   'amount', isRequired=True)
         if not amountValidation['valid']:
             errors['amount'] = amountValidation['error']
 

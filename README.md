@@ -62,10 +62,10 @@ Boa sorte e boa viagem! ;)
 
 
 Steps:
-1 - Simple app
-2 - Documentation
-3 - Validation
+1 - Simple app (done)
+2 - Validation (done)
+3 - Documentation
 4 - Tested API
 5 - Dockerized
-6 - Functional app (https://currencylayer.com/documentation)
-7 - Embedded stress Tests
+6 - Functional app (https://currencylayer.com/documentation) (ongoing)
+7 - Embedded stress Tests 
