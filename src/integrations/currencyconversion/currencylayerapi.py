@@ -1,4 +1,4 @@
-from contracts.currencyconversion.currencyconversionapi import CurrencyConversionApi
+from src.contracts.currencyconversion.currencyconversionapi import CurrencyConversionApi
 
 # Example class
 class CurrencyLayerApi(metaclass=CurrencyConversionApi):
@@ -8,6 +8,6 @@ class CurrencyLayerApi(metaclass=CurrencyConversionApi):
     #validCurrencies = ['', None, [], (), {}, 0, lambda x: x]
 
     def __init__(self):
-        print('hello from subclass')
+        pass
 
 t = CurrencyLayerApi()
