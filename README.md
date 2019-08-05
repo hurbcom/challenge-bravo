@@ -10,6 +10,7 @@ A aplicação roda dentro de uma imagem docker, portanto todo o ambiente é inst
 
 ### Configuração
 A configuração do sistema é baseada nos valores do arquivo de configurações `src/application/settings.py`
+
 | Chave | Descrição | Valor padrão |
 | --- | --- | --- |
 | FLASK_SERVER_NAME | Configura host e porta da aplicação (desenvolvimento)* | 'localhost:5000' |
@@ -18,7 +19,7 @@ A configuração do sistema é baseada nos valores do arquivo de configurações
 | RESTPLUS_MASK_SWAGGER | Reduz verbosidade do swagger frente ao restplus (https://flask-restplus.readthedocs.io/en/stable/mask.html) | False |
 | RESTPLUS_ERROR_404_HELP | Configura página de erro 404 do Restplus | False |
 | MOCK_CURRENCY_PROVIDER | Flag para mockar a API de conversão de moeda CurrencyLayer(envolve gastos) | True |
-| CURRENCY_LAYER_API_KEY | Chave de acesso à API CurrencyLayer| <secret> |
+| CURRENCY_LAYER_API_KEY | Chave de acesso à API CurrencyLayer| chaveSecreta(mas para exemplo, está no código) |
 
 * Para alteração do host e porta de PRD, consultar arquivo `bootstrap.sh`
 *TODO* parametrizar host e porta de maneira geral, separada por ambientes (via CD pipeline seria o ideal)
@@ -75,11 +76,11 @@ Caso o usuário opte por não utilizar a biblioteca externa, um Mock da mesma fo
 Para execuçao dos testes no formato unittest, foi utilizado o pytest, por facilitar a separação da pasta de testes da pasta de código, reduzindo o pacote copiado para dentro da imagem docker.
 
 ## Links
-https://docs.docker.com
-https://flask-restplus.readthedocs.io/en/stable/
-https://swagger.io/
-https://docs.pytest.org/en/latest/
-https://currencylayer.com/
+- https://docs.docker.com
+- https://flask-restplus.readthedocs.io/en/stable/
+- https://swagger.io/
+- https://docs.pytest.org/en/latest/
+- https://currencylayer.com/
 
 
 ## Débitos! (TODO)
