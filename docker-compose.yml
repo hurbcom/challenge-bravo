@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    image: brunofurmon/challenge-bravo:1.0
+    environment:
+      - FLASK_ENV=development
+    ports:
+      - 5000:5000 
