@@ -1,6 +1,6 @@
 # Flask settings
 FLASK_SERVER_NAME = 'localhost:5000'
-FLASK_DEBUG = True # Use false for production
+FLASK_DEBUG = 0 # Use false for production
 
 # Flask-Restplus settings
 RESTPLUS_SWAGGER_UI_DOC_EXPANSION = 'list'

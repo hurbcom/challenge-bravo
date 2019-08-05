@@ -5,6 +5,6 @@ services:
     build: .
     image: brunofurmon/challenge-bravo:1.0
     environment:
-      - FLASK_ENV=development
+      - FLASK_ENV=production
     ports:
       - 5000:5000 
