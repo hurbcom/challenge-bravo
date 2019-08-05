@@ -1,0 +1,2 @@
+class IntegrationException(Exception):
+    pass

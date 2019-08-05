@@ -1,5 +1,6 @@
 from flask import request
 from flask_restplus import Resource
+import simplejson as json
 
 from src.application.api.conversion.parsers import conversionRequest
 
@@ -8,6 +9,9 @@ from src.application.api.restplus import api
 
 from src.integrations.currencyconversion.currencyconversionmockapi import CurrencyConversionMockApi
 from src.integrations.currencyconversion.currencylayerapi import CurrencyLayerApi
+from src.integrations.integrationexception import IntegrationException
+
+from src.application import settings
 
 ns = api.namespace('currency', description='Conversion endpoint')
 
@@ -19,15 +23,13 @@ MockCurrencyConversionApi = True
 if MockCurrencyConversionApi:
     currencyIntegrationApi = CurrencyConversionMockApi()
 else:
-    currencyIntegrationApi = CurrencyLayerApi()
+    currencyIntegrationApi = CurrencyLayerApi(settings.CURRENCY_LAYER_API_KEY)
 assert not currencyIntegrationApi is None, 'currencyIntegrationApi can''t be None!'
 
 @ns.route('/convert')
 class ConversionResource(Resource):
 
     # TODO: Response model
-    # @api.marshal_with(dict)
-    # @api.expect(conversionRequest)
     @api.expect(conversionRequest)
     @api.response(200, '<success model here>') # TODO: OK response model
     @api.response(400, '<badrequest model here>') # TODO: BR response model
@@ -44,11 +46,23 @@ class ConversionResource(Resource):
 
         if errors:
             return {
-                'success':False,
+                'success': False,
                 'errors': errors
             }, 400
 
-        return {
-                'success':True,
-                'data': {}
-            }, 200
+        # Conversion
+        try:
+            conversionResult = currencyIntegrationApi.convert(request.args)
+            return {
+                    'success': True,
+                    'data': {
+                        'amount': json.dumps(conversionResult)
+                    }
+                }, 200
+
+        except IntegrationException as integrationException:
+            return {
+                'success': False,
+                'errors': str(integrationException)
+            }, 500    
+

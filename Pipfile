@@ -9,6 +9,8 @@ pylint = "*"
 [packages]
 flask = "*"
 flask-restplus = "*"
+simplejson = "*"
+currencylayer = "*"
 
 [requires]
 python_version = "3.7"

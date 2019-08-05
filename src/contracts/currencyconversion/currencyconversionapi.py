@@ -12,6 +12,14 @@ class CurrencyConversionApi(type):
             raise NotImplementedError(
                 'Subclass {name} must have a list of (non-empty) strings called ''validCurrencies'' containing all possible currency conversion arguments'
                 .format(name=name))
+        
+        if not 'convert' in attr \
+                or not (attr['convert'], types.MethodType):
+                # using inspect, get the arguments to test its signature too
+
+            raise NotImplementedError(
+                'Subclass {name} must implement a ''convert(conversionRequest)'' method receiving the correct parameter'
+                .format(name=name))
 
         return super(CurrencyConversionApi, cls).__new__(cls, name, bases, attr)
 
