@@ -3,6 +3,7 @@ from flask_restplus import Resource
 import simplejson as json
 
 from src.application.api.conversion.parsers import conversionRequest
+from src.application.api.conversion.models.currencyModels import successModel, badRequestModel, internalErrorModel
 from src.application.api.restplus import api
 from src.application import settings
 
@@ -18,10 +19,10 @@ class ConversionResource(Resource):
 
     currencyProvider = getCurrencyProvider()
 
-    # TODO: Response model
     @api.expect(conversionRequest)
-    @api.response(200, '<success model here>') # TODO: OK response model
-    @api.response(400, '<badrequest model here>') # TODO: BR response model
+    @api.response(200, 'Success', successModel)
+    @api.response(400, 'Bad Request', badRequestModel)
+    @api.response(500, 'Internal Server Error', internalErrorModel)
     def get(self):
         '''
         Gets an instant conversion based on the configured currencyProvider
