@@ -11,6 +11,19 @@ class Conversion():
 
     @staticmethod
     def _validate_currency(dict_, field, validCurrencies, isRequired=False):
+        ''' Returns whether the currency is valid and supported
+
+        Keyword arguments:
+            dict_ -- Dictionary containing string currencies conversionDict['from'], conversionDict['to'] and a decimal amount @conversionDict['amount']
+            field -- field containing the desired key to validate
+            validCurrencies -- List of strings containing the supported currencies
+            isRequired -- flag indicating if @field can be empty in @dict (default: False)
+        
+        Returned value:
+            A dict containing the following fields:
+                - valid (Boolean)
+                - error (str) containing the errored field
+        '''
         validation = {'valid': True, 'error': None}
 
         if isRequired:
@@ -33,6 +46,18 @@ class Conversion():
     
     @staticmethod
     def _validate_amount(dict_, field, isRequired=False):
+        ''' Returns whether the amount specified is valid
+
+        Keyword arguments:
+            dict_ -- Dictionary containing string currencies conversionDict['from'], conversionDict['to'] and a decimal amount @conversionDict['amount']
+            field -- field containing the desired key to validate
+            isRequired -- flag indicating if @field can be empty in @dict (default: False)
+        
+        Returned value:
+            A dict containing the following fields:
+                - valid (Boolean)
+                - error (str) containing the errored field
+        '''
         validation = {'valid': True, 'error': None}
 
         if isRequired:
@@ -50,7 +75,7 @@ class Conversion():
             value = Decimal(dict_[field])
         except:
             validation['valid'] = False
-            validation['error'] = '{field} ({value}) is an invalid positive decimal. Use ''.'' for decimal separator'.format(field=dict_[field], value=value)
+            validation['error'] = '{field} ({value}) is an invalid positive decimal. Use ''.'' for decimal separator'.format(field=field, value=dict_[field])
             return validation
 
         if not isinstance(value, Decimal) or value < 0:
@@ -60,6 +85,18 @@ class Conversion():
     
     @staticmethod
     def is_valid(conversionDict, validCurrencies):
+        ''' Returns whether the conversion specified is valid
+
+        Keyword arguments:
+            conversionDict -- Dictionary containing string currencies 
+                conversionDict['from'], conversionDict['to']
+                and a decimal amount @conversionDict['amount']
+            validCurrencies -- List containing string currencies
+
+        Returned value:
+            A dict with each errored field as key and a value containing the reason
+            If every field is OK, then an empty dict is returned
+        '''
         errors = {}
 
         fromValidation = Conversion._validate_currency(conversionDict, 'from', validCurrencies, isRequired=True)
