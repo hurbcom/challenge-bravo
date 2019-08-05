@@ -151,11 +151,5 @@ class CurrencyValidationTests(unittest.TestCase):
 
         self.assertDictEqual(isValidDict, expectedDict)
 
-
-class ConversionValidationTests(unittest.TestCase):
-    
-    class AmountValidationTests(object):
-        pass
-
 if __name__ == '__main__':
     unittest.main()
