@@ -2,7 +2,6 @@ import currencylayer
 from decimal import Decimal
 
 from src.contracts.currencyconversion.currencyconversionapi import CurrencyConversionApi
-from src.integrations.httpclient import httpsGet
 from src.integrations.integrationexception import IntegrationException
 
 # Example class
