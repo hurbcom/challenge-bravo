@@ -1,5 +1,6 @@
 from src.contracts.currencyconversion.currencyconversionapi import CurrencyConversionApi
-from decimal import Decimal
+
+from src.application.utils.convertutils import calculateExchange
 
 # Example class
 class CurrencyConversionMockApi(metaclass=CurrencyConversionApi):
@@ -34,22 +35,6 @@ class CurrencyConversionMockApi(metaclass=CurrencyConversionApi):
         # On the other hand, when 'to' is USD, we need only to revert the opperand
         quotes = response['quotes']
 
-        returnAmount = None
-        # Simple conversion
-        if to == 'USD':
-            returnAmount = Decimal(amount) / Decimal(quotes[to + from_])
+        returnAmount = calculateExchange(amount, from_, to, quotes)
 
-        elif from_ == 'USD':
-            returnAmount = Decimal(amount) * Decimal(quotes[from_ + to])
-
-        # Algebra
-        else:
-            fromQuote = quotes['USD' + from_]
-            toQuote = quotes['USD' + to]
-
-            returnAmount = Decimal(amount) * (Decimal(toQuote) / Decimal(fromQuote))
-
-        # TODO: extract to helper function
-        SIXPLACES = Decimal(10) ** -6
-
-        return returnAmount.quantize(SIXPLACES)
+        return returnAmount

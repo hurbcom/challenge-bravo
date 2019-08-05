@@ -1,8 +1,10 @@
 import currencylayer
-from decimal import Decimal
 
 from src.contracts.currencyconversion.currencyconversionapi import CurrencyConversionApi
+
 from src.integrations.integrationexception import IntegrationException
+
+from src.application.utils.convertutils import calculateExchange
 
 # Example class
 class CurrencyLayerApi(metaclass=CurrencyConversionApi):
@@ -55,24 +57,9 @@ class CurrencyLayerApi(metaclass=CurrencyConversionApi):
             if response['success']:
                 quotes = response['quotes']
 
-                returnAmount = None
-                # Simple conversion
-                if to == 'USD':
-                    returnAmount = Decimal(amount) / Decimal(quotes[to + from_])
+                returnAmount = calculateExchange(amount, from_, to, quotes)
 
-                elif from_ == 'USD':
-                    returnAmount = Decimal(amount) * Decimal(quotes[from_ + to])
-
-                # Algebra
-                else:
-                    fromQuote = quotes['USD' + from_]
-                    toQuote = quotes['USD' + to]
-
-                    returnAmount = Decimal(amount) * (Decimal(toQuote) / Decimal(fromQuote))
-
-                # TODO: extract to helper function
-                SIXPLACES = Decimal(10) ** -6
-                return returnAmount.quantize(SIXPLACES)
+                return returnAmount
 
             else:
                 responseError = response['error']
