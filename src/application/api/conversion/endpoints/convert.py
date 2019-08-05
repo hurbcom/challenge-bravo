@@ -3,31 +3,20 @@ from flask_restplus import Resource
 import simplejson as json
 
 from src.application.api.conversion.parsers import conversionRequest
+from src.application.api.restplus import api
+from src.application import settings
 
 from src.domain.model.currency.conversion import Conversion
-from src.application.api.restplus import api
 
-from src.integrations.currencyconversion.currencyconversionmockapi import CurrencyConversionMockApi
-from src.integrations.currencyconversion.currencylayerapi import CurrencyLayerApi
+from src.integrations.currencyconversion.currencyprovider import getCurrencyProvider
 from src.integrations.integrationexception import IntegrationException
-
-from src.application import settings
 
 ns = api.namespace('currency', description='Conversion endpoint')
 
-# Integrations
-currencyIntegrationApi = None
-# TODO: envvar
-MockCurrencyConversionApi = True
-
-if MockCurrencyConversionApi:
-    currencyIntegrationApi = CurrencyConversionMockApi()
-else:
-    currencyIntegrationApi = CurrencyLayerApi(settings.CURRENCY_LAYER_API_KEY)
-assert not currencyIntegrationApi is None, 'currencyIntegrationApi can''t be None!'
-
 @ns.route('/convert')
 class ConversionResource(Resource):
+
+    currencyProvider = getCurrencyProvider()
 
     # TODO: Response model
     @api.expect(conversionRequest)
@@ -38,11 +27,11 @@ class ConversionResource(Resource):
         Gets an instant conversion based on the configured currencyProvider
         '''
         # Inserts the current available currencies into the schemaValidation
-        requestArgs = {'validCurrencies': currencyIntegrationApi.validCurrencies}
+        requestArgs = {'validCurrencies': ConversionResource.currencyProvider.validCurrencies}
         requestArgs.update(request.args) 
 
         # Validation
-        errors = Conversion.is_valid(requestArgs, currencyIntegrationApi.validCurrencies)
+        errors = Conversion.is_valid(requestArgs, ConversionResource.currencyProvider.validCurrencies)
 
         if errors:
             return {
@@ -52,7 +41,7 @@ class ConversionResource(Resource):
 
         # Conversion
         try:
-            conversionResult = currencyIntegrationApi.convert(request.args)
+            conversionResult = ConversionResource.currencyProvider.convert(request.args)
             return {
                     'success': True,
                     'data': {
@@ -60,9 +49,9 @@ class ConversionResource(Resource):
                     }
                 }, 200
 
-        except IntegrationException as integrationException:
+        except IntegrationException as integrException:
             return {
                 'success': False,
-                'errors': str(integrationException)
+                'errors': str(integrException)
             }, 500    
 
