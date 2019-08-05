@@ -7,6 +7,7 @@ class CurrencyConversionApi(type):
         # Verifies if there are any None or '' or non-str types
         if not 'validCurrencies' in attr \
                 or not isinstance(attr['validCurrencies'], list) \
+                or len(attr['validCurrencies']) == 0 \
                 or len(list(filter(lambda objType: not isinstance(objType, str) or not objType, attr['validCurrencies']))) > 0:
 
             raise NotImplementedError(
