@@ -4,9 +4,10 @@ from src.integrations.currencyconversion.currencyconversionmockapi import Curren
 from src.integrations.currencyconversion.currencylayerapi import CurrencyLayerApi
 
 def getCurrencyProvider():
-    # Integrations
+    ''' Returns a concrete instance of CurrencyConversionApi
+    '''
     currencyIntegrationApi = None
-    # TODO: envvar
+    
     MockCurrencyConversionApi = settings.MOCK_CURRENCY_PROVIDER
 
     if MockCurrencyConversionApi:
