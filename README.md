@@ -10,6 +10,7 @@ API desenvolvida em NodeJS (v10.16) com a utilização dos seguintes pacotes:
     -   [express](https://github.com/expressjs/express)
     -   [helmet](https://github.com/helmetjs/helmet)
     -   [axios](https://github.com/axios/axios)
+    -   [redis](https://github.com/NodeRedis/node_redis)
 -   Testes
     -   [mocha](https://github.com/mochajs/mocha)
     -   [chai](https://github.com/chaijs/chai)

@@ -7,7 +7,8 @@
         "start": "./src/index.js",
         "test": "ENV=test mocha ./src/tests/**/*.spec.js",
         "test:watch": "npm run test -- --watch",
-        "test:coverage": "nyc npm test"
+        "test:coverage": "nyc npm test -- --exit",
+        "test:stress": "artillery quick --count 60 -n 1000 http://localhost:3000?from=BTC&to=EUR&amount=123.45"
     },
     "nyc": {
         "reporter": [
@@ -31,9 +32,11 @@
     "dependencies": {
         "axios": "^0.19.0",
         "express": "^4.17.1",
-        "helmet": "^3.20.0"
+        "helmet": "^3.20.0",
+        "redis": "^2.8.0"
     },
     "devDependencies": {
+        "artillery": "^1.6.0-28",
         "chai": "^4.2.0",
         "mocha": "^6.2.0",
         "nock": "^10.0.6",

@@ -3,12 +3,19 @@ const request = require('supertest');
 const nock = require('nock');
 const app = require('../server');
 const config = require('../config');
+const redisClient = require('../utils/redis');
 
 describe('API /convert', function() {
     let path = '/convert';
 
     afterEach(function() {
         nock.cleanAll();
+    });
+
+    // Como retorna um promise, os testes serão executados
+    // apenas depois de sua resolução.
+    beforeEach(function() {
+        return redisClient.cleanAll();
     });
 
     it('should return a 400 error if "from" parameter does not exist', function(done) {
@@ -109,5 +116,30 @@ describe('API /convert', function() {
                 expect(res.body).to.deep.equal(expectedResult);
                 done();
             });
+    });
+
+    it('should return the correct result using cached data', function(done) {
+        const from = 'BTC';
+        const to = 'EUR';
+        const amount = Number(10).toFixed(2);
+        const rate = 0.1;
+
+        const expectedResult = {
+            from,
+            to,
+            amount,
+            result: (amount * rate).toFixed(2)
+        };
+
+        redisClient.setAsync(`CONVERSION:${from}:${to}`, rate).then(() => {
+            request(app)
+                .get(`${path}?from=${from}&to=${to}&amount=${amount}`)
+                .expect(200)
+                .end(function(err, res) {
+                    if (err) return done(err);
+                    expect(res.body).to.deep.equal(expectedResult);
+                    done();
+                });
+        });
     });
 });
