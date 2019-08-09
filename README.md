@@ -36,6 +36,10 @@ Para rodar a aplicação em modo de desenvolvedor:
 
 ```
 cd $pasta-da-aplicacao
-docker-compose -f docker-compose.dev.yml build
+
+export USER_ID=${UID} && docker-compose -f docker-compose.dev.yml build
+ou
+export USER_ID="$(id -u)" && docker-compose -f docker-compose.dev.yml build
+
 docker-compose -f docker-compose.dev.yml up -d
 ```
