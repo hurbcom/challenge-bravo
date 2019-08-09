@@ -9,11 +9,13 @@ API desenvolvida em NodeJS (v10.16) com a utilização dos seguintes pacotes:
 -   Core
     -   [express](https://github.com/expressjs/express)
     -   [helmet](https://github.com/helmetjs/helmet)
+    -   [axios](https://github.com/axios/axios)
 -   Testes
     -   [mocha](https://github.com/mochajs/mocha)
     -   [chai](https://github.com/chaijs/chai)
     -   [nyc](https://github.com/istanbuljs/nyc)
     -   [supertest](https://github.com/visionmedia/supertest)
+    -   [nock](https://github.com/nock/nock)
 -   Infraestrutura
     -   [pm2](https://github.com/Unitech/pm2)
 
