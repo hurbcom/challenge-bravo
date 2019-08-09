@@ -8,6 +8,7 @@ API desenvolvida em NodeJS (v10.16) com a utilização dos seguintes pacotes:
 
 -   Core
     -   [express](https://github.com/expressjs/express)
+    -   [helmet](https://github.com/helmetjs/helmet)
 -   Testes
     -   [mocha](https://github.com/mochajs/mocha)
     -   [chai](https://github.com/chaijs/chai)
