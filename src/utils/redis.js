@@ -17,8 +17,6 @@ module.exports = {
     },
     setAsync: async (key, value) => {
         return new Promise((resolve, reject) => {
-            // Além de salvar o valor na chave, também dá um tempo de expiração para ela
-            // definido no arquivo de config
             client.set(key, value, function(err, reply) {
                 if (err) reject(null);
                 resolve(true);
