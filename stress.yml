@@ -1,0 +1,9 @@
+config:
+    target: 'http://localhost:3000'
+    phases:
+        - duration: 60
+          arrivalRate: 1000
+scenarios:
+    - flow:
+          - get:
+                url: '/convert?from=BTC&to=EUR&amount=123.45'

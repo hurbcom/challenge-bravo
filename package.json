@@ -8,11 +8,12 @@
         "test": "ENV=test mocha ./src/tests/**/*.spec.js",
         "test:watch": "npm run test -- --watch",
         "test:coverage": "nyc npm test -- --exit",
-        "test:stress": "artillery quick --count 60 -n 1000 http://localhost:3000?from=BTC&to=EUR&amount=123.45"
+        "test:stress": "artillery run stress.yml"
     },
     "nyc": {
         "reporter": [
-            "text"
+            "text",
+            "html"
         ],
         "exclude": [
             "src/tests/**"

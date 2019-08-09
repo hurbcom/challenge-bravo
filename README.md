@@ -36,7 +36,37 @@ docker-compose build --no-cache
 docker-compose up -d
 ```
 
-Para rodar a aplicação em modo de desenvolvedor:
+Depois basta acessar `http://localhost:3000`
+
+O endpoint para conversão é `http://localhost:3000/convert`
+
+Exemplo: `http://localhost:3000/convert?from=BTC&to=EUR&amount=123.45`
+
+## Executar testes
+
+Para executar os testes execute unitário e exibir a cobertura de cógio:
+
+```
+docker-compose exec app npm run test:coverage
+```
+
+Para rodar os testes de estresse:
+
+```
+docker-compose exec app npm run test:stress
+```
+
+## Monitoramento
+
+Para abrir o monitor dos processos do PM2 basta executar:
+
+```
+docker-compose exec app pm2 monit
+```
+
+Pode ser interessante deixar aberto enquanto realiza os testes de estresse.
+
+## Iniciar aplicação no modo de desenvolvimento
 
 ```
 cd $pasta-da-aplicacao
