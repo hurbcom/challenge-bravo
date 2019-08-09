@@ -8,13 +8,13 @@ const redisClient = require('../utils/redis');
 describe('API /convert', function() {
     let path = '/convert';
 
-    afterEach(function() {
+    beforeEach(function() {
         nock.cleanAll();
     });
 
     // Como retorna um promise, os testes serão executados
     // apenas depois de sua resolução.
-    beforeEach(function() {
+    afterEach(function() {
         return redisClient.cleanAll();
     });
 

@@ -20,6 +20,10 @@ module.exports = {
 
             const rate = res.data[to];
 
+            if (!rate) {
+                throw new Error('Could not get the conversion rate');
+            }
+
             // Salva a informação no cache
             await redisClient.setAsync(`CONVERSION:${from}:${to}`, rate);
             return (rate * amount).toFixed(2);
