@@ -1,0 +1,7 @@
+{
+    "name": "challenge-bravo",
+    "script": "./src/server.js",
+    "ignore_watch": ["node_modules", "./src/tests"],
+    "instances": "max",
+    "exec_mode": "cluster"
+}

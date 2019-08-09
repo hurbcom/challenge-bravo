@@ -1,0 +1,40 @@
+{
+    "name": "challenge-bravo",
+    "version": "1.0.0",
+    "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
+    "main": "index.js",
+    "scripts": {
+        "start": "./src/index.js",
+        "test": "ENV=test mocha ./src/tests/**/*.spec.js",
+        "test:watch": "npm run test -- --watch",
+        "test:coverage": "nyc npm test"
+    },
+    "nyc": {
+        "reporter": [
+            "text"
+        ],
+        "exclude": [
+            "src/tests/**"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/alan-rocha/challenge-bravo.git"
+    },
+    "keywords": [],
+    "author": "Alan Rocha <alanrocha.web@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/alan-rocha/challenge-bravo/issues"
+    },
+    "homepage": "https://github.com/alan-rocha/challenge-bravo#readme",
+    "dependencies": {
+        "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "mocha": "^6.2.0",
+        "nyc": "^14.1.1",
+        "supertest": "^4.0.2"
+    }
+}

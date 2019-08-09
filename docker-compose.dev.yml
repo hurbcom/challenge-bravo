@@ -1,0 +1,12 @@
+version: '3'
+services:
+    app:
+        build:
+            context: ./
+            args:
+                USER_ID: $USER_ID
+                ENV: development
+        volumes:
+            - ./:/var/www/hurb
+        ports:
+            - 3000:3000
