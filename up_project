@@ -1,0 +1,4 @@
+git clone https://github.com/davicervo/hurb.git
+cd hurb
+docker-compose build
+docker-compose up -d

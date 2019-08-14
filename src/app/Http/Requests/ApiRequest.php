@@ -25,9 +25,9 @@ class ApiRequest extends FormRequest
     public function rules()
     {
         return [
-            'to' => 'required',
-            'from' => 'required',
-            'amount' => 'required',
+            'to' => 'required|in:USD,BRL,EUR,BTC,ETH',
+            'from' => 'required|in:USD,BRL,EUR,BTC,ETH',
+            'amount' => 'required|numeric',
         ];
     }
 

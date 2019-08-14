@@ -70,7 +70,7 @@ class CryptoCompare
             ], 422, ['Content-Type' => 'application/json']);
 
 
-            return $response->getContent();
+            return $response;
         }
 
         //Criando valor
@@ -78,7 +78,7 @@ class CryptoCompare
 
         $response = response()->json([
             'data' => [
-                'value' => $response['amount']
+                'result' => $response['amount']
             ],
             'meta' => [
                 'message' => 'success',
@@ -87,7 +87,7 @@ class CryptoCompare
         ], 200, ['Content-Type' => 'application/json']);
 
 
-        return $response->getContent();
+        return $response;
     }
 
     public function typeParams($value)

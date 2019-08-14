@@ -9,13 +9,9 @@ RUN apt-get update \
     libmemcached-dev \
     libz-dev \
     libpq-dev \
-    libjpeg-dev \
-    libpng-dev \
-    libfreetype6-dev \
     libssl-dev \
     libmcrypt-dev \
     zlib1g-dev \
-    libgmp-dev \
     vim \
     gettext-base \
   && rm -rf /var/lib/apt/lists/*
@@ -44,13 +40,7 @@ RUN docker-php-ext-install mcrypt \
   # Instalando a extensão do PHP pdo_mysql
   && docker-php-ext-install pdo_mysql \
   # Instalando a extensão do PHP pdo_pgsql
-  && docker-php-ext-install pdo_pgsql \
-  # Instalando a extensão do PHP gd
-  && docker-php-ext-configure gd \
-    --enable-gd-native-ttf \
-    --with-jpeg-dir=/usr/lib \
-    --with-freetype-dir=/usr/include/freetype2 && \
-    docker-php-ext-install gd
+  && docker-php-ext-install pdo_pgsql
 
 RUN chown -R davicervo:www-data /var/www
 
