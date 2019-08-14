@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//converter
+Route::get('converter', 'Api\ConverterCoinController@index')->name('converter.index');
+Route::get('converter/coin', 'Api\ConverterCoinController@coin')->name('converter.index');
