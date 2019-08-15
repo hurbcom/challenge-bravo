@@ -12,6 +12,10 @@ Fiz um arquivo de classe, que é aonde se encontra método de validação de moe
 
 E uma classe de teste usando o PHPUnit, com assert de tipo de valor retornado e o valor final.
 
+Para iniciar a API, basta ter algum software que suba um servidor php local, como por exemplo o Wamp Server. Depois de instalar o Wamp, basta colocar a pasta do projeto dento de __diretorio_de_instalacao\wamp64\www e iniciar o servidor do Wamp. Basta usar http://localhost/challenge-bravo/?from=BTC&to=EUR&amount=123.45 que a API responderá.
+
+Foi adicionado uma collection do postman na versão 2.1 no projeto.
+
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
 </p>

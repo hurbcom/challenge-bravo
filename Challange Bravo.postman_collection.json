@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "ef3dbcd8-54ee-4784-bab7-b57a5c03d9b1",
+		"name": "Challange Bravo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET Challange Bravo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/challenge-bravo/?from=BTC&to=EUR&amount=123.45",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"challenge-bravo",
+						""
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "BTC"
+						},
+						{
+							"key": "to",
+							"value": "EUR"
+						},
+						{
+							"key": "amount",
+							"value": "123.45"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
