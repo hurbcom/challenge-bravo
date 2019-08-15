@@ -27,7 +27,7 @@ Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lis
 Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
 
 ## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*.
+- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*. Caso você tenha algum motivo para não submeter um *pull request*, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
 - O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
 - Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
   - git clone $seu-fork
