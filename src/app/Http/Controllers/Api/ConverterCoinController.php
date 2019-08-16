@@ -28,16 +28,21 @@ class ConverterCoinController extends Controller
         $this->converter->hydrate($request->all());
 
         if (!$this->converter->hasCache()) {
-            $response = $this->api->params([
+            $quotation = $this->api->params([
                 'fsym' => $this->converter->get('from'),
                 'tsyms' => $this->converter->get('to')
             ])->amount($this->converter->get('amount'))
-                ->request('price')
-                ->response();
+                ->request('price')->response();
 
-            $this->converter->createCache($response);
+            $this->converter->hydrate([
+                'quotation' => $quotation
+            ]);
+
+            $result = $this->converter->response();
+
+            $this->converter->createCache($result);
         }
-       
+
         return $this->converter->getCache();
     }
 }

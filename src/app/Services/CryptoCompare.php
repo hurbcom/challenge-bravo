@@ -58,36 +58,7 @@ class CryptoCompare
     {
         $response = json_decode($this->originalResquest->getBody()->getContents(), true);
 
-        if (isset($response['Response']) and $response['Response'] == 'Error') {
-            $response = response()->json([
-                'data' => [],
-                'meta' => [
-                    'message' => $response['Message'],
-                    'errors' => [
-                        $this->typeParams($response['ParamWithError']) => $response['Message']
-                    ]
-                ]
-            ], 422, ['Content-Type' => 'application/json']);
-
-
-            return $response;
-        }
-
-        //Criando valor
-        $response['amount'] = $this->amount * array_values($response)[0];
-
-        $response = response()->json([
-            'data' => [
-                'result' => $response['amount']
-            ],
-            'meta' => [
-                'message' => 'success',
-                'errors' => []
-            ]
-        ], 200, ['Content-Type' => 'application/json']);
-
-
-        return $response;
+        return number_format(array_values($response)[0], 2, '.', '');
     }
 
     public function typeParams($value)

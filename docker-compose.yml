@@ -1,39 +1,25 @@
-version: "2"
+version: '2'
 services:
-    app:
-        depends_on:
-            - database
-            - redis
-        build:
-            context: ./
-            dockerfile: docker/app/app.dockerfile
-            args:
-                - USER_ID=1001
-        working_dir: /var/www/html
-        volumes:
-            - ./src:/var/www/html
-    web:
-        depends_on:
-            - app
-        build:
-            context: ./
-            dockerfile: docker/web/web.dockerfile
-        working_dir: /var/www/html
-        volumes_from:
-            - app
-        ports:
-            - 8081:80
-    redis:
-        container_name: redis
-        image: redis
-        ports:
-            - "6379:6379"
-    database:
-        image: mysql:5.7
-        volumes:
-            - $HOME/.hurb/databases/davicervo:/var/lib/mysql
-        environment:
-            - MYSQL_DATABASE=hurb
-            - MYSQL_ROOT_PASSWORD=root
-        ports:
-            - 3307:3306
+  app:
+    depends_on:
+      - redis
+    build:
+      context: ./
+      dockerfile: docker/app/app.dockerfile
+    working_dir: /var/www/html
+  web:
+    depends_on:
+      - app
+    build:
+      context: ./
+      dockerfile: docker/web/web.dockerfile
+    working_dir: /var/www/html
+    volumes_from:
+      - app
+    ports:
+      - 8081:80
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - '6379:6379'
