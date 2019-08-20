@@ -2,13 +2,13 @@
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
 
-A API deve converter entre as seguintes moedas:
-- USD
-- BRL
-- EUR
-- BTC
-- ETH
+A API deve, originalmente, converter entre as seguintes moedas:
 
+-   USD
+-   BRL
+-   EUR
+-   BTC
+-   ETH
 
 Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
@@ -16,39 +16,43 @@ A requisição deve receber como parâmetros: A moeda de origem, o valor a ser c
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
+Construa também um endpoint para adicionar ou remover moedas suportadas pela API, usando os verbos HTTP.
+
 Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-- JavaScript (NodeJS)
-- Python
-- Go
-- Ruby
-- C++
-- PHP
+
+-   JavaScript (NodeJS)
+-   Python
+-   Go
+-   Ruby
+-   C++
+-   PHP
 
 Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
 
 ## Requisitos
-- Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um *pull request*. Caso você tenha algum motivo para não submeter um *pull request*, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
-- O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
-- Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-  - git clone $seu-fork
-  - cd $seu-fork
-  - comando para instalar dependências
-  - comando para executar a aplicação
-- A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 
-
+-   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
+    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github e adicione como colaborador o usuário `automator-hurb` e o deixe disponível por pelo menos 30 dias. Ao terminar o desafio nos envie um email avisando do termino.
+    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
+-   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
+-   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
+    -   git clone \$seu-fork
+    -   cd \$seu-fork
+    -   comando para instalar dependências
+    -   comando para executar a aplicação
+-   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 
 ## Critério de avaliação
 
-- **Organização do código**: Separação de módulos, view e model, back-end e front-end
-- **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
-- **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
-- **Legibilidade do código** (incluindo comentários)
-- **Segurança**: Existe alguma vulnerabilidade clara?
-- **Cobertura de testes** (Não esperamos cobertura completa)
-- **Histórico de commits** (estrutura e qualidade)
-- **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
-- **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+-   **Organização do código**: Separação de módulos, view e model, back-end e front-end
+-   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
+-   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
+-   **Legibilidade do código** (incluindo comentários)
+-   **Segurança**: Existe alguma vulnerabilidade clara?
+-   **Cobertura de testes** (Não esperamos cobertura completa)
+-   **Histórico de commits** (estrutura e qualidade)
+-   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
+-   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
 
 ## Dúvidas
 
