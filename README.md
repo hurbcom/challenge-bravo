@@ -16,7 +16,7 @@ A requisição deve receber como parâmetros: A moeda de origem, o valor a ser c
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Construa também um endpoint para adicionar ou remover moedas suportadas pela API, usando os verbos HTTP.
+Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
 Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
 
@@ -40,6 +40,8 @@ Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ qu
     -   cd \$seu-fork
     -   comando para instalar dependências
     -   comando para executar a aplicação
+-   A API pode ser escrita com ou sem a ajuda de _frameworks_
+    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
 -   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 
 ## Critério de avaliação
