@@ -11,6 +11,6 @@ func New() *httprouter.Router {
 	router := httprouter.New()
 	router.GET("/currencies", currenciesHandle)
 	router.GET("/quotes/:currency", quotesHandle)
-	// TODO router.GET("/conversion", ...)
+	router.GET("/conversion", conversionHandle)
 	return router
 }
