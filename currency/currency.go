@@ -12,3 +12,10 @@ const (
 	BTC                 // Bitcoin
 	ETH                 // Ethereum
 )
+
+/*
+Currencies returns an array containing all supported currencies.
+*/
+func Currencies() []currency {
+	return []currency{USD, BRL, EUR, BTC, ETH}
+}
