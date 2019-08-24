@@ -17,5 +17,8 @@ New returns the currency converter REST API handler.
 func New() *httprouter.Router {
 	router := httprouter.New()
 	router.GET("/", index)
+	// TODO router.GET("/currencies", ...)
+	// TODO router.GET("/quotes/:currency", ...)
+	// TODO router.GET("/conversion", ...)
 	return router
 }
