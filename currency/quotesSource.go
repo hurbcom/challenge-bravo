@@ -2,6 +2,11 @@ package currency
 
 type quotes map[currency]float64
 
+func failingQuotesSource() (_ quotes, ok bool) {
+	ok = false
+	return
+}
+
 func fakeQuotesSource() (quotes, bool) {
 	m := make(quotes)
 	m[USD] = 1.0
