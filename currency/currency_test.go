@@ -1,6 +1,7 @@
 package currency
 
 import (
+	"math"
 	"testing"
 )
 
@@ -73,6 +74,30 @@ func TestQuote(t *testing.T) {
 		}
 		if q != fqs[c] {
 			t.Errorf("wrong quote for %s", c.ToString())
+		}
+	}
+}
+
+func TestConvert(t *testing.T) {
+	quotesSource = fakeQuotesSource
+	for _, c1 := range Currencies() {
+		for _, c2 := range Currencies() {
+			q1, ok := Quote(c1)
+			if !ok {
+				t.Error("quote error #1")
+			}
+			q2, ok := Quote(c2)
+			if !ok {
+				t.Error("quote error #2")
+			}
+			a, ok := Convert(c1, c2, 1.0)
+			if !ok {
+				t.Error("conversion call failed")
+			}
+			delta := math.Abs(a - q1/q2)
+			if delta > 0.1 {
+				t.Error("conversion value mismatch")
+			}
 		}
 	}
 }

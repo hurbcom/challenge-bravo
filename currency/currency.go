@@ -60,3 +60,23 @@ func Quote(c currency) (q float64, ok bool) {
 	q = m[c]
 	return
 }
+
+/*
+Convert converts amount based on the conversion quote between from and to,
+returning convertedAmount.
+
+In case of internal failure, Convert returns ok = false.
+*/
+func Convert(from currency, to currency, amount float64) (convertedAmount float64, ok bool) {
+	quoteFrom, ok := Quote(from)
+	if !ok {
+		return
+	}
+	quoteTo, ok := Quote(to)
+	if !ok {
+		return
+	}
+	quote := quoteFrom / quoteTo
+	convertedAmount = amount * quote
+	return
+}
