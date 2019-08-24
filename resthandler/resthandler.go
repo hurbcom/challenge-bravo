@@ -9,7 +9,7 @@ New returns the currency converter REST API handler.
 */
 func New() *httprouter.Router {
 	router := httprouter.New()
-	// TODO router.GET("/currencies", ...)
+	router.GET("/currencies", currenciesHandle)
 	// TODO router.GET("/quotes/:currency", ...)
 	// TODO router.GET("/conversion", ...)
 	return router
