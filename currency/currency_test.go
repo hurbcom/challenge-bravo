@@ -41,6 +41,21 @@ func TestToString(t *testing.T) {
 	}
 }
 
+func TestToCurrency(t *testing.T) {
+	if _, ok := ToCurrency(""); ok {
+		t.Error("string conversion to currency does not detect errors")
+	}
+	for _, c := range Currencies() {
+		cFromString, ok := ToCurrency(c.ToString())
+		if !ok {
+			t.Error("cannot find supported currency from code")
+		}
+		if cFromString != c {
+			t.Error("conversion does not match ISO 4217-like code")
+		}
+	}
+}
+
 func TestQuote(t *testing.T) {
 	for _, c := range Currencies() {
 		quotesSource = failingQuotesSource

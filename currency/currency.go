@@ -29,6 +29,25 @@ func (c currency) ToString() string {
 }
 
 /*
+ToCurrency converts an ISO 4217-like code s to a currency.
+
+If s represents a supported currency, ToCurrency returns its correspondent
+currency unit c.
+
+If s does not represent a supported currency, ToCurrency returns ok = false.
+*/
+func ToCurrency(s string) (c currency, ok bool) {
+	m := make(map[string]currency)
+	m["USD"] = USD
+	m["BRL"] = BRL
+	m["EUR"] = EUR
+	m["BTC"] = BTC
+	m["ETH"] = ETH
+	c, ok = m[s]
+	return
+}
+
+/*
 Quote returns the quote q of currency c in USD.
 
 In case of internal failure, Quote returns ok = false.
