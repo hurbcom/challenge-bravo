@@ -40,3 +40,24 @@ func TestToString(t *testing.T) {
 		t.Error("bad string conversion: ETH")
 	}
 }
+
+func TestQuote(t *testing.T) {
+	for _, c := range Currencies() {
+		quotesSource = failingQuotesSource
+		if _, ok := Quote(c); ok {
+			t.Error("unable to signal failed quotes sourcing")
+		}
+		quotesSource = fakeQuotesSource
+		q, ok := Quote(c)
+		if !ok {
+			t.Error("failure reading an offline quotes source #1")
+		}
+		fqs, ok := fakeQuotesSource()
+		if !ok {
+			t.Error("failure reading an offline quotes source #2")
+		}
+		if q != fqs[c] {
+			t.Errorf("wrong quote for %s", c.ToString())
+		}
+	}
+}
