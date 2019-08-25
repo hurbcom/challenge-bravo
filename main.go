@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	httpserver.HTTPServer("localhost:8080")
+	httpserver.HTTPServer(":8080")
 }
