@@ -64,15 +64,15 @@ func TestQuote(t *testing.T) {
 			t.Error("unable to signal failed quotes sourcing")
 		}
 		quotesSource = fakeQuotesSource
-		q, ok := Quote(c)
+		quote, ok := Quote(c)
 		if !ok {
 			t.Error("failure reading an offline quotes source #1")
 		}
-		fqs, ok := fakeQuotesSource()
+		fakeQuote, ok := fakeQuotesSource(c)
 		if !ok {
 			t.Error("failure reading an offline quotes source #2")
 		}
-		if q != fqs[c] {
+		if quote != fakeQuote {
 			t.Errorf("wrong quote for %s", c.ToString())
 		}
 	}

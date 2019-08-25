@@ -53,12 +53,7 @@ Quote returns the quote q of currency c in USD.
 In case of internal failure, Quote returns ok = false.
 */
 func Quote(c currency) (q float64, ok bool) {
-	m, ok := quotesSource()
-	if !ok {
-		return
-	}
-	q = m[c]
-	return
+	return quotesSource(c)
 }
 
 /*
