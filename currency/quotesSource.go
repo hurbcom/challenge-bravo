@@ -20,4 +20,4 @@ func cachedQuotesSource(c currency) (q float64, ok bool) {
 	return quotesCache.Quote(c)
 }
 
-var quotesSource func(currency) (float64, bool) = fakeQuotesSource
+var quotesSource func(currency) (float64, bool) = cachedQuotesSource
