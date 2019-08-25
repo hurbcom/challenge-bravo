@@ -1,65 +1,41 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+challenge-bravo
+===============
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Name
+----
 
-A API deve, originalmente, converter entre as seguintes moedas:
+`challenge-bravo` is a REST service which provides USD-based currency quotes and currency conversion.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Synopsis
+--------
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+	docker build -t challenge-bravo . && docker run --publish <port>:8080 challenge-bravo
+	
+Description
+-----------
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+`challenge-bravo` provides the following REST API endpoints:
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+- `GET /currencies`: returns a list of supported currencies.
+- `GET /quotes/{currency}`: returns USD-based quotes for a given `currency`.
+- `GET /conversion?from={from}&to={to}&amount={amount}`: converts a given `amount` in currency `from` to currency `to`.
 
-Construa também um endpoint para adicionar ou remover moedas suportadas pela API, usando os verbos HTTP.
+Todo
+----
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+- User-provided TCP endpoint (currently hardcoded to `:8080`)
+- User-provided cache timeout (currently 15 minutes)
+- Look for a better third-party quotes service; response times are **terrible**
+- Automated tests for the quotes cache
+- Automated tests for the REST endpoints
+- Assess the usage of different containters to different endpoints
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+See also
+--------
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+Go source documentation.
 
-## Requisitos
+Author
+------
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github e adicione como colaborador o usuário `automator-hurb` e o deixe disponível por pelo menos 30 dias. Ao terminar o desafio nos envie um email avisando do termino.
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
-
-## Critério de avaliação
-
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
-
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Tadeu Bastos `<tadeu AT ondulat DOT net>`
