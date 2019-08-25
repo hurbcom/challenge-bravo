@@ -16,14 +16,14 @@ type cacheEntries struct {
 }
 
 const (
-	CacheTimeout time.Duration = 15 * time.Minute
+	cacheTimeout time.Duration = 15 * time.Minute
 )
 
 func (ce cacheEntries) isValid(c currency) bool {
 	ce.mutex.Lock()
 	e, ok := ce.entries[c]
 	ce.mutex.Unlock()
-	return ok && e.timestamp.Add(CacheTimeout).After(time.Now())
+	return ok && e.timestamp.Add(cacheTimeout).After(time.Now())
 }
 
 func (ce cacheEntries) updateCacheEntry(c currency) bool {
@@ -53,7 +53,7 @@ func (ce cacheEntries) Quote(c currency) (q float64, ok bool) {
 	return
 }
 
-var quotesCache cacheEntries = cacheEntries{
+var quotesCache = cacheEntries{
 	make(map[currency]cacheEntry),
 	sync.Mutex{},
 }
