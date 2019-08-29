@@ -10,7 +10,6 @@ func main() {
 	//config := config.GetConfig()
 
 	log.Warn("this is a message")
-	app := &app.App{}
 	app.Initialize()
 	app.Run(":3000")
 }

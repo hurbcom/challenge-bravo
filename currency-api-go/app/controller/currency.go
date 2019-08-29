@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"encoding/json"
@@ -11,8 +11,10 @@ import (
 	//"fmt"
 	//log "gopkg.in/inconshreveable/log15.v2"
 	"github.com/challenge-bravo/currency-api-go/app/model"
+	//"github.com/challenge-bravo/currency-api-go/app/db"
+
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
+	//"github.com/jinzhu/gorm"
 )
 
 type CurrencyConvertion struct {
@@ -22,13 +24,15 @@ type CurrencyConvertion struct {
 	Amount_converted 	float64 `json:"amount_converted"`
 }
 
-func GetAllCurrencys(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+var database =  model.InitializeDB()
+
+func GetAllCurrencys(w http.ResponseWriter, r *http.Request) {
 	currencys := []model.Currency{}
-	db.Find(&currencys)
+	database.Find(&currencys)
 	RespondJSON(w, http.StatusOK, currencys)
 }
 
-func CreateCurrency(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func CreateCurrency(w http.ResponseWriter, r *http.Request) {
 	currency := model.Currency{}
 
 	decoder := json.NewDecoder(r.Body)
@@ -38,29 +42,29 @@ func CreateCurrency(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	if err := db.Save(&currency).Error; err != nil {
+	if err := database.Save(&currency).Error; err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	RespondJSON(w, http.StatusCreated, currency)
 }
 
-func GetCurrency(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func GetCurrency(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	name := vars["name"]
-	currency := getCurrencyOr404(db, name, w, r)
+	currency := getCurrencyOr404(name, w, r)
 	if currency == nil {
 		return
 	}
 	RespondJSON(w, http.StatusOK, currency)
 }
 
-func UpdateCurrency(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func UpdateCurrency(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	name := vars["name"]
-	currency := getCurrencyOr404(db, name, w, r)
+	currency := getCurrencyOr404(name, w, r)
 	if currency == nil {
 		return
 	}
@@ -72,20 +76,20 @@ func UpdateCurrency(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	if err := db.Save(&currency).Error; err != nil {
+	if err := database.Save(&currency).Error; err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	RespondJSON(w, http.StatusOK, currency)
 }
 
-func DeleteCurrency(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func DeleteCurrency(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	name := vars["name"]
-	currency := getCurrencyOr404(db, name, w, r)
+	currency := getCurrencyOr404(name, w, r)
 	if currency == nil {
-		if err := db.Delete(&currency).Error; err != nil {
+		if err := database.Delete(&currency).Error; err != nil {
 			RespondError(w, http.StatusInternalServerError, err.Error())
 			return
 		}
@@ -94,7 +98,7 @@ func DeleteCurrency(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	RespondJSON(w, http.StatusNoContent, nil)
 }
 
-func GetConvertion(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func GetConvertion(w http.ResponseWriter, r *http.Request) {
 	var convertionJson CurrencyConvertion
 	var keys = [2]string{"from","to"}
 	var usd_values [2]float64
@@ -107,7 +111,7 @@ func GetConvertion(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 		for i, e :=  range keys {
 			currencys := model.Currency{}
 			search := urlParams[e][0]
-			db.Where("Name = ?", search).First(&currencys)
+			database.Where("Name = ?", search).First(&currencys)
 			usd_values[i] = currencys.Usd_value
 		}
 
@@ -157,9 +161,9 @@ func convertAmount(from_value float64, to_value float64, amount float64) float64
 }
 
 // getCurrencyOr404 gets a currency instance if exists, or respond the 404 error otherwise
-func getCurrencyOr404(db *gorm.DB, name string, w http.ResponseWriter, r *http.Request) *model.Currency {
+func getCurrencyOr404(name string, w http.ResponseWriter, r *http.Request) *model.Currency {
 	currency := model.Currency{}
-	if err := db.First(&currency, model.Currency{Name: name}).Error; err != nil {
+	if err := database.First(&currency, model.Currency{Name: name}).Error; err != nil {
 		RespondError(w, http.StatusNotFound, err.Error())
 		return nil
 	}
