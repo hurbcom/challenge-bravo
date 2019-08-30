@@ -14,7 +14,7 @@ type Response struct {
     Date string `json:"date"`
 }
 
-func Import_all(key string) *Response {
+func External_api_values(key string) *Response {
 	var url string
 	if key == "latest" {
 		url = "https://api.exchangeratesapi.io/latest"

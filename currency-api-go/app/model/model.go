@@ -27,12 +27,12 @@ func dbMigrate(db *gorm.DB) *gorm.DB {
 }
 
 func InitializeDB() *gorm.DB {
-	dbURI := fmt.Sprintf("%s:%s@/%s?charset=%s&parseTime=True",
+	dbURI := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=%s&parseTime=True",
 		"root",
-		"elton56261",
+		"root",
+		"0.0.0.0",
 		"currency",
 		"utf8")
-
 	db, err := gorm.Open("mysql", dbURI)
 	if err != nil {
 		log.Print(dbURI)

@@ -3,7 +3,7 @@ package controller
 import (
 	"encoding/json"
 
-    "net/url" 
+    "net/url"
 	//"log"
 	"net/http"
 	"strconv"
@@ -12,9 +12,8 @@ import (
 	"fmt"
 	"github.com/challenge-bravo/currency-api-go/app/model"
 	"github.com/challenge-bravo/currency-api-go/app/helpper"
-
 	"github.com/gorilla/mux"
-	//"github.com/jinzhu/gorm"
+
 )
 
 type CurrencyConvertion struct {
@@ -27,19 +26,24 @@ type CurrencyConvertion struct {
 var database =  model.InitializeDB()
 
 func Import_all(w http.ResponseWriter, r*http.Request){
+	flag := false
 	var response  helpper.Response
-	response = *helpper.Import_all("latest")
+	response = *helpper.External_api_values("latest")
 	ratesList := response.Rates.(map[string]interface{})
 
 	for key, value := range ratesList {
 		currency := model.Currency{}
 		currency.Name = key
 		currency.Usd_value =  convertAmountStringtoFloat(fmt.Sprint(value))
-		if err := database.Save(&currency).Error; err != nil {
-			RespondError(w, http.StatusNotModified, err.Error())
+		if err := database.Save(&currency).Error; err == nil {
+			flag = true
 		}
 	}
-	RespondJSON(w, http.StatusCreated, nil)
+	if flag{
+		RespondJSON(w, http.StatusCreated, nil)
+		return
+	}
+	RespondError(w, http.StatusNotModified, "")
 }
 func GetAllCurrencys(w http.ResponseWriter, r *http.Request) {
 	currencys := []model.Currency{}
@@ -63,7 +67,7 @@ func CreateCurrency(w http.ResponseWriter, r *http.Request) {
 
 	if currency.Usd_value == 0{
 		var response  helpper.Response
-		response = *helpper.Import_all("BRL")
+		response = *helpper.External_api_values("BRL")
 		ratesList := response.Rates.(map[string]interface{})
 		for _, value := range ratesList {
 			currency.Usd_value =  convertAmountStringtoFloat(fmt.Sprint(value))
@@ -86,11 +90,8 @@ func verifyCurrecyName(name string) bool {
 	return true
 }
 
-func GetCurrency(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-
-	name := vars["name"]
-	currency := getCurrencyOr404(name, w, r)
+func GetOneCurrency(w http.ResponseWriter, r *http.Request) {
+	currency := get_by_currency_code(w,r)
 	if currency == nil {
 		return
 	}
@@ -98,10 +99,7 @@ func GetCurrency(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateCurrency(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-
-	name := vars["name"]
-	currency := getCurrencyOr404(name, w, r)
+	currency := get_by_currency_code(w,r)
 	if currency == nil {
 		return
 	}
@@ -121,18 +119,22 @@ func UpdateCurrency(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteCurrency(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
+	currency := get_by_currency_code(w,r)
 
-	name := vars["name"]
-	currency := getCurrencyOr404(name, w, r)
-	if currency == nil {
-		if err := database.Delete(&currency).Error; err != nil {
+	if currency != nil {
+		if err := database.Unscoped().Delete(&currency).Error; err != nil {
 			RespondError(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 		return
 	}
 	RespondJSON(w, http.StatusNoContent, nil)
+}
+
+func get_by_currency_code(w http.ResponseWriter, r *http.Request) *model.Currency {
+	vars := mux.Vars(r)
+	currency_code := vars["currency_code"]
+	return getCurrencyOr404(currency_code, w, r)
 }
 
 func GetConvertion(w http.ResponseWriter, r *http.Request) {
