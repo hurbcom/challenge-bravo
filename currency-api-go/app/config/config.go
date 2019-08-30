@@ -1,52 +1,57 @@
-
+// Importa todas as variaveis de configuração da aplicação
 package config
 
+import (
+	"fmt"
+
+	"github.com/spf13/viper"
+
+)
+
+type dbConfig struct {
+	Dialect  string `yaml:"hostname"`
+	Address  string `yaml:"address"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Name     string `yaml:"name"`
+	Port     string `yaml:"port"`
+	Charset  string `yaml:"charset"`
+}
+
+type redisConfig struct {
+	Address  string `yaml:"address"`
+	Port     string `yaml:"port"`
+}
+
+type appConfig struct {
+	Address string `yaml:"address"`
+	Port    string `yaml:"port"`
+}
+
 type Config struct {
-	DB *DBConfig
+	Database  []dbConfig    `yaml:"database"`
+	Redis     []redisConfig `yaml:"redis"`
+	App       []appConfig   `yaml:"app"`
 }
 
-type DBConfig struct {
-	Dialect  string
-	Username string
-	Password string
-	Name     string
-	Charset  string
-}
+var (
+  conf *Config
+)
 
-func GetConfig() *Config {
-	return &Config{
-		DB: &DBConfig{
-			Dialect:  "mysql",
-			Username: "root",
-			Password: "root",
-			Name:     "currency",
-			Charset:  "utf8",
-		},
+func GetConf() *Config {
+	viper.AddConfigPath("../")
+	viper.SetConfigName("config")
+	err := viper.ReadInConfig()
+
+	if err != nil {
+		fmt.Printf("%v", err)
 	}
+
+	conf := &Config{}
+	err = viper.Unmarshal(conf)
+	if err != nil {
+		fmt.Printf("unable to decode into config struct, %v", err)
+	}
+
+	return conf
 }
-/*package config
-	
-	import (
-		"github.com/spf13/viper"
-	)
-	type Config struct {
-		Dialect  string
-		Username string
-		Password string
-		Name     string
-		Charset  string
-	}
-	
-	func InitConfig() (*Config, error) {
-		config := &Config{
-			Dialect: viper.GetString("mysql"),
-			Username: viper.GetString("root"),
-			Password: viper.GetString("root"),
-			Name: viper.GetString("currency"),
-			Charset: viper.GetString("utf8"),
-		}
-		if config.DatabaseURI == "" {
-			return nil, fmt.Errorf("DatabaseURI must be set")
-		}
-		return config, nil
-	}*/

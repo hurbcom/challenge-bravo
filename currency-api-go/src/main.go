@@ -2,14 +2,22 @@ package main
 
 import (
 	"../app"
-	// /"../app/config"
-	log "gopkg.in/inconshreveable/log15.v2"
+	"fmt"
+
+	"github.com/challenge-bravo/currency-api-go/app/config"
 )
 
 func main() {
-	//config := config.GetConfig()
+	var address string
+	config := *config.GetConf()
 
-	log.Warn("this is a message")
+	for _, c := range config.App {
+		address = fmt.Sprintf("%s:%s",
+			c.Address,
+			c.Port)
+	}
+
+	fmt.Println(address)
 	app.Initialize()
-	app.Run(":3000")
+	app.Run(address)
 }

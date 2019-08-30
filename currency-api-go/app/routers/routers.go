@@ -1,12 +1,14 @@
+// Definição de endpoint e chama o seu controlador
 package routers
 
 import (
 	"net/http"
-	"github.com/gorilla/mux"
+
 	"github.com/challenge-bravo/currency-api-go/app/controller"
+	"github.com/gorilla/mux"
 )
 
-
+// Define endpoint e seus método
 func SetRouters(router *mux.Router) *mux.Router {
 
 	router.HandleFunc("/currencys", GetAllCurrencys).Methods("GET")
@@ -21,7 +23,6 @@ func SetRouters(router *mux.Router) *mux.Router {
 }
 
 func GetAllCurrencys(w http.ResponseWriter, r *http.Request) {
-	
 	controller.GetAllCurrencys(w, r)
 }
 
@@ -41,10 +42,10 @@ func DeleteCurrency(w http.ResponseWriter, r *http.Request) {
 	controller.DeleteCurrency(w, r)
 }
 
-func GetConvertion(w http.ResponseWriter, r *http.Request){
+func GetConvertion(w http.ResponseWriter, r *http.Request) {
 	controller.GetConvertion(w, r)
 }
 
-func Import_all(w http.ResponseWriter, r *http.Request){
-	controller.Import_all(w,r)
+func Import_all(w http.ResponseWriter, r *http.Request) {
+	controller.Import_all(w, r)
 }

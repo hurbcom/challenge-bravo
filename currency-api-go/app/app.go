@@ -3,13 +3,13 @@ package app
 import (
 	"log"
 	"net/http"
+
 	"github.com/challenge-bravo/currency-api-go/app/routers"
 
 	"github.com/gorilla/mux"
 )
 
 var Router *mux.Router
-
 
 func Initialize() {
 	Router = mux.NewRouter()

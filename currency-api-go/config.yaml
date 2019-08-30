@@ -1,0 +1,14 @@
+app:
+  address: "localhost"
+  port: 3000
+database:
+  dialect: "mysql"
+  address: "0.0.0.0"
+  username: "root"
+  password: "root"
+  name: "currency"
+  port: "3306"
+  charset: "utf8"
+Redis:
+  address: "0.0.0.0"
+  port: 6379
