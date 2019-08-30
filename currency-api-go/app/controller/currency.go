@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"github.com/challenge-bravo/currency-api-go/app/model"
 	"github.com/challenge-bravo/currency-api-go/app/helpper"
+	"github.com/challenge-bravo/currency-api-go/app/config/redis"
 	"github.com/gorilla/mux"
-
 )
 
 type CurrencyConvertion struct {
@@ -47,9 +47,37 @@ func Import_all(w http.ResponseWriter, r*http.Request){
 }
 func GetAllCurrencys(w http.ResponseWriter, r *http.Request) {
 	currencys := []model.Currency{}
+	reply, err := redis.Get("currencys")
+
+	if err != nil {
+		fmt.Println("Buscando no mysql")
+		//movies, err := dao.GetAll()
+		database.Find(&currencys)
+		handleError(err)
+		m, err := json.Marshal(currencys)
+		handleError(err)
+		redis.Set("currencys", []byte(m))
+		RespondJSON(w, http.StatusOK, currencys)
+
+
+	} else {
+		fmt.Println("Buscando no redis")
+		json.Unmarshal(reply, &currencys)
+		RespondJSON(w, http.StatusOK, currencys)
+	}
+
+/*
+	currencys := []model.Currency{}
 	database.Find(&currencys)
-	RespondJSON(w, http.StatusOK, currencys)
+	RespondJSON(w, http.StatusOK, currencys)*/
 }
+
+
+func handleError(err error) {
+	if err != nil {
+	   fmt.Println(err)
+	}
+  }
 
 func CreateCurrency(w http.ResponseWriter, r *http.Request) {
 	currency := model.Currency{}
@@ -141,34 +169,48 @@ func GetConvertion(w http.ResponseWriter, r *http.Request) {
 	var convertionJson CurrencyConvertion
 	var keys = [2]string{"from","to"}
 	var usd_values [2]float64
-
+	
 	urlParams := r.URL.Query()
-
+	
+	
 	if verifyParameters(urlParams){
 		convertionJson.From = urlParams["from"][0]
 		convertionJson.To = urlParams["to"][0]
-		for i, e :=  range keys {
-			currencys := model.Currency{}
-			search := urlParams[e][0]
-			database.Where("Name = ?", search).First(&currencys)
-			usd_values[i] = currencys.Usd_value
-		}
+		redis_name :=  convertionJson.From + "_to_"+ convertionJson.To
+		reply, err := redis.Get(redis_name)
 
-		amount := convertAmountStringtoFloat(urlParams["amount"][0])
-		if amount == 0 {
-			RespondError(w, http.StatusBadRequest, "Adicione um valor valido")
+		if err != nil  {
+			fmt.Println("mysql")
+			for i, e :=  range keys {
+				currencys := model.Currency{}
+				search := urlParams[e][0]
+				database.Where("Name = ?", search).First(&currencys)
+				usd_values[i] = currencys.Usd_value
+			}
+
+			amount := convertAmountStringtoFloat(urlParams["amount"][0])
+			if amount == 0 {
+				RespondError(w, http.StatusBadRequest, "Adicione um valor valido")
+				return
+			}
+			convertionJson.Amount = amount
+			convertionJson.Amount_converted = convertAmount(usd_values[0], usd_values[1], amount)
+			m, _ := json.Marshal(convertionJson)
+			redis.Set(redis_name, []byte(m))
+
+			RespondJSON(w, http.StatusOK, convertionJson)
+			return
+		} else {
+			fmt.Println("redis")
+			json.Unmarshal(reply, &convertionJson)
+			RespondJSON(w, http.StatusOK, convertionJson)
 			return
 		}
-		convertionJson.Amount = amount
-		convertionJson.Amount_converted = convertAmount(usd_values[0], usd_values[1], amount)
-
-		RespondJSON(w, http.StatusOK, convertionJson)
-		return
 	} else {
 		RespondError(w, http.StatusBadRequest, "Formato da pesquisa invalido!")
 		return
 	}
-	RespondJSON(w, http.StatusOK, nil)
+	//RespondJSON(w, http.StatusOK, nil)
 
 
 }

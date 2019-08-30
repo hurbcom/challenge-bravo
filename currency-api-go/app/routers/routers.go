@@ -21,6 +21,7 @@ func SetRouters(router *mux.Router) *mux.Router {
 }
 
 func GetAllCurrencys(w http.ResponseWriter, r *http.Request) {
+	
 	controller.GetAllCurrencys(w, r)
 }
 
