@@ -9,12 +9,18 @@ import (
 
 type Currency struct {
 	gorm.Model
+	Name	  string  `gorm:"type:varchar(3);unique;not null json:"name"`
+	Usd_value float64 `gorm:"not null json:"usd_value"`
+}
+/*
+type CurrencyJson struct {
+	gorm.Model
 	Name	  string  `json:"name"`
 	Usd_value float64 `json:"usd_value"`
 
-}
+}*/
 
-// DBMigrate will create and migrate the tables, and then make the some relationships if necessary
+// DBMigrate will create and migrate the tables
 func dbMigrate(db *gorm.DB) *gorm.DB {
 	db.AutoMigrate(&Currency{})
 	return db
@@ -26,7 +32,7 @@ func InitializeDB() *gorm.DB {
 		"elton56261",
 		"currency",
 		"utf8")
- 
+
 	db, err := gorm.Open("mysql", dbURI)
 	if err != nil {
 		log.Print(dbURI)

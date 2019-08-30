@@ -11,9 +11,10 @@ func SetRouters(router *mux.Router) *mux.Router {
 
 	router.HandleFunc("/currencys", GetAllCurrencys).Methods("GET")
 	router.HandleFunc("/currencys", CreateCurrency).Methods("POST")
-	router.HandleFunc("/currencys/{title}", UpdateCurrency).Methods("PUT")
-	router.HandleFunc("/currencys{title}", DeleteCurrency).Methods("DELETE")
+	router.HandleFunc("/currencys/{id}", UpdateCurrency).Methods("PUT")
+	router.HandleFunc("/currencys{id}", DeleteCurrency).Methods("DELETE")
 	router.HandleFunc("/convert/", GetConvertion).Methods("GET")
+	router.HandleFunc("/import_all/", Import_all).Methods("GET")
 
 	return router
 }
@@ -40,4 +41,8 @@ func DeleteCurrency(w http.ResponseWriter, r *http.Request) {
 
 func GetConvertion(w http.ResponseWriter, r *http.Request){
 	controller.GetConvertion(w, r)
+}
+
+func Import_all(w http.ResponseWriter, r *http.Request){
+	controller.Import_all(w,r)
 }

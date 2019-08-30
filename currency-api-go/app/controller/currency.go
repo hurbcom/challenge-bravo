@@ -7,11 +7,11 @@ import (
 	//"log"
 	"net/http"
 	"strconv"
+	"strings"
 	//"reflect"
-	//"fmt"
-	//log "gopkg.in/inconshreveable/log15.v2"
+	"fmt"
 	"github.com/challenge-bravo/currency-api-go/app/model"
-	//"github.com/challenge-bravo/currency-api-go/app/db"
+	"github.com/challenge-bravo/currency-api-go/app/helpper"
 
 	"github.com/gorilla/mux"
 	//"github.com/jinzhu/gorm"
@@ -26,6 +26,21 @@ type CurrencyConvertion struct {
 
 var database =  model.InitializeDB()
 
+func Import_all(w http.ResponseWriter, r*http.Request){
+	var response  helpper.Response
+	response = *helpper.Import_all("latest")
+	ratesList := response.Rates.(map[string]interface{})
+
+	for key, value := range ratesList {
+		currency := model.Currency{}
+		currency.Name = key
+		currency.Usd_value =  convertAmountStringtoFloat(fmt.Sprint(value))
+		if err := database.Save(&currency).Error; err != nil {
+			RespondError(w, http.StatusNotModified, err.Error())
+		}
+	}
+	RespondJSON(w, http.StatusCreated, nil)
+}
 func GetAllCurrencys(w http.ResponseWriter, r *http.Request) {
 	currencys := []model.Currency{}
 	database.Find(&currencys)
@@ -34,7 +49,6 @@ func GetAllCurrencys(w http.ResponseWriter, r *http.Request) {
 
 func CreateCurrency(w http.ResponseWriter, r *http.Request) {
 	currency := model.Currency{}
-
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&currency); err != nil {
 		RespondError(w, http.StatusBadRequest, err.Error())
@@ -42,11 +56,34 @@ func CreateCurrency(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
+	if err := verifyCurrecyName(currency.Name); err != false{
+		RespondError(w, http.StatusInternalServerError, "Currency must be 3 characters!")
+		return
+	}
+
+	if currency.Usd_value == 0{
+		var response  helpper.Response
+		response = *helpper.Import_all("BRL")
+		ratesList := response.Rates.(map[string]interface{})
+		for _, value := range ratesList {
+			currency.Usd_value =  convertAmountStringtoFloat(fmt.Sprint(value))
+		}
+	}
+
+	currency.Name = strings.ToUpper(currency.Name)
+
 	if err := database.Save(&currency).Error; err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	RespondJSON(w, http.StatusCreated, currency)
+}
+
+func verifyCurrecyName(name string) bool {
+	if len(name) == 3 {
+		return false
+	}
+	return true
 }
 
 func GetCurrency(w http.ResponseWriter, r *http.Request) {
