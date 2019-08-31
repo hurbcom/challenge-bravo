@@ -1,119 +1,95 @@
 var fs = require('fs');
-const filePath = './database.json'
 
-const currency = {
-    code: ""
-}
+const filePath = './database.json'
+const encode = 'utf8'
+const defaultJson = '{"currencies":[]}'
+
+const error = msg => ({ status: 'failure', result: msg })
+
+const currencyExists = (obj, code) => obj.currencies.some(e => e.code === code.toUpperCase())
+const getCurrencyIndex = (obj, code) => obj.currencies.findIndex(e => e.code === code.toUpperCase())
 
 function getCurrency(req, res, next) {
-    fs.readFile(filePath, 'utf8', function(err, data){
-        if (err) {
-            var response = {status: 'falha', resultado: err};
-            res.send(response);
-        } else {
-            var obj = JSON.parse(data);
-            var result = {status: 'falha', resultado: 'Nenhuma moeda foi encontrada' };
+    fs.readFile(filePath, encode, (err, data) => {
+        if (err) return res.send(error(err))       
+        if (!data) return res.send(defaultJson)
+                
+        console.log('1')
+        var obj = JSON.parse(data)
 
-            if (obj != null) {
-                result = obj;
-            }
+        if (obj != null) response = obj
 
-            if (Object.keys(req.query).length > 0) {
-                obj.currencies.forEach(function(currency) {
-                    if (currency != null) {
-                        if (currency.code == req.query.code.toUpperCase()) {
-                            result = currency;
-                        }
-                    } 
-                });
-            }
-
-            var response = result;
-            res.send(response);
-        }
+        return res.send(response);        
     });
 }
 
 function getCurrencyByCode(req, res, next) {
-    fs.readFile('./database.json', 'utf8', function(err, data){
-        if (err) {
-            var response = {status: 'falha', resultado: err};
-            res.send(response);
-        } else {            
-            var obj = JSON.parse(data);
-            var result = {status: 'falha', resultado: 'Nenhuma moeda foi encontrada' } ;
+    fs.readFile(filePath, encode, (err, data) => {
+        if (err) return res.send(error(err))       
+        if (!data) return res.send(defaultJson)
+        
+        var obj = JSON.parse(data);
 
-            if (obj != null) {
-                result = obj;
-            }
+        if (obj != null) response = obj
 
-            obj.currencies.forEach(function(currency) {                
-                if (currency != null) {
-                    if (currency.code == req.params.code.toUpperCase()) {
-                        result = currency;
-                    }
-                } 
-            });
+        obj.currencies.forEach(function(currency) {                
+            if (currency != null) {
+                if (currency.code == req.params.code.toUpperCase()) {
+                    response = currency;
+                }
+            } 
+        });
 
-            var response = result;
-            res.send(response);
-        }
+        return res.send(response);
     });
 }
 
 function addCurrency(req, res, next) {
-    fs.readFile('./database.json', 'utf8', function(err, data){
-        if (err) {
-            var response = {status: 'falha', resultado: err};
-            res.send(response);
-        } else {            
-            var obj = JSON.parse(data);            
+    fs.readFile(filePath, encode, (err, data) => {
+        if (err) return res.send(error(err))                  
 
-            if (Object.keys(req.body).length > 0) {
-                obj.currencies.push(req.body);
+        var obj = JSON.parse(data || defaultJson);
 
-                fs.writeFile('./database.json', JSON.stringify(obj), function(err) {
-                    if (err) {
-                    var response = {status: 'falha', resultado: err};
-                    res.send(response);
-                    } else {
-                    var response = {status: 'sucesso', resultado: 'Registro incluído com sucesso'};
-                    res.send(response);
-                    }
-                });
-            } else {
-                var response = {status: 'falha', resultado: 'Nenhum registro a ser incluído'};
-                res.send(response);
-            }            
+        if (obj != null) response = obj
+        
+        if (Object.keys(req.body).length > 0) { 
+            if (!currencyExists(obj, req.body.code)) {
+                obj.currencies.push(req.body)
+
+                fs.writeFile(filePath, JSON.stringify(obj), err => {
+                    if (err) res.send(error(err))
+                    
+                    response = obj            
+                });        
+            }
         }
+
+        return res.send(response)
     });
 }
 
 function removeCurrency(req, res, next) {
-    fs.readFile('./database.json', 'utf8', function(err, data){
-        if (err) {
-            var response = {status: 'falha', resultado: err};
-            res.send(response);
-        } else {
-            var obj = JSON.parse(data);
-            var codeDeleted = req.params.code.toUpperCase();
-            var codeIndex = obj.currencies.findIndex(e => e.code === codeDeleted)
+    fs.readFile(filePath, encode, (err, data) => {
+        if (err) return res.send(error(err))       
+        if (!data) return res.send(defaultJson) 
 
-            console.log(codeDeleted)
-            console.log(codeIndex)
-            
+        var obj = JSON.parse(data);
+
+        if (obj != null) response = obj
+
+        if (currencyExists(obj, req.params.code)) {
+            var codeIndex = getCurrencyIndex(obj,req.params.code)
+
             obj.currencies.splice(codeIndex,1)
 
-            fs.writeFile('./database.json', JSON.stringify(obj), function(err) {
-                if (err) {
-                    var response = {status: 'falha', resultado: err};
-                    res.send(response);
-                } else {
-                    var response = {status: 'sucesso', resultado: `Registro ${codeDeleted} excluído com sucesso`};
-                    res.send(response);
-                }
+            fs.writeFile(filePath, JSON.stringify(obj), err => {
+                if (err) res.send(error(err))  
+                
+                response = obj
             });
-        }
+        }  
+
+        return res.send(response);
     });
 }
 
