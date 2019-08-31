@@ -5,6 +5,7 @@ const app = express();
 const router = express.Router();
 
 const currencyController = require('./routes/currency.route.js');
+const quoteController = require('./routes/quote.route.js');
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -19,5 +20,6 @@ app.use(function(req, res, next){
 });
 
 app.use('/currency', currencyController);
+app.use('/quote', quoteController);
 
 module.exports = app;
