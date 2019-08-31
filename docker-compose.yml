@@ -1,0 +1,33 @@
+version: "3"
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: currency
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+      LANG: C.UTF-8
+    ports:
+      - "3306:3306"
+  redis:
+    image: redis
+    command: redis-server
+    ports:
+      - "6379:6379"
+  app:
+    build:
+      context: .
+    restart: always
+    container_name: golang_app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+networks:
+  web:
+    external:
+      name: web-network

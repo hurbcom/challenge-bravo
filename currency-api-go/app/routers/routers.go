@@ -4,7 +4,8 @@ package routers
 import (
 	"net/http"
 
-	"github.com/challenge-bravo/currency-api-go/app/controller"
+	"github.com/EltonARodrigues/currency-api-go/app/controller"
+
 	"github.com/gorilla/mux"
 )
 

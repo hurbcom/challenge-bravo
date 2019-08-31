@@ -39,7 +39,7 @@ var (
 )
 
 func GetConf() *Config {
-	viper.AddConfigPath("../")
+	viper.AddConfigPath(".")
 	viper.SetConfigName("config")
 	err := viper.ReadInConfig()
 

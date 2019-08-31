@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/challenge-bravo/currency-api-go/app/routers"
+	"github.com/EltonARodrigues/currency-api-go/app/routers"
 
 	"github.com/gorilla/mux"
 )

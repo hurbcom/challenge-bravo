@@ -7,7 +7,7 @@ import (
 
 	"github.com/garyburd/redigo/redis"
 
-	"github.com/challenge-bravo/currency-api-go/app/config"
+	"github.com/EltonARodrigues/currency-api-go/app/config"
 )
 
 const (

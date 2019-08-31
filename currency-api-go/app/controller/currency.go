@@ -10,9 +10,10 @@ import (
 	"strings"
 	"fmt"
 
-	"github.com/challenge-bravo/currency-api-go/app/config/redis"
-	"github.com/challenge-bravo/currency-api-go/app/helpper"
-	"github.com/challenge-bravo/currency-api-go/app/model"
+	"github.com/EltonARodrigues/currency-api-go/app/config/redis"
+	"github.com/EltonARodrigues/currency-api-go/app/helpper"
+	"github.com/EltonARodrigues/currency-api-go/app/model"
+
 	"github.com/gorilla/mux"
 )
 

@@ -8,7 +8,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"github.com/challenge-bravo/currency-api-go/app/config"
+	"github.com/EltonARodrigues/currency-api-go/app/config"
 )
 
 type Currency struct {
