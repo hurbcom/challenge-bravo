@@ -1,28 +1,49 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+var fs = require('fs');
+
 const axios = require('axios')
-var currency = require('./currency')
 
 const app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-app.get('/', (req, res) => {
-    var result = 0
+app.use(function(req, res, next){
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Access-Control-Allow-Credentials", true);
+    next();
+});
 
-    currency = req.query
+app.get('/currency', function(req, res){
+    fs.readFile('./database.json', 'utf8', function(err, data){
+        if (err) {
+            var response = {status: 'falha', resultado: err};
+            res.json(response);
+        } else {
+            console.log(data)
+            var obj = JSON.parse(data);
+            var result = 'Nenhuma moeda foi encontrado';
 
-    const url = `https://api.exchangeratesapi.io/latest?base=${currency.from}`
+            if (obj != null) {
+                result = obj;
+            }
 
-    axios.get(url).then(response => {        
-        rate = response.data.rates[currency.to]
+            obj.currencies.forEach(function(currency) {
+                if (currency != null) {
+                    if (currency.code == req.query.code) {
+                        result = currency;
+                    }
+                } 
+            });
 
-        result = currency.amount * rate        
-        console.log(result)
-
-        return res.send({ ...currency, result })
-    })    
-})
+            var response = result;
+            res.json(response);
+        }
+    });
+});
 
 app.listen(3000)
