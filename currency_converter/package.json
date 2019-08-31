@@ -1,0 +1,24 @@
+{
+  "name": "currency_converter",
+  "version": "1.0.0",
+  "description": "Simple API to convert currencies and handle big loads.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielrodriguesrocha/challenge-bravo.git"
+  },
+  "author": "Gabriel Rocha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabrielrodriguesrocha/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/gabrielrodriguesrocha/challenge-bravo#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "express": "^4.17.1",
+    "redis": "^2.8.0"
+  }
+}
