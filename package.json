@@ -2,9 +2,9 @@
   "name": "nodejs-currency-converter-api",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.js",
+  "main": "./bin/server.js",
   "scripts": {
-    "start": "nodemon",
+    "start": "nodemon ./bin/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.6.11"
   }
 }
