@@ -41,12 +41,12 @@ function setResponse(origin, destiny, amount) {
     },
     result: {
       currency: destiny,
-      amount: calcConversion(origin, destiny, amount)
+      amount: calcConvertion(origin, destiny, amount)
     }
   };
 }
 
-function calcConversion(origin, dest, amount) {
+function calcConvertion(origin, dest, amount) {
   let rates = cacheProvider.instance().get('rates');
   if (origin == rates.base) return amount * rates.rates[dest];
   if (dest == rates.base) return amount / rates.rates[origin];

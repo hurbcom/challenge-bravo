@@ -6,6 +6,14 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <p><strong>End-points:</strong></p>
+    <ul>
+      <li><strong>Check supported currencies and rates: </strong><i><%=endpoints.rates%></i></li>
+      <li><strong>Friendly URL convertion: </strong><i><%=endpoints.friendlyConvertion%></i></li>
+      <li><strong>Querystring URL convertion</strong><i><%=endpoints.qsConvertion%></i></li>
+    </ul>
+    <br /><p><strong>Ps.:</strong> Use dots (.) to separate integers from fractions. DO NOT use comma.</p>
+    <p>Example: <i>150.25</i> instead of <i>150,35</i>.</p>
+
   </body>
 </html>

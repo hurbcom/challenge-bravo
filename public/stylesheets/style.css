@@ -6,3 +6,7 @@ body {
 a {
   color: #00B7FF;
 }
+
+li {
+  padding: 15px 0 0 0;
+}
