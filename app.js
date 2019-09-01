@@ -8,6 +8,7 @@ var cacheProvider = require('./cache-provider');
 var currencies = require('./services/currencies');
 
 var indexRouter = require('./routes/index');
+var ratesRouter = require('./routes/rates');
 var convertRouter = require('./routes/convert');
 
 var app = express();
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/rates', ratesRouter);
 app.use('/convert', convertRouter);
 
 // catch 404 and forward to error handler
@@ -45,6 +47,6 @@ cacheProvider.start(function(err) {
   if (err) console.error(err);
 });
 
-currencies( ).loadRates();
+currencies().loadRates();
 
 module.exports = app;
