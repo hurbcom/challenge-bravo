@@ -15,7 +15,8 @@ function Currencies() {
     }
 
     function loadRates() {
-        console.log('*****************************************\nPlease wait while loading currencies...\n');
+        console.log('*****************************************');
+        console.log('Please wait while loading currencies...\n');
         getRealCurrencyRates(base, () => {
             getCryptoCurrencyRates(base);
         });
