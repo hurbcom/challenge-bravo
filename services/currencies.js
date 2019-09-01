@@ -2,13 +2,17 @@ const https = require('https');
 var cacheProvider = require('../cache-provider');
 
 function Currencies() {
-
     let base = 'USD';
     let cryptoCoins = ['btc', 'eth'];
     
     this.loadRates = loadRates;
+    this.updateRates = updateRates;
 
     return this;
+
+    function updateRates() {
+        loadRates();
+    }
 
     function loadRates() {
         console.log('*****************************************\nPlease wait while loading currencies...\n');
