@@ -3,34 +3,37 @@ var cacheProvider = require('../cache-provider');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.send('convert');
+  let origin = req.query.from.toUpperCase();
+  let destiny = req.query.to.toUpperCase();
+  let amount = req.query.amount;
+  res.send(setResponse(origin, destiny, amount));
 });
 
-router.get('/:origin/:destiny/:value', function(req, res, next) {
-  let rates = cacheProvider.instance().get('rates');
-  let response = {};
+router.get('/:origin/:destiny/:amount', function(req, res, next) {
   let origin = req.params.origin.toUpperCase();
   let destiny = req.params.destiny.toUpperCase();
-
-  if (rates.rates[origin]) {
-    response = {
-      original: {
-        currency: origin,
-        value: req.params.value
-      },
-      result: {
-        currency: destiny,
-        value: calcConversion(origin, destiny, req.params.value)
-      }
-    };
-  }
-  res.send(response);
+  let amount = req.params.amount;
+  res.send(setResponse(origin, destiny, amount));
 });
 
-function calcConversion(origin, dest, val) {
-  if (origin == rates.base) return val * rates.rates[dest];
-  if (dest == rates.base) return val / rates.rates[origin];
-  return val / rates.rates[origin] * rates.rates[dest];
+function setResponse(origin, destiny, amount) {
+  return {
+    original: {
+      currency: origin,
+      amount: amount
+    },
+    result: {
+      currency: destiny,
+      amount: calcConversion(origin, destiny, amount)
+    }
+  };
+}
+
+function calcConversion(origin, dest, amount) {
+  let rates = cacheProvider.instance().get('rates');
+  if (origin == rates.base) return amount * rates.rates[dest];
+  if (dest == rates.base) return amount / rates.rates[origin];
+  return amount / rates.rates[origin] * rates.rates[dest];
 }
 
 module.exports = router;
