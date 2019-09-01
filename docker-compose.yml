@@ -1,4 +1,4 @@
-version: "3"
+version: "2.1"
 services:
   db:
     image: mysql:5.7
@@ -10,6 +10,11 @@ services:
       LANG: C.UTF-8
     ports:
       - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
   redis:
     image: redis
     command: redis-server
@@ -23,7 +28,9 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    depends_on:
       - redis
 networks:
   web:
