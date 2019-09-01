@@ -1,65 +1,65 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+API para cadastro de moedas e a realização de conversões entre moedas.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Inicialmente eu comecei a desenvolver a API com Django e DRF, mas devido a preocupação com performance resolvi testar Golang. É a primeira aplicação minha desenvolvida na linguagem e os maiores desafios foram na parte de gerenciar as dependências do go, principalmente na criação da imagem do container docker.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+## Instalação
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+#### Docker Compose (recomendado)
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Construa também um endpoint para adicionar ou remover moedas suportadas pela API, usando os verbos HTTP.
+- Clone: ` git clone https://github.com/EltonARodrigues/challenge-bravo.git `
+- Branch: ` git checkout imp-golang `
+- Run: ` sudo docker-compose up -d `
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+obs: O build demora um pouco para baixar as dependências do projeto
+obs2: A aplicação reiniciara até que a imagem do mysql esteja rodando.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+#### Sem docker ou docker-compose
 
-Você pode usar qualquer _framework_. Se a sua escolha for por um _framework_ que resulte em _boilerplate code_, por favor assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
+Necessita ter mysql e redis instalado na máquina, e coloca o endereço no arquivo config.yaml
+- Clone: ` git clone https://github.com/EltonARodrigues/challenge-bravo.git `
+- Branch: ` git checkout imp-golang `
+- Dir: `cd currency-api-go/app`
+- Run: `go run main.go`
 
-## Requisitos
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github e adicione como colaborador o usuário `automator-hurb` e o deixe disponível por pelo menos 30 dias. Ao terminar o desafio nos envie um email avisando do termino.
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+### Recursos e endpoints
 
-## Critério de avaliação
+Body:  `{"code": "BRL", "usd_value": 4.10 }`
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+| Método | Resurso | Descrição |
+| -|- | - |
+| GET | `http://localhost:3000/convert/?from=BRL&to=BTH&amount=10` | Converte moedas |
+| GET |   `http://localhost:3000/import_all/` | Importa valores da api externa |
+| GET |   `http://localhost:3000/currencys` | Mostra todos os valores |
+| POST | ` http://localhost:3000/currencys `  | Insere um novo valor |
+| DELETE | `http://localhost:3000/currencys/BRL` | Deleta uma moeda (ex: BRL) |
+| PUT |   `http://localhost:3000/currencys/BRL` | Modifica uma moeda parcialmente  (ex: BRL) |
 
-## Dúvidas
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+| Tecnologias | |
+|----|--|
+| Golang | Linguagem principal da API |
+| Mysql | Banco de dados responsável por guardar as moedas |
+| Redis | Usado como cache das conversões por um x segundos|
 
-Boa sorte e boa viagem! ;)
+# Coisas a fazer no futuro quem sabe
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+- Documentação da API. ex: Swagger;
+- Usar variáveis de ambiente em vez do arquivo de configuração;
+- Melhorar download de dependências no processo de build com Docker;
+- Trocar banco de dados para um não relaciona;
+- Aprofundar tests com Go;
+- /Import_all/ deve atualizar os em caso de duplicata.
+
+### Material Usado
+
+O material mais relevante usado para a contrução da aplicação:
+
+- [Golang RESTful API using GORM and Gorilla Mux](https://www.golangprograms.com/golang-restful-api-using-grom-and-gorilla-mux.html)
+- [Effective Go](https://golang.org/doc/effective_go.html)
+- [Go: implementando cache em APIs REST](https://imasters.com.br/back-end/go-implementando-cache-em-apis-rest)
+- [Using Go Modules](https://blog.golang.org/using-go-modules)

@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"fmt"
+	"math"
 
 	"github.com/EltonARodrigues/currency-api-go/app/config/redis"
 	"github.com/EltonARodrigues/currency-api-go/app/helpper"
@@ -32,7 +33,7 @@ var database = model.InitializeDB()
 	para gerar o cache das pesquisas já realizadas em um periodo x de tempo.
 
 	Método: GET
-	PATH = /convert/?from=BRL&to=USD&amount=120.55
+	Resource = /convert/?from=BRL&to=USD&amount=120.55
 
 	Response:
 	{
@@ -68,14 +69,20 @@ var database = model.InitializeDB()
 		// e retorna para o usuario e salva no redis.
 		if err != nil {
 			for i, e := range keys {
-				var currencys model.Currency
+				var currency model.Currency
 				search := urlParams[e][0]
-				database.Where("Code = ?", search).First(&currencys)
-				valueByUSD[i] = currencys.ValueByUSD
+
+				database.Where("Code = ?", search).First(&currency)
+
+				if currency.Code == "" {
+					RespondError(w, http.StatusBadRequest, "Currency not found!")
+					return
+				}
+				valueByUSD[i] = currency.Usd_value
 			}
 
 			if convertionJson.Amount == 0 {
-				RespondError(w, http.StatusBadRequest, "Adicione um valor valido")
+				RespondError(w, http.StatusBadRequest, "Invalid amount!")
 				return
 			}
 			convertionJson.Amount_converted = convertAmount(valueByUSD[0], valueByUSD[1], convertionJson.Amount)
@@ -91,14 +98,14 @@ var database = model.InitializeDB()
 		RespondJSON(w, http.StatusOK, convertionJson)
 		return
 	}
-	RespondError(w, http.StatusBadRequest, "Formato da pesquisa invalido!")
+	RespondError(w, http.StatusBadRequest, "Invalid search format!")
 }
 
 /* 	Formata e valida os dados enviados.
 	Caso o valor da moeda seja 0 ele tenta pegar com base na API externa.
 
 	Método: POST
-	PATH: /currencys
+	Resource: /currencys
 
 	Body:
 	{
@@ -107,12 +114,8 @@ var database = model.InitializeDB()
 	}
 	Response:
 	{
-		"ID": 2,
-		"CreatedAt": "2019-08-30T17:50:23Z",
-		"UpdatedAt": "2019-08-30T17:50:23Z",
-		"DeletedAt": null,
 		"Code": "BRL",
-		"ValueByUSD": 5.235
+		"Usd_value": 5.235
 	}
  */
 func CreateCurrency(w http.ResponseWriter, r *http.Request) {
@@ -132,13 +135,19 @@ func CreateCurrency(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Busca pela API Externa
-	if currency.ValueByUSD == 0 {
-		var response helpper.Response
-		response = *helpper.External_api_values("BRL")
-		ratesList := response.Rates.(map[string]interface{})
-		for _, value := range ratesList {
-			currency.ValueByUSD = convertStringtoFloat(fmt.Sprint(value))
+	// Quando o valor é zero ele tenta buscar pela api
+	// externa, caso não ache retorna erro.
+	if currency.Usd_value == 0 {
+		response := helpper.ExternalAPIGetOne(currency.Code)
+
+		if response != nil {
+			ratesList := response.Rates.(map[string]interface{})
+			for _, value := range ratesList {
+				currency.Usd_value = convertStringtoFloat(fmt.Sprint(value))
+			}
+		} else {
+			RespondError(w, http.StatusForbidden, "Zero is an invalid value!")
+			return
 		}
 	}
 
@@ -157,18 +166,17 @@ func CreateCurrency(w http.ResponseWriter, r *http.Request) {
 	contrario os valores faltando são importados mas nada é duplicado.
 
 	Método: GET
-	PATH: /import_all/
+	Resource: /import_all/
 */
-func Import_all(w http.ResponseWriter, r *http.Request) {
+func ImportAll(w http.ResponseWriter, r *http.Request) {
 	flag := false
-	var response helpper.Response
-	response = *helpper.External_api_values("latest")
+	response := helpper.ExternalAPIGetAll()
 	ratesList := response.Rates.(map[string]interface{})
 
 	for key, value := range ratesList {
 		var currency model.Currency
 		currency.Code = key
-		currency.ValueByUSD = convertStringtoFloat(fmt.Sprint(value))
+		currency.Usd_value = convertStringtoFloat(fmt.Sprint(value))
 		if err := database.Save(&currency).Error; err == nil {
 			flag = true
 		}
@@ -177,10 +185,24 @@ func Import_all(w http.ResponseWriter, r *http.Request) {
 		RespondJSON(w, http.StatusCreated, nil)
 		return
 	}
-	RespondError(w, http.StatusNotModified, "")
+	RespondError(w, http.StatusNotModified, "V")
 }
 
-// Busca todas as moedas cadastradas
+/*
+	Busca todas as moedas cadastradas.
+	Método: GET
+	Resource: /currencys
+
+	Body:
+	[{
+  		"Code": "BRL",
+  		"usd_value": 5.256
+	},
+	{
+		"Code": "EUR",
+		"usd_value": 0.25
+	}]
+*/
 func GetAllCurrencys(w http.ResponseWriter, r *http.Request) {
 	var currencys []model.Currency
 	database.Find(&currencys)
@@ -272,11 +294,16 @@ func convertStringtoFloat(amount string) float64 {
 	if err != nil {
 		return 0
 	}
+	if floatAmount == 0 {
+		return 0
+	}
 	return floatAmount
 
 }
 
 //	Calculo da conversão de moeda
 func convertAmount(from_value float64, to_value float64, amount float64) float64 {
-	return (to_value / from_value) * amount
+	result := (from_value / to_value) * amount
+	result = math.Round(result*100)/100
+	return result
 }

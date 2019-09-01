@@ -12,8 +12,8 @@ import (
 var Router *mux.Router
 
 func Initialize() {
-	Router = mux.NewRouter()
-	routers.SetRouters(Router)
+	
+	Router = routers.SetRouters()
 }
 
 func Run(host string) {

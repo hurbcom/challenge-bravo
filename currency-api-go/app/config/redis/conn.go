@@ -24,7 +24,6 @@ func RedisConnect() redis.Conn {
 			c.Address,
 			c.Port)
 	}
-
 	connect, err := redis.Dial("tcp", address)
 	handleError(err)
 	return connect

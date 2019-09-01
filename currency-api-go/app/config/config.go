@@ -1,11 +1,11 @@
-// Importa todas as variaveis de configuração da aplicação
+// Importa todas as variaveis de configuração da aplicação do config.yaml
+// para banco de dados redis e aplicação
 package config
 
 import (
 	"fmt"
 
 	"github.com/spf13/viper"
-
 )
 
 type dbConfig struct {

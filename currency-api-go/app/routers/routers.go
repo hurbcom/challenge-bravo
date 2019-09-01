@@ -10,15 +10,15 @@ import (
 )
 
 // Define endpoint e seus método
-func SetRouters(router *mux.Router) *mux.Router {
-
+func SetRouters() *mux.Router {
+	router := mux.NewRouter()
 	router.HandleFunc("/currencys", GetAllCurrencys).Methods("GET")
 	router.HandleFunc("/currencys/{currency_code}", GetOneCurrency).Methods("GET")
 	router.HandleFunc("/currencys", CreateCurrency).Methods("POST")
 	router.HandleFunc("/currencys/{currency_code}", DeleteCurrency).Methods("DELETE")
 	router.HandleFunc("/currencys/{currency_code}", UpdateCurrency).Methods("PUT")
 	router.HandleFunc("/convert/", GetConvertion).Methods("GET")
-	router.HandleFunc("/import_all/", Import_all).Methods("GET")
+	router.HandleFunc("/import_all/", ImportAll).Methods("GET")
 
 	return router
 }
@@ -47,6 +47,6 @@ func GetConvertion(w http.ResponseWriter, r *http.Request) {
 	controller.GetConvertion(w, r)
 }
 
-func Import_all(w http.ResponseWriter, r *http.Request) {
-	controller.Import_all(w, r)
+func ImportAll(w http.ResponseWriter, r *http.Request) {
+	controller.ImportAll(w, r)
 }
