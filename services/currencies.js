@@ -1,9 +1,6 @@
 const https = require('https');
 var cacheProvider = require('../cache-provider');
 
-
-module.exports = Currencies;
-
 function Currencies() {
 
     let base = 'USD';
@@ -31,7 +28,7 @@ function Currencies() {
                     callback();
                 }
             });
-        }).on('error', (error) => { console.log('error - ', error) });
+        }).on('error', error);
     }
 
     function getCryptoCurrencyRates(base) {
@@ -49,7 +46,7 @@ function Currencies() {
                     console.log('\n******* APLICATION READY TO USE! *******\n\n');
                 }
             });
-        }).on('error', (error) => { console.log('error - ', error) });
+        }).on('error', error);
     }
 
     function concatCoins(coins) {
@@ -64,4 +61,14 @@ function Currencies() {
         return res;
     }
 
+    function error(error) {
+        console.log('Unfortunately, an ERROR occurried:\n');
+        console.log(error);
+        console.log('*****************************************');
+        console.log('\nPlease, check the server\'s internet connection and try it again.\n\n');
+        process.exit();
+    }
+
 }
+
+module.exports = Currencies;
