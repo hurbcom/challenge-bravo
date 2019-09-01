@@ -29,17 +29,17 @@
 <h5>Método GET:</h5>
 
 - Listagem de moedas: 
-######https://localhost:3001/currency
+###### https://localhost:3001/currency
 - Consulta de planos por código: 
-######https://localhost:3001/currency/USD
+###### https://localhost:3001/currency/USD
 - Conversão de BRL para CAD, quantidade 10: 
-######https://localhost:3001/quote?from=BRL&to=CAD&amount=10
+###### https://localhost:3001/quote?from=BRL&to=CAD&amount=10
 >"USD", "BRL", "CAD" e 10 passados por parâmetro.
 
 <h5>Métodos POST e DELETE:</h5>
 
 - Para cadastro e exclusão: 
-######https://localhost:3001/currency/BRL
+###### https://localhost:3001/currency/BRL
 > BRL passado por parâmetro.
 
 <hr>
