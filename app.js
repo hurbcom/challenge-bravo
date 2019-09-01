@@ -11,6 +11,9 @@ var indexRouter = require('./routes/index');
 var ratesRouter = require('./routes/rates');
 var convertRouter = require('./routes/convert');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
 var app = express();
 
 // view engine setup
@@ -23,9 +26,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// routes
 app.use('/', indexRouter);
 app.use('/rates', ratesRouter);
 app.use('/convert', convertRouter);
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -12,6 +12,7 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
-    "node-cache": "^4.2.1"
+    "node-cache": "^4.2.1",
+    "swagger-ui-express": "^4.0.7"
   }
 }

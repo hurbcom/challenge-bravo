@@ -1,0 +1,96 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": 1.0,
+        "title": "Currency Convertion API",
+        "description": "Currency Convertion API made for Hurb, as a solution to challenge-charlie"
+    },
+    "basePath": "/",
+    "paths": {
+        "/convert": {
+            "get": {
+                "description": "Converts currencies",
+                "operationId": "qsConvert",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "The currency you want to convert from",
+                        "required": true,
+                        "type": "string"
+
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "The currency you want to convert to",
+                        "required": true,
+                        "type": "string"
+
+                    },
+                    {
+                        "name": "amount",
+                        "in": "query",
+                        "description": "Amount to be converted",
+                        "required": true,
+                        "type": "string"
+
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Given and converted currency and values"
+                    }
+                }
+            }
+        },
+        "/convert/{from}/{to}/{amount}": {
+            "get": {
+                "description": "Converts currencies",
+                "operationId": "friendlyConvert",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "path",
+                        "description": "The currency you want to convert from",
+                        "required": true,
+                        "type": "string"
+
+                    },
+                    {
+                        "name": "to",
+                        "in": "path",
+                        "description": "The currency you want to convert to",
+                        "required": true,
+                        "type": "string"
+
+                    },
+                    {
+                        "name": "amount",
+                        "in": "path",
+                        "description": "Amount to be converted",
+                        "required": true,
+                        "type": "string"
+
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Given and converted currency and values"
+                    }
+                }
+            }
+        },
+        "/rates": {
+            "get": {
+                "description": "Get supported currencies and their rates",
+                "operationId": "getRates",
+                "responses": {
+                    "200": {
+                        "description": "Rates' metadata, supported currencies and their rates"
+                    }
+                }
+            }
+        }
+    }
+}
