@@ -11,20 +11,24 @@ Inicialmente eu comecei a desenvolver a API com Django e DRF, mas devido a preoc
 
 
 - Clone: ` git clone https://github.com/EltonARodrigues/challenge-bravo.git `
-- Branch: ` git checkout imp-golang `
+- Dir: `cd challenge-bravo`
+- Branch(se já não estiver): ` git checkout imp-golang `
 - Run: ` sudo docker-compose up -d `
 
-obs: O build pode demora um pouco para baixar as dependências do projeto.
-obs2: A aplicação reiniciara até que a imagem do **mysql esteja rodando(+- 1 minuto)**.
+obs: Caso já exista um mysql e/ou redis mude address no arquivo **challenge-bravo/currency-api-go/config.yaml**
+
+obs2: O build pode demora um pouco para baixar as dependências do projeto.
+
+obs3: A aplicação reiniciara até que a imagem do **mysql esteja rodando(+- 1 minuto)**.
 
 #### Sem docker ou docker-compose
 
-Necessita ter mysql e redis instalado na máquina, e mudar address no arquivo **challenge-bravo/currency-api-go/config.yaml**(Mesma coisa para docker sem docker-compose)
 - Clone: ` git clone https://github.com/EltonARodrigues/challenge-bravo.git `
 - Dir: `cd challenge-bravo/currency-api-go`
 - Branch(se já não estiver): ` git checkout imp-golang `
 - Run: `go run main.go`
 
+obs: Necessita ter mysql e redis instalado na máquina, e mudar address no arquivo **challenge-bravo/currency-api-go/config.yaml**
 
 ### Recursos e endpoints
 
