@@ -36,7 +36,8 @@ app.get('/api', (req, res) => {
   const conversionRedisKey = `${from_currency}:${to_currency}`;
   const inverseConversionRedisKey = `${to_currency}:${from_currency}`;
 
-  const url = `${API_URL}${from_currency}-${to_currency}`;
+  const URL = `${API_URL}${from_currency}-${to_currency}`;
+  const inverseURL = `${API_URL}${to_currency}-${from_currency}`;
 
   return client.get(conversionRedisKey, (err, rate) => {
  
@@ -44,25 +45,27 @@ app.get('/api', (req, res) => {
     if (rate) {
         return res.json({ result: JSON.parse(rate).ticker.price * amount});
     }
-
-    return client.get(inverseConversionRedisKey, (err, rate) => {
       
-      // If the mirror key exists in Redis store
-      // This saves an external API call
-      if (rate) {
-        return res.json({ result: amount / (JSON.parse(rate).ticker.price)});
-      }
+      // First we save, asynchronously, the mirror key in Redis store
+      axios.get(inverseURL).then(response => {
+        console.log('Inverse price:')
+        console.log(response.data.ticker.price)
+        client.setex(inverseConversionRedisKey, 3600, JSON.stringify(response.data))
+      }).catch(error => {
+        console.log(error);
+      });
       
-      // If the key doesn't exist in Redis store
-      axios.get(url).then(response => {
+      // Then we fetch the actual key and return the converted value
+      axios.get(URL).then(response => {
+        console.log('Price:')
+        console.log(response.data.ticker.price)
         client.setex(conversionRedisKey, 3600, JSON.stringify(response.data))
         return res.json({ result: response.data.ticker.price * amount});
       }).catch(error => {
         console.log(error);
       });
-    });
   });
 
 });
 
-app.listen(80, () => console.log('Server running on port 80!'))
+app.listen(8000, () => console.log('Server running on port 8000!'))
