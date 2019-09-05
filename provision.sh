@@ -19,10 +19,6 @@ sudo apt update
 sudo apt -y install kubectl
 sudo minikube start --memory=4096 --vm-driver=none --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf
 
-curl -L https://github.com/kubernetes/kompose/releases/download/v1.16.0/kompose-linux-amd64 -o kompose
-chmod +x kompose
-sudo mv ./kompose /usr/local/bin/kompose
-
 cd /vagrant/currency_converter
 sudo docker build -t currency_converter .
 sudo docker run -d -p 5000:5000 --restart=always --name registry registry:2
@@ -31,7 +27,7 @@ sudo docker push localhost:5000/currency_converter
 
 cd ..
 sudo mkdir -p /k8s/nginx/
-sudo cp nginx.conf /etc/nginx
+sudo cp nginx.conf /k8s/nginx/nginx.conf
 
 cd k8s
 sudo kubectl create -f .    
