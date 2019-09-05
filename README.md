@@ -1,65 +1,43 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Este repositório contém uma prova de conceito de uma API para conversão monetária. A API é implementada em Node.js através do framework Express, com alguns outros detalhes de infraestrutura.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## Endpoints
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+- `/api`: retorna, em JSON, a conversão de um valor em determinada moeda para outra. O único método deste *endpoint* é GET. É preciso passar os seguintes parâmetros:
+  - `from`: código da moeda de origem;
+  - `to`: código da moeda de destino;
+  - `amount`: valor a ser convertido.
+- `/currencies`: Utilizado para inserir e remover moedas do serviço de conversão. Métodos disponíveis:
+  - GET: retorna todas as moedas suportadas;
+  - PUT: insere uma nova moeda através do parâmetro `currency`;
+  - DELETE: remove a moeda passada pelo parâmetro `currency`.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+## Execução
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+O serviço pode ser executado de diversas maneiras: localmente, através de *containers* Docker e através do orquestrador Kubernetes (sobre *containers* Docker). Este repositório possui *scripts* para as duas últimas opções.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+### Docker
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Supondo que a ferramenta Docker já está instalada em sua máquina, basta executar `docker-compose up`. 
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+Há três *containers*: um que propriamente executa o servidor em Node.js, outro que executa o *data store* Redis e outro que executa servidor NGINX como *proxy* reverso.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Com a finalidade de deixar o serviço mais escalável, é possível executá-lo dentro de um *stack* Docker (e posteriormente entre outras máquinas):
 
-## Requisitos
+1. Inicialize o *swarm* com `docker swarm init --advertise-addr=<endereco>`;
+2. Faça o *deploy* do *stack* com `docker stack deploy --compose-file docker-compose.yml web`;
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github e adicione como colaborador o usuário `automator-hurb` e o deixe disponível por pelo menos 30 dias. Ao terminar o desafio nos envie um email avisando do termino.
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+#### Kubernetes
 
-## Critério de avaliação
+Supondo que o Kubernetes já está instalado em sua máquina (e.g. Minikube), basta executar:
+1. `sudo mkdir -p /k8s/nginx && sudo cp ../nginx.conf /k8s/nginx/nginx.conf`;
+2. `cd k8s && sudo kubectl create -f .`
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Por conveniência, este repositório também fornece um arquivo para criar automaticamente uma máquina virtual com Vagrant de forma a instalar todos os pré-requisitos para executar o serviço em Kubernetes. Caso deseje utilizar este arquivo, basta instalar o Vagrant e executar `vagrant up`. Os *endpoints* ficarão acessíveis no endereço `192.168.50.2`.
 
-## Dúvidas
+## Detalhes de funcionamento
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+O serviço tem um modo de funcionamento muito simples. O NGINX mapeia solicitações para o servidor Node.js, que recebe solicitações de conversão e verifica se a taxa de conversão está disponível em um cache fornecido pelo Redis. Se a taxa está no cache, ela é recuperada e a operação de conversão é realizada. Caso contrário, a taxa e sua inversa são recuperadas de forma assíncrona de uma API externa e inseridas no cache, com tempo de expiração de uma hora.
 
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Este é um exercício interessante de integração de tecnologias. Embora a prova de conceito desenvolvida obviamente não esteja pronta para produção, ela utiliza alguns elementos que são práticas comuns no mercado.

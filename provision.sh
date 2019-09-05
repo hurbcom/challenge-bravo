@@ -30,8 +30,8 @@ sudo docker tag currency_converter localhost:5000/currency_converter
 sudo docker push localhost:5000/currency_converter
 
 cd ..
-sudo mkdir -p /etc/nginx/
+sudo mkdir -p /k8s/nginx/
 sudo cp nginx.conf /etc/nginx
 
-cd ../k8s
+cd k8s
 sudo kubectl create -f .    

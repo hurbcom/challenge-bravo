@@ -33,6 +33,6 @@ spec:
       volumes:
       - name: nginx-claim0
         hostPath:
-          path: /etc/nginx/
+          path: /k8s/nginx/
           type: Directory
 status: {}
