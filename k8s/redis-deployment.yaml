@@ -21,5 +21,7 @@ spec:
       - image: redis
         name: redis
         resources: {}
+        ports:
+        - containerPort: 6379
       restartPolicy: Always
 status: {}

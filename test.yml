@@ -1,5 +1,5 @@
 config:
-  target: 'http://192.168.50.2:8000'
+  target: 'http://192.168.50.2'
   phases:
     - duration: 60
       arrivalRate: 1000

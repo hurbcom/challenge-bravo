@@ -29,5 +29,9 @@ sudo docker run -d -p 5000:5000 --restart=always --name registry registry:2
 sudo docker tag currency_converter localhost:5000/currency_converter
 sudo docker push localhost:5000/currency_converter
 
+cd ..
+sudo mkdir -p /etc/nginx/
+sudo cp nginx.conf /etc/nginx
+
 cd ../k8s
-sudo kubectl create -f redis-deployment.yaml,web-deployment.yaml,web-service.yaml
+sudo kubectl create -f .    
