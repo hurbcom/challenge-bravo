@@ -1,0 +1,19 @@
+version: '3'
+services:
+  app:
+    container_name: docker-node-mongo
+    build: '.'
+    volumes:
+      - .:/src/app
+    links:
+      - db
+    ports:
+      - '3000:3000'
+
+  db:
+    image: 'mongo'
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data/db:/data/db

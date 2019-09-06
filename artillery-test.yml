@@ -1,0 +1,12 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 1
+      arrivalRate: 1000
+  defaults:
+    headers:
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjozLCJpYXQiOjE1Njc3MTMxNTJ9.IlIblh14WWeaCCLoAH3-nB-E0QOFUvCWwR9OHkiIc8o'
+scenarios:
+  - flow:
+    - get:
+        url: "/currencies"
