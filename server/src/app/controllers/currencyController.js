@@ -40,15 +40,16 @@ router.post('/insertcoin', async(req, res) => {
     const { name } = req.body
     try {
         if (await Currency.findOne({ name })) {
-            return res.status(400).send({error: 'Esta moeda já existe.'})
+            return res.status(400).send({error: 'This planet already exists'})
         }
         const currency = await Currency.create(req.body)
             return res.status(200).send({ currency })
-
+            
     } catch (error) {
-            return res.status(400).send({error: 'Falha ao registrar.'})
+            return res.status(400).send({error: 'Registration Failed'})
     }
 })
+
 
 
 router.delete('/clear/:id', async(req, res) => {

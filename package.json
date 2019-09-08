@@ -4,7 +4,8 @@
   "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --timeout 100000 './server/src/app/tests/test_currency'",
+    "start": "node ./server/src/index"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,13 @@
   },
   "homepage": "https://github.com/Willtavares/challenge-bravo#readme",
   "dependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "express": "^4.17.1",
+    "mocha": "^6.2.0",
     "mongoose": "^5.6.12"
+  },
+  "devDependencies": {
+    "should": "^13.2.3"
   }
 }
