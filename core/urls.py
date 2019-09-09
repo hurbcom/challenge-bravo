@@ -19,4 +19,5 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('api/v1/currency/', include(('currency.urls', 'Currency'), namespace='currency')),
+    path('api/v1/converter/', include(('converter.urls', 'Converter'), namespace='converter')),
 ]
