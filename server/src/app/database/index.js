@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise;
 
+// Conector central do banco de dados
 mongoose.connect('mongodb://localhost:27017/challengeBravo', {
     useNewUrlParser: true,
     useCreateIndex: true,

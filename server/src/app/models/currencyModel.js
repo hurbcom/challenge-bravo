@@ -1,5 +1,6 @@
 const mongoose = require('../database');
 
+// Schema do banco de dados não relacional
 var currencySchema = new mongoose.Schema({
     name:{
         type:String,
