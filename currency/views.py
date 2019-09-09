@@ -1,5 +1,6 @@
 from django.http import Http404
 from rest_framework.views import APIView
+from rest_framework import status
 
 from .models import Currency
 from .serializers import CurrencySerializer
@@ -15,7 +16,7 @@ class CurrencyList(APIView):
         """
         currency = Currency.objects.all()
         serializer = CurrencySerializer(currency, many=True)
-        return JSONResponse(serializer.data)
+        return JSONResponse(serializer.data, status.HTTP_200_OK)
     
     def post(self, request, format=None):
         """
@@ -26,9 +27,9 @@ class CurrencyList(APIView):
         if serializer.is_valid():
             if CryptoCompareTest(request.data):
                 serializer.save()
-                return JSONResponse(serializer.data)
-            return JSONResponse({"message":"Moeda %s não disponível para cadastro" % request.data['symbol']})
-        return JSONResponse(serializer.errors)
+                return JSONResponse(serializer.data, status.HTTP_201_CREATED)
+            return JSONResponse({"message":"Moeda %s não disponível para cadastro" % request.data['symbol']}, status.HTTP_400_BAD_REQUEST)
+        return JSONResponse(serializer.errors, status.HTTP_400_BAD_REQUEST)
         
 
 
@@ -48,7 +49,7 @@ class CurrencyDetail(APIView):
         """
         currency = self.get_object(symbol)
         serializer = CurrencySerializer(currency)
-        return JSONResponse(serializer.data)
+        return JSONResponse(serializer.data, status.HTTP_200_OK)
 
     def delete(self, request, symbol, format=None):
         """
@@ -56,4 +57,4 @@ class CurrencyDetail(APIView):
         """
         currency = self.get_object(symbol)
         currency.delete()
-        return JSONResponse({"message":"Moeda %s removida com sucesso" % symbol})
+        return JSONResponse({"message":"Moeda %s removida com sucesso" % symbol}, status.HTTP_404_NOT_FOUND)

@@ -1,15 +1,13 @@
 from django.http import HttpResponse, Http404
 from rest_framework.renderers import JSONRenderer
-from rest_framework.response import Response
-from rest_framework import status
 from . import settings
 import requests
 import hashlib
 
-def JSONResponse(conteudo):
+def JSONResponse(conteudo, status):
 	
 	content = JSONRenderer().render(conteudo)
-	response = HttpResponse(content, content_type='application/json')
+	response = HttpResponse(content, content_type='application/json', status=status)
 	response['Etag'] = "W/\""+hashlib.md5(content).hexdigest()+ "\""
 	
 	return response    

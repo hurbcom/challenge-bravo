@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from rest_framework import status
 from django.db.models import Q
 from currency.models import Currency
 from core.utils import Normalize, CryptoCompare, JSONResponse
@@ -9,7 +10,7 @@ class Converter(APIView):
     """
     def get(self, request, format=None):
         if not request.GET.get('to') or not request.GET.get('from') or not request.GET.get('amount'):
-            return JSONResponse({"message":"Parâmetros inválidos!"})
+            return JSONResponse({"message":"Parâmetros inválidos!"}, status.HTTP_400_BAD_REQUEST)
 
 
         data = Normalize(request)
@@ -28,6 +29,6 @@ class Converter(APIView):
                 "amount": "%s %s" % (shortname_from, data['amount']),
                 "currency": "%s %s" % (shortname_to, result['result'])
             }
-            return JSONResponse(context)
+            return JSONResponse(context, status.HTTP_200_OK)
         else:
-            return JSONResponse({"message":"Moeda não disponível para conversão"})
+            return JSONResponse({"message":"Moeda não disponível para conversão"}, status.HTTP_204_NO_CONTENT)

@@ -2,6 +2,8 @@
 
 echo "===============Install requirements=================="
 pip install -r requirements.txt
+echo "===========Django test============="
+python manage.py test
 echo "===========Django migrate============="
 python manage.py migrate
 echo "===============Start Nginx==========================="
