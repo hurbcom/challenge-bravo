@@ -29,7 +29,7 @@
 			<td>moeda</td>
 			<td>string (3 caracteres)</td>
 			<td>Sim</td>
-			<td>Tipo de Moeda a ser convertida.</td>
+			<td>Tipo de Moeda.</td>
 		  </tr>
   </tbody>
 </table>
