@@ -30,7 +30,7 @@ Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lis
 ## Requisitos
 
 -   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github e adicione como colaborador o usuário `automator-hurb` e o deixe disponível por pelo menos 30 dias. Ao terminar o desafio nos envie um email avisando do termino.
+    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github e adicione como colaborador o usuário `automator-hurb` e o deixe disponível por pelo menos 30 dias. Ao terminar o desafio, envie o código para esse projeto criado, preencha o arquivo chamado `pull-request.txt` e nos envie um email avisando do término.
     -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
 -   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
 -   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
