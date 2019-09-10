@@ -8,7 +8,7 @@ const request = require('request');
 
 // início api para conversão de valores
  exports.get = (req, res, next) => {
-  
+
   // variavel moeda de origem
   let from = req.params.from;
   // variavel moeda de destino
@@ -20,7 +20,7 @@ const request = require('request');
 
   // verifico se as moedas existem no json e o valor está preenchido
   if(moedas.hasOwnProperty(from) || moedas.hasOwnProperty(to) || amount){
-    
+
     // requisição de api de conversao de moedas e criptomoedas
     request(url, function (error, response, body) {
       // conversao da resposta em objeto
@@ -28,12 +28,12 @@ const request = require('request');
       // conversao do valor
       let amount_convert = resposta['ticker']['price'] * amount;
       // resposta com os valores de origem e convertido
-      res.json({'vl_original': amount, 'vl_convertido': amount_convert });  
+      res.json({'vl_original': amount, 'vl_convertido': amount_convert });
     });
   }
-  // mensagem de erro caso falte algum parametro ou as alguma das moedas não existam
+  // mensagem de erro caso falte algum parametro ou alguma das moedas não existam
   else {
-    res.json({'Resposta':'Erro ao Excluir Moeda.'});  
+    res.json({'Resposta':'Erro ao Excluir Moeda.'});
   }
  };
 
