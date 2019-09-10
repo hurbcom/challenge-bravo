@@ -1,65 +1,72 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+<h2>Instalação da API</h2>
+<p>A API foi construída em NodeJs, para instalação basta no diretório do projeto rodar o comando "npm install" e após isso "npm run start".</p>
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+<p>Ou fazer um docker build, o arquivo Dockerfile já está preparado neste repositório.</p>
 
-A API deve, originalmente, converter entre as seguintes moedas:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+<h3>Inserção de Moeda</h3>
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+<p>Os dados retornados pela API estão em formato JSON.</p>
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+<p><b>Endereço:</b> http://seuendereco:3000/moedas/ </p>
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+<p>
+<b>Tipo:</b> POST </br>
+<b>Content-Type:</b> application/x-www-form-urlencoded </br>
+</p>
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+<table id="datatable" class="table table-striped table-bordered">
+          <thead>
+          <tr>
+              <th>Key</th>
+			  <th>Tipo</th>
+			  <th>Obrigatório</th>
+			  <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+		  <tr>
+			<td>moeda</td>
+			<td>string (3 caracteres)</td>
+			<td>Sim</td>
+			<td>Tipo de Moeda a ser convertida.</td>
+		  </tr>
+  </tbody>
+</table>
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
 
-## Requisitos
+<h3>Exclusão de Moeda</h3>
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github e adicione como colaborador o usuário `automator-hurb` e o deixe disponível por pelo menos 30 dias. Ao terminar o desafio nos envie um email avisando do termino.
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+<p>Os dados retornados pela API estão em formato JSON.</p>
 
-## Critério de avaliação
+<p><b>Endereço:</b> http://seuendereco:3000/moedas/'moeda a ser excluída' </p>
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+<p>
+<b>Tipo:</b> DELETE </br>
+<b>Content-Type:</b> application/json </br>
+</p>
 
-## Dúvidas
+<h4>Exemplo de Consulta Completa</h4>
+<p>
+http://seuendereco:3000/moedas/EUR
+</p>
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
 
-Boa sorte e boa viagem! ;)
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
+
+<h3>Conversão de Valores</h3>
+
+<p>Os dados retornados pela API estão em formato JSON.</p>
+
+<p><b>Endereço:</b> http://seuendereco:3000/convert/'moeda origem'/'moeda destino'/'valor a ser convertido' </p>
+
+<p>
+<b>Tipo:</b> GET </br>
+<b>Content-Type:</b> application/json </br>
+</p>
+
+<h4>Exemplo de Consulta Completa</h4>
+<p>
+http://seuendereco:3000/convert/USD/BRL/50.00
 </p>
