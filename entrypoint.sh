@@ -6,6 +6,8 @@ echo "===========Django test============="
 python manage.py test
 echo "===========Django migrate============="
 python manage.py migrate
+echo "===========Django load data============="
+python manage.py loaddata currency.json
 echo "===============Start Nginx==========================="
 /etc/init.d/nginx start
 /etc/init.d/nginx status

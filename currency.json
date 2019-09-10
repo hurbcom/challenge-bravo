@@ -1,0 +1,46 @@
+[
+    {
+        "model": "currency.currency",
+        "fields": {
+            "name": "Bitcoin", 
+            "symbol": "BTC", 
+            "shortname": "₿"
+        }
+    }, 
+    {
+        "model": "currency.currency",
+        "fields": {
+            "name": "Dolar", 
+            "symbol": "USD", 
+            "shortname": "US$"
+        }
+    }, 
+    {
+        "model": "currency.currency",
+        "fields": {
+            "name": "Real", 
+            "symbol": "BRL", 
+            "shortname": "R$"
+        }
+    },
+    {
+        "model": "currency.currency", 
+        "fields": {
+            "name": "Euro", 
+            "symbol": "EUR",
+            "shortname": "€"
+            
+        }
+    },
+    {
+        "model": "currency.currency", 
+        "fields": {
+            "name": "Ethereum", 
+            "symbol": "ETH",
+            "shortname": "ETH"
+            
+        }
+    }
+
+    
+]
