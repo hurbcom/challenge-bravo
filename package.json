@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/server.js",
-    "dev:start": "nodemon index.js"
+    "start": "node ./bin/server.js"
   },
   "keywords": [],
   "author": "",
@@ -17,8 +16,5 @@
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "request": "^2.88.0"
-  },
-  "devDependencies": {
-    "nodemon": "^1.19.2"
   }
 }
