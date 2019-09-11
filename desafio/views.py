@@ -26,8 +26,14 @@ class CarregaMoeda(Resource):
             return "Moeda não encontrada"
 
 
-class InserirMoeda(Resource):
+class ConsultarMoeda(Resource):
     def get(self):
+        global objMoedas
+        return objMoedas
+
+
+class InserirMoeda(Resource):
+    def post(self):
         global objMoedas
         moedas = requests.get("https://economia.awesomeapi.com.br/all").json()
         usd = float(moedas["USD"]["bid"].replace(",", "."))

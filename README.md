@@ -63,3 +63,66 @@ Boa sorte e boa viagem! ;)
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
 </p>
+
+
+# Python Api
+
+<h3>Projeto desenvolvido em Python com Flask</h3>
+
+<h4>Conteúdo do projeto</h4>
+
+- <b>Três endpoints:</b>
+
+- `/` responsável por realizar a conversão entre duas moedas, com ambos os dados passados via parâmetro na URL. Exemplo: `?from=BRL&to=CAD&amount=10` 
+- `/inserir` responsável por realizar o método get para inserir moedas.
+- `/excluir` responsável por realizar o método delete para excluir determinadas moedas.
+
+- Processo separado em __init__ e views.
+
+- Utilizado API **economia.awesomeapi** para realizar as verificação de moedas válidas, e para obter a taxa de câmbio de cada moeda.
+
+- Adicionado tratamento para não permitir inserção de moedas duplicadas.
+
+- Porta teste utilizada: `5000`.
+
+
+- <b>Framework utilizado:</b> Flask, Restful.
+- <b>Ferramentas utilizadas:</b> Pycharm e Postman.
+
+<hr>
+
+<h4>Testes da API realizados utilizando Postman:</h4>
+
+<h5>Método GET:</h5>
+
+- Listagem de moedas: 
+###### https://localhost:5000/consultar
+- Conversão de BRL para USD, quantidade 10: 
+###### https://localhost:5000/?from=BRL&to=USD&amount=10
+>"USD", "BRL" e 10 passados por parâmetro.
+
+<h5>Métodos POST e DELETE:</h5>
+
+- Para cadastro: 
+###### https://localhost:5000/inserir/moeda=brl
+> BRL passado por parâmetro.
+
+- Para exclusão: 
+###### https://localhost:5000/excluir/moeda=brl
+> BRL passado por parâmetro.
+
+<hr>
+<h4>Utilização da API:</h4>
+
+- git clone `https://github.com/gsilvagusto/challenge-bravo.git`
+- $ $ pip install -r requirements.txt
+- $ app.py
+
+<hr>
+
+<h4>Observação:</h4>
+
+- Docker `Não foi possível subir o container por motivo de tempo`
+
+<hr>
+Desenvolvido por: George Augusto da Silva - 09/2019
