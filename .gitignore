@@ -1,1 +1,11 @@
-https://github.com/gsilvagusto/challenge-bravo.git
+.gitignore
+.venv/
+.idea/
+__pycache__/
+docs/
+solicitantes.json
+
+### CI ###
+.gitlab-ci.yml
+buildspec.yml
+taskdef.json
