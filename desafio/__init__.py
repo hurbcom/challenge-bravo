@@ -15,4 +15,3 @@ def register_resource(app):
     api.add_resource(views.InserirMoeda, '/inserir/')
     api.add_resource(views.ConsultarMoeda, '/consultar/')
     api.add_resource(views.ExcluirMoeda, '/excluir')
-

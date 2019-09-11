@@ -116,13 +116,13 @@ Boa sorte e boa viagem! ;)
 
 - git clone `https://github.com/gsilvagusto/challenge-bravo.git`
 - $ $ pip install -r requirements.txt
-- $ app.py
+- $ python app.py ou app.py
 
 <hr>
 
 <h4>Observação:</h4>
 
-- Docker `Não foi possível subir o container por motivo de tempo`
+- Docker ``
 
 <hr>
 Desenvolvido por: George Augusto da Silva - 09/2019
