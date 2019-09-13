@@ -1,15 +1,14 @@
 
-
 const express = require('express'); //Web framework of choice
-//const path = require('path');
 const axios = require('axios'); //HTTP promises
 const redis = require('redis'); //Caching solution
+const bluebird = require('bluebird'); // Promisify
+bluebird.promisifyAll(redis);
 const fs = require('fs'); //Required for system-level file handling
 const client = redis.createClient({
   host: 'redis',
   port: 6379
 });
-
 const app = express();
 let currencies = JSON.parse(fs.readFileSync('currencies.json', 'utf-8')) //A simple JSON is enough for our purposes
 
