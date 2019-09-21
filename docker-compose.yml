@@ -1,0 +1,14 @@
+version: '3'
+services:
+  mysql:
+    build: ./docker/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'currency_converter'
+      MYSQL_DATABASE: 'currency_converter'
+    volumes:
+      - data_mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+volumes:
+  data_mysql:
+    driver: local

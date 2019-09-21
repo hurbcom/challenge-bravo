@@ -1,0 +1,21 @@
+
+default: &default
+  adapter: mysql2
+  pool: 5
+  username: root
+  password: currency_converter
+  host: 127.0.0.1
+
+development:
+  <<: *default
+  database: currency_converter
+
+test:
+  <<: *default
+  database: currency_converter_test
+
+production:
+  <<: *default
+  database: currency_converter_production
+  username: currency_converter
+  password: <%= ENV['CURRENCY_CONVERTER_DATABASE_PASSWORD'] %>
