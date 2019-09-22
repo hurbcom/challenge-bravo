@@ -14,6 +14,7 @@ class Currency < ApplicationRecord
 
   before_validation :validate_default
 
+  after_create :test_integrity_with_conversor_service
 
   def crypto_coin?
     self.definition == 'crypto_coin'
@@ -31,4 +32,17 @@ class Currency < ApplicationRecord
       errors.add(:default, 'ballast already setted!!!')
     end
   end
+
+  def test_integrity_with_conversor_service
+    service = CurrencyConversorService.new(from: self.code, to: 'USD', amount: 1)
+    service.execute
+  rescue => error
+    Rails.logger.error("Create! Integrity Error: #{error}")
+    self.destroy!
+    raise CreateTestIntegrityError
+  end
+
+  protected
+
+  class CreateTestIntegrityError < StandardError ; end
 end

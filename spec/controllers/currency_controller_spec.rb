@@ -4,6 +4,7 @@ describe CurrencyController, type: :controller do
   render_views
 
   before do
+    allow_any_instance_of(Currency).to receive(:test_integrity_with_conversor_service)
     create(:currency_ballast)
     create(:currency_crypto_coin)
     allow_any_instance_of(EuCentralBank).to receive(:update_rates)

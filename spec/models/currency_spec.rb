@@ -2,6 +2,10 @@ require 'rails_helper'
 
 describe Currency do
   describe '#ballest' do
+    before do
+      allow_any_instance_of(described_class).to receive(:test_integrity_with_conversor_service)
+    end
+
     context 'when exist' do
       before { create(:currency_ballast) }
 
@@ -16,6 +20,10 @@ describe Currency do
   end
 
   describe '#validate_default' do
+    before do
+      allow_any_instance_of(described_class).to receive(:test_integrity_with_conversor_service)
+    end
+
     subject do
       record.valid?
       record.errors.messages
@@ -75,6 +83,32 @@ describe Currency do
       end
 
       it { is_expected.to be {} }
+    end
+  end
+
+  describe '#test_integrity_with_conversor_service' do
+    before do
+      allow_any_instance_of(EuCentralBank).to receive(:update_rates)
+    end
+
+    subject do
+      described_class.create!(code: 'EUR', symbol: '€', name: 'Euro', country: 'Euro Member')
+    end
+
+    context 'When something wrong happend' do
+      before do
+        allow_any_instance_of(CurrencyConversorService).to receive(:execute).and_raise(
+          StandardError
+        )
+      end
+
+      it { expect { subject }.to raise_error Currency::CreateTestIntegrityError }
+    end
+
+    context 'When nothing wrong happend' do
+      before { allow_any_instance_of(CurrencyConversorService).to receive(:execute) }
+
+      it { expect { subject }.to change { described_class.count }.to(1) }
     end
   end
 end

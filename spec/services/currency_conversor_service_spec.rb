@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe CurrencyConversorService do
   before do
+    allow_any_instance_of(Currency).to receive(:test_integrity_with_conversor_service)
     create(:currency_ballast)
     allow_any_instance_of(EuCentralBank).to receive(:update_rates)
   end
