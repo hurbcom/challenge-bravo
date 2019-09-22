@@ -15,8 +15,9 @@ ActiveRecord::Schema.define(version: 2019_09_21_230135) do
   create_table "currencies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", limit: 20, null: false
     t.string "code", limit: 3, null: false
-    t.string "symbol", limit: 3, null: false
+    t.string "symbol", limit: 10, null: false
     t.string "country", limit: 25, null: false
+    t.string "definition", limit: 11, default: "money", null: false
     t.boolean "default", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

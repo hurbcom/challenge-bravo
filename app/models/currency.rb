@@ -1,14 +1,23 @@
 class Currency < ApplicationRecord
+  extend Enumerize
+
   validates :name, :code, :symbol, :country, presence: true
   validates :name, length: { maximum: 20 }
   validates :code, length: { is: 3 }
-  validates :symbol, length: { maximum: 3 }
+  validates :symbol, length: { maximum: 10 }
   validates :country, length: { maximum: 25 }
   validates :code, uniqueness: true
+
+  enumerize :definition, in: %i(money cripto_coin)
 
   scope :ballast, ->() { where(default: true).limit(1) }
 
   before_validation :validate_default
+
+
+  def cripto_coin?
+    self.definition == 'cripto_coin'
+  end
 
   private
 

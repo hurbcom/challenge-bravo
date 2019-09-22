@@ -9,6 +9,10 @@ gem 'mysql2', '~> 0.5.2'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 gem 'jbuilder', '~> 2.5'
+gem 'enumerize'
+gem 'money'
+gem 'eu_central_bank'
+gem 'cryptocompare'
 
 group :development, :test do
     gem 'rspec-rails'
