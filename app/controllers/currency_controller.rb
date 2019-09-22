@@ -4,26 +4,33 @@ class CurrencyController < ApplicationController
     @currency = Currency.create!(create_params)
     render template: "currency/show"
   rescue ActiveRecord::RecordInvalid => error
-    render json: { error: error.message }, status: :bad_request
+    render_json_error(status: :bad_request, message: error.message)
   rescue Currency::CreateTestIntegrityError
-    render json: { error: 'You\'re trying to create a currency not supported by conversor service or can be a temporary error.' }, status: :bad_request
+    render_json_error(
+      status: :bad_request,
+      message: 'You\'re trying to create a currency not supported by conversor service ' \
+        'or can be a temporary error.'
+    )
   end
 
   def convert
     conversor_service_execute
   rescue CurrencyConversorService::CurrencyFromNotAllowed
-    render json: { error: 'it\'s not permited this from currency' }, status: :bad_request
+    render_json_error(status: :bad_request, message: 'it\'s not permited this from currency')
   rescue CurrencyConversorService::CurrencyToNotAllowed
-    render json: { error: 'it\'s not permited this to currency' }, status: :bad_request
+    render_json_error(status: :bad_request, message: 'it\'s not permited this to currency')
   rescue => error
     Rails.logger.error(error)
-    render json: { error: 'Something wrong happend, try again late...' }, status: :internal_server_error
+    render_json_error(
+      status: :internal_server_error,
+      message: 'Something wrong happend, try again late...'
+    )
   end
 
   private
 
   def create_params
-    params.require(:currency).permit(:code, :symbol, :name, :country, :default)
+    params.require(:currency).permit(:code, :symbol, :name, :country, :default, :definition)
   end
 
   def convert_params
