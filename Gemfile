@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.5.0'
 
@@ -17,4 +16,9 @@ end
 
 group :development do
     gem 'listen'
+end
+
+group :teste do
+  gem 'database_cleaner'
+  gem 'factory_bot_rails'
 end
