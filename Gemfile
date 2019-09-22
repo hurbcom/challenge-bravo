@@ -15,11 +15,11 @@ gem 'eu_central_bank'
 gem 'cryptocompare'
 
 group :development, :test do
-    gem 'rspec-rails'
+  gem 'rspec-rails'
 end
 
 group :development do
-    gem 'listen'
+  gem 'listen'
 end
 
 group :teste do
