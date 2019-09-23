@@ -9,6 +9,15 @@ services:
       - data_mysql:/var/lib/mysql
     ports:
       - "3306:3306"
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/currency
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
 volumes:
   data_mysql:
     driver: local

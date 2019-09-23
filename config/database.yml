@@ -4,7 +4,7 @@ default: &default
   pool: 5
   username: root
   password: currency_converter
-  host: 127.0.0.1
+  host: mysql
 
 development:
   <<: *default
