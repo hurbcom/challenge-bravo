@@ -16,6 +16,8 @@ class Currency < ApplicationRecord
 
   after_create :test_integrity_with_conversor_service
 
+  before_destroy :validate_permited_to_destroy
+
   def crypto_coin?
     self.definition == 'crypto_coin'
   end
@@ -42,7 +44,12 @@ class Currency < ApplicationRecord
     raise CreateTestIntegrityError
   end
 
+  def validate_permited_to_destroy
+    raise NotAllowedToDestroyError if self.default == true
+  end
+
   protected
 
   class CreateTestIntegrityError < StandardError ; end
+  class NotAllowedToDestroyError < StandardError ; end
 end

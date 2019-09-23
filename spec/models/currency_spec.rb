@@ -111,4 +111,28 @@ describe Currency do
       it { expect { subject }.to change { described_class.count }.to(1) }
     end
   end
+
+  describe '#validate_permited_to_destroy' do
+    before do
+      allow_any_instance_of(described_class).to receive(:test_integrity_with_conversor_service)
+    end
+    
+    context 'when success' do
+      subject do
+        currency = create(:currency)
+        currency.destroy!
+      end
+
+      it { expect { subject }.to_not raise_error Currency::NotAllowedToDestroyError }
+    end
+
+    context 'when NotAllowedToDestroyError' do 
+      subject do
+        currency = create(:currency_ballast)
+        currency.destroy!
+      end
+
+      it { expect { subject }.to raise_error Currency::NotAllowedToDestroyError }
+    end
+  end
 end

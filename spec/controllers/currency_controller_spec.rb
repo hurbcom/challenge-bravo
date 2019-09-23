@@ -114,6 +114,47 @@ describe CurrencyController, type: :controller do
     end
   end
 
+  describe '#destroy' do
+    before { subject }
+
+    context 'with success' do
+      subject do
+        currency = create(:currency)
+        delete :destroy, format: :json, params: { id: currency.id}
+      end
+
+      it { expect(response).to have_http_status :ok }
+    end
+
+    context 'with not found' do
+      subject do
+        currency = create(:currency)
+        delete :destroy, format: :json, params: { id: 555 }
+      end
+
+      it { expect(response).to have_http_status :not_found }
+    end
+
+    context 'with NotAllowedToDestroyError' do
+      subject do
+        currency = create(:currency_ballast)
+        delete :destroy, format: :json, params: { id: currency.id }
+      end
+
+      let(:body_expectation) do
+        {
+          error: 'You can\'t delete the Ballast!!!'
+        }.with_indifferent_access
+      end
+
+      it do
+        expect(response).to have_http_status :bad_request
+        result = JSON.parse(response.body)
+        expect(result).to eq body_expectation
+      end
+    end
+  end
+
   describe '#convert' do
     before do
       allow_any_instance_of(Currency).to receive(:test_integrity_with_conversor_service)

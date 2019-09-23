@@ -1,0 +1,1 @@
+json.currencies @currencies.map { |currency| currency.attributes }

@@ -1,5 +1,9 @@
 class CurrencyController < ApplicationController
 
+  def index
+    @currencies = Currency.all
+  end
+
   def create
     @currency = Currency.create!(create_params)
     render template: "currency/show"
@@ -11,6 +15,16 @@ class CurrencyController < ApplicationController
       message: 'You\'re trying to create a currency not supported by conversor service ' \
         'or can be a temporary error.'
     )
+  end
+
+  def destroy
+    Currency.find(params[:id]).destroy!
+    head :ok
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
+  rescue Currency::NotAllowedToDestroyError
+    Rails.logger.error('Someone try to delete the Ballast!!!')
+    render_json_error(status: :bad_request, message: 'You can\'t delete the Ballast!!!')
   end
 
   def convert
