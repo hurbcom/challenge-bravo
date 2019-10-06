@@ -1,6 +1,17 @@
 version: "2"
 services:
-    app:
+    mongo:
+        image: mongo
+        volumes:
+            - ./data:/data/db
+        ports:
+            - "27017:27017"
+    api:
+        environment:
+            - PORT=3000
+            - ENV=dev
+            - CONVERTER_URL=http://apilayer.net/api/live
+            - ACCESS_KEY=d63f1789fc72d6f413cd1383c44e49a6
         container_name: currency
         restart: always
         build: .
@@ -8,10 +19,3 @@ services:
             - "3000:3000"
         links:
             - mongo
-    mongo:
-        container_name: mongo
-        image: mongo
-        volumes:
-            - ./data:/data/db
-        ports:
-            - "27017:27017"
