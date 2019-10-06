@@ -1,0 +1,34 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Api para conversão de moedas.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "debug": "node --debug-brk index.js",
+    "lint": "eslint .",
+     "test": "./node_modules/.bin/mocha './!(node_modules)/**/*.spec.js'"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulohenriquefreitas/challenge-bravo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paulohenriquefreitas/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/paulohenriquefreitas/challenge-bravo#readme",
+  "devDependencies": {
+    "mocha": "^6.2.1"
+  }
+}
