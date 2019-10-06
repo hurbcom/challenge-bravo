@@ -6,13 +6,12 @@ const app = express();
 const bodyParser = require('body-parser');
 const dbConfig = require('./source/config/database');
 const mongoose = require('mongoose');
+const environment = require('./source/config/env')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
-const port = process.env.PORT;
-const env = process.env.ENV;
+const port = process.env.PORT ? process.env.PORT : environment.PORT;
+const env = process.env.ENV ? process.env.ENV : environment.ENV
 
 mongoose.Promise = global.Promise;
 

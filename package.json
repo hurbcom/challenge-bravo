@@ -8,7 +8,7 @@
     "dev": "nodemon index.js",
     "debug": "node --debug-brk index.js",
     "lint": "eslint .",
-     "test": "./node_modules/.bin/mocha './!(node_modules)/**/*.spec.js'"
+    "test": "./node_modules/.bin/mocha './!(node_modules)/**/*.spec.js'"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
