@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    command: npm start
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/user/app
+    depends_on:
+      - mongodb
+    links:
+      - "mongodb:banco"
+  mongodb:
+    image: mongo
+    volumes:
+      - /data/db:/data/db
