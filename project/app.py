@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 DATABASE = 'currency.db'
 
-API = 'https://api.exchangeratesapi.io/latest?base='
+API = 'https://api.exchangeratesapi.io/latest?base=USD'
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -69,6 +69,39 @@ def delete_currency(currency_id):
         return jsonify({'success': True, 'message':'Registro excluído com sucesso.'}), 200
     except:
         return jsonify({'success': False, 'message': "Ocorreu um erro ao excluir o registro."}), 500
+
+@app.route('/api', methods=['GET'])
+def convert():
+    try:
+        from_currency = request.args.get('from')
+        to_currency = request.args.get('to')
+        amount = request.args.get('amount')
+
+        # verifica se as moedas estão cadastradas no banco
+        from_currency = query_db(f'SELECT * FROM currency WHERE name = "{from_currency}"', True)
+        to_currency = query_db(f'SELECT * FROM currency WHERE name = "{to_currency}"', True)
+        
+        if(not len(from_currency)):
+            return jsonify({'success': False, 'message':f'A moeda {from_currency} não está cadastrada.'}), 200
+        
+        if(not len(to_currency)):
+            return jsonify({'success': False, 'message':f'A moeda {to_currency} não está cadastrada.'}), 200
+        
+        # busca a cotação das moedas com o USD como base
+        r = requests.get(API)
+        response = r.json()
+
+        if(to_currency['name'] in response['rates']):
+            to_currency_rate = response['rates'][to_currency['name']]
+            from_currency_rate = response['rates'][from_currency['name']]
+            
+            value = (to_currency_rate/from_currency_rate) * float(amount)
+            
+            return jsonify({'success': True, 'amount': value}), 200
+        else:
+            return jsonify({'success': False, 'message':f'A moeda {to_currency} não está cadastrada.'}), 200
+    except:
+        return jsonify({'success': False, 'message': "Ocorreu um erro ao converter o valor."}), 500
 
 if __name__ == '__main__':
     init_db()
