@@ -23,7 +23,7 @@ db.on("error", (err) => {
 
 db.once("open", () => {
     console.log("Connected to mongoose!");
-    app.listen(3000, function() {
+    app.listen(3000, () => {
         console.log("Server start!");
     });
 });
