@@ -63,3 +63,137 @@ Boa sorte e boa viagem! ;)
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
 </p>
+
+## API
+
+A API foi desenvolvida em Python, utilizando o framework Flask. Por se tratar de um framework simples não foi gerado nenhum *boilerplate code*. O banco de dados da aplicação é o SQLite.
+
+Para realizar as consultas das cotações das moedas foi utilizada a API gratuita [_CoinCap_](https://docs.coincap.io/?version=latest).
+
+### Endpoints
+
+#### POST /api/currency 
+
+Insere uma nova moeda. 
+
+| Parâmetro | Descrição                                   |
+| --------- |:-------------------------------------------:|
+| name      | **(Obrigatório)** Código ISO 4217 da moeda. |
+
+**Exemplo de requisição**
+
+```
+curl -d '{"name":"BTC"}' -H "Content-Type: application/json" -X POST http://0.0.0.0:5000/api/currency
+```
+
+**Exemplo de resposta**
+
+```
+{
+    "success": true,
+    "message": 'Registro adicionado com sucesso.'  
+}
+```
+
+| Parâmetro | Descrição                               |
+| --------- |:---------------------------------------:|
+| success   | Indica se ocorreu um erro na requisição |
+| message   | Mensagem com a descrição do retorno     |
+
+*As requisições para deletar e converter moeda também retornam esses parâmetros.*
+
+#### GET /api/currency
+
+Consulta todas as moedas cadastradas no banco.
+
+**Exemplo de requisição**
+
+```
+curl http://0.0.0.0:5000/api/currency
+```
+
+**Exemplo de resposta**
+
+```
+[
+    {
+        "id": 1,
+        "name": 'USD'  
+    },
+    {
+        "id": 2,
+        "name": 'BRL'  
+    }
+]
+```
+
+#### GET /api/currency/{currency_id}
+
+Consulta os dados de uma moeda pelo ID. 
+
+| Parâmetro    | Descrição                      |
+| ------------ |:------------------------------:|
+| currency_id  | **(Obrigatório)** ID da moeda |
+
+**Exemplo de requisição**
+
+```
+curl http://0.0.0.0:5000/api/currency/1
+```
+
+**Exemplo de resposta**
+
+```
+{
+    "id": 1,
+    "name": 'USD'  
+}
+```
+
+#### DELETE /api/currency/{currency_id}
+
+Excluí uma moeda. 
+
+| Parâmetro   | Descrição                                     |
+| ----------- |:---------------------------------------------:|
+| currency_id | **(Obrigatório)** ID da moeda a ser excluída |
+
+**Exemplo de requisição**
+
+```
+curl -X DELETE http://0.0.0.0:5000/api/currency/1
+```
+
+**Exemplo de resposta**
+
+```
+{
+    "success": true,
+    "message": 'Registro excluído com sucesso.'  
+}
+```
+
+#### GET /api?from=CURRENCY_ISO&to=CURRENCY_ISO&amount=VALUE
+
+Converte um valor de uma moeda para outra. 
+
+| Parâmetro | Descrição                                       |
+| ----------|:-----------------------------------------------:|
+| from      | **(Obrigatório)** Código ISO da moeda de origem.|
+| to        | **(Obrigatório)** Código ISO da moeda destino.  |
+| amount    | **(Obrigatório)** Quantia a ser convertida.     |
+
+**Exemplo de requisição**
+
+```
+curl http://0.0.0.0:5000/api?from=USD&to=BRL&amount=123.45
+```
+
+**Exemplo de resposta**
+
+```
+{
+    "success": true,
+    "amount": 507.07
+}
+```
