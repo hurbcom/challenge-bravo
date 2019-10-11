@@ -20,6 +20,12 @@ while True:
         print("Valor invalido. Por favor digite apenas numeros.")
     else:
         break
+
+input_cur = input("Enter base currency code: ").lower()
+print("input currency", input_cur)
+output_cur = input("Enter desired currency code: ").lower()
+print("output currency", output_cur)
+
 def teste_json(from_currency, to_currency, amount):
     
     import requests, json
@@ -38,17 +44,27 @@ def teste_json(from_currency, to_currency, amount):
     else :
         to_rate = result[to_currency]["rate"]
     
-    print("rate dollar/" + to_currency , from_rate)
-    print("rate dollar/" + from_currency , to_rate)
+    print("rate dollar/" + from_currency, from_rate)
+    print("rate dollar/" + to_currency , to_rate)
 
     total = (amount/from_rate)*to_rate
 
     print("total amount", total)
+
+def teste_crypto(crypto_name):
+    import requests
+
+    r = requests.get('https://api.coinmarketcap.com/v1/ticker/'+crypto_name)
+
+    result = r.json()
+
+    print(result[0]['price_usd'])
 
 
 if __name__ == "__main__" : 
   
     # function calling 
     #RealTimeCurrencyExchangeRate(from_currency, to_currency, api_key) 
-    teste_json("eur", "brl", amount)
+    teste_json(input_cur, output_cur, amount)
+    teste_crypto("bitcoin")
 
