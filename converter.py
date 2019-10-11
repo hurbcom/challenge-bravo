@@ -1,39 +1,26 @@
-dolar_value = 0
 
-print(dolar_value)
+valid_currencies = ["dol", "eur", "brl", "btc", "eth"]
 
-def RealTimeCurrencyExchangeRate(from_currency, to_currency, api_key) : 
-  
-    # importing required libraries 
-    import requests, json 
-  
-    # base_url variable store base url  
-    base_url = r"https://www.alphavantage.co/query?function = CURRENCY_EXCHANGE_RATE"
-  
-    # main_url variable store complete url 
-    main_url = base_url + "&from_currency =" + from_currency + "&to_currency =" + to_currency + "&apikey =" + api_key 
-  
-    # get method of requests module  
-    # return response object  
-    req_ob = requests.get(main_url) 
-  
-    # json method return json format 
-    # data into python dictionary data type. 
-      
-    # result contains list of nested dictionaries 
-    result = req_ob.json() 
-  
-    print(" Result before parsing the json data :\n", result) 
-    
-    print("\n After parsing : \n Realtime Currency Exchange Rate for", 
-          result["Realtime Currency Exchange Rate"] 
-                ["2. From_Currency Name"], "TO", 
-          result["Realtime Currency Exchange Rate"] 
-                ["4. To_Currency Name"], "is", 
-          result["Realtime Currency Exchange Rate"] 
-                ['5. Exchange Rate'], to_currency) 
+curr_amount = 5
 
-def teste_json():
+print("Available currencies: ", end='')
+for item in sorted(valid_currencies)[:-1]:
+    print(item, end=', ')
+print(sorted(valid_currencies)[-1])
+
+while True:
+
+    try:
+        amount = float(input("Enter amount: "))
+        if(amount < 0):
+            print("Valor invalido. Por favor digite escolha um numero nao negativo.")
+            continue
+        # checking for input errors
+    except ValueError:
+        print("Valor invalido. Por favor digite apenas numeros.")
+    else:
+        break
+def teste_json(from_currency, to_currency, amount):
     
     import requests, json
 
@@ -41,20 +28,27 @@ def teste_json():
 
     result = r.json()
 
-    Euro_Dollar_rate = result["eur"]["rate"]
-    print("rate dollar/euro" , Euro_Dollar_rate)
+    if(from_currency == "dol"):
+        from_rate = 1
+    else :
+        from_rate = result[from_currency]["rate"]
+    
+    if(to_currency == "dol"):
+        to_rate = 1
+    else :
+        to_rate = result[to_currency]["rate"]
+    
+    print("rate dollar/" + to_currency , from_rate)
+    print("rate dollar/" + from_currency , to_rate)
+
+    total = (amount/from_rate)*to_rate
+
+    print("total amount", total)
 
 
 if __name__ == "__main__" : 
   
-    # currency code 
-    from_currency = "USD"
-    to_currency = "INR"
-  
-    # enter your api key here  
-    api_key = "UOK34FMEVUWUZBRA"
-  
     # function calling 
     #RealTimeCurrencyExchangeRate(from_currency, to_currency, api_key) 
-    teste_json()
+    teste_json("eur", "brl", amount)
 
