@@ -3,10 +3,10 @@ from flask import Flask, jsonify, abort, make_response, request, url_for, g
 import sqlite3, requests
 
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
 
 DATABASE = 'currency.db'
-
-API = 'https://api.exchangeratesapi.io/latest?base=USD'
+API = 'https://api.coincap.io/v2/rates'
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -57,6 +57,11 @@ def add_currency():
         abort(400)
     try:
         name = request.json['name']
+        currency = query_db(f'SELECT * FROM currency WHERE name = "{name}"', True)
+        
+        if len(currency):
+            return jsonify({'sucess': False, 'message': 'Esta moeda já está cadastrada.'}), 201
+        
         query_db(f'INSERT INTO currency (name) VALUES ("{name}");')
         return jsonify({'sucess': True, 'message': 'Registro adicionado com sucesso.'}), 201
     except:
@@ -73,33 +78,37 @@ def delete_currency(currency_id):
 @app.route('/api', methods=['GET'])
 def convert():
     try:
-        from_currency = request.args.get('from')
-        to_currency = request.args.get('to')
+        from_currency_name = request.args.get('from')
+        to_currency_name = request.args.get('to')
         amount = request.args.get('amount')
 
         # verifica se as moedas estão cadastradas no banco
-        from_currency = query_db(f'SELECT * FROM currency WHERE name = "{from_currency}"', True)
-        to_currency = query_db(f'SELECT * FROM currency WHERE name = "{to_currency}"', True)
+        from_currency = query_db(f'SELECT * FROM currency WHERE name = "{from_currency_name}"', True)
+        to_currency = query_db(f'SELECT * FROM currency WHERE name = "{to_currency_name}"', True)
         
-        if(not len(from_currency)):
-            return jsonify({'success': False, 'message':f'A moeda {from_currency} não está cadastrada.'}), 200
+        if(not from_currency):
+            return jsonify({'success': False, 'message':f'A moeda {from_currency_name} não está cadastrada.'}), 200
         
-        if(not len(to_currency)):
-            return jsonify({'success': False, 'message':f'A moeda {to_currency} não está cadastrada.'}), 200
+        if(not to_currency):
+            return jsonify({'success': False, 'message':f'A moeda {to_currency_name} não está cadastrada.'}), 200
         
         # busca a cotação das moedas com o USD como base
         r = requests.get(API)
         response = r.json()
 
-        if(to_currency['name'] in response['rates']):
-            to_currency_rate = response['rates'][to_currency['name']]
-            from_currency_rate = response['rates'][from_currency['name']]
-            
-            value = (to_currency_rate/from_currency_rate) * float(amount)
-            
+        # a resposta da API traz a cotação de todas as moedas, então é necessário encontrar as moedas from e to no response
+        to_currency = next((d for d in response['data'] if d['symbol'] == to_currency['name']), None)
+        from_currency = next((d for d in response['data'] if d['symbol'] == from_currency['name']), None)
+
+        if to_currency and from_currency:
+            # converte cada moeda para o equivalente a 1 USD
+            to_currency_usd = 1/float(to_currency['rateUsd'])
+            from_currency_usd = 1/float(from_currency['rateUsd'])
+
+            value = (to_currency_usd/from_currency_usd) * float(amount)
             return jsonify({'success': True, 'amount': value}), 200
         else:
-            return jsonify({'success': False, 'message':f'A moeda {to_currency} não está cadastrada.'}), 200
+            return jsonify({'success': False, 'message':f'Não foi encontrada a cotação para a moeda {to_currency}.'}), 200
     except:
         return jsonify({'success': False, 'message': "Ocorreu um erro ao converter o valor."}), 500
 
