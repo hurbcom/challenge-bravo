@@ -1,0 +1,11 @@
+
+{
+    "currencies": {
+        "USD": {
+            "rate": 1
+        },
+        "ETH": {
+            "rate": 2
+        }
+    }
+}
