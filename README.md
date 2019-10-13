@@ -68,7 +68,34 @@ Boa sorte e boa viagem! ;)
 
 A API foi desenvolvida em Python, utilizando o framework Flask. Por se tratar de um framework simples não foi gerado nenhum *boilerplate code*. O banco de dados da aplicação é o SQLite.
 
+Escolhi utilizar essa ferramenta para aprimorar o conhecimento em Python e no uso do Flask.
+
 Para realizar as consultas das cotações das moedas foi utilizada a API gratuita [_CoinCap_](https://docs.coincap.io/?version=latest).
+
+É possível executar a aplicação utilizando um ambiente virtual ou container.
+
+### Ambiente virtual
+
+Acesse a pasta do repositório e digite os seguintes comandos. Se você já tem o virtualenv instalado pode pular o primeiro comando.
+
+```
+sudo pip install virtualenv
+virtualenv env
+source env/bin/activate
+pip install -r requirements.txt
+cd project
+python app.py
+```
+Feito isso, a API estará rodando no endereço http://0.0.0.0:5000.
+
+### Container
+
+Para rodar a aplicação em um container é necessário ter o Docker instalado e executar o seguinte comando:
+
+```
+docker run -d -p 5000:5000 laryssacarvalho/docker_flask:latest
+```
+Feito isso, a API estará rodando no endereço http://0.0.0.0:5000.
 
 ### Endpoints
 
@@ -78,12 +105,12 @@ Insere uma nova moeda.
 
 | Parâmetro | Descrição                                   |
 | --------- |:-------------------------------------------:|
-| name      | **(Obrigatório)** Código ISO 4217 da moeda. |
+| code      | **(Obrigatório)** Código ISO 4217 da moeda. |
 
 **Exemplo de requisição**
 
 ```
-curl -d '{"name":"BTC"}' -H "Content-Type: application/json" -X POST http://0.0.0.0:5000/api/currency
+curl -d '{"code":"BTC"}' -H "Content-Type: application/json" -X POST http://0.0.0.0:5000/api/currency
 ```
 
 **Exemplo de resposta**
@@ -118,11 +145,11 @@ curl http://0.0.0.0:5000/api/currency
 [
     {
         "id": 1,
-        "name": 'USD'  
+        "code": 'USD'  
     },
     {
         "id": 2,
-        "name": 'BRL'  
+        "code": 'BRL'  
     }
 ]
 ```
@@ -146,7 +173,7 @@ curl http://0.0.0.0:5000/api/currency/1
 ```
 {
     "id": 1,
-    "name": 'USD'  
+    "code": 'USD'  
 }
 ```
 
