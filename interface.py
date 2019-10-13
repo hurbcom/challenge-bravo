@@ -23,6 +23,10 @@ class Application:
         self.quintoContainer = Frame(master)
         self.quintoContainer["pady"] = 20
         self.quintoContainer.pack()
+
+        self.respContainer = Frame(master)
+        self.respContainer["pady"] = 20
+        self.respContainer.pack()
   
         self.titulo = Label(self.primeiroContainer, text="Conversor Monetário")
         self.titulo["font"] = ("Arial", "10", "bold")
@@ -42,7 +46,6 @@ class Application:
         self.to_currency = Entry(self.terceiroContainer)
         self.to_currency["width"] = 10
         self.to_currency["font"] = self.fontePadrao
-        self.to_currency["show"] = "*"
         self.to_currency.pack(side=RIGHT)
 
         self.quantidadeLabel = Label(self.quartoContainer, text="Quantidade ", font=self.fontePadrao)
@@ -51,7 +54,6 @@ class Application:
         self.quantidade = Entry(self.quartoContainer)
         self.quantidade["width"] = 10
         self.quantidade["font"] = self.fontePadrao
-        self.quantidade["show"] = "*"
         self.quantidade.pack(side=RIGHT)
   
         self.autenticar = Button(self.quintoContainer)
@@ -61,7 +63,7 @@ class Application:
         self.autenticar["command"] = self.Converter
         self.autenticar.pack()
   
-        self.msg = Label(self.quintoContainer, text="", font=self.fontePadrao)
+        self.msg = Label(self.respContainer, text="", font=self.fontePadrao)
         self.msg.pack()
   
     #Método verificar senha
@@ -71,7 +73,7 @@ class Application:
         amount = self.quantidade.get()
 
         try:
-            amount = float(self.quantidade.get())
+            amount = int(self.quantidade.get())
             if(amount < 0):
                 print("Valor invalido. Por favor digite escolha um numero nao negativo.")
             
@@ -81,9 +83,10 @@ class Application:
         
         else:
             verify = cv.verify_valid_currencies(to_currency, from_currency)
-            print(verify)
             if(verify):
-                self.msg["text"] = "Autenticado", from_currency, to_currency, amount
+                result = cv.teste_json(from_currency, to_currency, amount)
+                
+                self.msg["text"] = "Convertido de", '{:10,.2f}'.format(amount), from_currency, "para", '{:10,.2f}'.format(result), to_currency
             else:
                 self.msg["text"] = "moeda inválida ou não disponível"
         
