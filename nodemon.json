@@ -1,0 +1,7 @@
+{
+    "watch":"src",
+    "ext":"ts",
+    "execMap": {
+        "ts": "npm run lint && npm run build && npm start"
+    }
+}
