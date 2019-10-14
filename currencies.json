@@ -1,11 +1,1 @@
-
-{
-    "currencies": {
-        "USD": {
-            "rate": 1
-        },
-        "ETH": {
-            "rate": 2
-        }
-    }
-}
+{"usd": [{"code": "usd", "name": "Dollar", "rate": 1}], "btc": [{"code": "btc", "name": "bitcoin", "rate": "8332.08174838"}], "eur": [{"code": "eur", "name": "Euro", "rate": 1.1040784178986}], "eth": [{"code": "eth", "name": "ethereum", "rate": "183.266214056"}], "brl": [{"code": "brl", "name": "Brazilian Real", "rate": 0.24375598818142}]}
