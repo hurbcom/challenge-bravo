@@ -32,6 +32,22 @@ class CurrencyController {
       return res.status(500).send(err)
     }
   }
+
+  public RemoveCurrency (req: Request, res: Response): Response {
+    try {
+      const newCurrency = req.body.currency
+      const memoryCurrencies: string = memory.GetCurrencies()
+      const valid: string = validate.RemoveCurrency(newCurrency, memoryCurrencies)
+      if (valid === '') {
+        const currencies = memory.RemoveCurrency(newCurrency)
+        return res.status(200).send({ moedas: currencies })
+      } else {
+        return res.status(400).send(valid)
+      }
+    } catch (err) {
+      return res.status(500).send(err)
+    }
+  }
 }
 
 export default new CurrencyController()
