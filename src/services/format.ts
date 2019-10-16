@@ -1,10 +1,10 @@
 class Format {
-  public keysToList (object: object): Array<string> {
+  public KeysToString (object: object): string {
     let list: Array<string> = []
     Object.keys(object).forEach(key => {
       list = [...list, key]
     })
-    return list
+    return list.join()
   }
 }
 

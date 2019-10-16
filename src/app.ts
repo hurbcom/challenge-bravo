@@ -18,7 +18,7 @@ class App {
     }
 
     private starterData (): void {
-      cache.put('currencies','USD,BRL,EUR,BTC,ETH')
+      cache.put('currencies', 'USD,BRL,EUR,BTC,ETH')
     }
 
     private routes (): void {
