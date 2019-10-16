@@ -1,14 +1,14 @@
 import express from 'express'
 import cors from 'cors'
 import cache from 'memory-cache'
-
+import routes from './routes'
 class App {
     public express: express.Application;
 
     public constructor () {
       this.express = express()
       this.middlewares()
-      this.starterCurrencies()
+      this.starterData()
       this.routes()
     }
 
@@ -17,12 +17,12 @@ class App {
       this.express.use(cors())
     }
 
-    private starterCurrencies (): void {
-      cache.put('currencies', ['USD', 'BRL', 'EUR', 'BTC', 'ETH'])
+    private starterData (): void {
+      cache.put('currencies','USD,BRL,EUR,BTC,ETH')
     }
 
     private routes (): void {
-      this.express.get('/', (req, res) => res.send('teste'))
+      this.express.use(routes)
     }
 }
 
