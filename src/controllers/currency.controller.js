@@ -1,9 +1,9 @@
 const { Currency } = require("../models/currency.model");
 
 exports.get = (req, res) => {
-    var currency = req.params["currency"];
+    let currency = req.params["currency"];
 
-    var filter = {};
+    let filter = {};
 
     if (currency) {
         filter = { name: currency };
