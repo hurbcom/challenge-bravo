@@ -9,13 +9,24 @@ exports.get = async function (req, res) {
     if (!from || !to || !amount) {
         res.status(400).send({ status: false, response: "Invalid request" });
     } else {
-        let currency_from = await verifyCurrencyExists(from);
-        let currency_to = await verifyCurrencyExists(to);
+        var currency_from = await verifyCurrencyExists(from);
+        var currency_to = await verifyCurrencyExists(to);
 
         if (currency_from && currency_to) {
-            // request.get("http://api.coincap.io/v2/rates", (err, res, body) => {
-            //     console.log(body);
-            // });
+            var rates = await getCurrencyRates();
+
+            if (from in rates && to in rates) {
+                var rateFrom = rates[from];
+                var rateTo = rates[to];
+                console.log(from + " " + rateFrom);
+                console.log(to + " " + rateTo);
+                
+                var value = (rateFrom * amount) * rateTo;
+
+                res.status(200).send({ status: true, response: { from: from, to: to, amount: amount, value: value} });
+            } else {
+                res.status(404).send({ status: false, response: `Currency ${(from in rates) ? to : from} doesn't exists` });
+            }
         } else {
             res.status(404).send({ status: false, response: `Currency ${(from) ? to : from} doesn't exists` });
         }
@@ -35,6 +46,26 @@ function verifyCurrencyExists(name)
                     resolve(false);
                 }
             }
+        });
+    });
+}
+
+function getCurrencyRates()
+{
+    return new Promise((resolve, reject) => {
+        request.get("http://api.coincap.io/v2/rates", (err, res, body) => {
+            var json = JSON.parse(body);
+
+            if (!json) {
+                reject(false);
+            }
+            var rates = [];
+    
+            json.data.forEach(el => {
+                rates[el.symbol] = el.rateUsd;
+            });
+    
+            resolve(rates);
         });
     });
 }
