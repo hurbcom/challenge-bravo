@@ -1,65 +1,55 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Eson Challenge-Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+This project uses Node, Typescript and Docker.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## To avoid errors with node version, we recommend to use Node v10.16.0
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+# Preparing Development Environment
+## With Npm
+1. Clone the project with "git clone https://github.com/edysison/challenge-bravo.git"
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+2. Run "npm install"
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+3. Run the command "npm run dev" to generate a local enviroment
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+## Building with Docker
+1. Run the command "docker-compose up -d"
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+2. Access at http://localhost:3000
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+# Routes & Params
+## Get all
+1. This service is based on https://docs.awesomeapi.com.br/api-de-moedas that only supports a few tipes of currencies, so use this endpoint to check which currencies we currently support
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+2. Get all currencies that the service can support
 
-## Requisitos
+3. Route GET localhost:3000/currencies
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+4. Response: JSON Result  Ex: { "list":"USD,USDT,CAD,EUR,GBP,ARS,BTC,LTC,JPY,CHF,AUD,CNY,ILS,ETH,XRP,BRL" } 
 
-## Critério de avaliação
+## Add Currency 
+1. Initially the service will only accept "USD", "BRL", "EUR", "BTC", and "ETH", so use this API to increase the types of coins that the server will allow to conversion
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+2. Route POST localhost:3000/currencies
 
-## Dúvidas
+3. Param Body: { "currency": CODE } Ex: { "currency":"GBP" }
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+3. Response: JSON Result  Ex: { "currencies": "BRL,EUR,BTC,ETH,USD,GBP"}
 
-Boa sorte e boa viagem! ;)
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## Remove Currency 
+1. Initially the service will only accept "USD", "BRL", "EUR", "BTC", and "ETH", so use this API to decrease the types of coins that the server will allow to conversion
+
+2. Route DELETE localhost:3000/currencies
+
+3. Param Body: { "currency": CODE } Ex: { "currency":"USD" }
+
+4. Response: JSON Result  Ex: { "currencies": "BRL,EUR,BTC,ETH" }
+
+
+## Convert Values
+1. Convert the currenct currency value to another currency
+
+2. Route GET localhost:3000?from= YOUR_CURRENCY &to= DESIRED_CURRENCY &amount=VALUE   Ex: localhost:3000?from=BTC&to=EUR&amount=100 
+
+3. Response: JSON Result  Ex: { "convertedValue": 723004.28 } 
