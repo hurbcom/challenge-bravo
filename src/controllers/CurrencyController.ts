@@ -17,7 +17,7 @@ class CurrencyController {
         const response = await awesomeApi.GetCurrencies()
         const exchangeRate = format.ExchangeRate(from, to, response)
         const convertedValue = calculation.Conversion(amount, exchangeRate)
-        return res.status(200).send(convertedValue)
+        return res.status(200).send({convertedValue})
       } else {
         return res.status(400).send(valid)
       }
@@ -30,7 +30,7 @@ class CurrencyController {
     try {
       const response = await awesomeApi.GetCurrencies()
       const list: string = format.KeysToString(response)
-      return res.status(200).send(list)
+      return res.status(200).send({list})
     } catch (err) {
       return res.status(500).send(err)
     }
@@ -45,7 +45,7 @@ class CurrencyController {
       const valid: string = validate.NewCurrency(newCurrency, memoryCurrencies, list)
       if (valid === '') {
         const currencies = memory.AddCurrency(newCurrency)
-        return res.status(200).send({ moedas: currencies })
+        return res.status(200).send({ currencies })
       } else {
         return res.status(400).send(valid)
       }
@@ -61,7 +61,7 @@ class CurrencyController {
       const valid: string = validate.RemoveCurrency(newCurrency, memoryCurrencies)
       if (valid === '') {
         const currencies = memory.RemoveCurrency(newCurrency)
-        return res.status(200).send({ moedas: currencies })
+        return res.status(200).send({ currencies })
       } else {
         return res.status(400).send(valid)
       }
