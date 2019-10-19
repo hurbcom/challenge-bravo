@@ -53,3 +53,6 @@ This project uses Node, Typescript and Docker.
 2. Route GET localhost:3000?from= YOUR_CURRENCY &to= DESIRED_CURRENCY &amount=VALUE   Ex: localhost:3000?from=BTC&to=EUR&amount=100 
 
 3. Response: JSON Result  Ex: { "convertedValue": 723004.28 } 
+
+## Obs:
+This api uses BRL as main currency, because I wasn't abble to find an good free Api service that could generate the exchange rates for "USD", "BRL", "EUR", "BTC", and "ETH" with USD as main currency.
