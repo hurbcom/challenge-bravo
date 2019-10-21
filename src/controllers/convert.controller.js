@@ -16,12 +16,9 @@ exports.get = async function (req, res) {
             var rates = await getCurrencyRates();
 
             if (from in rates && to in rates) {
-                var rateFrom = rates[from];
-                var rateTo = rates[to];
-                console.log(from + " " + rateFrom);
-                console.log(to + " " + rateTo);
-                
-                var value = (rateFrom * amount) * rateTo;
+                var rateFromUSD = 1/rates[from];
+                var rateToUSD = 1/rates[to];
+                var value = (rateToUSD/rateFromUSD) * amount;
 
                 res.status(200).send({ status: true, response: { from: from, to: to, amount: amount, value: value} });
             } else {

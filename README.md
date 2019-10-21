@@ -63,3 +63,111 @@ Boa sorte e boa viagem! ;)
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
 </p>
+
+# Documentação
+
+A API foi desenvolvida em NodeJS, utilizando o banco de dados MongoDB e, para executar o teste de stress, a ferramenta Artillery.
+
+Para realizar a conversão das moedas, as cotações foram consultadas na API da [_CoinCap_](https://docs.coincap.io/?version=latest).
+
+## Instalação
+
+- Acessar a pasta do projeto
+- Instalar a ferramenta Artillery para o teste de stress: `npm install -g artillery`
+- Realizar o build do container: `docker-compose build`
+- Executar a aplicação: `npm start`
+
+O endereço da API será http://localhost:3000.
+
+## Testes
+
+- Para executar o teste de stress com um volume de 1000 requisições, é necessário executar o comando `npm test`.
+
+## Endpoints
+
+### GET /currency
+- Retorna todas as moedas cadastradas
+- Retorno da requisição
+```
+{
+    "status": true,
+    "response": [
+        {
+            "_id": "5dadbd94e63c09001945c7d0",
+            "name": "USD",
+            "__v": 0
+        },
+        {
+            "_id": "5dadbd8ae63c09001945c7cf",
+            "name": "BRL",
+            "__v": 0
+        },
+        {
+            "_id": "5dadbda8e63c09001945c7d3",
+            "name": "BTC",
+            "__v": 0
+        }
+    ]
+}
+```
+
+### GET /currency/{currency_symbol}
+- Retorna uma moeda cadastrada
+- Retorno de requisição
+```
+{
+    "status": true,
+    "response": [
+        {
+            "_id": "5dadbda8e63c09001945c7d3",
+            "name": "BTC",
+            "__v": 0
+        }
+    ]
+}
+```
+
+### POST /currency
+- Realiza o cadastro de uma moeda
+- Exemplo de requisição
+```
+{
+	"name": "BTC"
+}
+```
+- Retorno da requisição
+```
+{
+    "status": true,
+    "response": "Currency successfully registered"
+}
+```
+
+### DELETE /currency/{currency_symbol}
+- Remove uma moeda cadastrada anteriormente
+- Retorno da requisição
+```
+{
+    "status": true,
+    "response": "Currency successfully removed"
+}
+```
+
+### GET /convert?from={currency_symbol}&to={currency_symbol}&amount={value}
+- Realiza a conversão de um valor de uma moeda para outra
+- Requisição
+```
+http://localhost:3000/convert?from=BTC&to=BRL&amount=10
+```
+- Retorno da requisição
+```
+{
+    "status": true,
+    "response": {
+        "from": "BTC",
+        "to": "BRL",
+        "amount": "10",
+        "value": 340774.95712505426
+    }
+}
+```

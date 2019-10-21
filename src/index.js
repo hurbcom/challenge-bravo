@@ -2,10 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose");
 
+const CurrencyController = require("./controllers/currency.controller");
+
 const { CurrencyRouter } = require("./routes/currency.routes");
 const { ConvertRouter } = require("./routes/convert.routes");
 
-var mongoIP = process.env["MONGO_IP"] || "127.0.0.1";
+var mongoIP = process.env["MONGO_IP"] || "mongo";
+var serverPort = process.env["PORT"] || 3000;
 var mongoURI = `mongodb://${mongoIP}/challenge-bravo`;
 
 const app = express();
@@ -24,8 +27,11 @@ db.on("error", (err) => {
 });
 
 db.once("open", () => {
-    console.log("Connected to mongoose!");
-    app.listen(3000, () => {
-        console.log("Server start!");
-    });
+    console.log("Connected to database!");
+
+    if (CurrencyController.verifyStandardCurrencies()) {
+        app.listen(serverPort, "0.0.0.0", () => {
+            console.log("Server started!");
+        });
+    }
 });

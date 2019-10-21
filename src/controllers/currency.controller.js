@@ -1,4 +1,5 @@
 const { Currency } = require("../models/currency.model");
+var standardCurrencies = [ "BRL", "USD", "EUR", "BTC", "ETH" ];
 
 exports.get = (req, res) => {
     let currency = req.params["currency"];
@@ -61,4 +62,27 @@ exports.delete = (req, res) => {
             }
         }
     });
+};
+
+exports.verifyStandardCurrencies = () => {
+    standardCurrencies.forEach(el => {
+        Currency.findOne({ name: el }, (err, currency) => {
+            if (err) {
+                res.status(500).send({ status: false, response: "Internal server error" });
+            } else {
+                if (!currency) {
+                    var newCurrency = new Currency();
+                    newCurrency.name = el;
+
+                    newCurrency.save((err, savedCurrency) => {
+                        if (err) {
+                            res.status(500).send({ status: false, response: "Internal server error" });
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    return true;
 };

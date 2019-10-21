@@ -4,8 +4,8 @@
   "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "docker-compose up",
+    "test": "artillery quick --count 1000 -n 1 http://localhost:3000/currency"
   },
   "repository": {
     "type": "git",

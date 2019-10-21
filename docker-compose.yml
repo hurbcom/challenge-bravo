@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    command: npm start
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    links:
+      - "mongodb:mongo"
+  mongodb:
+    image: mongo
+    ports:
+      - "27018:27017"
