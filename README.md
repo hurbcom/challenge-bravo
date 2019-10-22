@@ -1,4 +1,42 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> 
+
+
+-/AMAURI README NOTES:
+
+Primeiramente, obrigado pela oportunidade.
+
+
+Utilizei a linguagem PHP para criar a API e jQuery para realizar o AJAX/JSON.
+
+Fonte para captacao das moedas: 
+https://min-api.cryptocompare.com/ (BTC e ETH)
+
+https://api.exchangeratesapi.io/latest
+
+
+
+<p align="center">
+  <img src="sc.jpg"/>
+</p>
+
+Alguns ajustes podem ser executados: 
+Ajustar o valor final de retorno para padrao 'monetario' atrelado com a moeda escolhida, aplicacao de mascaras jQuery para o front end. Poderia ter realizado os commits parte a parte, mas realizei apenas um final.
+
+Poderia ter utilizado apenas o servico https://min-api.cryptocompare.com/, mas utilizei os dois para exibir as duas formas.
+
+Existem diversas melhoras para serem executadas, mas o codigo esta funcionando normalmente, exibindo a conversao solicitada.
+
+Espero que possamos trabalhar juntos :) 
+
+Obrigado novamente e tenha um otimo dia!
+
+Amauri
+devamauri@gmail.com
+
+
+
+
+Desafio Bravo
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
 
