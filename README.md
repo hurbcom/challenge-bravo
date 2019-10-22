@@ -16,7 +16,7 @@ https://api.exchangeratesapi.io/latest
 
 
 <p align="center">
-  <img src="sc.jpg"/>
+  <img src="sc.png"/>
 </p>
 
 Alguns ajustes podem ser executados: 
