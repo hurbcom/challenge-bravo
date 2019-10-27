@@ -1,0 +1,17 @@
+DirectoryIndex index.php index.html
+RewriteEngine on
+# Allow requests for valid file or folder names, or some that should be
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+RewriteCond $1 ^(robots\.txt|favicon\.ico|style\.css)
+RewriteRule ^(.*)$ - [L]
+# use index.php as front controller ...
+RewriteRule ^(.*)$ ./index.php/$1 [L]
+# Turn on IE8-IE9 XSS prevention tools
+Header set X-XSS-Protection "1; mode=block"
+# prevent mime based attacks
+Header set X-Content-Type-Options "nosniff"
+# Don't allow any pages to be framed - Defends against CSRF
+Header set X-Frame-Options DENY
+# Hide PHP version
+Header unset X-Powered-By
