@@ -35,7 +35,8 @@ class API {
 
                 break;
             case 'POST':
-                $response = $this->_create();
+                $input = (array) json_decode(file_get_contents('php://input'), TRUE);
+                $response = $this->_create($input);
                 break;
             case 'DELETE':
                 $response = $this->_delete();
@@ -59,7 +60,7 @@ class API {
         if (is_null($from) || $from === "")
         {
             $response['success'] = FALSE;
-            $response['body']['error_code'] = "404";
+            $response['body']['error_code'] = "400";
             $response['body']['error_message'] = "Moeda 'from' nao informada.";
             return $response;
         }
@@ -67,7 +68,7 @@ class API {
         if (is_null($to) || $to === "")
         {
             $response['success'] = FALSE;
-            $response['body']['error_code'] = "404";
+            $response['body']['error_code'] = "400";
             $response['body']['error_message'] = "Moeda 'to' nao informada.";
             return $response;
         }
@@ -75,7 +76,7 @@ class API {
         if (is_null($fromRate) || is_null($toRate))
         {
             $response['success'] = FALSE;
-            $response['body']['error_code'] = "404";
+            $response['body']['error_code'] = "400";
             $response['body']['error_message'] = "Moeda nao suportada pela API.";
             return $response;
         }
@@ -83,7 +84,7 @@ class API {
         if (is_null($amount))
         {
             $response['success'] = FALSE;
-            $response['body']['error_code'] = "404";
+            $response['body']['error_code'] = "400";
             $response['body']['error_message'] = "Valor nao informado.";
             return $response;
         }
@@ -133,9 +134,28 @@ class API {
         }
     }
 
-    private function _create()
+    private function _create($input)
     {
-        return 'criado';
+        $cCurrency = new Currency();
+
+        $code = isset($input["code"]) ? (trim($input["code"])) : NULL;
+        $name = isset($input["name"]) ? (trim($input["name"])) : NULL;
+        $is_crypto = isset($input["is_crypto"]) ? (trim($input["is_crypto"])) : 0;
+
+        if (!$cCurrency->create($code, $name, $is_crypto))
+        {
+            $response['success'] = FALSE;
+            $response['body']['error_code'] = "400";
+            $response['body']['error_message'] = "Erro ao adicionar moeda.";
+            return $response;
+        }
+
+
+        $response['success'] = TRUE;
+        $response['body']['code'] = $code;
+        $response['body']['name'] = $name;
+        $response['body']['is_crypto'] = $is_crypto;
+        return $response;
     }
 
     private function _delete()

@@ -15,4 +15,25 @@ class Currency {
         return $pdo->single();
     }
 
+    function create($code, $name, $is_crypto)
+    {
+
+        $pdo = new DbPDO();
+        $sql = "INSERT INTO currency (code, name, is_crypto) VALUES (:code, :name, :is_crypto)";
+        $pdo->query($sql);
+        $pdo->bind(':code', $code);
+        $pdo->bind(':name', $name);
+        $pdo->bind(':is_crypto', $is_crypto);
+
+        try
+        {
+            $pdo->execute();
+            return TRUE;
+        }
+        catch (PDOException $ex)
+        {
+            return FALSE;
+        }
+    }
+
 }
