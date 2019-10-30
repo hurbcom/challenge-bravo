@@ -17,8 +17,8 @@ class API {
         switch ($this->method)
         {
             case 'GET':
-                $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-                $uri = explode('/', $uri);
+                $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+                $uri = explode('/', $requestUri);
 
                 if (isset($uri[3]) && $uri[3] === "list")
                 {
@@ -56,11 +56,35 @@ class API {
         $fromRate = self::getCurrencyRate($from);
         $toRate = self::getCurrencyRate($to);
 
+        if (is_null($from) || $from === "")
+        {
+            $response['success'] = FALSE;
+            $response['body']['error_code'] = "404";
+            $response['body']['error_message'] = "Moeda 'from' nao informada.";
+            return $response;
+        }
+
+        if (is_null($to) || $to === "")
+        {
+            $response['success'] = FALSE;
+            $response['body']['error_code'] = "404";
+            $response['body']['error_message'] = "Moeda 'to' nao informada.";
+            return $response;
+        }
+
         if (is_null($fromRate) || is_null($toRate))
         {
             $response['success'] = FALSE;
             $response['body']['error_code'] = "404";
-            $response['body']['error_message'] = "Moeda nao existe";
+            $response['body']['error_message'] = "Moeda nao suportada pela API.";
+            return $response;
+        }
+
+        if (is_null($amount))
+        {
+            $response['success'] = FALSE;
+            $response['body']['error_code'] = "404";
+            $response['body']['error_message'] = "Valor nao informado.";
             return $response;
         }
 
