@@ -16,4 +16,4 @@ include("class/DbPDO.class.php");
 
 $method = $_SERVER["REQUEST_METHOD"];
 $api = new API($method);
-$api->process_request();
+echo $api->process_request();

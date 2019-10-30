@@ -9,11 +9,11 @@ class API {
     public function __construct($method)
     {
         $this->method = $method;
-        $this->currency = new Currency();
     }
 
     public function process_request()
     {
+       // $response = "";
         switch ($this->method)
         {
             case 'GET':
@@ -26,33 +26,38 @@ class API {
                 $response = $this->_delete();
                 break;
             default:
-                $response = 'metodo nao permitido';
+                $response['success'] = FALSE;
+                $response['body']['error_code'] = "405";
+                $response['body']['error_message'] = "Metodo nao permitido";
                 break;
         }
 
-        if ($response)
-        {
-            echo $response;
-        }
+        return json_encode($response);
+
     }
 
     private function _convert($from, $to, $amount)
     {
 
-        $fromRate = 1;
-        $toRate = 1;
-
-
-
-
         $fromRate = self::getCurrencyRate($from);
         $toRate = self::getCurrencyRate($to);
 
+        if (is_null($fromRate) || is_null($toRate))
+        {
+            $response['success'] = FALSE;
+            $response['body']['error_code'] = "404";
+            $response['body']['error_message'] = "Moeda nao existe";
+            return $response;
+        }
+
         $result = $amount * $fromRate / $toRate;
 
-
-        return $result;
-
+        $response['success'] = TRUE;
+        $response['body']['from'] = $from;
+        $response['body']['to'] = $to;
+        $response['body']['amount'] = $amount;
+        $response['body']['rate'] = $result;
+        return $response;
     }
 
     function getCurrency($code)
@@ -69,7 +74,7 @@ class API {
         $currency = self::getCurrency($code);
         if (!$currency)
         {
-            return "n vale";
+            return;
         }
 
 
