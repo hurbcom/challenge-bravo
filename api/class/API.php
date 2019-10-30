@@ -13,11 +13,26 @@ class API {
 
     public function process_request()
     {
-       // $response = "";
+        // $response = "";
         switch ($this->method)
         {
             case 'GET':
-                $response = $this->_convert("USD", "ETH", 500);
+                $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+                $uri = explode('/', $uri);
+
+                if (isset($uri[3]) && $uri[3] === "list")
+                {
+                    $response = $this->_list();
+                }
+                else
+                {
+                    $from = filter_input(INPUT_GET, 'from', FILTER_SANITIZE_URL);
+                    $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
+                    $amount = filter_input(INPUT_GET, 'amount', FILTER_SANITIZE_URL);
+                    $response = $this->_convert($from, $to, $amount);
+                }
+
+
                 break;
             case 'POST':
                 $response = $this->_create();
@@ -33,7 +48,6 @@ class API {
         }
 
         return json_encode($response);
-
     }
 
     private function _convert($from, $to, $amount)
@@ -103,6 +117,11 @@ class API {
     private function _delete()
     {
         return 'excluido';
+    }
+
+    private function _list()
+    {
+        return 'listagem';
     }
 
 }
