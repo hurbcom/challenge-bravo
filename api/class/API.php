@@ -2,11 +2,14 @@
 
 class API {
 
+    const LASTRO = "USD";
+
     private $method;
 
     public function __construct($method)
     {
         $this->method = $method;
+        $this->currency = new Currency();
     }
 
     public function process_request()
@@ -14,7 +17,7 @@ class API {
         switch ($this->method)
         {
             case 'GET':
-                $response = $this->_convert("USD", "BRL", 500);
+                $response = $this->_convert("USD", "ETH", 500);
                 break;
             case 'POST':
                 $response = $this->_create();
@@ -35,13 +38,56 @@ class API {
 
     private function _convert($from, $to, $amount)
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        curl_close($ch);
 
-        return $output;
+        $fromRate = 1;
+        $toRate = 1;
+
+
+
+
+        $fromRate = self::getCurrencyRate($from);
+        $toRate = self::getCurrencyRate($to);
+
+        $result = $amount * $fromRate / $toRate;
+
+
+        return $result;
+
+    }
+
+    function getCurrency($code)
+    {
+        $cCurrency = new Currency();
+        return $cCurrency->get($code);
+    }
+
+    function getCurrencyRate($code)
+    {
+
+        $cHTTPCurrency = new HTTPCurrency();
+
+        $currency = self::getCurrency($code);
+        if (!$currency)
+        {
+            return "n vale";
+        }
+
+
+        if ($code === self::LASTRO)
+        {
+            return 1;
+        }
+
+        if ($currency['is_crypto'])
+        {
+            $result = $cHTTPCurrency->makeRequest(TRUE, $currency['name']);
+            return $result[0]['current_price'];
+        }
+        else
+        {
+            $result = $cHTTPCurrency->makeRequest(FALSE);
+            return $result[strtolower($code)]['rate'];
+        }
     }
 
     private function _create()
