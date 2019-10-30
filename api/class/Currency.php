@@ -35,5 +35,23 @@ class Currency {
             return FALSE;
         }
     }
+    
+    function delete($code) {
+
+        $pdo = new DbPDO();
+        $sql = "DELETE FROM currency WHERE code = :code";
+        $pdo->query($sql);
+        $pdo->bind(':code', $code);
+
+        try
+        {
+            $pdo->execute();
+            return TRUE;
+        }
+        catch (PDOException $ex)
+        {
+            return FALSE;
+        }
+    }
 
 }

@@ -89,7 +89,7 @@ class API {
             return $response;
         }
 
-        $result = $amount * $fromRate / $toRate;
+        $result = $amount * ($fromRate / $toRate);
 
         $response['success'] = TRUE;
         $response['body']['from'] = $from;
@@ -160,7 +160,29 @@ class API {
 
     private function _delete()
     {
-        return 'excluido';
+        $cCurrency = new Currency();
+        $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri = explode('/', $requestUri);
+
+        if (!isset($uri[3]))
+        {
+            $response['success'] = FALSE;
+            $response['body']['error_code'] = "404";
+            $response['body']['error_message'] = "Moeda nao encontrada.";
+            return $response;
+        }
+
+        if (!$cCurrency->delete($uri[3]))
+        {
+            $response['success'] = FALSE;
+            $response['body']['error_code'] = "400";
+            $response['body']['error_message'] = "Erro ao excluir moeda.";
+            return $response;
+        }
+
+        $response['success'] = TRUE;
+        $response['body']['code'] = $uri[3];
+        return $response;
     }
 
     private function _list()
