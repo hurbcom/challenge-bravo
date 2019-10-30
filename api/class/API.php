@@ -187,7 +187,8 @@ class API {
 
     private function _list()
     {
-        return 'listagem';
+        $cCurrency = new Currency();
+        return $cCurrency->getAll();
     }
 
 }

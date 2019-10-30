@@ -15,6 +15,20 @@ class Currency {
         return $pdo->single();
     }
 
+    function getAll()
+    {
+        $pdo = new DbPDO();
+        $sql = "SELECT * FROM currency";
+        $pdo->query($sql);
+        $rows = $pdo->resultset();
+        $total = $pdo->rowCount();
+        if ($total !== 0)
+        {
+            return $rows;
+        }
+        return FALSE;
+    }
+
     function create($code, $name, $is_crypto)
     {
 
@@ -35,8 +49,9 @@ class Currency {
             return FALSE;
         }
     }
-    
-    function delete($code) {
+
+    function delete($code)
+    {
 
         $pdo = new DbPDO();
         $sql = "DELETE FROM currency WHERE code = :code";
