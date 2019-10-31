@@ -13,7 +13,6 @@ class API {
 
     public function process_request()
     {
-        // $response = "";
         switch ($this->method)
         {
             case 'GET':
@@ -31,8 +30,6 @@ class API {
                     $amount = filter_input(INPUT_GET, 'amount', FILTER_SANITIZE_URL);
                     $response = $this->_convert($from, $to, $amount);
                 }
-
-
                 break;
             case 'POST':
                 $input = (array) json_decode(file_get_contents('php://input'), TRUE);
@@ -42,61 +39,59 @@ class API {
                 $response = $this->_delete();
                 break;
             default:
-                $response['success'] = FALSE;
-                $response['body']['error_code'] = "405";
-                $response['body']['error_message'] = "Metodo nao permitido";
+                $error['error_code'] = 405;
+                $error['error_message'] = "Metodo nao permitido";
+                $response = $this->_createResponse(FALSE, $error);
                 break;
         }
 
-        return json_encode($response);
+        return $response;
     }
 
     private function _convert($from, $to, $amount)
     {
-
-        $fromRate = self::getCurrencyRate($from);
-        $toRate = self::getCurrencyRate($to);
+        $fromRate = $this->getCurrencyRate($from);
+        $toRate = $this->getCurrencyRate($to);
 
         if (is_null($from) || $from === "")
         {
-            $response['success'] = FALSE;
-            $response['body']['error_code'] = "400";
-            $response['body']['error_message'] = "Moeda 'from' nao informada.";
+            $error['error_code'] = 400;
+            $error['error_message'] = "Moeda 'from' nao informada.";
+            $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
 
         if (is_null($to) || $to === "")
         {
-            $response['success'] = FALSE;
-            $response['body']['error_code'] = "400";
-            $response['body']['error_message'] = "Moeda 'to' nao informada.";
+            $error['error_code'] = 400;
+            $error['error_message'] = "Moeda 'to' nao informada.";
+            $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
 
         if (is_null($fromRate) || is_null($toRate))
         {
-            $response['success'] = FALSE;
-            $response['body']['error_code'] = "400";
-            $response['body']['error_message'] = "Moeda nao suportada pela API.";
+            $error['error_code'] = 400;
+            $error['error_message'] = "Moeda nao suportada pela API.";
+            $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
 
-        if (is_null($amount))
+        if (is_null($amount) || $amount <=0)
         {
-            $response['success'] = FALSE;
-            $response['body']['error_code'] = "400";
-            $response['body']['error_message'] = "Valor nao informado.";
+            $error['error_code'] = 400;
+            $error['error_message'] = "Valor nao informado.";
+            $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
-
 
         $result = $amount * ( $toRate / $fromRate );
 
-        $response['success'] = TRUE;
-        $response['body']['from'] = $from;
-        $response['body']['to'] = $to;
-        $response['body']['amount'] = $amount;
-        $response['body']['rate'] = $result;
+        $success['from'] = $from;
+        $success['to'] = $to;
+        $success['amount'] = $amount;
+        $success['rate'] = $result;
+        $response = $this->_createResponse(TRUE, $success);
         return $response;
     }
 
@@ -108,15 +103,12 @@ class API {
 
     function getCurrencyRate($code)
     {
-
         $cHTTPCurrency = new HTTPCurrency();
-
-        $currency = self::getCurrency($code);
-        if (!$currency)
+        $currency = $this->getCurrency($code);
+        if (is_null($currency) || $currency === FALSE)
         {
             return;
         }
-
 
         if ($code === self::LASTRO)
         {
@@ -126,37 +118,36 @@ class API {
         if ($currency['is_crypto'])
         {
             $result = $cHTTPCurrency->makeRequest(TRUE, $currency['name']);
-            return round(1/$result[0]['current_price'],7);
+            return round(1 / $result[0]['current_price'], 7);
         }
         else
         {
             $result = $cHTTPCurrency->makeRequest(FALSE);
-            
-            return round($result[strtolower($code)]['rate'],7);
+            return round($result[strtolower($code)]['rate'], 7);
         }
     }
 
     private function _create($input)
     {
         $cCurrency = new Currency();
-
         $code = isset($input["code"]) ? (trim($input["code"])) : NULL;
         $name = isset($input["name"]) ? (trim($input["name"])) : NULL;
         $is_crypto = isset($input["is_crypto"]) ? (trim($input["is_crypto"])) : 0;
 
         if (!$cCurrency->create($code, $name, $is_crypto))
         {
-            $response['success'] = FALSE;
-            $response['body']['error_code'] = "400";
-            $response['body']['error_message'] = "Erro ao adicionar moeda.";
+            $error['error_code'] = 400;
+            $error['error_message'] = "Erro ao adicionar moeda.";
+            $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
 
+        $success = TRUE;
+        $success['code'] = $code;
+        $success['name'] = $name;
+        $success['is_crypto'] = $is_crypto;
+        $response = $this->_createResponse(TRUE, $success);
 
-        $response['success'] = TRUE;
-        $response['body']['code'] = $code;
-        $response['body']['name'] = $name;
-        $response['body']['is_crypto'] = $is_crypto;
         return $response;
     }
 
@@ -168,17 +159,19 @@ class API {
 
         if (!isset($uri[3]))
         {
-            $response['success'] = FALSE;
-            $response['body']['error_code'] = "404";
-            $response['body']['error_message'] = "Moeda nao encontrada.";
+
+
+            $error['error_code'] = 404;
+            $error['error_message'] = "Moeda nao encontrada.";
+            $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
 
         if (!$cCurrency->delete($uri[3]))
         {
-            $response['success'] = FALSE;
-            $response['body']['error_code'] = "400";
-            $response['body']['error_message'] = "Erro ao excluir moeda.";
+            $error['error_code'] = 400;
+            $error['error_message'] = "Erro ao excluir moeda.";
+            $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
 
@@ -191,6 +184,13 @@ class API {
     {
         $cCurrency = new Currency();
         return $cCurrency->getAll();
+    }
+
+    private function _createResponse($success, $body)
+    {
+        $response['success'] = $success;
+        $response['body'] = $body;
+        return json_encode($response);
     }
 
 }
