@@ -26,8 +26,8 @@ class API {
                 }
                 else
                 {
-                    $from = filter_input(INPUT_GET, 'from', FILTER_SANITIZE_URL);
-                    $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
+                    $from = strtoupper(filter_input(INPUT_GET, 'from', FILTER_SANITIZE_URL));
+                    $to = strtoupper(filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL));
                     $amount = filter_input(INPUT_GET, 'amount', FILTER_SANITIZE_URL);
                     $response = $this->_convert($from, $to, $amount);
                 }
@@ -131,6 +131,7 @@ class API {
         else
         {
             $result = $cHTTPCurrency->makeRequest(FALSE);
+            
             return round($result[strtolower($code)]['rate'],7);
         }
     }
