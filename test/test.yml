@@ -1,0 +1,11 @@
+config:
+  target: 'http://localhost:8081/challenge-bravo'
+  phases:
+    - duration: 10
+      arrivalRate: 20
+scenarios:
+  -
+    name: 'Conversao'
+    flow:
+    - get:
+        url: "/api/?from=brdL&to=usd&amount=1"
