@@ -77,7 +77,7 @@ class API {
             return $response;
         }
 
-        if (is_null($amount) || $amount <=0)
+        if (is_null($amount) || $amount <= 0)
         {
             $error['error_code'] = 400;
             $error['error_message'] = "Valor nao informado.";
@@ -159,15 +159,13 @@ class API {
 
         if (!isset($uri[3]))
         {
-
-
             $error['error_code'] = 404;
             $error['error_message'] = "Moeda nao encontrada.";
             $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
 
-        if (!$cCurrency->delete($uri[3]))
+        if ($cCurrency->delete($uri[3]) === FALSE)
         {
             $error['error_code'] = 400;
             $error['error_message'] = "Erro ao excluir moeda.";
@@ -175,8 +173,9 @@ class API {
             return $response;
         }
 
-        $response['success'] = TRUE;
-        $response['body']['code'] = $uri[3];
+        $success = TRUE;
+        $success['code'] = $uri[3];
+        $response = $this->_createResponse(TRUE, $success);
         return $response;
     }
 
