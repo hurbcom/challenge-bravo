@@ -54,8 +54,8 @@ class API {
     private function _convert($from, $to, $amount)
     {
 
-        $fromRate = self::getCurrencyRate($from);
-        $toRate = self::getCurrencyRate($to);
+        $fromRate = round(self::getCurrencyRate($from),7);
+        $toRate = round(self::getCurrencyRate($to),7);
 
         if (is_null($from) || $from === "")
         {
@@ -89,7 +89,8 @@ class API {
             return $response;
         }
 
-        $result = $amount * ($fromRate / $toRate);
+
+        $result = $amount * ( $toRate / $fromRate );
 
         $response['success'] = TRUE;
         $response['body']['from'] = $from;
@@ -125,12 +126,12 @@ class API {
         if ($currency['is_crypto'])
         {
             $result = $cHTTPCurrency->makeRequest(TRUE, $currency['name']);
-            return $result[0]['current_price'];
+            return round(1/$result[0]['current_price'],7);
         }
         else
         {
             $result = $cHTTPCurrency->makeRequest(FALSE);
-            return $result[strtolower($code)]['rate'];
+            return round($result[strtolower($code)]['rate'],7);
         }
     }
 
