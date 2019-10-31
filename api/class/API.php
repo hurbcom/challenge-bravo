@@ -54,8 +54,8 @@ class API {
     private function _convert($from, $to, $amount)
     {
 
-        $fromRate = round(self::getCurrencyRate($from),7);
-        $toRate = round(self::getCurrencyRate($to),7);
+        $fromRate = self::getCurrencyRate($from);
+        $toRate = self::getCurrencyRate($to);
 
         if (is_null($from) || $from === "")
         {
