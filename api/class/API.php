@@ -225,7 +225,17 @@ class API {
     private function _list()
     {
         $cCurrency = new Currency();
-        return $cCurrency->getAll();
+        $list = $cCurrency->getAll();
+        if ($list === FALSE)
+        {
+            $error['error_code'] = 400;
+            $error['error_message'] = "Nenhuma moeda encontrada.";
+            $response = $this->_createResponse(FALSE, $error);
+        }
+        
+        $success['currencies'] = $list;
+        $response = $this->_createResponse(TRUE, $success);
+        return $response;
     }
 
     /**
