@@ -15,5 +15,5 @@ include("class/Currency.php");
 include("class/DbPDO.class.php");
 
 $method = $_SERVER["REQUEST_METHOD"];
-$api = new API($method);
-echo $api->process_request();
+$api = new API();
+echo $api->process_request($method);

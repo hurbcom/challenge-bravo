@@ -1,19 +1,25 @@
 <?php
 
+/**
+ * API Class
+ *
+ * Does all the requests based on the method called
+ *
+ */
 class API {
 
+    /** @var string Base Currency */
     const LASTRO = "USD";
 
-    private $method;
-
-    public function __construct($method)
+    /**
+     * Checks and returns the request in json format.
+     *
+     * @param	string $method Method requested.
+     * @return	json API response for the request.
+     */
+    public function process_request($method)
     {
-        $this->method = $method;
-    }
-
-    public function process_request()
-    {
-        switch ($this->method)
+        switch ($method)
         {
             case 'GET':
                 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -48,10 +54,18 @@ class API {
         return $response;
     }
 
+    /**
+     * Internal method used to convert an amount from one currency to another.
+     *
+     * @param	string $from From currency.
+     * @param	string $to to currency.
+     * @param	string $amount amount to be converted.
+     * @return	json response for the conversion.
+     */
     private function _convert($from, $to, $amount)
     {
-        $fromRate = $this->getCurrencyRate($from);
-        $toRate = $this->getCurrencyRate($to);
+        $fromRate = $this->_getCurrencyRate($from);
+        $toRate = $this->_getCurrencyRate($to);
 
         if (is_null($from) || $from === "")
         {
@@ -95,16 +109,28 @@ class API {
         return $response;
     }
 
-    function getCurrency($code)
+    /**
+     * Gets a currency.
+     *
+     * @param	string $code Currency code.
+     * @return	mixed
+     */
+    private function _getCurrency($code)
     {
         $cCurrency = new Currency();
         return $cCurrency->get($code);
     }
 
-    function getCurrencyRate($code)
+    /**
+     * Gets the rate of a currency.
+     *
+     * @param	string $code Currency code.
+     * @return	mixed
+     */
+    private function _getCurrencyRate($code)
     {
         $cHTTPCurrency = new HTTPCurrency();
-        $currency = $this->getCurrency($code);
+        $currency = $this->_getCurrency($code);
         if (is_null($currency) || $currency === FALSE)
         {
             return;
@@ -118,6 +144,7 @@ class API {
         if ($currency['is_crypto'])
         {
             $result = $cHTTPCurrency->makeRequest(TRUE, $currency['name']);
+            //note: returning a cryptocurrency, the rate has to be inverted (1/rate)
             return round(1 / $result[0]['current_price'], 7);
         }
         else
@@ -127,6 +154,12 @@ class API {
         }
     }
 
+    /**
+     * Internal method to add a currency on the system.
+     *
+     * @param	array $input Array containing the data to be created .
+     * @return	json response of the operation.
+     */
     private function _create($input)
     {
         $cCurrency = new Currency();
@@ -151,6 +184,11 @@ class API {
         return $response;
     }
 
+    /**
+     * Internal method to delete a currency on the system.
+     *
+     * @return	json response of the operation.
+     */
     private function _delete()
     {
         $cCurrency = new Currency();
@@ -179,12 +217,22 @@ class API {
         return $response;
     }
 
+    /**
+     * Internal method to list all supported currencies.
+     *
+     * @return	mixed.
+     */
     private function _list()
     {
         $cCurrency = new Currency();
         return $cCurrency->getAll();
     }
 
+    /**
+     * Internal method to create a response.
+     *
+     * @return	json Encoded json of a response.
+     */
     private function _createResponse($success, $body)
     {
         $response['success'] = $success;
