@@ -1,65 +1,143 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Challenge Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Challenge Bravo é uma API feita em PHP para conversão monetária, tendo como moeda lastro o Dólar Americano(USD).
 
-A API deve, originalmente, converter entre as seguintes moedas:
+A resposta é em formato JSON, com valores reais e atuais.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Originalmente, a API converte as seguintes moedas:
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+| Moeda Real | Moeda Virtual |
+|------------|---------------|
+| BRL        | BTC           |
+| EUR        | ETH           |
+| USD        |               |
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Moedas podem ser adicionadas ou removidas. O Dólar Americano(USD) é a única moeda que não pode ser removida.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+## API Endpoints
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Challenge Bravo possui 4 endpoints, tendo como base a seguinte URL:
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+*/api/*
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Ex: `http://localhost:8081/challenge-bravo/api/`
 
-## Requisitos
+### 1 - Conversão
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+Para converter o valor de uma moeda para a outra, é usado o método **GET**.
 
-## Critério de avaliação
+?from=BRL&to=USD&amount=1
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Ex: `http://localhost:8081/challenge-bravo/api/?from=BRL&to=USD&amount=1`
 
-## Dúvidas
+| Variável | Descrição                |
+|----------|--------------------------|
+| from     | Moeda de origem          |
+| to       | Moeda final              |
+| amount   | O valor a ser convertido |
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
 
-Boa sorte e boa viagem! ;)
+### 2 - Adição
+Para adicionar uma moeda, é usado o método **POST**.
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Ex: `http://localhost:8081/challenge-bravo/api/`
+
+| Variável    | Descrição                                    |
+|-------------|----------------------------------------------|
+| code        | Código da moeda (3 letras)                   |
+| name        | Nome da moeda                                |
+| is_crypto*  | **1** - Moeda virtual; **0** - moeda real    |
+
+*`Caso não informado, o valor padrão utilizado é 0.`*
+
+### 3 - Exclusão
+Para exclusão de uma moeda, é usado o método **DELETE**.
+
+/code
+
+Ex: `http://localhost:8081/challenge-bravo/api/code`
+
+| Variável    | Descrição                       |
+|-------------|---------------------------------|
+| code        | Código da moeda (3 letras)      |
+
+
+### 4 - Listagem
+Para listagem de moedas suportadas pela API, é usado o método **GET**.
+
+/api/list
+
+Ex: `http://localhost:8081/challenge-bravo/api/list`
+
+
+
+## Respostas da API
+
+O formato da resposta da API é em **JSON**
+
+Toda resposta tem em comum os atributos **success** e **body**
+
+### Exemplo de resposta
+
+#### Conversão entre moedas
+
+*Conversão feita com sucesso: `http://localhost:8081/challenge-bravo/api/?from=BRL&to=USD&amount=1`*
+```
+{
+   "success":true,
+   "body":{
+      "from":"BRL",
+      "to":"USD",
+      "amount":"1",
+      "result":0.24946716930975055
+   }
+}
+```
+
+*Conversão feita com erro: `http://localhost:8081/challenge-bravo/api/?from=BRL&to=USD`*
+```
+{
+   "success":false,
+   "body":{
+      "error_code":400,
+      "error_message":"Valor nao informado."
+   }
+}
+```
+
+
+## Resposta ao Desafio Bravo [ver desafio](https://github.com/hurbcom/challenge-bravo)
+
+
+1. O desafio foi feito em:
+  - PHP Version 7.1.22
+  - MySQL Version 5.6.28
+
+
+2. Nenhum framework foi utilizado. [DbPDO](/api/class/DbPDO.class.php) e [.htaccess](/api/.htaccess) não foram criados por mim.
+
+
+3. Testes:
+  - Codigo: realizados com Postman 2 e Insomnia (todos os requests feitos com sucesso)
+  - Estresse: artillery (suporta mais de 1000 requests por segundo)
+
+
+4. Segurança:
+  - Não foi utilizado SSL
+  - Não existe limitação para o número de acessos
+  - Senha do banco de dados exposta (preferencialmente usar fora do diretório raiz)
+  - Não foi feito um sistema de logs
+
+
+5. Instalação
+  - Acessar o diretorio htdocs(ou similar como www) do servidor
+  - Executar o comando: git clone https://github.com/RenanAguiar/challenge-bravo.git
+  - Criar um novo banco no MySQL e importar: /db/bravo.sql
+  - Alterar o arquivo /api/config.php com os seus dados de acesso ao banco MySQL
+
+
+6. Obervações
+  - Docker não foi utilizado pois não consegui levantar o PHP
+  - Para a moeda USD não ser removida, criei um Trigger no MySQL
+  - Como o desafio é back-end, não foi criado um front-end para o retorno da API
+  - Foi utilizado macOS Mojave(version 10.14.6) com MAMP 7.1.22-0 para o desenvolvimento
