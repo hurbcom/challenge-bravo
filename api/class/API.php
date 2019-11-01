@@ -64,8 +64,17 @@ class API {
      */
     private function _convert($from, $to, $amount)
     {
-        $fromRate = $this->_getCurrencyRate($from);
-        $toRate = $this->_getCurrencyRate($to);
+
+        if ($from === $to)
+        {
+            $fromRate = 1;
+            $toRate = 1;
+        }
+        else
+        {
+            $fromRate = $this->_getCurrencyRate($from);
+            $toRate = $this->_getCurrencyRate($to);
+        }
 
         if (is_null($from) || $from === "")
         {
@@ -231,7 +240,7 @@ class API {
             $error['error_message'] = "Nenhuma moeda encontrada.";
             $response = $this->_createResponse(FALSE, $error);
         }
-        
+
         $success['currencies'] = $list;
         $response = $this->_createResponse(TRUE, $success);
         return $response;
