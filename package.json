@@ -1,0 +1,35 @@
+{
+  "name": "desafio-bravo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Desafio API Lemobs",
+  "keywords": [],
+  "author": "Marcelle Panzariello",
+  "license": "UNLICENSED",
+  "main": "app.js",
+  "dependencies": {
+    "axios": "0.19.0",
+    "cors": "2.8.5",
+    "dotenv": "4.0.0",
+    "express": "4.12.3",
+    "fs": "0.0.1-security",
+    "moment-timezone": "0.5.26",
+    "node-fetch": "2.3.0",
+    "path": "0.12.7",
+    "pg": "7.3.0",
+    "sequelize": "5.18.1",
+    "swagger-express-mw": "0.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.7",
+    "should": "4.1.0",
+    "supertest": "1.0.0"
+  },
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "swagger project test"
+  },
+  "directories": {
+    "test": "test"
+  }
+}

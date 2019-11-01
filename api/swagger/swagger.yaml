@@ -1,0 +1,306 @@
+swagger: '2.0'
+info:
+  description: 'API conversora de moedas'
+  version: '1.0.0'
+  title: Desafio Bravo
+
+basePath: /v1/
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+schemes:
+  - http
+  - https
+
+paths:
+  /moeda:
+    x-swagger-router-controller: moeda
+    get:
+      tags:
+        - Moeda
+      description: Retorna todas as moedas cadastradas
+      operationId: moedaListar
+      responses:
+        "200":
+          description: Success
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+    post:
+      tags:
+        - Moeda
+      description: Cadastrar moeda
+      operationId: moedaInserir
+      parameters:
+        - name: body
+          in: body
+          description: Parâmetros para cadastrar aula
+          required: true
+          schema:
+            $ref: "#/definitions/MoedaRequest"
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "409":
+          description: Conflict
+        "500":
+          description: Internal Server Error
+
+  /moeda/{moeda_id}:
+    x-swagger-router-controller: moeda
+    get:
+      tags:
+        - Moeda
+      description: Retornar moeda cadastrada
+      operationId: moedaExibir
+      parameters:
+        - name: moeda_id
+          in: path
+          description: Id da moeda
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Success
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+    put:
+      tags:
+        - Moeda
+      description: Atualizar informações da moeda
+      operationId: moedaAtualizar
+      parameters:
+        - name: moeda_id
+          in: path
+          description: Id da moeda
+          required: true
+          type: integer
+        - name: body
+          in: body
+          description: Parâmetros para atualizar moeda
+          required: true
+          schema:
+            $ref: "#/definitions/MoedaRequest"
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "409":
+          description: Conflict
+        "500":
+          description: Internal Server Error
+    delete:
+      tags:
+        - Moeda
+      description: Remover moeda (soft delete)
+      operationId: moedaRemover
+      parameters:
+        - name: moeda_id
+          in: path
+          description: Id da moeda
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+
+  /valor_moeda:
+    x-swagger-router-controller: valor
+    get:
+      tags:
+        - Valor
+      description: Retorna o valor de todas as moedas cadastradas
+      operationId: listarValor
+      responses:
+        "200":
+          description: Success
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+  
+  /valor_moeda/{moeda_id}:
+    x-swagger-router-controller: valor
+    get:
+      tags:
+        - Valor
+      description: Retornar valor da moeda cadastrada
+      operationId: exibirValor
+      parameters:
+        - name: moeda_id
+          in: path
+          description: Id da moeda
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+
+  /valor/{moeda_origem}/converte/{moeda_destino}:
+    x-swagger-router-controller: valor
+    get:
+      tags:
+        - Valor
+      description: Converte valores para moedas diferentes
+      operationId: moedaConverter
+      parameters:
+        - name: moeda_origem
+          in: path
+          description: id da moeda de origem
+          type: integer
+          required: true
+        - name: valor
+          in: query
+          type: number
+          format: double
+          required: true
+        - name: moeda_destino
+          in: path
+          description: id da moeda de destino
+          type: integer
+          required: true
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+
+  /historico_valor/{data}:
+    x-swagger-router-controller: historico
+    get:
+      tags:
+        - Historico
+      description: Retorna o valor de todas as moedas cadastradas em determinada data
+      operationId: historicoListar
+      parameters:
+        - name: data
+          in: path
+          type: string
+          format: date
+          description: YYYY-MM-DD
+          required: true
+      responses:
+        "200":
+          description: Success
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+
+  /historico-valor/{moeda_id}/{data}:
+    x-swagger-router-controller: historico
+    get:
+      tags:
+        - Historico
+      description: Retorna os valores das moedas cadastradas em determinada data
+      operationId: historicoExibir
+      parameters:
+        - name: moeda_id
+          in: path
+          description: Id da moeda
+          required: true
+          type: integer
+        - name: data
+          in: path
+          type: string
+          format: date
+          description: YYYY-MM-DD
+          required: true
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+
+  /docs:
+    x-swagger-pipe: swagger_raw
+    
+definitions:
+  MoedaRequest:
+    type: object
+    properties:
+      nome:
+        type: string
+      moeda_lastro:
+        type: string
