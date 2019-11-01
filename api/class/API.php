@@ -194,7 +194,7 @@ class API {
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $uri = explode('/', $requestUri);
 
-        if (!isset($uri[3]))
+        if (!isset($uri[3]) || $uri[3] === "")
         {
             $error['error_code'] = 404;
             $error['error_message'] = "Moeda nao encontrada.";
@@ -202,7 +202,8 @@ class API {
             return $response;
         }
 
-        if ($cCurrency->delete($uri[3]) === FALSE)
+        $code = strtoupper($uri[3]);
+        if ($cCurrency->delete($code) === FALSE)
         {
             $error['error_code'] = 400;
             $error['error_message'] = "Erro ao excluir moeda.";
@@ -210,8 +211,7 @@ class API {
             return $response;
         }
 
-        $success = TRUE;
-        $success['code'] = $uri[3];
+        $success['code'] = $code;
         $response = $this->_createResponse(TRUE, $success);
         return $response;
     }
