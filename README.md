@@ -141,3 +141,4 @@ Toda resposta tem em comum os atributos **success** e **body**
   - Para a moeda USD não ser removida, criei um Trigger no MySQL
   - Como o desafio é back-end, não foi criado um front-end para o retorno da API
   - Foi utilizado macOS Mojave(version 10.14.6) com MAMP 7.1.22-0 para o desenvolvimento
+  - Melhorar codigo e mensagem de erros da API
