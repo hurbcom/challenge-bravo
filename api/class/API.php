@@ -104,7 +104,7 @@ class API {
         $success['from'] = $from;
         $success['to'] = $to;
         $success['amount'] = $amount;
-        $success['rate'] = $result;
+        $success['result'] = $result;
         $response = $this->_createResponse(TRUE, $success);
         return $response;
     }
