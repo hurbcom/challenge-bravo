@@ -25,7 +25,7 @@ class API {
                 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
                 $uri = explode('/', $requestUri);
 
-                if (isset($uri[3]) && $uri[3] === "list")
+                if (isset($uri[3]) && $uri[3] === 'list')
                 {
                     $response = $this->_list();
                 }
@@ -46,11 +46,32 @@ class API {
                 break;
             default:
                 $error['error_code'] = 405;
-                $error['error_message'] = "Metodo nao permitido";
+                $error['error_message'] = 'Metodo nao permitido';
                 $response = $this->_createResponse(FALSE, $error);
                 break;
         }
 
+        return $response;
+    }
+
+    /**
+     * Internal method to list all supported currencies.
+     *
+     * @return	mixed.
+     */
+    private function _list()
+    {
+        $cCurrency = new Currency();
+        $list = $cCurrency->getAll();
+        if ($list === FALSE)
+        {
+            $error['error_code'] = 400;
+            $error['error_message'] = 'Nenhuma moeda encontrada.';
+            $response = $this->_createResponse(FALSE, $error);
+        }
+
+        $success['currencies'] = $list;
+        $response = $this->_createResponse(TRUE, $success);
         return $response;
     }
 
@@ -76,7 +97,7 @@ class API {
             $toRate = $this->_getCurrencyRate($to);
         }
 
-        if (is_null($from) || $from === "")
+        if (is_null($from) || $from === '')
         {
             $error['error_code'] = 400;
             $error['error_message'] = "Moeda 'from' nao informada.";
@@ -95,7 +116,7 @@ class API {
         if (is_null($fromRate) || is_null($toRate))
         {
             $error['error_code'] = 400;
-            $error['error_message'] = "Moeda nao suportada pela API.";
+            $error['error_message'] = 'Moeda nao suportada pela API.';
             $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
@@ -103,12 +124,12 @@ class API {
         if (is_null($amount) || $amount <= 0)
         {
             $error['error_code'] = 400;
-            $error['error_message'] = "Valor nao informado.";
+            $error['error_message'] = 'Valor nao informado.';
             $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
 
-        $result = $amount * ( $toRate / $fromRate );
+        $result = $amount * ($toRate / $fromRate);
 
         $success['from'] = $from;
         $success['to'] = $to;
@@ -119,19 +140,7 @@ class API {
     }
 
     /**
-     * Gets a currency.
-     *
-     * @param	string $code Currency code.
-     * @return	mixed
-     */
-    private function _getCurrency($code)
-    {
-        $cCurrency = new Currency();
-        return $cCurrency->get($code);
-    }
-
-    /**
-     * Gets the rate of a currency.
+     * Internal method to get the rate of a currency.
      *
      * @param	string $code Currency code.
      * @return	mixed
@@ -164,6 +173,18 @@ class API {
     }
 
     /**
+     * Internal method to get a currency.
+     *
+     * @param	string $code Currency code.
+     * @return	mixed
+     */
+    private function _getCurrency($code)
+    {
+        $cCurrency = new Currency();
+        return $cCurrency->get($code);
+    }
+
+    /**
      * Internal method to add a currency on the system.
      *
      * @param	array $input Array containing the data to be created .
@@ -172,14 +193,14 @@ class API {
     private function _create($input)
     {
         $cCurrency = new Currency();
-        $code = isset($input["code"]) ? (trim($input["code"])) : NULL;
-        $name = isset($input["name"]) ? (trim($input["name"])) : NULL;
-        $is_crypto = isset($input["is_crypto"]) ? (trim($input["is_crypto"])) : 0;
+        $code = isset($input['code']) ? (trim($input['code'])) : NULL;
+        $name = isset($input['name']) ? (trim($input['name'])) : NULL;
+        $is_crypto = isset($input['is_crypto']) ? (trim($input['is_crypto'])) : 0;
 
         if (!$cCurrency->create($code, $name, $is_crypto))
         {
             $error['error_code'] = 400;
-            $error['error_message'] = "Erro ao adicionar moeda.";
+            $error['error_message'] = 'Erro ao adicionar moeda.';
             $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
@@ -206,7 +227,7 @@ class API {
         if (!isset($uri[3]) || $uri[3] === "")
         {
             $error['error_code'] = 404;
-            $error['error_message'] = "Moeda nao encontrada.";
+            $error['error_message'] = 'Moeda nao encontrada.';
             $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
@@ -215,33 +236,12 @@ class API {
         if ($cCurrency->delete($code) === FALSE)
         {
             $error['error_code'] = 400;
-            $error['error_message'] = "Erro ao excluir moeda.";
+            $error['error_message'] = 'Erro ao excluir moeda.';
             $response = $this->_createResponse(FALSE, $error);
             return $response;
         }
 
         $success['code'] = $code;
-        $response = $this->_createResponse(TRUE, $success);
-        return $response;
-    }
-
-    /**
-     * Internal method to list all supported currencies.
-     *
-     * @return	mixed.
-     */
-    private function _list()
-    {
-        $cCurrency = new Currency();
-        $list = $cCurrency->getAll();
-        if ($list === FALSE)
-        {
-            $error['error_code'] = 400;
-            $error['error_message'] = "Nenhuma moeda encontrada.";
-            $response = $this->_createResponse(FALSE, $error);
-        }
-
-        $success['currencies'] = $list;
         $response = $this->_createResponse(TRUE, $success);
         return $response;
     }

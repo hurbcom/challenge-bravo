@@ -18,7 +18,7 @@ class Currency {
      */
     function get($code)
     {
-        $sql = "SELECT * FROM currency WHERE code = :code";
+        $sql = 'SELECT * FROM currency WHERE code = :code';
         $pdo = new DbPDO();
         $pdo->query($sql);
         $pdo->bind(':code', $code);
@@ -33,7 +33,7 @@ class Currency {
     function getAll()
     {
         $pdo = new DbPDO();
-        $sql = "SELECT * FROM currency";
+        $sql = 'SELECT * FROM currency';
         $pdo->query($sql);
         $rows = $pdo->resultset();
         $total = $pdo->rowCount();
@@ -55,7 +55,7 @@ class Currency {
     function create($code, $name, $is_crypto)
     {
         $pdo = new DbPDO();
-        $sql = "INSERT INTO currency (code, name, is_crypto) VALUES (:code, :name, :is_crypto)";
+        $sql = 'INSERT INTO currency (code, name, is_crypto) VALUES (:code, :name, :is_crypto)';
         $pdo->query($sql);
         $pdo->bind(':code', $code);
         $pdo->bind(':name', $name);
@@ -81,7 +81,7 @@ class Currency {
     function delete($code)
     {
         $pdo = new DbPDO();
-        $sql = "DELETE FROM currency WHERE code = :code";
+        $sql = 'DELETE FROM currency WHERE code = :code';
         $pdo->query($sql);
         $pdo->bind(':code', $code);
 

@@ -10,10 +10,10 @@
 class HTTPCurrency {
 
     /** @var string Endpoint for crypto currencies */
-    const CRYPTO_END_POINT = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=";
+    const CRYPTO_END_POINT = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=';
 
     /** @var string Endpoint for regular currencies */
-    const NON_CRYPTO_END_POINT = "http://www.floatrates.com/daily/usd.json";
+    const NON_CRYPTO_END_POINT = 'http://www.floatrates.com/daily/usd.json';
 
     /**
      * Makes a request.
