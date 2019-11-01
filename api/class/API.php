@@ -175,7 +175,6 @@ class API {
             return $response;
         }
 
-        $success = TRUE;
         $success['code'] = $code;
         $success['name'] = $name;
         $success['is_crypto'] = $is_crypto;
