@@ -50,7 +50,7 @@ DELIMITER $$
 CREATE TRIGGER `currency_PreventDeletion` BEFORE DELETE ON `currency` FOR EACH ROW BEGIN
 
   IF old.code = "USD" THEN 
-    SIGNAL SQLSTATE '45000'       SET MESSAGE_TEXT = 'This record is allowed to be remove!';
+    SIGNAL SQLSTATE '45000'       SET MESSAGE_TEXT = 'This record is not allowed to be remove!';
   END IF;
 
 END
