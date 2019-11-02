@@ -1,7 +1,7 @@
 package route
 
 import (
-	"github.com/bispoman/challenge-bravo/service"
+	"github.com/bispoman/challenge-bravo/controller"
 	"github.com/gorilla/mux"
 )
 
@@ -11,7 +11,7 @@ func GetRoutes() *mux.Router {
 
 	routes = routes.PathPrefix("/api/v1").Subrouter()
 
-	routes.HandleFunc("/healthcheck", service.Healthcheck).Methods("GET")
+	routes.HandleFunc("/healthcheck", controller.Healthcheck).Methods("GET")
 
 	return routes
 }
