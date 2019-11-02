@@ -23,4 +23,7 @@
 /vendor/
 /Godeps/
 
+#Compiled files
+challenge-bravo
+
 # End of https://www.gitignore.io/api/go
