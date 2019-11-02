@@ -1,14 +1,16 @@
-package db
+package models
 
-type event struct {
-	ID       string `json:"ID"`
-	Currency string `json:"Currency"`
-	Rate     string `json:"Rate"`
+type Event struct {
+	Data struct {
+		ID       string `json:"ID"`
+		Currency string `json:"Currency"`
+		Rate     string `json:"Rate"`
+	}
 }
 
-type allEvents []event
+type allEvents []Event
 
-var events = allEvents{
+var Events = allEvents{
 	{
 		ID:       "1",
 		Currency: "USD",

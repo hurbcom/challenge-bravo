@@ -1,19 +1,18 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/bispoman/challenge-bravo/route"
+	log "github.com/sirupsen/logrus"
 )
 
-func homeReturn(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Test, test. \nokay")
-}
-
 func main() {
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", homeReturn)
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Info("Application has been started on : 8080")
+
+	routes := route.GetRoutes()
+
+	http.Handle("/", routes)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
