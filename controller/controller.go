@@ -4,6 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+
+	log "github.com/sirupsen/logrus"
+
+	"github.com/bispoman/challenge-bravo/service"
 )
 
 //Response on success cases
@@ -15,7 +19,7 @@ type Response struct {
 }
 
 func Healthcheck(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("healthcheck hit, responding with ok")
+	log.Info("healthcheck hit, responding with ok")
 
 	w.WriteHeader(http.StatusOK)
 
@@ -29,10 +33,16 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 	amount := queryparams["amount"]
 	quant, err := strconv.ParseFloat(amount[0], 64)
 
-	if from[0] == "" || to[0] == "" || err != nil {
-		fmt.Println("Empty query parameters or invalid amount")
+	if from[0] == "" || to[0] == "" || err == nil {
+		log.Warn("Empty query parameters or invalid amount")
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "Invalid query parameters")
 	}
+
+	result := service.MathConvert(from[0], to[0], quant)
+	responseObj := Response{from[0], to[0], quant, result}
+	log.Info("Convertion sucessful, result: ", responseObj)
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, fmt.Sprintf("%f", result))
 
 }

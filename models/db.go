@@ -10,8 +10,8 @@ import (
 )
 
 type Currency struct {
-	Currency string
-	Rate     float64
+	Name string
+	Rate float64
 }
 
 func PopulateDb() {
@@ -53,4 +53,9 @@ func PopulateDb() {
 		log.Fatal(err)
 	}
 	log.Info("Inserted multiple documents: ", insertResult.InsertedIDs)
+
+	err = client.Disconnect(context.TODO())
+	if err != nil {
+		log.Fatal(err)
+	}
 }
