@@ -36,7 +36,7 @@ func PopulateDb() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Info("Deleted %v documents in the currencies collection", deleteResult.DeletedCount)
+	log.Info("Amount of currencies deleted: ", deleteResult.DeletedCount)
 
 	//creating currencies to add to the Database
 	usd := Currency{"USD", 1}
