@@ -1,12 +1,14 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/bispoman/challenge-bravo/models"
 	"github.com/bispoman/challenge-bravo/service"
 )
 
@@ -33,7 +35,7 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 	amount := queryparams["amount"]
 	quant, err := strconv.ParseFloat(amount[0], 64)
 
-	if from[0] == "" || to[0] == "" || err == nil {
+	if from[0] == "" || to[0] == "" || err != nil {
 		log.Warn("Empty query parameters or invalid amount")
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "Invalid query parameters")
@@ -44,5 +46,23 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 	log.Info("Convertion sucessful, result: ", responseObj)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, fmt.Sprintf("%f", result))
+}
 
+func AddCurrency(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var newCurrency models.Currency
+	err := decoder.Decode(&newCurrency)
+	if err != nil {
+		log.Info("Error decoding json, invalid json in the request body")
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Invalid Json")
+	}
+
+	success := service.SaveCurrency(newCurrency)
+	if !success {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "Unable to save sent currency")
+	}
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "New currency saved")
 }

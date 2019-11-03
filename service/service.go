@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	"log"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/bispoman/challenge-bravo/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -49,4 +50,31 @@ func MathConvert(f string, t string, a float64) float64 {
 	}
 	liqFrom := a / fromCurrency.Rate
 	return toCurrency.Rate * liqFrom
+}
+
+func SaveCurrency(currency models.Currency) bool {
+
+	//mongodb connection bits
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	//trying to connect
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//checking connection
+	err = client.Ping(context.TODO(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	collection := client.Database("test").Collection("currencies")
+
+	insertResult, err := collection.InsertOne(context.TODO(), currency)
+	if err != nil {
+		log.Warn("Unable to save currency")
+		return false
+	}
+	log.Info("Currency saved with id: ", insertResult.InsertedID)
+
+	return true
 }

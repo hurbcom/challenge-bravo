@@ -13,5 +13,9 @@ func GetRoutes() *mux.Router {
 
 	routes.HandleFunc("/healthcheck", controller.Healthcheck).Methods("GET")
 
+	routes.HandleFunc("/convert", controller.Convert).Methods("GET")
+
+	routes.HandleFunc("/add", controller.AddCurrency).Methods("POST")
+
 	return routes
 }
