@@ -36,6 +36,7 @@ func getCurrencyfromDB(currencyName string) models.Currency {
 	if err != nil {
 		log.Fatal(err)
 	}
+	client.Disconnect(context.Background())
 
 	return result
 }
