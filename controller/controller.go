@@ -66,3 +66,26 @@ func AddCurrency(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "New currency saved")
 }
+
+func DeleteCurrency(w http.ResponseWriter, r *http.Request) {
+	qname := r.URL.Query()["name"]
+	name := qname[0]
+
+	if name == "" {
+		log.Warn("Empty query parameters on request")
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Invalid query parameters")
+	}
+
+	deleteReturn := service.DeleteCurrency(name)
+	if deleteReturn == 2 {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "Internal error while deleting currency")
+	} else if deleteReturn == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "No currencies found to delete")
+	} else if deleteReturn == 1 {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "Deleted currency")
+	}
+}

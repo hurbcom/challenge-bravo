@@ -78,3 +78,34 @@ func SaveCurrency(currency models.Currency) bool {
 
 	return true
 }
+
+func DeleteCurrency(name string) int {
+	//mongodb connection bits
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	//trying to connect
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//checking connection
+	err = client.Ping(context.TODO(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	collection := client.Database("test").Collection("currencies")
+
+	filter := bson.D{primitive.E{Key: "name", Value: name}}
+
+	deleteResult, err := collection.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		log.Warn("Failed to delete currency ", name)
+		return 2
+	}
+	if deleteResult.DeletedCount == 0 {
+		log.Info("No currencies deleted")
+		return int(deleteResult.DeletedCount)
+	}
+	log.Info("Deleted document ", name)
+	return 1
+}
