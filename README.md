@@ -41,7 +41,7 @@ A Api conta com 4 endpoints:
 -   /add
 -   /delete
 
-# healthcheck
+### healthcheck
 
 Esse endpoint é um simples endpoint para teste da aplicação.
 
@@ -54,7 +54,7 @@ Resposta:
 `Ok`
 
 
-# convert
+### convert
 
 Esse endpoint faz a conversão baseado nas taxas presente no banco de dados.
 
@@ -65,7 +65,7 @@ Resposta:
 
 `0.625`
 
-# add
+### add
 
 Esse endpoint adiciona novas moedas para uso na api.
 
@@ -81,7 +81,7 @@ body:
 Resposta:
 `New currency saved`
 
-# delete
+### delete
 
 Esse endpoint deleta moedas do banco baseado no nome delas.
 
@@ -98,4 +98,4 @@ Infelizmente a aplicação não ficou exatamente como eu queria nem como poderia
 
 Justamente por conta do tempo, não consegui implementar testes nem uma arquitetura mais rebuscada, acabei optando por fazer algo mais simples no modelo MVC.
 
-Quaisquer dúvidas, fique a vontade para submeter uma issue. 
+Quaisquer dúvidas, fique a vontade para submeter uma issue.
