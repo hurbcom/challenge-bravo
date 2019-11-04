@@ -17,5 +17,7 @@ func GetRoutes() *mux.Router {
 
 	routes.HandleFunc("/add", controller.AddCurrency).Methods("POST")
 
+	routes.HandleFunc("/delete", controller.DeleteCurrency).Methods("DELETE")
+
 	return routes
 }
