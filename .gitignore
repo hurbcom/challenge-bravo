@@ -1,0 +1,4 @@
+/dbdata/
+/vendor/
+/.idea/
+*.env

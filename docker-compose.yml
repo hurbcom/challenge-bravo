@@ -1,0 +1,65 @@
+version: '3'
+services:
+
+  #PHP Service
+  hurb-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hurb-app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    networks:
+      - app-network
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    entrypoint: ./start_app.sh
+
+  #Nginx Service
+  hurb-webserver:
+    image: nginx:alpine
+    container_name: hurb-webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8000:8000"
+      - "443:443"
+    networks:
+      - app-network
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+
+  #MySQL Service
+  hurb-db:
+    image: mysql:5.7.22
+    container_name: hurb-db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: hurb_development
+      MYSQL_ROOT_PASSWORD: 123456
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - app-network
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
