@@ -97,4 +97,9 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
+/**
+ * Load custom configuration files
+ */
+$app->configure('http_client');
+
 return $app;

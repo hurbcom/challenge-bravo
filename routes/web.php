@@ -12,5 +12,4 @@
 */
 
 $router->get('/', 'WelcomeController@index');
-
-// https://api.exchangeratesapi.io/latest?base=USD
+$router->get('/convert', 'ConverterController@convert');
