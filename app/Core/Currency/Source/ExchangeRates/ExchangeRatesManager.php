@@ -4,6 +4,7 @@ namespace App\Core\Currency\Source\ExchangeRates;
 
 use App\Core\Currency\Manager;
 use App\Models\Currency;
+use GuzzleHttp\Exception\GuzzleException;
 
 class ExchangeRatesManager implements Manager
 {
@@ -23,7 +24,12 @@ class ExchangeRatesManager implements Manager
         $this->client = $client;
     }
 
-    public function toBase(Currency $currency, float $amount): float
+    /**
+     * @param Currency $currency
+     * @return float
+     * @throws GuzzleException
+     */
+    public function toBase(Currency $currency): float
     {
         /**
          * @var $response FindRatesResponse
@@ -31,15 +37,5 @@ class ExchangeRatesManager implements Manager
         $response = $this->client->do(new FindRates());
 
         return $response->getValue($currency->code);
-    }
-
-    public function toFrom(Currency $to, float $baseCurrency): float
-    {
-        /**
-         * @var $response FindRatesResponse
-         */
-        $response = $this->client->do(new FindRates());
-
-        return $response->getValue($to->code);
     }
 }

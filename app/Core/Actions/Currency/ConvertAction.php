@@ -55,7 +55,7 @@ class ConvertAction extends BaseAction
         $to = $this->findCurrency($codeTo);
         $from = $this->findCurrency($codeFrom);
 
-        $convertedAmount = $to->convert($from, $amount);
+        $convertedAmount = $from->convert($to, $amount);
 
         return [
             'converted_amount' => round($convertedAmount, 2)
