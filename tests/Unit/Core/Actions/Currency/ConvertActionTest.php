@@ -22,6 +22,10 @@ class ConvertActionTest extends TestCase
             'source' => ExchangeRatesManager::TYPE
         ]);
 
+        $this->mockDefaultHttpClientResponses(
+            'exchange_rates/find_rates_success.yml'
+        );
+
         /**
          * @var $action ConvertAction
          */
