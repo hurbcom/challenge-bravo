@@ -30,9 +30,7 @@ class ExchangeRatesManager implements Manager
          */
         $response = $this->client->do(new FindRates());
 
-        $value = $response->getValue($currency->code);
-
-        return $amount / $value;
+        return $response->getValue($currency->code);
     }
 
     public function toFrom(Currency $to, float $baseCurrency): float
@@ -42,8 +40,6 @@ class ExchangeRatesManager implements Manager
          */
         $response = $this->client->do(new FindRates());
 
-        $value = $response->getValue($to->code);
-
-        return $baseCurrency * $value;
+        return $response->getValue($to->code);
     }
 }

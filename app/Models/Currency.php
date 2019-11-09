@@ -46,15 +46,18 @@ class Currency extends Base
      */
     public function toBase(float $amount): float
     {
-        return $this->manager()->toBase($this, $amount);
+        return $amount / $this->manager()->toBase($this, $amount);
     }
 
     /**
-     * @param float $base
-     * @return float
+     * @param Currency $from
+     * @param float $amount
+     * @return float|int
      */
-    public function convert(float $base): float
+    public function convert(Currency $from, float $amount)
     {
-        return $this->manager()->toFrom($this, $base);
+        $base = $from->toBase($amount);
+
+        return $base * $this->manager()->toFrom($this, $base);
     }
 }
