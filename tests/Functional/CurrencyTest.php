@@ -147,4 +147,35 @@ class CurrencyTest extends TestCase
             ]
         ]);
     }
+
+    public function testExternalIntegrationError()
+    {
+        factory(Currency::class)->create([
+            'code' => 'USD',
+            'source' => ExchangeRatesManager::TYPE
+        ]);
+
+        factory(Currency::class)->create([
+            'code' => 'BRL',
+            'source' => ExchangeRatesManager::TYPE
+        ]);
+
+        $uri = route('currency_convert', [
+            'from' => 'BRL',
+            'to' => 'USD',
+            'amount' => 2.0
+        ]);
+
+        $this->mockDefaultHttpClientResponses(
+            'exchange_rates/internal_server_error.yml'
+        );
+
+        $response = $this->get($uri);
+
+        $response->assertResponseStatus(500);
+
+        $response->seeJsonStructure([
+            'error_message'
+        ]);
+    }
 }

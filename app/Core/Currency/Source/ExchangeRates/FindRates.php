@@ -37,12 +37,4 @@ class FindRates extends Request
     {
         return FindRatesResponse::class;
     }
-
-    /**
-     * @return bool
-     */
-    public function cached(): bool
-    {
-        return true;
-    }
 }

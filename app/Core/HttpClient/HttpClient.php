@@ -19,13 +19,18 @@ abstract class HttpClient
      */
     public function __construct(array $config = [])
     {
-        $this->client = app(Client::class, ['config' => $config]);
+        $default = array_merge($config, [
+            'http_errors' => false
+        ]);
+
+        $this->client = app(Client::class, ['config' => $default]);
     }
 
     /**
      * @param Request $request
      * @return Response
      * @throws GuzzleException
+     * @throws HttpClientException
      */
     public function do(Request $request): Response
     {
@@ -45,12 +50,23 @@ abstract class HttpClient
 
         $data = json_decode($httpResponse->getBody()->getContents(), true);
 
+        /**
+         * @var $response Response
+         */
         $response =  app($request->responseClass())
             ->setData($data)
             ->setStatusCode($httpResponse->getStatusCode())
             ->withHeaders($httpResponse->getHeaders());
 
         Cache::put($key, $response, 300);
+
+        if (!$response->isOk()) {
+            throw new HttpClientException(
+                $this,
+                $request,
+                $response
+            );
+        }
 
         return $response;
     }

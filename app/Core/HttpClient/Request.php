@@ -92,6 +92,6 @@ abstract class Request
      */
     public function cached(): bool
     {
-        return false;
+        return true;
     }
 }

@@ -11,7 +11,8 @@ class FindRatesResponse extends Response
      */
     public function getErrorMessage(): string
     {
-        return '';
+        // read error from exchange rates format
+        return $this->getFieldData('error_message', 'Message error default');
     }
 
     /**
@@ -19,7 +20,8 @@ class FindRatesResponse extends Response
      */
     public function getErrorCode(): string
     {
-        return '';
+        // read error from exchange rates format
+        return $this->getFieldData('error_code', 'ERR001');
     }
 
     /**

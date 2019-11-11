@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Core\HttpClient\HttpClientException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -37,6 +38,8 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof ValidationException) {
             return $this->renderValidationException($exception);
+        } elseif ($exception instanceof HttpClientException) {
+            return $this->renderHttpClientException($exception);
         }
 
         return parent::render($request, $exception);
@@ -51,5 +54,18 @@ class Handler extends ExceptionHandler
         $data = ['errors' => $exception->errors()];
 
         return response()->json($data, Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * @param HttpClientException $exception
+     * @return JsonResponse
+     */
+    private function renderHttpClientException(HttpClientException $exception)
+    {
+        $data = [
+            'error_message' => $exception->getClientMessage()
+        ];
+
+        return response()->json($data, $exception->statusCode());
     }
 }

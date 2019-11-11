@@ -27,7 +27,7 @@ class ConvertAction extends BaseAction
                 'numeric',
                 function ($attribute, $value, $fail) {
                     if ($value <= 0) {
-                        $fail('Amount must be greater than zero...');
+                        $fail('Amount must be greater than zero.');
                     }
                 }
             ]
