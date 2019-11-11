@@ -3,6 +3,7 @@
 namespace App\Core\Actions\Currency;
 
 use App\Core\Actions\BaseAction;
+use App\Core\Rules\Currency\CurrencySupported;
 use App\Models\Currency;
 
 class ConvertAction extends BaseAction
@@ -14,14 +15,21 @@ class ConvertAction extends BaseAction
     {
         return [
             'from' => [
-                'required'
+                'required',
+                new CurrencySupported()
             ],
             'to' => [
-                'required'
+                'required',
+                new CurrencySupported()
             ],
             'amount' => [
                 'required',
-                'numeric'
+                'numeric',
+                function ($attribute, $value, $fail) {
+                    if ($value <= 0) {
+                        $fail('Amount must be greater than zero...');
+                    }
+                }
             ]
         ];
     }

@@ -4,6 +4,7 @@ namespace App\Core\Actions;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 abstract class BaseAction
 {
@@ -53,6 +54,7 @@ abstract class BaseAction
     /**
      * @param array $data
      * @return mixed
+     * @throws ValidationException
      */
     public function run(array $data)
     {
@@ -62,15 +64,7 @@ abstract class BaseAction
             return $this->execute();
         }
 
-        return $this->errorMessages();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function errorMessages()
-    {
-        return $this->validator->messages();
+        throw new ValidationException($this->validator);
     }
 
     /**
