@@ -10,7 +10,7 @@ abstract class BaseAction
     /**
      * @var array
      */
-    private $data;
+    protected $data;
 
     /**
      * @var \Illuminate\Contracts\Validation\Validator

@@ -17,7 +17,6 @@ class Currencies extends Migration
             $table->uuid('id')->primary();
             $table->string('code')->unique();
             $table->string('source');
-            $table->softDeletes();
             $table->timestamps();
         });
     }
