@@ -15,15 +15,11 @@ class ConvertAction extends BaseAction
     {
         return [
             'from' => [
-                'bail',
                 'required',
-                new CurrencySupported(),
                 'exists:currencies,code',
             ],
             'to' => [
-                'bail',
                 'required',
-                new CurrencySupported(),
                 'exists:currencies,code'
             ],
             'amount' => [
@@ -43,7 +39,10 @@ class ConvertAction extends BaseAction
      */
     public function messages(): array
     {
-        return [];
+        return [
+            'to.exists' => 'Currency not supported.',
+            'from.exists' => 'Currency not supported.'
+        ];
     }
 
     /**
