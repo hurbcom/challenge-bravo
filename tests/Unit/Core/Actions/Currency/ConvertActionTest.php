@@ -42,7 +42,7 @@ class ConvertActionTest extends TestCase
         $result = $action->run($data);
 
         $expected = [
-            'converted_amount' => 2.19
+            'converted_amount' => 2.1938
         ];
 
         $this->assertEquals($expected, $result);
@@ -79,14 +79,14 @@ class ConvertActionTest extends TestCase
         $result = $action->run($data);
 
         $expected = [
-            'converted_amount' => 41.31
+            'converted_amount' => 41.3114
         ];
 
         $this->assertEquals($expected, $result);
 
         $data = [
             'from' => 'BRL',
-            'amount' => 41.31,
+            'amount' => 41.3114,
             'to' => 'USD',
         ];
 
@@ -130,7 +130,7 @@ class ConvertActionTest extends TestCase
         $result = $action->run($data);
 
         $expected = [
-            'converted_amount' => 10
+            'converted_amount' => 9.99966
         ];
 
         $this->assertEquals($expected, $result);

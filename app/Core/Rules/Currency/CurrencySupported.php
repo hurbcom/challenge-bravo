@@ -2,6 +2,7 @@
 
 namespace App\Core\Rules\Currency;
 
+use App\Core\Currency\Source\CoinApi\CoinApiManager;
 use App\Core\Currency\Source\ExchangeRates\ExchangeRatesManager;
 use Illuminate\Contracts\Validation\Rule;
 
@@ -35,7 +36,8 @@ class CurrencySupported implements Rule
     protected function currenciesAvailable(): array
     {
         return array_merge(
-            ExchangeRatesManager::CURRENCIES
+            ExchangeRatesManager::CURRENCIES,
+            CoinApiManager::CURRENCIES
         );
     }
 }

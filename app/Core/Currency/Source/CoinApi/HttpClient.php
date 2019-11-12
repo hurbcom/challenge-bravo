@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Currency\Source\ExchangeRates;
+namespace App\Core\Currency\Source\CoinApi;
 
 use App\Core\HttpClient\HttpClient as BaseHttpClient;
 
@@ -12,7 +12,8 @@ class HttpClient extends BaseHttpClient
     public function __construct()
     {
         parent::__construct([
-            'base_uri' => config('http_client.exchange_rates.url')
+            'base_uri' => config('http_client.coin_api.url')
         ]);
     }
+
 }

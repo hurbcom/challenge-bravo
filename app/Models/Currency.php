@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Currency\Manager;
+use App\Core\Currency\Source\CoinApi\CoinApiManager;
 use App\Core\Currency\Source\ExchangeRates\ExchangeRatesManager;
 use Illuminate\Support\Arr;
 
@@ -13,7 +14,8 @@ use Illuminate\Support\Arr;
 class Currency extends Base
 {
     const MANAGER_MAP = [
-        ExchangeRatesManager::TYPE => ExchangeRatesManager::class
+        ExchangeRatesManager::TYPE => ExchangeRatesManager::class,
+        CoinApiManager::TYPE => CoinApiManager::class,
     ];
 
     protected $fillable = [

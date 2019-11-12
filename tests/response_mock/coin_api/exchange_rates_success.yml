@@ -1,0 +1,2 @@
+http_status: 200
+body: '{"asset_id_base":"USD","rates":[{"time":"2019-11-12T11:24:44.9294793Z","asset_id_quote":"BTC","rate":0.0001146343565538690362947295},{"time":"2019-11-12T11:24:44.3070000Z","asset_id_quote":"ETH","rate":0.0054028631520986489160965657}]}'

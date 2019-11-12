@@ -15,12 +15,16 @@ class ConvertAction extends BaseAction
     {
         return [
             'from' => [
+                'bail',
                 'required',
-                new CurrencySupported()
+                new CurrencySupported(),
+                'exists:currencies,code',
             ],
             'to' => [
+                'bail',
                 'required',
-                new CurrencySupported()
+                new CurrencySupported(),
+                'exists:currencies,code'
             ],
             'amount' => [
                 'required',
@@ -66,7 +70,7 @@ class ConvertAction extends BaseAction
         $convertedAmount = $from->convert($to, $amount);
 
         return [
-            'converted_amount' => round($convertedAmount, 2)
+            'converted_amount' => round($convertedAmount, 5)
         ];
     }
 }

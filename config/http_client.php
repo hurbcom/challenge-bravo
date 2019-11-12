@@ -1,13 +1,11 @@
 <?php
 
 return [
-    'exchange_rates_api' => [
+    'exchange_rates' => [
         'url' => 'https://api.exchangeratesapi.io',
     ],
-    'api_layer' => [
-        'url' => 'http://www.apilayer.net',
-        'access_key' => '29df7bc8e82adae2861c1aa78e41eac0'
+    'coin_api' => [
+        'url' => 'https://rest.coinapi.io',
+        'api_key' => '1F83132A-9371-49E5-9C7D-42A8F0FCD78D'
     ]
 ];
-
-// http://www.apilayer.net/api/live?access_key=29df7bc8e82adae2861c1aa78e41eac0

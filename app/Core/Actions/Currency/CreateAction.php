@@ -3,6 +3,7 @@
 namespace App\Core\Actions\Currency;
 
 use App\Core\Actions\BaseAction;
+use App\Core\Currency\Source\CoinApi\CoinApiManager;
 use App\Core\Currency\Source\ExchangeRates\ExchangeRatesManager;
 use App\Core\Rules\Currency\CurrencySupported;
 use App\Models\Currency;
@@ -38,7 +39,8 @@ class CreateAction extends BaseAction
     protected function listBySource(): Collection
     {
         return collect([
-            ExchangeRatesManager::TYPE => ExchangeRatesManager::CURRENCIES
+            ExchangeRatesManager::TYPE => ExchangeRatesManager::CURRENCIES,
+            CoinApiManager::TYPE => CoinApiManager::CURRENCIES,
         ]);
     }
 
