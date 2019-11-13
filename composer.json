@@ -34,8 +34,11 @@
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
-        "test-coverage": [
+        "test:coverage": [
             "phpunit --coverage-html coverage"
+        ],
+        "database:seed": [
+            "php artisan db:seed --class=DefaultCurrencies"
         ]
     },
     "config": {
