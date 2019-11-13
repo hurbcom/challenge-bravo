@@ -39,6 +39,10 @@
         ],
         "database:seed": [
             "php artisan db:seed --class=DefaultCurrencies"
+        ],
+        "database:migrate": [
+            "php artisan migrate",
+            "php artisan migrate --database=mysql_testing"
         ]
     },
     "config": {

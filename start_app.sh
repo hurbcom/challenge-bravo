@@ -2,7 +2,13 @@
 
 composer install
 php artisan database:wait
+php artisan database:testing
+
+echo "Migrate for developement."
 php artisan migrate
+
+echo "Migrate for tests."
+php artisan migrate --database=mysql_testing
 
 echo "***************************************************"
 echo "*                                                 *"

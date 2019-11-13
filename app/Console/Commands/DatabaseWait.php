@@ -46,7 +46,14 @@ class DatabaseWait extends Command
 
         } catch (Exception $exception) {
 
-            $this->info('Waiting database is fully up.' . ' | ' . get_class($exception) . ' ' .$exception->getMessage());
+            $message = sprintf(
+                'Waiting database is fully up. | %s %s',
+                get_class($exception),
+                $exception->getMessage()
+            );
+
+            $this->info($message);
+
             sleep(5);
             $this->handle();
         }

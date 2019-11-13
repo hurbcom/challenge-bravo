@@ -5,10 +5,27 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Arr;
+use Laravel\Lumen\Testing\DatabaseTransactions;
 use Symfony\Component\Yaml\Yaml;
 
 abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 {
+    use DatabaseTransactions;
+
+    /**
+     * @var array
+     */
+    protected $connectionsToTransact = [
+        'mysql_testing'
+    ];
+
+    public function setUp(): void
+    {
+        putenv('DB_CONNECTION=mysql_testing');
+
+        parent::setUp();
+    }
+
     /**
      * Creates the application.
      *

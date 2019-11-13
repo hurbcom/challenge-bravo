@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\DatabaseTesting;
 use App\Console\Commands\DatabaseWait;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        DatabaseWait::class
+        DatabaseWait::class,
+        DatabaseTesting::class
     ];
 
     /**
