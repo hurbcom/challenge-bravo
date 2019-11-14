@@ -1,65 +1,34 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+Oi pessoal, terminei o desafio.
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Como solicitado, para rodar o projeto seguem os passos:
 
-A API deve, originalmente, converter entre as seguintes moedas:
+- git clone https://github.com/diegodesousas/challenge-bravo
+- cd challenge-bravo
+- criar o arquivo .env
+- docker-compose up (Aguarde a mensagem "Hurb app is fully up on http://localhost:8000" )
+- docker-compose composer database:seed
+- comece a usar :)
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Para rodar os testes
+- docker-compose composer test:coverage
+Cobertura do código fica no diretório `coverage`  
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
-
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
-
-Ex: `?from=BTC&to=EUR&amount=123.45`
-
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
-
-## Requisitos
-
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
-
-## Critério de avaliação
-
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
-
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Arquivo .env
+```
+APP_NAME=hurb-app
+APP_ENV=development
+APP_KEY=base64:9DPfV8yMdI+gXWkz1Z5lh94PZ2detg0vuZFZKNHAsQ0=
+APP_DEBUG=true
+APP_URL=http://localhost
+LOG_CHANNEL=stack
+DB_CONNECTION=mysql
+DB_HOST=hurb-db
+DB_PORT=3306
+DB_DATABASE=hurb_development
+DB_USERNAME=root
+DB_PASSWORD=123456
+DB_TESTING_DATABASE=hurb_testing
+HTTP_CLIENT_EXCHANGE_RATES_URL=https://api.exchangeratesapi.io
+HTTP_CLIENT_COIN_API_URL=https://rest.coinapi.io
+HTTP_CLIENT_COIN_API_KEY=1F83132A-9371-49E5-9C7D-42A8F0FCD78D
+```
