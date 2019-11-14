@@ -7,6 +7,7 @@ use App\Core\Actions\Currency\CreateAction;
 use App\Core\Actions\Currency\DeleteAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class ConverterController
@@ -18,6 +19,7 @@ class CurrencyController extends Controller
      * @param Request $request
      * @param ConvertAction $action
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function convert(Request $request, ConvertAction $action): JsonResponse
     {
@@ -30,6 +32,7 @@ class CurrencyController extends Controller
      * @param Request $request
      * @param CreateAction $action
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function create(Request $request, CreateAction $action)
     {
@@ -39,13 +42,14 @@ class CurrencyController extends Controller
     }
 
     /**
-     * @param string $id
+     * @param string $code
      * @param DeleteAction $action
      * @return JsonResponse
+     * @throws ValidationException
      */
-    public function delete(string $id, DeleteAction $action)
+    public function delete(string $code, DeleteAction $action)
     {
-        $result = $action->run(['id' => $id]);
+        $result = $action->run(['code' => $code]);
 
         return response()->json($result);
     }

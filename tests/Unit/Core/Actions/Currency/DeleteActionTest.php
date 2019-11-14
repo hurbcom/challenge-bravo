@@ -22,36 +22,16 @@ class DeleteActionTest extends TestCase
                 'source' => ExchangeRatesManager::TYPE
             ]);
 
-        $data = ['id' => $currency->id];
+        $data = ['code' => $currency->code];
         $action = $this->app->make(DeleteAction::class);
         $action->run($data);
 
-        $this->notSeeInDatabase('currencies', ['id' => $currency->id]);
-    }
-
-    public function testMustBeUuid()
-    {
-        $data = ['id' => 'non-uuid'];
-
-        $action = $this->app->make(DeleteAction::class);
-
-        try {
-            $action->run($data);
-            $this->fail('Expected ValidationException');
-        } catch (ValidationException $exception) {
-            $expected = [
-                'id' => [
-                    'The id must be a valid UUID.'
-                ]
-            ];
-
-            $this->assertEquals($expected, $exception->errors());
-        }
+        $this->notSeeInDatabase('currencies', ['code' => $currency->code]);
     }
 
     public function testInvalidCurrency()
     {
-        $data = ['id' => Uuid::uuid4()->toString()];
+        $data = ['code' => 'INVALID'];
 
         $action = $this->app->make(DeleteAction::class);
 
@@ -60,8 +40,8 @@ class DeleteActionTest extends TestCase
             $this->fail('Expected ValidationException');
         } catch (ValidationException $exception) {
             $expected = [
-                'id' => [
-                    'The selected id is invalid.'
+                'code' => [
+                    'The selected code is invalid.'
                 ]
             ];
 

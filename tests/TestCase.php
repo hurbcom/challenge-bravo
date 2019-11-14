@@ -19,13 +19,6 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         'mysql_testing'
     ];
 
-    public function setUp(): void
-    {
-        putenv('DB_CONNECTION=mysql_testing');
-
-        parent::setUp();
-    }
-
     /**
      * Creates the application.
      *

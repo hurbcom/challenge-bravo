@@ -13,10 +13,9 @@ class DeleteAction extends BaseAction
     public function rules(): array
     {
         return [
-            'id' => [
+            'code' => [
                 'required',
-                'uuid',
-                'exists:currencies'
+                'exists:currencies,code'
             ]
         ];
     }
@@ -34,7 +33,9 @@ class DeleteAction extends BaseAction
      */
     public function execute()
     {
-        Currency::find($this->get('id'))->delete();
+        $code = $this->get('code');
+
+        Currency::where('code', strtoupper($code))->get()->first()->delete();
 
         return [];
     }

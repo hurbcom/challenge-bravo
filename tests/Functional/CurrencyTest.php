@@ -58,7 +58,7 @@ class CurrencyTest extends TestCase
         ]);
 
         $uri = route('currency_delete', [
-            'id' => $currency->id
+            'code' => $currency->code
         ]);
 
         $this->assertCount(1, Currency::all());
@@ -78,7 +78,7 @@ class CurrencyTest extends TestCase
         ]);
 
         $uri = route('currency_delete', [
-            'id' => 'invalid'
+            'code' => 'invalid'
         ]);
 
         $this->assertCount(1, Currency::all());
@@ -89,7 +89,7 @@ class CurrencyTest extends TestCase
 
         $response->seeJsonStructure([
             'errors' => [
-                'id'
+                'code'
             ]
         ]);
 

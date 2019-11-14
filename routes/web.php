@@ -14,5 +14,5 @@
 
 $router->get('/', ['as' => 'welcome', 'uses' => 'WelcomeController@index']);
 $router->post('/currency', ['as' => 'currency_create', 'uses' => 'CurrencyController@create']);
-$router->delete('/currency/{id}', ['as' => 'currency_delete', 'uses' => 'CurrencyController@delete']);
+$router->delete('/currency/{code}', ['as' => 'currency_delete', 'uses' => 'CurrencyController@delete']);
 $router->get('/currency/convert', ['as' => 'currency_convert', 'uses' => 'CurrencyController@convert']);
