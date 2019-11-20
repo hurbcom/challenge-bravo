@@ -76,3 +76,8 @@ func Exchange(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": coin})
 	return
 }
+
+func CreateCoin(c *gin.Context) {
+
+	return
+}

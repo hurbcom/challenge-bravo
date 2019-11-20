@@ -17,6 +17,12 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/exchange", controllers.Exchange)
+	router.POST("/coin")
+	router.DELETE("/coin")
+	router.GET("/coin", func(c *gin.Context) {
+		c.JSON(200, gin.H{"data": models.SuportedCoins})
+		return
+	})
 
 	_ = router.Run()
 }

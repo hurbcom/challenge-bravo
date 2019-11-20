@@ -10,11 +10,19 @@ import (
 
 var SuportedCoins []string
 
-func addCoin() {
-
+type coin struct {
+	Symbol string `json:"symbol"`
 }
 
-func removeCoin() error {
+func (c *coin) addCoin() {
+	if utils.Contains(SuportedCoins, c.Symbol) {
+		return
+	}
+	SuportedCoins = append(SuportedCoins, c.Symbol)
+	return
+}
+
+func (c *coin) DeleteCoin() error {
 	if len(SuportedCoins) > 0 {
 
 	}
