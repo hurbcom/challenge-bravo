@@ -1,5 +1,10 @@
 package responsemodel
 
+import (
+	"fmt"
+	"reflect"
+)
+
 // ResponseModel is the api return model
 type ResponseModel struct {
 	Base            string `json:"base"`
@@ -59,4 +64,19 @@ type ResponseModel struct {
 		VND float64 `json:"VND"`
 		ZAR float64 `json:"ZAR"`
 	} `json:"rates"`
+}
+
+// ReflectStructField wqqqwqw
+func ReflectStructField(Iface interface{}, FieldName string) error {
+	ValueIface := reflect.ValueOf(Iface)
+
+	if ValueIface.Type().Kind() != reflect.Ptr {
+		ValueIface = reflect.New(reflect.TypeOf(Iface))
+	}
+
+	Field := ValueIface.Elem().FieldByName(FieldName)
+	if !Field.IsValid() {
+		return fmt.Errorf("Interface `%s` does not have the field `%s`", ValueIface.Type(), FieldName)
+	}
+	return nil
 }

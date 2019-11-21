@@ -2,12 +2,11 @@ package main
 
 import (
 	service "challenge-bravo/Service"
-	"fmt"
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/shopspring/decimal"
 )
 
 func main() {
@@ -25,15 +24,16 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 	from, to, amount, error := service.ValidPost(r)
 	if error != "" {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Please, fill the " + strings.ToUpper(error) + " field"))
+		w.Write([]byte(error))
 		return
 	}
 
 	result := service.GetValue(from, to, amount)
 
-	if result > 0 {
+	if result.GreaterThan(decimal.NewFromFloat(0)) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Result: " + fmt.Sprintf("%f", result)))
+		w.Write([]byte("Result: " + result.StringFixedCash(5)))
+
 		return
 	}
 

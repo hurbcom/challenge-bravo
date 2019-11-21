@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
+	"github.com/shopspring/decimal"
 	"github.com/tidwall/gjson"
 )
 
@@ -40,44 +40,58 @@ func SetCurrency() {
 }
 
 // GetValue return the value converted
-func GetValue(from string, to string, amount string) float64 {
+func GetValue(from string, to string, dAmount decimal.Decimal) decimal.Decimal {
 	output, err := json.Marshal(msg)
 	if err != nil {
 		panic(err)
 	}
+	var final decimal.Decimal
 
-	valueTo := gjson.Get(string(output), "rates."+strings.ToUpper(to))
-	valueFrom := gjson.Get(string(output), "rates."+strings.ToUpper(from))
+	if msg.TimeLastUpdated > 0 {
+		valueTo := gjson.Get(string(output), "rates."+strings.ToUpper(to))
+		valueFrom := gjson.Get(string(output), "rates."+strings.ToUpper(from))
 
-	doubleTo, _ := strconv.ParseFloat(string(valueTo.Raw), 64)
-	doubleFrom, _ := strconv.ParseFloat(string(valueFrom.Raw), 64)
-	doubleAmount, _ := strconv.ParseFloat(amount, 64)
-
-	final := (doubleTo / doubleFrom) * doubleAmount
+		dTo, _ := decimal.NewFromString(string(valueTo.Raw))
+		dFrom, _ := decimal.NewFromString(string(valueFrom.Raw))
+		final = dTo.Div(dFrom).Mul(dAmount)
+	}
 
 	return final
 }
 
 // ValidPost get the keys of post and build the string of payload
-func ValidPost(r *http.Request) (string, string, string, string) {
+func ValidPost(r *http.Request) (string, string, decimal.Decimal, string) {
 
 	keys := r.URL.Query()
 
-	from := keys["from"]
-	to := keys["to"]
-	amount := keys["amount"]
+	from := strings.Join(keys["from"], "")
+	to := strings.Join(keys["to"], "")
+	amount := strings.Join(keys["amount"], "")
+
+	if err := responsemodel.ReflectStructField(msg.Rates, strings.ToUpper(from)); err != nil {
+		return "", "", decimal.New(0, 1), "Unable to convert from this currency '" + strings.ToUpper(from) + "'"
+	}
+	if err := responsemodel.ReflectStructField(msg.Rates, strings.ToUpper(to)); err != nil {
+		return "", "", decimal.New(0, 1), "Unable to convert to this currency '" + strings.ToUpper(to) + "'"
+	}
 
 	if len(from) <= 0 {
-		return "", "", "", "from"
+		return "", "", decimal.New(0, 1), "Please, fill the FROM field"
 	}
 
-	if to == nil {
-		return "", "", "", "to"
+	if len(to) <= 0 {
+		return "", "", decimal.New(0, 1), "Please, fill the TO field"
 	}
 
-	if amount == nil {
-		return "", "", "", "amount"
+	if len(amount) <= 0 {
+		return "", "", decimal.New(0, 1), "Please, fill the AMOUNT field"
 	}
 
-	return strings.Join(from, ""), strings.Join(to, ""), strings.Join(amount, ""), ""
+	dAmount, err := decimal.NewFromString(amount)
+
+	if err != nil || dAmount.IsNegative() {
+		return "", "", decimal.New(0, 1), "Invalid value, send positive value greater than zero"
+	}
+
+	return from, to, dAmount, ""
 }

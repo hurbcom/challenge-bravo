@@ -7,16 +7,24 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/shopspring/decimal"
 )
 
 func BenchmarkMain(b *testing.B) {
-	// inicia qualquer coisa q precisa pro service funcionar...
-
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			form, _ := url.ParseQuery(r.URL.RawQuery)
+			form.Add("from", "brl")
+			form.Add("to", "usd")
+			form.Add("amount", "15")
+
+			r.URL.RawQuery = form.Encode()
+
 			from, to, amount, error := service.ValidPost(r)
 			if error != "" {
 				w.WriteHeader(http.StatusBadRequest)
@@ -26,9 +34,10 @@ func BenchmarkMain(b *testing.B) {
 
 			result := service.GetValue(from, to, amount)
 
-			if result > 0 {
+			if result.GreaterThan(decimal.NewFromFloat(0)) {
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte("Result: " + fmt.Sprintf("%f", result)))
+				w.Write([]byte("Result: " + result.StringFixedCash(5)))
+
 				return
 			}
 
@@ -41,12 +50,12 @@ func BenchmarkMain(b *testing.B) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		greeting, err := ioutil.ReadAll(res.Body)
+		resp, err := ioutil.ReadAll(res.Body)
 		res.Body.Close()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("%s", greeting)
+		fmt.Printf("%s", resp)
 	}
 }
