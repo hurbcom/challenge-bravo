@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -78,6 +79,65 @@ func Exchange(c *gin.Context) {
 }
 
 func CreateCoin(c *gin.Context) {
+	var newCoin models.Coin
+	var verify models.VerifyCoin
 
+	c.ShouldBindJSON(&newCoin)
+
+	if newCoin.StoreContains() {
+		c.JSON(http.StatusOK, gin.H{"data": newCoin})
+		return
+	}
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", "https://pro-api.coinmarketcap.com/v1/cryptocurrency/map", nil)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"errors": []string{"OOPS request error'"}})
+		c.Abort()
+		return
+	}
+
+	q := url.Values{}
+	q.Add("symbol", newCoin.Symbol)
+
+	req.Header.Set("Accepts", "application/json")
+	req.Header.Add("X-CMC_PRO_API_KEY", os.Getenv("EXTERNAL_API_KEY"))
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := client.Do(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"errors": []string{"OOPS request error"}})
+		c.Abort()
+		return
+	}
+
+	if resp.StatusCode == http.StatusOK {
+		defer resp.Body.Close()
+		respBody, _ := ioutil.ReadAll(resp.Body)
+		log.Println(string(respBody))
+		json.Unmarshal(respBody, &verify)
+		if verify.Status.ErrorCode == 0 {
+			newCoin.AddCoin()
+			c.JSON(http.StatusOK, gin.H{"data": newCoin})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{"May this Symbol does not exist"}})
+		c.Abort()
+		return
+	}
+	c.JSON(http.StatusInternalServerError, gin.H{"errors": []string{"OOPS request error"}})
+	c.Abort()
+	return
+}
+
+func DeleteCoin(c *gin.Context) {
+	var removedCoin models.Coin
+	removedCoin.Symbol = c.Params.ByName("symbol")
+	if err := removedCoin.DeleteCoin(); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{err.Error()}})
+		c.Abort()
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"deleted": removedCoin})
 	return
 }

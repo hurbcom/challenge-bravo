@@ -3,28 +3,36 @@ package models
 import (
 	"errors"
 	"strings"
-	"time"
 
 	"github.com/hurbcom/challenge-bravo/utils"
 )
 
 var SuportedCoins []string
 
-type coin struct {
+type Coin struct {
 	Symbol string `json:"symbol"`
 }
 
-func (c *coin) addCoin() {
-	if utils.Contains(SuportedCoins, c.Symbol) {
-		return
-	}
+func (c *Coin) AddCoin() {
 	SuportedCoins = append(SuportedCoins, c.Symbol)
 	return
 }
 
-func (c *coin) DeleteCoin() error {
-	if len(SuportedCoins) > 0 {
+func (c *Coin) StoreContains() bool {
+	return utils.Contains(SuportedCoins, c.Symbol)
+}
 
+func (c *Coin) DeleteCoin() error {
+	if len(SuportedCoins) > 0 {
+		if utils.Contains(SuportedCoins, c.Symbol) {
+			for i, val := range SuportedCoins {
+				if c.Symbol == val {
+					utils.RemoveCopy(SuportedCoins, i)
+					return nil
+				}
+			}
+		}
+		return errors.New("Is not possible delete this coin")
 	}
 	return nil
 }
@@ -50,31 +58,4 @@ func (c *CoinExchange) ValidateAmount() error {
 		}
 	}
 	return nil
-}
-
-//Response
-type Response struct {
-	Status Status `json:"status"`
-	Data   struct {
-		ID          int              `json:"id"`
-		Symbol      string           `json:"symbol"`
-		Name        string           `json:"name"`
-		Amount      float64          `json:"amount"`
-		LastUpdated time.Time        `json:"last_updated"`
-		Quote       map[string]Quote `json:"quote"`
-	} `json:"data"`
-}
-
-type Quote struct {
-	Price       float64   `json:"price"`
-	LastUpdated time.Time `json:"last_updated"`
-}
-
-type Status struct {
-	Timestamp    time.Time   `json:"timestamp"`
-	ErrorCode    int         `json:"error_code"`
-	ErrorMessage interface{} `json:"error_message"`
-	Elapsed      int         `json:"elapsed"`
-	CreditCount  int         `json:"credit_count"`
-	Notice       interface{} `json:"notice"`
 }

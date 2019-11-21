@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/hurbcom/challenge-bravo/controllers"
 	"github.com/hurbcom/challenge-bravo/models"
@@ -12,17 +14,21 @@ func init() {
 }
 
 func main() {
-	_ = gotenv.Load()
-
+	err := gotenv.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
 	router := gin.Default()
 
 	router.GET("/exchange", controllers.Exchange)
-	router.POST("/coin")
-	router.DELETE("/coin")
+	router.POST("/coin", controllers.CreateCoin)
+	router.DELETE("/coin/:symbol", controllers.DeleteCoin)
 	router.GET("/coin", func(c *gin.Context) {
 		c.JSON(200, gin.H{"data": models.SuportedCoins})
 		return
 	})
 
-	_ = router.Run()
+	if err = router.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
