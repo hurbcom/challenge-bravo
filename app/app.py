@@ -6,6 +6,7 @@ from controllers.exchange import Exchange
 app = Flask(__name__)
 api = Api(app)
 
+# TODO: plural ou singular?
 api.add_resource(Currency, "/currencies")
 api.add_resource(Exchange, "/exchange")
 
