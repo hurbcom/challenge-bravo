@@ -15,19 +15,19 @@ type Coin struct {
 }
 
 func (c *Coin) AddCoin() {
-	SuportedCoins = append(SuportedCoins, c.Symbol)
+	SuportedCoins = append(SuportedCoins, strings.ToUpper(c.Symbol))
 	return
 }
 
 func (c *Coin) StoreContains() bool {
-	return utils.Contains(SuportedCoins, c.Symbol)
+	return utils.Contains(SuportedCoins, strings.ToUpper(c.Symbol))
 }
 
 func (c *Coin) DeleteCoin() error {
 	if len(SuportedCoins) > 0 {
-		if utils.Contains(SuportedCoins, c.Symbol) {
+		if utils.Contains(SuportedCoins, strings.ToUpper(c.Symbol)) {
 			for i, val := range SuportedCoins {
-				if c.Symbol == val {
+				if strings.ToUpper(c.Symbol) == val {
 					utils.RemoveCopy(SuportedCoins, i)
 					return nil
 				}
@@ -36,6 +36,10 @@ func (c *Coin) DeleteCoin() error {
 		return errors.New("Is not possible delete this coin")
 	}
 	return nil
+}
+
+func GetSuportedCoins() []string {
+	return SuportedCoins
 }
 
 //CoinExchange
@@ -47,7 +51,7 @@ type CoinExchange struct {
 }
 
 //ValidateAmount this validation is to view if the coin is suported
-func (c *CoinExchange) ValidateAmount() error {
+func (c *CoinExchange) ValidateCoin() error {
 	if ok := utils.Contains(SuportedCoins, c.From); !ok {
 		return errors.New("Coin not suported")
 	}

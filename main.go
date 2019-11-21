@@ -37,11 +37,7 @@ func main() {
 	}))
 
 	router.GET("/price-conversion", controllers.Conversion)
-	router.GET("/coin",
-		func(c *gin.Context) {
-			c.JSON(200, gin.H{"data": models.SuportedCoins})
-			return
-		})
+	router.GET("/coin", controllers.GetCoin)
 	router.POST("/coin", controllers.CreateCoin)
 	router.DELETE("/coin/:symbol", controllers.DeleteCoin)
 

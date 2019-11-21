@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -46,7 +45,7 @@ func Conversion(c *gin.Context) {
 	coin.To = strings.ToUpper(to)
 	coin.Amount = s
 
-	if err := coin.ValidateAmount(); err != nil {
+	if err := coin.ValidateCoin(); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{"Coin not suported"}})
 		c.Abort()
 		return
@@ -61,9 +60,9 @@ func Conversion(c *gin.Context) {
 			return
 		}
 		q := url.Values{}
-		q.Add("symbol", from)
+		q.Add("symbol", coin.From)
+		q.Add("convert", coin.To)
 		q.Add("amount", amount)
-		q.Add("convert", to)
 
 		req.Header.Set("Accepts", "application/json")
 		req.Header.Add("X-CMC_PRO_API_KEY", os.Getenv("EXTERNAL_API_KEY"))
@@ -117,7 +116,7 @@ func CreateCoin(c *gin.Context) {
 	}
 
 	q := url.Values{}
-	q.Add("symbol", newCoin.Symbol)
+	q.Add("symbol", strings.ToUpper(newCoin.Symbol))
 
 	req.Header.Set("Accepts", "application/json")
 	req.Header.Add("X-CMC_PRO_API_KEY", os.Getenv("EXTERNAL_API_KEY"))
@@ -133,7 +132,6 @@ func CreateCoin(c *gin.Context) {
 	if resp.StatusCode == http.StatusOK {
 		defer resp.Body.Close()
 		respBody, _ := ioutil.ReadAll(resp.Body)
-		log.Println(string(respBody))
 		json.Unmarshal(respBody, &verify)
 		if verify.Status.ErrorCode == 0 {
 			newCoin.AddCoin()
@@ -159,12 +157,17 @@ func CreateCoin(c *gin.Context) {
 // @Router /coin [DELETE]
 func DeleteCoin(c *gin.Context) {
 	var removedCoin models.Coin
-	removedCoin.Symbol = c.Params.ByName("symbol")
+	removedCoin.Symbol = strings.ToUpper(c.Params.ByName("symbol"))
 	if err := removedCoin.DeleteCoin(); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{err.Error()}})
 		c.Abort()
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"deleted": removedCoin})
+	return
+}
+
+func GetCoin(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"data": models.GetSuportedCoins()})
 	return
 }
