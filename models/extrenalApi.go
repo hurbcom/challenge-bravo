@@ -15,11 +15,13 @@ type Response struct {
 	} `json:"data"`
 }
 
+//Quote models
 type Quote struct {
 	Price       float64   `json:"price"`
 	LastUpdated time.Time `json:"last_updated"`
 }
 
+//Status
 type Status struct {
 	Timestamp    time.Time   `json:"timestamp"`
 	ErrorCode    int         `json:"error_code"`
@@ -29,6 +31,7 @@ type Status struct {
 	Notice       interface{} `json:"notice"`
 }
 
+//VerifyCoin
 type VerifyCoin struct {
 	Status Status      `json:"status"`
 	Data   interface{} `json:"data"`

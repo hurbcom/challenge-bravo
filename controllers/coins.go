@@ -8,12 +8,22 @@ import (
 	"net/url"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hurbcom/challenge-bravo/models"
 )
 
-func Exchange(c *gin.Context) {
+// Conversion Get/price-conversion
+// @Tags Conversion
+// @Summary Index Conversion
+// @Description Convert a amount of a coin into other
+// @Produce json
+// @Param  from query string true "Original symbol"
+// @Param  to query string true "Destiny symbol"
+// @Param  amount query string true "Amount to convert"
+// @Success 200 {object} models.CoinExchange
+func Conversion(c *gin.Context) {
 	var coin models.CoinExchange
 	var result models.Response
 	from := c.DefaultQuery("from", "")
@@ -27,13 +37,13 @@ func Exchange(c *gin.Context) {
 	}
 	s, err := strconv.ParseFloat(amount, 64)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"errors": []string{"OOPS something is wrong"}})
+		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{"Amount is invalid"}})
 		c.Abort()
 		return
 	}
 
-	coin.From = from
-	coin.To = to
+	coin.From = strings.ToUpper(from)
+	coin.To = strings.ToUpper(to)
 	coin.Amount = s
 
 	if err := coin.ValidateAmount(); err != nil {
@@ -78,6 +88,15 @@ func Exchange(c *gin.Context) {
 	return
 }
 
+// CreateCoin Post/coin
+// @Tags Coin
+// @Summary add a coin into the poll
+// @Description Create a new coin
+// @Accept json
+// @Produce json
+// @param Request body models.Coin true "Request body"
+// @Success 200 {object} models.Coin
+// @Router /coin [POST]
 func CreateCoin(c *gin.Context) {
 	var newCoin models.Coin
 	var verify models.VerifyCoin
@@ -130,6 +149,14 @@ func CreateCoin(c *gin.Context) {
 	return
 }
 
+// CreateCoin Delete/coin
+// @Tags Coin
+// @Summary Deleta a coin from the pool
+// @Description Convert a amount of a coin into other
+// @Produce json
+// @Param  symbol query string true "symbol to delete"
+// @Success 200 {object} models.CoinExchange models.Quote
+// @Router /coin [DELETE]
 func DeleteCoin(c *gin.Context) {
 	var removedCoin models.Coin
 	removedCoin.Symbol = c.Params.ByName("symbol")

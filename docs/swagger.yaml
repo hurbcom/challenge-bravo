@@ -1,0 +1,62 @@
+definitions:
+  models.Coin:
+    properties:
+      symbol:
+        type: string
+    type: object
+  models.CoinExchange:
+    properties:
+      amount:
+        type: number
+      from:
+        type: string
+      price_conversion:
+        type: object
+      to:
+        type: string
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /coin:
+    delete:
+      description: Convert a amount of a coin into other
+      parameters:
+      - description: symbol to delete
+        in: query
+        name: symbol
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CoinExchange'
+      summary: Deleta a coin from the pool
+      tags:
+      - Coin
+    post:
+      consumes:
+      - application/json
+      description: Create a new coin
+      parameters:
+      - description: Request body
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Coin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Coin'
+      summary: add a coin into the poll
+      tags:
+      - Coin
+swagger: "2.0"
