@@ -9,6 +9,7 @@ import (
 
 var SuportedCoins []string
 
+//Coin
 type Coin struct {
 	Symbol string `json:"symbol"`
 }
