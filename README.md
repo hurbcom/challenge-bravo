@@ -1,6 +1,7 @@
 # Api para conversão de moedas
 
 Api que recebe a moeda de origem, moeda de destino e um valor e retorna esse valor já convertido usando a cotação mais atual.
+Foi usado a bliblioteca github.com/shopspring/decimal para melhorar a precisão dos cálculos financeiros devido a problemas conhecidos quando se usa Float64.
 
 ## Requisção
 
