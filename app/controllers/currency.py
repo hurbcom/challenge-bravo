@@ -27,7 +27,7 @@ class Currency(Resource):
         new_currenty = CurrencyModel(**body)
         self._repository.insert(new_currenty)
 
-        return {"success": True}, HTTPStatus.ACCEPTED
+        return {"success": True}, HTTPStatus.CREATED
 
     def delete(self):
         return 'Not implemented yet', HTTPStatus.INTERNAL_SERVER_ERROR

@@ -32,4 +32,8 @@ class ExchangeService:
 
     def _request_to_exchange_api(self, day="latest", method="GET", params={}):
         url = f"https://api.exchangeratesapi.io/{day}"
-        return requests.request(method=method, url=url, params=params)
+        try:
+            return requests.request(method=method, url=url, params=params)
+        except Exception as ex:
+            # TODO: tratar como? raise? Munch lib?
+            return ex
