@@ -6,14 +6,21 @@ definitions:
     type: object
   models.CoinExchange:
     properties:
+      AmountConveted:
+        type: number
       amount:
         type: number
       from:
         type: string
-      price_conversion:
-        type: object
       to:
         type: string
+    type: object
+  models.DefaultError:
+    properties:
+      errors:
+        items:
+          type: string
+        type: array
     type: object
 info:
   contact: {}
@@ -21,11 +28,13 @@ info:
 paths:
   /coin:
     delete:
-      description: Convert a amount of a coin into other
+      consumes:
+      - application/json
+      description: Delete a Coin in the pool
       parameters:
-      - description: symbol to delete
-        in: query
-        name: symbol
+      - description: Request symbol
+        in: path
+        name: Request
         required: true
         type: string
       produces:
@@ -34,16 +43,38 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.CoinExchange'
-      summary: Deleta a coin from the pool
+            $ref: '#/definitions/models.Coin'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.DefaultError'
+      summary: Index coin
       tags:
-      - Coin
+      - coin
+    get:
+      description: Return all the coin on the pool of avalable coins
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Coin'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.DefaultError'
+      summary: Index coin
+      tags:
+      - coin
     post:
       consumes:
       - application/json
-      description: Create a new coin
+      description: Create a Coin in the pool
       parameters:
-      - description: Request body
+      - description: Request Body
         in: body
         name: Request
         required: true
@@ -56,7 +87,47 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Coin'
-      summary: add a coin into the poll
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.DefaultError'
+      summary: Index coin
       tags:
-      - Coin
+      - coin
+  /price-conversion:
+    get:
+      consumes:
+      - application/json
+      description: Convert an amount of one cryptocurrency or fiat currency into one
+        or more different currencies
+      parameters:
+      - description: Request from
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: Request to
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: Request amount
+        in: query
+        name: amount
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CoinExchange'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.DefaultError'
+      summary: Index Conversor
+      tags:
+      - Conversor
 swagger: "2.0"

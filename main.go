@@ -6,7 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/hurbcom/challenge-bravo/controllers"
-	"github.com/hurbcom/challenge-bravo/models"
+	"github.com/hurbcom/challenge-bravo/dao"
 	"github.com/subosito/gotenv"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -15,7 +15,7 @@ import (
 )
 
 func init() {
-	models.SuportedCoins = []string{"USD", "BRL", "EUR", "BTC", "ETH"}
+	dao.SuportedCoins = []string{"USD", "BRL", "EUR", "BTC", "ETH"}
 	docs.SwaggerInfo.Title = "hurbcom Test API"
 	docs.SwaggerInfo.Host = "localhost:8080"
 	docs.SwaggerInfo.Schemes = []string{"http"}
@@ -36,7 +36,7 @@ func main() {
 		MaxAge:          36000,
 	}))
 
-	router.GET("/price-conversion", controllers.Conversion)
+	router.GET("/price-conversion", controllers.Conversor)
 	router.GET("/coin", controllers.GetCoin)
 	router.POST("/coin", controllers.CreateCoin)
 	router.DELETE("/coin/:symbol", controllers.DeleteCoin)
