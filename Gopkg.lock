@@ -37,6 +37,17 @@
   revision = "fb15b899a75114aa79cc930e33c46b577cc664b1"
 
 [[projects]]
+  digest = "1:f343e6f508aa6d4d98c55eb9d1e9c0f99f51c34a4921f5b8d6171de7a25d5fa0"
+  name = "github.com/allegro/bigcache"
+  packages = [
+    ".",
+    "queue",
+  ]
+  pruneopts = "UT"
+  revision = "2cf8c0b01a0c01c2c0363d348aa7042f6542ed27"
+  version = "v2.1.1"
+
+[[projects]]
   digest = "1:cc93dd54278f6c0dd4b43588b3cf2c07b09b2a6dd4e2617edf81aa8946054c1e"
   name = "github.com/gin-contrib/cors"
   packages = ["."]
@@ -269,6 +280,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/alecthomas/template",
+    "github.com/allegro/bigcache",
     "github.com/gin-contrib/cors",
     "github.com/gin-gonic/gin",
     "github.com/subosito/gotenv",
