@@ -21,11 +21,8 @@ func init() {
 	docs.SwaggerInfo.Schemes = []string{"http"}
 
 }
-func main() {
-	err := gotenv.Load()
-	if err != nil {
-		log.Fatal(err)
-	}
+
+func SetUpRoutes() *gin.Engine {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -45,6 +42,15 @@ func main() {
 		"hurbcom": "123",
 	}))
 	swagger.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	return router
+}
+
+func main() {
+	err := gotenv.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
+	router := SetUpRoutes()
 
 	if err = router.Run(); err != nil {
 		log.Fatal(err)
