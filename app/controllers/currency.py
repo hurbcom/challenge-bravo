@@ -3,6 +3,7 @@ from models.currency import CurrencyModel
 from helper.currency_validator import CurrencyValidator
 from http import HTTPStatus
 from repository.currency_repository import CurrencyRepository
+from controllers import make_response as response
 
 
 class Currency(Resource):
@@ -12,8 +13,8 @@ class Currency(Resource):
 
     def get(self):
         currencies = self._repository.get_currencies()
-        response = [c.to_dict() for c in currencies]
-        return response, HTTPStatus.OK
+        currency_dict = [c.to_dict() for c in currencies]
+        return response(True, HTTPStatus.OK, data=currency_dict)
 
     def post(self):
         request = reqparse.request
@@ -23,11 +24,34 @@ class Currency(Resource):
         if not sucess:
             return {"errors": errors}, HTTPStatus.BAD_REQUEST
 
-        # TODO: Incluir ID autogerado para os objetos
         new_currenty = CurrencyModel(**body)
-        self._repository.insert(new_currenty)
 
-        return {"success": True}, HTTPStatus.CREATED
+        if self._repository.get_currency_by_code(new_currenty.code):
+            return response(
+                False,
+                HTTPStatus.CONFLICT,
+                None,
+                [f"Resource '{new_currenty.code}' already exists."]
+            )
+
+        # TODO: Validar se o currency code existe na api exchange
+        # TODO: Validar se o currency code existe na api crypto
+
+        self._repository.insert(new_currenty)
+        return response(True, HTTPStatus.CREATED)
 
     def delete(self):
-        return 'Not implemented yet', HTTPStatus.INTERNAL_SERVER_ERROR
+        request = reqparse.request
+        code = request.args.get('code')
+
+        if not code:
+            return response(
+                False,
+                HTTPStatus.BAD_REQUEST,
+                None,
+                ["'code' is a required argument"]
+            )
+
+        self._repository.delete(code)
+        # TODO: Por que a resposta não está sendo printada no postman?
+        return response(True, HTTPStatus.NO_CONTENT)

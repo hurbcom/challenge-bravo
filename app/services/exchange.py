@@ -7,7 +7,7 @@ class ExchangeService:
     def __init__(self):
         self._ballast = 'USD'
 
-    def converter(self, base, destination, amount):
+    def converter(self, base: str, amount: float, destination='USD'):
         params = {"base": self._ballast}
         response = self._request_to_exchange_api(params=params)
 

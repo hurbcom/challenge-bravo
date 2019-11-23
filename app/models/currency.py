@@ -10,10 +10,3 @@ class CurrencyModel:
             "code": self.code,
             "description": self.description
         }
-
-    @property
-    def value(self, amount):
-        pass
-
-    def value_in_other_currency(self, amount, other_currency):
-        pass

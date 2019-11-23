@@ -19,20 +19,38 @@ INITIAL_CURRENCIES = [
 
 class CurrencyRepository:
     _CURRENCIES = list()
+    _BACKUP = list()
 
     def __init__(self):
-        if not self._CURRENCIES:
+        if not self._CURRENCIES and not self._BACKUP:
             self._build_initial_currencies()
 
     def _build_initial_currencies(self):
         for code, name, description in INITIAL_CURRENCIES:
-            # TODO: Incluir ID autogerado para os objetos
-            self.insert(CurrencyModel(code, name, description))
+            currency = CurrencyModel(code, name, description)
+            self.insert(currency)
 
     def get_currencies(self):
         return self._CURRENCIES
 
+    def get_currency_by_code(self, currency_code):
+        for currency in self._CURRENCIES:
+            if currency_code == currency.code:
+                return currency
+
+        return None
+
     def insert(self, currency):
-        # TODO: Verificar se já não existe esta moeda no repo
-        # TODO: Validar se o currency code existe na api exchange
         self._CURRENCIES.append(currency)
+
+    def delete(self, currency_code):
+        currency = self.get_currency_by_code(currency_code)
+        if not currency:
+            return None
+
+        self._BACKUP.append(currency)
+
+        index = self._CURRENCIES.index(currency)
+        del self._CURRENCIES[index]
+
+        return None
