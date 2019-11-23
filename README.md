@@ -83,7 +83,7 @@ Construa também um endpoint para adicionar e remover moedas suportadas pela API
     ```sh
      go get -u github.com/swaggo/swag/cmd/swag
      ```
- 2. Write the docs 
+ 2. Write the docs on contollers
     ```go
     //CreateCoin Delete a Coin in the pool
     // @Tags coin
