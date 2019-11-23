@@ -1,0 +1,5 @@
+/vendor
+/.vendor-new
+*.exe
+.env
+challenge-bravo
