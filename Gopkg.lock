@@ -218,7 +218,7 @@
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "f068ffe820e46336f56dfca7777430582d6e507b"
+  revision = "bd437916bb0eb726b873ee8e9b2dcf212d32e2fd"
 
 [[projects]]
   digest = "1:66a2f252a58b4fbbad0e4e180e1d85a83c222b6bce09c3dcdef3dc87c72eda7c"
@@ -257,7 +257,7 @@
     "go/loader",
   ]
   pruneopts = "UT"
-  revision = "947d4aa89328ca3de223e23c6ed064660ff03347"
+  revision = "2a6ccf25d769ccc6c0b364ff440915b10af1e3cf"
 
 [[projects]]
   digest = "1:cbc72c4c4886a918d6ab4b95e347ffe259846260f99ebdd8a198c2331cf2b2e9"
