@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${fileDirname}",
+            "program": "/home/luis/go/src/github.com/hurbcom/challenge-bravo",
             "env": {
                 "GIN_MODE": "debug",
                 "EXTERNAL_API_KEY": "a3ff0024-6b40-49c0-8d9b-7982e33e6f24"

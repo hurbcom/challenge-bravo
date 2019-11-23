@@ -43,7 +43,7 @@ func Conversor(c *gin.Context) {
 
 	coin.AmountConveted, err = services.Convert(coin)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"errors": err.Error})
+		c.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		c.Abort()
 		return
 	}
