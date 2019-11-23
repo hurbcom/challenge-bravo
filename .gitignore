@@ -13,4 +13,5 @@
 vendor
 Client/node_modules
 gin-bin
+.vscode
 # .env

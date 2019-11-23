@@ -18,7 +18,7 @@ func init() {
 	dao.SuportedCoins = []string{"USD", "BRL", "EUR", "BTC", "ETH"}
 	docs.SwaggerInfo.Title = "hurbcom Test API"
 	docs.SwaggerInfo.Host = "localhost:8080"
-	docs.SwaggerInfo.Schemes = []string{"http"}
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 }
 
