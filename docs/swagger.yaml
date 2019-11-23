@@ -99,7 +99,7 @@ paths:
       consumes:
       - application/json
       description: Convert an amount of one cryptocurrency or fiat currency into one
-        or more different currencies
+        different currencies
       parameters:
       - description: Request from
         in: query

@@ -37,6 +37,17 @@
   revision = "fb15b899a75114aa79cc930e33c46b577cc664b1"
 
 [[projects]]
+  digest = "1:f343e6f508aa6d4d98c55eb9d1e9c0f99f51c34a4921f5b8d6171de7a25d5fa0"
+  name = "github.com/allegro/bigcache"
+  packages = [
+    ".",
+    "queue",
+  ]
+  pruneopts = "UT"
+  revision = "2cf8c0b01a0c01c2c0363d348aa7042f6542ed27"
+  version = "v2.1.1"
+
+[[projects]]
   digest = "1:cc93dd54278f6c0dd4b43588b3cf2c07b09b2a6dd4e2617edf81aa8946054c1e"
   name = "github.com/gin-contrib/cors"
   packages = ["."]
@@ -207,7 +218,7 @@
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "f068ffe820e46336f56dfca7777430582d6e507b"
+  revision = "bd437916bb0eb726b873ee8e9b2dcf212d32e2fd"
 
 [[projects]]
   digest = "1:66a2f252a58b4fbbad0e4e180e1d85a83c222b6bce09c3dcdef3dc87c72eda7c"
@@ -246,7 +257,7 @@
     "go/loader",
   ]
   pruneopts = "UT"
-  revision = "947d4aa89328ca3de223e23c6ed064660ff03347"
+  revision = "2a6ccf25d769ccc6c0b364ff440915b10af1e3cf"
 
 [[projects]]
   digest = "1:cbc72c4c4886a918d6ab4b95e347ffe259846260f99ebdd8a198c2331cf2b2e9"
@@ -269,6 +280,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/alecthomas/template",
+    "github.com/allegro/bigcache",
     "github.com/gin-contrib/cors",
     "github.com/gin-gonic/gin",
     "github.com/subosito/gotenv",

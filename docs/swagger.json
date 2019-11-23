@@ -110,7 +110,7 @@
         },
         "/price-conversion": {
             "get": {
-                "description": "Convert an amount of one cryptocurrency or fiat currency into one or more different currencies",
+                "description": "Convert an amount of one cryptocurrency or fiat currency into one different currencies",
                 "consumes": [
                     "application/json"
                 ],
