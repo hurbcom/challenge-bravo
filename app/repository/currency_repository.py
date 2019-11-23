@@ -44,13 +44,12 @@ class CurrencyRepository:
         self._CURRENCIES.append(currency)
 
     def delete(self, currency_code):
+        #TODO: validar condicional para não dirar USDOLAR
         currency = self.get_currency_by_code(currency_code)
         if not currency:
-            return None
+            return
 
         self._BACKUP.append(currency)
 
         index = self._CURRENCIES.index(currency)
         del self._CURRENCIES[index]
-
-        return None

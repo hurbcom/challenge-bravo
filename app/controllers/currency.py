@@ -1,13 +1,18 @@
+from controllers import make_response as response
 from flask_restful import Resource, reqparse
-from models.currency import CurrencyModel
 from helper.currency_validator import CurrencyValidator
 from http import HTTPStatus
+from models.currency import CurrencyModel
 from repository.currency_repository import CurrencyRepository
-from controllers import make_response as response
+from services.coin_cap import CoinCapService
+from services.exchange_rates import ExchangeRatesService
 
 
 class Currency(Resource):
     def __init__(self):
+        # TODO: Se o staticmethod ficar totalmente independente dos serviços, não precisarei instanciá los aqui.
+        self._crypto_service = CoinCapService()
+        self._exchange_service = ExchangeRatesService()
         self._repository = CurrencyRepository()
         self._validator = CurrencyValidator()
 
@@ -30,12 +35,18 @@ class Currency(Resource):
             return response(
                 False,
                 HTTPStatus.CONFLICT,
-                None,
+                self._repository.get_currency_by_code(new_currenty.code).to_dict(),
                 [f"Resource '{new_currenty.code}' already exists."]
             )
 
-        # TODO: Validar se o currency code existe na api exchange
-        # TODO: Validar se o currency code existe na api crypto
+        if not (ExchangeRatesService.is_currency_available(new_currenty) or
+                CoinCapService.is_currency_available(new_currenty)):
+            return response(
+                False,
+                HTTPStatus.NOT_IMPLEMENTED,
+                None,
+                [f"'{new_currenty.code}' not avaiable in our exchange services."]
+            )
 
         self._repository.insert(new_currenty)
         return response(True, HTTPStatus.CREATED)
@@ -51,7 +62,8 @@ class Currency(Resource):
                 None,
                 ["'code' is a required argument"]
             )
-
+        # TODO: devo tratar caso não exista o code desejado no meu db?
         self._repository.delete(code)
         # TODO: Por que a resposta não está sendo printada no postman?
-        return response(True, HTTPStatus.NO_CONTENT)
+        # responsta: se sar o httpstatus no content, não retorna o conteúdo no body.
+        return response(True, HTTPStatus.OK)

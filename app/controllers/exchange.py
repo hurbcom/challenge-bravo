@@ -4,15 +4,16 @@ from helper.exchange_validator import ExchangeValidator
 from http import HTTPStatus
 from repository.currency_repository import CurrencyRepository
 from services.coin_cap import CoinCapService
-from services.exchange import ExchangeService
+from services.exchange_rates import ExchangeRatesService
 # TODO: Ordenar todos os cabeçalhos
 
 
 class Exchange(Resource):
     def __init__(self):
+        # TODO: resolver o staticmethod dos serviçoes para não precisa instancia los aqui
         self._crypto_service = CoinCapService()
         self._repository = CurrencyRepository()
-        self._service = ExchangeService()
+        self._service = ExchangeRatesService()
         self._validator = ExchangeValidator()
 
     def get(self):
@@ -23,11 +24,13 @@ class Exchange(Resource):
         if not sucess:
             return make_response(False, HTTPStatus.BAD_REQUEST, None, errors)
 
-        base_currency = self._repository.get_currency_by_code(parameters["from"])
-        destination_currency = self._repository.get_currency_by_code(
-            parameters["to"]
+        base_currency, destination_currency = (
+            self._repository.get_currency_by_code(parameters["from"]),
+            self._repository.get_currency_by_code(parameters["to"])
         )
 
+        # TODO: Melhorar resposta para retornar todos os erros possíveis.
+        # vale a pena o esforço?
         if not base_currency:
             return make_response(
                 False,
@@ -43,34 +46,24 @@ class Exchange(Resource):
                 [f"'{parameters['to']}' doesn't record on currency resource."]
             )
 
-        exchange_rates_currencies = self._service.get_available_currencies()
-        crypto_cap_currencies = self._crypto_service.get_available_currencies()
-
-        if base_currency.code in exchange_rates_currencies and destination_currency.code in exchange_rates_currencies:
+        if ExchangeRatesService.is_currency_available(base_currency) and ExchangeRatesService.is_currency_available(destination_currency):
             value = self._service.converter(base_currency,
-                                            destination_currency,
-                                            parameters["amount"])
-            return make_response(True, HTTPStatus.OK, {"value": value})
-        elif base_currency.code in exchange_rates_currencies and destination_currency.code in crypto_cap_currencies:
-            base_value = self._service.converter(base_currency.code,
-                                                 amount=parameters["amount"])
-            # TODO método p calcular destination no crypto
-        elif base_currency.code in crypto_cap_currencies and destination_currency.code in exchange_rates_currencies:
-            destination_value = self._service.converter(destination_currency.code,
-                                                        amount=parameters["amount"])
-            # TODO método p calcular base no crypto
-        elif base_currency.code in crypto_cap_currencies and destination_currency.code in crypto_cap_currencies:
-            # AS DUAS MOEDAS SOLICITADAS SÃO CRYPTO. FAZER CONVERSÃO.
-            pass
-        else:
-            #moeda desconhecida. se for feito corretamente a validação inserção de novas moedas, este problema não deve acontecer.
-            pass
+                                            parameters["amount"],
+                                            destination_currency)
 
+        self.set_currency_value(base_currency)
+        self.set_currency_value(destination_currency)
+
+        value = parameters["amount"] * destination_currency.value / base_currency.value
         # TODO: melhorar contrato de response
+
         response = {
-            "value": round(value, 2)
+            "value": value
         }
         return make_response(True, HTTPStatus.OK, response)
 
-    def _converter_btc(self, amount):
-        return self._crypto_service.asset("BTC", float(amount))
+    def set_currency_value(self, currency):
+        if ExchangeRatesService.is_currency_available(currency):
+            currency.value = self._service.converter(currency, 1)
+        elif CoinCapService.is_currency_available(currency):
+            currency.value = self._crypto_service.asset(currency, 1)

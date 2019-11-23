@@ -10,7 +10,7 @@ class CurrencyValidator(JSONSchemaValidator):
             "properties": {
                 "code": {
                     "type": "string",
-                    "pattern": "^[A-Z]{3}$"
+                    "pattern": "^[A-Z]{3,5}$"
                 },
                 "name": {
                     "type": "string"
