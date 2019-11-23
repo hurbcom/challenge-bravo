@@ -1,0 +1,31 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Pelegrinetti/challenge-bravo.git",
+  "author": "Pelegrinetti <pelegrinetti.dev@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "eslint": "^6.7.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "nodemon": "^2.0.1",
+    "prettier": "^1.19.1"
+  }
+}
