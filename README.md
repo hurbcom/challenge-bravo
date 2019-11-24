@@ -78,10 +78,17 @@ Construa também um endpoint para adicionar e remover moedas suportadas pela API
 ### 📝 Docs
  > http://localhost:8080/docs/index.html
 
+ ` user: hurbcom
+ `
+
+ ` password: 123
+ `
+
  ####  🔨 Generate
  1. Install Swaggo
     ```sh
-     go get -u github.com/swaggo/swag/cmd/swag
+     go get -u github.com/swaggo/swag/cmd/swag 
+     $GOPATH/src/github.com/hurbcom/challenge-bravo
      ```
  2. Write the docs on contollers
     ```go
