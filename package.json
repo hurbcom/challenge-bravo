@@ -6,11 +6,13 @@
   "author": "Pelegrinetti <pelegrinetti.dev@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "db:seed": "babel-node src/database/seeders/index.js"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.7.12"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
