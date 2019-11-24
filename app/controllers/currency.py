@@ -5,15 +5,14 @@ from http import HTTPStatus
 from models.currency import CurrencyModel
 from repository.currency_repository import CurrencyRepository
 from services.coin_cap import CoinCapService
-from services.exchange_rates import ExchangeRatesService
+from services.exchange_rates import ExchangeRatesService, BALLAST
 
 
 class Currency(Resource):
     def __init__(self):
-        # TODO: Se o staticmethod ficar totalmente independente dos serviços, não precisarei instanciá los aqui.
         self._crypto_service = CoinCapService()
-        self._exchange_service = ExchangeRatesService()
         self._repository = CurrencyRepository()
+        self._service = ExchangeRatesService()
         self._validator = CurrencyValidator()
 
     def get(self):
@@ -25,8 +24,8 @@ class Currency(Resource):
         request = reqparse.request
         body = request.get_json()
 
-        sucess, errors = self._validator.validate(body)
-        if not sucess:
+        success, errors = self._validator.validate(body)
+        if not success:
             return {"errors": errors}, HTTPStatus.BAD_REQUEST
 
         new_currenty = CurrencyModel(**body)
@@ -35,17 +34,19 @@ class Currency(Resource):
             return response(
                 False,
                 HTTPStatus.CONFLICT,
-                self._repository.get_currency_by_code(new_currenty.code).to_dict(),
+                self._repository.get_currency_by_code(
+                    new_currenty.code).to_dict(),
                 [f"Resource '{new_currenty.code}' already exists."]
             )
 
-        if not (ExchangeRatesService.is_currency_available(new_currenty) or
-                CoinCapService.is_currency_available(new_currenty)):
+        if not (self._service.is_currency_available(new_currenty) or
+                self._crypto_service.is_currency_available(new_currenty)):
             return response(
                 False,
                 HTTPStatus.NOT_IMPLEMENTED,
                 None,
-                [f"'{new_currenty.code}' not avaiable in our exchange services."]
+                [f"'{new_currenty.code}' not avaiable "
+                 "in our exchange services."]
             )
 
         self._repository.insert(new_currenty)
@@ -62,8 +63,14 @@ class Currency(Resource):
                 None,
                 ["'code' is a required argument"]
             )
-        # TODO: devo tratar caso não exista o code desejado no meu db?
+        elif code == BALLAST.code:
+            return response(
+                False,
+                HTTPStatus.BAD_REQUEST,
+                None,
+                [f"'{code}' is the service ballast and "
+                 "can't be deleted."]
+            )
+
         self._repository.delete(code)
-        # TODO: Por que a resposta não está sendo printada no postman?
-        # responsta: se sar o httpstatus no content, não retorna o conteúdo no body.
         return response(True, HTTPStatus.OK)

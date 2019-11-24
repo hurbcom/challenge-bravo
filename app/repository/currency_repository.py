@@ -1,19 +1,18 @@
 from models.currency import CurrencyModel
 
-# TODO: Melhorar descriptions; Precisa da fonte?
 INITIAL_CURRENCIES = [
-    ("USD", "US dollars", "Wikipedia: Currency of the United States of"
-        " America"),
-    ("BRL", "Brazilian real", "Wikipedia: Currency of Brazil"),
-    ("EUR", "Euro", "Wikipedia: Currency of 19 of the 28 member states"
-        " of the European Union"),
-    ("BTC", "Bitcoin", "Wikipedia: Decentralized digital "
+    ("USD", "US dollars", "Currency of the United States of"
+        " America - Wikipedia"),
+    ("BRL", "Brazilian real", "Currency of Brazil - Wikipedia"),
+    ("EUR", "Euro", "Currency of 19 of the 28 member states"
+        " of the European Union - Wikipedia"),
+    ("BTC", "Bitcoin", "Decentralized digital "
         "cryptocurrency without a central bank or single "
-        "administrator"),
-    ("ETH", "Ethereum", "Wikipedia: Ethereum is an open source, public"
+        "administrator - Wikipedia"),
+    ("ETH", "Ethereum", "Ethereum is an open source, public"
         ", blockchain-based distributed computing platform and "
         "operating system featuring smart contract (scripting) "
-        "functionality")
+        "functionality - Wikipedia")
 ]
 
 
@@ -44,7 +43,6 @@ class CurrencyRepository:
         self._CURRENCIES.append(currency)
 
     def delete(self, currency_code):
-        #TODO: validar condicional para não dirar USDOLAR
         currency = self.get_currency_by_code(currency_code)
         if not currency:
             return
