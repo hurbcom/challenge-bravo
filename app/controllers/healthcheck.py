@@ -31,7 +31,6 @@ class Healthcheck(Resource):
                     "success": success,
                     "timestamp": str((datetime.utcnow() - start))
                 })
-                print(f"{datetime.utcnow() - start}")
 
         if False in [r["success"] for r in response]:
             return make_response(False,
