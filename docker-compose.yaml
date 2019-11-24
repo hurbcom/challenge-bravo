@@ -1,0 +1,10 @@
+version: '2'
+services:
+    redis:
+        image: redis:4-alpine
+        ports:
+            - "6379:6379"
+        volumes:
+            - "./docker_data/redis:/data"
+        container_name: "Challenge_redis"
+

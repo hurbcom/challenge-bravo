@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/gabrielerzinger/challenge-bravo/repositories"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 
@@ -16,6 +17,7 @@ type App struct {
 	Logger  logrus.FieldLogger
 	Router  *mux.Router
 	Server  *http.Server
+	Storage repositories.Repository
 }
 
 // NewApp creates a new application instance
@@ -40,6 +42,12 @@ func NewApp(host string, port int) *App {
 
 func (a *App) configureApp() {
 	a.Router = a.instantiateRouter()
+	a.Logger.Info("Connecting to repository...")
+	a.Storage = repositories.NewRedisStorage()
+	err := a.Storage.Connect()
+	if err != nil {
+		panic("Failed to connect")
+	}
 	a.configureServer()
 }
 
