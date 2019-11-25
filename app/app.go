@@ -61,6 +61,8 @@ func (a *App) configureServer() {
 func (a *App) instantiateRouter() *mux.Router {
 	router := mux.NewRouter()
 	router.Handle("/exchange", NewConversionHandler(a)).Methods("GET")
+	router.Handle("/currency", NewCurrencyHandler(a)).Methods("POST")
+	router.Handle("/currency/{symbol}", NewDeleteHandler(a)).Methods("DELETE")
 	return router
 }
 

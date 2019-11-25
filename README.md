@@ -1,4 +1,20 @@
+# Running
+
+```
+➜ sudo docker-compose up -d redis
+➜ go run main.go
+```
+
+Listen on port 9090.
+
+Urls are:
+
+- /currency (POST) expects a json with symbol string property
+- /currency/{symbol} (DELETE) removes a supported currency
+- /exchange (GET) make the exchange, using parameters per specification
+
 # Currency challenge
+
 
 Initially I wouldnt use a database for such application, making simple upsert in memory for currency values in USD, because the number of existing currency is relatively small (180 according to the UN), and also we would like to keep them up to date, therefore, I would just store those values in memory with an expiration time of a day or so. But then there is the requirement that the service must not work with non-registred coins, meaning that we would have to store a list of
 supported coins and returns a bad request otherwise. 
