@@ -10,6 +10,7 @@
     "db:seed": "babel-node src/database/seeders/index.js"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.7.12"

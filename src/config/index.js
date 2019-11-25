@@ -6,5 +6,8 @@ export default {
   },
   db: {
     uri: process.env.DB_URI
+  },
+  services: {
+    api_key: process.env.API_KEY
   }
 }
