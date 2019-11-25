@@ -4,8 +4,9 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pytest = "==5.3.0"
+munch = "==2.3.2"
 parameterized = "==0.7.0"
+pytest = "==5.3.0"
 
 [packages]
 flask = "==1.1.1"

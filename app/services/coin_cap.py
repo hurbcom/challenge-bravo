@@ -23,7 +23,6 @@ class CoinCapService:
             return
 
         response = self._request_to_api()
-
         currencies = response.json()["data"]
 
         VALUE_CACHE["values"] = {
