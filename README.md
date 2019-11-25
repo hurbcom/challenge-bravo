@@ -57,7 +57,7 @@ Construa também um endpoint para adicionar e remover moedas suportadas pela API
     `warning look the path to not overwrite an existent project`
 
     ```sh
-    git clone https://github.com/128423/challenge-bravo.git 
+    git clone https://github.com/128423/challenge-bravo.git $GOPATH/src/github.com/hurbcom/challenge-bravo
     ```
     ```sh
     cd challenge-bravo
