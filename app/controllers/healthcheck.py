@@ -23,7 +23,8 @@ class Healthcheck(Resource):
                 start = datetime.utcnow()
                 method()
                 success = True
-            except Exception:
+            except Exception as ex:
+                print(ex)
                 success = False
             finally:
                 response.append({
@@ -36,7 +37,7 @@ class Healthcheck(Resource):
             return make_response(False,
                                  HTTPStatus.SERVICE_UNAVAILABLE,
                                  response,
-                                 ["Any dependencies has fail."])
+                                 ["Some dependencies has fail."])
         else:
             return make_response(True,
                                  HTTPStatus.OK,

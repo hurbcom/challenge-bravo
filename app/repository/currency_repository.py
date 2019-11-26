@@ -1,8 +1,11 @@
 from models.currency import CurrencyModel
 
+BALLAST_CURRENCY = ("USD",
+                    "US dollars",
+                    "Currency of the United States of America - Wikipedia")
+
 INITIAL_CURRENCIES = [
-    ("USD", "US dollars", "Currency of the United States of"
-        " America - Wikipedia"),
+    BALLAST_CURRENCY,
     ("BRL", "Brazilian real", "Currency of Brazil - Wikipedia"),
     ("EUR", "Euro", "Currency of 19 of the 28 member states"
         " of the European Union - Wikipedia"),

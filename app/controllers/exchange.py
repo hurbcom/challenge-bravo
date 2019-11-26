@@ -39,10 +39,9 @@ class Exchange(Resource):
             self._set_currency_value(base_currency)
             self._set_currency_value(destination_currency)
         except Exception as ex:
-            # TODO: mudar para log
             print(ex)
             return make_response(False, HTTPStatus.INTERNAL_SERVER_ERROR,
-                                 None, ["Fail in request do dependencies."])
+                                 None, ["Fail in request to dependency."])
 
         value = parameters["amount"] * (
             base_currency.value / destination_currency.value

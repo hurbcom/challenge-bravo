@@ -1,11 +1,11 @@
-from controllers import make_response as response
+from controllers import make_response
 from flask_restful import Resource, reqparse
 from helper.currency_validator import CurrencyValidator
 from http import HTTPStatus
 from models.currency import CurrencyModel
-from repository.currency_repository import CurrencyRepository
+from repository.currency_repository import CurrencyRepository, BALLAST_CURRENCY
 from services.coin_cap import CoinCapService
-from services.exchange_rates import ExchangeRatesService, BALLAST
+from services.exchange_rates import ExchangeRatesService
 
 
 class Currency(Resource):
@@ -18,7 +18,7 @@ class Currency(Resource):
     def get(self):
         currencies = self._repository.get_currencies()
         currency_dict = [c.to_dict() for c in currencies]
-        return response(True, HTTPStatus.OK, data=currency_dict)
+        return make_response(True, HTTPStatus.OK, data=currency_dict)
 
     def post(self):
         request = reqparse.request
@@ -31,7 +31,7 @@ class Currency(Resource):
         new_currenty = CurrencyModel(**body)
 
         if self._repository.get_currency_by_code(new_currenty.code):
-            return response(
+            return make_response(
                 False,
                 HTTPStatus.CONFLICT,
                 self._repository.get_currency_by_code(
@@ -39,32 +39,37 @@ class Currency(Resource):
                 [f"Resource '{new_currenty.code}' already exists."]
             )
 
-        if not (self._service.is_currency_available(new_currenty) or
-                self._crypto_service.is_currency_available(new_currenty)):
-            return response(
-                False,
-                HTTPStatus.NOT_IMPLEMENTED,
-                None,
-                [f"'{new_currenty.code}' not avaiable "
-                 "in our exchange services."]
-            )
+        try:
+            if not (self._service.is_currency_available(new_currenty) or
+                    self._crypto_service.is_currency_available(new_currenty)):
+                return make_response(
+                    False,
+                    HTTPStatus.NOT_IMPLEMENTED,
+                    None,
+                    [f"'{new_currenty.code}' not avaiable "
+                    "in our exchange services."]
+                )
+        except Exception as ex:
+            print(ex)
+            return make_response(False, HTTPStatus.INTERNAL_SERVER_ERROR,
+                                 None, ["Fail in check new currency on our dependencies."])
 
         self._repository.insert(new_currenty)
-        return response(True, HTTPStatus.CREATED)
+        return make_response(True, HTTPStatus.CREATED)
 
     def delete(self):
         request = reqparse.request
         code = request.args.get('code')
 
         if not code:
-            return response(
+            return make_response(
                 False,
                 HTTPStatus.BAD_REQUEST,
                 None,
                 ["'code' is a required argument"]
             )
-        elif code == BALLAST.code:
-            return response(
+        elif code == BALLAST_CURRENCY[0]:
+            return make_response(
                 False,
                 HTTPStatus.BAD_REQUEST,
                 None,
@@ -73,4 +78,4 @@ class Currency(Resource):
             )
 
         self._repository.delete(code)
-        return response(True, HTTPStatus.OK)
+        return make_response(True, HTTPStatus.OK)
