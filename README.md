@@ -1,6 +1,6 @@
 # Challenge Bravo
 
-This API has mission to solve Challenge Bravo, where is necessary make exchanges between many currencies as necessary.
+This API has mission to solve Challenge Bravo, where make exchanges between many currencies as necessary.
 
 ---
 ## Development
