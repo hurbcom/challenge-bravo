@@ -62,41 +62,41 @@ Após isso, não tive mais erros e consegui iniciar a aplicação sem problemas.
 
 
 Rotas de resposta da API:
-
->>>>Endpoint: http://127.0.0.1:5000/status/codigo_moeda
-
-método HTTP: GET
-Exemplo: /status/USD
-Resposta: Retorna um JSON com informações atuais sobre a moeda escolhida, o valor da moeda tem como base o dólar comercial.
-
-
->>>>Endpoint: http://127.0.0.1:5000/codigo_moeda_origem/codigo_moeda_destino/valor
-
-método HTTP: GET
-Exemplo: http://127.0.0.1:5000/USD/BRL/100
-Resposta: Retorna um JSON com o nome da moeda destino, a data em que foi atualizada e o valor da conversão entre as duas moedas.
-
-
->>>>Endpoint: http://127.0.0.1:5000/codigo_moeda
-
-Método HTTP: POST
-Exemplo: http://127.0.0.1:5000/CAD
-Resposta: Adiciona a moeda passada como parâmetro ao banco de dados, e retorna uma mensagem de sucesso, caso tenha sido adiciona, ou de erro caso não tenha sido.
-
-
->>>>Endpoint: http://127.0.0.1:5000/codigo_moeda
-
-Método HTTP: DELETE
-Exemplo: http://127.0.0.1:5000/CAD
-Resposta: Deleta a moeda passada como parâmetro e retorna uma mensagem de sucesso caso tenha sido deletada e de erro caso não tenha sido.
-
-
-Escolhas técnicas para o projeto:
-
+<br>
+-> Endpoint: http://127.0.0.1:5000/status/codigo_moeda<br>
+<br>
+método HTTP: GET<br>
+Exemplo: /status/USD<br>
+Resposta: Retorna um JSON com informações atuais sobre a moeda escolhida, o valor da moeda tem como base o dólar comercial.<br>
+<br>
+<br>
+-> Endpoint: http://127.0.0.1:5000/codigo_moeda_origem/codigo_moeda_destino/valor<br>
+<br>
+método HTTP: GET<br>
+Exemplo: http://127.0.0.1:5000/USD/BRL/100<br>
+Resposta: Retorna um JSON com o nome da moeda destino, a data em que foi atualizada e o valor da conversão entre as duas moedas.<br>
+<br>
+<br>
+-> Endpoint: http://127.0.0.1:5000/codigo_moeda<br>
+<br>
+Método HTTP: POST<br>
+Exemplo: http://127.0.0.1:5000/CAD<br>
+Resposta: Adiciona a moeda passada como parâmetro ao banco de dados, e retorna uma mensagem de sucesso, caso tenha sido adiciona, ou de erro caso não tenha sido.<br>
+<br>
+<br>
+-> Endpoint: http://127.0.0.1:5000/codigo_moeda<br>
+<br>
+Método HTTP: DELETE<br>
+Exemplo: http://127.0.0.1:5000/CAD<br>
+Resposta: Deleta a moeda passada como parâmetro e retorna uma mensagem de sucesso caso tenha sido deletada e de erro caso não tenha sido.<br>
+<br>
+<br>
+Escolhas técnicas para o projeto:<br>
+<br>
 1- Atualmente trabalho como Front-End e utilizo o JavaScript, chegou a passar por minha cabeça desenvolver esta API usando NodeJS, porque essa tecnologia vem ganhando muito mercado e seria um bom aprendizado, porém Python é a linguagem com que tive mais afinidade até agora e é um grande desejo trabalhar usando essa linguagem, embora tivesse algum tempo desde que eu desenvolvia alguma coisa usando python.
 
 2- Por gostar tanto de python escolhi usar o Flask como framework, primeiro por ser um framework que ja tinha estudado a um tempo atrás e por não gerar boilerplate code, dessa forma todo o código contido nos arquivos foi escrito por mim.
 
 3- Escolhi o SQLite como banco de dados por ser um banco de dados que não precise instalar muitas bibliotecas para ser implementado e consegue ser facilmente rodado em qualquer sistema. No projeto eu utilizei o banco de dados como se fosse uma memória cache, toda vez que o servidor é iniciado uma função atualiza o banco de dados com os dados de uma API externa, todas as outras requisições feitas pela API são feitas para o banco, em um sistema real poderia ser criada uma rotina para atualizar o banco de tempo em tempo.
 
-4
+4- A API não foi assertiva quanto ao teste de stress, não atendendo a necessidade de receber 1000 requisições por segundo, tenho em mente algumas soluções para isso mas infelizmente o prazo do teste chegou ao fim.
