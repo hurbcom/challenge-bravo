@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+munch = "==2.3.2"
+parameterized = "==0.7.0"
+pytest = "==5.3.0"
+
+[packages]
+flask = "==1.1.1"
+flask-restful = "==0.3.7"
+jsonschema = {extras = ["format"],version = "==3.2.0"}
+requests = "==2.22.0"
+
+[requires]
+python_version = "3.7"

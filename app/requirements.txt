@@ -1,0 +1,7 @@
+flask-restful==0.3.7
+flask==1.1.1
+jsonschema
+munch==2.3.2
+parameterized==0.7.0
+pytest==5.3.0
+requests==2.22.0
