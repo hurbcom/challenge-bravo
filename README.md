@@ -58,6 +58,7 @@ Check if all dependencies are up.
 ##### HTTP METHODS
 |verbs:|GET|
 |------|---|
+|**description:**|Make simple requests to externals services, exchangeratesapi and api.coincap.|
 
 Examples:
 ```bash
