@@ -13,8 +13,8 @@ class Healthcheck(Resource):
 
     def get(self):
         services = [
-            ("CoinCapApi", self._crypto_service._request_to_api),
-            ("ExchangeRatesApi", self._service._request_to_exchange_api)
+            ("CoinCapApi", self._crypto_service._load_cache),
+            ("ExchangeRatesApi", self._service._load_cache)
         ]
         response = list()
 

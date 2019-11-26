@@ -1,9 +1,9 @@
 from configuration.configuration import Configuration
 from copy import copy
 from datetime import datetime, timedelta
+from helper.request import http_request
 from models.currency import CurrencyModel
 from repository.currency_repository import CurrencyRepository, BALLAST_CURRENCY
-import requests
 
 AVAILABLE_CURRENCIES_CODES = list()
 VALUE_CACHE = {"values": dict(), "last_update": datetime.min}
@@ -11,6 +11,9 @@ BALLAST = CurrencyRepository().get_currency_by_code(BALLAST_CURRENCY[0])
 
 
 class ExchangeRatesService:
+    def __init__(self):
+        self._exchange_base_url = Configuration().exchange_rates_url
+
     def converter(self, base: CurrencyModel,
                   amount: float, destination=BALLAST):
         self._load_cache()
@@ -27,7 +30,7 @@ class ExchangeRatesService:
             return
 
         params = {"base": BALLAST.code}
-        response = self._request_to_exchange_api(params=params)
+        response = http_request(self._exchange_base_url, "latest/", params)
 
         VALUE_CACHE["values"] = copy(response.json()["rates"])
         VALUE_CACHE["last_update"] = datetime.utcnow()
@@ -42,19 +45,6 @@ class ExchangeRatesService:
 
     def _build_available_currencies(self):
         if not AVAILABLE_CURRENCIES_CODES:
-            response = self._request_to_exchange_api()
+            response = http_request(self._exchange_base_url, "latest/")
             currencies_from_api = response.json()["rates"].keys()
             AVAILABLE_CURRENCIES_CODES.extend(currencies_from_api)
-
-    def _request_to_exchange_api(self, day="latest", method="GET", params={}):
-        try:
-            response = requests.request(
-                method=method,
-                url=f"{Configuration().exchange_rates_url}{day}",
-                params=params
-            )
-            if not response.ok:
-                raise Exception(response.text)
-            return response
-        except Exception as ex:
-            raise ex
