@@ -1,65 +1,102 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> AppHurb
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+API REST construída em Python, nela você pode verificar valores de moedas, fazer conversões de valores entre diferentes moedas, adicionar e excluir moedas do banco de dados.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+A API contém as seguintes moedas no banco de dados:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+-   USD (Dólar Comercial)
+-   BRL (Real Brasileiro)
+-   EUR (Euro)
+-   BTC (Bitcoin)
+-   ETH (Ethereum)
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+E você pode adicionar as seguintes moedas:
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+- USDT (Dólar Turismo)
+- CAD (Dólar Canadense)
+- AUD (Dólar Australiano)
+- GBP (Libra Esterlina)
+- ARS (Peso Argentino)
+- JPY (Iene Japonês)
+- CHF (Franco Suíço)
+- YLS (Novo Shekel Israelense)
+- LTC (Litecoin)
+- XRP (Ripple)
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Obs: Como o lastro da API está em dólar americano, eu optei por deixar o a exibição dos valores no formato americano, onde o ponto substitui a vírgula na separação dos centavos.
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+Após clonar o projeto, siga os passos para instalar as dependencias e iniciar a aplicação, como o projeto foi desenvolvido usando python 3, é necessário ter essa versão do python instalada.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+$ cd challenger-bravo
+$ pip3 install -r requirements.txt
+$ python3 appHurb.py
 
-## Requisitos
+Obs: O projeto foi desenvolvido em ambiente virtual usando o venv, caso seja de sua vontade rodar o projeto usando o ambiente virtual, utilize o comando abaixo antes de instalar as dependencias:
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+$ source meuenv/bin/activate
 
-## Critério de avaliação
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Possíveis erros ao tentar instalar dependências e rodar a aplicação:
 
-## Dúvidas
+Para simular a instalação deste projeto em um sistema novo, fiz um boot do sistema operacional linux pelo pendrive, assim teria um sistema totalmente "virgem" para testes.
+Primeiro instalei o python 3, o linux vem originalmente com python 2 instalado porém este está com os dias contados, porque será descontinuado pelo organização que mantém o Python.
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+$ sudo apt-get install python3
 
-Boa sorte e boa viagem! ;)
+Depois precisei instalar o PIP, pois será através dele que instalaremos o as dependencias contidas no requirements.txt, ele pode ser instalado pelo comando abaixo:
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+$ sudo apt install python3-pip
+
+Finalmente, ao tentar instalar as dependências seguindo o passo a passo deste documento, encontrei dois erros referentes a ferramentas do python 3 e que precisariam ser instaladas, possivelmente pelo fato de eu ter acabado de instalar o python 3 o sistema ainda não possuísse essas ferramentas, elas são o "sysconfig" e "setuptools".
+
+Para a primeira,resolvemos isnstando com o comando:
+
+$ sudo apt install python3-distutils
+
+Para a segunda, resolvemos instalando com o comando:
+
+$ pip3 install setuptools
+
+Após isso, não tive mais erros e consegui iniciar a aplicação sem problemas.
+
+
+Rotas de resposta da API:
+
+>>>>Endpoint: http://127.0.0.1:5000/status/codigo_moeda
+
+método HTTP: GET
+Exemplo: /status/USD
+Resposta: Retorna um JSON com informações atuais sobre a moeda escolhida, o valor da moeda tem como base o dólar comercial.
+
+
+>>>>Endpoint: http://127.0.0.1:5000/codigo_moeda_origem/codigo_moeda_destino/valor
+
+método HTTP: GET
+Exemplo: http://127.0.0.1:5000/USD/BRL/100
+Resposta: Retorna um JSON com o nome da moeda destino, a data em que foi atualizada e o valor da conversão entre as duas moedas.
+
+
+>>>>Endpoint: http://127.0.0.1:5000/codigo_moeda
+
+Método HTTP: POST
+Exemplo: http://127.0.0.1:5000/CAD
+Resposta: Adiciona a moeda passada como parâmetro ao banco de dados, e retorna uma mensagem de sucesso, caso tenha sido adiciona, ou de erro caso não tenha sido.
+
+
+>>>>Endpoint: http://127.0.0.1:5000/codigo_moeda
+
+Método HTTP: DELETE
+Exemplo: http://127.0.0.1:5000/CAD
+Resposta: Deleta a moeda passada como parâmetro e retorna uma mensagem de sucesso caso tenha sido deletada e de erro caso não tenha sido.
+
+
+Escolhas técnicas para o projeto:
+
+1- Atualmente trabalho como Front-End e utilizo o JavaScript, chegou a passar por minha cabeça desenvolver esta API usando NodeJS, porque essa tecnologia vem ganhando muito mercado e seria um bom aprendizado, porém Python é a linguagem com que tive mais afinidade até agora e é um grande desejo trabalhar usando essa linguagem, embora tivesse algum tempo desde que eu desenvolvia alguma coisa usando python.
+
+2- Por gostar tanto de python escolhi usar o Flask como framework, primeiro por ser um framework que ja tinha estudado a um tempo atrás e por não gerar boilerplate code, dessa forma todo o código contido nos arquivos foi escrito por mim.
+
+3- Escolhi o SQLite como banco de dados por ser um banco de dados que não precise instalar muitas bibliotecas para ser implementado e consegue ser facilmente rodado em qualquer sistema. No projeto eu utilizei o banco de dados como se fosse uma memória cache, toda vez que o servidor é iniciado uma função atualiza o banco de dados com os dados de uma API externa, todas as outras requisições feitas pela API são feitas para o banco, em um sistema real poderia ser criada uma rotina para atualizar o banco de tempo em tempo.
+
+4
