@@ -1,10 +1,9 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/labstack/echo"
+
+	handlers "challenge-bravo/src/handlers"
 )
 
 const port = "8000"
@@ -13,11 +12,7 @@ func main() {
 
 	server := echo.New()
 
-	server.GET("/", func(context echo.Context) error {
-		log.Println("Requisição recebida")
-
-		return context.JSON(http.StatusOK, "OK!")
-	})
+	server.GET("/", handlers.HandleExchange)
 
 	server.Start(":" + port)
 
