@@ -36,7 +36,7 @@ class CurrencyController {
     try {
       const currency = await Currency.create(req.body)
 
-      return res.json(currency)
+      return res.status(201).json(currency)
     } catch (error) {
       return res.status(500).json({ message: error.message })
     }
