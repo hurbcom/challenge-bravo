@@ -2,8 +2,8 @@ import db from '../../src/database'
 
 export default () => {
   return Promise.all(
-    db.modelNames().map(name => {
-      db.models[name].deleteMany({})
+    db.modelNames().map(async name => {
+      await db.models[name].deleteMany({})
     })
   )
 }
