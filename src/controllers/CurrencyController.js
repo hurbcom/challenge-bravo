@@ -4,6 +4,14 @@ import api from '../services/api'
 import config from '../config'
 
 class CurrencyController {
+  /**
+   * Convert currencies
+   * @param {String} from
+   * @param {String} to
+   * @param {Number} amount
+   *
+   * @return {Object}
+   */
   async convert (req, res) {
     try {
       const { from, to, amount } = req.query
@@ -32,6 +40,12 @@ class CurrencyController {
     }
   }
 
+  /**
+   * Add new currency
+   * @param {Object}
+   *
+   * @return {Object}
+   */
   async add (req, res) {
     try {
       const currency = await Currency.create(req.body)
@@ -42,11 +56,17 @@ class CurrencyController {
     }
   }
 
+  /**
+   * Remove a currency
+   * @param {ObjectId} id
+   *
+   * @return {Void}
+   */
   async remove (req, res) {
     try {
       await Currency.findOneAndRemove({ _id: req.params.id })
 
-      return res.status(204).json({ deleted: true })
+      return res.status(204).send()
     } catch (error) {
       return res.sendError({ message: error.message })
     }
