@@ -1,8 +1,16 @@
+# modules
 node_modules/
 
+# environment variables
 .env
 .env.test
 
+# test coverage
 __tests__/coverage
 
+# app build
 build
+
+# logs
+logs/*
+!logs/.gitkeep

@@ -1,7 +1,9 @@
 import express from 'express'
 import cors from 'cors'
+import morgan from 'morgan'
 
 import routes from './routes'
+import logger from './services/logger'
 
 class App {
   constructor () {
@@ -14,6 +16,7 @@ class App {
   middlewares () {
     this.app.use(cors())
     this.app.use(express.json())
+    this.app.use(morgan('combined', { stream: logger.stream }))
   }
 
   routes () {
