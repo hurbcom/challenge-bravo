@@ -4,6 +4,7 @@ import morgan from 'morgan'
 
 import routes from './routes'
 import logger from './services/logger'
+import sendError from './middlewares/sendError'
 
 class App {
   constructor () {
@@ -17,6 +18,7 @@ class App {
     this.app.use(cors())
     this.app.use(express.json())
     this.app.use(morgan('combined', { stream: logger.stream }))
+    this.app.use(sendError)
   }
 
   routes () {

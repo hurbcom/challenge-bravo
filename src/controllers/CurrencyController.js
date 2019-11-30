@@ -9,11 +9,11 @@ class CurrencyController {
       const { from, to, amount } = req.query
 
       if (!await Currency.findOne({ currency: from })) {
-        return res.status(404).json({ message: 'From currency not found' })
+        return res.sendError({ message: 'From currency not found' }, 404)
       }
 
       if (!await Currency.findOne({ currency: to })) {
-        return res.status(404).json({ message: 'To currency not found' })
+        return res.sendError({ message: 'To currency not found' }, 404)
       }
 
       const q = `${from}_${to}`
@@ -28,7 +28,7 @@ class CurrencyController {
 
       return res.json({ result: data[q] * amount })
     } catch (error) {
-      return res.status(500).json({ message: error.message })
+      return res.sendError({ message: error.message })
     }
   }
 
@@ -38,7 +38,7 @@ class CurrencyController {
 
       return res.status(201).json(currency)
     } catch (error) {
-      return res.status(500).json({ message: error.message })
+      return res.sendError({ message: error.message })
     }
   }
 
@@ -48,7 +48,7 @@ class CurrencyController {
 
       return res.status(204).json({ deleted: true })
     } catch (error) {
-      return res.status(500).json({ message: error.message })
+      return res.sendError({ message: error.message })
     }
   }
 }
