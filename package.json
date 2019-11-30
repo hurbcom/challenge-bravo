@@ -10,6 +10,7 @@
     "db:seed": "babel-node src/database/seeders/index.js",
     "test": "NODE_ENV=test jest --detectOpenHandles --forceExit",
     "build": "babel src -d build",
+    "prestart": "yarn build",
     "start": "node build/server.js"
   },
   "dependencies": {

@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  app:
+    container_name: 'app-bravo'
+    build: .
+    volumes:
+      - '.:/usr/app'
+    command: 'yarn start'
+    ports:
+      - '3333:3333'
+    depends_on:
+      - 'mongo'
+  mongo:
+    container_name: 'mongo-bravo'
+    image: 'mongo'
+    ports:
+      - '27017:27017'
