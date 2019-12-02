@@ -3,17 +3,19 @@ package main
 import (
 	"github.com/labstack/echo"
 
-	handlers "challenge-bravo/src/handlers"
+	controller "challenge-bravo/src/controller"
 )
 
-const port = "8000"
+const Port = "8000"
 
 func main() {
 
 	server := echo.New()
 
-	server.GET("/", handlers.HandleExchange)
+	server.GET("/exchange", controller.HandleExchange)
 
-	server.Start(":" + port)
+	//server.GET("/updade", controller.UpdateCurrencies)
+
+	server.Start(":" + Port)
 
 }

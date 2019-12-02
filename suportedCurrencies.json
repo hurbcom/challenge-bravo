@@ -1,0 +1,9 @@
+{
+    "suported": { 
+        "USD":true,
+        "BRL":true,
+        "EUR":true,
+        "BTC":true,
+        "ETH":true
+    }
+}
