@@ -13,5 +13,9 @@ export default {
   },
   services: {
     api_key: process.env.API_KEY
+  },
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT
   }
 }

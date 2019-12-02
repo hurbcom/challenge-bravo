@@ -1,5 +1,9 @@
+import { promisify } from 'util'
+
 import Currency from '../models/Currency'
+
 import api from '../services/api'
+import client from '../services/redis'
 
 import config from '../config'
 
@@ -37,6 +41,64 @@ class CurrencyController {
       return res.json({ result: data[q] * amount })
     } catch (error) {
       return res.sendError({ message: error.message })
+    }
+  }
+
+  async convertCached (req, res) {
+    try {
+      const { from, to, amount } = req.query
+      let fromQuotation, toQuotation
+
+      const getValueRedis = promisify(client.get).bind(client)
+      const setValuesRedis = promisify(client.set).bind(client)
+
+      const query = {
+        from: `${from}_USD`,
+        to: `${to}_USD`
+      }
+
+      const reply = {
+        from: await getValueRedis(query.from),
+        to: await getValueRedis(query.to)
+      }
+
+      if (reply.from) {
+        fromQuotation = parseFloat(reply.from.toString())
+      } else {
+        const { data } = await api.get('/convert', {
+          params: {
+            apiKey: config.services.api_key,
+            q: query.from,
+            compact: 'ultra'
+          }
+        })
+
+        fromQuotation = data[query.from]
+
+        await setValuesRedis(query.from, String(fromQuotation), 'EX', 60)
+      }
+
+      if (reply.to) {
+        toQuotation = parseFloat(reply.to.toString())
+      } else {
+        const { data } = await api.get('/convert', {
+          params: {
+            apiKey: config.services.api_key,
+            q: query.to,
+            compact: 'ultra'
+          }
+        })
+
+        toQuotation = data[query.to]
+
+        await setValuesRedis(query.from, String(fromQuotation), 'EX', 60)
+      }
+
+      const result = fromQuotation * toQuotation * amount
+
+      return res.json({ result })
+    } catch (error) {
+      res.sendError({ message: error.message })
     }
   }
 

@@ -21,6 +21,7 @@
     "jest": "^24.9.0",
     "mongoose": "^5.7.12",
     "morgan": "^1.9.1",
+    "redis": "^2.8.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
