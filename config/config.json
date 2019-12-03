@@ -1,0 +1,5 @@
+{
+    "PORT": "8000",
+    "APIKey": "3bbbaeaf31344ed295d36f8b5cee124a",
+    "APIUrl" : "https://openexchangerates.org/api/latest.json"   
+}

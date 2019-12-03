@@ -13,10 +13,16 @@ import (
 	"github.com/labstack/echo"
 )
 
-const (
-	APIKey = "3bbbaeaf31344ed295d36f8b5cee124a"
-	APIUrl = "https://openexchangerates.org/api/latest.json"
-)
+var config model.Config
+
+func init() {
+	//Lendo variavel de configuração para obter valor da chave de acesso e do endpoint da API
+	file, err := ioutil.ReadFile("config/config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	json.Unmarshal(file, &config)
+}
 
 //HandleExchange ... Função responsável por fazer a conversão do montante desejado
 func HandleExchange(context echo.Context) error {
@@ -73,21 +79,21 @@ func HandleExchange(context echo.Context) error {
 }
 
 //UpdateCurrencies ... Função responsável por fazer a atualização das taxas de câmbio
-func UpdateCurrencies() {
+func UpdateCurrencies(context echo.Context) error {
 
 	//Fazendo chamada na Api externa
-	resp, err := http.Get(APIUrl + "?app_id=" + APIKey + "&show_alternative=true")
+	resp, err := http.Get(config.APIUrl + "?app_id=" + config.APIKey + "&show_alternative=true")
 	if err != nil {
-		log.Println("Erro: ", err)
-		return
+		log.Println("Erro ao realizar requisição externa: ", err)
+		return context.JSON(http.StatusBadRequest, map[string]string{"error": "erro ao realizar requisição externa"})
 	}
 
 	//Lendo o corpo da resposta
 	respBinary, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 	if err != nil {
-		log.Println("Erro: ", err)
-		return
+		log.Println("Erro ao ler o body de resposta: ", err)
+		return context.JSON(http.StatusInternalServerError, map[string]string{"error": "erro ao ler o body de resposta"})
 	}
 
 	//Parseando o corpo da resposta com a estrutura desejada
@@ -97,10 +103,16 @@ func UpdateCurrencies() {
 	//Verificando se a resposta retornou válida
 	if response.Rates == nil {
 		log.Println("Erro: ", string(respBinary))
-		return
+		return context.JSON(http.StatusBadRequest, map[string]string{"error": "resposta inválida"})
 	}
 
 	//Atualizando o arquivo 'currencies.json'
-	responseString, _ := json.Marshal(response)
-	ioutil.WriteFile("currencies.json", responseString, os.ModePerm)
+	responseString, _ := json.MarshalIndent(response, " ", " ")
+	err = ioutil.WriteFile("currencies.json", responseString, os.ModePerm)
+	if err != nil {
+		log.Println("Erro ao salvar o arquivo 'currencies.json': ", err)
+		return context.JSON(http.StatusInternalServerError, map[string]string{"error": "erro ao salvar o arquivo no servidor"})
+	}
+
+	return context.JSON(http.StatusOK, map[string]bool{"sucesso": true})
 }
