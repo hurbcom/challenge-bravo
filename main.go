@@ -29,7 +29,10 @@ func main() {
 	server.GET("/exchange", controller.HandleExchange)
 
 	//Endpoint para atualização de taxas ex.: http://localhost:8000/update  obs.: necessário pois API tem limite de crédito
-	server.GET("/updade", controller.UpdateCurrencies)
+	server.PUT("/update", controller.UpdateCurrencies)
+
+	//Endpoint para atualização das moedas permitidas ex.: http://localhost:8000/add
+	server.PUT("/add", controller.AddCurrency)
 
 	server.Start(":" + config.PORT)
 

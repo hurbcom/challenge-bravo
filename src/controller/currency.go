@@ -107,10 +107,54 @@ func UpdateCurrencies(context echo.Context) error {
 	}
 
 	//Atualizando o arquivo 'currencies.json'
-	responseString, _ := json.MarshalIndent(response, " ", " ")
+	responseString, _ := json.MarshalIndent(response, "", "  ")
 	err = ioutil.WriteFile("currencies.json", responseString, os.ModePerm)
 	if err != nil {
 		log.Println("Erro ao salvar o arquivo 'currencies.json': ", err)
+		return context.JSON(http.StatusInternalServerError, map[string]string{"error": "erro ao salvar o arquivo no servidor"})
+	}
+
+	return context.JSON(http.StatusOK, map[string]bool{"sucesso": true})
+}
+
+//AddCurrency ... função responsável por adicionar uma nova moeda a lista de moedas permitidas
+func AddCurrency(context echo.Context) error {
+
+	var data struct {
+		Currency string `json:"currency"`
+	}
+
+	//Variável para controlas moedas suportadas pela API
+	var coins model.SuportedCoins
+
+	//Fazendo o parsing do json de requisição com a variável de data
+	err := context.Bind(&data)
+	if err != nil {
+		log.Println("Erro ao fazer o parsing dos dados: ", err)
+		return context.JSON(http.StatusInternalServerError, map[string]string{"error": "erro ao fazer o parsing dos dados"})
+	}
+
+	//Lendo o arquivo com as moedas suportadas
+	file, err := ioutil.ReadFile("suportedCurrencies.json")
+	if err != nil {
+		log.Println("Erro ao ler o arquivo 'suportedCurrencies.json': ", err)
+		return context.JSON(http.StatusInternalServerError, map[string]string{"error": "erro na leitura de arquivos"})
+	}
+	json.Unmarshal(file, &coins)
+
+	//Verificando se moeda adicionada é suportada pela API
+	if _, exist := coins.Suported[data.Currency]; !exist {
+		return context.JSON(http.StatusBadRequest, map[string]string{"error": "moeda não suportada pela api"})
+	}
+
+	//Adicionando moeda a lista de suportadas
+	coins.Suported[data.Currency] = true
+
+	//Salvando no arquivo json
+	suportedString, _ := json.MarshalIndent(coins, "", "  ")
+	err = ioutil.WriteFile("suportedCurrencies.json", suportedString, os.ModePerm)
+	if err != nil {
+		log.Println("Erro ao salvar o arquivo 'suportedCurrencies.json': ", err)
 		return context.JSON(http.StatusInternalServerError, map[string]string{"error": "erro ao salvar o arquivo no servidor"})
 	}
 
