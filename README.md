@@ -6,16 +6,16 @@ A Api foi criada para retornar valores de conversão de moedas com valores reais
 
 ## ROTAS
 
--   ** /converter ** -- Método GET -- Parâmetros ('from' (string/obrigatório), 'to' (string/obrigatório), 'amount' (nnumérico/obrigatório)) -- Rota que faz a conversão entre as moedas
+-   **/converter** -- Método GET -- Parâmetros ('from' (string/obrigatório), 'to' (string/obrigatório), 'amount' (nnumérico/obrigatório)) -- Rota que faz a conversão entre as moedas
 
 
--   ** /coins **     -- Método GET -- Sem parâmetros -- Rota que busca as moedas cadastradas na API 
+-   **/coins**     -- Método GET -- Sem parâmetros -- Rota que busca as moedas cadastradas na API 
 
 
--   ** /coins **    -- Método POST -- Parâmetros ('coin' (string/obrigatório) OBS: Sigla real de moeda válida (validação por API)) -- Rota que cadastra nova moeda na API
+-   **/coins**     -- Método POST -- Parâmetros ('coin' (string/obrigatório) OBS: Sigla real de moeda válida (validação por API)) -- Rota que cadastra nova moeda na API
 
 
--   ** /coins **     -- Método DELETE -- Parâmetros ('id' (string/obrigatório)) -- Rota que deleta a moeda selecionada
+-   **/coins**     -- Método DELETE -- Parâmetros ('id' (string/obrigatório)) -- Rota que deleta a moeda selecionada
 
 
 ## RUN
