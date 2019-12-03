@@ -1,0 +1,29 @@
+{
+  "coins": [
+    {
+      "id": "bH83UMrJ",
+      "title": "BRL",
+      "active": true
+    },
+    {
+      "id": "_QShHXew",
+      "title": "EUR",
+      "active": true
+    },
+    {
+      "id": "WydnB0jc",
+      "title": "ETH",
+      "active": true
+    },
+    {
+      "id": "y4heZr7y",
+      "title": "USD",
+      "active": true
+    },
+    {
+      "id": "4VwkG4mY",
+      "title": "BTC",
+      "active": true
+    }
+  ]
+}
