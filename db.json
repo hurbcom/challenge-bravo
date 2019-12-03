@@ -1,16 +1,6 @@
 {
   "coins": [
     {
-      "id": "bH83UMrJ",
-      "title": "BRL",
-      "active": true
-    },
-    {
-      "id": "_QShHXew",
-      "title": "EUR",
-      "active": true
-    },
-    {
       "id": "WydnB0jc",
       "title": "ETH",
       "active": true
@@ -23,6 +13,16 @@
     {
       "id": "4VwkG4mY",
       "title": "BTC",
+      "active": true
+    },
+    {
+      "id": "NJlfOpIU",
+      "title": "BRL",
+      "active": true
+    },
+    {
+      "id": "5gCMwKWt",
+      "title": "EUR",
       "active": true
     }
   ]

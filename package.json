@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "express": "^4.15.4",
+    "express-validator": "^6.3.0",
     "jshint": "^2.10.3",
     "lowdb": "^1.0.0",
     "shortid": "^2.2.15"
