@@ -8,6 +8,13 @@ exports.get = (req, res) => {
     let to = req.query.to;
     let amount = req.query.amount;
     
+    if (typeof(from) != 'string' || from == undefined || 
+            typeof(to) != 'string' || to == undefined || 
+            isNaN(amount) || amount == undefined){
+        res.status(422).send({sucess: false, error: "Parâmetros de entrada inválidos"});
+        return;
+    }
+    
     getValue(from, to, amount, res);
 };
 

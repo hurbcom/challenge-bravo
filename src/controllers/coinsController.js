@@ -6,13 +6,22 @@ const coinsModel = require('../models/coinsModel');
 exports.post = (req, res) => {
     let coin =  req.body.coin;
 
+    if (typeof(coin) != 'string' || coin == undefined){
+        res.status(422).send({sucess: false, error: "Parâmetros de entrada inválidos"});
+        return;
+    }
+
     setCoin(coin, res);
 };
 
 //Exportando o método DELETE da rota para o router
 exports.delete = (req, res) => {
     let id =  req.query.id;
-    
+
+    if (typeof(id) != 'string' || id == undefined){
+        res.status(422).send({sucess: false, error: "Parâmetros de entrada inválidos"});
+        return;
+    }
     deleteCoin(id, res);
 };
 
