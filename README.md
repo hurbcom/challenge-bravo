@@ -1,65 +1,219 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+# Conversor de moedas
 
-A API deve, originalmente, converter entre as seguintes moedas:
+Api construída em `GO` para conversão monetária.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+## Instalação
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Para rodar a aplicação é necessário ter instalado uma vesão de `GO` superior a 1.10. 
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Para o desenvolvimento do projeto foi utilizado a versão **1.13.4**.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+A aplicação precisa ser clonada no diretório de trabalho setado ao instalar o GO.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+  ```
+  git clone https://github.com/Kaicham/challenge-bravo.git
 
-## Requisitos
+  cd challenge-bravo
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+  go get 
+  ```
 
-## Critério de avaliação
+## Rodando a aplicação
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+  ```
+  go run main.go
+  ```
 
-## Dúvidas
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+# API Overview
 
-Boa sorte e boa viagem! ;)
+## Conversão de moedas
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Utiliza-se o método `GET` no endpoint `/exchange` para realizar a conversão das moedas. As moedas são indicadas nos parâmetros e a API retorna como resposta um json contendo o resultado da conversão e se a requisição foi realizada com sucesso.
+
+## Parâmetros
+ Os parâmetros para a requisição são passados via `QueryString`.
+
+| parâmetro                    | descrição                 |
+|:-----------------------------|:----------------------------|
+| `from`                       | moeda base para a conversão (geralmente são 3 letras maiúsculas) `[OBRIGATÓRIO]` |
+| `to`                         | moeda de destino (geralmente são 3 letras maiúsculas)`[OBRIGATÓRIO]`|
+| `amount`                     | montante a ser convertido `[OBRIGATÓRIO]` |
+
+
+  
+`GET /exchange`
+
+    http://{api_host}/exchange?from=USD&to=BRL&amount=3.0
+
+### Resposta
+
+  ```json
+  {
+    "success": true,
+    "error": "",
+    "data": {
+      "last_update": "2019-12-03T22:00:00-03:00",
+      "from": "USD",
+      "to": "BRL",
+      "amount": 3,
+      "value": 12.616499999999998
+    }
+  }
+  ```
+
+
+| variável     | tipo               | descrição                 |
+|:-------------|:---------------|:----------------------------|
+| `success`    |booleano                   | Retorna se a requisição foi realizada com sucesso|
+| `error`    |string                   | Retorna a mensagem de erro caso a `sucess` retorne `false`|
+| `last_update`    |date                   | Retorna a data da última atualização das taxas|
+| `from`    |string                   | Retorna a moeda de lastro|
+| `to`    |string                   | Retorna a moeda de destino|
+| `amount`    |double                   | Retorna a quantidade a ser convertida|
+| `value`    |double                   | Retorna o valor convertido|
+
+
+### Erro
+
+  ```json
+  {
+    "success": false,
+    "error": "mensagem de erro",
+    "data": null
+  }
+  ```
+
+## Listagem de moedas suportadas
+
+Utiliza-se o método `GET` no endpoint `/suported-currencies` para se obter uma listagem completa das moedas que são suportadas pela API. Esse endpoint suporta o parâmetro `filter` recebendo como valor `unblocked`, para listar as moedas que a API converte atualmente, e `blocked`, para listar as moedas que podem ser liberadas através do endpoind `/add`. 
+
+## Parâmetros
+ Os parâmetros para a requisição são passados via `QueryString`.
+
+| parâmetro                    | descrição                 |
+|:-----------------------------|:----------------------------|
+| `filter`                       | lista as moedas bloqueadas (`blocked`) e liberadas (`unblocked`) para a conversão. Retorna a listagem completa por default. [*OPCIONAL*] |
+
+
+  
+`GET /suported-currencies`
+
+    http://{api_host}/suported-currencies?filter=unblocked
+
+### Resposta
+
+  ```json
+  {
+    "success": true,
+    "error": "",
+    "data": {
+      "total": 5,
+      "currencies": [
+        "BTC",
+        "EUR",
+        "BRL",
+        "USD",
+        "ETH"
+      ]
+    }
+  }
+  ```
+
+| variável     | tipo               | descrição                 |
+|:-------------|:---------------|:----------------------------|
+| `success`    |booleano                   | Retorna se a requisição foi realizada com sucesso|
+| `error`    |string                   | Retorna a mensagem de erro caso a `success` retorne `false`|
+| `total`    |inteiro                   | Retorna o total de moedas na listagem|
+| `currencies`    |string array                   | Retorna a lista de moedas suportadas ou filtradas|
+
+### Erro
+
+  ```json
+  {
+    "success": false,
+    "error": "mensagem de erro",
+    "data": null
+  }
+  ```
+
+## Adição de moedas
+
+Utiliza-se o método `PUT` no endpoint `/add` para adicionar novas moedas a listagem de conversão. A moeda a ser adicionada é passada via `json` no body da requisição. Em caso de tentativa de adição de uma moeda inválida, a API retornará um erro. 
+
+## Parâmetros
+ Os parâmetros para a requisição são passados via `json` no body da requisição.
+
+```json
+{
+	"currency": "DOP"
+}
+```
+  
+`PUT /add`
+
+    http://{api_host}/add
+
+### Resposta
+
+  ```json
+  {
+    "success": true,
+    "error": "",
+    "data": "Moeda adicionada com sucesso!"
+  }
+  ```
+
+| variável     | tipo               | descrição                 |
+|:-------------|:---------------|:----------------------------|
+| `success`    |booleano                   | Retorna se a requisição foi realizada com sucesso|
+| `error`    |string                   | Retorna a mensagem de erro caso a `success` retorne `false`|
+| `data`    |string                   | Retorna mensagem de sucesso da adição|
+
+### Erro
+
+  ```json
+  {
+    "success": false,
+    "error": "mensagem de erro",
+    "data": null
+  }
+  ```
+
+  ## Atualização de taxas
+
+Utiliza-se o método `PUT` no endpoint `/update` para atualizar os arquivos contendo as taxas de câmbio das moedas. Existe um serviço automático para a atualização das taxas que é executado das `9h as 17h` de `segunda à sexta` no intervalo de `1 em 1 hora`.Para mais informações consultas **notas finais**.
+
+`PUT /update`
+
+    http://{api_host}/update
+
+### Resposta
+
+  ```json
+  {
+    "success": true,
+    "error": "",
+    "data": "Taxas atualizadas com sucesso!"
+  }
+  ```
+
+| variável     | tipo               | descrição                 |
+|:-------------|:---------------|:----------------------------|
+| `success`    |booleano                   | Retorna se a requisição foi realizada com sucesso|
+| `error`    |string                   | Retorna a mensagem de erro caso a `success` retorne `false`|
+| `data`    |string                   | Retorna mensagem de sucesso da atualização|
+
+### Erro
+
+  ```json
+  {
+    "success": false,
+    "error": "mensagem de erro",
+    "data": null
+  }
+  ```
