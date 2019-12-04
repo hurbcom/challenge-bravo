@@ -2,26 +2,32 @@ package main
 
 import (
 	controller "challenge-bravo/src/controller"
+	cronroutines "challenge-bravo/src/controller/cronroutines"
+	miscellaneous "challenge-bravo/src/miscellaneous"
+
 	"challenge-bravo/src/model"
-	"encoding/json"
-	"io/ioutil"
 	"log"
 
 	"github.com/labstack/echo"
+	"github.com/robfig/cron"
 )
 
 var config model.Config
 
 func init() {
 	//Lendo variavel de configuração para obter o port do servidor
-	file, err := ioutil.ReadFile("config/config.json")
-	if err != nil {
-		log.Fatal(err)
-	}
-	json.Unmarshal(file, &config)
+	miscellaneous.ReadConfig(&config)
+	log.Print("Configurações carregadas com sucesso!")
 }
 
 func main() {
+
+	//Adicionando função de cron para atualização automáticas das moedas
+	cronJob := cron.New()
+
+	//Cron acionado de 1 em 1 hora das 9 as 17 de segunda a sexta
+	cronJob.AddFunc("59 9-17 * * MON-FRI", cronroutines.UpdateCurrencies)
+	cronJob.Start()
 
 	server := echo.New()
 

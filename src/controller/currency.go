@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"challenge-bravo/src/miscellaneous"
 	"challenge-bravo/src/model"
 	"encoding/json"
 	"io/ioutil"
@@ -17,11 +18,7 @@ var config model.Config
 
 func init() {
 	//Lendo variavel de configuração para obter valor da chave de acesso e do endpoint da API
-	file, err := ioutil.ReadFile("config/config.json")
-	if err != nil {
-		log.Fatal(err)
-	}
-	json.Unmarshal(file, &config)
+	miscellaneous.ReadConfig(&config)
 }
 
 //HandleExchange ... Função responsável por fazer a conversão do montante desejado
@@ -91,11 +88,15 @@ func HandleExchange(context echo.Context) error {
 //UpdateCurrencies ... Função responsável por fazer a atualização das taxas de câmbio
 func UpdateCurrencies(context echo.Context) error {
 
+	//Variável de resposta
+	var response model.DefaultResponse
+
 	//Fazendo chamada na Api externa
 	resp, err := http.Get(config.APIUrl + "?app_id=" + config.APIKey + "&show_alternative=true")
 	if err != nil {
 		log.Println("Erro ao realizar requisição externa: ", err)
-		return context.JSON(http.StatusBadRequest, map[string]string{"error": "erro ao realizar requisição externa"})
+		response.Error = "erro ao realizar requisição externa"
+		return context.JSON(http.StatusBadRequest, response)
 	}
 
 	//Lendo o corpo da resposta
@@ -103,28 +104,36 @@ func UpdateCurrencies(context echo.Context) error {
 	defer resp.Body.Close()
 	if err != nil {
 		log.Println("Erro ao ler o body de resposta: ", err)
-		return context.JSON(http.StatusInternalServerError, map[string]string{"error": "erro ao ler o body de resposta"})
+		response.Error = "erro ao ler o body de resposta"
+		return context.JSON(http.StatusInternalServerError, response)
 	}
 
 	//Parseando o corpo da resposta com a estrutura desejada
-	var response model.CurrencyResponse
-	json.Unmarshal(respBinary, &response)
+	var data model.CurrencyResponse
+	json.Unmarshal(respBinary, &data)
 
 	//Verificando se a resposta retornou válida
-	if response.Rates == nil {
+	if data.Rates == nil {
 		log.Println("Erro: ", string(respBinary))
-		return context.JSON(http.StatusBadRequest, map[string]string{"error": "resposta inválida"})
+		response.Error = "resposta inválida"
+		return context.JSON(http.StatusBadRequest, response)
 	}
 
 	//Atualizando o arquivo 'currencies.json'
-	responseString, _ := json.MarshalIndent(response, "", "  ")
+	responseString, _ := json.MarshalIndent(data, "", "  ")
 	err = ioutil.WriteFile("currencies.json", responseString, os.ModePerm)
 	if err != nil {
 		log.Println("Erro ao salvar o arquivo 'currencies.json': ", err)
-		return context.JSON(http.StatusInternalServerError, map[string]string{"error": "erro ao salvar o arquivo no servidor"})
+		response.Error = "erro ao salvar taxas atualizadas"
+		return context.JSON(http.StatusInternalServerError, response)
 	}
 
-	return context.JSON(http.StatusOK, map[string]bool{"sucesso": true})
+	//Populando variavel de resposta
+	log.Println("Taxas atualizadas com sucesso!")
+	response.Success = true
+	response.Data = "Taxas atualizadas com sucesso!"
+
+	return context.JSON(http.StatusOK, response)
 }
 
 //AddCurrency ... função responsável por adicionar uma nova moeda a lista de moedas permitidas
