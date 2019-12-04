@@ -26,7 +26,7 @@ func main() {
 	cronJob := cron.New()
 
 	//Cron acionado de 1 em 1 hora das 9 as 17 de segunda a sexta
-	cronJob.AddFunc("59 9-17 * * MON-FRI", cronroutines.UpdateCurrencies)
+	cronJob.AddFunc("50 9-17 * * MON-FRI", cronroutines.UpdateCurrencies)
 	cronJob.Start()
 
 	server := echo.New()

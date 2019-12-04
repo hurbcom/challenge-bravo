@@ -4,6 +4,8 @@
 
 Api construída em `GO` para conversão monetária.
 
+A versão atual suporta a **listagem de moedas suportadas**, a **liberação de uma nova moeda para conversão**, a **conversão entre moedas** e a **atualização das taxas de câmbio**.
+
 
 
 ## Instalação
@@ -28,6 +30,13 @@ A aplicação precisa ser clonada no diretório de trabalho setado ao instalar o
   go run main.go
   ```
 
+## Bibliotecas externas
+Para a criação da API foram utilizadas algumas bibliotecas extenas:
+
+* [Echo labstack](https://echo.labstack.com/): framework web.
+* [Cron](https://godoc.org/github.com/robfig/cron): biblioteca utilizada para rotinas automáticas.
+* [enconding/json](https://godoc.org/encoding/json): biblioteca para manipulação de arquivos json.
+* [ioutil](https://godoc.org/io/ioutil): biblioteca para leitura e escrita de arquivos.
 
 # API Overview
 
@@ -186,7 +195,7 @@ Utiliza-se o método `PUT` no endpoint `/add` para adicionar novas moedas a list
 
   ## Atualização de taxas
 
-Utiliza-se o método `PUT` no endpoint `/update` para atualizar os arquivos contendo as taxas de câmbio das moedas. Existe um serviço automático para a atualização das taxas que é executado das `9h as 17h` de `segunda à sexta` no intervalo de `1 em 1 hora`.Para mais informações consultas **notas finais**.
+Utiliza-se o método `PUT` no endpoint `/update` para atualizar os arquivos contendo as taxas de câmbio das moedas. Existe um serviço automático para a atualização das taxas que é executado das `9h as 17h` de `segunda à sexta` no intervalo de `1 em 1 hora`. Para mais informações consultar **notas finais**.
 
 `PUT /update`
 
@@ -217,3 +226,20 @@ Utiliza-se o método `PUT` no endpoint `/update` para atualizar os arquivos cont
     "data": null
   }
   ```
+
+---
+
+# Notas Finais
+
+## Persistência de dados
+A API utiliza arquivos `.json` para controlar as taxas e as moedas suportadas. O arquivo `currencies.json` carrega as taxas de câmbio das moedas. O arquivo `suportedCurrencies.json` carrega o estado das moedas suportadas (se estão liberadas para conversão ou não). Para posteriores versões, o controle desses estados e taxas serão integrados com um banco de dados.
+
+## Atualização automática das taxas 
+A API utiliza um serviço de atualização de taxas de câmbio automático. O serviço é executado de segunda à sexta, das 9h as 17h. O horário foi escolhido de acordo com a abertura / fechamento do mercado de câmbio e limitada de 50 em 50 minutos para o melhor uso dos créditos dispostos pela API (limite de 200 requisições para chave gratuita). API utilizada para obtenção das taxas [openexchangerates.org]("https://openexchangerates.org).
+
+## Configurações da aplicação
+O projeto conta com uma pasta de configurações globais da aplicação (/config). Nesta pasta, o arquivo `config.json` carrega a **porta** do servidor da aplicação, a **chave da API externa** e a **URL da API externa**. Para o processo de deploy, orienta-se copiar essa pasta para dentro do container junto com o artefato gerado pelo build. Dessa forma, toda vez que as configurações globais forem modificadas não será necessário **buildar** a aplicação novamente com as novas configurações. Somente será necessário reiniciar o container. Isso pode ser aplicado também para a diferenciação de ambientes de *homologação* e *produção*.
+
+---
+
+
