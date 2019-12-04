@@ -31,8 +31,11 @@ func main() {
 	//Endpoint para atualização de taxas ex.: http://localhost:8000/update  obs.: necessário pois API tem limite de crédito
 	server.PUT("/update", controller.UpdateCurrencies)
 
-	//Endpoint para atualização das moedas permitidas ex.: http://localhost:8000/add
+	//Endpoint para atualização das moedas permitidas ex.: http://localhost:8000/add obs.: os dados são passados em formato de json '{ "currencies": "USD" }'
 	server.PUT("/add", controller.AddCurrency)
+
+	//Endpoint para listagem de moedas ex.: http://localhost:8000/suported-currencies obs.: aceita os parâmetros 'filter=unblocked' e 'filter=blocked'
+	server.GET("/suported-currencies", controller.ListCurrencies)
 
 	server.Start(":" + config.PORT)
 
