@@ -16,8 +16,9 @@ module.exports = {
             }
 
             const result = await CurrencyService.convert(from, to)
+            const finalResult = (result * amount).toFixed(2)
 
-            return res.json({success: true, data: (result * amount)})
+            return res.json({success: true, data: finalResult})
 
         } catch (error) {
             return res.status(404).json({success: false, data: error})
