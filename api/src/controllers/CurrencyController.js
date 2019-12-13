@@ -7,31 +7,31 @@ module.exports = {
         try {
             const findFrom = await Currency.findOne({ currency: from })
             if (!findFrom) {
-                return res.status(404).json({success: false, data: 'Currency is not supported'})
+                return res.status(404).json({success: false, result: 'Currency is not supported'})
             }
 
             const findTo = await Currency.findOne({ currency: to })
             if (!findTo) {
-                return res.status(404).json({success: false, data: 'Currency is not supported'})
+                return res.status(404).json({success: false, result: 'Currency is not supported'})
             }
 
             const result = await CurrencyService.convert(from, to)
             const finalResult = (result * amount).toFixed(2)
 
-            return res.json({success: true, data: finalResult})
+            return res.json({success: true, result: finalResult})
 
         } catch (error) {
-            return res.status(404).json({success: false, data: error})
+            return res.status(404).json({success: false, result: error})
         }
     },
     async store(req, res) {
         try {
             const response = await Currency.create(req.body)
 
-            return res.json({success: true, data: response})
+            return res.json({success: true, result: response})
             
         } catch (error) {
-            return res.status(404).json({success: false, data: error})
+            return res.status(404).json({success: false, result: error})
         }
     },
     async delete(req, res) {
@@ -41,7 +41,7 @@ module.exports = {
 
             return res.json({success: true})
         } catch (error) {
-            return res.status(404).json({success: false, data: error})
+            return res.status(404).json({success: false, result: error})
         }
     }
 }
