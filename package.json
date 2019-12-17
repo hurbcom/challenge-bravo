@@ -1,0 +1,22 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Hurb's back-end test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wipereira/challenge-bravo.git"
+  },
+  "author": "William Pereira <william.souza40@fatec.sp.gov.br>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wipereira/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/wipereira/challenge-bravo#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
