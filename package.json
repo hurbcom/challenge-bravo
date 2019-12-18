@@ -18,6 +18,8 @@
   "homepage": "https://github.com/wipereira/challenge-bravo#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "express-validator": "^6.3.0",
+    "helmet": "^3.21.2",
     "influx": "^5.5.1",
     "node-fetch": "^2.6.0",
     "os": "^0.1.1"
