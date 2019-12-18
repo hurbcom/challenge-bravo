@@ -1,0 +1,9 @@
+{
+  "baseCoin": "USD",
+  "adjacentCoins": [
+    "BRL",
+    "EUR",
+    "BTC",
+    "ETH"
+  ]
+}

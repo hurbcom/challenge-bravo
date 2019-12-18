@@ -1,8 +1,10 @@
-const ScroogeError = require('./error');
 const fetch = require('node-fetch').default;
+const fs = require('fs');
+
+let coinConfig = JSON.parse(fs.readFileSync('coins.json'));
 const DEFAULT_OPTIONS = {
-    baseCoin: 'USD',
-    adjacentCoins: ['BTC', 'ETH', 'EUR', 'BRL' ]
+    baseCoin: coinConfig.baseCoin,
+    adjacentCoins: coinConfig.adjacentCoins
 }
 
 class Scrooge {
@@ -12,7 +14,7 @@ class Scrooge {
             ...DEFAULT_OPTIONS,
             ...options
         }
-        let parameter = 
+        let parameter =
             Array.isArray(this.options.adjacentCoins) ?
                 this.options.adjacentCoins.join() :
                 this.options.adjacentCoins;
