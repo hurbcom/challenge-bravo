@@ -20,9 +20,10 @@
     "express": "^4.17.1",
     "express-validator": "^6.3.0",
     "helmet": "^3.21.2",
-    "influx": "^5.5.1",
+    "node-cache": "^5.1.0",
     "node-fetch": "^2.6.0",
-    "os": "^0.1.1"
+    "redis": "^2.8.0",
+    "xss-clean": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

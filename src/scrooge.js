@@ -12,7 +12,7 @@ const DEFAULT_OPTIONS = {
 class Scrooge {
     /**
      * Creates a new instance of Scrooge coin utility
-     * @param {Object} options optional parameter to modify the default settings
+     * @param {Object} [options] optional parameter to modify or increment the default settings, apiKey can be set.
      */
     constructor(options) {
         this.exchangeRates = {};
@@ -25,6 +25,7 @@ class Scrooge {
                 this.options.adjacentCoins.join() :
                 this.options.adjacentCoins;
         this.apiUrl = `https://min-api.cryptocompare.com/data/price?fsym=${this.options.baseCoin}&tsyms=${parameter}`
+        this.apiUrl = this.options.apiKey ? this.apiUrl + `&api_key=${this.options.apiKey}` : this.apiUrl
     }
 
     /**

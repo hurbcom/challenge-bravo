@@ -2,6 +2,9 @@ const { query, param } = require('express-validator');
 const coinConfig = require('./coinConfig');
 const storedCoins = coinConfig.adjacentCoins.concat( coinConfig.baseCoin );
 
+/**
+ * Defined validation predicates
+ */
 module.exports = method => {
     switch(method) {
         case 'convert': {

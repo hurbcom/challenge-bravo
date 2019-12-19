@@ -1,13 +1,17 @@
 const express = require('express');
 const helmet = require('helmet');
+const xss = require('xss-clean')
+const cache = require('./src/cacheMiddleware');
 const { validationResult } = require('express-validator');
-const validation = require('./src/validation.js');
+const validation = require('./src/validation');
 const fs = require('fs');
 const server = express();
 
 server.use(helmet());
+server.use(xss());
+server.use(express.json({ limit: '10kb' })); // Body limit is 10
 
-server.get('/convert', validation('convert'), (req, res) => {
+server.get('/convert', validation('convert'), cache.middleware, (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
         res.status(422)
@@ -24,11 +28,11 @@ server.get('/convert', validation('convert'), (req, res) => {
             res.contentType('application/vnd.api+json')
                 .status(200)
                 .json({
-                date: new Date(),
-                result: conversion
-            })
-        });
-})
+                    date: new Date(),
+                    result: conversion
+                })
+        })
+});
 
 server.route('/coins/:id')
     .post(validation('add'), (req, res) => {
@@ -70,6 +74,8 @@ server.route('/coins/:id')
             config.adjacentCoins
                 .splice(config.adjacentCoins.indexOf(coinId), 1);
 
+
+            cache.removeEntries(coinId);
             fs.writeFile('coins.json', JSON.stringify(config, null, 2), () => {
                 res.json({
                     errors: [],
