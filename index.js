@@ -9,7 +9,7 @@ const server = express();
 
 server.use(helmet());
 server.use(xss());
-server.use(express.json({ limit: '10kb' })); // Body limit is 10
+server.use(express.json({ limit: '10kb' }));
 
 server.get('/convert', validation('convert'), cache.middleware, (req, res) => {
     const errors = validationResult(req);
@@ -45,13 +45,14 @@ server.route('/coins/:id')
                     errors: errors.array()
                 });
 
-        let coinId = req.params.id;
+        let coinId = req.params.id; // simplifying the name
         fs.readFile('coins.json', (err, data) => {
             if (err) throw err;
 
             let config = JSON.parse(data);
             config.adjacentCoins.push(coinId);
-
+            // regular configuration update by updating the entire file, pushing the
+            // config and appending to it the new coin
             fs.writeFile('coins.json', JSON.stringify(config, null, 2), () => {
                 res.json({
                     errors: [],
@@ -75,9 +76,12 @@ server.route('/coins/:id')
             let config = JSON.parse(data);
             config.adjacentCoins
                 .splice(config.adjacentCoins.indexOf(coinId), 1);
-
+            
+            // same idea as the post route, updating the file with a new modified config
+            // but rather than adding, here we remove it using splice.
 
             cache.removeEntries(coinId);
+
             fs.writeFile('coins.json', JSON.stringify(config, null, 2), () => {
                 res.json({
                     errors: [],
