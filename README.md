@@ -24,5 +24,5 @@ padrão e executando o comando `node index.js` na pasta raiz da API, ou através
 simplicidade.
 
 <p align="center">
-  <img src="ca.jpg" alt="Challenge completed" />
+  <img src="cc.jpg" alt="Challenge completed" />
 </p>
