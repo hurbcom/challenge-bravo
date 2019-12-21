@@ -14,7 +14,7 @@ server.use(express.json({ limit: '10kb' })); // Body limit is 10
 server.get('/convert', validation('convert'), cache.middleware, (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
-        res.status(422)
+        return res.status(422)
             .json({
                 errors: errors.array()
             })
@@ -24,14 +24,16 @@ server.get('/convert', validation('convert'), cache.middleware, (req, res) => {
     var { from, to, amount } = req.query;
 
     scrooge.convert(from, to, amount)
-        .then(conversion => {
+        .then(conversion =>
             res.contentType('application/vnd.api+json')
                 .status(200)
                 .json({
                     date: new Date(),
                     result: conversion
                 })
-        })
+        ).catch(err => console.error('An abrupt problem occured: ', err));
+
+
 });
 
 server.route('/coins/:id')
