@@ -28,7 +28,7 @@ module.exports = {
                 res.sendResponse = res.send;
 
             res.send = (body) => {
-                client.set(key, body);
+                client.setex(key, 60 * 60, body);
                 res.sendResponse(body);
             }
             next();
