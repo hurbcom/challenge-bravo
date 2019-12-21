@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+    web:
+        build: .
+        ports:
+        - "3000:3000"
+        command: node index.js
+        links:
+        - redis
+        environment:
+          REDIS_URL: redis://redis:6379
+    redis:
+        image: redis
+        expose:
+        - "6379"
+
