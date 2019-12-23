@@ -55,8 +55,33 @@ func (s *service) ExchangeCurrency(ctx context.Context, currencyFrom, currencyTo
 	return exchange, nil
 }
 
-func (s *service) UpdateCurrency(ctx context.Context, currency string) (models.Currency, error) {
-	return models.Currency{}, nil
+func (s *service) UpdateCurrency(ctx context.Context, currencyName string) (models.Currency, error) {
+	var currency models.Currency
+	var err error
+
+	if currencyName == "" {
+		return currency, fmt.Errorf("error invalid currency")
+	}
+
+	currency, err = s.Repository.GetCurrency(ctx, currencyName)
+
+	if err != nil {
+		return currency, err
+	}
+
+	currency, err = s.Gateway.GetCurrencyByName(currency.Name)
+
+	if err != nil {
+		return currency, err
+	}
+
+	err = s.Repository.UpdateBallast(ctx, currency)
+
+	if err != nil {
+		return currency, err
+	}
+
+	return currency, nil
 }
 
 func (s *service) CreateCurrency(ctx context.Context, currency string) (models.Currency, error) {
