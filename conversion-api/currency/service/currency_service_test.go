@@ -152,7 +152,47 @@ func TestUpdateCurrency(t *testing.T) {
 	}
 }
 func TestCreateCurrency(t *testing.T) {
+	type test struct {
+		currency       string
+		oldResult      models.Currency
+		expectedResult models.Currency
+		expectedError  error
+	}
 
+	var tests = make(map[string]test)
+
+	tests["SuccessfulTest"] = test{
+		currency:       "Yen",
+		oldResult:      makeFakeCurrency(0, "", 0),
+		expectedResult: makeFakeCurrency(1, "Yen", 109.40),
+		expectedError:  nil,
+	}
+
+	tests["Invalid Currency"] = test{
+		currency:       "",
+		expectedResult: makeFakeCurrency(0, "", 0),
+		expectedError:  fmt.Errorf("error invalid currency"),
+	}
+
+	tests["Currency already exists on our database"] = test{
+		currency:       "USD",
+		oldResult:      makeFakeCurrency(1, "USD", 1),
+		expectedResult: makeFakeCurrency(1, "USD", 1),
+		expectedError:  fmt.Errorf("Currency already exists on our database"),
+	}
+
+	for title, test := range tests {
+		t.Run(title, func(t *testing.T) {
+			rr.On("GetCurrency", context.Background(), test.currency).Return(test.oldResult, test.expectedError).Once()
+			rr.On("InsertCurrency", context.Background(), test.expectedResult).Return(test.expectedResult, test.expectedError).Once()
+			gg.On("GetCurrencyByName", test.currency).Return(test.expectedResult, test.expectedError).Once()
+			response, err := testService.CreateCurrency(context.Background(), test.currency)
+
+			if assert.Equalf(t, test.expectedError, err, "Fail! Was expecting error %s got: %s", test.expectedError, err) {
+				assert.Equalf(t, test.expectedResult, response, "Fail! Was expecting response %#v\n got: %#v")
+			}
+		})
+	}
 }
 
 func makeFakeCurrency(id int64, currency string, ballast float64) models.Currency {
