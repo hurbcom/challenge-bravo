@@ -56,19 +56,23 @@ func TestExchangeCurrency(t *testing.T) {
 	}
 
 	tests["Invalid Currency To"] = test{
-		currencyFrom:   "USD",
-		currencyTo:     "",
-		amount:         100.00,
-		expectedResult: models.CurrencyExchange{},
-		expectedError:  fmt.Errorf("error invalid currency to"),
+		currencyFrom: "USD",
+		currencyTo:   "",
+		amount:       100.00,
+		expectedResult: models.CurrencyExchange{
+			CurrencyFrom: makeFakeCurrency(1, "USD", 1.00),
+		},
+		expectedError: fmt.Errorf("error invalid currency to"),
 	}
 
 	tests["Currency that doesn't exists"] = test{
-		currencyFrom:   "USD",
-		currencyTo:     "ZIG",
-		amount:         100.00,
-		expectedResult: models.CurrencyExchange{},
-		expectedError:  fmt.Errorf("error Currency ZIG does not exists"),
+		currencyFrom: "USD",
+		currencyTo:   "ZIG",
+		amount:       100.00,
+		expectedResult: models.CurrencyExchange{
+			CurrencyFrom: makeFakeCurrency(1, "USD", 1.00),
+		},
+		expectedError: fmt.Errorf("error Currency ZIG does not exists"),
 	}
 
 	tests["A more complex transaction"] = test{
@@ -79,15 +83,15 @@ func TestExchangeCurrency(t *testing.T) {
 			CurrencyFrom:   makeFakeCurrency(1, "EUR", 0.90),
 			CurrencyTo:     makeFakeCurrency(2, "BRL", 4.20),
 			OriginalValue:  325.72,
-			ExchangedValue: 1520.026666667,
+			ExchangedValue: 1520.0266666666669,
 		},
 		expectedError: nil,
 	}
 
 	for title, test := range tests {
-		gg.On("GetCurrency", context.Background(), test.currencyFrom).Return(test.expectedResult.CurrencyFrom)
-		gg.On("GetCurrency", context.Background(), test.currencyTo).Return(test.expectedResult.CurrencyTo)
 		t.Run(title, func(t *testing.T) {
+			rr.On("GetCurrency", context.Background(), test.currencyFrom).Return(test.expectedResult.CurrencyFrom, test.expectedError).Once()
+			rr.On("GetCurrency", context.Background(), test.currencyTo).Return(test.expectedResult.CurrencyTo, test.expectedError).Once()
 			response, err := testService.ExchangeCurrency(context.Background(), test.currencyFrom, test.currencyTo, test.amount)
 
 			if assert.Equalf(t, test.expectedError, err, "Fail! Was expecting error %s got: %s", test.expectedError, err) {

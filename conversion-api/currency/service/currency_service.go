@@ -4,6 +4,7 @@ import (
 	"challenge-bravo/conversion-api/currency"
 	"challenge-bravo/conversion-api/models"
 	"context"
+	"fmt"
 )
 
 type service struct {
@@ -20,7 +21,38 @@ func NewService(r currency.Repository, g currency.Gateway) currency.Service {
 }
 
 func (s *service) ExchangeCurrency(ctx context.Context, currencyFrom, currencyTo string, amount float64) (models.CurrencyExchange, error) {
-	return models.CurrencyExchange{}, nil
+	var exchange models.CurrencyExchange
+	var err error
+
+	if currencyFrom == "" {
+		return exchange, fmt.Errorf("error invalid currency from")
+	}
+
+	exchange.CurrencyFrom, err = s.Repository.GetCurrency(ctx, currencyFrom)
+
+	if err != nil {
+		return exchange, err
+	}
+
+	if currencyTo == "" {
+		return exchange, fmt.Errorf("error invalid currency to")
+	}
+
+	exchange.CurrencyTo, err = s.Repository.GetCurrency(ctx, currencyTo)
+
+	if err != nil {
+		return exchange, err
+	}
+
+	exchange.OriginalValue = amount
+
+	exchange.ExchangedValue, err = s.calculateExchange(exchange.OriginalValue, exchange.CurrencyFrom.BallastToDollar, exchange.CurrencyTo.BallastToDollar)
+
+	if err != nil {
+		return exchange, err
+	}
+
+	return exchange, nil
 }
 
 func (s *service) UpdateCurrency(ctx context.Context, currency string) (models.Currency, error) {
@@ -29,4 +61,19 @@ func (s *service) UpdateCurrency(ctx context.Context, currency string) (models.C
 
 func (s *service) CreateCurrency(ctx context.Context, currency string) (models.Currency, error) {
 	return models.Currency{}, nil
+}
+
+func (s *service) calculateExchange(amount, ballastFrom, ballastTo float64) (float64, error) {
+	if ballastFrom <= 0 {
+		return 0, fmt.Errorf("invalid ballast from because its equal 0")
+	}
+
+	if ballastTo == 0 || amount == 0 {
+		return 0, nil
+	}
+
+	exchange := ballastTo / ballastFrom
+	value := amount * exchange
+
+	return value, nil
 }
