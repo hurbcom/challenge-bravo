@@ -69,13 +69,14 @@ func (s *service) UpdateCurrency(ctx context.Context, currencyName string) (mode
 		return currency, err
 	}
 
-	currency, err = s.Gateway.GetCurrencyByName(currency.Name)
+	newCurrency, err := s.Gateway.GetCurrencyByName(currency.Name)
 
 	if err != nil {
 		return currency, err
 	}
 
-	err = s.Repository.UpdateBallast(ctx, currency)
+	newCurrency.ID = currency.ID
+	err = s.Repository.UpdateBallast(ctx, newCurrency)
 
 	if err != nil {
 		return currency, err
