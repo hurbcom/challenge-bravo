@@ -2,13 +2,12 @@ package gateway
 
 import (
 	"challenge-bravo/conversion-api/currency"
-	"time"
-	"strconv"
 	"challenge-bravo/conversion-api/models"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 type gateway struct {
@@ -54,14 +53,14 @@ func (g *gateway) GetCurrencyByName(currency string) (models.Currency, error) {
 	var theCurrency models.Currency
 
 	theCurrency.Name = currency
-	timestamp, err := strconv.ParseInt(data["timestamp"].(string), 10, 64)
+	timestamp := data["timestamp"].(float64)
 
 	if err != nil {
 		return models.Currency{}, err
 	}
 
-	theCurrency.Timestamp = time.Unix(timestamp, 0)
-	theCurrency.BallastToDollar = data["rates"].(map[string]float64)[currency]
+	theCurrency.Timestamp = time.Unix(int64(timestamp), 0)
+	theCurrency.BallastToDollar = data["rates"].(map[string]interface{})[currency].(float64)
 
 	return theCurrency, nil
 }
