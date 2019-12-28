@@ -2,7 +2,7 @@ USE conversion;
 CREATE TABLE
 IF NOT EXISTS currency
 (
-  id INT PRIMARY KEY NOT NULL,
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   name VARCHAR
 (50) NOT NULL,
   ballast_to_dollar DECIMAL
