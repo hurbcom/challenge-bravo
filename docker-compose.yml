@@ -1,13 +1,6 @@
 version: '3'
 
 services:
-  currency:
-    build: ./conversion-api/
-    ports: 
-      - 8080:8080
-    networks: 
-        currency_net:
-            ipv4_address: 172.28.1.2
   mysql:
     image: mysql
     container_name: mysql
@@ -20,8 +13,17 @@ services:
     ports:
       - "3306:3306"
     networks: 
+      currency_net:
+        ipv4_address: 172.28.1.1
+  currency:
+    build: ./conversion-api
+    ports: 
+      - 8081:8081
+    depends_on: 
+      -  "mysql"
+    networks: 
         currency_net:
-            ipv4_address: 172.28.1.1
+            ipv4_address: 172.28.1.2
 
 networks: 
     currency_net:

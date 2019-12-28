@@ -2,7 +2,7 @@ package currency
 
 import "context"
 
-import "challenge-bravo/conversion-api/models"
+import "conversion-api/models"
 
 //Repository is a interface to represents all connection with data persistence, if you need to store some data, implement this interface
 type Repository interface {

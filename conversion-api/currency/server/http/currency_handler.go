@@ -1,7 +1,7 @@
 package http
 
 import (
-	"challenge-bravo/conversion-api/currency"
+	"conversion-api/currency"
 	"context"
 	"encoding/json"
 	"fmt"

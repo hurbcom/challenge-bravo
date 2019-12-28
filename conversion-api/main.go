@@ -1,25 +1,33 @@
 package main
 
 import (
-	"challenge-bravo/conversion-api/currency/gateway"
-	"challenge-bravo/conversion-api/currency/repository"
-	conversion_http "challenge-bravo/conversion-api/currency/server/http"
-	"challenge-bravo/conversion-api/currency/service"
+	"conversion-api/currency"
+	"conversion-api/currency/gateway"
+	"conversion-api/currency/repository"
+	conversion_http "conversion-api/currency/server/http"
+	"conversion-api/currency/service"
 	"fmt"
-	"github.com/go-chi/chi"
+	"github.com/tinrab/retry"
 	"net/http"
 	"os"
+	"time"
+
+	"github.com/go-chi/chi"
 )
 
 func main() {
 	fmt.Println("Starting API...")
 	fmt.Println("Connecting to Database...")
-	repo, err := repository.NewRepository()
+	var repo currency.Repository
 
-	if err != nil {
-		fmt.Println("Error Connecting to Database: ", err)
-		os.Exit(0)
-	}
+	retry.ForeverSleep(2*time.Second, func(_ int) (err error) {
+		repo, err = repository.NewRepository()
+		if err != nil {
+			fmt.Println("Error Connecting to Database: ", err)
+			os.Exit(1)
+		}
+		return
+	})
 
 	fmt.Println("Database Connected!")
 

@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	models "challenge-bravo/conversion-api/models"
+	models "conversion-api/models"
 
 	mock "github.com/stretchr/testify/mock"
 )

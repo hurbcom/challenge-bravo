@@ -1,6 +1,6 @@
 package currency
 
-import "challenge-bravo/conversion-api/models"
+import "conversion-api/models"
 
 //Gateway is a interface to catch external sources for currency
 type Gateway interface {

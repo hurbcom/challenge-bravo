@@ -1,7 +1,7 @@
 package currency
 
 import (
-	"challenge-bravo/conversion-api/models"
+	"conversion-api/models"
 	"context"
 )
 

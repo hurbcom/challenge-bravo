@@ -1,8 +1,8 @@
 package service
 
 import (
-	"challenge-bravo/conversion-api/currency"
-	"challenge-bravo/conversion-api/models"
+	"conversion-api/currency"
+	"conversion-api/models"
 	"context"
 	"fmt"
 	"time"

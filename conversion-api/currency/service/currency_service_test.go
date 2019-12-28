@@ -1,8 +1,8 @@
 package service
 
 import (
-	"challenge-bravo/conversion-api/currency/mocks"
-	"challenge-bravo/conversion-api/models"
+	"conversion-api/currency/mocks"
+	"conversion-api/models"
 	"context"
 	"fmt"
 	"github.com/stretchr/testify/assert"
@@ -36,11 +36,11 @@ func TestExchangeCurrency(t *testing.T) {
 
 	tests["SuccessfulTest"] = test{
 		currencyFrom: "USD",
-		currencyTo:   "BRL",
+		currencyTo:   "ETH",
 		amount:       100.00,
 		expectedResult: models.CurrencyExchange{
 			CurrencyFrom:   makeFakeCurrency(1, "USD", 1.00),
-			CurrencyTo:     makeFakeCurrency(2, "BRL", 4.20),
+			CurrencyTo:     makeFakeCurrency(2, "ETH", 4.20),
 			OriginalValue:  100.00,
 			ExchangedValue: 420.00,
 		},
