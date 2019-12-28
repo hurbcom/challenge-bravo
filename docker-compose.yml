@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    volumes:
+      - ./mysql/scripts:/docker-entrypoint-initdb.d/
+      - ./mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: conversion
+    ports:
+      - "3306:3306"
+    networks: 
+      currency_net:
+        ipv4_address: 172.28.1.1
+  currency:
+    build: ./conversion-api
+    ports: 
+      - 8081:8081
+    depends_on: 
+      -  "mysql"
+    networks: 
+        currency_net:
+            ipv4_address: 172.28.1.2
+
+networks: 
+    currency_net:
+        ipam: 
+            driver: default
+            config: 
+                - subnet:  172.28.0.0/16

@@ -1,0 +1,10 @@
+FROM golang:1.13
+
+WORKDIR /go/src/app
+COPY . .
+
+RUN go get -d -v ./...
+RUN go install -v ./...
+RUN go test -v -count=1 ./...
+
+CMD ["conversion-api"]
