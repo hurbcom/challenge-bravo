@@ -60,6 +60,11 @@ func (g *gateway) GetCurrencyByName(currency string) (models.Currency, error) {
 	}
 
 	theCurrency.Timestamp = time.Unix(int64(timestamp), 0)
+	rate := data["rates"].(map[string]interface{})[currency]
+
+	if rate == nil {
+		return models.Currency{}, fmt.Errorf("Currency %s Not found", currency)
+	}
 	theCurrency.BallastToDollar = data["rates"].(map[string]interface{})[currency].(float64)
 
 	return theCurrency, nil

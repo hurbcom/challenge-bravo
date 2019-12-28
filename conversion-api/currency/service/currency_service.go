@@ -5,6 +5,7 @@ import (
 	"challenge-bravo/conversion-api/models"
 	"context"
 	"fmt"
+	"time"
 )
 
 type service struct {
@@ -34,6 +35,15 @@ func (s *service) ExchangeCurrency(ctx context.Context, currencyFrom, currencyTo
 		return exchange, err
 	}
 
+	expiredFrom := exchange.CurrencyFrom.Timestamp.Sub(time.Now()) > 2
+
+	if exchange.CurrencyFrom.BallastToDollar <= 0 || expiredFrom {
+		exchange.CurrencyFrom, err = s.UpdateCurrency(ctx, exchange.CurrencyFrom.Name)
+		if err != nil {
+			return exchange, err
+		}
+	}
+
 	if currencyTo == "" {
 		return exchange, fmt.Errorf("error invalid currency to")
 	}
@@ -42,6 +52,15 @@ func (s *service) ExchangeCurrency(ctx context.Context, currencyFrom, currencyTo
 
 	if err != nil {
 		return exchange, err
+	}
+
+	expiredTo := exchange.CurrencyTo.Timestamp.Sub(time.Now()) > 2
+
+	if exchange.CurrencyTo.BallastToDollar <= 0 || expiredTo {
+		exchange.CurrencyTo, err = s.UpdateCurrency(ctx, exchange.CurrencyTo.Name)
+		if err != nil {
+			return exchange, err
+		}
 	}
 
 	exchange.OriginalValue = amount
@@ -79,10 +98,12 @@ func (s *service) UpdateCurrency(ctx context.Context, currencyName string) (mode
 	err = s.Repository.UpdateBallast(ctx, newCurrency)
 
 	if err != nil {
-		return currency, err
+		if err.Error() != "Error no lines where affected during update of Ballast" {
+			return currency, err
+		}
 	}
 
-	return currency, nil
+	return s.Repository.GetCurrency(ctx, currency.Name)
 }
 
 func (s *service) CreateCurrency(ctx context.Context, currencyName string) (models.Currency, error) {
