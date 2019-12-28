@@ -117,7 +117,9 @@ func (s *service) CreateCurrency(ctx context.Context, currencyName string) (mode
 	currency, err = s.Repository.GetCurrency(ctx, currencyName)
 
 	if err != nil {
-		return currency, err
+		if err.Error() != "sql: no rows in result set" {
+			return currency, err
+		}
 	}
 
 	if currency != (models.Currency{}) {
