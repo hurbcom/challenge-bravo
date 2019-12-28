@@ -77,13 +77,13 @@ func TestExchangeCurrency(t *testing.T) {
 
 	tests["A more complex transaction"] = test{
 		currencyFrom: "EUR",
-		currencyTo:   "BRL",
+		currencyTo:   "BTC",
 		amount:       325.72,
 		expectedResult: models.CurrencyExchange{
 			CurrencyFrom:   makeFakeCurrency(1, "EUR", 0.90),
-			CurrencyTo:     makeFakeCurrency(2, "BRL", 4.20),
+			CurrencyTo:     makeFakeCurrency(2, "BTC", 0.00015),
 			OriginalValue:  325.72,
-			ExchangedValue: 1520.0266666666669,
+			ExchangedValue: 0.05428666666666667,
 		},
 		expectedError: nil,
 	}
@@ -132,15 +132,15 @@ func TestUpdateCurrency(t *testing.T) {
 	}
 
 	tests["Complex Success"] = test{
-		currency:       "BRL",
-		oldCurrency:    makeFakeCurrency(2, "BRL", 4.10),
-		expectedResult: makeFakeCurrency(2, "BRL", 4.20),
+		currency:       "ETH",
+		oldCurrency:    makeFakeCurrency(2, "ETH", 4.10),
+		expectedResult: makeFakeCurrency(2, "ETH", 4.10),
 		expectedError:  nil,
 	}
 
 	for title, test := range tests {
 		t.Run(title, func(t *testing.T) {
-			rr.On("GetCurrency", context.Background(), test.currency).Return(test.oldCurrency, test.expectedError).Once()
+			rr.On("GetCurrency", context.Background(), test.currency).Return(test.oldCurrency, test.expectedError)
 			rr.On("UpdateBallast", context.Background(), test.expectedResult).Return(test.expectedError).Once()
 			gg.On("GetCurrencyByName", test.currency).Return(test.expectedResult, test.expectedError).Once()
 			response, err := testService.UpdateCurrency(context.Background(), test.currency)
@@ -162,9 +162,9 @@ func TestCreateCurrency(t *testing.T) {
 	var tests = make(map[string]test)
 
 	tests["SuccessfulTest"] = test{
-		currency:       "Yen",
+		currency:       "JPY",
 		oldResult:      makeFakeCurrency(0, "", 0),
-		expectedResult: makeFakeCurrency(1, "Yen", 109.40),
+		expectedResult: makeFakeCurrency(1, "JPY", 109.40),
 		expectedError:  nil,
 	}
 
