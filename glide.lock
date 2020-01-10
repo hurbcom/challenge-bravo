@@ -1,0 +1,10 @@
+hash: 313b20f90fe9042162d8b34803af301cf0dd87f5e78b82333db2d99e9bef0307
+updated: 2019-11-28T20:22:45.508207-03:00
+imports:
+- name: github.com/gorilla/handlers
+  version: 597a9be2cbe9820827281afab3e5b09eb04447f2
+- name: github.com/gorilla/mux
+  version: 49c01487a141b49f8ffe06277f3dca3ee80a55fa
+- name: github.com/mattn/go-sqlite3
+  version: 590d44c02bca83987d23f6eab75e6d0ddf95f644
+testImports: []
