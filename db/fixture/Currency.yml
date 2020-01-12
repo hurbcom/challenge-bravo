@@ -1,0 +1,17 @@
+entity: Currency
+items:
+  dolar:
+    code: 'USD'
+    name: 'Dollar'
+  real:
+    code: 'BRL'
+    name: 'Real'
+  euro:
+    code: 'EUR'
+    name: 'Euro'
+  bitcoin:
+    code: 'BTC'
+    name: 'Bitcoin'
+  ethereum:
+    code: 'ETH'
+    name: 'Ethereum'

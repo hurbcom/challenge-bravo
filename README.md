@@ -1,65 +1,86 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> API de Conversão de Moedas
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+## Solução
+Construção de uma API, que responde JSON, para realizar conversões entre diferentes moedas com cotações de verdade e atuais.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## Tecnologias utilizadas:
+1. Node JS
+    - Nest JS (Framework MVC)
+    - Type ORM (Mapeamento objeto-relacional)
+    - Jest (Testes)
+    - Typescript
+2. MySQL
+3. Docker
+4. Awesome API (https://economia.awesomeapi.com.br) para cotação das moedas
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## Como rodar o projeto?
+1. Instale o Docker `sudo apt install docker.io`
+2. Rode o comando `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up` (ambiente de desenvolvimento) ou `docker-compose -f docker-compose.yml -f docker-compose.test.yml up` (ambiente de teste)
+3. Pronto, a aplicação estará no ar na porta 3000
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+## Rotas
+Para acessar as rotas é necessário informar no header a `API_KEY` que está configurada no arquivo `.env.dev` ou `.env.test`.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+1. POST /currency
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Requisição:
+```json
+{
+	"name": "Real",
+	"code": "BRL"
+}
+```
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Resposta: Status 201
+```json
+{
+	"name": "Real",
+	"code": "BRL",
+    "created_at": "2020-01-02 00:00:00"
+}
+```
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+2. DELETE /currency/{id}
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Parâmetro: id = 1
 
-## Requisitos
+Resposta: Status 200 
+```json
+{}
+```
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+3. GET /currency/convert?codeFrom={codeFrom}&codeTo={codeTo}&amount={amount}
 
-## Critério de avaliação
+Parâmetros: codeFrom = USD, codeTo = BRL e amount = 100 
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Resposta: Status 200 
+```json
+{
+    "codeFrom": "USD",
+    "amountFrom": 100,
+    "codeTo": "BRL",
+    "amountTo": 0.25
+}
+```
 
-## Dúvidas
+## Informações adicionais
+- Foram criadas migrations para mantermos o histórico cronológico de todos scripts de alteração de estrutura de tabela.
+- Dentro da pasta /test existe o arquivo `currency.e2e-spec.ts` que possui testes end to end.
+- @AuthGuard intercepta as requisições e verifica se a `API_KEY` (configurada no `.env`) está presente no cabeçalho.
+- Scripts que a aplicação possui:
+    - `build`: build da aplicação.
+    - `start`: roda a aplicação com hot deploy para o ambiente de desenvolvimento.
+    - `test`: roda a aplicação com hot deploy para o ambiente de teste.
+    - `migration:create`: Gera uma migration, basta definir o nome dela após o comando.
+    - `migration:run`: Roda todas as migrations.
+    - `migration:revert`: Reverte todas as migrations.
+    - `fixture:run`: Roda os arquivos que geram dados iniciais para aplicação (db/fixture) 
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+## Dúvidas?
+Email: kbrandaolira@gmail.com
 
-Boa sorte e boa viagem! ;)
+Celular: (21) 98332-6783
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Github: https://github.com/kbrandaolira/
+
+LinkedIn: https://br.linkedin.com/in/kbrandaolira

@@ -1,0 +1,25 @@
+version: "3.3"
+
+services:
+  app:
+    build: .
+    command: sh -c "npm run build && npm run migration:revert default && npm run migration:run default && npm run fixture:run && npm run start"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    volumes:
+      - .:/usr/app
+  mysql:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+  adminer:
+    image: adminer
+    restart: always    
+    ports:      
+      - "8080:8080"
