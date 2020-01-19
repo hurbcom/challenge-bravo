@@ -1,26 +1,31 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const currencies = require('./services/currencies');
+require('./services/cacheService').instance();
+const express = require('express'), app = express(), currencies = require('./services/currenciesService'),
+    bodyParser = require('body-parser'), schedule = require('./schedule/currencyLoad'),
+    compression = require('compression');
 
 
-const router = express.Router();
 
-currencies().loadRates();
-
+app.use(compression());
 
 //Rotas
-const convert = require('./routes/convert');
+const convertRoutes = require('./routes/convertRoute');
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+main().then(r => {
+    console.log(r);
+    routes();
+});
 
+async function main() {
+    console.log("init");
+    const {loadRates} = new currencies();
+    loadRates();
+    schedule.init();
+}
 
-app.use('/', convert);
-
-//schedule
-const schedule = require('./schedule/schedule');
-schedule.init();
+function routes() {
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.json());
+    app.use('/convert', convertRoutes);
+}
 
 module.exports = app;
-
