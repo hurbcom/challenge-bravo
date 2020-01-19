@@ -1,12 +1,14 @@
 let currencies = require('../services/currenciesService');
 const formatCurrency = require('format-currency');
+require('../services/cacheService').instance();
+
 let cryptoCoins = ['BTC', 'ETH'];
 let listOfCoins = ['USD', 'BRL', 'EUR'];
 
 currenciesConvert = new currencies();
 exports.get = async (req, res) => {
     let response;
-    if (paramsFilters(req.query.from, req.query.amount, req.query.to)) {
+    if (paramsFilters(req.query)) {
         response = setResponse(
             req.query.from,
             req.query.amount,
@@ -22,7 +24,7 @@ exports.get = async (req, res) => {
 
 exports.getfriendly = ('/:from/:to/:amount', async function (req, res) {
     let response;
-    if (paramsFilters(req.params.from, req.params.amount, req.params.to)) {
+    if (paramsFilters(req.params)) {
         response = setResponse(
             req.params.from,
             req.params.amount,
@@ -48,18 +50,18 @@ const setResponse = (origin, amount, destiny, amountResult) => ({
 });
 
 
-const paramsFilters = function isRatesDateValid(from, amount, to) {
-    if (
-        (cryptoCoins.includes(from) || listOfCoins.includes(from))
+const paramsFilters = function isRatesDateValid(req) {
+    return (cryptoCoins.includes(req.from) || listOfCoins.includes(req.from))
         &&
-        (cryptoCoins.includes(to) || listOfCoins.includes(to))
-        && ValidateNumber(amount))
-        return true;
-    return false;
+        (cryptoCoins.includes(req.to) || listOfCoins.includes(req.to))
+        && ValidateNumber(req.amount);
+
 };
 
+/**
+ * @return {boolean}
+ */
 function ValidateNumber(strNumber) {
-    var regExp = new RegExp("^\\d+(\\.\\d+)?$");
-    var isValid = regExp.test(strNumber); // or just: /^\d+$/.test(strNumber);
-    return isValid;
+    const regExp = new RegExp("^\\d+(\\.\\d+)?$");
+    return regExp.test(strNumber); // or just: /^\d+$/.test(strNumber);
 }

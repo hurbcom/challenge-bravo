@@ -17,12 +17,11 @@ class CurrenciesService {
         let listOfCoins = ['USD', 'BRL', 'EUR'];
 
         this.loadRates = loadRates;
-        this.scheduleReloadValues = scheduleReloadValues;
+
 
         return this;
 
         function scheduleReloadValues(){
-            cacheProvider.set("Data", "Loading", true);
             console.log("Loading a data of currencies  in memory");
             //setRateCoins(base);
             listOfCoins.forEach(function (nameCurrency) {
@@ -33,11 +32,9 @@ class CurrenciesService {
                 });
             });
             console.log("End loading data");
-            cacheProvider.set("Data", "Loading", false);
         }
 
         function loadRates() {
-            cacheProvider.set("Data", "Loading", true);
             console.log("Loading a data of currencies  in memory");
             //setRateCoins(base);
             listOfCoins.forEach(function (nameCurrency) {
@@ -48,7 +45,6 @@ class CurrenciesService {
                 });
             });
             console.log("End loading data");
-            cacheProvider.set("Data", "Loading", false);
         }
 
 
