@@ -5,7 +5,7 @@ schdedulingUpdateCurrencies = new currencies();
 module.exports.init = function () {
 
     currencyLoad.scheduleJob('0 1-23/2 * * * ', function () {
-        schdedulingUpdateCurrencies.loadRates();
+        schdedulingUpdateCurrencies.scheduleReloadValues();
     });
 
 };

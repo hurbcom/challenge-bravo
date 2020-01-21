@@ -1,12 +1,7 @@
 const convertController = require("../../src/controllers/convertController")
 const httpMocks = require("node-mocks-http");
 const cacheProvider = require('../../src/services/cacheService').instance();
-
-const app = require("../../src/app.js");
-const request = require("supertest");
-const endpointUrl = "/convert";
-
-
+//const usdBrl = require("../mock-data/usd-brl-convert");
 let req, resp, next;
 
 
@@ -32,12 +27,5 @@ describe("convertController.get", () => {
         await expect(res.statusCode).toBe(200);
         await expect(res._isEndCalled).toBeTruthy();
 
-    });
-
-    test("GET by Id " + endpointUrl + ":todoId", async () => {
-        const response = await request(app).get(endpointUrl + "/?from=USD&to=BRL&amount=2");
-        expect(response.statusCode).toBe(200);
-        let rates = JSON.parse(JSON.stringify(response.body));
-        console.log(rates)
     });
 });

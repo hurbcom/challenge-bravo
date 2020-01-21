@@ -1,19 +1,15 @@
 require('express');
 const request = require("request"), cacheProvider = require('./cacheService').instance();
+const criptService = require('./criptoService');
+const coinsService = require('./coinsService');
 
-function getCriptoCoins(nameCurrency, coins) {
-    request(`https://min-api.cryptocompare.com/data/price?fsym=${nameCurrency}&tsyms=${coins}`, function (error, response, body) {
-        const currentRate = JSON.parse(body);
-        Object.entries(currentRate).forEach(([, value]) => {
-            cacheProvider.set(nameCurrency, coins, value);
-        });
-    });
-}
 
 class CurrenciesService {
 
     async getConversionCurrencies(from, to) {
-        return cacheProvider.get(from, to);
+        if (cacheProvider.get(from, to) == null)
+            throw new Error("some unexpected/uncaught async exception");
+        return cacheProvider.get(from, to)
     }
 
     constructor() {
@@ -21,16 +17,19 @@ class CurrenciesService {
         let listOfCoins = ['USD', 'BRL', 'EUR'];
 
         this.loadRates = loadRates;
-
+        this.scheduleReloadValues = scheduleReloadValues;
 
         return this;
 
-        function scheduleReloadValues(){
+        function scheduleReloadValues() {
             console.log("Loading a data of currencies  in memory");
-            //setRateCoins(base);
-            listOfCoins.forEach(function (nameCurrency) {
+            cacheProvider.get("cripto", 'valid');
+            cacheProvider.get("coins", 'valid')
+
+
+            cacheProvider.get("coins", 'valid').forEach(function (nameCurrency) {
                 setCryptoCurrencyRates(nameCurrency);
-                let currencies = listOfCoins.filter(currency => currency !== nameCurrency);
+                let currencies = cacheProvider.get("coins", 'valid').filter(currency => currency !== nameCurrency);
                 currencies.forEach(function (to) {
                     setRateCoins(nameCurrency, nameCurrency, to);
                 });
@@ -39,26 +38,30 @@ class CurrenciesService {
         }
 
         async function loadRates() {
+            cacheProvider.set("cripto", 'valid', ['BTC', 'ETH',]);
+            cacheProvider.set("coins", 'valid', ['USD', 'BRL', 'EUR'])
+
             console.log("Loading a data of currencies  in memory");
-            //setRateCoins(base);
             listOfCoins.forEach(function (nameCurrency) {
                 try {
-                     setCryptoCurrencyRates(nameCurrency);
-                }
-                catch (e) {
+                    setCryptoCurrencyRates(nameCurrency);
+                } catch (e) {
                     console.error(e)
                 }
                 try {
                     let currencies = listOfCoins.filter(currency => currency !== nameCurrency);
                     currencies.forEach(function (to) {
-                          setRateCoins(nameCurrency, nameCurrency, to);
+                        setRateCoins(nameCurrency, nameCurrency, to);
                     });
-                }
-                catch (e) {
+                } catch (e) {
                     console.error(e)
                 }
             });
             console.log("End loading data");
+
+            cacheProvider.set("cripto", 'valid', ['BTC', 'ETH',]);
+            cacheProvider.set("coins", 'valid', ['USD', 'BRL', 'EUR'])
+
             return new Promise((resolve) => {
                 setTimeout(() => {
                     resolve("Promise resolvida");
@@ -70,41 +73,31 @@ class CurrenciesService {
         function setRateCoins(nameCurrency, keyName = "base", to = "USD") {
             console.log(`Loading data in memory - Coin: ${keyName}`);
             try {
-                request('https://api.exchangeratesapi.io/latest?base=' + nameCurrency, function (error, response, body) {
-                    const currentRate = JSON.parse(body);
-                    const {rates} = currentRate;
-                    cacheProvider.set(keyName, to, rates[to]);
-                })
-            }
-            catch (e) {
+                coinsService.getCurenciesCoins(nameCurrency, keyName, to);
+            } catch (e) {
                 console.error(e)
             }
         }
 
+        function setCryptoCurrencyRates(firstCurrency) {
 
-         function setCryptoCurrencyRates(nameCurrency) {
+            cryptoCoins.forEach(function (secondCurrency) {
 
-            cryptoCoins.forEach(function (coins) {
-
-                let otherCrypto = cryptoCoins.filter(currency => currency !== coins);
-                otherCrypto.forEach(function (othercoins) {
-                    try{
-                        request(`https://min-api.cryptocompare.com/data/price?fsym=${coins}&tsyms=${othercoins}`, function (error, response, body) {
-                            const currentRate = JSON.parse(body);
-                            Object.entries(currentRate).forEach(([, value]) => {
-                                cacheProvider.set(coins, othercoins, value);
-                            });
-                        });
-                    }
-                    catch (e) {
+                let otherCrypto = cryptoCoins.filter(currency => currency !== secondCurrency);
+                otherCrypto.forEach(function (to) {
+                    try {
+                        criptService.getCriptoCoin(secondCurrency, to);
+                    } catch (e) {
                         console.error(e)
                     }
                 });
 
+                if (cacheProvider.get("cripto", 'valid').filter(currency => currency === firstCurrency))
+                    criptService.getCriptoCoin(firstCurrency, secondCurrency);
+                if (cacheProvider.get("cripto", 'valid').filter(currency => currency === secondCurrency))
+                    criptService.getCriptoCoin(secondCurrency, firstCurrency);
+                console.log(`Loading a data in memory - cryptocoins ${secondCurrency}`);
 
-                console.log(`Loading a data in memory - cryptocoins ${coins}`);
-                getCriptoCoins(nameCurrency, coins);
-                getCriptoCoins(coins, nameCurrency);
             });
         }
     }
