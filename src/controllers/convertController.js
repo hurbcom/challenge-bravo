@@ -1,53 +1,67 @@
 let currencies = require('../services/currenciesService');
 const formatCurrency = require('format-currency');
-require('../services/cacheService').instance();
 
 let cryptoCoins = ['BTC', 'ETH'];
 let listOfCoins = ['USD', 'BRL', 'EUR'];
 
 currenciesConvert = new currencies();
-exports.get = async (req, res) => {
-    let response;
-    if (paramsFilters(req.query)) {
-        response = setResponse(
-            req.query.from,
-            req.query.amount,
-            req.query.to,
-            currenciesConvert.getConversionCurrencies(req.query.from, req.query.to)
-        );
-        await res.send(response);
-    } else {
-        res.status(500).send({error: 'Something failed!'});
-    }
 
+exports.get = async (req, res, next) => {
+    try {
+        let from = req.query.from.toUpperCase() , to = req.query.to.toUpperCase(), amount = req.query.amount;
+        if (paramsFilters(req.query)) {
+            const response = await setResponse(
+                from,
+                amount,
+                to,
+                await currenciesConvert.getConversionCurrencies(from, to)
+            );
+            res.status(200).json(response);
+        } else {
+            res.status(400).json({error: 'Something failed!'});
+        }
+    } catch (err) {
+        next(err);
+    }
 };
 
-exports.getfriendly = ('/:from/:to/:amount', async function (req, res) {
-    let response;
-    if (paramsFilters(req.params)) {
-        response = setResponse(
-            req.params.from,
-            req.params.amount,
-            req.params.to,
-            currenciesConvert.getConversionCurrencies(req.params.from, req.params.to)
-        );
-        await res.send(response);
-    } else {
-        res.status(500).send({error: 'Something failed!'});
+exports.getfriendly = ('/:from/:to/:amount', async function (req, res, next) {
+    try {
+        let from = req.params.from.toUpperCase(), to = req.params.to.toUpperCase(), amount = req.params.amount;
+
+        if (paramsFilters(req.query)) {
+            const response = await setResponse(
+                from,
+                amount,
+                to,
+                currenciesConvert.getConversionCurrencies(from, to)
+            );
+            console.log(response);
+            res.status(400).json(response);
+        } else {
+            res.status(500).json({error: 'Something failed!'});
+        }
+    } catch (err) {
+        next(err);
     }
+
 });
 
 
-const setResponse = (origin, amount, destiny, amountResult) => ({
-    original: {
-        currency: origin,
-        amount: formatCurrency(amount)
-    },
-    result: {
-        currency: destiny,
-        amount: formatCurrency((amountResult * amount), {maxSignificant: 2})
-    }
-});
+const setResponse = async function setResponse(origin, amount, destiny, amountResult) {
+    return {
+        original: {
+            currency: origin,
+                amount: formatCurrency(amount)
+        },
+        result: {
+            currency: destiny,
+                amount: formatCurrency((amountResult * amount), {maxSignificant: 2})
+        }
+    };
+};
+
+//const setResponse = async (origin, amount, destiny, amountResult) => ();
 
 
 const paramsFilters = function isRatesDateValid(req) {

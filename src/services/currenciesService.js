@@ -12,6 +12,10 @@ function getCriptoCoins(nameCurrency, coins) {
 
 class CurrenciesService {
 
+    async getConversionCurrencies(from, to) {
+        return cacheProvider.get(from, to);
+    }
+
     constructor() {
         let cryptoCoins = ['BTC', 'ETH'];
         let listOfCoins = ['USD', 'BRL', 'EUR'];
@@ -34,43 +38,67 @@ class CurrenciesService {
             console.log("End loading data");
         }
 
-        function loadRates() {
+        async function loadRates() {
             console.log("Loading a data of currencies  in memory");
             //setRateCoins(base);
             listOfCoins.forEach(function (nameCurrency) {
-                setCryptoCurrencyRates(nameCurrency);
-                let currencies = listOfCoins.filter(currency => currency !== nameCurrency);
-                currencies.forEach(function (to) {
-                    setRateCoins(nameCurrency, nameCurrency, to);
-                });
+                try {
+                     setCryptoCurrencyRates(nameCurrency);
+                }
+                catch (e) {
+                    console.error(e)
+                }
+                try {
+                    let currencies = listOfCoins.filter(currency => currency !== nameCurrency);
+                    currencies.forEach(function (to) {
+                          setRateCoins(nameCurrency, nameCurrency, to);
+                    });
+                }
+                catch (e) {
+                    console.error(e)
+                }
             });
             console.log("End loading data");
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve("Promise resolvida");
+                }, 10);
+            });
         }
 
 
         function setRateCoins(nameCurrency, keyName = "base", to = "USD") {
             console.log(`Loading data in memory - Coin: ${keyName}`);
-
-            request('https://api.exchangeratesapi.io/latest?base=' + nameCurrency, function (error, response, body) {
-                const currentRate = JSON.parse(body);
-                const {rates} = currentRate;
-                cacheProvider.set(keyName, to, rates[to]);
-            })
+            try {
+                request('https://api.exchangeratesapi.io/latest?base=' + nameCurrency, function (error, response, body) {
+                    const currentRate = JSON.parse(body);
+                    const {rates} = currentRate;
+                    cacheProvider.set(keyName, to, rates[to]);
+                })
+            }
+            catch (e) {
+                console.error(e)
+            }
         }
 
 
-        function setCryptoCurrencyRates(nameCurrency) {
+         function setCryptoCurrencyRates(nameCurrency) {
 
             cryptoCoins.forEach(function (coins) {
 
                 let otherCrypto = cryptoCoins.filter(currency => currency !== coins);
                 otherCrypto.forEach(function (othercoins) {
-                    request(`https://min-api.cryptocompare.com/data/price?fsym=${coins}&tsyms=${othercoins}`, function (error, response, body) {
-                        const currentRate = JSON.parse(body);
-                        Object.entries(currentRate).forEach(([, value]) => {
-                            cacheProvider.set(coins, othercoins, value);
+                    try{
+                        request(`https://min-api.cryptocompare.com/data/price?fsym=${coins}&tsyms=${othercoins}`, function (error, response, body) {
+                            const currentRate = JSON.parse(body);
+                            Object.entries(currentRate).forEach(([, value]) => {
+                                cacheProvider.set(coins, othercoins, value);
+                            });
                         });
-                    });
+                    }
+                    catch (e) {
+                        console.error(e)
+                    }
                 });
 
 
@@ -79,11 +107,6 @@ class CurrenciesService {
                 getCriptoCoins(coins, nameCurrency);
             });
         }
-    }
-
-    getConversionCurrencies(from, to) {
-
-        return cacheProvider.get(from, to);
     }
 
 }
