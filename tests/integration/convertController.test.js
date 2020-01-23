@@ -6,8 +6,8 @@ const endpointUrl = "/convert";
 const usdBrl = require("../mock-data/usd-brl-convert.json");
 
 beforeEach(() => {
-        cacheProvider.set("USD", "BRL", 4.2)
-        cacheProvider.set("BRL", "USD", 0.24)
+        cacheProvider.set("Rates", "BRL", 4.2)
+        cacheProvider.set("Rates", "USD", 0.24)
     }
 );
 
@@ -52,14 +52,6 @@ describe("convertController.get", () => {
     test("should handle 400" + endpointUrl, async () => {
         const response = await request(app).get(endpointUrl + "?from=X&to=USD&amount=2");
         expect(response.statusCode).toBe(400);
-    });
-    test("should handle errors in  " + endpointUrl, async () => {
-        const response = await request(app).get(endpointUrl + "?from=USD&to=USD&amount=2");
-        expect(response.statusCode).toBe(500);
-    });
-    test("should handle errors in  " + endpointUrl, async () => {
-        const response = await request(app).get("/convert/USD/USD/2");
-        expect(response.statusCode).toBe(500);
     });
 
 });

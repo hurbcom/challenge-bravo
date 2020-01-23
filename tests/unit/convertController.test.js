@@ -9,8 +9,8 @@ beforeEach(() => {
         req = httpMocks.createRequest();
         res = httpMocks.createResponse();
         next = jest.fn();
-        cacheProvider.set("USD", "BRL", 4.2)
-        cacheProvider.set("BRL", "USD", 0.24)
+        cacheProvider.set("Rates", "BRL", 4.2)
+        cacheProvider.set("Rates", "USD", 0.24)
     }
 );
 
