@@ -10,16 +10,21 @@ exports.createRate = async (req, res, next) => {
         let currency = req.body.currency;
 
         if (currentCurrencies.includes(currency)) {
-            res.status(400).json("This  currency: " + currency + " is registered");
+            res.status(400).json("Bad Request! This  currency: " + currency + " is registered");
             return;
         }
-        if (paramsFilter.paramsFiltersCreate(currency)) {
+        let paramsIsValid = paramsFilter.paramsFiltersCreate(currency);
+        if (!paramsIsValid) {
+            res.status(500).send({error: 'Something failed!'});
+            return
+        }
+        if (paramsIsValid) {
             let base = cacheProvider.get("Rates", 'base');
             currencies.addRate(base, currency);
 
             res.status(201).json("Successful to create the currency:" + currency);
         } else {
-            res.status(400).json("There is no data for this currency:" + currency);
+            res.status(400).json("Bad Request");
         }
     } catch (err) {
         next(err);
@@ -41,16 +46,17 @@ exports.updateRate = async (req, res, next) => {
         let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
         let currency = req.body.currency;
         if (!currentCurrencies.includes(currency)) {
-            res.status(400).json("This  currency: " + currency + " is not registered");
+            res.status(400).json("Bad Request");
             return;
         }
-        if (paramsFilter.paramsFiltersCreate(currency)) {
+        let paramsIsValid = paramsFilter.paramsFiltersCreate(currency);
+        if (paramsIsValid) {
             let base = cacheProvider.get("Rates", 'base');
             currencies.getRate(base, currency);
 
             res.status(201).json("Successful to update the currency:" + currency);
         } else {
-            res.status(400).json("There is no data for this currency:" + currency);
+            res.status(400).json("Bad Request");
         }
     } catch (err) {
         next(err);
@@ -62,10 +68,15 @@ exports.deleteCurrency = async (req, res, next) => {
         let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
         let currency = req.params.currency;
         if (!currentCurrencies.includes(currency)) {
-            res.status(400).json("This  currency: " + currency + " is not registered");
+            res.status(400).json("Bad Request");
             return;
         }
-        if (paramsFilter.paramsFiltersCreate(currency)) {
+        let paramsIsValid = paramsFilter.paramsFiltersCreate(currency);
+        if (!paramsIsValid) {
+            res.status(500).send({error: 'Something failed!'});
+            return
+        }
+        if (paramsIsValid) {
             let base = cacheProvider.get("Rates", 'base');
             currencies.delete(base, currency);
 

@@ -18,7 +18,7 @@ exports.get = async (req, res, next) => {
             );
             res.status(200).json(response);
         } else {
-            res.status(400).json({error: 'There is no data for any of the currency:'+from+' to:'+ to});
+            res.status(400).json({error: 'Bad Request'});
         }
     } catch (err) {
         next(err);
@@ -38,7 +38,7 @@ exports.getfriendly = ("/:from/:to/:amount", async function (req, res, next) {
             );
             res.status(200).json(response);
         } else {
-            res.status(400).json({error: 'Something failed!'});
+            res.status(400).json({error: 'Bad Request'});
         }
     } catch (err) {
         next(err);

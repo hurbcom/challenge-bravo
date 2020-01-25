@@ -89,5 +89,12 @@ describe("convertController.get", () => {
         expect(res2.statusCode).toBe(201);
     });
 
-
+    it("should return error 500 on malformed data with POST" + endpointUrl,
+        async () => {
+            const response = await request(app)
+                .post(endpointUrl)
+                .send({title: "Missing done property"});
+            expect(response.statusCode).toBe(500);
+        }
+    );
 });

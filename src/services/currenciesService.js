@@ -6,7 +6,6 @@ exports.getRate = function (from, to) {
         const currentRate = JSON.parse(body);
         let currencies = Array.from(cacheProvider.get("currencies", 'valid'));
         Object.entries(currentRate).forEach(([key, value]) => {
-            //86400000
             cacheProvider.delete("Rates", key.toString());
             cacheProvider.delete("Rates", "base");
             cacheProvider.set("Rates", 'base', from, 86400000);
