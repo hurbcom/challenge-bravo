@@ -18,16 +18,16 @@ exports.get = async (req, res, next) => {
             );
             res.status(200).json(response);
         } else {
-            console.log("400")
+            console.log("400");
             res.status(400).json({error: 'There is no data for any of the currency:'+from+' to:'+ to});
         }
     } catch (err) {
-        console.log("Error")
+        console.log("Error");
         next(err);
     }
 };
 
-exports.getfriendly = ('/:from/:to/:amount', async function (req, res, next) {
+exports.getfriendly = ("/:from/:to/:amount", async function (req, res, next) {
     try {
         let from = req.params.from.toUpperCase(), to = req.params.to.toUpperCase(), amount = req.params.amount;
         if (paramsFilter.paramsFilters(req.params)) {
@@ -44,7 +44,7 @@ exports.getfriendly = ('/:from/:to/:amount', async function (req, res, next) {
             console.log("400")
         }
     } catch (err) {
-        console.log("Error")
+        console.log("Error");
         next(err);
     }
 });

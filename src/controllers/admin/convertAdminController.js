@@ -1,8 +1,8 @@
 let paramsFilter = require('../filters/paramsFilter');
 let cacheProvider = require('../../services/cacheService').instance();
-let numbersUtil = require("../../util/numbers");
+require("../../util/numbers");
 let currencies = require('../../services/currenciesService');
-let loadData = require('../../services/loadDataService');
+require('../../services/loadDataService');
 
 exports.createRate = async (req, res, next) => {
     try {
@@ -15,7 +15,7 @@ exports.createRate = async (req, res, next) => {
         }
         if (paramsFilter.paramsFiltersCreate(currency)) {
             let base = cacheProvider.get("Rates", 'base');
-            currencies.getRate(base, currency)
+            currencies.addRate(base, currency);
 
             res.status(201).json("Successful to create the currency:" + currency);
         } else {

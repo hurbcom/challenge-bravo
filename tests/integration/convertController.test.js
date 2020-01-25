@@ -6,10 +6,11 @@ const endpointUrl = "/convert";
 const usdBrl = require("../mock-data/usd-brl-convert.json");
 
 beforeEach(() => {
-        cacheProvider.set("Rates", "BRL", 4.2)
-        cacheProvider.set("Rates", "USD", 0.24)
-    }
-);
+    cacheProvider.set("Rates", "BRL", 4.2)
+    cacheProvider.set("Rates", "USD", 0.24)
+    cacheProvider.set("coins", 'valid', ['BTC', 'ETH', 'USD', 'BRL', 'EUR'])
+    cacheProvider.set("Rates", 'base', "USD", 86400000)
+});
 
 describe("convertController.get", () => {
     test("should return 200 OK" + endpointUrl, async () => {
