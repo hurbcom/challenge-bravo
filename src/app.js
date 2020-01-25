@@ -4,7 +4,6 @@ require('./services/loadDataService');
 const express = require('express'), app = express(), bodyParser = require('body-parser'), compression = require('compression');
 const  cacheProvider = require('./services/cacheService').instance();
 
-var compression = require('compression');
 
 app.use(compression());
 
@@ -13,11 +12,10 @@ const convertRoutes = require('./routes/convertRoute');
 routes();
 
 function routes() {
-    app.use(compression());
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
     app.use('/convert', convertRoutes);
-    app.use((error, req, res) => {
+    app.use((error, req, res, next) => {
         res.status(500).json({message: error.message});
     });
 }
