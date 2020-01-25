@@ -31,19 +31,15 @@ class LoadData {
 
         function scheduleReloadValues() {
             console.log("Loading a data of currencies  in memory");
-            cacheProvider.get("cripto", 'valid');
-            cacheProvider.get("coins", 'valid');
-            cacheProvider.set("Rates", 'base', base);
-
-            setRates(base, cacheProvider.get("cripto", 'valid').concat(cacheProvider.get("coins", 'valid')).join(','));
-
+            cacheProvider.set("Rates", 'base', base, 86400000);
+            let listOfCurrencies = cacheProvider.get("coins", 'valid');
+            setRates(base, listOfCurrencies);
             console.log("End loading data");
         }
 
         async function loadRates() {
-            cacheProvider.set("cripto", 'valid', ['BTC', 'ETH',]);
-            cacheProvider.set("coins", 'valid', ['USD', 'BRL', 'EUR']);
-            cacheProvider.set('Data', "Loading", true);
+            cacheProvider.set("coins", 'valid', ['BTC', 'ETH','USD', 'BRL', 'EUR']);
+            cacheProvider.set("Rates", 'base', base, 86400000);
             console.log("Loading a data of currencies  in memory");
             try {
                 setRates(base, cryptoCoins.concat(listOfCoins).join(','));
@@ -51,11 +47,7 @@ class LoadData {
                 console.error(e)
             }
             console.log("End loading data");
-
-            cacheProvider.set("cripto", 'valid', ['BTC', 'ETH',]);
-            cacheProvider.set("coins", 'valid', ['USD', 'BRL', 'EUR']);
-            cacheProvider.set('Data', "Loading", false);
-
+            cacheProvider.set("coins", 'valid', ['USD', 'BRL', 'EUR','BTC', 'ETH']);
             return new Promise((resolve) => {
                 setTimeout(() => {
                     resolve("");
@@ -64,9 +56,9 @@ class LoadData {
         }
 
 
-        function setRates(keyName, to) {
+        function setRates(keyName = base, to) {
             try {
-                criptService.getRates(keyName, to);
+                criptService.getRate(keyName, to);
             } catch (e) {
                 console.error(e)
             }

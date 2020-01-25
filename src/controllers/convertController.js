@@ -1,5 +1,5 @@
 let currencies = require('../services/loadDataService');
-let paramsFilter = require('./filters/paramsFIlter');
+let paramsFilter = require('./filters/paramsFilter');
 require('../services/cacheService').instance();
 let numbersUtil = require("../util/numbers");
 
@@ -19,7 +19,7 @@ exports.get = async (req, res, next) => {
             res.status(200).json(response);
         } else {
             console.log("400")
-            res.status(400).json({error: 'Something failed'});
+            res.status(400).json({error: 'There is no data for any of the currency:'+from+' to:'+ to});
         }
     } catch (err) {
         console.log("Error")

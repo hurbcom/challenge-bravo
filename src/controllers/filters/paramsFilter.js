@@ -9,3 +9,13 @@ exports.paramsFilters = function (req) {
         (cryptoCoins.includes(req.to) || listOfCoins.includes(req.to))
         && numbersUtil.validateNumber(req.amount);
 };
+
+exports.paramsFiltersCreate = function (currency) {
+    return (cryptoCoins.includes(currency) || listOfCoins.includes(currency));
+};
+
+exports.paramsFilters = function (array) {
+    array.filter(function (ele) {
+        return ele == to;
+    })
+};

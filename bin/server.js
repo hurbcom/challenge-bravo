@@ -11,7 +11,7 @@ const {loadRates} = new currencies();
 const server = http.createServer(app);
 
 loadRates().then(response => {
-    schedule.init();
+    schedule.loadCurrenciesScheduler();
 
     server.listen(port);
     server.on('error', onError);
