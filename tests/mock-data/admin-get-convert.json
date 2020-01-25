@@ -1,0 +1,38 @@
+{
+    "BRL": {
+        "value": 4.226,
+        "counter": false,
+        "expiration": 86400000,
+        "referenceDate": 1579987501408
+    },
+    "EUR": {
+        "value": 0.9077,
+        "counter": false,
+        "expiration": 86400000,
+        "referenceDate": 1579987501408
+    },
+    "BTC": {
+        "value": 0.0001191,
+        "counter": false,
+        "expiration": 86400000,
+        "referenceDate": 1579987501408
+    },
+    "ETH": {
+        "value": 0.00619,
+        "counter": false,
+        "expiration": 86400000,
+        "referenceDate": 1579987501408
+    },
+    "base": {
+        "value": "USD",
+        "counter": false,
+        "expiration": 86400000,
+        "referenceDate": 1579991753320
+    },
+    "USD": {
+        "value": 1,
+        "counter": false,
+        "expiration": 86400000,
+        "referenceDate": 1579991739277
+    }
+}

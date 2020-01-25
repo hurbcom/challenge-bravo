@@ -2,7 +2,7 @@ require('express');
 const formatCurrency = require('format-currency');
 
 exports.formatCurrency = function (value) {
-    return formatCurrency(value, {maxSignificant: 3, minimumFractionDigits: 2})
+    return formatCurrency(value, {maxSignificant: 3 })
 };
 
 /**
