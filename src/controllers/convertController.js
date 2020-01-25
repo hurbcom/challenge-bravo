@@ -7,7 +7,6 @@ currenciesConvert = new currencies();
 
 exports.get = async (req, res, next) => {
     try {
-        console.log("converting ");
         let from = req.query.from.toUpperCase(), to = req.query.to.toUpperCase(), amount = req.query.amount;
         if (paramsFilter.paramsFilters(req.query)) {
             const valueconvert = await currenciesConvert.getConversionCurrencies(from, to, amount);
@@ -17,7 +16,6 @@ exports.get = async (req, res, next) => {
                 to,
                 valueconvert
             );
-            console.log("Success")
             res.status(200).json(response);
         } else {
             console.log("400")
@@ -31,7 +29,6 @@ exports.get = async (req, res, next) => {
 
 exports.getfriendly = ('/:from/:to/:amount', async function (req, res, next) {
     try {
-        console.log("converting ");
         let from = req.params.from.toUpperCase(), to = req.params.to.toUpperCase(), amount = req.params.amount;
         if (paramsFilter.paramsFilters(req.params)) {
             const valueconvert = await currenciesConvert.getConversionCurrencies(from, to, amount);
@@ -41,7 +38,6 @@ exports.getfriendly = ('/:from/:to/:amount', async function (req, res, next) {
                 to,
                 await valueconvert
             );
-            console.log("Success")
             res.status(200).json(response);
         } else {
             res.status(400).json({error: 'Something failed!'});
