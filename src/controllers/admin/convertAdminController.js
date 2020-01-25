@@ -6,7 +6,7 @@ require('../../services/loadDataService');
 
 exports.createRate = async (req, res, next) => {
     try {
-        let currentCurrencies = Array.from(cacheProvider.get("coins", 'valid'));
+        let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
         let currency = req.body.currency;
 
         if (currentCurrencies.includes(currency)) {
@@ -38,7 +38,7 @@ exports.getGeAll = async (req, res, next) => {
 
 exports.updateRate = async (req, res, next) => {
     try {
-        let currentCurrencies = Array.from(cacheProvider.get("coins", 'valid'));
+        let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
         let currency = req.body.currency;
         if (!currentCurrencies.includes(currency)) {
             res.status(400).json("This  currency: " + currency + " is not registered");
@@ -59,7 +59,7 @@ exports.updateRate = async (req, res, next) => {
 
 exports.deleteCurrency = async (req, res, next) => {
     try {
-        let currentCurrencies = Array.from(cacheProvider.get("coins", 'valid'));
+        let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
         let currency = req.params.currency;
         if (!currentCurrencies.includes(currency)) {
             res.status(400).json("This  currency: " + currency + " is not registered");

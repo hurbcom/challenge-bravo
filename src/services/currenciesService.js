@@ -4,7 +4,7 @@ const request = require("request"), cacheProvider = require('./cacheService').in
 exports.getRate = function (from, to) {
     request(`https://min-api.cryptocompare.com/data/price?fsym=${from}&tsyms=${to}`, function (error, response, body) {
         const currentRate = JSON.parse(body);
-        let currencies = Array.from(cacheProvider.get("coins", 'valid'));
+        let currencies = Array.from(cacheProvider.get("currencies", 'valid'));
         Object.entries(currentRate).forEach(([key, value]) => {
             //86400000
             cacheProvider.delete("Rates", key.toString());
@@ -12,7 +12,7 @@ exports.getRate = function (from, to) {
             cacheProvider.set("Rates", 'base', from, 86400000);
             cacheProvider.set("Rates", key.toString(), value, 86400000);
         });
-        cacheProvider.set("coins", 'valid', currencies);
+        cacheProvider.set("currencies", 'valid', currencies);
     });
 };
 
@@ -20,7 +20,7 @@ exports.getRate = function (from, to) {
 exports.addRate = function (from, to) {
     request(`https://min-api.cryptocompare.com/data/price?fsym=${from}&tsyms=${to}`, function (error, response, body) {
         const currentRate = JSON.parse(body);
-        let currencies = Array.from(cacheProvider.get("coins", 'valid'));
+        let currencies = Array.from(cacheProvider.get("currencies", 'valid'));
         Object.entries(currentRate).forEach(([key, value]) => {
             cacheProvider.delete("Rates", key.toString());
             cacheProvider.delete("Rates", "base");
@@ -28,16 +28,16 @@ exports.addRate = function (from, to) {
             cacheProvider.set("Rates", key.toString(), value, 86400000);
             currencies.push(key.toString());
         });
-        cacheProvider.set("coins", 'valid', currencies);
+        cacheProvider.set("currencies", 'valid', currencies);
 
     });
 };
 
 
 exports.delete = function (from, to) {
-    let currencies = Array.from(cacheProvider.get("coins", 'valid'));
+    let currencies = Array.from(cacheProvider.get("currencies", 'valid'));
     currencies = removeArray(currencies, to);
-    cacheProvider.set("coins", 'valid', currencies);
+    cacheProvider.set("currencies", 'valid', currencies);
     cacheProvider.delete("Rates", to.toString());
 };
 

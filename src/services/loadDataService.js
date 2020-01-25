@@ -21,8 +21,8 @@ class LoadData {
     }
 
     constructor() {
-        let cryptoCoins = ['BTC', 'ETH'];
-        let listOfCoins = ['USD', 'BRL', 'EUR'];
+        let cryptoCurrencies = ['BTC', 'ETH'];
+        let listOfcurrencies = ['USD', 'BRL', 'EUR'];
 
         this.loadRates = loadRates;
         this.scheduleReloadValues = scheduleReloadValues;
@@ -32,22 +32,22 @@ class LoadData {
         function scheduleReloadValues() {
             console.log("Loading a data of currencies  in memory");
             cacheProvider.set("Rates", 'base', base, 86400000);
-            let listOfCurrencies = cacheProvider.get("coins", 'valid');
+            let listOfCurrencies = cacheProvider.get("currencies", 'valid');
             setRates(base, listOfCurrencies);
             console.log("End loading data");
         }
 
         async function loadRates() {
-            cacheProvider.set("coins", 'valid', ['BTC', 'ETH','USD', 'BRL', 'EUR']);
+            cacheProvider.set("currencies", 'valid', ['BTC', 'ETH','USD', 'BRL', 'EUR']);
             cacheProvider.set("Rates", 'base', base, 86400000);
             console.log("Loading a data of currencies  in memory");
             try {
-                setRates(base, cryptoCoins.concat(listOfCoins).join(','));
+                setRates(base, cryptoCurrencies.concat(listOfcurrencies).join(','));
             } catch (e) {
                 console.error(e)
             }
             console.log("End loading data");
-            cacheProvider.set("coins", 'valid', ['USD', 'BRL', 'EUR','BTC', 'ETH']);
+            cacheProvider.set("currencies", 'valid', ['USD', 'BRL', 'EUR','BTC', 'ETH']);
             return new Promise((resolve) => {
                 setTimeout(() => {
                     resolve("");
