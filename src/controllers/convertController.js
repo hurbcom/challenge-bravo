@@ -1,90 +1,68 @@
-let currencies = require('../services/currenciesService');
-const formatCurrency = require('format-currency');
-
-let cryptoCoins = ['BTC', 'ETH'];
-let listOfCoins = ['USD', 'BRL', 'EUR'];
-const cacheProvider = require('../services/cacheService').instance();
-var BigNumbers = require('big-numbers');
+let currencies = require('../services/loadDataService');
+let paramsFilter = require('./filters/paramsFIlter');
+require('../services/cacheService').instance();
+let numbersUtil = require("../util/numbers");
 
 currenciesConvert = new currencies();
 
 exports.get = async (req, res, next) => {
     try {
-        let from = req.query.from.toUpperCase() , to = req.query.to.toUpperCase(), amount = req.query.amount;
-            if (paramsFilters(req.query)) {
-            var valueconvert = await currenciesConvert.getConversionCurrencies(from, to, amount);
+        console.log("converting ");
+        let from = req.query.from.toUpperCase(), to = req.query.to.toUpperCase(), amount = req.query.amount;
+        if (paramsFilter.paramsFilters(req.query)) {
+            const valueconvert = await currenciesConvert.getConversionCurrencies(from, to, amount);
             const response = await setResponse(
                 from,
                 amount,
                 to,
-                await valueconvert
+                valueconvert
             );
+            console.log("Success")
             res.status(200).json(response);
         } else {
-            res.status(400).json({error: 'Something failed!'});
+            console.log("400")
+            res.status(400).json({error: 'Something failed'});
         }
     } catch (err) {
+        console.log("Error")
         next(err);
     }
 };
 
 exports.getfriendly = ('/:from/:to/:amount', async function (req, res, next) {
     try {
+        console.log("converting ");
         let from = req.params.from.toUpperCase(), to = req.params.to.toUpperCase(), amount = req.params.amount;
-        if (paramsFilters(req.params)) {
-            var valueconvert = await currenciesConvert.getConversionCurrencies(from, to, amount);
+        if (paramsFilter.paramsFilters(req.params)) {
+            const valueconvert = await currenciesConvert.getConversionCurrencies(from, to, amount);
             const response = await setResponse(
                 from,
                 amount,
                 to,
                 await valueconvert
             );
+            console.log("Success")
             res.status(200).json(response);
         } else {
             res.status(400).json({error: 'Something failed!'});
+            console.log("400")
         }
     } catch (err) {
+        console.log("Error")
         next(err);
     }
 });
 
 
 const setResponse = async function setResponse(origin, amount, destiny, amountResult) {
-        return {
-            original: {
-                currency: origin,
-                    amount:     formatCurrency(amount, {minimumFractionDigits: 2})
-            },
-            result: {
-                currency: destiny,
-                    amount: formatCurrency(formatNumber(amountResult), {maxSignificant: 3})
-            }
-        };
+    return {
+        original: {
+            currency: origin,
+            amount: numbersUtil.formatCurrency(amount)
+        },
+        result: {
+            currency: destiny,
+            amount: numbersUtil.formatCurrency(amountResult)
+        }
+    };
 };
-
-//const setResponse = async (origin, amount, destiny, amountResult) => ();
-
-
-const formatNumber = function (value){
-    var numbers = new BigNumbers();
-    var number = numbers.of(value);
-    return numbers.format(number)
-}
-
-const paramsFilters = function isRatesDateValid(req) {
-        return (cryptoCoins.includes(req.from) || listOfCoins.includes(req.from))
-        &&
-        (cryptoCoins.includes(req.to) || listOfCoins.includes(req.to))
-        && ValidateNumber(req.amount);
-
-
-};
-
-/**
- * @return {boolean}
- */
-function ValidateNumber(strNumber) {
-        const regExp = new RegExp("^\\d+(\\.\\d+)?$");
-        return regExp.test(strNumber); // or just: /^\d+$/.test(strNumber);
-
-}

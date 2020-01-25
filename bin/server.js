@@ -1,56 +1,54 @@
 #!/usr/bin/env node
 
 const app = require('../src/app');
-const schedule = require('../src/schedule/currencyLoad');
-const currencies = require('../src/services/currenciesService');
-const cacheProvider = require('../src/services/cacheService').instance();
+const schedule = require('../src/schedule/loadCurrenciesScheduler');
+const currencies = require('../src/services/loadDataService');
 const debug = require('debug')('teste:server');
 const http = require('http');
-var port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 
 const {loadRates} = new currencies();
 const server = http.createServer(app);
 
 loadRates().then(response => {
     schedule.init();
-    app.set('port', port);
 
     server.listen(port);
     server.on('error', onError);
     server.on('listening', onListening);
-    
+
 });
 
 
 function normalizePort(val) {
     var port = parseInt(val, 10);
-  
+
     if (isNaN(port)) {
       // named pipe
       return val;
     }
-  
+
     if (port >= 0) {
       // port number
       return port;
     }
-  
+
     return false;
   }
-  
+
   /**
    * Event listener for HTTP server "error" event.
    */
-  
+
   function onError(error) {
     if (error.syscall !== 'listen') {
       throw error;
     }
-  
+
     var bind = typeof port === 'string'
       ? 'Pipe ' + port
       : 'Port ' + port;
-  
+
     // handle specific listen errors with friendly messages
     switch (error.code) {
       case 'EACCES':
@@ -65,11 +63,7 @@ function normalizePort(val) {
         throw error;
     }
   }
-  
-  /**
-   * Event listener for HTTP server "listening" event.
-   */
-  
+
   function onListening() {
     var addr = server.address();
     var bind = typeof addr === 'string'

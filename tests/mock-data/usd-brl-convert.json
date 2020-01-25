@@ -1,7 +1,7 @@
 {
     "original": {
         "currency": "USD",
-        "amount": "2.00"
+        "amount": "2"
     },
     "result": {
         "currency": "BRL",
