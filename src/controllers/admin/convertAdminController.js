@@ -50,16 +50,18 @@ function setData(req, currencyIsEnable, res, next, currency) {
     }
 }
 
-exports.updateRate = async (req, res, next) => {
-    let currency = req.body.currency;
+function extractedNotInListCurrenciesActive(req, res, next, currency) {
     let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
     let currencyIsEnable = (!currentCurrencies.includes(currency));
     setData(req, currencyIsEnable, res, next, currency);
+}
+
+exports.updateRate = async (req, res, next) => {
+    let currency = req.body.currency;
+    extractedNotInListCurrenciesActive(req, res, next, currency);
 };
 
 exports.deleteCurrency = async (req, res, next) => {
     let currency = req.params.currency;
-    let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
-    let currencyIsEnable = (!currentCurrencies.includes(currency));
-    setData(req, currencyIsEnable, res, next, currency);
+    extractedNotInListCurrenciesActive(req, res, next, currency);
 };
