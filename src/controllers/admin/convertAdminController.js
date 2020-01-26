@@ -32,7 +32,8 @@ function setData(req, currencyIsEnable, res, next, currency) {
             let base = cacheProvider.get("Rates", 'base');
             switch (req.method) {
                 case 'PUT':
-                    currencies.getRate(base, currency);
+                    currencies.addRate(base, currency);
+                    break;
                 case 'POST':
                     currencies.addRate(base, currency);
                     break;

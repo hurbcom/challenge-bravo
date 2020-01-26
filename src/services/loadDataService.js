@@ -58,7 +58,7 @@ class LoadData {
 
         function setRates(keyName = base, to) {
             try {
-                criptService.getRate(keyName, to);
+                criptService.addRate(keyName, to);
             } catch (e) {
                 console.error(e)
             }
