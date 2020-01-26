@@ -42,7 +42,6 @@ exports.delete = function (from, to) {
     currencies = removeArray(currencies, to);
     cacheProvider.set("currencies", 'valid', currencies);
     cacheProvider.delete("Rates", to.toString());
-    console.log(cacheProvider.get("currencies", 'valid'))
 };
 
 let removeArray = function (array, to) {
