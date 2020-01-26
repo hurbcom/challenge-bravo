@@ -5,30 +5,10 @@ let currencies = require('../../services/currenciesService');
 require('../../services/loadDataService');
 
 exports.createRate = async (req, res, next) => {
-    try {
-        let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
-        let currency = req.body.currency;
-
-        if (currentCurrencies.includes(currency)) {
-            res.status(400).json("Bad Request! This  currency: " + currency + " is registered");
-            return;
-        }
-        let paramsIsValid = paramsFilter.paramsFiltersCreate(currency);
-        if (!paramsIsValid) {
-            res.status(500).send({error: 'Something failed!'});
-            return
-        }
-        if (paramsIsValid) {
-            let base = cacheProvider.get("Rates", 'base');
-            currencies.addRate(base, currency);
-
-            res.status(201).json("Successful to create the currency:" + currency);
-        } else {
-            res.status(400).json("Bad Request");
-        }
-    } catch (err) {
-        next(err);
-    }
+    let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
+    let currency = req.body.currency;
+    let currencyIsEnable = (currentCurrencies.includes(currency));
+    setData(req, currencyIsEnable, res, next, currency);
 };
 
 
@@ -41,19 +21,26 @@ exports.getGeAll = async (req, res, next) => {
     }
 };
 
-exports.updateRate = async (req, res, next) => {
+function setData(req, currencyIsEnable, res, next, currency) {
     try {
-        let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
-        let currency = req.body.currency;
-        if (!currentCurrencies.includes(currency)) {
+        if (currencyIsEnable) {
             res.status(400).json("Bad Request");
             return;
         }
         let paramsIsValid = paramsFilter.paramsFiltersCreate(currency);
         if (paramsIsValid) {
             let base = cacheProvider.get("Rates", 'base');
-            currencies.getRate(base, currency);
-
+            switch (req.method) {
+                case 'PUT':
+                    currencies.getRate(base, currency);
+                case 'POST':
+                    currencies.addRate(base, currency);
+                    break;
+                case 'DELETE':
+                    currencies.delete(base, currency);
+                    break;
+                default:
+            }
             res.status(201).json("Successful to update the currency:" + currency);
         } else {
             res.status(400).json("Bad Request");
@@ -61,30 +48,18 @@ exports.updateRate = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+}
+
+exports.updateRate = async (req, res, next) => {
+    let currency = req.body.currency;
+    let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
+    let currencyIsEnable = (!currentCurrencies.includes(currency));
+    setData(req, currencyIsEnable, res, next, currency);
 };
 
 exports.deleteCurrency = async (req, res, next) => {
-    try {
-        let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
-        let currency = req.params.currency;
-        if (!currentCurrencies.includes(currency)) {
-            res.status(400).json("Bad Request");
-            return;
-        }
-        let paramsIsValid = paramsFilter.paramsFiltersCreate(currency);
-        if (!paramsIsValid) {
-            res.status(500).send({error: 'Something failed!'});
-            return
-        }
-        if (paramsIsValid) {
-            let base = cacheProvider.get("Rates", 'base');
-            currencies.delete(base, currency);
-
-            res.status(201).json("Successful to delete the currency:" + currency);
-        } else {
-            res.status(400).json("There is no data for this currency:" + currency);
-        }
-    } catch (err) {
-        next(err);
-    }
+    let currency = req.params.currency;
+    let currentCurrencies = Array.from(cacheProvider.get("currencies", 'valid'));
+    let currencyIsEnable = (!currentCurrencies.includes(currency));
+    setData(req, currencyIsEnable, res, next, currency);
 };

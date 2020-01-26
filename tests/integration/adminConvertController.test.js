@@ -94,7 +94,7 @@ describe("convertController.get", () => {
             const response = await request(app)
                 .post(endpointUrl)
                 .send({title: "Missing done property"});
-            expect(response.statusCode).toBe(500);
+            expect(response.statusCode).toBe(400);
         }
     );
 });
