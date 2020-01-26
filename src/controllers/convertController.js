@@ -6,29 +6,14 @@ let numbersUtil = require("../util/numbers");
 currenciesConvert = new currencies();
 
 exports.get = async (req, res, next) => {
-    try {
-        let from = req.query.from.toUpperCase(), to = req.query.to.toUpperCase(), amount = req.query.amount;
-        if (paramsFilter.paramsFilters(req.query)) {
-            const valueconvert = await currenciesConvert.getConversionCurrencies(from, to, amount);
-            const response = await setResponse(
-                from,
-                amount,
-                to,
-                valueconvert
-            );
-            res.status(200).json(response);
-        } else {
-            res.status(400).json({error: 'Bad Request'});
-        }
-    } catch (err) {
-        next(err);
-    }
+    let from = req.query.from.toUpperCase(), to = req.query.to.toUpperCase(), amount = req.query.amount;
+    let  parameters = req.query;
+    await convertion(req, from, to, amount, res, next,  parameters);
 };
 
-exports.getfriendly = ("/:from/:to/:amount", async function (req, res, next) {
+async function convertion(req, from, to, amount, res, next, parameters) {
     try {
-        let from = req.params.from.toUpperCase(), to = req.params.to.toUpperCase(), amount = req.params.amount;
-        if (paramsFilter.paramsFilters(req.params)) {
+        if (paramsFilter.paramsFilters(parameters)) {
             const valueconvert = await currenciesConvert.getConversionCurrencies(from, to, amount);
             const response = await setResponse(
                 from,
@@ -43,6 +28,12 @@ exports.getfriendly = ("/:from/:to/:amount", async function (req, res, next) {
     } catch (err) {
         next(err);
     }
+}
+
+exports.getfriendly = ("/:from/:to/:amount", async function (req, res, next) {
+    let from = req.params.from.toUpperCase(), to = req.params.to.toUpperCase(), amount = req.params.amount;
+    let parameters = req.params;
+    await convertion(req, from, to, amount, res, next, parameters);
 });
 
 

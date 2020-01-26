@@ -19,7 +19,6 @@ beforeEach(() => {
 
 describe("convertController.get", () => {
     test("should return 200 OK" + endpointUrl + "", async () => {
-        console.log(endpointUrl);
         const response = await request(app).get(endpointUrl);
         expect(response.statusCode).toBe(200);
         let rates = JSON.parse(JSON.stringify(response.body));
