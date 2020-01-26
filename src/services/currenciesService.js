@@ -1,6 +1,13 @@
 require('express');
 const request = require("request"), cacheProvider = require('./cacheService').instance();
 
+function populateMemory(key, from, value) {
+    cacheProvider.delete("Rates", key.toString());
+    cacheProvider.delete("Rates", "base");
+    cacheProvider.set("Rates", 'base', from, 86400000);
+    cacheProvider.set("Rates", key.toString(), value, 86400000);
+}
+
 exports.getRate = function (from, to) {
 
     request(`https://min-api.cryptocompare.com/data/price?fsym=${from}&tsyms=${to}`, function (error, response, body) {
@@ -8,10 +15,7 @@ exports.getRate = function (from, to) {
             const currentRate = JSON.parse(body);
             let currencies = Array.from(cacheProvider.get("currencies", 'valid'));
             Object.entries(currentRate).forEach(([key, value]) => {
-                cacheProvider.delete("Rates", key.toString());
-                cacheProvider.delete("Rates", "base");
-                cacheProvider.set("Rates", 'base', from, 86400000);
-                cacheProvider.set("Rates", key.toString(), value, 86400000);
+                populateMemory(key, from, value);
             });
             cacheProvider.set("currencies", 'valid', currencies);
         } catch (e) {
@@ -28,10 +32,7 @@ exports.addRate = function (from, to) {
             const currentRate = JSON.parse(body);
             let currencies = Array.from(cacheProvider.get("currencies", 'valid'));
             Object.entries(currentRate).forEach(([key, value]) => {
-                cacheProvider.delete("Rates", key.toString());
-                cacheProvider.delete("Rates", "base");
-                cacheProvider.set("Rates", 'base', from, 86400000);
-                cacheProvider.set("Rates", key.toString(), value, 86400000);
+                populateMemory(key, from, value);
                 currencies.push(key.toString());
             });
             cacheProvider.set("currencies", 'valid', currencies);

@@ -10,9 +10,11 @@ exports.paramsFilters = function (req) {
             &&  enableCurrency.includes(req.from)) )
         &&
         ((cryptoCurrencies.includes(req.to) || listOfCurrencies.includes(req.to))  &&  enableCurrency.includes(req.to))
-        && numbersUtil.validateNumber(req.amount);
+        && numbersUtil.validateNumber(req.amount) && req.from.toString().toLocaleLowerCase() != "base"  && req.from.toString().toLocaleLowerCase() != "base" ;
 };
 
 exports.paramsFiltersCreate = function (currency) {
-    return (cryptoCurrencies.includes(currency) || listOfCurrencies.includes(currency));
+    return (
+        (cryptoCurrencies.includes(currency) || listOfCurrencies.includes(currency)
+            && currency.toString().toLocaleLowerCase() != "base" ))
 };
