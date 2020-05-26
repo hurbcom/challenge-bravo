@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter", "CurrencyConverter.csproj", "{7E2605E6-CD5F-4776-9736-7E8A6749B02B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter.API", "CurrencyConverter.API.csproj", "{7E2605E6-CD5F-4776-9736-7E8A6749B02B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter.Domain", "..\CurrencyConverter.Domain\CurrencyConverter.Domain.csproj", "{13F0C945-9942-4144-A986-A2747E10C85A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter.Infrasctructure", "..\CurrencyConverter.Infrasctructure\CurrencyConverter.Infrasctructure.csproj", "{9A9AC205-C88A-4F7A-A128-3AE7FE6ACF55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter.Service", "..\CurrencyConverter.Service\CurrencyConverter.Service.csproj", "{DCAE5D31-3C6A-4B7F-ADA4-F87A6E891183}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{7E2605E6-CD5F-4776-9736-7E8A6749B02B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E2605E6-CD5F-4776-9736-7E8A6749B02B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E2605E6-CD5F-4776-9736-7E8A6749B02B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13F0C945-9942-4144-A986-A2747E10C85A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13F0C945-9942-4144-A986-A2747E10C85A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13F0C945-9942-4144-A986-A2747E10C85A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13F0C945-9942-4144-A986-A2747E10C85A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A9AC205-C88A-4F7A-A128-3AE7FE6ACF55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A9AC205-C88A-4F7A-A128-3AE7FE6ACF55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A9AC205-C88A-4F7A-A128-3AE7FE6ACF55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A9AC205-C88A-4F7A-A128-3AE7FE6ACF55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCAE5D31-3C6A-4B7F-ADA4-F87A6E891183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCAE5D31-3C6A-4B7F-ADA4-F87A6E891183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCAE5D31-3C6A-4B7F-ADA4-F87A6E891183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCAE5D31-3C6A-4B7F-ADA4-F87A6E891183}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
