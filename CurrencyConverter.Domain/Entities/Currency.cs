@@ -9,9 +9,9 @@ namespace CurrencyConverter.Domain.Entities
     public class Currency : IEntity
     {
         public int id { get; set; }
-        string name { get; set; }
-        float rate { get; set; }
-        string @base { get; set; }
-        currencyType type { get; set; }
+        public string name { get; set; }
+        public float rate { get; set; }
+        public string @base { get; set; }
+        public currencyType type { get; set; }
     }
 }
