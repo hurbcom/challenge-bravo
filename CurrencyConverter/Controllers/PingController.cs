@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CurrencyConverter.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -13,9 +14,11 @@ namespace currencyConverter.API.Controllers
     public class PingController : ControllerBase
     {
         private readonly ILogger<PingController> _logger;
+        private DatabaseContext _ctx;
 
-        public PingController(ILogger<PingController> logger)
+        public PingController(ILogger<PingController> logger, DatabaseContext ctx)
         {
+            _ctx = ctx;
             _logger = logger;
         }
 
@@ -32,7 +35,7 @@ namespace currencyConverter.API.Controllers
                 Date = d,
                 Msg = "I'm alive",
                 MarketPing = market.IsSuccessStatusCode,
-                CryptoPing = cryto.IsSuccessStatusCode
+                CryptoPing = cryto.IsSuccessStatusCode,
             };
 
             _logger.LogInformation($"User called ping at {d}");
