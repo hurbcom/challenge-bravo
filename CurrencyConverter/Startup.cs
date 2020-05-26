@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CurrencyConverter.Infrasctructure;
 using CurrencyConverter.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,7 +47,7 @@ namespace CurrencyConverter
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DatabaseContext databaseContext)
         {
             if (env.IsDevelopment())
             {
@@ -58,6 +59,7 @@ namespace CurrencyConverter
                 app.UseHttpsRedirection();
             }
 
+            databaseContext.EnsureSeedDataForContext();
             app.UseMvc();
         }
     }
