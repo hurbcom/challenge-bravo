@@ -1,3 +1,4 @@
+using CurrencyConverter.Domain.Helpers;
 using CurrencyConverter.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace CurrencyConverter.Domain.Entities
         string name { get; set; }
         float rate { get; set; }
         string @base { get; set; }
+        currencyType type { get; set; }
     }
 }
