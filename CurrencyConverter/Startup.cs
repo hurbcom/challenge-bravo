@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CurrencyConverter.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -15,16 +17,33 @@ namespace CurrencyConverter
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            Configuration = configuration;
+            _env = env;
+            _config = configuration;
+
+            loggerFactory.AddDebug(LogLevel.Debug);
+            var logger = loggerFactory.CreateLogger("Startup");
+            logger.LogWarning("Logger configured!");
+            loggerFactory.AddConsole();
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration _config { get; }
+        public IHostingEnvironment _env { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            string connectionString = "server=localhost;user id=sa;password=Hurb2020!;database=Currency";
+            services.AddDbContext<DatabaseContext>(db => db.UseMySql(connectionString));
+
+            services.AddMvc(opt =>
+            {
+                if (!_env.IsDevelopment())
+                {
+                    opt.Filters.Add(new RequireHttpsAttribute());
+                    opt.SslPort = 44388;
+                }
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -36,9 +55,9 @@ namespace CurrencyConverter
             else
             {
                 app.UseHsts();
+                app.UseHttpsRedirection();
             }
 
-            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
