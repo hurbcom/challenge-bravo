@@ -13,5 +13,6 @@ namespace CurrencyConverter.Domain.Entities
         public float rate { get; set; }
         public string @base { get; set; }
         public currencyType type { get; set; }
+        public bool isActive { get; set; } = true;
     }
 }
