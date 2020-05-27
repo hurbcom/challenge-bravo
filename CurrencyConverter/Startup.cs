@@ -34,7 +34,7 @@ namespace CurrencyConverter
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "server=localhost;user id=sa;password=Hurb2020!;database=Currency";
+            var connectionString = _config.GetConnectionString("localDb");
             services.AddDbContext<DatabaseContext>(db => db.UseMySql(connectionString));
 
             services.AddMvc(opt =>
