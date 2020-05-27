@@ -21,8 +21,16 @@ namespace CurrencyConverter.Infrasctructure.Repositories
 
         public virtual IEnumerable<T> GetAll<T>(Expression<Func<T, bool>> filter = null) where T : class, IEntity
         {
-            var items = _context.Set<T>().ToList().AsQueryable<T>().Where(filter);
-            return items;
+            if (filter != null)
+            {
+                var items = _context.Set<T>().ToList().AsQueryable<T>().Where(filter);
+                return items;
+            }
+            else
+            {
+                var items = _context.Set<T>().ToList();
+                return items;
+            }
         }
 
         public virtual int Insert<T>(T entity) where T : class, IEntity
