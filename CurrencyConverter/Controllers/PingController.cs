@@ -14,11 +14,9 @@ namespace currencyConverter.API.Controllers
     public class PingController : ControllerBase
     {
         private readonly ILogger<PingController> _logger;
-        private DatabaseContext _ctx;
 
-        public PingController(ILogger<PingController> logger, DatabaseContext ctx)
+        public PingController(ILogger<PingController> logger)
         {
-            _ctx = ctx;
             _logger = logger;
         }
 
