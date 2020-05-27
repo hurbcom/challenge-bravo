@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CurrencyConverter.Infrasctructure;
 using CurrencyConverter.Infrastructure;
+using CurrencyConverter.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,8 @@ namespace CurrencyConverter
 
         public void ConfigureServices(IServiceCollection services)
         {
+            DependencyInjection.Register(services);
+
             var connectionString = _config.GetConnectionString("localDb");
             services.AddDbContext<DatabaseContext>(db => db.UseMySql(connectionString));
 
