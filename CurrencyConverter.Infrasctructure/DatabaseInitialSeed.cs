@@ -12,7 +12,6 @@ namespace CurrencyConverter.Infrasctructure
         public static bool EnsureSeedDataForContext(this DatabaseContext context)
         {
             if (context.Currencies.Any()) return false;
-
             //initial currencies
             Configuration configuration = new Configuration()
             {
