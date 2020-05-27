@@ -24,13 +24,43 @@ namespace CurrencyConverter.API.Controllers
             _currencySrv = currencySrv;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        /// <summary>
+        ///Get all currencies registered
+        /// </summary>
+        [HttpGet(Name = "GetCurrencies")]
+        public IActionResult GetAll()
         {
-            var i = _currencySrv.GetAll();
+            try
+            {
+                var allItems = _currencySrv.GetAll();
+                _logger.LogInformation($"Called GetAll currency returned {allItems.ToList().Count}");
+                return new OkObjectResult(allItems);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Called GetAll currency returned error: {ex.Message}");
+                throw new Exception(ex.Message);
+            }
+        }
 
-            _logger.LogInformation($"User called currency");
-            return new OkObjectResult(i);
+        /// <summary>
+        ///Add new currency
+        /// </summary>
+        /// /// <param name="currency">Entity</param>
+        [HttpPost]
+        public IActionResult CreateCurrency([FromBody] Currency currency)
+        {
+            try
+            {
+                var Item = _currencySrv.AddCurrency(currency);
+                _logger.LogInformation($"Called Create currency returned {Item}");
+                return new OkObjectResult(currency);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Called Create currency returned error: {ex.Message}");
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

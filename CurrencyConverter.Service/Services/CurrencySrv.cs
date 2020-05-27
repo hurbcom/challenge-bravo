@@ -18,7 +18,8 @@ namespace CurrencyConverter.Service.Services
 
         public int AddCurrency(Currency currency)
         {
-            throw new NotImplementedException();
+            var item = _repo.Insert<Currency>(currency);
+            return item;
         }
 
         public bool DeleteCurrency(Currency currency)
