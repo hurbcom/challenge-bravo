@@ -23,10 +23,18 @@ namespace CurrencyConverter.Service.Services
             return item;
         }
 
-        public bool DeleteCurrency(Currency currency)
+        public bool DeleteCurrency(int currencyId)
         {
-            currency.isActive = false;
-            return _repo.Update<Currency>(currency);
+            if (currencyId > 0)
+            {
+                var item = _repo.GetById<Currency>(currencyId);
+                item.isActive = false;
+                return _repo.Update<Currency>(item);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public IEnumerable<Currency> GetAll()
@@ -36,17 +44,32 @@ namespace CurrencyConverter.Service.Services
 
         public IEnumerable<Currency> GetAllActive()
         {
-            return _repo.GetAll<Currency>().Where(i => i.isActive = true);
+            return _repo.GetAll<Currency>(i => i.isActive == true);
         }
 
         public Currency GetById(int id)
         {
-            return _repo.GetById<Currency>(id);
+            if (id > 0)
+            {
+                return _repo.GetById<Currency>(id);
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public bool UpdateCurrency(Currency currency)
+        public bool UpdateCurrency(int id, Currency currency)
         {
-            return _repo.Update<Currency>(currency);
+            if (id > 0)
+            {
+                currency.id = id;
+                return _repo.Update<Currency>(currency);
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

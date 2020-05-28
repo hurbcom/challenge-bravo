@@ -32,7 +32,7 @@ namespace CurrencyConverter.API.Controllers
         {
             try
             {
-                var allItems = _currencySrv.GetAll();
+                var allItems = _currencySrv.GetAllActive();
                 _logger.LogInformation($"Called GetAllCurrencies returned {allItems.ToList().Count}");
                 return new OkObjectResult(allItems);
             }
@@ -86,13 +86,14 @@ namespace CurrencyConverter.API.Controllers
         /// <summary>
         ///Update currency information
         /// </summary>
+        /// <param name="id">Entity Id</param>
         /// <param name="currency">Entiy to update</param>
-        [HttpPut]
-        public IActionResult UpdateCurrency([FromBody]Currency currency)
+        [HttpPut("{id}")]
+        public IActionResult UpdateCurrency(int id, [FromBody]Currency currency)
         {
             try
             {
-                var resul = _currencySrv.UpdateCurrency(currency);
+                var resul = _currencySrv.UpdateCurrency(id, currency);
                 _logger.LogInformation($"Called UpdateCurrency returned {resul}");
                 var item = _currencySrv.GetById(currency.id);
                 return new OkObjectResult(item);
@@ -107,15 +108,15 @@ namespace CurrencyConverter.API.Controllers
         /// <summary>
         ///Delete currency information
         /// </summary>
-        /// <param name="currency">Entiy to delete</param>
-        [HttpDelete]
-        public IActionResult DeleteCurrency([FromBody]Currency currency)
+        /// <param name="id">Entity Id</param>
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCurrency(int id)
         {
             try
             {
-                var resul = _currencySrv.DeleteCurrency(currency);
+                var resul = _currencySrv.DeleteCurrency(id);
                 _logger.LogInformation($"Called DeleteCurrency returned {resul}");
-                var item = _currencySrv.GetById(currency.id);
+                var item = _currencySrv.GetById(id);
                 return new OkObjectResult(item);
             }
             catch (Exception ex)
