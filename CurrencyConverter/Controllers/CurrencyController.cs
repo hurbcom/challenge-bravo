@@ -28,17 +28,17 @@ namespace CurrencyConverter.API.Controllers
         ///Get all currencies registered
         /// </summary>
         [HttpGet(Name = "GetCurrencies")]
-        public IActionResult GetAll()
+        public IActionResult GetAllCurrencies()
         {
             try
             {
                 var allItems = _currencySrv.GetAll();
-                _logger.LogInformation($"Called GetAll currency returned {allItems.ToList().Count}");
+                _logger.LogInformation($"Called GetAllCurrencies returned {allItems.ToList().Count}");
                 return new OkObjectResult(allItems);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Called GetAll currency returned error: {ex.Message}");
+                _logger.LogError($"Called GetAllCurrencies returned error: {ex.Message}");
                 throw new Exception(ex.Message);
             }
         }
@@ -53,12 +53,74 @@ namespace CurrencyConverter.API.Controllers
             try
             {
                 var Item = _currencySrv.AddCurrency(currency);
-                _logger.LogInformation($"Called Create currency returned {Item}");
+                _logger.LogInformation($"Called CreateCurrency returned {Item}");
                 return new OkObjectResult(currency);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Called Create currency returned error: {ex.Message}");
+                _logger.LogError($"Called CreateCurrency returned error: {ex.Message}");
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///Get currency by Id
+        /// </summary>
+        /// <param name="id">Entity Id</param>
+        [HttpGet("{id}", Name = "GetCurrencyById")]
+        public IActionResult GetCurrencyById(int id)
+        {
+            try
+            {
+                var item = _currencySrv.GetById(id);
+                _logger.LogInformation($"Called GetCurrencyById returned {item}");
+                return new OkObjectResult(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Called GetCurrencyById returned error: {ex.Message}");
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///Update currency information
+        /// </summary>
+        /// <param name="currency">Entiy to update</param>
+        [HttpPut]
+        public IActionResult UpdateCurrency([FromBody]Currency currency)
+        {
+            try
+            {
+                var resul = _currencySrv.UpdateCurrency(currency);
+                _logger.LogInformation($"Called UpdateCurrency returned {resul}");
+                var item = _currencySrv.GetById(currency.id);
+                return new OkObjectResult(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Called UpdateCurrency returned error: {ex.Message}");
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///Delete currency information
+        /// </summary>
+        /// <param name="currency">Entiy to delete</param>
+        [HttpDelete]
+        public IActionResult DeleteCurrency([FromBody]Currency currency)
+        {
+            try
+            {
+                var resul = _currencySrv.DeleteCurrency(currency);
+                _logger.LogInformation($"Called DeleteCurrency returned {resul}");
+                var item = _currencySrv.GetById(currency.id);
+                return new OkObjectResult(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Called DeleteCurrency returned error: {ex.Message}");
                 throw new Exception(ex.Message);
             }
         }
