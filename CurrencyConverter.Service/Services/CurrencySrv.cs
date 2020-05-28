@@ -3,6 +3,7 @@ using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CurrencyConverter.Service.Services
@@ -24,7 +25,8 @@ namespace CurrencyConverter.Service.Services
 
         public bool DeleteCurrency(Currency currency)
         {
-            throw new NotImplementedException();
+            currency.isActive = false;
+            return _repo.Update<Currency>(currency);
         }
 
         public IEnumerable<Currency> GetAll()
@@ -34,17 +36,17 @@ namespace CurrencyConverter.Service.Services
 
         public IEnumerable<Currency> GetAllActive()
         {
-            throw new NotImplementedException();
+            return _repo.GetAll<Currency>().Where(i => i.isActive = true);
         }
 
         public Currency GetById(int id)
         {
-            throw new NotImplementedException();
+            return _repo.GetById<Currency>(id);
         }
 
         public bool UpdateCurrency(Currency currency)
         {
-            throw new NotImplementedException();
+            return _repo.Update<Currency>(currency);
         }
     }
 }
