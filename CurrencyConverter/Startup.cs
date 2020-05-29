@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using CurrencyConverter.Infrasctructure;
 using CurrencyConverter.Infrastructure;
 using CurrencyConverter.Service;
+using Hangfire;
+using Hangfire.MySql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -40,6 +42,19 @@ namespace CurrencyConverter
             var connectionString = _config.GetConnectionString("localDb");
             services.AddDbContext<DatabaseContext>(db => db.UseMySql(connectionString));
 
+            services.AddHangfire(configuration => {
+                configuration.UseStorage(
+                    new MySqlStorage(
+                        connectionString,
+                        new MySqlStorageOptions
+                        {
+                            TablesPrefix = "Hangfire"
+                        }
+                    )
+                );
+            });
+            services.AddHangfireServer();
+
             services.AddMvc(opt =>
             {
                 if (!_env.IsDevelopment())
@@ -63,6 +78,8 @@ namespace CurrencyConverter
             }
 
             databaseContext.EnsureSeedDataForContext();
+
+            app.UseHangfireDashboard();
             app.UseMvc();
         }
     }
