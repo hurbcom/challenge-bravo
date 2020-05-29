@@ -16,9 +16,9 @@ namespace CurrencyConverter.API.Controllers
     public class CurrencyController : ControllerBase
     {
         private readonly ILogger<CurrencyController> _logger;
-        private ICurrencySrv _currencySrv;
+        private ICurrencySrvc _currencySrv;
 
-        public CurrencyController(ILogger<CurrencyController> logger, ICurrencySrv currencySrv)
+        public CurrencyController(ILogger<CurrencyController> logger, ICurrencySrvc currencySrv)
         {
             _logger = logger;
             _currencySrv = currencySrv;

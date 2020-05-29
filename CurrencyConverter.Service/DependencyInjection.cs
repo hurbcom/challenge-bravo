@@ -15,7 +15,8 @@ namespace CurrencyConverter.Service
         public static void Register(IServiceCollection svc)
         {
             //Service
-            svc.AddScoped<ICurrencySrv, CurrencySrv>();
+            svc.AddScoped<ICurrencySrvc, CurrencySrvc>();
+            svc.AddScoped<IPriceSrvc, PriceSrvc>();
 
             //Repository and integration
             svc.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));

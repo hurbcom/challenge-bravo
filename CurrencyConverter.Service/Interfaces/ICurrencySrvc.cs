@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CurrencyConverter.Service.Interfaces
 {
-    public interface ICurrencySrv
+    public interface ICurrencySrvc
     {
         Currency GetById(int id);
         IEnumerable<Currency> GetAll();

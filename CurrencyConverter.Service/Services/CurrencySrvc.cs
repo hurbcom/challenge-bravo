@@ -8,28 +8,33 @@ using System.Text;
 
 namespace CurrencyConverter.Service.Services
 {
-    public class CurrencySrv : ICurrencySrv
+    public class CurrencySrvc : ICurrencySrvc
     {
-        private readonly IRepositoryBase<Currency> _repo;
+        private readonly IRepositoryBase<Currency> _repoCurrency;
+        private readonly IPriceSrvc _prices;
+        private readonly Configuration _config;
 
-        public CurrencySrv(IRepositoryBase<Currency> repo)
+        public CurrencySrvc(IRepositoryBase<Currency> repoCurrency, IRepositoryBase<Configuration> repoConfig, IPriceSrvc price)
         {
-            _repo = repo;
-        }
+            _prices = price;
+            _repoCurrency = repoCurrency;
+            _config = repoConfig.GetAll<Configuration>().ToList().FirstOrDefault();
+        }        
 
         public int AddCurrency(Currency currency)
         {
-            var item = _repo.Insert<Currency>(currency);
-            return item;
+            currency.@base = _config.baseRate;
+            _prices.UpdateRate(currency);
+            return currency.id;
         }
 
         public bool DeleteCurrency(int currencyId)
         {
             if (currencyId > 0)
             {
-                var item = _repo.GetById<Currency>(currencyId);
+                var item = _repoCurrency.GetById<Currency>(currencyId);
                 item.isActive = false;
-                return _repo.Update<Currency>(item);
+                return _repoCurrency.Update<Currency>(item);
             }
             else
             {
@@ -39,19 +44,19 @@ namespace CurrencyConverter.Service.Services
 
         public IEnumerable<Currency> GetAll()
         {
-            return _repo.GetAll<Currency>();
+            return _repoCurrency.GetAll<Currency>();
         }
 
         public IEnumerable<Currency> GetAllActive()
         {
-            return _repo.GetAll<Currency>(i => i.isActive == true);
+            return _repoCurrency.GetAll<Currency>(i => i.isActive == true);
         }
 
         public Currency GetById(int id)
         {
             if (id > 0)
             {
-                return _repo.GetById<Currency>(id);
+                return _repoCurrency.GetById<Currency>(id);
             }
             else
             {
@@ -64,7 +69,7 @@ namespace CurrencyConverter.Service.Services
             if (id > 0)
             {
                 currency.id = id;
-                return _repo.Update<Currency>(currency);
+                return _repoCurrency.Update<Currency>(currency);
             }
             else
             {
