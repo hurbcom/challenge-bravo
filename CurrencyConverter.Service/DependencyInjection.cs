@@ -1,3 +1,4 @@
+using CurrencyConverter.Infrasctructure.ExternalIntegrations;
 using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Infrasctructure.Repositories;
 using CurrencyConverter.Service.Interfaces;
@@ -16,8 +17,9 @@ namespace CurrencyConverter.Service
             //Service
             svc.AddScoped<ICurrencySrv, CurrencySrv>();
 
-            //Repository
+            //Repository and integration
             svc.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            svc.AddScoped<ICryptoComparer, CryptoComparer>();
         }
     }
 }
