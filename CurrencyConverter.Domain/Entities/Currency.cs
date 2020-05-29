@@ -1,4 +1,3 @@
-using CurrencyConverter.Domain.Helpers;
 using CurrencyConverter.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace CurrencyConverter.Domain.Entities
         public string name { get; set; }
         public float rate { get; set; }
         public string @base { get; set; }
-        public currencyType type { get; set; }
         public bool isActive { get; set; } = true;
+        public DateTime lastUpdate { get; set; } = DateTime.Now;
     }
 }

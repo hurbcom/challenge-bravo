@@ -1,4 +1,5 @@
 using CurrencyConverter.Domain.Entities;
+using CurrencyConverter.Infrasctructure.ExternalIntegrations;
 using CurrencyConverter.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -27,8 +28,7 @@ namespace CurrencyConverter.Infrasctructure
             {
                 @base = "USD",
                 name = "USD",
-                rate = 1,
-                type = Domain.Helpers.currencyType.Market
+                rate = 0
             };
             context.Currencies.Add(usd);
 
@@ -36,8 +36,7 @@ namespace CurrencyConverter.Infrasctructure
             {
                 @base = usd.name,
                 name = "BRL",
-                rate = 0,
-                type = Domain.Helpers.currencyType.Market
+                rate = 0
             };
             context.Currencies.Add(brl);
 
@@ -45,8 +44,7 @@ namespace CurrencyConverter.Infrasctructure
             {
                 @base = usd.name,
                 name = "EUR",
-                rate = 0,
-                type = Domain.Helpers.currencyType.Market
+                rate = 0
             };
             context.Currencies.Add(eur);
 
@@ -54,8 +52,7 @@ namespace CurrencyConverter.Infrasctructure
             {
                 @base = usd.name,
                 name = "BTC",
-                rate = 0,
-                type = Domain.Helpers.currencyType.Crypto
+                rate = 0
             };
             context.Currencies.Add(btc);
 
@@ -63,8 +60,7 @@ namespace CurrencyConverter.Infrasctructure
             {
                 @base = usd.name,
                 name = "ETH",
-                rate = 0,
-                type = Domain.Helpers.currencyType.Crypto
+                rate = 0
             };
             context.Currencies.Add(eth);
             var result = context.SaveChanges();
