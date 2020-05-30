@@ -84,28 +84,6 @@ namespace CurrencyConverter.API.Controllers
         }
 
         /// <summary>
-        ///Update currency information
-        /// </summary>
-        /// <param name="id">Entity Id</param>
-        /// <param name="currency">Entiy to update</param>
-        [HttpPut("{id}")]
-        public IActionResult UpdateCurrency(int id, [FromBody]Currency currency)
-        {
-            try
-            {
-                var resul = _currencySrv.UpdateCurrency(id, currency);
-                _logger.LogInformation($"Called UpdateCurrency returned {resul}");
-                var item = _currencySrv.GetById(currency.id);
-                return new OkObjectResult(item);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Called UpdateCurrency returned error: {ex.Message}");
-                throw new Exception(ex.Message);
-            }
-        }
-
-        /// <summary>
         ///Delete currency information
         /// </summary>
         /// <param name="id">Entity Id</param>

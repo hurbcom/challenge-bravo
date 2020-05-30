@@ -38,6 +38,7 @@ namespace CurrencyConverter
         public void ConfigureServices(IServiceCollection services)
         {
             DependencyInjection.Register(services);
+            services.AddScoped<IBackgroundJobsSrvc, BackgroundJobsSrvc>();
 
             var connectionString = _config.GetConnectionString("localDb");
             services.AddDbContext<DatabaseContext>(db => db.UseMySql(connectionString));
@@ -65,7 +66,7 @@ namespace CurrencyConverter
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DatabaseContext databaseContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DatabaseContext databaseContext, IBackgroundJobsSrvc backgroundJobs)
         {
             if (env.IsDevelopment())
             {
@@ -80,6 +81,7 @@ namespace CurrencyConverter
             databaseContext.EnsureSeedDataForContext();
 
             app.UseHangfireDashboard();
+            backgroundJobs.callUpdateAllCurrencyRates();
             app.UseMvc();
         }
     }

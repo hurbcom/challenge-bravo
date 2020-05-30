@@ -12,6 +12,5 @@ namespace CurrencyConverter.Service.Interfaces
         IEnumerable<Currency> GetAllActive();
         int AddCurrency(Currency currency);
         bool DeleteCurrency(int currencyId);
-        bool UpdateCurrency(int id, Currency currency);
     }
 }

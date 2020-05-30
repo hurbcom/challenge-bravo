@@ -14,19 +14,21 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
     {
         private readonly IRepositoryBase<Configuration> _repo;
         protected readonly ILogger<CryptoComparer> logger;
-        protected string baseCurrency { get; }
+        protected string baseCurrency { get; set; } = "";
 
         public PriceIntegration(IRepositoryBase<Configuration> repo, ILogger<CryptoComparer> logger)
         {
             this.logger = logger;
             _repo = repo;
-            baseCurrency = _repo.GetAll<Configuration>().ToList().FirstOrDefault().baseRate;
         }
 
         public abstract string getUrl(string currencyName);
 
         public string GrabLastPrice(string currencyName)
         {
+            if (!baseCurrency.Any())
+                baseCurrency = _repo.GetAll<Configuration>().ToList().FirstOrDefault().baseRate;
+
             var url = getUrl(currencyName);
             var cli = new HttpClient();
             var response = cli.GetAsync(url).Result;

@@ -9,5 +9,6 @@ namespace CurrencyConverter.Service.Interfaces
     {
         float Convert(Currency from, Currency to, float amount);
         bool UpdateRate(Currency currency);
+        bool UpdateAllActiveRates();
     }
 }

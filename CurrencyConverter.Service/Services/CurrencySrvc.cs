@@ -11,12 +11,10 @@ namespace CurrencyConverter.Service.Services
     public class CurrencySrvc : ICurrencySrvc
     {
         private readonly IRepositoryBase<Currency> _repoCurrency;
-        private readonly IPriceSrvc _prices;
         private readonly Configuration _config;
 
-        public CurrencySrvc(IRepositoryBase<Currency> repoCurrency, IRepositoryBase<Configuration> repoConfig, IPriceSrvc price)
+        public CurrencySrvc(IRepositoryBase<Currency> repoCurrency, IRepositoryBase<Configuration> repoConfig)
         {
-            _prices = price;
             _repoCurrency = repoCurrency;
             _config = repoConfig.GetAll<Configuration>().ToList().FirstOrDefault();
         }        
@@ -24,7 +22,6 @@ namespace CurrencyConverter.Service.Services
         public int AddCurrency(Currency currency)
         {
             currency.@base = _config.baseRate;
-            _prices.UpdateRate(currency);
             return currency.id;
         }
 
@@ -61,19 +58,6 @@ namespace CurrencyConverter.Service.Services
             else
             {
                 return null;
-            }
-        }
-
-        public bool UpdateCurrency(int id, Currency currency)
-        {
-            if (id > 0)
-            {
-                currency.id = id;
-                return _repoCurrency.Update<Currency>(currency);
-            }
-            else
-            {
-                return false;
             }
         }
     }
