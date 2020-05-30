@@ -7,7 +7,7 @@ namespace CurrencyConverter.Service.Interfaces
 {
     public interface IPriceSrvc
     {
-        float Convert(Currency from, Currency to, float amount);
+        float Convert(string from, string to, float amount);
         bool UpdateRate(Currency currency);
         bool UpdateAllActiveRates();
     }

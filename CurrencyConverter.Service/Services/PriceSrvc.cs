@@ -24,10 +24,13 @@ namespace CurrencyConverter.Service.Services
             _cache = cache;
         }
 
-        public float Convert(Currency from, Currency to, float amount)
+        public float Convert(string from, string to, float amount)
         {
-            var fromAmount = amount * from.rate;
-            var toAmount = fromAmount / to.rate;
+            var fromRate = float.Parse(_cache.GetString(from));
+            var toRate = float.Parse(_cache.GetString(to));
+
+            var fromAmount = amount * fromRate;
+            var toAmount = fromAmount / toRate;
 
             return toAmount;
         }
