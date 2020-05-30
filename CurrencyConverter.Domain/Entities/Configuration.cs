@@ -10,7 +10,5 @@ namespace CurrencyConverter.Domain.Entities
         public int id { get; set; }
         public int refreshTime { get; set; }
         public string baseRate { get; set; }
-        public int minRefresh { get; set; }
-        public int maxRefresh { get; set; }
     }
 }

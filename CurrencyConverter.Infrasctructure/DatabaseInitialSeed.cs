@@ -17,9 +17,7 @@ namespace CurrencyConverter.Infrasctructure
             Configuration configuration = new Configuration()
             {
                 baseRate = "USD",
-                refreshTime = 20,
-                minRefresh = 15,
-                maxRefresh = 60
+                refreshTime = 20
             };
             context.configurations.Add(configuration);
             context.SaveChanges();
