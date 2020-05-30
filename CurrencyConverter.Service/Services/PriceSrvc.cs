@@ -1,6 +1,7 @@
 using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,12 +14,14 @@ namespace CurrencyConverter.Service.Services
         public ICryptoComparer _cryptoComparer { get; }
         public ICurrencySrvc _currencySrvc { get; }
         public IRepositoryBase<Currency> _repo { get; }
+        public IDistributedCache _cache { get; }
 
-        public PriceSrvc(ICryptoComparer cryptoComparer, ICurrencySrvc currencySrvc, IRepositoryBase<Currency> repo)
+        public PriceSrvc(ICryptoComparer cryptoComparer, ICurrencySrvc currencySrvc, IRepositoryBase<Currency> repo, IDistributedCache cache)
         {
             _cryptoComparer = cryptoComparer;
             _currencySrvc = currencySrvc;
             _repo = repo;
+            _cache = cache;
         }
 
         public float Convert(Currency from, Currency to, float amount)
@@ -33,7 +36,15 @@ namespace CurrencyConverter.Service.Services
         {
             var latestRate = _cryptoComparer.GetLastestRate(currency.name);
             currency.rate = latestRate;
-            return _repo.Update<Currency>(currency);
+            if(_repo.Update<Currency>(currency))
+            {
+                _cache.SetString(currency.name, latestRate.ToString());
+            }
+            else
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool UpdateAllActiveRates()

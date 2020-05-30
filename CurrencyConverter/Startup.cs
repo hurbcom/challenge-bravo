@@ -56,6 +56,11 @@ namespace CurrencyConverter
             });
             services.AddHangfireServer();
 
+            services.AddDistributedRedisCache(opt =>
+            {
+                opt.Configuration = "127.0.0.1";
+            });
+
             services.AddMvc(opt =>
             {
                 if (!_env.IsDevelopment())
