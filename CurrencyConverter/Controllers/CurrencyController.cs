@@ -30,10 +30,16 @@ namespace CurrencyConverter.API.Controllers
         ///Get all currencies registered
         /// </summary>
         [HttpGet(Name = "GetCurrencies")]
-        public IActionResult GetAllCurrencies()
+        public IActionResult GetAllCurrencies([FromQuery] string from = "", [FromQuery] string to = "", [FromQuery] float amount = 0)
         {
             try
             {
+                if (from.Any() && to.Any() && amount > 0)
+                {
+                    var result = _priceSrvc.Convert(from, to, amount);
+                    return new OkObjectResult(result);
+                }
+
                 var allItems = _currencySrv.GetAllActive();
                 _logger.LogInformation($"Called GetAllCurrencies returned {allItems.ToList().Count}");
                 return new OkObjectResult(allItems);
