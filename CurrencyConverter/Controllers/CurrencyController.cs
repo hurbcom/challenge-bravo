@@ -17,11 +17,13 @@ namespace CurrencyConverter.API.Controllers
     {
         private readonly ILogger<CurrencyController> _logger;
         private ICurrencySrvc _currencySrv;
+        public IPriceSrvc _priceSrvc;
 
-        public CurrencyController(ILogger<CurrencyController> logger, ICurrencySrvc currencySrv)
+        public CurrencyController(ILogger<CurrencyController> logger, ICurrencySrvc currencySrv, IPriceSrvc priceSrvc)
         {
             _logger = logger;
             _currencySrv = currencySrv;
+            _priceSrvc = priceSrvc;
         }
 
         /// <summary>
@@ -53,6 +55,7 @@ namespace CurrencyConverter.API.Controllers
             try
             {
                 var Item = _currencySrv.AddCurrency(currency);
+                _priceSrvc.UpdateRate(currency);
                 _logger.LogInformation($"Called CreateCurrency returned {Item}");
                 return new OkObjectResult(currency);
             }
