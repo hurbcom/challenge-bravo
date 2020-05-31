@@ -1,14 +1,10 @@
 using CurrencyConverter.Domain.Entities;
-using CurrencyConverter.Domain.Interfaces;
 using CurrencyConverter.Infrasctructure.Interfaces;
-using CurrencyConverter.Infrasctructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
 {
@@ -29,9 +25,9 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
         }
 
         public float GetLastestRate(string currency)
-        {            
+        {
             string result = base.GrabLastPrice(currency);
-            float rate = JsonConvert.DeserializeObject<Dictionary<string,float>>(result).FirstOrDefault().Value;
+            float rate = JsonConvert.DeserializeObject<Dictionary<string, float>>(result).FirstOrDefault().Value;
             return rate;
         }
     }

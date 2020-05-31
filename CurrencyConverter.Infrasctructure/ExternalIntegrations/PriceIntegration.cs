@@ -1,12 +1,9 @@
 using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure.Interfaces;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 
 namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
 {
@@ -42,7 +39,7 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
             {
                 logger.LogError($"Error while grabbing last price for {currencyName}");
                 throw new Exception($"Error while grabbing last price for {currencyName}");
-            }           
+            }
         }
     }
 }

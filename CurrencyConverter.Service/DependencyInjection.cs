@@ -4,9 +4,6 @@ using CurrencyConverter.Infrasctructure.Repositories;
 using CurrencyConverter.Service.Interfaces;
 using CurrencyConverter.Service.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CurrencyConverter.Service
 {

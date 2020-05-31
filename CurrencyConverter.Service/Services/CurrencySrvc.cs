@@ -4,7 +4,6 @@ using CurrencyConverter.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CurrencyConverter.Service.Services
 {
@@ -19,21 +18,21 @@ namespace CurrencyConverter.Service.Services
             _repoCurrency = repoCurrency;
             _config = repoConfig.GetAll<Configuration>().ToList().FirstOrDefault();
             _price = price;
-        }        
+        }
 
         public int AddCurrency(string currencyName)
         {
             Currency currency = new Currency();
             currency.name = currencyName;
             currency.@base = _config.baseRate;
-            if(_price.UpdateRate(currency))
+            if (_price.UpdateRate(currency))
             {
                 return currency.id;
             }
             else
             {
                 throw new Exception($"Cannot create currency {currencyName}");
-            }             
+            }
         }
 
         public bool DeleteCurrency(int currencyId)

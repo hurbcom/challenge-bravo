@@ -3,9 +3,6 @@ using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CurrencyConverter.Service.Services
 {
@@ -38,7 +35,7 @@ namespace CurrencyConverter.Service.Services
             var latestRate = _cryptoComparer.GetLastestRate(currency.name);
             currency.rate = latestRate;
             currency.lastUpdate = DateTime.Now;
-            if(_repo.Update<Currency>(currency))
+            if (_repo.Update<Currency>(currency))
             {
                 try
                 {
@@ -47,7 +44,7 @@ namespace CurrencyConverter.Service.Services
                 catch (Exception)
                 {
                     //Logger pro Redis
-                }                
+                }
             }
             else
             {

@@ -3,9 +3,7 @@ using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
 using Hangfire;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CurrencyConverter
 {

@@ -1,8 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using CurrencyConverter.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyConverter.Infrastructure
 {

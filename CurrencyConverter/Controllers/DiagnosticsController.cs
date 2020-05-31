@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure.Interfaces;
-using CurrencyConverter.Infrastructure;
 using Hangfire;
 using Hangfire.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
 
 namespace currencyConverter.API.Controllers
 {
@@ -22,7 +18,7 @@ namespace currencyConverter.API.Controllers
         private readonly IDistributedCache _cache;
         private readonly ICryptoComparer _cryptoComparer;
         private readonly IRepositoryBase<Configuration> _repo;
-        
+
         public DiagnosticsController(ILogger<DiagnosticsController> logger, ICryptoComparer cryptoComparer, IDistributedCache cache, IRepositoryBase<Configuration> repo)
         {
             _logger = logger;
@@ -30,14 +26,14 @@ namespace currencyConverter.API.Controllers
             _cryptoComparer = cryptoComparer;
             _repo = repo;
         }
-        
+
         [HttpGet]
         public ActionResult<object> Get()
         {
             string d = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
             IMonitoringApi monitoringApi = JobStorage.Current.GetMonitoringApi();
 
-            bool externalConnection = false;            
+            bool externalConnection = false;
             try
             {
                 var rate = _cryptoComparer.GetLastestRate("BRL");
@@ -63,8 +59,8 @@ namespace currencyConverter.API.Controllers
             {
                 dbCheck = _repo.GetAll<Configuration>().ToList().Any();
             }
-            catch(Exception)
-            {  }
+            catch (Exception)
+            { }
 
             object ping = new
             {

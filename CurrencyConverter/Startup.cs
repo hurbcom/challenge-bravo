@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CurrencyConverter.Infrasctructure;
 using CurrencyConverter.Infrastructure;
 using CurrencyConverter.Service;
@@ -9,13 +5,11 @@ using Hangfire;
 using Hangfire.MySql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace CurrencyConverter
 {
@@ -43,7 +37,8 @@ namespace CurrencyConverter
             var connectionString = _config.GetConnectionString("localDb");
             services.AddDbContext<DatabaseContext>(db => db.UseMySql(connectionString));
 
-            services.AddHangfire(configuration => {
+            services.AddHangfire(configuration =>
+            {
                 configuration.UseStorage(
                     new MySqlStorage(
                         connectionString,
