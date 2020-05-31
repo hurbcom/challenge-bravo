@@ -37,6 +37,6 @@ sleep 10
 
 docker-compose up -d
 
+Write-Host "`n`n --- Script concluído ---`n" -ForegroundColor Green
 Write-Host "Endereço da API: http://localhost:8090/diagnostics`n" -ForegroundColor Cyan
- 
-docker logs -f CurrencyConverter
+Write-Host "Conectar aos logs: docker logs -f CurrencyConverter`n" -ForegroundColor Cyan 
