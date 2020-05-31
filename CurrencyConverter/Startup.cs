@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+using CurrencyConverter.Domain.Entities;
+using CurrencyConverter.API.DTO;
 
 namespace CurrencyConverter
 {
@@ -54,6 +57,8 @@ namespace CurrencyConverter
             {
                 opt.Configuration = connectionRedis;
             });
+
+            services.AddAutoMapper(m => m.CreateMap<Currency, CurrencyResponse>());
 
             services.AddMvc(opt =>
             {

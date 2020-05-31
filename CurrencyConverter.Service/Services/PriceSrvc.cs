@@ -2,55 +2,68 @@ using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace CurrencyConverter.Service.Services
 {
     public class PriceSrvc : IPriceSrvc
     {
-        public ICryptoComparer _cryptoComparer { get; }
-        public IRepositoryBase<Currency> _repo { get; }
-        public IDistributedCache _cache { get; }
+        private readonly ICryptoComparer _cryptoComparer;
+        private readonly IRepositoryBase<Currency> _repo;
+        private readonly IDistributedCache _cache;
+        private readonly ILogger<PriceSrvc> _logger;
 
-        public PriceSrvc(ICryptoComparer cryptoComparer, IRepositoryBase<Currency> repo, IDistributedCache cache)
+        public PriceSrvc(ICryptoComparer cryptoComparer, IRepositoryBase<Currency> repo, IDistributedCache cache, ILogger<PriceSrvc> logger)
         {
             _cryptoComparer = cryptoComparer;
             _repo = repo;
             _cache = cache;
+            _logger = logger;
         }
 
         public float Convert(string from, string to, float amount)
         {
-            var fromRate = float.Parse(_cache.GetString(from));
-            var toRate = float.Parse(_cache.GetString(to));
+            try
+            {
+                var fromRate = float.Parse(_cache.GetString(from));
+                var toRate = float.Parse(_cache.GetString(to));
 
-            var fromAmount = amount * fromRate;
-            var toAmount = fromAmount / toRate;
+                var fromAmount = amount * fromRate;
+                var toAmount = fromAmount / toRate;
 
-            return toAmount;
+                return toAmount;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Called Convert failed with {ex.Message}");
+                throw new Exception($"Converter failed");
+            }
         }
 
         public bool UpdateRate(Currency currency)
         {
-            var latestRate = _cryptoComparer.GetLastestRate(currency.name);
-            currency.rate = latestRate;
-            currency.lastUpdate = DateTime.Now;
-            if (_repo.Update<Currency>(currency))
+            try
             {
-                try
+                var latestRate = _cryptoComparer.GetLastestRate(currency.name);
+                currency.rate = latestRate;
+                currency.lastUpdate = DateTime.Now;
+                if (_repo.Update<Currency>(currency))
                 {
                     _cache.SetString(currency.name, latestRate.ToString());
                 }
-                catch (Exception)
+                else
                 {
-                    //Logger pro Redis
+                    _logger.LogError($"Database update failed to {currency.name}");
+                    throw new Exception($"Database update failed");
                 }
+                return true;
             }
-            else
+            catch (Exception ex)
             {
-                return false;
+                _logger.LogError($"Called UpdateRate failed with {ex.Message}");
+                throw new Exception($"Update rate failed");
             }
-            return true;
         }
     }
 }

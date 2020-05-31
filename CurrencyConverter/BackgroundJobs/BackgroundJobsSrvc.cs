@@ -20,9 +20,16 @@ namespace CurrencyConverter
 
         public void callUpdateAllCurrencyRates()
         {
-            Configuration config = _repo.GetAll<Configuration>().ToList().FirstOrDefault();
-            BackgroundJob.Enqueue(() => _currencySrvc.SyncAllActiveCurrencyRates());
-            RecurringJob.AddOrUpdate("upd-CurrenciesPrice", () => _currencySrvc.SyncAllActiveCurrencyRates(), Cron.MinuteInterval(config.refreshTime));
+            try
+            {
+                Configuration config = _repo.GetAll<Configuration>().ToList().FirstOrDefault();
+                BackgroundJob.Enqueue(() => _currencySrvc.SyncAllActiveCurrencyRates());
+                RecurringJob.AddOrUpdate("upd-CurrenciesPrice", () => _currencySrvc.SyncAllActiveCurrencyRates(), Cron.MinuteInterval(config.refreshTime));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error creating BackgroundJobs {ex.Message}");
+            }
         }
     }
 }

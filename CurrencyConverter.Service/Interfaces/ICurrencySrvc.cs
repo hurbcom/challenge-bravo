@@ -5,11 +5,10 @@ namespace CurrencyConverter.Service.Interfaces
 {
     public interface ICurrencySrvc
     {
-        Currency GetById(int id);
         IEnumerable<Currency> GetAll();
         IEnumerable<Currency> GetAllActive();
-        int AddCurrency(string currency);
-        bool DeleteCurrency(int currencyId);
+        Currency AddCurrency(string currencyName);
+        bool DeleteCurrency(string currencyName);
         bool SyncAllActiveCurrencyRates();
     }
 }
