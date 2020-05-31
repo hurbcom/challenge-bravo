@@ -12,14 +12,12 @@ namespace CurrencyConverter.Service.Services
     public class PriceSrvc : IPriceSrvc
     {
         public ICryptoComparer _cryptoComparer { get; }
-        public ICurrencySrvc _currencySrvc { get; }
         public IRepositoryBase<Currency> _repo { get; }
         public IDistributedCache _cache { get; }
 
-        public PriceSrvc(ICryptoComparer cryptoComparer, ICurrencySrvc currencySrvc, IRepositoryBase<Currency> repo, IDistributedCache cache)
+        public PriceSrvc(ICryptoComparer cryptoComparer, IRepositoryBase<Currency> repo, IDistributedCache cache)
         {
             _cryptoComparer = cryptoComparer;
-            _currencySrvc = currencySrvc;
             _repo = repo;
             _cache = cache;
         }
@@ -41,24 +39,20 @@ namespace CurrencyConverter.Service.Services
             currency.rate = latestRate;
             if(_repo.Update<Currency>(currency))
             {
-                _cache.SetString(currency.name, latestRate.ToString());
+                try
+                {
+                    _cache.SetString(currency.name, latestRate.ToString());
+                }
+                catch (Exception)
+                {
+                    //Logger pro Redis
+                }
+                
             }
             else
             {
                 return false;
             }
-            return true;
-        }
-
-        public bool UpdateAllActiveRates()
-        {
-            var allCurrencies = _currencySrvc.GetAllActive();
-
-            foreach (var item in allCurrencies)
-            {
-                if (!UpdateRate(item))
-                    throw new Exception("Fail when updating all currency rates");
-            };
             return true;
         }
     }

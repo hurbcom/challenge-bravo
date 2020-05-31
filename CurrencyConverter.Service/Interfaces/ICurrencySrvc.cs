@@ -10,7 +10,8 @@ namespace CurrencyConverter.Service.Interfaces
         Currency GetById(int id);
         IEnumerable<Currency> GetAll();
         IEnumerable<Currency> GetAllActive();
-        int AddCurrency(Currency currency);
+        int AddCurrency(string currency);
         bool DeleteCurrency(int currencyId);
+        bool SyncAllActiveCurrencyRates();
     }
 }

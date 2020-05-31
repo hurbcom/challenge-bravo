@@ -12,17 +12,28 @@ namespace CurrencyConverter.Service.Services
     {
         private readonly IRepositoryBase<Currency> _repoCurrency;
         private readonly Configuration _config;
+        private readonly IPriceSrvc _price;
 
-        public CurrencySrvc(IRepositoryBase<Currency> repoCurrency, IRepositoryBase<Configuration> repoConfig)
+        public CurrencySrvc(IRepositoryBase<Currency> repoCurrency, IRepositoryBase<Configuration> repoConfig, IPriceSrvc price)
         {
             _repoCurrency = repoCurrency;
             _config = repoConfig.GetAll<Configuration>().ToList().FirstOrDefault();
+            _price = price;
         }        
 
-        public int AddCurrency(Currency currency)
+        public int AddCurrency(string currencyName)
         {
+            Currency currency = new Currency();
+            currency.name = currencyName;
             currency.@base = _config.baseRate;
-            return currency.id;
+            if(_price.UpdateRate(currency))
+            {
+                return currency.id;
+            }
+            else
+            {
+                throw new Exception($"Cannot create currency {currencyName}");
+            }             
         }
 
         public bool DeleteCurrency(int currencyId)
@@ -59,6 +70,18 @@ namespace CurrencyConverter.Service.Services
             {
                 return null;
             }
+        }
+
+        public bool SyncAllActiveCurrencyRates()
+        {
+            var allCurrencies = GetAllActive();
+
+            foreach (var item in allCurrencies)
+            {
+                if (!_price.UpdateRate(item))
+                    throw new Exception("Fail when updating all currency rates");
+            };
+            return true;
         }
     }
 }

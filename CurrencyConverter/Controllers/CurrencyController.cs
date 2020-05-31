@@ -56,12 +56,11 @@ namespace CurrencyConverter.API.Controllers
         /// </summary>
         /// /// <param name="currency">Entity</param>
         [HttpPost]
-        public IActionResult CreateCurrency([FromBody] Currency currency)
+        public IActionResult CreateCurrency([FromBody] string currency)
         {
             try
             {
                 var Item = _currencySrv.AddCurrency(currency);
-                _priceSrvc.UpdateRate(currency);
                 _logger.LogInformation($"Called CreateCurrency returned {Item}");
                 return new OkObjectResult(currency);
             }

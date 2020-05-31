@@ -11,12 +11,12 @@ namespace CurrencyConverter
 {
     public class BackgroundJobsSrvc : IBackgroundJobsSrvc
     {
-        public IPriceSrvc PriceSrvc { get; }
+        public ICurrencySrvc _currencySrvc { get; }
         public IRepositoryBase<Configuration> _repo { get; }
 
-        public BackgroundJobsSrvc(IPriceSrvc priceSrvc, IRepositoryBase<Configuration> repo)
+        public BackgroundJobsSrvc(ICurrencySrvc currencySrvc, IRepositoryBase<Configuration> repo)
         {
-            PriceSrvc = priceSrvc;
+            _currencySrvc = currencySrvc;
             _repo = repo;
         }
 
@@ -28,8 +28,8 @@ namespace CurrencyConverter
         public void callUpdateAllCurrencyRates()
         {
             Configuration config = _repo.GetAll<Configuration>().ToList().FirstOrDefault();
-            BackgroundJob.Enqueue(() => PriceSrvc.UpdateAllActiveRates());
-            RecurringJob.AddOrUpdate("upd-CurrenciesPrice", () => PriceSrvc.UpdateAllActiveRates(), Cron.MinuteInterval(config.refreshTime));
+            BackgroundJob.Enqueue(() => _currencySrvc.SyncAllActiveCurrencyRates());
+            RecurringJob.AddOrUpdate("upd-CurrenciesPrice", () => _currencySrvc.SyncAllActiveCurrencyRates(), Cron.MinuteInterval(config.refreshTime));
         }
     }
 }
