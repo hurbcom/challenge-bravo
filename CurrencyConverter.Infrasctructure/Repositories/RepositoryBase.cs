@@ -47,14 +47,5 @@ namespace CurrencyConverter.Infrasctructure.Repositories
             else
                 return false;
         }
-
-        public virtual T GetById<T>(int id) where T : class, IEntity
-        {
-            var t = _context.Find<T>(id);
-            if (t != null)
-                return t;
-            else
-                return null;
-        }
     }
 }

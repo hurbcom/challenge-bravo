@@ -10,12 +10,12 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
     public abstract class PriceIntegration : IPriceIntegration
     {
         private readonly IRepositoryBase<Configuration> _repo;
-        protected readonly ILogger<CryptoComparer> logger;
+        protected readonly ILogger<PriceIntegration> _logger;
         protected string baseCurrency { get; set; } = "";
 
-        public PriceIntegration(IRepositoryBase<Configuration> repo, ILogger<CryptoComparer> logger)
+        public PriceIntegration(IRepositoryBase<Configuration> repo, ILogger<PriceIntegration> logger)
         {
-            this.logger = logger;
+            _logger = logger;
             _repo = repo;
         }
 
@@ -23,23 +23,31 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
 
         public string GrabLastPrice(string currencyName)
         {
-            if (!baseCurrency.Any())
-                baseCurrency = _repo.GetAll<Configuration>().ToList().FirstOrDefault().baseRate;
-
-            var url = getUrl(currencyName);
-            var cli = new HttpClient();
-            var response = cli.GetAsync(url).Result;
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var content = response.Content.ReadAsStringAsync().Result;
-                return content;
+                if (!baseCurrency.Any())
+                    baseCurrency = _repo.GetAll<Configuration>().ToList().FirstOrDefault().baseRate;
+
+                var url = getUrl(currencyName);
+                var cli = new HttpClient();
+                var response = cli.GetAsync(url).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = response.Content.ReadAsStringAsync().Result;
+                    return content;
+                }
+                else
+                {
+                    _logger.LogError($"Error while grabbing last price for {currencyName}");
+                    throw new Exception($"Error while grabbing last price for {currencyName}");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                logger.LogError($"Error while grabbing last price for {currencyName}");
-                throw new Exception($"Error while grabbing last price for {currencyName}");
+                throw ex;
             }
+
         }
     }
 }

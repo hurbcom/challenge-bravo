@@ -1,3 +1,6 @@
+using AutoMapper;
+using CurrencyConverter.API.DTO;
+using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure;
 using CurrencyConverter.Infrastructure;
 using Hangfire;
@@ -9,9 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using AutoMapper;
-using CurrencyConverter.Domain.Entities;
-using CurrencyConverter.API.DTO;
 
 namespace CurrencyConverter
 {
@@ -33,7 +33,7 @@ namespace CurrencyConverter
 
         public void ConfigureServices(IServiceCollection services)
         {
-            DependencyInjection.Register(services);            
+            DependencyInjection.Register(services);
 
             var connectionString = _config.GetConnectionString("localDb");
             services.AddDbContext<DatabaseContext>(db => db.UseMySql(connectionString));

@@ -5,9 +5,7 @@ using Hangfire.Storage;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CurrencyConverter.API
 {
@@ -61,7 +59,7 @@ namespace CurrencyConverter.API
         public bool BackgroundWorkers()
         {
             IMonitoringApi monitoringApi = JobStorage.Current.GetMonitoringApi();
-            return monitoringApi.Servers().Any(); 
+            return monitoringApi.Servers().Any();
         }
 
         public bool CacheServer()

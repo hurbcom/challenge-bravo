@@ -1,6 +1,5 @@
 using AutoMapper;
 using CurrencyConverter.API.DTO;
-using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,7 +17,7 @@ namespace CurrencyConverter.API.Controllers
         private readonly ICurrencySrvc _currencySrv;
         private readonly IPriceSrvc _priceSrvc;
         private readonly IMapper _m;
-        
+
         public CurrencyController(ILogger<CurrencyController> logger, ICurrencySrvc currencySrv, IPriceSrvc priceSrvc, IMapper m)
         {
             _logger = logger;
@@ -42,9 +41,9 @@ namespace CurrencyConverter.API.Controllers
                     return new OkObjectResult(result);
                 }
                 else
-                {                    
+                {
                     return new BadRequestObjectResult(new { Error = "Verify if these currencies exists and amount is positive" });
-                }                 
+                }
             }
             catch (Exception ex)
             {
@@ -60,7 +59,7 @@ namespace CurrencyConverter.API.Controllers
         public IActionResult GetAllCurrencies()
         {
             try
-            {                
+            {
                 var allItems = _currencySrv.GetAllActive().ToList();
                 var allItemsResponse = _m.Map<List<CurrencyResponse>>(allItems);
                 _logger.LogInformation($"Called GetAllCurrencies returned {allItems.ToList().Count} active items");
@@ -113,7 +112,7 @@ namespace CurrencyConverter.API.Controllers
                 {
                     return new NotFoundObjectResult(currencyName);
                 }
-                
+
             }
             catch (Exception ex)
             {

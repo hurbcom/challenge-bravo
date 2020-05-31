@@ -61,7 +61,7 @@ namespace CurrencyConverter.Service.Services
         public bool DeleteCurrency(string currencyName)
         {
             var result = GetAllActive().ToList().Where(c => c.name.Contains(currencyName));
-            
+
             if (result.Any())
             {
                 var item = result.FirstOrDefault();

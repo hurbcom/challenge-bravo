@@ -12,17 +12,27 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
     public class CryptoComparer : PriceIntegration, ICryptoComparer
     {
         protected IConfiguration config { get; set; }
+        private readonly ILogger<CryptoComparer> _logger;
 
         public CryptoComparer(IConfiguration config, IRepositoryBase<Configuration> repo, ILogger<CryptoComparer> logger) : base(repo, logger)
         {
             this.config = config;
+            _logger = logger;
         }
 
         public override string getUrl(string currencyName)
         {
-            var marketURL = config.GetSection("externalURLs:cryptoCompare").Value;
-            var URL = marketURL + $"data/price?fsym={currencyName}&tsyms={base.baseCurrency}";
-            return URL;
+            try
+            {
+                var marketURL = config.GetSection("externalURLs:cryptoCompare").Value;
+                var URL = marketURL + $"data/price?fsym={currencyName}&tsyms={base.baseCurrency}";
+                return URL;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Called getUrl returned error: {ex.Message}");
+                throw ex;
+            }
         }
 
         public float GetLastestRate(string currency)
@@ -35,7 +45,7 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
             }
             catch (Exception ex)
             {
-                logger.LogError($"Error while parsing last price for {currency}. {ex.Message}");
+                _logger.LogError($"Error while parsing last price for {currency}. {ex.Message}");
                 throw new Exception($"Cannot locate rate for {currency}");
             }
         }
