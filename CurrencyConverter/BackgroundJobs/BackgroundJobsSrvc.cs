@@ -18,11 +18,6 @@ namespace CurrencyConverter
             _repo = repo;
         }
 
-        public void callRevalidateCache()
-        {
-            throw new NotImplementedException();
-        }
-
         public void callUpdateAllCurrencyRates()
         {
             Configuration config = _repo.GetAll<Configuration>().ToList().FirstOrDefault();

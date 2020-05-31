@@ -1,6 +1,5 @@
 using CurrencyConverter.Infrasctructure;
 using CurrencyConverter.Infrastructure;
-using CurrencyConverter.Service;
 using Hangfire;
 using Hangfire.MySql;
 using Microsoft.AspNetCore.Builder;
@@ -22,7 +21,7 @@ namespace CurrencyConverter
 
             loggerFactory.AddDebug(LogLevel.Debug);
             var logger = loggerFactory.CreateLogger("Startup");
-            logger.LogWarning("Logger configured!");
+            logger.LogInformation("Logger started");
             loggerFactory.AddConsole();
         }
 
@@ -31,8 +30,7 @@ namespace CurrencyConverter
 
         public void ConfigureServices(IServiceCollection services)
         {
-            DependencyInjection.Register(services);
-            services.AddScoped<IBackgroundJobsSrvc, BackgroundJobsSrvc>();
+            DependencyInjection.Register(services);            
 
             var connectionString = _config.GetConnectionString("localDb");
             services.AddDbContext<DatabaseContext>(db => db.UseMySql(connectionString));
@@ -51,9 +49,10 @@ namespace CurrencyConverter
             });
             services.AddHangfireServer();
 
+            var connectionRedis = _config.GetConnectionString("redis");
             services.AddDistributedRedisCache(opt =>
             {
-                opt.Configuration = "127.0.0.1";
+                opt.Configuration = connectionRedis;
             });
 
             services.AddMvc(opt =>

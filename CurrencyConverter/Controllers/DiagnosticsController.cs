@@ -1,3 +1,4 @@
+using CurrencyConverter.API;
 using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure.Interfaces;
 using Hangfire;
@@ -18,61 +19,29 @@ namespace currencyConverter.API.Controllers
         private readonly IDistributedCache _cache;
         private readonly ICryptoComparer _cryptoComparer;
         private readonly IRepositoryBase<Configuration> _repo;
+        private readonly IDiagnostics _diagnostics;
 
-        public DiagnosticsController(ILogger<DiagnosticsController> logger, ICryptoComparer cryptoComparer, IDistributedCache cache, IRepositoryBase<Configuration> repo)
+        public DiagnosticsController(ILogger<DiagnosticsController> logger, IDiagnostics diagnostics)
         {
             _logger = logger;
-            _cache = cache;
-            _cryptoComparer = cryptoComparer;
-            _repo = repo;
+            _diagnostics = diagnostics;
         }
 
         [HttpGet]
         public ActionResult<object> Get()
         {
             string d = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
-            IMonitoringApi monitoringApi = JobStorage.Current.GetMonitoringApi();
-
-            bool externalConnection = false;
-            try
-            {
-                var rate = _cryptoComparer.GetLastestRate("BRL");
-                if (rate > 0)
-                {
-                    externalConnection = true;
-                }
-            }
-            catch (Exception)
-            { }
-
-            bool cacheCheck = false;
-            try
-            {
-                _cache.SetString("beat", "true");
-                cacheCheck = bool.Parse(_cache.GetString("beat"));
-            }
-            catch (Exception)
-            { }
-
-            bool dbCheck = false;
-            try
-            {
-                dbCheck = _repo.GetAll<Configuration>().ToList().Any();
-            }
-            catch (Exception)
-            { }
-
             object ping = new
             {
                 System = "Is system fully alive?",
                 Date = d,
-                external_integration = externalConnection,
-                Background_worker = monitoringApi.Servers().Any(),
-                cache_server = cacheCheck,
-                database = dbCheck
+                external_integration = _diagnostics.ExternalConnection(),
+                Background_worker = _diagnostics.BackgroundWorkers(),
+                cache_server = _diagnostics.CacheServer(),
+                database = _diagnostics.Database()
             };
 
-            _logger.LogInformation($"User called ping at {d}");
+            _logger.LogInformation($"User called diagnostics at {d}");
             return ping;
         }
     }
