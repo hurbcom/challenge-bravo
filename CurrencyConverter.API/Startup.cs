@@ -64,8 +64,8 @@ namespace CurrencyConverter
             {
                 if (!_env.IsDevelopment())
                 {
-                    opt.Filters.Add(new RequireHttpsAttribute());
-                    opt.SslPort = 44388;
+                    //opt.Filters.Add(new RequireHttpsAttribute());
+                    //opt.SslPort = 44390;
                 }
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -78,7 +78,8 @@ namespace CurrencyConverter
             }
             else
             {
-                app.UseHsts();
+                //app.UseHsts();
+                //app.UseHttpsRedirection();
             }
 
             app.UseCors(builder => builder
