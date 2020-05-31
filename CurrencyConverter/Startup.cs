@@ -76,6 +76,11 @@ namespace CurrencyConverter
                 app.UseHsts();
             }
 
+            app.UseCors(builder => builder
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .AllowAnyMethod());
+
             databaseContext.EnsureSeedDataForContext();
 
             app.UseHangfireDashboard();

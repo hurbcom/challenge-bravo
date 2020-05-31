@@ -1,13 +1,7 @@
 using CurrencyConverter.API;
-using CurrencyConverter.Domain.Entities;
-using CurrencyConverter.Infrasctructure.Interfaces;
-using Hangfire;
-using Hangfire.Storage;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 
 namespace currencyConverter.API.Controllers
 {
@@ -16,9 +10,6 @@ namespace currencyConverter.API.Controllers
     public class DiagnosticsController : ControllerBase
     {
         private readonly ILogger<DiagnosticsController> _logger;
-        private readonly IDistributedCache _cache;
-        private readonly ICryptoComparer _cryptoComparer;
-        private readonly IRepositoryBase<Configuration> _repo;
         private readonly IDiagnostics _diagnostics;
 
         public DiagnosticsController(ILogger<DiagnosticsController> logger, IDiagnostics diagnostics)
