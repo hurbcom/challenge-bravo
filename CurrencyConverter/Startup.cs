@@ -80,7 +80,6 @@ namespace CurrencyConverter
             else
             {
                 app.UseHsts();
-                app.UseHttpsRedirection();
             }
 
             databaseContext.EnsureSeedDataForContext();
