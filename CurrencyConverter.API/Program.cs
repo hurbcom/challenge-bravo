@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using System;
+using System.Threading;
 
 namespace CurrencyConverter
 {
@@ -7,6 +9,9 @@ namespace CurrencyConverter
     {
         public static void Main(string[] args)
         {
+            int processorCounter = Environment.ProcessorCount;
+            bool set = ThreadPool.SetMaxThreads(processorCounter, processorCounter);
+
             CreateWebHostBuilder(args).Build().Run();
         }
 

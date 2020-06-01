@@ -15,41 +15,13 @@ namespace CurrencyConverter.API.Controllers
     {
         private readonly ILogger<CurrencyController> _logger;
         private readonly ICurrencySrvc _currencySrv;
-        private readonly IPriceSrvc _priceSrvc;
         private readonly IMapper _m;
 
-        public CurrencyController(ILogger<CurrencyController> logger, ICurrencySrvc currencySrv, IPriceSrvc priceSrvc, IMapper m)
+        public CurrencyController(ILogger<CurrencyController> logger, ICurrencySrvc currencySrv, IMapper m)
         {
             _logger = logger;
             _currencySrv = currencySrv;
-            _priceSrvc = priceSrvc;
             _m = m;
-        }
-
-        /// <summary>
-        ///Get all currencies registered
-        /// </summary>
-        [HttpGet("/Converter")]
-        public IActionResult Converter([FromQuery] string from = "", [FromQuery] string to = "", [FromQuery] float amount = 0)
-        {
-            try
-            {
-                //Logger removed to maximize performance
-                if (from.Any() && to.Any() && amount > 0)
-                {
-                    var result = _priceSrvc.Convert(from, to, amount);
-                    return new OkObjectResult(result);
-                }
-                else
-                {
-                    return new BadRequestObjectResult(new { Error = "Verify if these currencies exists and amount is positive" });
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Called Converter returned error: {ex.Message}");
-                return new BadRequestObjectResult(new { Error = "Currency not found" });
-            }
         }
 
         /// <summary>
