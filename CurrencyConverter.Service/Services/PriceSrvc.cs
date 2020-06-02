@@ -22,25 +22,6 @@ namespace CurrencyConverter.Service.Services
             _logger = logger;
         }
 
-        public float Convert(string from, string to, float amount)
-        {
-            try
-            {
-                var fromRate = float.Parse(_cache.GetString(from));
-                var toRate = float.Parse(_cache.GetString(to));
-
-                var fromAmount = amount * fromRate;
-                var toAmount = fromAmount / toRate;
-
-                return toAmount;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Called Convert failed with {ex.Message}");
-                throw new Exception($"Converter failed");
-            }
-        }
-
         public bool UpdateRate(Currency currency)
         {
             try

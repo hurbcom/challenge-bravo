@@ -16,6 +16,7 @@ namespace CurrencyConverter
             svc.AddScoped<ICurrencySrvc, CurrencySrvc>();
             svc.AddScoped<IPriceSrvc, PriceSrvc>();
             svc.AddScoped<IDiagnostics, Diagnostics>();
+            svc.AddSingleton<IConverterSrvc, ConverterSrvc>();
 
             //Repository, integration and workers
             svc.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));

@@ -1,3 +1,4 @@
+using CurrencyConverter.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
@@ -11,30 +12,30 @@ namespace CurrencyConverter.API.Controllers
     [Route("[controller]")]
     public class ConverterController : ControllerBase
     {
+        private readonly IConverterSrvc _converterSrvc;
+        public ConverterController(IConverterSrvc converterSrvc)
+        {
+            _converterSrvc = converterSrvc;
+        }
+
         [HttpGet("/Converter")]
-        public async Task<IActionResult> Converter([FromServices]IDistributedCache _cache, [FromQuery] string from = "", [FromQuery] string to = "", [FromQuery] float amount = 0)
+        public async Task<IActionResult> Converter([FromQuery] string from, [FromQuery] string to, [FromQuery] decimal amount)
         {
             try
             {
-                float result = 0;
                 //Logger removed to maximize performance
-                if (from.Any() && to.Any() && amount > 0)
-                {
-                    await Task.Run(async () =>
-                    {
-                        var fromRate = float.Parse(await _cache.GetStringAsync(from));
-                        var toRate = float.Parse(await _cache.GetStringAsync(to));
+                if (from == null)
+                    return new BadRequestObjectResult(new { Error = "variable 'from' not found or empty" });
 
-                        var fromAmount = amount * fromRate;
-                        var toAmount = fromAmount / toRate;
-                        result = toAmount;
-                    });
-                    return new OkObjectResult(result);
-                }
-                else
-                {
-                    return new BadRequestObjectResult(new { Error = "Verify if these currencies exists and amount is positive" });
-                }
+                if (to == null)
+                    return new BadRequestObjectResult(new { Error = "variable 'to' not found or empty" });
+
+                if (amount <= 0)
+                    return new BadRequestObjectResult(new { Error = "variable 'amount' not found or not positive value" });
+
+                decimal result = 0;
+                result = await _converterSrvc.convertCurrencyAsync(from, to, amount);
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {

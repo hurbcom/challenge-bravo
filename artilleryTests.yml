@@ -1,0 +1,14 @@
+config:
+  target: 'http://localhost:8090'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 50
+  defaults:
+    headers:
+scenarios:
+  - flow:
+    - loop:
+      - get:
+          url: "/converter?from=BRL&to=USD&amount=30"
+      count: 200
