@@ -89,6 +89,7 @@ namespace CurrencyConverter
 
             databaseContext.EnsureSeedDataForContext();
 
+            app.UseRequestLocalization();
             app.UseHangfireDashboard();
             backgroundJobs.callUpdateAllCurrencyRates();
             app.UseMvc();

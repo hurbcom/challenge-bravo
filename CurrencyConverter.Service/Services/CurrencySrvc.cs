@@ -47,15 +47,13 @@ namespace CurrencyConverter.Service.Services
                 currency.@base = _config.baseRate;
             }
 
-            if (_price.UpdateRate(currency))
-            {
-                return currency;
-            }
-            else
+            if (!_price.UpdateRate(currency))
             {
                 _logger.LogError($"Called AddCurrency failed for currency name {currencyName}");
                 throw new Exception($"Cannot create currency {currencyName}");
             }
+
+            return currency;
         }
 
         public bool DeleteCurrency(string currencyName)

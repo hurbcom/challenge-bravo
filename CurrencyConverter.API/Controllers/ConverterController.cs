@@ -1,9 +1,6 @@
 using CurrencyConverter.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CurrencyConverter.API.Controllers
@@ -37,7 +34,7 @@ namespace CurrencyConverter.API.Controllers
                 result = await _converterSrvc.convertCurrencyAsync(from, to, amount);
                 return new OkObjectResult(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new BadRequestObjectResult(new { Error = "Currency not found" });
             }

@@ -34,6 +34,7 @@ namespace CurrencyConverter.API.Controllers
             {
                 var allItems = _currencySrv.GetAllActive().ToList();
                 var allItemsResponse = _m.Map<List<CurrencyResponse>>(allItems);
+
                 _logger.LogInformation($"Called GetAllCurrencies returned {allItems.ToList().Count} active items");
                 return new OkObjectResult(allItemsResponse);
             }
@@ -55,6 +56,7 @@ namespace CurrencyConverter.API.Controllers
             {
                 var Item = _currencySrv.AddCurrency(currencyName);
                 var createdCurrency = _m.Map<CurrencyResponse>(Item);
+
                 _logger.LogInformation($"Called CreateCurrency returned id {Item}");
                 return new OkObjectResult(createdCurrency);
             }
@@ -76,15 +78,12 @@ namespace CurrencyConverter.API.Controllers
             {
                 var resul = _currencySrv.DeleteCurrency(currencyName);
                 _logger.LogInformation($"Called DeleteCurrency for {currencyName} returned {resul}");
-                if (resul)
-                {
-                    return new OkObjectResult(resul);
-                }
-                else
+                if (!resul)
                 {
                     return new NotFoundObjectResult(currencyName);
                 }
 
+                return new OkObjectResult(resul);
             }
             catch (Exception ex)
             {
