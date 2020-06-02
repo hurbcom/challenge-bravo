@@ -1,6 +1,8 @@
 using CurrencyConverter.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CurrencyConverter.API.Controllers
@@ -16,7 +18,7 @@ namespace CurrencyConverter.API.Controllers
         }
 
         [HttpGet("/Converter")]
-        public async Task<IActionResult> Converter([FromQuery] string from, [FromQuery] string to, [FromQuery] decimal amount)
+        public async Task<IActionResult> Converter([FromQuery] string from, [FromQuery] string to, [FromQuery] string amount)
         {
             try
             {
@@ -27,11 +29,16 @@ namespace CurrencyConverter.API.Controllers
                 if (to == null)
                     return new BadRequestObjectResult(new { Error = "variable 'to' not found or empty" });
 
-                if (amount <= 0)
-                    return new BadRequestObjectResult(new { Error = "variable 'amount' not found or not positive value" });
+                if (amount == null)
+                    return new BadRequestObjectResult(new { Error = "variable 'amount' not found" });
 
-                decimal result = 0;
-                result = await _converterSrvc.convertCurrencyAsync(from, to, amount);
+                decimal amountDecimal = 0;
+                if (!decimal.TryParse(amount, NumberStyles.AllowDecimalPoint, new NumberFormatInfo() { NumberDecimalSeparator = "," }, out amountDecimal))
+                {
+                    return new BadRequestObjectResult(new { Error = "variable 'amount' doesn't have valid value (must be positive and use ',' as decimal separator" });
+                }
+
+                decimal result = await _converterSrvc.convertCurrencyAsync(from, to, amountDecimal);
                 return new OkObjectResult(result);
             }
             catch (Exception)
