@@ -42,10 +42,7 @@ namespace CurrencyConverter.Infrasctructure.Repositories
         public virtual bool Update<T>(T entity) where T : class, IEntity
         {
             _context.Update<T>(entity);
-            if (_context.SaveChanges() == 1)
-                return true;
-            else
-                return false;
+            return _context.SaveChanges() == 1;
         }
     }
 }
