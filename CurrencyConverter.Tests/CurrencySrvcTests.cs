@@ -1,4 +1,4 @@
-﻿using CurrencyConverter.Domain.Entities;
+using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
 using CurrencyConverter.Service.Services;
@@ -8,10 +8,6 @@ using Microsoft.Extensions.Logging.Internal;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CurrencyConverter.Tests
@@ -97,7 +93,7 @@ namespace CurrencyConverter.Tests
         [Fact]
         public void SyncAllActiveCurrencyRates_ShouldReturnTrue_WhenNoCurrencies()
         {
-            var currencies = new List<Currency>() {  };
+            var currencies = new List<Currency>() { };
             _repoCurrency.Setup(x => x.GetAll<Currency>(i => i.isActive == true)).Returns(currencies);
 
             _currencySrvc.Setup(x => x.GetAllActive()).Returns(currencies);
