@@ -7,12 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyConverter.API", "Cu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyConverter.Domain", "CurrencyConverter.Domain\CurrencyConverter.Domain.csproj", "{13F0C945-9942-4144-A986-A2747E10C85A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyConverter.Service", "CurrencyConverter.Service\CurrencyConverter.Service.csproj", "{DCAE5D31-3C6A-4B7F-ADA4-F87A6E891183}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyConverter.Infrasctructure", "CurrencyConverter.Infrasctructure\CurrencyConverter.Infrasctructure.csproj", "{9A9AC205-C88A-4F7A-A128-3AE7FE6ACF55}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyConverter.Service", "CurrencyConverter.Service\CurrencyConverter.Service.csproj", "{DCAE5D31-3C6A-4B7F-ADA4-F87A6E891183}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter.Tests", "CurrencyConverter.Tests\CurrencyConverter.Tests.csproj", "{D5DDF3D5-0B0A-4E52-B0EA-E8CC0E80BD05}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{80D198F7-CE59-4AE6-A911-0DABEFED7F54}"
 EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +42,10 @@ Global
 		{80D198F7-CE59-4AE6-A911-0DABEFED7F54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80D198F7-CE59-4AE6-A911-0DABEFED7F54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80D198F7-CE59-4AE6-A911-0DABEFED7F54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5DDF3D5-0B0A-4E52-B0EA-E8CC0E80BD05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5DDF3D5-0B0A-4E52-B0EA-E8CC0E80BD05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5DDF3D5-0B0A-4E52-B0EA-E8CC0E80BD05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5DDF3D5-0B0A-4E52-B0EA-E8CC0E80BD05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

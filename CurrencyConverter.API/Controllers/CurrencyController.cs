@@ -76,6 +76,9 @@ namespace CurrencyConverter.API.Controllers
         {
             try
             {
+                if (currencyName == null)
+                    return new BadRequestObjectResult(new { Error = "variable 'currencyName' not found or empty" });
+
                 var resul = _currencySrv.DeleteCurrency(currencyName);
                 _logger.LogInformation($"Called DeleteCurrency for {currencyName} returned {resul}");
                 if (!resul)

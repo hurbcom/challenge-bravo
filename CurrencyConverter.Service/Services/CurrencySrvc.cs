@@ -12,7 +12,7 @@ namespace CurrencyConverter.Service.Services
     public class CurrencySrvc : ICurrencySrvc
     {
         private readonly IRepositoryBase<Currency> _repoCurrency;
-        private readonly Configuration _config;
+        private readonly IRepositoryBase<Configuration> _repoConfig;
         private readonly IPriceSrvc _price;
         private readonly IDistributedCache _cache;
         private readonly ILogger<CurrencySrvc> _logger;
@@ -20,7 +20,7 @@ namespace CurrencyConverter.Service.Services
         public CurrencySrvc(IRepositoryBase<Currency> repoCurrency, IRepositoryBase<Configuration> repoConfig, IPriceSrvc price, IDistributedCache cache, ILogger<CurrencySrvc> logger)
         {
             _repoCurrency = repoCurrency;
-            _config = repoConfig.GetAll<Configuration>().ToList().FirstOrDefault();
+            _repoConfig = repoConfig;
             _price = price;
             _cache = cache;
             _logger = logger;
@@ -43,8 +43,11 @@ namespace CurrencyConverter.Service.Services
             }
             else
             {
+                Configuration config = new Configuration();
+                config = _repoConfig.GetAll<Configuration>().ToList().FirstOrDefault();
+
                 currency.name = currencyName;
-                currency.@base = _config.baseRate;
+                currency.@base = config.baseRate;
             }
 
             if (!_price.UpdateRate(currency))
@@ -58,7 +61,7 @@ namespace CurrencyConverter.Service.Services
 
         public bool DeleteCurrency(string currencyName)
         {
-            var result = GetAllActive().ToList().Where(c => c.name.Contains(currencyName));
+            IEnumerable<Currency> result = GetAllActive().ToList().Where(c => c.name.Contains(currencyName));
 
             if (result.Any())
             {
