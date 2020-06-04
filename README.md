@@ -1,64 +1,114 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24"/> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+API construída em resposta ao desafio Bravo. Sua função é fazer conversões monetárias com retorno JSON.
+A intenção é demonstrar arquitetura seguindo padrões SOLID, de fácil manutenção, escalabilidade, testável, dockerizavel e com desempenho superior ao exigido na proposta.
+A linguagem escolhida foi C#. Caso eu utilizasse a stack sugerida no desafio talvez eu entregasse um produto simples e possivelmente com desempenho aquém do que este oferece.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+# Objetivos
+- Implementar o back-end da aplicação
+- Implementar testes de unidade (xUnit)
+- Implementar uma  solução para o problema de 1000 request por segundo
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+# Tecnologias
+- Dotnet Core C#
+- Redis
+- MySql
+- xUnit
+- Docker
+- HangFire
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+# Sobre a Infraestrutura de início automatizada
+Para subir toda a aplicação basta executar o scrip setup_Currency.PS1 (Windows) ou setup_Currency.SH (Linux).
+O script executa os testes unitários presentes na camada de Teste.
+Ao finalizar a subida pro Docker a aplicação cria suas tabelas automaticamente se baseando na camada de Domínio.
+São gravadas as moedas iniciais conforme sugerido pelo desafio (USD, BRL, EUR, BTC, ETH), ao mesmo tempo que seus valores atuais são buscados pela integração externa.
+Após atualização dos valores de cada moeda, eles são enviados ao cache.
+Uma tarefa recorrente para atualização dos preços de cada moeda é criada baseada no tempo em minutos contido no domínio de configuração (a cada 20 minutos).
+Ao final temos 3 PODs (Banco, Cache e API)
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+# Instalação e execução da aplicação
+Para instalar a aplicação pela linha de comando:
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+- **com docker**
+    - Clone o repositório: `git clone https://github.com/carvrodrigo/challenge-bravo.git`
+    - Acesse a pasta `cd challenge-bravo`
+    - Inicie instalação em `setup_Currency` (.ps1 ou .bs)
+  
+- **sem docker**
+    - Clone o repositório: `git clone https://github.com/carvrodrigo/challenge-bravo.git`
+    - Acesse a pasta `cd challenge-bravo`
+    - Instale a dependência `dotnet core runtime 2.1`
+    - Inicie instalação em `setup_Currency` (.ps1 ou .bs)
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+# Testes manuais
+Os testes rodam automaticamente ao iniciar a instalação automatizada. Os resultados são exibidos em tela. Caso seja necessário rodar novamente:
+- Na pasta da aplicação, digite: `Dotnet test CurrencyConverter.Tests/CurrencyConverter.Tests.csproj`
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+# Endpoints da API
+A API por padrão estará rodando na porta 8090, seus endpoints são:
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+### Conversor de moedas
 
-## Requisitos
+- `GET` converte entre as moedas sugeridas via parâmetro.
+Parâmertros: 
+    - MoedaOrigem: Moeda inicial que irá ser convertida (Ex.: BRL).
+    - MoedaDestino: Moeda Final que receberá a conversão (Ex.: EUR).
+    - Valor: Montante em moeda inicial para ser convertido, (Ex.: 1,99). Os valores não inteiros devem utilizar ',' para parte decimal.
+    - Exemplo completo: localhost:8090/Converter?from=BRL&to=EUR&amount=1,99
+    
+    http://localhost:8090/Converter?from={MoedaOrigem}&to={MoedaDestino}&amount={Valor}
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+### Diagnostico e Hearthbeat
 
-## Critério de avaliação
+- `GET` útil para Kubernetes e clusters, mostra a saúde da API e roda um check para todos os sistemas:
+    http://localhost:8090/Diagnostics
+Resposta:
+```
+{
+    "system": "Is system fully alive?",
+    "date": "2020-06-04 10:03:56",
+    "external_integration": true,
+    "background_worker": true,
+    "cache_server": true,
+    "database": true
+}
+```
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+### Adicionar, Remover ou exibir moedas
 
-## Dúvidas
+- `POST` para adicionar uma moeda, usando o corpo: "USD".
+    http://localhost:8090/Currency
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+- `DELETE` para remover uma moeda, usando o nome da moeda: "USD".
+    http://localhost:8090/Currency
 
-Boa sorte e boa viagem! ;)
+- `GET` para receber todas as moedas cadastradas.
+    http://localhost:3000/Currency
+
+# Teste de carga
+Foi utilizado o Artillery para realizar o estresse na API no endpoint de conversão. 
+O conversor de moedas está buscando diretamente no cache para realizar os cálculos.
+Devido ao cache a performance ultrapassou a marca de 1000 req/s. Em todos os testes a API respondeu 200.
+Os seguintes testes foram realizados:
+
+**Teste 1)** 1.000 requests/s durante 60 segundos (total: 60.000)
+    Resposta na máquina 1 (windows de alta performance): 1000 processados por segundo (tempo de processamento: 1min)
+    Resposta na máquina 2 (linux xubuntu doméstica de baixa desempenho): 1000 processados por segundo (tempo de processamento: 1min)
+ 
+**Teste 2)** 6.000 requests/s durante 60 segundos (total: 360.000)
+    Resposta na máquina 1: 1180/s (tempo: 5min:10sec)
+    Resposta na máquina 2: 1509/s (tempo: 3min:55sec)
+
+# Melhorias
+
+ - Implementar segurança na parte administrativa.
+
+# Dúvidas
+Estou disponível para qualquer dúvida ou sugestão.
+
+Rodrigo Dias de Carvalho -
+carvrodrigo@gmai.com
+
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
