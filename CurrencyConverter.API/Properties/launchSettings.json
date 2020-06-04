@@ -25,7 +25,7 @@
             "launchBrowser": true,
             "launchUrl": "diagnostics",
             "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Docker"
+                "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "applicationUrl": "http://localhost:8090/"
         }

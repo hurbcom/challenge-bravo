@@ -20,8 +20,8 @@ namespace CurrencyConverter
 
             //Repository, integration and workers
             svc.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            svc.AddSingleton<ICryptoComparer, CryptoComparer>();
-            svc.AddSingleton<IBackgroundJobsSrvc, BackgroundJobsSrvc>();
+            svc.AddScoped<ICryptoComparer, CryptoComparer>();
+            svc.AddScoped<IBackgroundJobsSrvc, BackgroundJobsSrvc>();
             svc.AddSingleton<ICacheBase, CacheBase>();
         }
     }
