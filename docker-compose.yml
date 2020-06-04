@@ -3,7 +3,7 @@ version: '3.4'
 services:
   db:
     image: mysql:8
-    container_name: mysql
+    container_name: carv_mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -16,14 +16,14 @@ services:
 
   cache:
     image: redis
-    container_name: redis
+    container_name: carvr_redis
     command: redis-server
     ports:
       - "6379:6379"
 
   currencyconverter.api:
     image: ${DOCKER_REGISTRY-}currencyconverterapi
-    container_name: CurrencyConverter
+    container_name: carv_CurrencyConverter
     links:
       - db
       - cache
