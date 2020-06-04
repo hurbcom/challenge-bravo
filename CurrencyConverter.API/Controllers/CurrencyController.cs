@@ -57,7 +57,7 @@ namespace CurrencyConverter.API.Controllers
                 if (currencyName == null)
                     return new BadRequestObjectResult(new { Error = "variable 'currencyName' not found or empty" });
 
-                var Item = _currencySrv.AddCurrency(currencyName);
+                var Item = _currencySrv.AddCurrency(currencyName.ToUpper());
                 var createdCurrency = _m.Map<CurrencyResponse>(Item);
 
                 _logger.LogInformation($"Called CreateCurrency returned id {Item}");
@@ -82,7 +82,7 @@ namespace CurrencyConverter.API.Controllers
                 if (currencyName == null)
                     return new BadRequestObjectResult(new { Error = "variable 'currencyName' not found or empty" });
 
-                var resul = _currencySrv.DeleteCurrency(currencyName);
+                var resul = _currencySrv.DeleteCurrency(currencyName.ToUpper());
                 _logger.LogInformation($"Called DeleteCurrency for {currencyName} returned {resul}");
                 if (!resul)
                 {

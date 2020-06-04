@@ -37,7 +37,7 @@ namespace CurrencyConverter.API.Controllers
                     return new BadRequestObjectResult(new { Error = "variable 'amount' doesn't have valid value (must be positive and use ',' as decimal separator" });
                 }
 
-                decimal result = await _converterSrvc.convertCurrencyAsync(from, to, amountDecimal);
+                decimal result = await _converterSrvc.convertCurrencyAsync(from.ToUpper(), to.ToUpper(), amountDecimal);
                 return new OkObjectResult(result);
             }
             catch (Exception)
