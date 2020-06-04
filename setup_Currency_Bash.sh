@@ -1,5 +1,4 @@
 ﻿#!/usr/bin/env bash
-
 echo "--- Script de preparacao para Currency Converter api em container ---"
 echo " Testando docker presente..."
 docker version
@@ -22,4 +21,3 @@ docker-compose up -d
 echo " --- Script concluido ---"
 echo "Endereco da API: http://localhost:8090/diagnostics"
 echo "Conectar aos logs: docker logs -f CurrencyConverter"
-
