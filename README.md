@@ -32,7 +32,7 @@ Para instalar a aplicação pela linha de comando:
 - **com docker**
     - Clone o repositório: `git clone https://github.com/carvrodrigo/challenge-bravo.git`
     - Acesse a pasta `cd challenge-bravo`
-    - Inicie instalação em `setup_Currency` (.ps1 ou .bs)
+    - Inicie instalação em `setup_Currency` (.ps1 ou .sh)
   
 - **sem docker**
     - Clone o repositório: `git clone https://github.com/carvrodrigo/challenge-bravo.git`
@@ -42,7 +42,7 @@ Para instalar a aplicação pela linha de comando:
 
 # Testes manuais
 Os testes rodam automaticamente ao iniciar a instalação automatizada. Os resultados são exibidos em tela. Caso seja necessário rodar novamente:
-- Na pasta da aplicação, digite: `Dotnet test CurrencyConverter.Tests/CurrencyConverter.Tests.csproj`
+- Na pasta raiz da aplicação, digite: `Dotnet test CurrencyConverter.Tests/CurrencyConverter.Tests.csproj`
 
 # Endpoints da API
 A API por padrão estará rodando na porta 8090, seus endpoints são:
@@ -50,7 +50,7 @@ A API por padrão estará rodando na porta 8090, seus endpoints são:
 ### Conversor de moedas
 
 - `GET` converte entre as moedas sugeridas via parâmetro.
-Parâmertros: 
+Parâmetros: 
     - MoedaOrigem: Moeda inicial que irá ser convertida (Ex.: BRL).
     - MoedaDestino: Moeda Final que receberá a conversão (Ex.: EUR).
     - Valor: Montante em moeda inicial para ser convertido, (Ex.: 1,99). Os valores não inteiros devem utilizar ',' para parte decimal.
@@ -76,17 +76,17 @@ Resposta:
 
 ### Adicionar, Remover ou exibir moedas
 
-- `POST` para adicionar uma moeda, usando o corpo: "USD".
+- `POST` para adicionar uma moeda, usando o nome da moeda no corpo da requisição: "USD".
     http://localhost:8090/Currency
 
-- `DELETE` para remover uma moeda, usando o nome da moeda: "USD".
+- `DELETE` para remover uma moeda, usando o nome da moeda no corpo da requisição: "USD".
     http://localhost:8090/Currency
 
 - `GET` para receber todas as moedas cadastradas.
-    http://localhost:3000/Currency
+    http://localhost:8090/Currency
 
 # Teste de carga
-Foi utilizado o Artillery para realizar o estresse na API no endpoint de conversão. 
+Foi utilizado o Artillery para realizar o estresse da API no endpoint de conversão. 
 O conversor de moedas está buscando diretamente no cache para realizar os cálculos.
 Devido ao cache a performance ultrapassou a marca de 1000 req/s. Em todos os testes a API respondeu 200.
 Os seguintes testes foram realizados:
@@ -107,7 +107,7 @@ Os seguintes testes foram realizados:
 Estou disponível para qualquer dúvida ou sugestão.
 
 Rodrigo Dias de Carvalho -
-carvrodrigo@gmai.com
+carvrodrigo@gmail.com
 
 
 <p align="center">
