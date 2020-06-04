@@ -35,12 +35,12 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
             }
         }
 
-        public float GetLastestRate(string currency)
+        public decimal GetLastestRate(string currency)
         {
             try
             {
                 string result = base.GrabLastPrice(currency);
-                float rate = JsonConvert.DeserializeObject<Dictionary<string, float>>(result).FirstOrDefault().Value;
+                decimal rate = JsonConvert.DeserializeObject<Dictionary<string, decimal>>(result).FirstOrDefault().Value;
                 return rate;
             }
             catch (Exception ex)

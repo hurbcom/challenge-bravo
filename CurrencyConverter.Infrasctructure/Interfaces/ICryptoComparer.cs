@@ -2,6 +2,6 @@ namespace CurrencyConverter.Infrasctructure.Interfaces
 {
     public interface ICryptoComparer
     {
-        float GetLastestRate(string currency);
+        decimal GetLastestRate(string currency);
     }
 }

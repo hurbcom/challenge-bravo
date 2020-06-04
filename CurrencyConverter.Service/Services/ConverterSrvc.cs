@@ -1,5 +1,5 @@
+using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -8,10 +8,10 @@ namespace CurrencyConverter.Service.Services
 {
     public class ConverterSrvc : IConverterSrvc
     {
-        private readonly IDistributedCache _cache;
+        private readonly ICacheBase _cache;
         private readonly ILogger<ConverterSrvc> _logger;
 
-        public ConverterSrvc(IDistributedCache cache, ILogger<ConverterSrvc> logger)
+        public ConverterSrvc(ICacheBase cache, ILogger<ConverterSrvc> logger)
         {
             _cache = cache;
             _logger = logger;
@@ -21,8 +21,8 @@ namespace CurrencyConverter.Service.Services
         {
             try
             {
-                var fromRate = decimal.Parse(await _cache.GetStringAsync(from));
-                var toRate = decimal.Parse(await _cache.GetStringAsync(to));
+                var fromRate = decimal.Parse(await fromCache(from));
+                var toRate = decimal.Parse(await fromCache(to));
 
                 var fromAmount = amount * fromRate;
                 var toAmount = fromAmount / toRate;
@@ -33,6 +33,19 @@ namespace CurrencyConverter.Service.Services
             {
                 _logger.LogError($"Called Convert failed with {ex.Message}");
                 throw new Exception($"Converter failed");
+            }
+        }
+
+        public async Task<string> fromCache(string key)
+        {
+            try
+            {
+                return await _cache.GetAsync(key);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Called fromCache failed to {key} with {ex.Message}");
+                throw new Exception($"Key not in cache {key}");
             }
         }
     }

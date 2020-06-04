@@ -2,7 +2,6 @@ using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
 using CurrencyConverter.Service.Services;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Internal;
 using Moq;
@@ -19,7 +18,7 @@ namespace CurrencyConverter.Tests
         private readonly Mock<IRepositoryBase<Currency>> _repoCurrency = new Mock<IRepositoryBase<Currency>>();
         private readonly Mock<IRepositoryBase<Configuration>> _repoConfig = new Mock<IRepositoryBase<Configuration>>();
         private readonly Mock<IPriceSrvc> _price = new Mock<IPriceSrvc>();
-        private readonly Mock<IDistributedCache> _cache = new Mock<IDistributedCache>();
+        private readonly Mock<ICacheBase> _cache = new Mock<ICacheBase>();
         private readonly Mock<ILogger<CurrencySrvc>> _logger = new Mock<ILogger<CurrencySrvc>>();
         private readonly Mock<ICurrencySrvc> _currencySrvc = new Mock<ICurrencySrvc>();
 

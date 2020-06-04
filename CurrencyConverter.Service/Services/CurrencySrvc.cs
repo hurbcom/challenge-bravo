@@ -1,7 +1,6 @@
 using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,10 +13,10 @@ namespace CurrencyConverter.Service.Services
         private readonly IRepositoryBase<Currency> _repoCurrency;
         private readonly IRepositoryBase<Configuration> _repoConfig;
         private readonly IPriceSrvc _price;
-        private readonly IDistributedCache _cache;
+        private readonly ICacheBase _cache;
         private readonly ILogger<CurrencySrvc> _logger;
 
-        public CurrencySrvc(IRepositoryBase<Currency> repoCurrency, IRepositoryBase<Configuration> repoConfig, IPriceSrvc price, IDistributedCache cache, ILogger<CurrencySrvc> logger)
+        public CurrencySrvc(IRepositoryBase<Currency> repoCurrency, IRepositoryBase<Configuration> repoConfig, IPriceSrvc price, ICacheBase cache, ILogger<CurrencySrvc> logger)
         {
             _repoCurrency = repoCurrency;
             _repoConfig = repoConfig;
@@ -67,7 +66,7 @@ namespace CurrencyConverter.Service.Services
             {
                 var item = result.FirstOrDefault();
                 item.isActive = false;
-                _cache.Remove(currencyName);
+                _cache.RemoveAsync(currencyName);
                 return _repoCurrency.Update<Currency>(item);
             }
             else

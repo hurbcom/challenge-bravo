@@ -7,7 +7,7 @@ namespace CurrencyConverter.Domain.Entities
     {
         public int id { get; set; }
         public string name { get; set; }
-        public float rate { get; set; }
+        public decimal rate { get; set; }
         public string @base { get; set; }
         public bool isActive { get; set; } = true;
         public DateTime lastUpdate { get; set; } = DateTime.Now;

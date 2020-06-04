@@ -5,5 +5,6 @@ namespace CurrencyConverter.Service.Interfaces
     public interface IConverterSrvc
     {
         Task<decimal> convertCurrencyAsync(string from, string to, decimal amount);
+        Task<string> fromCache(string key);
     }
 }

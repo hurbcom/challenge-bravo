@@ -1,7 +1,6 @@
 using CurrencyConverter.Domain.Entities;
 using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
 
@@ -11,10 +10,10 @@ namespace CurrencyConverter.Service.Services
     {
         private readonly ICryptoComparer _cryptoComparer;
         private readonly IRepositoryBase<Currency> _repo;
-        private readonly IDistributedCache _cache;
+        private readonly ICacheBase _cache;
         private readonly ILogger<PriceSrvc> _logger;
 
-        public PriceSrvc(ICryptoComparer cryptoComparer, IRepositoryBase<Currency> repo, IDistributedCache cache, ILogger<PriceSrvc> logger)
+        public PriceSrvc(ICryptoComparer cryptoComparer, IRepositoryBase<Currency> repo, ICacheBase cache, ILogger<PriceSrvc> logger)
         {
             _cryptoComparer = cryptoComparer;
             _repo = repo;
@@ -31,7 +30,7 @@ namespace CurrencyConverter.Service.Services
                 currency.lastUpdate = DateTime.Now;
                 if (_repo.Update<Currency>(currency))
                 {
-                    _cache.SetString(currency.name, latestRate.ToString());
+                    _cache.SetAsync(currency.name, latestRate.ToString());
                 }
                 else
                 {
