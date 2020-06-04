@@ -8,13 +8,17 @@ COPY ["CurrencyConverter.API/CurrencyConverter.API.csproj", "CurrencyConverter.A
 COPY ["CurrencyConverter.Service/CurrencyConverter.Service.csproj", "CurrencyConverter.Service/"]
 COPY ["CurrencyConverter.Infrasctructure/CurrencyConverter.Infrasctructure.csproj", "CurrencyConverter.Infrasctructure/"]
 COPY ["CurrencyConverter.Domain/CurrencyConverter.Domain.csproj", "CurrencyConverter.Domain/"]
+COPY ["CurrencyConverter.Tests/CurrencyConverter.Tests.csproj", "CurrencyConverter.Tests/"]
 RUN dotnet restore "CurrencyConverter.API/CurrencyConverter.API.csproj"
+RUN dotnet restore "CurrencyConverter.Tests/CurrencyConverter.Tests.csproj"
 COPY . .
-WORKDIR "/src/CurrencyConverter.API"
-RUN dotnet build "CurrencyConverter.API.csproj" -c Release -o /app/build
+RUN dotnet build "CurrencyConverter.API/CurrencyConverter.API.csproj" -c Release -o /app/build
+RUN dotnet build "CurrencyConverter.Tests/CurrencyConverter.Tests.csproj" -c Release -o /app 
+
+RUN dotnet test "CurrencyConverter.Tests/CurrencyConverter.Tests.csproj"
 
 FROM build AS publish
-RUN dotnet publish "CurrencyConverter.API.csproj" -c Release -o /app/publish
+RUN dotnet publish "CurrencyConverter.API/CurrencyConverter.API.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
