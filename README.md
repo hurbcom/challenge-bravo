@@ -38,7 +38,7 @@ Para instalar a aplicação pela linha de comando:
     - Clone o repositório: `git clone https://github.com/carvrodrigo/challenge-bravo.git`
     - Acesse a pasta `cd challenge-bravo`
     - Instale a dependência `dotnet core runtime 2.1`
-    - Inicie instalação em `setup_Currency` (.ps1 ou .bs)
+    - Inicie instalação em `dotnet run --project .\CurrencyConverter.API\CurrencyConverter.API.csproj`
 
 # Testes manuais
 Os testes rodam automaticamente ao iniciar a instalação automatizada. Os resultados são exibidos em tela. Caso seja necessário rodar novamente:
