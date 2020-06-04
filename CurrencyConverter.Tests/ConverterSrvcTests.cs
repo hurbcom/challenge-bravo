@@ -4,6 +4,7 @@ using CurrencyConverter.Service.Interfaces;
 using CurrencyConverter.Service.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -36,6 +37,18 @@ namespace CurrencyConverter.Tests
             var toAmount = fromAmount / eur.rate;
 
             Assert.Equal(toAmount, result);
+        }
+
+        [Fact]
+        public async Task convertCurrencyAsync_ShouldThrowException_WhenCurrencyNameNotValid()
+        {
+            Currency aaa = new Currency() { name = "AAA", rate = 0.5M };
+            Currency eur = new Currency() { name = "EUR", rate = 2M };
+            _cache.Setup(x => x.GetAsync(aaa.name)).ThrowsAsync(new Exception());
+            _cache.Setup(x => x.GetAsync(eur.name)).ReturnsAsync(eur.rate.ToString());
+
+            decimal amount = 1;
+            await Assert.ThrowsAsync<Exception>(async () => await _sut.convertCurrencyAsync(aaa.name, eur.name, amount));
         }
     }
 }
