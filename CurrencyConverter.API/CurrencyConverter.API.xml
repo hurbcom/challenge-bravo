@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CurrencyConverter.API</name>
+    </assembly>
+    <members>
+        <member name="M:CurrencyConverter.API.Controllers.CurrencyController.GetAllCurrencies">
+             <summary>
+            Get all active currencies registered
+             </summary>
+        </member>
+        <member name="M:CurrencyConverter.API.Controllers.CurrencyController.CreateCurrency(System.String)">
+             <summary>
+            Add new currency
+             </summary>
+             /// <param name="currency">Entity</param>
+        </member>
+        <member name="M:CurrencyConverter.API.Controllers.CurrencyController.DeleteCurrency(System.String)">
+             <summary>
+            Delete currency information
+             </summary>
+             <param name="id">Entity Id</param>
+        </member>
+    </members>
+</doc>

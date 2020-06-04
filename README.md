@@ -58,6 +58,11 @@ Parâmetros:
     
     http://localhost:8090/Converter?from={MoedaOrigem}&to={MoedaDestino}&amount={Valor}
 
+### Auto-Documentação Swagger
+
+- Contem documentação dinâmica da API com acesso direto aos dados:
+    http://localhost:8090/Swagger
+
 ### Diagnostico e Hearthbeat
 
 - `GET` útil para Kubernetes e clusters, mostra a saúde da API e roda um check para todos os sistemas:
@@ -66,6 +71,7 @@ Resposta:
 ```
 {
     "system": "Is system fully alive?",
+    "swagger": "/swagger",
     "date": "2020-06-04 10:03:56",
     "external_integration": true,
     "background_worker": true,
@@ -100,8 +106,9 @@ Os seguintes testes foram realizados:
     Resposta na máquina 2: 1509/s (tempo: 3min:55sec)
 
 # Melhorias
-
  - Implementar segurança na parte administrativa.
+ - Mover o swagger para ser acessível somente development
+ - Criar uma pipe para deploy para remover as senhas (Produção já possui token)
 
 # Dúvidas
 Estou disponível para qualquer dúvida ou sugestão.

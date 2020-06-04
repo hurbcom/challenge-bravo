@@ -25,6 +25,7 @@ namespace currencyConverter.API.Controllers
             object ping = new
             {
                 System = "Is system fully alive?",
+                Swagger = "/swagger",
                 Date = d,
                 external_integration = _diagnostics.ExternalConnection(),
                 Background_worker = _diagnostics.BackgroundWorkers(),

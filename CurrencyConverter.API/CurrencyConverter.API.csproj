@@ -8,6 +8,10 @@
     <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>CurrencyConverter.API.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
@@ -20,12 +24,19 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CurrencyConverter.Domain\CurrencyConverter.Domain.csproj" />
     <ProjectReference Include="..\CurrencyConverter.Infrasctructure\CurrencyConverter.Infrasctructure.csproj" />
     <ProjectReference Include="..\CurrencyConverter.Service\CurrencyConverter.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="CurrencyConverter.API.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

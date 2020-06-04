@@ -12,6 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace CurrencyConverter
 {
@@ -60,6 +64,27 @@ namespace CurrencyConverter
 
             services.AddAutoMapper(m => m.CreateMap<Currency, CurrencyResponse>());
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1",
+                    new Info
+                    {
+                        Title = "Currency Converter",
+                        Version = "v1",
+                        Description = "Documentação da API backend",
+                        Contact = new Contact
+                        {
+                            Name = "Rodrigo Dias de Carvalho",
+                            Email = "carvrodrigo@gmail.com"
+                        }
+                    });
+
+                var appPath = AppContext.BaseDirectory;
+                var assemblyName = Assembly.GetEntryAssembly().GetName().Name;
+                var fileName = Path.GetFileName(assemblyName + ".xml");
+                c.IncludeXmlComments(fileName);
+            });
+
             services.AddMvc(opt =>
             {
                 if (!_env.IsDevelopment())
@@ -86,6 +111,13 @@ namespace CurrencyConverter
                 .AllowAnyHeader()
                 .AllowAnyOrigin()
                 .AllowAnyMethod());
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = "swagger";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Currency Converter backend API");
+            });
 
             databaseContext.EnsureSeedDataForContext();
 
