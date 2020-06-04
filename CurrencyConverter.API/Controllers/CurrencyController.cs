@@ -54,6 +54,9 @@ namespace CurrencyConverter.API.Controllers
         {
             try
             {
+                if (currencyName == null)
+                    return new BadRequestObjectResult(new { Error = "variable 'currencyName' not found or empty" });
+
                 var Item = _currencySrv.AddCurrency(currencyName);
                 var createdCurrency = _m.Map<CurrencyResponse>(Item);
 

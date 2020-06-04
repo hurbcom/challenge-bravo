@@ -9,9 +9,9 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
 {
     public abstract class PriceIntegration : IPriceIntegration
     {
-        private readonly IRepositoryBase<Configuration> _repo;
-        protected readonly ILogger<PriceIntegration> _logger;
-        protected string baseCurrency { get; set; } = "";
+        public IRepositoryBase<Configuration> _repo;
+        public ILogger<PriceIntegration> _logger;
+        protected string baseCurrency { get; set; } = string.Empty;
 
         public PriceIntegration(IRepositoryBase<Configuration> repo, ILogger<PriceIntegration> logger)
         {
@@ -21,7 +21,7 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
 
         public abstract string getUrl(string currencyName);
 
-        public string GrabLastPrice(string currencyName)
+        public virtual string GrabLastPrice(string currencyName)
         {
             try
             {
@@ -29,25 +29,28 @@ namespace CurrencyConverter.Infrasctructure.ExternalIntegrations
                     baseCurrency = _repo.GetAll<Configuration>().ToList().FirstOrDefault().baseRate;
 
                 var url = getUrl(currencyName);
-                var cli = new HttpClient();
-                var response = cli.GetAsync(url).Result;
+                var response = GrabFromExternalSource(url);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = response.Content.ReadAsStringAsync().Result;
-                    return content;
-                }
-                else
-                {
-                    _logger.LogError($"Error while grabbing last price for {currencyName}");
-                    throw new Exception($"Error while grabbing last price for {currencyName}");
-                }
+                return response;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
 
+        public virtual string GrabFromExternalSource(string url)
+        {
+            HttpClient cli = new HttpClient();
+            var result = cli.GetAsync(url).Result;
+            if (!result.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Error while grabbing last price for {url}");
+                throw new Exception($"Error while grabbing last price for {url}");
+            }
+
+            var content = result.Content.ReadAsStringAsync().Result;
+            return content;
         }
     }
 }

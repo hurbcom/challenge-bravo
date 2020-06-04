@@ -15,6 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CurrencyConverter.API\CurrencyConverter.API.csproj" />
+    <ProjectReference Include="..\CurrencyConverter.Infrasctructure\CurrencyConverter.Infrasctructure.csproj" />
     <ProjectReference Include="..\CurrencyConverter.Service\CurrencyConverter.Service.csproj" />
   </ItemGroup>
 

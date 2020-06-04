@@ -3,7 +3,6 @@ using CurrencyConverter.Infrasctructure.Interfaces;
 using CurrencyConverter.Service.Interfaces;
 using CurrencyConverter.Service.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Internal;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -103,23 +102,6 @@ namespace CurrencyConverter.Tests
         }
 
         [Fact]
-        public void SyncAllActiveCurrencyRates_ShouldLog_WhenUpdateFails()
-        {
-            var usd = new Currency() { @base = "USD", name = "USD", rate = 0 };
-            var brl = new Currency() { @base = usd.name, name = "BRL", rate = 0 };
-            var eur = new Currency() { @base = usd.name, name = "EUR", rate = 0 };
-            var currencies = new List<Currency>() { usd, brl, eur };
-            _repoCurrency.Setup(x => x.GetAll<Currency>(i => i.isActive == true)).Returns(currencies);
-
-            _currencySrvc.Setup(x => x.GetAllActive()).Returns(currencies);
-            _price.Setup(x => x.UpdateRate(It.IsAny<Currency>())).Returns(false);
-
-            var result = _sut.SyncAllActiveCurrencyRates();
-
-            _logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<FormattedLogValues>(), It.IsAny<Exception>(), It.IsAny<Func<object, Exception, string>>()), Times.Once);
-        }
-
-        [Fact]
         public void DeleteCurrency_ShouldRemoveGivenCurrency()
         {
             var usd = new Currency() { @base = "USD", name = "USD", rate = 0 };
@@ -149,22 +131,6 @@ namespace CurrencyConverter.Tests
             var result = _sut.DeleteCurrency("NOT");
 
             Assert.False(result);
-        }
-
-        [Fact]
-        public void DeleteCurrency_ShouldLog_WhenCurrencyNotFound()
-        {
-            var usd = new Currency() { @base = "USD", name = "USD", rate = 0 };
-            var currencies = new List<Currency>() { usd };
-            _repoCurrency.Setup(x => x.GetAll<Currency>(i => i.isActive == true)).Returns(currencies);
-            _repoCurrency.Setup(x => x.Update<Currency>(usd)).Returns(false);
-
-            _currencySrvc.Setup(x => x.GetAllActive()).Returns(currencies);
-            _price.Setup(x => x.UpdateRate(It.IsAny<Currency>())).Returns(true);
-
-            var result = _sut.DeleteCurrency("NOT");
-
-            _logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<FormattedLogValues>(), It.IsAny<Exception>(), It.IsAny<Func<object, Exception, string>>()), Times.Once);
         }
 
         [Fact]
