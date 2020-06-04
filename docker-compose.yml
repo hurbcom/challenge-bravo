@@ -16,7 +16,7 @@ services:
 
   cache:
     image: redis
-    container_name: carvr_redis
+    container_name: carv_redis
     command: redis-server
     ports:
       - "6379:6379"
