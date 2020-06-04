@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+﻿#!/usr/bin/bash
 echo "--- Script de preparacao para Currency Converter api em container ---"
 echo " Testando docker presente..."
 docker version
