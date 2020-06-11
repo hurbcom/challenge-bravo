@@ -3,10 +3,9 @@ const mongoose = require('mongoose');
 const CoinSchema = new mongoose.Schema({
     code : String,
     name: String,
-    value: Number,
     lastro: {
-        type: Boolean,
-        default: false
+        type: Number,
+        required: true,
     },
     created_at: {
         type: Date,
