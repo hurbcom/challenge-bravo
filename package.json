@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/rafaellrf09/challenge-bravo#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "express": "^4.17.1",
     "mongoose": "^5.9.18"
   }
