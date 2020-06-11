@@ -5,7 +5,7 @@ module.exports =  {
             callback: (req, res) => {
                 res.send ("API IS ONLINE")
             },
-            path:'/get-conversion',
+            path:'/conversion',
             callback: require('@controllers/convert-currency')
         }
     ]
