@@ -1,3 +1,5 @@
+const erroHandler = require("@middlewares/errors-handler");
+
 module.exports = class Server {
     constructor ({dependencies, routes}){
         this.dependencies = {
@@ -22,6 +24,7 @@ module.exports = class Server {
     configureExpress({app, cors, logger}){
         app.use(cors());
         app.use(logger('dev'));
+        app.use(erroHandler);
     }
     startApi (dependencies, routes){
         const {app} = dependencies;
