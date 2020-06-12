@@ -5,6 +5,7 @@ const configs = {
         express: require('express'),
         logger: require('morgan'),
         cors: require('cors'),
+        bodyParser: require("body-parser"),
         env: {
             PORT: process.env.PORT || 3000
         }

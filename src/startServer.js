@@ -21,17 +21,28 @@ module.exports = class Server {
         const app = express();
         this.set("app", app)
     }
-    configureExpress({app, cors, logger}){
+    configureExpress({app, cors, logger, bodyParser}){
         app.use(cors());
         app.use(logger('dev'));
         app.use(erroHandler);
+        app.use(
+            bodyParser.urlencoded({
+                extended: true,
+                limit: "500mb"
+            })
+        );
+        app.use(
+            bodyParser.json({
+                limit: "500mb"
+            })
+        );
     }
     startApi (dependencies, routes){
         const {app} = dependencies;
         const {env: {PORT}} = dependencies
         Object.entries(routes).forEach(([method,route]) =>{
             route.forEach(({path, callback})=>{
-                app[method](path,callback.bind(dependencies))
+                app[method](path,callback)
             }
             )
         })
