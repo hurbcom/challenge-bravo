@@ -1,26 +1,34 @@
 const baseCoins = require("@utils/coin-base.json");
-const validatorAmount = require("@utils/validator-amount");
+const valueFormatter = require("@utils/value-formatter");
 module.exports = (req, res) => {
-    var { from, to, amount } = req.query;
-    from = from.toUpperCase();
-    to = to.toUpperCase();
-    amount = validatorAmount(amount);
-    if (
-        Object.keys(baseCoins).includes(from) &&
-        Object.keys(baseCoins).includes(to)
-    ) {
-        const dollarValueBase =
-            parseFloat(amount) / parseFloat(baseCoins[from]);
-        const convertedValue = String(
-            dollarValueBase * parseFloat(baseCoins[to])
-        );
-        res.json({
-            convertedValue,
-            message: `Os valores que serviram como base de calculo foram pegos em: ... e sua ultima atualização ocorreu em: ...`,
-        });
-    } else
-        res.json({
-            convertedValue: null,
-            message: `Valores não encontrado no banco de moedas`,
-        });
+    try {
+        var { from, to, amount } = req.query;
+
+        from = from.toUpperCase();
+        to = to.toUpperCase();
+        amount = valueFormatter(amount);
+
+        if (
+            Object.keys(baseCoins).includes(from) &&
+            Object.keys(baseCoins).includes(to)
+        ) {
+            const dollarValueBase =
+                parseFloat(amount) / parseFloat(baseCoins[from].value);
+            const convertedValue = String(
+                dollarValueBase * parseFloat(baseCoins[to].value)
+            );
+            res.json({
+                convertedValue,
+                from: { name: from, ...baseCoins[from] },
+                to: { name: to, ...baseCoins[to] },
+                message: `Success`,
+            });
+        } else
+            res.json({
+                convertedValue: null,
+                message: `Valores não encontrado no banco de moedas`,
+            });
+    } catch (err) {
+        res.json(err);
+    }
 };
