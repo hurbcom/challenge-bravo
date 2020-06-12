@@ -4,7 +4,7 @@ const routes = Router();
 
 routes.get('/coins', CoinController.index);
 routes.post('/coins', CoinController.store);
-routes.put('/coins', CoinController.update);
+routes.put('/coins/:id', CoinController.update);
 routes.delete('/coins/:id', CoinController.delete);
 
 routes.get('/conversion', CoinController.conversion);

@@ -1,4 +1,4 @@
-const Coin = require('../schemas/Coin');
+const Coin = require('../database/schemas/Coin');
 const axios = require('axios');
 
 
@@ -8,6 +8,7 @@ class CoinController {
         const coins = await Coin.find();
         return res.send(coins);
     }
+    //Função para criação de moeda
     async store(req, res) {
         const { code, name, lastro } = req.body;
 
@@ -23,7 +24,20 @@ class CoinController {
         return res.json(coin);
 
     }
+    //Função para a atualização da moeda
     async update(req, res) {
+        const { id } = req.params;
+        try {
+            await Coin.findByIdAndUpdate(id, req.body);
+            const coin = await Coin.findById(id);
+            return res.json(coin)
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ error: "Coin does not updated" });
+        }
+
+
+
 
     }
     //Função para deletar uma moeda
