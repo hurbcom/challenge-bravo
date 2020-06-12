@@ -1,10 +1,1 @@
-{
-    "comment": "1 dollar based coin database",
-    "USD":"1.00",
-    "BRL": "4.97",
-    "EUR": "0.88",
-    "BTC": "0.0001012067897611115",
-    "ETH": "0.0040"
-    
-}
-
+{"comment":"1 dollar based coin database","USD":{"value":"1.00","lastUpdate":"2020-6-12 15:54:46"},"BRL":{"value":"4.97","lastUpdate":"2020-6-12 15:54:46"},"EUR":{"value":"0.88","lastUpdate":"2020-6-12 15:54:46"},"BTC":{"value":"0.0001012067897611115","lastUpdate":"2020-6-12 15:54:46"},"ETH":{"value":"0.0040","lastUpdate":"2020-6-12 15:54:46"},"BIT":{"value":"3333","lastUpdate":"2020-6-12 17:23:09"}}
