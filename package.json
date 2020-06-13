@@ -1,40 +1,43 @@
 {
-  "name": "challenge-bravo",
-  "version": "1.0.0",
-  "description": "Technical challenge for admission to the HU",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --inspect index.js",
-    "start": "node index"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lmaiaa/challenge-bravo.git"
-  },
-  "author": "Luccas Maia",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/lmaiaa/challenge-bravo/issues"
-  },
-  "homepage": "https://github.com/lmaiaa/challenge-bravo#readme",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "module-alias": "^2.2.2",
-    "morgan": "^1.10.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
-  },
-  "_moduleAliases": {
-    "@root": ".",
-    "@src": "./src",
-    "@controllers": "./src/controllers",
-    "@middlewares": "./src/middlewares",
-    "@routes": "./src/routes",
-    "@services": "./src/services",
-    "@utils": "./src/utils"
-  }
+    "name": "challenge-bravo",
+    "version": "1.0.0",
+    "description": "Technical challenge for admission to the HURB",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon --inspect index.js",
+        "start": "node index"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lmaiaa/challenge-bravo.git"
+    },
+    "author": "Luccas Maia",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/lmaiaa/challenge-bravo/issues"
+    },
+    "homepage": "https://github.com/lmaiaa/challenge-bravo#readme",
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "module-alias": "^2.2.2",
+        "morgan": "^1.10.0"
+    },
+    "devDependencies": {
+        "eslint": "^7.2.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-prettier": "^3.1.3",
+        "nodemon": "^2.0.4"
+    },
+    "_moduleAliases": {
+        "@root": ".",
+        "@src": "./src",
+        "@controllers": "./src/controllers",
+        "@middlewares": "./src/middlewares",
+        "@routes": "./src/routes",
+        "@services": "./src/services",
+        "@utils": "./src/utils"
+    }
 }

@@ -5,14 +5,12 @@ const configs = {
         express: require('express'),
         logger: require('morgan'),
         cors: require('cors'),
-        bodyParser: require("body-parser"),
-        env: {
-            PORT: process.env.PORT || 3000
-        }
+        bodyParser: require('body-parser'),
+        env: { PORT: process.env.PORT || 3333 },
     },
-    routes: require('@src/routes')
+    routes: require('@src/routes'),
 }
 
-const server = new Server(configs);
+const server = new Server(configs)
 
-server.start();
+server.start()
