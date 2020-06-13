@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon --inspect index.js",
+        "dev": "nodemon  --ignore src/utils/coin-base.json index.js",
+        "dev-job": "cross-env JOB=true nodemon  --ignore src/utils/coin-base.json index.js",
         "start": "node index"
     },
     "repository": {
@@ -19,6 +20,7 @@
     },
     "homepage": "https://github.com/lmaiaa/challenge-bravo#readme",
     "dependencies": {
+        "axios": "^0.19.2",
         "body-parser": "^1.19.0",
         "cors": "^2.8.5",
         "express": "^4.17.1",
@@ -28,6 +30,7 @@
         "swagger-ui-express": "^4.1.4"
     },
     "devDependencies": {
+        "cross-env": "^7.0.2",
         "eslint": "^7.2.0",
         "eslint-config-prettier": "^6.11.0",
         "eslint-plugin-prettier": "^3.1.3",

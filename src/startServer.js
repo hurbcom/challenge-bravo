@@ -14,6 +14,12 @@ module.exports = class Server {
         this.configureExpress(dependencies)
         this.startApi(dependencies, routes)
     }
+    async scheduleJob(loop, job, instantStart) {
+        this.dependencies.scheduler(loop, job.bind(this.dependencies))
+        if (instantStart) {
+            await job.bind(this.dependencies)()
+        }
+    }
     set(name, dependencie) {
         this.dependencies[name] = dependencie
     }
