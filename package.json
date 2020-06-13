@@ -23,7 +23,9 @@
         "cors": "^2.8.5",
         "express": "^4.17.1",
         "module-alias": "^2.2.2",
-        "morgan": "^1.10.0"
+        "morgan": "^1.10.0",
+        "swagger-jsdoc": "^4.0.0",
+        "swagger-ui-express": "^4.1.4"
     },
     "devDependencies": {
         "eslint": "^7.2.0",

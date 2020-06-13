@@ -7,6 +7,7 @@ const configs = {
         cors: require('cors'),
         bodyParser: require('body-parser'),
         env: { PORT: process.env.PORT || 3333 },
+        swaggerUi: require('swagger-ui-express'),
     },
     routes: require('@src/routes'),
 }
