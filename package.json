@@ -1,7 +1,9 @@
 {
-    "name": "challenge-bravo",
-	"version": "1.0.0",
-	"engines": {"node": "14"},
+    "name": "currency-api",
+    "version": "1.0.0",
+    "engines": {
+        "node": "14"
+    },
     "description": "Desafio Hurb Challenge-bravo. Api de converssao monetaria",
     "main": "src/app.js",
     "type": "module",

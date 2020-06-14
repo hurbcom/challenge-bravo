@@ -23,8 +23,10 @@ services:
     ports:
       - "6379:6379"
 
-  currency.api:
+  currency-api:
     container_name: currency-api
+    image: currency-api
+    restart: always
     environment: 
       MYSQL_HOST: mysql
       MYSQL_USER: currenciesUsr

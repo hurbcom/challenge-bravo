@@ -5,8 +5,8 @@ const currenciesDbClient = mySqlClient(connections.currenciesDb);
 
 const controller = {
 	set(server) {
-		server.get('/isAlive', this.isAlive);
-		server.head('/isAlive', this.isAlive);
+		server.get('/heartbeat/isAlive', this.isAlive);
+		server.head('/heartbeat/isAlive', this.isAlive);
 	},
 	async isAlive(request, response, next) {
 		try {
