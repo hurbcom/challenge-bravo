@@ -56,3 +56,12 @@ server.listen(8080, function () {
 });
 
 server.timeout = 3 * 1000;//3 sec
+
+/*
+import currencyLayerApiClient from './services/currencyLayerApiClient.js';
+
+currencyLayerApiClient.requestExchangeRatesAsync().then((result) => {
+	console.log(result);
+}).catch((e) => {
+	console.log(e);
+}) ;*/

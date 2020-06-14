@@ -15,11 +15,11 @@ let connections = {
 	}
 }
 
-console.log('using conections', connections);
 let appParameters = {
 	cors: [/.*/],
+	fixerApiKey: 'b974365156ad62aeea355a9a149ede01',
+	currencyLayerApiKey: '8a521dbb148e80fda3efb7eed8148299'
 	
 }
-
 
 export {connections, appParameters};

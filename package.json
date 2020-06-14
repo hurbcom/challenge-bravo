@@ -22,7 +22,9 @@
     },
     "homepage": "https://github.com/ewma18/challenge-bravo#readme",
     "dependencies": {
+        "axios": "^0.19.2",
         "bluebird": "^3.7.2",
+        "lodash": "^4.17.15",
         "mysql": "^2.18.1",
         "redis": "^3.0.2",
         "restify": "^8.5.1",
