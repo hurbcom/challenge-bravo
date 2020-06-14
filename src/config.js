@@ -4,8 +4,8 @@ let connections = {
 	currenciesDb: {
 		connectionLimit: process.env.MYSQL_CONNECTIONS_LIMIT || 10,
 		host: process.env.MYSQL_HOST || 'localhost',
-		user: 'root',
-		password: process.env.MYSQL_CURRENCIES_API_PASSWORD || '_hard_password_',
+		user: process.env.MYSQL_USER || 'root',
+		password: process.env.MYSQL_PASSWORD || '_hard_password_',
 		database: 'currencies',
 		multipleStatements: true
 	},
@@ -15,6 +15,7 @@ let connections = {
 	}
 }
 
+console.log('using conections', connections);
 let appParameters = {
 	cors: [/.*/],
 	

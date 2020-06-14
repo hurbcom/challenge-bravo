@@ -10,6 +10,7 @@ const controller = {
 	},
 	async isAlive(request, response, next) {
 		try {
+			console.log('handling heartbeat request');
 			await currenciesDbClient.heartbeatAsync();
 
 			response.send(200);

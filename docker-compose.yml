@@ -11,6 +11,8 @@ services:
     environment:
       MYSQL_DATABASE: currencies
       MYSQL_ROOT_PASSWORD: _hard_password_
+      MYSQL_USER: currenciesUsr
+      MYSQL_PASSWORD: 1234
     ports:
       - "3306:3306"
 
@@ -22,8 +24,11 @@ services:
       - "6379:6379"
 
   currency.api:
-    image: ${DOCKER_REGISTRY-}currency-api
     container_name: currency-api
+    environment: 
+      MYSQL_HOST: mysql
+      MYSQL_USER: currenciesUsr
+      MYSQL_PASSWORD: 1234
     links:
       - mysql
       - redis
