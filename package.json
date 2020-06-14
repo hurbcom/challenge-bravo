@@ -1,0 +1,29 @@
+{
+    "name": "challenge-bravo",
+	"version": "1.0.0",
+	"engines": {"node": "14"},
+    "description": "Desafio Hurb Challenge-bravo. Api de converssao monetaria",
+    "main": "src/app.js",
+    "type": "module",
+    "scripts": {
+        "start": "node src/app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ewma18/challenge-bravo.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ewma18/challenge-bravo/issues"
+    },
+    "homepage": "https://github.com/ewma18/challenge-bravo#readme",
+    "dependencies": {
+        "bluebird": "^3.7.2",
+        "mysql": "^2.18.1",
+        "redis": "^3.0.2",
+        "restify": "^8.5.1",
+        "restify-cors-middleware": "^1.1.1"
+    }
+}

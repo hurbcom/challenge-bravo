@@ -1,0 +1,39 @@
+version: "3.4"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password --init-file /data/application/init.sql
+    volumes: 
+      - ./sql-scripts/init.sql:/data/application/init.sql
+    restart: always
+    environment:
+      MYSQL_DATABASE: currencies
+      MYSQL_ROOT_PASSWORD: _hard_password_
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis
+    container_name: redis
+    command: redis-server
+    ports:
+      - "6379:6379"
+
+  currency.api:
+    image: ${DOCKER_REGISTRY-}currency-api
+    container_name: currency-api
+    links:
+      - mysql
+      - redis
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    expose:
+      - "8080"
+    ports:
+      - "9090:8080"
+    depends_on:
+      - mysql
+      - redis
