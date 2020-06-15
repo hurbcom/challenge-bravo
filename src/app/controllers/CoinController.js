@@ -26,19 +26,13 @@ class CoinController {
     }
     //Função para a atualização da moeda
     async update(req, res) {
-        const { id } = req.params;
         try {
-            await Coin.findByIdAndUpdate(id, req.body);
-            const coin = await Coin.findById(id);
+            const coin = await Coin.findByIdAndUpdate(req.params.id, req.body, { new: true });
             return res.json(coin)
         } catch (error) {
             console.log(error);
             return res.status(400).json({ error: "Coin does not updated" });
         }
-
-
-
-
     }
     //Função para deletar uma moeda
     async delete(req, res) {
@@ -72,20 +66,47 @@ class CoinController {
 
         return res.json({ value: conversion });
     }
-    //Função para atualização dos valores cambiais das moedas automaticamente;
-    async updateWEB (req, res) {
+    //Função para atualização dos valores cambiais das moedas automaticamente por api web;
+    async updateWEB () {
         try {
             const response = await axios.get('https://economia.awesomeapi.com.br/json/all');
             const data = Object.values(response.data);
-            data.map(async (coin) => {
+            data.forEach(async (coin, index) => {
                 try {
-                   const newCoin = await Coin.updateOne({code: coin.code}, { lastro: Number(coin.high) })
-                   console.log(newCoin)
+                   if (index !== 1){
+                        let newCoin = await Coin.updateOne({
+                            code: coin.code
+                        }, {
+                            lastro: Number(coin.high)
+                        })
+                        return console.log(newCoin)
+                    }
                 } catch (error) {
                     console.log(error);
                 }
             })
-            console.log("Updated");
+            return console.log("Updated");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    //Função para criar moedas automaticamente através de api web
+    async createWeb () {
+        try {
+            const response = await axios.get('https://economia.awesomeapi.com.br/json/all');
+            const data = Object.values(response.data);
+            data.map(async (coin , index) => {
+                try {
+                    if (index !== 1) await Coin.create({
+                        code: coin.code,
+                        name: coin.name,
+                        lastro: coin.high
+                     })
+                } catch (error) {
+                    console.log(error);
+                }
+            })
+            return console.log("Created Coins");
         } catch (error) {
             console.log(error);
         }
