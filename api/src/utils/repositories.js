@@ -1,4 +1,4 @@
-const Coins = require('./model')
+const Coins = require('./model/coins')
 
 class CoinsRepository {
     constructor(model) {

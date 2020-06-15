@@ -45,6 +45,7 @@
         "@middlewares": "./src/middlewares",
         "@routes": "./src/routes",
         "@services": "./src/services",
-        "@utils": "./src/utils"
+        "@utils": "./src/utils",
+        "@jobs": "./src/jobs"
     }
 }
