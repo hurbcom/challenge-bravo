@@ -28,6 +28,8 @@
         "mysql": "^2.18.1",
         "redis": "^3.0.2",
         "restify": "^8.5.1",
-        "restify-cors-middleware": "^1.1.1"
+        "restify-cors-middleware": "^1.1.1",
+        "restify-errors": "^8.0.2",
+        "validator": "^13.1.1"
     }
 }

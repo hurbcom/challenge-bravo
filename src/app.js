@@ -1,5 +1,6 @@
 import restify from 'restify';
 import corsMiddleware from 'restify-cors-middleware';
+
 import {connections, appParameters} from './config.js';
 
 const server = restify.createServer({ name: 'Currencies-Api' });
@@ -56,12 +57,3 @@ server.listen(8080, function () {
 });
 
 server.timeout = 3 * 1000;//3 sec
-
-/*
-import currencyLayerApiClient from './services/currencyLayerApiClient.js';
-
-currencyLayerApiClient.requestExchangeRatesAsync().then((result) => {
-	console.log(result);
-}).catch((e) => {
-	console.log(e);
-}) ;*/
