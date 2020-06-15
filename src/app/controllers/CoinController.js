@@ -1,34 +1,35 @@
-const Coin = require('../database/schemas/Coin');
+const knex = require('../../database/connection');
 const axios = require('axios');
 
 
 class CoinController {
     //Função que mostra todas as moedas cadastradas no banco
     async index(req, res) {
-        const coins = await Coin.find();
+        const coins = await knex('coins').select('*');
         return res.send(coins);
     }
     //Função para criação de moeda
     async store(req, res) {
         const { code, name, lastro } = req.body;
 
-        const coinExists = await Coin.findOne({ code: code});
+        const coinExists = await knex('coins').where('code',code).first();
 
         if (coinExists) return res.status(400).json({ erro: "Coin already exists." })
 
-        const coin = await Coin.create({
+        const newCoin = {
             code,
             name,
             lastro
-        });
-        return res.json(coin);
+        }
 
+        await knex('coins').insert(newCoin);
+        return res.json(newCoin);
     }
     //Função para a atualização da moeda
     async update(req, res) {
         try {
-            const coin = await Coin.findByIdAndUpdate(req.params.id, req.body, { new: true });
-            return res.json(coin)
+            await knex('coins').where('id',req.params.id).update(req.body);
+            return res.json(req.body)
         } catch (error) {
             console.log(error);
             return res.status(400).json({ error: "Coin does not updated" });
@@ -37,10 +38,11 @@ class CoinController {
     //Função para deletar uma moeda
     async delete(req, res) {
        //pegando id através dos parametros na requisição
-       const { id } = req.params;
        try {
            //removendo do banco a moeda desejada pelo id da mesma.
-           await Coin.findByIdAndRemove(id)
+           await knex('coins')
+               .where('id', req.params.id)
+               .del()
            return res.status(200).json();
         } catch (error) {
             console.log(error);
@@ -51,8 +53,8 @@ class CoinController {
     async conversion(req, res) {
         const {from, to, amount } = req.query;
         //localizando as moedas no banco de dados
-        const coinFrom = await Coin.findOne({ code: from })
-        const coinTo = await Coin.findOne({ code: to })
+        const coinFrom = await knex('coins').where({ code: from }).first();
+        const coinTo = await knex('coins').where({ code: to }).first();
 
         if (!coinFrom) return res.status(400).json({ error: "Coin From does not exists" });
         if (!coinTo) return res.status(400).json({ error: "Coin To does not exists" });
@@ -74,11 +76,9 @@ class CoinController {
             data.forEach(async (coin, index) => {
                 try {
                    if (index !== 1){
-                        let newCoin = await Coin.updateOne({
-                            code: coin.code
-                        }, {
-                            lastro: Number(coin.high)
-                        })
+                        let newCoin = await knex('coins')
+                            .where('code', coin.code)
+                            .update({ lastro : Number(coin.high) })
                         return console.log(newCoin)
                     }
                 } catch (error) {
@@ -86,27 +86,6 @@ class CoinController {
                 }
             })
             return console.log("Updated");
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    //Função para criar moedas automaticamente através de api web
-    async createWeb () {
-        try {
-            const response = await axios.get('https://economia.awesomeapi.com.br/json/all');
-            const data = Object.values(response.data);
-            data.map(async (coin , index) => {
-                try {
-                    if (index !== 1) await Coin.create({
-                        code: coin.code,
-                        name: coin.name,
-                        lastro: coin.high
-                     })
-                } catch (error) {
-                    console.log(error);
-                }
-            })
-            return console.log("Created Coins");
         } catch (error) {
             console.log(error);
         }
