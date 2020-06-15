@@ -18,8 +18,8 @@ let connections = {
 let appParameters = {
 	cors: [/.*/],
 	fixerApiKey: 'b974365156ad62aeea355a9a149ede01',
-	currencyLayerApiKey: '8a521dbb148e80fda3efb7eed8148299'
-	
+	currencyLayerApiKey: '8a521dbb148e80fda3efb7eed8148299',
+	cryptoCompareApiKey: 'ef2fee6ed0b32385e346b325cca147767191e1f60fd5de468fd6c5b39919f01d'
 }
 
 export {connections, appParameters};
