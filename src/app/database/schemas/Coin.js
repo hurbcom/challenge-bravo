@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const CoinSchema = new mongoose.Schema({
     code : {
         type: String,
+        unique: true,
         required: true
     },
     name: {
@@ -12,11 +13,9 @@ const CoinSchema = new mongoose.Schema({
     lastro: {
         type: Number,
         required: true,
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
     }
+}, {
+    timestamps: true
 });
 
 const Coin = mongoose.model("Coin", CoinSchema);
