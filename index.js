@@ -1,14 +1,17 @@
-require('module-alias/register')
-const Server = require('@src/startServer')
+require('module-alias/register') //importando alias
+const Server = require('@src/startServer') //importando classe Server
+
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` }) //configurando dotenv
+
 const configs = {
     dependencies: {
         express: require('express'),
         logger: require('morgan'),
         cors: require('cors'),
         bodyParser: require('body-parser'),
-        env: { PORT: process.env.PORT || 3333 },
         swaggerUi: require('swagger-ui-express'),
         scheduler: require('@utils/scheduler'),
+        mongoose: require('mongoose'),
     },
     routes: require('@src/routes'),
 }

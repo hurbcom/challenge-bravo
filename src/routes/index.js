@@ -1,3 +1,5 @@
+const repository = require('@utils/repositories')
+
 module.exports = {
     get: [
         {
@@ -8,7 +10,10 @@ module.exports = {
         },
         {
             path: '/coins',
-            callback: require('@controllers/list-coins'),
+            callback: async (req, res) => {
+                const coins = await repository.findAll()
+                res.json(coins)
+            },
             /**
              * @swagger
              * /coins:
@@ -121,8 +126,13 @@ module.exports = {
     ],
     delete: [
         {
-            path: '/coin/:id',
-            callback: require('@controllers/delete-coin'),
+            path: '/coin/:name',
+            callback: async (req, res) => {
+                var { name } = req.params
+                name = name.toUpperCase()
+                const result = await repository.deleteById({ name })
+                res.status(200).json([result])
+            },
             /**
              * @swagger
              * /coin:
@@ -138,7 +148,7 @@ module.exports = {
     ],
     put: [
         {
-            path: '/coin',
+            path: '/coin/:name/:value',
             callback: require('@controllers/update-coin'),
             /**
              * @swagger

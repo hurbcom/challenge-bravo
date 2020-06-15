@@ -45,9 +45,12 @@ module.exports = class Server {
     }
     startApi(dependencies, routes) {
         const { app } = dependencies
-        const {
-            env: { PORT },
-        } = dependencies
+        const { mongoose } = dependencies
+
+        mongoose.connect(process.env.DB_HOST, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
 
         Object.entries(routes).forEach(([method, route]) => {
             route.forEach(({ path, callback }) => {
@@ -62,7 +65,7 @@ module.exports = class Server {
                 customCss: '.swagger-ui .topbar { display: none }',
             })
         )
-
+        const PORT = process.env.PORT
         app.listen(PORT, () => {
             console.log(`Servidor rodando em http://localhost:${PORT}`)
         })
