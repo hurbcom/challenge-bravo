@@ -1,14 +1,9 @@
 //import { connections } from '../config.js';
 //import mySqlClient from '../infra/mysqlDbClient.js';
 import validationFilter from './parameterValidationFilter.js';
+import currencyExchangeService from '../services/currencyExchangeService.js';
 
 //const currenciesDbClient = mySqlClient(connections.currenciesDb);
-
-class Currency {
-	constructor(symbol) {
-		this.symbol = symbol
-	}
-}
 
 let exchangeConvertRequestModel = {
 	query: {
@@ -35,9 +30,18 @@ const controller = {
 	async convertCurrenciesAsync(request, response, next) {
 		try {
 			console.log('handling currency conversion request');
-			//await currenciesDbClient.heartbeatAsync();
+			
+			const from = request.parsedParameters.from.toUpperCase();
+			const to = request.parsedParameters.to.toUpperCase();
+			const convertedAmount = await currencyExchangeService.convertCurrencyAsync(
+				from, to, request.parsedParameters.amount);
 
-			response.send(200);
+			response.send(200, {
+				originalCurrency: from,
+				originalAmount: request.parsedParameters.amount,
+				convertedCurrency: to,
+				convertedAmount
+			});
 			return next();
 		} catch (error) {
 			console.error(error);
