@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.81% </span>
+                <span class="strong">38.64% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/42</span>
+                <span class='fraction'>17/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/8</span>
+                <span class='fraction'>4/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.29% </span>
+                <span class="strong">28.57% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/7</span>
+                <span class='fraction'>2/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.08% </span>
+                <span class="strong">37.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/39</span>
+                <span class='fraction'>15/40</span>
             </div>
         
             
@@ -151,7 +151,8 @@
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a>
 <a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -180,12 +181,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -273,13 +275,14 @@ class CoinController {
         return res.json(newCoin);
     }
     //Função para a atualização da moeda
-<span class="fstat-no" title="function not covered" >    as</span>ync update(req, res) {
-<span class="cstat-no" title="statement not covered" >        try {</span>
-<span class="cstat-no" title="statement not covered" >            await knex('coins').where('id',req.params.id).update(req.body);</span>
-<span class="cstat-no" title="statement not covered" >            return res.json(req.body)</span>
+    async update(req, res) {
+        try {
+            const coin = await knex('coins').where('id',req.params.id).update(req.body);
+            if (coin === 0 ) return res.status(400).json({ error: "Coin does not updated" });
+            return res.json(req.body)
         } catch (error) {
-<span class="cstat-no" title="statement not covered" >            console.log(error);</span>
-<span class="cstat-no" title="statement not covered" >            return res.status(400).json({ error: "Coin does not updated" });</span>
+            console.log(error);
+            return res.status(400).json({ error: "Coin does not updated" });
         }
     }
     //Função para deletar uma moeda
@@ -318,7 +321,7 @@ class CoinController {
     //Função para atualização dos valores cambiais das moedas automaticamente por api web;
 <span class="fstat-no" title="function not covered" >    as</span>ync updateWEB () {
 <span class="cstat-no" title="statement not covered" >        try {</span>
-            const response = <span class="cstat-no" title="statement not covered" >await axios.get('https://economia.awesomeapi.com.br/json/all');</span>
+            const response = <span class="cstat-no" title="statement not covered" >await axios.get(process.env.API_ECONOMIA);</span>
             const data = <span class="cstat-no" title="statement not covered" >Object.values(response.data);</span>
 <span class="cstat-no" title="statement not covered" >            data.forEach(<span class="fstat-no" title="function not covered" >as</span>ync (coin, index) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >                try {</span>
@@ -346,7 +349,7 @@ module.exports = new CoinController;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Jun 16 2020 01:42:10 GMT-0300 (GMT-03:00)
+                at Tue Jun 16 2020 16:06:31 GMT-0300 (GMT-03:00)
             </div>
         </div>
         <script src="prettify.js"></script>
