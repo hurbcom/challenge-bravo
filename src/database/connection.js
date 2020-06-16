@@ -1,7 +1,8 @@
+require('../bootstrap');
 const knex = require('knex');
 const path = require('path');
 
-const connection = knex({
+const connectionDev = knex({
     client: 'sqlite3',
     connection: {
         filename: path.resolve(__dirname, 'database.sqlite'),
@@ -13,4 +14,16 @@ const connection = knex({
     }
 });
 
-module.exports = connection;
+const connectionTest = knex({
+    client: 'sqlite3',
+    connection: {
+        filename: path.resolve(__dirname, '..', '..', '__tests__', 'databaseTest.sqlite'),
+    },
+    useNullAsDefault: true,
+    pool: {
+        min: 0,
+        max: 10
+    }
+});
+
+module.exports = process.env.NODE_ENV === 'development' ? connectionDev : connectionTest;
