@@ -1,3 +1,4 @@
+require('./bootstrap');
 const express = require('express');
 const routes = require('./routes');
 const bodyParser = require('body-parser');
@@ -11,7 +12,7 @@ new cronJob('0 */5 * * * *', CoinController.updateWEB , null, true, 'America/Sao
 
 app.use(bodyParser.json())
 app.use(routes);
-app.listen(3333)
-console.log("Servidor conectado na porta 3333");
+app.listen(process.env.APP_PORT)
+console.log(`Servidor conectado na porta ${process.env.APP_PORT}`);
 
 
