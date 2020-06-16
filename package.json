@@ -7,7 +7,9 @@
     "dev": "nodemon src/index.js",
     "knex:migrate": "knex --knexfile knexfile.js migrate:latest",
     "knex:seed": "knex --knexfile knexfile.js seed:run",
-    "test": "jest"
+    "pretest": "set NODE_ENV=test knex --knexfile knexfile.js migrate:latest",
+    "test": "set NODE_ENV=test jest",
+    "posttest": "set NODE_ENV=test knex --knexfile knexfile.js migrate:rollback --all"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "cron": "^1.8.2",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "knex": "^0.21.1",
     "sqlite3": "^4.2.0"
