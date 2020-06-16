@@ -2,7 +2,7 @@ import axios from "axios";
 import store from "@/store";
 
 export const api = axios.create({
-    baseURL: process.env.VUE_APP_API_URL
+    baseURL: "http://localhost:3333"
 });
 
 const onError = ({ message, stack }) => {

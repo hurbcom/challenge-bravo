@@ -1,13 +1,14 @@
 import { api } from "./../utils/api-instance";
 
 export const getCoins = async () => {
+    console.log("cheguei aqui");
     const result = await api.get("/coins");
     return result;
 };
 
-export const convertCoin = async (to, from, amount) => {
+export const convertCoin = async (from, to, amount) => {
     const result = await api.get(
-        `/coin/conversion?to=${to}&from=${from}&amount=${amount}`
+        `/coin/conversion?from=${from}&to=${to}&amount=${amount}`
     );
     return result;
 };
