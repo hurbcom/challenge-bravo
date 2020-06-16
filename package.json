@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "knex:migrate": "knex --knexfile knexfile.js migrate:latest",
-    "knex:seed": "knex --knexfile knexfile.js seed:run"
+    "knex:seed": "knex --knexfile knexfile.js seed:run",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,10 @@
     "express": "^4.17.1",
     "knex": "^0.21.1",
     "sqlite3": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.1",
+    "supertest": "^4.0.2"
   }
 }
