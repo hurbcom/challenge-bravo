@@ -28,7 +28,8 @@ class CoinController {
     //Função para a atualização da moeda
     async update(req, res) {
         try {
-            await knex('coins').where('id',req.params.id).update(req.body);
+            const coin = await knex('coins').where('id',req.params.id).update(req.body);
+            if (coin === 0 ) return res.status(400).json({ error: "Coin does not updated" });
             return res.json(req.body)
         } catch (error) {
             console.log(error);
@@ -71,7 +72,7 @@ class CoinController {
     //Função para atualização dos valores cambiais das moedas automaticamente por api web;
     async updateWEB () {
         try {
-            const response = await axios.get('https://economia.awesomeapi.com.br/json/all');
+            const response = await axios.get(process.env.API_ECONOMIA);
             const data = Object.values(response.data);
             data.forEach(async (coin, index) => {
                 try {
