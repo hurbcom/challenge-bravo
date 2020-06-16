@@ -11,7 +11,7 @@
 
 
 exports.down = async function(knex) {
-    return knex.schema.dropTable('points');
+    return knex.schema.dropTable('coins');
 }
 exports.config = {
     transaction: false
