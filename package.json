@@ -7,9 +7,9 @@
     "dev": "nodemon src/index.js",
     "knex:migrate": "knex --knexfile knexfile.js migrate:latest",
     "knex:seed": "knex --knexfile knexfile.js seed:run",
-    "pretest": "set NODE_ENV=test knex --knexfile knexfile.js migrate:latest",
-    "test": "set NODE_ENV=test jest",
-    "posttest": "set NODE_ENV=test knex --knexfile knexfile.js migrate:rollback --all"
+    "pretest": "NODE_ENV=test knex --knexfile knexfile.js migrate:latest",
+    "test": "NODE_ENV=test jest",
+    "posttest": "NODE_ENV=test knex --knexfile knexfile.js migrate:rollback --all"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
+    "faker": "^4.1.0",
     "jest": "^26.0.1",
     "supertest": "^4.0.2"
   }
