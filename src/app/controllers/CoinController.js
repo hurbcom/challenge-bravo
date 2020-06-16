@@ -29,10 +29,11 @@ class CoinController {
     async update(req, res) {
         try {
             const coin = await knex('coins').where('id',req.params.id).update(req.body);
-            if (coin === 0 ) return res.status(400).json({ error: "Coin does not updated" });
+            if (coin === 0 )
+                return res.status(400).json({ error: "Coin does not updated" });
+
             return res.json(req.body)
         } catch (error) {
-            console.log(error);
             return res.status(400).json({ error: "Coin does not updated" });
         }
     }
@@ -41,12 +42,11 @@ class CoinController {
        //pegando id através dos parametros na requisição
        try {
            //removendo do banco a moeda desejada pelo id da mesma.
-           await knex('coins')
+           const coin = await knex('coins')
                .where('id', req.params.id)
                .del()
            return res.status(200).json();
         } catch (error) {
-            console.log(error);
             return res.status(400).json({ error: `Error when deleting currency with id: ${id}` });
         }
     }
