@@ -5,8 +5,13 @@ const axios = require('axios');
 class CoinController {
     //Função que mostra todas as moedas cadastradas no banco
     async index(req, res) {
-        const coins = await knex('coins').select('*');
-        return res.send(coins);
+        try {
+            const coins = await knex('coins').select('*');
+            return res.send(coins);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error: 'Internal server error' })
+        }
     }
     //Função para criação de moeda
     async store(req, res) {
