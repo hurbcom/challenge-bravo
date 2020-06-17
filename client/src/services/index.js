@@ -23,6 +23,6 @@ export const deleteCoin = async name => {
 };
 
 export const updateCoin = async (name, value) => {
-    const result = await api.put(`/coin/${name}`, value);
+    const result = await api.put(`/coin/${name}/${value}`);
     return result;
 };
