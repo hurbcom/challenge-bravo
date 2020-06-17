@@ -1,7 +1,6 @@
 import { api } from "./../utils/api-instance";
 
 export const getCoins = async () => {
-    console.log("cheguei aqui");
     const result = await api.get("/coins");
     return result;
 };

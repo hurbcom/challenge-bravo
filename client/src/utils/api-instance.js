@@ -8,7 +8,8 @@ export const api = axios.create({
 const onError = ({ message, stack }) => {
     console.error({ message, stack });
     store.dispatch("showError", {
-        text: "Fatal Error"
+        text: "Você está sem conexão ou API está offline",
+        persistent: true
     });
     return { data: false };
 };

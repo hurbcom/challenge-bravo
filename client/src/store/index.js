@@ -6,7 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        coins: []
+        coins: [],
+        snackbar: { status: false }
     },
     getters: {
         nameCoins: state => {
@@ -16,12 +17,30 @@ export default new Vuex.Store({
     mutations: {
         SET_COINS(state, coins) {
             state.coins = coins;
+        },
+
+        SET_SNACKBAR(state, snackbar) {
+            state.snackbar = snackbar;
         }
     },
     actions: {
         async getCoins({ commit }) {
             const result = await getCoins();
             commit("SET_COINS", result);
+        },
+
+        showNotification({ commit }, notification) {
+            commit("SET_SNACKBAR", {
+                ...notification,
+                status: true
+            });
+        },
+        showError({ commit }, notification) {
+            commit("SET_SNACKBAR", {
+                ...notification,
+                color: "red",
+                status: true
+            });
         }
     }
 });
