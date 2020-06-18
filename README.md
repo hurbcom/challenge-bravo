@@ -58,4 +58,5 @@ A API está por padrão sendo executada na URL: **http://localhost:3333**
 -   POST /coin  -> Cria uma nova moeda
 -   PUT /coin/*:name*/*:value*  -> Edita uma moeda (lastro dólar americano)
 -   DELETE /coin/*:name*  -> Exclui uma moeda
+
 Para mais informações acesse: **http://localhost:3333/api-docs**
