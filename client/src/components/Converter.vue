@@ -59,7 +59,7 @@ export default {
         this.convertCoin = convertCoin;
     },
     async created() {
-        this.debouncedGetAnswer = debounce(this.getConvertedCoin, 500);
+        this.debouncedGetConvertedCoin = debounce(this.getConvertedCoin, 500);
         this.getConvertedCoin();
     },
     methods: {
@@ -84,7 +84,13 @@ export default {
     watch: {
         value: function() {
             this.message = "Esperando o valor...";
-            this.debouncedGetAnswer();
+            this.debouncedGetConvertedCoin();
+        },
+        to: function() {
+            this.debouncedGetConvertedCoin();
+        },
+        from: function() {
+            this.debouncedGetConvertedCoin();
         }
     },
     computed: {

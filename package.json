@@ -1,0 +1,12 @@
+{
+    "name": "challenge-bravo",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "install": "concurrently -r  \"cd client && npm install\" \"cd api && npm install\"",
+        "start": "concurrently -r  \"cd client && npm run serve\" \"cd api && npm run dev-job\""
+    },
+    "dependencies": {
+        "concurrently": "^5.2.0"
+    }
+}
