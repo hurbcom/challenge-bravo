@@ -1,3 +1,4 @@
+//consumindo API de conversão
 import { api } from "./../utils/api-instance";
 
 export const getCoins = async () => {

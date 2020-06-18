@@ -1,3 +1,5 @@
+//criando instancia da API
+
 import axios from "axios";
 import store from "@/store";
 
