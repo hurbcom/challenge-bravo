@@ -2,8 +2,11 @@
 
 ## Sobre o Projeto
 
-O projeto é um monolito que utiliza as seguintes tecnologias: MongoDB - NodeJs (JavaScript) - VueJs (FrameWork JavaScript).
+O projeto é um monolito que utiliza as seguintes tecnologias: MongoDB - NodeJs (JavaScript) - VueJs (Framework JavaScript).
+
 O projeto não foi colocado em um contâiner Docker devido as dificuldades encontradas devido a incompatibilidade entre o Docker e a versão do meu Windows (Windows Home).
+
+Foi utilizado utilizado o framework VueJs no frontend e para inicialização do projeto foi utilizado seu [CLI](https://cli.vuejs.org/).
 
 ## Requisitos necessários
 
