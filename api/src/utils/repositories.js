@@ -31,13 +31,19 @@ class CoinsRepository {
     //update coin
     updateById(name, value) {
         const query = { name }
-        return this.model.findOneAndUpdate(query, {
-            $set: {
-                name,
-                value,
-                lastUpdate: new Date().toLocaleString(),
+        return this.model.findOneAndUpdate(
+            query,
+            {
+                $set: {
+                    name,
+                    value,
+                    lastUpdate: new Date().toLocaleString(),
+                },
             },
-        })
+            {
+                upsert: true,
+            }
+        )
     }
 }
 

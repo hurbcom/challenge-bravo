@@ -5,7 +5,10 @@ module.exports = {
         {
             path: '/',
             callback: (req, res) => {
-                res.send('API IS ONLINE')
+                res.json({
+                    status: 'ONLINE',
+                    more: 'Leia a documentação em: https://localhost/3333/docs',
+                })
             },
         },
         {
@@ -140,6 +143,8 @@ module.exports = {
              *    summary: Documentar
              *    tags:
              *      - Coin
+             *  parameters:
+             *      - in: query
              *    responses:
              *      '200':
              *         description: Documentar
