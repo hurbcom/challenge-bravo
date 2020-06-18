@@ -1,8 +1,13 @@
 # Desafio Bravo - HURB
 
 ## Sobre o Projeto
+O projeto é um conversor de moedas, para isso foi criado uma API capaz de realizar a conversão, criação, atualização, exclusão e listagem de moedas. Além disso foi criado um FrontEnd que permite de forma intuitiva a utilização das funções básica da API.
 
-O projeto é um monolito que utiliza as seguintes tecnologias: MongoDB - NodeJs (JavaScript) - VueJs (Framework JavaScript).
+O sistema possuí um serviço de atualização de 5 em 5 minutos (~podendo ser alterado no index.js da API~) das moedas cadastradas. Esse serviço é possível graças a uma API externa e aberta que fornece informações atualizadas de diversas moedas. A API externa pode ser acessada [aqui](https://economia.awesomeapi.com.br).
+
+É importante ressaltar que o valor base utilizado para conversão foi o Dólar Americano (lastro), então para inclusão de uma nova moeda, seu valor deve ser baseado no valor de 1 dólar. Exemplo: Para adicionar a moeda Euro, deve informar o valor de x Euros equivalente a 1 dólar.
+
+A arquitetura utilizada foi um monolito que utiliza as seguintes tecnologias: MongoDB - NodeJs (JavaScript) - VueJs (Framework JavaScript).
 
 O projeto não foi colocado em um contâiner Docker devido as dificuldades encontradas devido a incompatibilidade entre o Docker e a versão do meu Windows (Windows Home).
 
@@ -42,3 +47,14 @@ Para inicializar execute o comando:
 ```
 npm start
 ```
+
+## Rotas
+
+A API está por padrão sendo executada na URL: **http://localhost:3333**
+
+-   GET /coins   -> Retorna uma lista de moedas cadastras na API
+
+-   GET coin/conversion?from=*Moeda1*&to=*Moeda2*&amount=*Valor*  -> Realiza a conversão entre moedas cadastradas
+-   POST /coin  -> Cria uma nova moeda
+-   PUT /coin/*:name*/*:value*  -> Edita uma moeda (lastro dólar americano)
+-   DELETE /coin/*:name*  -> Exclui uma moeda
