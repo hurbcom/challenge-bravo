@@ -23,36 +23,30 @@ Para instalar o projeto faça:
 &nbsp;
 
 -   Acessar, pelo terminal de comandos do Sistema Operacional, a pasta onde será depositado o projeto.
-
 &nbsp;
 
 Ex: A pasta "my_project"c riada para receber os arquivos do projeto.
 &nbsp;
+
 Para o Linux:
 $ cd /home/user/my_project
-
 &nbsp;
 
 Para o Mac:
 $ cd /Users/user/my_project
-
 &nbsp;
 
 Para o Windows:
 $ cd /c/user/my_project
-
 &nbsp;
 
 -   Digitar o comando para clonar o projeto:
-
 &nbsp;
 
 $ git clone https://github.com/rafaellrf09/challenge-bravo.git
-
 &nbsp;
 
 -   Acessar a pasta do projeto : *cd /challenge-bravo (CONFERIR SE É ESSA PASTA MESMO QUE É CRIADA)*
-
 &nbsp;
 
 -   **Caso tenha Docker instalado**:
@@ -86,6 +80,7 @@ Por padrão o projeto deverá rodar em: **http://localhost:3333**
 ## Parâmetros das Rotas
 POST /coins
 &nbsp;
+
     {
         "name" : "RealTeste",
         "code": "BRLTX",
@@ -95,15 +90,14 @@ POST /coins
 
 PUT /coins/*id*
 &nbsp;
+
     {
         "name" : "Real Brasileiro de verdade",
         "lastro": 3
     }
-
 &nbsp;
 
 DELETE /coins/*id*
-
 &nbsp;
 
 GET /conversion?from=*USD*&to=*BRL*&amount=*500*
