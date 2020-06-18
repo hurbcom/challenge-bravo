@@ -28,7 +28,7 @@ git clone https://github.com/lmaiaa/challenge-bravo.git
 Em seguida acesse a pasta clonada e instale as dependências
 
 ```
-cd challeng-bravo
+cd challenge-bravo
 
 npm install
 ```
