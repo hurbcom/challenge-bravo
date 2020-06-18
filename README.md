@@ -18,8 +18,9 @@ Foi utilizado utilizado o framework VueJs no frontend e para inicialização do 
 É necessário a instalação do NodeJs 12.X, MongoDB e GIT para inicialização do projeto.
 
 -   **Instalação do NodeJs:** [Acesse aqui](https://nodejs.org/en/download/) e realize o download do NodeJs 12.X
--   **Instalação do MongoDB:** Realize o download do instalador [aqui](https://www.mongodb.com/try/download/community) ou caso já tenha instalado o NodeJs use o comando `npm install mongodb --save`.
+-   **Instalação do MongoDB:** Realize o download do instalador [aqui](https://www.mongodb.com/try/download/community).
 -   **Instalação do GIT:** Realize o download [aqui](https://git-scm.com/downloads) e realize a instalção.
+*Obs.: Lamento profundamente por essa etapa, sei quanto o Docker ajudaria.*
 
 Realizado as configurações vamos para a próxima etapa.
 
