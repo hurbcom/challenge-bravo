@@ -6,31 +6,35 @@ module.exports = class Server {
             ...dependencies,
         }
         this.routes = routes
-    } // crio classe Server que recebe as dependencias e as rotas
+    } // classe Server que recebe as dependencias e as rotas
 
     async start() {
-        const { dependencies, routes } = this
-        this.setServerDependencies(dependencies)
-        this.configureExpress(dependencies)
-        this.startApi(dependencies, routes)
+        const { dependencies, routes } = this //pegando dependencias do this
+        this.setServerDependencies(dependencies) //setando dependencias no server
+        this.configureExpress(dependencies) //configurando express
+        this.startApi(dependencies, routes) //startando express configurado e api com suas dependecnias
     }
     async scheduleJob(loop, job, instantStart) {
-        this.dependencies.scheduler(loop, job.bind(this.dependencies))
+        this.dependencies.scheduler(loop, job.bind(this.dependencies)) //permite que o job use todas as dependencias para seu funcionamento correto
         if (instantStart) {
+            //inicializar quando API inicializar
             await job.bind(this.dependencies)()
         }
     }
     set(name, dependencie) {
+        //setagem no this
         this.dependencies[name] = dependencie
     }
     setServerDependencies({ express }) {
         const app = express()
-        this.set('app', app)
+        this.set('app', app) //setando app no this
     }
     configureExpress({ app, cors, logger, bodyParser }) {
-        app.use(cors())
-        app.use(logger('dev'))
-        app.use(erroHandler)
+        //configurando express
+        app.use(cors()) //middleware cors
+        app.use(logger('dev')) //middleware log
+        app.use(erroHandler) //middleware interceptador de erros
+        //configurando body parser para utilização fácil do body no request
         app.use(
             bodyParser.urlencoded({
                 extended: true,
@@ -50,15 +54,17 @@ module.exports = class Server {
         mongoose.connect(process.env.DB_HOST, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-        })
+        }) //conectando no MongoDB
 
         Object.entries(routes).forEach(([method, route]) => {
+            //roteirizando as rotas antes de inicializar o servidor
             route.forEach(({ path, callback }) => {
                 app[method](path, callback)
             })
         })
         const { swaggerUi } = dependencies
         app.use(
+            // criando rotar de documentação e passando as configurações
             '/api-docs',
             swaggerUi.serve,
             swaggerUi.setup(require('./../swagger.config'), {
@@ -67,6 +73,7 @@ module.exports = class Server {
         )
         const PORT = process.env.PORT
         app.listen(PORT, () => {
+            //inicializando servidor na porta setada no .env
             console.log(`Servidor rodando em http://localhost:${PORT}`)
         })
     }

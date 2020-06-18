@@ -7,7 +7,8 @@ module.exports = {
             callback: (req, res) => {
                 res.json({
                     status: 'ONLINE',
-                    more: 'Leia a documentação em: https://localhost/3333/docs',
+                    more:
+                        'Leia a documentação em: http://localhost:3333/api-docs',
                 })
             },
         },
@@ -106,7 +107,7 @@ module.exports = {
              * /coin:
              *   post:
              *     tags:
-             *       - Coin
+             *       -Coin
              *     summary: Adicionar moeda ao banco moedas
              *     requestBody:
              *       required: true
@@ -121,7 +122,7 @@ module.exports = {
              *                 type: string
              *   responses:
              *     '200':
-             *        description: Documentar
+             *        description: Moeda adicionada com sucesso
              *
 
              */
@@ -140,14 +141,26 @@ module.exports = {
              * @swagger
              * /coin:
              *  delete:
-             *    summary: Documentar
+             *    summary: Deletar Moeda
              *    tags:
              *      - Coin
-             *  parameters:
-             *      - in: query
+             *    requestBody:
+             *      required: true
+             *      content:
+             *        application/json:
+             *          schema:
+             *            type: object
+             *            properties:
+             *              value: string
+             *    parameters:
+             *      - in: params
+             *        name: name
+             *        required: true
+             *        schema:
+             *          type: string
              *    responses:
              *      '200':
-             *         description: Documentar
+             *         description: Modeda deletada
              */
         },
     ],
@@ -159,12 +172,18 @@ module.exports = {
              * @swagger
              * /coin:
              *  put:
-             *    summary: Documentar
+             *    summary: Atualizar valor de Moeda
              *    tags:
              *      - Coin
+             *    parameters:
+             *      - in: params
+             *        name: name
+             *        required: true
+             *        schema:
+             *          type: string
              *    responses:
              *      '200':
-             *         description: Documentar
+             *         description: Moeda atualizada
              */
         },
     ],
