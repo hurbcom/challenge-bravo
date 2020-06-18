@@ -107,7 +107,7 @@ module.exports = {
              * /coin:
              *   post:
              *     tags:
-             *       -Coin
+             *       - Coin
              *     summary: Adicionar moeda ao banco moedas
              *     requestBody:
              *       required: true
