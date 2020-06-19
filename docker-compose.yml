@@ -9,6 +9,7 @@ services:
             - db
         volumes:
             - ./api:/usr/src/app
+            - /usr/src/app/node_modules
         environment:
             - DB_HOST= mongodb://localhost:27017/
             - PORT=3333
@@ -28,6 +29,7 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ./client:/usr/src/app
+            - /usr/src/app/node_modules
         ports:
             - 8080:8080
         depends_on:
