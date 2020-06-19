@@ -21,7 +21,7 @@ Foi utilizado utilizado o framework VueJs no frontend e para inicialização do 
 -   **Instalação do MongoDB:** Realize o download do instalador [aqui](https://www.mongodb.com/try/download/community).
 -   **Instalação do GIT:** Realize o download [aqui](https://git-scm.com/downloads) e realize a instalção.
 
-*Obs.: Lamento profundamente por essa etapa, sei quanto o Docker ajudaria.*
+*Obs.: Não é necessário a instalação caso utilize o Docker. Para instalção do Docker, acesse [aqui](https://www.docker.com/products/docker-desktop)*
 
 Realizado as configurações vamos para a próxima etapa.
 
@@ -35,13 +35,15 @@ Execute o comando
 git clone https://github.com/lmaiaa/challenge-bravo.git
 ```
 - **Com Docker:**
+
 Acesse a pasta clonada e inicialize o projeto com o seguinte comando:
 ```
 docker-composer up -d
 ```
 
 - **Sem Docker:**
-Em seguida acesse a pasta clonada e instale as dependências
+
+Acesse a pasta clonada e instale as dependências
 
 ```
 cd challenge-bravo
