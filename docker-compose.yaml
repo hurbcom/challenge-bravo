@@ -1,0 +1,30 @@
+version: "3"
+services:
+    api:
+        container_name: api
+        build:
+            context: ./api
+        depends_on:
+            - db
+        volumes:
+            - ./api:/usr/app
+            - /usr/app/node_modules
+        environment:
+            - DB_HOST=mongodb://db:27017/
+            - PORT=3333
+        ports: ["80:80"]
+
+    db:
+        container_name: db
+        image: mongo:4.0
+        restart: always
+
+    client:
+        container_name: client
+        build:
+            context: ./client
+        volumes:
+            - ./client:/app
+            - /app/node_modules
+        ports:
+            - "8080:8080"
