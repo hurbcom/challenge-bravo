@@ -2,29 +2,30 @@ version: "3"
 services:
     api:
         container_name: api
-        build:
-            context: ./api
+        build: ./api
         depends_on:
             - db
         volumes:
-            - ./api:/usr/app
-            - /usr/app/node_modules
+            - ./api:/usr/src/api
         environment:
             - DB_HOST=mongodb://db:27017/
             - PORT=3333
-        ports: ["80:80"]
+        ports:
+            - "3333:3333"
 
     db:
         container_name: db
         image: mongo:4.0
-        restart: always
+        ports:
+            - "27017:27017"
 
     client:
         container_name: client
         build:
             context: ./client
         volumes:
-            - ./client:/app
-            - /app/node_modules
+            - ./client:/usr/src/client
         ports:
             - "8080:8080"
+        depends_on:
+            - api
