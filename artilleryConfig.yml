@@ -1,0 +1,20 @@
+config:
+  target: 'http://localhost:8080'
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      name: "Warm up the application"
+    - duration: 20
+      arrivalRate: 0
+      rampTo: 500
+      name: "Ramp up load"
+    - duration: 60
+      arrivalRate: 250
+      maxVusers: 1000
+      name: "Sustained max load"
+scenarios:
+  - flow:
+    - loop:
+      - get:
+          url: "/exchange/convert?from=USD&to=BRL&amount=10.56"
+      count: 10

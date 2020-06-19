@@ -29,8 +29,7 @@ const controller = {
 	},
 	async convertCurrenciesAsync(request, response, next) {
 		try {
-			console.log('handling currency conversion request');
-			
+					
 			const from = request.parsedParameters.from.toUpperCase();
 			const to = request.parsedParameters.to.toUpperCase();
 			const convertedAmount = await currencyExchangeService.convertCurrencyAsync(

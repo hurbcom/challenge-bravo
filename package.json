@@ -9,7 +9,8 @@
     "type": "module",
     "scripts": {
         "start": "node src/app.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"load-test": "artillery run artilleryConfig.yml"
     },
     "repository": {
         "type": "git",
@@ -31,5 +32,8 @@
         "restify-cors-middleware": "^1.1.1",
         "restify-errors": "^8.0.2",
         "validator": "^13.1.1"
+    },
+    "devDependencies": {
+        "artillery": "^1.6.0"
     }
 }
