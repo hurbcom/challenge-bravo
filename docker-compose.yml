@@ -3,7 +3,7 @@ services:
     api:
         container_name: api
         build:
-            context: ./api
+            context: ./api/
             dockerfile: Dockerfile
         depends_on:
             - db
@@ -24,7 +24,7 @@ services:
     client:
         container_name: client
         build:
-            context: ./client
+            context: ./client/
             dockerfile: Dockerfile
         volumes:
             - ./client:/usr/src/app
