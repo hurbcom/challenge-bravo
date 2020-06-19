@@ -1,13 +1,11 @@
 FROM node:12.2.0-alpine 
 
-RUN mkdir /usr/src/api
+RUN mkdir -p /usr/src/api
 
 WORKDIR /usr/src/api
 
-COPY package*.json ./
+RUN npm install -g nodemon --quiet
 
-RUN npm install
-
-COPY . . 
+EXPOSE 3333
 
 CMD [ "npm", "run" ,"dev-job" ]
