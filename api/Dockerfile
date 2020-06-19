@@ -1,8 +1,8 @@
 FROM node:12.2.0-alpine 
 
-RUN mkdir -p /usr/src/api
+RUN mkdir -p /usr/src/app
 
-WORKDIR /usr/src/api
+WORKDIR /usr/src/app
 
 RUN npm install -g nodemon --quiet
 

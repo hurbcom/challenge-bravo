@@ -6,7 +6,7 @@ services:
         depends_on:
             - db
         volumes:
-            - ./api:/usr/src/api
+            - ./api:/usr/src/app
         environment:
             - DB_HOST= mongodb://localhost:27017/
             - PORT=3333
@@ -24,7 +24,7 @@ services:
         build:
             context: ./client
         volumes:
-            - ./client:/usr/src/client
+            - ./client:/usr/src/app
         ports:
             - "8080:8080"
         depends_on:
