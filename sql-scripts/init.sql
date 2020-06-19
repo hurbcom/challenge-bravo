@@ -5,7 +5,7 @@ USE currencies;
 CREATE TABLE currencies.currencies (
 	id INT auto_increment NOT NULL,
 	description varchar(100) NOT NULL,
-	symbol varchar(10) NOT NULL,
+	symbol varchar(3) NOT NULL,
 	CONSTRAINT currencies_PK PRIMARY KEY (id),
 	CONSTRAINT currencies_UN UNIQUE KEY (symbol)
 )

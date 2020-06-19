@@ -36,6 +36,7 @@ server.on('restifyError', function (req, res, error, next) {
 	if (!error.handled) {
 		// here we should log the error on some external service for monitoring/metrics purpose like
 		// https://sentry.io/
+		console.log('log on sentry');
 	  }
 	  next();
 });
@@ -48,7 +49,7 @@ server.on('uncaughtException', (request, response, route, error) => {
 
 process.on('unhandledRejection', (error) => {
 	console.error ('global Unhandled Promise Rejection handler');
-	console.error(e.stack || e);
+	console.error(error.stack || error);
 	process.exit(1);
 });
 

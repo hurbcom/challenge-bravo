@@ -6,7 +6,7 @@ import currencyExchangeService from '../services/currencyExchangeService.js';
 //const currenciesDbClient = mySqlClient(connections.currenciesDb);
 
 let exchangeConvertRequestModel = {
-	query: {
+	params: {
 		from: {
 			isRequired: true,
 			isLength: { min: 3, max: 3 }
@@ -30,14 +30,14 @@ const controller = {
 	async convertCurrenciesAsync(request, response, next) {
 		try {
 					
-			const from = request.parsedParameters.from.toUpperCase();
-			const to = request.parsedParameters.to.toUpperCase();
+			const from = request.parsedParams.from.toUpperCase();
+			const to = request.parsedParams.to.toUpperCase();
 			const convertedAmount = await currencyExchangeService.convertCurrencyAsync(
-				from, to, request.parsedParameters.amount);
+				from, to, request.parsedParams.amount);
 
 			response.send(200, {
 				originalCurrency: from,
-				originalAmount: request.parsedParameters.amount,
+				originalAmount: request.parsedParams.amount,
 				convertedCurrency: to,
 				convertedAmount
 			});
