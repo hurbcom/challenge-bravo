@@ -1,8 +1,10 @@
-version: "3"
+version: "3.7"
 services:
     api:
         container_name: api
-        build: ./api
+        build:
+            context: ./api
+            dockerfile: Dockerfile
         depends_on:
             - db
         volumes:
@@ -11,21 +13,22 @@ services:
             - DB_HOST= mongodb://localhost:27017/
             - PORT=3333
         ports:
-            - "3333:3333"
+            - 3333:3333
 
     db:
         container_name: db
         image: mongo:4.0
         ports:
-            - "27017:27017"
+            - 27017:27017
 
     client:
         container_name: client
         build:
             context: ./client
+            dockerfile: Dockerfile
         volumes:
             - ./client:/usr/src/app
         ports:
-            - "8080:8080"
+            - 8080:8080
         depends_on:
             - api
