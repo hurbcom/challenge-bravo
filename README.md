@@ -9,7 +9,7 @@ O sistema possui um serviço de atualização de 5 em 5 minutos (~podendo ser al
 
 A arquitetura utilizada foi um monolito que utiliza as seguintes tecnologias: MongoDB - NodeJs (JavaScript) - VueJs (Framework JavaScript).
 
-O projeto não foi colocado em um contâiner Docker devido as dificuldades encontradas causdas pela incompatibilidade entre o Docker e a versão do meu Windows (Windows Home).
+O projeto foi colocado em um contâiner Docker, porém só foi testado no [Docker Playground](https://labs.play-with-docker.com/) devido as dificuldades encontradas causada pela incompatibilidade entre o Docker e a versão do meu Windows (Windows Home).
 
 Foi utilizado utilizado o framework VueJs no frontend e para inicialização do projeto foi utilizado seu [CLI](https://cli.vuejs.org/).
 
@@ -34,7 +34,13 @@ Execute o comando
 ```
 git clone https://github.com/lmaiaa/challenge-bravo.git
 ```
+- **Com Docker:**
+Acesse a pasta clonada e inicialize o projeto com o seguinte comando:
+```
+docker-composer up -d
+```
 
+- **Sem Docker:**
 Em seguida acesse a pasta clonada e instale as dependências
 
 ```
@@ -49,10 +55,15 @@ Para inicializar execute o comando:
 ```
 npm start
 ```
+## Projeto inicializado
+
+Ao inicializar o projeto:
+- API pode ser acessada em: **http://localhost:3333**
+- Client (Frontend) pode ser acessado em: **http://localhost:8080**
 
 ## Rotas
 
-A API está por padrão sendo executada na URL: **http://localhost:3333**
+A API está por padrão sendo executada na URL: 
 
 -   GET /coins   -> Retorna uma lista de moedas cadastras na API
 
