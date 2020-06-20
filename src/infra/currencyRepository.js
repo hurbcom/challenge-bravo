@@ -34,7 +34,7 @@ const currencyRepository = {
 		const result = await dbClient.queryAsync(query, { symbol });
 		return result;
 	},
-	async addCurrencyAsync({ description, symbol }) {
+	async createCurrencyAsync({ description, symbol }) {
 		if (!description || !symbol) throw new Error('Invalid parameters.');
 
 		const query = `INSERT INTO currencies.currencies (description , symbol)
@@ -52,7 +52,7 @@ const currencyRepository = {
 
 		const result = await dbClient.queryAsync(query, { id, description, symbol });
 
-		if (result && result.affetedRows == 0) {
+		if (result && result.affectedRows == 0) {
 			throw new Error('Error updating currency');
 		}
 	},
@@ -65,7 +65,7 @@ const currencyRepository = {
 		var connection = await dbClient.getConnectionAsync();
 		var result = await connection.queryAsync(query, { id });
 
-		if (result && result.affetedRows == 0) {
+		if (result && result.affectedRows == 0) {
 			throw new Error('Error updating currency');
 		}
 	}

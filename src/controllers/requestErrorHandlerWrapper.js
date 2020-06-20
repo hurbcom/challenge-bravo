@@ -11,7 +11,7 @@ import restifyErrors from 'restify-errors';
  * @param {*} next the next handler in the chain
  */
 
-function handleAsync(handler, request, response, next) {
+function handleErrorAsync(handler, request, response, next) {
 	return async function (request, response, next) {
 		try {
 			await handler(request, response, next)
@@ -23,4 +23,4 @@ function handleAsync(handler, request, response, next) {
 		}
 	}
 }
-export default handleAsync;
+export default handleErrorAsync;

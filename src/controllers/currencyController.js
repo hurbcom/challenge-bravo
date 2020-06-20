@@ -1,8 +1,7 @@
-
 import restifyErrors from 'restify-errors';
 
 import validationFilter from './parameterValidationFilter.js';
-import handleWrapper from './requestHandlerWrapper.js';
+import errorHandlerWrapper from './requestErrorHandlerWrapper.js';
 
 import currencyService from '../services/currencyService.js';
 
@@ -15,7 +14,7 @@ const currencyModel = {
 		isRequired: true,
 		isLength: { min: 10, max: 100 }
 	}
-}
+};
 
 const idRequestModel = {
 	params: {
@@ -23,16 +22,32 @@ const idRequestModel = {
 			type: 'int'
 		}
 	}
-}
+};
 
-const updateCurrencyRequestModel = Object.assign({}, idRequestModel, {body: currencyModel});
+const updateCurrencyRequestModel = Object.assign({}, idRequestModel, { body: currencyModel });
 
 const controller = {
 	set(server) {
-		server.get('/currency/:id', validationFilter(idRequestModel), handleWrapper(this.getCurrencyById));
-		server.del('/currency/:id', validationFilter(idRequestModel), handleWrapper(this.removeCurrencyById));
-		server.put('/currency/:id', validationFilter(updateCurrencyRequestModel), handleWrapper(this.updateCurrency));
-		server.post('/currency', validationFilter({body: currencyModel}), handleWrapper(this.createCurrency));
+		server.get(
+			'/currency/:id',
+			validationFilter(idRequestModel),
+			errorHandlerWrapper(this.getCurrencyById)
+		);
+		server.del(
+			'/currency/:id',
+			validationFilter(idRequestModel),
+			errorHandlerWrapper(this.removeCurrencyById)
+		);
+		server.put(
+			'/currency/:id',
+			validationFilter(updateCurrencyRequestModel),
+			errorHandlerWrapper(this.updateCurrency)
+		);
+		server.post(
+			'/currency',
+			validationFilter({ body: currencyModel }),
+			errorHandlerWrapper(this.createCurrency)
+		);
 	},
 	async removeCurrencyById(request, response, next) {
 		await currencyService.removeCurrencyByIAsync(request.parsedParams.id);
@@ -47,14 +62,26 @@ const controller = {
 		return next();
 	},
 	async updateCurrency(request, response, next) {
+		const currency = {
+			id: request.parsedParams.id,
+			symbol: request.parsedBody.symbol,
+			description: request.parsedBody.description
+		};
 
-		response.send(200)
+		await currencyService.updateCurrencyAsync(currency);
+		response.send(200, currency);
 		return next();
 	},
 	async createCurrency(request, response, next) {
-		 
+		const currency = {
+			symbol: request.parsedBody.symbol,
+			description: request.parsedBody.description
+		};
+
+		const createdCurrency = await currencyService.createCurrencyAsync(currency);
+		response.send(200, createdCurrency);
+		return next();
 	}
 };
 
 export default controller;
-
