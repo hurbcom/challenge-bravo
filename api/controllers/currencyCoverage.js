@@ -39,6 +39,13 @@ module.exports = app => {
       .catch(err => res.status(200).json(err))
     }
 
+    //Remove uma nova moeda da lista de conversão 
+    controller.removeCurrency = (req, res) => {
+
+      currencyValuesModel.removeCurrency(req.body.currency)
+      .then(resolved => res.status(200).json(resolved))
+      .catch(err => res.status(200).json(err))
+    }
 
   
     return controller;

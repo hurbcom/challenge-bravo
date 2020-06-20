@@ -16,7 +16,7 @@ module.exports = app => {
 
    //Endpoint de remoção de uma nova moeda para conversão 
     app.route('/api/v1/currency')
-    .delete(controller.addCurrency);
+    .delete(controller.removeCurrency);
 
 
     

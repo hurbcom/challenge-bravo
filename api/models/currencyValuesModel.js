@@ -1,8 +1,6 @@
 module.exports = app => {
 
-    const currencyValuesModel = {};
-    // const currencyCoverageValues = app.data.currencyValues.currency;
-
+    const currencyValuesModel = {};  
     const jsonfile = require('jsonfile');
     const currencyValuefile = './api/data/currencyValues.json';
 
@@ -32,6 +30,30 @@ module.exports = app => {
                 else 
                 {
                     reject(failMessage('currency Already Registered'));
+                }         
+            });
+        });
+    }
+
+    currencyValuesModel.removeCurrency = (currency) => {
+
+        return new Promise((resolve, reject) => {
+
+            jsonfile.readFile(currencyValuefile, (err, objFile) => {
+
+                if(objFile.currency[currency])
+                {
+                    delete objFile.currency[currency];
+                    jsonfile.writeFile(currencyValuefile, objFile);
+
+                    resolve({
+                        "success": true,
+                        "message": "Currency " + currency + " successfully deleted!"
+                    });
+                }
+                else 
+                {
+                    reject(failMessage('currency is not Registered'));
                 }         
             });
         });
