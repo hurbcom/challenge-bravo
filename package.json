@@ -1,0 +1,26 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Hurb Challenge Bravo for Back-end Developer",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlosbbraga/challenge-bravo.git"
+  },
+  "author": "Carlos Braga",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carlosbbraga/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/carlosbbraga/challenge-bravo#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "config": "^3.2.3",
+    "consign": "^0.1.6",
+    "express": "^4.17.1"
+  }
+}

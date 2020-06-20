@@ -1,0 +1,12 @@
+
+{
+    "_comment": "Guarda os valores de conversões das moedas para o lastro (coverage)",
+    "coverage": "USD",
+    "currency": {
+        "USD": 1,
+        "BRL": 5.31,
+        "EUR": 0.89,
+        "BTC": 0.00011,
+        "ETH": 0.0044
+    }
+}
