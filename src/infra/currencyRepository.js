@@ -17,7 +17,7 @@ const currencyRepository = {
 		const result = await dbClient.queryAsync(query, { id });
 		return result[0];
 	},
-	async getCurrencyByisoCodeAsync(isoCode) {
+	async getCurrencyByIsoCodeAsync(isoCode) {
 		if (!isoCode) throw new Error('Invalid parameters.');
 
 		const query = `SELECT id, description, isoCode 

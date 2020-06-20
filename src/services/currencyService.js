@@ -29,7 +29,7 @@ const service = {
 	},
 
 	async createCurrencyAsync({ isoCode, description }) {
-		const dbCurrency = await currencyRepository.getCurrencyByisoCodeAsync(isoCode);
+		const dbCurrency = await currencyRepository.getCurrencyByIsoCodeAsync(isoCode);
 		if (dbCurrency) {
 			throw new restifyErrors.UnprocessableEntityError(
 				`A currency with the same isoCode '${isoCode}' already exists.`

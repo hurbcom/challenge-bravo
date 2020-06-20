@@ -5,11 +5,11 @@ const CURRENCIES_CACHE_KEY = 'AvailableCurrencies';
 import redisCacheRepository from '../infra/redisCacheClient.js';
 import currencyRepository from '../infra/currencyRepository.js';
 
-async function validateCurrenciesAsync(...currencyisoCodes) {
+async function validateCurrenciesAsync(...currenciesIsoCodes) {
 	const cachedCurrencies = await getAllAvailableCurrenciesAsync();
 
-	return _.every(currencyisoCodes, (currencyisoCode) => {
-		return cachedCurrencies[currencyisoCode];
+	return _.every(currenciesIsoCodes, (currencyIsoCode) => {
+		return cachedCurrencies[currencyIsoCode];
 	});
 }
 
@@ -31,7 +31,7 @@ async function getAllAvailableCurrenciesAsync () {
 		cachedCurrencies = await refreshCacheAsync();
 	}
 
-	return getAllAvailableCurrenciesAsync;
+	return cachedCurrencies;
 }
 
 export default { validateCurrenciesAsync, refreshCacheAsync, getAllAvailableCurrenciesAsync };

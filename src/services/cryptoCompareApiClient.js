@@ -14,7 +14,7 @@ const http = axios.create({
 const cryptoCompareApiClient = {
 	async requestExchangeRatesAsync(availableCurrencies) {
 		
-		const currenciesParameter = availableCurrencies.join(',');
+		const currenciesParameter = _.keys(availableCurrencies).join(',');
 
 		const result = await http.get(`/price`, {
 			params: {

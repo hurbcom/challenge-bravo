@@ -14,7 +14,7 @@ const currencyLayerApiClient = {
 
 		if (!result.data.success === true) throw new Error('External request to Currency Layer Api failed.', result);
 
-		//currency layer's quotes are in the format 'USDEUR': 0.89, where the first 3 digits are the base currency information
+		//currency layer's quotes are in the format 'USDEUR': 0.89, where the first 3 digits are the source currency informed
 		//and the last 3 are the target currency. the code below removes the suffix from the result.
 		const rates = _.mapKeys(result.data.quotes, (value, key) => {
 			return key.substring(3);
