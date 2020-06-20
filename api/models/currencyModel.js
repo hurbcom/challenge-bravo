@@ -32,7 +32,7 @@ module.exports = app => {
         }
     }
 
-    //Converte valor para moeda correta
+    //Converte valor para moeda recebida
     currencyModel.toCurrency = (amount, currency) => {
 
         let convertedToDolar = currencyCoverageValues[currency];

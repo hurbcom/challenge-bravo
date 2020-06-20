@@ -10,14 +10,21 @@ module.exports = app => {
 
     controller.convert = (req, res) => {
 
-      conversion = currencyModel.convertFromTo(req.query.from, req.query.to, parseInt(req.query.amount));
-      if(conversion.success)
+      if(!req.query.from || !req.query.to || !req.query.amount)
       {
-        res.status(200).json(conversion)
+        res.status(400).json({'success': false, errorMessage: "Fields From, To and Amount Required!"})
       }
-      else 
+      else
       {
-        res.status(400).json(conversion)
+        conversion = currencyModel.convertFromTo(req.query.from, req.query.to, parseInt(req.query.amount));
+        if(conversion.success)
+        {
+          res.status(200).json(conversion)
+        }
+        else 
+        {
+          res.status(400).json(conversion)
+        }
       }
     }
 
