@@ -6,7 +6,7 @@ import errorHandlerWrapper from './requestErrorHandlerWrapper.js';
 import currencyService from '../services/currencyService.js';
 
 const currencyModel = {
-	symbol: {
+	isoCode: {
 		isRequired: true,
 		isLength: { min: 3, max: 3 }
 	},
@@ -64,7 +64,7 @@ const controller = {
 	async updateCurrency(request, response, next) {
 		const currency = {
 			id: request.parsedParams.id,
-			symbol: request.parsedBody.symbol,
+			isoCode: request.parsedBody.isoCode,
 			description: request.parsedBody.description
 		};
 
@@ -74,7 +74,7 @@ const controller = {
 	},
 	async createCurrency(request, response, next) {
 		const currency = {
-			symbol: request.parsedBody.symbol,
+			isoCode: request.parsedBody.isoCode,
 			description: request.parsedBody.description
 		};
 

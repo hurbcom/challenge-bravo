@@ -3,6 +3,8 @@ import _ from 'lodash';
 import util from 'util';
 const isDate = util.types.isDate;
 
+import availableCurrencyCacheService from './availableCurrencyCacheService.js';
+
 import cryptoCompareApiClient from './cryptoCompareApiClient.js';
 import currencyLayerApiClient from './currencyLayerApiClient.js';
 
@@ -64,6 +66,10 @@ async function getRatesAsync(from, to) {
 
 	if(!cachedRates || !validateCacheBustingDates(cachedRates.sourceRate.updateDate, cachedRates.targetRate.updateDate)) {
 		let rates = await refreshRatesAsync();
+
+		if (!rates[to] || !rates[from]) {
+			throw new Error ('Unable to obtain exchange rate for required currencies');
+		}
 		cachedRates = {
 			sourceRate: {rate:rates[from]},
 			targetRate: {rate:rates[to]}
@@ -74,8 +80,7 @@ async function getRatesAsync(from, to) {
 }
 
 async function refreshRatesAsync() {
-	//todo get list of available currencies from database
-	const availableCurrencies = [{symbol:'USD'}, {symbol:'BRL'}, {symbol:'EUR'}, {symbol:'BTC'}, {symbol:'ETH'}];
+	const availableCurrencies = await availableCurrencyCacheService.getAllAvailableCurrenciesAsync();
 	const rates = await getRatesFromExternalApisAsync(availableCurrencies);
 	await updateRatesCacheAsync(rates);
 

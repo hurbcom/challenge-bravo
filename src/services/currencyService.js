@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import restifyErrors from 'restify-errors';
 
+import availableCurrencyCacheService from './availableCurrencyCacheService.js';
+
 import currencyRepository from '../infra/currencyRepository.js';
 
 const service = {
@@ -13,25 +15,31 @@ const service = {
 		if (!dbCurrency) throw new restifyErrors.NotFoundError();
 
 		await currencyRepository.deleteCurrencyByIdAsync(id);
+
+		await availableCurrencyCacheService.refreshCacheAsync();
 	},
 
-	async updateCurrencyAsync({ id, symbol, description }) {
+	async updateCurrencyAsync({ id, isoCode, description }) {
 		const dbCurrency = await currencyRepository.getCurrencyByIdAsync(id);
 		if (!dbCurrency) throw new restifyErrors.NotFoundError();
 
-		await currencyRepository.updateCurrencyAsync({ id, symbol, description });
+		await currencyRepository.updateCurrencyAsync({ id, isoCode, description });
+
+		await availableCurrencyCacheService.refreshCacheAsync();
 	},
 
-	async createCurrencyAsync({ symbol, description }) {
-		const dbCurrency = await currencyRepository.getCurrencyBySymbolAsync(symbol);
+	async createCurrencyAsync({ isoCode, description }) {
+		const dbCurrency = await currencyRepository.getCurrencyByisoCodeAsync(isoCode);
 		if (dbCurrency) {
 			throw new restifyErrors.UnprocessableEntityError(
-				`A currency with the same symbol '${symbol}' already exists.`
+				`A currency with the same isoCode '${isoCode}' already exists.`
 			);
 		}
 
-		let currency = { symbol, description };
-		currency.id = await currencyRepository.createCurrencyAsync({ symbol, description });
+		let currency = { isoCode, description };
+		currency.id = await currencyRepository.createCurrencyAsync({ isoCode, description });
+
+		await availableCurrencyCacheService.refreshCacheAsync();
 
 		return currency;
 	}

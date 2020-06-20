@@ -14,14 +14,12 @@ const http = axios.create({
 const cryptoCompareApiClient = {
 	async requestExchangeRatesAsync(availableCurrencies) {
 		
-		let currenciesParameter = availableCurrencies.map((currency) => {
-			return currency.symbol
-		}).join(',');
+		const currenciesParameter = availableCurrencies.join(',');
 
 		const result = await http.get(`/price`, {
 			params: {
-				fsym: 'USD', //base currency "from symbol"
-				tsyms: currenciesParameter //list of target currencies symbols 
+				fsym: 'USD', //base currency "from isoCode"
+				tsyms: currenciesParameter //list of target currencies isoCodes 
 			}
 		});
 
