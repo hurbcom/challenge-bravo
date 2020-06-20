@@ -12,7 +12,14 @@ module.exports = app => {
         }
     }
  
-    //Converte valor para Dolar
+    /**
+     * Converte valor recebido de moeda recebida (from) para Dolar
+     * 
+     * @param {number} amount 
+     * @param {string} currency 
+     * 
+     * @return {array}
+     */
     currencyModel.toDolar = (amount, currency) => {
 
         let convertedToDolar = currencyCoverageValues[currency];
@@ -32,7 +39,12 @@ module.exports = app => {
         }
     }
 
-    //Converte valor para moeda recebida
+    /**
+     * Converte valor de dólar para moeda recebida (to)
+     * 
+     * @param {number} amount 
+     * @param {string} currency 
+     */
     currencyModel.toCurrency = (amount, currency) => {
 
         let convertedToDolar = currencyCoverageValues[currency];
@@ -54,7 +66,11 @@ module.exports = app => {
         }
     }
 
-
+    /**
+     * Retorno de Mensagem com erro
+     * 
+     * @param {string} message 
+     */
     failMessage = (message) => {
         return {
             "success": false,
