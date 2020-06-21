@@ -12,6 +12,8 @@ const Model = mongoose.Schema({
         type: String,
         required: true
     }
+}, {
+    timestamps: true
 });
 
 Model.plugin(autoincrement, { inc_field: 'moeda_id' }).set('toJSON', {
