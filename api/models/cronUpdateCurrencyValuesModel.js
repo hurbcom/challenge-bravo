@@ -9,7 +9,7 @@ module.exports = app => {
     cronUpdateCurrencyValues.updateAll = async () => {
          
         //Atualiza os valores das cryptomoedas no arquivo
-         await updateCryptoValues();
+         await cronUpdateCurrencyValues.updateCryptoValues();
 
          return new Promise((resolve, reject) => {
                     
@@ -45,7 +45,7 @@ module.exports = app => {
     }
 
     //Responsável por atualizar todas as criptomoedas armazenadas
-    updateCryptoValues = () => {
+    cronUpdateCurrencyValues.updateCryptoValues = () => {
        
         return new Promise((resolve, reject) => {
 

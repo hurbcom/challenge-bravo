@@ -4,7 +4,7 @@ var assert = require('chai').assert;
 const app = require('../../server.js');
 const currencyModel = app.models.currencyModel;
 
-after(() => {
+before(() => {
     require('./currencyValue_test');
   });
 
