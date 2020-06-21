@@ -3,7 +3,7 @@ O desafio foi criado em NODEJS, na versão 12.16.3.
 
 Segue o passo a passo para executar a aplicação:
 - Faça o clone do projeto https://github.com/gabrielbaroni/challenge-bravo
-- Acesse a pasta do projeto aonde você salvou, abra o terminal e execute o comando npm install ou yarn install ( caso utilize o yarn)
+- Acesse a pasta do projeto aonde você salvou, abra o terminal e execute o comando `npm install` ou `yarn install` ( caso utilize o yarn)
 - Execute o projeto com comando: `node app.js` ou instale o NODEMON e execute com comando: `nodemon`
 
 ## Ações na aplicação
