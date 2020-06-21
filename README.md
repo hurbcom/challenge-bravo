@@ -128,6 +128,8 @@ Foram utilizadas 2 apis gratuitas para atualização dos valores das moedas disp
 2. https://www.coingecko.com/
 **Obs: Somente as 100 cryptomoedas com maior market cap são atualizadas
 
+O Sistema aceita moedas fictícias como "Hurb" utilizada nos testes.
+
 
 
 ## Dúvidas?
@@ -135,3 +137,7 @@ Foram utilizadas 2 apis gratuitas para atualização dos valores das moedas disp
 Celular: (21) 988444718
 
 Email: carlosbbraga@gmail.com
+
+<p align="center">
+  <img src="cc.jpg" alt="Challange Completed" />
+</p>
