@@ -65,14 +65,17 @@ Boa sorte e boa viagem! ;)
 </p>
 
 ## Solução
+
 Construção de uma api que responde à conversões de moedas sendo possivel cadastra-las com valor lastreado em dólar. 
 Meu objetivo foi criar uma api leve, simples e de imensa facilidade de compreensão de código.
 
-## Como executar o projeto?
+## Execução do Projeto
+
 1. npm install 
 2. npm start
 
 ## Execução de testes
+
 1. npm test
 
 ## Requisições
@@ -113,6 +116,22 @@ Body:
 }
 ```
 
+Atualiza valores das moedas armazenadas
+```sh 
+GET  http://localhost:8080/api/v1/updateCurrencyValues
+```
+
+## Informações Adicionais
+
+Foram utilizadas 2 apis gratuitas para atualização dos valores das moedas disponíveis: 
+1. https://exchangeratesapi.io/
+2. https://www.coingecko.com/
+**Obs: Somente as 100 cryptomoedas com maior market cap são atualizadas
+
+
+
 ## Dúvidas?
+
 Celular: (21) 988444718
+
 Email: carlosbbraga@gmail.com

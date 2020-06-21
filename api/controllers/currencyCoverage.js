@@ -3,12 +3,11 @@ module.exports = app => {
     const currencyCoverageValues = app.data.currencyValues;
     const currencyModel = app.models.currencyModel;
     const currencyValuesModel = app.models.currencyValuesModel;
+    const cronUpdateCurrencyValues = app.models.cronUpdateCurrencyValuesModel;
     const controller = {};
 
     //Lista todas as moedas disponiveis para conversão na api
-    controller.listAllCurrencies = (req, res) => {
-      res.status(200).json(currencyCoverageValues.currency)
-    }
+    controller.listAllCurrencies = (req, res) => res.status(200).json(currencyCoverageValues.currency);
 
     //Realiza a conversão de moedas
     controller.convert = (req, res) => {
@@ -47,6 +46,7 @@ module.exports = app => {
       .catch(err => res.status(200).json(err))
     }
 
+    controller.updateCurrencyValues = (req, res) =>  res.status(200).json(cronUpdateCurrencyValues.updateAll());
   
     return controller;
 

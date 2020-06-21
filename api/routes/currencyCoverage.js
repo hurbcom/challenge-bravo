@@ -18,6 +18,10 @@ module.exports = app => {
     app.route('/api/v1/currency')
     .delete(controller.removeCurrency);
 
+      //Endpoint que atualiza os valores das moedas cadsatradas
+      app.route('/api/v1/updateCurrencyValues')
+      .get(controller.updateCurrencyValues);
+
 
     
   }
