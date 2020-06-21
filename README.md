@@ -1,3 +1,26 @@
+## Como instalar e executar
+O desafio foi criado em NODEJS, na versão 12.16.3.
+
+Segue o passo a passo para executar a aplicação:
+- Faça o clone do projeto https://github.com/gabrielbaroni/challenge-bravo
+- Acesse a pasta do projeto aonde você salvou, abra o terminal e execute o comando npm install ou yarn install ( caso utilize o yarn)
+- Execute o projeto com comando: `node app.js` ou instale o NODEMON e execute com comando: `nodemon`
+
+## Ações na aplicação
+**LISTAR TODAS MOEDAS**
+- Via url ou postman e insomnia ( http://localhost:5000/api/v1/moedas ) [GET]
+
+**CRIAR MOEDAS**
+- Via url ou postman e insomnia ( http://localhost:5000/api/v1/moedas ) [POST]
+
+**CONVERTER MOEDAS**
+- Via url ou postman e insomnia ( http://localhost:5000/api/v1/moedas/converter?from=usb&to=brl&amount=100.00 ) [GET]
+
+**PARAMETROS CONVERTER MOEDAS**
+- From: Moeda de origem
+- To: Moeda que será convertida
+- Amount: Valor da conversão
+
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
