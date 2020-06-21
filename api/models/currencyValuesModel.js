@@ -13,7 +13,7 @@ module.exports = app => {
      * @returns {Promise} array
      */
     currencyValuesModel.addCurrency = (currency, conversionRate) => {
-
+        
         return new Promise((resolve, reject) => {
 
             //Lê o arquivo que possui todas as moedas disponiveis
@@ -21,26 +21,30 @@ module.exports = app => {
 
                 if(!objFile.currency[currency])
                 {
-                    if(typeof conversionRate === 'number')
+                    if(typeof conversionRate === 'number')  
                     {   
-                        objFile.currency[currency] = conversionRate;
-                        //Atualiza o arquivo incluindo a moeda recebida com seu respectivo lastro
-                        jsonfile.writeFile(currencyValuefile, objFile);
-    
-                        resolve({
-                            "success": true,
-                            "message": "Currency " + currency + " successfully registered!"
-                        });
+                        if(!isNaN(conversionRate))
+                        {
+                            objFile.currency[currency] = conversionRate;
+                            //Atualiza o arquivo incluindo a moeda recebida com seu respectivo lastro
+                            jsonfile.writeFile(currencyValuefile, objFile);
+        
+                            resolve({
+                                "success": true,
+                                "message": "Currency " + currency + " successfully registered!"
+                            });
+                        }                        
                     }
-                    else 
-                    {
-                        reject(failMessage('Conversion Rate must be a number'));
-                    }
+                    
+                    reject(failMessage('Conversion Rate must be a number'));
+                    
                 }
                 else 
                 {
                     reject(failMessage('Currency '+currency+' is already registered'));
-                }         
+                }  
+
+                reject(failMessage('Undefined Error'));      
             });
         });
     }
