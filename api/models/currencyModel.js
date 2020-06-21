@@ -15,6 +15,8 @@ module.exports = app => {
         {
             return currencyModel.toCurrency(dolarValue.value, to);
         }
+        
+        return dolarValue;
     }
  
     /**
@@ -26,6 +28,11 @@ module.exports = app => {
      * @return {array}
      */
     currencyModel.toDolar = (amount, currency) => {
+
+        if(typeof amount !== 'number' || isNaN(amount))
+        {
+            return failMessage('Amount should be a valid Number!');
+        }
 
         let convertedToDolar = currencyCoverageValues[currency];
         if(convertedToDolar)
@@ -48,6 +55,11 @@ module.exports = app => {
      * @param {string} currency 
      */
     currencyModel.toCurrency = (amount, currency) => {
+
+        if(typeof amount !== 'number' || isNaN(amount))
+        {
+            return failMessage('Amount should be a valid Number!');
+        }
 
         let convertedToDolar = currencyCoverageValues[currency];
         if(convertedToDolar)

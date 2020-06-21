@@ -20,7 +20,6 @@ module.exports = () => {
   .then('models')
   .then('controllers')
   .then('routes')
-  
   .into(app);
   
   return app;

@@ -13,31 +13,27 @@ module.exports = app => {
      * @returns {Promise} array
      */
     currencyValuesModel.addCurrency = (currency, conversionRate) => {
-        
-        return new Promise((resolve, reject) => {
+
+         return new Promise((resolve, reject) => {
+
+            if(typeof conversionRate !== 'number' || isNaN(conversionRate))
+            {
+                return resolve(failMessage('Lastro should be a valid Number!'));
+            }
 
             //Lê o arquivo que possui todas as moedas disponiveis
             jsonfile.readFile(currencyValuefile, (err, objFile) => {
 
-                if(!objFile.currency[currency])
-                {
-                    if(typeof conversionRate === 'number')  
-                    {   
-                        if(!isNaN(conversionRate))
-                        {
-                            objFile.currency[currency] = conversionRate;
-                            //Atualiza o arquivo incluindo a moeda recebida com seu respectivo lastro
-                            jsonfile.writeFile(currencyValuefile, objFile);
-        
-                            resolve({
-                                "success": true,
-                                "message": "Currency " + currency + " successfully registered!"
-                            });
-                        }                        
-                    }
-                    
-                    reject(failMessage('Conversion Rate must be a number'));
-                    
+                if(typeof objFile.currency[currency] == 'undefined')
+                {  
+                    objFile.currency[currency] = conversionRate;
+                    //Atualiza o arquivo incluindo a moeda recebida com seu respectivo lastro
+                    jsonfile.writeFile(currencyValuefile, objFile);
+
+                    resolve({
+                        "success": true,
+                        "message": "Currency " + currency + " successfully registered!"
+                    });
                 }
                 else 
                 {
@@ -63,21 +59,16 @@ module.exports = app => {
             //Lê o arquivo que possui todas as moedas disponiveis
             jsonfile.readFile(currencyValuefile, (err, objFile) => {
 
-                if(objFile.currency[currency])
+                if(typeof objFile.currency[currency] !== 'undefined')
                 {
                     delete objFile.currency[currency];
                     //Atualiza o arquivo removendo a moeda recebida
-                    jsonfile.writeFile(currencyValuefile, objFile);
-
-                    resolve({
-                        "success": true,
-                        "message": "Currency " + currency + " successfully deleted!"
-                    });
+                    jsonfile.writeFile(currencyValuefile, objFile);                    
                 }
-                else 
-                {
-                    reject(failMessage('Currency ' + currency + ' is not Registered'));
-                }         
+                resolve({
+                    "success": true,
+                    "message": "Currency " + currency + " successfully deleted!"
+                });
             });
         });
     }
