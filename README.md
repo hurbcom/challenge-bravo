@@ -63,3 +63,56 @@ Boa sorte e boa viagem! ;)
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
 </p>
+
+## Solução
+Construção de uma api que responde à conversões de moedas sendo possivel cadastra-las com valor lastreado em dólar. 
+Meu objetivo foi criar uma api leve, simples e de imensa facilidade de compreensão de código.
+
+## Como executar o projeto?
+1. npm install 
+2. npm start
+
+## Execução de testes
+1. npm test
+
+## Requisições
+
+Retorna a lista de todas as moedas disponiveis para realizar a conversão
+
+ ```sh 
+ GET / http://localhost:8080/api/v1/listCurrency
+ ```
+
+Conversão de valores
+
+ ```sh 
+GET  http://localhost:8080/api/v1/convert?from=BRL&to=USD&amount=1000
+from = Moeda origem
+to = Moeda de destino
+amount = valor numérico
+ ```
+
+Adicionando uma moeda nova para lista de conversão
+```sh 
+POST http://localhost:8080/api/v1/currency
+
+Body: 
+{
+    "currency": "CAD",
+    "conversionRate": "0.73"
+}
+```
+
+Removendo uma moeda da  lista de conversão
+```sh 
+DELETE http://localhost:8080/api/v1/currency
+
+Body: 
+{
+    "currency": "CAD"
+}
+```
+
+## Dúvidas?
+Celular: (21) 988444718
+Email: carlosbbraga@gmail.com
