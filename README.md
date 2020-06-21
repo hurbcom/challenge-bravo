@@ -34,7 +34,7 @@ As tecnologias utilizadas foram:
 A api foi construida em 3 camadas para melhorar a manutenabilidade e isolamento de responsabilidades entre os módulos. As 3 camadas são: Controllers, Service e Infra
 
 ## Controllers
-Está camada é responsável por toda comunicação do servidor HTTP da api. É aqui que é feita toda configuração do web framework restify, além de toda lógica de parsers das requisições, gerenciamento das rotas e parser das respotas de volta para o client.
+Está camada é responsável por toda comunicação do servidor HTTP da api. É aqui que é feita toda configuração do web framework restify, além de toda lógica de parsers e validação das requisições, gerenciamento das rotas e parser das respotas de volta para o client.
 
 ## Services
 Nesta camada se encontra toda lógica de negócio do sistema. Está camada é o foco principal dos testes unitários. É aqui que é feita a conversão das moedas, controle do cache de cotações, chamadas a apis externas e gerenciamento das moedas.
