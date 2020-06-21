@@ -1,39 +1,42 @@
 {
-    "name": "currency-api",
-    "version": "1.0.0",
-    "engines": {
-        "node": "14"
-    },
-    "description": "Desafio Hurb Challenge-bravo. Api de converssao monetaria",
-    "main": "src/app.js",
-    "type": "module",
-    "scripts": {
-        "start": "node src/app.js",
-		"test": "echo \"Error: no test specified\" && exit 1",
+	"name": "currency-api",
+	"version": "1.0.0",
+	"engines": {
+		"node": "14"
+	},
+	"description": "Desafio Hurb Challenge-bravo. Api de converssao monetaria",
+	"main": "src/app.js",
+	"type": "module",
+	"scripts": {
+		"start": "node src/app.js",
+		"test": "mocha --exit",
 		"load-test": "artillery run artilleryConfig.yml"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/ewma18/challenge-bravo.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/ewma18/challenge-bravo/issues"
-    },
-    "homepage": "https://github.com/ewma18/challenge-bravo#readme",
-    "dependencies": {
-        "axios": "^0.19.2",
-        "bluebird": "^3.7.2",
-        "lodash": "^4.17.15",
-        "mysql": "^2.18.1",
-        "redis": "^3.0.2",
-        "restify": "^8.5.1",
-        "restify-cors-middleware": "^1.1.1",
-        "restify-errors": "^8.0.2",
-        "validator": "^13.1.1"
-    },
-    "devDependencies": {
-        "artillery": "^1.6.0"
-    }
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ewma18/challenge-bravo.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ewma18/challenge-bravo/issues"
+	},
+	"homepage": "https://github.com/ewma18/challenge-bravo#readme",	
+	"dependencies": {
+		"axios": "^0.19.2",
+		"bluebird": "^3.7.2",
+		"lodash": "^4.17.15",
+		"mysql": "^2.18.1",
+		"redis": "^3.0.2",
+		"restify": "^8.5.1",
+		"restify-cors-middleware": "^1.1.1",
+		"restify-errors": "^8.0.2",
+		"validator": "^13.1.1"
+	},
+	"devDependencies": {
+		"artillery": "^1.6.0",
+		"chai": "^4.2.0",
+		"mocha": "^8.0.1",
+		"simple-mock": "^0.8.0"
+	}
 }

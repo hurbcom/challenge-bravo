@@ -2,7 +2,6 @@ import _ from 'lodash';
 import restifyErrors from 'restify-errors';
 
 import availableCurrencyCacheService from './availableCurrencyCacheService.js';
-
 import currencyRepository from '../infra/currencyRepository.js';
 
 const service = {
