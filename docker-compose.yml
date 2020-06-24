@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+
+  app:
+    build: .
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: hurb-currency-converter
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+    networks:
+      - app-network
+
+  db:
+    image: postgres
+    container_name: hurb-currency-converter-db
+    restart: always
+    tty: true
+    ports:
+      - "15432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+    driver: local

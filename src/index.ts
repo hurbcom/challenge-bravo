@@ -1,0 +1,1 @@
+console.log(`Hello traveler, today it's Hurb who's going to introduce you to the world!`)
