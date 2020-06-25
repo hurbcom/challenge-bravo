@@ -17,6 +17,5 @@ const create = async (currency: any) => {
     return user;
 }
 create({
-    name: 'DUMMY_CURRENCY', value: 2000
-})
-.then(c => console.log(c.toJSON()))
+    name: 'USC', value: 2000
+}).then(c => console.log(c.toJSON()))
