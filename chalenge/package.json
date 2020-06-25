@@ -1,0 +1,33 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node -r dotenv/config dist/index.js",
+    "migration": "tsc && node -r dotenv/config ./node_modules/.bin/sequelize db:migrate --config dist/config/config.js --migrations-path dist/migrations",
+    "clear": "rm -rf dist && rm -rf database",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinigomescunha/challenge-bravo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinigomescunha/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/vinigomescunha/challenge-bravo#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "sequelize": "^6.1.0",
+    "sequelize-cli": "^6.0.0",
+    "@types/sequelize": "^4.28.9",
+    "sqlite3": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.14",
+    "typescript": "^3.9.5"
+  }
+}
