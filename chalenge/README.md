@@ -41,7 +41,7 @@ ERROR: Dialect needs to be explicitly supplied as of v4.0.0
 Error: listen EADDRINUSE: address already in use :::3000
 
 - npm run free-port
-- 
+
 - Caso esteja pelo docker vai ter que parar o container docker stop $(docker  ps -aq)
 
 ## Quero reiniciar o banco
@@ -95,32 +95,45 @@ Para mais informações acesse http://localhost:3000/api-docs
 
 GET http://localhost:3000/
 
+
 descrição: Endpoint de conversão de moedas
+
 
 parametros:
 
+
 from - moeda atual
+
 
 to - moeda a converter
 
+
 amount - quantidade da moeda atual
 
+
 Exemplo de conversão: *?from=BTC&to=EUR&amount=123.45*
+
 
   
 
 POST http://localhost:3000/create
 
+
 descrição: Endpoint de criaçao de moeda
+
 
 parametros:
 
+
 name - nome da moeda
+
 
 value - valor de conversão baseado no dolar ex: 1.2
 
+
 Exemplo de criação: ?name=GBP&value=0.81
 
-  
+
+
 
 SWAGGER http://localhost:3000/api-docs
