@@ -19,6 +19,29 @@
       "jest"
     ]
   },
+  "paths": {
+    "@config/*": [
+      "config/*"
+    ],
+    "@tests/*": [
+      "tests/*"
+    ],
+    "@controllers/*": [
+      "app/controllers/*"
+    ],
+    "@services/*": [
+      "app/services/*"
+    ],
+    "@models/*": [
+      "app/models/*"
+    ],
+    "@repositories/*": [
+      "app/repositories/*"
+    ],
+    "@core/*": [
+      "app/repositories"
+    ]
+  },
   "include": [
     "./src/**/*"
   ],
