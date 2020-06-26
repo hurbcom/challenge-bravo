@@ -19,16 +19,16 @@ router.get('/', async (request: express.Request, response: express.Response, nex
     const currencyFrom = currencies.find(e => e.name === fromFormatted);
     const currencyTo = currencies.find(e => e.name === toFormatted);
     if (!currencyFrom || !currencyTo) {
-        response.status(200).send({ 
+        response.status(200).send({
             ok: false
-         });
+        });
         return;
     }
     const conversionValue: number = +currencyTo.value / +currencyFrom.value;
     response.status(200).send({
         ok: true,
-        from: fromFormatted, 
-        to: toFormatted, 
+        from: fromFormatted,
+        to: toFormatted,
         amount: (amountFormatted * conversionValue).toFixed(2)
     });
 });
@@ -36,7 +36,7 @@ router.get('/', async (request: express.Request, response: express.Response, nex
 
 router.post('/create', async (request: express.Request, response: express.Response, next: express.NextFunction) => {
 
-    const name: string = String(request?.query?.name);
+    const name: string = String(request?.query?.name).toUpperCase();
     const value: number = stringToFloat(<string>request?.query?.value);
     if (!name || !value) {
         response.status(422).send('Unprocessable Entity');
