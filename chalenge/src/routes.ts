@@ -11,7 +11,6 @@ router.get('/', async (request: express.Request, response: express.Response, nex
     const fromFormatted: string = String(from).toLocaleUpperCase();
     const toFormatted: string = String(to).toLocaleUpperCase();
     const amountFormatted: number = Number(amount);
-
     if (!from || !to || !amountFormatted) {
         response.status(422).send('Unprocessable Entity');
         return;
@@ -20,12 +19,17 @@ router.get('/', async (request: express.Request, response: express.Response, nex
     const currencyFrom = currencies.find(e => e.name === fromFormatted);
     const currencyTo = currencies.find(e => e.name === toFormatted);
     if (!currencyFrom || !currencyTo) {
-        response.status(200).send({ ok: false });
+        response.status(200).send({ 
+            ok: false
+         });
         return;
     }
     const conversionValue: number = +currencyTo.value / +currencyFrom.value;
     response.status(200).send({
-        from: fromFormatted, to: toFormatted, amount: (amountFormatted * conversionValue).toFixed(2)
+        ok: true,
+        from: fromFormatted, 
+        to: toFormatted, 
+        amount: (amountFormatted * conversionValue).toFixed(2)
     });
 });
 
