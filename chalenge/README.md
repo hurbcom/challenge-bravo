@@ -7,15 +7,13 @@ EUR
 BTC
 ETH
 
-
 ## Como usar
 
 #### Instalar as dependências do projeto
  - npm install
 #### adicionar o ambiente
  - renomeie .env.example para .env 
-#### executar migração do banco
- - npm run migration 
+ - renomeie .env.test.example para .env.test
 #### Iniciar o projeto
  - npm start
 
@@ -28,7 +26,6 @@ Error: listen EADDRINUSE: address already in use :::3000
 ## Quero reiniciar o banco
 
 - npm run clear
-- npm run migration
 - npm start
 
 ### Endpoints
