@@ -4,13 +4,13 @@
   "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm run migration",
-    "start": "node -r dotenv/config dist/index.js",
-    "migration": "tsc && node -r dotenv/config ./node_modules/.bin/sequelize db:migrate --config dist/config/config.js --migrations-path dist/migrations",
-    "pretest": "npm run migration -- dotenv_config_path=./.env.test",
-    "test": "node -r dotenv/config ./node_modules/.bin/mocha -r ts-node/register src/**/test.ts  --reporter mochawesome dotenv_config_path=./.env.test",
+    "clear": "rm -rf dist && rm -rf database && rm -rf mochawesome-report",
     "free-port": "kill-port --port 3000",
-    "clear": "rm -rf dist && rm -rf database && rm -rf mochawesome-report"
+    "migration": "tsc && node -r dotenv/config ./node_modules/.bin/sequelize db:migrate --config dist/config/config.js --migrations-path dist/migrations",
+    "prestart": "npm run migration",
+    "pretest": "npm run migration -- dotenv_config_path=./.env.test",
+    "start": "node -r dotenv/config dist/index.js",
+    "test": "node -r dotenv/config ./node_modules/.bin/mocha -r ts-node/register src/**/test.ts  --reporter mochawesome --exit dotenv_config_path=./.env.test"
   },
   "repository": {
     "type": "git",
