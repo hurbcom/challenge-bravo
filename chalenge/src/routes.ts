@@ -30,7 +30,7 @@ router.get('/', async (request: express.Request, response: express.Response, nex
 });
 
 
-router.get('/create', async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+router.post('/create', async (request: express.Request, response: express.Response, next: express.NextFunction) => {
 
     const name: string = String(request?.query?.name);
     const value: number = stringToFloat(<string>request?.query?.value);
