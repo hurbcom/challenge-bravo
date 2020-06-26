@@ -1,5 +1,5 @@
 # Api para conversão de moedas
-Tecnologias utilizadas: Typescript, Express, Nodejs, Sqlite, Swagger/OpenApi 3.0, Sequelize ORM
+Tecnologias utilizadas: Typescript, Express, Nodejs, Sqlite, Swagger/OpenApi 3.0, Sequelize ORM, Mocha, Supertest e Chai
 ## converte as seguintes moedas
 USD
 BRL
@@ -16,8 +16,14 @@ ETH
  - renomeie .env.test.example para .env.test
 #### Iniciar o projeto
  - npm start
-
+#### Testes
+ - npm test
+ 
 ## Possiveis problemas
+
+ERROR: Dialect needs to be explicitly supplied as of v4.0.0
+
+ - Verifique se os arquivos .env e .env.test existem 
 
 Error: listen EADDRINUSE: address already in use :::3000
 
