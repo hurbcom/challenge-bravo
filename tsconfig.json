@@ -7,39 +7,16 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "strict": true,
     "allowJs": true,
+    "moduleResolution": "Node",
     "types": [
       "node",
       "jest"
-    ]
-  },
-  "paths": {
-    "@config/*": [
-      "config/*"
-    ],
-    "@tests/*": [
-      "tests/*"
-    ],
-    "@controllers/*": [
-      "app/controllers/*"
-    ],
-    "@services/*": [
-      "app/services/*"
-    ],
-    "@models/*": [
-      "app/models/*"
-    ],
-    "@repositories/*": [
-      "app/repositories/*"
-    ],
-    "@core/*": [
-      "app/repositories"
     ]
   },
   "include": [

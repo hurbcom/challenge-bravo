@@ -14,6 +14,8 @@ services:
       - .:/home/node/app
     networks:
       - app-network
+    depends_on:
+      - db
 
   db:
     image: postgres
@@ -24,9 +26,9 @@ services:
       - "15432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
+    env_file: 
+      - .env
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
       - PGDATA=/var/lib/postgresql/data/pgdata
     networks:
       - app-network
