@@ -1,0 +1,139 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {},
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "chalenge-api-openapi",
+    "version": "0.0.1",
+    "description": "chalenge api ",
+    "license": {
+      "name": "ISC"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "USD,BRL,EUR,BTC,ETH",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "USD,BRL,EUR,BTC,ETH",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Quantidade a converter",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "from": {
+                      "type": "string"
+                    },
+                    "to": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Ok"
+          },
+          "422": {
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Error"
+            }
+        },
+        "security": []
+      }
+    },
+    "/create": {
+      "post": {
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "O nome da moeda: ex: USD,BRL,EUR,BTC,ETH,etc ...",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "description": "Float: O valor da moeda em relação ao dolar ex: 5.40, 6.20",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ok",
+                    "text"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Ok"
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/"
+    }
+  ]
+}
