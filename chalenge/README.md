@@ -25,6 +25,12 @@ Error: listen EADDRINUSE: address already in use :::3000
 
  - npm run free-port
 
+## Quero reiniciar o banco
+
+- npm run clear
+- npm run migration
+- npm start
+
 ### Endpoints
 
 Para mais informações acesse http://localhost:3000/api-docs
