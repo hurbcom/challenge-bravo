@@ -1,13 +1,15 @@
 import { CurrencyRepository } from "../repositories/currency.repository";
 import { Currency } from "../models/currency.model";
+import { injectable, inject } from 'inversify';
 
+@injectable()
 export class CurrencyService {
     /**
      *
      */
-    constructor(private currencyRepository: CurrencyRepository) {
-        
-    }
+    constructor(
+        @inject(CurrencyRepository) private currencyRepository: CurrencyRepository
+    ) { }
 
     public getCurrencyById(id: string): Currency | null {
         if (!id) {

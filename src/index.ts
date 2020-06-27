@@ -1,10 +1,9 @@
-import express from 'express';
+import 'reflect-metadata'
+import { Server } from './server';
+import DIContainer from './di-container';
 
-const server = express();
-
-server.get('/', (_, res) => {
-    res.send('Server online');
-});
+const serverObject = DIContainer.resolve<Server>(Server);
+const server = serverObject.server;
 
 server.listen(3000, () => {
     console.log('Server running');

@@ -1,6 +1,8 @@
 import { Currency } from "../models/currency.model";
 import { HashTable } from "../infrastructure/crosscutting/hashtable";
+import { injectable } from "inversify";
 
+@injectable()
 export class CurrencyRepository {
     private _currencies: HashTable<Currency>;
 
