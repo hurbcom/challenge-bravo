@@ -1,0 +1,33 @@
+import { injectable, inject } from "inversify";
+import { Request, Response } from 'express';
+import { ExchangeService } from "../services/exchange.service";
+
+@injectable()
+export class ExchangeController {
+    /**
+     *
+     */
+    constructor(
+        @inject(ExchangeService) private exchangeService: ExchangeService
+    ) { }
+
+    public convertCurrency = (req: Request, res: Response): void => {
+
+        if (!req.query['from'] || !req.query['to'] || !req.query['ammount'])
+        {
+            res.sendStatus(400);
+            return;
+        }
+        
+        const from: string = req.query['from'].toString();
+        const to: string = req.query['to'].toString();
+        const ammount: number = parseFloat(req.query['ammount'].toString());
+        const convertedValue = this.exchangeService.convertCurrency(from, to, ammount);
+
+        res.json({
+            'from': from,
+            'to': to,
+            'newAmmount': convertedValue.toFixed(2)
+        });
+    }
+}

@@ -1,0 +1,7 @@
+POST http://localhost:3000/currencies HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "BRL",
+    "usdValue": 0.25
+}

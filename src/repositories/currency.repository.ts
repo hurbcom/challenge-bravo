@@ -16,6 +16,8 @@ export class CurrencyRepository {
 
     private seedData(): void {
         this.insertOrUpdateCurrency(new Currency('USD', 1));
+        this.insertOrUpdateCurrency(new Currency('BRL', 5.40));
+        this.insertOrUpdateCurrency(new Currency('EUR', 0.89));
     }
 
     public insertOrUpdateCurrency(newCurrency: Currency): Currency {
