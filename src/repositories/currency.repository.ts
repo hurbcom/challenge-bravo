@@ -21,6 +21,7 @@ export class CurrencyRepository {
     }
 
     public insertOrUpdateCurrency(newCurrency: Currency): Currency {
+        newCurrency.dateRate = new Date();
         this._currencies[newCurrency.id] = newCurrency;
         return this._currencies[newCurrency.id];
     }

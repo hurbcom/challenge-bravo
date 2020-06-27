@@ -21,7 +21,7 @@ export class CurrencyService {
 
     public insertOrUpdateCurrency(newCurrency: Currency): Currency {
 
-        if (!newCurrency || !newCurrency.id || !newCurrency.usdValue) {
+        if (!newCurrency || !newCurrency.id || !newCurrency.usdRate) {
             throw new Error('Currency object invalid');
         }
 

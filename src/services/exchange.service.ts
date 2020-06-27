@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
 import { CurrencyService } from "./currency.service";
+import { ConvertedCurrency } from "../models/converted-currency.model";
 
 @injectable()
 export class ExchangeService {
@@ -12,18 +13,22 @@ export class ExchangeService {
         
     }
 
-    public convertCurrency(fromCurrencyId: string, toCurrencyId: string, ammount: number): number {
+    public convertCurrency(fromCurrencyId: string, toCurrencyId: string, ammount: number): ConvertedCurrency {
         const fromCurrency = this.currencyService.getCurrencyById(fromCurrencyId);
         const toCurrency = this.currencyService.getCurrencyById(toCurrencyId);
 
         if (!fromCurrency || !toCurrency)
             throw new Error("One or more currencies were not found");
 
+        let convertedAmmount: number;
+
         if (fromCurrency.id == 'USD')
-            return ammount * toCurrency.usdValue;
+            convertedAmmount = ammount * toCurrency.usdRate;
         else if (toCurrency.id == 'USD')
-            return ammount / fromCurrency.usdValue;
+            convertedAmmount = ammount / fromCurrency.usdRate;
         else 
-            return (ammount * toCurrency.usdValue) / fromCurrency.usdValue;
+            convertedAmmount =  (ammount * toCurrency.usdRate) / fromCurrency.usdRate;
+        
+        return new ConvertedCurrency(convertedAmmount, fromCurrency, toCurrency);
     }
 }
