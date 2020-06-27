@@ -1,3 +1,18 @@
+## Raphael Meloni
+
+Antes de executar a aplicação talvez seja necessário executar a migração da base de dados com o seguinte comando:
+- npx sequelize db:migrate
+
+## Swagger
+http://localhost:3000/api
+
+## Endpoints
+- http://localhost:3000/currencies - GET - retornas as moedas cadastradas
+- http://localhost:3000/currency/currencyName - POST - adiciona uma moeda
+- http://localhost:3000/currency/currencyName - DELETE - remove uma moeda
+- http://localhost:3000/?from=BTC&to=EUR&amount=123.45 - GET - Obter a conversão entre as moedas
+
+
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.

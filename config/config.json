@@ -1,0 +1,14 @@
+{
+  "development": {
+    "storage": "./database-bravo.sqlite",
+    "dialect": "sqlite"
+  },
+  "test": {
+    "storage": "./database-bravo-test.sqlite",
+    "dialect": "sqlite"
+  },
+  "production": {
+    "storage": "./database-bravo-live.sqlite",
+    "dialect": "sqlite"
+  }
+}
