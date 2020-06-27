@@ -7,7 +7,8 @@
     "build": "tsc",
     "dev": "nodemon --watch \"src/\" --exec \"ts-node src/index.ts\" -e ts",
     "build-prod": "npm run build && node dist/index.js",
-    "test": "jest --no-cache"
+    "test": "jest --no-cache",
+    "test:watch": "jest --no-cache --watchAll"
   },
   "repository": {
     "type": "git",
@@ -37,7 +38,7 @@
   },
   "jest": {
     "transform": {
-      "^.\\.ts$": "ts-jest"
+      "^.+\\.ts$": "ts-jest"
     },
     "testRegex": "\\.test\\.ts",
     "moduleFileExtensions": [
