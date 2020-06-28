@@ -10,10 +10,6 @@ class ApplicationContext {
   public database!: Connection;
 
   constructor() {
-    this.mount();
-  }
-
-  mount() {
     this.configureEnvironment();
     this.router = express();
     this.registerGlobalMiddlewares();

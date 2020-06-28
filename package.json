@@ -16,7 +16,6 @@
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.0",
     "@types/supertest": "^2.0.8",
-    "@types/yup": "^0.29.3",
     "factory-girl": "^5.0.4",
     "faker": "^4.1.0",
     "nodemon": "^1.19.1",
@@ -39,7 +38,6 @@
     "lodash": "^4.17.15",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.25",
-    "yup": "^0.29.1"
+    "typeorm": "^0.2.25"
   }
 }
