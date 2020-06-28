@@ -13,9 +13,9 @@ export class ExchangeService {
         
     }
 
-    public convertCurrency(fromCurrencyId: string, toCurrencyId: string, ammount: number): ConvertedCurrency {
-        const fromCurrency = this.currencyService.getCurrencyById(fromCurrencyId);
-        const toCurrency = this.currencyService.getCurrencyById(toCurrencyId);
+    public async convertCurrency(fromCurrencyId: string, toCurrencyId: string, ammount: number): Promise<ConvertedCurrency> {
+        const fromCurrency = await this.currencyService.getCurrencyById(fromCurrencyId);
+        const toCurrency = await this.currencyService.getCurrencyById(toCurrencyId);
 
         if (!fromCurrency || !toCurrency)
             throw new Error("One or more currencies were not found");

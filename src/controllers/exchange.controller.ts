@@ -11,7 +11,7 @@ export class ExchangeController {
         @inject(ExchangeService) private exchangeService: ExchangeService
     ) { }
 
-    public convertCurrency = (req: Request, res: Response): void => {
+    public convertCurrency = async (req: Request, res: Response): Promise<void> => {
 
         if (!req.query['from'] || !req.query['to'] || !req.query['ammount'])
         {
@@ -22,7 +22,7 @@ export class ExchangeController {
         const from: string = req.query['from'].toString();
         const to: string = req.query['to'].toString();
         const ammount: number = parseFloat(req.query['ammount'].toString());
-        const convertedValue = this.exchangeService.convertCurrency(from, to, ammount);
+        const convertedValue = await this.exchangeService.convertCurrency(from, to, ammount);
 
         res.json(convertedValue);
     }

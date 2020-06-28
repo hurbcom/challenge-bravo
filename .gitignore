@@ -3,3 +3,4 @@ package-lock.json
 **/*.map
 dist
 .DS_Store
+notas.md

@@ -1,15 +1,15 @@
 export class Currency {
     public id: string;
     public usdRate: number;
-    public dateRate: Date;
+    public rateDate: Date;
 
     /**
      * 
      */
-    constructor(id: string, usdRate: number) {
+    constructor(id: string, usdRate: number, rateDate: any = null) {
         this.id = id;
         this.usdRate = usdRate;
-        this.dateRate = new Date();
+        this.rateDate = rateDate || new Date();
     }
 
     public isValid(): boolean {

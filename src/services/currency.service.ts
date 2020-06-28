@@ -11,20 +11,22 @@ export class CurrencyService {
         @inject(CurrencyRepository) private currencyRepository: CurrencyRepository
     ) { }
 
-    public getCurrencyById(id: string): Currency | null {
+    public async getCurrencyById(id: string): Promise<Currency | null> {
         if (!id) {
             throw new Error('Currency id required');
         }
 
-        return this.currencyRepository.getCurrencyById(id);
+        const currency = await this.currencyRepository.getCurrencyById(id);
+
+        return currency;
     }
 
-    public insertOrUpdateCurrency(newCurrency: Currency): Currency {
+    public async insertOrUpdateCurrency(newCurrency: Currency): Promise<Currency> {
 
         if (!newCurrency || !newCurrency.id || !newCurrency.usdRate) {
             throw new Error('Currency object invalid');
         }
 
-        return this.currencyRepository.insertOrUpdateCurrency(newCurrency);
+        return await this.currencyRepository.insertOrUpdateCurrency(newCurrency);
     }
 }
