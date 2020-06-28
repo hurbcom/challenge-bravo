@@ -1,22 +1,20 @@
 import express, { Express } from "express";
 import cors from "cors";
-import router from "../../routes";
+import routes from "../../routes";
 import { createConnection, Connection } from "typeorm";
 import dotenv from "dotenv";
 
 class ApplicationContext {
 
-  express!: Express;
-  database!: Connection;
+  public router!: Express;
+  public database!: Connection;
 
-  mount() {
-    console.log(`Mounting application...`);
+  constructor() {
     this.configureEnvironment();
-    this.express = express();
+    this.router = express();
     this.registerGlobalMiddlewares();
     this.createDatabaseInstance();
-    this.appendRouter();
-    this.startRouter();
+    this.appendRoutes();
   }
 
   configureEnvironment() {
@@ -24,23 +22,25 @@ class ApplicationContext {
   }
 
   registerGlobalMiddlewares() {
-    this.express.use([express.json(), cors()]);
+    this.router.use([express.json(), cors()]);
   }
 
   mountProviders() {
     // TODO: Register provider containers
   }
 
-  appendRouter() {
-    this.express.use(router);
+  appendRoutes() {
+    this.router.use(routes);
   }
 
   async createDatabaseInstance() {
-    this.database = await createConnection();
+    //this.database = await createConnection();
   }
 
-  startRouter() {
-    this.express.listen(process.env.PORT || 3000);
+  bootstrap() {
+    const port = process.env.PORT || 3000;
+    console.log(`Starting application on port ${port}`);
+    this.router.listen(port);
   }
 }
 

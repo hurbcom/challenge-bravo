@@ -1,3 +1,3 @@
-import app from "./app/core/application";
+import app from "@core/application";
 
-app.mount();
+app.bootstrap();
