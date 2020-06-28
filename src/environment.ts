@@ -6,7 +6,7 @@ export const environment = {
     connectionStrings: {
         postgres: {
             user: "postgres",
-            host: "postgres",
+            host: process.env.NODE_ENV == 'production' ? 'postgres' : 'localhost',
             database: "CurrencyExchange",
             password: "challengeHurb",
             port: 5432

@@ -1,25 +1,26 @@
+import 'reflect-metadata';
 import { CurrencyRepository } from "./currency.repository";
 
 describe('CurrencyRepository', () => {
-    test('should get USD currency object', () => {
+    test('Should get USD currency object', async () => {
         // Arrange
         const sut = new CurrencyRepository();
     
         // Act
-        const result = sut.getCurrencyById('USD');
+        const result = await sut.getCurrencyById('USD');
     
         // Assert
         expect(result).not.toBeNull();
         expect(result?.id).toBe('USD');
-        expect(result?.usdValue).toBe(1);
+        expect(result?.usdRate).toBe(1);
     });
 
-    test('should return null if currency was not found', () => {
+    test('Should return null if currency was not found', async () => {
         // Arrange
         const sut = new CurrencyRepository();
     
         // Act
-        const result = sut.getCurrencyById('ABC');
+        const result = await sut.getCurrencyById('ABC');
     
         // Assert
         expect(result).toBeNull();

@@ -8,6 +8,8 @@ services:
         - "3000:3000"
         links:
         - postgres
+        environment: 
+        - NODE_ENV=production
     postgres:
         build: ./resources/docker/database
         ports: 
