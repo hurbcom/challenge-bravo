@@ -1,0 +1,12 @@
+FROM node:12
+WORKDIR /hurb_app
+COPY *.json ./
+RUN npm install
+COPY src ./src
+RUN npm run build
+
+FROM node:12
+WORKDIR /hurb_app
+COPY --from=0 /hurb_app/dist .
+COPY --from=0 /hurb_app/node_modules ./node_modules
+CMD ["node", "index.js"]

@@ -1,0 +1,14 @@
+version: '2.0'
+services: 
+    webapi:
+        build: 
+            context: .
+            dockerfile: ./resources/docker/application/dockerfile
+        ports: 
+        - "3000:3000"
+        links:
+        - postgres
+    postgres:
+        build: ./resources/docker/database
+        ports: 
+        - "5432:5432"

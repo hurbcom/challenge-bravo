@@ -6,7 +6,7 @@ export const environment = {
     connectionStrings: {
         postgres: {
             user: "postgres",
-            host: "localhost",
+            host: "postgres",
             database: "CurrencyExchange",
             password: "challengeHurb",
             port: 5432
