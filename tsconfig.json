@@ -13,16 +13,32 @@
     "esModuleInterop": true,
     "strict": true,
     "allowJs": true,
-    "moduleResolution": "Node",
+    "baseUrl": ".",
+    "moduleResolution": "node",
     "types": [
       "node",
       "jest"
-    ]
+    ],
+    "paths": {
+      "@core/*": [
+        "src/app/core/*"
+      ],
+      "@controllers/*": [
+        "src/app/controllers/*"
+      ],
+      "@models/*": [
+        "src/app/models/*"
+      ],
+      "@services/*": [
+        "src/app/services/*"
+      ]
+    },
   },
   "include": [
     "./src/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/tests"
   ]
 }

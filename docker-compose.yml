@@ -23,7 +23,7 @@ services:
     restart: always
     tty: true
     ports:
-      - "15432:5432"
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
     env_file: 

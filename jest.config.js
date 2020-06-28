@@ -26,7 +26,7 @@ module.exports = {
   ],
 
   // The directory where Jest should output its coverage files
-  //coverageDirectory: "__tests__/coverage",
+  coverageDirectory: "src/tests/coverage",
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -78,7 +78,14 @@ module.exports = {
   // ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: {
+    '^@core/(.*)$': '<rootDir>/src/app/core/$1',
+    '^@controllers/(.*)$': '<rootDir>/src/app/controllers/$1',
+    '^@models/(.*)$': '<rootDir>/src/app/models/$1',
+    '^@services/(.*)$': '<rootDir>/src/app/services/$1',
+    '^@config/(.*)$': '<rootDir>/src/config/$1',
+    '^@tests/(.*)$': '<rootDir>/src/tests/$1'
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -90,7 +97,7 @@ module.exports = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  // preset: null,
+  preset: 'ts-jest/presets/js-with-ts',
 
   // Run tests from one or more projects
   // projects: null,
@@ -141,7 +148,7 @@ module.exports = {
 
   // The glob patterns Jest uses to detect test files
   testMatch: [
-    "**/__tests__/**/*.test.[jt]s?(x)"
+    "**/*.test.[jt]s?(x)"
   ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
