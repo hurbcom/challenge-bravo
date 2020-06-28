@@ -24,6 +24,8 @@ export class CurrencyRepository {
     }
 
     private seedData(): void {
+        // TODO: Adicionar demais moedas
+        // TODO: Obter última cotação das moedas antes de inserir
         this.insertOrUpdateCurrency(new Currency('USD', 1));
         this.insertOrUpdateCurrency(new Currency('BRL', 5.40));
         this.insertOrUpdateCurrency(new Currency('EUR', 0.89));

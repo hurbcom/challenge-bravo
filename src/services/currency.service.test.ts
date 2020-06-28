@@ -1,4 +1,4 @@
-jest.mock('../repositories/currency.repository')
+jest.mock('../repositories/currency.repository');
 import 'reflect-metadata';
 import { CurrencyService } from './currency.service';
 import { CurrencyRepository } from '../repositories/currency.repository';
