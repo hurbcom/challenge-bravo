@@ -1,8 +1,10 @@
+import "reflect-metadata";
 import express, { Express } from "express";
 import cors from "cors";
 import routes from "../../routes";
 import { createConnection, Connection } from "typeorm";
 import dotenv from "dotenv";
+import provider from "./providers";
 
 class ApplicationContext {
 
@@ -15,9 +17,10 @@ class ApplicationContext {
 
   mount() {
     this.configureEnvironment();
+    this.registerProviders();
+    this.createDatabaseInstance();
     this.router = express();
     this.registerGlobalMiddlewares();
-    this.createDatabaseInstance();
     this.appendRoutes();
   }
 
@@ -29,8 +32,8 @@ class ApplicationContext {
     this.router.use([express.json(), cors()]);
   }
 
-  mountProviders() {
-    // TODO: Register provider containers
+  registerProviders() {
+    provider;
   }
 
   appendRoutes() {

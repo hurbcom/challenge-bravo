@@ -1,9 +1,12 @@
 import { Router } from "express";
-import ExchangeController from "./app/controllers/ExchangeController";
+import providers from '@core/providers';
+import ExchangeController from "@controllers/ExchangeController";
 
 const routes = Router();
 
+const ExchangeContainer = providers.container.resolve(ExchangeController);
+
 routes.get('/', (req, res) => res.send(`Olá viajante!`));
-routes.get('/exchange', ExchangeController.exchange);
+routes.get('/exchange', ExchangeContainer.exchange);
 
 export default routes;

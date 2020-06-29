@@ -28,11 +28,13 @@
   },
   "dependencies": {
     "@sentry/node": "5.5.0",
+    "@types/glob": "^7.1.2",
     "cors": "^2.8.5",
     "cross-env": "^5.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.1.1",
+    "glob": "^7.1.6",
     "inversify": "^5.0.1",
     "jest": "^24.8.0",
     "loadtest": "^5.0.4",
