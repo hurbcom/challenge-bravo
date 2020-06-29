@@ -26,5 +26,20 @@ describe('ExchangeService', () => {
         expect(result).not.toBeNull();
         expect(result.ammount).toBe(0.5);
     });
-    //TODO: Complementar
+
+    test('Should fail when one currency was not found', async () => {
+        // Arrange
+        const mockGetCurrencyById = jest.fn();
+        mockGetCurrencyById.mockResolvedValueOnce(new Currency('FAK', 2, new Date())
+        ).mockResolvedValueOnce(null);
+
+        const currencyRepositoryMock = new CurrencyRepository();
+        const currencyServiceMock = new CurrencyService(currencyRepositoryMock);
+        currencyServiceMock.getCurrencyById = mockGetCurrencyById;
+        
+        const sut = new ExchangeService(currencyServiceMock);
+        
+        // Act/Assert
+        expect(sut.convertCurrency('FAK', 'USD', 1)).rejects.toThrow(new Error("One or more currencies were not found"));
+    });
 })

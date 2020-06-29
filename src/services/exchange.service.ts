@@ -1,6 +1,7 @@
 import { injectable, inject } from "inversify";
 import { CurrencyService } from "./currency.service";
 import { ConvertedCurrency } from "../models/converted-currency.model";
+import { CurrencyNotFoundError } from "../infrastructure/errors/currency-not-found.error";
 
 @injectable()
 export class ExchangeService {
@@ -17,8 +18,10 @@ export class ExchangeService {
         const fromCurrency = await this.currencyService.getCurrencyById(fromCurrencyId);
         const toCurrency = await this.currencyService.getCurrencyById(toCurrencyId);
 
-        if (!fromCurrency || !toCurrency)
-            throw new Error("One or more currencies were not found");
+        if (!fromCurrency || !toCurrency) {
+            throw new CurrencyNotFoundError("One or more currencies were not found");
+        }
+            
 
         let convertedAmmount: number;
 
