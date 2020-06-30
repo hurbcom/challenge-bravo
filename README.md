@@ -49,6 +49,10 @@ Caso deseje, também é possível executar a aplicação conectado ao Visual Stu
 1. Iniciar o compilador do TypeScript com o comando ```npm start```;
 1. Apertar F5 no Visual Studio Code para iniciar a aplicação e se conectar ao Debugger
 
+## Testes de carga
+
+Os testes de carga usam como base a rota ```/exchange``` e utilizam o [Artillery](https://artillery.io) para fazer as chamadas. Para execução do teste, após a instalação da ferramenta conforme instruções do site, é só executar o script ```artillery.sh``` localizado na raiz do projeto.
+
 ---
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
