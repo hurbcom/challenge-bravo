@@ -1,0 +1,19 @@
+version: "3"
+services:
+    redis:
+        container_name: redis
+        image: redis:alpine
+        ports:
+            - "6379:6379"
+        restart: always
+    api:
+        build: "./"
+        container_name: hurb-bravo
+        ports:
+            - "3333:3333"
+        links:
+            - redis
+        depends_on:
+            - redis
+        environment:
+            - REDIS_URL=redis://redis
