@@ -21,10 +21,7 @@ export default class ExchangeController {
       amount: yup.string().required()
     });
 
-    const hasValidParams = await schema.isValid({ from, to, amount })
-      .catch(err => {
-        return res.status(400).send({ error: err.name, expected: err.errors })
-      });
+    const hasValidParams = await schema.isValid({ from, to, amount });
 
     if (!hasValidParams)
       return res.status(400).send({ error: "Invalid params" });
