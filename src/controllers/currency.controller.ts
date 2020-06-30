@@ -16,11 +16,11 @@ export class CurrencyController {
         try {
             const currencyId: string = req.params.currencyId;
             const currency = await this.currencyService.getCurrencyById(currencyId);
-    
+
             if (currency)
                 res.json(currency);
             else
-                res.status(404).send('Currency not found');   
+                res.status(404).send('Currency not found');
         } catch (error) {
             res.sendStatus(500);
         }
@@ -32,25 +32,37 @@ export class CurrencyController {
             const newCurrency: Currency = new Currency(currencyDto.id, currencyDto.usdRate);
 
             const resultCurrency = await this.currencyService.insertOrUpdateCurrency(newCurrency);
-            res.status(201).json(resultCurrency);    
+            res.status(201).json(resultCurrency);
         } catch (error) {
-            if (error.message == 'Currency object invalid')
-            {
+            if (error.message == 'Currency object invalid') {
                 res.status(400).send(error.message);
                 return;
             }
-                
+
             res.sendStatus(500);
-        }   
+        }
     }
 
     public getAllCurrencies = async (_: Request, res: Response): Promise<void> => {
         try {
             const result = await this.currencyService.getAllCurrencies();
-        res.status(200).json(result);
+            res.status(200).json(result);
         } catch (error) {
             res.sendStatus(500);
         }
-        
+    }
+
+    public deleteCurrencyById = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const currencyId = req.params.currencyId;
+            if (!((await this.currencyService.getCurrencyById(currencyId))?.isValid())) {
+                res.sendStatus(404);
+            } else {
+                await this.currencyService.deleteCurrencyById(currencyId);
+                res.sendStatus(200);
+            }
+        } catch (error) {
+            res.sendStatus(500);
+        }
     }
 }

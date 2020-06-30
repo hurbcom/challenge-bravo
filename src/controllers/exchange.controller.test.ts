@@ -32,6 +32,8 @@ describe('ExchangeController', () => {
     const currencyController = new CurrencyController(currencyServiceMock);
     const exchangeController = new ExchangeController(exchangeServiceMock);
 
+    beforeEach(() => jest.clearAllMocks());
+
     test('Should return 200 when able to convert currencies', async () => {
         // Arrange
         const fakeCurrency = new Currency('FAK', 2, new Date());

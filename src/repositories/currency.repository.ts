@@ -85,4 +85,9 @@ export class CurrencyRepository {
 
         return result;
     }
+
+    public async deleteCurrencyById(id: string): Promise<boolean> {
+        const result = await this.pool.query('DELETE FROM Currencies WHERE Id=$1', [id.toUpperCase()]);
+        return result.rowCount > 0;
+    }
 }

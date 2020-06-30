@@ -31,6 +31,8 @@ describe('CurrencyController', () => {
     const currencyController = new CurrencyController(currencyServiceMock);
     const exchangeController = new ExchangeController(exchangeServiceMock);
 
+    beforeEach(() => jest.clearAllMocks());
+
     test('Should return 200 when found currency by id', async () => {
         // Arrange
         const fakeData = new Currency('FAK', 2, new Date());
@@ -74,7 +76,39 @@ describe('CurrencyController', () => {
                 .send(fakeData)
                 .expect('Content-Type', /json/)
                 .expect(201, /FAK/);
+    });
 
+    test('Should return 200 if delete currency by id succeeded', async () => {
+        // Arrange
+        const fakeData = new Currency('FAK', 2, new Date());
+        const mockGetCurrencyById = jest.fn();
+        mockGetCurrencyById.mockResolvedValueOnce(fakeData);
+        currencyServiceMock.getCurrencyById = mockGetCurrencyById;
+
+        currencyRepositoryMock.deleteCurrencyById = jest.fn().mockReturnValueOnce(true);
+
+        const sut = new Server(currencyController, exchangeController);   
         
-    })
+        // Act/Assert
+        await req(sut.server).delete('/currencies/fak')
+                .expect(200);
+    });
+
+    test('Should return 404 on delete if currency not found', async () => {
+        // Arrange
+        const mockGetCurrencyById = jest.fn();
+        mockGetCurrencyById.mockResolvedValueOnce(null);
+        currencyServiceMock.getCurrencyById = mockGetCurrencyById;
+
+        currencyRepositoryMock.deleteCurrencyById = jest.fn().mockReturnValueOnce(false);
+
+        const sut = new Server(currencyController, exchangeController);   
+        
+        // Act/Assert
+        await req(sut.server).delete('/currencies/fak')
+                .expect(404);
+        
+        // Assert
+        expect(currencyServiceMock.deleteCurrencyById).not.toBeCalled();
+    });
 })

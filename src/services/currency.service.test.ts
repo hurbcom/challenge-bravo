@@ -12,6 +12,9 @@ import { CurrencyFactory } from '../infrastructure/factories/currency.factory';
 
 
 describe('CurrencyService', () => {
+
+    beforeEach(() => jest.clearAllMocks());
+
     test('Should get call CurrencyRepository to get Currency', async () => {
         // Arrange
         const mockCreate = jest.fn();
@@ -45,6 +48,5 @@ describe('CurrencyService', () => {
         
         // Assert
         expect(currencyRepositoryMock.insertOrUpdateCurrency).toHaveBeenCalled();
-        
-    })
-})
+    });
+});

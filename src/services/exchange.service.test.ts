@@ -12,6 +12,9 @@ import { CurrencyFactory } from '../infrastructure/factories/currency.factory';
 import { FreeCurrencyApiService } from './free-currency-api.service';
 
 describe('ExchangeService', () => {
+
+    beforeEach(() => jest.clearAllMocks());
+
     test('Should convert currency', async () => {
         // Arrange
         const mockGetCurrencyById = jest.fn();

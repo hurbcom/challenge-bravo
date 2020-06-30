@@ -38,4 +38,8 @@ export class CurrencyService {
 
         return await this.currencyRepository.insertOrUpdateCurrency(newCurrency);
     }
+
+    public async deleteCurrencyById(currencyId: string): Promise<boolean> {
+        return this.currencyRepository.deleteCurrencyById(currencyId);
+    }
 }

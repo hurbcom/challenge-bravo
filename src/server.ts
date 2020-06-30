@@ -29,6 +29,7 @@ export class Server {
         this.server.get('/currencies/:currencyId', this.currencyController.getCurrencyById);
         this.server.get('/currencies', this.currencyController.getAllCurrencies);
         this.server.post('/currencies', this.currencyController.insertOrUpdateCurrency);
+        this.server.delete('/currencies/:currencyId', this.currencyController.deleteCurrencyById);
 
         this.server.get('/exchange', this.exchangeController.convertCurrency);
     }    

@@ -1,0 +1,1 @@
+DELETE http://localhost:3000/currencies/fak HTTP/1.1
