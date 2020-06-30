@@ -31,7 +31,11 @@ export class CurrencyController {
             res.status(201).json(resultCurrency);    
         } catch (error) {
             debugger;
-        }
-        
+        }   
+    }
+
+    public getAllCurrencies = async (_: Request, res: Response): Promise<void> => {
+        const result = await this.currencyService.getAllCurrencies();
+        res.status(200).json(result);
     }
 }

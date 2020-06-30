@@ -1,16 +1,26 @@
 jest.mock('../repositories/currency.repository');
+jest.mock('./free-currency-api.service');
+jest.mock('../infrastructure/factories/currency.factory');
+
 import 'reflect-metadata';
 import { CurrencyService } from './currency.service';
 import { CurrencyRepository } from '../repositories/currency.repository';
 import { Currency } from '../models/currency.model';
+import { FreeCurrencyApiService } from './free-currency-api.service';
+import { CurrencyFactory } from '../infrastructure/factories/currency.factory';
 // import { Currency } from '../models/currency.model';
 
 
 describe('CurrencyService', () => {
     test('Should get call CurrencyRepository to get Currency', async () => {
         // Arrange
-        const currencyRepositoryMock = new CurrencyRepository();
-        const sut = new CurrencyService(currencyRepositoryMock);
+        const mockCreate = jest.fn();
+        mockCreate.mockResolvedValueOnce(new Currency('FAK', 2, new Date()));
+        const freeCurrencyApiServiceMock = new FreeCurrencyApiService();
+        const currencyFactoryMock = new CurrencyFactory(freeCurrencyApiServiceMock);
+
+        const currencyRepositoryMock = new CurrencyRepository(currencyFactoryMock);
+        const sut = new CurrencyService(currencyRepositoryMock, freeCurrencyApiServiceMock);
 
         // Act
         await sut.getCurrencyById('USD');
@@ -21,8 +31,13 @@ describe('CurrencyService', () => {
 
     test('Should save currency on repository', async () => {
         // Arrange
-        const currencyRepositoryMock = new CurrencyRepository();
-        const sut = new CurrencyService(currencyRepositoryMock);
+        const mockCreate = jest.fn();
+        mockCreate.mockResolvedValueOnce(new Currency('FAK', 2, new Date()));
+        const freeCurrencyApiServiceMock = new FreeCurrencyApiService();
+        const currencyFactoryMock = new CurrencyFactory(freeCurrencyApiServiceMock);
+        
+        const currencyRepositoryMock = new CurrencyRepository(currencyFactoryMock);
+        const sut = new CurrencyService(currencyRepositoryMock, freeCurrencyApiServiceMock);
         const fakeData = new Currency('FAK', 1, new Date());
 
         // Act

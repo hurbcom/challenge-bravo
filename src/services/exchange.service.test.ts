@@ -1,10 +1,15 @@
-jest.mock('./currency.service')
-jest.mock('../repositories/currency.repository')
+jest.mock('./currency.service');
+jest.mock('../repositories/currency.repository');
+jest.mock('./free-currency-api.service');
+jest.mock('../infrastructure/factories/currency.factory');
+
 import 'reflect-metadata';
 import { ExchangeService } from './exchange.service';
 import { CurrencyService } from "./currency.service";
 import { CurrencyRepository } from '../repositories/currency.repository';
 import { Currency } from '../models/currency.model';
+import { CurrencyFactory } from '../infrastructure/factories/currency.factory';
+import { FreeCurrencyApiService } from './free-currency-api.service';
 
 describe('ExchangeService', () => {
     test('Should convert currency', async () => {
@@ -13,8 +18,13 @@ describe('ExchangeService', () => {
         mockGetCurrencyById.mockResolvedValueOnce(new Currency('FAK', 2, new Date())
         ).mockResolvedValueOnce(new Currency('USD', 1, new Date()));
 
-        const currencyRepositoryMock = new CurrencyRepository();
-        const currencyServiceMock = new CurrencyService(currencyRepositoryMock);
+        const mockCreate = jest.fn();
+        mockCreate.mockResolvedValueOnce(new Currency('FAK', 2, new Date()));
+        const freeCurrencyApiServiceMock = new FreeCurrencyApiService();
+        const currencyFactoryMock = new CurrencyFactory(freeCurrencyApiServiceMock);
+
+        const currencyRepositoryMock = new CurrencyRepository(currencyFactoryMock);
+        const currencyServiceMock = new CurrencyService(currencyRepositoryMock, freeCurrencyApiServiceMock);
         currencyServiceMock.getCurrencyById = mockGetCurrencyById;
         
         const sut = new ExchangeService(currencyServiceMock);
@@ -33,8 +43,13 @@ describe('ExchangeService', () => {
         mockGetCurrencyById.mockResolvedValueOnce(new Currency('FAK', 2, new Date())
         ).mockResolvedValueOnce(null);
 
-        const currencyRepositoryMock = new CurrencyRepository();
-        const currencyServiceMock = new CurrencyService(currencyRepositoryMock);
+        const mockCreate = jest.fn();
+        mockCreate.mockResolvedValueOnce(new Currency('FAK', 2, new Date()));
+        const freeCurrencyApiServiceMock = new FreeCurrencyApiService();
+        const currencyFactoryMock = new CurrencyFactory(freeCurrencyApiServiceMock);
+
+        const currencyRepositoryMock = new CurrencyRepository(currencyFactoryMock);
+        const currencyServiceMock = new CurrencyService(currencyRepositoryMock, freeCurrencyApiServiceMock);
         currencyServiceMock.getCurrencyById = mockGetCurrencyById;
         
         const sut = new ExchangeService(currencyServiceMock);

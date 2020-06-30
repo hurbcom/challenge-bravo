@@ -1,5 +1,6 @@
+import { CurrencyFactory } from '../infrastructure/factories/currency.factory';
 import { Currency } from '../models/currency.model';
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import { Pool } from 'pg';
 import { environment } from '../environment';
 
@@ -10,7 +11,9 @@ export class CurrencyRepository {
     /**
      *
      */
-    constructor() {
+    constructor(
+        @inject(CurrencyFactory) private currencyFactory: CurrencyFactory
+    ) {
         // this._currencies = {};
         this.pool = new Pool({
             user: environment.connectionStrings.postgres.user,
@@ -23,12 +26,18 @@ export class CurrencyRepository {
         this.seedData();
     }
 
-    private seedData(): void {
-        // TODO: Adicionar demais moedas
-        // TODO: Obter última cotação das moedas antes de inserir
-        this.insertOrUpdateCurrency(new Currency('USD', 1));
-        this.insertOrUpdateCurrency(new Currency('BRL', 5.40));
-        this.insertOrUpdateCurrency(new Currency('EUR', 0.89));
+    private async seedData(): Promise<void> {
+        const allCurrencies = await this.getAllCurrencies();
+        const currencyIds = allCurrencies.map(x => x.id);
+
+        const baseCurrencies = ['USD', 'BRL', 'EUR', 'BTC', 'ETH'];
+        
+        const currenciesIdList = baseCurrencies.concat(currencyIds.filter(x => baseCurrencies.every(y => y !== x)));
+
+        for (let id of currenciesIdList) {
+            const currency = await this.currencyFactory.Create(id);
+            await this.insertOrUpdateCurrency(currency);
+        }
     }
 
     public async insertOrUpdateCurrency(newCurrency: Currency): Promise<Currency> {
@@ -57,5 +66,19 @@ export class CurrencyRepository {
 
         const currencyFound = result.rows[0];
         return new Currency(currencyFound.id, currencyFound.usdrate, currencyFound.ratedate);
+    }
+
+    public async getAllCurrencies(): Promise<Currency[]> {
+        const result: Currency[] = [];
+
+        const queryResult = await this.pool.query('SELECT * FROM Currencies');
+        
+        if (queryResult.rowCount == 0) return [];
+
+        for(let currencyFound of queryResult.rows) {
+            result.push(new Currency(currencyFound.id, currencyFound.usdrate, currencyFound.ratedate));
+        }
+
+        return result;
     }
 }

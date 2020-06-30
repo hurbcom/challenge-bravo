@@ -27,6 +27,7 @@ export class Server {
      */
     private setupRoutes(): void {
         this.server.get('/currencies/:currencyId', this.currencyController.getCurrencyById);
+        this.server.get('/currencies', this.currencyController.getAllCurrencies);
         this.server.post('/currencies', this.currencyController.insertOrUpdateCurrency);
 
         this.server.get('/exchange', this.exchangeController.convertCurrency);

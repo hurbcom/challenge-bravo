@@ -1,6 +1,8 @@
 jest.mock('../services/currency.service.ts');
 jest.mock('../services/exchange.service.ts');
+jest.mock('../services/free-currency-api.service');
 jest.mock('../repositories/currency.repository');
+jest.mock('../infrastructure/factories/currency.factory');
 import 'reflect-metadata';
 
 import { CurrencyController } from './currency.controller';
@@ -13,10 +15,17 @@ import { ExchangeService } from '../services/exchange.service';
 
 import { Server } from '../server';
 import req from 'supertest';
+import { FreeCurrencyApiService } from '../services/free-currency-api.service';
+import { CurrencyFactory } from '../infrastructure/factories/currency.factory';
 
 describe('CurrencyController', () => {
-    const currencyRepositoryMock = new CurrencyRepository();
-    const currencyServiceMock = new CurrencyService(currencyRepositoryMock);
+    const mockCreate = jest.fn();
+    mockCreate.mockResolvedValueOnce(new Currency('FAK', 2, new Date()));
+    const freeCurrencyApiServiceMock = new FreeCurrencyApiService();
+    const currencyFactoryMock = new CurrencyFactory(freeCurrencyApiServiceMock);
+
+    const currencyRepositoryMock = new CurrencyRepository(currencyFactoryMock);
+    const currencyServiceMock = new CurrencyService(currencyRepositoryMock, freeCurrencyApiServiceMock);
     const exchangeServiceMock = new ExchangeService(currencyServiceMock);
 
     const currencyController = new CurrencyController(currencyServiceMock);

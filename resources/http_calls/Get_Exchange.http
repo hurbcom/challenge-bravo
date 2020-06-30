@@ -1,1 +1,1 @@
-GET http://localhost:3000/exchange?from=usd&to=brl&ammount=1 HTTP/1.1
+GET http://localhost:3000/exchange?from=btc&to=brl&ammount=1 HTTP/1.1
