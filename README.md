@@ -1,20 +1,58 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+API para conversão de moedas desenvolvida com NodeJS e Typescript para o desafio do Hurb.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## Tecnologias utilizadas
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+- NodeJs
+- Express
+- Axios
+- Redis
+- IORedis - ORM
+
+## Iniciando a aplicação
+
+
+## Moedas disponíveis
+A API, originalmente, converte entre as seguintes moedas:
+
+- USD: Dólar americano
+- BRL: Real brasileiro
+- EUR: Euro
+- BTC: Bitcoin
+- ETH: Ethereum
 
 Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Novas moedas podem ser adicionadas utilizando o endpoint `http://localhost:3333/currency/create`
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Ex: `http://localhost:3333/currency/create?name=AUD&value=0.6771`
+Onde name é o nome da moeda que será adicionada e value é o valor dela comparada ao dólar americano
+Caso um valor não seja informado ele buscará na Awesome API pela moeda correspondente.
+Essa adição automatizada está disponível somente para Dólar (USD, USDT, CA, AUD), Euro, Libra, Peso, Iene, Franco, Yuan Chinês, Shekel Israelense, Litecoin, Bitcoin, Ethereum e Ripple.
+
+## Remoção de Moedas
+
+O endpoint para remover moedas do banco de dados é `http://localhost:3333/currency/remove`
+passando o nome da moeda que será removida.
+
+EX: `http://localhost:3333/currency/remove?name=AUD`
+
+## Busca de moeda
+
+É possível buscar uma moeda específica no bando de dados e exibir o seu valor comparado com o dólar americano
+
+EX: `http://localhost:3333/currency/recover?currency=BRL`
+
+## Conversão de moedas
+
+O endpoint de conversão é `http://localhost:3333/currency/convert`
+A requisição recebe como parâmetros de query:
+A moeda de origem: from ;
+A moeda final: to ;
+o valor a ser convertido: amount ;
+
+Ex: `http://localhost:3333/currency/convert?from=BRL&to=USD&amount=123.45`
 
 Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
