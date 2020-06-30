@@ -53,6 +53,16 @@ Caso deseje, também é possível executar a aplicação conectado ao Visual Stu
 
 Os testes de carga usam como base a rota ```/exchange``` e utilizam o [Artillery](https://artillery.io) para fazer as chamadas. Para execução do teste, após a instalação da ferramenta conforme instruções do site, é só executar o script ```artillery.sh``` localizado na raiz do projeto.
 
+## Rotas
+
+Existem exemplos de chamadas para as rotas utilizadas na pasta ```resources/http_calls```. As rotas criadas são as seguintes:
+
+- ```GET /currencies/:currencyId``` - Retorna o objeto Currency identificado pelo id;
+- ```GET /currencies``` - Retorna todas as moedas cadastradas no sistema;
+- ```POST /currencies``` - Adiciona uma nova moeda ao sistema;
+- ```DELETE /currencies/:currencyId``` - Exclui a moeda identificada pelo id
+- ```GET /exchange?from=ABC&to=DEF&ammount=1``` - Efetua a conversão do valor do campo ammount entre as moedas identificadas nos campos from e to
+
 ---
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
