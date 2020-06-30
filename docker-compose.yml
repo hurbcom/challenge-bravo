@@ -1,4 +1,4 @@
-version: '2.0'
+version: '3'
 services: 
     webapi:
         build: 
@@ -6,10 +6,11 @@ services:
             dockerfile: ./resources/docker/application/dockerfile
         ports: 
         - "3000:3000"
-        links:
+        depends_on:
         - postgres
         environment: 
         - NODE_ENV=production
+        command: sh -c "dockerize -wait tcp://postgres:5432 -timeout 300s -wait-retry-interval 1s node index.js"
     postgres:
         build: ./resources/docker/database
         ports: 
