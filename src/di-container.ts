@@ -8,6 +8,8 @@ import { ExchangeService } from './services/exchange.service';
 import { FreeCurrencyApiService } from './services/free-currency-api.service';
 import { CurrencyFactory } from './infrastructure/factories/currency.factory';
 
+// DI Container for IoC using Inversify
+
 const DIContainer = new Container();
 
 DIContainer.bind<Server>(Server).toSelf();

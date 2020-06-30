@@ -1,5 +1,56 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
+## Notas do candidato
+
+Optei por utilizar Node com Typescript para o desenvolvimento do desafio por questões de familiaridade e relembrar um pouco desta linguagem. Utilizei alguns pacotes, listados no tópico abaixo, para auxiliar o desenvolvimento.
+
+Como vulnerabilidades do sistema eu apontaria a falta de autenticação (eu utilizaria JWT) e a falta do SSL para o servidor. Não implementei ambas, mas acho importante ressalta-las aqui.
+
+### Pacotes utilizados
+
+#### Pacotes de desenvolvimento
+
+- ```jest``` e ```ts-jest``` - Utilizado para os testes de unidade;
+- ```supertest``` - Utilizado para os testes de unidade relacionados a chamadas da API;
+- ```ts-node``` - Utilizado para execução local do projeto utilizando Typescript ao invés do Javascript;
+- ```typescript``` - Compilador do Typescript
+
+#### Pacotes usados em produção
+
+- ```body-parser``` - Utilizado pelo Express para fazer parsing do body das requisições;
+- ```express``` - Utilizado para gerenciamento das rotas da API e pelo servidor;
+- ```got``` - Utilizado para fazer chamadas HTTP externas. Optei pelo uso desse pacote, ao invés do ```http``` nativo do Node, por suportar o modelo async/await;
+- ```inversify``` e ```reflect-metadata``` - Utilizado para a injeção de dependências do projeto;
+- ```pg``` - Conector para Postgres;
+
+### Instruções para execução
+
+### Docker
+
+- Solução está montada utilizando dois containers (um com a aplicação e um com um banco de dados usando Postgres) em uma pattern side-car;
+- A execução do mesmo se dá através dos comandos do ```docker-compose``` abaixo a partir da raiz do projeto:
+  - ```docker-compose build``` - Constrói ambos os containers
+  - ```docker-compose up``` - Inicia ambos os containers em modo verboso. Para executar em modo silencioso, adicionar ```-d``` ao comando
+- O container da aplicação só é iniciado após o serviço do Postgres iniciar e estar de prontidão. Essa verificação é feita através da ferramenta [Dockerize](https://github.com/jwilder/dockerize) quer verifica se a porta do Postgres está disponível para uso;
+
+### Execução local
+
+Para execução local é necessário seguir os seguintes passo:
+
+1. Instalar as dependências do projeto usando o comando ```npm install``` ou ```npm i```;
+1. Iniciar o container do Postgres, localizado na pasta ```resources/docker/database```;
+1. Iniciar a aplicação usando o comando ```npm run build-prod``` que irá compilar o projeto e iniciar o mesmo;
+
+### Visual Studio Code
+
+Caso deseje, também é possível executar a aplicação conectado ao Visual Studio Code para depurar. Para isso, além de executar a instalação das dependências e o container do Postgres, também são necessários os seguintes passos:
+
+1. Instalar as dependências de desenvolvimento usando o comando ```npm install --only=dev```;
+1. Iniciar o compilador do TypeScript com o comando ```npm start```;
+1. Apertar F5 no Visual Studio Code para iniciar a aplicação e se conectar ao Debugger
+
+---
+
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
 
 A API deve, originalmente, converter entre as seguintes moedas:

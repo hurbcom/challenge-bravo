@@ -6,12 +6,17 @@ import { Currency } from '../models/currency.model';
 @injectable()
 export class CurrencyController {
     /**
-     *
+     * Constructor for CurrencyController
      */
     constructor(
         @inject(CurrencyService) private currencyService: CurrencyService
     ) { }
 
+    /**
+     * Gets a currency object by id on the route
+     * @param req Request object from Express
+     * @param res Response object from Express
+     */
     public getCurrencyById = async (req: Request, res: Response): Promise<void> => {
         try {
             const currencyId: string = req.params.currencyId;
@@ -26,6 +31,11 @@ export class CurrencyController {
         }
     }
 
+    /**
+     * Inserts or updates a currency
+     * @param req Request object from Express
+     * @param res Response object from Express
+     */
     public insertOrUpdateCurrency = async (req: Request, res: Response): Promise<void> => {
         try {
             const currencyDto = req.body;
@@ -34,6 +44,7 @@ export class CurrencyController {
             const resultCurrency = await this.currencyService.insertOrUpdateCurrency(newCurrency);
             res.status(201).json(resultCurrency);
         } catch (error) {
+            // Check error type
             if (error.message == 'Currency object invalid') {
                 res.status(400).send(error.message);
                 return;
@@ -43,6 +54,11 @@ export class CurrencyController {
         }
     }
 
+    /**
+     * Returns all currencies that exists in the system
+     * @param _ Discarded parameter
+     * @param res Response object from Express
+     */
     public getAllCurrencies = async (_: Request, res: Response): Promise<void> => {
         try {
             const result = await this.currencyService.getAllCurrencies();
@@ -52,14 +68,21 @@ export class CurrencyController {
         }
     }
 
+    /**
+     * Deletes a currency from the system
+     * @param req Request object from Express
+     * @param res Response object from Express
+     */
     public deleteCurrencyById = async (req: Request, res: Response): Promise<void> => {
         try {
             const currencyId = req.params.currencyId;
-            if (!((await this.currencyService.getCurrencyById(currencyId))?.isValid())) {
-                res.sendStatus(404);
-            } else {
+
+            // Checks if exists any currency with the provided id. If it doesn´t, return a not found status code.
+            if ((await this.currencyService.getCurrencyById(currencyId))?.isValid()) {
                 await this.currencyService.deleteCurrencyById(currencyId);
                 res.sendStatus(200);
+            } else {
+                res.sendStatus(404);
             }
         } catch (error) {
             res.sendStatus(500);

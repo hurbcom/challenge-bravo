@@ -5,12 +5,15 @@ import { CurrencyController } from './controllers/currency.controller';
 import { injectable, inject } from 'inversify';
 import { ExchangeController } from './controllers/exchange.controller';
 
+/**
+ * Describes the server object
+ */
 @injectable()
 export class Server {
     public server: express.Express;
 
     /**
-     *
+     * Server constructor and initializer
      */
     constructor(
         @inject(CurrencyController) private currencyController: CurrencyController,

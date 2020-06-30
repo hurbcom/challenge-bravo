@@ -1,5 +1,8 @@
 import { Currency } from "./currency.model";
 
+/**
+ * Describes the converted value between currencies
+ */
 export class ConvertedCurrency {
     public ammount: number;
     public date: Date;
