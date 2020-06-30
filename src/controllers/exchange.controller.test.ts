@@ -26,7 +26,7 @@ describe('ExchangeController', () => {
     const currencyFactoryMock = new CurrencyFactory(freeCurrencyApiServiceMock);
 
     const currencyRepositoryMock = new CurrencyRepository(currencyFactoryMock);
-    const currencyServiceMock = new CurrencyService(currencyRepositoryMock, freeCurrencyApiServiceMock);
+    const currencyServiceMock = new CurrencyService(currencyRepositoryMock);
     const exchangeServiceMock = new ExchangeService(currencyServiceMock);
 
     const currencyController = new CurrencyController(currencyServiceMock);

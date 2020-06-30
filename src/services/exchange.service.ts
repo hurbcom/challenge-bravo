@@ -21,7 +21,6 @@ export class ExchangeService {
         if (!fromCurrency || !toCurrency) {
             throw new CurrencyNotFoundError("One or more currencies were not found");
         }
-            
 
         let convertedAmmount: number;
 

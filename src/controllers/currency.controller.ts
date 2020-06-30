@@ -13,29 +13,44 @@ export class CurrencyController {
     ) { }
 
     public getCurrencyById = async (req: Request, res: Response): Promise<void> => {
-        const currencyId: string = req.params.currencyId;
-        const currency = await this.currencyService.getCurrencyById(currencyId);
-
-        if (currency)
-            res.json(currency);
-        else
-            res.status(404).send('Currency not found');
+        try {
+            const currencyId: string = req.params.currencyId;
+            const currency = await this.currencyService.getCurrencyById(currencyId);
+    
+            if (currency)
+                res.json(currency);
+            else
+                res.status(404).send('Currency not found');   
+        } catch (error) {
+            res.sendStatus(500);
+        }
     }
 
     public insertOrUpdateCurrency = async (req: Request, res: Response): Promise<void> => {
         try {
             const currencyDto = req.body;
-            const newCurrency: Currency = new Currency(currencyDto.id, currencyDto.usdValue);
+            const newCurrency: Currency = new Currency(currencyDto.id, currencyDto.usdRate);
 
             const resultCurrency = await this.currencyService.insertOrUpdateCurrency(newCurrency);
             res.status(201).json(resultCurrency);    
         } catch (error) {
-            debugger;
+            if (error.message == 'Currency object invalid')
+            {
+                res.status(400).send(error.message);
+                return;
+            }
+                
+            res.sendStatus(500);
         }   
     }
 
     public getAllCurrencies = async (_: Request, res: Response): Promise<void> => {
-        const result = await this.currencyService.getAllCurrencies();
+        try {
+            const result = await this.currencyService.getAllCurrencies();
         res.status(200).json(result);
+        } catch (error) {
+            res.sendStatus(500);
+        }
+        
     }
 }

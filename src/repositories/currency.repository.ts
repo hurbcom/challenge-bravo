@@ -7,7 +7,7 @@ import { environment } from '../environment';
 @injectable()
 export class CurrencyRepository {
     private pool: Pool;
-    
+
     /**
      *
      */
@@ -31,37 +31,41 @@ export class CurrencyRepository {
         const currencyIds = allCurrencies.map(x => x.id);
 
         const baseCurrencies = ['USD', 'BRL', 'EUR', 'BTC', 'ETH'];
-        
+
         const currenciesIdList = baseCurrencies.concat(currencyIds.filter(x => baseCurrencies.every(y => y !== x)));
 
         for (let id of currenciesIdList) {
-            const currency = await this.currencyFactory.Create(id);
-            await this.insertOrUpdateCurrency(currency);
+            try {
+                const currency = await this.currencyFactory.Create(id);
+                await this.insertOrUpdateCurrency(currency);
+            } catch (error) {
+                console.log(`[WARN] Fail to insert or update currency: ${id}`);
+                
+            }
         }
     }
 
     public async insertOrUpdateCurrency(newCurrency: Currency): Promise<Currency> {
-        newCurrency.rateDate = new Date();
+        const currencyToBeAdded = await this.currencyFactory.Create(newCurrency.id, newCurrency.usdRate);
         let sqlCommand: string;
 
-        if (await this.getCurrencyById(newCurrency.id)) {
+        if (await this.getCurrencyById(currencyToBeAdded.id)) {
             sqlCommand = 'UPDATE Currencies SET UsdRate = $2, RateDate = $3 WHERE Id = $1';
         } else {
             sqlCommand = 'INSERT INTO Currencies VALUES ($1, $2, $3)';
         }
 
-        const result = await this.pool.query(sqlCommand, [newCurrency.id, newCurrency.usdRate, newCurrency.rateDate]);
+        const result = await this.pool.query(sqlCommand, [currencyToBeAdded.id, currencyToBeAdded.usdRate, currencyToBeAdded.rateDate]);
         if (result.rowCount = 1) {
-            return newCurrency;
+            return currencyToBeAdded;
         } else {
             throw new Error('Error saving/updating data');
         }
     }
 
-    public async getCurrencyById (id: string): Promise<Currency | null> {
-        
+    public async getCurrencyById(id: string): Promise<Currency | null> {
         const result = await this.pool.query('SELECT * FROM Currencies WHERE Id=$1', [id.toUpperCase()]);
-        
+
         if (result.rowCount == 0) return null;
 
         const currencyFound = result.rows[0];
@@ -72,10 +76,10 @@ export class CurrencyRepository {
         const result: Currency[] = [];
 
         const queryResult = await this.pool.query('SELECT * FROM Currencies');
-        
+
         if (queryResult.rowCount == 0) return [];
 
-        for(let currencyFound of queryResult.rows) {
+        for (let currencyFound of queryResult.rows) {
             result.push(new Currency(currencyFound.id, currencyFound.usdrate, currencyFound.ratedate));
         }
 

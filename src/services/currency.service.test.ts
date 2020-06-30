@@ -20,7 +20,7 @@ describe('CurrencyService', () => {
         const currencyFactoryMock = new CurrencyFactory(freeCurrencyApiServiceMock);
 
         const currencyRepositoryMock = new CurrencyRepository(currencyFactoryMock);
-        const sut = new CurrencyService(currencyRepositoryMock, freeCurrencyApiServiceMock);
+        const sut = new CurrencyService(currencyRepositoryMock);
 
         // Act
         await sut.getCurrencyById('USD');
@@ -37,7 +37,7 @@ describe('CurrencyService', () => {
         const currencyFactoryMock = new CurrencyFactory(freeCurrencyApiServiceMock);
         
         const currencyRepositoryMock = new CurrencyRepository(currencyFactoryMock);
-        const sut = new CurrencyService(currencyRepositoryMock, freeCurrencyApiServiceMock);
+        const sut = new CurrencyService(currencyRepositoryMock);
         const fakeData = new Currency('FAK', 1, new Date());
 
         // Act

@@ -11,9 +11,9 @@ export class CurrencyFactory {
         @inject(FreeCurrencyApiService) private freeCurrencyApiService: FreeCurrencyApiService
     ) { }
 
-    public async Create(currencyId: string): Promise<Currency> {
+    public async Create(currencyId: string, usdRate?: number): Promise<Currency> {
         try {
-            const value = await this.freeCurrencyApiService.GetUpdatedExchangeRateByCurrencyId(currencyId);
+            const value = usdRate || await this.freeCurrencyApiService.GetUpdatedExchangeRateByCurrencyId(currencyId);
             return new Currency(currencyId, value, new Date());
         } catch (error) {
             throw error;
