@@ -27,7 +27,8 @@ class ConvertCurrencyService {
         }
 
         if(fromCurrencyValue && toCurrencyValue){
-            const result = ((amount * Number(fromCurrencyValue)) / Number(toCurrencyValue)).toFixed(2);
+
+            const result = ((amount / Number(fromCurrencyValue)) * Number(toCurrencyValue)  ).toFixed(4);
             return Number(result);
         }
         return;

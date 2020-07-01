@@ -2,6 +2,11 @@ import Redis, { Redis as RedisClient } from 'ioredis';
 import redisConfig from '../../../../config/redis';
 import ICurrencyRepository from '../../repositories/ICurrencyRepository';
 
+interface ICurrency {
+    name: string;
+    value: number;
+}
+
 /**
  * Repository using Redis as database
  */
@@ -18,9 +23,9 @@ export default class CurrencyRepository implements ICurrencyRepository {
      * @param value
      * Creates a timestamp in the database in unix timestamp
      */
-    public async timestamp(key: string, value: number): Promise<void>{
+    public async timestamp(): Promise<void>{
         try{
-            await this.client.set(key, value);
+            await this.client.set('_timestamp', new Date().getTime());
           }catch(err){
               throw new Error(err);
           }
@@ -32,9 +37,9 @@ export default class CurrencyRepository implements ICurrencyRepository {
      * @param value
      * adds the currency name and value information based on USD to the database
      */
-    public async save(key: string, value: any): Promise<void>{
+    public async save(name: string, value: number): Promise<void>{
         try{
-          await this.client.set(key, value);
+          await this.client.set(name, value);
         }catch(err){
             throw new Error(err);
         }

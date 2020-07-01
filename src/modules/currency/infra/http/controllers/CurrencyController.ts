@@ -1,14 +1,12 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 
 import CurrencyRepository from '../../redis/CurrencyRepository'
 
-import CreateCurrencyService from '../../../services/CreateCurrencyService';
 import ConvertCurrency from '../../../services/ConvertCurrencyService';
+import CreateCurrencyService from '../../../services/CreateCurrencyService';
 
-import FetchCurrenciesInformation from '../../../../../utils/fetchCurrencyInformation'
-import treatCurrency from '../../../../../utils/treatCurrency';
-
-import defaultCurrencies from '../../../../../config/defaultCoins';
+import defaultCurrencies from '../../../../../config/defaultCurrencies';
+import FetchCurrenciesInformation from '../../../../../utils/FetchCurrencyInformation'
 
 const currencyRepository = new CurrencyRepository();
 
@@ -23,11 +21,11 @@ export default class CurrencyController {
         const { name, value } = request.query;
         const createCurrency = new CreateCurrencyService(currencyRepository);
         if(!value){
-            createCurrency.execute(String(name));
-            return response.status(200).json({message: 'currency added to database'});
+            const currencyCreated = await createCurrency.execute(String(name));
+            return response.status(200).json(currencyCreated);
         }else{
-            createCurrency.execute(String(name), Number(value));
-            return response.status(200).json({message: 'currency added to database'});
+            const currencyCreated = await createCurrency.execute(String(name), Number(value));
+            return response.status(200).json(currencyCreated);
         }
     }
 
@@ -62,43 +60,31 @@ export default class CurrencyController {
     }
 
     /**
-     *  Fetches updated currency information from an external API, updates REDIS information
+     *  Get timestamp from Redis and verifies if last update was less than 10 minutes ago,
+     *  Fetches updated currency information from an external API,
+     *  updates REDIS with information gathered
      *
      * @param request
      * @param response
      */
 
-    public async fetchCurrencies(request: Request, response: Response): Promise<Response>{
-        const fetchCurrencies = new FetchCurrenciesInformation();
-        const createCurrency = new CreateCurrencyService(currencyRepository);
+    public async fetchDefaultCurrencies(request: Request, response: Response): Promise<Response>{
+        const getTimestamp = await currencyRepository.recover('_timestamp');
+        const currentTime = new Date().getTime();
+        const currencies = defaultCurrencies.currencies.join(',')
 
-        /**
-         * Verifies if last update was in the last 10 minutes
-         */
-        const timestamp = new Date().getTime()
-        const lastUpdate = await currencyRepository.recover('_timestamp')
-        if(lastUpdate && !(Number(lastUpdate) + 600000 < timestamp )){
-            return response.status(200).json({message: 'currencies up to date'});
+        if(Number(getTimestamp) + 600000 > currentTime){
+            return response.status(200).json({mesage: 'currency up to date'});
         }
 
-        /**
-         * Fetches updated currency information from awesomeAPI
-         */
+        const currencyFetcher = new FetchCurrenciesInformation();
+        const currencyResult = await currencyFetcher.getDefaultCurrencies(currencies);
 
-        const currencies = await fetchCurrencies.getDefaultCurrencies();
-        await currencyRepository.timestamp('_timestamp', new Date().getTime());
-
-        /**
-         * Maps the currency array and updates Redis Database with the information
-         * fetched from awesomeAPI, treating the values to be based on USD instead of
-         * BRL (default currency in the api)
-         */
-
-        defaultCurrencies.currencies.map(async currency => {
-            const treatedCurrency = treatCurrency(currencies['USD'].ask, currencies[currency].ask);
-            await createCurrency.execute(currency, treatedCurrency)
+        defaultCurrencies.currencies.map(currency => {
+            currencyRepository.save(currency, currencyResult[currency])
         })
-            await createCurrency.execute('BRL', treatCurrency(currencies['USD'].ask, 1));
-        return response.status(200).json(currencies);
+
+        currencyRepository.timestamp();
+        return response.status(200).json(currencyResult);
     }
 }

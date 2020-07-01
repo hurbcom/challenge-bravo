@@ -11,6 +11,6 @@ currencyRouter.post('/create', currencyController.create);
 currencyRouter.delete('/remove', currencyController.remove);
 currencyRouter.get('/recover', currencyController.recover);
 currencyRouter.get('/convert', currencyController.convert);
-currencyRouter.get('/fetch', currencyController.fetchCurrencies);
+currencyRouter.get('/fetch', currencyController.fetchDefaultCurrencies);
 
 export default currencyRouter;
