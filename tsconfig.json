@@ -26,12 +26,15 @@
       "@controllers/*": [
         "src/app/controllers/*"
       ],
-      "@models/*": [
-        "src/app/models/*"
+      "@entities/*": [
+        "src/app/entities/*"
       ],
       "@services/*": [
         "src/app/services/*"
-      ]
+      ],
+      "@factories/*": [
+        "src/database/factories/*"
+      ],
     },
   },
   "include": [

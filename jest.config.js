@@ -26,7 +26,7 @@ module.exports = {
   ],
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "src/tests/coverage",
+  coverageDirectory: "src/tests/data/coverage",
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -81,10 +81,11 @@ module.exports = {
   moduleNameMapper: {
     '^@core/(.*)$': '<rootDir>/src/app/core/$1',
     '^@controllers/(.*)$': '<rootDir>/src/app/controllers/$1',
-    '^@models/(.*)$': '<rootDir>/src/app/models/$1',
+    '^@entities/(.*)$': '<rootDir>/src/app/entities/$1',
     '^@services/(.*)$': '<rootDir>/src/app/services/$1',
     '^@config/(.*)$': '<rootDir>/src/config/$1',
-    '^@tests/(.*)$': '<rootDir>/src/tests/$1'
+    '^@tests/(.*)$': '<rootDir>/src/tests/$1',
+    '^@factories/(.*)$': '<rootDir>/src/database/factories/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

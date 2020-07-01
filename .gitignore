@@ -1,4 +1,4 @@
 node_modules
 .docker/volumes
 dist
-**/tests/coverage
+**/tests/data
