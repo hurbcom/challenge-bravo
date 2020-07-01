@@ -2,20 +2,14 @@ import Redis, { Redis as RedisClient } from 'ioredis';
 import redisConfig from '../../../../config/redis';
 import ICurrencyRepository from '../../repositories/ICurrencyRepository';
 
-interface ICurrency {
-    name: string;
-    value: number;
-}
+
+const client = new Redis(redisConfig.config.redis);
 
 /**
  * Repository using Redis as database
  */
-
 export default class CurrencyRepository implements ICurrencyRepository {
-    private client: RedisClient;
-    constructor(){
-        this.client = new Redis(redisConfig.config.redis)
-    }
+
 
     /**
      *
@@ -25,7 +19,7 @@ export default class CurrencyRepository implements ICurrencyRepository {
      */
     public async timestamp(): Promise<void>{
         try{
-            await this.client.set('_timestamp', new Date().getTime());
+            await client.set('_timestamp', new Date().getTime());
           }catch(err){
               throw new Error(err);
           }
@@ -39,7 +33,7 @@ export default class CurrencyRepository implements ICurrencyRepository {
      */
     public async save(name: string, value: number): Promise<void>{
         try{
-          await this.client.set(name, value);
+          await client.set(name, value);
         }catch(err){
             throw new Error(err);
         }
@@ -51,7 +45,7 @@ export default class CurrencyRepository implements ICurrencyRepository {
      */
 
     public async recover<T>(key:string): Promise<T | void> {
-        const data = await this.client.get(key);
+        const data = await client.get(key);
         if(!data){
             return;
         }
@@ -65,7 +59,7 @@ export default class CurrencyRepository implements ICurrencyRepository {
      */
 
     public async invalidate(key: string): Promise<void>{
-        await this.client.del(key);
+        await client.del(key);
         return;
     }
 }

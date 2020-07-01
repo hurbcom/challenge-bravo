@@ -1,49 +1,45 @@
-import Currency from '../../infra/models/Currency'
-
-interface ICurrencyRepository {
-    create(name: string, baseValue: number): Currency;
-    find(name: string): Currency | undefined;
+import ICurrencyRepository from '../ICurrencyRepository';
+interface IFakeCurrency {
+    [name: string]: number;
 }
 
-class CurrencyRepository implements ICurrencyRepository {
-    private currencies: Currency[];
+class FakeCurrencyRepository implements ICurrencyRepository {
+    private currencies = {};
 
     constructor() {
-        this.currencies = [
+        this.currencies =
             {
-                name: "USD",
-                baseValue: 1
-            },
-            {
-                name: "BRL",
-                baseValue: 0.19
-            },
-            {
-                name: "EUR",
-                baseValue: 1.12
-            },
-            {
-                name: "BTC",
-                baseValue: 9239.59
-            },
-            {
-                name: "ETH",
-                baseValue: 234.55
-            },
-        ]
+                BRL: 5.446,
+                USD: 1,
+                EUR: 0.89,
+                BTC: 0.0001091,
+                ETH: 0.004395,
+            }
     }
 
-    public create(name: string, baseValue: number): Currency{
-        const currency = new Currency(name, baseValue);
-        this.currencies.push(currency);
-
-        return currency;
+    public async save(name: string, value: number): Promise<void>{
+        const currency = this.currencies[name] = Number(value);
     }
 
-    public find(name: string): Currency | undefined {
-        const currency = this.currencies.find(currencies => currencies.name === name);
-        return currency;
-    }
+    public async timestamp(): Promise<void>{
+        const name = 'timestamp';
+        this.currencies[name] = 123456;
+    };
+
+    public async recover<T>(key:string): Promise<T | void> {
+        const data = this.currencies[key];
+
+        if(!data){
+            return;
+        }
+
+        const parsedData = JSON.parse(data) as T;
+        return parsedData;
+    };
+
+    public async invalidate(key: string): Promise<void>{
+        delete this.currencies[key];
+    };
 }
 
-export default CurrencyRepository;
+export default FakeCurrencyRepository;
