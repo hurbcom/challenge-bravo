@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import defaultCurrencies from '../config/defaultCurrencies';
+import config from '../config/config';
 
 const api = axios.create();
 
@@ -8,7 +8,7 @@ const api = axios.create();
  */
 class FetchCurrencyInformation {
     public async getDefaultCurrencies(currency: string): Promise<any>{
-            const apiResult = await api.get(`https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=${currency}`)
+            const apiResult = await api.get(`https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=${currency}&api_key=${config.cryptoCompareApiKey}`)
             .then((response: AxiosResponse) => {
                 return response.data;
             });
