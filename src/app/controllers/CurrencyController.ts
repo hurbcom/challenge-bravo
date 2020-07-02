@@ -18,4 +18,9 @@ export default class CurrencyController {
     return res.send(currency);
   }
 
+  findBySymbol = async (req: Request, res: Response) => {
+    const currency = await this.currencyService.findBySymbol(req.params.symbol);
+    return res.send(currency);
+  }
+
 }

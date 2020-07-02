@@ -38,4 +38,25 @@ describe('currency integration test suite', () => {
     });
   });
 
+  it('should find a specific currency by its symbol', async () => {
+    const currencies: any = await CurrencyFactory.createMany('Currency', 10);
+
+    const randomCurrencyIndex = Math.floor(Math.random() * (currencies.length - 1));
+    const randomCurrency = currencies[randomCurrencyIndex];
+
+    const response = await request(app.router)
+      .get(encodeURI(`/currency/symbol/${randomCurrency.symbol}`));
+
+    expect(response.status).toBe(200);
+    expect({
+      id: response.body.id,
+      name: response.body.name,
+      symbol: response.body.symbol,
+    }).toMatchObject({
+      id: randomCurrency.id,
+      name: randomCurrency.name,
+      symbol: randomCurrency.symbol
+    });
+  });
+
 });
