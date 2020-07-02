@@ -76,4 +76,23 @@ describe('currency integration test suite', () => {
       symbol: params.symbol
     });
   });
+
+  it('should delete a currency', async () => {
+    const totalCurrencies = 10;
+    const currencies: any = await CurrencyFactory.createMany('Currency', totalCurrencies);
+
+    const randomCurrencyIndex = Math.floor(Math.random() * currencies.length - 1);
+    const randomCurrency = currencies[randomCurrencyIndex];
+
+    const response = await request(app.router)
+      .delete(`/currency/${randomCurrency.id}`);
+
+    const currenciesResponse = await request(app.router)
+      .get('/currency');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toBeTruthy();
+    expect(currenciesResponse.body.length).toBe(totalCurrencies - 1);
+  });
+
 });

@@ -27,4 +27,9 @@ export default class CurrencyController {
     const currency = await this.currencyService.create(req.body);
     return res.status(201).send(currency);
   }
+
+  delete = async (req: Request, res: Response) => {
+    const result = await this.currencyService.delete(parseInt(req.params.id));
+    return res.send(result);
+  }
 }
