@@ -63,7 +63,7 @@ EX: GET `http://localhost:3333/currency/recover?currency=BRL`
 
 ## Conversão de moedas
 
-O endpoint de conversão é GET `http://localhost:3333/currency/convert`
+O endpoint de conversão é GET `http://localhost:3333/currency/convert`.
 
 A requisição recebe como parâmetros:
 
