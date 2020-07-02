@@ -1,4 +1,4 @@
-import factory, { Static } from "factory-girl";
+import factory from "factory-girl";
 import faker from "faker";
 import Currency, { ICurrency } from "@models/Currency";
 
