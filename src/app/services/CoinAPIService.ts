@@ -1,6 +1,7 @@
-import ExchangeService from "@services/contracts/ExchangeService";
+
 import { injectable } from "inversify";
 import axios from "axios";
+import ExchangeService from "@services/contracts/ExchangeService";
 
 @injectable()
 export default class CoinAPIService extends ExchangeService {
