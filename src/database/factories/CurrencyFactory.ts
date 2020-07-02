@@ -1,10 +1,10 @@
-import factory from "factory-girl";
+import factory, { Static } from "factory-girl";
 import faker from "faker";
-import Currency from "@models/Currency";
+import Currency, { ICurrency } from "@models/Currency";
 
-factory.define('Currency', Currency, {
+factory.define<ICurrency>('Currency', Currency, () => ({
   name: faker.finance.currencyName(),
   symbol: faker.finance.currencySymbol()
-});
+}));
 
 export default factory;

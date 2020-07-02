@@ -1,5 +1,4 @@
 import CoinAPIService from "@services/CoinAPIService";
-import sequelize from "@config/database";
 
 describe('exchange unit test suite', () => {
 

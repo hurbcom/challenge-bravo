@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import CoinAPIService from "@services/exchange/CoinAPIService";
+import CoinAPIService from "@services/CoinAPIService";
 
 describe('exchange unit test suite', () => {
 

@@ -13,4 +13,9 @@ export default class CurrencyController {
     res.send(currencies);
   }
 
+  find = async (req: Request, res: Response) => {
+    const currency = await this.currencyService.findById(parseInt(req.params.id));
+    return res.send(currency);
+  }
+
 }

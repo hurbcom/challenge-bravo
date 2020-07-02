@@ -1,8 +1,12 @@
 import { Table, Column, Model, AllowNull, Length } from 'sequelize-typescript';
 
 export interface ICurrency {
+  id?: number,
   symbol: string,
   name: string
+  createdAt?: Date,
+  updatedAt?: Date,
+  deletedAt?: Date
 }
 
 @Table({ tableName: 'currencies', paranoid: true, timestamps: true, createdAt: 'created_at', updatedAt: 'updated_at', deletedAt: 'deleted_at' })

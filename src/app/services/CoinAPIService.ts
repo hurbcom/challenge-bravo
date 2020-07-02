@@ -2,6 +2,7 @@ import ExchangeService from "@services/contracts/ExchangeService";
 import { injectable } from "inversify";
 import axios from "axios";
 
+@injectable()
 export default class CoinAPIService extends ExchangeService {
 
   async getSymbols() {

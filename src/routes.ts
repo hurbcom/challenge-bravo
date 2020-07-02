@@ -10,5 +10,6 @@ const CurrencyContainer = providers.container.resolve(CurrencyController);
 
 routes.get('/exchange', ExchangeContainer.exchange);
 routes.get('/currency', CurrencyContainer.index);
+routes.get('/currency/:id', CurrencyContainer.find);
 
 export default routes;
