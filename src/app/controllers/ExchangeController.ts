@@ -30,4 +30,8 @@ export default class ExchangeController {
     return res.send(result);
   }
 
+  symbols = async (req: Request, res: Response) => {
+    const symbols = await this.exchangeService.symbols();
+    return res.send(symbols);
+  }
 }

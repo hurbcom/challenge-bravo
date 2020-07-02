@@ -14,4 +14,5 @@ routes.get('/currency/:id', CurrencyContainer.find);
 routes.get('/currency/symbol/:symbol', CurrencyContainer.findBySymbol);
 routes.post('/currency', CurrencyContainer.create);
 routes.delete('/currency/:id', CurrencyContainer.delete);
+
 export default routes;
