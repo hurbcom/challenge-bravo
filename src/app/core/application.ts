@@ -2,30 +2,29 @@ import "reflect-metadata";
 import express, { Express } from "express";
 import cors from "cors";
 import routes from "../../routes";
-import { createConnection, Connection } from "typeorm";
 import dotenv from "dotenv";
-import provider from "./providers";
+import provider from "@core/providers";
+import database from "@config/database";
+import { Sequelize } from "sequelize-typescript";
+
+
+dotenv.config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
 
 class ApplicationContext {
 
   public router!: Express;
-  public database!: Connection;
+  public database!: Sequelize;
 
   constructor() {
     this.mount();
   }
 
-  mount() {
-    this.configureEnvironment();
+  async mount() {
     this.registerProviders();
-    this.createDatabaseInstance();
     this.router = express();
     this.registerGlobalMiddlewares();
     this.appendRoutes();
-  }
-
-  configureEnvironment() {
-    dotenv.config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
+    await this.connectDatabase();
   }
 
   registerGlobalMiddlewares() {
@@ -40,11 +39,11 @@ class ApplicationContext {
     this.router.use(routes);
   }
 
-  async createDatabaseInstance() {
-    //this.database = await createConnection();
+  async connectDatabase() {
+    this.database = await database.sync();
   }
 
-  bootstrap() {
+  async bootstrap() {
     const port = process.env.PORT || 3000;
     console.log(`Starting application on port ${port}`);
     this.router.listen(port);
