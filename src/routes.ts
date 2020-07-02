@@ -12,4 +12,6 @@ routes.get('/exchange', ExchangeContainer.exchange);
 routes.get('/currency', CurrencyContainer.index);
 routes.get('/currency/:id', CurrencyContainer.find);
 routes.get('/currency/symbol/:symbol', CurrencyContainer.findBySymbol);
+routes.post('/currency', CurrencyContainer.create);
+
 export default routes;

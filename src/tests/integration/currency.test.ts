@@ -2,6 +2,7 @@ import app from "@core/application";
 import request from 'supertest';
 import CurrencyFactory from '@factories/CurrencyFactory';
 import sequelize from "@config/database";
+import Currency from "@models/Currency";
 
 describe('currency integration test suite', () => {
 
@@ -59,4 +60,20 @@ describe('currency integration test suite', () => {
     });
   });
 
+  it('should create a currency with valid params', async () => {
+    const params: Currency = await CurrencyFactory.attrs('Currency');
+
+    const response = await request(app.router)
+      .post('/currency')
+      .send({ name: params.name, symbol: params.symbol });
+
+    expect(response.status).toBe(201);
+    expect({
+      name: response.body.name,
+      symbol: response.body.symbol
+    }).toMatchObject({
+      name: params.name,
+      symbol: params.symbol
+    });
+  });
 });

@@ -23,4 +23,8 @@ export default class CurrencyController {
     return res.send(currency);
   }
 
+  create = async (req: Request, res: Response) => {
+    const currency = await this.currencyService.create(req.body);
+    return res.status(201).send(currency);
+  }
 }
