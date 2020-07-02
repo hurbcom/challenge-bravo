@@ -19,7 +19,6 @@ describe('currency integration test suite', () => {
 
   it('should find a specific currency by its id', async () => {
     const currencies: any = await CurrencyFactory.createMany('Currency', 10);
-    console.log(`Currencies: `, currencies);
 
     const randomCurrencyIndex = Math.floor(Math.random() * currencies.length - 1);
     const randomCurrency = currencies[randomCurrencyIndex];
