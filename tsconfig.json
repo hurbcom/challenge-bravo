@@ -23,17 +23,20 @@
       "@core/*": [
         "src/app/core/*"
       ],
+      "@config/*": [
+        "src/config/*"
+      ],
       "@controllers/*": [
         "src/app/controllers/*"
       ],
-      "@entities/*": [
-        "src/app/entities/*"
+      "@factories/*": [
+        "src/database/factories/*"
+      ],
+      "@models/*": [
+        "src/app/models/*"
       ],
       "@services/*": [
         "src/app/services/*"
-      ],
-      "@factories/*": [
-        "src/database/factories/*"
       ],
     },
   },

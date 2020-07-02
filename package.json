@@ -17,9 +17,9 @@
     "@types/node": "^12.6.0",
     "@types/supertest": "^2.0.8",
     "@types/yup": "^0.29.3",
-    "factory-girl": "^5.0.4",
     "faker": "^4.1.0",
     "nodemon": "^1.19.1",
+    "sequelize-typescript": "^1.1.0",
     "supertest": "^4.0.2",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
@@ -28,12 +28,12 @@
   },
   "dependencies": {
     "@sentry/node": "5.5.0",
-    "@types/glob": "^7.1.2",
     "cors": "^2.8.5",
     "cross-env": "^5.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.1.1",
+    "factory-girl": "^5.0.4",
     "glob": "^7.1.6",
     "inversify": "^5.0.1",
     "jest": "^24.8.0",
@@ -41,7 +41,8 @@
     "lodash": "^4.17.15",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.25",
+    "sequelize": "5.15.1",
+    "sqlite3": "^5.0.0",
     "yup": "^0.29.1"
   }
 }

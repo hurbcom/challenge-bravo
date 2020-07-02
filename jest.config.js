@@ -81,7 +81,7 @@ module.exports = {
   moduleNameMapper: {
     '^@core/(.*)$': '<rootDir>/src/app/core/$1',
     '^@controllers/(.*)$': '<rootDir>/src/app/controllers/$1',
-    '^@entities/(.*)$': '<rootDir>/src/app/entities/$1',
+    '^@models/(.*)$': '<rootDir>/src/app/models/$1',
     '^@services/(.*)$': '<rootDir>/src/app/services/$1',
     '^@config/(.*)$': '<rootDir>/src/config/$1',
     '^@tests/(.*)$': '<rootDir>/src/tests/$1',
