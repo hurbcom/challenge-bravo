@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import ExchangeService from "@services/exchange";
+import ExchangeService from "@services/contracts/ExchangeService";
 import { injectable, inject } from "inversify";
 import types from "@core/types";
 import * as yup from "yup";

@@ -1,10 +1,12 @@
 import { Container } from 'inversify';
-import ExchangeService from '@services/exchange';
-import CoinAPIService from '@services/exchange/CoinAPIService';
-import ExchangeController from '@controllers/ExchangeController';
 import types from './types';
+
+import ExchangeService from '@services/contracts/ExchangeService';
+import CoinAPIService from '@services/CoinAPIService';
+
 import CurrencyService from '@services/contracts/CurrencyService';
 import HurbCurrencyService from '@services/HurbCurrencyService';
+import ExchangeController from '@controllers/ExchangeController';
 import CurrencyController from '@controllers/CurrencyController';
 
 class Providers {
