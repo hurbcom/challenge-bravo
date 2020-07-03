@@ -27,16 +27,19 @@ Para executar a aplicação, basta rodar as seguintes linhas de comando:
 
 ## Endpoint de conversão de moeda
 
- - `/convert?from=:ORIGEM&to=:DESTINO&amount=:QUANTIDADE`
+ `/convert?from=:ORIGEM&to=:DESTINO&amount=:QUANTIDADE`
+
 
 - **Exemplos**:
 
 `http://localhost:3000/api/converter?from=USD&to=BRL&amount=4`
 
-Resultado:
+Resultado:  
+```
     {
         "amount": 21.44
-    }
+    }  
+```
 
 ## Endpoints de listagem e manipulação
 
@@ -49,9 +52,10 @@ Recursos:
 
 Exemplos:
 
- - `GET`
-    http://localhost:3000/api/currencies
-    return status 200
+ - `GET`  
+    http://localhost:3000/api/currencies  
+```
+    return status 200  
         [
             {
                 "code": "USD",
@@ -74,27 +78,34 @@ Exemplos:
                 "name": "Ethereum"
             }
         ]
+```
 
-- `GET`
-    http://localhost:3000/api/currencies/BRL
-    return status 200
+- `GET`  
+    http://localhost:3000/api/currencies/BRL  
+```
+    return status 200  
         {
             "code": "BRL",
             "name": "Real Brasileiro"
-        }
+        }  
+```
 
-- `POST`
-    http://localhost:3000/api/currencies
-    body
+- `POST`  
+    http://localhost:3000/api/currencies  
+```
+    body  
         {
             "code": "ALL",
             "name": "Lek"
-        }
+        }  
     return status 204
+```
 
-- `DELETE`
-    http://localhost:3000/api/currencies/ALL
+- `DELETE`  
+    http://localhost:3000/api/currencies/ALL  
+```
     return status 204
+```
 
 ## Regras
 Foram implementadas as seguintes regras:
@@ -116,6 +127,7 @@ Foram implementadas as seguintes regras:
 
 
 
-Estou a disposição para qualquer esclarecimento.
-Miqueias F Ferreira
+Estou a disposição para qualquer esclarecimento.  
+
+Miqueias F Ferreira  
 miqueiasff@gmail.com
