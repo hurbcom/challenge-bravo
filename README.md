@@ -39,7 +39,7 @@ Resultado:
     {
         "amount": 21.44
     }  
-	```
+```
 
 ## Endpoints de listagem e manipulação
 
@@ -54,7 +54,7 @@ Exemplos:
 
  - `GET`  
     http://localhost:3000/api/currencies  
-	```
+```
     return status 200  
         [
             {
@@ -78,34 +78,34 @@ Exemplos:
                 "name": "Ethereum"
             }
         ]
-		```
+```
 
 - `GET`  
     http://localhost:3000/api/currencies/BRL  
-	```
+```
     return status 200  
         {
             "code": "BRL",
             "name": "Real Brasileiro"
         }  
-		```
+```
 
 - `POST`  
     http://localhost:3000/api/currencies  
-	```
+```
     body  
         {
             "code": "ALL",
             "name": "Lek"
         }  
     return status 204
-	```
+```
 
 - `DELETE`
     http://localhost:3000/api/currencies/ALL  
-	```
+```
     return status 204
-	```
+```
 
 ## Regras
 Foram implementadas as seguintes regras:
