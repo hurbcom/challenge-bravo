@@ -17,7 +17,6 @@ class CreateCurrenciesTable extends Migration
             $table->id();
             $table->string("name", 3)->unique();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -22,5 +22,5 @@ Route::prefix('v1')->namespace('Api')->group(function() {
 
     Route::get('currency', 'CurrencyController@index');
     Route::post('currency', 'CurrencyController@store');
-    Route::delete('currency', 'CurrencyController@destroy');
+    Route::delete('currency/{currency_id}', 'CurrencyController@destroy');
 });

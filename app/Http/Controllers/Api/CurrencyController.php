@@ -76,6 +76,15 @@ class CurrencyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $currency = Currency::findOrFail($id);
+            $currency->delete();
+
+            $message = new ApiMessages("Currency sucessfully deleted");
+            return response()->json($message->getMessage());
+        } catch (QueryException $e) {
+            $message = new ApiMessages($e->getMessage());
+            return response()->json($message->getMessage(), 401);
+        }
     }
 }
