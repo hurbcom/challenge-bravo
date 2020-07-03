@@ -87,4 +87,11 @@ class CurrencyController extends Controller
             return response()->json($message->getMessage(), 401);
         }
     }
+
+    public function convert(Request $request) 
+    {
+        $currencyRepository = new CurrencyRepository($this->currency);
+
+        return $currencyRepository->convert($request);
+    }
 }
