@@ -101,7 +101,7 @@ Exemplos:
     return status 204
 ```
 
-- `DELETE`
+- `DELETE`  
     http://localhost:3000/api/currencies/ALL  
 ```
     return status 204
