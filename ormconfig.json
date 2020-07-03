@@ -1,0 +1,15 @@
+{
+    "name": "default",
+    "type": "sqlite",
+    "database": "challenge.sqlite",
+    "autoSchemaSync": true,
+    "entities": [
+      "./src/models/*.ts"
+    ],
+    "migrations": [
+      "./src/database/migrations/*.ts"
+    ],
+    "cli": {
+      "migrationsDir": "./src/database/migrations"
+    }
+  }
