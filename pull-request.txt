@@ -1,3 +1,3 @@
-Your name: ___
-Your Github homepage: ___
-Original challenge URL: http://github.com/hurbcom/challenge-___
+Your name: Miqueias Faria Ferreira
+Your Github homepage: https://github.com/miqueiasff
+Original challenge URL: http://github.com/hurbcom/challenge-bravo

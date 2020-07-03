@@ -1,65 +1,121 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Aplicação desenvolvida em Node.JS com MongoDb.
 
-A API deve, originalmente, converter entre as seguintes moedas:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Acabei optando pelo Node e Mongo para aproveitar o desafio e aprender mais sobre as tecnologias destacadas.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Nesse teste meu objetivo foi:
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+- Implementar uma API em NodeJS com o MongoDB, acessando um serviço externo para conversão de valores.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+## Executar a aplicação
+Para executar a aplicação, basta rodar as seguintes linhas de comando:
+ - `git clone https://github.com/miqueiasff/challenge-bravo` para clonar o repositório.
+ - `cd challenge-bravo` entrando na pasta clonada.
+ - `docker-compose up` subindo o docker do banco de dados.
+ - `npm install` instalando as dependencias.
+ - `npm run seed` carga inicial de dados.
+ - `npm run dev` rodando a aplicação.
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+ ## Lista de moedas previamente carregadas no Mongo (preenchidas ao rodar o comando "seed"):
+    - USD
+    - BRL
+    - EUR
+    - BTC
+    - ETH
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+## Endpoint de conversão de moeda
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+ - `/convert?from=:ORIGEM&to=:DESTINO&amount=:QUANTIDADE`
 
-## Requisitos
+- **Exemplos**:
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+`http://localhost:3000/api/converter?from=USD&to=BRL&amount=4`
 
-## Critério de avaliação
+Resultado:
+    {
+        "amount": 21.44
+    }
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+## Endpoints de listagem e manipulação
 
-## Dúvidas
+Endereço base: `http://localhost:3000/api/currencies`
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+Recursos:
+   - Listar todas as moedas (ou uma em específico). `GET`
+   - Cadastrar a moeda. `POST`
+   - Excluir. `DELETE`
 
-Boa sorte e boa viagem! ;)
+Exemplos:
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+ - `GET`
+    http://localhost:3000/api/currencies
+    return status 200
+        [
+            {
+                "code": "USD",
+                "name": "Dolar Americano"
+            },
+            {
+                "code": "BRL",
+                "name": "Real Brasileiro"
+            },
+            {
+                "code": "EUR",
+                "name": "Euro"
+            },
+            {
+                "code": "BTC",
+                "name": "Bitcoin"
+            },
+            {
+                "code": "ETH",
+                "name": "Ethereum"
+            }
+        ]
+
+- `GET`
+    http://localhost:3000/api/currencies/BRL
+    return status 200
+        {
+            "code": "BRL",
+            "name": "Real Brasileiro"
+        }
+
+- `POST`
+    http://localhost:3000/api/currencies
+    body
+        {
+            "code": "ALL",
+            "name": "Lek"
+        }
+    return status 204
+
+- `DELETE`
+    http://localhost:3000/api/currencies/ALL
+    return status 204
+
+## Regras
+Foram implementadas as seguintes regras:
+ - Pesquisa:
+    - Só é possível converter moedas que estejam previamente cadastradas.
+    - Moedas de origem e destino devem ser informadas.
+    - O valor a ser convertido deve ser maior que 0 (zero).
+ - Cadastro:
+    - O código da moeda deve ter um código de no mímino 3 caracteres.
+    - O código da moeda deve estar em caixa alta.
+    - O nome da moeda precisa ter no mínimo 3 caracteres e no máximo 280.
+
+
+
+## Melhorias observadas
+ - O processo de colocar a aplicação para rodar deveria conter menos comandos necessários (necessita de mais estudos relativos ao docker-compose).
+ - Implementar segurança para as rotas de manipulação de dados (POST/DELETE).
+ - Aplicação de teste.
+
+
+
+Estou a disposição para qualquer esclarecimento.
+Miqueias F Ferreira
+miqueiasff@gmail.com

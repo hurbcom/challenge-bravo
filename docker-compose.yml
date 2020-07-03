@@ -1,0 +1,10 @@
+version: "3.1"
+services:
+    db:
+        image: mongo:4.2
+        container_name: mongodb42
+        restart: always
+        ports:
+            - 27017:27017
+        environment:
+            MONGO_INITDB_DATABASE: currency
