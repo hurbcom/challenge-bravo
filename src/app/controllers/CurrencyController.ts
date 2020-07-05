@@ -5,6 +5,7 @@ import types from "@core/types";
 
 import CurrencyService from "@services/contracts/CurrencyService";
 import UnsupportedSymbolError from "@errors/UnsuportedSymbolError";
+import DuplicatedSymbolError from "@utils/errors/DuplicatedSymbolError";
 
 @injectable()
 export default class CurrencyController {
@@ -28,6 +29,9 @@ export default class CurrencyController {
     } catch (e) {
       if (e instanceof UnsupportedSymbolError)
         return res.status(422).send({ error: "Unsupported currency symbol" });
+
+      if (e instanceof DuplicatedSymbolError)
+        return res.status(409).send({ error: "There is already a currency with that symbol in the database" });
 
       return res.status(500).send({ error: "Internal server error" });
     }

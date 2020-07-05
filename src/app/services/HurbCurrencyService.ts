@@ -4,6 +4,7 @@ import Currency, { ICurrency } from "@models/Currency";
 import types from "@core/types";
 import ExchangeService from "./contracts/ExchangeService";
 import UnsupportedSymbolError from "../utils/errors/UnsuportedSymbolError";
+import DuplicatedSymbolError from "@utils/errors/DuplicatedSymbolError";
 
 @injectable()
 export default class HurbCurrencyService extends CurrencyService {
@@ -16,11 +17,21 @@ export default class HurbCurrencyService extends CurrencyService {
     return await Currency.findByPk(id);
   }
 
+  async findBySymbol(symbol: string) {
+    return await Currency.findOne({ where: { symbol } });
+  }
+
   async index() {
     return await Currency.findAll();
   }
 
   async create(data: ICurrency) {
+
+    const currency = await this.findBySymbol(data.symbol);
+
+    if (currency)
+      throw new DuplicatedSymbolError("There is already a currency with that symbol");
+
     const symbols = await this.exchangeService.symbols();
 
     if (!symbols.some(s => s.symbol === data.symbol))

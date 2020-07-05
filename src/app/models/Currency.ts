@@ -1,4 +1,4 @@
-import { Table, Column, Model, AllowNull, Length } from 'sequelize-typescript';
+import { Table, Column, Model, AllowNull, Unique } from 'sequelize-typescript';
 
 export interface ICurrency {
   id?: number,
@@ -12,6 +12,7 @@ export interface ICurrency {
 @Table({ tableName: 'currencies', paranoid: true, timestamps: true, createdAt: 'created_at', updatedAt: 'updated_at', deletedAt: 'deleted_at' })
 export default class Currency extends Model<Currency> {
   @AllowNull(false)
+  @Unique
   @Column
   symbol!: string;
 
