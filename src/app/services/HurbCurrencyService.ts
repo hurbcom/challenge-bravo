@@ -1,16 +1,19 @@
 import CurrencyService from "./contracts/CurrencyService";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 import Currency, { ICurrency } from "@models/Currency";
+import types from "@core/types";
+import ExchangeService from "./contracts/ExchangeService";
+import UnsupportedSymbolError from "../utils/errors/UnsuportedSymbolError";
 
 @injectable()
 export default class HurbCurrencyService extends CurrencyService {
 
-  async findById(id: number) {
-    return await Currency.findByPk(id);
+  constructor(@inject(types.ExchangeService) private exchangeService: ExchangeService) {
+    super();
   }
 
-  async findBySymbol(symbol: string) {
-    return await Currency.findOne({ where: { symbol } });
+  async findById(id: number) {
+    return await Currency.findByPk(id);
   }
 
   async index() {
@@ -18,6 +21,11 @@ export default class HurbCurrencyService extends CurrencyService {
   }
 
   async create(data: ICurrency) {
+    const symbols = await this.exchangeService.symbols();
+
+    if (!symbols.some(s => s.symbol === data.symbol))
+      return undefined;
+
     return await Currency.create(data);
   }
 

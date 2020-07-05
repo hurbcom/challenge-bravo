@@ -1,7 +1,10 @@
 import { injectable, inject } from "inversify";
+import { Request, Response, response } from "express";
+
 import types from "@core/types";
+
 import CurrencyService from "@services/contracts/CurrencyService";
-import { Request, Response } from "express";
+import UnsupportedSymbolError from "@errors/UnsuportedSymbolError";
 
 @injectable()
 export default class CurrencyController {
@@ -18,18 +21,21 @@ export default class CurrencyController {
     return res.send(currency);
   }
 
-  findBySymbol = async (req: Request, res: Response) => {
-    const currency = await this.currencyService.findBySymbol(req.params.symbol);
-    return res.send(currency);
-  }
-
   create = async (req: Request, res: Response) => {
-    const currency = await this.currencyService.create(req.body);
-    return res.status(201).send(currency);
+    const currency = await this.currencyService
+      .create(req.body)
+      .catch(error => {
+        if (error instanceof UnsupportedSymbolError)
+          return res.status(422).send({ error: "Unsupported currency symbol" });
+
+        return res.status(500).send({ error: "Internal server error" });
+      });
+
+    return res.status(currency ? 201 : 422).send(currency || { error: "Unsupported currency symbol" });
   }
 
   delete = async (req: Request, res: Response) => {
-    const result = await this.currencyService.delete(parseInt(req.params.id));
-    return res.send(result);
+    const deleted = await this.currencyService.delete(parseInt(req.params.id));
+    return res.send({ deleted })
   }
 }
