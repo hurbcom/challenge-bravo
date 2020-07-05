@@ -38,6 +38,18 @@
       "@services/*": [
         "src/app/services/*"
       ],
+      "@tests/*": [
+        "src/tests/*"
+      ],
+      "@mocks/*": [
+        "src/tests/mocks/*"
+      ],
+      "@utils/*": [
+        "src/app/utils/*"
+      ],
+      "@errors/*": [
+        "src/app/utils/errors/*"
+      ]
     },
   },
   "include": [
