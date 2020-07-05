@@ -90,6 +90,7 @@ module.exports = {
     '^@errors/(.*)$': '<rootDir>/src/app/utils/errors/$1',
     '^@mocks/(.*)$': '<rootDir>/src/tests/mocks/$1',
     "^@database/(.*)$": '<rootDir>/src/database/$1',
+    "^@middlewares/(.*)$": '<rootDir>/src/app/middlewares/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

@@ -12,22 +12,14 @@ export default class ExchangeController {
   }
 
   exchange = async (req: Request, res: Response) => {
+    try {
+      const { from, to, amount } = req.query;
+      const result = this.exchangeService.getExchangeBetweenCurrencies(from as string, to as string, parseFloat(amount as string));
+      return res.send(result);
+    } catch (e) {
+      return res.status(500).send({ error: "Internal server error" });
+    }
 
-    const { from, to, amount } = req.query;
-
-    const schema = yup.object().shape({
-      from: yup.string().required(),
-      to: yup.string().required(),
-      amount: yup.string().required()
-    });
-
-    const hasValidParams = await schema.isValid({ from, to, amount });
-
-    if (!hasValidParams)
-      return res.status(400).send({ error: "Invalid params" });
-
-    const result = this.exchangeService.getExchangeBetweenCurrencies(from as string, to as string, parseFloat(amount as string));
-    return res.send(result);
   }
 
 }

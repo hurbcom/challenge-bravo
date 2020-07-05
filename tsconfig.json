@@ -53,6 +53,9 @@
       ],
       "@database/*": [
         "src/database/*"
+      ],
+      "@middlewares/*": [
+        "src/app/middlewares/*"
       ]
     },
   },
