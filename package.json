@@ -39,6 +39,7 @@
     "jest": "^24.8.0",
     "loadtest": "^5.0.4",
     "lodash": "^4.17.15",
+    "nock": "^13.0.2",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
     "sequelize": "5.15.1",
