@@ -4,7 +4,6 @@ import { Router } from "express";
 import ExchangeController from "@controllers/ExchangeController";
 import CurrencyController from "@controllers/CurrencyController";
 import validateRequest from "@middlewares/validate-request";
-import { inject, injectable } from "inversify";
 import types from "@core/types";
 import providers from "@core/providers";
 

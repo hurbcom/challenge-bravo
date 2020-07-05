@@ -33,6 +33,15 @@ services:
     networks:
       - app-network
 
+  cache:
+    image: redis
+    container_name: hurb-currency-converter-cache
+    restart: always
+    ports: 
+      - 6379:6379
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

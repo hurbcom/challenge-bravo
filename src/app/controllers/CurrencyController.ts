@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { Request, Response, response } from "express";
+import { Request, Response } from "express";
 
 import types from "@core/types";
 
@@ -26,6 +26,7 @@ export default class CurrencyController {
       const currency = await this.currencyService.findById(parseInt(req.params.id));
       return res.send(currency);
     } catch (e) {
+      console.error(e);
       res.status(500).send({ error: "Internal server error" });
     }
   }

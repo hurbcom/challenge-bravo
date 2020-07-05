@@ -25,10 +25,8 @@ export default class CoinAPIService extends ExchangeService {
 
     const exchangeRate = await this.exchangeRepository.getExchangeRate(from, to);
 
-    if (!exchangeRate || exchangeRate < 0) {
-      console.log(`Invalid exchange rate: ${exchangeRate}`);
+    if (!exchangeRate || exchangeRate < 0)
       throw new ExchangeRateError("Could not determine the exchange rate between currencies");
-    }
 
     const total = this.calculateExchange(exchangeRate, amount);
 

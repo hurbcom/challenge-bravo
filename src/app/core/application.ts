@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import provider from "@core/providers";
 import database from "@config/database";
 import { Sequelize } from "sequelize-typescript";
-
+import redis from "redis";
 
 dotenv.config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
 
@@ -14,6 +14,7 @@ class ApplicationContext {
 
   public router!: Express;
   public database!: Sequelize;
+  public cache!: redis.RedisClient;
 
   constructor() {
     this.mount();
@@ -24,6 +25,7 @@ class ApplicationContext {
     this.router = express();
     this.registerGlobalMiddlewares();
     this.appendRoutes();
+    this.connectCache();
     await this.connectDatabase();
   }
 
@@ -37,6 +39,14 @@ class ApplicationContext {
 
   appendRoutes() {
     this.router.use(routes);
+  }
+
+  async connectCache() {
+    this.cache = redis.createClient(parseInt(process.env.REDIS_PORT || "6379"));
+
+    this.cache.on("error", error => {
+      console.error(`[CACHE ERROR]: `, error);
+    });
   }
 
   async connectDatabase() {
