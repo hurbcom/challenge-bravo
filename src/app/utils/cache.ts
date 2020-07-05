@@ -19,6 +19,6 @@ export const get = async (key: string) => {
 }
 
 export const wipe = async () => {
-  const wipe = promisify(app.cache.flushall);
+  const wipe = promisify(app.cache.flushall).bind(app.cache);
   return await wipe();
 }
