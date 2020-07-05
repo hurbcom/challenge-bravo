@@ -42,7 +42,10 @@ class ApplicationContext {
   }
 
   async connectCache() {
-    this.cache = redis.createClient(parseInt(process.env.REDIS_PORT || "6379"));
+    this.cache = redis.createClient({
+      port: parseInt(process.env.CACHE_PORT || "6379"),
+      host: process.env.CACHE_HOST || "localhost"
+    });
 
     this.cache.on("error", error => {
       console.error(`[CACHE ERROR]: `, error);
