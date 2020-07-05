@@ -4,6 +4,7 @@ import types from "@core/types";
 import UnsupportedSymbolError from "../utils/errors/UnsuportedSymbolError";
 import DuplicatedSymbolError from "@utils/errors/DuplicatedSymbolError";
 import ExchangeRepository from "./ExchangeRepository";
+import { get } from "@utils/cache";
 
 @injectable()
 export default class CurrencyRepository {
@@ -15,6 +16,16 @@ export default class CurrencyRepository {
   }
 
   async findBySymbol(symbol: string): Promise<Currency | null> {
+
+    const cached = await get('currencies');
+
+    if (cached) {
+      const result = JSON.parse(cached).find(c => c.symbol === symbol);
+
+      if (result)
+        return result;
+    }
+
     const currency: Currency = await Currency.findOne({ where: { symbol } });
     return currency;
   }
