@@ -1,51 +1,37 @@
 import CurrencyService from "./contracts/CurrencyService";
 import { injectable, inject } from "inversify";
-import Currency, { ICurrency } from "@models/Currency";
+import { ICurrency } from "@models/Currency";
 import types from "@core/types";
-import ExchangeService from "./contracts/ExchangeService";
-import UnsupportedSymbolError from "../utils/errors/UnsuportedSymbolError";
-import DuplicatedSymbolError from "@utils/errors/DuplicatedSymbolError";
+import CurrencyRepository from "../repositories/CurrencyRepository";
 
 @injectable()
 export default class HurbCurrencyService extends CurrencyService {
 
-  constructor(@inject(types.ExchangeService) private exchangeService: ExchangeService) {
+  constructor(@inject(types.CurrencyRepository) private currencyRepository: CurrencyRepository) {
     super();
   }
 
   async findById(id: number) {
-    return await Currency.findByPk(id);
+    return await this.currencyRepository.findById(id);
   }
 
   async findBySymbol(symbol: string) {
-    return await Currency.findOne({ where: { symbol } });
+    return await this.currencyRepository.findBySymbol(symbol);
   }
 
   async index() {
-    return await Currency.findAll();
+    return await this.currencyRepository.index();
   }
 
   async create(data: ICurrency) {
-
-    const currency = await this.findBySymbol(data.symbol);
-
-    if (currency)
-      throw new DuplicatedSymbolError("There is already a currency with that symbol");
-
-    const symbols = await this.exchangeService.symbols();
-
-    if (!symbols.some(s => s.symbol === data.symbol))
-      throw new UnsupportedSymbolError("This currency symbol is not supported by the application");
-
-    return await Currency.create(data);
+    return this.currencyRepository.create(data);
   }
 
   async update(id: number, data: ICurrency) {
-    return await Currency.update(data, { where: { id } });
+    return await this.currencyRepository.update(id, data);
   }
 
   async delete(id: number) {
-    const affected = await Currency.destroy({ where: { id } });
-    return (affected && affected > 0) ? true : false;
+    return await this.currencyRepository.delete(id);
   }
 }

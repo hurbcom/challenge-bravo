@@ -1,16 +1,17 @@
 import * as yup from "yup";
 import { Router } from "express";
 
-import providers from '@core/providers';
 import ExchangeController from "@controllers/ExchangeController";
 import CurrencyController from "@controllers/CurrencyController";
 import validateRequest from "@middlewares/validate-request";
-import { uptime } from "process";
+import { inject, injectable } from "inversify";
+import types from "@core/types";
+import providers from "@core/providers";
 
 const routes = Router();
 
-const ExchangeContainer = providers.container.resolve(ExchangeController);
-const CurrencyContainer = providers.container.resolve(CurrencyController);
+const ExchangeContainer = providers.container.get<ExchangeController>(types.ExchangeController);
+const CurrencyContainer = providers.container.get<CurrencyController>(types.CurrencyController);
 
 routes.get('/exchange', validateRequest({
   from: yup.string().required(),
