@@ -2,8 +2,9 @@ import app from "@core/application";
 import nock from "nock";
 import request from 'supertest';
 import CurrencyFactory from '@factories/CurrencyFactory';
+import { clearTakenCurrencies } from '@database/faker/currency';
 import sequelize from "@config/database";
-import Currency from "@models/Currency";
+import Currency, { ICurrency } from "@models/Currency";
 
 import { MockGetSymbolsRequest as mockGetSymbolsRequest } from "../mocks/CoinAPIMock";
 
@@ -12,7 +13,10 @@ describe('currency integration test suite', () => {
 
   beforeEach(async () => await sequelize.sync({ force: true }));
 
-  afterEach(() => nock.cleanAll());
+  afterEach(() => {
+    nock.cleanAll()
+    clearTakenCurrencies();
+  });
 
   it('should find all currencies', async () => {
     await CurrencyFactory.createMany('Currency', 3);
@@ -25,7 +29,7 @@ describe('currency integration test suite', () => {
   });
 
   it('should find a specific currency by its id', async () => {
-    const currencies: any = await CurrencyFactory.createMany('Currency', 10);
+    const currencies: ICurrency[] = await CurrencyFactory.createMany('Currency', 10);
 
     const randomCurrency = currencies[Math.floor(Math.random() * currencies.length)];
 
@@ -65,7 +69,7 @@ describe('currency integration test suite', () => {
 
   it('should delete a currency', async () => {
     const totalCurrencies = 10;
-    const currencies: any = await CurrencyFactory.createMany('Currency', totalCurrencies);
+    const currencies: ICurrency[] = await CurrencyFactory.createMany('Currency', totalCurrencies);
 
     const randomCurrency = currencies[Math.floor(Math.random() * currencies.length)];
 
@@ -80,7 +84,7 @@ describe('currency integration test suite', () => {
     expect(currenciesResponse.body.length).toBe(totalCurrencies - 1);
   });
 
-  it('should not create a currency with invalid symbols but return a 422 HTTP status code', async () => {
+  it('should not create a currency with invalid symbol but return a 422 HTTP status code', async () => {
     mockGetSymbolsRequest();
 
     const response = await request(app.router)
@@ -88,6 +92,18 @@ describe('currency integration test suite', () => {
       .send({ name: "foo", symbol: "bar" });
 
     expect(response.status).toBe(422);
+  });
+
+  it('should not create a currency with duplicated symbol but return a 409 HTTP status code', async () => {
+    mockGetSymbolsRequest();
+
+    const currency: ICurrency = await CurrencyFactory.create('Currency');
+
+    const response = await request(app.router)
+      .post('/currencies')
+      .send({ name: "foo", symbol: currency.symbol });
+
+    expect(response.status).toBe(409);
   });
 
 });
