@@ -13,13 +13,21 @@ export default class CurrencyController {
   constructor(@inject(types.CurrencyService) private currencyService: CurrencyService) { }
 
   index = async (req: Request, res: Response) => {
-    const currencies = await this.currencyService.index();
-    res.send(currencies);
+    try {
+      const currencies = await this.currencyService.index();
+      res.send(currencies);
+    } catch (e) {
+      res.status(500).send({ error: "Internal server error" });
+    }
   }
 
   find = async (req: Request, res: Response) => {
-    const currency = await this.currencyService.findById(parseInt(req.params.id));
-    return res.send(currency);
+    try {
+      const currency = await this.currencyService.findById(parseInt(req.params.id));
+      return res.send(currency);
+    } catch (e) {
+      res.status(500).send({ error: "Internal server error" });
+    }
   }
 
   create = async (req: Request, res: Response) => {
@@ -35,11 +43,15 @@ export default class CurrencyController {
 
       return res.status(500).send({ error: "Internal server error" });
     }
-
   }
 
   delete = async (req: Request, res: Response) => {
-    const deleted = await this.currencyService.delete(parseInt(req.params.id));
-    return res.send({ deleted })
+    try {
+      const deleted = await this.currencyService.delete(parseInt(req.params.id));
+      return res.send({ deleted });
+    } catch (e) {
+      return res.status(500).send({ error: "Internal server error" });
+    }
+
   }
 }
