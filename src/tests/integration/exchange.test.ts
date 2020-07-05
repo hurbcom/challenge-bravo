@@ -7,7 +7,6 @@ describe('exchange integration test suite', () => {
   beforeEach(async () => await sequelize.sync({ force: true }));
 
   it('should calculate the exchange rate between two given currencies', async () => {
-
     const response = await request(app.router)
       .get('/exchange?from=USD&to=BTC&amount=1');
 

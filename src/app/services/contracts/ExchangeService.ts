@@ -1,9 +1,13 @@
 import { injectable } from "inversify";
 
+export interface CurrencySymbol {
+  name: string,
+  symbol: string
+}
 @injectable()
 export default abstract class ExchangeService {
 
-  abstract symbols(): any;
+  abstract symbols(): Promise<CurrencySymbol[]>;
 
   getExchangeBetweenCurrencies(from: string, to: string, amount: number) {
     return { total: 0.00011 };
