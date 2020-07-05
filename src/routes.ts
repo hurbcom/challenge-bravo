@@ -9,10 +9,9 @@ const ExchangeContainer = providers.container.resolve(ExchangeController);
 const CurrencyContainer = providers.container.resolve(CurrencyController);
 
 routes.get('/exchange', ExchangeContainer.exchange);
-routes.get('/currency', CurrencyContainer.index);
-routes.get('/currency/:id', CurrencyContainer.find);
-routes.get('/currency/symbol/:symbol', CurrencyContainer.findBySymbol);
-routes.post('/currency', CurrencyContainer.create);
-routes.delete('/currency/:id', CurrencyContainer.delete);
+routes.get('/currencies/:id', CurrencyContainer.find);
+routes.delete('/currencies/:id', CurrencyContainer.delete);
+routes.get('/currencies', CurrencyContainer.index);
+routes.post('/currencies', CurrencyContainer.create);
 
 export default routes;
