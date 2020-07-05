@@ -15,6 +15,7 @@
     "allowJs": true,
     "baseUrl": ".",
     "moduleResolution": "node",
+    "suppressImplicitAnyIndexErrors": true,
     "types": [
       "node",
       "jest"
@@ -49,6 +50,9 @@
       ],
       "@errors/*": [
         "src/app/utils/errors/*"
+      ],
+      "@database/*": [
+        "src/database/*"
       ]
     },
   },
