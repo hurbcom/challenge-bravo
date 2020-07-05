@@ -24,7 +24,7 @@ export default class HurbCurrencyService extends CurrencyService {
     const symbols = await this.exchangeService.symbols();
 
     if (!symbols.some(s => s.symbol === data.symbol))
-      return undefined;
+      throw new UnsupportedSymbolError("This currency symbol is not supported by the application");
 
     return await Currency.create(data);
   }

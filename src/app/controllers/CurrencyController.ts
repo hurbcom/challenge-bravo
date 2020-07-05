@@ -22,16 +22,16 @@ export default class CurrencyController {
   }
 
   create = async (req: Request, res: Response) => {
-    const currency = await this.currencyService
-      .create(req.body)
-      .catch(error => {
-        if (error instanceof UnsupportedSymbolError)
-          return res.status(422).send({ error: "Unsupported currency symbol" });
+    try {
+      const currency = await this.currencyService.create(req.body);
+      return res.status(201).send(currency);
+    } catch (e) {
+      if (e instanceof UnsupportedSymbolError)
+        return res.status(422).send({ error: "Unsupported currency symbol" });
 
-        return res.status(500).send({ error: "Internal server error" });
-      });
+      return res.status(500).send({ error: "Internal server error" });
+    }
 
-    return res.status(currency ? 201 : 422).send(currency || { error: "Unsupported currency symbol" });
   }
 
   delete = async (req: Request, res: Response) => {
