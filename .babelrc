@@ -1,0 +1,29 @@
+{
+  "compact": false,
+  "retainLines": true,
+  "minified": false,
+  "inputSourceMap": false,
+  "sourceMaps": false,
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "@core": "./app/core",
+          "@config": "./config",
+          "@controllers": "./app/controllers",
+          "@factories": "./database/factories",
+          "@models": "./app/models",
+          "@services": "./app/services",
+          "@tests": "./tests",
+          "@mocks": "./tests/mocks",
+          "@utils": "./app/utils",
+          "@errors": "./app/utils/errors",
+          "@database": "./database",
+          "@middlewares": "./app/middlewares"
+        },
+        "cwd": "./dist"
+      }
+    ]
+  ]
+}

@@ -1,11 +1,15 @@
 {
   "scripts": {
+    "serve": "node ./dist/index.js",
     "dev": "nodemon src/index.ts",
-    "build": "tsc",
+    "build": "yarn tsc -b && babel dist -d dist",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
+    "prestress": "docker-compose up -d",
+    "stress": "node --require ts-node/register ./src/tests/stress/exchange.stress-test.ts",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.4",
     "@types/axios": "^0.14.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.5",
@@ -17,6 +21,7 @@
     "@types/node": "^12.6.0",
     "@types/supertest": "^2.0.8",
     "@types/yup": "^0.29.3",
+    "babel-plugin-module-resolver": "^4.0.0",
     "faker": "^4.1.0",
     "nodemon": "^1.19.1",
     "sequelize-typescript": "^1.1.0",
