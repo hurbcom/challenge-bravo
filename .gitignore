@@ -4,3 +4,4 @@ dist
 **/tests/data/coverage
 **/tests/data/*.db
 *.log
+.npm-cache

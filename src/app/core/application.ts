@@ -57,7 +57,7 @@ class ApplicationContext {
   }
 
   async bootstrap() {
-    const port = process.env.PORT || 3000;
+    const port = process.env.APP_PORT || 3000;
     console.log(`Starting application on port ${port}`);
     this.router.listen(port);
   }
