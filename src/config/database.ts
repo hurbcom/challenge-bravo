@@ -14,7 +14,10 @@ const sequelize: Sequelize = new Sequelize({
   password: process.env.DATABASE_PASSWORD,
   modelPaths: [__dirname + '/../app/models'],
   storage: process.env.DATABASE_STORAGE,
-  logging: false
+  logging: false,
+  define: {
+    underscored: true
+  }
 });
 
 export default sequelize;
