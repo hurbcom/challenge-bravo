@@ -3,10 +3,14 @@ import request from "supertest";
 import sequelize from "@config/database";
 import { MockGetExchangeRateFromUSDToBTC, MockGetSymbolsRequest } from "@tests/mocks/CoinAPIMock";
 import CurrencyFactory from '@factories/CurrencyFactory';
+import { wipe } from "@utils/cache";
 
 describe('exchange integration test suite', () => {
 
-  beforeEach(async () => await sequelize.sync({ force: true }));
+  beforeEach(async () => {
+    await sequelize.sync({ force: true });
+    await wipe();
+  });
 
   it('should calculate the exchange rate between two given currencies', async () => {
     MockGetSymbolsRequest();

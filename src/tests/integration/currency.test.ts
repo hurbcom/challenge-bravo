@@ -7,11 +7,15 @@ import sequelize from "@config/database";
 import Currency, { ICurrency } from "@models/Currency";
 
 import { MockGetSymbolsRequest as mockGetSymbolsRequest } from "../mocks/CoinAPIMock";
+import { wipe } from "@utils/cache";
 
 
 describe('currency integration test suite', () => {
 
-  beforeEach(async () => await sequelize.sync({ force: true }));
+  beforeEach(async () => {
+    await sequelize.sync({ force: true })
+    await wipe();
+  });
 
   afterEach(() => {
     nock.cleanAll()
