@@ -26,7 +26,6 @@ export default class CurrencyController {
       const currency = await this.currencyService.findById(parseInt(req.params.id));
       return res.send(currency);
     } catch (e) {
-      console.error(e);
       res.status(500).send({ error: "Internal server error" });
     }
   }
@@ -42,6 +41,16 @@ export default class CurrencyController {
       if (e instanceof DuplicatedSymbolError)
         return res.status(409).send({ error: "There is already a currency with that symbol in the database" });
 
+      console.error(e);
+      return res.status(500).send({ error: "Internal server error" });
+    }
+  }
+
+  update = async (req: Request, res: Response) => {
+    try {
+      const currency = await this.currencyService.update(parseInt(req.params.id), req.body);
+      return res.send(currency);
+    } catch (e) {
       return res.status(500).send({ error: "Internal server error" });
     }
   }

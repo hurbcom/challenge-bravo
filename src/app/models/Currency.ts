@@ -1,4 +1,4 @@
-import { Table, Column, Model, AllowNull, Unique } from 'sequelize-typescript';
+import { Table, Column, Model, AllowNull, Unique, CreatedAt, UpdatedAt, DeletedAt } from 'sequelize-typescript';
 
 export interface ICurrency {
   id?: number,
@@ -9,7 +9,7 @@ export interface ICurrency {
   deletedAt?: Date
 }
 
-@Table({ tableName: 'currencies', paranoid: true, timestamps: true, createdAt: 'created_at', updatedAt: 'updated_at', deletedAt: 'deleted_at' })
+@Table({ tableName: 'currencies', paranoid: true, timestamps: true, createdAt: false, updatedAt: false })
 export default class Currency extends Model<Currency> {
   @AllowNull(false)
   @Unique
@@ -19,4 +19,17 @@ export default class Currency extends Model<Currency> {
   @AllowNull(false)
   @Column
   name!: string;
+
+  @CreatedAt
+  @Column({ field: 'created_at' })
+  createdAt!: Date;
+
+  @UpdatedAt
+  @Column({ field: 'updated_at' })
+  updatedAt!: Date;
+
+  @DeletedAt
+  @Column({ field: 'deleted_at' })
+  deletedAt!: Date;
+
 }

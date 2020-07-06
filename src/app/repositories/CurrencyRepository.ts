@@ -36,10 +36,18 @@ export default class CurrencyRepository {
 
   async create(data: ICurrency) {
 
-    const currency = await this.findBySymbol(data.symbol);
+    const currency: Currency = await Currency.findOne({ where: { symbol: data.symbol }, paranoid: false });
 
-    if (currency)
-      throw new DuplicatedSymbolError("There is already a currency with that symbol");
+    if (currency) {
+      if (!currency.deletedAt)
+        throw new DuplicatedSymbolError("There is already a currency with that symbol");
+
+      else {
+        currency.restore();
+        return currency;
+      }
+    }
+
 
     const symbols = await this.exchangeRepository.symbols();
 
