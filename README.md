@@ -31,12 +31,23 @@ Caso queira dar suporte à outras moedas, é necessário cadastrá-las no banco 
 $ git clone git@github.com:n0minal/challenge-bravo.git
 ```
 
-2. Rode o projeto com docker, nenhum passo adicional é necessário:
+2. Entre na pasta do projeto:
+
+```base
+$ cd ./challenge-bravo
+```
+
+3. Conceda permissão de execução no entrypoint ao:
+```base
+$ sudo chmod +x .docker/entrypoint.sh
+```
+
+4. Rode o projeto com docker:
 ```bash
 $ docker-compose up -d --build
 ```
 
-3. Após iniciada a aplicação, utilize a documentação do SwaggerUI para realizar conversões e manipular moedas suportadas pela API:
+5. Após iniciada a aplicação, utilize a documentação do SwaggerUI para realizar conversões e manipular moedas suportadas pela API:
 ```bash 
 http://localhost:3000/docs
 ```

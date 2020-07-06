@@ -29,6 +29,8 @@ services:
     env_file: 
       - .env
     environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - PGDATA=/var/lib/postgresql/data/pgdata
     networks:
       - app-network
