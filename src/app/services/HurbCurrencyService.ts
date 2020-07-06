@@ -56,12 +56,6 @@ export default class HurbCurrencyService extends CurrencyService {
     return this.currencyRepository.create(data);
   }
 
-  async update(id: number, data: ICurrency) {
-    await del('currencies');
-    await del(`currencies/${id}`)
-    return await this.currencyRepository.update(id, data);
-  }
-
   async delete(id: number) {
     await del('currencies');
     await del(`currencies/${id}`);

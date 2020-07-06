@@ -8,5 +8,4 @@ export default abstract class CurrencyService {
   abstract async index(): Promise<Currency[]>;
   abstract async create(data: any): Promise<Currency | Currency[]>;
   abstract async delete(id: number): Promise<boolean>;
-  abstract async update(id: number, data: ICurrency): Promise<Currency>;
 }

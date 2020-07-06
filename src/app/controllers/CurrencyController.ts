@@ -46,15 +46,6 @@ export default class CurrencyController {
     }
   }
 
-  update = async (req: Request, res: Response) => {
-    try {
-      const currency = await this.currencyService.update(parseInt(req.params.id), req.body);
-      return res.send(currency);
-    } catch (e) {
-      return res.status(500).send({ error: "Internal server error" });
-    }
-  }
-
   delete = async (req: Request, res: Response) => {
     try {
       const deleted = await this.currencyService.delete(parseInt(req.params.id));

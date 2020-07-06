@@ -26,11 +26,6 @@ routes.get('/currencies/:id', CurrencyContainer.find);
 
 routes.delete('/currencies/:id', CurrencyContainer.delete);
 
-routes.put('/currencies/:id', validateRequest({
-  name: yup.string(),
-  symbol: yup.string()
-}), CurrencyContainer.update);
-
 routes.get('/currencies', CurrencyContainer.index);
 
 routes.post('/currencies', validateRequest({
