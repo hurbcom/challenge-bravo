@@ -1,0 +1,115 @@
+swagger: "2.0"
+info:
+  description: "A simple application for real-time currency exchanges"
+  version: "1.0.0"
+  title: "Hurb Currency Exchange"
+  contact:
+    email: "nominal@outlook.com.br"
+    url: "https://linkedin.com/in/nominal"
+host: "localhost:3000"
+basePath: "/"
+tags:
+- name: "exchange"
+  description: "Exchange operations"
+- name: "currency"
+  description: "Currencies operations"
+schemes:
+- "http"
+paths:
+  /exchange:
+    get:
+      tags:
+      - "exchange"
+      summary: "Calculates the exchange between two currencies"
+      description: "Note: the currencies should be registered at database, otherwise you won't be able to calculate their exchange."
+      operationId: "calculateExchange"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "from"
+        in: "query"
+        description: "The source currency"
+        required: true
+        type: "string"
+      - name: "to"
+        in: "query"
+        description: "The target currency"
+        required: true
+        type: "string"
+      - name: "amount"
+        in: "query"
+        description: "The amount of coins from the source currency to convert to the target currency"
+        type: "integer"
+      responses:
+        "200":
+          description: "Successfully converted"
+        "400":
+            description: "Bad request, invalid parameters"
+        "422":
+          description: "One or more currency symbols present on the request are not supported by the application, make sure they exists in database before using"
+  /currencies:
+    get:
+      tags:
+      - "currency"
+      summary: "Find all currencies currently registered at the application"
+      description: ""
+      operationId: "findAllCurrencies"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Successfully retrieved all currencies"
+    post:
+      tags:
+        - "currency"
+      summary: "Create a new currency to be supported by exchange operations"
+      description: ""
+      operationId: "createCurrency"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"      
+      requestBody:
+        description: The request body
+        required: true
+        content:
+          application/json:
+            schema:
+              name:
+                type: string
+              symbol:
+                type: stringa
+      responses:
+        "201":
+          description: "Successfully created a new currency"
+        "400":
+          description: "Bad request, invalid parameters"
+        "422":
+          description: "Unsupported currency symbol, verify if your symbol represents a valid currency before creating it"
+        "409":
+          description: "Duplicated record, there is already a currency with that symbol"
+  /currencies/{currencyId}:
+    delete:
+      tags:
+        - "currency"
+      summary: "Delete a specific currency"
+      description: ""
+      operationId: "deleteCurrency"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"      
+      parameters:
+      - name: "currencyId"
+        type: "integer"
+        in: "path"
+        description: "The currency id"
+        required: true
+      responses:
+        "200":
+          description: "Request successfully executed, the operation result is represented by the boolean flag 'deleted' in response body"
+      
