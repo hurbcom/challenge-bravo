@@ -1,4 +1,5 @@
 import "reflect-metadata";
 import app from "@core/application";
+import { wipe } from "@utils/cache";
 
-app.bootstrap();
+app.bootstrap().then(() => wipe());
