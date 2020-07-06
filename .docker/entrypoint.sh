@@ -7,4 +7,4 @@ cd /home/node/app
 npm run build
 npm run db:create
 npm run db:seed
-npm run dev
+npm run start
