@@ -71,6 +71,7 @@ paths:
       operationId: "createCurrency"
       consumes:
       - "application/json"
+      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"      
       requestBody:
@@ -82,7 +83,15 @@ paths:
               name:
                 type: string
               symbol:
-                type: stringa
+                type: string
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                symbol:
+                  type: string
       responses:
         "201":
           description: "Successfully created a new currency"

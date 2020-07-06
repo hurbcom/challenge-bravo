@@ -7,6 +7,7 @@ import provider from "@core/providers";
 import database from "@config/database";
 import { Sequelize } from "sequelize-typescript";
 import redis from "redis";
+import bodyParser from "body-parser";
 
 dotenv.config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
 
@@ -30,7 +31,7 @@ class ApplicationContext {
   }
 
   registerGlobalMiddlewares() {
-    this.router.use([express.json(), cors()]);
+    this.router.use([express.json(), bodyParser.urlencoded({ extended: true }), cors()]);
   }
 
   registerProviders() {
