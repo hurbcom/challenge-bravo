@@ -16,3 +16,5 @@
 spec/
 dist/
 
+pkg/external/http/static/statik.go
+
