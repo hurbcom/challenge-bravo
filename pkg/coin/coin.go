@@ -1,6 +1,6 @@
 package coin
 
 type Coin struct {
-	Name  string
-	Value int64
+	Name   string
+	Amount int64
 }
