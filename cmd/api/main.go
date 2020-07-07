@@ -7,9 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/hurbcom/challenge-bravo/pkg/boleto"
+	"github.com/hurbcom/challenge-bravo/pkg/coin"
 	"github.com/hurbcom/challenge-bravo/pkg/external/http/rest"
-	"github.com/hurbcom/challenge-bravo/pkg/external/storage/memory"
 )
 
 var port string = "8000"
@@ -38,11 +37,10 @@ func main() {
  Server's running on port :%v
 
 `
-	storage := memory.NewStorage()
 
-	boletoService := boleto.NewService(storage)
+	coinService := new(coin.DefaultService)
 
-	router := rest.NewRouter(boletoService)
+	router := rest.NewRouter(coinService)
 
 	fmt.Fprintf(os.Stdout, tmpl, port)
 

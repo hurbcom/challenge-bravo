@@ -3,7 +3,7 @@ package rest
 import (
 	"github.com/go-chi/chi"
 
-	"github.com/hurbcom/challenge-bravo/pkg/boleto"
+	"github.com/hurbcom/challenge-bravo/pkg/coin"
 
 	"net/http"
 )
@@ -13,12 +13,12 @@ import (
 // @description Specification for all resource from Coins API
 
 // @BasePath /api
-func NewRouter(bsvc boleto.Service) http.Handler {
+func NewRouter(cs coin.Service) http.Handler {
 	router := chi.NewRouter()
 
 	router.Route("/api", func(api chi.Router) {
 		api.Route("/v1", func(v1 chi.Router) {
-			v1.Get("/coins/convert", v1ConvertCoinValue(bsvc))
+			v1.Get("/coins/convert", v1ConvertCoinValue(cs))
 		})
 	})
 
