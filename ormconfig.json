@@ -1,15 +1,18 @@
 {
     "name": "default",
-    "type": "sqlite",
-    "database": "challenge.sqlite",
-    "autoSchemaSync": true,
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password": "docker",
+    "database": "challenge_bravo",
     "entities": [
-      "./src/models/*.ts"
+        "./src/models/*.ts"
     ],
     "migrations": [
-      "./src/database/migrations/*.ts"
+        "./src/database/migrations/*.ts"
     ],
     "cli": {
-      "migrationsDir": "./src/database/migrations"
+        "migrationsDir":  "./src/database/migrations"
     }
-  }
+}
