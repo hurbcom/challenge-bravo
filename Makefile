@@ -11,17 +11,12 @@ install: lint test build ## Call 'make build', 'make install' or just call 'make
 
 $(LINTER):
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(BIN_DIR) v1.27.0
-	golangci-lint --version
 
 lint: $(LINTER) ## Run app lint
 	@$(LINTER) run -v
 
 test: ## Run app tests
 	@go test -v -cover $(PKGS)
-
-artifact: build ## Prepare a compressed artifact
-
-build: doc api ## Build all app environment to dist folder
 
 api: ## Build the command api
 	@CGO_ENABLED=0 go build -v -o $(DIST_DIR)/bin/api cmd/api/main.go
@@ -39,15 +34,15 @@ $(SPEC_COMPILER):
 	@go get -v github.com/rakyll/statik
 
 api-spec-bind: $(SPEC_COMPILER) api-spec
-	@$(SPEC_COMPILER) -src=./dist/spec -dest=./pkg/external/http/static -f
+	@$(SPEC_COMPILER) -src=spec -dest=pkg/external/http -p static -f
 
 $(SPEC_BUILDER):
 	@go get -u github.com/swaggo/swag/cmd/swag
-	@swag --version
 
 api-spec: $(SPEC_BUILDER) ## Generate Swagger for your API specification into dist folder
-	@$(SPEC_BUILDER) init --generalInfo pkg/external/http/rest/router.go --output dist/spec
-	@rm -rf dist/spec/docs.go
+	@$(SPEC_BUILDER) init --generalInfo pkg/external/http/rest/router.go --output spec
+	@rm -rf spec/docs.go
 
 help: ## Display available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+

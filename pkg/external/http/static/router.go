@@ -6,8 +6,6 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/rakyll/statik/fs"
-
-	_ "github.com/hurbcom/challenge-bravo/pkg/external/http/static/statik"
 )
 
 type HTMLData struct {
