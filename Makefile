@@ -7,7 +7,7 @@ SPEC_COMPILER=$(BIN_DIR)/statik
 
 DIST_DIR := ./dist
 
-install: lint test build ## Call 'make build', 'make install' or just call 'make' it's same mean
+install: lint test api doc ## Call 'make install' or just call 'make' it's same mean
 
 $(LINTER):
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(BIN_DIR) v1.27.0
