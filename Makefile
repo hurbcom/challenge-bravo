@@ -34,7 +34,7 @@ $(SPEC_COMPILER):
 	@go get -v github.com/rakyll/statik
 
 api-spec-bind: $(SPEC_COMPILER) api-spec
-	@$(SPEC_COMPILER) -src=spec -dest=pkg/external/http -p static -f
+	@$(SPEC_COMPILER) -src=spec -dest=adapter/primary/http -p static -f
 
 $(SPEC_BUILDER):
 	@go get -u github.com/swaggo/swag/cmd/swag
