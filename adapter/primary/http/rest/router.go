@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// @title Coins API
+// @title Challenge Bravo API
 // @version 1.0
 // @description Specification for all resource from Coins API
 

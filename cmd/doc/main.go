@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/hurbcom/challenge-bravo/pkg/external/http/static"
+	"github.com/hurbcom/challenge-bravo/adapter/primary/http/static"
 )
 
 var port string = "8001"

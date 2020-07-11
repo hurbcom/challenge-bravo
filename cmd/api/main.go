@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/hurbcom/challenge-bravo/adapter/primary/http/rest"
 	"github.com/hurbcom/challenge-bravo/pkg/coin"
-	"github.com/hurbcom/challenge-bravo/pkg/external/http/rest"
 )
 
 var port string = "8000"

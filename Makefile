@@ -40,7 +40,7 @@ $(SPEC_BUILDER):
 	@go get -u github.com/swaggo/swag/cmd/swag
 
 api-spec: $(SPEC_BUILDER) ## Generate Swagger for your API specification into dist folder
-	@$(SPEC_BUILDER) init --generalInfo pkg/external/http/rest/router.go --output spec
+	@$(SPEC_BUILDER) init --generalInfo adapter/primary/http/rest/router.go --output spec
 	@rm -rf spec/docs.go
 
 help: ## Display available commands
