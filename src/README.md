@@ -133,7 +133,7 @@ amount: { type: Number, required: true }
 
 ## Orientações:
 
-Para executar a aplicação é necessário ter o coker e o docker compose instalado.
+Para executar a aplicação é necessário ter o docker e o docker compose instalado.
 Uma vez que essas dependências estejam instaladas é necessário executar o seguinte comando:
 
 ``` docker-compose up --build```
