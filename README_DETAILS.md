@@ -1,7 +1,6 @@
-# template-go
-:nerd_face: This is a template to easier build apps using Golang.
+# Challenge Bravo
 
-![dev](https://github.com/iupay/template-go/workflows/dev/badge.svg)
+![master](https://github.com/guiferpa/challenge-bravo/workflows/master/badge.svg)
 
 ## Data flows design
 
@@ -14,47 +13,48 @@ For directories and the organization of the source code this template uses basic
 Let's look the directories:
 ```bash
 .
+├── adapter
+│   ├── primary
+│   │   └── http
+│   │       ├── rest
+│   │       │   ├── coin.go
+│   │       │   └── router.go
+│   │       └── static
+│   │           ├── router.go
+│   │           └── statik.go
+│   └── secondary
+│       └── http
+│           └── rest
+│               └── repository.go
 ├── cmd
 │   ├── api
 │   │   └── main.go
 │   └── doc
 │       └── main.go
 ├── dist
-│   └── spec
-│       ├── swagger.json
-│       └── swagger.yaml
+│   └── bin
+│       ├── api
+│       └── doc
 ├── go.mod
 ├── go.sum
 ├── Makefile
 ├── pkg
-│   ├── boleto
-│   │   ├── boleto.go
-│   │   ├── cost.go
-│   │   ├── issuer.go
-│   │   ├── payer.go
-│   │   ├── repository.go
-│   │   ├── service.go
-│   │   └── tax.go
-│   └── external
-│       ├── http
-│       │   ├── rest
-│       │   │   ├── boleto.go
-│       │   │   └── router.go
-│       │   └── static
-│       │       ├── router.go
-│       │       └── statik
-│       │           └── statik.go
-│       └── storage
-│           └── memory
-│               ├── boleto.go
-│               └── repository.go
+│   └── coin
+│       ├── coin.go
+│       ├── port.go
+│       ├── quota.go
+│       └── service.go
 ├── platform
 │   └── docker
 │       ├── api
 │       │   └── Dockerfile
 │       └── doc
 │           └── Dockerfile
-└── README.md
+├── README_DETAILS.md
+├── README.md
+└── spec
+    ├── swagger.json
+    └── swagger.yaml
 ```
 
 ### What's a command?
