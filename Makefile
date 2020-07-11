@@ -12,28 +12,28 @@ install: lint test api doc ## Call 'make install' or just call 'make' it's same 
 $(LINTER):
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(BIN_DIR) v1.27.0
 
-lint: $(LINTER) ## Run app lint
+lint: $(LINTER) ## Run lint for source code
 	@$(LINTER) run -v
 
-test: ## Run app tests
+test: ## Run tests
 	@go test -v -cover $(PKGS)
 
 api: ## Build the command api
 	@CGO_ENABLED=0 go build -v -o $(DIST_DIR)/bin/api cmd/api/main.go
 
-doc: api-spec-bind ## Build the command doc
+doc: _api-spec-bind ## Build the command doc
 	@CGO_ENABLED=0 go build -v -o $(DIST_DIR)/bin/doc cmd/doc/main.go
 
 docker-image-api: ## Build the docker image for command api
-	@docker build -t template-go-api -f platform/docker/api/Dockerfile .
+	@docker build -t challenge-bravo-api -f platform/docker/api/Dockerfile .
 
 docker-image-doc: ## Build the docker image for command doc
-	@docker build -t template-go-doc -f platform/docker/doc/Dockerfile .
+	@docker build -t challenge-bravo-api-doc -f platform/docker/doc/Dockerfile .
 
 $(SPEC_COMPILER):
 	@go get -v github.com/rakyll/statik
 
-api-spec-bind: $(SPEC_COMPILER) api-spec
+_api-spec-bind: $(SPEC_COMPILER) api-spec
 	@$(SPEC_COMPILER) -src=spec -dest=adapter/primary/http -p static -f
 
 $(SPEC_BUILDER):

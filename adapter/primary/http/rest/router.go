@@ -13,7 +13,7 @@ import (
 // @description Specification for all resource from Coins API
 
 // @BasePath /api
-func NewRouter(cs coin.Service) http.Handler {
+func NewRouter(cs coin.PrimaryPort) http.Handler {
 	router := chi.NewRouter()
 
 	router.Route("/api", func(api chi.Router) {

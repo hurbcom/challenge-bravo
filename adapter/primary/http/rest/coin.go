@@ -27,13 +27,13 @@ type (
 	ConvertCoinHTTPQueryParams struct {
 		From   string `validate:"enum=USD,BRL,EUR,BTC,ETH"` // Converted coin
 		To     string `validate:"enum=USD,BRL,EUR,BTC,ETH"` // Converted coin
-		Amount int64  `validate:"min=1"`
+		Amount int64  `validate:"min=1"`                    // Coin amount
 	}
 
 	CoinHTTPResponse struct {
-		Name   string    `json:"name"`   // Coin name
-		Amount int64     `json:"amount"` // Coin amount
-		When   time.Time `json:"when"`   // Coin quotation time
+		Name  string    `json:"name"`  // Coin name
+		Value int64     `json:"value"` // Coin value
+		When  time.Time `json:"when"`  // Coin quotation time
 	}
 )
 
@@ -72,9 +72,11 @@ func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
 // @Failure 400 {object} ErrCoinHTTPResponse
 // @Failure 500 {object} ErrCoinHTTPResponse
 // @Router /v1/coins/convert [get]
-func v1ConvertCoinValue(s coin.Service) http.HandlerFunc {
+func v1ConvertCoinValue(s coin.PrimaryPort) http.HandlerFunc {
 	validator := gody.NewValidator()
-	validator.AddRules(rule.Enum)
+	if err := validator.AddRules(rule.Enum); err != nil {
+		panic(err)
+	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
@@ -110,7 +112,7 @@ func v1ConvertCoinValue(s coin.Service) http.HandlerFunc {
 			return
 		}
 
-		from := coin.Coin{Name: params.From, Amount: params.Amount}
+		from := coin.Coin{Name: params.From, Value: params.Amount}
 		to := params.To
 		coinConverted, err := s.ConvertCoin(from, to)
 		if err != nil {
@@ -118,7 +120,7 @@ func v1ConvertCoinValue(s coin.Service) http.HandlerFunc {
 			return
 		}
 
-		bodyResp := CoinHTTPResponse{Name: coinConverted.Name, Amount: coinConverted.Amount, When: time.Now()}
+		bodyResp := CoinHTTPResponse{Name: coinConverted.Name, Value: coinConverted.Value, When: time.Now()}
 		writeJSON(w, http.StatusOK, bodyResp)
 	}
 }

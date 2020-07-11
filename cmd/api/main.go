@@ -7,7 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/hurbcom/challenge-bravo/adapter/primary/http/rest"
+	primaryrest "github.com/hurbcom/challenge-bravo/adapter/primary/http/rest"
+	secondaryrest "github.com/hurbcom/challenge-bravo/adapter/secondary/http/rest"
 	"github.com/hurbcom/challenge-bravo/pkg/coin"
 )
 
@@ -38,9 +39,11 @@ func main() {
 
 `
 
-	coinService := new(coin.DefaultService)
+	coinQuerierService := secondaryrest.NewService("https://api.exchangeratesapi.io")
 
-	router := rest.NewRouter(coinService)
+	coinService := coin.NewService(coinQuerierService)
+
+	router := primaryrest.NewRouter(coinService)
 
 	fmt.Fprintf(os.Stdout, tmpl, port)
 
