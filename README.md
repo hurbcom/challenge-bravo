@@ -1,65 +1,134 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Challenge Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+![master](https://github.com/guiferpa/challenge-bravo/workflows/master/badge.svg)
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## Get started
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+### Running the project
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+All steps put out her output file(s) to **dist folder**.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Well, there are many way to do this.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+#### Execute the pipeline builder and run the API
+```bash
+make && ./dist/bin/api
+```
+Using this command others steps will be called to **test source code**, **lint source code** and **Swagger spec generation**.
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+#### Compile and running per command
+```bash
+make <command> && ./dist/bin/<command>
+```
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+#### Requirements
 
-## Requisitos
+- [x] **Go 1.13**
+- [x] **Docker 19.03.x** - *This dependency only will be used if build docker image step will be called*
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+The tools that help in some steps will be installed by Make automatically.
 
-## Critério de avaliação
+### Running tests
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+```bash
+make test
+```
 
-## Dúvidas
+### Generation spec Swagger
+```
+make <command>-spec
+```
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+## Intro in project source code
 
-Boa sorte e boa viagem! ;)
+There are few ways to run steps as tests and compilations and for easier life of us this project contains support for a famous task runner called make. You can either take a look in step at [Makefile](https://github.com/guiferpa/challenge-bravo/blob/master/Makefile) of the project or just call `make help`.
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+### Design for source code
+
+This project uses basically [ports and adapters architecture](http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html) for code structure.
+
+### Directories structure
+
+For directories and the organization of the source code this project uses segmentation for entity reponsabilities.
+
+Let's look the directories:
+```bash
+.
+├── adapter
+│   ├── primary
+│   │   └── http
+│   │       ├── rest
+│   │       │   ├── coin.go
+│   │       │   └── router.go
+│   │       └── static
+│   │           ├── router.go
+│   │           └── statik.go
+│   └── secondary
+│       └── http
+│           └── rest
+│               └── repository.go
+│
+├── cmd
+│   ├── api
+│   │   └── main.go
+│   └── doc
+│       └── main.go
+│
+├── go.mod
+├── go.sum
+├── Makefile
+├── pkg
+│   └── coin
+│       ├── coin.go
+│       ├── port.go
+│       ├── quota.go
+│       └── service.go
+│
+├── platform
+│   └── docker
+│       ├── api
+│       │   └── Dockerfile
+│       └── doc
+│           └── Dockerfile
+│
+└── README.md
+```
+
+### What's a command?
+
+Well, the command's a component commonly looks in Golang apps directory structures, take a look in few Golang projects that use this approach.
+
+- [Kubernetes](https://github.com/kubernetes/kubernetes/tree/a054010d032b301e495d1a421f53b9a37a0a0109/cmd)
+- [Tsuru](https://github.com/tsuru/tsuru/tree/86132787ea4fa5cb2e6ce8ea99520441fd4df569/cmd)
+- [Docker](https://github.com/docker/docker-ce/tree/ab9188d5fd82bf7fcacf4cb5b625d15f50edf939/components/engine/cmd)
+
+The commands can be founded at `./cmd` folder by default. For this project, we just have two commands called **api** and **doc** which is an entry point for compilation of project. It's a good practice you have a folder with entry point files of your Golang application for easier the compilation step.
+
+We could compile differents binaries with this command directory structure as the Kubernetes project do. All directories below which are a different binary could find in `./cmd` at Tsuru source code.
+
+```bash
+...
+├── tsurud
+│   ├── api.go
+│   ├── api_test.go
+│   ├── checker.go
+│   ├── checker_test.go
+│   ├── command.go
+│   ├── command_test.go
+│   ├── gandalf.go
+│   ├── main.go
+│   ├── main_test.go
+│   ├── migrate.go
+│   ├── migrate_test.go
+│   ├── signals.go
+│   ├── signals_notsupported.go
+│   ├── suite_test.go
+│   ├── testdata
+│   │   ├── tsuru2.conf
+│   │   └── tsuru.conf
+│   ├── token.go
+│   └── token_test.go
+├── utils.go
+└── utils_test.go
+```
