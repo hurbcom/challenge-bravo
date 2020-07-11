@@ -1,0 +1,36 @@
+{
+  "name": "challenge-bravo",
+  "version": "0.0.1",
+  "description": "Hurb Challenge - Bravo",
+  "main": "app.js",
+  "repository": "https://github.com/cristianocruz/challenge-bravo.git",
+  "author": "Cristiano Cruz <cristiano_nsc@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "@types/express": "^4.17.6",
+    "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "ioredis": "^4.17.3",
+    "mongodb": "^3.5.9",
+    "prettier": "^2.0.5"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "eslint": "^7.3.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-promise": "^4.2.1",
+    "jest": "^26.1.0",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}
