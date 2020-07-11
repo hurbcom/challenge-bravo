@@ -1,0 +1,96 @@
+version: '3.4'
+
+x-common-variables: &common-variables
+    MONGO_URI: ${MONGO_URI}
+    EXCHANGE_RATE_BASE_URL: ${EXCHANGE_RATE_BASE_URL}
+    EXCHANGE_RATE_TOKEN: ${EXCHANGE_RATE_TOKEN}
+    REDIS_HOST: ${REDIS_HOST}
+    REDIS_PORT: ${REDIS_PORT}
+
+services:
+    redis-hurb:
+        container_name: redis-hurb
+        image: redis
+        ports:
+            - "6379:6379"
+        networks:
+            - hurb-network
+    mongodb-hurb:
+        container_name: mongodb-hurb
+        build: ./mongodb
+        restart: always
+        volumes:
+            - ./mongodb/data:/data/db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${DBUSERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${DBPWD}
+            MONGO_INITDB_DATABASE: ${DBNAME}
+        ports:
+            - "27017:27017"
+        networks:
+            - hurb-network
+    currency-app-hurb-01:
+        container_name: currency-app-hurb-01
+        image: cristiano.cruz/currency-app
+        build: ./app
+        command: node index.js
+        environment:
+            <<: *common-variables
+            PORT: 3001
+            DBNAME: ${DBNAME}
+        ports:
+            - "3001:3000"
+        networks:
+            - hurb-network
+        depends_on:
+            - redis-hurb
+            - mongodb-hurb
+    currency-app-hurb-02:
+        container_name: currency-app-hurb-02
+        image: cristiano.cruz/currency-app
+        build: ./app
+        command: node index.js
+        environment:
+            <<: *common-variables
+            PORT: 3002
+            DBNAME: ${DBNAME}
+        ports:
+            - "3002:3000"
+        networks:
+            - hurb-network
+        depends_on:
+            - redis-hurb
+            - mongodb-hurb
+    currency-app-hurb-03:
+        container_name: currency-app-hurb-03
+        image: cristiano.cruz/currency-app
+        build: ./app
+        command: node index.js
+        environment:
+            <<: *common-variables
+            PORT: 3003
+            DBNAME: ${DBNAME}
+        ports:
+            - "3003:3000"
+        networks:
+            - hurb-network
+        depends_on:
+            - redis-hurb
+            - mongodb-hurb
+    nginx:
+        image: nginx:latest
+        container_name: nginx-hurb
+        volumes:
+            - ./nginx:/etc/nginx
+        ports:
+            - 3000:3000
+        networks:
+            - hurb-network
+        depends_on:
+            - currency-app-hurb-01
+            - currency-app-hurb-02
+            - currency-app-hurb-03
+
+networks:
+    hurb-network:
+        driver: bridge
