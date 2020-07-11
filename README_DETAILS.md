@@ -2,11 +2,54 @@
 
 ![master](https://github.com/guiferpa/challenge-bravo/workflows/master/badge.svg)
 
+## Get started
+
+### Running the project
+
+All steps put out her output file(s) to **dist folder**.
+
+Well, there are many way to do this.
+
+#### Compile and running per command
+```bash
+make <command> && ./dist/bin/<command>
+```
+
+#### Execute the pipeline builder and run the API
+```bash
+make && ./dist/bin/api
+```
+
+Using this command others steps will be called to **test source code**, **lint source code** and **Swagger spec generation**.
+
+
+#### Requirements
+
+- [x] **Go 1.13**
+- [x] **Docker 19.03.x** - *This dependency only will be used if build docker image step will be called*
+
+The tools that help in some steps will be installed by Make automatically.
+
+### Running tests
+
+```bash
+make test
+```
+
+### Generation spec Swagger
+```
+make <command>-spec
+```
+
 ## Data flows design
 
 This template uses basically [ports and adapters architecture](http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html) for application data flow.
 
-## Directories structure
+## Intro in project source code
+
+There are few ways to run development steps as tests and compilations and for easier life of us this template contains support for a famous task runner called make. You can either take a look in step at [Makefile](https://github.com/guiferpa/challenge-bravo/blob/master/Makefile) of the project or just call `make help`.
+
+### Directories structure
 
 For directories and the organization of the source code this template uses basically segmentation for entity reponsabilities.
 
@@ -94,55 +137,3 @@ We could compile differents binaries with this command directory structure as th
 ├── utils.go
 └── utils_test.go
 ```
-
-## Intro in project code
-
-There are few ways to run development steps as tests and compilations and for easier life of us this template contains support for a famous task runner called make. You can either take a look in step at [Makefile](https://github.com/iupay/golang-http-api/blob/master/Makefile) of the project or just call `make help`.
-
-## Requirements
-
-- [x] **Go 1.13**
-- [x] **Docker 19.03.x** - *This dependency only will be used if build docker image step will be called*
-
-The tools that help in some steps will be installed by Make automatically.
-
-## Steps
-
-### Running the project directly (without compilation step)
-
-> Comming soon
-
-### Running the project compiled
-
-All steps put out her output file(s) to **dist folder**.
-
-Well, there are many way to do this.
-
-#### Just compile and run the project
-```bash
-make build && ./dist/bin/<command>
-```
-
-#### Execute a compilation pipeline and run the project
-```bash
-make && ./dist/bin/<command>
-```
-
-Using this commands others steps will be called to test **source code**, **lint source code** and **Swagger spec generation**.
-
-### Running tests
-
-Nowadays this template only contamples **unit tests**
-
-```bash
-make test
-```
-
-### Generation spec Swagger
-```
-make <command>-spec
-```
-
-## Questions
-
-For any questions or improvement for this doc feel free to open a **pull request** or an **issue**.
