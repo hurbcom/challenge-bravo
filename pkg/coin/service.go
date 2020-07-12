@@ -2,20 +2,6 @@ package coin
 
 import "fmt"
 
-const (
-	USD = "USD"
-	BRL = "BRL"
-	EUR = "EUR"
-	BTC = "BTC"
-	ETH = "ETH"
-)
-
-type ErrQueryCoinQuota struct{}
-
-func (err *ErrQueryCoinQuota) Error() string {
-	return ""
-}
-
 type ErrCoinUnsupported struct {
 	Coin string
 }
@@ -29,9 +15,9 @@ type DefaultService struct {
 }
 
 func (s *DefaultService) ConvertCoin(from Coin, to string) (*Coin, error) {
-	result, err := s.secondary.QueryCoinQuota(from)
+	result, err := s.secondary.QueryCoinQuota(from.Name)
 	if err != nil {
-		return nil, &ErrQueryCoinQuota{}
+		return nil, &ErrCoinUnsupported{from.Name}
 	}
 
 	cval, ok := result[to]

@@ -14,8 +14,8 @@ type Service struct {
 	url string
 }
 
-func (s *Service) QueryCoinQuota(c coin.Coin) (coin.CoinQuotaResult, error) {
-	u, err := url.Parse(fmt.Sprintf("%s/latest?base=%s", s.url, c.Name))
+func (s *Service) QueryCoinQuota(cname string) (coin.CoinQuotaResult, error) {
+	u, err := url.Parse(fmt.Sprintf("%s/latest?base=%s", s.url, cname))
 	if err != nil {
 		return nil, err
 	}
