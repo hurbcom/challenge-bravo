@@ -28,7 +28,7 @@ Ubuntu 18.04.4 LTS
  * Request == 2.24.0
 
 ## Instalação
-1. git clone https://github.com/andrewsmonzato/Challenge-Bravo challenge-bravo
+1. git clone https://github.com/andrewsmonzato/challenge-bravo-1.git challenge-bravo
 1. cd challenge-bravo
 1. pip3 install requests
 1. python3 challenge-bravo.py
