@@ -1,65 +1,117 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Challenge-Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+## Autor
+Andrews Coura Monzato
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## Problema
+Construir uma API, que responda JSON, para conversão monetária.  
+A API por padrão aceita as moedas:  
+  - USD
+  - BRL
+  - EUR
+  - BTC
+  - ETH<br/>  
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+A API tem a capacidade de trabalhar com mais moedas, de acordo com a necessidade do usuário (mais informações no setor Utilização).  
+A API utiliza como moeda de lastro o USD.  
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+## Linguagem Utilizada
+Python 3.6.9
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
-
-Ex: `?from=BTC&to=EUR&amount=123.45`
-
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+## Sistema Operacional Utilizado
+Ubuntu 18.04.4 LTS
 
 ## Requisitos
+ * Git >= 2.17.1
+ * Python >= 3.6
+ * Pip >= 20.0.2
+ * Request == 2.24.0
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+## Instalação
+1. git clone https://github.com/andrewsmonzato/Challenge-Bravo challenge-bravo
+1. cd challenge-bravo
+1. pip3 install requests
+1. python3 challenge-bravo.py
 
-## Critério de avaliação
+## Utilização
+A API trabalha majoritariamente com a requisição GET e trabalha com o sistema de endpoints descritos abaixo.
+A resposta da API tem o formato :
+```python
+server_response_dict = {
+      "code": return_code,
+      "message": return_message,
+      "data": return_data
+  }
+```
+### Endpoints
+- **/price** <br/>
+  Exemplo : localhost:8080/price <br/>
+  Função : Exibe cotação de todas as moedas disponiveis para a moeda de lastro (USD) <br/>
+  Padrão Data:
+  ```python
+    {
+        [{
+        "from": USD,
+        "to": data_to[0],
+        "rate": data_rate,
+        "last_update": data_lastup
+        },
+        {
+        "from": USD,
+        "to": data_to[1],
+        "rate": data_rate,
+        "last_update": data_lastup
+        },
+        . . .
+        ]
+  }
+  ```  
+  <br/>
+  
+- **/price?from=DATA1&to=DATA2&amount=DATA3** <br/>
+  Tipos :
+  * DATA1 : Código do país de origem. Tipo : string;
+  * DATA2 : Código do país de destino. Tipo : string;
+  * DATA3 : Quantia a ser cotada. Tipo : float. <br/>  
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+  Exemplo: localhost:8080/price?from=BRL&to=USD&amount=130.00 <br/>
+  Função : Exibe cotação requisitada <br/>
+  Padrão Data:
+  ```python
+    {
+        "from": data_from,
+        "to": data_to,
+        "rate": data_rate,
+        "in_amount": data_amount,
+        "out_amount": (rate_to/rate_from)*data_amount,
+        "last_update": data_lastup
+    }  
+<br/>  
 
-## Dúvidas
+- **/inccurrency?code=DATA1** <br/>
+    Tipos :
+    * DATA1 : Codigo da cotação a ser inserida. Tipo : string. <br/>  
+    
+    Exemplo: localhost:8080/inccurrency?code=ARS <br/>
+    Função : Se existir moeda com codigo requisitado, incluir na lista de cotações disponíveis <br/>
+    Padrão Data:
+    ```python
+      {
+          "action":"DATA1 foi incluido na lista de moedas a serem cotadas"
+      }  
+<br/>   
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+- **/rmccurrency?code=DATA1** <br/>
+    Tipos :
+    * DATA1 : Codigo da cotação a ser removida. Tipo : string. <br/>  
+    
+    Exemplo: localhost:8080/rmccurrency?code=ARS <br/>
+    Função : Se existir moeda com codigo requisitado na lista de cotaçes ativas, a remove <br/>
+    Padrão Data:
+    ```python
+      {
+          "action":"DATA1 foi removido na lista de moedas a serem cotadas"
+      }  
+    
 
-Boa sorte e boa viagem! ;)
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
