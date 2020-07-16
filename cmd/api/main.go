@@ -12,7 +12,11 @@ import (
 	"github.com/hurbcom/challenge-bravo/pkg/coin"
 )
 
-var port string = "8000"
+var (
+	port              string = "8000"
+	coinbaseApiKey    string = ""
+	coinbaseApiSecret string = ""
+)
 
 func LookupEnvOrString(key string, defaultVal string) string {
 	if val, ok := os.LookupEnv(key); ok {
@@ -23,6 +27,8 @@ func LookupEnvOrString(key string, defaultVal string) string {
 
 func main() {
 	flag.StringVar(&port, "port", LookupEnvOrString("PORT", port), "service port")
+	flag.StringVar(&coinbaseApiKey, "coinbase-api-key", LookupEnvOrString("COINBASE_API_KEY", coinbaseApiKey), "set a custom Coinbase api key")
+	flag.StringVar(&coinbaseApiSecret, "coinbase-api-secret", LookupEnvOrString("COINBASE_API_SECRET", coinbaseApiSecret), "set a custom Coinbase api secret")
 
 	flag.Parse()
 
@@ -39,7 +45,7 @@ func main() {
 
 `
 
-	coinQuerierService := secondaryrest.NewService("https://api.exchangeratesapi.io")
+	coinQuerierService := secondaryrest.NewService(coinbaseApiKey, coinbaseApiSecret)
 
 	coinService := coin.NewService(coinQuerierService)
 

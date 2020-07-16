@@ -1,57 +1,55 @@
 package rest
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"net/http"
-	"net/url"
+	"strconv"
 
 	"github.com/hurbcom/challenge-bravo/pkg/coin"
 )
 
 type Service struct {
-	url string
+	coinbaseapiURL      string
+	coinbaseapiKey      string
+	coinbaseapiSecret   string
+	exchangeratesapiURL string
 }
 
-func (s *Service) QueryCoinQuota(cname string) (coin.CoinQuotaResult, error) {
-	u, err := url.Parse(fmt.Sprintf("%s/latest?base=%s", s.url, cname))
+const apiKey = "CYIRbG2bDxT4n25H"
+const apiKeySecret = "Ix7WG6cCaqjJ7Dp8xR03r7YvWLdsAHCe"
+
+func (s *Service) QueryCurrencyQuotation(cname string) (coin.CurrencyQuotationResult, error) {
+	cryptos, err := s.ListCryptoRates(cname)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := http.DefaultClient.Get(u.String())
+	papers, err := s.ListPaperRates(cname)
 	if err != nil {
 		return nil, err
 	}
 
-	var body map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
+	result := make(coin.CurrencyQuotationResult)
 
-	rates, ok := body["rates"]
-	if !ok {
-		return nil, errors.New("test rates")
-	}
-
-	raw, ok := rates.(map[string]interface{})
-	if !ok {
-		return nil, errors.New("test cast rates")
-	}
-
-	result := make(coin.CoinQuotaResult)
-
-	for key, val := range raw {
-		if cval, ok := val.(float64); ok {
-			result[key] = cval
+	for name, currency := range cryptos {
+		amount, err := strconv.ParseFloat(currency.Data.Amount, 64)
+		if err != nil {
+			return nil, err
 		}
+
+		result[name] = 1 / amount
+	}
+
+	for name, value := range papers.Rates {
+		result[name] = value
 	}
 
 	return result, nil
 }
 
-func NewService(u string) *Service {
-	return &Service{url: u}
+func NewService(coinbaseapiKey, coinbaseapiSecret string) *Service {
+	return &Service{
+		coinbaseapiURL:      "https://api.coinbase.com",
+		coinbaseapiKey:      coinbaseapiKey,
+		coinbaseapiSecret:   coinbaseapiSecret,
+		exchangeratesapiURL: "https://api.exchangeratesapi.io",
+	}
 }

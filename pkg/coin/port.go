@@ -1,25 +1,25 @@
 package coin
 
 type PrimaryPort interface {
-	ConvertCoin(from Coin, to string) (*Coin, error)
+	ConvertCoin(from, to string, amout int64) (*Coin, error)
 }
 
 type SecondaryPort interface {
-	QueryCoinQuota(coin string) (CoinQuotaResult, error)
+	QueryCurrencyQuotation(coin string) (CurrencyQuotationResult, error)
 }
 
 type mockSecondaryPort struct {
-	MockQueryCoinQuota func(coin string) (CoinQuotaResult, error)
+	MockQueryCurrenryQuotation func(base string) (*CurrencyQuotationResult, error)
 }
 
-func (mock *mockSecondaryPort) QueryCoinQuota(coin string) (CoinQuotaResult, error) {
-	if mock.MockQueryCoinQuota == nil {
-		return CoinQuotaResult{}, nil
+func (mock *mockSecondaryPort) QueryCoinQuota(base string) (*CurrencyQuotationResult, error) {
+	if mock.MockQueryCurrenryQuotation == nil {
+		return nil, nil
 	}
 
-	return mock.MockQueryCoinQuota(coin)
+	return mock.MockQueryCurrenryQuotation(base)
 }
 
-func MockQueryCoinQuotaFunc(fn func(coin string) (CoinQuotaResult, error)) *mockSecondaryPort {
-	return &mockSecondaryPort{MockQueryCoinQuota: fn}
+func MockQueryCurrencyQuotationFunc(fn func(c string) (*CurrencyQuotationResult, error)) *mockSecondaryPort {
+	return &mockSecondaryPort{MockQueryCurrenryQuotation: fn}
 }

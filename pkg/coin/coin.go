@@ -10,5 +10,5 @@ const (
 
 type Coin struct {
 	Name  string
-	Value int64
+	Value float64
 }

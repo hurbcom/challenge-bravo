@@ -1,31 +1,33 @@
 package coin
 
-import "fmt"
-
-type ErrCoinUnsupported struct {
-	Coin string
-}
-
-func (err *ErrCoinUnsupported) Error() string {
-	return fmt.Sprintf("unsupported [%s] coin", err.Coin)
-}
+import (
+	"fmt"
+)
 
 type DefaultService struct {
 	secondary SecondaryPort
 }
 
-func (s *DefaultService) ConvertCoin(from Coin, to string) (*Coin, error) {
-	result, err := s.secondary.QueryCoinQuota(from.Name)
+func (s *DefaultService) ConvertCoin(from, to string, amount int64) (*Coin, error) {
+	result, err := s.secondary.QueryCurrencyQuotation(USD)
 	if err != nil {
-		return nil, &ErrCoinUnsupported{from.Name}
+		return nil, err
 	}
 
-	cval, ok := result[to]
-	if !ok {
-		return nil, &ErrCoinUnsupported{to}
+	fromValue, err := result.GetCurrency(from)
+	if err != nil {
+		return nil, err
 	}
 
-	c := &Coin{Name: to, Value: int64(cval)}
+	toValue, err := result.GetCurrency(to)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(from, fromValue)
+	fmt.Println(to, toValue)
+
+	c := &Coin{Name: to, Value: toValue}
 
 	return c, nil
 }

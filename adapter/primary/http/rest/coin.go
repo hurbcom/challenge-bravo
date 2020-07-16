@@ -32,7 +32,7 @@ type (
 
 	CoinHTTPResponse struct {
 		Name  string    `json:"name"`  // Coin name
-		Value int64     `json:"value"` // Coin value
+		Value float64   `json:"value"` // Coin value
 		When  time.Time `json:"when"`  // Coin quotation time
 	}
 )
@@ -112,9 +112,7 @@ func v1ConvertCoinValue(s coin.PrimaryPort) http.HandlerFunc {
 			return
 		}
 
-		from := coin.Coin{Name: params.From, Value: params.Amount}
-		to := params.To
-		coinConverted, err := s.ConvertCoin(from, to)
+		coinConverted, err := s.ConvertCoin(params.From, params.To, params.Amount)
 		if err != nil {
 			writeJSON(w, http.StatusBadRequest, newErrorCoinHTTPResponse(ErrCoinCodeConvert, err))
 			return
