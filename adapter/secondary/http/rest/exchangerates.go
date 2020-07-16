@@ -8,16 +8,21 @@ import (
 )
 
 type (
-	ExchangeratesRatesResponse map[string]float64
+	ExchangeratesRatesResponseBody map[string]float64
 
-	ExchangeratesResponse struct {
-		Base  string                     `json:"base"`
-		Date  string                     `json:"date"`
-		Rates ExchangeratesRatesResponse `json:"rates"`
+	ExchangeratesResponseBody struct {
+		Base  string                         `json:"base"`
+		Date  string                         `json:"date"`
+		Rates ExchangeratesRatesResponseBody `json:"rates"`
+	}
+
+	ExchangeratesResult struct {
+		Name   string
+		Amount float64
 	}
 )
 
-func (s *Service) ListPaperRates(base string) (*ExchangeratesResponse, error) {
+func (s *Service) ListPaperRates(base string) ([]ExchangeratesResult, error) {
 	u, err := url.Parse(fmt.Sprintf("%s/latest?base=%s", s.exchangeratesapiURL, base))
 	if err != nil {
 		return nil, err
@@ -28,10 +33,19 @@ func (s *Service) ListPaperRates(base string) (*ExchangeratesResponse, error) {
 		return nil, err
 	}
 
-	var result ExchangeratesResponse
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	var body ExchangeratesResponseBody
+	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
 		return nil, err
 	}
 
-	return &result, nil
+	result := make([]ExchangeratesResult, 0)
+
+	for name, rate := range body.Rates {
+		result = append(result, ExchangeratesResult{
+			Name:   name,
+			Amount: rate,
+		})
+	}
+
+	return result, nil
 }

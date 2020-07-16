@@ -14,19 +14,24 @@ import (
 )
 
 type (
-	CoinbaseItemDataResponse struct {
+	CoinbaseItemDataResponseBody struct {
 		Amount   string `json:"amount"`
 		Currency string `json:"currency"`
 	}
 
-	CoinbaseItemResponse struct {
-		Data CoinbaseItemDataResponse `json:"data"`
+	CoinbaseItemResponseBody struct {
+		Data CoinbaseItemDataResponseBody `json:"data"`
 	}
 
-	CoinbaseResponse map[string]CoinbaseItemResponse
+	CoinbaseResponseBody map[string]CoinbaseItemResponseBody
+
+	CoinbaseResult struct {
+		Name   string
+		Amount float64
+	}
 )
 
-func (s *Service) getCryptoRate(base, currency string) (*CoinbaseItemResponse, error) {
+func (s *Service) getCryptoRate(base, currency string) (*CoinbaseItemResponseBody, error) {
 	endpoint := fmt.Sprintf("%s/v2/prices/%s-%s/buy", s.coinbaseapiURL, currency, base)
 	nonce := strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
 	message := nonce + http.MethodGet + endpoint
@@ -49,7 +54,7 @@ func (s *Service) getCryptoRate(base, currency string) (*CoinbaseItemResponse, e
 		return nil, err
 	}
 
-	var result CoinbaseItemResponse
+	var result CoinbaseItemResponseBody
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, err
 	}
@@ -57,7 +62,7 @@ func (s *Service) getCryptoRate(base, currency string) (*CoinbaseItemResponse, e
 	return &result, nil
 }
 
-func (s *Service) ListCryptoRates(base string) (CoinbaseResponse, error) {
+func (s *Service) ListCryptoRates(base string) ([]CoinbaseResult, error) {
 	ethereum, err := s.getCryptoRate(base, coin.ETH)
 	if err != nil {
 		return nil, err
@@ -68,9 +73,25 @@ func (s *Service) ListCryptoRates(base string) (CoinbaseResponse, error) {
 		return nil, err
 	}
 
-	result := make(CoinbaseResponse)
-	result[coin.ETH] = *ethereum
-	result[coin.BTC] = *bitcoin
+	result := make([]CoinbaseResult, 0)
+
+	amount, err := strconv.ParseFloat(ethereum.Data.Amount, 64)
+	if err != nil {
+		return nil, err
+	}
+	result = append(result, CoinbaseResult{
+		Name:   coin.ETH,
+		Amount: amount,
+	})
+
+	amount, err = strconv.ParseFloat(bitcoin.Data.Amount, 64)
+	if err != nil {
+		return nil, err
+	}
+	result = append(result, CoinbaseResult{
+		Name:   coin.BTC,
+		Amount: amount,
+	})
 
 	return result, nil
 }

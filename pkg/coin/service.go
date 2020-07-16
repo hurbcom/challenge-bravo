@@ -1,15 +1,12 @@
 package coin
 
-import (
-	"fmt"
-)
-
 type DefaultService struct {
+	base      string
 	secondary SecondaryPort
 }
 
 func (s *DefaultService) ConvertCoin(from, to string, amount int64) (*Coin, error) {
-	result, err := s.secondary.QueryCurrencyQuotation(USD)
+	result, err := s.secondary.QueryCurrencyQuotation(s.base)
 	if err != nil {
 		return nil, err
 	}
@@ -24,14 +21,13 @@ func (s *DefaultService) ConvertCoin(from, to string, amount int64) (*Coin, erro
 		return nil, err
 	}
 
-	fmt.Println(from, fromValue)
-	fmt.Println(to, toValue)
+	convertedValue := (toValue / fromValue) * float64(amount)
 
-	c := &Coin{Name: to, Value: toValue}
+	c := &Coin{Name: to, Value: convertedValue}
 
 	return c, nil
 }
 
-func NewService(secondary SecondaryPort) *DefaultService {
-	return &DefaultService{secondary: secondary}
+func NewService(base string, secondary SecondaryPort) *DefaultService {
+	return &DefaultService{base: base, secondary: secondary}
 }
