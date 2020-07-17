@@ -1,0 +1,9 @@
+.trocar {
+  cursor: pointer;
+  font-size: 3em;
+}
+
+.trocar:hover {
+  color: DodgerBlue;
+  transition: all 0.4s linear;
+}
