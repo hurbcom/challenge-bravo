@@ -1,0 +1,29 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
+  "main": "./src/app.js",
+  "scripts": {
+    "dev": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arielfreire/challenge-bravo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arielfreire/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/arielfreire/challenge-bravo#readme",
+  "dependencies": {
+    "coingecko-api": "^1.0.10",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.9",
+    "node-schedule": "^1.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
