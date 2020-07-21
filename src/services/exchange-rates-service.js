@@ -1,14 +1,13 @@
 let CoinGecko = require("coingecko-api");
 const HistoricalRatesDao = require("../dao/historical-rates-dao");
 let ExchangeRates = require("../models/exchange-rates")
-const { Container } = require("typedi")
 
 class ExchangeRatesService
 {
-	constructor()
+	constructor(container)
 	{
-		this.coinGeckoClient = Container.get(CoinGecko);
-		this.dao = Container.get(HistoricalRatesDao);
+		this.coinGeckoClient = container.get(CoinGecko);
+		this.dao = container.get(HistoricalRatesDao);
 	}
 
 	async getLatestExchangeRates()
