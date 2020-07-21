@@ -1,13 +1,13 @@
 let CoinGecko = require("coingecko-api");
-const exchangeRatesDao = require("../dao/historical-rates-dao");
+const HistoricalRatesDao = require("../dao/historical-rates-dao");
 let ExchangeRates = require("../models/exchange-rates")
 
 class ExchangeRatesService
 {
-	CoinGeckoClient = new CoinGecko();
-	constructor()
+	constructor(container)
 	{
-		this.dao = new exchangeRatesDao();
+		this.coinGeckoClient = container.get(CoinGecko);
+		this.dao = container.get(HistoricalRatesDao);
 	}
 
 	async getLatestExchangeRates()
@@ -17,7 +17,7 @@ class ExchangeRatesService
 
 	async getExchangeRates()
 	{
-		let exchangeRates = await this.CoinGeckoClient.exchangeRates.all();
+		let exchangeRates = await this.coinGeckoClient.exchangeRates.all();
 		let usdValue = exchangeRates.data.rates.usd.value;
 		let brl = exchangeRates.data.rates.brl.value/usdValue;
 		let eur = exchangeRates.data.rates.eur.value/usdValue;
@@ -28,6 +28,4 @@ class ExchangeRatesService
 		return updatedExchangeRates;
 	}
 }
-
-const instance = new ExchangeRatesService();
-module.exports = instance;
+module.exports = ExchangeRatesService;
