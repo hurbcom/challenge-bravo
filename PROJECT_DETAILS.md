@@ -44,7 +44,7 @@ This project uses basically [ports and adapters architecture](http://www.dossier
 # Structure of directories
 
 ```bash
-.
+
 ├── adapter
 │   ├── primary
 │   │   └── http
@@ -90,3 +90,10 @@ This project uses basically [ports and adapters architecture](http://www.dossier
         └── doc
             └── Dockerfile
 ```
+
+- **platform** - All recipes and files about platform of application is there, for example Terraform files, Docker files and etc.
+
+- **pkg** - All core application source code is there, for example business rules, domains and extendable helpers.
+- **cmd** - All entrypoint to compile the code is there.
+- **adapter/primary** - All adapeters for primary ports
+- **adapter/secondary** - All adapeters for secondary ports
