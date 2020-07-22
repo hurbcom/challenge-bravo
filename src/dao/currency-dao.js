@@ -1,4 +1,4 @@
-const IDbConnection = require("./db-connection-interface");
+const MongoDBConnection = require("./mongo-db-connection");
 
 const CURRENCY_COLLECTION_NAME="currencies"
 class CurrencyDao
@@ -6,6 +6,10 @@ class CurrencyDao
 	constructor(container) 
 	{
 		this.db = container.get(MongoDBConnection).db;
+	}
+	findByKey(key)
+	{
+		return this.db.collection(CURRENCY_COLLECTION_NAME).findOne({key:key});
 	}
 	list()
 	{
@@ -17,7 +21,7 @@ class CurrencyDao
 	}
 	delete(currency)
 	{
-		this.db.collection(CURRENCY_COLLECTION_NAME).deleteOne({key:currency.key});
+		this.db.collection(CURRENCY_COLLECTION_NAME).deleteOne({key:currency});
 	}
 }
 module.exports = CurrencyDao;
