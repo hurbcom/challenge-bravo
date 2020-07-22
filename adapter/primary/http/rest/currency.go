@@ -25,15 +25,15 @@ type (
 
 type (
 	ConvertCurrencyHTTPQueryParams struct {
-		From   string `validate:"enum=USD,BRL,EUR,BTC,ETH"` // Converted coin
-		To     string `validate:"enum=USD,BRL,EUR,BTC,ETH"` // Converted coin
-		Amount int64  `validate:"min=1"`                    // Coin amount
+		From   string `validate:"enum=USD,BRL,EUR,BTC,ETH"` // Converted currency
+		To     string `validate:"enum=USD,BRL,EUR,BTC,ETH"` // Converted currency
+		Amount int64  `validate:"min=1"`                    // Currency amount
 	}
 
 	CurrencyHTTPResponse struct {
-		Name  string    `json:"name"`  // Coin name
-		Value float64   `json:"value"` // Coin value
-		When  time.Time `json:"when"`  // Coin quotation time
+		Name  string    `json:"name"`  // Currency name
+		Value float64   `json:"value"` // Currency value
+		When  time.Time `json:"when"`  // Currency quotation time
 	}
 )
 
@@ -62,12 +62,12 @@ func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
 }
 
 // v1ConvertCurrencyValue godoc
-// @Summary Convert coin
+// @Summary Convert currency
 // @Description Resource to convert coins as USD, BRL, EUR, BTC, ETH
 // @Produce  json
-// @Param from query string true "Coin that will be converted"
-// @Param to query string true "Converted coin"
-// @Param amount query integer true "Coin amount that will be converted"
+// @Param from query string true "Currency that will be converted"
+// @Param to query string true "Converted currency"
+// @Param amount query integer true "Currency amount that will be converted"
 // @Success 200 {object} CurrencyHTTPResponse
 // @Failure 400 {object} ErrCurrencyHTTPResponse
 // @Failure 500 {object} ErrCurrencyHTTPResponse

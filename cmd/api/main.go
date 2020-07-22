@@ -10,6 +10,7 @@ import (
 	"github.com/hurbcom/challenge-bravo/adapter/primary/http/rest"
 	"github.com/hurbcom/challenge-bravo/adapter/secondary/http/coinbase"
 	"github.com/hurbcom/challenge-bravo/adapter/secondary/http/exchangerates"
+	"github.com/hurbcom/challenge-bravo/pkg/config"
 	"github.com/hurbcom/challenge-bravo/pkg/currency"
 )
 
@@ -22,20 +23,13 @@ var (
 	currencyBase      string = currency.USD
 )
 
-func LookupEnvOrString(key string, defaultVal string) string {
-	if val, ok := os.LookupEnv(key); ok {
-		return val
-	}
-	return defaultVal
-}
-
 func main() {
-	flag.StringVar(&port, "port", LookupEnvOrString("PORT", port), "service port")
-	flag.StringVar(&exchangeratesURL, "exchangerates-api-url", LookupEnvOrString("EXCHANGESRATES_API_URL", exchangeratesURL), "set a custom Exchangerates api url")
-	flag.StringVar(&coinbaseURL, "coinbase-api-url", LookupEnvOrString("COINBASE_API_URL", coinbaseURL), "set a custom Coinbase api url")
-	flag.StringVar(&coinbaseApiKey, "coinbase-api-key", LookupEnvOrString("COINBASE_API_KEY", coinbaseApiKey), "set a custom Coinbase api key")
-	flag.StringVar(&coinbaseApiSecret, "coinbase-api-secret", LookupEnvOrString("COINBASE_API_SECRET", coinbaseApiSecret), "set a custom Coinbase api secret")
-	flag.StringVar(&currencyBase, "currency-base", LookupEnvOrString("CURRENCY_BASE", currencyBase), "set currency base")
+	flag.StringVar(&port, "port", config.LookupEnvOrString("PORT", port), "service port")
+	flag.StringVar(&exchangeratesURL, "exchangerates-api-url", config.LookupEnvOrString("EXCHANGESRATES_API_URL", exchangeratesURL), "set a custom Exchangerates api url")
+	flag.StringVar(&coinbaseURL, "coinbase-api-url", config.LookupEnvOrString("COINBASE_API_URL", coinbaseURL), "set a custom Coinbase api url")
+	flag.StringVar(&coinbaseApiKey, "coinbase-api-key", config.LookupEnvOrString("COINBASE_API_KEY", coinbaseApiKey), "set a custom Coinbase api key")
+	flag.StringVar(&coinbaseApiSecret, "coinbase-api-secret", config.LookupEnvOrString("COINBASE_API_SECRET", coinbaseApiSecret), "set a custom Coinbase api secret")
+	flag.StringVar(&currencyBase, "currency-base", config.LookupEnvOrString("CURRENCY_BASE", currencyBase), "set currency base")
 
 	flag.Parse()
 

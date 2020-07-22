@@ -10,7 +10,7 @@ import (
 
 // @title Challenge Bravo API
 // @version 1.0
-// @description Specification for all resource from Coins API
+// @description Specification for all resource from Challenge Bravo API
 
 // @BasePath /api
 func NewRouter(cs currency.PrimaryPort) http.Handler {

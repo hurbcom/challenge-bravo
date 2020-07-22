@@ -8,19 +8,13 @@ import (
 	"os"
 
 	"github.com/hurbcom/challenge-bravo/adapter/primary/http/static"
+	"github.com/hurbcom/challenge-bravo/pkg/config"
 )
 
 var port string = "8001"
 
-func LookupEnvOrString(key string, defaultVal string) string {
-	if val, ok := os.LookupEnv(key); ok {
-		return val
-	}
-	return defaultVal
-}
-
 func main() {
-	flag.StringVar(&port, "port", LookupEnvOrString("PORT", port), "service port")
+	flag.StringVar(&port, "port", config.LookupEnvOrString("PORT", port), "service port")
 
 	flag.Parse()
 
