@@ -2,6 +2,8 @@
 
 ![master](https://github.com/guiferpa/challenge-bravo/workflows/master/badge.svg)
 
+This project is a solution for the [Hurb Challenge](CHALLENGE.md)
+
 ## Get started
 
 This project use [Coinbase](https://www.coinbase.com) and [Exchangerates](https://exchangeratesapi.io) as base for your datas served then your feel free to set custom parameters like this flags below:
