@@ -92,5 +92,5 @@ help                           Display available commands
 ## Interesting knowledge about the project
 
 - [What is a command?](PROJECT_DETAILS.md#whats-is-a-command)
-- Design of project code
-- Structure of directories
+- [Design of source code from project](PROJECT_DETAILS#design-of-source-code-from-project)
+- [Structure of directories](PROJECT_DETAILS#structure-of-directories)
