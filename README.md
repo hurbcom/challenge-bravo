@@ -56,6 +56,16 @@ Using this command others steps will be called to **test source code**, **lint s
 make <command> && ./dist/bin/<command>
 ```
 
+#### Using docker to run app
+```bash
+make docker-image-api && docker run -d \
+  --name challenge-bravo-api \
+  -p 8000:8000 \
+  -e COINBASE_API_KEY=CYIRbG2bDxT4n25H \
+  -e COINBASE_API_SECRET=Ix7WG6cCaqjJ7Dp8xR03r7YvWLdsAHCe \
+  challenge-bravo-api
+```
+
 #### Requirements
 
 - [x] **Go 1.13**
