@@ -43,4 +43,50 @@ This project uses basically [ports and adapters architecture](http://www.dossier
 
 # Structure of directories
 
-There are few ways to run steps as tests and compilations and for easier life of us this project contains support for a famous task runner called make. You can either take a look in step at [Makefile](https://github.com/guiferpa/challenge-bravo/blob/master/Makefile) of the project or just call `make help`.
+```bash
+.
+├── adapter
+│   ├── primary
+│   │   └── http
+│   │       ├── rest
+│   │       │   ├── currency.go
+│   │       │   └── router.go
+│   │       └── static
+│   │           ├── router.go
+│   │           └── statik.go
+│   └── secondary
+│       └── http
+│           ├── coinbase
+│           │   ├── coinbase.go
+│           │   └── repository.go
+│           ├── exchangerates
+│           │   ├── exchangerates.go
+│           │   └── repository.go
+│           └── mock
+│               └── repository.go
+|
+├── cmd
+│   ├── api
+│   │   └── main.go
+│   └── doc
+│       └── main.go
+|
+├── pkg
+│   ├── config
+│   │   └── config.go
+│   ├── currency
+│   │   ├── currency.go
+│   │   ├── port.go
+│   │   ├── quota.go
+│   │   ├── service.go
+│   │   └── service_test.go
+│   └── httputil
+│       └── write.go
+|
+└── platform
+    └── docker
+        ├── api
+        │   └── Dockerfile
+        └── doc
+            └── Dockerfile
+```
