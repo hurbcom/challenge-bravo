@@ -4,7 +4,40 @@
 
 ## Get started
 
-### Running the project
+This project use [Coinbase](https://www.coinbase.com) and [Exchangerates](https://exchangeratesapi.io) as base for your datas served then your feel free to set custom parameters like this flags below:
+```bash
+$ ./dist/bin/api -help
+                                                                                   
+Usage of ./dist/bin/api:
+  -coinbase-api-key string
+    	set a custom Coinbase api key
+  -coinbase-api-secret string
+    	set a custom Coinbase api secret
+  -coinbase-api-url string
+    	set a custom Coinbase api url (default "https://api.coinbase.com")
+  -currency-base string
+    	set currency base (default "USD")
+  -exchangerates-api-url string
+    	set a custom Exchangerates api url (default "https://api.exchangeratesapi.io")
+  -port string
+    	service port (default "8000")
+```
+
+### Compile and run API command
+```bash
+make api && ./dist/bin/api -coinbase-api-key CYIRbG2bDxT4n25H -coinbase-api-secret Ix7WG6cCaqjJ7Dp8xR03r7YvWLdsAHCe
+```
+
+#### Coinbase credentials to test
+- **Coinbase key:** `CYIRbG2bDxT4n25H`
+- **Coinbase secret:** `Ix7WG6cCaqjJ7Dp8xR03r7YvWLdsAHCe`
+
+### Compile and run API Documentation command
+```bash
+make doc && ./dist/doc
+```
+
+### Running others steps
 
 All steps put out her output file(s) to **dist folder**.
 
@@ -15,7 +48,6 @@ Well, there are many way to do this.
 make && ./dist/bin/api
 ```
 Using this command others steps will be called to **test source code**, **lint source code** and **Swagger spec generation**.
-
 
 #### Compile and running per command
 ```bash
@@ -40,95 +72,23 @@ make test
 make <command>-spec
 ```
 
-## Intro in project source code
-
-There are few ways to run steps as tests and compilations and for easier life of us this project contains support for a famous task runner called make. You can either take a look in step at [Makefile](https://github.com/guiferpa/challenge-bravo/blob/master/Makefile) of the project or just call `make help`.
-
-### Design for source code
-
-This project uses basically [ports and adapters architecture](http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html) for code structure.
-
-### Directories structure
-
-For directories and the organization of the source code this project uses segmentation for entity reponsabilities.
-
-Let's look the directories:
+For more details you can call the `make help` command. Look at below the help output:
 ```bash
-.
-├── adapter
-│   ├── primary
-│   │   └── http
-│   │       ├── rest
-│   │       │   ├── coin.go
-│   │       │   └── router.go
-│   │       └── static
-│   │           ├── router.go
-│   │           └── statik.go
-│   └── secondary
-│       └── http
-│           └── rest
-│               └── repository.go
-│
-├── cmd
-│   ├── api
-│   │   └── main.go
-│   └── doc
-│       └── main.go
-│
-├── go.mod
-├── go.sum
-├── Makefile
-├── pkg
-│   └── coin
-│       ├── coin.go
-│       ├── port.go
-│       ├── quota.go
-│       └── service.go
-│
-├── platform
-│   └── docker
-│       ├── api
-│       │   └── Dockerfile
-│       └── doc
-│           └── Dockerfile
-│
-└── README.md
+$ make help
+                 
+install                        Call 'make install' or just call 'make' it's same mean
+lint                           Run lint for source code
+test                           Run tests
+api                            Build the command api
+doc                            Build the command doc
+docker-image-api               Build the docker image for command api
+docker-image-doc               Build the docker image for command doc
+api-spec                       Generate Swagger for your API specification into dist folder
+help                           Display available commands
 ```
 
-### What's a command?
+## Interesting knowledge about the project
 
-Well, the command's a component commonly looks in Golang apps directory structures, take a look in few Golang projects that use this approach.
-
-- [Kubernetes](https://github.com/kubernetes/kubernetes/tree/a054010d032b301e495d1a421f53b9a37a0a0109/cmd)
-- [Tsuru](https://github.com/tsuru/tsuru/tree/86132787ea4fa5cb2e6ce8ea99520441fd4df569/cmd)
-- [Docker](https://github.com/docker/docker-ce/tree/ab9188d5fd82bf7fcacf4cb5b625d15f50edf939/components/engine/cmd)
-
-The commands can be founded at `./cmd` folder by default. For this project, we just have two commands called **api** and **doc** which is an entry point for compilation of project. It's a good practice you have a folder with entry point files of your Golang application for easier the compilation step.
-
-We could compile differents binaries with this command directory structure as the Kubernetes project do. All directories below which are a different binary could find in `./cmd` at Tsuru source code.
-
-```bash
-...
-├── tsurud
-│   ├── api.go
-│   ├── api_test.go
-│   ├── checker.go
-│   ├── checker_test.go
-│   ├── command.go
-│   ├── command_test.go
-│   ├── gandalf.go
-│   ├── main.go
-│   ├── main_test.go
-│   ├── migrate.go
-│   ├── migrate_test.go
-│   ├── signals.go
-│   ├── signals_notsupported.go
-│   ├── suite_test.go
-│   ├── testdata
-│   │   ├── tsuru2.conf
-│   │   └── tsuru.conf
-│   ├── token.go
-│   └── token_test.go
-├── utils.go
-└── utils_test.go
-```
+- [What is a command?](PROJECT_DETAILS.md#whats-is-a-command)
+- Design of project code
+- Structure of directories
