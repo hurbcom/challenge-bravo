@@ -1,17 +1,15 @@
 package rest
 
 import (
-	"encoding/json"
-	"errors"
-	"log"
+	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
 	"github.com/guiferpa/gody/v2"
 	"github.com/guiferpa/gody/v2/rule"
 	"github.com/hurbcom/challenge-bravo/pkg/currency"
+	"github.com/hurbcom/challenge-bravo/pkg/httputil"
 )
 
 type (
@@ -42,25 +40,6 @@ const (
 	ErrCurrencyCodeConvert            ErrCurrencyCode = "ERR_CONVERT_CURRENCY"
 )
 
-func newErrorCurrencyHTTPResponse(code ErrCurrencyCode, err error) ErrCurrencyHTTPResponse {
-	return ErrCurrencyHTTPResponse{
-		Code:    code,
-		Message: err.Error(),
-	}
-}
-
-func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
-	w.Header().Add("Content-Type", "application/json")
-
-	if err := json.NewEncoder(w).Encode(payload); err != nil {
-		log.SetOutput(os.Stderr)
-		log.SetPrefix("[challenge-bravo] [API] writeJSON")
-		log.Println(err.Error())
-
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-}
-
 // v1ConvertCurrencyValue godoc
 // @Summary Convert currency
 // @Description Resource to convert coins as USD, BRL, EUR, BTC, ETH
@@ -83,8 +62,8 @@ func v1ConvertCurrencyValue(s currency.PrimaryPort) http.HandlerFunc {
 
 		amount, err := strconv.ParseInt(query.Get("amount"), 10, 64)
 		if err != nil {
-			cerr := newErrorCurrencyHTTPResponse(ErrCurrencyCodeInvalidQueryParams, errors.New("invalid amount field"))
-			writeJSON(w, http.StatusBadRequest, cerr)
+			resp := ErrCurrencyHTTPResponse{Code: ErrCurrencyCodeInvalidQueryParams, Message: fmt.Sprintf("amount: %s", err.Error())}
+			httputil.WriteJSON(w, http.StatusBadRequest, resp)
 			return
 		}
 
@@ -98,14 +77,14 @@ func v1ConvertCurrencyValue(s currency.PrimaryPort) http.HandlerFunc {
 		if err != nil {
 			if isValidated {
 				if ce, ok := err.(*rule.ErrEnum); ok {
-					cerr := newErrorCurrencyHTTPResponse(ErrCurrencyCodeInvalidQueryParams, ce)
-					writeJSON(w, http.StatusBadRequest, cerr)
+					resp := ErrCurrencyHTTPResponse{Code: ErrCurrencyCodeInvalidQueryParams, Message: ce.Error()}
+					httputil.WriteJSON(w, http.StatusBadRequest, resp)
 					return
 				}
 
 				if ce, ok := err.(*rule.ErrMin); ok {
-					cerr := newErrorCurrencyHTTPResponse(ErrCurrencyCodeInvalidQueryParams, ce)
-					writeJSON(w, http.StatusBadRequest, cerr)
+					resp := ErrCurrencyHTTPResponse{Code: ErrCurrencyCodeInvalidQueryParams, Message: ce.Error()}
+					httputil.WriteJSON(w, http.StatusBadRequest, resp)
 					return
 				}
 			}
@@ -114,11 +93,12 @@ func v1ConvertCurrencyValue(s currency.PrimaryPort) http.HandlerFunc {
 
 		convertedCurrency, err := s.ConvertCurrency(params.From, params.To, params.Amount)
 		if err != nil {
-			writeJSON(w, http.StatusBadRequest, newErrorCurrencyHTTPResponse(ErrCurrencyCodeConvert, err))
+			resp := ErrCurrencyHTTPResponse{Code: ErrCurrencyCodeConvert, Message: err.Error()}
+			httputil.WriteJSON(w, http.StatusBadRequest, resp)
 			return
 		}
 
-		bodyResp := CurrencyHTTPResponse{Name: convertedCurrency.Name, Value: convertedCurrency.Value, When: time.Now()}
-		writeJSON(w, http.StatusOK, bodyResp)
+		resp := CurrencyHTTPResponse{Name: convertedCurrency.Name, Value: convertedCurrency.Value, When: time.Now()}
+		httputil.WriteJSON(w, http.StatusOK, resp)
 	}
 }
