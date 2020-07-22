@@ -34,10 +34,18 @@ make api && ./dist/bin/api -coinbase-api-key CYIRbG2bDxT4n25H -coinbase-api-secr
 - **Coinbase key:** `CYIRbG2bDxT4n25H`
 - **Coinbase secret:** `Ix7WG6cCaqjJ7Dp8xR03r7YvWLdsAHCe`
 
+#### Access resource to convert currency
+
+```
+GET - https://localhost:<port>/api/v1/currency/convert?from=<from-currency>&amount=<from-currency-amount>&to=<to-currency>
+```
+
 ### Compile and run API Documentation command
 ```bash
 make doc && ./dist/doc
 ```
+
+> The API documentation  server contains a Swagger as html page showing the resources and how use them.
 
 ### Running others steps
 
