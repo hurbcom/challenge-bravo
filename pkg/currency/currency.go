@@ -1,4 +1,4 @@
-package coin
+package currency
 
 const (
 	USD = "USD"
@@ -8,7 +8,7 @@ const (
 	ETH = "ETH"
 )
 
-type Coin struct {
+type Currency struct {
 	Name  string
 	Value float64
 }

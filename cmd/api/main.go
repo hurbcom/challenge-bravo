@@ -10,7 +10,7 @@ import (
 	"github.com/hurbcom/challenge-bravo/adapter/primary/http/rest"
 	"github.com/hurbcom/challenge-bravo/adapter/secondary/http/coinbase"
 	"github.com/hurbcom/challenge-bravo/adapter/secondary/http/exchangerates"
-	"github.com/hurbcom/challenge-bravo/pkg/coin"
+	"github.com/hurbcom/challenge-bravo/pkg/currency"
 )
 
 var (
@@ -19,7 +19,7 @@ var (
 	coinbaseURL       string = "https://api.coinbase.com"
 	coinbaseApiKey    string = ""
 	coinbaseApiSecret string = ""
-	currencyBase      string = coin.USD
+	currencyBase      string = currency.USD
 )
 
 func LookupEnvOrString(key string, defaultVal string) string {
@@ -31,6 +31,7 @@ func LookupEnvOrString(key string, defaultVal string) string {
 
 func main() {
 	flag.StringVar(&port, "port", LookupEnvOrString("PORT", port), "service port")
+	flag.StringVar(&exchangeratesURL, "exchangerates-api-url", LookupEnvOrString("EXCHANGESRATES_API_URL", exchangeratesURL), "set a custom Exchangerates api url")
 	flag.StringVar(&coinbaseURL, "coinbase-api-url", LookupEnvOrString("COINBASE_API_URL", coinbaseURL), "set a custom Coinbase api url")
 	flag.StringVar(&coinbaseApiKey, "coinbase-api-key", LookupEnvOrString("COINBASE_API_KEY", coinbaseApiKey), "set a custom Coinbase api key")
 	flag.StringVar(&coinbaseApiSecret, "coinbase-api-secret", LookupEnvOrString("COINBASE_API_SECRET", coinbaseApiSecret), "set a custom Coinbase api secret")
@@ -54,9 +55,9 @@ func main() {
 	coinbaseService := coinbase.NewService(coinbaseURL, coinbaseApiKey, coinbaseApiSecret)
 	exchangeratesService := exchangerates.NewService(exchangeratesURL)
 
-	coinService := coin.NewService(currencyBase, coinbaseService, exchangeratesService)
+	currencyService := currency.NewService(currencyBase, coinbaseService, exchangeratesService)
 
-	router := rest.NewRouter(coinService)
+	router := rest.NewRouter(currencyService)
 
 	fmt.Fprintf(os.Stdout, tmpl, port)
 

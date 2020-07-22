@@ -1,11 +1,11 @@
-package coin
+package currency
 
 type PrimaryPort interface {
-	ConvertCoin(from, to string, amout int64) (*Coin, error)
+	ConvertCurrency(from, to string, amout int64) (*Currency, error)
 }
 
 type SecondaryPort interface {
-	QueryCurrencyQuotation(coin string) (CurrencyQuotationResult, error)
+	QueryCurrencyQuotation(base string) (CurrencyQuotationResult, error)
 }
 
 type mockSecondaryPort struct {

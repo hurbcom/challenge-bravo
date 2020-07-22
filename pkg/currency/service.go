@@ -1,4 +1,4 @@
-package coin
+package currency
 
 type DefaultService struct {
 	base          string
@@ -6,7 +6,7 @@ type DefaultService struct {
 	coinbase      SecondaryPort
 }
 
-func (s *DefaultService) ConvertCoin(from, to string, amount int64) (*Coin, error) {
+func (s *DefaultService) ConvertCurrency(from, to string, amount int64) (*Currency, error) {
 	cryptoCurrency, err := s.coinbase.QueryCurrencyQuotation(s.base)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (s *DefaultService) ConvertCoin(from, to string, amount int64) (*Coin, erro
 
 	convertedValue := (toValue / fromValue) * float64(amount)
 
-	c := &Coin{Name: to, Value: convertedValue}
+	c := &Currency{Name: to, Value: convertedValue}
 
 	return c, nil
 }

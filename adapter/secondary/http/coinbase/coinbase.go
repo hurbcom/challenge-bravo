@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/hurbcom/challenge-bravo/pkg/coin"
+	"github.com/hurbcom/challenge-bravo/pkg/currency"
 )
 
 type (
@@ -65,12 +65,12 @@ func (s *Service) getCryptoRate(base, currency string) (*CoinbaseItemResponseBod
 }
 
 func (s *Service) ListCryptoRates(base string) ([]CoinbaseResult, error) {
-	ethereum, err := s.getCryptoRate(base, coin.ETH)
+	ethereum, err := s.getCryptoRate(base, currency.ETH)
 	if err != nil {
 		return nil, err
 	}
 
-	bitcoin, err := s.getCryptoRate(base, coin.BTC)
+	bitcoin, err := s.getCryptoRate(base, currency.BTC)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (s *Service) ListCryptoRates(base string) ([]CoinbaseResult, error) {
 		return nil, err
 	}
 	result = append(result, CoinbaseResult{
-		Name:   coin.ETH,
+		Name:   currency.ETH,
 		Amount: amount,
 	})
 
@@ -91,7 +91,7 @@ func (s *Service) ListCryptoRates(base string) ([]CoinbaseResult, error) {
 		return nil, err
 	}
 	result = append(result, CoinbaseResult{
-		Name:   coin.BTC,
+		Name:   currency.BTC,
 		Amount: amount,
 	})
 

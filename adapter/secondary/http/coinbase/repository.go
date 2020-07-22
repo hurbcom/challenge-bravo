@@ -1,6 +1,6 @@
 package coinbase
 
-import "github.com/hurbcom/challenge-bravo/pkg/coin"
+import "github.com/hurbcom/challenge-bravo/pkg/currency"
 
 type Service struct {
 	url    string
@@ -8,16 +8,16 @@ type Service struct {
 	secret string
 }
 
-func (s *Service) QueryCurrencyQuotation(base string) (coin.CurrencyQuotationResult, error) {
+func (s *Service) QueryCurrencyQuotation(base string) (currency.CurrencyQuotationResult, error) {
 	rates, err := s.ListCryptoRates(base)
 	if err != nil {
 		return nil, err
 	}
 
-	result := make(coin.CurrencyQuotationResult)
+	result := make(currency.CurrencyQuotationResult)
 
-	for _, currency := range rates {
-		result[currency.Name] = 1 / currency.Amount // Get currency amount from currency base amount (1)
+	for _, curr := range rates {
+		result[curr.Name] = 1 / curr.Amount // Get currency amount from currency base amount (1)
 	}
 
 	return result, nil
