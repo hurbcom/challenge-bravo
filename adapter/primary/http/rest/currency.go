@@ -23,9 +23,9 @@ type (
 
 type (
 	ConvertCurrencyHTTPQueryParams struct {
-		From   string `validate:"enum=USD,BRL,EUR,BTC,ETH"` // Converted currency
-		To     string `validate:"enum=USD,BRL,EUR,BTC,ETH"` // Converted currency
-		Amount int64  `validate:"min=1"`                    // Currency amount
+		From   string `validate:"not_empty enum=USD,BRL,EUR,BTC,ETH"` // Converted currency
+		To     string `validate:"not_empty enum=USD,BRL,EUR,BTC,ETH"` // Converted currency
+		Amount int64  `validate:"min=1"`                              // Currency amount
 	}
 
 	CurrencyHTTPResponse struct {
@@ -53,12 +53,19 @@ const (
 // @Router /v1/currency/convert [get]
 func v1ConvertCurrencyValue(s currency.PrimaryPort) http.HandlerFunc {
 	validator := gody.NewValidator()
-	if err := validator.AddRules(rule.Enum); err != nil {
+	if err := validator.AddRules(rule.Enum, rule.NotEmpty); err != nil {
 		panic(err)
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
+
+		amountString := query.Get("amount")
+		if amountString == "" {
+			resp := ErrCurrencyHTTPResponse{Code: ErrCurrencyCodeInvalidQueryParams, Message: "missing amount"}
+			httputil.WriteJSON(w, http.StatusBadRequest, resp)
+			return
+		}
 
 		amount, err := strconv.ParseInt(query.Get("amount"), 10, 64)
 		if err != nil {
@@ -84,6 +91,12 @@ func v1ConvertCurrencyValue(s currency.PrimaryPort) http.HandlerFunc {
 
 				if ce, ok := err.(*rule.ErrMin); ok {
 					resp := ErrCurrencyHTTPResponse{Code: ErrCurrencyCodeInvalidQueryParams, Message: ce.Error()}
+					httputil.WriteJSON(w, http.StatusBadRequest, resp)
+					return
+				}
+
+				if ce, ok := err.(*rule.ErrNotEmpty); ok {
+					resp := ErrCurrencyHTTPResponse{Code: ErrCurrencyCodeInvalidQueryParams, Message: fmt.Sprintf("missing %s", ce.Field)}
 					httputil.WriteJSON(w, http.StatusBadRequest, resp)
 					return
 				}
