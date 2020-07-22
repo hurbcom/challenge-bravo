@@ -9,17 +9,17 @@ type SecondaryPort interface {
 }
 
 type mockSecondaryPort struct {
-	MockQueryCurrenryQuotation func(base string) (*CurrencyQuotationResult, error)
+	mockQueryCurrencyQuotation func(base string) (CurrencyQuotationResult, error)
 }
 
-func (mock *mockSecondaryPort) QueryCoinQuota(base string) (*CurrencyQuotationResult, error) {
-	if mock.MockQueryCurrenryQuotation == nil {
+func (mock *mockSecondaryPort) QueryCurrencyQuotation(base string) (CurrencyQuotationResult, error) {
+	if mock.mockQueryCurrencyQuotation == nil {
 		return nil, nil
 	}
 
-	return mock.MockQueryCurrenryQuotation(base)
+	return mock.mockQueryCurrencyQuotation(base)
 }
 
-func MockQueryCurrencyQuotationFunc(fn func(c string) (*CurrencyQuotationResult, error)) *mockSecondaryPort {
-	return &mockSecondaryPort{MockQueryCurrenryQuotation: fn}
+func MockQueryCurrencyQuotationFunc(fn func(base string) (CurrencyQuotationResult, error)) *mockSecondaryPort {
+	return &mockSecondaryPort{mockQueryCurrencyQuotation: fn}
 }

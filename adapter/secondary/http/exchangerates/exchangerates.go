@@ -1,4 +1,4 @@
-package rest
+package exchangerates
 
 import (
 	"encoding/json"
@@ -23,7 +23,7 @@ type (
 )
 
 func (s *Service) ListPaperRates(base string) ([]ExchangeratesResult, error) {
-	u, err := url.Parse(fmt.Sprintf("%s/latest?base=%s", s.exchangeratesapiURL, base))
+	u, err := url.Parse(fmt.Sprintf("%s/latest?base=%s", s.url, base))
 	if err != nil {
 		return nil, err
 	}

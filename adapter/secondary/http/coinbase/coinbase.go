@@ -1,4 +1,4 @@
-package rest
+package coinbase
 
 import (
 	"crypto/hmac"
@@ -32,12 +32,14 @@ type (
 )
 
 func (s *Service) getCryptoRate(base, currency string) (*CoinbaseItemResponseBody, error) {
-	endpoint := fmt.Sprintf("%s/v2/prices/%s-%s/buy", s.coinbaseapiURL, currency, base)
+	endpoint := fmt.Sprintf("%s/v2/prices/%s-%s/buy", s.url, currency, base)
 	nonce := strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
 	message := nonce + http.MethodGet + endpoint
 
-	h := hmac.New(sha256.New, []byte(apiKeySecret))
-	h.Write([]byte(message))
+	h := hmac.New(sha256.New, []byte(s.secret))
+	if _, err := h.Write([]byte(message)); err != nil {
+		return nil, err
+	}
 
 	signature := hex.EncodeToString(h.Sum(nil))
 
@@ -45,7 +47,7 @@ func (s *Service) getCryptoRate(base, currency string) (*CoinbaseItemResponseBod
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("CB-ACCESS-KEY", apiKey)
+	req.Header.Set("CB-ACCESS-KEY", s.key)
 	req.Header.Set("CB-ACCESS-SIGN", signature)
 	req.Header.Set("CB-ACCESS-TIMESTAMP", nonce)
 

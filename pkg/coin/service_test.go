@@ -1,19 +1,21 @@
 package coin
 
 import (
-	"errors"
 	"testing"
 )
 
-func TestConvertCoinFromUnsupportedCoin(t *testing.T) {
-	fromCoin := Coin{Name: "ABC", Value: 20}
-	toCoin := BRL
+func TestConvertCoinFromUnsupportedCurrency(t *testing.T) {
+	fromCurrencyName := "ABC"
 
-	secondaryport := MockQueryCoinQuotaFunc(func(cname string) (CoinQuotaResult, error) {
-		return CoinQuotaResult{}, errors.New("generic error")
+	cryptoService := MockQueryCurrencyQuotationFunc(func(_ string) (CurrencyQuotationResult, error) {
+		return CurrencyQuotationResult{}, nil
 	})
 
-	convertedCoin, err := NewService(secondaryport).ConvertCoin(fromCoin, toCoin)
+	paperService := MockQueryCurrencyQuotationFunc(func(_ string) (CurrencyQuotationResult, error) {
+		return CurrencyQuotationResult{USD: 100}, nil
+	})
+
+	_, err := NewService("", cryptoService, paperService).ConvertCoin(fromCurrencyName, "", 0)
 	if err == nil {
 		t.Error("unexpected error value as nil")
 		return
@@ -21,27 +23,23 @@ func TestConvertCoinFromUnsupportedCoin(t *testing.T) {
 
 	if _, ok := err.(*ErrCoinUnsupported); !ok {
 		t.Error("unexpected value error not equals *ErrCoinUnsupported")
-		return
-	}
-
-	if convertedCoin != nil {
-		t.Error("unexpected converted coin value not equals nil")
 		return
 	}
 }
 
-func TestConvertCoinToUnsupportedCoin(t *testing.T) {
-	fromCoin := Coin{Name: BRL, Value: 20}
-	toCoin := "ABC"
+func TestConvertCoinToUnsupportedCurrency(t *testing.T) {
+	fromCurrencyName := ETH
+	toCurrencyName := "ABC"
 
-	secondaryport := MockQueryCoinQuotaFunc(func(cname string) (CoinQuotaResult, error) {
-		return CoinQuotaResult{
-			BRL: 10,
-			EUR: 100,
-		}, nil
+	cryptoService := MockQueryCurrencyQuotationFunc(func(_ string) (CurrencyQuotationResult, error) {
+		return CurrencyQuotationResult{ETH: 0.108}, nil
 	})
 
-	convertedCoin, err := NewService(secondaryport).ConvertCoin(fromCoin, toCoin)
+	paperService := MockQueryCurrencyQuotationFunc(func(_ string) (CurrencyQuotationResult, error) {
+		return CurrencyQuotationResult{}, nil
+	})
+
+	_, err := NewService("", cryptoService, paperService).ConvertCoin(fromCurrencyName, toCurrencyName, 0)
 	if err == nil {
 		t.Error("unexpected error value as nil")
 		return
@@ -49,34 +47,37 @@ func TestConvertCoinToUnsupportedCoin(t *testing.T) {
 
 	if _, ok := err.(*ErrCoinUnsupported); !ok {
 		t.Error("unexpected value error not equals *ErrCoinUnsupported")
-		return
-	}
-
-	if convertedCoin != nil {
-		t.Error("unexpected converted coin value not equals nil")
 		return
 	}
 }
 
 func TestConvertCoinSuccessful(t *testing.T) {
-	fromCoin := Coin{Name: BRL, Value: 20}
-	toCoin := USD
+	fromCoinName := BRL
+	var fromCoinAmount int64 = 2
+	toCoinName := USD
+	var toCoinValue float64 = 400
 
-	secondaryport := MockQueryCoinQuotaFunc(func(cname string) (CoinQuotaResult, error) {
-		return CoinQuotaResult{
-			toCoin: 10,
-			EUR:    100,
-		}, nil
+	cryptoService := MockQueryCurrencyQuotationFunc(func(_ string) (CurrencyQuotationResult, error) {
+		return CurrencyQuotationResult{}, nil
 	})
 
-	convertedCoin, err := NewService(secondaryport).ConvertCoin(fromCoin, toCoin)
+	paperService := MockQueryCurrencyQuotationFunc(func(_ string) (CurrencyQuotationResult, error) {
+		return CurrencyQuotationResult{fromCoinName: 1, toCoinName: 200}, nil
+	})
+
+	convertedCoin, err := NewService("", cryptoService, paperService).ConvertCoin(fromCoinName, toCoinName, fromCoinAmount)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	if got, want := convertedCoin.Name, toCoin; got != want {
+	if got, want := convertedCoin.Name, toCoinName; got != want {
 		t.Errorf("unexpected converted coin name: got: %v, want: %v", got, want)
+		return
+	}
+
+	if got, want := convertedCoin.Value, toCoinValue; got != want {
+		t.Errorf("unexpected converted coin value: got: %v, want: %v", got, want)
 		return
 	}
 }

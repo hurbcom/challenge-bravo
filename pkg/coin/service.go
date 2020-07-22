@@ -1,14 +1,30 @@
 package coin
 
 type DefaultService struct {
-	base      string
-	secondary SecondaryPort
+	base          string
+	exchangerates SecondaryPort
+	coinbase      SecondaryPort
 }
 
 func (s *DefaultService) ConvertCoin(from, to string, amount int64) (*Coin, error) {
-	result, err := s.secondary.QueryCurrencyQuotation(s.base)
+	cryptoCurrency, err := s.coinbase.QueryCurrencyQuotation(s.base)
 	if err != nil {
 		return nil, err
+	}
+
+	paperCurrency, err := s.exchangerates.QueryCurrencyQuotation(s.base)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make(CurrencyQuotationResult)
+
+	for key, value := range cryptoCurrency {
+		result[key] = value
+	}
+
+	for key, value := range paperCurrency {
+		result[key] = value
 	}
 
 	fromValue, err := result.GetCurrency(from)
@@ -28,6 +44,10 @@ func (s *DefaultService) ConvertCoin(from, to string, amount int64) (*Coin, erro
 	return c, nil
 }
 
-func NewService(base string, secondary SecondaryPort) *DefaultService {
-	return &DefaultService{base: base, secondary: secondary}
+func NewService(base string, coinbase, exchangerates SecondaryPort) *DefaultService {
+	return &DefaultService{
+		base:          base,
+		coinbase:      coinbase,
+		exchangerates: exchangerates,
+	}
 }
