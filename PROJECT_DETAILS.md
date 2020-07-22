@@ -1,59 +1,4 @@
-# Intro in project source code
-
-There are few ways to run steps as tests and compilations and for easier life of us this project contains support for a famous task runner called make. You can either take a look in step at [Makefile](https://github.com/guiferpa/challenge-bravo/blob/master/Makefile) of the project or just call `make help`.
-
-### Design for source code
-
-This project uses basically [ports and adapters architecture](http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html) for code structure.
-
-### Directories structure
-
-For directories and the organization of the source code this project uses segmentation for entity reponsabilities.
-
-Let's look the directories:
-```bash
-.
-├── adapter
-│   ├── primary
-│   │   └── http
-│   │       ├── rest
-│   │       │   ├── coin.go
-│   │       │   └── router.go
-│   │       └── static
-│   │           ├── router.go
-│   │           └── statik.go
-│   └── secondary
-│       └── http
-│           └── rest
-│               └── repository.go
-│
-├── cmd
-│   ├── api
-│   │   └── main.go
-│   └── doc
-│       └── main.go
-│
-├── go.mod
-├── go.sum
-├── Makefile
-├── pkg
-│   └── coin
-│       ├── coin.go
-│       ├── port.go
-│       ├── quota.go
-│       └── service.go
-│
-├── platform
-│   └── docker
-│       ├── api
-│       │   └── Dockerfile
-│       └── doc
-│           └── Dockerfile
-│
-└── README.md
-```
-
-### What's a command?
+# What is a command?
 
 Well, the command's a component commonly looks in Golang apps directory structures, take a look in few Golang projects that use this approach.
 
@@ -91,3 +36,11 @@ We could compile differents binaries with this command directory structure as th
 └── utils_test.go
 ```
 
+
+# Design of source code from project
+
+This project uses basically [ports and adapters architecture](http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html) for code structure.
+
+# Structure of directories
+
+There are few ways to run steps as tests and compilations and for easier life of us this project contains support for a famous task runner called make. You can either take a look in step at [Makefile](https://github.com/guiferpa/challenge-bravo/blob/master/Makefile) of the project or just call `make help`.
