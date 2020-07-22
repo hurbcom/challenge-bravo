@@ -41,6 +41,10 @@ We could compile differents binaries with this command directory structure as th
 
 This project uses basically [ports and adapters architecture](http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html) for code structure.
 
+Ports and adapters are a design based on hexagonal architecture where you basically have **port** which is an interface with a contract defined by your business model and **adapter** which is an **port** implementation. With this architecture the application have more flexibility for plugin and unplugin any adapter.
+
+Let's think in a scene where there'is a problem and the engineers are thinking about some PoC for differents databases. This scene at this architecture is simple because of the flexibility that it come in. I am free to plug a adapter for MySQL, MongoDB, PgSQL and etc. And it's possible because of the **ports** and **adapters**.
+
 # Structure of directories
 
 ```bash
