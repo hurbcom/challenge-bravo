@@ -1,4 +1,5 @@
 
+const CurrencyDao = require("../dao/currency-dao");
 const HistoricalRatesDao = require("../dao/historical-rates-dao");
 let ExchangeRates = require("../models/exchange-rates");
 const ICoinService = require("./coin-service-interface");
@@ -8,24 +9,39 @@ class ExchangeRatesService
 	constructor(container)
 	{
 		this.coinService = container.get(ICoinService);
-		this.dao = container.get(HistoricalRatesDao);
+		this.historicalRatesDao = container.get(HistoricalRatesDao);
+		this.currencyDao = container.get(CurrencyDao);
 	}
 
 	async getLatestExchangeRates()
 	{
-		return await this.dao.getLatest();
+		return await this.historicalRatesDao.getLatest();
+	}
+
+	async exchangeFromTo(from, to, amount)
+	{
+		const latestRate = await this.historicalRatesDao.getLatest();
+		console.log(latestRate);
+		const fromRate = latestRate[from];
+		const toRate = latestRate[to];
+		if(fromRate && toRate)
+		{
+			return (toRate*amount)/fromRate;
+		}
+		throw Error(`No support provided to given currency keys: from ${from} to: ${to}`)
 	}
 
 	async getExchangeRates()
 	{
-		let exchangeRates = await this.coinService.getAll();
-		let usdValue = exchangeRates.usd.value;
-		let brl = exchangeRates.brl.value/usdValue;
-		let eur = exchangeRates.eur.value/usdValue;
-		let btc = exchangeRates.btc.value/usdValue;
-		let eth = exchangeRates.eth.value/usdValue;
-		let updatedExchangeRates = new ExchangeRates(btc,brl,eth,eur);
-		await this.dao.insert(updatedExchangeRates);
+		const exchangeRates = await this.coinService.getAll();
+		const availableCurrencies = await this.currencyDao.list();
+		let referenceValue = exchangeRates.usd.value;
+		let updatedExchangeRates = new ExchangeRates();
+		for (const index in availableCurrencies) {
+			const currencyKey = availableCurrencies[index].key;
+			updatedExchangeRates[currencyKey] = exchangeRates[currencyKey].value/referenceValue;
+		}
+		await this.historicalRatesDao.insert(updatedExchangeRates);
 		return updatedExchangeRates;
 	}
 }

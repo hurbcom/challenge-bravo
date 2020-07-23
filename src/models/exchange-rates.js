@@ -1,12 +1,8 @@
 
 class ExchangeRates
 {
-	constructor(btc,brl,eth,eur)
+	constructor()
 	{
-		this.btc = btc;
-		this.brl = brl;
-		this.eth = eth;
-		this.eur = eur;
 		this.referenceDate = new Date();
 	}
 }
