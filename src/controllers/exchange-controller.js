@@ -1,7 +1,6 @@
 const ExchangeRatesService = require("../services/exchange-rates-service");
 const sanitize = require("mongo-sanitize");
 const ErrorMessage = require("../models/error-msg");
-const moment = require('moment');
 const Configuration = require("../config/config");
 
 class ExchangeController
@@ -25,14 +24,12 @@ class ExchangeController
 	async latest(req, res)
 	{
 		const latestRates = await this.exchangeService.getLatestExchangeRates();
-		latestRates.referenceDate = moment(latestRates.referenceDate).format(Configuration.DEFAULT_DATE_FORMAT);
 		res.json(latestRates);
 	}
 
 	sanitizeAmount(amount)
 	{
 		let mongoSanitizedAmount = sanitize(amount);
-		mongoSanitizedAmount = mongoSanitizedAmount.
 		mongoSanitizedAmount = parseFloat(mongoSanitizedAmount);
 		if( !mongoSanitizedAmount || isNaN(mongoSanitizedAmount))
 		{

@@ -1,7 +1,9 @@
-
+const moment = require('moment');
+const Configuration = require("../config/config");
 const CurrencyDao = require("../dao/currency-dao");
 const HistoricalRatesDao = require("../dao/historical-rates-dao");
 let ExchangeRates = require("../models/exchange-rates");
+const ExchangeResult = require("../models/exchange-result");
 const ICoinService = require("./coin-service-interface");
 
 class ExchangeRatesService
@@ -15,7 +17,9 @@ class ExchangeRatesService
 
 	async getLatestExchangeRates()
 	{
-		return await this.historicalRatesDao.getLatest();
+		const latestRates = await this.historicalRatesDao.getLatest();
+		latestRates.referenceDate = moment(latestRates.referenceDate).format(Configuration.DEFAULT_DATE_FORMAT);
+		return latestRates;
 	}
 
 	async exchangeFromTo(from, to, amount)
@@ -26,9 +30,15 @@ class ExchangeRatesService
 		const toRate = latestRate[to];
 		if(fromRate && toRate)
 		{
-			return (toRate*amount)/fromRate;
+			const result = new ExchangeResult();
+			result.from = from;
+			result.to = to;
+			result.amount = amount;
+			result.value = (toRate*amount)/fromRate;
+			result.timestamp = moment().format(Configuration.DEFAULT_DATE_FORMAT);
+			return result;
 		}
-		throw Error(`No support provided to given currency keys: from ${from} to: ${to}`)
+		throw Error(`No support provided to given currency from: ${from} to: ${to}`)
 	}
 
 	async getExchangeRates()
