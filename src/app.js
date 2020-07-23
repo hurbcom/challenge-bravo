@@ -8,7 +8,7 @@ app = express(),
 app.listen(port);
 
 app.use(express.json());
-app.use("/", Router);
+app.use('/currency', Router);
 console.log('Challenge Bravo RESTful API server started on: ' + port);
 
 updateJob.initJob()
