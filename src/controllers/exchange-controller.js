@@ -32,7 +32,8 @@ class ExchangeController
 	sanitizeAmount(amount)
 	{
 		let mongoSanitizedAmount = sanitize(amount);
-		mongoSanitizedAmount = toFixed(mongoSanitizedAmount);
+		mongoSanitizedAmount = mongoSanitizedAmount.
+		mongoSanitizedAmount = parseFloat(mongoSanitizedAmount);
 		if( !mongoSanitizedAmount || isNaN(mongoSanitizedAmount))
 		{
 			throw new Error("No valid amount value in query parameter.");
