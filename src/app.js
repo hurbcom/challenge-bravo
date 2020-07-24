@@ -1,6 +1,7 @@
 const express = require('express');
+const { default: Container } = require('typedi');
 const Configuration = require('./config/config');
-const updateJob = require('./jobs/update-rates-job');
+const UpdateExchangeRatesJob = require('./jobs/update-exchange-rates-job');
 const Router = require('./router');
 const responseHeadersMiddleware = require('./services/middlewares/response-headers-interceptor');
 
@@ -13,4 +14,5 @@ app.use(express.json());
 app.use('/currency', Router);
 console.log(`Challenge Bravo RESTful API server started on: ${port}`);
 
+const updateJob = Container.get(UpdateExchangeRatesJob);
 updateJob.initJob();
