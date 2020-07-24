@@ -54,4 +54,4 @@ Lista todas as moedas cadastradas para conversão no sistema.
 
 ## Nota
 
--   Caso nenhuma moeda tenha sido cadastrada será retornada uma lista vazia. Ver [Cadastar de Moedas](post-currency.md).
+-   Caso nenhuma moeda tenha sido cadastrada será retornada uma lista vazia. Ver [Cadastro de Moedas](post-currency.md).

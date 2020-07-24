@@ -16,13 +16,15 @@ Forneça a chave da moeda a ser cadastrada
 }
 ```
 
-**Exemplo de dado** All fields must be sent.
+**Exemplo de dado**
 
 ```json
 {
     "key": "USD"
 }
 ```
+
+Campo `key` é obrigatório.
 
 ## Sucesso
 
@@ -42,7 +44,7 @@ Forneça a chave da moeda a ser cadastrada
 
 ## Erro
 
-**Condição** : Se a moeda não é suportada pela api ( ver [moedas disponíveis](available-currency.md) ).
+**Condição** : Caso a moeda não seja suportada pela api ( ver [moedas disponíveis](available-currency.md) ).
 
 **Code** : `400 BAD REQUEST`
 
@@ -62,9 +64,9 @@ Forneça a chave da moeda a ser cadastrada
 }
 ```
 
-### Or
+### Ou
 
-**Condição** : Se a moeda ja foi cadastrada anteriormente
+**Condição** : Caso a moeda ja tenha sido cadastrada anteriormente.
 
 **Code** : `400 BAD REQUEST`
 

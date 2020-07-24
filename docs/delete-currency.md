@@ -1,6 +1,6 @@
 # Remover Moedas
 
-Remove moedas cadastradas para conversão no sistema.
+Remove moedas cadastradas no sistema.
 
 **URL** : `/api/currency/:key/`
 
