@@ -1,6 +1,6 @@
 const sanitize = require('mongo-sanitize');
-const ErrorMessage = require('../models/error-msg');
-const CurrencyService = require('../services/currency-service');
+const ErrorMessage = require('../../models/dtos/error-msg');
+const CurrencyService = require('../../services/currency-service');
 
 class CurrencyController {
     constructor(container) {

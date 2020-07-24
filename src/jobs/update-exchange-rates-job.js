@@ -7,7 +7,6 @@ class UpdateExchangeRatesJob {
     initJob() {
         this.job = schedule.scheduleJob(Configuration.CRON_JOB_STRING, () => {
             Container.get(ExchangeRatesService).updateHistoricalExchangeRates();
-            console.log('Successfully obtained updated exchange rates.');
         });
         console.log('UpdateExchangeRatesJob initialized.');
     }

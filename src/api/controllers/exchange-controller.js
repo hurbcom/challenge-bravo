@@ -1,6 +1,6 @@
 const sanitize = require('mongo-sanitize');
-const ExchangeRatesService = require('../services/exchange-rates-service');
-const ErrorMessage = require('../models/error-msg');
+const ExchangeRatesService = require('../../services/exchange-rates-service');
+const ErrorMessage = require('../../models/dtos/error-msg');
 
 class ExchangeController {
     constructor(container) {
