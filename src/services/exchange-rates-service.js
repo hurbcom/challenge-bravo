@@ -3,7 +3,7 @@ const Configuration = require('../config/config');
 const CurrencyDao = require('../dao/currency-dao');
 const HistoricalExchangeRatesDao = require('../dao/historical-exchange-rates-dao');
 const ExchangeRates = require('../models/exchange-rates');
-const ExchangeResult = require('../models/exchange-result');
+const ExchangeResult = require('../models/dtos/exchange-result');
 const ICoinService = require('./coin-service-interface');
 
 class ExchangeRatesService {
@@ -47,6 +47,7 @@ class ExchangeRatesService {
             updatedExchangeRates[currencyKey] = exchangeRates[currencyKey].value / referenceValue;
         });
         await this.historicalRatesDao.insert(updatedExchangeRates);
+        console.log('Successfully obtained updated exchange rates.');
         return updatedExchangeRates;
     }
 }

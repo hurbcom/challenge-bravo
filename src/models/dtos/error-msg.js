@@ -1,5 +1,5 @@
 const moment = require('moment');
-const Configuration = require('../config/config');
+const Configuration = require('../../config/config');
 
 class ErrorMessage {
     constructor(status, message) {
