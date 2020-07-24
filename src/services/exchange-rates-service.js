@@ -23,7 +23,6 @@ class ExchangeRatesService {
 
     async exchangeFromTo(from, to, amount) {
         const latestRate = await this.historicalRatesDao.getLatest();
-        console.log(latestRate);
         const fromRate = latestRate[from];
         const toRate = latestRate[to];
         if (fromRate && toRate) {
@@ -32,13 +31,13 @@ class ExchangeRatesService {
             result.to = to;
             result.amount = amount;
             result.value = (toRate * amount) / fromRate;
-            result.timestamp = moment().format(Configuration.DEFAULT_DATE_FORMAT);
+            result.referenceDate = moment().format(Configuration.DEFAULT_DATE_FORMAT);
             return result;
         }
         throw Error(`No support provided to given currency from: ${from} to: ${to}`);
     }
 
-    async getExchangeRates() {
+    async updateHistoricalExchangeRates() {
         const exchangeRates = await this.coinService.getAll();
         const availableCurrencies = await this.currencyDao.list();
         const referenceValue = exchangeRates.usd.value;
