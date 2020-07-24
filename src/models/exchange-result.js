@@ -1,8 +1,2 @@
-class ExchangeResult
-{
-	constructor()
-	{
-
-	}
-}
+class ExchangeResult {}
 module.exports = ExchangeResult;
