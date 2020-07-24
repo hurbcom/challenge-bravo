@@ -6,7 +6,7 @@ const Configuration = require('../config/config');
 class UpdateRatesJob {
     initJob() {
         this.job = schedule.scheduleJob(Configuration.CRON_JOB_STRING, () => {
-            Container.get(ExchangeRatesService).getExchangeRates();
+            Container.get(ExchangeRatesService).updateHistoricalExchangeRates();
             console.log('Successfully obtained updated exchange rates.');
         });
         console.log('UpdateRatesJob initialized.');
