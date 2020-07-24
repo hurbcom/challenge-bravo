@@ -1,7 +1,7 @@
 const moment = require('moment');
 const Configuration = require('../config/config');
 const CurrencyDao = require('../dao/currency-dao');
-const HistoricalRatesDao = require('../dao/historical-rates-dao');
+const HistoricalExchangeRatesDao = require('../dao/historical-exchange-rates-dao');
 const ExchangeRates = require('../models/exchange-rates');
 const ExchangeResult = require('../models/exchange-result');
 const ICoinService = require('./coin-service-interface');
@@ -9,7 +9,7 @@ const ICoinService = require('./coin-service-interface');
 class ExchangeRatesService {
     constructor(container) {
         this.coinService = container.get(ICoinService);
-        this.historicalRatesDao = container.get(HistoricalRatesDao);
+        this.historicalRatesDao = container.get(HistoricalExchangeRatesDao);
         this.currencyDao = container.get(CurrencyDao);
     }
 

@@ -1,7 +1,7 @@
 const MongoDBConnection = require('./mongo-db-connection');
 
 const HISTORICAL_RATES_COLLECTION_NAME = 'historical-exchange-rates';
-class HistoricalRatesDao {
+class HistoricalExchangeRatesDao {
     constructor(container) {
         this.db = container.get(MongoDBConnection).db;
     }
@@ -22,4 +22,4 @@ class HistoricalRatesDao {
     }
 }
 
-module.exports = HistoricalRatesDao;
+module.exports = HistoricalExchangeRatesDao;
