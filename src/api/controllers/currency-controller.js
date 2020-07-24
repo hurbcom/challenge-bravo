@@ -17,9 +17,10 @@ class CurrencyController {
         try {
             const key = this.sanitizeCurrencyKey(req.body.key);
             const newCurrency = await this.currencyService.addCurrency(key);
-            return res.json(newCurrency);
+            return res.status(201).json(newCurrency);
         } catch (error) {
-            return res.status(400).json(new ErrorMessage(400, error.message));
+            const status = error.status || 500;
+            return res.status(status).json(new ErrorMessage(status, error.message));
         }
     }
 
@@ -27,16 +28,17 @@ class CurrencyController {
         try {
             const key = this.sanitizeCurrencyKey(req.params.key);
             await this.currencyService.removeCurrency(key);
-            return res.status(200).json();
+            return res.status(204).json();
         } catch (error) {
-            return res.status(400).json(new ErrorMessage(400, error.message));
+            const status = error.status || 500;
+            return res.status(status).json(new ErrorMessage(status, error.message));
         }
     }
 
     sanitizeCurrencyKey(key) {
         const mongoSanitizedBody = this.sanitize(key);
         if (!mongoSanitizedBody || typeof mongoSanitizedBody !== 'string') {
-            throw new Error('No valid key in body');
+            throw new ErrorMessage(400, 'No valid key in body');
         }
         return mongoSanitizedBody.toLowerCase();
     }

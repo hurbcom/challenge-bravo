@@ -16,7 +16,8 @@ class ExchangeController {
             const amount = this.sanitizeAmount(query.amount);
             return res.json(await this.exchangeService.exchangeFromTo(from, to, amount));
         } catch (error) {
-            return res.status(400).json(new ErrorMessage(400, error.message));
+            const status = error.status || 500;
+            return res.status(status).json(new ErrorMessage(status, error.message));
         }
     }
 
@@ -29,7 +30,7 @@ class ExchangeController {
         let mongoSanitizedAmount = this.sanitize(amount);
         mongoSanitizedAmount = parseFloat(mongoSanitizedAmount);
         if (!mongoSanitizedAmount || Number.isNaN(mongoSanitizedAmount)) {
-            throw new Error('No valid amount value in query parameter.');
+            throw new ErrorMessage(400, 'No valid amount value in query parameter.');
         }
         return mongoSanitizedAmount;
     }
@@ -37,7 +38,7 @@ class ExchangeController {
     sanitizeCurrencyKey(key) {
         const mongoSanitizedKey = this.sanitize(key);
         if (!mongoSanitizedKey || typeof mongoSanitizedKey !== 'string') {
-            throw new Error('No valid key in query parameter.');
+            throw new ErrorMessage(400, 'No valid key in query parameter.');
         }
         return mongoSanitizedKey.toLowerCase();
     }

@@ -1,5 +1,6 @@
 const CurrencyDao = require('../dao/currency-dao');
 const Currency = require('../models/currency');
+const ErrorMessage = require('../models/dtos/error-msg');
 const ICoinService = require('./coin-service-interface');
 const ExchangeRatesService = require('./exchange-rates-service');
 
@@ -21,7 +22,7 @@ class CurrencyService {
         if (availableCoin) {
             const hasKey = await this.dao.findByKey(newKey);
             if (hasKey) {
-                throw new Error(`Key ${newKey} is already available`);
+                throw new ErrorMessage(400, `Key ${newKey} is already available`);
             }
             const newCurrency = new Currency(
                 newKey,
@@ -33,7 +34,7 @@ class CurrencyService {
             this.exchangeService.updateHistoricalExchangeRates();
             return newCurrency;
         }
-        throw new Error(`No support for given currency key: ${newKey}`);
+        throw new ErrorMessage(400, `No support for given currency key: ${newKey}`);
     }
 
     async removeCurrency(key) {
@@ -42,7 +43,7 @@ class CurrencyService {
             this.dao.delete(key);
             return this.exchangeService.updateHistoricalExchangeRates();
         }
-        throw new Error(`No currency found with given key: ${key}`);
+        throw new ErrorMessage(404, `No currency found with given key: ${key}`);
     }
 }
 module.exports = CurrencyService;

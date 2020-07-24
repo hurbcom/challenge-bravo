@@ -5,6 +5,7 @@ const HistoricalExchangeRatesDao = require('../dao/historical-exchange-rates-dao
 const ExchangeRates = require('../models/exchange-rates');
 const ExchangeResult = require('../models/dtos/exchange-result');
 const ICoinService = require('./coin-service-interface');
+const ErrorMessage = require('../models/dtos/error-msg');
 
 class ExchangeRatesService {
     constructor(container) {
@@ -34,7 +35,7 @@ class ExchangeRatesService {
             result.referenceDate = moment().format(Configuration.DEFAULT_DATE_FORMAT);
             return result;
         }
-        throw Error(`No support provided to given currency from: ${from} to: ${to}`);
+        throw ErrorMessage(400, `No support provided to given currency from: ${from} to: ${to}`);
     }
 
     async updateHistoricalExchangeRates() {
