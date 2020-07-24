@@ -5,7 +5,7 @@ class ErrorMessage {
     constructor(status, message) {
         this.status = status;
         this.message = message;
-        this.timestamp = moment().format(Configuration.DEFAULT_DATE_FORMAT);
+        this.date = moment().format(Configuration.DEFAULT_DATE_FORMAT);
     }
 }
 module.exports = ErrorMessage;
