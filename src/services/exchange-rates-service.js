@@ -35,7 +35,8 @@ class ExchangeRatesService {
             result.referenceDate = moment().format(Configuration.DEFAULT_DATE_FORMAT);
             return result;
         }
-        throw ErrorMessage(400, `No support provided to given currency from: ${from} to: ${to}`);
+        const unavailableKey = !fromRate ? from : to;
+        throw new ErrorMessage(400, `No support provided to given currency: ${unavailableKey}`);
     }
 
     async updateHistoricalExchangeRates() {
