@@ -20,5 +20,5 @@ Endpoints que gerenciam as moedas que serão utilizadas para conversão pela API
 
 Endpoints relacionados à conversão entre moedas cadastradas no sistema.
 
--   [Última Cotação](docs/latest-exchange.md) : `GET /api/currency/exchange/latest`
+-   [Última Cotação](docs/latest-exchange-rates.md) : `GET /api/currency/exchange/latest`
 -   [Converter Moedas](docs/exchange.md) : `GET /api/currency/exchange?from=:key1&to=:key2&amount=:value`
