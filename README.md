@@ -2,6 +2,10 @@
 
 API Rest para conversão monetária.
 
+## Requisitos
+
+<Em construção>
+
 ## Endpoints
 
 Todos os endpoints fornecidos por essa aplicação não exigem autenticação.
