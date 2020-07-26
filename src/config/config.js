@@ -5,10 +5,11 @@ class Configuration {
 
     static DB_NAME = 'currency-converter';
 
-    static MONGODB_DEFAULT_URL = 'mongodb://127.0.0.1:27017/';
+    static MONGODB_DEFAULT_URL = 'mongodb://mongo:27017/';
 
     static PORT = 3000;
 
     static CORS_ALLOW_ORIGIN = '*';
 }
+
 module.exports = Configuration;
