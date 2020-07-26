@@ -21,6 +21,7 @@
     "dependencies": {
         "coingecko-api": "^1.0.10",
         "express": "^4.17.1",
+        "jest": "^26.1.0",
         "moment": "^2.27.0",
         "mongo-sanitize": "^1.1.0",
         "mongodb": "^3.5.9",
