@@ -1,12 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const { default: Container } = require('typedi');
-const Configuration = require('./config/config');
 const UpdateExchangeRatesJob = require('./jobs/update-exchange-rates-job');
 const Router = require('./api/router');
 const responseHeadersMiddleware = require('./services/middlewares/response-headers-interceptor');
 
 const app = express();
-const port = Configuration.PORT || 3000;
+const port = process.env.PORT;
 
 app.listen(port);
 app.use(responseHeadersMiddleware);

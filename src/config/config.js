@@ -7,8 +7,6 @@ class Configuration {
 
     static MONGODB_DEFAULT_URL = 'mongodb://mongo:27017/';
 
-    static PORT = 3000;
-
     static CORS_ALLOW_ORIGIN = '*';
 }
 
