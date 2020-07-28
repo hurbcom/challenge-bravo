@@ -1,0 +1,426 @@
+{
+    "info": {
+        "_postman_id": "7d98d8d7-905c-481c-8d16-784c28a7e7fc",
+        "name": "Challenge-Bravo-Collection",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Crud Moeda",
+            "item": [
+                {
+                    "name": "Cadastrar Moeda ETH",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "66fb698e-b711-4928-9d37-03d334978520",
+                                "exec": [
+                                    "pm.test(\"Cadastro da chave ETH\", function () {\r",
+                                    "    if (pm.response.code == 400)\r",
+                                    "    {\r",
+                                    "        const currencyKey = pm.variables.get(\"eth_key\").toLowerCase();\r",
+                                    "        const host = pm.variables.get(\"host\");\r",
+                                    "        const port = pm.variables.get(\"port\");\r",
+                                    "        pm.sendRequest( host+':'+port+'/api/currency', function (err, response) {\r",
+                                    "            const availableKey = response.json().some( currency => currency.key == currencyKey );\r",
+                                    "            pm.expect(availableKey).to.be.true;\r",
+                                    "        });\r",
+                                    "    }\r",
+                                    "    \r",
+                                    "    else\r",
+                                    "    {\r",
+                                    "        pm.expect(pm.response.code).to.be.oneOf([201,202]);\r",
+                                    "    }\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"key\":\"{{eth_key}}\"}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{host}}:{{port}}/api/currency",
+                            "host": ["{{host}}"],
+                            "port": "{{port}}",
+                            "path": ["api", "currency"]
+                        },
+                        "description": "Cadastra moedas no sistema de conversão.\r\nExemplo: cadastro chave BRL"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Moeda ETH Disponível",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "ef2ccc90-ab19-4564-9901-88f198259a5d",
+                                "exec": [
+                                    "pm.test(\"Chave ETH disponível\", function () {\r",
+                                    "    var jsonData = pm.response.json();\r",
+                                    "    const key = pm.variables.get(\"eth_key\").toLowerCase();\r",
+                                    "    var eth = jsonData.some(currency => currency.key == key);\r",
+                                    "    pm.expect(eth).to.be.true;\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{host}}:{{port}}/api/currency",
+                            "host": ["{{host}}"],
+                            "port": "{{port}}",
+                            "path": ["api", "currency"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Remoção da Chave ETH",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "9c101f87-a73b-49f3-9952-75934e4988b0",
+                                "exec": [
+                                    "pm.test(\"Sucesso na deleção\", function () {\r",
+                                    "  \r",
+                                    "    if( pm.response.status != 'Not Found')\r",
+                                    "    {\r",
+                                    "        pm.response.to.have.status(204);\r",
+                                    "    }\r",
+                                    "\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{host}}:{{port}}/api/currency/{{eth_key}}",
+                            "host": ["{{host}}"],
+                            "port": "{{port}}",
+                            "path": ["api", "currency", "{{eth_key}}"]
+                        },
+                        "description": "Remove moedas cadastradas no sistema."
+                    },
+                    "response": []
+                }
+            ],
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "id": "c1bebc15-717c-4587-a317-69a5fb6f55b3",
+                        "type": "text/javascript",
+                        "exec": [""]
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "b14f4aa5-9129-42c3-9a0a-57ae1b128c66",
+                        "type": "text/javascript",
+                        "exec": [""]
+                    }
+                }
+            ],
+            "protocolProfileBehavior": {}
+        },
+        {
+            "name": "Cadastrar Moeda BRL",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "6f564d75-4bf6-4907-af11-ab8ca4c5d287",
+                        "exec": [
+                            "pm.test(\"Cadastrada chave BRL\", function () {\r",
+                            "    if (pm.response.code == 400)\r",
+                            "    {\r",
+                            "        const currencyKey = pm.variables.get(\"brl_key\").toLowerCase();\r",
+                            "        const host = pm.variables.get(\"host\");\r",
+                            "        const port = pm.variables.get(\"port\");\r",
+                            "        pm.sendRequest( host+':'+port+'/api/currency', function (err, response) {\r",
+                            "            const availableKey = response.json().some( currency => currency.key == currencyKey );\r",
+                            "            if( availableKey )\r",
+                            "            {\r",
+                            "                console.log(`Moeda ${currencyKey} ja cadastrada`);\r",
+                            "            }\r",
+                            "            pm.expect(availableKey).to.be.true;\r",
+                            "        });\r",
+                            "    }\r",
+                            "    else\r",
+                            "    {\r",
+                            "        pm.expect(pm.response.code).to.be.oneOf([201,202]);\r",
+                            "    }\r",
+                            "});\r",
+                            ""
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"key\":\"{{brl_key}}\"}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "{{host}}:{{port}}/api/currency",
+                    "host": ["{{host}}"],
+                    "port": "{{port}}",
+                    "path": ["api", "currency"]
+                },
+                "description": "Cadastra moedas no sistema de conversão.\r\nExemplo: cadastro chave BRL"
+            },
+            "response": []
+        },
+        {
+            "name": "Cadastrar Moeda USD",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "baec1c52-5d54-4819-a51c-13564c540851",
+                        "exec": [
+                            "pm.test(\"Cadastrada chave USD\", function () {\r",
+                            "    if (pm.response.code == 400)\r",
+                            "    {\r",
+                            "        const currencyKey = pm.variables.get(\"usd_key\").toLowerCase();\r",
+                            "        const host = pm.variables.get(\"host\");\r",
+                            "        const port = pm.variables.get(\"port\");\r",
+                            "        pm.sendRequest( host+':'+port+'/api/currency', function (err, response) {\r",
+                            "            const availableKey = response.json().some( currency => currency.key == currencyKey );\r",
+                            "            if( availableKey )\r",
+                            "            {\r",
+                            "                console.log(`Moeda ${currencyKey} ja cadastrada`);\r",
+                            "            }\r",
+                            "            pm.expect(availableKey).to.be.true;\r",
+                            "        });\r",
+                            "    }\r",
+                            "    else\r",
+                            "    {\r",
+                            "        pm.expect(pm.response.code).to.be.oneOf([201,202]);\r",
+                            "    }\r",
+                            "});\r",
+                            ""
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"key\":\"{{usd_key}}\"}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "{{host}}:{{port}}/api/currency",
+                    "host": ["{{host}}"],
+                    "port": "{{port}}",
+                    "path": ["api", "currency"]
+                },
+                "description": "Cadastra moedas no sistema de conversão.\r\nExemplo: cadastro chave USD"
+            },
+            "response": []
+        },
+        {
+            "name": "Moedas Disponíveis",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "3ffad609-2fa1-4db0-a6e5-f3776614a44c",
+                        "exec": [
+                            "pm.test(\"Chave USD disponível\", function () {\r",
+                            "    var jsonData = pm.response.json();\r",
+                            "    var usdAvailable = jsonData.some(currency => currency.key === \"usd\");\r",
+                            "    pm.expect(usdAvailable).to.be.true;\r",
+                            "});\r",
+                            "pm.test(\"Chave BRL disponível\", function () {\r",
+                            "    var jsonData = pm.response.json();\r",
+                            "    var brlAvailable = jsonData.some( currency => currency.key === \"brl\");\r",
+                            "    pm.expect(brlAvailable).to.be.true;\r",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{host}}:{{port}}/api/currency",
+                    "host": ["{{host}}"],
+                    "port": "{{port}}",
+                    "path": ["api", "currency"]
+                },
+                "description": "Lista todas as moedas cadastradas para conversão no sistema."
+            },
+            "response": []
+        },
+        {
+            "name": "Ultima Cotação",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "9a1a85fa-3785-47ec-b324-4ef935ec4bd6",
+                        "exec": [
+                            "pm.test(\"Status code is 200\", function () {\r",
+                            "    pm.response.to.have.status(200);\r",
+                            "});\r",
+                            "\r",
+                            "pm.test(\"Existe cotação  da chave USD\", function () {\r",
+                            "    var jsonData = pm.response.json();\r",
+                            "    pm.expect(jsonData).to.have.property('usd');\r",
+                            "});\r",
+                            "\r",
+                            "pm.test(\"Existe cotação  da chave BRL\", function () {\r",
+                            "    var jsonData = pm.response.json();\r",
+                            "    pm.expect(jsonData).to.have.property('brl');\r",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{host}}:{{port}}/api/currency/exchange/latest",
+                    "host": ["{{host}}"],
+                    "port": "{{port}}",
+                    "path": ["api", "currency", "exchange", "latest"]
+                },
+                "description": "Retorna a taxa atual de cambio baseada na moeda de referência USD"
+            },
+            "response": []
+        },
+        {
+            "name": "Conversão de Moedas",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "6e83bc27-d10c-4f3a-a0a2-10a78151313c",
+                        "exec": [
+                            "pm.test(\"Status code is 200\", function () {\r",
+                            "    pm.response.to.have.status(200);\r",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{host}}:{{port}}/api/currency/exchange?from={{usd_key}}&to={{brl_key}}&amount=1000.0",
+                    "host": ["{{host}}"],
+                    "port": "{{port}}",
+                    "path": ["api", "currency", "exchange"],
+                    "query": [
+                        {
+                            "key": "from",
+                            "value": "{{usd_key}}"
+                        },
+                        {
+                            "key": "to",
+                            "value": "{{brl_key}}"
+                        },
+                        {
+                            "key": "amount",
+                            "value": "1000.0"
+                        }
+                    ]
+                },
+                "description": "Retorna a conversão das moedas fornecidas de acordo com a ultima cotação, conforme disponibilidade."
+            },
+            "response": []
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "id": "6c92a816-1260-48ec-a860-c40c937e6d83",
+                "type": "text/javascript",
+                "exec": [""]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "id": "f14d3ff5-51af-4aba-8297-225e04576ca4",
+                "type": "text/javascript",
+                "exec": [""]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "id": "bf72c0c7-42d2-48a1-b505-97cab96c5888",
+            "key": "host",
+            "value": "192.168.99.100"
+        },
+        {
+            "id": "d6fece3c-a9c1-45ec-84f2-77ecb61c5af5",
+            "key": "port",
+            "value": "3000"
+        },
+        {
+            "id": "5da9202e-c14f-4958-80ff-6074e264ff75",
+            "key": "usd_key",
+            "value": "USD"
+        },
+        {
+            "id": "7810dd5c-270d-4457-adb8-70843a1cc6f8",
+            "key": "brl_key",
+            "value": "BRL"
+        },
+        {
+            "id": "80e4639c-1939-49ea-97af-e1992148d78d",
+            "key": "eth_key",
+            "value": "ETH"
+        }
+    ],
+    "protocolProfileBehavior": {}
+}
