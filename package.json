@@ -5,7 +5,8 @@
     "main": "./src/app.js",
     "scripts": {
         "dev": "nodemon",
-        "test": "jest && newman run bravo.postman_collection.json",
+        "unit-test": "jest",
+        "integration-test": "node ./tests/integration.js",
         "lint": "eslint src"
     },
     "repository": {
