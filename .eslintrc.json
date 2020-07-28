@@ -11,7 +11,7 @@
         "prettier/prettier": ["error"]
     },
     "parser": "babel-eslint",
-    "ignorePatterns": ["*.test.js"],
+    "ignorePatterns": ["*.test.js", "/tests/*"],
     "parserOptions": {
         //"ecmaVersion": 10
     }
