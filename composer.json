@@ -1,6 +1,6 @@
 {
-    "name": "mariojrrc/geonames-api-mezzio",
-    "description": "Example of using mezzio with mongodb",
+    "name": "mariojrrc/challenge-bravo",
+    "description": "Example of using mezzio with swoole for a currency conversion api",
     "type": "project",
     "license": "UNLICENSED",
     "authors": [
@@ -13,14 +13,13 @@
         "laminas",
         "mezzio",
         "api",
-        "mongodb",
-        "geonames"
+        "swoole"
     ],
-    "homepage": "https://github.com/mariojrrc/geonames-api-mezzio",
+    "homepage": "https://github.com/mariojrrc/challenge-bravo",
     "support": {
-        "docs": "https://github.com/mariojrrc/geonames-api-mezzio/api.yml",
-        "issues": "https://github.com/mariojrrc/geonames-api-mezzio/issues",
-        "source": "https://github.com/mariojrrc/geonames-api-mezzio"
+        "docs": "https://github.com/mariojrrc/challenge-bravo/public/doc/api.yml",
+        "issues": "https://github.com/mariojrrc/challenge-bravo/issues",
+        "source": "https://github.com/mariojrrc/challenge-bravo"
     },
     "config": {
         "sort-packages": true
@@ -33,7 +32,6 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-mysqli": "*",
-        "ext-redis": "*",
         "guzzlehttp/guzzle": "^6.5",
         "laminas/laminas-cache": "^2.9",
         "laminas/laminas-component-installer": "^2.1.2",
