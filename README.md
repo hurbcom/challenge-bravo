@@ -1,65 +1,41 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+Hurb Challenge Bravo
+=================================================
+[![Build Status](https://semaphoreci.com/api/v1/mariojrrc/hurb-challenge-bravo/branches/master/badge.svg)](https://semaphoreci.com/mariojrrc/geonames-api-mezzio)
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+This project is an example of REST API written in PHP 7.4 to handle currency conversion. It is result of the [Hurb Challenge Bravo](https://github.com/hurbcom/challenge-bravo).
+The project makes use of [Swoole](https://www.swoole.co.uk/docs/) to handle at least 1000 requests per second. It also uses of [Crypto Compare API](https://min-api.cryptocompare.com/) to fetch data from.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+It basically has two endpoints that allow us to perform some CRUD operations:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+- /v1/exchange/{fromCurrency}/{toCurrency}/{amount}
+- /v1/currency
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+The endpoints are protected by authorization header tokens in the following format `X-Api-Key: uuid`. It has two types of tokens defined in the file `.env` on project's root folder. One token is to perform some "Admin level" operations, such as create, update and delete. And the other one is to perform only read operations.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Note: Tokens have rate-limit params setted up. You can configure them in `config/autoload/api-credentials.global.php` file. By default, it allow us to perform 2000 requests per second.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+## DOCS
+The endpoint's documentation is located in `public/doc` folder. It was written on top of OpenAPI v3 notation.
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+## Running the project
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+**Using it with Docker**
+1. `docker-compose up`
+2. `docker exec -t challenge-bravo-php bash -c 'PHINX_DBHOST=challenge-bravo-mysql PHINX_DBUSER=mario PHINX_DBPASS=mariocosta ./vendor/bin/phinx migrate'`
+3. Make calls to the endpoints via [Postman](https://www.getpostman.com/) or similar in the following address `0.0.0.0:8080/v1/health` to check if it's working.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+** Using without docker. OBS: PHP 7.4, MySQL, and [Swoole](https://www.swoole.co.uk/docs/) extensions are required**
+1. Rename the file `.env.dist` to `.env` and fill out the required info
+2. Run `composer install`
+3. Run `./vendor/bin/mezzio-swoole start or composer serve`
+4. Make calls to the endpoints via [Postman](https://www.getpostman.com/) or similar in the following address `0.0.0.0:8080/v1/health`
 
-## Requisitos
+## CI/CD
+There is a configured pipeline in [SemaphoreCI](http://semaphoreci.com/) to run some code style validations ([PHPCS](https://github.com/squizlabs/PHP_CodeSniffer) and [PHPStan](https://github.com/phpstan/phpstan)) and Unit tests.
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+## Questions and Suggestions?
+Drop me an [e-mail](mailto:mariojr.rcosta@gmail.com)
 
-## Critério de avaliação
-
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
-
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## TODO
+- Fetch api tokens from database (cached) in order to keep it more easily to maintain
+- Create more unit tests to have a 100% coverage score.

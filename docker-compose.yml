@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  challenge-bravo-mysql:
+    image: mysql:latest
+    container_name: challenge-bravo-mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./.docker/data/mysql:/data/db:rw
+    environment:
+      - MYSQL_USER=mario
+      - MYSQL_PASSWORD=mariocosta
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=challenge_bravo
+    networks:
+      - challenge-bravo
+
+  challenge-bravo-php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: challenge-bravo-php
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./.docker/php/php-development.ini:/usr/local/etc/php/php.ini
+      - ./.docker/php/php-fpm.conf:/usr/local/etc/php-fpm.d/zz-custom.conf
+    networks:
+      - challenge-bravo
+
+networks:
+  challenge-bravo:
+    driver: bridge
+

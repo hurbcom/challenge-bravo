@@ -1,0 +1,19 @@
+class_name: ApiTester
+modules:
+    enabled:
+        - REST:
+            url: %REST_URL%
+            depends: PhpBrowser
+            part: Json
+coverage:
+    enabled: true
+    remote: true
+    low_limit: 60
+    high_limit: 90
+    remote_context_options:
+        http:
+            timeout: 60
+        ssl:
+            verify_peer: false
+    include:
+        - src/Handler/*

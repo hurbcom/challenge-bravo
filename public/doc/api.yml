@@ -1,0 +1,245 @@
+servers:
+  - url: https://localhost:8080
+openapi: "3.0.0"
+info:
+  title: Hurb Challenge Bravo API
+  version: 1.0.0
+  description: This API provides a way to exchange currency.
+  contact:
+    name: Mario Costa
+    email: mariojr.rcosta@gmail.com
+security:
+  - ApiKeyAuth: []
+paths:
+  '/v1/exchange/{from}/{to}/{amount}':
+    get:
+      tags:
+        - exchange
+      summary: List all registered currencies
+      parameters:
+        - in: path
+          name: from
+          schema:
+            type: string
+          required: true
+          description: Currency to convert from
+        - in: path
+          name: to
+          schema:
+            type: string
+          required: true
+          description: Currency to convert to
+        - in: path
+          name: amount
+          schema:
+            type: integer
+          required: true
+          description: Amount
+
+      responses:
+        200:
+          description: Eexchange response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeResponseOk"
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitError'
+
+  '/v1/currency':
+    get:
+      tags:
+        - currency
+      summary: List all registered currencies
+      responses:
+        200:
+          description: Currency collection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrencyListOk"
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitError'
+    post:
+      tags:
+        - currency
+      summary: Creates a new currency
+      requestBody:
+        description: Currency body
+        content:
+          application/json:
+            schema:
+              required: [name]
+              properties:
+                name:
+                  type: string
+                  example: "MXN"
+
+
+      responses:
+        422:
+          description: Failed validation
+          content: {}
+        201:
+          description: Item sucessfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyObject'
+
+  '/v1/currency/{id}':
+    get:
+      tags:
+        - currency
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Uuid v4 format
+      summary: Fetch one currency
+      responses:
+        200:
+          description: Item atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyObject'
+        404:
+          description: Item not found
+          content: {}
+    delete:
+      tags:
+        - currency
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Uuid v4 format
+      summary: Removes a currency from database
+      responses:
+        204:
+          description: Empty response
+          content: {}
+        404:
+          description: Item not found
+          content: {}
+
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+  schemas:
+    RateLimitError:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+          example: "Too Many Requests"
+        type:
+          type: "string"
+          format: "uri"
+          example: "https://httpstatus.com/429"
+        status:
+          type: "integer"
+          example: 429
+        detail:
+          type: "string"
+          example: "You have exceeded your 2000 requests rate limit"
+    CurrencyListOk:
+      type: "object"
+      properties:
+        _total_items:
+          type: integer
+          format: int32
+        _page:
+          type: integer
+          format: int32
+        _page_count:
+          type: integer
+          format: int32
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  type: string
+                  example:
+                    "http://{{host}}/v1/currency?page=1"
+        _embedded:
+          type: object
+          properties:
+            states:
+              type: "array"
+              items:
+                $ref: '#/components/schemas/CurrencyObject'
+
+    CurrencyObject:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+          example:
+            "90e55853-16ca-49a9-90bd-1dee256ab233"
+        name:
+          type: "string"
+          format: "string"
+          example: "BRL"
+
+        createdAt:
+          type: string
+          format: 'date-time'
+          example:
+            "2020-06-26 01:50:37"
+        updatedAt:
+          type: string
+          format: 'date-time'
+          example:
+            "2020-06-26 01:50:37"
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  type: string
+                  example:
+                    "http://{{host}}/v1/currency/90e55853-16ca-49a9-90bd-1dee256ab233"
+    ExchangeResponseOk:
+      type: "object"
+      properties:
+        from:
+          type: "string"
+          example:
+            "BRL"
+        top:
+          type: "string"
+          example: "USD"
+        from_amount:
+          type: integer
+          format: int32
+          example:
+            1
+        to_amount:
+          type: number
+          format: float
+          example:
+            0.19330000

@@ -1,0 +1,152 @@
+{
+    "name": "mariojrrc/geonames-api-mezzio",
+    "description": "Example of using mezzio with mongodb",
+    "type": "project",
+    "license": "UNLICENSED",
+    "authors": [
+        {
+            "name": "Mario Costa",
+            "email": "mariojr.rcosta@gmail.com"
+        }
+    ],
+    "keywords": [
+        "laminas",
+        "mezzio",
+        "api",
+        "mongodb",
+        "geonames"
+    ],
+    "homepage": "https://github.com/mariojrrc/geonames-api-mezzio",
+    "support": {
+        "docs": "https://github.com/mariojrrc/geonames-api-mezzio/api.yml",
+        "issues": "https://github.com/mariojrrc/geonames-api-mezzio/issues",
+        "source": "https://github.com/mariojrrc/geonames-api-mezzio"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.4",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-mysqli": "*",
+        "ext-redis": "*",
+        "guzzlehttp/guzzle": "^6.5",
+        "laminas/laminas-cache": "^2.9",
+        "laminas/laminas-component-installer": "^2.1.2",
+        "laminas/laminas-config-aggregator": "^1.2",
+        "laminas/laminas-db": "^2.11",
+        "laminas/laminas-diactoros": "^2.3.0",
+        "laminas/laminas-filter": "^2.9",
+        "laminas/laminas-hydrator": "^3.0",
+        "laminas/laminas-i18n": "^2.10",
+        "laminas/laminas-i18n-resources": "^2.6",
+        "laminas/laminas-inputfilter": "^2.10",
+        "laminas/laminas-paginator": "^2.8",
+        "laminas/laminas-serializer": "^2.9",
+        "laminas/laminas-servicemanager": "^3.4",
+        "laminas/laminas-stdlib": "^3.2.1",
+        "laminas/laminas-validator": "^2.13",
+        "laminas/laminas-zendframework-bridge": "^1.0",
+        "los/api-server": "^3.4",
+        "los/los-rate-limit": "^3.1",
+        "los/loslog": "^3.3",
+        "los/response-time": "^2.0",
+        "mezzio/mezzio": "^3.2.1",
+        "mezzio/mezzio-fastroute": "^3.0.3",
+        "mezzio/mezzio-hal": "^1.3",
+        "mezzio/mezzio-helpers": "^5.3",
+        "mezzio/mezzio-problem-details": "^1.1",
+        "mezzio/mezzio-swoole": "^2.6",
+        "moontoast/math": "^1.2",
+        "phpseclib/bcmath_compat": "1.0.4",
+        "ramsey/uuid": "^4.0",
+        "roave/security-advisories": "dev-master",
+        "symfony/console": "^5.1",
+        "symfony/dotenv": "^5.1",
+        "symfony/lock": "^5.1",
+        "tuupola/cors-middleware": "^1.1"
+    },
+    "require-dev": {
+        "codeception/codeception": "^4.1",
+        "codeception/module-asserts": "^1.0.0",
+        "codeception/module-phpbrowser": "^1.0.0",
+        "codeception/module-rest": "^1.2",
+        "doctrine/coding-standard": "^8.0",
+        "filp/whoops": "^2.7.1",
+        "laminas/laminas-development-mode": "^3.2",
+        "mezzio/mezzio-tooling": "^1.3",
+        "phpspec/prophecy": "^1.10.3",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpstan/phpstan": "^0.12.31",
+        "phpunit/phpunit": "^7.5.20 || ^8.5.2 || ^9.0.1",
+        "robmorgan/phinx": "^0.12.3",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/App/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AppTest\\": "tests/unit/AppTest/"
+        }
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "@development-enable"
+        ],
+        "post-install-cmd": [
+            "@create-dir"
+        ],
+        "post-update-cmd": [
+            "@create-dir"
+        ],
+        "development-disable": "laminas-development-mode disable",
+        "development-enable": "laminas-development-mode enable",
+        "development-status": "laminas-development-mode status",
+        "create-dir": [
+            "mkdir -p data/logs data/cache data/cache/rate_limit data/cache/api tests/_output",
+            "chmod 777 data/logs data/cache data/cache/rate_limit data/cache/api tests/_output"
+        ],
+        "mezzio": "mezzio --ansi",
+        "check": [
+            "@cs-check",
+            "@phpstan"
+        ],
+        "ci": [
+            "@check",
+            "@test"
+        ],
+        "ci-test": [
+            "@copy-test-config",
+            "codecept run unit --coverage-html --no-colors",
+            "@remove-test-config"
+        ],
+        "clear-config-cache": "php bin/clear-config-cache.php",
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "phpstan": "php -d memory_limit=-1 vendor/bin/phpstan analyse -l 5 -c phpstan.neon src",
+        "serve": "php -S 0.0.0.0:8080 -t public/",
+        "test": [
+            "@copy-test-config",
+            "codecept run unit",
+            "@remove-test-config"
+        ],
+        "test-coverage": [
+            "@copy-test-config",
+            "codecept run unit --coverage-html",
+            "@remove-test-config"
+        ],
+        "copy-test-config": [
+            "cp tests/env.yml.dist tests/env.yml"
+        ],
+        "remove-test-config": [
+            "rm -f tests/env.yml"
+        ]
+    }
+}
