@@ -1,3 +1,5 @@
+![Tests](https://github.com/arielfreire/challenge-bravo/workflows/Node.js%20CI/badge.svg)
+
 # Challenge-Bravo
 
 API Rest para conversão monetária.
