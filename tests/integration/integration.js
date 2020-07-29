@@ -6,7 +6,7 @@ const host = process.env.HOST;
 
 newman.run(
     {
-        collection: require('../bravo.postman_collection.json'),
+        collection: require('./bravo.postman_collection.json'),
         reporters: 'cli',
         environment: {
             id: '4454509f-00c3-fd32-d56c-ac1537f31415',
