@@ -1,6 +1,6 @@
-# Conversão de Moedas
+# Últimas Cotações
 
-Retorna a taxa atual de cambio baseada na moeda de referência USD
+Retorna a taxa atual de cambio para todas as moedas cadastradas, com base na moeda de referência USD.
 
 **URL** : `/api/currency/exchange/latest`
 

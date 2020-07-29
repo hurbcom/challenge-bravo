@@ -1,4 +1,4 @@
-# Remover Moedas
+# Remoção de Moedas
 
 Remove moedas cadastradas no sistema.
 
@@ -12,7 +12,7 @@ Remove moedas cadastradas no sistema.
 
 ## Sucesso
 
-**Condição** : Se a chave esta cadastrada.
+**Condição** : Se a chave estiver cadastrada.
 
 **Code** : `204 NO CONTENT`
 
