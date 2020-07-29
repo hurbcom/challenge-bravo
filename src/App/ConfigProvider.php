@@ -24,7 +24,6 @@ use App\Service\ExchangeService;
 use App\Service\ExchangeServiceFactory;
 use App\Service\ExternalApiService;
 use App\Service\ExternalApiServiceFactory;
-use ArrayObject;
 use Laminas\Hydrator\ArraySerializableHydrator;
 use Mezzio\Hal\Metadata\MetadataMap;
 use Mezzio\Hal\Metadata\RouteBasedCollectionMetadata;
@@ -86,12 +85,6 @@ class ConfigProvider
             [
                 '__class__' => RouteBasedResourceMetadata::class,
                 'resource_class' => CurrencyEntity::class,
-                'route' => 'v1.currency.entity',
-                'extractor' => ArraySerializableHydrator::class,
-            ],
-            [
-                '__class__' => RouteBasedResourceMetadata::class,
-                'resource_class' => ArrayObject::class,
                 'route' => 'v1.currency.entity',
                 'extractor' => ArraySerializableHydrator::class,
             ],
