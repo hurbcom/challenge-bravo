@@ -31,7 +31,7 @@ class CurrencyService {
                 availableCoin.type
             );
             this.dao.insert(newCurrency);
-            this.exchangeService.updateHistoricalExchangeRates();
+            await this.exchangeService.updateHistoricalExchangeRates();
             return newCurrency;
         }
         throw new ErrorMessage(400, `No support for given currency key: ${newKey}`);

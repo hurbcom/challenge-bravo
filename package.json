@@ -5,8 +5,9 @@
     "main": "./src/app.js",
     "scripts": {
         "dev": "nodemon",
-        "unit-test": "jest",
-        "integration-test": "node ./tests/integration.js",
+        "unit-test": "jest --coverage",
+        "integration-test": "node ./tests/integration/integration.js",
+        "load-test": "artillery run ./tests/load/load-test.yml",
         "lint": "eslint src"
     },
     "repository": {
@@ -32,6 +33,7 @@
         "typedi": "^0.8.0"
     },
     "devDependencies": {
+        "artillery": "^1.6.1",
         "babel-eslint": "^10.1.0",
         "eslint": "^7.2.0",
         "eslint-config-airbnb": "^18.2.0",
