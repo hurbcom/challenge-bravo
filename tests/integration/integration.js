@@ -1,6 +1,6 @@
 require('dotenv').config();
 const newman = require('newman');
-const Configuration = require('../src/config/config');
+const Configuration = require('../../src/config/config');
 
 const port = process.env.PORT || Configuration.DEFAULT_PORT;
 const host = process.env.HOST || Configuration.DEFAULT_HOST;
