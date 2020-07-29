@@ -6,7 +6,7 @@ return [
     'db' => [
         'mysql' => [
             'driver' => 'Pdo_Mysql',
-            'database' => 'challenge_bravo',
+            'database' => getenv('MYSQL_DBNAME') ?: 'challenge_bravo',
             'username' => getenv('MYSQL_USER'),
             'password' => getenv('MYSQL_PASS'),
             'hostname' => getenv('MYSQL_HOST'),

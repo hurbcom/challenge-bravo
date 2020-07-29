@@ -8,9 +8,18 @@ use Laminas\ConfigAggregator\ConfigAggregator;
 use Laminas\ConfigAggregator\PhpFileProvider;
 use Symfony\Component\Dotenv\Dotenv;
 
+$env = getenv('APPLICATION_ENV') ?: 'production';
+
+// loads global env
 $envFile = __DIR__ . '/../.env';
 if (file_exists($envFile)) {
-    (new Dotenv(true))->overload($envFile);
+    (new Dotenv())->usePutenv(true)->overload($envFile);
+}
+
+// loads specif enriroment variables
+$envFileSpecific = __DIR__ . '/../.env.' . $env;
+if (file_exists($envFileSpecific)) {
+    (new Dotenv())->usePutenv(true)->overload($envFileSpecific);
 }
 
 date_default_timezone_set(getenv('TIMEZONE'));

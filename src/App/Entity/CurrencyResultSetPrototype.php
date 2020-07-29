@@ -8,7 +8,7 @@ use Laminas\Db\ResultSet\AbstractResultSet;
 
 use function is_array;
 
-class CurrencyResultSetPropotype extends AbstractResultSet
+class CurrencyResultSetPrototype extends AbstractResultSet
 {
     public function current(): ?CurrencyEntity
     {
