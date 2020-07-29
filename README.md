@@ -1,6 +1,6 @@
 Hurb Challenge Bravo
 =================================================
-[![Build Status](https://semaphoreci.com/api/v1/mariojrrc/hurb-challenge-bravo/branches/master/badge.svg)](https://semaphoreci.com/mariojrrc/geonames-api-mezzio)
+[![Build Status](https://semaphoreci.com/api/v1/mariojrrc/challenge-bravo/branches/master/badge.svg)](https://semaphoreci.com/mariojrrc/geonames-api-mezzio)
 
 This project is an example of REST API written in PHP 7.4 to handle currency conversion. It is result of the [Hurb Challenge Bravo](https://github.com/hurbcom/challenge-bravo).
 The project makes use of [Swoole](https://www.swoole.co.uk/docs/) to handle at least 1000 requests per second. It also uses of [Crypto Compare API](https://min-api.cryptocompare.com/) to fetch data from.
