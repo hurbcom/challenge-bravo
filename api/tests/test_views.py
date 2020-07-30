@@ -18,3 +18,11 @@ class TestExchangeView(unittest.TestCase):
     def test_delete_exchange_should_return_not_implemented(self):
         response = self.test_app.delete(self.url)
         self.assertEqual(response.status_code, 405)
+
+    def test_get_exchange_should_return_ok(self):
+        response = self.test_app.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_exchange_should_return_json(self):
+        response = self.test_app.get(self.url)
+        self.assertEqual(response.content_type, 'application/json')
