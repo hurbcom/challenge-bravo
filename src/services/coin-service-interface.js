@@ -6,8 +6,13 @@ class ICoinService {
     }
 
     async getAll() {
-        const coinGeckApiResponse = await this.coinService.exchangeRates.all();
-        return coinGeckApiResponse.data.rates;
+        try {
+            const coinGeckApiResponse = await this.coinService.exchangeRates.all();
+            return coinGeckApiResponse.data.rates;
+        } catch (error) {
+            console.error(error);
+        }
+        return {};
     }
 }
 
