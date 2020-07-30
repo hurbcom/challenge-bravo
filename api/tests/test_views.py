@@ -1,3 +1,4 @@
+import json
 import unittest
 
 from api.app import app
@@ -26,3 +27,13 @@ class TestExchangeView(unittest.TestCase):
     def test_get_exchange_should_return_json(self):
         response = self.test_app.get(self.url)
         self.assertEqual(response.content_type, 'application/json')
+
+    def test_get_exchange_should_return_default_exchange(self):
+        response = self.test_app.get(self.url)
+        data = json.loads(response.get_data(as_text=True))
+        self.assertEqual(data, {
+            'from': 'USD',
+            'to': 'BRL',
+            'amount': '1',
+            'value': '5,15'
+        })
