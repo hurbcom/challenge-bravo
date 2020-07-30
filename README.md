@@ -1,5 +1,20 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
+## Decisões de projeto
+
+### Framework
+Escolhi usar o flask como framework para esse projeto, por se tratar de um projeto simples um micro framework como o flask dá conta do recado. Poderia ter usado também o Tornado, gosto dele pela velocidade e por trabalhar com requisições assíncronas e não blocantes, mas para esse projeto fiquei com a opção mais simples.
+
+### Banco de dados
+Optei por não usar um banco de dados convencional (MySql, Postgres, MongoDb) e usar o Redis, isso porque as operações necessárias nesse projeto envolvem apenas chave e valor, e para isso o Redis é extremamente rápido e eficiente. Também escolhi o Redis para fazer uso dele como cache.
+
+Uma preocupação que todos tem com o Redis é o fato dele fazer o armazenamento em memória, como imaginei um tempo de cache muito curto para essa aplicação e os dados serão consumidos de outra API essa não é uma preocupação tão grande nesse projeto. Além disso é possível habilitar o Redis para guardar backups em disco.
+
+
+
+
+## Especificações
+
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
 
 A API deve, originalmente, converter entre as seguintes moedas:
