@@ -5,7 +5,7 @@ from api.app import app
 
 
 class TestExchangeView(unittest.TestCase):
-    url = '/exchange/'
+    url = '/convert/'
     test_app = app.test_client()
 
     def test_put_exchange_should_return_not_implemented(self):

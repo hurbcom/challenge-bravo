@@ -4,8 +4,8 @@ from flask import Flask, Response
 app = Flask(__name__)
 
 
-@app.route('/exchange/')
-def hello_world():
+@app.route('/convert/')
+def currency_converter():
     response = {
         'from': 'USD',
         'to': 'BRL',
