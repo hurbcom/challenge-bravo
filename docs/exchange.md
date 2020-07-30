@@ -32,6 +32,8 @@ Retorna a conversão das moedas fornecidas de acordo com a ultima cotação, con
 }
 ```
 
+-   referenceDate é a data em que foi solicitada a conversão.
+
 ## Erro
 
 **Condição** : Se alguma das chaves requeridas não estiverem cadastradas.

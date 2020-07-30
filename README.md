@@ -35,13 +35,35 @@ Endpoints relacionados à conversão entre moedas cadastradas no sistema.
 
 ## Testes
 
-### Unitario
+### Unitarion ( Jest )
 
-    npm run unit-test ( Jest )
+    npm run unit-test
 
-### Integração
+-   Exemplo
 
-    npm run integration-test ( Postman Collection com Newman )
+```bash
+> jest --coverage
+
+ PASS  tests/unit/services/coin-service-interface.test.js
+  Coin Gecko API
+    ✓ Should return a valid object (async version) (590 ms)
+
+---------------------------|---------|----------|---------|---------|-------------------
+File                       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+---------------------------|---------|----------|---------|---------|-------------------
+All files                  |      75 |      100 |     100 |      75 |
+ coin-service-interface.js |      75 |      100 |     100 |      75 | 13-15
+---------------------------|---------|----------|---------|---------|-------------------
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        4.162 s, estimated 8 s
+Ran all test suites.
+```
+
+### Integração ( Postman Collection com Newman )
+
+    npm run integration-test
 
 -   Exemplo
 
@@ -111,6 +133,12 @@ Endpoints relacionados à conversão entre moedas cadastradas no sistema.
 	└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Carga
+### Carga (Artillery)
 
-    `npm run load-test` (Artillery)
+    npm run load-test
+
+## TO-DO
+
+-   Aumentar a cobertura de testes utilizando mocks para as respostas vindas do BD.
+-   Adicionar um middleware de filtro padrão
+-   Aperfeiçoar Logging da aplicação.
