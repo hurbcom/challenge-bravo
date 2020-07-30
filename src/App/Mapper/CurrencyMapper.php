@@ -6,6 +6,7 @@ namespace App\Mapper;
 
 use App\Entity\CollectionInterface;
 use App\Entity\CurrencyEntity;
+use App\Entity\CurrencyResultSetPrototype;
 use App\Entity\EntityInterface;
 use DateTimeImmutable;
 use Laminas\Cache\Storage\StorageInterface;
@@ -126,7 +127,7 @@ class CurrencyMapper implements MapperInterface
         $result = $this->tableGateway->select(static function (Select $select) use ($names): void {
             $select->where((new Where())->in('name', $names));
         });
-        assert($result instanceof ResultSet);
+        assert($result instanceof CurrencyResultSetPrototype);
         if ($result->count() !== count(array_unique($names))) {
             return null;
         }
