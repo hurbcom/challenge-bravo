@@ -12,6 +12,8 @@ class Configuration {
     static MONGODB_DEFAULT_URL = 'mongodb://mongo:27017/';
 
     static CORS_ALLOW_ORIGIN = '*';
+
+    static DEFAULT_CURRENCY_KEYS = ['usd', 'brl', 'eur', 'eth', 'btc'];
 }
 
 module.exports = Configuration;

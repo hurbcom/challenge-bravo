@@ -16,7 +16,13 @@ class CurrencyController {
     async addCurrency(req, res) {
         try {
             const key = this.sanitizeCurrencyKey(req.body.key);
-            const newCurrency = await this.currencyService.addCurrency(key);
+
+            const existingKey = await this.currencyService.getExistingCurrency(key);
+            if (existingKey) {
+                throw new ErrorMessage(400, `Key ${key} is already available`);
+            }
+
+            const newCurrency = await this.currencyService.addCurrencyIfNew(key);
             return res.status(201).json(newCurrency);
         } catch (error) {
             const status = error.status || 500;

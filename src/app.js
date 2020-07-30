@@ -17,8 +17,13 @@ app.use(express.json());
 // API Routes
 app.use('/api', Router);
 
-app.listen(port, () => {
-    console.log(`Challenge Bravo REST API server started on: ${port}`);
-});
-const updateJob = Container.get(UpdateExchangeRatesJob);
-updateJob.initJob();
+(async () => {
+    // HTTP Server
+    app.listen(port, () => {
+        console.log(`Challenge Bravo REST API server started on port '${port}'`);
+    });
+
+    // Currncy update Scheduler
+    const updateJob = Container.get(UpdateExchangeRatesJob);
+    await updateJob.initJob();
+})();

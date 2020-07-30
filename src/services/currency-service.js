@@ -16,20 +16,31 @@ class CurrencyService {
         return currentCurrencies;
     }
 
-    async addCurrency(newKey) {
+    async getExistingCurrency(key) {
+        const existingKey = await this.dao.findByKey(key);
+        if (existingKey) {
+            return existingKey;
+        }
+        return null;
+    }
+
+    async addCurrencyIfNew(newKey) {
+        const existingKey = await this.dao.findByKey(newKey);
+        if (existingKey) {
+            return existingKey;
+        }
+
         const availableCoins = await this.coinService.getAll();
         const availableCoin = availableCoins[newKey];
+
         if (availableCoin) {
-            const hasKey = await this.dao.findByKey(newKey);
-            if (hasKey) {
-                throw new ErrorMessage(400, `Key ${newKey} is already available`);
-            }
             const newCurrency = new Currency(
                 newKey,
                 availableCoin.name,
                 availableCoin.unit,
                 availableCoin.type
             );
+
             this.dao.insert(newCurrency);
             await this.exchangeService.updateHistoricalExchangeRates();
             return newCurrency;
