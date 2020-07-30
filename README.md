@@ -3,7 +3,7 @@ Hurb Challenge Bravo
 [![Build Status](https://semaphoreci.com/api/v1/mariojrrc/challenge-bravo/branches/master/badge.svg)](https://semaphoreci.com/mariojrrc/geonames-api-mezzio)
 
 This project is an example of REST API written in PHP 7.4 to handle currency conversion. It is result of the [Hurb Challenge Bravo](https://github.com/hurbcom/challenge-bravo).
-The project makes use of [Swoole](https://www.swoole.co.uk/docs/) to handle at least 1000 requests per second. It also uses of [Crypto Compare API](https://min-api.cryptocompare.com/) to fetch data from.
+The project makes use of [Swoole](https://www.swoole.co.uk/docs/) to handle at least 1000 requests per second. It also uses [Crypto Compare API](https://min-api.cryptocompare.com/) to fetch data from.
 
 It basically has two endpoints that allow us to perform some CRUD operations:
 
@@ -12,7 +12,8 @@ It basically has two endpoints that allow us to perform some CRUD operations:
 
 The endpoints are protected by authorization header tokens in the following format `X-Api-Key: uuid`. It has two types of tokens defined in the file `.env` on project's root folder. One token is to perform some "Admin level" operations, such as create, update and delete. And the other one is to perform only read operations.
 
-Note: Tokens have rate-limit params setted up. You can configure them in `config/autoload/api-credentials.global.php` file. By default, it allow us to perform 2000 requests per second.
+Note: Tokens committed to this repo for are for testing purpose only. For production environment, credentials should not be available in your version control.
+Note: Tokens have rate-limit params defined. You can configure them in `config/autoload/api-credentials.global.php` file. By default, it allow us to perform 2000 requests per second.
 
 ## DOCS
 The endpoint's documentation is located in `public/doc` folder. It was written on top of OpenAPI v3 notation.
