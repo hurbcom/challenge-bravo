@@ -7,7 +7,7 @@
         "dev": "nodemon",
         "unit-test": "jest --coverage",
         "integration-test": "node ./tests/integration/integration.js",
-        "load-test": "artillery run ./tests/load/load-test.yml",
+        "load-test": "artillery quick --count 1 -n 1000 -d 30 'http://localhost:8000/api/currency/exchange?from=USD&to=BRL&amount=1.0'",
         "lint": "eslint src"
     },
     "repository": {

@@ -1,9 +1,0 @@
-config:
-    target: http://192.168.99.100:8000
-    phases:
-        - duration: 60
-          arrivalRate: 1
-scenarios:
-    - flow:
-          - get:
-                url: '/api/currency/exchange?from=USD&to=BRL&amount=1.0'
