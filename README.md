@@ -23,7 +23,7 @@ The endpoint's documentation is located in `public/doc` folder. It was written o
 **Using it with Docker**
 1. `docker-compose up`
 2. `docker exec -t challenge-bravo-php bash -c 'PHINX_DBHOST=challenge-bravo-mysql PHINX_DBUSER=mario PHINX_DBPASS=mariocosta ./vendor/bin/phinx migrate'`
-3. Make calls to the endpoints via [Postman](https://www.getpostman.com/) or similar in the following address `0.0.0.0:8080/v1/health` to check if it's working.
+3. Make calls to the endpoints via [Postman](https://www.getpostman.com/) or similar in the following address `0.0.0.0:8080/health` to check if it's live.
 
 ** Using without docker. OBS: PHP 7.4, MySQL, and [Swoole](https://www.swoole.co.uk/docs/) extensions are required**
 1. Rename the file `.env.dist` to `.env` and fill out the required info
