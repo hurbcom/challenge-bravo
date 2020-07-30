@@ -20,6 +20,7 @@ class CurrencyController {
             return res.status(201).json(newCurrency);
         } catch (error) {
             const status = error.status || 500;
+            console.error(error.message);
             return res.status(status).json(new ErrorMessage(status, error.message));
         }
     }
@@ -31,6 +32,7 @@ class CurrencyController {
             return res.status(204).json();
         } catch (error) {
             const status = error.status || 500;
+            console.error(error.message);
             return res.status(status).json(new ErrorMessage(status, error.message));
         }
     }
@@ -38,7 +40,9 @@ class CurrencyController {
     sanitizeCurrencyKey(key) {
         const mongoSanitizedBody = this.sanitize(key);
         if (!mongoSanitizedBody || typeof mongoSanitizedBody !== 'string') {
-            throw new ErrorMessage(400, 'No valid key in body');
+            const message = 'No valid key in body';
+            console.error(message);
+            throw new ErrorMessage(400, message);
         }
         return mongoSanitizedBody.toLowerCase();
     }

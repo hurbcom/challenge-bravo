@@ -17,6 +17,7 @@ class ExchangeController {
             return res.json(await this.exchangeService.exchangeFromTo(from, to, amount));
         } catch (error) {
             const status = error.status || 500;
+            console.error(error.message);
             return res.status(status).json(new ErrorMessage(status, error.message));
         }
     }
@@ -37,8 +38,10 @@ class ExchangeController {
 
     sanitizeCurrencyKey(key) {
         const mongoSanitizedKey = this.sanitize(key);
-        if (!mongoSanitizedKey || typeof mongoSanitizedKey !== 'string') {
-            throw new ErrorMessage(400, 'No valid key in query parameter.');
+        if (!mongoSanitizedKey) {
+            const message = `No valid key '${key}' in query parameter.`;
+            console.error(message);
+            throw new ErrorMessage(400, message);
         }
         return mongoSanitizedKey.toLowerCase();
     }
