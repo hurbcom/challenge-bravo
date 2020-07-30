@@ -10,7 +10,6 @@ use App\Entity\CurrencyResultSetPrototype;
 use App\Entity\EntityInterface;
 use DateTimeImmutable;
 use Laminas\Cache\Storage\StorageInterface;
-use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Where;
 use Laminas\Db\TableGateway\TableGateway;
