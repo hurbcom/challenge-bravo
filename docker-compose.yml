@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
     image: redis:6.0.6-alpine
-    command: redis-server --requirepass exchange@123
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
       - "6379:6379"
   web:
@@ -12,6 +12,6 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - .:/var/www/exchange-api
+      - .:/var/www/currency-api
     depends_on:
       - db
