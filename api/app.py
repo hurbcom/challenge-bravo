@@ -43,3 +43,23 @@ def currencies():
         'results': results
     }
     return Response(json.dumps(response), status=200, mimetype='application/json')
+
+
+@app.route('/currencies/', methods=['POST'])
+def post_currencies():
+    currency_id = request.json.get('id')
+    redisConnector.hset('currencies', currency_id, 1)
+
+    response = {
+        'id': currency_id,
+        'rate': 1
+    }
+    return Response(json.dumps(response), status=201, mimetype='application/json')
+
+
+@app.route('/currencies/<string:currency>/', methods=['DELETE'])
+def delete_currencies(currency):
+    redisConnector.hdel('currencies', currency)
+
+    response = {}
+    return Response(json.dumps(response), status=204, mimetype='application/json')
