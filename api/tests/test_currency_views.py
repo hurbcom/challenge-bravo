@@ -1,8 +1,7 @@
 import json
-import redis
 import unittest
 
-from api.app import app
+from api.app import app, redisConnector
 
 
 class TestCurrenciesView(unittest.TestCase):
@@ -10,7 +9,7 @@ class TestCurrenciesView(unittest.TestCase):
     test_app = app.test_client()
 
     def setUp(self):
-        self.redis = redis.Redis(host='db', port=6379, db=0, password='sOmE_sEcUrE_pAsS', encoding="utf-8", decode_responses=True)
+        self.redis = redisConnector
         self.redis.hset('currencies', 'USD', 1)
         self.redis.hset('currencies', 'BRL', 5.15)
 
