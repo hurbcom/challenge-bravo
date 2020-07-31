@@ -1,7 +1,10 @@
 import json
+import redis
 
 from flask import Flask, Response, request
 app = Flask(__name__)
+
+redisConnector = redis.Redis(host='db', port=6379, db=0, password='sOmE_sEcUrE_pAsS', encoding="utf-8", decode_responses=True)
 
 
 @app.route('/convert/')
@@ -21,4 +24,22 @@ def currency_converter():
         'value': value
     }
 
+    return Response(json.dumps(response), status=200, mimetype='application/json')
+
+
+@app.route('/currencies/', methods=['GET'])
+def currencies():
+    currencies = redisConnector.hgetall('currencies')
+    results = []
+
+    for currency in currencies.items():
+        results.append({
+            'id': currency[0],
+            'rate': float(currency[1])
+        })
+
+    response = {
+        'count': len(results),
+        'results': results
+    }
     return Response(json.dumps(response), status=200, mimetype='application/json')
