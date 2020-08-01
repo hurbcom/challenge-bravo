@@ -61,6 +61,10 @@ class TestCurrenciesView(unittest.TestCase):
             'rate': 1
         })
 
+    def test_post_currencies_should_return_conflict_when_duplicate(self):
+        response = self.test_app.post(self.url, json={'id': 'USD'})
+        self.assertEqual(response.status_code, 409)
+
 
 class TestCurrencieDeleteView(unittest.TestCase):
     url = '/currencies/BRL/'
@@ -77,3 +81,7 @@ class TestCurrencieDeleteView(unittest.TestCase):
     def test_delete_currencies_should_return_ok(self):
         response = self.test_app.delete(self.url)
         self.assertEqual(response.status_code, 204)
+
+    def test_delete_currencies_should_not_found_when_id_is_wrong(self):
+        response = self.test_app.delete('/currencies/WRONG/')
+        self.assertEqual(response.status_code, 404)
