@@ -1,12 +1,20 @@
 import json
 import unittest
 
-from api.app import app
+from api.app import app, redisConnector
 
 
 class TestConvertView(unittest.TestCase):
     url = '/convert/'
     test_app = app.test_client()
+    redis = redisConnector
+
+    def setUp(self):
+        self.redis.hset('currencies', 'USD', 1)
+        self.redis.hset('currencies', 'BRL', 5.15)
+
+    def tearDown(self):
+        self.redis.delete('currencies')
 
     def test_put_convert_should_return_not_implemented(self):
         response = self.test_app.put(self.url)
@@ -51,3 +59,11 @@ class TestConvertView(unittest.TestCase):
             'amount': 1,
             'value': 0.19
         })
+
+    def test_get_convert_should_return_not_found_when_currencies_are_wrong(self):
+        response = self.test_app.get(self.url, query_string={
+            'from': 'EUR',
+            'to': 'USD',
+            'amount': 1
+        })
+        self.assertEqual(response.status_code, 404)
