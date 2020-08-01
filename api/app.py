@@ -12,16 +12,20 @@ def currency_converter():
     currency_from = request.args.get('from', 'USD')
     currency_to = request.args.get('to', 'BRL')
     amount = request.args.get('amount', 1, type=int)
-    value = 5.15
 
-    if currency_from == 'BRL':
-        value = 0.19
+    currency_from_rate = redisConnector.hget('currencies', currency_from)
+    currency_to_rate = redisConnector.hget('currencies', currency_to)
+
+    if not currency_from_rate or not currency_to_rate:
+        return Response(json.dumps({}), status=404, mimetype='application/json')
+
+    value = amount / float(currency_from_rate) * float(currency_to_rate)
 
     response = {
         'from': currency_from,
         'to': currency_to,
         'amount': amount,
-        'value': value
+        'value': float(f'{value:.2f}')
     }
 
     return Response(json.dumps(response), status=200, mimetype='application/json')
@@ -48,18 +52,27 @@ def currencies():
 @app.route('/currencies/', methods=['POST'])
 def post_currencies():
     currency_id = request.json.get('id')
-    redisConnector.hset('currencies', currency_id, 1)
+    result = redisConnector.hset('currencies', currency_id, 1)
+    status = 201
 
     response = {
         'id': currency_id,
         'rate': 1
     }
-    return Response(json.dumps(response), status=201, mimetype='application/json')
+
+    if not result:
+        status = 409
+
+    return Response(json.dumps(response), status=status, mimetype='application/json')
 
 
 @app.route('/currencies/<string:currency>/', methods=['DELETE'])
 def delete_currencies(currency):
-    redisConnector.hdel('currencies', currency)
-
+    result = redisConnector.hdel('currencies', currency)
     response = {}
-    return Response(json.dumps(response), status=204, mimetype='application/json')
+    status = 204
+
+    if not result:
+        status = 404
+
+    return Response(json.dumps(response), status=status, mimetype='application/json')
