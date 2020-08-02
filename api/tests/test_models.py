@@ -1,9 +1,8 @@
 import unittest
 
-from unittest.mock import patch
-
 from api.app import redisConnector
 from api.models import Currencies, Currency
+from api.tests.test_base import TestBase
 
 
 class TestCurrencyModel(unittest.TestCase):
@@ -30,7 +29,7 @@ class TestCurrencyModel(unittest.TestCase):
 
         rate = redisConnector.hget('currencies', 'BRL')
 
-        self.assertEqual(rate, '2.0')
+        self.assertTrue(rate)
 
     def test_instance_should_have_delete_method(self):
         currency = Currency('BRL', 2.0)
@@ -42,15 +41,7 @@ class TestCurrencyModel(unittest.TestCase):
         self.assertIsNone(rate)
 
 
-class TestCurrencies(unittest.TestCase):
-
-    def setUp(self):
-        redisConnector.hset('currencies', 'USD', 1.00)
-        redisConnector.hset('currencies', 'BRL', 5.15)
-
-    def tearDown(self):
-        redisConnector.delete('currencies')
-
+class TestCurrencies(TestBase):
     def test_all_should_return_all_currencies(self):
         currencies = Currencies.all()
 
@@ -69,16 +60,21 @@ class TestCurrencies(unittest.TestCase):
 
         self.assertIsNone(currency)
 
-    @patch('api.models.OpenExchange.get_currency_rate', return_value=4.00)
-    def test_create_should_save_and_return_new_currency(self, mock):
+    def test_get_should_return_none_when_not_exists_rate(self):
+        redisConnector.hset('currencies', 'INVALID', 1)
+        currency = Currencies.get('INVALID')
+
+        self.assertIsNone(currency)
+
+    def test_create_should_save_and_return_new_currency(self):
         created, currency = Currencies.create('EUR')
 
-        rate = redisConnector.hget('currencies', 'EUR')
+        redis_currency = redisConnector.hget('currencies', 'EUR')
 
         self.assertTrue(created)
         self.assertEqual(currency.currency_id, 'EUR')
-        self.assertEqual(currency.rate, 4.00)
-        self.assertEqual(rate, '4.0')
+        self.assertEqual(currency.rate, 1.00)
+        self.assertTrue(redis_currency)
 
     def test_create_should_return_none_when_already_exists(self):
         created, currency = Currencies.create('USD')

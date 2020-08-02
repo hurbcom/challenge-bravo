@@ -1,7 +1,7 @@
 import json
 
 from flask import Response, request
-from api.app import app, redisConnector
+from api.app import app
 from api.models import Currencies
 
 
@@ -11,6 +11,9 @@ def currency_converter():
     currency_to_id = request.args.get('to', 'BRL')
     amount = request.args.get('amount', 1, type=int)
 
+    if amount < 0:
+        amount = amount * -1
+
     currency_from = Currencies.get(currency_from_id)
     currency_to = Currencies.get(currency_to_id)
 
@@ -18,13 +21,13 @@ def currency_converter():
         response = {}
         status = 404
     else:
-        value = amount / currency_from.rate * currency_to.rate
+        value = round(amount / currency_from.rate * currency_to.rate, 2)
 
         response = {
             'from': currency_from.currency_id,
             'to': currency_to.currency_id,
             'amount': amount,
-            'value': float(f'{value:.2f}')
+            'value': value
         }
 
         status = 200

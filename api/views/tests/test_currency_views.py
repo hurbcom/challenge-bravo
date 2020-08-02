@@ -1,22 +1,10 @@
 import json
-import unittest
 
-from unittest.mock import patch
-
-from api.app import app, redisConnector
+from api.tests.test_base import TestBase
 
 
-class TestCurrenciesView(unittest.TestCase):
+class TestCurrenciesView(TestBase):
     url = '/currencies/'
-    test_app = app.test_client()
-    redis = redisConnector
-
-    def setUp(self):
-        self.redis.hset('currencies', 'USD', 1)
-        self.redis.hset('currencies', 'BRL', 5.15)
-
-    def tearDown(self):
-        self.redis.delete('currencies')
 
     def test_put_currencies_should_return_not_implemented(self):
         response = self.test_app.put(self.url)
@@ -42,7 +30,7 @@ class TestCurrenciesView(unittest.TestCase):
             'results': [
                 {
                     'id': 'USD',
-                    'rate': 1
+                    'rate': 1.00
                 }, {
                     'id': 'BRL',
                     'rate': 5.15
@@ -50,14 +38,12 @@ class TestCurrenciesView(unittest.TestCase):
             ]
         })
 
-    @patch('api.models.OpenExchange.get_currency_rate', return_value=1.00)
-    def test_post_currencies_should_return_created(self, mock):
+    def test_post_currencies_should_return_created(self):
         response = self.test_app.post(self.url, json={'id': 'EUR'})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
-    @patch('api.models.OpenExchange.get_currency_rate', return_value=1.00)
-    def test_post_currencies_should_return_currency_information(self, mock):
+    def test_post_currencies_should_return_currency_information(self):
         response = self.test_app.post(self.url, json={'id': 'EUR'})
         data = json.loads(response.get_data(as_text=True))
         self.assertEqual(data, {
@@ -70,17 +56,8 @@ class TestCurrenciesView(unittest.TestCase):
         self.assertEqual(response.status_code, 409)
 
 
-class TestCurrencieDeleteView(unittest.TestCase):
+class TestCurrencieDeleteView(TestBase):
     url = '/currencies/BRL/'
-    test_app = app.test_client()
-    redis = redisConnector
-
-    def setUp(self):
-        self.redis.hset('currencies', 'USD', 1)
-        self.redis.hset('currencies', 'BRL', 5.15)
-
-    def tearDown(self):
-        self.redis.delete('currencies')
 
     def test_delete_currencies_should_return_ok(self):
         response = self.test_app.delete(self.url)

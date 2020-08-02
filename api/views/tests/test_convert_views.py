@@ -1,20 +1,10 @@
 import json
-import unittest
 
-from api.app import app, redisConnector
+from api.tests.test_base import TestBase
 
 
-class TestConvertView(unittest.TestCase):
+class TestConvertView(TestBase):
     url = '/convert/'
-    test_app = app.test_client()
-    redis = redisConnector
-
-    def setUp(self):
-        self.redis.hset('currencies', 'USD', 1)
-        self.redis.hset('currencies', 'BRL', 5.15)
-
-    def tearDown(self):
-        self.redis.delete('currencies')
 
     def test_put_convert_should_return_not_implemented(self):
         response = self.test_app.put(self.url)
@@ -39,6 +29,7 @@ class TestConvertView(unittest.TestCase):
     def test_get_convert_should_return_default_conversion(self):
         response = self.test_app.get(self.url)
         data = json.loads(response.get_data(as_text=True))
+
         self.assertEqual(data, {
             'from': 'USD',
             'to': 'BRL',
@@ -52,7 +43,25 @@ class TestConvertView(unittest.TestCase):
             'to': 'USD',
             'amount': 2
         })
+
         data = json.loads(response.get_data(as_text=True))
+
+        self.assertEqual(data, {
+            'from': 'BRL',
+            'to': 'USD',
+            'amount': 2,
+            'value': 0.39
+        })
+
+    def test_get_convert_should_return_conversion_positive(self):
+        response = self.test_app.get(self.url, query_string={
+            'from': 'BRL',
+            'to': 'USD',
+            'amount': -2
+        })
+
+        data = json.loads(response.get_data(as_text=True))
+
         self.assertEqual(data, {
             'from': 'BRL',
             'to': 'USD',
@@ -66,4 +75,5 @@ class TestConvertView(unittest.TestCase):
             'to': 'USD',
             'amount': 1
         })
+
         self.assertEqual(response.status_code, 404)
