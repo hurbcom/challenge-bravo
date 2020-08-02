@@ -1,6 +1,8 @@
 import requests
 
-from api.app import app
+from api.app import app, cache
+
+ONE_HOUR = 3600
 
 class OpenExchange(object):
 
@@ -14,6 +16,7 @@ class OpenExchange(object):
     def get_currencies_rate(self):
         return self._get_rates_from_api()
 
+    @cache.memoize(ONE_HOUR)
     def _get_rates_from_api(self):
         latest_url = 'https://openexchangerates.org/api/latest.json'
         url = F'{latest_url}?app_id={self.app_id}&base=USD'
@@ -26,3 +29,6 @@ class OpenExchange(object):
 
         app.logger.error(F'OpenExchange: Error on access API (Status code: {response.status_code}).')
         return {}
+
+    def __repr__(self):
+        return 'OpenExchange'

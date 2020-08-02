@@ -3,6 +3,7 @@ import requests
 
 from unittest.mock import patch
 
+from api.app import cache
 from api.open_exchange import OpenExchange
 
 FAKE_RATES = {
@@ -27,19 +28,28 @@ def fake_500():
 class TestIntegrationOpenExchange(unittest.TestCase):
     exchange = OpenExchange('9e99dd7952614fb494bc2fa538c7a7c4')
 
-    def test_get_currencies_rate_should_return_all_currencies_rates(self):
-        currencies = self.exchange.get_currencies_rate()
+    def setUp(self):
+        cache.delete_memoized(OpenExchange._get_rates_from_api)
+
+    def test_get_rates_from_api_should_return_all_currencies_rates(self):
+        currencies = self.exchange._get_rates_from_api()
 
         self.assertIsInstance(currencies, dict)
         self.assertIsNotNone(currencies['BRL'])
 
-    def test_get_currency_rate_should_return_current_rate(self):
-        currency_rate = self.exchange.get_currency_rate('BRL')
-        self.assertIsInstance(currency_rate, float)
+    def test_get_rates_from_api_should_be_cached(self):
+        self.exchange._get_rates_from_api()
+
+        with patch('api.open_exchange.requests.get') as mock:
+            self.exchange._get_rates_from_api()
+            self.assertFalse(mock.called)
 
 
 class TestOpenExchange(unittest.TestCase):
     exchange = OpenExchange('9e99dd7952614fb494bc2fa538c7a7c4')
+
+    def setUp(self):
+        cache.delete_memoized(OpenExchange._get_rates_from_api)
 
     @patch('api.open_exchange.requests.get', return_value=fake_200())
     def test_get_currencies_rate_should_return_all_currencies(self, mock):
