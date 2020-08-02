@@ -4,17 +4,19 @@ from flask import Response, request
 from api.app import app
 from api.models import Currencies
 
+JSON = 'application/json'
+
 
 @app.route('/currencies/', methods=['GET'])
 def currencies():
     currencies = Currencies.all()
 
-    response = {
+    response = json.dumps({
         'count': len(currencies),
         'results': [currency.to_dict() for currency in currencies]
-    }
+    })
 
-    return Response(json.dumps(response), status=200, mimetype='application/json')
+    return Response(response, mimetype=JSON)
 
 
 @app.route('/currencies/', methods=['POST'])
@@ -27,7 +29,8 @@ def post_currencies():
     else:
         status = 409
 
-    return Response(json.dumps(new_currency.to_dict()), status=status, mimetype='application/json')
+    response = json.dumps(new_currency.to_dict())
+    return Response(response, status=status, mimetype=JSON)
 
 
 @app.route('/currencies/<string:currency_id>/', methods=['DELETE'])
@@ -40,4 +43,4 @@ def delete_currencies(currency_id):
     else:
         status = 404
 
-    return Response('{}', status=status, mimetype='application/json')
+    return Response('{}', status=status, mimetype=JSON)

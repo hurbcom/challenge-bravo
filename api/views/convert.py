@@ -2,27 +2,35 @@ import json
 
 from flask import Response, request
 from api.app import app, redisConnector
+from api.models import Currencies
 
 
 @app.route('/convert/')
 def currency_converter():
-    currency_from = request.args.get('from', 'USD')
-    currency_to = request.args.get('to', 'BRL')
+    currency_from_id = request.args.get('from', 'USD')
+    currency_to_id = request.args.get('to', 'BRL')
     amount = request.args.get('amount', 1, type=int)
 
-    currency_from_rate = redisConnector.hget('currencies', currency_from)
-    currency_to_rate = redisConnector.hget('currencies', currency_to)
+    currency_from = Currencies.get(currency_from_id)
+    currency_to = Currencies.get(currency_to_id)
 
-    if not currency_from_rate or not currency_to_rate:
-        return Response(json.dumps({}), status=404, mimetype='application/json')
+    if not currency_from or not currency_to:
+        response = {}
+        status = 404
+    else:
+        value = amount / currency_from.rate * currency_to.rate
 
-    value = amount / float(currency_from_rate) * float(currency_to_rate)
+        response = {
+            'from': currency_from.currency_id,
+            'to': currency_to.currency_id,
+            'amount': amount,
+            'value': float(f'{value:.2f}')
+        }
 
-    response = {
-        'from': currency_from,
-        'to': currency_to,
-        'amount': amount,
-        'value': float(f'{value:.2f}')
-    }
+        status = 200
 
-    return Response(json.dumps(response), status=200, mimetype='application/json')
+    return Response(
+        json.dumps(response),
+        status=status,
+        mimetype='application/json'
+    )
