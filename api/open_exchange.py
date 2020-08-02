@@ -4,6 +4,7 @@ from api.app import app, cache
 
 ONE_HOUR = 3600
 
+
 class OpenExchange(object):
 
     def __init__(self, app_id):
