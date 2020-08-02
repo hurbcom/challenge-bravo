@@ -50,14 +50,14 @@ class TestConvertView(unittest.TestCase):
         response = self.test_app.get(self.url, query_string={
             'from': 'BRL',
             'to': 'USD',
-            'amount': 1
+            'amount': 2
         })
         data = json.loads(response.get_data(as_text=True))
         self.assertEqual(data, {
             'from': 'BRL',
             'to': 'USD',
-            'amount': 1,
-            'value': 0.19
+            'amount': 2,
+            'value': 0.39
         })
 
     def test_get_convert_should_return_not_found_when_currencies_are_wrong(self):
