@@ -22,7 +22,7 @@ def currencies():
 @app.route('/currencies/', methods=['POST'])
 def post_currencies():
     currency_id = request.json.get('id')
-    created, new_currency = Currencies.create(currency_id, 1)
+    created, new_currency = Currencies.create(currency_id)
 
     if created:
         status = 201

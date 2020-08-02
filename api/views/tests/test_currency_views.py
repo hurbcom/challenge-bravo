@@ -1,6 +1,8 @@
 import json
 import unittest
 
+from unittest.mock import patch
+
 from api.app import app, redisConnector
 
 
@@ -48,17 +50,19 @@ class TestCurrenciesView(unittest.TestCase):
             ]
         })
 
-    def test_post_currencies_should_return_created(self):
+    @patch('api.models.OpenExchange.get_currency_rate', return_value=1.00)
+    def test_post_currencies_should_return_created(self, mock):
         response = self.test_app.post(self.url, json={'id': 'EUR'})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
-    def test_post_currencies_should_return_currency_information(self):
+    @patch('api.models.OpenExchange.get_currency_rate', return_value=1.00)
+    def test_post_currencies_should_return_currency_information(self, mock):
         response = self.test_app.post(self.url, json={'id': 'EUR'})
         data = json.loads(response.get_data(as_text=True))
         self.assertEqual(data, {
             'id': 'EUR',
-            'rate': 1
+            'rate': 1.00
         })
 
     def test_post_currencies_should_return_conflict_when_duplicate(self):

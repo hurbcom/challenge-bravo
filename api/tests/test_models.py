@@ -1,5 +1,7 @@
 import unittest
 
+from unittest.mock import patch
+
 from api.app import redisConnector
 from api.models import Currencies, Currency
 
@@ -67,18 +69,19 @@ class TestCurrencies(unittest.TestCase):
 
         self.assertIsNone(currency)
 
-    def test_create_should_save_and_return_new_currency(self):
-        created, currency = Currencies.create('EUR', 3.00)
+    @patch('api.models.OpenExchange.get_currency_rate', return_value=4.00)
+    def test_create_should_save_and_return_new_currency(self, mock):
+        created, currency = Currencies.create('EUR')
 
         rate = redisConnector.hget('currencies', 'EUR')
 
         self.assertTrue(created)
         self.assertEqual(currency.currency_id, 'EUR')
-        self.assertEqual(currency.rate, 3.00)
-        self.assertEqual(rate, '3.0')
+        self.assertEqual(currency.rate, 4.00)
+        self.assertEqual(rate, '4.0')
 
     def test_create_should_return_none_when_already_exists(self):
-        created, currency = Currencies.create('USD', 3.00)
+        created, currency = Currencies.create('USD')
 
         self.assertFalse(created)
         self.assertEqual(currency.currency_id, 'USD')

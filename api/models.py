@@ -1,4 +1,5 @@
 from api.app import redisConnector
+from api.open_exchange import OpenExchange
 
 CURRENCIES_KEY = 'currencies'
 
@@ -46,11 +47,14 @@ class Currencies(object):
         return Currency(currency_id, rate)
 
     @classmethod
-    def create(cls, currency_id, rate):
+    def create(cls, currency_id):
         created = False
         currency = cls.get(currency_id)
 
         if not currency:
+            open_exchange = OpenExchange('9e99dd7952614fb494bc2fa538c7a7c4')
+            rate = open_exchange.get_currency_rate(currency_id)
+
             currency = Currency(currency_id, rate)
             created = currency.save()
 
