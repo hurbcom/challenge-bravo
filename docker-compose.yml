@@ -7,6 +7,7 @@ services:
       - "6379:6379"
   web:
     build: .
+    command: gunicorn --workers=3 --threads=3 --bind 0.0.0.0:5000 wsgi:app
     environment:
       - FLASK_APP=api/app.py
     ports:
@@ -15,3 +16,9 @@ services:
       - .:/var/www/currency-api
     depends_on:
       - db
+  nginx:
+    build: ./services/nginx
+    ports:
+      - "8000:80"
+    depends_on:
+      - web
