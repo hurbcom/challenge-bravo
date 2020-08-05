@@ -18,7 +18,6 @@ services:
       - db
   nginx:
     build: ./services/nginx
-    command: nginx
     ports:
       - "80:80"
     depends_on:
