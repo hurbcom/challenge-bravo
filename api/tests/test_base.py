@@ -2,9 +2,9 @@ import unittest
 
 from unittest.mock import patch
 
-from api.app import app, redisConnector
+from api.app import app, Redis
 
-OPEN_EXCHANGE_PATH = 'api.models.OpenExchange.get_currency_rate'
+OPEN_EXCHANGE_PATH = 'api.models.OpenExchangeApi.get_currency_rate'
 
 
 def mock_currency_rate(currency):
@@ -19,11 +19,10 @@ def mock_currency_rate(currency):
 
 class TestBase(unittest.TestCase):
     test_app = app.test_client()
-    redis = redisConnector
 
     def setUp(self):
-        self.redis.hset('currencies', 'USD', 1)
-        self.redis.hset('currencies', 'BRL', 1)
+        Redis.hset('currencies', 'USD', 1)
+        Redis.hset('currencies', 'BRL', 1)
 
         self.patcher = patch(
             OPEN_EXCHANGE_PATH,
@@ -32,5 +31,5 @@ class TestBase(unittest.TestCase):
         self.patcher.start()
 
     def tearDown(self):
-        self.redis.delete('currencies')
+        Redis.delete('currencies')
         self.patcher.stop()

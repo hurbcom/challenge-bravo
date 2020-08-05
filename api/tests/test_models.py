@@ -1,6 +1,6 @@
 import unittest
 
-from api.app import redisConnector
+from api.app import Redis
 from api.models import Currencies, Currency
 from api.tests.test_base import TestBase
 
@@ -8,7 +8,7 @@ from api.tests.test_base import TestBase
 class TestCurrencyModel(unittest.TestCase):
 
     def tearDown(self):
-        redisConnector.delete('currencies')
+        Redis.delete('currencies')
 
     def test_instance_model_should_create_new_object(self):
         currency = Currency('BRL', 2.0)
@@ -27,7 +27,7 @@ class TestCurrencyModel(unittest.TestCase):
         currency = Currency('BRL', 2.0)
         currency.save()
 
-        rate = redisConnector.hget('currencies', 'BRL')
+        rate = Redis.hget('currencies', 'BRL')
 
         self.assertTrue(rate)
 
@@ -36,7 +36,7 @@ class TestCurrencyModel(unittest.TestCase):
         currency.save()
         currency.delete()
 
-        rate = redisConnector.hget('currencies', 'BRL')
+        rate = Redis.hget('currencies', 'BRL')
 
         self.assertIsNone(rate)
 
@@ -61,7 +61,7 @@ class TestCurrencies(TestBase):
         self.assertIsNone(currency)
 
     def test_get_should_return_none_when_not_exists_rate(self):
-        redisConnector.hset('currencies', 'INVALID', 1)
+        Redis.hset('currencies', 'INVALID', 1)
         currency = Currencies.get('INVALID')
 
         self.assertIsNone(currency)
@@ -69,7 +69,7 @@ class TestCurrencies(TestBase):
     def test_create_should_save_and_return_new_currency(self):
         created, currency = Currencies.create('EUR')
 
-        redis_currency = redisConnector.hget('currencies', 'EUR')
+        redis_currency = Redis.hget('currencies', 'EUR')
 
         self.assertTrue(created)
         self.assertEqual(currency.currency_id, 'EUR')

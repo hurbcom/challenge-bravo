@@ -24,8 +24,8 @@ def currency_converter():
         value = round(amount / currency_from.rate * currency_to.rate, 2)
 
         response = {
-            'from': currency_from.currency_id,
-            'to': currency_to.currency_id,
+            'from': currency_from_id,
+            'to': currency_to_id,
             'amount': amount,
             'value': value
         }

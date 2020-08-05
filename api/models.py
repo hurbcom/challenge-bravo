@@ -1,7 +1,7 @@
-from api.app import redisConnector
-from api.open_exchange import OpenExchange
+from api.app import Redis, OpenExchangeApi, cache
 
 CURRENCIES_KEY = 'currencies'
+ONE_HOUR = 3600
 
 
 class Currency(object):
@@ -20,22 +20,20 @@ class Currency(object):
         }
 
     def save(self):
-        return redisConnector.hset(CURRENCIES_KEY, self.currency_id, 1)
+        return Redis.hset(CURRENCIES_KEY, self.currency_id, 1)
 
     def delete(self):
-        return redisConnector.hdel(CURRENCIES_KEY, self.currency_id)
+        return Redis.hdel(CURRENCIES_KEY, self.currency_id)
 
 
 class Currencies(object):
     @classmethod
     def all(cls):
-        currencies = redisConnector.hkeys(CURRENCIES_KEY)
+        currencies = Redis.hkeys(CURRENCIES_KEY)
         results = []
 
-        open_exchange = OpenExchange('9e99dd7952614fb494bc2fa538c7a7c4')
-
         for currency_id in currencies:
-            rate = open_exchange.get_currency_rate(currency_id)
+            rate = OpenExchangeApi.get_currency_rate(currency_id)
 
             if rate:
                 results.append(Currency(currency_id, rate))
@@ -43,14 +41,14 @@ class Currencies(object):
         return results
 
     @classmethod
+    @cache.memoize(ONE_HOUR)
     def get(cls, currency_id):
-        currency = redisConnector.hget(CURRENCIES_KEY, currency_id)
+        currency = Redis.hget(CURRENCIES_KEY, currency_id)
 
         if not currency:
             return None
 
-        open_exchange = OpenExchange('9e99dd7952614fb494bc2fa538c7a7c4')
-        rate = open_exchange.get_currency_rate(currency_id)
+        rate = OpenExchangeApi.get_currency_rate(currency_id)
 
         if not rate:
             return None
@@ -63,10 +61,12 @@ class Currencies(object):
         currency = cls.get(currency_id)
 
         if not currency:
-            open_exchange = OpenExchange('9e99dd7952614fb494bc2fa538c7a7c4')
-            rate = open_exchange.get_currency_rate(currency_id)
+            rate = OpenExchangeApi.get_currency_rate(currency_id)
 
             currency = Currency(currency_id, rate)
             created = currency.save()
 
         return created, currency
+
+    def __repr__(self):
+        return 'Currencies'
