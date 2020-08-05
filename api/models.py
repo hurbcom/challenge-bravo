@@ -33,10 +33,10 @@ class Currencies(object):
         results = []
 
         for currency_id in currencies:
-            rate = OpenExchangeApi.get_currency_rate(currency_id)
+            currency = cls.get(currency_id)
 
-            if rate:
-                results.append(Currency(currency_id, rate))
+            if currency:
+                results.append(currency)
 
         return results
 
