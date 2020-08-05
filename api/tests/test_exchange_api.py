@@ -24,21 +24,20 @@ def fake_500():
     r.status_code = 500
     return r
 
-# TESTE COMENTADO POR RAZÕES DE LIMITE DE CHAMADAS DAS APIS TERCEIRAS
 
-# class TestIntegrationOpenExchange(unittest.TestCase):
-#     exchange = OpenExchangeApi
+class TestIntegrationOpenExchange(unittest.TestCase):
+    exchange = OpenExchangeApi
 
-#     def setUp(self):
-        # cache.delete_memoized(OpenExchangeApi._get_rates_from_api)
-        # cache.delete_memoized(OpenExchangeApi.get_currency_rate)
+    def setUp(self):
+        cache.delete_memoized(OpenExchangeApi._get_rates_from_api)
+        cache.delete_memoized(OpenExchangeApi.get_currency_rate)
 
-#     def test_get_rates_from_api_should_return_all_currencies_rates(self):
-#         currencies = self.exchange._get_rates_from_api()
+    def test_get_rates_from_api_should_return_all_currencies_rates(self):
+        currencies = self.exchange._get_rates_from_api()
 
-#         self.assertIsInstance(currencies, dict)
-#         self.assertIsNotNone(currencies['BRL'])
-#         self.assertIsNotNone(currencies['ETH'])
+        self.assertIsInstance(currencies, dict)
+        self.assertIsNotNone(currencies['BRL'])
+        self.assertIsNotNone(currencies['ETH'])
 
 
 class TestOpenExchange(unittest.TestCase):
