@@ -10,6 +10,8 @@ Optei por não usar um banco de dados convencional (MySql, Postgres, MongoDb) e 
 
 Uma preocupação que todos tem com o Redis é o fato dele fazer o armazenamento em memória, como imaginei um tempo de cache muito curto para essa aplicação e os dados serão consumidos de outra API essa não é uma preocupação tão grande nesse projeto. Além disso é possível habilitar o Redis para guardar backups em disco.
 
+### Imagens de docker
+Eu comecei o projeto usando como imagem base do container web e db a distribuição Alpine, mas ao fazer o benchmark ao final do projeto percebi que independente das minhas otimizações não conseguia ganhar mais performance, pesquisei e descobri outras pessoas com o mesmo problema, alterei as imagens bases para usar debian e tive um ganho de pelo menos 30% de performance.
 
 
 
