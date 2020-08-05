@@ -1,14 +1,117 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
+## Como rodar
+
+### Setup
+```
+make setup
+```
+
+### Run
+```
+make run
+```
+
+### Testes
+```
+make test
+```
+
+### Stress
+```
+make stress
+```
+
+## Tecnologias
+* Python
+* Flask
+* Redis
+* Requests
+* Gunicorn
+* Flask Caching
+* Docker Compose
+
+
+## API
+* **GET:** http://ec2-18-228-221-6.sa-east-1.compute.amazonaws.com/convert/?from=USD&to=BRL&amount=1
+
+Parâmetros de Get
+* **from**: ID da moeda a ser convertida
+* **to**: ID da moeda final
+* **ammount**: Valor a ser convertido
+
+Retorno 200
+```javascript
+{
+  "from": "BRL",
+  "to": "USD",
+  "amount": 10,
+  "value": 1.89
+}
+```
+
+* **GET:** http://ec2-18-228-221-6.sa-east-1.compute.amazonaws.com/currencies/
+
+Retorno 200
+```javascript
+{
+  "count": 5,
+  "results": [
+    {
+      "id": "USD",
+      "rate": 1.0
+    },
+    {
+      "id": "BRL",
+      "rate": 5.2912
+    },
+    {
+      "id": "EUR",
+      "rate": 0.846475
+    },
+    {
+      "id": "BTC",
+      "rate": 0.000089325498
+    },
+    {
+      "id": "ETH",
+      "rate": 0.0025804730187676513
+    }
+  ]
+}
+```
+
+* **POST:** http://ec2-18-228-221-6.sa-east-1.compute.amazonaws.com/currencies/
+
+Body
+```javascript
+{
+  "id": "EUR"
+}
+```
+
+Retorno 201
+```javascript
+{
+  "id": "EUR",
+  "rate": 1.2,
+}
+```
+
+* **DELETE:** http://ec2-18-228-221-6.sa-east-1.compute.amazonaws.com/currencies/EUR/
+
+Retorno 204
+
+
 ## Decisões de projeto
 
 ### Framework
 Escolhi usar o flask como framework para esse projeto, por se tratar de um projeto simples um micro framework como o flask dá conta do recado. Poderia ter usado também o Tornado, gosto dele pela velocidade e por trabalhar com requisições assíncronas e não blocantes, mas para esse projeto fiquei com a opção mais simples.
 
 ### Banco de dados
-Optei por não usar um banco de dados convencional (MySql, Postgres, MongoDb) e usar o Redis, isso porque as operações necessárias nesse projeto envolvem apenas chave e valor, e para isso o Redis é extremamente rápido e eficiente. Também escolhi o Redis para fazer uso dele como cache.
+Optei por não usar um banco de dados convencional (MySql, Postgres, MongoDb) e usar o Redis, isso porque as operações necessárias nesse projeto envolvem apenas chave e valor, e para isso o Redis é extremamente rápido e eficiente. Também escolhi o Redis para fazer uso dele como cache e memoize. Se o projeto crescesse todos os containers da app poderiam se aproveitar de um cache centralizado.
 
-Uma preocupação que todos tem com o Redis é o fato dele fazer o armazenamento em memória, como imaginei um tempo de cache muito curto para essa aplicação e os dados serão consumidos de outra API essa não é uma preocupação tão grande nesse projeto. Além disso é possível habilitar o Redis para guardar backups em disco.
+Uma preocupação que todos tem com o Redis é o fato dele fazer o armazenamento em memória, como imaginei um tempo de cache muito curto para essa aplicação e os dados serão consumidos de outras APIs essa não é uma preocupação tão grande nesse projeto. Além disso é possível habilitar o Redis para guardar backups em disco.
 
 ### Imagens de docker
 Eu comecei o projeto usando como imagem base do container web e db a distribuição Alpine, mas ao fazer o benchmark ao final do projeto percebi que independente das minhas otimizações não conseguia ganhar mais performance, pesquisei e descobri outras pessoas com o mesmo problema, alterei as imagens bases para usar debian e tive um ganho de pelo menos 30% de performance.
