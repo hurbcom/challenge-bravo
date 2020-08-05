@@ -19,6 +19,11 @@ services:
   nginx:
     build: ./services/nginx
     ports:
-      - "8000:80"
+      - "80:80"
+    depends_on:
+      - web
+  performance:
+    build:  ./services/performance
+    command:  ab -r -n 10000 -c 100 'http://web:5000/convert/?from=USD&to=BRL&amount=10'
     depends_on:
       - web
