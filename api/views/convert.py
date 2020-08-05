@@ -9,7 +9,7 @@ from api.models import Currencies
 def currency_converter():
     currency_from_id = request.args.get('from', 'USD')
     currency_to_id = request.args.get('to', 'BRL')
-    amount = request.args.get('amount', 1, type=int)
+    amount = request.args.get('amount', 1, type=float)
 
     if amount < 0:
         amount = amount * -1
