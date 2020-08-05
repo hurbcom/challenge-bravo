@@ -1,13 +1,13 @@
 version: '3'
 services:
   db:
-    image: redis:6.0.6-alpine
+    image: redis:6.0.6
     command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
       - "6379:6379"
   web:
     build: .
-    command: gunicorn --workers=3 --threads=3 --bind 0.0.0.0:5000 wsgi:app
+    command: gunicorn --workers=7 --bind 0.0.0.0:5000 wsgi:app
     environment:
       - FLASK_APP=api/app.py
     ports:
