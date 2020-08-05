@@ -7,6 +7,15 @@ from api.models import Currencies
 JSON = 'application/json'
 
 
+@app.before_first_request
+def startup():
+    currencies = Currencies.all()
+
+    if len(currencies) == 0:
+        for currency in ['USD', 'BRL', 'EUR', 'BTC', 'ETH']:
+            Currencies.create(currency)
+
+
 @app.route('/currencies/', methods=['GET'])
 def currencies():
     currencies = Currencies.all()
