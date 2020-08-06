@@ -1,0 +1,65 @@
+version: "3"
+
+services:
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask
+    restart: unless-stopped
+    environment:
+      APP_ENV: "prod"
+      APP_DEBUG: "False"
+      APP_PORT: 5000
+    volumes:
+      - appdata:/var/www
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+    networks:
+      - frontend
+      - backend
+  redis:
+    image: redis:4.0.6-alpine
+    hostname: redis
+    container_name: redis
+    networks:
+      - backend
+    volumes:
+      - redis-data:/data/db
+  webserver:
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    image: nginx
+    container_name: webserver
+    restart: unless-stopped
+    environment:
+      APP_ENV: "prod"
+      APP_NAME: "webserver"
+      APP_DEBUG: "false"
+      SERVICE_NAME: "webserver"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - nginxdata:/var/log/nginx
+    depends_on:
+      - flask
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  redis-data:
+    driver: local
+  appdata:
+    driver: local
+  nginxdata:
+    driver: local
