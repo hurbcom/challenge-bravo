@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "https://github.com/Scherpel/challenge-bravo.git",
   "author": "Lucas Scherpel <lucasscherpel@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
