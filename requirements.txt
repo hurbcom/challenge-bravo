@@ -1,0 +1,15 @@
+Flask==1.1.1
+gunicorn==19.10.0
+pymongo==3.5.1
+flask_pymongo==0.5.1
+gevent==1.3.7
+flask_sqlalchemy==2.4.3
+flask-expects-json==1.4.0
+Flask-Migrate
+Flask-Script
+pytest-mock
+Flask-Caching==1.8
+redis
+sqlalchemy
+mysqlclient==2.0.1
+pymysql
