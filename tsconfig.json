@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"outDir": "dist",
+		"sourceMap": true,
+		"strict": true,
+        "target": "es6",
+        "esModuleInterop": true
+	},
+	"compileOnSave": true,
+	"include": ["src/**/*.ts", "src/__tests__/integration/currencies.test.js"],
+	"exclude": ["src/__tests__", "node_modules", ".vscode"]
+}
