@@ -25,6 +25,7 @@ class ProdConfig(Config):
     CACHE_DEFAULT_TIMEOUT = 300
     CACHE_REDIS_HOST = "redis"
     CACHE_REDIS_PORT = 6379
+    SECRET_KEY = ""
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
                                              'postgresql://localhost/example')
 
@@ -35,6 +36,7 @@ class DevConfig(Config):
     ENV = 'dev'
     DEBUG = True
     DB_NAME = 'dev.db'
+    SECRET_KEY = ""
 
     DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)

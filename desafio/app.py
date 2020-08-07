@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from desafio import settings, commands, moeda
 import json
 import datetime
 
@@ -7,9 +8,14 @@ from bson.objectid import ObjectId
 from contextlib import contextmanager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
+from flask_redis import FlaskRedis
 from flask_caching import Cache
-from desafio import models, settings, commands, moeda
-from desafio.extensions import cache, db, migrate
+
+
+db = SQLAlchemy()
+migrate = Migrate()
+cache = Cache()
+redis_store = FlaskRedis()
 
 
 def create_app(config_object=settings.ProdConfig):
@@ -39,6 +45,7 @@ def register_shellcontext(app):
 def register_extensions(app):
     cache.init_app(app)
     db.init_app(app)
+    redis_store.init_app(app)
     migrate.init_app(app, db)
 
 
