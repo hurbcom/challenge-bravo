@@ -1,8 +1,9 @@
-from desafio.moeda.models import Currency
+from desafio.currency.model import Currency
 from desafio.app import session_scope
 
 
-class RepositoryCurrency():
+class CurrencyRepository():
+
     def get_all_currency(self):
         with session_scope() as session:
             return session.query(Currency).all()

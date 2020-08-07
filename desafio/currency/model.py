@@ -5,7 +5,7 @@ from desafio.app import db
 
 class Currency(db.Model):  # type: ignore
     id: int = db.Column(db.Integer, primary_key=True)
-    simbol_currency: str = db.Column(db.Char(4), unique=True, nullable=False)
+    simbol_currency: str = db.Column(db.String(4), unique=True, nullable=False)
     name_description: str = db.Column(db.String(30), nullable=False)
 
     def __init__(self, simbol_currency="", name_description=""):

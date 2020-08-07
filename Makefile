@@ -1,14 +1,14 @@
 install:
-	- virtualenv -p python3 ../desafio/build
+	- virtualenv -p python3 ../challenge-bravo/build
 	- ( \
-       .  build/bin/activate; \
+        .  build/bin/activate; \
         pip3 install -r requirements.txt; \
     )
 
 run:
 	- ( \
        .  build/bin/activate; \
-	   FLASK_APP=desafio  flask run\
+	   FLASK_APP=autoapp  flask run\
     )
 
 migrate:

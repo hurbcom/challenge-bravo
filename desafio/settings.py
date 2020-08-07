@@ -26,6 +26,7 @@ class ProdConfig(Config):
     CACHE_REDIS_HOST = "redis"
     CACHE_REDIS_PORT = 6379
     SECRET_KEY = ""
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
                                              'postgresql://localhost/example')
 
@@ -35,12 +36,12 @@ class DevConfig(Config):
 
     ENV = 'dev'
     DEBUG = True
-    DB_NAME = 'dev.db'
+    DB_NAME = 'desafio.sqlite'
     SECRET_KEY = ""
-
     DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
     CACHE_TYPE = 'simple'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class TestConfig(Config):
@@ -48,4 +49,7 @@ class TestConfig(Config):
 
     TESTING = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    SECRET_KEY = "test"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CACHE_TYPE = 'simple'
+    SQLALCHEMY_DATABASE_URI = "sqlite:///environ"
