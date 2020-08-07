@@ -7,6 +7,7 @@ flask_sqlalchemy==2.4.3
 flask-expects-json==1.4.0
 Flask-Migrate
 Flask-Script
+flask_redis
 pytest-mock
 Flask-Caching==1.8
 redis

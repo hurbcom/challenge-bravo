@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
+from desafio import settings, commands, currency
 import json
 import datetime
+import os
 
 from flask import Flask
 from bson.objectid import ObjectId
 from contextlib import contextmanager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
+from flask_redis import FlaskRedis
 from flask_caching import Cache
-from desafio import models, settings, commands, moeda
-from desafio.extensions import cache, db, migrate
+from desafio.extensions import cache, db, migrate, redis_store
 
 
 def create_app(config_object=settings.ProdConfig):
-    app = Flask(__name__.split('.')[0])
+    app = Flask(__name__.split('.')[0], instance_relative_config=True)
     app.url_map.strict_slashes = False
     app.config.from_object(config_object)
     register_extensions(app)
@@ -24,13 +26,14 @@ def create_app(config_object=settings.ProdConfig):
 
 
 def register_blueprints(app):
-    app.register_blueprint(moeda.views.blueprint)
+    app.register_blueprint(currency.views.blueprint)
 
 
 def register_shellcontext(app):
     def shell_context():
         return {
             'db':  db,
+            'Currency': currency.model.Currency
         }
 
     app.shell_context_processor(shell_context)
@@ -39,6 +42,7 @@ def register_shellcontext(app):
 def register_extensions(app):
     cache.init_app(app)
     db.init_app(app)
+    redis_store.init_app(app)
     migrate.init_app(app, db)
 
 
