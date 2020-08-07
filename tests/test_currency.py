@@ -1,22 +1,3 @@
-# from src import dal
-
-
-# try:
-#     import sys
-#     import os
-
-#     sys.path.append(
-#         os.path.abspath(
-#             os.path.join(
-#                 os.path.dirname(__file__),
-#                 '../desafio'
-#             )
-#         )
-#     )
-# except:
-#     raise
-
-
 from desafio.currency.repository import CurrencyRepository
 from desafio.currency.model import Currency
 from sqlalchemy.exc import IntegrityError
@@ -45,25 +26,29 @@ class TestRepositoryPersona(unittest.TestCase):
         self.assertIsInstance(id_currency, int)
         self.assertEqual(id_currency, 1)
 
-    # @patch('persona.session_scope')
-    # def test_3_deve_obter_uma_persona_by_id(self, mock_tmp):
-    #     persona = self.personas.get_persona_by_id(self.persona)
-    #     self.assertIsInstance(persona.id, int)
-    #     self.assertTrue(persona == self.persona)
+    @patch('desafio.app.session_scope')
+    def test_3_deve_obter_uma_currency_by_id(self, mock_tmp):
+        currency = self.currencys.get_currency_by_id(self.currency)
+        self.assertIsInstance(currency.id, int)
+        self.assertTrue(currency == self.currency)
 
-    # @patch('persona.session_scope')
-    # def test_3_deve_obter_uma_persona_by_handle(self, mock_tmp):
-    #     persona = self.personas.get_persona_by_handle(self.persona)
-    #     self.assertIsInstance(persona.handle, str)
-    #     self.assertTrue(persona == self.persona)
+    @patch('desafio.app.session_scope')
+    def test_4_deve_obter_uma_currency_by_simbol_currency(self, mock_tmp):
+        currency = self.currencys.get_currency_by_simbol_currency(
+            self.currency)
+        self.assertIsInstance(currency.simbol_currency, str)
+        self.assertTrue(currency == self.currency)
 
-    # @patch('persona.session_scope')
-    # def test_4_deve_alterar_o_handle_da_persona(self, mock_tmp):
-    #     self.persona.character_points = 20
-    #     update_persona = self.personas.update(self.persona)
-    #     self.assertEqual(update_persona.character_points,
-    #                      self.persona.character_points)
+    @patch('desafio.app.session_scope')
+    def test_5_deve_alterar_o_simbol_currency(self, mock_tmp):
+        self.currency.simbol_currency = "USD"
+        self.currency.name_description = "Dolar"
+        self.currency.id = 1
 
-    # @patch('persona.session_scope')
-    # def test_5_deve_deletar_uma_persona(self, mock_tmp):
-    #     self.assertTrue(self.personas.delete(self.persona))
+        update_currency = self.currencys.update(self.currency)
+        self.assertEqual(update_currency.simbol_currency,
+                         self.currency.simbol_currency)
+
+    @patch('desafio.app.session_scope')
+    def test_6_deve_deletar_simbol_currency(self, mock_tmp):
+        self.assertTrue(self.currencys.delete(self.currency))

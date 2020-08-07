@@ -14,14 +14,13 @@ run:
 migrate:
 	- ( \
        .  build/bin/activate; \
-	   FLASK_APP=desafio  flask db init;\
-       FLASK_APP=desafio flask db migrate;\
-       FLASK_APP=desafio  flask db upgrade;\
+	   FLASK_APP=autoapp  flask db init;\
+       FLASK_APP=autoapp  flask db migrate;\
+       FLASK_APP=autoapp  flask db upgrade;\
     )
 
 test:
 	- ( \
        .  build/bin/activate; \
-	   pip install -e '.[test]';\
-       pytest -v  \
+	   FLASK_APP=autoapp flask test;\
     )

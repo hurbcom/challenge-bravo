@@ -28,6 +28,18 @@ class CurrencyRepository():
             print('Insert', currency)
             return currency.id
 
+    def update(self, currency):
+        with session_scope() as session:
+            print(f' Currency: {currency.simbol_currency}')
+            session.query(Currency).filter(
+                currency.id == currency.id).update(
+                    {"simbol_currency": currency.simbol_currency,
+                     "name_description": currency.name_description}
+            )
+            update_currency = session.query(Currency).filter(
+                currency.simbol_currency == currency.simbol_currency).first()
+        return update_currency
+
     def delete(self, currency):
         with session_scope() as session:
             currency = session.query(Currency).filter(
