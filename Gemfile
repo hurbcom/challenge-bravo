@@ -11,10 +11,11 @@ gem 'sequel', '>= 5'
 gem 'sequel_pg', '>= 1.8'
 gem 'rack-unreloader'
 gem 'rest-client'
+gem 'rake'
+gem 'sequel-seed'
 
 group :development do
   gem 'pry-byebug'
-  gem 'sequel-annotate'
 end
 
 group :test do
