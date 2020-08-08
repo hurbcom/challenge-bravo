@@ -1,8 +1,7 @@
 require 'roda'
-
+require_relative './api/v1/currency'
 class ChallengeBravo < Roda
   route do |r|
-    r.root do
-    end
+    r.run API::Currency
   end
 end
