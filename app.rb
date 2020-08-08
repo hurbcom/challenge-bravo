@@ -1,7 +1,9 @@
 require 'roda'
-require_relative './api/v1/currency'
+require 'sequel'
+require_relative 'models'
+require_relative 'api/v1/base'
 class ChallengeBravo < Roda
   route do |r|
-    r.run API::Currency
+    r.run API::V1::Base
   end
 end
