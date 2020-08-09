@@ -2,3 +2,5 @@ __pycache__
 .editorconfig
 build
 .vscode
+.DS_Store
+desafio/.DS_Store
