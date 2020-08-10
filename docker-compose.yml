@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  challenge-bravo:
+    image: challenge-bravo
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    command: python -u app.py
+    links:
+      - db
+  db:
+    image: mongo:4.2.6

@@ -1,65 +1,68 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Challenge-Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Api Restful de conversão de moedas
 
-A API deve, originalmente, converter entre as seguintes moedas:
+### Instalação
+A aplicação foi feita em Python e usando banco de dados MongoDB.
+Portanto, é necessário ter o Python (v3) e o MongoDB instalado em sua máquina para conseguir rodar o projeto.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Execute-o em ambiente virtual
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+`$ source .venv/Scripts/activate`
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+E instale todas as dependências do projeto no ambiente:
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+`$ pip install -r requirements.txt`
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Configure seus banco de dados de acordo com o arquivo *database.ini*. 
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+E finalmente, para executá-lo (por padrão, roda na porta 5000 do localhost)
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+`$ python app.py`
 
-## Requisitos
+### Utilização
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+A API dispôe dos verbos e seus endpoints: 
 
-## Critério de avaliação
+***Index para conversão de moedas:***
+- GET: http://127.0.0.1:5000?from=BTC&to=EUR&amount=123.45
+-- from = símbolo da moeda base
+-- to = símbolo da moeda para conversão
+-- amount = valor a ser convertido
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
 
-## Dúvidas
+**Lista todas as moedas disponíves**
+- GET: http://127.0.0.1:5000/currencies
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
 
-Boa sorte e boa viagem! ;)
+**Obtem a moeda pelo determinado {symbol}**
+- GET: http://127.0.0.1:5000/currencies/{symbol}
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+**Insere uma nova moeda sendo declarado no body da requisição. **
+- POST: http://127.0.0.1:5000/currencies/
+
+**Formato do body:**
+
+`{
+  "symbol": [symbol],\
+}`
+
+
+** Remove uma moeda já inserida pelo {symbol} **
+- DELETE: http://127.0.0.1:5000/invoices/{symbol}
+
+
+### Testes
+
+Os testes foram feitos com a biblioteca PyTest. Para rodá-los, utilize o comando na raiz do projeto:
+
+`$ pytest`
+
+
+### Últimas Atualizações
+
+- *09/ago - Primeiro commit - API funcional*
+
+- *09/ago - Adicionando testes unitários e correções*
+
+- *10/ago - Inicializando arquivos de docker*
