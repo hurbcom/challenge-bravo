@@ -16,3 +16,4 @@ mysqlclient==2.0.1
 pymysql
 requests
 websockets
+psycopg2-binary

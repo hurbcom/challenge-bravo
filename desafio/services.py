@@ -5,22 +5,24 @@ import requests
 
 class ServiceQuoteCurrencyPrice:
 
-    def __init__(self, currency_base="USD", currencies_quote=[]):
-        self.currency_base = currency_base
+    def __init__(self, symbol_currency="USD", currencies_quote=[]):
+        self.symbol_currency = symbol_currency
         self.currencies_quote = currencies_quote
 
     def get_currencies_quote(self):
         currencies_quote = ','.join(self.currencies_quote)
-        qs = f"?fsym={self.currency_base}&tsyms={currencies_quote}"
+        qs = f"?fsym={self.symbol_currency}&tsyms={currencies_quote}"
         api_url_base = f"https://min-api.cryptocompare.com/data/price{qs}"
 
         response = requests.get(api_url_base)
         if response.status_code == 200:
+            print(response.content)
             return json.loads(response.content.decode("utf-8"))
         else:
             return None
 
-    def calc_currency_price_by_currencies_quote(self, value):
+    def calc_currency_price_by_currencies_quote(self, amount):
         currencies_quote = self.get_currencies_quote()
-        return {currency: round(value * price, 4) for currency,
+        print(currencies_quote)
+        return {currency: round(amount * price, 4) for currency,
                 price in currencies_quote.items()}

@@ -4,3 +4,5 @@ build
 .vscode
 .DS_Store
 desafio/.DS_Store
+migrations/
+desafio.sqlite

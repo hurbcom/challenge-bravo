@@ -1,6 +1,6 @@
 import enum
 from typing import List
-from desafio.app import db
+from desafio.extensions import db
 
 
 class Currency(db.Model):  # type: ignore

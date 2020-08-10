@@ -1,5 +1,5 @@
 from desafio.currency.model import Currency
-from desafio.app import session_scope
+from desafio.extensions import session_scope
 
 
 class CurrencyRepository():

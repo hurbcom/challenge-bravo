@@ -20,9 +20,6 @@ class TestServiceQuoteCurrencyPrice(unittest.TestCase):
         self.money = 20
         self.round_value = 4
 
-    def _decode(self, type):
-        return self.mock_quotes_result
-
     def _mock_response(
             self,
             status=200,
@@ -40,8 +37,7 @@ class TestServiceQuoteCurrencyPrice(unittest.TestCase):
         if json_data:
             mock_resp.content = Mock()
             mock_resp.content.decode = Mock()
-            mock_resp.content.decode.return_value = json.dumps(
-                self._decode('utf-8'))
+            mock_resp.content.decode.return_value = json.dumps(json_data)
 
         return mock_resp
 
