@@ -46,8 +46,8 @@ def index():
         "_links": {
             "url": request.url,
             "list_all_currencys": request.url_root + "currencies",
-            "dolar_to_currency_from": request.url_root + "currencies/" + currency_from,
-            "dolar_to_currency_to": request.url_root + "currencies/" + currency_to,
+            "usd_to_currency_from": request.url_root + "currencies/" + currency_from,
+            "usd_to_currency_to": request.url_root + "currencies/" + currency_to,
         }
     }
 
@@ -72,8 +72,11 @@ def add_currency():
         c = Currency()
         symbol = request.get_json()['symbol'].upper()
 
-        response = c.create({'symbol': symbol})
-        return response
+        response_message, response_status = c.create({'symbol': symbol})
+        if response_status == 201:
+            return jsonify({"message": response_message}), response_status
+        else:
+            return jsonify({"error": response_message}), response_status
 
 
 @currency_controller.route('/currencies/<string:symbol>', methods=['DELETE'])

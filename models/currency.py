@@ -30,7 +30,7 @@ class Currency(object):
 
         currency_with_symbol = self.find_by_symbol(currency["symbol"])
 
-        if len(currency_with_symbol) == 0:
+        if not currency_with_symbol:
             currency["value"] = self.get_currency_value(currency)
             res = self.db.insert(currency, self.collection_name)
             return "Inserted Id " + res, 201
@@ -94,6 +94,3 @@ class Currency(object):
                 json.dump(mock_file, json_file)
         
         return need_update
-
-
-
