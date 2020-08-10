@@ -34,6 +34,5 @@ class ServiceQuoteCurrencyPrice:
 
     def calc_currency_price_by_currencies_quote(self, amount):
         currencies_quote = self.get_currencies_quote()
-        print(currencies_quote)
         return {currency: round(amount * price, 4) for currency,
                 price in currencies_quote.items()}
