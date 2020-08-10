@@ -29,8 +29,18 @@ def insert_currency():
     currency.simbol_currency = content['simbol_currency']
     currency.name_description = content['name_description']
 
+    service_currency_price = ServiceQuoteCurrencyPrice(
+        currency_base=currency.simbol_currency)
+
     if currencys.get_currency_by_simbol_currency(currency):
         return json.dumps({'message': "A moeda ja existe"}), 409,
+        JSON_CONTENT
+
+    result = service_currency_price.find_symbol_currency(
+        currency.simbol_currency)
+
+    if result['Response'] == "Error":
+        return json.dumps({'message': 'Essa moeda não existe'}), 204,
         JSON_CONTENT
 
     currencys.insert(currency)

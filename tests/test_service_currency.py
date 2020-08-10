@@ -76,3 +76,29 @@ class TestServiceQuoteCurrencyPrice(unittest.TestCase):
             self.mock_quotes_result['JPY']*self.money, self.round_value))
         self.assertEqual(prices_currency['EUR'],  round(
             self.mock_quotes_result['EUR']*self.money, self.round_value))
+
+    @patch('requests.get')
+    def test_4_deve_falhar_quando_symbol_currency_nao_exisitr(self, mock_get):
+        mock_error_result = {
+            "Response": 'Error'
+        }
+        mock_resp = self._mock_response(json_data=mock_error_result)
+        mock_get.return_value = mock_resp
+        result = self.service_currence \
+            .find_symbol_currency("INEXISTENTE")
+
+        self.assertEqual(
+            result['Response'], "Error")
+
+    @patch('requests.get')
+    def test_5_deve_encontrar_simbolo(self, mock_get):
+        mock_error_result = {
+            "Response": 'Success'
+        }
+        mock_resp = self._mock_response(json_data=mock_error_result)
+        mock_get.return_value = mock_resp
+        result = self.service_currence \
+            .find_symbol_currency("BRL")
+
+        self.assertEqual(
+            result['Response'], "Success")
