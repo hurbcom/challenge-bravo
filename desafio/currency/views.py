@@ -1,5 +1,6 @@
 from desafio.currency.model import Currency
 from flask import request, jsonify, Blueprint
+from http import HTTPStatus
 from desafio.utils import EnhancedJSONEncoder
 import json
 from desafio.currency.repository import CurrencyRepository
@@ -34,24 +35,24 @@ def insert_currency():
         symbol_currency=currency.simbol_currency)
 
     if currencys.get_currency_by_simbol_currency(currency):
-        return json.dumps({'message': "A moeda ja existe"}), 409,
-        JSON_CONTENT
+        return json.dumps({'message': "A moeda ja existe"}),\
+            HTTPStatus.CONFLICT, JSON_CONTENT
 
     result = service_currency_price.find_symbol_currency(
         currency.simbol_currency)
 
     if result['Response'] == "Error":
-        return json.dumps({'message': 'Essa moeda não existe'}), 204,
-        JSON_CONTENT
+        return json.dumps({'message': 'Essa moeda não existe'}),\
+            HTTPStatus.NO_CONTENT, JSON_CONTENT
 
     currencys.insert(currency)
-    return json.dumps({'message': 'Sua moeda foi criada com sucesso'}), 201,
-    JSON_CONTENT
+    return json.dumps({'message': 'Sua moeda foi criada com sucesso'}),\
+        HTTPStatus.CREATED, JSON_CONTENT
 
 
 @bp.route('/', methods=["GET"])
-@cache.cached(timeout=50, key_prefix='quote')
 def get_quotes():
+    cg = cache.get('quote')
     from_currency = request.args.get('from')
     to_currency = request.args.get('to')
     amount = request.args.get('amount')
@@ -63,14 +64,37 @@ def get_quotes():
         find_currency = currencies.get_currency_by_simbol_currency(currency)
 
     if not find_currency:
-        return json.dumps({'message': 'Não possuimos essa Moeda cadastrada'}), 204, JSON_CONTENT
+        return '', HTTPStatus.NO_CONTENT, JSON_CONTENT
 
     service_currency_price = ServiceQuoteCurrencyPrice(
         symbol_currency=find_currency.simbol_currency,
         currencies_quote=[to_currency])
 
-    result_calc = service_currency_price. \
-        calc_currency_price_by_currencies_quote(
-            float(amount))
+    if cg is None:
+        cg = service_currency_price. \
+            calc_currency_price_by_currencies_quote(
+                float(amount))
+        cache.set('quote', cg, timeout=50)
 
-    return json.dumps(result_calc, cls=EnhancedJSONEncoder), 200, JSON_CONTENT
+    return json.dumps(cg, cls=EnhancedJSONEncoder),\
+        HTTPStatus.OK, JSON_CONTENT
+
+
+@bp.route('/<int:currency_id>', methods=['DELETE'])
+@bp.route('/<symbol_currency>', methods=['DELETE'])
+def delete_currencys(currency_id=None, symbol_currency=None):
+    currencies = CurrencyRepository()
+    if currency_id:
+        currency = Currency(id=currency_id)
+    else:
+        currency = Currency(simbol_currency=symbol_currency)
+
+    if currencies.get_currency_by_simbol_currency(currency):
+        currencies.delete(currency)
+        return json.dumps({'message': f'A moeda {currency.name_description} '
+                           + 'foi removida com sucesso'}), \
+            HTTPStatus.OK, JSON_CONTENT
+
+    return '', HTTPStatus.NO_CONTENT
+
+
