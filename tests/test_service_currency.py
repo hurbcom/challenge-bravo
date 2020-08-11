@@ -20,9 +20,6 @@ class TestServiceQuoteCurrencyPrice(unittest.TestCase):
         self.money = 20
         self.round_value = 4
 
-    def _decode(self, type):
-        return self.mock_quotes_result
-
     def _mock_response(
             self,
             status=200,
@@ -40,8 +37,7 @@ class TestServiceQuoteCurrencyPrice(unittest.TestCase):
         if json_data:
             mock_resp.content = Mock()
             mock_resp.content.decode = Mock()
-            mock_resp.content.decode.return_value = json.dumps(
-                self._decode('utf-8'))
+            mock_resp.content.decode.return_value = json.dumps(json_data)
 
         return mock_resp
 
@@ -80,3 +76,29 @@ class TestServiceQuoteCurrencyPrice(unittest.TestCase):
             self.mock_quotes_result['JPY']*self.money, self.round_value))
         self.assertEqual(prices_currency['EUR'],  round(
             self.mock_quotes_result['EUR']*self.money, self.round_value))
+
+    @patch('requests.get')
+    def test_4_deve_falhar_quando_symbol_currency_nao_exisitr(self, mock_get):
+        mock_error_result = {
+            "Response": 'Error'
+        }
+        mock_resp = self._mock_response(json_data=mock_error_result)
+        mock_get.return_value = mock_resp
+        result = self.service_currence \
+            .find_symbol_currency("INEXISTENTE")
+
+        self.assertEqual(
+            result['Response'], "Error")
+
+    @patch('requests.get')
+    def test_5_deve_encontrar_simbolo(self, mock_get):
+        mock_error_result = {
+            "Response": 'Success'
+        }
+        mock_resp = self._mock_response(json_data=mock_error_result)
+        mock_get.return_value = mock_resp
+        result = self.service_currence \
+            .find_symbol_currency("BRL")
+
+        self.assertEqual(
+            result['Response'], "Success")

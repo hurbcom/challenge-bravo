@@ -15,31 +15,31 @@ class TestRepositoryPersona(unittest.TestCase):
                                  name_description="Real"
                                  )
 
-    @patch('desafio.app.session_scope')
+    @patch('desafio.extensions.session_scope')
     def test_2_deve_retornar_integrity_error(self, mock_tmp):
         with self.assertRaises(IntegrityError):
             self.currencys.insert(self.currency)
 
-    @patch('desafio.app.session_scope')
+    @patch('desafio.extensions.session_scope')
     def test_1_deve_retornar_id_currency_depois_add(self, mock_tmp):
         id_currency = self.currencys.insert(self.currency)
         self.assertIsInstance(id_currency, int)
         self.assertEqual(id_currency, 1)
 
-    @patch('desafio.app.session_scope')
+    @patch('desafio.extensions.session_scope')
     def test_3_deve_obter_uma_currency_by_id(self, mock_tmp):
         currency = self.currencys.get_currency_by_id(self.currency)
         self.assertIsInstance(currency.id, int)
         self.assertTrue(currency == self.currency)
 
-    @patch('desafio.app.session_scope')
+    @patch('desafio.extensions.session_scope')
     def test_4_deve_obter_uma_currency_by_simbol_currency(self, mock_tmp):
         currency = self.currencys.get_currency_by_simbol_currency(
             self.currency)
         self.assertIsInstance(currency.simbol_currency, str)
         self.assertTrue(currency == self.currency)
 
-    @patch('desafio.app.session_scope')
+    @patch('desafio.extensions.session_scope')
     def test_5_deve_alterar_o_simbol_currency(self, mock_tmp):
         self.currency.simbol_currency = "USD"
         self.currency.name_description = "Dolar"
@@ -49,6 +49,6 @@ class TestRepositoryPersona(unittest.TestCase):
         self.assertEqual(update_currency.simbol_currency,
                          self.currency.simbol_currency)
 
-    @patch('desafio.app.session_scope')
+    @patch('desafio.extensions.session_scope')
     def test_6_deve_deletar_simbol_currency(self, mock_tmp):
         self.assertTrue(self.currencys.delete(self.currency))

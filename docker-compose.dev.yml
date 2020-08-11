@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  flask-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask-dev
+    restart: unless-stopped
+    environment:
+      APP_ENV: "DEV"
+      FLASK_DEBUG: "true"
+      APP_PORT: 5000
+    volumes:
+      - appdata:/var/www
+    ports:
+      - "5000:5000"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  appdata:
+    driver: local

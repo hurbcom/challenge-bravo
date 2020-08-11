@@ -17,10 +17,8 @@ class Config(object):
 
 class ProdConfig(Config):
     """Production configuration."""
-
     ENV = 'prod'
     DEBUG = False
-
     CACHE_TYPE = "redis"
     CACHE_DEFAULT_TIMEOUT = 300
     CACHE_REDIS_HOST = "redis"
@@ -33,7 +31,6 @@ class ProdConfig(Config):
 
 class DevConfig(Config):
     """Development configuration."""
-
     ENV = 'dev'
     DEBUG = True
     DB_NAME = 'desafio.sqlite'
@@ -46,7 +43,6 @@ class DevConfig(Config):
 
 class TestConfig(Config):
     """Test configuration."""
-
     TESTING = True
     DEBUG = True
     SECRET_KEY = "test"

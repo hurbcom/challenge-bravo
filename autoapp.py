@@ -7,11 +7,9 @@ from desafio.settings import DevConfig, ProdConfig
 from logging.config import dictConfig
 from flask.logging import default_handler
 
-
-ENVIRONMENT_DEBUG = os.environ.get("FLASK_DEBUG", True)
+# os.environ["FLASK_DEBUG"] = "true"
 
 CONFIG = DevConfig if get_debug_flag() else ProdConfig
-
 application = create_app(CONFIG)
 
 
