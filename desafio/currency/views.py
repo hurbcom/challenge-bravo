@@ -74,7 +74,7 @@ def get_quotes():
         cg = service_currency_price. \
             calc_currency_price_by_currencies_quote(
                 float(amount))
-        cache.set('quote', cg, timeout=50)
+        cache.set('quote', cg, timeout=30)
 
     return json.dumps(cg, cls=EnhancedJSONEncoder),\
         HTTPStatus.OK, JSON_CONTENT

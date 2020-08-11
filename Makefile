@@ -1,28 +1,24 @@
-install:
-	- virtualenv -p python3 ../challenge-bravo/build
+prod:
 	- ( \
-        .  build/bin/activate; \
-        pip3 install -r requirements.txt; \
+	   docker-compose -f docker-compose.yml up -d --build\
     )
 
-run:
+dev:    
 	- ( \
-       .  build/bin/activate; \
-       FLASK_ENV=development \
-       FLASK_DEBUG=true \
-	   FLASK_APP=autoapp   flask run\
+	   docker-compose  -f docker-compose.dev.yml up -d  --build \
     )
-
-migrate:
-	- ( \
-       .  build/bin/activate; \
-	   FLASK_APP=autoapp  FLASK_ENV=development FLASK_DEBUG=true  flask db init;\
-       FLASK_APP=autoapp  FLASK_ENV=development FLASK_DEBUG=true  flask db migrate;\
-       FLASK_APP=autoapp  FLASK_ENV=development FLASK_DEBUG=true flask db upgrade;\
-    )
-
+  
 test:
 	- ( \
-       .  build/bin/activate; \
-	   FLASK_APP=autoapp flask test;\
+       docker build -t tests -f tests/Dockerfile . \
+	   docker run -it --name tests \
+       docker rm -f tests\
+    )
+  
+remove:
+	- ( \
+        docker rm -f flask \
+        docker rm -f flask-dev \
+        docker rm -f redis \
+        docker rm -f webserver \
     )
