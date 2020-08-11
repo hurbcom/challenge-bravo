@@ -98,3 +98,13 @@ def delete_currencys(currency_id=None, symbol_currency=None):
     return '', HTTPStatus.NO_CONTENT
 
 
+@bp.route("/all", methods=['GET'])
+def get_currencies():
+    currencies = CurrencyRepository().get_all_currency()
+
+    dict_currencies = {
+        currency.simbol_currency: currency.name_description
+        for currency in currencies}
+
+    return json.dumps(dict_currencies, cls=EnhancedJSONEncoder), \
+        HTTPStatus.OK, JSON_CONTENT
