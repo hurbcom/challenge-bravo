@@ -8,11 +8,18 @@
   "scripts": {
     "build": "tsc",
     "dev:server": "ts-node-dev --ignore-watch node_modules src/server.ts",
-    "test": "jest"
+    "test": "jest",
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@types/joi": "^14.3.4",
     "@types/supertest": "^2.0.10",
     "express": "^4.17.1",
+    "joi": "^17.2.0",
+    "pg": "^8.3.0",
+    "reflect-metadata": "^0.1.13",
+    "ts": "^0.2.2",
+    "typeorm": "^0.2.25",
     "uuidv4": "^6.2.2"
   },
   "devDependencies": {
