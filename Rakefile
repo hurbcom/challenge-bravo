@@ -1,6 +1,7 @@
 namespace :db do
   require "sequel"
   require 'sequel/extensions/seed'
+  require 'require_all'
   Sequel.extension :migration, :seed
 
   begin
@@ -46,6 +47,7 @@ namespace :db do
 
   desc "Seeds the database"
   task :seed do
+    require_all "models"
     Sequel::Seeder.apply(DB, "db/seeds/")
     Rake::Task['db:version'].execute
   end
