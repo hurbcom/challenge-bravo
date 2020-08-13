@@ -5,6 +5,7 @@ import { addCurrency, removeCurrency, convert, getCurrencies } from './controlle
 import { addCurrencyValidator, removeCurrencyValidator } from './validators/CurrencyValidator';
 import { convertValidator } from './validators/ConvertionValidator';
 import bodyParser from 'body-parser';
+import { environment } from './environments/environment';
 
 const app = express();
 app.use(cors({ origin: true }));
@@ -16,7 +17,7 @@ app.get('/bravo/v1/convertions', convertValidator, convert);
 database();
 
 function database(): void {
-    mongoose.connect('mongodb://localhost:27017',
+    mongoose.connect('mongodb://' + environment.mongoHost + ':27017',
         {
             useNewUrlParser: true,
             useUnifiedTopology: true,

@@ -9,9 +9,9 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "start": "node server.js",
-    "dev": "nodemon src/server.ts --ignore __tests__",
-    "docker": "yarn build && docker-compose up --build"
+    "start": "node Server.js",
+    "dev": "cp ./src/environments/environment.dev.ts ./src/environments/environment.ts && nodemon src/server.ts --ignore __tests__",
+    "docker": "cp ./src/environments/environment.prod.ts ./src/environments/environment.ts && yarn build && docker-compose up"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",

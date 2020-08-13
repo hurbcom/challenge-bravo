@@ -19,9 +19,10 @@ Restful API to currency convertion, based on USD, allowing dinamically currencie
 
 - Clone the repository
 - run `yarn install`  or  `npm install`
+- You will need a MongoDB container running. Create one with: `docker run --name mongo -d -p 27017:27017 mongo`
 - run `yarn dev`  or  `npm run dev`
 
-### Container mode
+### Docker mode
 
 - Clone the repository
 - run `yarn install`  or  `npm install`

@@ -1,12 +1,14 @@
 version: "2"
 services:
   api:
+    container_name: api
     build: .
     ports:
-    - "3000:3000"
-    depends_on:
-    - mongo
+      - "3000:3000"
+    links:
+      - mongo
   mongo:
+    container_name: mongo
     image: mongo
     ports:
-    - "27017:27017"
+      - "27017:27017"
