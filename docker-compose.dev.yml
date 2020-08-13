@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: flask-dev
+    entrypoint: ./docker-entrypoint-dev.sh
     restart: unless-stopped
     environment:
       APP_ENV: "DEV"

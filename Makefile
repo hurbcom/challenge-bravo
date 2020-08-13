@@ -5,20 +5,23 @@ prod:
 
 dev:    
 	- ( \
-	   docker-compose  -f docker-compose.dev.yml up -d  --build \
+	   docker-compose  -f docker-compose.dev.yml up -d  --build\
     )
   
 test:
 	- ( \
-       docker build -t tests -f tests/Dockerfile . \
-	   docker run -it --name tests \
-       docker rm -f tests\
+       docker build -t tests -f tests/Dockerfile . ; \
+	   docker run -it tests;  \
+       docker rmi -f tests;\
     )
   
 remove:
 	- ( \
-        docker rm -f flask \
-        docker rm -f flask-dev \
-        docker rm -f redis \
-        docker rm -f webserver \
-    )
+        docker-compose down --rmi all  -v  --remove-orphans \
+        )
+
+
+clean-all-images:
+	- ( \
+         docker rmi -f $(docker images -q) \
+        )

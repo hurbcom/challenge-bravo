@@ -18,15 +18,15 @@ class Config(object):
 class ProdConfig(Config):
     """Production configuration."""
     ENV = 'prod'
-    DEBUG = False
+    DEBUG = True
     CACHE_TYPE = "redis"
     CACHE_DEFAULT_TIMEOUT = 300
     CACHE_REDIS_HOST = "redis"
     CACHE_REDIS_PORT = 6379
     SECRET_KEY = ""
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
-                                             'postgresql://localhost/example')
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        'DATABASE_URL', 'mysql+pymysql://admin:admin@mysql:3306/desafio_db')
 
 
 class DevConfig(Config):

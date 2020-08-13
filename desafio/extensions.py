@@ -3,8 +3,6 @@ from flask_migrate import Migrate
 from flask_redis import FlaskRedis
 from flask_caching import Cache
 from contextlib import contextmanager
-import json
-import datetime
 
 
 db = SQLAlchemy()

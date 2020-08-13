@@ -6,28 +6,50 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: flask
+    entrypoint: ./docker-entrypoint.sh
     restart: unless-stopped
     environment:
       APP_ENV: "PROD"
       FLASK_DEBUG: "false"
       APP_PORT: 5000
+      DATABASE_URL: "mysql+pymysql://admin:admin@mysql:3306/desafio_db"
     volumes:
       - appdata:/var/www
     ports:
       - "5000:5000"
     depends_on:
       - redis
+      - mysql
     networks:
       - frontend
       - backend
   redis:
     image: redis:4.0.6-alpine
+    restart: unless-stopped
     hostname: redis
     container_name: redis
     networks:
       - backend
     volumes:
       - redis-data:/data/db
+  mysql:
+    image: mysql
+    restart: unless-stopped
+    container_name: mysql
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+    environment:
+      MYSQL_DATABASE: "desafio_db"
+      MYSQL_PASSWORD: "admin"
+      MYSQL_ROOT_PASSWORD: "admin"
+      MYSQL_USER: "admin"
+    cap_add:
+      - SYS_NICE
+    ports:
+      - "3357:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - backend
   webserver:
     build:
       context: nginx
@@ -58,6 +80,8 @@ networks:
 
 volumes:
   redis-data:
+    driver: local
+  mysql-data:
     driver: local
   appdata:
     driver: local

@@ -7,11 +7,8 @@ from desafio.settings import DevConfig, ProdConfig
 from logging.config import dictConfig
 from flask.logging import default_handler
 
-# os.environ["FLASK_DEBUG"] = "true"
-
 CONFIG = DevConfig if get_debug_flag() else ProdConfig
 application = create_app(CONFIG)
-
 
 dictConfig({
     'version': 1,
@@ -24,7 +21,7 @@ dictConfig({
         'formatter': 'default'
     }},
     'root': {
-        'level': 'INFO',
+        'level': 'DEBUG',
         'handlers': ['wsgi']
     }
 })
