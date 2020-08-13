@@ -1,7 +1,12 @@
 namespace :db do
   require "sequel"
   require 'sequel/extensions/seed'
+  require 'sequel/extensions/migration'
   require 'require_all'
+  require 'dotenv'
+
+  Dotenv.load
+
   Sequel.extension :migration, :seed
 
   begin
