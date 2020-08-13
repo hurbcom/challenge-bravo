@@ -1,0 +1,28 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:9.6
+    restart: always
+    container_name: "postgres"
+    environment:
+      - POSTGRES_DB=hurb_currency_converter
+      - POSTGRES_USER=hurb_currency_converter
+      - POSTGRES_PASSWORD=admin123
+      - PGDATA=/var/lib/postgresql/data
+      - TZ=GMT
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  app:
+    build: .
+    command: bash -c "bundle exec rackup -p 3000"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+volumes:
+  postgres-data:
+    driver: local
