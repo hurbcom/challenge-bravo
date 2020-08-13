@@ -15,15 +15,7 @@ RUN  pip3 install --upgrade pip
 RUN  pip3 install -r requirements.txt
 RUN  pip3 install gunicorn
 
-RUN groupadd -g $GROUP_ID www
-RUN useradd -u $USER_ID -g $GROUP_ID  -G www www  -s /bin/bash 
-
-
 RUN chmod +x docker-entrypoint.sh
-
-USER www
+RUN chmod +x docker-entrypoint-dev.sh
 
 EXPOSE 5000
-
-CMD [ "gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "wsgi:application"]
-

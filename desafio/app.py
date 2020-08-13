@@ -7,8 +7,6 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
-from flask_redis import FlaskRedis
-from flask_caching import Cache
 from desafio.extensions import cache, db, migrate, redis_store
 
 
@@ -47,4 +45,5 @@ def register_extensions(app):
 def register_commands(app):
     app.cli.add_command(commands.test)
     app.cli.add_command(commands.init_db_command)
+    app.cli.add_command(commands.seed)
     app.cli.add_command('db', MigrateCommand)

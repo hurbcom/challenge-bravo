@@ -4,6 +4,7 @@ import os
 import click
 from flask.cli import with_appcontext
 from desafio.extensions import db
+from desafio.currency.model import Currency
 
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -32,3 +33,22 @@ def test():
     exit(rv)
 
 
+@click.command()
+@with_appcontext
+def seed():
+    db.session.add(Currency(simbol_currency="BRL",
+                            name_description="Real"
+                            ))
+    db.session.add(Currency(simbol_currency="USD",
+                            name_description="Dolar"
+                            ))
+    db.session.add(Currency(simbol_currency="EUR",
+                            name_description="EURO"
+                            ))
+    db.session.add(Currency(simbol_currency="BTC",
+                            name_description="Bitcoin"
+                            ))
+    db.session.add(Currency(simbol_currency="ETH",
+                            name_description="Ethereum"
+                            ))
+    db.session.commit()

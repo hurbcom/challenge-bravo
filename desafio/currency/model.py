@@ -1,5 +1,3 @@
-import enum
-from typing import List
 from desafio.extensions import db
 
 

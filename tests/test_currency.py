@@ -11,14 +11,10 @@ class TestRepositoryPersona(unittest.TestCase):
 
     def setUp(self):
         self.currencys = CurrencyRepository()
-        self.currency = Currency(simbol_currency="BRL",
-                                 name_description="Real"
-                                 )
-
-    @patch('desafio.extensions.session_scope')
-    def test_2_deve_retornar_integrity_error(self, mock_tmp):
-        with self.assertRaises(IntegrityError):
-            self.currencys.insert(self.currency)
+        self.currency = Currency(
+            simbol_currency="BRL",
+            name_description="Real"
+        )
 
     @patch('desafio.extensions.session_scope')
     def test_1_deve_retornar_id_currency_depois_add(self, mock_tmp):
@@ -27,7 +23,13 @@ class TestRepositoryPersona(unittest.TestCase):
         self.assertEqual(id_currency, 1)
 
     @patch('desafio.extensions.session_scope')
+    def test_2_deve_retornar_integrity_error(self, mock_tmp):
+        with self.assertRaises(IntegrityError):
+            self.currencys.insert(self.currency)
+
+    @patch('desafio.extensions.session_scope')
     def test_3_deve_obter_uma_currency_by_id(self, mock_tmp):
+        self.currency.id = 1
         currency = self.currencys.get_currency_by_id(self.currency)
         self.assertIsInstance(currency.id, int)
         self.assertTrue(currency == self.currency)
