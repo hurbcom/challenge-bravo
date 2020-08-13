@@ -5,9 +5,11 @@ import { getCustomRepository } from 'typeorm';
 import AddCurrenciesService from '../services/AddCurrenciesService';
 import CurrenciesRepositories from '../repositories/CurrenciesRepositories';
 import DeleteCurrenciesService from '../services/DeleteCurrenciesService';
+import ExchangeCurrencyService from '../services/ExchangeCurrenciesService';
 
 const currencyRouter = Router();
 const addCurrency = new AddCurrenciesService();
+const exchangeCurrencies = new ExchangeCurrencyService();
 
 currencyRouter.get('/', async (request, response) => {
   const currencyRepository = getCustomRepository(CurrenciesRepositories);
@@ -51,6 +53,20 @@ currencyRouter.delete('/:id', async (request, response) => {
   }
 });
 
-currencyRouter.post('/convert');
+currencyRouter.post('/convert', async (request, response) => {
+  try {
+    const { to, from, amount } = request.body;
+    const convert = await exchangeCurrencies.execute({ to, from, amount });
+    return response.json({ mesage: 'Currency converted successfully', convert });
+  } catch (err) {
+    return response.status(400).json(
+      {
+        message: 'Invalid entries',
+        error: err.mesage,
+      },
+
+    );
+  }
+});
 
 export default currencyRouter;
