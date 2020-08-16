@@ -54,7 +54,6 @@ services:
     build:
       context: nginx
       dockerfile: Dockerfile
-    image: nginx
     container_name: webserver
     restart: unless-stopped
     environment:
@@ -69,6 +68,33 @@ services:
       - nginxdata:/var/log/nginx
     depends_on:
       - flask
+    networks:
+      - frontend
+
+  master:
+    image: locustio/locust
+    container_name: locust_master
+    environment:
+      - LOCUST_MODE=master
+      - TARGET_URL=http://webserver:80
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./locust-scripts:/locust-scripts
+    depends_on:
+      - webserver
+    networks:
+      - frontend
+    command: -f /locust-scripts/locustfile.py --headless -u 2000 -r 300  --csv=/locust-scripts/output  --master  --host=http://webserver:80  --run-time=2m
+
+  worker:
+    image: locustio/locust
+    container_name: locust_worker
+    volumes:
+      - ./locust-scripts:/locust-scripts
+    command: -f /locust-scripts/locustfile.py --worker --master-host master
+    depends_on:
+      - webserver
     networks:
       - frontend
 

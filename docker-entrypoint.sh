@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/sh 
 
 set -e
 
@@ -21,11 +21,17 @@ until db_ready; do
   sleep 1
 done
 >&2 echo 'Database is available'
-flask db init;
-flask db migrate;  
-flask db upgrade; 
-flask seed;
-echo "Starting server"
-gunicorn -w 1 --bind 0.0.0.0:5000 wsgi:application;
 
+lines=$(find migrations/ | wc -l)
+
+if [ $lines -eq 0 ]; then
+    echo "Starting Migrate"
+    flask db init;
+    flask db migrate;  
+    flask db upgrade; 
+    flask seed;
+fi
+
+echo "Starting server"
+gunicorn -w 4 --bind 0.0.0.0:5000 wsgi:application;
 exec "$@"

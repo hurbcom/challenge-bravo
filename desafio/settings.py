@@ -18,7 +18,7 @@ class Config(object):
 class ProdConfig(Config):
     """Production configuration."""
     ENV = 'prod'
-    DEBUG = True
+    DEBUG = False
     CACHE_TYPE = "redis"
     CACHE_DEFAULT_TIMEOUT = 300
     CACHE_REDIS_HOST = "redis"
