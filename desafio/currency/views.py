@@ -52,10 +52,22 @@ def insert_currency():
 
 @bp.route('/', methods=["GET"])
 def get_quotes():
-    cg = cache.get('quote')
+
     from_currency = request.args.get('from')
     to_currency = request.args.get('to')
     amount = request.args.get('amount')
+
+    message_bad_request = f'O elemento amount = {amount} não' + \
+        'corresponde a um valor valido'
+
+    try:
+        amount = float(amount)
+    except ValueError:
+        return json.dumps({'error': message_bad_request}), \
+            HTTPStatus.BAD_REQUEST, JSON_CONTENT
+
+    cache_key = from_currency+to_currency+str(round(amount, 2))
+    cache_get = cache.get(cache_key)
 
     currencies = CurrencyRepository()
 
@@ -70,13 +82,17 @@ def get_quotes():
         symbol_currency=find_currency.simbol_currency,
         currencies_quote=[to_currency])
 
-    if cg is None:
-        cg = service_currency_price. \
-            calc_currency_price_by_currencies_quote(
-                float(amount))
-        cache.set('quote', cg, timeout=30)
+    if cache_get is None:
+        try:
+            cache_get = service_currency_price. \
+                calc_currency_price_by_currencies_quote(
+                    amount)
+            cache.set(cache_key, cache_get, timeout=5*60)
+        except ValueError:
+            return json.dumps({'erro': 'Limite de cota de requisicoes'}), \
+                HTTPStatus.OK, JSON_CONTENT
 
-    return json.dumps(cg, cls=EnhancedJSONEncoder),\
+    return json.dumps(cache_get, cls=EnhancedJSONEncoder), \
         HTTPStatus.OK, JSON_CONTENT
 
 

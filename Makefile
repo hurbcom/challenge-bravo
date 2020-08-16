@@ -1,7 +1,13 @@
 prod:
 	- ( \
-	   docker-compose -f docker-compose.yml up -d --build\
+	  docker-compose  -f docker-compose.yml up -d --no-deps --build webserver redis mysql flask\
     )
+
+teste-carga:
+	- ( \
+	  docker-compose  -f docker-compose.yml up -d --build \
+    )
+
 
 dev:    
 	- ( \
@@ -17,11 +23,7 @@ test:
   
 remove:
 	- ( \
-        docker-compose down --rmi all  -v  --remove-orphans \
-        )
-
-
-clean-all-images:
-	- ( \
-         docker rmi -f $(docker images -q) \
+        docker-compose stop;\
+        docker-compose down --rmi all  -v  --remove-orphans ; \
+        docker volume prune; \
         )

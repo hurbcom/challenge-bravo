@@ -10,7 +10,7 @@ pytest-mock
 Flask-Caching==1.8
 redis
 sqlalchemy
-mysqlclient==2.0.1
+mysqlclient==2.0.0
 pymysql
 requests
 psycopg2-binary==2.8.5
