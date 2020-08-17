@@ -6,7 +6,7 @@ class Cache {
 
     constructor() {
       this.redis = new Redis({
-        host: 'localhost',
+        host: process.env.REDIS_HOST,
         port: 6379,
         keyPrefix: 'cache:',
       });
