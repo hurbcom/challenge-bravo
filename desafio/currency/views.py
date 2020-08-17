@@ -1,5 +1,5 @@
 from desafio.currency.model import Currency
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, make_response
 from http import HTTPStatus
 from desafio.utils import EnhancedJSONEncoder
 import json
@@ -13,10 +13,14 @@ from desafio.extensions import cache
 bp = Blueprint('currencies', __name__,
                url_prefix="/currency")
 
+default = Blueprint('default', __name__,
+                    url_prefix="/")
+
+
 JSON_CONTENT = {'Content-Type': 'application/json'}
 
 
-@bp.route("/healthcheck", methods=['GET'], strict_slashes=False)
+@default.route("/healthcheck", methods=['GET'], strict_slashes=False)
 def healthcheck():
     return jsonify({'status': 'online'})
 
@@ -55,8 +59,12 @@ def get_quotes():
 
     from_currency = request.args.get('from')
     to_currency = request.args.get('to')
-    amount = request.args.get('amount')
 
+    if not from_currency or not to_currency:
+        return json.dumps({'error': "necessario as querys strings from e to"}), \
+            HTTPStatus.BAD_REQUEST, JSON_CONTENT
+
+    amount = request.args.get('amount')
     message_bad_request = f'O elemento amount = {amount} não' + \
         'corresponde a um valor valido'
 
@@ -89,7 +97,7 @@ def get_quotes():
                     amount)
             cache.set(cache_key, cache_get, timeout=5*60)
         except ValueError:
-            return json.dumps({'erro': 'Limite de cota de requisicoes'}), \
+            return json.dumps({'error': 'Atingiu o limite de cota de requisições'}), \
                 HTTPStatus.OK, JSON_CONTENT
 
     return json.dumps(cache_get, cls=EnhancedJSONEncoder), \
@@ -124,3 +132,8 @@ def get_currencies():
 
     return json.dumps(dict_currencies, cls=EnhancedJSONEncoder), \
         HTTPStatus.OK, JSON_CONTENT
+
+
+@bp.errorhandler(400)
+def bad_request(error):
+    return make_response(jsonify({'error': "necessario campo symbol e name_description"}), 400)

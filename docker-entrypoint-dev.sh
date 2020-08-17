@@ -10,4 +10,4 @@ if [ $lines -eq 0 ]; then
 fi
 
 echo "Starting server"
-gunicorn --daemon  -w 8 --bind 0.0.0.0:5000 wsgi:application;
+gunicorn -w 4 --bind 0.0.0.0:5000 wsgi:application;

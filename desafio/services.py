@@ -17,7 +17,7 @@ class ServiceQuoteCurrencyPrice:
         try:
             response = requests.get(api_url_base)
         except requests.exceptions.ConnectionError:
-            return {'error': f'Max retries exceeded with url:{api_url_base}'}
+            return {'error': f'Foi execedido o maximo de requisições para: {api_url_base}'}
 
         if response.status_code == 200:
             return json.loads(response.content.decode("utf-8"))

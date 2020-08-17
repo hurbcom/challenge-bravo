@@ -30,7 +30,6 @@ class CurrencyRepository():
 
     def update(self, currency):
         with session_scope() as session:
-            print(f' Currency: {currency.simbol_currency}')
             session.query(Currency).filter(
                 Currency.id == currency.id).update(
                     {"simbol_currency": currency.simbol_currency,

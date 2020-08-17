@@ -85,7 +85,7 @@ services:
       - webserver
     networks:
       - frontend
-    command: -f /locust-scripts/locustfile.py --headless -u 2000 -r 300  --csv=/locust-scripts/output  --master  --host=http://webserver:80  --run-time=2m
+    command: -f /locust-scripts/locustfile.py --headless -u 4000 -r 300  --csv=/locust-scripts/outputs/desafio  --master  --host=http://webserver:80  --run-time=3m
 
   worker:
     image: locustio/locust

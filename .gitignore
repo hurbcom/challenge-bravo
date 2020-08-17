@@ -1,7 +1,9 @@
-__pycache__
 .editorconfig
 build
 .vscode
 .DS_Store
 desafio/.DS_Store
 desafio.sqlite
+__pycache__
+*.csv
+migrations

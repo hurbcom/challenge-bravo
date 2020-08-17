@@ -6,12 +6,6 @@ def test_config():
     assert create_app(TestConfig).testing
 
 
-def test_db_url_environ(monkeypatch):
-    monkeypatch.setenv("DATABASE_URL", "sqlite:///environ")
-    app = create_app(TestConfig)
-    assert app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///environ"
-
-
 def test_init_db_command(runner, monkeypatch):
     class Recorder:
         called = False

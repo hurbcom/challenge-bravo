@@ -23,6 +23,7 @@ def create_app(config_object=settings.ProdConfig):
 
 def register_blueprints(app):
     app.register_blueprint(currency.views.bp)
+    app.register_blueprint(currency.views.default)
 
 
 def register_shellcontext(app):

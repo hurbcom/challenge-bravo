@@ -18,7 +18,7 @@ class TestServiceQuoteCurrencyPrice(unittest.TestCase):
             "EUR":  0.1567
         }
         self.money = 20
-        self.round_value = 4
+        self.round_value = 2
 
     def _mock_response(
             self,
@@ -41,14 +41,14 @@ class TestServiceQuoteCurrencyPrice(unittest.TestCase):
 
         return mock_resp
 
-    @ patch('requests.get')
+    @patch('requests.get')
     def test_1_deve_retornar_none_if_currency_not_exist(self, mock_get):
         mock_resp = self._mock_response(
             json_data=self.mock_quotes_result, status=400)
         mock_get.return_value = mock_resp
         self.assertIsNone(self.service_currence.get_currencies_quote())
 
-    @ patch('requests.get')
+    @patch('requests.get')
     def test_2_deve_retornar_currency_quotes(self, mock_get):
         mock_resp = self._mock_response(json_data=self.mock_quotes_result)
         mock_get.return_value = mock_resp
