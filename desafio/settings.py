@@ -48,4 +48,6 @@ class TestConfig(Config):
     SECRET_KEY = "test"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CACHE_TYPE = 'simple'
-    SQLALCHEMY_DATABASE_URI = "sqlite:///environ"
+    DB_NAME = 'test.sqlite'
+    DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)

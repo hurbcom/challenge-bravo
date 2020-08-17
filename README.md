@@ -1,65 +1,102 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# API Chalenge Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+## API deve retornar a cotação das moedas.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+A api toma como bade os dados oriundos da api **min-api.cryptocompare.com** . Os dados providos por essa api são manipulados por um servico chamado ServiceQuoteCurrencyPrice que retor na o valor da moeda atual baseado na query string amount.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## 1 Ambientes
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+O projeto é possui dois ambiente de dev e prod. Ambas configurações se encontram no arquivos settings.
+### 1.1 Dev
+No ambiente de dev usa se o cache type simple e sqlite. O docker-compose que sobe a app em dev só possui o servico flask
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+### 1.2 Prod
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+No ambiente em prod usa se o cache redis e o mysql. O docker-compose que sobe a app em possui o servico **flask , redis , mysql e webserver** . O serviço web  é uma imagen com nginx, ela foi alterada afim de obter aumento de desempenho. Suas confs se encontram na pasta nginx, onde existe o Dockerfile reponsavel pela criacao da imagem e uma pasta conf.d com os seguintes arquivos:
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+- conf.d:
+   - app.conf
+   - http.conf
+   - nginx.conf
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+Foi adicionado na location configuração de stale cache e de proxy lock on. Exitem dois headers que retornam a informações de cache  **X-Cache-Status** e **X-CACHE-KEY**, informando o status do cache e o path cacheado
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
 
-## Requisitos
+## Cache 
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+A aplicação possui dois nives de cache, um de FE e outro de BE . O de FE é provido pelo nginx e serve um stale caso aja algum problema no servidor de BE, e um cache 3m de http code 200. O de BE é provido pelo redis, para a resposta do metodo  calc_currency_price_by_currencies_quote  da classe ServiceQuoteCurrencyPrice. A soma dos caches é de 8 min o que garante a perfomance esperada. A key do cache de BE é formado pela junção from_currency+to_currency+str(round(amount, 2)
+valor é a redondado para dois, para diminuir o scape de cache para flutuantes. Uma boa opção seria limitar o tamanho do amount. Entretanto, neste caso existe a questão da dualidade entre dominio do negocio e performance. Nesse cenario, quanto maior é o tempo de cache(range maior de valores cacheados), mais distante o valor é da realidade.
 
-## Critério de avaliação
+## DDD
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Trabalhou se no conceito do livro de Eric Evans (DDD) na concepção da arquitetura de software. Possuindo assim a ideias de Serviços e Repositorios, que auxiliam criar uma arquitetura com alta coesão e baixo acoplamento
 
-## Dúvidas
+## Endpoints
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
 
-Boa sorte e boa viagem! ;)
+|Método|Rotas |Query String | Parametros | Body
+|------|------------|-----------------------|-----------|-------|
+|GET |/healthcheck|- |-| -|
+|GET |/currency |`from={moeda}`,`to={moeda}`,`amount=1`|-|-|
+|POST |/currency |-|-| `{"simbol_currency":"moeda","name_description": "descricao"}`|
+|DELETE|/currency/{ID or symbol_currency}|-|`symbol_currency`,`id`|-|
+|GET|/currency/all|-|-|-|
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+
+### Especificações de Requests e Responses
+
+  - Request:
+
+    ```bash
+    curl -X GET "/currency?from=BTC&to=BRL&amount=1"
+    ```
+
+  - Response Body esperado:
+
+
+## Como executar o projeto
+
+- Para instalar e executar sem docker:
+    - O código executara com as confs de dev
+    - ```make install```
+    - ```make migrate```
+    - ```make run```
+
+- Para instalar e executar com docker em dev:
+    - ```make dev```
+
+- Para instalar e executar com docker em prod:
+    - ```make prod```
+
+- Para instalar e executar com docker em prod e executar teste de carga:
+    - ```make testecarga```
+
+- Para **WARNING** remover containers:
+    - ```make remove```
+    - Esse comando executa os seguintes comandos em background e fara um clean nos volumes e imagens:
+        - docker-compose stop;\
+        - docker-compose down --rmi all  -v  --remove-orphans ; \
+        -  docker volume prune; \
+        -  docker image prune; \
+- Para executar os tests sem docker:
+    - ```make test ```
+
+- Para executar os tests com docker **Não é muito recomendado para trabalho muito delay para criacao das imagens**:
+    - ```make testdocker ```
+
+- Remover a imagem de test
+    -  ```make removetest```
+
+
+## Teste de carga
+
+O teste de carga gera 3 arquivos o que podera ajudar a acompanhar os resultados. Ele permanecera executando por 3m 
+
+- desafio_failures.csv
+- desafio_stats.csv
+- desafio_stats_history.csv
+
+## **Cuidados Docker**
+
+Recomendado a cada utilização dos comandos que execute o ```make remove``` e um ```docker rmi -f $(docker images -q)```
+Importante:  isso apagara todas as imagens e volumes na sua maquina

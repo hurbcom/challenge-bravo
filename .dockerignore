@@ -1,0 +1,15 @@
+build
+.vscode
+.editorconfig
+.gitignore
+.Python
+desafio.sqlite
+test.sqlite
+tests
+README.md
+.DS_Store
+desafio/.DS_Store
+.pytest_cache
+.mypy_cache
+__pycache__
+migrations
