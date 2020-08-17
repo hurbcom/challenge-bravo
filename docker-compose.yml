@@ -1,0 +1,46 @@
+version: '3.4'
+
+services:
+    challenge_bravo_redis:
+        container_name: challenge_bravo_redis
+        image: redis
+        ports:
+            - "6379:6379"
+        networks:
+            - challenge-bravo-network
+    challenge_bravo_postgres:
+        container_name: challenge_bravo_postgres
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: docker
+        ports:
+            - "5433:5432"
+        networks:
+            - challenge-bravo-network
+    challenge_bravo_app:
+        container_name: challenge_bravo_app
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: yarn dev:server
+        image: challenge_bravo_app
+        ports:
+            - "3333:3333"
+        networks:
+            - challenge-bravo-network
+        depends_on:
+            - challenge_bravo_redis
+            - challenge_bravo_postgres
+        environment:
+            REDIS_HOST: challenge_bravo_redis
+            REDIS_PORT: 6379
+            DB_HOST: challenge_bravo_postgres
+            DB_PORT: 5432
+            DB_USERNAME: postgres
+            DB_PASSWORD: docker
+            DB_DATABASE: postgres
+
+networks:
+    challenge-bravo-network:
+        driver: bridge
