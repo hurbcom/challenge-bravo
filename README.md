@@ -34,10 +34,10 @@ Trabalhou se no conceito do livro de Eric Evans (DDD) na concepção da arquitet
 ## Endpoints
 
 
-|Método|Rotas |Query String | Parametros | Body
+|Método|Rotas |Query String | Parametros | Body|
 |------|------------|-----------------------|-----------|-------|
 |GET |/healthcheck|- |-| -|
-|GET |/currency |`from={moeda}`,`to={moeda}`,`amount=1`|-|-|
+|GET |/currency |`from={moeda}`,`to={moeda}`,`amount=1`|-|-||
 |POST |/currency |-|-| `{"simbol_currency":"moeda","name_description": "descricao"}`|
 |DELETE|/currency/{ID or symbol_currency}|-|`symbol_currency`,`id`|-|
 |GET|/currency/all|-|-|-|
