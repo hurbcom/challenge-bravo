@@ -1,106 +1,86 @@
-import request from 'supertest';
-import { isUuid } from 'uuidv4';
-import app from '../app';
+import { uuid } from 'uuidv4';
+import FakeAddCurrencyService from '../services/fakes/FakeAddCurrenciesService';
+import FakeDeleteCurrencyService from '../services/fakes/FakeDeleteCurrenciesService';
+import FakeExchangeCurrencyService from '../services/fakes/FakeExchangeCurrenciesService';
+import FakeCurrenciesRepositories from '../repositories/fakes/FakeCurrenciesRepositories';
 
 describe('Create currency', () => {
   it('should be able to add new currency coins', async () => {
-    const response = await request(app).post('/currencies').send({
-      code: 'TZS',
-      name: 'Tanzania shilling',
+    const fakeCurrenciesRepository = new FakeCurrenciesRepositories();
+    const addCurrency = new FakeAddCurrencyService();
+    const currency = await fakeCurrenciesRepository.create({
+      id: uuid(),
+      code: 'BRL',
+      name: 'Brazilian Real',
     });
+    addCurrency.execute(currency);
 
-    expect(isUuid(response.body.id)).toBe(true);
-
-    expect(response.body).toMatchObject({
-      message: 'New currency created successfully!',
-      id: expect.any(String),
-      code: 'TZS',
-      name: 'Tanzania shilling',
-    });
+    expect(currency).toHaveProperty('id');
+    expect(currency.code).toBe('BRL');
+    expect(currency.name).toBe('Brazilian Real');
   });
+
   it('should not be able to add new currency coin that already exists in the database', async () => {
-    await request(app).post('/currencies').send({
-      code: 'TZS',
-      name: 'Tanzania shilling',
+    const fakeCurrenciesRepository = new FakeCurrenciesRepositories();
+    const addCurrency = new FakeAddCurrencyService();
+    const currency = await fakeCurrenciesRepository.create({
+      id: uuid(),
+      code: 'USD',
+      name: 'United States Dolar',
     });
+    addCurrency.execute(currency);
 
-    const response = await request(app).post('/currencies').send({
-      code: 'TZS',
-      name: 'Tanzania shilling',
-    });
-
-    expect(response.body).toMatchObject({
-      message: 'Invalid entries. Make sure the code you entering is 3 letter long and does not exist in the list of available currencies',
-    });
+    expect(fakeCurrenciesRepository.create({
+      id: uuid(),
+      code: 'USD',
+      name: 'United States Dolar',
+    })).rejects.toBeInstanceOf(Error);
   });
 
   it('should not be able to add a currency with more than 3 digits', async () => {
-    const response = await request(app).post('/currencies').send({
-      code: 'TZSS',
-      name: 'Tanzania shilling',
-    });
-
-    expect(response.body).toMatchObject({
-      message: 'Invalid entries. Make sure the code you entering is 3 letter long and does not exist in the list of available currencies',
-    });
-  });
-});
-
-describe('List currencies coins', () => {
-  it('should be able to list the transactions', async () => {
-    await request(app).post('/currencies').send({
-      code: 'AFN',
-      name: 'Afghan afghani',
-    });
-
-    await request(app).post('/currencies').send({
-      code: 'CAD',
-      name: 'Canadian dollar',
-    });
-
-    const response = await request(app).get('/currencies');
-
-    expect(response.body.currencies).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: expect.any(String),
-          code: 'AFN',
-          name: 'Afghan afghani',
-        }),
-        expect.objectContaining({
-          id: expect.any(String),
-          code: 'CAD',
-          name: 'Canadian dollar',
-        }),
-      ]),
-    );
+    const fakeCurrenciesRepository = new FakeCurrenciesRepositories();
+    expect(fakeCurrenciesRepository.create({
+      id: uuid(),
+      code: 'USDDDD',
+      name: 'United States Dolar',
+    })).rejects.toBeInstanceOf(Error);
   });
 });
 
 describe('Delete currency coin', () => {
   it('should be able to delete a currency coin', async () => {
-    const response = await request(app).delete('/currencies/:id').send({
-      id: expect.any(String),
+    const fakeCurrenciesRepository = new FakeCurrenciesRepositories();
+    const addCurrency = new FakeAddCurrencyService();
+    const deleteCurrency = new FakeDeleteCurrencyService();
+    const id = uuid();
+    const currency = await fakeCurrenciesRepository.create({
+      id,
+      code: 'BRL',
+      name: 'Brazilian Real',
     });
-
-    expect(response.body).toMatchObject({
-      message: 'Currency coin deleletd successfully',
-    });
+    addCurrency.execute(currency);
+    deleteCurrency.execute(id);
+    expect(fakeCurrenciesRepository.findCodeById(id)).rejects.toBeInstanceOf(Error);
   });
 });
 
 describe('Exchage currencies coins', () => {
-  it('should be able to convert available coins', async () => {
-    const response = await request(app).post('/currencies').send({
-      from: 'BRL',
-      to: 'USD',
-      amount: 1200,
-    });
+  it('should be able to exchange currencies', async () => {
+    const fakeCurrenciesRepository = new FakeCurrenciesRepositories();
+    const exchangeCurrency = new FakeExchangeCurrencyService();
 
-    expect(response.body).toMatchObject({
-      from: 'BRL',
-      to: 'USD',
-      amount: 226.71,
+    await fakeCurrenciesRepository.create({
+      id: uuid(),
+      code: 'BRL',
+      name: 'Brazilian Real',
     });
+    await fakeCurrenciesRepository.create({
+      id: uuid(),
+      code: 'USD',
+      name: 'United States Dolar',
+    });
+    const convertedAmount = exchangeCurrency.execute({ from: 'USD', to: 'BRL', amount: 1000 });
+
+    expect(convertedAmount).toBeTruthy();
   });
 });
