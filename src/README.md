@@ -2,6 +2,12 @@
 
 Challenge created by Hurb to develop an API to convert, create, delete, and convert currencies coins. Well, Hurb, challenge accepted!
 
+## How to run the application:
+To run the aplication you simply have to run `docker-compose up`
+
+
+Ps: If the available currencies (BRL, EUR, BTC, ETH, USD) doesn't store in the batabse automatically when running the docker command, you just have to use the Add Currency endpoint to create those currency in the database. To see how the endpoints work simply follow the instructions bellow.
+
 
 ## Add currency
 
@@ -33,7 +39,7 @@ Example:
 
 | Status Code | Description | Response |
 |--|--|--|
-| 200 | Currency added | ```{message: "New currency coin created successfully!"}``` |
+| 200 | Currency added | ```{message: "New currency coin created successfully!", "currency": {"code": "BTC", "name": "Bitcoin", "id": "11c68d48-f16f-4ce4-b858-dbb4402a39bb"}}``` |
 | 400 | Validation error | ```{message: "Invalid entries. Make sure the code you entering is 3 letter long and does not exist in the list of available currencies"}```  |
 | 500 | Internal Server error| Unexpected error |
 
@@ -54,7 +60,7 @@ Example:
 
 | Status Code | Description | Response |
 |--|--|--|
-| 200 | Currencies listed | ```"currencies": {{"id": "e56f762e-0d84-4a16-9586-a9f1dd53fdb8", "code": "TZS", "name":"Tanzania shilling"}, {"id": "e5634362e-034284-2rer6-9er6-e9ffddfer53fdb8", "code": "CAD", "name": "Canadian dollar"}}``` |
+| 200 | Currencies listed | ```[{"id": "e56f762e-0d84-4a16-9586-a9f1dd53fdb8", "code": "TZS", "name":"Tanzania shilling"}, {"id": "e5634362e-034284-2rer6-9er6-e9ffddfer53fdb8", "code": "CAD", "name": "Canadian dollar"}]``` |
 | 400 | Validation error | ```{message: "Invalid entries"}```  |
 | 500 | Internal Server error| Unexpected error |
 
@@ -78,7 +84,7 @@ id: { type: string, required: true }
 
 | Status Code | Description | Response |
 |--|--|--|
-| 200 | Currency coin deleted | ```{message: 'Currency coin deleletd successfully'}``` |
+| 204 | Currency coin deleted |  |
 | 400 | Validation error | ```{message: "Invalid entries"}```  |
 | 500 | Internal Server error| Unexpected error |
 
@@ -92,14 +98,14 @@ Users can only convert coins that are available on the list of currencies.
 
 **METHOD / CONTEXT**
 
-##### `POST`  /currencies/converter
+##### `POST`  /currencies/convert
 
 
 **REQUEST BODY**
 
     from: { type: string, required: true },
     to: { type: string, required: true },
-    ammount: { type: Double, required: true }
+    ammount: { type: number, required: true }
 
 **Example**:
 ```json
@@ -114,7 +120,7 @@ Users can only convert coins that are available on the list of currencies.
 
 | Status Code | Description | Response |
 |--|--|--|
-| 200 | Currencies converted | ```{{“from": "BRL", "to": "USD", "ammount":226.71}, }``` |
+| 200 | Currencies converted | ```{"message":"Currency converted successfully", "covert":226.71}, }``` |
 | 400 | Validation error | ```{message: "Invalid entries"}```  |
 | 500 | Internal Server error| Unexpected error |
 
