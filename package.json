@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev:server": "ts-node-dev --ignore-watch node_modules src/server.ts",
-    "test": "cross-env NODE_ENV=test jest",
+    "dev:server": "ts-node-dev --inspect --ignore-watch node_modules src/server.ts",
+    "test": "jest",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
