@@ -3,8 +3,8 @@ const { asFunction, createContainer, asValue } = require('awilix')
 // ALphabetical
 const app = require('./app')
 const config = require('./config')
-const logger = require('./shared/services/LoggerService')
-const response = require('./shared/response')
+const logger = require('./currency/infrastructure/logging/LoggerService')
+const response = require('./currency/infrastructure/common/response')
 const router = require('./config/routes')
 const server = require('./config/server')
 

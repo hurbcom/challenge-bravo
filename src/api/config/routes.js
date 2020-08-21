@@ -3,8 +3,8 @@ const helmet = require('helmet')
 const cors = require('cors')
 const compression = require('compression')
 const bodyParser = require('body-parser')
-const httpLogger = require('api/shared/middlewares/http_logger')
-const handleErr = require('api/shared/middlewares/handle_err')
+const httpLogger = require('api/currency/infrastructure/logging/http_logger')
+const handleErr = require('api/currency/application/middlewares/handle_err')
 const R = require('ramda')
 
 
