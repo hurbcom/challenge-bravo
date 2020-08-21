@@ -3,7 +3,7 @@ const express = require('express')
 module.exports = ({ logger, config, router }) => {
     const app = express()
 
-    app.use('/', router)
+    app.use(router)
 
     return {
         app,

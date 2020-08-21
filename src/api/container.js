@@ -4,8 +4,11 @@ const { asFunction, createContainer, asValue } = require('awilix')
 const app = require('./app')
 const config = require('./config')
 const logger = require('./shared/services/LoggerService')
+const response = require('./shared/response')
 const router = require('./config/routes')
 const server = require('./config/server')
+
+const currencyFeature = require('api/currency')
 
 const container = createContainer();
 
@@ -13,8 +16,11 @@ const container = createContainer();
 container.register({
     app: asFunction(app).singleton(),
     config: asValue(config),
+    currencyFeatureRouter: asFunction(currencyFeature.router).singleton(),
+    currencyConversionAppService: asFunction(currencyFeature.conversionAppService).singleton(),
     logger: asFunction(logger).singleton(),
     router: asFunction(router).singleton(),
+    response: asFunction(response).singleton(),
     server: asFunction(server).singleton(),
 })
 

@@ -27,6 +27,7 @@
         "morgan": "^1.10.0",
         "path": "^0.12.7",
         "ramda": "^0.27.1",
+        "tcomb": "^3.2.29",
         "winston": "^3.3.3"
     },
     "devDependencies": {

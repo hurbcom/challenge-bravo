@@ -7,9 +7,12 @@ const httpLogger = require('api/shared/middlewares/http_logger')
 const handleErr = require('api/shared/middlewares/handle_err')
 const R = require('ramda')
 
-const currencyFeature = require('api/currency')
 
-module.exports = ({ config, logger }) => {
+module.exports = ({
+    config,
+    logger,
+    currencyFeatureRouter,
+}) => {
     const router = Router()
 
     const apiRouter = Router()
@@ -29,7 +32,7 @@ module.exports = ({ config, logger }) => {
     })
 
     // Routers here
-    apiRouter.use('/currency', currencyFeature.router)
+    apiRouter.use('/currency', currencyFeatureRouter)
 
     router.use(httpLogger(logger))
     router.use(`/api/${config.version}`, apiRouter)

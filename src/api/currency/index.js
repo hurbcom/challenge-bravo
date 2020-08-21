@@ -1,5 +1,7 @@
-const router = require('./routes')
+const router = require('./application/routes')
+const conversionAppService = require('./application/impl/ConversionService')
 
 module.exports = {
-    router
+    router,
+    conversionAppService,
 }
