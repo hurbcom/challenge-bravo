@@ -1,0 +1,36 @@
+{
+    "name": "challenge-bravo",
+    "version": "1.0.0",
+    "description": "An API for hurb's challenge",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "cross-env NODE_PATH=. node cluster.js",
+        "start:dev": "cross-env NODE_PATH=. nodemon cluster.js",
+        "start:no-cluster": "cross-env NODE_PATH=. node index.js",
+        "start:cc": "codecrumbs -d src -e api/container.js"
+    },
+    "author": "Alexander Santos",
+    "license": "MIT",
+    "dependencies": {
+        "awilix": "^4.2.6",
+        "body-parser": "^1.19.0",
+        "compression": "^1.7.4",
+        "config": "^3.3.1",
+        "cors": "^2.8.5",
+        "cross-env": "^7.0.2",
+        "express": "^4.17.1",
+        "file-system": "^2.2.2",
+        "helmet": "^4.1.0",
+        "http-status": "^1.4.2",
+        "lodash": "^4.17.20",
+        "morgan": "^1.10.0",
+        "path": "^0.12.7",
+        "ramda": "^0.27.1",
+        "winston": "^3.3.3"
+    },
+    "devDependencies": {
+        "codecrumbs": "^1.7.3",
+        "pm2": "^4.4.1"
+    }
+}
