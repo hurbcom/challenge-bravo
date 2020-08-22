@@ -7,7 +7,8 @@ const logger = require('./currency/infrastructure/logging/LoggerService')
 const response = require('./currency/infrastructure/common/response')
 const router = require('./config/routes')
 const server = require('./config/server')
-
+const database = require('./currency/infrastructure/knex/connection')
+const ratesAPI = require('./currency/infrastructure/exchangeRatesAPI')
 const currencyFeature = require('api/currency')
 
 const container = createContainer();
@@ -16,11 +17,16 @@ const container = createContainer();
 container.register({
     app: asFunction(app).singleton(),
     config: asValue(config),
-    currencyFeatureRouter: asFunction(currencyFeature.router).singleton(),
+    currencyConversionService: asFunction(currencyFeature.conversionService).singleton(),
     currencyConversionAppService: asFunction(currencyFeature.conversionAppService).singleton(),
+    currencyFeatureRouter: asFunction(currencyFeature.router).singleton(),
+    currencyAppService: asFunction(currencyFeature.currencyAppService).singleton(),
+    currencyRepository: asFunction(currencyFeature.currencyRepository).singleton(),
+    database: asFunction(database).singleton(),
     logger: asFunction(logger).singleton(),
-    router: asFunction(router).singleton(),
+    ratesAPI: asFunction(ratesAPI).singleton(),
     response: asFunction(response).singleton(),
+    router: asFunction(router).singleton(),
     server: asFunction(server).singleton(),
 })
 
