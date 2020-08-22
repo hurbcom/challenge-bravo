@@ -4,7 +4,7 @@ const cors = require('cors')
 const compression = require('compression')
 const bodyParser = require('body-parser')
 const httpLogger = require('api/currency/infrastructure/logging/http_logger')
-const handleErr = require('api/currency/application/middlewares/handle_err')
+const handleErr = require('api/currency/infrastructure/middlewares/handle_err')
 const R = require('ramda')
 
 
