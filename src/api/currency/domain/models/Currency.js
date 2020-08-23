@@ -4,4 +4,4 @@ const AllowedCurrency = t.struct({
     abbreviation: t.String
 })
 
-module.exports = compose(AllowedCurrency)
+module.exports = AllowedCurrency
