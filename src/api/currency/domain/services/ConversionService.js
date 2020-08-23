@@ -2,8 +2,8 @@ module.exports = ({
     ratesAPI
 }) => {
     const convert = async (from, to, amount) => {
-        const rates = await ratesAPI.getRates(from)
-        const conversionRate = rates[to]
+        const rates = await ratesAPI.getRates(from.abbreviation)
+        const conversionRate = rates[to.abbreviation]
 
         return amount * conversionRate
     }

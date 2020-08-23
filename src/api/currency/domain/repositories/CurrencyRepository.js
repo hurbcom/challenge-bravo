@@ -1,6 +1,5 @@
 module.exports = ({ database }) => {
 
-    console.log("db", database)
 
     const getAll = () => {
         return database.select('*').from('currencies')

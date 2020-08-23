@@ -10,6 +10,7 @@ module.exports = {
         migrations: {
             tableName: 'currency',
             directory: 'api/currency/infrastructure/knex/migrations'
-        }
+        },
+        useNullAsDefault: true
     },
 };

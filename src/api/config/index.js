@@ -1,6 +1,7 @@
 /** config
  * Creates an object that holds the configuration-related values
  */
+require('dotenv').config()
 
 const path = require('path')
 

@@ -1,4 +1,4 @@
-const { asFunction, createContainer, asValue } = require('awilix')
+const { asFunction, createContainer, asValue, asClass } = require('awilix')
 
 // ALphabetical
 const app = require('./app')
@@ -22,6 +22,7 @@ container.register({
     currencyFeatureRouter: asFunction(currencyFeature.router).singleton(),
     currencyAppService: asFunction(currencyFeature.currencyAppService).singleton(),
     currencyRepository: asFunction(currencyFeature.currencyRepository).singleton(),
+    currencyFactory: asFunction(cradle => currencyFeature.currencyFactory),
     database: asFunction(database).singleton(),
     logger: asFunction(logger).singleton(),
     ratesAPI: asFunction(ratesAPI).singleton(),

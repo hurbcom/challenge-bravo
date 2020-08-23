@@ -4,10 +4,11 @@
     "description": "An API for hurb's challenge",
     "main": "index.js",
     "scripts": {
+        "preinstall": "npm i nodemon -g",
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "cross-env NODE_PATH=. node cluster.js",
         "start:dev": "cross-env NODE_PATH=. nodemon cluster.js",
-        "start:no-cluster": "cross-env NODE_PATH=. node index.js",
+        "dev": "cross-env NODE_PATH=. nodemon index.js",
         "start:cc": "codecrumbs -d src -e api/container.js"
     },
     "author": "Alexander Santos",
@@ -20,6 +21,7 @@
         "config": "^3.3.1",
         "cors": "^2.8.5",
         "cross-env": "^7.0.2",
+        "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "file-system": "^2.2.2",
         "helmet": "^4.1.0",
@@ -31,10 +33,12 @@
         "ramda": "^0.27.1",
         "sqlite3": "^5.0.0",
         "tcomb": "^3.2.29",
+        "tcomb-validation": "^3.4.1",
         "winston": "^3.3.3"
     },
     "devDependencies": {
         "codecrumbs": "^1.7.3",
+        "nodemon": "^2.0.4",
         "pm2": "^4.4.1"
     }
 }
