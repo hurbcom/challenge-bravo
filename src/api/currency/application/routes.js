@@ -1,3 +1,6 @@
+/** currency/routes.js
+ * Routes for currency-related services
+ */
 const { Router } = require("express")
 const Status = require("http-status")
 

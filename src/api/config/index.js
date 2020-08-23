@@ -1,3 +1,7 @@
+/** config
+ * Creates an object that holds the configuration-related values
+ */
+
 const path = require('path')
 
 const ENV = process.env.NODE_ENV || 'development'

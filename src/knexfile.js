@@ -1,5 +1,6 @@
-// Update with your config settings.
-
+/** knexfile.js
+ * Database's config for using knex
+ */
 module.exports = {
     development: {
         client: 'sqlite3',

@@ -1,3 +1,7 @@
+/** server.js
+ * starts the express
+ */
+
 const express = require('express')
 
 module.exports = ({ logger, config, router }) => {

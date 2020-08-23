@@ -1,3 +1,7 @@
+/** routes.js
+ * Contains common configs for routes (Like using helmet, body-parser, etc)
+ * Holds info about service routes, but not the routes itself
+ * */
 const { Router } = require("express")
 const helmet = require('helmet')
 const cors = require('cors')
@@ -31,7 +35,7 @@ module.exports = ({
         res.status(200).send('API is working :)')
     })
 
-    // Routers here
+    // Feature Routers here
     apiRouter.use('/currency', currencyFeatureRouter)
 
     router.use(httpLogger(logger))

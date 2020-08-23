@@ -1,3 +1,7 @@
+
+/**
+ * Server starter
+ */
 module.exports = ({ server }) => {
     return {
         start: () =>
