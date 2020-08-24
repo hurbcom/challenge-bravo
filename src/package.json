@@ -10,7 +10,7 @@
         "start:dev": "cross-env NODE_PATH=. nodemon cluster.js",
         "dev": "cross-env NODE_PATH=. nodemon index.js",
         "start:cc": "codecrumbs -d api -e api/container.js",
-        "test:stress": "loadtest --rps 1000 http://localhost:4000/api/v1/currency/convert?from=BRL&to=EUR&amount=100"
+        "test:stress": "loadtest --rps 1000 \"http://localhost:4000/api/v1/currency/convert?from=BRL&to=EUR&amount=100\""
     },
     "author": "Alexander Santos",
     "license": "MIT",
