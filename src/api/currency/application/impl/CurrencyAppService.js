@@ -25,6 +25,7 @@ module.exports = ({
                 }
             })
             .then(data => res.status(Status.OK).json(Success(data)))
+            .catch(err => { throw err })
     }
 
     const del = (req, res, next, id) => {

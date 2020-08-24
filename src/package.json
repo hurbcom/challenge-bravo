@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "preinstall": "npm i nodemon -g",
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "cross-env NODE_PATH=. NODE_ENV=test mocha",
         "start": "cross-env NODE_PATH=. node cluster.js",
         "start:dev": "cross-env NODE_PATH=. nodemon cluster.js",
         "dev": "cross-env NODE_PATH=. nodemon index.js",
@@ -37,8 +37,13 @@
         "winston": "^3.3.3"
     },
     "devDependencies": {
+        "chai": "^4.2.0",
         "codecrumbs": "^1.7.3",
+        "mocha": "^8.1.1",
+        "node-mocks-http": "^1.9.0",
         "nodemon": "^2.0.4",
-        "pm2": "^4.4.1"
+        "pm2": "^4.4.1",
+        "sinon": "^9.0.3",
+        "supertest": "^4.0.2"
     }
 }

@@ -13,4 +13,15 @@ module.exports = {
         },
         useNullAsDefault: true
     },
+    test: {
+        client: 'sqlite3',
+        connection: {
+            filename: process.env.SQLITE_FILENAME || './test.sqlite3'
+        },
+        migrations: {
+            tableName: 'currency',
+            directory: 'api/currency/infrastructure/knex/migrations'
+        },
+        useNullAsDefault: true
+    },
 };
