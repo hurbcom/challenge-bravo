@@ -9,6 +9,9 @@ const router = require('./config/routes')
 const server = require('./config/server')
 const database = require('./currency/infrastructure/knex/connection')
 const ratesAPI = require('./currency/infrastructure/exchangeRatesAPI')
+const redisClient = require('./currency/infrastructure/redis')
+
+// Features
 const currencyFeature = require('api/currency')
 
 const container = createContainer();
@@ -29,6 +32,7 @@ container.register({
     response: asFunction(response).singleton(),
     router: asFunction(router).singleton(),
     server: asFunction(server).singleton(),
+    redisClient: asFunction(redisClient).singleton()
 })
 
 module.exports = container;

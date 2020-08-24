@@ -21,9 +21,11 @@ module.exports = ({
                 if (!isFromSupported) throw Error(`${from} is not supported`)
                 if (!isToSupported) throw Error(`${to} is not supported`)
 
-                return Math.round(await currencyConversionService.convert(fromCurrency,
+                const conversionResult = Math.round(await currencyConversionService.convert(fromCurrency,
                     toCurrency,
                     amount) * 100) / 100;
+                console.log(conversionResult)
+                return conversionResult
             })
             .then(data => res.status(Status.OK).json(Success(data)))
             .catch(err => {

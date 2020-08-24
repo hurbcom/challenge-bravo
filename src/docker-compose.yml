@@ -7,3 +7,18 @@ services:
             - /usr/src/app/node_modules
         ports:
             - "4000:4000"
+        depends_on:
+            - redis-server
+        # networks:
+        #     - redis-net
+    redis-server:
+        image: "redis:6.0.6-alpine"
+        # hostname: redis
+#         networks:
+#             - redis-net
+#         volumes:
+#             - redis-data:/data
+# networks:
+#     redis-net:
+# volumes:
+#     redis-data:
