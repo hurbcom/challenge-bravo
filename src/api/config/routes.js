@@ -46,9 +46,6 @@ module.exports = ({
     const swaggerSpec = swaggerJSDoc(options)
 
     apiRouter.use(cors({
-        origin: [
-            'http://localhost:3000'
-        ],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
     }))
         .use(helmet())
@@ -75,10 +72,11 @@ module.exports = ({
 
 
     // Feature Routers here
-    apiRouter.use('/currency', currencyFeatureRouter)
+    apiRouter.use('/currency', currencyFeatureRouter) // currency
 
     router.use(httpLogger(logger))
     router.use(`/api/${config.version}`, apiRouter)
+
     router.get('/', (req, res) => res.send(`It works, but nothing to see here.`))
     router.use(R.partialRight(handleErr, [logger, config]))
 
