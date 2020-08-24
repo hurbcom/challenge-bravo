@@ -1,12 +1,12 @@
 const pm2 = require('pm2')
 
-const instances = process.env.WEB_CONCURRENCY || -1
+const instances = process.env.WEB_CONCURRENCY || 'max'
 const maxMemory = process.env.WEB_MEMORY || 512
 
 pm2.connect(() => {
     pm2.start({
         script: 'index.js',
-        instances: 'max',
+        instances: instances,
         max_memory_restart: `${maxMemory}M`,
         env: {
             NODE_ENV: process.env.NODE_ENV || 'development',

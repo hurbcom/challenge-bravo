@@ -1,8 +1,24 @@
-module.exports = ({ database }) => {
+module.exports = ({
+    database,
+    redisClient,
+    logger
+}) => {
 
 
     const getAll = () => {
-        return database.select('*').from('currencies')
+        return new Promise((resolve, reject) => {
+            redisClient.get('GET_ALL_CURRENCY_RESPONSE', async (err, data) => {
+                if (err) throw err
+                if (data) {
+                    currencies = JSON.parse(data)
+                }
+                else {
+                    currencies = await database.select('*').from('currencies')
+                    redisClient.set('GET_ALL_CURRENCY_RESPONSE', JSON.stringify(currencies))
+                }
+                resolve(currencies)
+            })
+        })
     }
 
     const add = (data) => {
