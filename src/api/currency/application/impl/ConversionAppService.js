@@ -24,7 +24,6 @@ module.exports = ({
                 const conversionResult = Math.round(await currencyConversionService.convert(fromCurrency,
                     toCurrency,
                     amount) * 100) / 100;
-                console.log(conversionResult)
                 return conversionResult
             })
             .then(data => res.status(Status.OK).json(Success(data)))

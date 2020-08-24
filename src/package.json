@@ -9,7 +9,8 @@
         "start": "cross-env NODE_PATH=. node cluster.js",
         "start:dev": "cross-env NODE_PATH=. nodemon cluster.js",
         "dev": "cross-env NODE_PATH=. nodemon index.js",
-        "start:cc": "codecrumbs -d src -e api/container.js"
+        "start:cc": "codecrumbs -d api -e api/container.js",
+        "test:stress": "loadtest --rps 1000 http://localhost:4000/api/v1/currency/convert?from=BRL&to=EUR&amount=100"
     },
     "author": "Alexander Santos",
     "license": "MIT",
@@ -40,6 +41,7 @@
     "devDependencies": {
         "chai": "^4.2.0",
         "codecrumbs": "^1.7.3",
+        "loadtest": "^5.0.4",
         "mocha": "^8.1.1",
         "node-mocks-http": "^1.9.0",
         "nodemon": "^2.0.4",

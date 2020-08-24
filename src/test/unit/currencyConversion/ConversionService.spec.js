@@ -1,5 +1,4 @@
 const { expect } = require('chai')
-const sinon = require('sinon')
 const ConversionService = require('../../../api/currency/domain/services/ConversionService')
 
 describe('Currency -> Domain -> Services -> ConversionService', () => {

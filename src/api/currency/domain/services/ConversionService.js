@@ -9,12 +9,10 @@ module.exports = ({
             redisClient.get('RATES_VALUE', async (err, data) => {
                 if (err) throw err
                 if (data) {
-                    logger.info('Using redis cached response for rates')
                     rates = JSON.parse(data)
                 }
                 else {
                     rates = await ratesAPI.getRates(from.abbreviation)
-                    logger.info('Setting redis response')
                     redisClient.set('RATES_VALUE', JSON.stringify(rates))
                 }
 
