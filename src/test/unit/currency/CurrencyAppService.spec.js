@@ -1,6 +1,6 @@
 const CurrencyAppService = require("../../../api/currency/application/impl/CurrencyAppService")
 
-const { expect, should } = require('chai')
+const { expect } = require('chai')
 const sinon = require('sinon')
 const httpMocks = require('node-mocks-http');
 
