@@ -4,12 +4,14 @@
     "description": "An API for hurb's challenge",
     "main": "index.js",
     "scripts": {
-        "preinstall": "npm i nodemon -g",
+        "preinstall": "npm i nodemon -g && npm i -g knex",
         "test": "cross-env NODE_PATH=. NODE_ENV=test mocha",
         "start": "cross-env NODE_PATH=. node cluster.js",
         "start:dev": "cross-env NODE_PATH=. nodemon cluster.js",
         "dev": "cross-env NODE_PATH=. nodemon index.js",
         "start:cc": "codecrumbs -d api -e api/container.js",
+        "seed": "knex seed:run",
+        "migrate": "knex migrate:latest",
         "test:stress": "loadtest --rps 1000 \"http://localhost:4000/api/v1/currency/convert?from=BRL&to=EUR&amount=100\""
     },
     "author": "Alexander Santos",

@@ -11,6 +11,10 @@ module.exports = {
             tableName: 'currency',
             directory: 'api/currency/infrastructure/knex/migrations'
         },
+        seeds: {
+            tableName: 'currency',
+            directory: 'api/currency/infrastructure/knex/seeds'
+        },
         useNullAsDefault: true
     },
     test: {
@@ -21,6 +25,10 @@ module.exports = {
         migrations: {
             tableName: 'currency',
             directory: 'api/currency/infrastructure/knex/migrations'
+        },
+        seeds: {
+            tableName: 'currency',
+            directory: 'api/currency/infrastructure/knex/seeds'
         },
         useNullAsDefault: true
     },

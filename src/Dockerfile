@@ -14,6 +14,8 @@ RUN npm run preinstall
 
 RUN npm install
 
+RUN npm run migrate && npm run seed
+
 EXPOSE 4000
 
 CMD [ "npm", "run", "start:dev"]
