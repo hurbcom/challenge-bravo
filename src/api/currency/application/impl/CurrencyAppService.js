@@ -17,7 +17,7 @@ module.exports = ({
     const post = (req, res, next, data) => {
         return Promise.resolve()
             .then(async () => {
-                const currency = currencyFactory(data)
+                const currency = currencyFactory(data['abbreviation'])
                 const id = await currencyRepository.add(currency)
                 return {
                     id: id,
@@ -25,7 +25,6 @@ module.exports = ({
                 }
             })
             .then(data => res.status(Status.OK).json(Success(data)))
-            .catch(err => { throw err })
     }
 
     const del = (req, res, next, id) => {

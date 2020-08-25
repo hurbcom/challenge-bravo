@@ -16,9 +16,13 @@ const Currency = t.struct({
 // Currency.prototype.isSupported = 
 
 const currencyFactory = abbreviation => {
+    if (!abbreviation)
+        throw Error('abbreviation must not be empty')
     const validation = validate(abbreviation, Abbreviation)
+
     if (!validation.isValid())
         throw Error(validation.firstError().message)
+
     const currencyObject = Currency({ abbreviation: abbreviation.toUpperCase() })
     return currencyObject
 }

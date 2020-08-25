@@ -22,10 +22,12 @@ module.exports = ({
     }
 
     const add = (data) => {
+        redisClient.del('GET_ALL_CURRENCY_RESPONSE') // clears getAll() cache
         return database.insert(data).into('currencies')
     }
 
     const remove = (id) => {
+        redisClient.del('GET_ALL_CURRENCY_RESPONSE') // clears getAll() cache
         return database.table('currencies').del().where('id', id)
     }
 

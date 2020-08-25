@@ -157,7 +157,7 @@ describe('Currency -> Application -> Impl -> CurrencyAppService', () => {
 
         describe('POST', () => {
             it('should throw exception when add has error', (done) => {
-                currencyAppServiceWithRepositoryError.post({ id: 1, abbreviation: 'BRL' })
+                currencyAppServiceWithRepositoryError.post(req, res, nextSpy, { abbreviation: 'BRL' })
                     .catch(error => {
                         // kind of workaround, chai has no real solution for this
                         expect(error).to.be.an('Error').with.property('message', 'test error')
@@ -166,7 +166,7 @@ describe('Currency -> Application -> Impl -> CurrencyAppService', () => {
             })
 
             it('should throw exception when currencyFactory has error', (done) => {
-                currencyAppServiceWithFactoryError.post({ id: 1, abbreviation: 'BRL' })
+                currencyAppServiceWithFactoryError.post(req, res, nextSpy, { id: 1, abbreviation: 'BRL' })
                     .catch(error => {
                         // kind of workaround, chai has no real solution for this
                         expect(error).to.be.an('Error').with.property('message', 'test error')
@@ -177,7 +177,7 @@ describe('Currency -> Application -> Impl -> CurrencyAppService', () => {
 
         describe('DELETE', () => {
             it('should throw exception when remove has error', (done) => {
-                currencyAppServiceWithRepositoryError.del(1)
+                currencyAppServiceWithRepositoryError.del(req, res, nextSpy, 1)
                     .catch(error => {
                         // kind of workaround, chai has no real solution for this
                         expect(error).to.be.an('Error').with.property('message', 'test error')
