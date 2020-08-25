@@ -14,7 +14,9 @@ module.exports = ({
                 }
                 else {
                     currencies = await database.select('*').from('currencies')
-                    redisClient.set('GET_ALL_CURRENCY_RESPONSE', JSON.stringify(currencies))
+                        .catch(err => { reject(err) })
+                    if (currencies)
+                        redisClient.set('GET_ALL_CURRENCY_RESPONSE', JSON.stringify(currencies))
                 }
                 resolve(currencies)
             })

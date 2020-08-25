@@ -11,7 +11,6 @@ module.exports = ({
                 return await currencyRepository.getAll()
             })
             .then(data => res.status(Status.OK).json(Success(data)))
-            .catch(err => { throw err })
     }
 
     const post = (req, res, next, data) => {

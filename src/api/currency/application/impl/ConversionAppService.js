@@ -12,7 +12,6 @@ module.exports = ({
             .then(async () => {
                 amount = amount.replace(',', '.') // Simplifying for API user
 
-                console.log(!amount)
                 // checks if amount is number
                 if (!amount || isNaN(amount))
                     throw Error("amount is an invalid number")

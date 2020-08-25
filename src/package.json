@@ -10,8 +10,8 @@
         "start:dev": "cross-env NODE_PATH=. nodemon cluster.js",
         "dev": "cross-env NODE_PATH=. nodemon index.js",
         "start:cc": "codecrumbs -d api -e api/container.js",
-        "seed": "knex seed:run",
-        "migrate": "knex migrate:latest",
+        "seed": "npx knex seed:run",
+        "migrate": "npx knex migrate:latest",
         "test:stress": "loadtest --rps 1000 \"http://localhost:4000/api/v1/currency/convert?from=BRL&to=EUR&amount=100\""
     },
     "author": "Alexander Santos",
@@ -29,7 +29,6 @@
         "file-system": "^2.2.2",
         "helmet": "^4.1.0",
         "http-status": "^1.4.2",
-        "knex": "^0.21.5",
         "lodash": "^4.17.20",
         "morgan": "^1.10.0",
         "path": "^0.12.7",
@@ -45,6 +44,7 @@
     "devDependencies": {
         "chai": "^4.2.0",
         "codecrumbs": "^1.7.3",
+        "knex": "^0.21.5",
         "loadtest": "^5.0.4",
         "mocha": "^8.1.1",
         "node-mocks-http": "^1.9.0",
