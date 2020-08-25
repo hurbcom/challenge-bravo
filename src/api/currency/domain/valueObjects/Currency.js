@@ -13,7 +13,17 @@ const Currency = t.struct({
     abbreviation: Abbreviation
 }, 'Currency')
 
-// Currency.prototype.isSupported = 
+Currency.prototype.isSupportedUsing = function (allowedCurrencies) {
+    // Tries to find if allowedCurrencies has the abbreviation
+    // for is faster, 
+    // check https://stackoverflow.com/questions/8217419/how-to-determine-if-javascript-array-contains-an-object-with-an-attribute-that-e
+    for (var i = 0; i < allowedCurrencies.length; i++) {
+        if (allowedCurrencies[i].abbreviation === this.abbreviation) {
+            return true
+        }
+    }
+    return false
+}
 
 const currencyFactory = abbreviation => {
     if (!abbreviation)
