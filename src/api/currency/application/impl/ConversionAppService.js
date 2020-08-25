@@ -21,10 +21,13 @@ module.exports = ({
                 if (!isFromSupported) throw Error(`${from} is not supported`)
                 if (!isToSupported) throw Error(`${to} is not supported`)
 
-                const conversionResult = Math.round(await currencyConversionService.convert(fromCurrency,
+                const converted = await currencyConversionService.convert(fromCurrency,
                     toCurrency,
-                    amount) * 100) / 100;
-                return conversionResult
+                    amount.replace(',', '.'))
+                const conversionResult = Math.round(converted * 100) / 100;
+
+                // Cryptocurrencies have very low value
+                return (conversionResult == 0) ? converted : conversionResult
             })
             .then(data => res.status(Status.OK).json(Success(data)))
             .catch(err => {

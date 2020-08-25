@@ -17,7 +17,6 @@ module.exports = ({
                 }
 
                 const conversionRate = rates[to.abbreviation]
-
                 const conversionResult = amount * conversionRate
 
                 resolve(conversionResult)
