@@ -14,7 +14,10 @@ RUN npm run preinstall
 
 RUN npm install
 
-RUN npm run migrate && npm run seed
+VOLUME .:/usr/src/app
+
+RUN npm run migrate
+RUN npm run seed
 
 EXPOSE 4000
 
