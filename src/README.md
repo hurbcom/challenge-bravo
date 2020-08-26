@@ -22,7 +22,7 @@ Aplicação Node.js criada para o desafio challenge-bravo da hurb.
 * Execute o seguinte comando
 
 ``` bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 Isto criará dois containers Docker orquestrados pelo docker-compose. Um para o Redis e outro para a aplicação.
