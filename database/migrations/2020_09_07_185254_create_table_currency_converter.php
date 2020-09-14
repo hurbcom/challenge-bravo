@@ -17,6 +17,7 @@ class CreateTableCurrencyConverter extends Migration
             $table->increments('id');
             $table->string('currency')->unique()->index('currency');
             $table->double('value', 8, 2);
+            $table->boolean('hasAutomaticUpdate')->nullable()->index('hasAutomaticUpdate');
             $table->timestamps();
         });
 

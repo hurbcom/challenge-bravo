@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\CurrencyConverterController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'CurrencyConverterController@index');
+Route::get('/', [CurrencyConverterController::class, 'index']);

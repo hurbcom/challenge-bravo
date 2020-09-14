@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class CurrencyApiGateway extends Model
+{
+    const DEFAULT_CURRENCIES_AND_VALUES = [
+        "USD" => 1,
+        "BTC" => 0.00009682,
+        "BRL" => 5.38,
+        "ETH" => 0.002744,
+        "EUR" => 0.8467
+    ];
+
+    const DEFAULT_CURRENCIES = [
+        "USD",
+        "BTC",
+        "BRL",
+        "ETH",
+        "EUR"
+    ];
+
+    public function getSuportedCurrencies()
+    {
+        $currencyConverter = new CurrencyConverter();
+        $currenciesInDatabase = $currencyConverter->getAllCurrencies();
+    }
+
+    public function getApiVaules(Array $currenciesArray)
+    {
+        if (empty($currenciesArray)) {
+            return false;
+        }
+
+        $params = '';
+        foreach ($currenciesArray as $currency) {
+            $params .= $currency . ',';
+        }
+        $params = substr($params, 0, -1);
+
+        $apiData = Http::get($this->getExternalApiUrl($params))->json();
+
+        if ($apiData->response === "Error") {
+            return false;
+        }
+
+        return json_decode($apiData);
+
+    }
+
+    public function insertApiData($apiData, $hasAutomaticUpdate = false)
+    {
+        if (empty($apiData)) {
+            return false;
+        }
+
+        $currencyConverter = new CurrencyConverter();
+
+        return $currencyConverter->insertCurrenciesArray($apiData, $hasAutomaticUpdate);
+    }
+
+    public function updateCurrency($currency)
+    {
+        $apiData = $this->getApiVaules([$currency->currency]);
+
+        if (!$apiData) {
+            return $currency;
+        }
+        
+        $hasAutomaticUpdate = true;
+        $this->insertApiData($apiData, $hasAutomaticUpdate);
+    }
+
+    private function getExternalApiUrl($params)
+    {
+        $baseUrl = env('EXT_API_URL', 'https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=');
+        $apiKey = env('API_KEY', false);
+        
+        if (!$apiKey) {
+            return false;
+        }
+
+        return $baseUrl . $params . $apiKey;
+    }
+
+
+}

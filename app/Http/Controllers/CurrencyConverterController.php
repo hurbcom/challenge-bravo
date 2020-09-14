@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
-use App\CurrencyConverter;
+use App\Models\CurrencyConverter;
 
 class CurrencyConverterController extends Controller
 {
