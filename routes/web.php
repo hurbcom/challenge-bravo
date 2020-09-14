@@ -16,3 +16,12 @@ use App\Http\Controllers\CurrencyConverterController;
 */
 
 Route::get('/', [CurrencyConverterController::class, 'index']);
+
+Route::get('/clear-cache', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('route:cache');
+    Artisan::call('config:cache');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    return "All cache cleared - ". gmdate('d/M/Y, H:m:s');
+});

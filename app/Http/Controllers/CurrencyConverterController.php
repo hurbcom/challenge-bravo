@@ -18,8 +18,8 @@ class CurrencyConverterController extends Controller
     public function index(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'from' => 'required|string|size:3',
-            'to' => 'required|string|size:3',
+            'from' => 'required|string',
+            'to' => 'required|string',
             'amount' => 'required|numeric'
         ], [
             'from.required' => 'Origin currency not informed',

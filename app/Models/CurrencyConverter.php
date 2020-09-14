@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
 use Carbon\Carbon;
@@ -21,31 +20,77 @@ class CurrencyConverter extends Model
 
     protected $table = 'currency_converter';
 
+    public $amount;
+    public $from;
+    public $to;
+    public $lastUpdate;
+
+    public $errors;
+
     const CURRENCY_DOLLAR = 'USD';
     const CURRENCY_DATA_CACHE_KEY_PREFIX = 'currency_data_cache_key_';
-    const LAST_UPDATE_CACHE_KEY = 'last_update_cache_key';
+    const AVALIABLE_CURRENCIES_CACHE_KEY = 'avaliable_currencies_cache_key';
     const DEFAULT_CACHE_TIME = 3600;
+    
+    const ERROR_UNSUPORTED_CURRENCY = 'Chosen currency not suported yet.';
 
     public function getConvertedValue($from, $to, $amount)
     {
-        $this->amount = $amount;
+        $this->amount = (float)$amount;
         $this->from = $from;
         $this->to = $to;
 
-        $amountInDollar = $amount;
-
-        if ($from != CurrencyConverter::CURRENCY_DOLLAR) {
-            $amountInDollar = $this->convertValueinDollar($amount, $from);
+        if (!$this->hasRequestedCurrencies()) {
+            return $this->formatErrorResponse(CurrencyConverter::ERROR_UNSUPORTED_CURRENCY);
         }
 
-    
+        $amountInDollar = $this->amount;
+
+        if ($from != CurrencyConverter::CURRENCY_DOLLAR) {
+            $amountInDollar = $this->convertValueinDollar($this->amount, $this->from);
+        }
+
         if ($to == CurrencyConverter::CURRENCY_DOLLAR) {
             return $this->formatResponse($amountInDollar);
         }
-
-        $convertedAmount = $this->convertValue($amountInDollar, $to);
+        
+        $convertedAmount = $this->convertValue($amountInDollar, $this->to);
 
         return $this->formatResponse($convertedAmount);
+    }
+
+    private function hasRequestedCurrencies()
+    {
+        $avaliableCurrencies = Cache::get(CurrencyConverter::AVALIABLE_CURRENCIES_CACHE_KEY);
+
+        if (!$avaliableCurrencies) {
+            $avaliableCurrencies = $this->getAvaliableCurrencies();
+            $this->putAvaliableCurrenciesInCache($avaliableCurrencies);
+        }
+
+        if ( !in_array($this->from, $avaliableCurrencies) ) {
+            $this->errors = $this->from;
+            return false;
+        }
+
+        if ( !in_array($this->to, $avaliableCurrencies) ) {
+            $this->errors = $this->to;
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getAvaliableCurrencies()
+    {
+        $avaliableCurrencies = CurrencyConverter::all();
+        $avaliableCurrenciesArray = [];
+
+        foreach ($avaliableCurrencies as $currency) {
+            $avaliableCurrenciesArray[] = $currency->currency;
+        }
+
+        return $avaliableCurrenciesArray;
     }
 
     private function convertValueinDollar($amount, $from)
@@ -70,14 +115,20 @@ class CurrencyConverter extends Model
             $currencyValue = $this->getCurrencyValueFromDatabase($currency);
         }
 
+        $this->setLastUpdate($currencyValue);
+
         return $currencyValue->value;
     }
 
     private function getCurrencyValueFromDatabase($currency)
     {
-        $currencyValue = CurrencyConverter::where('currency', $currency)->get();
+        $currencyValue = CurrencyConverter::where('currency', $currency)->first();
 
-        $lastUpdate = $currencyValue->updated_at->toDateString();
+        if (!$currencyValue) {
+            return false;
+        }
+
+        $lastUpdate = $currencyValue->updated_at;
 
         if ($lastUpdate->isToday() || $currencyValue->hasAutomaticUpdate === false) {
             $this->putCurrencyInCache($currencyValue);
@@ -92,7 +143,7 @@ class CurrencyConverter extends Model
         return $updatedCurrency;
     }
 
-    private function insertCurrenciesArray($apiData, $hasAutomaticUpdate = false)
+    public function insertCurrenciesArray($apiData, $hasAutomaticUpdate = false)
     {
         if (empty($apiData)) {
             return false;
@@ -109,19 +160,48 @@ class CurrencyConverter extends Model
         }
     }
 
-    private function putCurrencyInCache($currency)
+    private function setLastUpdate($currency)
     {
-        Cache::put(CurrencyConverter::CURRENCY_DATA_CACHE_KEY_PREFIX . $currency, CurrencyConverter::DEFAULT_CACHE_TIME);
+        if (!$this->lastUpdate) {
+            $this->lastUpdate = $currency->updated_at;
+            return;
+        }
+
+        if ( $this->lastUpdate->greaterThan($currency->updated_at) ) {
+            $this->lastUpdate = $currency->updated_at;
+        }
+    }
+
+    public function putCurrencyInCache($currency)
+    {
+        Cache::put(CurrencyConverter::CURRENCY_DATA_CACHE_KEY_PREFIX . $currency, $currency, CurrencyConverter::DEFAULT_CACHE_TIME);
+    }
+
+    public function putAvaliableCurrenciesInCache($avaliableCurrencies)
+    {
+        Cache::put(CurrencyConverter::AVALIABLE_CURRENCIES_CACHE_KEY, $avaliableCurrencies, CurrencyConverter::DEFAULT_CACHE_TIME);
     }
 
     private function formatResponse($convertedAmount)
     {
+        $convertedAmount = number_format($convertedAmount, 2, '.', '');
+
         return json_encode([
             'amount' => $this->amount,
             'from' => $this->from,
             'to' => $this->to,
             'convertedAmount' => $convertedAmount,
-            'lastUpdate' => $this->lastUpdate
+            'lastUpdate' => $this->lastUpdate->toDateTimeString()
+        ]);
+    }
+
+    private function formatErrorResponse($error)
+    {
+        return json_encode([
+            'amount' => $this->amount,
+            'from' => $this->from,
+            'to' => $this->to,
+            'error' => $error . 'param: ' . $this->errors
         ]);
     }
 }

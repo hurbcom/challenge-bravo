@@ -16,7 +16,7 @@ class CreateTableCurrencyConverter extends Migration
         Schema::create('currency_converter', function (Blueprint $table) {
             $table->increments('id');
             $table->string('currency')->unique()->index('currency');
-            $table->double('value', 8, 2);
+            $table->double('value', 16, 8);
             $table->boolean('hasAutomaticUpdate')->nullable()->index('hasAutomaticUpdate');
             $table->timestamps();
         });

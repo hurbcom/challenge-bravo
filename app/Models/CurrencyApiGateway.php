@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Http;
+use App\Models\CurrencyConverter;
 
 class CurrencyApiGateway extends Model
 {
@@ -41,13 +43,19 @@ class CurrencyApiGateway extends Model
         }
         $params = substr($params, 0, -1);
 
-        $apiData = Http::get($this->getExternalApiUrl($params))->json();
+        $apiData = Http::get($this->getExternalApiUrl($params));
 
-        if ($apiData->response === "Error") {
+        if (!$apiData->successful()) {
             return false;
         }
 
-        return json_decode($apiData);
+        $apiData = json_decode($apiData->body());
+        $responseArray = [];
+        foreach ($apiData as $currency => $value) {
+            $responseArray[$currency] = $value;
+        }
+
+        return $responseArray;
 
     }
 
@@ -83,7 +91,7 @@ class CurrencyApiGateway extends Model
             return false;
         }
 
-        return $baseUrl . $params . $apiKey;
+        return $baseUrl . $params . "&api_key=" . $apiKey;
     }
 
 
