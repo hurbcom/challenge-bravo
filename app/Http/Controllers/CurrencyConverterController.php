@@ -107,4 +107,33 @@ class CurrencyConverterController extends Controller
 
         return $responseJson;
     }
+
+    /**
+     * @param  string  $currency
+     * @param  double  $value
+     * @return string
+     */
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'currency' => 'required|string',
+            'value' => 'numeric',
+        ], [
+            'currency.required' => 'Currency not informed',
+            'currency.string' => 'Currency invalid format',
+            'value.numeric' => 'Currency Value invalid format',
+        ]);
+
+        if ($validator->fails()) {
+            return json_encode($validator->messages()->all());
+        }
+
+        $currency = strtoupper($request->currency);
+        $value = $request->value ? (float)$request->value : 0;
+
+        $currencyConverter = new CurrencyConverter();
+        $responseJson = $currencyConverter->updateCurrency($currency,  $value);
+
+        return $responseJson;
+    }
 }

@@ -35,8 +35,10 @@ class CurrencyConverter extends Model
     const ERROR_UNSUPORTED_CURRENCY = 'Chosen currency not suported yet.';
     const ERROR_DUPLICATE_CURRENCY = 'Currency already registred in database.';
     const ERROR_INSERT_NEW_CURRENCY = 'Error creating new currency in database.';
-    const ERROR_CURRENCY_NOT_FOUND = 'Error deleting currency, not found in database.';
+    const ERROR_CURRENCY_NOT_FOUND = 'Currency not found in database.';
     const ERROR_CURRENCY_NOT_DELETED = 'Error deleting currency.';
+    const ERROR_UPDATE_CURRENCY = 'Error updating the currency in database.';
+
 
     
 
@@ -241,6 +243,51 @@ class CurrencyConverter extends Model
     
         return json_encode([
             'deletedCurrency' => $currency,
+        ]);
+    }
+
+    public function updateCurrency($currency,  $value)
+    {
+        $avaliableCurrencies = $this->getAvaliableCurrencies();
+
+        if (!in_array($currency, $avaliableCurrencies)) {
+            return json_encode([
+                'currency' => $currency,
+                'value' => $value,
+                'error' => CurrencyConverter::ERROR_UNSUPORTED_CURRENCY,
+            ]);
+        }
+
+        $currencyObj = CurrencyConverter::where('currency', $currency)->first();
+
+        if (!$currencyObj) {
+            return json_encode([
+                'currency' => $currency,
+                'error' => CurrencyConverter::ERROR_CURRENCY_NOT_FOUND,
+            ]);
+        }
+
+        $currencyObj->value = $value;
+
+        $apiGateway = new CurrencyApiGateway();
+        $updatedCurrency = $apiGateway->insertOrUpdateCurrency($currencyObj);
+
+        if (!$updatedCurrency) {
+            return json_encode([
+                'currency' => $currency,
+                'value' => $value,
+                'error' => CurrencyConverter::ERROR_UPDATE_CURRENCY,
+            ]);
+        }
+
+        $forceUpdate = true;
+        $avaliableCurrencies = $this->getAvaliableCurrencies($forceUpdate);
+
+        return json_encode([
+            'currency' => $updatedCurrency->currency,
+            'value' => $updatedCurrency->value,
+            'hasAutomaticUpdate' => $updatedCurrency->hasAutomaticUpdate,
+            'lastUpdate' => $updatedCurrency->updated_at->toDateTimeString()
         ]);
     }
 
