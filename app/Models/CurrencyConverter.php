@@ -35,12 +35,14 @@ class CurrencyConverter extends Model
     const ERROR_UNSUPORTED_CURRENCY = 'Chosen currency not suported yet.';
     const ERROR_DUPLICATE_CURRENCY = 'Currency already registred in database.';
     const ERROR_INSERT_NEW_CURRENCY = 'Error creating new currency in database.';
+    const ERROR_CURRENCY_NOT_FOUND = 'Error deleting currency, not found in database.';
+    const ERROR_CURRENCY_NOT_DELETED = 'Error deleting currency.';
 
     
 
     public function getConvertedValue($from, $to, $amount)
     {
-        $this->amount = (float)$amount;
+        $this->amount = $amount;
         $this->from = $from;
         $this->to = $to;
 
@@ -80,11 +82,11 @@ class CurrencyConverter extends Model
         return true;
     }
 
-    public function getAvaliableCurrencies()
+    public function getAvaliableCurrencies($forceUpdate = false)
     {
         $avaliableCurrencies = Cache::get(CurrencyConverter::AVALIABLE_CURRENCIES_CACHE_KEY);
 
-        if ($avaliableCurrencies) {
+        if ($avaliableCurrencies && $forceUpdate === false) {
             return $avaliableCurrencies;
         }
 
@@ -204,11 +206,41 @@ class CurrencyConverter extends Model
             ]);
         }
 
+        $forceUpdate = true;
+        $avaliableCurrencies = $this->getAvaliableCurrencies($forceUpdate);
+
         return json_encode([
             'currency' => $updatedCurrency->currency,
             'value' => $updatedCurrency->value,
             'hasAutomaticUpdate' => $updatedCurrency->hasAutomaticUpdate,
             'lastUpdate' => $updatedCurrency->updated_at->toDateTimeString()
+        ]);
+    }
+
+    public function deleteCurrency($currency)
+    {
+        $currencyObj = CurrencyConverter::where('currency', $currency)->first();
+
+        if (!$currencyObj) {
+            return json_encode([
+                'currency' => $currency,
+                'error' => CurrencyConverter::ERROR_CURRENCY_NOT_FOUND,
+            ]);
+        }
+
+        if (!$currencyObj->delete()) {
+            return json_encode([
+                'currency' => $currency,
+                'error' => CurrencyConverter::ERROR_CURRENCY_NOT_DELETED,
+            ]);
+        }
+
+        $forceUpdate = true;
+        $avaliableCurrencies = $this->getAvaliableCurrencies($forceUpdate);
+        $this->removeCurrencyFromCache($currency);
+    
+        return json_encode([
+            'deletedCurrency' => $currency,
         ]);
     }
 
@@ -227,6 +259,11 @@ class CurrencyConverter extends Model
     public function putCurrencyInCache($currency)
     {
         Cache::put(CurrencyConverter::CURRENCY_DATA_CACHE_KEY_PREFIX . $currency, $currency, CurrencyConverter::DEFAULT_CACHE_TIME);
+    }
+
+    public function removeCurrencyFromCache($currency)
+    {
+        Cache::forget(CurrencyConverter::CURRENCY_DATA_CACHE_KEY_PREFIX . $currency);
     }
 
     public function putAvaliableCurrenciesInCache($avaliableCurrencies)

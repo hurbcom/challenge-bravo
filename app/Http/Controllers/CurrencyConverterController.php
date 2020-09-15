@@ -36,6 +36,7 @@ class CurrencyConverterController extends Controller
 
         $from = strtoupper($request->from);
         $to = strtoupper($request->to);
+        $amount = (float)$request->amount;
 
         $key = $from . $to . $request->amount;
         $cacheConvertedValue = Cache::get($key);
@@ -45,7 +46,7 @@ class CurrencyConverterController extends Controller
         }
 
         $currencyConverter = new CurrencyConverter();
-        $responseJson = $currencyConverter->getConvertedValue($from, $to, $request->amount);
+        $responseJson = $currencyConverter->getConvertedValue($from, $to, $amount);
 
         Cache::put($key, $responseJson, 300);
 
@@ -78,6 +79,31 @@ class CurrencyConverterController extends Controller
 
         $currencyConverter = new CurrencyConverter();
         $responseJson = $currencyConverter->insertNewCurrency($currency,  $value);
+
+        return $responseJson;
+    }
+
+    /**
+     * @param  string  $currency
+     * @return string
+     */
+    public function delete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'currency' => 'required|string',
+        ], [
+            'currency.required' => 'Currency not informed',
+            'currency.string' => 'Currency invalid format',
+        ]);
+
+        if ($validator->fails()) {
+            return json_encode($validator->messages()->all());
+        }
+
+        $currency = strtoupper($request->currency);
+
+        $currencyConverter = new CurrencyConverter();
+        $responseJson = $currencyConverter->deleteCurrency($currency);
 
         return $responseJson;
     }
