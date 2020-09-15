@@ -70,16 +70,22 @@ class CurrencyApiGateway extends Model
         return $currencyConverter->insertCurrenciesArray($apiData, $hasAutomaticUpdate);
     }
 
-    public function updateCurrency($currency)
+    public function insertOrUpdateCurrency($currency)
     {
+        $currencyConverter = new CurrencyConverter();
+
         $apiData = $this->getApiVaules([$currency->currency]);
 
-        if (!$apiData) {
-            return $currency;
+        if (isset($apiData["Response"])
+            && $apiData["Response"] == 'Error') {
+            $hasAutomaticUpdate = false;
+            return $currencyConverter->insertOrUpdateCurrency($currency->currency, $currency->value, $hasAutomaticUpdate);
         }
-        
+
         $hasAutomaticUpdate = true;
-        $this->insertApiData($apiData, $hasAutomaticUpdate);
+        foreach ($apiData as $apiCurrency => $apiValue) {
+            return $currencyConverter->insertOrUpdateCurrency($apiCurrency, $apiValue, $hasAutomaticUpdate);
+        }
     }
 
     private function getExternalApiUrl($params)

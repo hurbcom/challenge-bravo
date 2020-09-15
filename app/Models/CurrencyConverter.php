@@ -33,6 +33,10 @@ class CurrencyConverter extends Model
     const DEFAULT_CACHE_TIME = 3600;
     
     const ERROR_UNSUPORTED_CURRENCY = 'Chosen currency not suported yet.';
+    const ERROR_DUPLICATE_CURRENCY = 'Currency already registred in database.';
+    const ERROR_INSERT_NEW_CURRENCY = 'Error creating new currency in database.';
+
+    
 
     public function getConvertedValue($from, $to, $amount)
     {
@@ -61,12 +65,7 @@ class CurrencyConverter extends Model
 
     private function hasRequestedCurrencies()
     {
-        $avaliableCurrencies = Cache::get(CurrencyConverter::AVALIABLE_CURRENCIES_CACHE_KEY);
-
-        if (!$avaliableCurrencies) {
-            $avaliableCurrencies = $this->getAvaliableCurrencies();
-            $this->putAvaliableCurrenciesInCache($avaliableCurrencies);
-        }
+        $avaliableCurrencies = $this->getAvaliableCurrencies();
 
         if ( !in_array($this->from, $avaliableCurrencies) ) {
             $this->errors = $this->from;
@@ -83,6 +82,12 @@ class CurrencyConverter extends Model
 
     public function getAvaliableCurrencies()
     {
+        $avaliableCurrencies = Cache::get(CurrencyConverter::AVALIABLE_CURRENCIES_CACHE_KEY);
+
+        if ($avaliableCurrencies) {
+            return $avaliableCurrencies;
+        }
+
         $avaliableCurrencies = CurrencyConverter::all();
         $avaliableCurrenciesArray = [];
 
@@ -90,6 +95,7 @@ class CurrencyConverter extends Model
             $avaliableCurrenciesArray[] = $currency->currency;
         }
 
+        $this->putAvaliableCurrenciesInCache($avaliableCurrenciesArray);
         return $avaliableCurrenciesArray;
     }
 
@@ -137,7 +143,7 @@ class CurrencyConverter extends Model
 
         $apiGateway = new CurrencyApiGateway();
 
-        $updatedCurrency = $apiGateway->updateCurrency($currencyValue);
+        $updatedCurrency = $apiGateway->insertOrUpdateCurrency($currencyValue);
 
         $this->putCurrencyInCache($updatedCurrency);
         return $updatedCurrency;
@@ -149,15 +155,61 @@ class CurrencyConverter extends Model
             return false;
         }
 
+        $currenciesArray = [];
+
         foreach ($apiData as $currency => $value) {
-            CurrencyConverter::updateOrCreate(
-                [
-                    'currency' => $currency,
-                    'value' => $value,
-                    'hasAutomaticUpdate' => $hasAutomaticUpdate,
-                ]
-            );
+            $currenciesArray[] = $this->insertOrUpdateCurrency($currency, $value, $hasAutomaticUpdate);
         }
+
+        return $currenciesArray;
+    }
+
+    public function insertOrUpdateCurrency($currency, $value, $hasAutomaticUpdate = false)
+    {
+        $newCurrency = CurrencyConverter::updateOrCreate(
+            [
+                'currency' => $currency,
+                'value' => $value,
+                'hasAutomaticUpdate' => $hasAutomaticUpdate,
+            ]
+        );
+
+        return $newCurrency;
+    }
+
+    public function insertNewCurrency($currency,  $value)
+    {
+        $avaliableCurrencies = $this->getAvaliableCurrencies();
+
+        if (in_array($currency, $avaliableCurrencies)) {
+            return json_encode([
+                'currency' => $currency,
+                'value' => $value,
+                'error' => CurrencyConverter::ERROR_DUPLICATE_CURRENCY,
+            ]);
+        }
+
+        $newCurrency = new CurrencyConverter();
+        $newCurrency->currency = $currency;
+        $newCurrency->value = $value;
+
+        $apiGateway = new CurrencyApiGateway();
+        $updatedCurrency = $apiGateway->insertOrUpdateCurrency($newCurrency);
+
+        if (!$updatedCurrency) {
+            return json_encode([
+                'currency' => $currency,
+                'value' => $value,
+                'error' => CurrencyConverter::ERROR_INSERT_NEW_CURRENCY,
+            ]);
+        }
+
+        return json_encode([
+            'currency' => $updatedCurrency->currency,
+            'value' => $updatedCurrency->value,
+            'hasAutomaticUpdate' => $updatedCurrency->hasAutomaticUpdate,
+            'lastUpdate' => $updatedCurrency->updated_at->toDateTimeString()
+        ]);
     }
 
     private function setLastUpdate($currency)
@@ -201,7 +253,7 @@ class CurrencyConverter extends Model
             'amount' => $this->amount,
             'from' => $this->from,
             'to' => $this->to,
-            'error' => $error . 'param: ' . $this->errors
+            'error' => $error . ' Param: ' . $this->errors
         ]);
     }
 }

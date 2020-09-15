@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CurrencyConverterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/create', [CurrencyConverterController::class, 'create']);
+
+Route::put('/', [CurrencyConverterController::class, 'update']);
+
+Route::delete('/', [CurrencyConverterController::class, 'destroy']);

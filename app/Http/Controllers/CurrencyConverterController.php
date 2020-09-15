@@ -13,7 +13,7 @@ class CurrencyConverterController extends Controller
      * @param  string  $from
      * @param  string  $to
      * @param  double  $amount
-     * @return double
+     * @return string
      */
     public function index(Request $request)
     {
@@ -24,16 +24,14 @@ class CurrencyConverterController extends Controller
         ], [
             'from.required' => 'Origin currency not informed',
             'from.string' => 'Origin currency invalid format',
-            'from.size' => 'Origin currency need have 3 characters',
             'to.required' => 'Destiny currency not informed',
             'to.string' => 'Destiny currency invalid format',
-            'to.size' => 'Destiny currency need have 3 characters',
             'amount.required'  => 'Amount not informed',
             'amount.numeric' => 'Amount invalid format',
         ]);
 
         if ($validator->fails()) {
-            return json_encode($validator->messages()->first());
+            return json_encode($validator->messages()->all());
         }
 
         $from = strtoupper($request->from);
@@ -50,6 +48,36 @@ class CurrencyConverterController extends Controller
         $responseJson = $currencyConverter->getConvertedValue($from, $to, $request->amount);
 
         Cache::put($key, $responseJson, 300);
+
+        return $responseJson;
+    }
+
+    /**
+     * @param  string  $currency
+     * @param  double  $value
+     * @return string
+     */
+    public function create(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'currency' => 'required|string',
+            'value' => 'required|numeric',
+        ], [
+            'currency.required' => 'Currency not informed',
+            'currency.string' => 'Currency invalid format',
+            'value.required' => 'Currency Value not informed',
+            'value.numeric' => 'Currency Value invalid format',
+        ]);
+
+        if ($validator->fails()) {
+            return json_encode($validator->messages()->all());
+        }
+
+        $currency = strtoupper($request->currency);
+        $value = (float)$request->value;
+
+        $currencyConverter = new CurrencyConverter();
+        $responseJson = $currencyConverter->insertNewCurrency($currency,  $value);
 
         return $responseJson;
     }
