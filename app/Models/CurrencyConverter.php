@@ -264,7 +264,7 @@ class CurrencyConverter extends Model
         Cache::forget(CurrencyConverter::CURRENCY_DATA_CACHE_KEY_PREFIX . $currency);
     }
 
-    public function putAvaliableCurrenciesInCache(string $avaliableCurrencies)
+    public function putAvaliableCurrenciesInCache(array $avaliableCurrencies)
     {
         Cache::put(CurrencyConverter::AVALIABLE_CURRENCIES_CACHE_KEY, $avaliableCurrencies, CurrencyConverter::DEFAULT_CACHE_TIME);
     }
