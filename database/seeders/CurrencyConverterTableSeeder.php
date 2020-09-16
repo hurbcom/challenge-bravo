@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\CurrencyApiGateway;
+use App\Models\CurrencyConverter;
 
 class CurrencyConverterTableSeeder extends Seeder
 {
@@ -14,16 +14,14 @@ class CurrencyConverterTableSeeder extends Seeder
      */
     public function run()
     {
-        $currencyApiGateway = new CurrencyApiGateway();
-    
-        $apiData = $currencyApiGateway->getApiVaules(CurrencyApiGateway::DEFAULT_CURRENCIES);
-        $hasAutomaticUpdate = true;
+        $defaultCurrencies = CurrencyConverter::DEFAULT_CURRENCIES_AND_VALUES;
 
-        if (!$apiData) {
-            $apiData = CurrencyApiGateway::DEFAULT_CURRENCIES_AND_VALUES;
-            $hasAutomaticUpdate = false;
+        foreach ($defaultCurrencies as $currency => $value) {
+            $newCurrency = new CurrencyConverter();
+            $newCurrency->currency = $currency;
+            $newCurrency->value = $value;
+            $newCurrency->hasAutomaticUpdate = true;
+            $newCurrency->save();
         }
-
-        $currencyApiGateway->insertApiData($apiData, $hasAutomaticUpdate);
     }
 }

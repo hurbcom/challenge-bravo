@@ -20,12 +20,13 @@ class CurrencyConverter extends Model
 
     protected $table = 'currency_converter';
 
-    public $amount;
-    public $from;
-    public $to;
-    public $lastUpdate;
-
-    public $errors;
+    const DEFAULT_CURRENCIES_AND_VALUES = [
+        "USD" => 1,
+        "BTC" => 0.00009682,
+        "BRL" => 5.38,
+        "ETH" => 0.002744,
+        "EUR" => 0.8467
+    ];
 
     const CURRENCY_DOLLAR = 'USD';
     const CURRENCY_DATA_CACHE_KEY_PREFIX = 'currency_data_cache_key_';
@@ -39,17 +40,21 @@ class CurrencyConverter extends Model
     const ERROR_CURRENCY_NOT_DELETED = 'Error deleting currency.';
     const ERROR_UPDATE_CURRENCY = 'Error updating the currency in database.';
 
+    public $amount;
+    public $from;
+    public $to;
+    public $lastUpdate;
 
-    
+    public $errorParams = [];
 
-    public function getConvertedValue($from, $to, $amount)
+    public function getConvertedValue(string $from, string $to, float $amount)
     {
         $this->amount = $amount;
         $this->from = $from;
         $this->to = $to;
 
-        if (!$this->hasRequestedCurrencies()) {
-            return $this->formatErrorResponse(CurrencyConverter::ERROR_UNSUPORTED_CURRENCY);
+        if (!$this->hasRequestedCurrency($this->from) || !$this->hasRequestedCurrency($this->to)) {
+            return $this->formatConversionErrorResponse(CurrencyConverter::ERROR_UNSUPORTED_CURRENCY);
         }
 
         $amountInDollar = $this->amount;
@@ -59,32 +64,27 @@ class CurrencyConverter extends Model
         }
 
         if ($to == CurrencyConverter::CURRENCY_DOLLAR) {
-            return $this->formatResponse($amountInDollar);
+            return $this->formatConversionResponse($amountInDollar);
         }
         
         $convertedAmount = $this->convertValue($amountInDollar, $this->to);
 
-        return $this->formatResponse($convertedAmount);
+        return $this->formatConversionResponse($convertedAmount);
     }
 
-    private function hasRequestedCurrencies()
+    private function hasRequestedCurrency(string $currency)
     {
         $avaliableCurrencies = $this->getAvaliableCurrencies();
 
-        if ( !in_array($this->from, $avaliableCurrencies) ) {
-            $this->errors = $this->from;
-            return false;
-        }
-
-        if ( !in_array($this->to, $avaliableCurrencies) ) {
-            $this->errors = $this->to;
+        if (!in_array($currency, $avaliableCurrencies)) {
+            $this->errorParams[] = $currency;
             return false;
         }
 
         return true;
     }
 
-    public function getAvaliableCurrencies($forceUpdate = false)
+    public function getAvaliableCurrencies(bool $forceUpdate = false)
     {
         $avaliableCurrencies = Cache::get(CurrencyConverter::AVALIABLE_CURRENCIES_CACHE_KEY);
 
@@ -103,21 +103,21 @@ class CurrencyConverter extends Model
         return $avaliableCurrenciesArray;
     }
 
-    private function convertValueinDollar($amount, $from)
+    private function convertValueinDollar(float $amount, string $from)
     {
         $destinyCurrencyValue = $this->getCurrencyValue($from);
 
         return $amount / $destinyCurrencyValue;
     }
 
-    private function convertValue($amount, $to)
+    private function convertValue(float $amount, string $to)
     {
         $destinyCurrencyValue = $this->getCurrencyValue($to);
 
         return $amount * $destinyCurrencyValue;
     }
 
-    private function getCurrencyValue($currency)
+    private function getCurrencyValue(string $currency)
     {
         $currencyValue = Cache::get(CurrencyConverter::CURRENCY_DATA_CACHE_KEY_PREFIX . $currency);
 
@@ -130,96 +130,54 @@ class CurrencyConverter extends Model
         return $currencyValue->value;
     }
 
-    private function getCurrencyValueFromDatabase($currency)
+    private function getCurrencyValueFromDatabase(string $currency)
     {
-        $currencyValue = CurrencyConverter::where('currency', $currency)->first();
+        $currencyObj = CurrencyConverter::where('currency', $currency)->first();
 
-        if (!$currencyValue) {
-            return false;
-        }
+        $lastUpdate = $currencyObj->updated_at;
 
-        $lastUpdate = $currencyValue->updated_at;
-
-        if ($lastUpdate->isToday() || $currencyValue->hasAutomaticUpdate === false) {
-            $this->putCurrencyInCache($currencyValue);
-            return $currencyValue;
+        if ($lastUpdate->isToday() || $currencyObj->hasAutomaticUpdate === false) {
+            $this->putCurrencyInCache($currencyObj);
+            return $currencyObj;
         }
 
         $apiGateway = new CurrencyApiGateway();
-
-        $updatedCurrency = $apiGateway->insertOrUpdateCurrency($currencyValue);
+        $updatedCurrency = $apiGateway->getCurrencyUpdatedValue($currencyObj);
+        $updatedCurrency->save();
 
         $this->putCurrencyInCache($updatedCurrency);
         return $updatedCurrency;
     }
 
-    public function insertCurrenciesArray($apiData, $hasAutomaticUpdate = false)
+    public function insertCurrency(string $currency, float $value)
     {
-        if (empty($apiData)) {
-            return false;
-        }
-
-        $currenciesArray = [];
-
-        foreach ($apiData as $currency => $value) {
-            $currenciesArray[] = $this->insertOrUpdateCurrency($currency, $value, $hasAutomaticUpdate);
-        }
-
-        return $currenciesArray;
-    }
-
-    public function insertOrUpdateCurrency($currency, $value, $hasAutomaticUpdate = false)
-    {
-        $newCurrency = CurrencyConverter::updateOrCreate(
-            [
-                'currency' => $currency,
-                'value' => $value,
-                'hasAutomaticUpdate' => $hasAutomaticUpdate,
-            ]
-        );
-
-        return $newCurrency;
-    }
-
-    public function insertNewCurrency($currency,  $value)
-    {
-        $avaliableCurrencies = $this->getAvaliableCurrencies();
-
-        if (in_array($currency, $avaliableCurrencies)) {
-            return json_encode([
-                'currency' => $currency,
-                'value' => $value,
-                'error' => CurrencyConverter::ERROR_DUPLICATE_CURRENCY,
-            ]);
-        }
-
         $newCurrency = new CurrencyConverter();
         $newCurrency->currency = $currency;
         $newCurrency->value = $value;
 
+        if ($this->hasRequestedCurrency($currency)) {
+            return $this->formatInsertOrUpdateErrorResponse($newCurrency, CurrencyConverter::ERROR_DUPLICATE_CURRENCY);
+        }
+
         $apiGateway = new CurrencyApiGateway();
-        $updatedCurrency = $apiGateway->insertOrUpdateCurrency($newCurrency);
+        $updatedCurrency = $apiGateway->getCurrencyUpdatedValue($newCurrency);
 
         if (!$updatedCurrency) {
-            return json_encode([
-                'currency' => $currency,
-                'value' => $value,
-                'error' => CurrencyConverter::ERROR_INSERT_NEW_CURRENCY,
-            ]);
+            return $this->formatInsertOrUpdateErrorResponse($newCurrency, CurrencyConverter::ERROR_INSERT_NEW_CURRENCY);
+        }
+
+        if (!$updatedCurrency->save()) {
+            return $this->formatInsertOrUpdateErrorResponse($newCurrency, CurrencyConverter::ERROR_INSERT_NEW_CURRENCY);
         }
 
         $forceUpdate = true;
         $avaliableCurrencies = $this->getAvaliableCurrencies($forceUpdate);
 
-        return json_encode([
-            'currency' => $updatedCurrency->currency,
-            'value' => $updatedCurrency->value,
-            'hasAutomaticUpdate' => $updatedCurrency->hasAutomaticUpdate,
-            'lastUpdate' => $updatedCurrency->updated_at->toDateTimeString()
-        ]);
+
+        return $this->formatInsertOrUpdateResponse($updatedCurrency);
     }
 
-    public function deleteCurrency($currency)
+    public function deleteCurrency(string $currency)
     {
         $currencyObj = CurrencyConverter::where('currency', $currency)->first();
 
@@ -246,11 +204,9 @@ class CurrencyConverter extends Model
         ]);
     }
 
-    public function updateCurrency($currency,  $value)
+    public function updateCurrency(string $currency, float $value)
     {
-        $avaliableCurrencies = $this->getAvaliableCurrencies();
-
-        if (!in_array($currency, $avaliableCurrencies)) {
+        if (!$this->hasRequestedCurrency($currency)) {
             return json_encode([
                 'currency' => $currency,
                 'value' => $value,
@@ -270,7 +226,7 @@ class CurrencyConverter extends Model
         $currencyObj->value = $value;
 
         $apiGateway = new CurrencyApiGateway();
-        $updatedCurrency = $apiGateway->insertOrUpdateCurrency($currencyObj);
+        $updatedCurrency = $apiGateway->getCurrencyUpdatedValue($currencyObj);
 
         if (!$updatedCurrency) {
             return json_encode([
@@ -283,42 +239,37 @@ class CurrencyConverter extends Model
         $forceUpdate = true;
         $avaliableCurrencies = $this->getAvaliableCurrencies($forceUpdate);
 
-        return json_encode([
-            'currency' => $updatedCurrency->currency,
-            'value' => $updatedCurrency->value,
-            'hasAutomaticUpdate' => $updatedCurrency->hasAutomaticUpdate,
-            'lastUpdate' => $updatedCurrency->updated_at->toDateTimeString()
-        ]);
+        return $this->formatInsertOrUpdateResponse($updatedCurrency);
     }
 
-    private function setLastUpdate($currency)
+    private function setLastUpdate(CurrencyConverter $currency)
     {
         if (!$this->lastUpdate) {
             $this->lastUpdate = $currency->updated_at;
             return;
         }
 
-        if ( $this->lastUpdate->greaterThan($currency->updated_at) ) {
+        if ($this->lastUpdate->greaterThan($currency->updated_at)) {
             $this->lastUpdate = $currency->updated_at;
         }
     }
 
-    public function putCurrencyInCache($currency)
+    public function putCurrencyInCache(string $currency)
     {
         Cache::put(CurrencyConverter::CURRENCY_DATA_CACHE_KEY_PREFIX . $currency, $currency, CurrencyConverter::DEFAULT_CACHE_TIME);
     }
 
-    public function removeCurrencyFromCache($currency)
+    public function removeCurrencyFromCache(string $currency)
     {
         Cache::forget(CurrencyConverter::CURRENCY_DATA_CACHE_KEY_PREFIX . $currency);
     }
 
-    public function putAvaliableCurrenciesInCache($avaliableCurrencies)
+    public function putAvaliableCurrenciesInCache(string $avaliableCurrencies)
     {
         Cache::put(CurrencyConverter::AVALIABLE_CURRENCIES_CACHE_KEY, $avaliableCurrencies, CurrencyConverter::DEFAULT_CACHE_TIME);
     }
 
-    private function formatResponse($convertedAmount)
+    private function formatConversionResponse(float $convertedAmount)
     {
         $convertedAmount = number_format($convertedAmount, 2, '.', '');
 
@@ -327,17 +278,39 @@ class CurrencyConverter extends Model
             'from' => $this->from,
             'to' => $this->to,
             'convertedAmount' => $convertedAmount,
-            'lastUpdate' => $this->lastUpdate->toDateTimeString()
+            'lastUpdate' => $this->lastUpdate->toDateTimeString(),
+            'errors' => $this->errorParams
         ]);
     }
 
-    private function formatErrorResponse($error)
+    private function formatConversionErrorResponse(string $error)
     {
         return json_encode([
             'amount' => $this->amount,
             'from' => $this->from,
             'to' => $this->to,
-            'error' => $error . ' Param: ' . $this->errors
+            'errorMsg' => $error,
+            'errorParams' => $this->errorParams
+        ]);
+    }
+
+    private function formatInsertOrUpdateResponse(CurrencyConverter $currencyObj)
+    {
+        return json_encode([
+            'currency' => $currencyObj->currency,
+            'value' => $currencyObj->value,
+            'hasAutomaticUpdate' => $currencyObj->hasAutomaticUpdate,
+            'lastUpdate' => $currencyObj->updated_at->toDateTimeString(),
+            'errors' => $this->errorParams
+        ]);
+    }
+
+    private function formatInsertOrUpdateErrorResponse(CurrencyConverter $currencyObj, string $errorMsg)
+    {
+        return json_encode([
+            'currency' => $currencyObj->currency,
+            'value' => $currencyObj->value,
+            'error' => $errorMsg,
         ]);
     }
 }

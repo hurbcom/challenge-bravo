@@ -78,7 +78,7 @@ class CurrencyConverterController extends Controller
         $value = (float)$request->value;
 
         $currencyConverter = new CurrencyConverter();
-        $responseJson = $currencyConverter->insertNewCurrency($currency,  $value);
+        $responseJson = $currencyConverter->insertCurrency($currency,  $value);
 
         return $responseJson;
     }
@@ -87,7 +87,7 @@ class CurrencyConverterController extends Controller
      * @param  string  $currency
      * @return string
      */
-    public function delete(Request $request)
+    public function destroy(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'currency' => 'required|string',
