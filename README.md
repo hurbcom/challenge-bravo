@@ -17,11 +17,15 @@
 
 * **Moedas Padrão**
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+  -   USD
+  -   BRL
+  -   EUR
+  -   BTC
+  -   ETH
+
+* **Testes Automaticos**
+
+  `docker-compose exec app php artisan test`
 
 **End-points**
 
