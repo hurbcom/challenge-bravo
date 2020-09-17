@@ -66,7 +66,7 @@
   * **Conteúdo:** `{"amount":123.45,"from":"BBB","to":"EUR","errorMsg":"Chosen currency not suported yet.","errorParams":["BBB"]}` <br />
     
 
-* **Sample Call:**
+* **Exemplo de Chamada:**
 
   `http://localhost/?from=BRL&to=EUR&amount=123.45`
 
