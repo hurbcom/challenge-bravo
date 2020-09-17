@@ -61,7 +61,7 @@
 
   * **Conteúdo:** `["Origin currency not informed"]` <br />
 
-  OR
+  OU
 
   * **Conteúdo:** `{"amount":123.45,"from":"BBB","to":"EUR","errorMsg":"Chosen currency not suported yet.","errorParams":["BBB"]}` <br />
     
@@ -102,7 +102,7 @@
 
   * **Conteúdo:** `["Currency not informed"]` <br />
 
-  OR
+  OU
 
   * **Conteúdo:** `{"currency":"BBB","value":7.45,"error":"Currency already registred in database."}` <br />
     
@@ -142,7 +142,7 @@
 
   * **Conteúdo:** `["Currency not informed"]` <br />
 
-  OR
+  OU
 
   * **Conteúdo:** `{"currency":"BBB","value":7.45,"error":"Chosen currency not suported yet."}` <br />
 
@@ -177,6 +177,6 @@
 
   * **Conteúdo:** `["Currency not informed"]` <br />
 
-  OR
+  OU
 
   * **Conteúdo:** `{"currency":"BBB","error":"Currency not found in database."}` <br />
