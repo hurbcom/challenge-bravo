@@ -106,6 +106,41 @@ class CurrencyConverterTest extends TestCase
      *
      * @return void
      */
+    public function testGetConvertedValueOnCurrencyWithOutAutomaticUpdate()
+    {
+        $this->clearCache();
+        $model = new CurrencyConverter();
+
+        $currency = 'YYY';
+        $value = 13.13;
+
+        $newConversionJson = $model->insertCurrency($currency, $value);
+        $newConversion = json_decode($newConversionJson);
+        $this->assertEquals($currency, $newConversion->currency);
+        $this->assertEquals($value, $newConversion->value);
+        $this->assertFalse($newConversion->hasAutomaticUpdate);
+
+        $from = 'EUR';
+        $to = 'YYY';
+        $amount = 26.26;
+
+        $this->clearCache();
+
+        $expectedError = [0 => 'YYY'];
+
+        $convertedValueJson = $model->getConvertedValue($from, $to, $amount);
+        $convertedValue = json_decode($convertedValueJson);
+        $this->assertEquals($from, $convertedValue->from);
+        $this->assertEquals($to, $convertedValue->to);
+        $this->assertEquals($amount, $convertedValue->amount);
+        $this->assertEquals($expectedError, $convertedValue->errors);
+    }
+
+    /**
+     * unit test getConvertedValue.
+     *
+     * @return void
+     */
     public function testInsertNewCurrencyWithAutomaticUpdate()
     {
         $this->clearCache();
@@ -118,6 +153,26 @@ class CurrencyConverterTest extends TestCase
         $newConversion = json_decode($newConversionJson);
         $this->assertEquals($currency, $newConversion->currency);
         $this->assertTrue($newConversion->hasAutomaticUpdate);
+    }
+
+    /**
+     * unit test getConvertedValue.
+     *
+     * @return void
+     */
+    public function testTryInsertDuplicateCurrency()
+    {
+        $this->clearCache();
+        $model = new CurrencyConverter();
+
+        $currency = 'USD';
+        $value = 13.13;
+
+        $newConversionJson = $model->insertCurrency($currency, $value);
+        $newConversion = json_decode($newConversionJson);
+        $this->assertEquals($currency, $newConversion->currency);
+        $this->assertEquals($value, $newConversion->value);
+        $this->assertEquals(CurrencyConverter::ERROR_DUPLICATE_CURRENCY, $newConversion->error);
     }
 
     /**

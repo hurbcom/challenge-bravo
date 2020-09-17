@@ -15,12 +15,8 @@ use App\Http\Controllers\CurrencyConverterController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/', [CurrencyConverterController::class, 'create'])->name('create');
 
-Route::post('/create', [CurrencyConverterController::class, 'create']);
+Route::put('/', [CurrencyConverterController::class, 'update'])->name('update');
 
-Route::put('/', [CurrencyConverterController::class, 'update']);
-
-Route::delete('/', [CurrencyConverterController::class, 'destroy']);
+Route::delete('/', [CurrencyConverterController::class, 'destroy'])->name('destroy');

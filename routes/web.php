@@ -15,7 +15,7 @@ use App\Http\Controllers\CurrencyConverterController;
 |
 */
 
-Route::get('/', [CurrencyConverterController::class, 'index']);
+Route::get('/', [CurrencyConverterController::class, 'index'])->name('index');
 
 Route::get('/clear-cache', function() {
     Artisan::call('cache:clear');

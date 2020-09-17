@@ -162,10 +162,6 @@ class CurrencyConverter extends Model
         $apiGateway = new CurrencyApiGateway();
         $updatedCurrency = $apiGateway->getCurrencyUpdatedValue($newCurrency);
 
-        if (!$updatedCurrency) {
-            return $this->formatInsertOrUpdateErrorResponse($newCurrency, CurrencyConverter::ERROR_INSERT_NEW_CURRENCY);
-        }
-
         if (!$updatedCurrency->save()) {
             return $this->formatInsertOrUpdateErrorResponse($newCurrency, CurrencyConverter::ERROR_INSERT_NEW_CURRENCY);
         }
@@ -215,25 +211,13 @@ class CurrencyConverter extends Model
         }
 
         $currencyObj = CurrencyConverter::where('currency', $currency)->first();
-
-        if (!$currencyObj) {
-            return json_encode([
-                'currency' => $currency,
-                'error' => CurrencyConverter::ERROR_CURRENCY_NOT_FOUND,
-            ]);
-        }
-
         $currencyObj->value = $value;
 
         $apiGateway = new CurrencyApiGateway();
         $updatedCurrency = $apiGateway->getCurrencyUpdatedValue($currencyObj);
 
-        if (!$updatedCurrency) {
-            return json_encode([
-                'currency' => $currency,
-                'value' => $value,
-                'error' => CurrencyConverter::ERROR_UPDATE_CURRENCY,
-            ]);
+        if (!$updatedCurrency->save()) {
+            return $this->formatInsertOrUpdateErrorResponse($updatedCurrency, CurrencyConverter::ERROR_UPDATE_CURRENCY);
         }
 
         $forceUpdate = true;
