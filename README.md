@@ -8,7 +8,7 @@
   `git clone https://github.com/pabloferreiradias/challenge-bravo.git`<br><br>
   Entre na pasta do projeto: <br>
   `cd challenge-bravo`<br><br>
-  Crie o arquivo com as variaveis de ambiente: <br>
+  Crie o arquivo com as variáveis de ambiente: <br>
   `cp .env.example .env`<br><br>
   Suba as imagens do docker em segundo plano: <br>
   `docker-compose up -d`<br><br>
@@ -72,6 +72,32 @@
 
 ----
 
+* **API - Moedas Disponíveis**
+
+  Esse método retorna as moedas disponíveis para conversão.
+
+* **URL**
+
+  _localhost/avaliable-currencies_
+
+* **Método:**
+  
+  <_Tipo de requisição_>
+
+  `GET`
+
+* **Resposta com Sucesso:**
+
+  * **Código:** 200 <br />
+    **Conteúdo:** `["USD","BTC","BRL","ETH","EUR"]`
+    
+
+* **Exemplo de Chamada:**
+
+  `http://localhost/avaliable-currencies`
+
+----
+
 * **API - Adicionar nova moeda**
 
   Esse método adiciona uma nova moeda no banco de dados, a API irá tentar atualizar o valor dela após o cadastro.
@@ -111,7 +137,7 @@
 
 * **API - Editar moeda**
 
-  Esse método edita uma moeda já existente no banco de dados, caso o parametro `value` não seja informado, a API irá tentar atualizar o valor da moeda.
+  Esse método edita uma moeda já existente no banco de dados, caso o parâmetro `value` não seja informado, a API irá tentar atualizar o valor da moeda.
 
 * **URL**
 

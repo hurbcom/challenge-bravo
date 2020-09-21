@@ -56,6 +56,16 @@ class CurrencyConverterControllerTest extends TestCase
     /**
      * @return void
      */
+    public function testAvaliableCurrencies()
+    {
+        $this->get(route('avaliableCurrencies'))
+            ->assertStatus(200)
+            ->assertJson($params);
+    }
+
+    /**
+     * @return void
+     */
     public function testDestroy()
     {
         $params = [ 'currency' => 'USD'];

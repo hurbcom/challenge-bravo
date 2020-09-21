@@ -136,4 +136,21 @@ class CurrencyConverterController extends Controller
 
         return $responseJson;
     }
+
+    /**
+     * @return string
+     */
+    public function avaliableCurrencies()
+    {
+        $cacheAvaliableCurrencies = Cache::get(CurrencyConverter::AVALIABLE_CURRENCIES_CACHE_KEY);
+
+        if ($cacheAvaliableCurrencies) {
+            return $cacheAvaliableCurrencies;
+        }
+
+        $currencyConverter = new CurrencyConverter();
+        $responseJson = $currencyConverter->getAvaliableCurrencies();
+
+        return $responseJson;
+    }
 }
