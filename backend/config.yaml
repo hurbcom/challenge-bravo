@@ -1,0 +1,9 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 20
+scenarios:
+  - flow:
+    - get:
+        url: "/exchange/converter?from=BRL&to=USD&amount=20"
