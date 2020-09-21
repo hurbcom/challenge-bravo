@@ -1,7 +1,7 @@
 ## Pré-Requisitos
 
 - Iniciar o docker  `docker-compose up`
-- Chamar a rota  `GET /exchange/lastest` para inicializar a cotações do dia.
+- Chamar a rota  `GET /exchange/lastest` para inicializar as cotações do dia.
 
 
 ### Endpoints
