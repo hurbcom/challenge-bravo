@@ -1,0 +1,9 @@
+version: "3"
+services:
+  backend:
+    image: node:latest
+    volumes:
+      - ./backend:/backend
+    ports:
+      - 3000:3000
+    command: bash -c "cd /backend && yarn install &&  yarn run knex:migrate && yarn run dev"
