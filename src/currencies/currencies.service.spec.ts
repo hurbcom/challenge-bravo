@@ -72,5 +72,10 @@ describe('CurrenciesService', () => {
       await service.createCurrency(mockData);
       expect(repository.createCurrency).toBeCalledWith(mockData);
     });
+
+    it('should be return value with repository return value', async () => {
+      (repository.createCurrency as jest.Mock).mockReturnValue(mockData);
+      expect(await service.createCurrency(mockData)).toEqual(mockData);
+    });
   });
 });
