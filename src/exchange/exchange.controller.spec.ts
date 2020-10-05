@@ -32,5 +32,11 @@ describe('ExchangeController', () => {
       await controller.convertAmount(mockData);
       expect(service.convertAmount).toBeCalledWith(mockData);
     });
+
+    it('should be returns service.convertAmount value', async () => {
+      const mockData = { from: 'USD' } as ConvertAmountDto;
+      (service.convertAmount as jest.Mock).mockReturnValue(mockData);
+      expect(await controller.convertAmount({ from: 'USD' } as ConvertAmountDto)).toEqual(mockData);
+    });
   });
 });

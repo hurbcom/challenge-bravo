@@ -2,7 +2,7 @@ import { Controller, Get, Query, UsePipes, ValidationPipe } from '@nestjs/common
 import { ExchangeService } from './exchange.service';
 import { ConvertAmountDto } from './dto/convert-amount.dto';
 
-@Controller('conversions')
+@Controller('exchange')
 export class ExchangeController {
   constructor(private exchangeService: ExchangeService) {}
 
