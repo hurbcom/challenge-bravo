@@ -46,5 +46,13 @@ describe('CurrenciesRepository', () => {
         'Currency value must be greater than 0.',
       );
     });
+
+    it('should be called save with correct values', async () => {
+      const mockData = new Currencies();
+      repository.save = jest.fn().mockReturnValue({});
+
+      await repository.createCurrency(mockData);
+      expect(repository.save).toBeCalledWith(mockData);
+    });
   });
 });

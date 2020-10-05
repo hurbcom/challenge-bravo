@@ -18,5 +18,11 @@ export class CurrenciesRepository extends Repository<Currencies> {
     if (createCurrency.value <= 0) {
       throw new BadRequestException('Currency value must be greater than 0.');
     }
+
+    try {
+      await this.save(createCurrency);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }
