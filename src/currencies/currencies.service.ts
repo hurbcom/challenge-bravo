@@ -27,4 +27,14 @@ export class CurrenciesService {
 
     return await this.currenciesRepository.createCurrency(createCurrency);
   }
+
+  async deleteCurrency(currency: string): Promise<void> {
+    const exists = await this.currenciesRepository.findOne({ currency });
+
+    if (!exists) {
+      throw new BadRequestException(`The currency "${currency}" not found`);
+    }
+
+    await this.currenciesRepository.delete({ currency });
+  }
 }
