@@ -1,8 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CurrenciesRepository } from './currencies.repository';
 
 @Injectable()
 export class CurrenciesService {
-  async getCurrency(currency): Promise<any> {
-      return currency;
+  constructor(
+    @InjectRepository(CurrenciesRepository) private currenciesRepository: CurrenciesRepository,
+  ) {}
+
+  async getCurrency(currency: string): Promise<any> {
+    return await this.currenciesRepository.getCurrency(currency);
   }
 }
