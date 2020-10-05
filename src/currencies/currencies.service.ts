@@ -46,7 +46,7 @@ export class CurrenciesService {
     const currencyData = await this.currenciesRepository.findOne({ currency });
 
     if (!currencyData) {
-      throw new NotFoundException(`The currency "${currency} not found"`);
+      throw new NotFoundException(`The currency "${currency}" not found`);
     }
 
     currencyData.value = value;

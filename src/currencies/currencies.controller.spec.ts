@@ -66,4 +66,15 @@ describe('CurrenciesController', () => {
       expect(service.deleteCurrency).toBeCalledWith('VALID');
     });
   });
+
+  describe('updateCurrency', () => {
+    it('should be throws if service throw', async () => {
+      (service.updateCurrency as jest.Mock) = jest
+        .fn()
+        .mockRejectedValue(new BadRequestException());
+      await expect(controller.updateCurrency('INVALID', 1)).rejects.toThrow(
+        new BadRequestException(),
+      );
+    });
+  });
 });
