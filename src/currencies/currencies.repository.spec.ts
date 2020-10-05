@@ -22,5 +22,10 @@ describe('CurrenciesRepository', () => {
       await repository.getCurrency('USD');
       expect(repository.findOne).toBeCalledWith({ currency: 'USD' });
     });
+
+    it('should be throw if findOne returns empty', async () => {
+      repository.findOne = jest.fn().mockReturnValue(undefined);
+      await expect(repository.getCurrency('INVALID')).rejects.toThrow();
+    });
   });
 });
