@@ -54,5 +54,10 @@ describe('CurrenciesRepository', () => {
       await repository.createCurrency(mockData);
       expect(repository.save).toBeCalledWith(mockData);
     });
+
+    it('should be throw when save throw', async () => {
+      repository.save = jest.fn().mockRejectedValue(new Error());
+      await expect(repository.createCurrency({} as Currencies)).rejects.toThrow();
+    });
   });
 });
