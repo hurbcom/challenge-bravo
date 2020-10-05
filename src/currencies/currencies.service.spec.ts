@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Currencies } from './currencies.entity';
 import { CurrenciesRepository } from './currencies.repository';
 import { CurrenciesService } from './currencies.service';
 
@@ -9,6 +10,7 @@ describe('CurrenciesService', () => {
   beforeEach(async () => {
     const mockRepository = {
       getCurrency: jest.fn(),
+      createCurrency: jest.fn(),
     };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -46,6 +48,13 @@ describe('CurrenciesService', () => {
     it('should be return value with repository return value', async () => {
       (repository.getCurrency as jest.Mock).mockReturnValue({ value: 1 });
       expect(await service.getCurrency('USD')).toEqual({ value: 1 });
+    });
+  });
+
+  describe('createCurrency()', () => {
+    it('should be throw if repository throw', async () => {
+      (repository.createCurrency as jest.Mock).mockRejectedValue(new Error());
+      await expect(service.createCurrency(new Currencies())).rejects.toThrow();
     });
   });
 });

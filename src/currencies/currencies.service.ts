@@ -12,4 +12,8 @@ export class CurrenciesService {
   async getCurrency(currency: string): Promise<Currencies> {
     return await this.currenciesRepository.getCurrency(currency);
   }
+
+  async createCurrency(currency: Currencies): Promise<Currencies> {
+    return await this.currenciesRepository.createCurrency(currency);
+  }
 }
