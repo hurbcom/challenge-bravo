@@ -56,5 +56,9 @@ describe('CurrenciesService', () => {
       (repository.createCurrency as jest.Mock).mockRejectedValue(new Error());
       await expect(service.createCurrency(new Currencies())).rejects.toThrow();
     });
+
+    it('should be not throw if repository return value', async () => {
+      await expect(service.createCurrency(new Currencies())).resolves.not.toThrow();
+    });
   });
 });
