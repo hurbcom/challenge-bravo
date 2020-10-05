@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  api:
+    image: hurb-api
+    build:
+      context: .
+      dockerfile: Dockerfiler
+    container_name: tdd-api
+    command: bash -c "yarn && yarn start"
+    restart: always
+    volumes:
+      - .:/app
+    working_dir: '/app'
+    ports:
+        - "80:3000"
+    networks:
+      api-network:
+        ipv4_address: 1.0.0.2
+
+  mongo:
+    image: mongo:3.4
+    container_name: mongodb-hurbr
+    restart: always
+    volumes:
+    - ./volumes/mongo:/data/db
+    networks:
+      api-network:
+        ipv4_address: 1.0.0.3
+
+networks:
+  api-network:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 1.0.0.0/24
