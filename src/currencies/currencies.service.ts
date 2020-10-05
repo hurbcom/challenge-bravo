@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { validate } from 'class-validator';
 import { Currencies } from './currencies.entity';
 import { CurrenciesRepository } from './currencies.repository';
 
@@ -13,7 +14,16 @@ export class CurrenciesService {
     return await this.currenciesRepository.getCurrency(currency);
   }
 
-  async createCurrency(currency: Currencies): Promise<Currencies> {
-    return await this.currenciesRepository.createCurrency(currency);
+  async createCurrency({ currency, value }: Currencies): Promise<Currencies> {
+    const createCurrency = new Currencies();
+    createCurrency.currency = currency;
+    createCurrency.value = value;
+
+    const errors = await validate(createCurrency);
+    if (errors.length > 0) {
+      throw new BadRequestException(errors);
+    }
+
+    return await this.currenciesRepository.createCurrency(createCurrency);
   }
 }

@@ -6,6 +6,7 @@ import { CurrenciesService } from './currencies.service';
 describe('CurrenciesService', () => {
   let service: CurrenciesService;
   let repository: CurrenciesRepository;
+  let mockData;
 
   beforeEach(async () => {
     const mockRepository = {
@@ -24,6 +25,7 @@ describe('CurrenciesService', () => {
 
     service = module.get<CurrenciesService>(CurrenciesService);
     repository = module.get<CurrenciesRepository>(CurrenciesRepository);
+    mockData = { currency: 'USD', value: 1 } as Currencies;
   });
 
   it('should be defined', () => {
@@ -58,7 +60,12 @@ describe('CurrenciesService', () => {
     });
 
     it('should be not throw if repository return value', async () => {
-      await expect(service.createCurrency(new Currencies())).resolves.not.toThrow();
+      await expect(service.createCurrency(mockData)).resolves.not.toThrow();
+    });
+
+    it('should be throw if validate throw', async () => {
+      mockData.currency = 'INVALID';
+      await expect(service.createCurrency(mockData)).rejects.toThrow();
     });
   });
 });
