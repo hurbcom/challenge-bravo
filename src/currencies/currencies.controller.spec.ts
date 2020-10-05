@@ -44,5 +44,11 @@ describe('CurrenciesController', () => {
       await controller.createCurrency(mockData);
       expect(service.createCurrency).toBeCalledWith(mockData);
     });
+
+    it('should be returns service value', async () => {
+      const mockData = { currency: 'USD' } as Currencies;
+      (service.createCurrency as jest.Mock) = jest.fn().mockResolvedValue(mockData);
+      expect(await controller.createCurrency(mockData)).toEqual(mockData);
+    });
   });
 });
