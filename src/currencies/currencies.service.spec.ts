@@ -33,5 +33,9 @@ describe('CurrenciesService', () => {
       (repository.getCurrency as jest.Mock).mockRejectedValue(new Error());
       await expect(service.getCurrency('INVALID')).rejects.toThrow();
     });
+
+    it('should be not throw if repository return value', async () => {
+      await expect(service.getCurrency('USD')).resolves.not.toThrow();
+    });
   });
 });
