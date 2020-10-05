@@ -5,7 +5,7 @@ services:
     image: hurb-api
     build:
       context: .
-      dockerfile: Dockerfiler
+      dockerfile: Dockerfile
     container_name: tdd-api
     command: bash -c "yarn && yarn start"
     restart: always
