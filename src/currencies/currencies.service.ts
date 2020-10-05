@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { validate } from 'class-validator';
 import { Currencies } from './currencies.entity';
@@ -36,5 +36,22 @@ export class CurrenciesService {
     }
 
     await this.currenciesRepository.delete({ currency });
+  }
+
+  async updateCurrency({ currency, value }: Currencies): Promise<Currencies> {
+    if (value <= 0) {
+      throw new BadRequestException(`The value cannot be less than zero."`);
+    }
+
+    const currencyData = await this.currenciesRepository.findOne({ currency });
+
+    if (!currencyData) {
+      throw new NotFoundException(`The currency "${currency} not found"`);
+    }
+
+    currencyData.value = value;
+    await this.currenciesRepository.save(currencyData);
+
+    return currencyData;
   }
 }

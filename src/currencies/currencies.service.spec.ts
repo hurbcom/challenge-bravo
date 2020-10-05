@@ -14,6 +14,7 @@ describe('CurrenciesService', () => {
       createCurrency: jest.fn(),
       findOne: jest.fn(),
       delete: jest.fn(),
+      save: jest.fn(),
     };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -90,6 +91,31 @@ describe('CurrenciesService', () => {
       (repository.findOne as jest.Mock).mockReturnValue(mockData);
       await service.deleteCurrency('VALID');
       expect(repository.delete).toBeCalledWith({ currency: 'VALID' });
+    });
+  });
+
+  describe('updateCurrency()', () => {
+    it('should be throw if currency not exists', async () => {
+      await expect(service.updateCurrency(mockData)).rejects.toThrow();
+    });
+
+    it('should be throw if currency value <= 0', async () => {
+      (repository.findOne as jest.Mock).mockReturnValue(mockData);
+      mockData.value = 0;
+      await expect(service.updateCurrency(mockData)).rejects.toThrow();
+    });
+
+    it('should be called repository.save with correct params if currency exists', async () => {
+      (repository.findOne as jest.Mock).mockReturnValue(mockData);
+      await service.updateCurrency(mockData);
+      expect(repository.save).toBeCalledWith(mockData);
+    });
+
+    it('should be returns updated currency', async () => {
+      (repository.findOne as jest.Mock).mockReturnValue(mockData);
+      const mockDataUpdated = mockData;
+      mockDataUpdated.value = 2;
+      expect(await service.updateCurrency(mockDataUpdated)).toEqual(mockDataUpdated);
     });
   });
 });
