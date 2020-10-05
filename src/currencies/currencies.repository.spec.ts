@@ -35,4 +35,16 @@ describe('CurrenciesRepository', () => {
       expect(await repository.getCurrency('USD')).toEqual(mockData);
     });
   });
+
+  describe('createCurrency()', () => {
+    beforeEach(() => {
+      repository.save = jest.fn();
+    });
+
+    it('should be throw when currency value and value <= 0', async () => {
+      await expect(repository.createCurrency({ value: 0 } as Currencies)).rejects.toThrowError(
+        'Currency value must be greater than 0.',
+      );
+    });
+  });
 });

@@ -1,4 +1,4 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { Currencies } from './currencies.entity';
 
@@ -14,7 +14,9 @@ export class CurrenciesRepository extends Repository<Currencies> {
     return result;
   }
 
-  async createCurrency(currency: Currencies): Promise<any> {
-    //
+  async createCurrency(createCurrency: Currencies): Promise<any> {
+    if (createCurrency.value <= 0) {
+      throw new BadRequestException('Currency value must be greater than 0.');
+    }
   }
 }
