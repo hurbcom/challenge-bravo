@@ -4,7 +4,7 @@ import { Currencies } from './currencies.entity';
 
 @EntityRepository(Currencies)
 export class CurrenciesRepository extends Repository<Currencies> {
-  async getCurrency(currency: string): Promise<any> {
+  async getCurrency(currency: string): Promise<Currencies> {
     const result = await this.findOne({ currency });
 
     if (!result) {
@@ -14,7 +14,7 @@ export class CurrenciesRepository extends Repository<Currencies> {
     return result;
   }
 
-  async createCurrency(createCurrency: Currencies): Promise<any> {
+  async createCurrency(createCurrency: Currencies): Promise<Currencies> {
     if (createCurrency.value <= 0) {
       throw new BadRequestException('Currency value must be greater than 0.');
     }
@@ -24,5 +24,7 @@ export class CurrenciesRepository extends Repository<Currencies> {
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
+
+    return createCurrency;
   }
 }
