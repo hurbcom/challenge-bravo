@@ -14,7 +14,7 @@ export class ExchangeService {
       const fromCurrency = await this.currenciesService.getCurrency(from);
       const toCurrency = await this.currenciesService.getCurrency(to);
 
-      return;
+      return { amount: (fromCurrency.value / toCurrency.value) * amount };
     } catch (error) {
       throw new Error(error);
     }

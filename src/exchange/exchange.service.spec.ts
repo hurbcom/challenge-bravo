@@ -32,6 +32,7 @@ describe('ExchangeService', () => {
     });
 
     it('should be not throw if convertAmount is called with valid params', async () => {
+      (currenciesService.getCurrency as jest.Mock).mockReturnValue({ value: 1 });
       await expect(
         service.convertAmount({ from: 'BRL', to: 'USD', amount: 2 }),
       ).resolves.not.toThrow();
@@ -58,6 +59,19 @@ describe('ExchangeService', () => {
       await expect(
         service.convertAmount({ from: 'BRL', to: 'INVALID', amount: 2 }),
       ).rejects.toThrow();
+    });
+
+    it('should be returns correct conversion value', async () => {
+      (currenciesService.getCurrency as jest.Mock).mockReturnValue({ value: 1 });
+      expect(await service.convertAmount({ from: 'USD', to: 'USD', amount: 1 })).toEqual({
+        amount: 1,
+      });
+
+      (currenciesService.getCurrency as jest.Mock).mockReturnValueOnce({ value: 0.2 });
+      (currenciesService.getCurrency as jest.Mock).mockReturnValueOnce({ value: 1 });
+      expect(await service.convertAmount({ from: 'BRL', to: 'USD', amount: 5 })).toEqual({
+        amount: 1,
+      });
     });
   });
 });
