@@ -9,7 +9,14 @@ export class ExchangeService {
     if (!from || !to || !amount) {
       throw new BadRequestException();
     }
-    this.currenciesService.getCurrency(from);
-    this.currenciesService.getCurrency(to);
+
+    try {
+      const fromCurrency = await this.currenciesService.getCurrency(from);
+      const toCurrency = await this.currenciesService.getCurrency(to);
+
+      return;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

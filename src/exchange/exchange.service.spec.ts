@@ -44,10 +44,20 @@ describe('ExchangeService', () => {
     });
 
     it('should be called getCurrency with correct params', async () => {
-        currenciesService.getCurrency = jest.fn().mockReturnValue({ value: 1 });
-        await service.convertAmount({ from: 'BRL', to: 'USD', amount: 2 });
-        await expect(currenciesService.getCurrency).toBeCalledWith('BRL');
-        await expect(currenciesService.getCurrency).toBeCalledWith('USD');
-      });
+      currenciesService.getCurrency = jest.fn().mockReturnValue({ value: 1 });
+      await service.convertAmount({ from: 'BRL', to: 'USD', amount: 2 });
+      await expect(currenciesService.getCurrency).toBeCalledWith('BRL');
+      await expect(currenciesService.getCurrency).toBeCalledWith('USD');
+    });
+
+    it('should be throw if currency does not exist', async () => {
+      (currenciesService.getCurrency as jest.Mock).mockRejectedValue(new Error());
+      await expect(
+        service.convertAmount({ from: 'INVALID', to: 'USD', amount: 2 }),
+      ).rejects.toThrow();
+      await expect(
+        service.convertAmount({ from: 'BRL', to: 'INVALID', amount: 2 }),
+      ).rejects.toThrow();
+    });
   });
 });
