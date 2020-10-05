@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Currencies } from './currencies.entity';
 import { CurrenciesRepository } from './currencies.repository';
 
 describe('CurrenciesRepository', () => {
@@ -26,6 +27,12 @@ describe('CurrenciesRepository', () => {
     it('should be throw if findOne returns empty', async () => {
       repository.findOne = jest.fn().mockReturnValue(undefined);
       await expect(repository.getCurrency('INVALID')).rejects.toThrow();
+    });
+
+    it('should be returns value with findOne returns', async () => {
+      const mockData = { currency: 'USD', value: 1 } as Currencies;
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      expect(await repository.getCurrency('USD')).toEqual(mockData);
     });
   });
 });
