@@ -42,5 +42,12 @@ describe('ExchangeService', () => {
       await service.convertAmount({ from: 'USD', to: 'BRL', amount: 1 });
       expect(currenciesService.getCurrency).toBeCalledTimes(2);
     });
+
+    it('should be called getCurrency with correct params', async () => {
+        currenciesService.getCurrency = jest.fn().mockReturnValue({ value: 1 });
+        await service.convertAmount({ from: 'BRL', to: 'USD', amount: 2 });
+        await expect(currenciesService.getCurrency).toBeCalledWith('BRL');
+        await expect(currenciesService.getCurrency).toBeCalledWith('USD');
+      });
   });
 });
