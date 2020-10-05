@@ -15,6 +15,7 @@ describe('CurrenciesController', () => {
           provide: CurrenciesService,
           useFactory: () => ({
             createCurrency: jest.fn(),
+            deleteCurrency: jest.fn(),
           }),
         },
       ],
@@ -49,6 +50,20 @@ describe('CurrenciesController', () => {
       const mockData = { currency: 'USD' } as Currencies;
       (service.createCurrency as jest.Mock) = jest.fn().mockResolvedValue(mockData);
       expect(await controller.createCurrency(mockData)).toEqual(mockData);
+    });
+  });
+
+  describe('deleteCurrency', () => {
+    it('should be throws if service throw', async () => {
+      (service.deleteCurrency as jest.Mock) = jest
+        .fn()
+        .mockRejectedValue(new BadRequestException());
+      await expect(controller.deleteCurrency('INVALID')).rejects.toThrow(new BadRequestException());
+    });
+
+    it('should be call service with correct params', async () => {
+      await controller.deleteCurrency('VALID');
+      expect(service.deleteCurrency).toBeCalledWith('VALID');
     });
   });
 });
