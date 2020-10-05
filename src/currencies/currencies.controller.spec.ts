@@ -38,5 +38,11 @@ describe('CurrenciesController', () => {
         new BadRequestException(),
       );
     });
+
+    it('should be call service with correct params', async () => {
+      const mockData = { currency: 'USD' } as Currencies;
+      await controller.createCurrency(mockData);
+      expect(service.createCurrency).toBeCalledWith(mockData);
+    });
   });
 });
