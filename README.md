@@ -20,6 +20,8 @@ $ npm run test:cov
 ```
 
 <img src="http://hugo.bz/temp/cov.png" />
+<br/>
+<img src="http://hugo.bz/temp/wrk.png" />
 
 <br/>
 
