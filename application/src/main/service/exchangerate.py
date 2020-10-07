@@ -2,6 +2,7 @@ from main.model.exchange import ExchangeSource as ExchangeSourceModel
 from main.model.exchange import ExchangeRate as ExchangeRateModel
 from main.repository.exchange import ExchangeSource as ExchangeSourceRespository
 from main.repository.exchange import ExchangeRate as ExchangeRateRespository
+from main.repository.currency import Currency as CurrencyRepository
 from main.app import logger
 import aiohttp
 import asyncio
@@ -14,7 +15,7 @@ client = aiohttp.ClientSession(loop=loop)
 class Exchangerate():
 
     source_name = 'exchangerate'
-    source_uri = 'https://api.exchangerate-api.com/v4/latest/BRL'
+    source_uri = 'https://api.exchangerate-api.com/v4/latest/USD'
 
     def get_request(self,source_uri):
         try:
@@ -23,7 +24,17 @@ class Exchangerate():
         except requests.RequestException:
             return
 
+    def add_default_allowe_currencies(self, currencies):
+        for i in currencies:
+            try:
+                CurrencyRepository.create({"name": i,"currency": i})
+            except Exception:
+                logger.error('Error on storing allowed currency')
+
     def dump_rates_to_local_database(self):
+
+        self.add_default_allowe_currencies(currencies=['USD', 'BRL', 'EUR', 'BTC', 'ETH'])
+
         data1 = self.get_request(self.source_uri)
         payload = json.loads(data1['html'])
 
@@ -36,7 +47,7 @@ class Exchangerate():
                 "time_last_updated":payload.get('time_last_updated'),
             }
 
-            object = ExchangeSourceRespository().find({'base':'BRL'})
+            object = ExchangeSourceRespository().find({'base':'USD'})
 
             if object.count(True):
                 object = ExchangeSourceRespository().hydrate_rates(object[0])
@@ -58,6 +69,8 @@ class Exchangerate():
                             rates_loaded[rate_loaded['currency']] = rate_loaded['value']
 
                     object['rates'] = rates_loaded
+
+                self.add_default_allowe_currencies(currencies=['USD','BRL','EUR','BTC','ETH'])
 
                 return object
             else:
