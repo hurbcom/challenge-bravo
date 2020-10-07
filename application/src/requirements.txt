@@ -1,0 +1,9 @@
+pymongo
+flask
+flask-restful
+aiodns
+aiohttp
+asyncio
+cchardet
+marshmallow
+requests
