@@ -5,27 +5,13 @@ from main.repository.currency import Currency as CurrencyRepository
 from flask_restful import reqparse
 
 class Currencies(Resource):
+    """
+    Management of available currencies
+    """
 
     insert_currency_fields = {
         'currency': fields.String
     }
-
-    # def get(self):
-    #
-    #     mongodb = DBClient.conn()
-    #
-    #     mongo_currencies_collection = mongodb["currencies"]
-    #
-    #     myquery = {}
-    #
-    #     mydoc = mongo_currencies_collection.find(myquery)
-    #
-    #     output = []
-    #
-    #     for doc in mydoc:
-    #         output = MySchema().load(doc)
-    #
-    #     return output
 
     @marshal_with(insert_currency_fields)
     def get(self):

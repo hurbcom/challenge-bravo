@@ -1,6 +1,5 @@
 from flask_restful import Resource, fields, marshal_with, request, marshal, reqparse
 from main.common.database import DBClient
-from main.model.conversion import Conversion
 from main.repository.exchange import ExchangeRate as ExchangeRepository, ExchangeSource as ExchangeSourceRepository
 from main.repository.currency import Currency
 from main.service.exchangerate import Exchangerate
@@ -9,6 +8,9 @@ import time
 
 
 class Exchanges(Resource):
+    """
+    Exchange calculation response control class
+    """
 
     get_currency_fields = {
         'from': {'currency':fields.String(default='BRL'), 'value':fields.Float},
