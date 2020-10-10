@@ -10,7 +10,6 @@ import json
 import requests
 
 loop = asyncio.get_event_loop()
-client = aiohttp.ClientSession(loop=loop)
 
 class Exchangerate():
 

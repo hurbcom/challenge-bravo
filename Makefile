@@ -23,6 +23,6 @@ stresstest-run-linux:
 	@docker run -i loadimpact/k6 --add-host=host.docker.internal:host-gateway run - <test/stress/k6script.js
 unittest:
 	@echo "Carregando a ferramenta de análise..."
-	@docker exec -it challenge-bravo_backend_1 python -m unittest -v test.general
+	@docker exec -it challenge-bravo_backend_1 python -m unittest -v test.general test.sources
 
 

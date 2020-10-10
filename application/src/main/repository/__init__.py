@@ -12,11 +12,7 @@ class RopositoryBase():
     def find(self, query):
         mongo_currencies_collection = self.get_collection()
         documents = mongo_currencies_collection.find(query)
-        output = []
-
-        if documents.count():
-            return documents
-
+        output = list(documents)
         return output
 
 
