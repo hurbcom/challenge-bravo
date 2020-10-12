@@ -1,0 +1,31 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JrFarias/challenge-bravo.git"
+  },
+  "author": "Junior Farias",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JrFarias/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/JrFarias/challenge-bravo#readme",
+  "dependencies": {
+    "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-helmet": "^6.0.0",
+    "koa-json": "^2.0.2",
+    "koa-router": "^9.4.0"
+  },
+  "devDependencies": {
+    "jest": "^26.5.3"
+  }
+}

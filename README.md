@@ -1,5 +1,61 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
+## Tecnologias utilizadas:
+ - node 12
+ - [Koa](https://koajs.com/)
+ - [Koa-router](https://github.com/ZijianHe/koa-router) rotas da app
+ - [koa-bodyparser](https://github.com/koajs/bodyparser) Faz parse do que I/O
+ - [koa-helmet](https://www.npmjs.com/package/koa-helmet) Inclui 11 middleware de segurança
+ - [koa-json](https://github.com/koajs/json) Middleware simples para converter objeto JS em JSON no KOA
+ - [Jest](https://jestjs.io/docs/en/getting-started) Para mock tests
+ - [Docker](https://www.docker.com/)
+
+## Como subir a aplicação
+
+```
+  docker build -t node-app .
+```
+
+```
+  docker run -p 3000:3000 -d node-app
+```
+
+## Como rodar os testes
+ `não esqueça o npm install antes.`
+```
+  npm run test
+```
+
+## API
+
+```
+http://localhost:3000/v1/exchange?from=EUR&to=USD&amount=1000
+```
+```
+http://localhost:3000/health
+```
+
+## Explicações
+
+O problema consiste em fazer conversões de moedas tendo o USD como lastro, assim criei um mapa de USD para todas as outras moedas existentes na aplicação e realizei simples contas para retornar o valor de acordo com as moedas e valor informado.
+
+Arquitetura utilizei o pattern [DDD](https://en.wikipedia.org/wiki/Domain-driven_design) como tenho apenas um domínio e para esse problema me pareceu mais simples.
+
+Realizei testes unitário utilizando o Jest e com o [DI](https://en.wikipedia.org/wiki/Dependency_injection)(injeção de dependências), ficou simples mockar e tendo uma entrada esperar a mesma saída sempre.
+
+Utilizei algumas bibliotecas de segurança que acho importantes em aplicações nodeJs.
+
+Poderia ter utilizado [PM2](https://pm2.keymetrics.io/) ou [Forever](https://www.npmjs.com/package/forever), para subir a aplicação e utilizar todos os CORE's da máquina, como o nodeJs é sigle thread, isso faria com que a aplicação fosse mais resiliente tendo um nó por core.
+
+## Teste de stess
+Realizei um teste simples fazendo mil requests pelo postman
+
+## Commits
+Utilizo o pattern de [Karma commits](http://karma-runner.github.io/5.2/dev/git-commit-msg.html), com foi uma aplicação simples não utilizei.
+
+
+--------------------------------------------------------------------------------------------
+
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
 
 A API deve, originalmente, converter entre as seguintes moedas:
