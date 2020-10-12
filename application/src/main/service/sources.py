@@ -7,6 +7,8 @@ import json
 
 class Sources():
 
+    base_currency = 'USD'
+
     standard_currencies = ['USD','BRL','EUR','BTC','ETH']
 
     source_apis = [
@@ -45,6 +47,7 @@ class Sources():
 
     def get_rates(self,currencies):
         rates = {}
+        currencies.append(self.base_currency)
         for currency in currencies:
             rates[currency] = self._get_rates_from_local(currency)
         return rates

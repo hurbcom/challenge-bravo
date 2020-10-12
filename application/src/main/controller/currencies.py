@@ -1,7 +1,6 @@
 from flask_restful import Resource, fields, marshal_with, request
-from main.common.database import DBClient
-# from main.model.currency import Currency as CurrencyModel
-from main.repository.currency import Currency as CurrencyRepository
+from main.service.sources import Sources
+from main.model.rate import Rate
 from flask_restful import reqparse
 
 class Currencies(Resource):
@@ -9,48 +8,44 @@ class Currencies(Resource):
     Management of available currencies
     """
 
-    insert_currency_fields = {
-        'currency': fields.String
-    }
-
-    @marshal_with(insert_currency_fields)
     def get(self):
-        currency = CurrencyRepository.find({"currency": request.args.get('currency')})
-
-        if len(currency):
-            currency = currency[0]
-            code = 200
-        else:
-            currency = None
-            code = 404
-
-        return currency, code
-
-    @marshal_with(insert_currency_fields)
-    def post(self):
-
-        # raise Exception(kwargs)
         parser = reqparse.RequestParser()
         parser.add_argument('currency', type=str, required=True, help="currency cannot be blank!")
         args = parser.parse_args()
 
-        active_currency = CurrencyRepository.find({"currency": args.get('currency')})
+        active_currency = Sources().get_rates([args.get('currency')]);
 
-        if active_currency:
-            return active_currency[0], 423
+        if active_currency[args.get('currency')]:
+            currency = active_currency[args.get('currency')]
+            output = Rate().load(data=currency)
+            return output, 200
+        else:
+            raise Exception('Currency not found', 404)
 
-        data = {"name": args.get('currency'),"currency": args.get('currency')}
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('currency', type=str, required=True, help="currency cannot be blank!")
+        args = parser.parse_args()
 
-        object = CurrencyRepository.create(data)
+        active_currency = Sources().get_rates([args.get('currency')]);
 
-        return object, 201
+        if active_currency[args.get('currency')]:
+            currency = active_currency[args.get('currency')]
+            return Rate().load(data=currency), 201
+        else:
+            new_currency = Sources().add_rates([args.get('currency')]);
+            if new_currency[args.get('currency')]:
+                # return new_currency[args.get('currency')], 201
+                currency = new_currency[args.get('currency')]
+                return Rate().load(data=currency), 201
+            else:
+                raise Exception('Unknow error, please try again')
 
-    @marshal_with(insert_currency_fields)
-    def delete(self, currency):
+    def delete(self,currency):
+        active_currency = Sources().get_rates([currency]);
 
-        active_currency = CurrencyRepository.find({"currency": currency})
-
-        if len(active_currency) < 1:
-            return None, 404
-
-        return None, 204
+        if active_currency[currency]:
+            deleteds = Sources().delete_rates([currency]);
+            return deleteds, 204
+        else:
+            raise Exception('Currency not found', 404)
