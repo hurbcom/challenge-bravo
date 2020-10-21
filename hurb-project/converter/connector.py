@@ -1,4 +1,5 @@
 import requests
+from django.core.exceptions import ValidationError
 
 
 class ExternalApiConnector:
@@ -13,7 +14,11 @@ class ExternalApiConnector:
             url
         )
 
-        return response.json()
+        response_error = response.json().get('Response')
+        if not response_error == 'Error':
+            return response.json()
+        raise ValidationError(message='O simbolo inserido para conversão não foi encontrado na API externa.')
 
+        
 
 

@@ -63,9 +63,11 @@ class CurrencyResource(ModelResource):
 
 
         amount = float(request.GET.get('amount'))
+        if amount < 0:
+            raise ValidationError("O valor da conversão não pode ser negativo.")
 
         response_json = ExternalApiConnector.get_quotation(self, currency_from, currency_to)
-        print (response_json)
+    
         value_to = response_json[currency_from][currency_to]
         total = conversion_calculate(value_to, amount)
 
