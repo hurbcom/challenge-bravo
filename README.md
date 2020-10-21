@@ -1,3 +1,49 @@
+## Api de cotação de moedas.
+
+Api desenvolvida para o calculo de conversão de moedas, usando como base uma api externa com as cotações em tempo real.
+Para o desenvolvimento, foram utilizados as tecnologias: Python, Django, Tastypie, PostgreSQL, Docker e a ORM do próprio Django.
+
+Na arquitetura, foi usada a MVT, porém os templates não foram implementados nesse projeto.
+
+Foi utilizado um arquivo chamado connector que funciona como um Service para as requisições na API externa.
+
+## Rotas
+- **CRUD para as moedas suportadas pela API.**
+    - GET -> Retorna a lista de moedas cadastradas:
+        - curl -L -X GET 'http://localhost:8000/api/v1/currency/' -H 'Content-Type: application/json;charset=UTF-8'
+
+    - POST -> Cadastra uma nova moeda:
+        - curl -L -X POST 'http://localhost:8000/api/v1/currency/' -H 'Content-Type: application/json;charset=UTF-8' --data-raw '{"symbol": "JPY", "description": "Moeda do Japão"}'
+
+    - PATCH -> Altera uma moeda:
+        - curl -L -X PATCH 'http://localhost:8000/api/v1/currency/2/' -H 'Content-Type: application/json;charset=UTF-8' --data-raw '{"description": "Mudando a descrição de uma currency"}'
+
+    - DELETE -> Deleta uma moeda:
+        - curl -L -X DELETE 'http://localhost:8000/api/v1/currency/2/' -H 'Content-Type: application/json;charset=UTF-8'
+
+- **Endpoint para converter moedas**
+    - Exemplo:
+    
+    - POST -> Método para conversão de moedas(Único verbo suportado no endpoint)
+        - curl -L -X POST 'http://localhost:8000/api/v1/currency/convert_value/?from=USD&to=BRL&amount=10' -H 'Content-Type: application/json;charset=UTF-8'
+
+## Observações
+
+- Para converter de uma moeda X para outra moeda Y, é necessário que as duas moedas estejam cadastradas pelo endpoint de cadastrar moedas. Inicialmente já possui as 5, porém, é necessário cadastrar a moeda em questão caso não seja uma das: USD, BRL, EUR, BTC ou ETH.
+- Não é possível converter de uma moeda pra ela mesmo, nesse caso a api retornará um erro.
+
+
+# Como rodar o projeto
+
+- Clone o projeto no seu computador local, entre na pasta /hurb-project
+- Execute o seguinte comando para buildar o projeto:
+    -  sudo make build
+ - Após buildar o projeto, vamos subir o projeto com o seguinte comando:
+    - sudo make start
+  - Para rodar os testes, abra um novo terminal(Certifique-se que o server esteja rodando em outro terminal) e rode o seguinte comando:
+    - sudo make test
+    
+ -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
