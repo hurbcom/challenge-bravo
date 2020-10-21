@@ -19,7 +19,7 @@ class TestCurrency(TestCase):
         self.quotation = 4.2
         self.convert_from = 'BRL'
         self.convert_to = 'USD'
-        self.url_base = 'http://0.0.0.0:8000/api/v1/currency/'
+        self.url_base = 'http://127.0.0.1:8000/api/v1/currency/'
         self.headers = {
         "Accept": "application/json",
         "Content-Type": "application/json"
