@@ -8,7 +8,6 @@ from django.conf.urls import url
 from tastypie.utils import trailing_slash
 from converter.connector import ExternalApiConnector
 from converter.utils import conversion_calculate, verify_if_exists_symbols
-from django.http import Http404
 from django.core.exceptions import ValidationError
 
 
@@ -20,6 +19,13 @@ class CurrencyResource(ModelResource):
         queryset = Currency.objects.all()
         resource_name = 'currency'
         authorization = Authorization()
+
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/convert_value%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('convert_value'), name="api_teste"),
+        ]
 
 
     def obj_create(self, bundle, request=None, **kwargs):
@@ -37,12 +43,6 @@ class CurrencyResource(ModelResource):
         return bundle
 
 
-    def prepend_urls(self):
-        return [
-            url(r"^(?P<resource_name>%s)/convert_value%s$" %
-                (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('convert_value'), name="api_teste"),
-        ]
 
     def convert_value(self, request, **kwargs):
         self.method_check(request, allowed=['post'])
@@ -51,11 +51,13 @@ class CurrencyResource(ModelResource):
 
         currency_from = request.GET.get('from')
         currency_to = request.GET.get('to')
-
+        if currency_to == currency_from:
+            raise ValidationError(message='Foram inseridos dois campos iguais para conversão.')
+    
         is_valid_entry = verify_if_exists_symbols(currency_from, currency_to)
 
         if not is_valid_entry:
-            raise Http404("O simbolo fornecido não foi encontrado. É necessário cadastra-lo antes.")
+            raise ValidationError("O simbolo fornecido não foi encontrado. É necessário cadastra-lo antes.")
 
             #return self.create_response(request, {"error_message": "O símbolo fornecido não está cadastrado. É necessário cadastra-lo anteriormente."}, 404)
 
@@ -63,7 +65,7 @@ class CurrencyResource(ModelResource):
         amount = float(request.GET.get('amount'))
 
         response_json = ExternalApiConnector.get_quotation(self, currency_from, currency_to)
-
+        print (response_json)
         value_to = response_json[currency_from][currency_to]
         total = conversion_calculate(value_to, amount)
 

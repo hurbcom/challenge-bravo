@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from converter.models import *
 class Command(BaseCommand):
-    help = 'Displays current time'
 
     def handle(self, *args, **kwargs):
         initial_countries = ['BRL', 'USD', 'EUR', 'BTC', 'ETH']
