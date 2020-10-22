@@ -35,7 +35,11 @@ Foi utilizado um arquivo chamado connector que funciona como um Service para as 
 
 # Como rodar o projeto
 
-- Clone o projeto no seu computador local, entre na pasta /hurb-project
+- **Requisitos**
+    - Docker
+    - Docker-compose
+   
+- Clone o projeto no seu computador local, entre na pasta /challenge-bravo/hurb-project
 - Execute o seguinte comando para buildar o projeto:
     -  sudo make build
  - Após buildar o projeto, vamos subir o projeto com o seguinte comando:
