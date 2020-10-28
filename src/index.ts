@@ -4,6 +4,7 @@ import morganBody from 'morgan-body';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import redis from '../config/redis';
+import { setInitialSupportedCurrencies } from '../config/initializationProcedures';
 import routes from './routes';
 
 const { NODE_ENV = 'development', PORT, REDIS_HOST, REDIS_PASSWORD } = process.env;
@@ -11,6 +12,8 @@ const { NODE_ENV = 'development', PORT, REDIS_HOST, REDIS_PASSWORD } = process.e
 const app = express();
 
 redis.configure({host: REDIS_HOST, password: REDIS_PASSWORD});
+
+setInitialSupportedCurrencies();
 
 app.use(bodyParser.json());
 app.use(compression());
