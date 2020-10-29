@@ -2,3 +2,11 @@
 
 #microframework used to build api 
 flask 
+
+#requirements for usign swagger to documentation
+flask_swagger_ui
+apispec
+apispec_webframeworks
+openapi_spec_validator
+
+#
