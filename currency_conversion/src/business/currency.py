@@ -1,6 +1,6 @@
 #--- Define Currency methods to access database ---#
 
-from src.models.currency import Curerncy
+from src.models.currency import Currency
 from src.db import db 
 
 class CurrencyBusiness(object):
