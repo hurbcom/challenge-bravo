@@ -5,5 +5,6 @@ const router = express.Router();
 
 // Exchanges Routes
 
+router.get('/exchange', Exchange.exchange);
 
 export default router;
