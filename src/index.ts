@@ -13,8 +13,6 @@ const app = express();
 
 redis.configure({host: REDIS_HOST, password: REDIS_PASSWORD});
 
-setInitialSupportedCurrencies();
-
 app.use(bodyParser.json());
 app.use(compression());
 app.use(helmet());
@@ -23,10 +21,14 @@ morganBody(app, { prettify: NODE_ENV === 'development' });
 
 app.use(routes);
 
-const port = PORT || 8080;
+setInitialSupportedCurrencies().then(result => {
+    console.info(`${result} currencies were added on initializing.`);
 
-// TODO configure mongoDB
+    const port = PORT || 8080;
 
-app.listen({ port }, () => {
-    console.info(`Server running on port ${port}`);
+    app.listen({ port }, () => {
+        console.info(`Server running on port ${port}`);
+    });
+}).catch(err => {
+    console.log(`Error while trying to set add initial currencies. Error: ${err}.`);
 });
