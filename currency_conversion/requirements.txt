@@ -1,0 +1,4 @@
+#All dependencies of application
+
+#microframework used to build api 
+flask 
