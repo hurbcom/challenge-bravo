@@ -30,5 +30,5 @@ initializeSupportedCurrencies().then(result => {
         console.info(`Server running on port ${port}`);
     });
 }).catch(err => {
-    console.log(`Error while trying to set add initial currencies. Error: ${err}.`);
+    console.log(`Error while trying to set add initial currencies. [${err}].`);
 });

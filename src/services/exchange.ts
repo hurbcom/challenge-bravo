@@ -1,5 +1,7 @@
 import Big from "big.js";
-import AlphaVantageApiIntegration from '../integrations/AlphaVantageApiIntegration';
+import CurrencyCache from "../cache/currencyCache";
+import AlphaVantageApiIntegration from "../integrations/alphaVantageApiIntegration";
+import { validCurrencyCodes } from "../utils/validations";
 
 export type ExchangeParams = {
     originalCurrency: string;
@@ -17,15 +19,31 @@ export type ExchangeResult = {
 
 class ExchangeService {
 
-    public async exchange(exchangeParams: ExchangeParams) : Promise<ExchangeResult> {
-        const exchangeRate = await AlphaVantageApiIntegration.exchange(exchangeParams.originalCurrency, exchangeParams.finalCurrency);
+    private readonly currencyCache;
+    private readonly alphaVantageApiIntegration
+
+    constructor() {
+        this.currencyCache = new CurrencyCache();
+        this.alphaVantageApiIntegration = new AlphaVantageApiIntegration();
+    }
+
+    public async getSupportedCurrencies() : Promise<string[]> {
+        return await this.currencyCache.getSupportedCurrencies();
+    }
+
+    public async exchange({ originalCurrency, finalCurrency, amount }: ExchangeParams) : Promise<ExchangeResult> {
+        if(!validCurrencyCodes(originalCurrency, finalCurrency)) {
+            throw new Error('One of the currencies provided was not valid. Ensure to be providing an existing currency code in uppercase, e.g., "USD".');
+        }
+
+        const exchangeRate = await this.alphaVantageApiIntegration.exchange(originalCurrency, finalCurrency);
 
         return {
-            originalCurrency: exchangeParams.originalCurrency,
-            finalCurrency: exchangeParams.finalCurrency,
-            amount: exchangeParams.amount,
+            originalCurrency: originalCurrency,
+            finalCurrency: finalCurrency,
+            amount: amount,
             rate: exchangeRate.rate,
-            result: exchangeParams.amount.times(exchangeRate.rate)
+            result: amount.times(exchangeRate.rate)
         };
     }
 

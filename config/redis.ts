@@ -1,8 +1,8 @@
 import Redis from 'ioredis';
 
-export const SUPPORTED_VALUES_KEY = 'currencies:supported';
+export const SUPPORTED_CURRENCIES_KEY = 'currencies:supported';
 
-class RedisClient {
+export class RedisClient {
     private static redisClient: Redis.Redis | undefined;
 
     public configure(options: Redis.RedisOptions) : void {

@@ -1,10 +1,10 @@
 import express from 'express';
-import Exchange from './controllers/exchange';
+import exchangeController from './controllers/exchange';
 
 const router = express.Router();
 
 // Exchanges Routes
 
-router.get('/exchange', Exchange.exchange);
+router.get('/exchange', exchangeController.exchange);
 
 export default router;

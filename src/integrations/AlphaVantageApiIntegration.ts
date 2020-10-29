@@ -1,5 +1,5 @@
 import Big from "big.js";
-import Axios, { AxiosResponse } from "axios";
+import Axios from "axios";
 
 type ExchangeRate = {
     originalCurrency: string;
@@ -49,8 +49,14 @@ class AlphaVantageApiIntegration {
             apikey: this.apiKey
         };
 
-        const res = await Axios.get<CurrencyExchangeRateResponse>(this.baseURL, { params: params }).catch(err => {
-            console.log(`An error occured while trying to fetch the exchange rate. Error: `, err);
+        const res = await Axios.get<CurrencyExchangeRateResponse>(this.baseURL, { params: params }).then((res) => {
+            if(!res.data[REALTIME_CURRENCY_EXCHANGE_RATE_KEY]) {
+                throw new Error('The API responded with an unexpected value.');
+            }
+
+            return Promise.resolve(res);
+        }).catch(err => {
+            console.error(`An error occured while trying to fetch the exchange rate. [${err}].`);
             throw err;
         });
 
@@ -62,4 +68,4 @@ class AlphaVantageApiIntegration {
     }
 }
 
-export default new AlphaVantageApiIntegration();
+export default AlphaVantageApiIntegration;
