@@ -24,7 +24,7 @@ def add_currency(from_code, to_code, ammount):
     return jsonify({'Currency Codes': ""})
 
 #endpoint to delete currency code
-@currency_api.route('/conversion/<string:currency_code>', methods=['DELETE'])
+@currency_api.route('/conversion/<int:id>', methods=['DELETE'])
 def delete_currency(id):
 
     return jsonify({'Currency Codes': ""})
