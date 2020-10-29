@@ -9,4 +9,7 @@ apispec
 apispec_webframeworks
 openapi_spec_validator
 
-#
+#requirements for usign database
+flask-sqlalchemy
+flask-marshmallow
+marshmallow-sqlalchemy
