@@ -31,18 +31,11 @@ def currency_conversion(from_code, to_code, ammount):
 def add_currency(currency_code):
 
     response = CurrencyBusiness.insert_currency(currency_code) 
-
-    return '', response
+    return jsonify(response), response["status"]
 
 #endpoint to delete currency code
 @currency_api.route('/conversion/<int:id>', methods=['DELETE'])
 def delete_currency(id):
 
-    CurrencyBusiness.delete_currency(id)
-    get_currencies = CurrencyBusiness.get_all_currencies()
-
-    return jsonify({'Currency Codes': currencies_schema.dump(get_currencies)})
-
-@currency_api.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({"response": "Pepe não achou"}), 404)
+    response = CurrencyBusiness.delete_currency(id)
+    return jsonify(response), response["status"]
