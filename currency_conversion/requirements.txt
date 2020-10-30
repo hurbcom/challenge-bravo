@@ -1,10 +1,13 @@
-#All dependencies of application
+#-- All dependencies of application --#
 
 #microframework used to build api 
 flask 
 
 #requirements to use http message methods
 flask_api
+
+#requirements to consumes quote api (Awesome API)
+requests
 
 #requirements for usign swagger to documentation
 flask_swagger_ui

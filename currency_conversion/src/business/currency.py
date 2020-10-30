@@ -62,7 +62,6 @@ class CurrencyBusiness(object):
         except:
             return status_code.INTERNAL_SERVER_ERROR_500
 
-
     #check if currency code already exists in database
     @classmethod
     def currency_code_exists(self, currency_code):
@@ -76,5 +75,4 @@ class CurrencyBusiness(object):
         except:
             return status_code.INTERNAL_SERVER_ERROR_500
 
-    
         
