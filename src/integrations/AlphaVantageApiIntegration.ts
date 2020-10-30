@@ -23,7 +23,7 @@ type CurrencyExchangeRateResponse = {
     [REALTIME_CURRENCY_EXCHANGE_RATE_KEY]: {
         [FROM_CURRENCY_CODE_KEY]: string,
         [TO_CURRENCY_CODE_KEY]: string,
-        [EXCHANGE_RATE_KEY]: string,
+        [EXCHANGE_RATE_KEY]: string
     }
 };
 
@@ -41,7 +41,7 @@ class AlphaVantageApiIntegration {
         this.apiKey = EXCHANGE_API_KEY;
     }
 
-    async exchange(originalCurrency: string, finalCurrency: string) : Promise<ExchangeRate> {
+    public async exchange(originalCurrency: string, finalCurrency: string) : Promise<ExchangeRate> {
         const params : CurrencyExchangeRateParams = {
             function: AlphaVantageApiIntegration.EXCHANGE_RATE_QUERY_FUNCTION,
             from_currency: originalCurrency,
@@ -60,6 +60,8 @@ class AlphaVantageApiIntegration {
             throw err;
         });
 
+        console.info(`The exchange API responded with: ${JSON.stringify(res.data)}`);
+
         return Promise.resolve({
             originalCurrency,
             finalCurrency,
@@ -68,4 +70,4 @@ class AlphaVantageApiIntegration {
     }
 }
 
-export default AlphaVantageApiIntegration;
+export default new AlphaVantageApiIntegration();

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Big from 'big.js';
-import exchangeService, { ExchangeParams } from '../services/exchange';
+import exchangeService from '../services/exchange';
 
 class ExchangeController {
 
@@ -9,11 +9,9 @@ class ExchangeController {
 
     constructor() {
         this.exchangeService = exchangeService;
-
-        this.exchange = this.exchange.bind(this);
     }
 
-    async exchange(req: Request, res: Response) {
+    public exchange : (req: Request, res: Response) => void = async (req, res) => {
         const { from, to, amount } = req.query;
 
         if(!from || !to || !amount) {
@@ -29,23 +27,19 @@ class ExchangeController {
             Ensure to be providing an existing currency code in uppercase, e.g., ${supportedCurrencies}.`);
         }
 
-        let exchangeParams: ExchangeParams;
+        let amountBig: Big;
 
         try {
-            exchangeParams = {
-                originalCurrency,
-                finalCurrency,
-                amount: Big(amount.toString())
-            }
+            amountBig = Big(amount.toString());
         } catch(err) {
             console.error(err);
-            return res.status(StatusCodes.BAD_REQUEST).send('One of the query parameters provided was not valid.');
+            return res.status(StatusCodes.BAD_REQUEST).send('The amount provided for the exchange is not valid. Ensure to be providing a monetary value using dot (.) as separator.');
         }
 
         let exchangeResult;
 
         try {
-            exchangeResult = await this.exchangeService.exchange(exchangeParams);
+            exchangeResult = await this.exchangeService.exchange(originalCurrency, finalCurrency, amountBig);
         } catch (err) {
             console.error(`An error occurred while trying to exchange the values. [${err}].`);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('An internal error occurred while trying to exchange the currencies.');
@@ -54,7 +48,7 @@ class ExchangeController {
         res.json({
             from: exchangeResult.originalCurrency,
             to: exchangeResult.finalCurrency,
-            rage: exchangeResult.rate.toFixed(),
+            rate: exchangeResult.rate.toFixed(),
             amount: exchangeResult.amount.toFixed(),
             result: exchangeResult.result.toFixed(),
         });

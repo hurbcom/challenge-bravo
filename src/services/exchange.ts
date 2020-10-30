@@ -1,13 +1,7 @@
 import Big from "big.js";
-import CurrencyCache from "../cache/currencyCache";
-import AlphaVantageApiIntegration from "../integrations/alphaVantageApiIntegration";
+import currencyCache from "../cache/currencyCache";
+import alphaVantageApiIntegration from "../integrations/alphaVantageApiIntegration";
 import { validCurrencyCodes } from "../utils/validations";
-
-export type ExchangeParams = {
-    originalCurrency: string;
-    finalCurrency: string;
-    amount: Big;
-}
 
 export type ExchangeResult = {
     originalCurrency: string;
@@ -23,27 +17,41 @@ class ExchangeService {
     private readonly alphaVantageApiIntegration
 
     constructor() {
-        this.currencyCache = new CurrencyCache();
-        this.alphaVantageApiIntegration = new AlphaVantageApiIntegration();
+        this.currencyCache = currencyCache;
+        this.alphaVantageApiIntegration = alphaVantageApiIntegration;
     }
 
     public async getSupportedCurrencies() : Promise<string[]> {
         return await this.currencyCache.getSupportedCurrencies();
     }
 
-    public async exchange({ originalCurrency, finalCurrency, amount }: ExchangeParams) : Promise<ExchangeResult> {
+    public async exchange( originalCurrency: string, finalCurrency: string, amount: Big) : Promise<ExchangeResult> {
         if(!validCurrencyCodes(originalCurrency, finalCurrency)) {
             throw new Error('One of the currencies provided was not valid. Ensure to be providing an existing currency code in uppercase, e.g., "USD".');
         }
 
-        const exchangeRate = await this.alphaVantageApiIntegration.exchange(originalCurrency, finalCurrency);
+        let exchangeRate : Big | null;
+
+        exchangeRate = await this.currencyCache.getCurrencyExchangeRate(originalCurrency, finalCurrency);
+
+        if(!exchangeRate) {
+            console.info(`The exchange from currency ${originalCurrency} to ${finalCurrency} could not be found on cache.`);
+
+            const exchangeRateApiResponse = await this.alphaVantageApiIntegration.exchange(originalCurrency, finalCurrency);
+
+            await this.currencyCache.setCurrencyExchangeRate(originalCurrency, finalCurrency, exchangeRateApiResponse.rate);
+
+            exchangeRate = exchangeRateApiResponse.rate;
+        } else {
+            console.info(`The exchange from currency ${originalCurrency} to ${finalCurrency} was successfully found on cache.`);
+        }
 
         return {
             originalCurrency: originalCurrency,
             finalCurrency: finalCurrency,
             amount: amount,
-            rate: exchangeRate.rate,
-            result: amount.times(exchangeRate.rate)
+            rate: exchangeRate,
+            result: amount.times(exchangeRate)
         };
     }
 

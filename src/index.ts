@@ -4,7 +4,7 @@ import morganBody from 'morgan-body';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import redis from '../config/redis';
-import { initializeSupportedCurrencies } from '../config/initializationProcedures';
+import currencyCache from './cache/currencyCache';
 import routes from './routes';
 
 const { NODE_ENV = 'development', PORT, REDIS_HOST, REDIS_PASSWORD } = process.env;
@@ -21,7 +21,7 @@ morganBody(app, { prettify: NODE_ENV === 'development' });
 
 app.use(routes);
 
-initializeSupportedCurrencies().then(result => {
+currencyCache.initializeSupportedCurrencies().then(result => {
     console.info(`The current supported currencies are [${result}].`);
 
     const port = PORT || 8080;
