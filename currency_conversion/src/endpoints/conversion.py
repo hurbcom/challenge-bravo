@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, make_response, abort
 #import modules 
 from src.schemas.currency import CurrencySchema
 from src.business.currency import CurrencyBusiness
+from src.service.currency_conversion import Currency_Conversion
 
 #define the blueprint name
 currency_api = Blueprint(name="currency_api", import_name=__name__)
@@ -23,8 +24,9 @@ def all_currency_codes():
 #endpoint to get currency conversion between two currencies by from_code, to_code and amount
 @currency_api.route('/conversion/<string:from_code>/<string:to_code>/<int:ammount>', methods=['POST'])
 def currency_conversion(from_code, to_code, ammount):
-
-    return jsonify({'Value Converted': ""})
+    
+    response = {"Value Converted": Currency_Conversion.calculate_conversion(from_code, to_code, ammount)}
+    return jsonify(response)
 
 #endpoint to save currency code
 @currency_api.route('/conversion/<string:currency_code>', methods=['POST'])
