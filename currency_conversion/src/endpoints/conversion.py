@@ -25,8 +25,8 @@ def all_currency_codes():
 @currency_api.route('/conversion/<string:from_code>/<string:to_code>/<int:ammount>', methods=['POST'])
 def currency_conversion(from_code, to_code, ammount):
     
-    response = {"Value Converted": Currency_Conversion.calculate_conversion(from_code, to_code, ammount)}
-    return jsonify(response)
+    response = Currency_Conversion.calculate_conversion(from_code, to_code, ammount)
+    return jsonify(response), response["status"]
 
 #endpoint to save currency code
 @currency_api.route('/conversion/<string:currency_code>', methods=['POST'])
