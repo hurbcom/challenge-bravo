@@ -2,6 +2,8 @@
 
 from src.models.currency import Currency
 from src.db import db 
+from flask_api import status
+
 
 class CurrencyBusiness(object):
 
@@ -9,12 +11,22 @@ class CurrencyBusiness(object):
     @classmethod
     def insert_currency(self, currency_code):
         try:
+            
             currency = Currency(currency_code=currency_code)
-            db.session.add(currency)
-            db.session.commit()
+            currency_exits = self.currency_code_exists(currency_code)
+
+            if(not currency_exits):
+                db.session.add(currency)
+                db.session.commit()
+                
+                return status.HTTP_201_CREATED
+
+            else:
+                return status.HTTP_400_BAD_REQUEST
         except:
             db.session.rollback()
-        return currency
+            return status.HTTP_500_INTERNAL_SERVER_ERROR
+
     
     #get all currencies codes 
     @classmethod
@@ -39,4 +51,12 @@ class CurrencyBusiness(object):
     #check if currency code already exists in database
     @classmethod
     def currency_code_exists(self, currency_code):
-        get_currency_code = Currency.query.filter(Currency.currency_code == currency_code)
+        get_currency_code = Currency.query.filter(Currency.currency_code == currency_code).first()
+        
+        if(get_currency_code is not None):
+            return True
+        else:
+            return False
+
+    
+        

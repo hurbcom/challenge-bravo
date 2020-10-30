@@ -3,6 +3,9 @@
 #microframework used to build api 
 flask 
 
+#requirements to use http message methods
+flask_api
+
 #requirements for usign swagger to documentation
 flask_swagger_ui
 apispec

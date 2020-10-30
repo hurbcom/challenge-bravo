@@ -1,6 +1,6 @@
 #--- Setting endpoints for api ---#
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, make_response, abort
 
 #import modules 
 from src.schemas.currency import CurrencySchema
@@ -30,10 +30,9 @@ def currency_conversion(from_code, to_code, ammount):
 @currency_api.route('/conversion/<string:currency_code>', methods=['POST'])
 def add_currency(currency_code):
 
-    CurrencyBusiness.insert_currency(currency_code)
-    get_currencies = CurrencyBusiness.get_all_currencies()
+    response = CurrencyBusiness.insert_currency(currency_code) 
 
-    return jsonify({'Currency Codes': currencies_schema.dump(get_currencies)})
+    return '', response
 
 #endpoint to delete currency code
 @currency_api.route('/conversion/<int:id>', methods=['DELETE'])
@@ -43,3 +42,7 @@ def delete_currency(id):
     get_currencies = CurrencyBusiness.get_all_currencies()
 
     return jsonify({'Currency Codes': currencies_schema.dump(get_currencies)})
+
+@currency_api.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({"response": "Pepe não achou"}), 404)
