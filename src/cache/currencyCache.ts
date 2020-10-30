@@ -53,8 +53,14 @@ class CurrencyCache {
 
     public async setCurrencyExchangeRate(originalCurrency: string, exchangeRates: { [currency: string]: string }) : Promise<void> {
         try{
+            const supportedCurrencies = await this.getSupportedCurrencies();
+
             for(const finalCurrency of Object.keys(exchangeRates)) {
-                await this.getClient().set(this.getCurrencyExchangeRateKey(originalCurrency, finalCurrency), exchangeRates[finalCurrency], 'PX', this.getTTL());
+                if(supportedCurrencies.includes(finalCurrency)) {
+                    await this.getClient().set(this.getCurrencyExchangeRateKey(originalCurrency, finalCurrency), exchangeRates[finalCurrency], 'PX', this.getTTL());
+
+                    console.info(`The exchange rate from ${originalCurrency} to ${finalCurrency} was added on cache.`);
+                }
             }
         } catch (err) {
             console.error(`An error occurred while trying to set the currency exchange rate. [${err}].`);
