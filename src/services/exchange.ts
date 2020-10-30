@@ -1,6 +1,6 @@
 import Big from "big.js";
 import currencyCache from "../cache/currencyCache";
-import alphaVantageApiIntegration from "../integrations/alphaVantageApiIntegration";
+import coinbaseIntegration from "../integrations/coinBaseIntegration";
 import { validCurrencyCodes } from "../utils/validations";
 
 export type ExchangeResult = {
@@ -14,11 +14,11 @@ export type ExchangeResult = {
 class ExchangeService {
 
     private readonly currencyCache;
-    private readonly alphaVantageApiIntegration
+    private readonly coinbaseIntegration
 
     constructor() {
         this.currencyCache = currencyCache;
-        this.alphaVantageApiIntegration = alphaVantageApiIntegration;
+        this.coinbaseIntegration = coinbaseIntegration;
     }
 
     public async getSupportedCurrencies() : Promise<string[]> {
@@ -27,7 +27,7 @@ class ExchangeService {
 
     public async exchange( originalCurrency: string, finalCurrency: string, amount: Big) : Promise<ExchangeResult> {
         if(!validCurrencyCodes(originalCurrency, finalCurrency)) {
-            throw new Error('One of the currencies provided was not valid. Ensure to be providing an existing currency code in uppercase, e.g., "USD".');
+            throw new Error('One of the currencies provided was not valid. Ensure to be providing an existing currency code, e.g., "USD". The case is sensitive.');
         }
 
         let exchangeRate : Big | null;
@@ -35,15 +35,17 @@ class ExchangeService {
         exchangeRate = await this.currencyCache.getCurrencyExchangeRate(originalCurrency, finalCurrency);
 
         if(!exchangeRate) {
-            console.info(`The exchange from currency ${originalCurrency} to ${finalCurrency} could not be found on cache.`);
+            console.info(`The exchange rate from currency ${originalCurrency} to ${finalCurrency} could not be found on cache.`);
 
-            const exchangeRateApiResponse = await this.alphaVantageApiIntegration.exchange(originalCurrency, finalCurrency);
+            const exchangeRateApiResponse = await this.coinbaseIntegration.exchange(originalCurrency);
 
-            await this.currencyCache.setCurrencyExchangeRate(originalCurrency, finalCurrency, exchangeRateApiResponse.rate);
+            await this.currencyCache.setCurrencyExchangeRate(originalCurrency, exchangeRateApiResponse.rates);
 
-            exchangeRate = exchangeRateApiResponse.rate;
+            console.info(`The exchange rates from currency ${originalCurrency} were added on cache.`);
+
+            exchangeRate = Big(exchangeRateApiResponse.rates[finalCurrency]);
         } else {
-            console.info(`The exchange from currency ${originalCurrency} to ${finalCurrency} was successfully found on cache.`);
+            console.info(`The exchange rate from currency ${originalCurrency} to ${finalCurrency} was successfully found on cache.`);
         }
 
         return {

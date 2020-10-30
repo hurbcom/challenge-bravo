@@ -23,11 +23,11 @@ class ExchangeController {
 
         const supportedCurrencies = await this.exchangeService.getSupportedCurrencies();
         if(!supportedCurrencies.includes(originalCurrency) || !supportedCurrencies.includes(finalCurrency)) {
-            return res.status(StatusCodes.BAD_REQUEST).send(`One of the currencies provided was not valid.
-            Ensure to be providing an existing currency code in uppercase, e.g., ${supportedCurrencies}.`);
+            return res.status(StatusCodes.BAD_REQUEST).send(`One of the currencies provided was not supported.
+            The supported currencies are: [${supportedCurrencies}], sensitive case.`);
         }
 
-        let amountBig: Big;
+        let amountBig;
 
         try {
             amountBig = Big(amount.toString());

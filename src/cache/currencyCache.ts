@@ -1,6 +1,6 @@
 import { Redis } from 'ioredis';
 import redisClient, { RedisClient } from '../../config/redis';
-import initialCurrencies from '../../config/initialCurrencies.json';
+import initialCurrencies from './initialCurrencies.json';
 import Big from 'big.js';
 
 export const SUPPORTED_CURRENCIES_KEY = 'currencies:supported';
@@ -51,9 +51,11 @@ class CurrencyCache {
         }
     }
 
-    public async setCurrencyExchangeRate(originalCurrency: string, finalCurrency: string, exchangeRate: Big) : Promise<void> {
+    public async setCurrencyExchangeRate(originalCurrency: string, exchangeRates: { [currency: string]: string }) : Promise<void> {
         try{
-            await this.getClient().set(this.getCurrencyExchangeRateKey(originalCurrency, finalCurrency), exchangeRate.toFixed(), 'PX', this.getTTLToNextHour());
+            for(const finalCurrency of Object.keys(exchangeRates)) {
+                await this.getClient().set(this.getCurrencyExchangeRateKey(originalCurrency, finalCurrency), exchangeRates[finalCurrency], 'PX', this.getTTL());
+            }
         } catch (err) {
             console.error(`An error occurred while trying to set the currency exchange rate. [${err}].`);
             throw err;
@@ -68,11 +70,11 @@ class CurrencyCache {
         return `currencies:exchange:${originalCurrency}:${finalCurrency}`;
     }
 
-    private getTTLToNextHour() {
+    private getTTL() {
         const now = new Date();
 
         const utcExchangeRateTime = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes());
-        const utcExchangeRateExpirationTime = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() + 1, 0);
+        const utcExchangeRateExpirationTime = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes() + 2);
 
         return utcExchangeRateExpirationTime - utcExchangeRateTime;
     }
