@@ -9,6 +9,9 @@ flask_api
 #requirements to consumes quote api (Awesome API)
 requests
 
+#requirements to usign unit test
+pytest
+
 #requirements for usign swagger to documentation
 flask_swagger_ui
 apispec
