@@ -26,21 +26,16 @@ type CurrencyExchangeRateResponse = {
 };
 
 class CoinbaseIntegration {
-    private readonly baseURL: string;
 
     private static readonly EXCHANGE_RATE_ENDPOINT = 'exchange-rates';
     private static readonly CURRENCIES_ENDPOINT = 'currencies';
 
-    constructor() {
-        const { EXCHANGE_API_BASEURL = 'https://api.coinbase.com/v2' } = process.env;
-
-        this.baseURL = EXCHANGE_API_BASEURL;
-    }
+    constructor(private readonly baseUrl: string) {}
 
     public async getAvailableCurrencies(): Promise<string[]> {
         try {
             const { data } = await Axios.get<CurrenciesResponse>(
-                `${this.baseURL}/${CoinbaseIntegration.CURRENCIES_ENDPOINT}`
+                `${this.baseUrl}/${CoinbaseIntegration.CURRENCIES_ENDPOINT}`
             );
 
             if (!data.data) {
@@ -69,7 +64,7 @@ class CoinbaseIntegration {
 
         try {
             const { data } = await Axios.get<CurrencyExchangeRateResponse>(
-                `${this.baseURL}/${CoinbaseIntegration.EXCHANGE_RATE_ENDPOINT}`,
+                `${this.baseUrl}/${CoinbaseIntegration.EXCHANGE_RATE_ENDPOINT}`,
                 {
                     params: params,
                 }
@@ -89,4 +84,4 @@ class CoinbaseIntegration {
     }
 }
 
-export default new CoinbaseIntegration();
+export default CoinbaseIntegration;

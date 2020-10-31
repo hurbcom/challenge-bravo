@@ -1,16 +1,13 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Big from 'big.js';
-import exchangeService from '../services/exchange';
+import ExchangeService from '../services/exchange';
 
 Big.DP = 50;
 
 class ExchangeController {
-    private readonly exchangeService;
 
-    constructor() {
-        this.exchangeService = exchangeService;
-    }
+    constructor(private readonly exchangeService: ExchangeService) {}
 
     public exchange: (req: Request, res: Response) => void = async (req, res) => {
         const { from, to, amount } = req.query;
@@ -172,4 +169,4 @@ class ExchangeController {
     }
 }
 
-export default new ExchangeController();
+export default ExchangeController;

@@ -5,15 +5,12 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../docs/swagger.json';
-import redis from '../config/redis';
-import currencyCache from './cache/currencyCache';
 import routes from './routes';
+import { currencyCache } from '../config/dependencyInjection';
 
-const { NODE_ENV = 'development', PORT, REDIS_HOST, REDIS_PASSWORD } = process.env;
+const { NODE_ENV = 'development', PORT } = process.env;
 
 const app = express();
-
-redis.configure({ host: REDIS_HOST, password: REDIS_PASSWORD });
 
 app.use(bodyParser.json());
 app.use(compression());
@@ -21,9 +18,7 @@ app.use(helmet());
 
 morganBody(app, { prettify: NODE_ENV === 'development' });
 
-if (NODE_ENV === 'development') {
-    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-}
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(routes);
 

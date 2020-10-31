@@ -1,5 +1,5 @@
 import { Redis } from 'ioredis';
-import redisClient, { RedisClient } from '../../config/redis';
+import { RedisClient } from '../../config/redis';
 import initialCurrencies from './initialCurrencies.json';
 import Big from 'big.js';
 
@@ -7,11 +7,8 @@ export const AVAILABLE_CURRENCIES_KEY = 'currencies:available';
 export const SUPPORTED_CURRENCIES_KEY = 'currencies:supported';
 
 class CurrencyCache {
-    private redisClient: RedisClient;
 
-    constructor() {
-        this.redisClient = redisClient;
-    }
+    constructor(private redisClient: RedisClient) {}
 
     public async getAvailableCurrencies(): Promise<string[]> {
         try {
@@ -163,4 +160,4 @@ class CurrencyCache {
     }
 }
 
-export default new CurrencyCache();
+export default CurrencyCache;

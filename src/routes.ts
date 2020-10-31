@@ -1,5 +1,5 @@
 import express from 'express';
-import exchangeController from './controllers/exchange';
+import { exchangeController } from '../config/dependencyInjection';
 
 const router = express.Router();
 

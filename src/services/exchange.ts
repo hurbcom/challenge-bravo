@@ -1,7 +1,6 @@
 import Big from 'big.js';
-import currencyCache from '../cache/currencyCache';
-import coinbaseIntegration from '../integrations/coinbaseIntegration';
-import { validCurrencyCodes } from '../utils/validations';
+import CurrencyCache from '../cache/currencyCache';
+import CoinbaseIntegration from '../integrations/coinbaseIntegration';
 
 export type ExchangeResult = {
     originalCurrency: string;
@@ -12,13 +11,8 @@ export type ExchangeResult = {
 };
 
 class ExchangeService {
-    private readonly currencyCache;
-    private readonly coinbaseIntegration;
 
-    constructor() {
-        this.currencyCache = currencyCache;
-        this.coinbaseIntegration = coinbaseIntegration;
-    }
+    constructor(private readonly currencyCache: CurrencyCache, private readonly coinbaseIntegration: CoinbaseIntegration) {}
 
     public async getAvailableCurrencies(): Promise<string[]> {
         const availableCurrencies = await this.currencyCache.getAvailableCurrencies();
@@ -79,4 +73,4 @@ class ExchangeService {
     }
 }
 
-export default new ExchangeService();
+export default ExchangeService;
