@@ -88,7 +88,7 @@ class CurrencyCache {
         }
     }
 
-    public async setCurrencyExchangeRate(
+    public async setCurrencyExchangeRates(
         originalCurrency: string,
         exchangeRates: { [currency: string]: string }
     ): Promise<void> {

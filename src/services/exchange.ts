@@ -52,7 +52,7 @@ class ExchangeService {
 
             const exchangeRateApiResponse = await this.coinbaseIntegration.exchange(originalCurrency);
 
-            await this.currencyCache.setCurrencyExchangeRate(originalCurrency, exchangeRateApiResponse.rates);
+            await this.currencyCache.setCurrencyExchangeRates(originalCurrency, exchangeRateApiResponse.rates);
 
             console.info(`The exchange rates from currency ${originalCurrency} were added on cache.`);
 
