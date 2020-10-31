@@ -3,7 +3,7 @@ import Redis from 'ioredis';
 export class RedisClient {
     private static redisClient: Redis.Redis | undefined;
 
-    public configure(options: Redis.RedisOptions) : void {
+    public configure(options: Redis.RedisOptions): void {
         RedisClient.redisClient = new Redis(options);
 
         RedisClient.redisClient.on('connect', () => {
@@ -15,8 +15,8 @@ export class RedisClient {
         });
     }
 
-    public getClient() : Redis.Redis | never {
-        if(!RedisClient.redisClient) {
+    public getClient(): Redis.Redis | never {
+        if (!RedisClient.redisClient) {
             throw new Error('The Redis client should be configured before requesting its instance.');
         }
 
