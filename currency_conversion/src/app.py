@@ -17,6 +17,14 @@ app.register_blueprint(swagger_ui, url_prefix=SWAGGER_URL)
 #call method to init the configure db
 configure_db(app)
 
+#register swagger all swagger functions 
+with app.test_request_context():
+    for function_name in app.view_functions:
+        if function_name == 'static':
+            continue
+        view_function = app.view_functions[function_name]
+        apispec.path(view=view_function)
+
 #endpoint to load swagger docs
 @app.route("/api/swagger.json")
 def swagger_spec():

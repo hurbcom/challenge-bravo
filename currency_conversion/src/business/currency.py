@@ -3,6 +3,7 @@
 from src.models.currency import Currency
 from src.db import db 
 from src.utils import status_code
+from flask_sqlalchemy import event
 
 
 class CurrencyBusiness(object):
