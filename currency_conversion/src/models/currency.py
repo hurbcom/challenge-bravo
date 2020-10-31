@@ -8,3 +8,4 @@ class Currency(db.Model):
 
     def __init__(self, currency_code):
         self.currency_code = currency_code
+
