@@ -61,7 +61,7 @@ class CurrencyCache {
         }
     }
 
-    /** This method verifies if there are supported currencies, and, if not, initializes it with {@var initialCurrencies}. */
+    /** This method verifies if there are supported currencies, and, if not, initializes it with {@link initialCurrencies}. */
     public async initializeSupportedCurrencies() : Promise<string[]> {
         const redisClient = this.getClient();
 
@@ -119,7 +119,7 @@ class CurrencyCache {
         const now = new Date();
 
         const nowUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes(), now.getSeconds());
-        const utcExchangeRateExpirationTime = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes() + 2);
+        const utcExchangeRateExpirationTime = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes() + 5);
 
         return utcExchangeRateExpirationTime - nowUTC;
     }

@@ -3,6 +3,8 @@ import compression from 'compression';
 import morganBody from 'morgan-body';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../docs/swagger.json';
 import redis from '../config/redis';
 import currencyCache from './cache/currencyCache';
 import routes from './routes';
@@ -18,6 +20,10 @@ app.use(compression());
 app.use(helmet());
 
 morganBody(app, { prettify: NODE_ENV === 'development' });
+
+if(NODE_ENV === 'development') {
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
 
 app.use(routes);
 

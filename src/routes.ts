@@ -3,7 +3,7 @@ import exchangeController from './controllers/exchange';
 
 const router = express.Router();
 
-// Exchanges Routes
+// Exchanges routes
 
 router.get('/exchange', exchangeController.exchange);
 

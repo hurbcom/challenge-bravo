@@ -1,0 +1,194 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for providing exchange rates in several different currencies",
+        "version": "1.0.0",
+        "title": "HURB - Bravo Challenge",
+        "contact": {
+            "email": "magno@magnonascimento.com"
+        }
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/currencies": {
+            "get": {
+                "tags": [
+                    "currencies"
+                ],
+                "summary": "retrieves the supported currencies",
+                "operationId": "getSupportedCurrencies",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The supported currencies were correctly retrieved",
+                        "schema": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                    },
+                    "500": {
+                        "description": "An internal error occurred while trying to retrieve the supported currencies"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "currencies"
+                ],
+                "summary": "adds support to the provided currencies",
+                "operationId": "addSupportedCurrencies",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "currencies",
+                        "description": "The currencies to add support",
+                        "schema": {
+                            "required": true,
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The support to the provided currencies was successfully added",
+                        "schema": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                    },
+                    "400": {
+                        "description": "The request body is not an array of currencies or the currency is not available to be used by the API"
+                    },
+                    "500": {
+                        "description": "An internal error occurred while trying to retrieve the supported currencies"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "currencies"
+                ],
+                "summary": "removes support to the provided currencies",
+                "operationId": "removeSupportedCurrencies",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "currencies",
+                        "description": "The currencies to remove support",
+                        "schema": {
+                            "required": true,
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The support to the provided currencies was successfully removed",
+                        "schema": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                    },
+                    "400": {
+                        "description": "The request body is not an array of currencies or one of the currencies provided is not supported by the API"
+                    },
+                    "500": {
+                        "description": "An internal error occurred while trying to retrieve the supported currencies"
+                    }
+                }
+            }
+        },
+        "/exchange": {
+            "get": {
+                "tags": [
+                    "exchange"
+                ],
+                "summary": "retrieves the exchange rate for the specified currency",
+                "operationId": "exchange",
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "from",
+                        "description": "The currency used as base to the exchange rate",
+                        "schema": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "to",
+                        "description": "The currency used as destination to the exchange rate",
+                        "schema": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "amount",
+                        "description": "The total amount to be converted",
+                        "schema": {
+                            "required": true,
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The exchange was successfully done",
+                        "schema": {
+                          "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "One of the currencies provided is not supported or the total amount value provided is invalid"
+                    },
+                    "500": {
+                        "description": "An internal error occurred while trying to exchange the values"
+                    }
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "http://swagger.io"
+    }
+}

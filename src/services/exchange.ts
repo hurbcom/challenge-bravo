@@ -40,14 +40,6 @@ class ExchangeService {
     }
 
     public async addSupportedCurrencies(currencies: string[]) : Promise<void> {
-        const availableCurrencies = await this.getAvailableCurrencies();
-
-        currencies.forEach(currency => {
-            if(!availableCurrencies.includes(currency)) {
-                throw new Error(`The currency [${currency}] is not available to be added to the supported currencies.`);
-            }
-        })
-
         return await this.currencyCache.addSupportedCurrencies(currencies);
     }
 

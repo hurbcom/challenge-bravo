@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Big from 'big.js';
 import exchangeService from '../services/exchange';
-import { STATUS_CODES } from 'http';
+
+Big.DP = 50;
 
 class ExchangeController {
 
@@ -43,9 +44,9 @@ class ExchangeController {
             return res.json({
                 from: exchangeResult.originalCurrency,
                 to: exchangeResult.finalCurrency,
-                rate: exchangeResult.rate.toFixed(),
-                amount: exchangeResult.amount.toFixed(),
-                result: exchangeResult.result.toFixed(),
+                rate: this.normalizeValues(exchangeResult.rate),
+                amount: this.normalizeValues(exchangeResult.amount),
+                result: this.normalizeValues(exchangeResult.result),
             });
         } catch (err) {
             console.error(`An error occurred while trying to exchange the values. [${err}].`);
@@ -70,6 +71,14 @@ class ExchangeController {
         }
 
         try{
+            const availableCurrencies = await this.exchangeService.getAvailableCurrencies();
+
+            for(const currency of body) {
+                if(!availableCurrencies.includes(currency)) {
+                    return res.status(StatusCodes.BAD_REQUEST).send(`The currency [${currency}] is not available to be used by the API.`);
+                }
+            }
+
             const oldSupportedCurrencies = await this.exchangeService.getSupportedCurrencies();
 
             await this.exchangeService.addSupportedCurrencies(body);
@@ -93,6 +102,14 @@ class ExchangeController {
         }
 
         try{
+            const supportedCurrencies = await this.exchangeService.getSupportedCurrencies();
+
+            for(const currency of body) {
+                if(!supportedCurrencies.includes(currency)) {
+                    return res.status(StatusCodes.BAD_REQUEST).send(`The currency [${currency}] is not supported by the API.`);
+                }
+            }
+
             const oldSupportedCurrencies = await this.exchangeService.getSupportedCurrencies();
 
             await this.exchangeService.removeSupportedCurrencies(body);
@@ -101,11 +118,26 @@ class ExchangeController {
 
             console.info(`Removed support to the following currencies: [${oldSupportedCurrencies.filter((currency) => !newSupportedCurrencies.includes(currency))}].`);
 
-            return res.json(oldSupportedCurrencies);
+            return res.json(newSupportedCurrencies);
         } catch(err) {
             console.error(`An error occurred while trying to remove support to the provided currencies. [${err}].`);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('An internal error occurred while trying to retrieve the supported currencies.');
         }
+    }
+
+    /** Normalizes the provided value to string.
+     *
+     * If it has more than two decimal values, ${@link Big.toFixed} will simply be called.
+     * If it has zero or only one decimal values, then ${@link Big.toFixed} will be called with value 2.
+     */
+    private normalizeValues(value : Big) : string {
+        const valueAsString = value.toFixed();
+
+        if(/(\.[0-9])$/.test(valueAsString) || !/(\.)/.test(valueAsString)) {
+            return value.toFixed(2);
+        }
+
+        return valueAsString;
     }
 }
 
