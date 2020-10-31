@@ -21,15 +21,41 @@ class ExchangeService {
         this.coinbaseIntegration = coinbaseIntegration;
     }
 
+    public async getAvailableCurrencies() : Promise<string[]> {
+        const availableCurrencies = await this.currencyCache.getAvailableCurrencies();
+
+        if(!availableCurrencies.length) {
+            const coinbaseAvailableCurrencies = await this.coinbaseIntegration.getAvailableCurrencies();
+
+            await this.currencyCache.setAvailableCurrencies(coinbaseAvailableCurrencies);
+
+            return coinbaseAvailableCurrencies;
+        }
+
+        return availableCurrencies;
+    }
+
     public async getSupportedCurrencies() : Promise<string[]> {
         return await this.currencyCache.getSupportedCurrencies();
     }
 
-    public async exchange( originalCurrency: string, finalCurrency: string, amount: Big) : Promise<ExchangeResult> {
-        if(!validCurrencyCodes(originalCurrency, finalCurrency)) {
-            throw new Error('One of the currencies provided was not valid. Ensure to be providing an existing currency code, e.g., "USD". The case is sensitive.');
-        }
+    public async addSupportedCurrencies(currencies: string[]) : Promise<void> {
+        const availableCurrencies = await this.getAvailableCurrencies();
 
+        currencies.forEach(currency => {
+            if(!availableCurrencies.includes(currency)) {
+                throw new Error(`The currency [${currency}] is not available to be added to the supported currencies.`);
+            }
+        })
+
+        return await this.currencyCache.addSupportedCurrencies(currencies);
+    }
+
+    public async removeSupportedCurrencies(currencies: string[]) : Promise<void> {
+        return await this.currencyCache.removeSupportedCurrencies(currencies);
+    }
+
+    public async exchange(originalCurrency: string, finalCurrency: string, amount: Big) : Promise<ExchangeResult> {
         let exchangeRate : Big | null;
 
         exchangeRate = await this.currencyCache.getCurrencyExchangeRate(originalCurrency, finalCurrency);

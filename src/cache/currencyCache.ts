@@ -3,6 +3,7 @@ import redisClient, { RedisClient } from '../../config/redis';
 import initialCurrencies from './initialCurrencies.json';
 import Big from 'big.js';
 
+export const AVAILABLE_CURRENCIES_KEY = 'currencies:available';
 export const SUPPORTED_CURRENCIES_KEY = 'currencies:supported';
 
 class CurrencyCache {
@@ -13,11 +14,49 @@ class CurrencyCache {
         this.redisClient = redisClient;
     }
 
+    public async getAvailableCurrencies() : Promise<string[]> {
+        try{
+            return await this.getClient().smembers(AVAILABLE_CURRENCIES_KEY);
+        } catch (err) {
+            console.error(`An error occurred while trying to obtain the available currencies. [${err}].`);
+            throw err;
+        }
+    }
+
+    public async setAvailableCurrencies(currencies: string[]) : Promise<void> {
+        try{
+            const client = this.getClient();
+            await client.sadd(AVAILABLE_CURRENCIES_KEY, currencies);
+            await client.expire(AVAILABLE_CURRENCIES_KEY, this.getAvailableCurrenciesTTL());
+        } catch (err) {
+            console.error(`An error occurred while trying to set the available currencies. [${err}].`);
+            throw err;
+        }
+    }
+
     public async getSupportedCurrencies() : Promise<string[]> {
         try{
             return await this.getClient().smembers(SUPPORTED_CURRENCIES_KEY);
         } catch (err) {
             console.error(`An error occurred while trying to obtain the supported currencies. [${err}].`);
+            throw err;
+        }
+    }
+
+    public async addSupportedCurrencies(currencies: string[]) : Promise<void> {
+        try{
+            await this.getClient().sadd(SUPPORTED_CURRENCIES_KEY, currencies);
+        } catch (err) {
+            console.error(`An error occurred while trying to add new currencies the supported currencies. [${err}].`);
+            throw err;
+        }
+    }
+
+    public async removeSupportedCurrencies(currencies: string[]) : Promise<void> {
+        try{
+            await this.getClient().srem(SUPPORTED_CURRENCIES_KEY, currencies);
+        } catch (err) {
+            console.error(`An error occurred while trying to remove some of the supported currencies. [${err}].`);
             throw err;
         }
     }
@@ -57,7 +96,7 @@ class CurrencyCache {
 
             for(const finalCurrency of Object.keys(exchangeRates)) {
                 if(supportedCurrencies.includes(finalCurrency)) {
-                    await this.getClient().set(this.getCurrencyExchangeRateKey(originalCurrency, finalCurrency), exchangeRates[finalCurrency], 'PX', this.getTTL());
+                    await this.getClient().set(this.getCurrencyExchangeRateKey(originalCurrency, finalCurrency), exchangeRates[finalCurrency], 'PX', this.getCurrencyExchangeRateTTL());
 
                     console.info(`The exchange rate from ${originalCurrency} to ${finalCurrency} was added on cache.`);
                 }
@@ -76,13 +115,22 @@ class CurrencyCache {
         return `currencies:exchange:${originalCurrency}:${finalCurrency}`;
     }
 
-    private getTTL() {
+    private getCurrencyExchangeRateTTL() : number {
         const now = new Date();
 
-        const utcExchangeRateTime = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes());
+        const nowUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes(), now.getSeconds());
         const utcExchangeRateExpirationTime = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes() + 2);
 
-        return utcExchangeRateExpirationTime - utcExchangeRateTime;
+        return utcExchangeRateExpirationTime - nowUTC;
+    }
+
+    private getAvailableCurrenciesTTL() : number {
+        const now = new Date();
+
+        const nowUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes(), now.getSeconds());
+        const utcAvailableCurrenciesExpirationTime = Date.UTC(now.getFullYear(), now.getMonth() + 1);
+
+        return (utcAvailableCurrenciesExpirationTime - nowUTC) / 1000;
     }
 }
 
