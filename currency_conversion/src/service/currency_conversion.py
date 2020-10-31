@@ -39,6 +39,6 @@ class Currency_Conversion():
                 value_converted = format(float(from_value_currency / to_value_currency) * ammount, '.2f')
                 return {"value": value_converted, "status": 200}
             else:
-                return status_code.NOT_FOUND_DB_404
+                return status_code.NOT_FOUND_DB_405
         except:
             return status_code.NOT_SUPPORTED_CODE_500
