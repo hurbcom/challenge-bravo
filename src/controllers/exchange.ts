@@ -122,17 +122,15 @@ class ExchangeController {
         }
 
         try {
-            const supportedCurrencies = await this.exchangeService.getSupportedCurrencies();
+            const oldSupportedCurrencies = await this.exchangeService.getSupportedCurrencies();
 
             for (const currency of body) {
-                if (!supportedCurrencies.includes(currency)) {
+                if (!oldSupportedCurrencies.includes(currency)) {
                     return res
                         .status(StatusCodes.BAD_REQUEST)
                         .send(`The currency [${currency}] is not supported by the API.`);
                 }
             }
-
-            const oldSupportedCurrencies = await this.exchangeService.getSupportedCurrencies();
 
             await this.exchangeService.removeSupportedCurrencies(body);
 
