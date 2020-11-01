@@ -18,13 +18,12 @@ services:
         image: hurb/bravo-challenge
         tty: true
         container_name: bravo-challenge-api
-        env_file: .env
         environment:
-            - NODE_ENV=$NODE_ENV
-            - HOST=$HOST
-            - PORT=$PORT
-            - REDIS_HOST=$REDIS_HOST
-            - REDIS_PORT=$REDIS_PORT
+            - NODE_ENV=production
+            - HOST=0.0.0.0
+            - PORT=8080
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
         ports:
             - 8090:8080
         links:
