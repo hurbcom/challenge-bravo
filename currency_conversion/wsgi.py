@@ -1,4 +1,4 @@
-# Web Server Gatway Interface - configuring entry point for application
+# configuring entry point for application
 
 from src.app import app
 

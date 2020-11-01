@@ -21,7 +21,7 @@ def all_currency_codes():
     ---
     get:
       tags:
-        - currency conversion
+        - Currency Conversion
       summary: Get all currencies code
       description: ""
       parameters: []
@@ -41,7 +41,7 @@ def currency_conversion(from_code, to_code, ammount):
     ---
     post:
       tags:
-          - currency conversion
+          - Currency Conversion
       summary: Calculate the currency conversion
       description: ""
       parameters: 
@@ -83,7 +83,7 @@ def add_currency(currency_code):
     ---
     post:
       tags:
-          - currency conversion
+          - Currency Conversion
       summary: Add new currency code
       description: ""
       parameters: 
@@ -110,7 +110,7 @@ def delete_currency(id):
     ---
     delete:
       tags:
-          - currency conversion
+          - Currency Conversion
       summary: Delete currency code
       description: ""
       parameters: 
@@ -128,11 +128,3 @@ def delete_currency(id):
 
     response = CurrencyBusiness.delete_currency(id)
     return jsonify(response), response["status"]
-
-# @currency_api.before_app_first_request
-# def inital_values():
-#   CurrencyBusiness.insert_currency("USD")
-#   CurrencyBusiness.insert_currency("BRL")
-#   CurrencyBusiness.insert_currency("EUR")
-#   CurrencyBusiness.insert_currency("BTC")
-#   CurrencyBusiness.insert_currency("ETH")
