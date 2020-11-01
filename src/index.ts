@@ -8,7 +8,7 @@ import swaggerDocument from '../docs/swagger.json';
 import routes from './routes';
 import { currencyCache } from '../config/dependencyInjection';
 
-const { NODE_ENV = 'development', PORT } = process.env;
+const { NODE_ENV = 'development', PORT, HOST } = process.env;
 
 const app = express();
 
@@ -27,10 +27,11 @@ currencyCache
     .then((result) => {
         console.info(`The current supported currencies are [${result}].`);
 
-        const port = PORT || 8080;
+        const host = HOST || '127.0.0.1';
+        const port = PORT ? Number.parseInt(PORT) : 8080;
 
-        app.listen({ port }, () => {
-            console.info(`Server running on port ${port}`);
+        app.listen(port, host, () => {
+            console.info(`Server running on host ${host} and port ${port}.`);
         });
     })
     .catch((err) => {

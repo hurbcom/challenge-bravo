@@ -4,9 +4,9 @@ import CurrencyCache from '../src/cache/currencyCache';
 import CoinbaseIntegration from '../src/integrations/coinbaseIntegration';
 import redis from './redis';
 
-const { EXCHANGE_API_BASEURL = 'https://api.coinbase.com/v2', REDIS_HOST, REDIS_PASSWORD } = process.env;
+const { EXCHANGE_API_BASEURL = 'https://api.coinbase.com/v2', REDIS_HOST, REDIS_PORT } = process.env;
 
-redis.configure({ host: REDIS_HOST, password: REDIS_PASSWORD });
+redis.configure({ host: REDIS_HOST || '127.0.0.1', port: REDIS_PORT ? Number.parseInt(REDIS_PORT) : 6379 });
 
 export const coinbaseIntegration = new CoinbaseIntegration(EXCHANGE_API_BASEURL);
 export const currencyCache = new CurrencyCache(redis);

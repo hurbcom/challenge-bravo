@@ -70,11 +70,11 @@ class CoinbaseIntegration {
                 }
             );
 
+            console.info(`The exchange API responded with: ${JSON.stringify(data)}`);
+
             if (!data.data) {
                 throw new Error('The API responded with an unexpected value.');
             }
-
-            console.info(`The exchange API responded with: ${JSON.stringify(data)}`);
 
             return data.data;
         } catch (err) {

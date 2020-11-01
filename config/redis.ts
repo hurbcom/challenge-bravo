@@ -4,6 +4,8 @@ export class RedisClient {
     private static redisClient: Redis.Redis | undefined;
 
     public configure(options: Redis.RedisOptions): void {
+        console.info(`Initializing Redis client with options: ${JSON.stringify(options)}.`)
+
         RedisClient.redisClient = new Redis(options);
 
         RedisClient.redisClient.on('connect', () => {

@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+    redis:
+        image: redis:6-alpine
+        container_name: bravo-challenge-cache
+        ports:
+            - 6380:6379
+        networks:
+            - bravochallenge-network
+
+    node:
+        depends_on:
+            - redis
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: hurb/bravo-challenge
+        tty: true
+        container_name: bravo-challenge-api
+        env_file: .env
+        environment:
+            - NODE_ENV=$NODE_ENV
+            - HOST=$HOST
+            - PORT=$PORT
+            - REDIS_HOST=$REDIS_HOST
+            - REDIS_PORT=$REDIS_PORT
+        ports:
+            - 8090:8080
+        links:
+            - redis
+        networks:
+            - bravochallenge-network
+
+networks:
+    bravochallenge-network:
+        driver: bridge
