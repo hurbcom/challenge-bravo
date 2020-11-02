@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Big from 'big.js';
 import ExchangeService from '../services/exchange';
+import { Console } from 'console';
 
 Big.DP = 50;
 
@@ -91,17 +92,19 @@ class ExchangeController {
 
             const oldSupportedCurrencies = await this.exchangeService.getSupportedCurrencies();
 
-            await this.exchangeService.addSupportedCurrencies(body);
+            const missingCurrencies = body.filter((currency) => !oldSupportedCurrencies.includes(currency));
 
-            const newSupportedCurrencies = await this.exchangeService.getSupportedCurrencies();
+            if(missingCurrencies) {
+                await this.exchangeService.addSupportedCurrencies(body);
 
-            console.info(
-                `Added support to the following currencies: [${newSupportedCurrencies.filter(
-                    (currency) => !oldSupportedCurrencies.includes(currency)
-                )}].`
-            );
+                console.info(
+                    `Added support to the following currencies: [${missingCurrencies}].`
+                );
 
-            return res.json(newSupportedCurrencies);
+                return res.json([...oldSupportedCurrencies, ...missingCurrencies]);
+            }
+
+            return res.json(oldSupportedCurrencies);
         } catch (err) {
             console.error(`An error occurred while trying to add support to the provided currencies. [${err}].`);
             return res
@@ -134,7 +137,7 @@ class ExchangeController {
 
             await this.exchangeService.removeSupportedCurrencies(body);
 
-            const newSupportedCurrencies = await this.exchangeService.getSupportedCurrencies();
+            const newSupportedCurrencies = oldSupportedCurrencies.filter((currency) => !body.includes(currency));
 
             console.info(
                 `Removed support to the following currencies: [${oldSupportedCurrencies.filter(

@@ -37,5 +37,5 @@ currencyCache
         });
     })
     .catch((err) => {
-        console.log(`Error while trying to set add initial currencies. [${err}].`);
+        console.error(`Error while trying to set add initial currencies. [${err}].`);
     });

@@ -14,6 +14,7 @@ describe('Exchange Controller', () => {
 
         // suppress error logs from Mocha output
         sandbox.stub(console, 'error');
+        sandbox.stub(console, 'info');
     });
 
     afterEach(() => {
@@ -305,7 +306,6 @@ describe('Exchange Controller', () => {
 
             const getSupportedCurrenciesStub = sandbox.stub();
             getSupportedCurrenciesStub.onCall(0).resolves(['USD']);
-            getSupportedCurrenciesStub.onCall(1).resolves(['USD', 'EUR', 'BTC']);
             exchangeService.getSupportedCurrencies = getSupportedCurrenciesStub;
 
             const addSupportedCurrenciesMock = sandbox.mock().resolves();

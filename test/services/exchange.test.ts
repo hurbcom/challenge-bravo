@@ -14,6 +14,7 @@ describe('Exchange Controller', () => {
 
         // suppress error logs from Mocha output
         sandbox.stub(console, 'error');
+        sandbox.stub(console, 'info');
     });
 
     afterEach(() => {
