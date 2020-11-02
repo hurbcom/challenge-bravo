@@ -3,9 +3,6 @@
 #microframework used to build api 
 flask 
 
-#requirements to use http message methods
-flask_api
-
 #requirements to consumes quote api (Awesome API)
 requests
 
@@ -16,7 +13,6 @@ pytest
 flask_swagger_ui
 apispec
 apispec_webframeworks
-openapi_spec_validator
 
 #requirements for usign database
 flask-sqlalchemy
