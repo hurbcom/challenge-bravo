@@ -179,3 +179,14 @@ Exemplo de retorno:
   <img src="./docs/DELETE__Currencies.png"/>
   <figcaption>Diagrama de sequência da operação <em>remover de moedas suportadas</em>.</figcaption>
 </figure>
+
+---
+
+## Considerações Importantes
+A API Coinbase foi escolhida por ser uma das utilizadas pelo Google para conversão de valores entre moedas e criptomoedas, porém ao longo do desenvolvimento puderam ser notadas algumas inconsistências quanto algumas moedas.
+
+Por exemplo, desde quinta-feira (29-10-2020), a API têm listado corretamente todas as criptomoedas, como `BTC` e `EHT` pelo seu endpoint <a href="https://api.coinbase.com/v2/currencies">https://api.coinbase.com/v2/currencies</a>, mas no sábado (02-11-2020) foi notado que algumas dessas moedas não estavam sendo retornados nesta mesma chamada, mesmo que ainda possam ser utilizadas para conversão pelo endpoint <a href="https://api.coinbase.com/v2/exchange-rates?currency=ETH">https://api.coinbase.com/v2/exchange-rates?currency=ETH</a>, caindo assim o número de moedas disponíveis de 205 para 169.
+
+Com isso, o tempo de expiração para a chave que armazena as moedas disponíveis teve que ser reduzido de 1 mês (a proposta inicial) para 1 hora, para que a API não seja tão afetada em caso de downtime de algum módulo da Coinbase.
+
+A documentação de que criptomoedas podem ser utilizadas com a API do Coinbase pode ser encontrada <a href="https://developers.coinbase.com/api/v2#currencies">aqui</a>.
