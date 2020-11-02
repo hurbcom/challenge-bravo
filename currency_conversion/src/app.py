@@ -1,6 +1,6 @@
 #--- Main file application to load all other modules ---#
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
 #load modules 
 from src.endpoints.conversion import currency_api
@@ -24,6 +24,11 @@ with app.test_request_context():
             continue
         view_function = app.view_functions[function_name]
         apispec.path(view=view_function)
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 #endpoint to load swagger docs
 @app.route("/api/swagger.json")
