@@ -154,7 +154,12 @@ class CurrencyCache {
             now.getMinutes(),
             now.getSeconds()
         );
-        const utcAvailableCurrenciesExpirationTime = Date.UTC(now.getFullYear(), now.getMonth() + 1);
+        const utcAvailableCurrenciesExpirationTime = Date.UTC(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDay(),
+            now.getHours() + 1
+        );
 
         return (utcAvailableCurrenciesExpirationTime - nowUTC) / 1000;
     }
