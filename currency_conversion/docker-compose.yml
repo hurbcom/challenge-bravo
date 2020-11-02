@@ -1,0 +1,8 @@
+version: "3.3"
+services:
+  challenge-bravo:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
