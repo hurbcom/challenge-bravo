@@ -35,7 +35,12 @@ class CoinbaseIntegration {
     public async getAvailableCurrencies(): Promise<string[]> {
         try {
             const { data } = await Axios.get<CurrenciesResponse>(
-                `${this.baseUrl}/${CoinbaseIntegration.CURRENCIES_ENDPOINT}`
+                `${this.baseUrl}/${CoinbaseIntegration.CURRENCIES_ENDPOINT}`,
+                {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
             );
 
             if (!data.data) {
@@ -67,6 +72,9 @@ class CoinbaseIntegration {
                 `${this.baseUrl}/${CoinbaseIntegration.EXCHANGE_RATE_ENDPOINT}`,
                 {
                     params: params,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
                 }
             );
 
