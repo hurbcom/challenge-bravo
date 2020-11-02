@@ -4,11 +4,11 @@ import morganBody from 'morgan-body';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from '../docs/swagger.json';
+import swaggerDocument from './docs/swagger.json';
 import routes from './routes';
 import { currencyCache } from '../config/dependencyInjection';
 
-const { NODE_ENV = 'development', PORT, HOST } = process.env;
+const { NODE_ENV = 'development', PORT = '8080', HOST = 'localhost' } = process.env;
 
 const app = express();
 
@@ -29,11 +29,10 @@ currencyCache
     .then((result) => {
         console.info(`The current supported currencies are [${result}].`);
 
-        const host = HOST || 'localhost';
-        const port = PORT ? Number.parseInt(PORT) : 8080;
+        const port = Number.parseInt(PORT);
 
-        app.listen(port, host, () => {
-            console.info(`Server running on host ${host} and port ${port}.`);
+        app.listen(port, HOST, () => {
+            console.info(`Server running on host ${HOST} and port ${port}.`);
         });
     })
     .catch((err) => {
