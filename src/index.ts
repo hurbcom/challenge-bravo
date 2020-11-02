@@ -18,7 +18,9 @@ app.use(helmet());
 
 morganBody(app, { prettify: NODE_ENV === 'development' });
 
-app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+if(NODE_ENV === 'development') {
+    app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
 
 app.use(routes);
 
@@ -27,7 +29,7 @@ currencyCache
     .then((result) => {
         console.info(`The current supported currencies are [${result}].`);
 
-        const host = HOST || '127.0.0.1';
+        const host = HOST || 'localhost';
         const port = PORT ? Number.parseInt(PORT) : 8080;
 
         app.listen(port, host, () => {
