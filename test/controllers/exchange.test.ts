@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai';
+import { expect } from 'chai';
 import sinon, { SinonSandbox } from 'sinon';
 import { Request, Response } from 'express';
 import StatusCodes from 'http-status-codes';

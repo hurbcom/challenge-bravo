@@ -54,7 +54,7 @@ describe('Exchange controller', () => {
 
             try{
                 await coinbaseIntegration.getAvailableCurrencies();
-                fail('It should throw an exception');
+                fail('It should have thrown an exception');
             } catch(err) {
                 expect(err.message).to.be.equal('The API responded with an unexpected value.');
             }
@@ -77,7 +77,7 @@ describe('Exchange controller', () => {
 
             const coinbaseIntegration = new CoinbaseIntegration('https://api.coinbase.com/v2');
 
-            const exchangeRates = await coinbaseIntegration.exchange('BRL');
+            const exchangeRates = await coinbaseIntegration.getCurrencyExchangeRate('BRL');
 
             expect(exchangeRates).deep.equal(body.data);
         });
@@ -90,8 +90,8 @@ describe('Exchange controller', () => {
             const coinbaseIntegration = new CoinbaseIntegration('https://api.coinbase.com/v2');
 
             try {
-                await coinbaseIntegration.exchange('BRL');
-                fail('It should throw an exception');
+                await coinbaseIntegration.getCurrencyExchangeRate('BRL');
+                fail('It should have thrown an exception');
             } catch(err) {
                 expect(err.message).to.be.equal('The API responded with an unexpected value.');
             }

@@ -57,7 +57,7 @@ class CoinbaseIntegration {
         }
     }
 
-    public async exchange(baseCurrency: string): Promise<ExchangeRate> {
+    public async getCurrencyExchangeRate(baseCurrency: string): Promise<ExchangeRate> {
         const params: CurrencyExchangeRateParams = {
             currency: baseCurrency,
         };

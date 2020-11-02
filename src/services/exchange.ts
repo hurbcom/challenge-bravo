@@ -50,7 +50,7 @@ class ExchangeService {
                 `The exchange rate from currency ${originalCurrency} to ${finalCurrency} could not be found on cache.`
             );
 
-            const exchangeRateApiResponse = await this.coinbaseIntegration.exchange(originalCurrency);
+            const exchangeRateApiResponse = await this.coinbaseIntegration.getCurrencyExchangeRate(originalCurrency);
 
             await this.currencyCache.setCurrencyExchangeRates(originalCurrency, exchangeRateApiResponse.rates);
 
