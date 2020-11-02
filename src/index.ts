@@ -18,9 +18,8 @@ app.use(helmet());
 
 morganBody(app, { prettify: NODE_ENV === 'development' });
 
-if(NODE_ENV === 'development') {
-    app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-}
+swaggerDocument.host = `${HOST}:${PORT}`;
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(routes);
 

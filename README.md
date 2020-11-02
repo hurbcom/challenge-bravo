@@ -1,65 +1,181 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+## Descrição
+A API construída realiza a conversão de valores entre 205 moedas, incluindo as principais criptomoedas do mercado.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+As ferramentas utilizadas para sua construção foram:
+- Typescript (NodeJS)
+- Redis
+- Docker
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Os frameworks e bibliotecas utilizados para desenvolvimento foram:
+- Express, para criação do servidor;
+- Ioredis, para conexão com o Redis;
+- Axios, para realização de requisições HTTP.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Os frameworks e bibliotecas utilizados para teste foram:
+- Mocha, suíte de testes para realização de testes unitários;
+- Chai, biblioteca de asserções baseada no princípio de interfaces fluentes;
+- Sinon, biblioteca para criação de mocks, stubs e spies;
+- Nock, para criação de servidores mock e interceptação de requisições.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+## Instalação e Inicialização
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+### NPM
+A instalação por NPM pode ser realizada com o comando:
+```
+npm install
+```
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+#### Modo de Desenvolvimento
+Para inicialização do servidor em modo de desenvolvimento, deve ser utilizado o comando:
+```
+npm run dev
+```
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+#### Modo de Produção
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Para inicialização do servidor em modo de produção, as variáveis de ambiente devem ser configuradas.
+A configuração das variáveis pode ser realizada por meio da criação do arquivo `.env`, podendo utilizar o arquivo `.env.example` como base para configuração.
 
-## Requisitos
+Após configuração das variáveis de ambiente, deve ser utilizado o comando:
+```
+npm start
+```
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+Caso as variáveis de ambiente não sejam fornecidas, valores padrões serão utilizados, como os fornecidos no arquivo `.env.example`.
 
-## Critério de avaliação
+### Docker
+A instalação por Docker pode ser realizada pelo comando:
+```
+docker-compose up -d
+```
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+O Docker Compose já vem pré-configurado com alguns valores padrões para as variáveis de ambiente, podendo ser alterados a partir do arquivo `docker-compose.yml`, porém é aconselhável, caso necessário, que sejam alteradas apenas as portas públicas.
 
-## Dúvidas
+## Documentação
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+### Swagger
+O Swagger foi utilizado para documentação da API, podendo ser acessado a partir do endpoint `/api-doc`.
 
-Boa sorte e boa viagem! ;)
+### Diagramas de Sequência
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+**GET** `/exchange?from=originalCurrency&?to=finalCurrency&amount=value`, onde:
+
+- `originalCurrency` é a moeda a ser utilizada como base para conversão;
+- `finalCurrency` é a moeda a ser utilizada como destino para conversão;
+- `value` é o valor a ser convertido entre a moeda base e a moeda de destino.
+
+Este é o endpoint para realização de conversão de valores entre duas moedas.
+
+Exemplo de retorno:
+```json
+{
+    "from": "EUR",
+    "to": "AUD",
+    "rate": "1.651478826240532869633",
+    "amount": "15.00",
+    "result": "24.772182393607993044495"
+}
+```
+Onde:
+- `from` possui o mesmo valor fornecido na requisição;
+- `to` possui o mesmo valor fornecido na requisição;
+- `amount` possui o mesmo valor fornecido na requisição, podendo ser normalizado, caso um valor inteiro ou com apenas 1 casa decimal seja fornecida;
+- `rate` a taxa de conversão entre a moeda base e a moeda de destino;
+- `result` é o valor fornecido multiplicado pela taxa de conversão, sendo considerado o resultado final da conversão.
+
+<figure align="center">
+  <img src="./docs/GET__Exchange.png"/>
+  <figcaption>Diagrama de sequência da operação <em>obter cotação</em>.</figcaption>
+</figure>
+
+---
+
+**GET** `/currencies`
+
+Este é o endpoint para listagem de todas as moedas suportadas pela API.
+
+Exemplo de retorno:
+```json
+[
+    "EUR",
+    "NZD",
+    "AUD",
+    "GBP",
+    "JPY"
+]
+```
+
+<figure align="center">
+  <img src="./docs/GET__Currencies.png"/>
+  <figcaption>Diagrama de sequência da operação <em>obter moedas suportadas</em>.</figcaption>
+</figure>
+
+---
+
+**POST** `/currencies`
+
+Este é o endpoint para adição de uma moeda à lista de moedas a serem suportadas pela API.
+
+<small>
+A lista de moedas que podem ser adicionadas pode ser encontrada na API <a href="https://developers.coinbase.com">Coinbase</a> a partir <a href="https://api.coinbase.com/v2/currencies">deste link</a>.
+</small>
+
+Exemplo de corpo de requisição:
+```json
+[
+    "USD"
+]
+```
+
+Exemplo de retorno:
+```json
+[
+    "EUR",
+    "NZD",
+    "AUD",
+    "GBP",
+    "JPY",
+    "USD"
+]
+```
+
+<figure align="center">
+  <img src="./docs/POST__Currencies.png"/>
+  <figcaption>Diagrama de sequência da operação <em>adicionar à moedas suportadas</em>.</figcaption>
+</figure>
+
+---
+
+**DELETE** `/currencies`
+
+Este é o endpoint para remoção de uma moeda da lista de moedas suportadas pela API.
+A moeda deve ser suportada pela API para que a remoção seja efetuada com sucesso.
+
+<small>
+A listagem de moedas suportadas pela API pode ser encontrada a partir da versão GET deste mesmo endpoint.
+</small>
+
+Exemplo de corpo de requisição:
+```json
+[
+    "EUR",
+    "USD"
+]
+```
+
+Exemplo de retorno:
+```json
+[
+    "NZD",
+    "AUD",
+    "GBP",
+    "JPY"
+]
+```
+
+<figure align="center">
+  <img src="./docs/DELETE__Currencies.png"/>
+  <figcaption>Diagrama de sequência da operação <em>remover de moedas suportadas</em>.</figcaption>
+</figure>

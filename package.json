@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --watch './**' --ext 'ts,json' -i 'src/**/*.spec.ts' -i './node_modules/' --exec 'ts-node -r dotenv/config src/index.ts'",
     "build": "rimraf ./dist && tsc",
-    "start": "npm run build && node dist/src/index.js",
+    "start": "npm run build && node -r dotenv/config dist/src/index.js",
     "test": "mocha -r ts-node/register 'test/**/*.test.ts'"
   },
   "repository": {
