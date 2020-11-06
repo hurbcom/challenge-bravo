@@ -9,7 +9,7 @@ Git, Node e Visual Studio Code
 
 ## Desenvolvimento
 
-Para iniciar o desenvolvimento, é necessário clonar o projeto do GitHub num diretório de sua preferência:
+Para iniciar o desenvolvimento, é necessário clonar o projeto do GitHub em um diretório de sua preferência:
 
 cd diretórioDeSuaPreferência
 
