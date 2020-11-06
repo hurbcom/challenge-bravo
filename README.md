@@ -1,4 +1,117 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+Esse projeto faz parte do desafio de Challenge-brado da HUB
+
+## Começando
+
+Para executar o projeto, será necessário instalar os seguintes programas:
+
+Git
+Node
+Visual Studio Code
+
+## Desenvolvimento
+
+Para iniciar o desenvolvimento, é necessário clonar o projeto do GitHub num diretório de sua preferência:
+
+cd diretórioDeSuaPreferência
+git clone https://github.com/cirelalespier/challenge-bravo
+
+### Construção
+
+Para baixar as dependências do projeto, executar o comando abaixo:
+
+npm i
+
+### Rodar aplicação
+
+Para iniciar o projeto, executar o comando abaixo:
+
+node src/app.js
+
+#### Listar moedas
+
+Descrição: Endpoint que permite listar as moedas a serem convertidas.
+
+**MÉTODO HTTP / RECURSO**
+
+##### GET /
+
+#### Converter moedas
+
+Descrição: Endpoint que permite a conversão entre duas moedas.
+
+**MÉTODO HTTP / RECURSO**
+
+##### POST /
+
+**REQUEST QUERY**
+
+  from: { type: string, required: true },
+  to: { type: string, required: true },
+  amount: { type: number, required: true }
+
+Example:
+
+  from: "USD",
+  to: "BRL",
+  amount: 123.0
+
+#### ADICIONAR MOEDA
+
+Descrição: Endpoint que permite a criação de uma moeda no banco de dados.
+
+**MÉTODO HTTP / RECURSO**
+
+##### PUT /
+
+**REQUEST BODY**
+
+    currency: { type: string, required: true }
+
+Example:
+
+```json
+{
+  "currency": "ABC"
+}
+```
+
+#### EXCLUIR MOEDA
+
+Descrição: Endpoint que permite excluir uma moeda no banco de dados.
+
+**MÉTODO HTTP / RECURSO**
+
+##### DELETE /:id
+
+**REQUEST PARAMs**
+
+    id: { type: string, required: true }
+
+### Rodar testes unitários da aplicação
+
+Para iniciar os testes unitários do projeto, executar o comando abaixo:
+
+npm test
+
+# Licença
+
+Não se aplica.
+
+## Decisões de projeto
+
+### Framework
+Escolhi usar o Express.js como framework, por ser um framework leve, rápido e flexível que fornece recursos robustos para criar aplicações em Node.js.
+
+### Banco de dados
+
+Utilizei o banco de dados MongoDB com Mongoose, por se tratar de trocas de informações no projeto baseadas em chave a valor, e por necessitar de consultas rápidas e eficientes.
+
+# Desafio
+
+Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+
+A API deve, originalmente, converter entre as seguintes moedas:
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
 
@@ -63,3 +176,9 @@ Boa sorte e boa viagem! ;)
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
 </p>
+
+## Contato
+
+Estou à disposição para dúvidas e sugestões!
+
+** Cirela Lespier | lespier.cirela@gmail.com **

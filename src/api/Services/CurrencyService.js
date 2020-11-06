@@ -1,19 +1,45 @@
-const CurrencyModel = require('../Models/CurrencyModel');
+const Currency = require('../Models/CurrencyModel');
 
 module.exports = {
 
-    async create(currency) {
+    async findAll() {
 
-        const currencyRecord = await CurrencyModel.create(currency);
+        const currencies = await Currency.find();
+        
+        if (currencies[0] == null) {
+            throw { msg: "Empty list" };
+        }
 
-        return { currency: currencyRecord };
+        return { currencies };
     },
 
-    async delete(id) {
+    async create(body) {
 
-        const currencyId = await CurrencyModel.delete(id);
+        let { currency } = body;
+        let currencyUper = currency.toUpperCase();
+        let findCurrency = await Currency.findOne({ currency : currencyUper });
 
-        return { currencyId: currencyId };
+        if (findCurrency == null) {
+            await Currency.create({
+                currency : currencyUper
+            })    
+            return { "Created currency": currencyUper };
+        };
+        throw { msg: "Currency already exists" };
+    },
+
+    async delete(params) {
+
+        let { id } = params;
+        let findId = await Currency.findOne({ _id : id });
+
+        if (findId == null) {
+            throw { msg: "Currency not found" };
+        }    
+
+        await Currency.findOneAndRemove({ _id : id });
+
+        return { "Deleted currency": id };             
     }
 
 }

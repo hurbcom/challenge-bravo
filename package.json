@@ -4,10 +4,9 @@
   "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/app.js",
-    "test": "mocha --timeout 50000 src/test.js",
-    "prod": "node src/index.js",
-    "coverage": "istanbul cover src/test.js"
+    "start": "node src/app.js",
+    "test": "mocha src/test.js",
+    "prod": "node src/app.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +23,16 @@
     "@types/express": "^4.17.8",
     "@types/mongoose": "^5.7.36",
     "axios": "^0.20.0",
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
-    "mongoose": "^5.10.9"
+    "express-joi-validation": "^5.0.0",
+    "joi": "^17.3.0",
+    "mocha": "^8.2.1",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.9",
+    "morgan": "^1.10.0"
   }
 }

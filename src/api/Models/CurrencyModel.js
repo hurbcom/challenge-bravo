@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const CurrencySchema = new mongoose.Schema({
-    currency: String,
-    value: Boolean
-},{
+    currency: String
+}, {
     timestamps: true,
+    useUnifiedTopology: true
 });
 
-module.exports = mongoose.model('CurrencyModel', CurrencySchema);
+module.exports = mongoose.model('Currency', CurrencySchema);
