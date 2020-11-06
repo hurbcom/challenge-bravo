@@ -5,15 +5,14 @@ Esse projeto faz parte do desafio de Challenge-bravo da HURB
 
 Para executar o projeto, será necessário instalar os seguintes programas:
 
-Git
-Node
-Visual Studio Code
+Git, Node e Visual Studio Code
 
 ## Desenvolvimento
 
 Para iniciar o desenvolvimento, é necessário clonar o projeto do GitHub num diretório de sua preferência:
 
 cd diretórioDeSuaPreferência
+
 git clone https://github.com/cirelalespier/challenge-bravo
 
 ### Construção
@@ -26,7 +25,7 @@ npm i
 
 Para iniciar o projeto, executar o comando abaixo:
 
-node src/app.js
+npm start
 
 #### Listar moedas
 
