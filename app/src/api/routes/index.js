@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import exchange from './exchange';
+import conversion from './conversion';
 
 export default () => {
     const router = Router();
 
-    router.use(exchange());
+    router.use(conversion());
 
     return router;
 }

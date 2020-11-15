@@ -17,7 +17,7 @@ export default ({ getRate } = { getRate: getRates }) => {
     * - error handling
     * - tests
     */
-    router.get('/exchange', async (req, res, next) => {
+    router.get('/conversion', async (req, res, next) => {
         const { from, to, amount } = req.query;
 
         const rate = await getRate(from, to);
