@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import conversion from './conversion';
+import conversion from './conversion.routes';
 
 export default () => {
     const router = Router();

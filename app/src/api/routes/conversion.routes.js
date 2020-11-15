@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import conversionController from '../../controllers/conversion';
+import conversionController from '../../controllers/conversion.controller';
 
 export default ({ controller } = { controller: conversionController() }) => {
     const { convert } = controller;
