@@ -1,5 +1,6 @@
 import express from 'express';
 import Status from 'http-status';
+import routes from './routes';
 
 function server(app) {
     app.use(express.json());
@@ -7,6 +8,7 @@ function server(app) {
     app.use(morgan('dev'));
 
     app.get('/', (req, res) => res.status(Status.OK).json('Up and running!'));
+    app.use('/api', routes());
 
     const PORT = process.env.PORT;
     
