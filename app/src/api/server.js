@@ -1,8 +1,10 @@
 import express from 'express';
 import Status from 'http-status';
 import routes from './routes';
+import morgan from 'morgan';
 
-function server(app) {
+function server({ app }) {
+
     app.use(express.json());
 
     app.use(morgan('dev'));
@@ -20,5 +22,5 @@ function server(app) {
 }
 
 export default {
-    start: ({ app = express() }) => server(app)
+    start: () => server({ app: express() })
 }
