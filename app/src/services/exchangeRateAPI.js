@@ -11,6 +11,6 @@ async function getRate(from, to) {
     return response.data;
 }
 
-export default () => ({
+export {
     getRate
-})
+}
