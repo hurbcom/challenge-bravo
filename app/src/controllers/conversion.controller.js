@@ -1,3 +1,4 @@
+import Status from 'http-status';
 import { getRate as getRates } from '../services/exchangeRateAPI';
 
 export default ({ getRate } = { getRate: getRates }) => {
@@ -5,9 +6,23 @@ export default ({ getRate } = { getRate: getRates }) => {
     async function convert(req, res, next) {
         const { from, to, amount } = req.query;
 
-        const rate = await getRate(from, to);
+        try {
+            const reference = 'USD';
 
-        return res.status(Status.OK).json(rate);
+            const conversion = await getRate(from, to, reference);
+
+            const rate = (conversion[to] / conversion[from]);
+            const response = {
+                'reference': reference,
+                [from]: amount,
+                [to]: amount * rate,
+                'exchange rate': rate,
+            };
+
+            return res.status(Status.OK).json(response);
+        } catch (e) {
+            return next(e);
+        }
     };
 
     return {
