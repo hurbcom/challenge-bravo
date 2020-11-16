@@ -10,7 +10,7 @@ export class ConversionProvider implements IConversionProvider {
       const { from, to, amount } = request;
 
       const cachedResult = await getData(`Cache - ${from}:${to}`);
-      if (cachedResult) return (amount * cachedResult).toFixed(2);
+      if (cachedResult) return (amount * cachedResult).toFixed(8);
 
       const res = await axios.get(
         `${apiUrl}/data/price?fsym=${from}&tsyms=${to}`,
@@ -30,7 +30,7 @@ export class ConversionProvider implements IConversionProvider {
       // Salva a informação no cache
       await setData(`Cache - ${from}:${to}`, result);
 
-      return (result * amount).toFixed(2);
+      return (result * amount).toFixed(8);
     } catch (error) {
       throw new Error(error);
     }
