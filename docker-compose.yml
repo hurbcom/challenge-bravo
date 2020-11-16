@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+    bravo_app:
+        container_name: bravo_app
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile
+        image: bravo_app
+        volumes:
+        - .:/usr/src/app
+        ports:
+            - "3000:3000"
+        networks:
+            - bravo-network
+        depends_on:
+            - bravo_mysql
+            - bravo_redis
+        restart: always
+    bravo_mysql:
+        container_name: bravo_mysql
+        image: mysql
+        restart: always
+        ports:
+            - "3310:3306"
+        networks:
+            - bravo-network
+        environment:
+            MYSQL_HOST: bravo_mysql
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: challenger_bravo
+        security_opt:
+            - seccomp:unconfined
+    bravo_redis:
+        container_name: bravo_redis
+        image: redis
+        command: redis-server --requirepass sOmE_sEcUrE_pAsS
+        ports:
+        - "6379:6379"
+        volumes:
+        - $PWD/redis-data:/var/lib/redis
+        - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+        networks:
+            - bravo-network
+
+networks:
+    bravo-network:
+        driver: bridge
