@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
-import { IDeleteCoinRequestDTO } from './DeleteCoinDTO';
 import { DeleteCoinUseCase } from './DeleteCoinUseCase';
 
 export class DeleteCoinController {
   constructor(private deleteCoinUseCase: DeleteCoinUseCase) {}
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const { uid }: IDeleteCoinRequestDTO = request.body;
+    const { uid } = request.params;
 
     try {
       await this.deleteCoinUseCase.execute({

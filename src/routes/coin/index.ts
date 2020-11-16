@@ -14,11 +14,11 @@ router.post('/', (request, response) =>
   createCoinController.handle(request, response)
 );
 
-router.put('/', (request, response) =>
+router.put('/:uid', (request, response) =>
   updateCoinController.handle(request, response)
 );
 
-router.delete('/', (request, response) =>
+router.delete('/:uid', (request, response) =>
   deleteCoinController.handle(request, response)
 );
 

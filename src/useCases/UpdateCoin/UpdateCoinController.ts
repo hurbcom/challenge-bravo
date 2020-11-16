@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { IUpdateCoinRequestDTO } from './UpdateCoinDTO';
 import { UpdateCoinUseCase } from './UpdateCoinUseCase';
 
 export class UpdateCoinController {
   constructor(private updateCoinUseCase: UpdateCoinUseCase) {}
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const { uid, name }: IUpdateCoinRequestDTO = request.body;
+    const { uid } = request.params;
+    const { name } = request.body;
 
     try {
       const coinUpdated = await this.updateCoinUseCase.execute({

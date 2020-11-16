@@ -1,4 +1,3 @@
-import { Coin } from '../../entities/Coin';
 import { ICoinsRespository } from '../../repositories/ICoinsRepository';
 
 import { IDeleteCoinRequestDTO } from './DeleteCoinDTO';
@@ -9,7 +8,7 @@ export class DeleteCoinUseCase {
   async execute(data: IDeleteCoinRequestDTO) {
     const coinDeleted = await this.coinsRepository.delete(data.uid);
 
-    if (coinDeleted) {
+    if (!coinDeleted) {
       throw new Error('Coin deleted error');
     }
 
