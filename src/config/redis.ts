@@ -22,7 +22,7 @@ export const getData = async (key: string): Promise<any> =>
   });
 
 export const setData = async (key: string, value: any) => {
-  const response = client.set(key, value);
+  const response = client.set(key, value, 'EX', 60 * 2);
 
   if (!response) {
     return false;
