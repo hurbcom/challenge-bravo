@@ -28,6 +28,10 @@ export class ConvertCoinController {
         amount: traitAmount,
       });
 
+      if (!result) {
+        throw new Error('Ocorreu um erro ao fazer conversão!');
+      }
+
       return response.status(201).json(result);
     } catch (err) {
       return response.status(400).json({
