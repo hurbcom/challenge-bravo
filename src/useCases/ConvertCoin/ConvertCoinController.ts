@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { IConvertCoinRequestDTO } from './ConvertCoinDTO';
 import { ConvertCoinUseCase } from './ConvertCoinUseCase';
 
 export class ConvertCoinController {
