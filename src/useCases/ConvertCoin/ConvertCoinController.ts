@@ -6,17 +6,27 @@ export class ConvertCoinController {
   constructor(private convertCoinUseCase: ConvertCoinUseCase) {}
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const { from, to, amount }: IConvertCoinRequestDTO = request.body;
+    const { from, to, amount } = request.query;
 
     try {
       if (!from || !to || !amount) {
         return response.status(400).send('Faltou preencher algum parâmetro');
       }
 
+      if (
+        typeof from !== 'string' ||
+        typeof to !== 'string' ||
+        typeof amount !== 'string'
+      ) {
+        return response.status(400).send('Faltou preencher algum parâmetro');
+      }
+
+      const traitAmount = Number(amount);
+
       const result = await this.convertCoinUseCase.execute({
         from,
         to,
-        amount,
+        amount: traitAmount,
       });
 
       return response.status(201).json(result);

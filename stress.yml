@@ -11,8 +11,4 @@ config:
 scenarios:
     - flow:
           - get:
-                url: '/convert'
-                json:
-                    from: "BTC"
-                    to: "EUR"
-                    amount: 123.45
+                url: '/convert?from=BTC&to=EUR&amount=123.45'
