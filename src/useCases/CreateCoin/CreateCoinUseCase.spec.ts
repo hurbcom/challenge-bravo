@@ -1,39 +1,33 @@
-import { Transaction } from 'knex';
-import { Coin } from '../../entities/Coin';
+import request from 'supertest';
 import knex from '../../config/knex';
+import app from '../../app';
 
 describe('Create Coin', () => {
-  let trx: Transaction;
+  const path = '/coin';
 
-  beforeEach((done) => {
-    knex.transaction((newTrx) => {
-      trx = newTrx;
+  it('deveria dar erro ao criar uma moeda', async (done) => {
+    request(app).post(`${path}`).expect(400, done);
+  });
+
+  it('deveria permitir criar uma moeda', async (done) => {
+    knex.transaction(async (newTrx) => {
+      request(app)
+        .post(`${path}`)
+        .send({
+          name: 'ATAB9',
+        })
+        .expect(201);
+
       done();
     });
   });
 
-  afterEach(async (done) => {
-    await trx.rollback();
-    done();
-  });
-
-  it('should be able to create new coin', async () => {
-    const data = {
-      name: 'BRL',
-    };
-
-    const coin = new Coin(data);
-
-    await trx('coins').insert(coin);
-
-    const list = await trx('coins').where('name', data.name);
-
-    expect(list).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          name: data.name,
-        }),
-      ])
-    );
+  it('deveria dar erro criar uma moeda existante', async (done) => {
+    request(app)
+      .post(`${path}`)
+      .send({
+        name: 'BTC',
+      })
+      .expect(400, done);
   });
 });
