@@ -9,6 +9,10 @@ export class CreateCoinController {
     const { name }: ICreateCoinRequestDTO = request.body;
 
     try {
+      if (!name) {
+        throw new Error('A moeda não possui nome');
+      }
+
       await this.createCoinUseCase.execute({
         name,
       });
