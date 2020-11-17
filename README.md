@@ -6,11 +6,16 @@ Todo o projeto foi baseado no conceito de SOLID. <br/><br/>
 Ao rodar docker-compose, ele executa um entrypoint que verifica se o banco está em pé<br/>
 Se estiver, roda as migrations e seeds principais (moedas) do projeto<br/><br/>
 
-Todo projeto foi pensado para ser tudo automatizado, não precise entrar dentro de container e executar nada<br/><br/>
+Todo projeto foi pensado para ser (ou tentar ser) tudo automatizado<br/><br/>
 
-Possui verificação de sintaxe(eslint + prettier), padronização de commits integrado com husky, testes unitários, teste de estresse.
+_Features interessantes:_<br/>
 
-<br/><br/>
+- Verificação de sintaxe(eslint + prettier)<br/>
+- Padronização de commits integrado com husky<br/>
+- Testes unitários<br/>
+- Teste de estresse.<br/>
+- Projeto automatizado através de entrypoints <br/>
+- Conceito SOLID :D <br/>
 
 # Ferramentas Utilizadas <br/>
 
