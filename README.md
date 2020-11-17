@@ -8,7 +8,7 @@ Se estiver, roda as migrations e seeds principais (moedas) do projeto<br/><br/>
 
 Todo projeto foi pensado para ser (ou tentar ser) tudo automatizado<br/><br/>
 
-_Features interessantes:_<br/>
+**Features interessantes:**<br/>
 
 - Verificação de sintaxe(eslint + prettier)<br/>
 - Padronização de commits integrado com husky<br/>
