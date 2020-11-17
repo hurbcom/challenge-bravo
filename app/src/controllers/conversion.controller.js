@@ -1,5 +1,5 @@
 import Status from 'http-status';
-import { getRate as getRates } from '../services/exchangeRateAPI';
+import { getRate as getRates } from '../services/external/exchangeRate';
 
 export default ({ getRate } = { getRate: getRates }) => {
     
