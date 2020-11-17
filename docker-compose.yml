@@ -17,6 +17,7 @@ services:
             - bravo_mysql
             - bravo_redis
         restart: always
+        entrypoint: ./docker/wait-for-it.sh bravo_mysql:3306 -- ./docker/docker-entrypoint.sh
     bravo_mysql:
         container_name: bravo_mysql
         image: mysql
