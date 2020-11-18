@@ -13,7 +13,11 @@
     "@babel/core": "^7.12.3",
     "@babel/node": "^7.12.6",
     "@babel/preset-env": "^7.12.1",
-    "nodemon": "^2.0.6"
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.6",
+    "sinon": "^9.2.1",
+    "supertest": "^6.0.1"
   },
   "dependencies": {
     "axios": "^0.21.0",
