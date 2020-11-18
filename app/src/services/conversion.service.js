@@ -1,10 +1,10 @@
-import { getRate as getRates } from './external/exchangeRateApi';
+import { getRatesFromApi } from './external/exchangeRateApi';
 
-export default ({ getRate } = { getRate: getRates }) => {
+export default ({ getRates } = { getRates: getRatesFromApi }) => {
 
     async function calculateExchangeRate({ from, to, amount, reference }) {
         
-        const conversion = await getRate({ from, to, amount, reference });
+        const conversion = await getRates({ from, to, amount, reference });
 
         const rate = (conversion[to] / conversion[from]);
         
