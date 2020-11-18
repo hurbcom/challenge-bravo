@@ -16,6 +16,7 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/register": "^7.12.1",
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.6",
     "sinon": "^9.2.1",
