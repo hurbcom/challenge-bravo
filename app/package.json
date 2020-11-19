@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon --exec babel-node index.js",
     "test": "mocha --require @babel/register './__test__/**/*.test.js'",
-    "build": "babel src --out-dir lib",
+    "build": "npm run clean && babel src --out-dir lib",
+    "clean": "rm -rf ./lib && mkdir lib",
     "start": "node lib/index.js"
   },
   "author": "gustavares",
