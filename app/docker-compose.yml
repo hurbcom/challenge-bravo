@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  app:
+    image: node:14.15.1-alpine
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+      - type: volume
+        source: nodemodules
+        target: /app/node_modules
+        volume:
+          nocopy: true
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "3030:3030"
+volumes:
+    nodemodules:
