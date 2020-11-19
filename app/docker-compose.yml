@@ -11,9 +11,23 @@ services:
         target: /app/node_modules
         volume:
           nocopy: true
+    depends_on: 
+      - mongodb
     working_dir: /app
     command: npm run dev
     ports:
       - "3030:3030"
+
+  mongodb:
+    container_name: mongodb
+    hostname: mongodb
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data
+    ports:
+      - '27017:27017'
+
 volumes:
     nodemodules:
+    mongo-data:
