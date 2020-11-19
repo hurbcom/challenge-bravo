@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon --exec babel-node index.js",
     "test": "mocha --require @babel/register './__test__/**/*.test.js'",
-    "build": "babel src --out-dir build",
-    "start": "node build/index.js"
+    "build": "babel src --out-dir lib",
+    "start": "node lib/index.js"
   },
   "author": "gustavares",
   "license": "MIT",
