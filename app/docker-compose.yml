@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  app:
+  bravo_api:
     image: node:14.15.1-alpine
     volumes:
       - type: bind
