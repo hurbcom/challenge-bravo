@@ -1,0 +1,23 @@
+FROM node:14.15.1-alpine AS base
+
+WORKDIR /usr/app
+
+FROM base AS builder
+
+COPY package*.json .babelrc ./
+COPY .env.production ./.env
+RUN npm i
+
+COPY ./node_modules ./node_modules
+COPY ./src ./src
+
+RUN npm run build
+RUN npm prune --production
+
+FROM builder AS release
+
+COPY --from=builder lib ./lib
+
+EXPOSE 3030
+
+CMD [ "node", "./lib/index.js" ]
