@@ -4,7 +4,7 @@
   "description": "A currency exchange API ",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node index.js",
+    "dev": "nodemon --exec babel-node ./src/index.js",
     "test": "mocha --require @babel/register './__test__/**/*.test.js'",
     "build": "npm run clean && babel src --out-dir lib",
     "clean": "rm -rf ./lib && mkdir lib",
