@@ -1,22 +1,15 @@
 version: "3.8"
 services:
   bravo_api:
-    image: node:14.15.1-alpine
-    volumes:
-      - type: bind
-        source: ./
-        target: /app
-      - type: volume
-        source: nodemodules
-        target: /app/node_modules
-        volume:
-          nocopy: true
+    build: 
+      context: .
+      dockerfile: Dockerfile.development
     depends_on: 
       - mongodb
-    working_dir: /app
-    command: npm run dev
-    ports:
-      - "3030:3030"
+    restart: always
+    volumes:
+      - .:/usr/app
+      - /usr/app/node_modules
 
   mongodb:
     container_name: mongodb
@@ -29,5 +22,4 @@ services:
       - '27017:27017'
 
 volumes:
-    nodemodules:
     mongo-data:

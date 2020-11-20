@@ -1,0 +1,12 @@
+FROM node:14.15.1-alpine
+
+WORKDIR /usr/app
+
+COPY package*.json .babelrc .env ./
+RUN npm i
+
+COPY . .
+
+EXPOSE 3030
+
+CMD [ "npm", "run", "dev" ]
