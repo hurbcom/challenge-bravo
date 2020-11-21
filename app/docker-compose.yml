@@ -5,15 +5,14 @@ services:
       context: .
       dockerfile: Dockerfile.development
     depends_on: 
-      - mongodb
+      - mongo
     restart: always
     volumes:
       - .:/usr/app
       - /usr/app/node_modules
 
-  mongodb:
+  mongo:
     container_name: mongodb
-    hostname: mongodb
     image: mongo:latest
     restart: unless-stopped
     volumes:
