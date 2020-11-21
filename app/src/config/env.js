@@ -8,5 +8,9 @@ export default {
     api: {
         url: process.env.EXCHANGE_RATE_API_URL,
         key: process.env.EXCHANGE_RATE_API_KEY
+    },
+    mongo: {
+        connectionString: process.env.MONGO_URL,
+        name: process.env.MONGO_NAME
     }
 }
