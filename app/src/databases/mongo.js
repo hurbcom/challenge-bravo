@@ -1,13 +1,17 @@
-import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 import { env } from '../config';
+const config = env.mongo; 
 
 export default async () => {
-    const url = env.mongo.connectionString;
-    const mongoClient = new MongoClient(url, {
-        useUnifiedTopology: true,
-    });
+    const url = config.connectionString;
 
-    const connection = await mongoClient.connect();
-    
-    return connection.db(env.mongo.name);
+    await mongoose.connect(
+        url, 
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useCreateIndex: true,
+            useFindAndModify: false,
+        }
+    );
 };
