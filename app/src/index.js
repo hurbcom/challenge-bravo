@@ -1,3 +1,11 @@
 import server from './api/server';
+import mongoConnect from './databases/mongo';
 
-server.start();
+(async () => {
+    try {
+        await mongoConnect();
+        server.start();
+    } catch (e) {
+        console.error(e);
+    }
+})();
