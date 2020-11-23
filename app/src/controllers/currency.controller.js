@@ -3,7 +3,7 @@ import Currency from '../schemas/Currency';
 import currencyService from '../services/currency.service';
 
 export default () => {
-    const { save } = currencyService();
+    const { save, remove } = currencyService();
 
     async function post(req, res, next) {
         const { currency } = req.body;
@@ -28,8 +28,21 @@ export default () => {
         }
     }
 
+    async function del(req, res, next) {
+        const { currency } = req.body;
+
+        try {
+            await remove(currency);
+
+            return res.status(Status.OK).json('Deleted');
+        } catch (e) {
+            next(e);
+        }
+    }
+
     return {
         post,
-        getAll
+        getAll, 
+        del
     }
 }
