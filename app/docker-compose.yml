@@ -23,5 +23,10 @@ services:
       - '27017:27017'
     command: mongod --quiet --logpath /dev/null
 
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
+
 volumes:
     mongo-data:
