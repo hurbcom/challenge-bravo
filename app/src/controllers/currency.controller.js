@@ -1,9 +1,8 @@
 import Status from 'http-status';
-import Currency from '../schemas/Currency';
 import currencyService from '../services/currency.service';
 
 export default ({ service } = { service: currencyService() }) => {
-    const { save, remove } = service;
+    const { save, remove, getAll } = service;
 
     async function post(req, res, next) {
         const { currency } = req.body;
@@ -17,10 +16,10 @@ export default ({ service } = { service: currencyService() }) => {
         }
     }
 
-    async function getAll(req, res, next) {
+    async function index(req, res, next) {
         
         try {
-            const result = await Currency.getAll();
+            const result = await getAll();
 
             return res.status(Status.OK).json(result);
         } catch (e) {
@@ -42,7 +41,7 @@ export default ({ service } = { service: currencyService() }) => {
 
     return {
         post,
-        getAll, 
+        index, 
         del
     }
 }

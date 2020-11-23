@@ -26,8 +26,11 @@ export default () => {
         }
     }
 
+    const getAll = async () =>  await Currency.getAll();
+
     return {
         save,
-        remove
+        remove,
+        getAll
     };
 }
