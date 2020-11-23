@@ -2,6 +2,7 @@ import express from 'express';
 import Status from 'http-status';
 import routes from './routes';
 import morgan from 'morgan';
+import errorHandler from './middlewares/error/handler';
 
 function server({ app }) {
 
@@ -11,6 +12,7 @@ function server({ app }) {
 
     app.get('/', (req, res) => res.status(Status.OK).json('Up and running!'));
     app.use('/api', routes());
+    app.use(errorHandler);
 
     const PORT = process.env.PORT;
     
