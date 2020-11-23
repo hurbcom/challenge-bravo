@@ -7,5 +7,5 @@ export const client = redis.createClient({
 
 export const cache = ExpressRedisCache({
     client: client,
-    expire: 20, 
+    expire: 10, 
 });
