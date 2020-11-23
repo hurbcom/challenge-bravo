@@ -11,7 +11,7 @@ export default ({ getRates } = { getRates: getRatesFromApi }) => {
         return {
             [from]: amount,
             [to]: amount * rate,
-            [reference]: rate
+            [reference]: 1 / conversion[from]
         };
     }
 
