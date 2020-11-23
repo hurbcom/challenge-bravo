@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile.development
     depends_on: 
       - mongo
+      - redis-server
     restart: always
     ports:
       - 3030:3030
@@ -23,7 +24,7 @@ services:
       - '27017:27017'
     command: mongod --quiet --logpath /dev/null
 
-  redis:
+  redis-server:
     image: "redis"
     ports:
       - "6379:6379"
