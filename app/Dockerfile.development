@@ -5,7 +5,7 @@ WORKDIR /usr/app
 COPY package*.json .babelrc .env ./
 RUN npm i
 
-COPY . .
+COPY . usr/app
 
 EXPOSE 3030
 
