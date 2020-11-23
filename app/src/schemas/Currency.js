@@ -28,7 +28,9 @@ async function getAll() {
 }
 
 async function remove(currency) {
-    return await Currency.remove({ currency });
+    const result = await Currency.deleteOne({ currency });
+
+    return result.deletedCount;
 }
 
 async function save(currency) {
