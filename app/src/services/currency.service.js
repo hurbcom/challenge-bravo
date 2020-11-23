@@ -1,4 +1,5 @@
 import Currency from '../schemas/Currency';
+import { BadRequest, Conflict, NotFound } from '../api/middlewares/error/model/HttpError';
 
 export default () => {
 
@@ -6,7 +7,7 @@ export default () => {
         const foundCurrency = await Currency.findByName(currency);
 
         if (foundCurrency) {
-            throw new Error('Currency already exists.')
+            throw new Conflict('Currency already exists.')
         }
 
         await Currency.save(currency);
@@ -16,7 +17,7 @@ export default () => {
         const foundCurrency = await Currency.findByName(currency);
 
         if (!foundCurrency) {
-            throw new Error('Currency does not exist.');
+            throw new NotFound(`${currency} not found.`);
         }
 
         const deleteCount = await Currency.remove(currency);
@@ -26,11 +27,22 @@ export default () => {
         }
     }
 
+    const findOne = async (currency) => {
+        const foundCurrency = await Currency.findByName(currency);
+
+        if (!foundCurrency) {
+            throw new NotFound(`${currency} not found.`);
+        }
+
+        return foundCurrency;
+    }
+
     const getAll = async () =>  await Currency.getAll();
 
     return {
         save,
         remove,
+        findOne,
         getAll
     };
 }
