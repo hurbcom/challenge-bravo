@@ -7,10 +7,9 @@ export default ({ service } = { service: conversionService() }) => {
     const { REFERENCE_CURRENCY } = constants;
 
     async function convert(req, res, next) {
-        const { from, to, amount } = req.query;
 
         try {
-            const exchangeRate = await calculateExchangeRate(from, to, amount, REFERENCE_CURRENCY);
+            const exchangeRate = await calculateExchangeRate({ ...req.query, reference: REFERENCE_CURRENCY });
 
             return res.status(Status.OK).json(exchangeRate);
         } catch (e) {
