@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import cache from '../../databases/redis';
+import { cache as redisCache } from '../../databases/redis';
 
 import conversionController from '../../controllers/conversion.controller';
 import validator from '../middlewares/validators/conversion.validator';
 
-export default ({ controller } = { controller: conversionController() }) => {
+
+export default ({ controller, cache } = { controller: conversionController(), cache: redisCache }) => {
     const { convert } = controller;
     const router = Router();
     
