@@ -2,8 +2,8 @@ import Status from 'http-status';
 import Currency from '../schemas/Currency';
 import currencyService from '../services/currency.service';
 
-export default () => {
-    const { save, remove } = currencyService();
+export default ({ service } = { service: currencyService() }) => {
+    const { save, remove } = service;
 
     async function post(req, res, next) {
         const { currency } = req.body;
