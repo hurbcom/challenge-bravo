@@ -1,6 +1,11 @@
+import redis from 'redis';
 import ExpressRedisCache from 'express-redis-cache';
 
-export default ExpressRedisCache({
-    host: 'redis-server',
+export const client = redis.createClient({
+    host: 'redis-server'
+});
+
+export const cache = ExpressRedisCache({
+    client: client,
     expire: 20, 
 });
