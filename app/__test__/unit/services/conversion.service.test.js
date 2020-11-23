@@ -6,13 +6,12 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 describe('services/conversion.service.js', () => {
-    const reference = 'USD';
     let service;
 
     beforeEach(() => {
         const getRatesFromApiMock = () => ({
-            'BRL': 5.36,
-            'EUR': 0.841
+            'BRL': 5,
+            'EUR': 0.8
         });
         
         service = ConversionService({
@@ -25,26 +24,26 @@ describe('services/conversion.service.js', () => {
         describe('Given that all parameters are correct', () => {
             const testCases = [
                 { 
-                    amount: 1, 
-                    to: 0.15690298507462686, 
-                    rate: 0.15690298507462686 
+                    amount: 10, 
+                    to: 1.6, 
+                    reference: 2
                 }
             ];
 
             for (const expected of testCases) {
-                it(`should return 'BRL: ${expected.amount}, EUR: ${expected.to}, USD: ${expected.rate}`, async () => {
+                it(`should return 'BRL: ${expected.amount}, EUR: ${expected.to}, USD: ${expected.reference}`, async () => {
                     
                     const conversion = await service.calculateExchangeRate({ 
                         from: 'BRL', 
                         to: 'EUR', 
                         amount: expected.amount, 
-                        reference 
+                        reference: 'USD'
                     });
 
                     expect(conversion).to.eql({
                         'BRL': expected.amount,
                         'EUR': expected.to,
-                        'USD': expected.rate
+                        'USD': expected.reference
                     });
                 });
             }
