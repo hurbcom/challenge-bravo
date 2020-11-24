@@ -24,5 +24,5 @@ function server({ app }) {
 }
 
 export default {
-    start: () => server({ app: express() })
+    start: ({ expressApp }) => server({ app: expressApp } = { app: express() })
 }
