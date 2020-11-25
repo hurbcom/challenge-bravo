@@ -23,3 +23,11 @@ func (c *Controller) Convert(from, to string, amount float64) (float64, error) {
 	}
 	return ((1 / currencyFrom) * currencyTo) * amount, nil
 }
+
+func (c *Controller) AddCurrency(initials string) error {
+	return c.currencyModule.AddCurrency(initials)
+}
+
+func (c *Controller) DeleteCurrency(initials string) {
+	c.currencyModule.DeleteCurrency(initials)
+}
