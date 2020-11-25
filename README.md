@@ -159,6 +159,18 @@ DONE 17 tests in 2.730s
 
 A aplicação chega a aguentar algo em torno de **3586** requisições no intervalo de **347661ns**.
 
+## Observações
+
+As siglas das moedas seguem o padrão ISO4217 
+
+Siglas disponíveis por padrão, como requesitado no desafio, são: 
+
+* USD
+* BRL
+* EUR
+* BTC
+* ETH
+
 ## Informações a respeito do projeto
 
 O desenvolvimento seguiu as práticas do TDD.
