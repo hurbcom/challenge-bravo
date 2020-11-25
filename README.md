@@ -57,3 +57,7 @@ O desenvolvimento seguiu as práticas do TDD.
 
 Foi gerado executaveís para todas as plataformas, e se encontram dentro da pasta `bin`
 
+# Contato
+
+E-mail: evbcjr@gmail.com
+LinkedIn: https://www.linkedin.com/in/ednailsonvb/
