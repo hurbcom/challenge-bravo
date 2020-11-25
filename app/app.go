@@ -25,6 +25,9 @@ func LoadApp() (*App, error) {
 func loadServer(ctrl *controller.Controller) httping.IServer {
 	server := httping.NewHttpServer("", 8080)
 	server.NewRoute(nil, "/v1/convert").GET(handlers.Convert(ctrl))
+	currencyRoute := server.NewRoute(nil, "/v1/currency/:currency")
+	currencyRoute.POST(handlers.AddCurrency(ctrl))
+	currencyRoute.DELETE(handlers.DeleteCurrency(ctrl))
 	return server
 }
 
