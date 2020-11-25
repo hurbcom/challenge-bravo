@@ -27,11 +27,21 @@ Por padrão a aplicação roda na porta `8080`, mas caso queira o acesso a parti
 
     docker run -p 8080:PORTA_DESEJADA challenge-bravo run
 
-## Convertendo valores
+## Endpoints
 
-Após executar o comando do docker, o servidor já consegue receber requisições.
+### Conversão
 
-### Example
+METÓDO `GET`
+
+    /v1/convert?from=SIGLA_FROM&to=SIGLA_TO&amount=QTD
+
+**Parametros**: 
+
+* SIGLA_FROM: Sigla da moeda base
+* SIGLA_TO: Sigla da moeda a ser convertida
+* QTD: Quantidade a ser convertido
+
+#### Exemplo
 
 No terminal execute
 
@@ -39,6 +49,7 @@ No terminal execute
 
 Saída esperada
 
+_Status http_: `200 OK`
 ```json
 {
 	"status": "success",
@@ -47,20 +58,6 @@ Saída esperada
 	}
 }
 ```
-
-## Endpoints
-
-### Conversão
-
-METÓDO `GET`
-
-    /v1/convert?from=BTC&to=EUR&amount=123.45
-
-**Parametros**: 
-
-* From: Sigla da moeda base
-* To: Sigla da moeda a ser convertida
-* Amount: Quantidade a ser convertido
 
 ### Adicionando uma nova moeda 
 
@@ -72,6 +69,24 @@ METÓDO `POST`
 
 * SIGLA_DA_MOEDA: Sigla da moeda a ser adicionada
 
+#### Exemplo
+
+No terminal execute
+
+    curl --location --request POST 'http://localhost:8080/v1/currency/CAD'
+
+Saída esperada
+
+_Status http_: `200 OK`
+```json
+{
+	"status": "success",
+	"data": {
+		"CAD": "CAD has been added"
+	}
+}
+```
+
 ### Deletando suporte a moeda
 
 METÓDO `DELETE`
@@ -81,6 +96,19 @@ METÓDO `DELETE`
 **Parametros**: 
 
 * SIGLA_DA_MOEDA: Sigla da moeda a ser removida
+
+
+#### Exemplo
+
+No terminal execute
+
+    curl --location --request DELETE 'http://localhost:8080/v1/currency/USD'
+
+Saída esperada
+
+_Status http_: `204 No Content`
+```json
+```
 
 ## Running tests
 
