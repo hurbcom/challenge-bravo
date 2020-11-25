@@ -33,13 +33,13 @@ Por padrão a aplicação roda na porta `8080`, mas caso queira o acesso a parti
 
 METÓDO `GET`
 
-    /v1/convert?from=SIGLA_FROM&to=SIGLA_TO&amount=QTD
+    /v1/convert?from=CURRENCY_FROM&to=CURRENCY_TO&amount=AMOUNT
 
 **Parametros**: 
 
-* SIGLA_FROM: Sigla da moeda base
-* SIGLA_TO: Sigla da moeda a ser convertida
-* QTD: Quantidade a ser convertido
+* CURRENCY_FROM: Sigla da moeda base
+* CURRENCY_TO: Sigla da moeda a ser convertida
+* AMOUNT: Quantidade a ser convertido
 
 #### Exemplo
 
@@ -63,17 +63,21 @@ _Status http_: `200 OK`
 
 METÓDO `POST`
 
-    /v1/currency/SIGLA_DA_MOEDA
+    /v1/currency
 
-**Parametros**: 
+**Body** (application/json): 
 
-* SIGLA_DA_MOEDA: Sigla da moeda a ser adicionada
+* currency: Sigla da moeda a ser adicionada
 
 #### Exemplo
 
 No terminal execute
 
-    curl --location --request POST 'http://localhost:8080/v1/currency/CAD'
+    curl --location --request POST 'http://localhost:8080/v1/currency' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+        "currency": "CAD"
+    }'
 
 Saída esperada
 
@@ -91,12 +95,11 @@ _Status http_: `200 OK`
 
 METÓDO `DELETE`
 
-    /v1/currency/SIGLA_DA_MOEDA
+    /v1/currency/CURRENCY
 
 **Parametros**: 
 
-* SIGLA_DA_MOEDA: Sigla da moeda a ser removida
-
+* CURRENCY: Sigla da moeda a ser removida
 
 #### Exemplo
 

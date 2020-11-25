@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bytes"
 	"github.com/ednailson/challenge-bravo/currency"
 	. "github.com/onsi/gomega"
 	"github.com/tidwall/gjson"
@@ -33,7 +34,7 @@ func TestApp(t *testing.T) {
 	})
 
 	t.Run("adding cad currency", func(t *testing.T) {
-		resp, err := http.Post("http://localhost:8080/v1/currency/CAD", "application/json", nil)
+		resp, err := http.Post("http://localhost:8080/v1/currency", "application/json", bytes.NewReader([]byte(`{"currency": "CAD"}`)))
 
 		g.Expect(err).ShouldNot(HaveOccurred())
 		g.Expect(resp.StatusCode).Should(BeEquivalentTo(http.StatusOK))
