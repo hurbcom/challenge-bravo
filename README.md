@@ -48,13 +48,47 @@ Saída esperada
 }
 ```
 
+## Endpoints
+
+### Conversão
+
+METÓDO `GET`
+
+    /v1/convert?from=BTC&to=EUR&amount=123.45
+
+**Parametros**: 
+
+* From: Sigla da moeda base
+* To: Sigla da moeda a ser convertida
+* Amount: Quantidade a ser convertido
+
+### Adicionando uma nova moeda 
+
+METÓDO `POST`
+
+    /v1/currency/SIGLA_DA_MOEDA
+
+**Parametros**: 
+
+* SIGLA_DA_MOEDA: Sigla da moeda a ser adicionada
+
+### Deletando suporte a moeda
+
+METÓDO `DELETE`
+
+    /v1/currency/SIGLA_DA_MOEDA
+
+**Parametros**: 
+
+* SIGLA_DA_MOEDA: Sigla da moeda a ser removida
+
 ## Running tests
 
-### Requirements
+### Requirementos
 
 * GoLang 1:15
 
-### Command
+### Comando
 
     make tests
 
@@ -64,8 +98,8 @@ Saída esperada
 EMPTY .
 PASS controller.TestController/convert_from_eur_to_brl (0.00s)
 PASS controller.TestController/convert_from_invalid_currency (0.00s)
-PASS controller.TestController (1.65s)
-coverage: 87.5% of statements
+PASS controller.TestController (1.10s)
+coverage: 70.0% of statements
 PASS controller
 PASS currency.TestCurrency/usd_currency (0.00s)
 PASS currency.TestCurrency/eur_currency (0.00s)
@@ -73,17 +107,21 @@ PASS currency.TestCurrency/brl_currency (0.00s)
 PASS currency.TestCurrency/btc_currency (0.00s)
 PASS currency.TestCurrency/eth_currency (0.00s)
 PASS currency.TestCurrency/cad_currency (0.00s)
-PASS currency.TestCurrency/cad_lower_case_currency (0.00s)
-PASS currency.TestCurrency/invalid_currency (0.00s)
-PASS currency.TestCurrency (2.11s)
-coverage: 70.0% of statements
+PASS currency.TestCurrency/usd_lower_case_currency (0.00s)
+PASS currency.TestCurrency/adding_new_currency (0.00s)
+PASS currency.TestCurrency/deleting_new_currency (0.00s)
+PASS currency.TestCurrency (1.48s)
+coverage: 77.4% of statements
 PASS currency
-PASS app.TestApp (1.89s)
-coverage: 71.4% of statements
+PASS app.TestApp/converting_currencies (0.01s)
+PASS app.TestApp/adding_cad_currency (0.00s)
+PASS app.TestApp/deleting_cad_currency (0.00s)
+PASS app.TestApp (1.50s)
+coverage: 76.5% of statements
 PASS app
 EMPTY handlers
 
-DONE 13 tests in 3.470s
+DONE 17 tests in 2.730s
 ```
 
 ## Informações a respeito do projeto
