@@ -8,8 +8,7 @@ Recrutadora: Paloma
 
 ## Requirementos
 
-* Docker
-* GoLang 1.15
+* [Docker](https://docs.docker.com/engine/install/ubuntu/)
 
 ## Instalação
 
@@ -44,9 +43,47 @@ Saída esperada
 {
 	"status": "success",
 	"data": {
-		"value": 1984843.800252671
+		"result": 1984843.800252671
 	}
 }
+```
+
+## Running tests
+
+### Requirements
+
+* GoLang 1:15
+
+### Command
+
+    make tests
+
+### Output
+
+```bash
+EMPTY .
+PASS controller.TestController/convert_from_eur_to_brl (0.00s)
+PASS controller.TestController/convert_from_invalid_currency (0.00s)
+PASS controller.TestController (1.65s)
+coverage: 87.5% of statements
+PASS controller
+PASS currency.TestCurrency/usd_currency (0.00s)
+PASS currency.TestCurrency/eur_currency (0.00s)
+PASS currency.TestCurrency/brl_currency (0.00s)
+PASS currency.TestCurrency/btc_currency (0.00s)
+PASS currency.TestCurrency/eth_currency (0.00s)
+PASS currency.TestCurrency/cad_currency (0.00s)
+PASS currency.TestCurrency/cad_lower_case_currency (0.00s)
+PASS currency.TestCurrency/invalid_currency (0.00s)
+PASS currency.TestCurrency (2.11s)
+coverage: 70.0% of statements
+PASS currency
+PASS app.TestApp (1.89s)
+coverage: 71.4% of statements
+PASS app
+EMPTY handlers
+
+DONE 13 tests in 3.470s
 ```
 
 ## Informações a respeito do projeto

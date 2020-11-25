@@ -16,10 +16,9 @@ default: help
 up-deps: ## Install projects dependecies with GOMOD
 	go mod tidy
 
-docker-build:up-deps ## Build docker image
+docker-build: ## Build docker image
 	@echo "building ${BIN_NAME} ${VERSION}"
 	@echo "GOPATH=${GOPATH}"
-	go build -o bin/${BIN_NAME} ./
 	docker build -t ${APPLICATION_NAME} ./
 
 tests: ## Run project tests

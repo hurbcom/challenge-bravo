@@ -34,6 +34,6 @@ func Convert(ctrl *controller.Controller) httping.HandlerFunc {
 				return httping.InternalServerError("server internal error")
 			}
 		}
-		return httping.OK(map[string]float64{"value": converted})
+		return httping.OK(map[string]float64{"result": converted})
 	}
 }
