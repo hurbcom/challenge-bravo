@@ -33,7 +33,10 @@ func main() {
 
 func runApplication() error {
 	ctx := gracefullyShutdown()
-	application := app.LoadApp()
+	application, err := app.LoadApp()
+	if err != nil {
+		return err
+	}
 	log.Infof("running application")
 	chErr := application.Run()
 	select {
