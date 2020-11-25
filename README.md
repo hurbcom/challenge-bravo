@@ -57,6 +57,10 @@ O desenvolvimento seguiu as práticas do TDD.
 
 Foi gerado executaveís para todas as plataformas, e se encontram dentro da pasta `bin`
 
+A biblioteca utilizada para o servidor HTTP foi o [httping-go](https://github.com/ednailson/httping-go.git). É uma biblioteca escrita por mim, que utiliza o GIN como base.
+
+Os padrões de resposta da API é o [JSend](https://github.com/omniti-labs/jsend)
+
 # Contato
 
 E-mail: evbcjr@gmail.com
