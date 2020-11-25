@@ -1,6 +1,8 @@
 package controller
 
-import "github.com/ednailson/challenge-bravo/currency"
+import (
+	"github.com/ednailson/challenge-bravo/currency"
+)
 
 type Controller struct {
 	currencyModule currency.Currency
@@ -11,11 +13,11 @@ func NewController(currencyModule currency.Currency) *Controller {
 }
 
 func (c *Controller) Convert(from, to string, amount float64) (float64, error) {
-	currencyFrom, err := c.currencyModule.Extra(from)
+	currencyFrom, err := c.currencyModule.Currency(from)
 	if err != nil {
 		return 0, err
 	}
-	currencyTo, err := c.currencyModule.Extra(to)
+	currencyTo, err := c.currencyModule.Currency(to)
 	if err != nil {
 		return 0, err
 	}

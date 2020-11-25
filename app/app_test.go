@@ -24,5 +24,9 @@ func TestApp(t *testing.T) {
 	body, err := ioutil.ReadAll(resp.Body)
 	g.Expect(err).ShouldNot(HaveOccurred())
 	g.Expect(gjson.Get(string(body), "status").String()).Should(BeEquivalentTo("success"))
-	g.Expect(gjson.Get(string(body), "data.result").Float()).Should(BeEquivalentTo(((1 / currencyModule.USD()) * currencyModule.EUR()) * 123.45))
+	usdCurrency, err := currencyModule.Currency("USD")
+	g.Expect(err).ShouldNot(HaveOccurred())
+	eurCurrency, err := currencyModule.Currency("EUR")
+	g.Expect(err).ShouldNot(HaveOccurred())
+	g.Expect(gjson.Get(string(body), "data.result").Float()).Should(BeEquivalentTo(((1 / usdCurrency) * eurCurrency) * 123.45))
 }
