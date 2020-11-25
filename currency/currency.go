@@ -15,73 +15,83 @@ const host = `https://api.exchangeratesapi.io/latest?base=USD`
 const btcHost = `https://blockchain.info/tobtc?currency=USD&value=1`
 
 type currency struct {
-	raw string
-	btc float64
+	raw        string
+	btc        float64
+	currencies map[string]float64
 }
 
 func NewCurrency() (Currency, error) {
-	body, err := getCurrencies()
-	if err != nil {
-		return nil, err
+	cur := &currency{
+		raw: "",
+		btc: 0,
+		currencies: map[string]float64{
+			"USD": 0,
+			"BRL": 0,
+			"EUR": 0,
+			"BTC": 0,
+			"ETH": 0,
+		},
 	}
-	btc, err := getBtcCurrency()
-	if err != nil {
-		return nil, err
-	}
-	cur := &currency{raw: string(body), btc: btc}
+	updateCurrencies(cur)
 	go func() {
 		for {
 			<-time.Tick(time.Minute)
-			body, err = getCurrencies()
-			if err != nil {
-				log.WithField("error", err.Error()).Errorf("failed to get new currencies")
-				continue
-			}
-			btc, err = getBtcCurrency()
-			if err != nil {
-				log.WithField("error", err.Error()).Errorf("failed to get new bitcoin currency")
-				continue
-			}
-			cur.raw = string(body)
-			cur.btc = btc
+			updateCurrencies(cur)
 		}
 	}()
 	return cur, nil
 }
 
-func (c *currency) USD() float64 {
-	price, _ := c.Extra("USD")
-	return price
-}
-
-func (c *currency) BRL() float64 {
-	price, _ := c.Extra("BRL")
-	return price
-}
-
-func (c *currency) EUR() float64 {
-	price, _ := c.Extra("EUR")
-	return price
-}
-
-func (c *currency) BTC() float64 {
-	return c.btc
-}
-
-func (c *currency) ETH() float64 {
-	price, _ := c.Extra("ETH")
-	return price
-}
-
-func (c *currency) Extra(initials string) (float64, error) {
+func (c *currency) AddCurrency(initials string) error {
+	initials = strings.ToUpper(initials)
+	if _, ok := c.currencies[initials]; ok {
+		return nil
+	}
 	if initials == "BTC" {
-		return c.BTC(), nil
+		c.currencies[initials] = c.btc
+		return nil
 	}
 	result := gjson.Get(c.raw, fmt.Sprintf("rates.%s", strings.ToUpper(initials)))
 	if !result.Exists() {
+		return ErrCurrencyNotExist
+	}
+	c.currencies[initials] = result.Float()
+	return nil
+}
+
+func (c *currency) DeleteCurrency(initials string) {
+	initials = strings.ToUpper(initials)
+	delete(c.currencies, initials)
+}
+
+func (c *currency) Currency(initials string) (float64, error) {
+	initials = strings.ToUpper(initials)
+	if _, ok := c.currencies[initials]; !ok {
 		return 0, ErrCurrencyNotExist
 	}
-	return result.Float(), nil
+	return c.currencies[initials], nil
+}
+
+func updateCurrencies(cur *currency) {
+	body, err := getCurrencies()
+	if err != nil {
+		log.WithField("error", err.Error()).Errorf("failed to get new currencies")
+		return
+	}
+	btc, err := getBtcCurrency()
+	if err != nil {
+		log.WithField("error", err.Error()).Errorf("failed to get new bitcoin currency")
+		return
+	}
+	cur.raw = string(body)
+	cur.btc = btc
+	for key, _ := range cur.currencies {
+		if key == "BTC" {
+			cur.currencies[key] = cur.btc
+			continue
+		}
+		cur.currencies[key] = gjson.Get(cur.raw, fmt.Sprintf("rates.%s", key)).Float()
+	}
 }
 
 func getBtcCurrency() (float64, error) {
