@@ -13,6 +13,6 @@ func AddCurrency(ctrl *controller.Controller) httping.HandlerFunc {
 		if err != nil {
 			return httping.BadRequest(map[string]string{"currency": "currency is invalid"})
 		}
-		return httping.OK(map[string]string{currency: fmt.Sprintf("%s added", currency)})
+		return httping.OK(map[string]string{currency: fmt.Sprintf("%s has been added", currency)})
 	}
 }
