@@ -52,3 +52,19 @@ func TestApp(t *testing.T) {
 		g.Expect(resp.StatusCode).Should(BeEquivalentTo(http.StatusNoContent))
 	})
 }
+
+func BenchmarkApp(b *testing.B) {
+	g := NewGomegaWithT(b)
+	sut, err := LoadApp()
+	g.Expect(err).ShouldNot(HaveOccurred())
+	sut.Run()
+
+	b.Run("calling multiple times convert route", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			resp, err := http.Get("http://localhost:8080/v1/convert?from=USD&to=EUR&amount=123.45")
+
+			g.Expect(err).ShouldNot(HaveOccurred())
+			g.Expect(resp.StatusCode).Should(BeEquivalentTo(http.StatusOK))
+		}
+	})
+}

@@ -124,6 +124,10 @@ EMPTY handlers
 DONE 17 tests in 2.730s
 ```
 
+## Benchmark
+
+A aplicação chega a aguentar algo em torno de **3586** requisições no intervalo de **347661ns**.
+
 ## Informações a respeito do projeto
 
 O desenvolvimento seguiu as práticas do TDD.
