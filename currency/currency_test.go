@@ -18,44 +18,71 @@ func TestCurrency(t *testing.T) {
 	g.Expect(err).ShouldNot(HaveOccurred())
 
 	t.Run("usd currency", func(t *testing.T) {
-		g.Expect(gjson.Get(matchCurrencies, "rates.USD").Float()).Should(BeEquivalentTo(sut.USD()))
+		usdCurrency, err := sut.Currency("USD")
+
+		g.Expect(err).ShouldNot(HaveOccurred())
+		g.Expect(gjson.Get(matchCurrencies, "rates.USD").Float()).Should(BeEquivalentTo(usdCurrency))
 	})
 
 	t.Run("eur currency", func(t *testing.T) {
-		g.Expect(gjson.Get(matchCurrencies, "rates.EUR").Float()).Should(BeEquivalentTo(sut.EUR()))
+		eurCurrency, err := sut.Currency("EUR")
+
+		g.Expect(err).ShouldNot(HaveOccurred())
+		g.Expect(gjson.Get(matchCurrencies, "rates.EUR").Float()).Should(BeEquivalentTo(eurCurrency))
 	})
 
 	t.Run("brl currency", func(t *testing.T) {
-		g.Expect(gjson.Get(matchCurrencies, "rates.BRL").Float()).Should(BeEquivalentTo(sut.BRL()))
+		brlCurrency, err := sut.Currency("BRL")
+
+		g.Expect(err).ShouldNot(HaveOccurred())
+		g.Expect(gjson.Get(matchCurrencies, "rates.BRL").Float()).Should(BeEquivalentTo(brlCurrency))
 	})
 
 	t.Run("btc currency", func(t *testing.T) {
-		g.Expect(btcCurrency).Should(BeEquivalentTo(sut.BTC()))
+		btc, err := sut.Currency("BTC")
+
+		g.Expect(err).ShouldNot(HaveOccurred())
+		g.Expect(btcCurrency).Should(BeEquivalentTo(btc))
 	})
 
 	t.Run("eth currency", func(t *testing.T) {
-		g.Expect(gjson.Get(matchCurrencies, "rates.ETH").Float()).Should(BeEquivalentTo(sut.ETH()))
+		ethCurrency, err := sut.Currency("ETH")
+
+		g.Expect(err).ShouldNot(HaveOccurred())
+		g.Expect(gjson.Get(matchCurrencies, "rates.ETH").Float()).Should(BeEquivalentTo(ethCurrency))
 	})
 
 	t.Run("cad currency", func(t *testing.T) {
-		value, err := sut.Extra("CAD")
-
-		g.Expect(err).ShouldNot(HaveOccurred())
-		g.Expect(gjson.Get(matchCurrencies, "rates.CAD").Float()).Should(BeEquivalentTo(value))
-	})
-
-	t.Run("cad lower case currency", func(t *testing.T) {
-		value, err := sut.Extra("cad")
-
-		g.Expect(err).ShouldNot(HaveOccurred())
-		g.Expect(gjson.Get(matchCurrencies, "rates.CAD").Float()).Should(BeEquivalentTo(value))
-	})
-
-	t.Run("invalid currency", func(t *testing.T) {
-		value, err := sut.Extra("INVALID")
+		cadCurrency, err := sut.Currency("CAD")
 
 		g.Expect(err).Should(HaveOccurred())
-		g.Expect(value).Should(BeEquivalentTo(0))
+		g.Expect(err).Should(MatchError(ErrCurrencyNotExist))
+		g.Expect(cadCurrency).Should(BeEquivalentTo(0))
+	})
+
+	t.Run("usd lower case currency", func(t *testing.T) {
+		usdCurrency, err := sut.Currency("usd")
+
+		g.Expect(err).ShouldNot(HaveOccurred())
+		g.Expect(gjson.Get(matchCurrencies, "rates.USD").Float()).Should(BeEquivalentTo(usdCurrency))
+	})
+
+	t.Run("adding new currency", func(t *testing.T) {
+		err := sut.AddCurrency("CAD")
+
+		g.Expect(err).ShouldNot(HaveOccurred())
+		cadCurrency, err := sut.Currency("CAD")
+		g.Expect(err).ShouldNot(HaveOccurred())
+		g.Expect(gjson.Get(matchCurrencies, "rates.CAD").Float()).Should(BeEquivalentTo(cadCurrency))
+	})
+
+	t.Run("deleting new currency", func(t *testing.T) {
+		sut.DeleteCurrency("BRL")
+
+		brlCurrency, err := sut.Currency("BRL")
+		g.Expect(err).Should(HaveOccurred())
+		g.Expect(err).Should(MatchError(ErrCurrencyNotExist))
+		g.Expect(brlCurrency).Should(BeEquivalentTo(0))
 	})
 }
 
