@@ -1,9 +1,17 @@
 package app
 
-type App struct{}
+import "github.com/ednailson/challenge-bravo/currency"
 
-func LoadApp() *App {
-	return &App{}
+type App struct {
+	currencyModule currency.Currency
+}
+
+func LoadApp() (*App, error) {
+	currencyModule, err := currency.NewCurrency()
+	if err != nil {
+		return nil, err
+	}
+	return &App{currencyModule: currencyModule}, nil
 }
 
 func (a *App) Run() chan error {

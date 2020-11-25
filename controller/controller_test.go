@@ -17,6 +17,13 @@ func TestController(t *testing.T) {
 		convertedValue, err := sut.Convert("EUR", "BRL", 100)
 
 		g.Expect(err).ShouldNot(HaveOccurred())
-		g.Expect(((1 / currencyModule.EUR()) * currencyModule.BRL()) * 100).Should(BeEquivalentTo(convertedValue))
+		g.Expect(convertedValue).Should(BeEquivalentTo(((1 / currencyModule.EUR()) * currencyModule.BRL()) * 100))
+	})
+
+	t.Run("convert from invalid currency", func(t *testing.T) {
+		convertedValue, err := sut.Convert("INVALID", "BRL", 100)
+
+		g.Expect(err).Should(HaveOccurred())
+		g.Expect(convertedValue).Should(BeEquivalentTo(0))
 	})
 }
