@@ -34,12 +34,12 @@ func NewCurrency() (Currency, error) {
 			<-time.Tick(time.Minute)
 			body, err = getCurrencies()
 			if err != nil {
-				log.WithFields(log.Fields{"error": err.Error()}).Errorf("failed to get new currencies")
+				log.WithField("error", err.Error()).Errorf("failed to get new currencies")
 				continue
 			}
 			btc, err = getBtcCurrency()
 			if err != nil {
-				log.WithFields(log.Fields{"error": err.Error()}).Errorf("failed to get new bitcoin currency")
+				log.WithField("error", err.Error()).Errorf("failed to get new bitcoin currency")
 				continue
 			}
 			cur.raw = string(body)

@@ -27,7 +27,7 @@ func main() {
 	}
 	err := cliApp.Run(os.Args)
 	if err != nil {
-		log.WithFields(log.Fields{"error": err.Error()}).Errorf("error on running application")
+		log.WithField("error", err.Error()).Errorf("error on running application")
 	}
 }
 
@@ -37,12 +37,12 @@ func runApplication() error {
 	if err != nil {
 		return err
 	}
-	log.Infof("running application")
+	log.Infof("application running")
 	chErr := application.Run()
 	select {
 	case err := <-chErr:
 		if err != nil {
-			log.WithFields(log.Fields{"error": err.Error()}).Errorf("something went wrong on the application")
+			log.WithField("error", err.Error()).Errorf("something went wrong on the application")
 			application.Close()
 			return err
 		}
