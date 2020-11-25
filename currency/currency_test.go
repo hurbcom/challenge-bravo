@@ -41,6 +41,13 @@ func TestCurrency(t *testing.T) {
 		g.Expect(err).ShouldNot(HaveOccurred())
 		g.Expect(gjson.Get(matchCurrencies, "rates.CAD").Float()).Should(BeEquivalentTo(value))
 	})
+
+	t.Run("invalid currency", func(t *testing.T) {
+		value, err := sut.Extra("INVALID")
+
+		g.Expect(err).Should(HaveOccurred())
+		g.Expect(value).Should(BeEquivalentTo(0))
+	})
 }
 
 func getLatestCurrencies(g *GomegaWithT) string {
