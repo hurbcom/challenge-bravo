@@ -13,6 +13,10 @@ services:
     volumes:
       - .:/usr/app
       - /usr/app/node_modules
+    environment:
+      WAIT_HOSTS: mongo:27017
+    networks:
+      - bravo
 
   mongo:
     container_name: mongodb
@@ -23,11 +27,18 @@ services:
     ports:
       - '27017:27017'
     command: mongod --quiet --logpath /dev/null
+    networks:
+      - bravo
 
   redis-server:
     image: "redis"
     ports:
       - "6379:6379"
+    networks:
+      - bravo
 
 volumes:
     mongo-data:
+
+networks:
+  bravo:
