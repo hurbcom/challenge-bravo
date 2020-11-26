@@ -1,8 +1,8 @@
 import { BadRequest } from "../error/model/HttpError";
-import currencyService from '../../../services/currency.service';
-const { getAll } = currencyService();
+import CurrencyService from '../../../services/currency.service';
 
 async function checkAllowedCurrencies(currencies) {
+    const { getAll } = new CurrencyService();
     const allCurrencies = await getAll();
 
     for (const key in currencies) {

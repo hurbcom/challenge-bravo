@@ -1,34 +1,39 @@
-import Currency from '../schemas/Currency';
-import { BadRequest, Conflict, NotFound } from '../api/middlewares/error/model/HttpError';
+import currencyDao from '../dao/currency.dao';
+import { Conflict, NotFound } from '../api/middlewares/error/model/HttpError';
+import CurrencyDao from '../dao/currency.dao';
 
-export default () => {
+export default class CurrencyService {
 
-    const save = async (currency) => {
-        const foundCurrency = await Currency.findByName(currency);
+    constructor(currencyDao) {
+        this.currencyDao = currencyDao || new CurrencyDao();
+    }
+
+    async save(currency) {
+        const foundCurrency = await currencyDao.findByName(currency);
 
         if (foundCurrency) {
             throw new Conflict('Currency already exists.')
         }
 
-        await Currency.save(currency);
+        await currencyDao.save(currency);
     }
 
-    const remove = async (currency) => {
-        const foundCurrency = await Currency.findByName(currency);
+    async remove(currency) {
+        const foundCurrency = await currencyDao.findByName(currency);
 
         if (!foundCurrency) {
             throw new NotFound(`${currency} not found.`);
         }
 
-        const deleteCount = await Currency.remove(currency);
+        const deleteCount = await currencyDao.remove(currency);
         
         if (deleteCount !== 1) {
             throw new Error('Failed to delete.');
         }
     }
 
-    const findOne = async (currency) => {
-        const foundCurrency = await Currency.findByName(currency);
+    async findOne(currency) {
+        const foundCurrency = await currencyDao.findByName(currency);
 
         if (!foundCurrency) {
             throw new NotFound(`${currency} not found.`);
@@ -37,12 +42,7 @@ export default () => {
         return foundCurrency;
     }
 
-    const getAll = async () =>  await Currency.getAll();
-
-    return {
-        save,
-        remove,
-        findOne,
-        getAll
-    };
+    async getAll() { 
+        return await currencyDao.getAll() 
+    }
 }

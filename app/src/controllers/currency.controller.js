@@ -1,10 +1,13 @@
 import Status from 'http-status';
-import currencyService from '../services/currency.service';
+import CurrencyService from '../services/currency.service';
 
-export default ({ service } = { service: currencyService() }) => {
-    const { save, remove, getAll } = service;
+export default class CurrencyController {
+    
+    constructor(currencyService = new CurrencyService()) {
+        this.currencyService = currencyService;
+    }
 
-    async function post(req, res, next) {
+    post = async (req, res, next) => { 
         const { currency } = req.body;
 
         try {
@@ -16,10 +19,10 @@ export default ({ service } = { service: currencyService() }) => {
         }
     }
 
-    async function index(req, res, next) {
+    index = async (req, res, next) => {
         
         try {
-            const result = await getAll();
+            const result = await this.currencyService.getAll();
 
             return res.status(Status.OK).json(result);
         } catch (e) {
@@ -27,7 +30,7 @@ export default ({ service } = { service: currencyService() }) => {
         }
     }
 
-    async function del(req, res, next) {
+    del = async (req, res, next) => {
         const { currency } = req.body;
 
         try {
@@ -37,11 +40,5 @@ export default ({ service } = { service: currencyService() }) => {
         } catch (e) {
             next(e);
         }
-    }
-
-    return {
-        post,
-        index, 
-        del
     }
 }

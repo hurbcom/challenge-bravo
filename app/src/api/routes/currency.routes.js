@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import currencyController from '../../controllers/currency.controller';
+import CurrencyController from '../../controllers/currency.controller';
 
-export default ({ controller } = { controller: currencyController }) => {
-    const { post, index, del } = controller();
+export default () => {
+    const { post, index, del } = new CurrencyController();
     const router = Router();
     
     router.post('/currency', post);
