@@ -1,29 +1,50 @@
 import * as redis from 'redis';
 import { promisify } from 'util';
 import ExpressRedisCache from 'express-redis-cache';
+import env from '../config/env';
 
-export let instance = {};
+const singleton = Symbol();
+const singletonEnforcer = Symbol()
 
-function redisConnect() {
-    const client = redis.createClient({
-        host: 'redis-server'
-    });
+class Redis {
+    constructor(enforcer) {
+        if (enforcer != singletonEnforcer) {
+            throw new Error('Cannot instantiate redis singleton');
+        }
+        const client = redis.createClient({
+            host: env.redis.host
+        });
+        
+        client.getAsync = promisify(client.get).bind(client);
+        client.setAsync = promisify(client.set).bind(client);
 
-    const redisAsync = {
-        get: promisify(client.get).bind(client),
-        set: promisify(client.set).bind(client)
+        this._client = client;
+
+        this._httpCache = ExpressRedisCache({
+            client: client,
+            expire: 10, 
+        });
+
+        
+        client. ? console.log('[REDIS] Connected!') : console.log('[REDIS] Failed to connect!');
     }
 
-    client.on('connect', () => console.log('[ REDIS ] Connected!'));
-    client.on('error', (err) => console.log(`[ REDIS ] Failed to connect: ${err}`));
+    static get instance() {
+        if (!this[singleton]) {
+          this[singleton] = new Redis(singletonEnforcer);
+        }
+    
+        return this[singleton];
+      }
+    
 
-    const cache = ExpressRedisCache({
-        client: client,
-        expire: 10, 
-    });
+    async get(key) {
+        return await this.client.getAsync(key);
+    }
 
-    instance = { client: redisAsync, cache };
-    return instance;
+    async set(key, value) {
+        return await this.client.setAsync(key, value);
+    }
 }
 
-export default redisConnect;
+export default Redis;
