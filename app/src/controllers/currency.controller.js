@@ -11,7 +11,7 @@ export default class CurrencyController {
         const { currency } = req.body;
 
         try {
-            await save(currency);
+            await this.currencyService.save(currency);
 
             return res.status(Status.OK).send();
         } catch (e) {
@@ -34,7 +34,7 @@ export default class CurrencyController {
         const { currency } = req.body;
 
         try {
-            await remove(currency);
+            await this.currencyService.remove(currency);
 
             return res.status(Status.OK).json('Deleted');
         } catch (e) {
