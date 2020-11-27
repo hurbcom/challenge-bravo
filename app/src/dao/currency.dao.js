@@ -18,13 +18,13 @@ export default class CurrencyDao {
         return documents.map(doc => doc.get('currency'));
     }
 
-    async  remove(currency) {
+    async remove(currency) {
         const result = await CurrencySchema.deleteOne({ currency });
 
         return result.deletedCount;
     }
 
-    async  save(currency) {
+    async save(currency) {
         await CurrencySchema.create({ currency });
     }
 }
