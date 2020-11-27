@@ -9,7 +9,7 @@ export default () => {
     const { convert } = new ConversionController();
     const router = Router();
     
-    router.get('/conversion', validator, redis.httpCache().route(), convert);
+    router.get('/conversion', redis.httpCache().route(), validator, convert);
 
     return router;
 }
