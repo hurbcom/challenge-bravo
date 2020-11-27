@@ -13,10 +13,9 @@ const collections = seeder.readCollectionsFromPath(
     path.resolve(`${__dirname}/collections`)
 );
 
-collections.map(collection => console.log(JSON.stringify(collection)));
-
 seeder.import(collections).then(() => {
     console.log('MongoDB Seeding Success');
 }).catch(err => {
+    if (err.code == 11000) return; // duplication error
     console.log('MongoDB Seeding Error', err);
 });
