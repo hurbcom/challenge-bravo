@@ -1,22 +1,23 @@
 import { getRatesFromApi as getRates } from './external/exchangeRateApi';
-import { instance as redis } from '../databases/redis';
+import Redis from '../databases/redis';
 
 export default class ConversionService { 
     
-    constructor(exchangeRatesApi) {
+    constructor(exchangeRatesApi, redisInstance) {
         this._getRates = exchangeRatesApi || getRates;
+        this._redis = redisInstance || Redis.instance;
     }
 
     async calculateExchangeRate({ from, to, amount, reference }) {
         const cacheKey = `external-${from}-${to}`;
         
-        const cached = await redis.client.get(cacheKey);
+        const cached = await this._redis.get(cacheKey);
         if (cached) {
             return JSON.parse(cached);
         }
 
         const conversion = await this._getRates({ from, to, reference });
-        await redis.client.set(cacheKey, JSON.stringify(conversion), 'EX', 20);
+        await this._redis.set(cacheKey, JSON.stringify(conversion), 'EX', 20);
 
         const rate = (conversion[to] / conversion[from]);
         
