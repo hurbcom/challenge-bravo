@@ -1,4 +1,3 @@
-process.env.DEBUG = 'mongo-seeding';
 const path = require('path');
 const { Seeder } = require('mongo-seeding');
 const dotenv = require('dotenv');
