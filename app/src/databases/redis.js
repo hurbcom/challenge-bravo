@@ -26,6 +26,9 @@ class Redis {
         });
     }
 
+    /**
+     * @returns {Redis} a Redis instance
+     */
     static get instance() {
         if (!this[singleton]) {
           this[singleton] = new Redis(singletonEnforcer);
@@ -36,11 +39,15 @@ class Redis {
     
 
     async get(key) {
-        return await this.client.getAsync(key);
+        return await this._client.getAsync(key);
     }
 
     async set(key, value) {
-        return await this.client.setAsync(key, value);
+        return await this._client.setAsync(key, value);
+    }
+
+    httpCache() {
+        return this._httpCache;
     }
 }
 
