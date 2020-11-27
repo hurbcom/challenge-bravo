@@ -22,8 +22,6 @@ services:
     container_name: mongodb
     image: mongo:latest
     restart: unless-stopped
-    volumes:
-      - mongo-data:/data
     ports:
       - '27017:27017'
     command: mongod --quiet --logpath /dev/null
@@ -36,9 +34,6 @@ services:
       - "6379:6379"
     networks:
       - bravo
-
-volumes:
-    mongo-data:
 
 networks:
   bravo:
