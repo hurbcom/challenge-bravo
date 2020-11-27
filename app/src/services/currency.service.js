@@ -9,23 +9,23 @@ export default class CurrencyService {
     }
 
     async save(currency) {
-        const foundCurrency = await currencyDao.findByName(currency);
+        const foundCurrency = await this.currencyDao.findByName(currency);
 
         if (foundCurrency) {
             throw new Conflict('Currency already exists.')
         }
 
-        await currencyDao.save(currency);
+        await this.currencyDao.save(currency);
     }
 
     async remove(currency) {
-        const foundCurrency = await currencyDao.findByName(currency);
+        const foundCurrency = await this.currencyDao.findByName(currency);
 
         if (!foundCurrency) {
             throw new NotFound(`${currency} not found.`);
         }
 
-        const deleteCount = await currencyDao.remove(currency);
+        const deleteCount = await this.currencyDao.remove(currency);
         
         if (deleteCount !== 1) {
             throw new Error('Failed to delete.');
@@ -33,7 +33,7 @@ export default class CurrencyService {
     }
 
     async findOne(currency) {
-        const foundCurrency = await currencyDao.findByName(currency);
+        const foundCurrency = await this.currencyDao.findByName(currency);
 
         if (!foundCurrency) {
             throw new NotFound(`${currency} not found.`);
@@ -43,6 +43,6 @@ export default class CurrencyService {
     }
 
     async getAll() { 
-        return await currencyDao.getAll() 
+        return await this.currencyDao.getAll() 
     }
 }
