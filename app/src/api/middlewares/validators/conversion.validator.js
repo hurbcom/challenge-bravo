@@ -2,8 +2,8 @@ import { BadRequest } from "../error/model/HttpError";
 import CurrencyService from '../../../services/currency.service';
 
 async function checkAllowedCurrencies(currencies) {
-    const { getAll } = new CurrencyService();
-    const allCurrencies = await getAll();
+    const service = new CurrencyService();
+    const allCurrencies = await service.getAll();
 
     for (const key in currencies) {
         const found = allCurrencies.find(currency => currency === currencies[key]);
