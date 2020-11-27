@@ -99,5 +99,6 @@ dessa forma quando essa chamada resolver dispararia um evento com a conversão p
 ### Melhorias
 
 - Utilizar swagger para documentar a api.
+- Utilizar alguma lib de log como o *winston*.
 - Aumentar a cobertura de testes.
 - Sistema de fila com *pub/sub* descrito na sessão de [caching](https://github.com/gustavares/challenge-bravo/tree/master/app#Caching)
