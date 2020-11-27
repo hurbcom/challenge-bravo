@@ -1,20 +1,28 @@
 import sinon from 'sinon';
+import chai, { assert } from 'chai';
 import * as redis from 'redis';
 import redisMock from 'redis-mock';
-import redisConnect from '../../src/databases/redis';
+import Redis from '../../src/databases/redis';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 let mongoServer;
+let createClientStub;
 
 before(async () => {
     mongoServer = new MongoMemoryServer();
     const mongoUri = await mongoServer.getUri();
     await mongoose.connect(mongoUri);
 
-    sinon.stub(redis, 'createClient').callsFake(() => redisMock.createClient());
+    createClientStub = sinon.stub(redis, 'createClient').callsFake(() => redisMock.createClient());
 
-    await redisConnect();
+    Redis.instance;
+});
+
+describe('Redis in memory instance',() => {
+    it('should call createClient stub function', () => {
+        assert(createClientStub.calledOnce, true);
+    });
 });
 
 after(async () => {
