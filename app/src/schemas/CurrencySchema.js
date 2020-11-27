@@ -9,4 +9,4 @@ const CurrencySchema = new Schema(
     }
 );
 
-export default mongoose.model('Currency', CurrencySchema);
+export default mongoose.model('Currency', CurrencySchema, 'currencies');
