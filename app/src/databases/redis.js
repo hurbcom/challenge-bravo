@@ -24,9 +24,6 @@ class Redis {
             client: client,
             expire: 10, 
         });
-
-        
-        client. ? console.log('[REDIS] Connected!') : console.log('[REDIS] Failed to connect!');
     }
 
     static get instance() {
