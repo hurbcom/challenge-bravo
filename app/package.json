@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec babel-node ./src/index.js",
-    "seed": "babel-node ./src/databases/seeds/index.js",
+    "seed": "node ./src/databases/seeds/index.js",
     "test": "mocha --timeout 120000 --require @babel/register './__test__/**/*.test.js'",
     "build": "npm run clean && babel src --out-dir lib",
     "clean": "rm -rf ./lib && mkdir lib",
