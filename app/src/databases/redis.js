@@ -46,6 +46,10 @@ class Redis {
         return await this._client.setAsync(key, value);
     }
 
+    client() {
+        return this._client;
+    }
+
     httpCache() {
         return this._httpCache;
     }
