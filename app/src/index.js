@@ -1,11 +1,11 @@
 import server from './api/server';
 import mongoConnect from './databases/mongo';
-import redis from './databases/redis';
+import redisConnect from './databases/redis';
 import env from './config/env';
 
 (async () => {
     try {
-        redis.connect();
+        redisConnect();
         await mongoConnect();
         
         const app = server.start();
