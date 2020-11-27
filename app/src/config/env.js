@@ -12,5 +12,9 @@ export default {
     mongo: {
         connectionString: process.env.MONGO_URL,
         name: process.env.MONGO_NAME
+    },
+    redis: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT
     }
 }
