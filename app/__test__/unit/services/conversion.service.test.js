@@ -14,9 +14,7 @@ describe('services/conversion.service.js', () => {
             'EUR': 0.8
         });
         
-        service = ConversionService({
-            getRates: getRatesFromApiMock
-        });
+        service = new ConversionService(getRatesFromApiMock);
     });
 
     describe('calculateExchangeRate()', () => {
