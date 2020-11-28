@@ -3,13 +3,16 @@ services:
   bravo_api:
     build: 
       context: .
-      dockerfile: Dockerfile.production
+      dockerfile: Dockerfile.development
     depends_on: 
       - mongo
       - redis-server
     restart: always
     ports:
       - 3030:3030
+    volumes:
+      - .:/usr/app
+      - /usr/app/node_modules
     environment:
       WAIT_HOSTS: mongo:27017
     networks:
