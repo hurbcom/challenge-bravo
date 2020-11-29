@@ -24,7 +24,7 @@ app.get('/', (req, res) =>
 
 // Iniciar aplicação na porta específica
 app.listen(port, () => {
-    console.log("🚀 API rodando em http://localhost:3301/");
+    console.log("API rodando em http://localhost:3301/");
 });
 
 app.use(cors());

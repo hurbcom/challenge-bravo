@@ -26,6 +26,7 @@
     "express": "^4.17.1",
     "express-joi-validation": "^5.0.0",
     "express-validator": "^6.7.0",
+    "got": "^11.8.0",
     "joi": "^17.3.0",
     "mongoose": "^5.10.17",
     "nodemon": "^2.0.6"

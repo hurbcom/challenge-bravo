@@ -1,25 +1,75 @@
-const currencyService = require('../services/currencyService');
-const converterService = require('../services/converterService');
+// Importar Mongoose
+var mongoose = require('mongoose');
+let got = require('got');
 
-module.exports = {
+const Currency = require('../models/currencyModel');
+const { validationResult } = require('express-validator');
 
-// Lista todos os planetas armazenados
-    async index (req, res) {
-        try {
-            const response = await currencyService.index();
-            return res.status(200).json(response);
-        } catch (err) {
-            return res.status(404).json(err);
-        }
-    },
+// Lista todas as moedas armazenadas
+exports.findAll = function (req, res) {
 
-// Armazenar novos planetas
-    async new (req, res) {
-        try {
-            const response = await currencyService.new();
-            return res.status(200).json(response);
-        } catch (err) {
-            return res.status(404).json(err);
-        }
+    Currency.find()
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || 'Erro ao recuperar moedas.'
+            });
+        });
+};
+
+// Armazenar novas moedas
+exports.create = async function (req, res) {
+
+    const { errors } = validationResult(req);
+
+    if(errors.length > 0) {
+        return res.status(400).send({
+            message: errors
+        })
     }
+
+    const currency = new Currency({
+        sigla: req.body.sigla,
+        nome: req.body.nome,
+    });
+
+    // Salva a moeda e checa por erros
+    currency
+        .save(currency)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: 
+                    err.message || 'Erro ao cadastrar moeda:' + req.body.sigla
+            });
+        });
 }
+
+// Deletar uma moeda específica pelo ID
+exports.delete = async function (req, res) {
+
+    const id = req.params.currency_id;
+
+    Currency.findByIdAndRemove(id)
+    .then(currency => {
+        if (!currency) {
+            res.status(404).send({
+                message: 'Não foi possível deletar a moeda com ID: '+ id + '. Talvez ela não tenha sido encontrada!'
+            });
+        } else {
+            res.send({
+                message: 'Moeda deletada com sucesso!'
+            });
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: 'Erro ao deletar moeda com ID:' + id
+        });
+    });
+};

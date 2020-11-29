@@ -1,10 +1,10 @@
 let cors = require('cors');
+
 // Inicializa o Router Express
 const express = require('express');
 const router = express.Router();
 
-const validator = require('express-joi-validation').createValidator({})
-const Validation =  require('../middleware/validator')
+const { body, query, check } = require("express-validator");
 
 router.use(cors());
 
@@ -16,24 +16,17 @@ router.get('/', function (req, res) {
     });
 });
 
-// Importa o controller de planetas
+// Importa o controller de moedas
 var currencyController = require('../controllers/currencyController');
-var currencyService = require('../services/currencyService');
 
-//router.get('/currencies/list', currencyController.index)
-//router.put('/currencies/list', validator.body(Validation.bodySchema), currencyController.new)
+router.get('/currencies/list', currencyController.findAll)
+router.post('/currencies/new', [
+    body('sigla').isIn([ 'USD', 'BRL', 'EUR', 'BTC', 'ETH' ]).withMessage("Esta moeda não é suportada pela API."),
+    body('sigla').isUppercase().withMessage("A sigla da moeda deve ser digitada em maiúsculo."),
+    body('sigla').isLength({ min: 3, max: 3 }).withMessage("A sigla da moeda deve possuir 3 caracteres."),
+    body('nome').isLength({ min: 3, max: 100 }).withMessage("O nome da moeda precisa ter no mínimo 3 caracteres e no máximo 100.")
+], currencyController.create)
+router.delete('/currencies/remove/id/:currency_id', currencyController.delete)
 
-router.route('/currencies/list')
-    .get(currencyService.index)
-
-router.route('/currencies/new')
-    .post(currencyService.new);
-
-router.route('/currencies/remove/id/:currency_id')
-    .delete(currencyService.delete);
-
-/*router.route('/:id')
-    .delete(CurrencyController.delete);
-*/
 // Exportar endpoints da API
 module.exports = router;

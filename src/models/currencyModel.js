@@ -3,8 +3,15 @@ const { Schema } = mongoose;
 
 // Configura o schema
 const currencySchema = new Schema({
-    sigla: String,
-    nome: String
+    sigla: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    nome: {
+        type: String,
+        required: true
+    },
 });
 
 var Currency = module.exports = mongoose.model("Currency", currencySchema);
