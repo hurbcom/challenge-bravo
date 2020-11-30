@@ -4,7 +4,7 @@ let cors = require('cors');
 const express = require('express');
 const router = express.Router();
 
-const { body, query, check } = require("express-validator");
+const { body, query } = require("express-validator");
 
 router.use(cors());
 
@@ -18,6 +18,8 @@ router.get('/', function (req, res) {
 
 // Importa o controller de moedas
 var currencyController = require('../controllers/currencyController');
+// Importa o controller de conversão
+var converterController = require('../controllers/converterController');
 
 router.get('/currencies/list', currencyController.findAll)
 router.post('/currencies/new', [
@@ -27,6 +29,15 @@ router.post('/currencies/new', [
     body('nome').isLength({ min: 3, max: 100 }).withMessage("O nome da moeda precisa ter no mínimo 3 caracteres e no máximo 100.")
 ], currencyController.create)
 router.delete('/currencies/remove/id/:currency_id', currencyController.delete)
+    
+router.get('/convert', [
+    query('from').notEmpty().withMessage("A moeda de origem deve ser informada."),
+    query('from').isUppercase().withMessage("A sigla da moeda de origem deve ser digitada em maiúsculo."),
+    query('to').notEmpty().withMessage("A moeda de destino deve ser informada."),
+    query('to').isUppercase().withMessage("A sigla da moeda de destino deve ser digitada em maiúsculo."),
+    query('amount').notEmpty().withMessage("O valor para conversão deve ser informado."),
+    query('amount').isFloat({ gt: 0 }).withMessage("O valor precisa ser maior que zero.")
+], converterController.convert)
 
 // Exportar endpoints da API
 module.exports = router;

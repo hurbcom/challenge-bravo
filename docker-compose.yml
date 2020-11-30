@@ -1,9 +1,19 @@
-version: "3"
+version: "3.1"
 services:
-  backend:
-    image: node:latest
-    volumes:
-      - ./backend:/backend
+  nodejs:
+    container_name: nodejs
+    build: .
+    restart: unless-stopped
+    env_file: .env
     ports:
-      - 3000:3000
-    command: bash -c "cd /backend && yarn install && yarn run knex:migrate && yarn run dev"
+      - "3301:3301"
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_CLUSTER=$MONGO_CLUSTER
+      - MONGO_DB=$MONGO_DB
+      - CURRCONV_API_URL=$CURRCONV_API_URL
+      - CURRCONV_API_KEY=$CURRCONV_API_KEY
+    volumes:
+      - .:/usr/src/app
+      - ./node_modules:/usr/src/app/node_modules
