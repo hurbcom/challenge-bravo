@@ -1,5 +1,5 @@
 ## Git history
-This fork developent history is in the my [code challenge repos branch](https://github.com/ozzono/code-challenge/tree/hurb-challenge/hurb)
+This forks previous developent history is in the my [code challenge repos branch](https://github.com/ozzono/code-challenge/tree/hurb-challenge/hurb)
 
 ## Known Issues
 - This code depends of the used api endpoints to work properly, so this test automatically inherit its dependencies limitations. The most problematic limitation is described below.
@@ -12,4 +12,4 @@ This fork developent history is in the my [code challenge repos branch](https://
             - `Here's your free API key: <20characterkeyhere>`
         - When editing the url for challenge test, add the argument _&key=\<keystringyoujustgot\>_
     - Done as suggested, there should be no issues, at least for single requests.
-    - I coded the stress test and kept it in the internal test file but disabled it from the test flow. Luckily I made enough tests to give me confidence it is working properly.
+    - I coded the stress test and kept it in the internal test file but limited to a single request.
