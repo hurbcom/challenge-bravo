@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -50,23 +52,42 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = m.checkDB()
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
-func (m *mongodb) checkDB() error {
-	databases, err := m.client.ListDatabaseNames(m.ctx, bson.M{})
+func (m *mongodb) findDB(dbName string) (mongo.DatabaseSpecification, error) {
+	databases, err := m.client.ListDatabases(m.ctx, bson.M{})
 	if err != nil {
-		return fmt.Errorf("ListDatabaseNames err: %v", err)
+		return mongo.DatabaseSpecification{}, fmt.Errorf("ListDatabaseNames err: %v", err)
 	}
-	log.Printf("%+v\n", databases)
-	return nil
+	mapDB := map[string]mongo.DatabaseSpecification{}
+	for _, db := range databases.Databases {
+		mapDB[db.Name] = db
+	}
+	_, ok := mapDB[dbName]
+	if !ok {
+		return mongo.DatabaseSpecification{}, fmt.Errorf("%s database not found", dbName)
+	}
+
+	return mapDB[dbName], nil
 }
 
 func (m *mongodb) fillDB() error {
 	database := m.client.Database("hurb-challenge")
+	collections, err := database.ListCollectionNames(m.ctx, bson.M{})
+	if err != nil {
+		return fmt.Errorf("ListCollectionNames err: %v", err)
+	}
+	for i := range collections {
+		if collections[i] == "currencies" {
+			log.Println("This script will drop the currencies database")
+			waitEnter()
+			err = database.Collection("currencies").Drop(m.ctx)
+			if err != nil {
+				return fmt.Errorf("InsertOne err: %v", err)
+			}
+		}
+	}
+
 	currList := database.Collection("currencies")
 	results := []*mongo.InsertOneResult{}
 	for i := range currencies {
@@ -85,7 +106,7 @@ func (m *mongodb) fillDB() error {
 }
 
 func newMongoClient() (mongodb, error) {
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://hurb:randomhze3185JFK@localhost:28017"))
+	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb+srv://hurb:randomhze3185JFK@hurb-challenge.qkuww.mongodb.net/hurb?retryWrites=true&w=majority"))
 	if err != nil {
 		return mongodb{}, err
 	}
@@ -102,4 +123,11 @@ func newMongoClient() (mongodb, error) {
 		close()
 		client.Disconnect(ctx)
 	}}, nil
+}
+
+func waitEnter() {
+	log.Printf("Press <enter> to continue or <ctrl+c> to interrupt")
+	bufio.NewReader(os.Stdin).ReadBytes('\n')
+	log.Printf("Now, where was I?")
+	log.Printf("Oh yes...\n\n")
 }
