@@ -39,7 +39,7 @@ func startServer() error {
 	r := mux.NewRouter()
 	log.Println("new router")
 	r.HandleFunc("/exchange", exchange).Methods("GET")
-	r.HandleFunc("/list", listCurrencies).Methods("GET")
+	r.HandleFunc("/add", addCurrency).Methods("GET")
 	if len(errList) > 0 {
 		errOutput := ""
 		for i := range errList {
@@ -52,17 +52,20 @@ func startServer() error {
 	return nil
 }
 
-func listCurrencies(w http.ResponseWriter, r *http.Request) {
+func addCurrency(w http.ResponseWriter, r *http.Request) {
 	args, err := currenciesArgs(r)
 	if err != nil {
-		errList = append(errList, err)
-		w.Write([]byte(fmt.Sprint(err)))
+		w.Write(errJSON(err))
 		return
 	}
-
-	_, ok := supportedCurrencies()[args.name]
+	currList, err := supportedCurrencies()
+	if err != nil {
+		w.Write(errJSON(err))
+		return
+	}
+	_, ok := currList[args.name]
 	if ok {
-		w.Write([]byte(fmt.Sprintf("%s currency already supported", args.name)))
+		w.Write(successJSON(fmt.Sprintf("%s currency already supported", args.name)))
 		return
 	}
 
@@ -80,12 +83,24 @@ func listCurrencies(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if found {
-		w.Write([]byte(fmt.Sprintf("{\"success\":\"%s %s currency can be added to support list\"}", currType, args.name)))
-	} else {
-		w.Write([]byte(fmt.Sprintf("{\"error\":\"unable to support %s %s currency\"}", currType, args.name)))
+	if !found {
+		w.Write(errJSON(fmt.Errorf("unable to support %s %s currency", currType, args.name)))
+		return
 	}
-	return
+	m, err := newMongoClient()
+	defer m.close()
+	if err != nil {
+		w.Write(errJSON(fmt.Errorf("newMongoClient err: %v", err)))
+		return
+	}
+
+	err = m.addCurr(args)
+	if err != nil {
+		w.Write(errJSON(fmt.Errorf("addCurr err: %v", err)))
+		return
+	}
+
+	w.Write(successJSON(fmt.Sprint("%s %s currency succesfully added to support list", currType, args.name)))
 }
 
 func exchange(w http.ResponseWriter, r *http.Request) {
@@ -197,6 +212,10 @@ func errJSON(err error) []byte {
 	return []byte(fmt.Sprintf("{\"error\":\"%v\"}", err))
 }
 
+func successJSON(output string) []byte {
+	return []byte(fmt.Sprintf("{\"success\":\"%v\"}", output))
+}
+
 func exchangeOutput(from, to string, value float64) []byte {
 	return []byte(fmt.Sprintf("{\"%s_%s\":%.2f}", from, to, value))
 }
@@ -269,14 +288,17 @@ func exchangeArgs(r *http.Request) (args, error) {
 	return output, nil
 }
 
-func supportedCurrencies() map[string]currency {
-	return map[string]currency{
-		"USD": {name: "USD", crypto: false},
-		"BRL": {name: "BRL", crypto: false},
-		"EUR": {name: "EUR", crypto: false},
-		"BTC": {name: "BTC", crypto: true},
-		"ETH": {name: "ETH", crypto: true},
+func supportedCurrencies() (map[string]currency, error) {
+	m, err := newMongoClient()
+	defer m.close()
+	if err != nil {
+		return map[string]currency{}, err
 	}
+	currencies, err := m.listCurr()
+	if err != nil {
+		return map[string]currency{}, err
+	}
+	return currencies, nil
 }
 
 func toString(i interface{}) string {
