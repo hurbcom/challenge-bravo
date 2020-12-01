@@ -3,8 +3,6 @@ package hurb
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"sync"
 	"testing"
 	"time"
@@ -18,7 +16,6 @@ var (
 
 type testme struct {
 	t     *testing.T
-	mongo db
 	close func()
 }
 
@@ -30,19 +27,26 @@ func TestHurb(t *testing.T) {
 	time.Sleep(1 * time.Second)
 
 	test.stressTest()
-	test.listsTests()
-
 	test.mongoDB()
-	defer test.mongo.close()
+	test.addCurrTests(currency{"nok", false})
+	test.addCurrTests(currency{"ltc", true})
+
 }
 
 func (test *testme) mongoDB() error {
-	test.t.Log("starting mongodb test")
-	client, err := newMongoClient()
+	test.t.Log("starting mongo db test flow")
+	m, err := newMongoClient()
+	if err != nil {
+		m.close()
+		return err
+	}
+	defer m.close()
+
+	_, err = m.listCurr()
 	if err != nil {
 		return err
 	}
-	test.mongo = client
+	test.t.Log("finished mongo db test flow")
 	return nil
 }
 
@@ -74,82 +78,56 @@ func (test *testme) stressTest() {
 	}
 }
 
+func (test *testme) addCurrTest() error {
+
+	return nil
+}
+
 func (test *testme) exchangeTest(i int) error {
 	test.t.Log("starting exchange test")
 	defer loopWG.Done()
 	test.t.Logf("exchange test %d", i)
 
 	url := "http://localhost:8888/exchange?from=btc&to=brl&amount=1&key=" + apiKey
-
-	req, err := http.NewRequest("GET", url, nil)
+	body, err := defaultRequest(url)
 	if err != nil {
-		errList = append(errList, fmt.Errorf("err from exchangeTest: %v", err))
 		return err
 	}
 
-	res, err := http.DefaultClient.Do(req)
+	err = parseBody([]byte(body))
 	if err != nil {
-		errList = append(errList, fmt.Errorf("err from exchangeTest: %v", err))
 		return err
 	}
 
-	defer res.Body.Close()
-	_, err = ioutil.ReadAll(res.Body)
-	if err != nil {
-		errList = append(errList, fmt.Errorf("err from exchangeTest: %v", err))
-		return err
-	}
 	test.t.Logf("finished test %d", i)
 	return nil
 }
-func (test *testme) listsTests() {
-	test.t.Log("starting lists test")
-	curr, err := map[string]string{}, fmt.Errorf("")
 
-	curr, err = listCurrencyTest("abcdefg", true)
-	if err == nil {
-		test.t.Fatalf("returned <nil> when it should be non-nil: %+v", curr)
-	}
-
-	curr, err = listCurrencyTest("ltc", true)
+func (test *testme) addCurrTests(curr currency) {
+	test.t.Logf("testing addCurr with %s currency", curr.name)
+	url := fmt.Sprintf("http://localhost:8888/add?currency=%s&isCrypto=%t", curr.name, curr.crypto)
+	body, err := defaultRequest(url)
 	if err != nil {
 		test.t.Fatal(err)
 	}
-	_, ok := curr["error"]
-	if ok {
-		test.t.Fatalf("%v", curr["error"])
-	}
 
-	curr, err = listCurrencyTest("abcdefg", false)
-	if err == nil {
-		test.t.Fatalf("returned <nil> when it should be non-nil: %+v", curr)
-	}
-
-	curr, err = listCurrencyTest("nok", false)
+	err = parseBody([]byte(body))
 	if err != nil {
 		test.t.Fatal(err)
 	}
-	_, ok = curr["error"]
-	if ok {
-		test.t.Fatalf("%v", curr["error"])
-	}
 
-	test.t.Log("finished currencies listing test")
+	test.t.Logf("successfully tested addCurr")
 }
 
-func listCurrencyTest(currency string, cryto bool) (map[string]string, error) {
-	body, err := defaultRequest(fmt.Sprintf("http://localhost:8888/list?currency=%s&isCrypto=%t", currency, cryto))
+func parseBody(body []byte) error {
+	output := args{}
+	err := json.Unmarshal([]byte(body), &output)
 	if err != nil {
-		return map[string]string{}, err
+		return err
 	}
-	args := map[string]string{}
-	err = json.Unmarshal([]byte(body), &args)
-	if err != nil {
-		return args, err
-	}
-	_, ok := args["error"]
+	_, ok := output["error"]
 	if ok {
-		return map[string]string{}, fmt.Errorf(args["error"])
+		return fmt.Errorf("%v", output["error"])
 	}
-	return args, nil
+	return nil
 }

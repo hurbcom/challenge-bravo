@@ -53,7 +53,7 @@ func startServer() error {
 }
 
 func addCurrency(w http.ResponseWriter, r *http.Request) {
-	args, err := currenciesArgs(r)
+	args, err := addCurrArgs(r)
 	if err != nil {
 		w.Write(errJSON(err))
 		return
@@ -100,7 +100,7 @@ func addCurrency(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write(successJSON(fmt.Sprint("%s %s currency succesfully added to support list", currType, args.name)))
+	w.Write(successJSON(fmt.Sprintf("%s %s currency succesfully added to support list", currType, args.name)))
 }
 
 func exchange(w http.ResponseWriter, r *http.Request) {
@@ -161,7 +161,11 @@ func currencyToUSD(args args) (float64, error) {
 	if inputCurrency == "USD" {
 		return float64(1), nil
 	}
-	isCrypto := supportedCurrencies()[strings.ToUpper(toString(args["currency"]))].crypto
+	currList, err := supportedCurrencies()
+	if err != nil {
+		return float64(0), err
+	}
+	isCrypto := currList[inputCurrency].crypto
 
 	endpoint := endpoints["regular"]
 	url := fmt.Sprintf(endpoint.url, inputCurrency, args["key"])
@@ -171,9 +175,6 @@ func currencyToUSD(args args) (float64, error) {
 	}
 
 	log.Printf("fetching %s to usd ratio from %s endpoint", inputCurrency, strings.ToLower(endpoint.name))
-	if !supportedCurrencies()[strings.ToUpper(fmt.Sprint(args["currency"]))].crypto {
-		// adds api key if  currency is non crypto
-	}
 
 	body, err := defaultRequest(url)
 	if err != nil {
@@ -182,7 +183,6 @@ func currencyToUSD(args args) (float64, error) {
 
 	type out interface{}
 	jsonData := map[string]out{}
-	log.Printf("unmarshaling output body")
 	err = json.Unmarshal([]byte(body), &jsonData)
 	if err != nil {
 		return float64(0), fmt.Errorf("json.Unmarshal err: %v", err)
@@ -220,7 +220,7 @@ func exchangeOutput(from, to string, value float64) []byte {
 	return []byte(fmt.Sprintf("{\"%s_%s\":%.2f}", from, to, value))
 }
 
-func currenciesArgs(r *http.Request) (currency, error) {
+func addCurrArgs(r *http.Request) (currency, error) {
 	log.Printf("validating currencies query arguments")
 	currName := r.FormValue("currency")
 	if len(currName) == 0 {
@@ -249,19 +249,24 @@ func exchangeArgs(r *http.Request) (args, error) {
 	if len(from) == 0 {
 		return args{}, fmt.Errorf("invalid 'from' value; cannot be empty")
 	}
-	_, ok := supportedCurrencies()[strings.ToUpper(from)]
+
+	currList, err := supportedCurrencies()
+	if err != nil {
+		return args{}, err
+	}
+
+	_, ok := currList[strings.ToUpper(from)]
 	if !ok {
 		return args{}, fmt.Errorf("%s currency not supported", from)
 	}
-	output := args{}
-	output["from"] = from
+	output := args{"from": from}
 	log.Printf("valid 'from'")
 
 	to := r.FormValue("to")
 	if len(to) == 0 {
 		return args{}, fmt.Errorf("invalid 'to' value; cannot be empty")
 	}
-	_, ok = supportedCurrencies()[strings.ToUpper(to)]
+	_, ok = currList[strings.ToUpper(to)]
 	if !ok {
 		return args{}, fmt.Errorf("%s currency not supported", to)
 	}
@@ -277,28 +282,25 @@ func exchangeArgs(r *http.Request) (args, error) {
 		return args{}, fmt.Errorf("invalid amount format: %v", err)
 	}
 	output["amount"] = amount
+	log.Printf("valid 'amount'")
 
 	apiKey := r.FormValue("key")
 	if len(apiKey) == 0 {
+		log.Println("using default currconv api key")
 		apiKey = defaultAPIKey
 	}
 	output["key"] = apiKey
 
-	log.Printf("valid 'amount'")
 	return output, nil
 }
 
 func supportedCurrencies() (map[string]currency, error) {
 	m, err := newMongoClient()
+	if err != nil {
+		return map[string]currency{}, err
+	}
 	defer m.close()
-	if err != nil {
-		return map[string]currency{}, err
-	}
-	currencies, err := m.listCurr()
-	if err != nil {
-		return map[string]currency{}, err
-	}
-	return currencies, nil
+	return m.listCurr()
 }
 
 func toString(i interface{}) string {
