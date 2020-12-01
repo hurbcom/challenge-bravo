@@ -28,8 +28,10 @@ func TestHurb(t *testing.T) {
 
 	test.stressTest()
 	test.mongoDB()
-	test.addCurrTests(currency{"nok", false})
-	test.addCurrTests(currency{"ltc", true})
+	test.addCurrTest(currency{"nok", false})
+	test.addCurrTest(currency{"ltc", true})
+	test.rmCurrTest(currency{"nok", false})
+	test.rmCurrTest(currency{"ltc", true})
 
 }
 
@@ -78,11 +80,6 @@ func (test *testme) stressTest() {
 	}
 }
 
-func (test *testme) addCurrTest() error {
-
-	return nil
-}
-
 func (test *testme) exchangeTest(i int) error {
 	test.t.Log("starting exchange test")
 	defer loopWG.Done()
@@ -103,7 +100,7 @@ func (test *testme) exchangeTest(i int) error {
 	return nil
 }
 
-func (test *testme) addCurrTests(curr currency) {
+func (test *testme) addCurrTest(curr currency) {
 	test.t.Logf("testing addCurr with %s currency", curr.name)
 	url := fmt.Sprintf("http://localhost:8888/add?currency=%s&isCrypto=%t", curr.name, curr.crypto)
 	body, err := defaultRequest(url)
@@ -117,6 +114,22 @@ func (test *testme) addCurrTests(curr currency) {
 	}
 
 	test.t.Logf("successfully tested addCurr")
+}
+
+func (test *testme) rmCurrTest(curr currency) {
+	test.t.Logf("testing rmCurr with %s currency", curr.name)
+	url := fmt.Sprintf("http://localhost:8888/rm?currency=%s", curr.name)
+	body, err := defaultRequest(url)
+	if err != nil {
+		test.t.Fatal(err)
+	}
+
+	err = parseBody([]byte(body))
+	if err != nil {
+		test.t.Fatal(err)
+	}
+
+	test.t.Logf("successfully tested rmCurr")
 }
 
 func parseBody(body []byte) error {

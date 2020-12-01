@@ -40,6 +40,7 @@ func startServer() error {
 	log.Println("new router")
 	r.HandleFunc("/exchange", exchange).Methods("GET")
 	r.HandleFunc("/add", addCurrency).Methods("GET")
+	r.HandleFunc("/rm", rmCurrency).Methods("GET")
 	if len(errList) > 0 {
 		errOutput := ""
 		for i := range errList {
@@ -50,6 +51,28 @@ func startServer() error {
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8888", nil))
 	return nil
+}
+
+func rmCurrency(w http.ResponseWriter, r *http.Request) {
+	log.Println("starting rm currency flow")
+	currValue := r.FormValue("currency")
+	if len(currValue) == 0 {
+		w.Write(errJSON(fmt.Errorf("invalid currency; cannot be empty")))
+		return
+	}
+	m, err := newMongoClient()
+	if err != nil {
+		m.close()
+		w.Write(errJSON(fmt.Errorf("newMongoClient err: %v", err)))
+		return
+	}
+	defer m.close()
+	err = m.rmCurr(currency{name: currValue})
+	if err != nil {
+		w.Write(errJSON(err))
+		return
+	}
+	w.Write(successJSON(fmt.Sprintf("successfully removed %s currency from support list", currValue)))
 }
 
 func addCurrency(w http.ResponseWriter, r *http.Request) {
