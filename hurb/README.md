@@ -13,3 +13,6 @@ This forks previous developent history is in the my [code challenge repos branch
         - When editing the url for challenge test, add the argument _&key=\<keystringyoujustgot\>_
     - Done as suggested, there should be no issues, at least for single requests.
     - I coded the stress test and kept it in the internal test file but limited to a single request.
+
+## MongoDB setup and http-handler setup
+Run `setup/setup` to boot start the challenge settings. This command starts the local server for the challenge after clearing the MongoDB database and refilling it with default data.
