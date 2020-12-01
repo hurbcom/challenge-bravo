@@ -28,10 +28,45 @@ func TestHurb(t *testing.T) {
 
 	test.stressTest()
 	test.mongoDB()
-	test.addCurrTest(currency{"nok", false})
-	test.addCurrTest(currency{"ltc", true})
-	test.rmCurrTest(currency{"nok", false})
-	test.rmCurrTest(currency{"ltc", true})
+	test.mngCurrTest()
+}
+
+func (test *testme) mngCurrTest() {
+
+	err := test.addCurrTest(currency{"nok", false})
+	if err != nil {
+		test.t.Fatal(err)
+	}
+
+	err = test.addCurrTest(currency{"abcefg", false})
+	if err == nil {
+		test.t.Fatal(fmt.Errorf("err is <nil> when it should not "))
+	}
+
+	err = test.addCurrTest(currency{"ltc", true})
+	if err != nil {
+		test.t.Fatal(err)
+	}
+
+	err = test.addCurrTest(currency{"abcefg", true})
+	if err == nil {
+		test.t.Fatal(fmt.Errorf("err is <nil> when it should not "))
+	}
+
+	err = test.rmCurrTest(currency{"nok", false})
+	if err != nil {
+		test.t.Fatal(err)
+	}
+
+	err = test.rmCurrTest(currency{"ltc", true})
+	if err != nil {
+		test.t.Fatal(err)
+	}
+
+	err = test.rmCurrTest(currency{"abcefg", true})
+	if err != nil {
+		test.t.Fatal(err)
+	}
 }
 
 func (test *testme) mongoDB() error {
@@ -55,7 +90,7 @@ func (test *testme) startServer() {
 	var wg sync.WaitGroup
 	test.t.Log("starting server")
 	wg.Add(1)
-	go startServer()
+	go StartServer()
 	test.close = func() {
 		test.t.Log("closing server")
 		wg.Done()
@@ -90,7 +125,7 @@ func (test *testme) exchangeTest(i int) error {
 		return err
 	}
 
-	err = parseBody([]byte(body))
+	err = test.parseBody([]byte(body))
 	if err != nil {
 		return err
 	}
@@ -99,43 +134,46 @@ func (test *testme) exchangeTest(i int) error {
 	return nil
 }
 
-func (test *testme) addCurrTest(curr currency) {
+func (test *testme) addCurrTest(curr currency) error {
 	test.t.Logf("testing addCurr with %s currency", curr.name)
 	url := fmt.Sprintf("http://localhost:8888/add?currency=%s&isCrypto=%t", curr.name, curr.crypto)
 	body, err := defaultRequest(url)
 	if err != nil {
-		test.t.Fatal(err)
+		return err
 	}
 
-	err = parseBody([]byte(body))
+	err = test.parseBody([]byte(body))
 	if err != nil {
-		test.t.Fatal(err)
+		return err
 	}
 
 	test.t.Logf("successfully tested addCurr")
+	return nil
 }
 
-func (test *testme) rmCurrTest(curr currency) {
+func (test *testme) rmCurrTest(curr currency) error {
 	test.t.Logf("testing rmCurr with %s currency", curr.name)
 	url := fmt.Sprintf("http://localhost:8888/rm?currency=%s", curr.name)
 	body, err := defaultRequest(url)
 	if err != nil {
-		test.t.Fatal(err)
+		return err
 	}
 
-	err = parseBody([]byte(body))
+	err = test.parseBody([]byte(body))
 	if err != nil {
-		test.t.Fatal(err)
+		return err
 	}
 
 	test.t.Logf("successfully tested rmCurr")
+	return nil
 }
 
-func parseBody(body []byte) error {
+func (test *testme) parseBody(body []byte) error {
+	test.t.Log("parsing body")
 	output := args{}
 	err := json.Unmarshal([]byte(body), &output)
 	if err != nil {
-		return err
+		return fmt.Errorf("json.Unmarshall err: %v \n body: %s", err, string(body))
 	}
 	_, ok := output["error"]
 	if ok {

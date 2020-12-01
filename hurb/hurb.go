@@ -209,7 +209,7 @@ func currencyToUSD(args args) (float64, error) {
 	jsonData := map[string]out{}
 	err = json.Unmarshal([]byte(body), &jsonData)
 	if err != nil {
-		return float64(0), fmt.Errorf("json.Unmarshal err: %v", err)
+		return float64(0), fmt.Errorf("json.Unmarshal err: %v\nbody:%s", err, string(body))
 	}
 
 	outputKey := strings.ToUpper(fmt.Sprintf("%s_USD", inputCurrency))

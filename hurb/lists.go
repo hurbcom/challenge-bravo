@@ -34,7 +34,7 @@ func findRegular(currency string) (bool, error) {
 	body = strings.TrimSuffix(strings.TrimPrefix(body, "{\"results\":"), "}")
 	err = json.Unmarshal([]byte(body), &output)
 	if err != nil {
-		return false, fmt.Errorf("json.Unmarshal err: %v", err)
+		return false, fmt.Errorf("json.Unmarshal err: %v body:%s", err, string(body))
 	}
 	_, ok := output[strings.ToUpper(currency)]
 	if !ok {
