@@ -34,7 +34,8 @@ type endpoint struct {
 	name string
 }
 
-func startServer() error {
+// StartServer starts the hurb-challenge test suite
+func StartServer() error {
 	log.Println("starting")
 	r := mux.NewRouter()
 	log.Println("new router")

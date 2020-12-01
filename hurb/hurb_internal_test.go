@@ -32,7 +32,6 @@ func TestHurb(t *testing.T) {
 	test.addCurrTest(currency{"ltc", true})
 	test.rmCurrTest(currency{"nok", false})
 	test.rmCurrTest(currency{"ltc", true})
-
 }
 
 func (test *testme) mongoDB() error {

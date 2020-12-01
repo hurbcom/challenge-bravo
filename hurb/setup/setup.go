@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/ozzono/challenge-bravo/hurb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -52,6 +53,10 @@ func main() {
 		log.Fatal(err)
 	}
 
+	err = hurb.StartServer()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func (m *mongodb) findDB(dbName string) (mongo.DatabaseSpecification, error) {
