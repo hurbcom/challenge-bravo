@@ -16,11 +16,11 @@ import (
 
 var (
 	currencies = []currency{
-		{name: "USD", isCrytpo: false},
-		{name: "BRL", isCrytpo: false},
-		{name: "EUR", isCrytpo: false},
-		{name: "BTC", isCrytpo: true},
-		{name: "ETH", isCrytpo: true},
+		{name: "USD", isCrypto: false},
+		{name: "BRL", isCrypto: false},
+		{name: "EUR", isCrypto: false},
+		{name: "BTC", isCrypto: true},
+		{name: "ETH", isCrypto: true},
 	}
 )
 
@@ -32,7 +32,7 @@ type mongodb struct {
 
 type currency struct {
 	name     string
-	isCrytpo bool
+	isCrypto bool
 }
 
 func main() {
@@ -83,7 +83,7 @@ func (m *mongodb) fillDB() error {
 			waitEnter()
 			err = database.Collection("currencies").Drop(m.ctx)
 			if err != nil {
-				return fmt.Errorf("InsertOne err: %v", err)
+				return fmt.Errorf("Collection err: %v", err)
 			}
 		}
 	}
@@ -91,8 +91,10 @@ func (m *mongodb) fillDB() error {
 	currList := database.Collection("currencies")
 	results := []*mongo.InsertOneResult{}
 	for i := range currencies {
+		log.Printf("name: % 4s crypto: %t", currencies[i].name, currencies[i].isCrypto)
 		result, err := currList.InsertOne(m.ctx, bson.D{
 			{Key: "name", Value: currencies[i].name},
+			{Key: "is_crypto", Value: currencies[i].isCrypto},
 		})
 		if err != nil {
 			return fmt.Errorf("InsertOne err: %v", err)
