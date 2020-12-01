@@ -9,8 +9,8 @@ const { validationResult } = require('express-validator');
 exports.findAll = function (req, res) {
 
     Currency.find()
-        .then(data => {
-            res.send(data);
+        .then(currencies => {
+            res.send(currencies);
         })
         .catch(err => {
             res.status(500).send({
@@ -39,8 +39,8 @@ exports.create = async function (req, res) {
     // Salva a moeda e checa por erros
     currency
         .save(currency)
-        .then(data => {
-            res.send(data);
+        .then(newCurrency => {
+            res.status(200).send(newCurrency);
         })
         .catch(err => {
             res.status(500).send({
@@ -51,25 +51,54 @@ exports.create = async function (req, res) {
 }
 
 // Deletar uma moeda específica pelo ID
-exports.delete = async function (req, res) {
+exports.deleteByID = async function (req, res) {
 
     const id = req.params.currency_id;
 
     Currency.findByIdAndRemove(id)
-    .then(currency => {
-        if (!currency) {
-            res.status(404).send({
-                message: 'Não foi possível deletar a moeda com ID: '+ id + '. Talvez ela não tenha sido encontrada!'
+        .then(currency => {
+            if (!currency) {
+                res.status(404).send({
+                    message: 'Não foi possível deletar a moeda com ID: '+ id + '. Talvez ela não tenha sido encontrada!'
+                });
+            } else {
+                res.status(200).send({
+                    message: 'Moeda deletada com sucesso!'
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: 
+                    err.message || 'Erro ao deletar moeda com ID: ' + id
             });
-        } else {
-            res.send({
-                message: 'Moeda deletada com sucesso!'
-            });
-        }
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: 'Erro ao deletar moeda com ID:' + id
         });
-    });
+};
+
+// Deletar uma moeda específica pela sigla
+exports.deleteByCode = async function (req, res) {
+
+    const sigla = req.params.sigla;
+
+    Currency.findOne({ sigla: sigla })
+        .then(found => {
+            if (!found) {
+                res.status(404).send({
+                    message: 'Não foi possível encontrar a moeda com sigla: '+ sigla + '. Talvez ela não tenha sido encontrada!'
+                });
+            } else {
+                Currency.deleteOne({ sigla: sigla }, function (err) {
+                    if (err) res.send(err);
+                    res.status(200).send({
+                        message: 'Moeda deletada com sucesso!'
+                    });
+                })
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: 
+                    err.message || 'Erro ao deletar moeda com código: ' + sigla
+            });
+        });
 };

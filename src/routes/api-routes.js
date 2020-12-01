@@ -28,7 +28,8 @@ router.post('/currencies/new', [
     body('sigla').isLength({ min: 3, max: 3 }).withMessage("A sigla da moeda deve possuir 3 caracteres."),
     body('nome').isLength({ min: 3, max: 100 }).withMessage("O nome da moeda precisa ter no mínimo 3 caracteres e no máximo 100.")
 ], currencyController.create)
-router.delete('/currencies/remove/id/:currency_id', currencyController.delete)
+router.delete('/currencies/remove/id/:currency_id', currencyController.deleteByID)
+router.delete('/currencies/remove/code/:sigla', currencyController.deleteByCode)
     
 router.get('/convert', [
     query('from').notEmpty().withMessage("A moeda de origem deve ser informada."),

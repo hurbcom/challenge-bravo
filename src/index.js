@@ -3,19 +3,19 @@ const bodyParser= require('body-parser')
 var app = express();
 
 const cors = require('cors');
-require("./server/db");
+require("./database/db");
 require('dotenv').config();
 
-// Importa rotas
+// Importa rotas da API
 let router = require("./routes/api-routes")
 
 // Configurar porta do server
 let port = process.env.SERVER_PORT || 3301;
 
-// parse application/x-www-form-urlencoded
+// Parse de application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
-// parse application/json
+// Parse de application/json
 app.use(bodyParser.json())
 
  // Enviar mensagem para URL
@@ -24,10 +24,11 @@ app.get('/', (req, res) =>
 );
 
 // Iniciar aplicação na porta especificada
-app.listen(port, () => {
+module.exports = app.listen(port, () => {
     console.log("API rodando em http://localhost:3301/");
 });
 
 app.use(cors());
 
-app.use('/', router);
+// As rotas da API serão utilizadas após o /api, por ex: /api/currencies/list
+app.use('/api', router);
