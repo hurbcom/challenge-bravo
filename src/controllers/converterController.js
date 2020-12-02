@@ -1,6 +1,7 @@
 const Currency = require('../models/currencyModel');
 const converterService = require('../services/converterService');
 const { validationResult } = require('express-validator');
+require('dotenv').config();
 
 exports.convert = async function (req, res, next) {
 
@@ -52,16 +53,20 @@ exports.convert = async function (req, res, next) {
             });
         });
 
+    const ref = process.env.CURRENCY_REF
+        
     if ((confirmFrom == null) || (confirmTo == null)) {
         //console.log("Moeda não disponivel")
         //console.log(confirmFrom)
         //console.log(confirmTo)
     } else {
-        await converterService.convert(from, to, amount)
-            .then(data => {
+        await converterService.convert(from, to, amount, ref)
+            .then(converted => {
                 res.status(200).send({
                     message: 'Conversão de ' + amount + ' em ' + from + ' para ' + to,
-                    amount: data
+                    [from]: parseFloat(amount),
+                    //[to]: Math.round(parseFloat((amount * rate).toFixed(5)))
+                    [to]: converted
                 })
             })
             .catch(err => {

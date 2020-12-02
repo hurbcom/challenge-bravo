@@ -1,4 +1,4 @@
-const Currency = require('../src/models/currencyModel');
+const Currency = require('../../src/models/currencyModel');
 const mongoose = require('mongoose');
 const chai = require('chai');
 

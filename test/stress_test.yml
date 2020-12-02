@@ -1,0 +1,15 @@
+config:
+    processor: "../src/index.js"
+    target: 'http://localhost:3301'
+    phases:
+        - duration: 10
+          arrivalRate: 10
+          rampTo: 1000
+          name: 'Warm up the application'
+        - duration: 60
+          arrivalRate: 1000
+          name: 'Sustained max load'
+scenarios:
+    - flow:
+          - get:
+                url: '/api/convert?from=BTC&to=EUR&amount=23.46'
