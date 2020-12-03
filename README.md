@@ -22,11 +22,12 @@ Construa também um endpoint para adicionar e remover moedas suportadas pela API
 
 ## Solução
 
-Esta API foi criada com o objetivo de armazenar as informações de moedas, contendo seus códigos e nomes, e também realizar a conversão entre as diferentes moedas que se encontram previamente cadastradas no banco de dados, utilizando uma API externa para isso: https://free.currencyconverterapi.com/. As conversões utilizam como parâmetro os códigos de origem e destino, e também o montante que será convertido.
+Esta API foi criada com o objetivo de armazenar as informações de moedas, contendo seus códigos e nomes, e também realizar a conversão entre as diferentes moedas que se encontram previamente cadastradas no banco de dados, utilizando uma API externa para isso: https://min-api.cryptocompare.com/data/price. As conversões utilizam como parâmetro os códigos de origem e destino, e também o montante que será convertido.
 
 ## Contato
 
 Dicas, dúvidas e sugestões? Sinta-se a vontade para entrar em contato comigo!
 
-Leonardo Meliande
-leo.meliande25@outlook.com
+Leonardo Meliande | leo.meliande25@outlook.com
+
+:-)

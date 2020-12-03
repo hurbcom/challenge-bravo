@@ -13,6 +13,9 @@ exports.convert = async function (req, res, next) {
         })
     }
 
+    // Salva moeda de referência numa variável
+    const ref = process.env.CURRENCY_REF
+
     let { from, to, amount } = req.query;
 
     // Checa se moeda de origem existe no banco de dados
@@ -23,14 +26,14 @@ exports.convert = async function (req, res, next) {
         .then(dbCurrencyFrom => {
             if (!dbCurrencyFrom) {
                 res.status(404).send({
-                    message: 'A moeda de origem ' + from + ' não consta no banco de dados.' 
+                    message: `A moeda de origem ${from} não consta no banco de dados.`
                 });
             } return dbCurrencyFrom
         })
         .catch(err => {
             res.status(500).send({
                 message: 
-                    err.message || 'Erro ao procurar moeda com codigo:' + from
+                    err.message || `Erro ao procurar moeda de origem com codigo: ${from}`
             });
         });
 
@@ -42,36 +45,30 @@ exports.convert = async function (req, res, next) {
         .then(dbCurrencyTo => {
             if (!dbCurrencyTo) {
                 res.status(404).send({
-                    message: 'A moeda de destino ' + to + ' não consta no banco de dados.' 
+                    message: `A moeda de destino ${to} não consta no banco de dados.` 
                 });
             } return dbCurrencyTo
         })
         .catch(err => {
             res.status(500).send({
                 message: 
-                    err.message || 'Erro ao procurar moeda com codigo:' + to
+                    err.message || `Erro ao procurar moeda de destino com codigo: ${to}`
             });
         });
-
-    const ref = process.env.CURRENCY_REF
         
-    if ((confirmFrom == null) || (confirmTo == null)) {
-        //console.log("Moeda não disponivel")
-        //console.log(confirmFrom)
-        //console.log(confirmTo)
-    } else {
+    if ((confirmFrom != null) && (confirmTo != null)) { 
         await converterService.convert(from, to, amount, ref)
             .then(converted => {
                 res.status(200).send({
-                    message: 'Conversão de ' + amount + ' em ' + from + ' para ' + to,
-                    [from]: parseFloat(amount),
-                    //[to]: Math.round(parseFloat((amount * rate).toFixed(5)))
-                    [to]: converted
+                    message: `Conversão de ${amount} em ${from} para ${to}`,
+                    [from]: parseFloat(amount), // Moeda de origem
+                    [to]: converted // Moeda de destino
                 })
             })
             .catch(err => {
                 res.status(500).send({ 
-                    err 
+                    message: 
+                        err.message || 'Erro ao realizar a conversão' 
                 })
             });
     }

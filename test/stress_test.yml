@@ -1,5 +1,4 @@
 config:
-    processor: "../src/index.js"
     target: 'http://localhost:3301'
     phases:
         - duration: 10
@@ -12,4 +11,4 @@ config:
 scenarios:
     - flow:
           - get:
-                url: '/api/convert?from=BTC&to=EUR&amount=23.46'
+                url: '/api/convert?from=USD&to=BRL&amount=23.46'

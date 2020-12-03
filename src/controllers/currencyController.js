@@ -1,7 +1,3 @@
-// Importar Mongoose
-var mongoose = require('mongoose');
-let got = require('got');
-
 const Currency = require('../models/currencyModel');
 const { validationResult } = require('express-validator');
 
@@ -31,6 +27,9 @@ exports.create = async function (req, res) {
         })
     }
 
+    const sigla = req.body.sigla
+
+    // Cria uma nova instância de moeda para ser salva no BD
     const currency = new Currency({
         sigla: req.body.sigla,
         nome: req.body.nome,
@@ -45,7 +44,7 @@ exports.create = async function (req, res) {
         .catch(err => {
             res.status(500).send({
                 message: 
-                    err.message || 'Erro ao cadastrar moeda:' + req.body.sigla
+                    err.message || `Erro ao cadastrar a moeda ${sigla}`
             });
         });
 }
@@ -55,11 +54,12 @@ exports.deleteByID = async function (req, res) {
 
     const id = req.params.currency_id;
 
+    // Procura na base de dados o registro associado ao ID digitado
     Currency.findByIdAndRemove(id)
         .then(currency => {
             if (!currency) {
                 res.status(404).send({
-                    message: 'Não foi possível deletar a moeda com ID: '+ id + '. Talvez ela não tenha sido encontrada!'
+                    message: `Não foi possível encontrar a moeda com ID: ${id}. Talvez ela não esteja cadastrada!`
                 });
             } else {
                 res.status(200).send({
@@ -70,7 +70,7 @@ exports.deleteByID = async function (req, res) {
         .catch(err => {
             res.status(500).send({
                 message: 
-                    err.message || 'Erro ao deletar moeda com ID: ' + id
+                    err.message || `Erro ao deletar moeda com ID: ${id}`
             });
         });
 };
@@ -80,13 +80,15 @@ exports.deleteByCode = async function (req, res) {
 
     const sigla = req.params.sigla;
 
+    // Primeiro faz a busca no BD pela sigla digitada
     Currency.findOne({ sigla: sigla })
         .then(found => {
             if (!found) {
                 res.status(404).send({
-                    message: 'Não foi possível encontrar a moeda com sigla: '+ sigla + '. Talvez ela não tenha sido encontrada!'
+                    message: `Não foi possível encontrar a moeda com sigla: ${sigla}. Talvez ela não esteja cadastrada!`
                 });
             } else {
+                // Caso seja encontrada, prossegue para deletar o registro associado a ela
                 Currency.deleteOne({ sigla: sigla }, function (err) {
                     if (err) res.send(err);
                     res.status(200).send({
@@ -98,7 +100,7 @@ exports.deleteByCode = async function (req, res) {
         .catch(err => {
             res.status(500).send({
                 message: 
-                    err.message || 'Erro ao deletar moeda com código: ' + sigla
+                    err.message || `Erro ao deletar moeda com código: ${sigla}`
             });
         });
 };
