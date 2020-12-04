@@ -1,0 +1,23 @@
+version: "3.1"
+services:
+  nodejs:
+    container_name: currency_converter_API
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file: .env
+    ports:
+      - "3301:3301"
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_CLUSTER=$MONGO_CLUSTER
+      - MONGO_DB=$MONGO_DB
+      - CONV_API_URL=$CONV_API_URL
+      - CONV_API_KEY=$CONV_API_KEY
+    volumes:
+      - .:/usr/src/app
+      - ./node_modules:/usr/src/app/node_modules
+    networks:
+      - currency_converter_NETWORK

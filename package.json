@@ -1,0 +1,35 @@
+{
+	"name": "challenge-bravo",
+	"version": "1.0.0",
+	"description": "API JSON para conversão monetária. Possui uma moeda de lastro (USD) e faz conversões entre diferentes moedas com cotações de verdade e atuais.",
+	"main": "index.js",
+	"scripts": {
+		"start": "node src/index.js",
+		"dev": "nodemon src/index.js",
+		"test": "mocha --exit test/test_index.js",
+		"stress": "artillery run test/stress_test.yml",
+		"seed": "node src/database/seed.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/leomeliande/challenge-bravo.git"
+	},
+	"author": "Leonardo Meliande",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/leomeliande/challenge-bravo/issues"
+	},
+	"homepage": "https://github.com/leomeliande/challenge-bravo#readme",
+	"dependencies": {
+		"axios": "^0.21.0",
+		"chai": "^4.2.0",
+		"chai-http": "^4.3.0",
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"express-validator": "^6.7.0",
+		"mongoose": "^5.10.17",
+		"mongoose-seed": "^0.6.0",
+		"nodemon": "^2.0.6"
+	}
+}
