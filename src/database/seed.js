@@ -33,7 +33,7 @@ seeder.connect(dbURI, function () {
     });
 });
 
-// Data array containing seed data - documents organized by Model
+// Array de dados que serão inseridos no modelo
 var data = [
     {
         'model': 'Currency',
