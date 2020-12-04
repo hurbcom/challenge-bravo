@@ -1,0 +1,17 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "repository": "git@github.com:glauco-foeppel/challenge-bravo.git",
+  "author": "Glauco Foeppel <glauco.tf@gmail.com>"
+}
