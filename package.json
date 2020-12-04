@@ -7,7 +7,8 @@
 		"start": "node src/index.js",
 		"dev": "nodemon src/index.js",
 		"test": "mocha --exit test/test_index.js",
-		"stress": "artillery run test/stress_test.yml"
+		"stress": "artillery run test/stress_test.yml",
+		"seed": "node src/database/seed.js"
 	},
 	"repository": {
 		"type": "git",
@@ -32,6 +33,7 @@
 		"got": "^11.8.0",
 		"joi": "^17.3.0",
 		"mongoose": "^5.10.17",
+		"mongoose-seed": "^0.6.0",
 		"nodemon": "^2.0.6"
 	}
 }

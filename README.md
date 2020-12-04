@@ -29,7 +29,7 @@ Esta API foi criada com o objetivo de armazenar as informações de moedas, cont
 Caso prefira executar a aplicação em Docker, basta executar os seguintes comandos:
 - `git clone https://github.com/leomeliande/challenge-bravo` para clonar o repositório.
 - `cd challenge-bravo` para entrar na pasta do projeto.
-- `docker-compose up -d` para subir o container da aplicação.
+- `docker-compose up -d` para subir o container e iniciar a aplicação em segundo plano.
 
 Por outro lado, se quiser executar sem utilizar o Docker, basta executar os seguintes comandos: 
 - `git clone https://github.com/leomeliande/challenge-bravo` para clonar o repositório.
@@ -39,7 +39,11 @@ Por outro lado, se quiser executar sem utilizar o Docker, basta executar os segu
 
 Caso queira executar a aplicação em modo de desenvolvimento, use o comando:
 
-<pre>npm run dev</pre>
+- `npm run dev` inicia a aplicação com o nodemon (para desenvolvimento).
+
+Caso queira realizar uma carga inicial de todas as moedas no BD, use o comando:
+
+- `npm run seed` carga inicial dos dados de todas as moedas no BD.
 
 ### Tecnologias utilizadas
 
@@ -52,12 +56,19 @@ A API foi desenvolvida em NodeJS (v12.18.4) e utiliza os seguintes pacotes:
   - cors
   - dotenv
   - mongoose
+  - mongoose-seed
 
 - Testes
   - mocha
   - chai
   - chai-http
   - artillery
+  
+## Escolhas técnicas
+
+Utilizei o framework Express por ser um framework mínimo e flexível e pela praticidade de design e construção de aplicações web; e pela possibilidade de utilização de middlewares compatíveis. O Express possui um ótimo desempenho, o que permite criar uma API robusta com facilidade, até mesmo por desenvolvedores que não possuem muita experiência.
+
+Fiz utilização do Mongoose para se conectar num BD na nuvem (MongoDB Atlas). O motivo dessa decisão se deve ao fato do Mongoose gerenciar relacionamentos entre dados, fornecer validação de schema, população de dados, middlewares e outras coisas, além de oferecer um ótimo nível de abstração. O MongoDB representa os dados como uma coleção de documentos em vez de tabelas relacionadas por chaves, e isso representa uma grande vantagem em desenvolvimento web pois permite que as consultas sejam realizadas de maneira veloz e escalável.
 
 ## Endpoints
 
@@ -137,9 +148,9 @@ Resposta:
 
 A conversão monetária é o ponto chave dessa aplicação. Utilizando a função convert, é realizada uma requisição GET para a seguinte URL: http://localhost:3301/api/v1/convert?from={from}&to={to}&amount={amount}, onde:
 
-- from = A moeda de origem
-- to = A moeda de destino
-- amount = O valor que deverá ser convertido entre as moedas
+- `from` é a moeda de origem
+- `to` é a moeda de destino
+- `amount` é valor que deverá ser convertido entre as moedas
 
 A partir dessas informações é consultada na API da CryptoCompare (https://min-api.cryptocompare.com/) o preço das moedas de origem e destino, utilizando o USD como referência. É realizado então o cálculo da taxa de conversão, e por fim essa taxa é aplicada à multiplicação do valor informado para conversão. O resultado é então retornado e informado pela API.
 
@@ -219,8 +230,14 @@ Para realizar o teste de estresse (1000 requisições por segundo), utilize o co
 
 <pre>npm run stress</pre>
 
+## Observação
+
+Não tive como testar se o container Docker estava sendo criado ou não, pois neste notebook que eu estou utilizando não estava sendo possível iniciar o daemon do Docker. Eu creio que esteja funcionando pois o <b>Dockerfile</b> e o <b>docker-compose</b> estão configurados de maneira correta, mas caso não funcione eu sinto muito de verdade, e me digam por favor o que pode ser feito para melhorar.
+
 ## Contato
 
 Dicas, dúvidas e sugestões? Sinta-se a vontade para entrar em contato comigo! :-)
 
 Leonardo Meliande | leo.meliande25@outlook.com
+
+<IMG SRC="https://pa1.narvii.com/6445/2effbe46653f3c5604386e6802c9e7ea8de0f46a_hq.gif">  
