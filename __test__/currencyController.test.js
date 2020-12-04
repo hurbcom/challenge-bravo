@@ -5,22 +5,24 @@ const request = supertest(app);
 
 
 describe("Currency Controller Test", () => {
-    
-    describe("ChangeCurrency", () => {
-        
+
+    describe("ChangeCurrency method", () => {
+        it("", () => {
+            
+        });
     });
       
 
     describe("Add Currency Test", () => {
-        
-        
-
+        it("", () => {
+            
+        });
     });
 
 
     describe("Remove Currency Test", () => {
-        
-
-
+        it("", () => {
+            
+        });
     });
 });

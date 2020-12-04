@@ -1,7 +1,7 @@
 const express = require("express");
 
 exports.ChangeCurrency = (req, res) => {
-    return res.json({message: "Change Currency Routes"});
+    // return res.status(200).json({message: "Change Currency Routes"});
 };
 
 exports.AddCurrency = async (req, res) => {
