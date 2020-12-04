@@ -4,7 +4,8 @@
 	"description": "API JSON para conversão monetária. Possui uma moeda de lastro (USD) e faz conversões entre diferentes moedas com cotações de verdade e atuais.",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon src/index.js",
+		"start": "node src/index.js",
+		"dev": "nodemon src/index.js",
 		"test": "mocha --exit test/test_index.js",
 		"stress": "artillery run test/stress_test.yml"
 	},

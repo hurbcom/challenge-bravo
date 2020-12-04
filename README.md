@@ -24,25 +24,40 @@ Construa também um endpoint para adicionar e remover moedas suportadas pela API
 
 Esta API foi criada com o objetivo de armazenar as informações de moedas, contendo seus códigos e nomes, e também realizar a conversão entre as diferentes moedas que se encontram previamente cadastradas no banco de dados, utilizando uma API externa para isso: https://min-api.cryptocompare.com/documentation. As conversões utilizam como parâmetro os códigos de origem e destino, e também o montante que será convertido.
 
+## Executar aplicação
+
+Caso prefira executar a aplicação em Docker, basta executar os seguintes comandos:
+- `git clone https://github.com/leomeliande/challenge-bravo` para clonar o repositório.
+- `cd challenge-bravo` para entrar na pasta do projeto.
+- `docker-compose up -d` para subir o container da aplicação.
+
+Por outro lado, se quiser executar sem utilizar o Docker, basta executar os seguintes comandos: 
+- `git clone https://github.com/leomeliande/challenge-bravo` para clonar o repositório.
+- `cd challenge-bravo` para entrar na pasta do projeto.
+- `npm install` para instalar as dependências do projeto.
+- `npm start` para iniciar a aplicação em modo de produção.
+
+Caso queira executar a aplicação em modo de desenvolvimento, use o comando:
+
+<pre>npm run dev</pre>
+
 ### Tecnologias utilizadas
 
 A API foi desenvolvida em NodeJS (v12.18.4) e utiliza os seguintes pacotes:
 
-<pre>
 - Core
-    - express
-    - express-validator
-    - axios
-    - cors
-    - dotenv
-    - mongoose
+  - express
+  - express-validator
+  - axios
+  - cors
+  - dotenv
+  - mongoose
 
 - Testes
-    - mocha
-    - chai
-    - chai-http
-    - artillery
-</pre>
+  - mocha
+  - chai
+  - chai-http
+  - artillery
 
 ## Endpoints
 
@@ -122,11 +137,11 @@ Resposta:
 
 A conversão monetária é o ponto chave dessa aplicação. Utilizando a função convert, é realizada uma requisição GET para a seguinte URL: http://localhost:3301/api/v1/convert?from={from}&to={to}&amount={amount}, onde:
 
-<pre>
-    from = A moeda de origem da conversão
-    to = A moeda de destino
-    amount = O valor que deverá ser convertido entre as moedas
-</pre>
+- from = A moeda de origem
+- to = A moeda de destino
+- amount = O valor que deverá ser convertido entre as moedas
+
+A partir dessas informações é consultada na API da CryptoCompare (https://min-api.cryptocompare.com/) o preço das moedas de origem e destino, utilizando o USD como referência. É realizado então o cálculo da taxa de conversão, e por fim essa taxa é aplicada à multiplicação do valor informado para conversão. O resultado é então retornado e informado pela API.
 
 Exemplo de requisição:
 
@@ -142,6 +157,23 @@ Resposta:
 }
 </pre>
 
+## Validação
+
+Foram implementados filtros na aplicação de validação das informações digitadas nas requisições. São as seguintes:
+
+### Moedas:
+
+- A moeda cadastrada devem fazer parte das moedas suportadas pela API. São elas: `'USD', 'BRL', 'EUR', 'BTC', 'ETH'`;
+- A sigla da moeda deve ser digitada em maiúsculo;
+- A sigla da moeda deve possuir apenas 3 caracteres.
+- O nome da moeda precisa ter no mínimo 3 caracteres e no máximo 100.
+
+### Conversão:
+
+- As moedas de origem e destino devem ser informadas;
+- As siglas das moedas de origem e destino devem ser digitadas em maiúsculo;
+- O valor para conversão deve ser informado;
+- O valor precisa ser maior que zero.
 
 ## Testes
 
@@ -149,7 +181,8 @@ Tentei realizar uma cobertura ampla de testes, contemplando os endpoints da API 
 
 Para executar os testes unitários, utilize o comando abaixo:
 
-</pre>
+<pre>
+
 > mocha --exit test/test_index.js
 
 API rodando em http://localhost:3301/
@@ -180,7 +213,6 @@ Banco de dados conectado!
         √ Deve retornar todas as informações do banco de dados
 
   12 passing (3s)
-
 </pre>
 
 Para realizar o teste de estresse (1000 requisições por segundo), utilize o comando abaixo:
@@ -189,8 +221,6 @@ Para realizar o teste de estresse (1000 requisições por segundo), utilize o co
 
 ## Contato
 
-Dicas, dúvidas e sugestões? Sinta-se a vontade para entrar em contato comigo!
+Dicas, dúvidas e sugestões? Sinta-se a vontade para entrar em contato comigo! :-)
 
 Leonardo Meliande | leo.meliande25@outlook.com
-
-:-)

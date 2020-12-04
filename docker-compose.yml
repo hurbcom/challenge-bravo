@@ -2,7 +2,9 @@ version: "3.1"
 services:
   nodejs:
     container_name: currency_converter_API
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     env_file: .env
     ports:
@@ -17,3 +19,5 @@ services:
     volumes:
       - .:/usr/src/app
       - ./node_modules:/usr/src/app/node_modules
+    networks:
+      - currency_converter_NETWORK
