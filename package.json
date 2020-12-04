@@ -8,12 +8,16 @@
     "test": "jest --coverage --silent"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.0",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.6",
     "jest": "^26.6.3",
-    "supertest": "^6.0.1"
+    "supertest": "^6.0.1",
+    "sequelize-cli": "^6.2.0"
   },
   "repository": "git@github.com:glauco-foeppel/challenge-bravo.git",
   "author": "Glauco Foeppel <glauco.tf@gmail.com>"
