@@ -9,7 +9,7 @@ app.use("/api", routers)
 
 // Return error message for all invalid routes
 app.get('*', (req, res) => {
-    res.status(400).json("Endpoint invalid");
+    res.status(400).json({ error: "Endpoint invalid" });
 });
 
 module.exports = app;
