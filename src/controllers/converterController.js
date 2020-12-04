@@ -5,6 +5,7 @@ require('dotenv').config();
 
 exports.convert = async function (req, res, next) {
 
+    // Validação de middleware
     const { errors } = validationResult(req);
 
     if (errors.length > 0) {
@@ -13,13 +14,13 @@ exports.convert = async function (req, res, next) {
         })
     }
 
-    // Salva moeda de referência numa variável
+    // Salva moeda de referência numa variável (USD)
     const ref = process.env.CURRENCY_REF
 
     let { from, to, amount } = req.query;
 
     // Checa se moeda de origem existe no banco de dados
-    const confirmFrom = await Currency
+    var confirmFrom = await Currency
         .findOne({ 
             sigla: from 
         })
@@ -37,25 +38,31 @@ exports.convert = async function (req, res, next) {
             });
         });
 
-    // Checa se moeda de destino existe no banco de dados
-    const confirmTo = await Currency
-        .findOne({ 
-            sigla: to 
-        })
-        .then(dbCurrencyTo => {
-            if (!dbCurrencyTo) {
-                res.status(404).send({
-                    message: `A moeda de destino ${to} não consta no banco de dados.` 
+    /* 
+        Caso encontre moeda de origem, checa se moeda de destino existe no banco de dados
+        Não faz sentido realizar essa verificação caso a moeda de origem não seja encontrada 
+    */
+    if (confirmFrom) {
+        var confirmTo = await Currency
+            .findOne({ 
+                sigla: to 
+            })
+            .then(dbCurrencyTo => {
+                if (!dbCurrencyTo) {
+                    res.status(404).send({
+                        message: `A moeda de destino ${to} não consta no banco de dados.` 
+                    });
+                } return dbCurrencyTo
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message: 
+                        err.message || `Erro ao procurar moeda de destino com codigo: ${to}`
                 });
-            } return dbCurrencyTo
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: 
-                    err.message || `Erro ao procurar moeda de destino com codigo: ${to}`
             });
-        });
-        
+    }
+
+    // Caso as DUAS moedas sejam encontradas, chamar seviço de conversão
     if ((confirmFrom != null) && (confirmTo != null)) { 
         await converterService.convert(from, to, amount, ref)
             .then(converted => {
