@@ -4,7 +4,8 @@
   "main": "src/app.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "start": "nodemon src/app.js",
+    "test": "jest --coverage --silent"
   },
   "dependencies": {
     "express": "^4.17.1"
