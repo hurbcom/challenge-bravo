@@ -1,5 +1,4 @@
 const request = require('supertest');
-const { response } = require('../src/server');
 const app = require("../src/server");
 
 describe("Endpoint acceptance test", () => {
@@ -40,7 +39,10 @@ describe("Endpoint acceptance test", () => {
         });
 
         it("Should return 400 when currencies are not accepted in the api", async () => {
-            const result = await request(app).get("/api/ChangeCurrency?from=BRL&to=CCC&amount=10").set('Accept', 'application/json');
+            const result = await request(app)
+                                    .get("/api/ChangeCurrency")
+                                    .query({ from: "BRL", to: "CCC", amount: 10 })
+                                    .set('Accept', 'application/json');
             expect(JSON.parse(result.text)).toEqual({ Error: "Currency 'to' not accepted" });
             expect(result.status).toEqual(400);
         });
@@ -49,8 +51,29 @@ describe("Endpoint acceptance test", () => {
 
 
     describe("POST /api/AddCurrency", () => {
-        it("", () => {
+        it("Should 400 return when there is no parameter", async () => {
+            const result = await request(app).post("/api/AddCurrency?").set('Accept', 'application/json');
+            expect(JSON.parse(result.text)).toEqual({ Error: "Invalid params" });
+            expect(result.status).toEqual(400);
+        });
 
+        it("Should 200 return when add new currency", async () => {
+            const result = await request(app)
+                                    .post("/api/AddCurrency")
+                                    .query({ currency_name: "ABC" })
+                                    .set('Accept', 'application/json');
+
+            expect(JSON.parse(result.text)).toEqual({ Message: "Currency successfully registered" });
+            expect(result.status).toEqual(200);
+        });
+
+        it("Should 400 return when currency exist", async () => {
+            const result = await request(app)
+                                    .post("/api/AddCurrency")
+                                    .query({ currency_name: "ABC" })
+                                    .set('Accept', 'application/json');
+            expect(JSON.parse(result.text)).toEqual({ Error: "Currency exist" });
+            expect(result.status).toEqual(400);
         });
     });
     

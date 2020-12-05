@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon src/app.js",
-    "test": "jest --coverage --silent"
+    "test": "jest --coverage --silent",
+    "pretest": "yarn sequelize db:migrate:undo:all --env test && yarn sequelize db:migrate --env test && yarn sequelize db:seed:all --env test"
+    
   },
   "dependencies": {
     "express": "^4.17.1",

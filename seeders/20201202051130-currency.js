@@ -5,28 +5,28 @@ module.exports = {
     await queryInterface.bulkInsert('Currencies', [
       {
         currency_name: 'USD',
-        createdAt: Sequelize.DATE,
-        updatedAt: Sequelize.DATE
+        createdAt: new Date().toUTCString(),
+        updatedAt: new Date().toUTCString()
       },
       {
         currency_name: 'BRL',
-        createdAt: Sequelize.DATE,
-        updatedAt: Sequelize.DATE
+        createdAt: new Date().toUTCString(),
+        updatedAt: new Date().toUTCString()
       },
       {
         currency_name: 'EUR',
-        createdAt: Sequelize.DATE,
-        updatedAt: Sequelize.DATE
+        createdAt: new Date().toUTCString(),
+        updatedAt: new Date().toUTCString()
       },
       {
         currency_name: 'BTC',
-        createdAt: Sequelize.DATE,
-        updatedAt: Sequelize.DATE
+        createdAt: new Date().toUTCString(),
+        updatedAt: new Date().toUTCString()
       },
       {
         currency_name: 'ETH',
-        createdAt: Sequelize.DATE,
-        updatedAt: Sequelize.DATE
+        createdAt: new Date().toUTCString(),
+        updatedAt: new Date().toUTCString()
       }
     ]);
 
