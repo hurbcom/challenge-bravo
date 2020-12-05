@@ -32,5 +32,14 @@ exports.AddCurrency = async (req, res) => {
 };
 
 exports.RemoveCurrency = async (req, res) => {
-    return res.json({ message: "Remove Currency Routes" });
+    if(!req.query.currency_name || req.query.currency_name.isEmpty){ 
+        return res.status(400).json({ Error: "Invalid params"}); 
+    }else{
+        const deleted = await Currency.destroy({ where: { currency_name: req.query.currency_name }});
+        if (deleted != 0) { 
+            return res.status(200).json({ Success: "Currency deleted" }); 
+        }else{
+            return res.status(400).json({ Error: "Currency not found" });
+        }
+    }
 };

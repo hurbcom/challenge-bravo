@@ -1,2 +1,4 @@
 node_modules
 coverage
+sqlite-dev.db
+sqlite-test.db
