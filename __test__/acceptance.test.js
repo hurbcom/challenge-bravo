@@ -57,8 +57,19 @@ describe("Endpoint acceptance test", () => {
                                     .get("/api/ChangeCurrency")
                                     .query({ from: "BRL", to: "CCC", amount: 10 })
                                     .set('Accept', 'application/json');
+
             expect(JSON.parse(result.text)).toEqual({ Error: "Currency 'to' not accepted" });
             expect(result.status).toEqual(400);
+        });
+
+        it("Should convert the currency to the country informed", async () => {
+            const result = await request(app)
+                                    .get("/api/ChangeCurrency")
+                                    .query({ from: "BRL", to: "USD", amount: 10 })
+                                    .set('Accept', 'application/json');
+
+            expect(JSON.parse(result.text)).toEqual({ query: { from: "BRL", to: "USD", amount: 10 }, result: "1.94" });
+            expect(result.status).toEqual(200);
         });
 
     });

@@ -1,6 +1,7 @@
 const express = require("express");
 const currencies = ["USD","BRL","EUR","BTC","ETH"];
 const { Currency } = require("../models");
+const apiService = require("../services/apiService");
 
 exports.ChangeCurrency = async (req, res) => {
     if(!req.query.from || !req.query.to || !req.query.amount){ 
@@ -14,6 +15,14 @@ exports.ChangeCurrency = async (req, res) => {
     if(!currencies.includes(req.query.to)){
         return res.status(400).json({ Error: "Currency 'to' not accepted"}); 
     }
+
+    apiService.ConvertCurrency(req.query).then( response => { 
+        return res.status(200).json({
+            "result": response.data.result, 
+            "query": response.data.query
+        });
+    });
+
 };
 
 exports.AddCurrency = async (req, res) => {
