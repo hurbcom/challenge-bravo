@@ -1,13 +1,15 @@
 const express = require("express");
-const currencies = ["USD","BRL","EUR","BTC","ETH"];
 const { Currency } = require("../models");
+const currency = require("../models/currency");
 const apiService = require("../services/apiService");
+
 
 exports.ChangeCurrency = async (req, res) => {
     if(!req.query.from || !req.query.to || !req.query.amount){ 
         return res.status(400).json({ Error: "Invalid params"}); 
     }
-
+    
+    const currencies = await Currency.findAll({attributes: ['currency_name'], raw : true}).then( currencies => { return currencies.map( currency => { return currency.currency_name })} );
     if(!currencies.includes(req.query.from)){
         return res.status(400).json({ Error: "Currency 'from' not accepted"}); 
     }
