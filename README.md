@@ -9,6 +9,7 @@
 
 ## Rodando a aplicacao
 - Clone repositorio
+- cd [diretorio_do_projeto]
 - yarn (Instalação de dependencias/modulos)
 - yarn sequelize db:migrate db:seed:all
 - docker build -t [nome_da_imagem] .
@@ -30,7 +31,10 @@
 - [DELETE] /api/RemoveCurrency = query(currency_name)
     - currency_name = Sigla do país a ser removido
     - Example http://localhost:3000/api/RemoveCurrency?currency_name=TRR
-    
+
+## Rodando testes
+- yarn test (dentro do diretorio do projeto)
+
 ## Pontos de melhorias
 - Cache de bancos cadastrados evitando consulta no banco para validar moedas aceitas
 - Efetuar teste de performance utilizando mongodb para talvez uma migração (sqlite foi utilizado somente para o desafio)
