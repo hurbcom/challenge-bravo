@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/iiurydias/challenge-bravo/currency-rate-updater/service/controller"
 	"github.com/iiurydias/challenge-bravo/currency-rate-updater/service/server/currency"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
@@ -14,12 +15,12 @@ type Server struct {
 	server   *grpc.Server
 }
 
-func New(port int) (*Server, error) {
+func New(port int, cntroller controller.Controller) (*Server, error) {
 	l, err := net.Listen("tcp", ":"+strconv.Itoa(port))
 	if err != nil {
 		return nil, errors.Wrap(err, "server failed to start listening")
 	}
-	currencyServer := new(currency.Server)
+	currencyServer := currency.NewCurrencyServer(cntroller)
 	grpcServer := grpc.NewServer()
 	currency.RegisterCurrencyServiceServer(grpcServer, currencyServer)
 	return &Server{
@@ -42,5 +43,6 @@ func (s *Server) Run() <-chan error {
 
 // It closes the gRPC server
 func (s *Server) Close() {
+	log.Infoln("gRPC server shutdown")
 	s.server.GracefulStop()
 }

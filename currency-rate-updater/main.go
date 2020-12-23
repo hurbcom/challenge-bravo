@@ -62,7 +62,7 @@ func runService(fileName string) error {
 	if err := config.Scan(&configParams); err != nil {
 		return errors.Wrap(err, "failed to scan file")
 	}
-	log.SetLevel(log.Level(configParams.Log.Level))
+	log.SetLevel(log.Level(configParams.LogLevel))
 	serviceApp, err := service.New(configParams)
 	if err != nil {
 		return err

@@ -8,12 +8,10 @@ import (
 
 type Config struct {
 	Cache             cache.Config `json:"cache"`
-	Log               Log          `json:"log"`
+	LogLevel          int          `json:"logLevel"`
+	PullingTime       string       `json:"pullingTime"`
 	AllowedCurrencies []string     `json:"allowedCurrencies"`
-}
-
-type Log struct {
-	Level int `json:"level"`
+	ServerPort        int          `json:"serverPort"`
 }
 
 func NewConfigFile(filename string) error {
