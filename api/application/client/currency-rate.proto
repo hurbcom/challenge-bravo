@@ -1,0 +1,15 @@
+syntax = "proto3";
+package currency;
+
+message Response {
+    bool success = 1;
+}
+
+message Request {
+    string code = 1;
+}
+
+service CurrencyService {
+    rpc AddCurrency(Request) returns (Response) {}
+    rpc RemoveCurrency(Request) returns (Response) {}
+}

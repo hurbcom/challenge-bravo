@@ -16,23 +16,25 @@ type Service struct {
 	cntroller     controller.Controller
 	updaterCancel context.CancelFunc
 	pullingTime   time.Duration
+	cacheModule   cache.Cache
 }
 
 func New(c *Config) (*Service, error) {
-	service := Service{}
+	var srvice Service
 	pullingTime, err := time.ParseDuration(c.PullingTime)
 	if err != nil {
 		return nil, errors.Wrap(err, "invalid pulling time")
 	}
-	service.pullingTime = pullingTime
+	srvice.pullingTime = pullingTime
 	cacheModule, err := cache.New(c.Cache)
 	if err != nil {
 		return nil, err
 	}
-	currencyModule := currency.New("https://api.exchangerate.host/latest?source=crypto&base=USD")
-	service.cntroller = controller.New(cacheModule, currencyModule, c.AllowedCurrencies)
-	service.grpcServer, _ = server.New(c.ServerPort, service.cntroller)
-	return &service, nil
+	currencyModule := currency.New("https://application.exchangerate.host/latest?source=crypto&base=USD")
+	srvice.cntroller = controller.New(cacheModule, currencyModule, c.AllowedCurrencies)
+	srvice.grpcServer, _ = server.New(c.ServerPort, srvice.cntroller)
+	srvice.cacheModule = cacheModule
+	return &srvice, nil
 }
 
 func (s *Service) Run() <-chan error {
@@ -56,5 +58,6 @@ func (s *Service) Run() <-chan error {
 
 func (s *Service) Shutdown() {
 	s.updaterCancel()
+	s.cacheModule.Close()
 	s.grpcServer.Close()
 }
