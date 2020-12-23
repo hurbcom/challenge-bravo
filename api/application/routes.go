@@ -2,13 +2,14 @@ package application
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/iiurydias/challenge-bravo/api/application/controllers/currency"
+	"github.com/iiurydias/challenge-bravo/api/application/handlers"
 	"net/http"
 )
 
-func initializeApiRouter(controller *currency.Currency) http.Handler {
+func initializeApiRouter(handlers handlers.Handlers) http.Handler {
 	r := gin.Default()
-	r.POST("/currency", controller.AddCurrencyHandler)
-	r.DELETE("/currency/:id", controller.RemoveCurrencyHandler)
+	r.POST("/currency", handlers.AddCurrency())
+	r.DELETE("/currency/:id", handlers.RemoveCurrency())
+	r.GET("/currency", handlers.ConvertCurrency())
 	return r
 }

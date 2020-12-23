@@ -6,6 +6,8 @@ import (
 	"strconv"
 )
 
+var ErrNotFound = redis.Nil
+
 type cache struct {
 	redisClient *redis.Client
 }

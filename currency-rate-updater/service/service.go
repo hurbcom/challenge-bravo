@@ -58,6 +58,8 @@ func (s *Service) Run() <-chan error {
 
 func (s *Service) Shutdown() {
 	s.updaterCancel()
-	s.cacheModule.Close()
+	if err := s.cacheModule.Close(); err != nil {
+		log.Errorln(errors.Wrap(err, "failed to close cache client"))
+	}
 	s.grpcServer.Close()
 }
