@@ -1,0 +1,4 @@
+.idea
+vendor/
+go.sum
+test/

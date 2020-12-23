@@ -1,0 +1,8 @@
+version: "3.2"
+
+services:
+  redis:
+    image: redis:rc-alpine3.11
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass dummyPass
