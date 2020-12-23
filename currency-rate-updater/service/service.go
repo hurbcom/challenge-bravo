@@ -30,7 +30,7 @@ func New(c *Config) (*Service, error) {
 	if err != nil {
 		return nil, err
 	}
-	currencyModule := currency.New("https://application.exchangerate.host/latest?source=crypto&base=USD")
+	currencyModule := currency.New(c.CurrencyRateApiHost)
 	srvice.cntroller = controller.New(cacheModule, currencyModule, c.AllowedCurrencies)
 	srvice.grpcServer, _ = server.New(c.ServerPort, srvice.cntroller)
 	srvice.cacheModule = cacheModule

@@ -1,6 +1,7 @@
 package currency
 
 import (
+	customErrors "github.com/iiurydias/challenge-bravo/currency-rate-updater/service/errors"
 	"github.com/pkg/errors"
 	"github.com/tidwall/gjson"
 	"io/ioutil"
@@ -23,7 +24,7 @@ func (c *currency) GetCurrencyRate(code string) (float64, error) {
 	}
 	value, ok := result[code]
 	if !ok {
-		return 0, errors.New("currency does not exist")
+		return 0, customErrors.ErrInvalidCurrency
 	}
 	return value.Float(), nil
 }

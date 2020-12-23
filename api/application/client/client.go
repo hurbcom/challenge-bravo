@@ -24,7 +24,7 @@ func (c *client) AddCurrency(code string) error {
 	request := &currency.Request{Code: code}
 	_, err := c.client.AddCurrency(context.Background(), request)
 	if err != nil {
-		return errors.Wrap(err, "failed to add currency through grpc service")
+		return err
 	}
 	return nil
 }
@@ -33,7 +33,7 @@ func (c *client) RemoveCurrency(code string) error {
 	request := &currency.Request{Code: code}
 	_, err := c.client.RemoveCurrency(context.Background(), request)
 	if err != nil {
-		return errors.Wrap(err, "failed to remove currency through grpc service")
+		return err
 	}
 	return nil
 }

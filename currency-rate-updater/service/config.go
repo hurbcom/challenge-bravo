@@ -7,11 +7,12 @@ import (
 )
 
 type Config struct {
-	Cache             cache.Config `json:"cache"`
-	LogLevel          int          `json:"logLevel"`
-	PullingTime       string       `json:"pullingTime"`
-	AllowedCurrencies []string     `json:"allowedCurrencies"`
-	ServerPort        int          `json:"serverPort"`
+	Cache               cache.Config `json:"cache"`
+	LogLevel            int          `json:"logLevel"`
+	PullingTime         string       `json:"pullingTime"`
+	AllowedCurrencies   []string     `json:"allowedCurrencies"`
+	ServerPort          int          `json:"serverPort"`
+	CurrencyRateApiHost string       `json:"currencyRateApiHost"`
 }
 
 func NewConfigFile(filename string) error {

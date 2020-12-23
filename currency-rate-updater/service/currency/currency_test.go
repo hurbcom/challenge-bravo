@@ -1,6 +1,7 @@
 package currency
 
 import (
+	customErrors "github.com/iiurydias/challenge-bravo/currency-rate-updater/service/errors"
 	. "github.com/onsi/gomega"
 	"net/http"
 	"net/http/httptest"
@@ -34,7 +35,7 @@ func TestGetNonexistentCurrencyRate(t *testing.T) {
 	curr := New(ts.URL)
 	value, err := curr.GetCurrencyRate("BRL")
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).Should(BeEquivalentTo("currency does not exist"))
+	Expect(err).Should(BeEquivalentTo(customErrors.ErrInvalidCurrency))
 	Expect(value).Should(BeZero())
 }
 

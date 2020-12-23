@@ -49,7 +49,6 @@ func TestService(t *testing.T) {
 		req := &currency.Request{Code: "USDD"}
 		resp, err := client.AddCurrency(context.Background(), req)
 		Expect(err).Should(HaveOccurred())
-		Expect(err.Error()).Should(BeEquivalentTo("rpc error: code = Unknown desc = currency does not exist"))
 		Expect(resp).Should(BeNil())
 	})
 	t.Run("It removes a currency", func(t *testing.T) {
@@ -67,7 +66,6 @@ func TestService(t *testing.T) {
 		req := &currency.Request{Code: "EURR"}
 		resp, err := client.RemoveCurrency(context.Background(), req)
 		Expect(err).Should(HaveOccurred())
-		Expect(err.Error()).Should(BeEquivalentTo("rpc error: code = Unknown desc = currency does not exist"))
 		Expect(resp).Should(BeNil())
 	})
 }
@@ -80,10 +78,11 @@ func getMockConfig() *Config {
 			Port:     6379,
 			Database: 0,
 		},
-		LogLevel:          6,
-		PullingTime:       "1ms",
-		AllowedCurrencies: []string{"EUR"},
-		ServerPort:        3001,
+		LogLevel:            6,
+		PullingTime:         "1ms",
+		AllowedCurrencies:   []string{"EUR"},
+		ServerPort:          3001,
+		CurrencyRateApiHost: "https://api.exchangerate.host/latest?source=crypto&base=USD",
 	}
 }
 

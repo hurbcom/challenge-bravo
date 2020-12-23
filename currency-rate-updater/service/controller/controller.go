@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/iiurydias/challenge-bravo/currency-rate-updater/cache"
 	"github.com/iiurydias/challenge-bravo/currency-rate-updater/service/currency"
+	customErrors "github.com/iiurydias/challenge-bravo/currency-rate-updater/service/errors"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
@@ -24,7 +25,7 @@ func New(cacheModule cache.Cache, currencyModule currency.Currency, allowedCurre
 
 func (c *controller) AddCurrency(code string) error {
 	if _, ok := c.existCurrency(code); ok {
-		return errors.New("currency already exist")
+		return customErrors.ErrCurrencyAlreadyExist
 	}
 	value, err := c.currencyModule.GetCurrencyRate(code)
 	if err != nil {
@@ -40,7 +41,7 @@ func (c *controller) AddCurrency(code string) error {
 
 func (c *controller) RemoveCurrency(code string) error {
 	if ok := c.removeCurrency(code); !ok {
-		return errors.New("currency does not exist")
+		return customErrors.ErrCurrencyNotFound
 	}
 	if err := c.cacheModule.Delete(code); err != nil {
 		c.addCurrency(code)

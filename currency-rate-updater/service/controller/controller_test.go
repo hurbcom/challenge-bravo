@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	customErrors "github.com/iiurydias/challenge-bravo/currency-rate-updater/service/errors"
 	. "github.com/onsi/gomega"
 	"testing"
 )
@@ -105,7 +106,7 @@ func TestRemovingANonexistentCurrency(t *testing.T) {
 	}, nil, []string{"EUR", "USD"})
 	err := cntroller.RemoveCurrency("BRL")
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).Should(BeEquivalentTo("currency does not exist"))
+	Expect(err).Should(BeEquivalentTo(customErrors.ErrCurrencyNotFound))
 	Expect(cntroller.GetAllowedCurrencies()).Should(BeEquivalentTo([]string{"EUR", "USD"}))
 }
 

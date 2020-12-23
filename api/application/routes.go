@@ -9,5 +9,6 @@ import (
 func initializeApiRouter(controller *currency.Currency) http.Handler {
 	r := gin.Default()
 	r.POST("/currency", controller.AddCurrencyHandler)
+	r.DELETE("/currency/:id", controller.RemoveCurrencyHandler)
 	return r
 }
