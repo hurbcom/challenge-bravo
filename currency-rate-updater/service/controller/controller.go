@@ -55,12 +55,12 @@ func (c *controller) UpdateCurrencies() error {
 	if err != nil {
 		return err
 	}
-	for index, value := range currencies {
-		if _, ok := c.existCurrency(index); ok {
-			if err := c.cacheModule.Set(index, value); err != nil {
-				log.Errorln(fmt.Sprintf("failed to update in cache currency called %s", index))
+	for _, allowedCurrency := range c.allowedCurrencies {
+		if value, ok := currencies[allowedCurrency]; ok {
+			if err := c.cacheModule.Set(allowedCurrency, value); err != nil {
+				log.Errorln(fmt.Sprintf("failed to update in cache currency called %s", allowedCurrency))
 			}
-			log.Infoln(fmt.Sprintf("currency %s was updated on cache to value %f", index, value))
+			log.Infoln(fmt.Sprintf("currency %s was updated on cache to value %f", allowedCurrency, value))
 		}
 	}
 	return nil
