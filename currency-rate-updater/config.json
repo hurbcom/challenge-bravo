@@ -1,0 +1,19 @@
+{
+  "cache": {
+    "host": "redis.service.com.br",
+    "password": "dummyPass",
+    "port": 6379,
+    "database": 0
+  },
+  "logLevel": 6,
+  "pullingTime": "1m",
+  "allowedCurrencies": [
+    "USD",
+    "BRL",
+    "EUR",
+    "BTC",
+    "ETH"
+  ],
+  "serverPort": 3000,
+  "currencyRateApiHost": "https://api.exchangerate.host/latest?source=crypto&base=USD"
+}

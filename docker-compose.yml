@@ -6,3 +6,35 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --requirepass dummyPass
+    networks:
+      back:
+        aliases:
+          - "redis.service.com.br"
+
+  api:
+    build: ./api
+    restart: always
+    ports:
+      - "3500:3500"
+    networks:
+      back:
+        aliases:
+          - "api.service.com.br"
+    depends_on:
+      - redis
+      - currency-rate-updater
+
+  currency-rate-updater:
+    build: ./currency-rate-updater
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      back:
+        aliases:
+          - "currency-rate-updater.service.com.br"
+    depends_on:
+      - redis
+
+networks:
+  back:

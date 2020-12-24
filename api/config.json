@@ -1,0 +1,14 @@
+{
+  "cache": {
+    "host": "redis.service.com.br",
+    "password": "dummyPass",
+    "port": 6379,
+    "database": 0
+  },
+  "logLevel": 6,
+  "serverPort": 3500,
+  "grpcHost": {
+    "host": "currency-rate-updater.service.com.br",
+    "port": 3000
+  }
+}

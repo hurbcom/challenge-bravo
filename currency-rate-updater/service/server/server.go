@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/iiurydias/challenge-bravo/currency-rate-updater/service/controller"
 	"github.com/iiurydias/challenge-bravo/currency-rate-updater/service/server/currency"
 	"github.com/pkg/errors"
@@ -13,6 +14,7 @@ import (
 type Server struct {
 	listener net.Listener
 	server   *grpc.Server
+	port     int
 }
 
 func New(port int, cntroller controller.Controller) (*Server, error) {
@@ -26,13 +28,14 @@ func New(port int, cntroller controller.Controller) (*Server, error) {
 	return &Server{
 		listener: l,
 		server:   grpcServer,
+		port:     port,
 	}, nil
 }
 
 // It starts the gRPC server
 func (s *Server) Run() <-chan error {
 	var chErr chan error
-	log.Infoln("gRPC server has started")
+	log.Infoln(fmt.Sprintf("gRPC server has started at port %d", s.port))
 	go func() {
 		if err := s.server.Serve(s.listener); err != nil {
 			chErr <- err
