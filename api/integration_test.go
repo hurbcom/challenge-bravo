@@ -62,7 +62,9 @@ func TestOfIntegration(t *testing.T) {
 	t.Run("it tests remove a not found currency", func(t *testing.T) {
 		deleteCurrencyAnyway("cad")
 		resp := deleteCurrency("cad")
+		body := getResponseBody(resp.Body)
 		Expect(resp.StatusCode).Should(BeEquivalentTo(http.StatusNotFound))
+		Expect(body).Should(BeEquivalentTo(`{"status":"fail","data":{"code":"code not found"}}`))
 	})
 	t.Run("it tests convert currencies", func(t *testing.T) {
 		resp := convertCurrencies(fmt.Sprintf("?from=%s&to=%s&amount=%d", "USD", "BRL", 1))
