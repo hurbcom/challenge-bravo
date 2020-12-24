@@ -9,6 +9,7 @@
 * [Docker-compose](https://docs.docker.com/compose/install/)
 
 ####Arquitetura do projeto
+
 ![alt text](https://github.com/iiurydias/challenge-bravo/blob/master/architecture.png?raw=true "Arquitetura do projeto")
 
 **api**: Responsável por receber requisições para adição, remoção e converção de moedas. Chamadas de adição e remoção são encaminhadas para o serviço atualizador de cotações através de serviços gRPC, além de realizar conversões através de valores resgatados em cache.
@@ -45,7 +46,9 @@ Parâmetros (*Via Query*)
 Exemplo:
 
 ```curl -XGET 'localhost:3500/currency?from=USD&to=BRL&amount=1'```
+
 #####Respostas
+
 + **Success** 201
 
 ```json
@@ -78,7 +81,9 @@ Parâmetros (*application/json*)
 * **Code**: Código da moeda 
 
 ```curl -XPOST -H "Content-type: application/json" -d '{"code":"CAD"}' 'localhost:3500/currency'```
+
 #####Resposta
+
 + **Success** 201
 
 ```json
@@ -111,7 +116,9 @@ Parâmetros (**Via URI**)
 * **Code**: Código da moeda
 
 ```curl -XDELETE 'localhost:3500/currency/CAD''```
+
 #####Resposta
+
 + **Success** 204
 
 + **Fail** 404
