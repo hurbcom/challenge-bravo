@@ -4,11 +4,11 @@
 
 **Cadidato**: Iury Dias
 
-##Requisitos
+#### Requisitos
 
 * [Docker-compose](https://docs.docker.com/compose/install/)
 
-##Arquitetura do projeto
+#### Arquitetura do projeto
 
 ![alt text](https://github.com/iiurydias/challenge-bravo/blob/master/architecture.png?raw=true "Arquitetura do projeto")
 
@@ -18,7 +18,7 @@
 
 **redis**: Serviço de cache responsável por manter valores de cotação das moedas suportadas.
 
-##Iniciando a aplicação
+#### Iniciando a aplicação
 Após clonar o projeto em sua máquina e com os requisitos já instalados, executar o seguinte comando:
 ```shell script
     docker-compose up
@@ -27,9 +27,9 @@ Isso subirá o serviço de **API** na porta ```3500```.
 
 *Obs: Configurações de host, porta, acesso ao cache de cada serviço são configuráveis através dos arquivos **config.json** dentro dos respectivos repositórios dentro do projeto. Moedas iniciais suportadas da aplicação também são configuradas da mesma forma, as requisitadas pelo desafio já se encontram no arquivo.*
 
-##Rotas
+#### Rotas
 
-###Converção de moedas
+##### Converção de moedas
 
 ```GET /currency```
 
@@ -47,7 +47,7 @@ Exemplo:
 
 ```curl -XGET 'localhost:3500/currency?from=USD&to=BRL&amount=1'```
 
-####Respostas
+##### Respostas
 
 + **Success** 201
 
@@ -70,7 +70,7 @@ Exemplo:
 }    
 ``` 
 
-###Adicionar nova moeda suportada
+##### Adicionar nova moeda suportada
 
 ```POST /currency```
 
@@ -82,7 +82,7 @@ Parâmetros (*application/json*)
 
 ```curl -XPOST -H "Content-type: application/json" -d '{"code":"CAD"}' 'localhost:3500/currency'```
 
-####Resposta
+##### Resposta
 
 + **Success** 201
 
@@ -105,7 +105,7 @@ Parâmetros (*application/json*)
 }    
 ```  
 
-###Remover moeda suportada
+##### Remover moeda suportada
 
 ```DELETE /currency/:code```
 
@@ -117,7 +117,7 @@ Parâmetros (**Via URI**)
 
 ```curl -XDELETE 'localhost:3500/currency/CAD''```
 
-####Resposta
+##### Resposta
 
 + **Success** 204
 
@@ -134,19 +134,19 @@ Parâmetros (**Via URI**)
 
 *Obs: Códigos das moedas seguem o padrão da [ISO_4217](https://en.wikipedia.org/wiki/ISO_4217).*
 
-###Executando testes
+#### Executando testes
 
 **Requisitos**
 
 * [Golang](https://golang.org/doc/install) 1.15
 
-####Comando
+##### Comando
 
 É necessário entrar no respositório de cada serviço e executar o comando:
 
 ```make run-tests```
 
-####Saída
+##### Saída
 
 **api**
 
@@ -171,7 +171,7 @@ ok      github.com/iiurydias/challenge-bravo/currency-rate-updater/service/serve
 ?       github.com/iiurydias/challenge-bravo/currency-rate-updater/service/server/currency      [no test files]
 ```
 
-###Benchmark
+#### Benchmark
 
 Testes de benchmark foram realizados com a ajuda do [wrk](https://github.com/wg/wrk), uma ferramenta para medição de performance de serviços web, onde foi obtido o seguinte resultado:
 
