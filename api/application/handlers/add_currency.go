@@ -16,6 +16,7 @@ type currency struct {
 	Body string `json:"body,omitempty"`
 }
 
+// IT HANDLES A ADD NEW CURRENCY REQUEST
 func (h *handlers) AddCurrency() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		body, err := ioutil.ReadAll(ctx.Request.Body)

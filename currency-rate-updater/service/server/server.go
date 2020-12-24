@@ -32,7 +32,7 @@ func New(port int, cntroller controller.Controller) (*Server, error) {
 	}, nil
 }
 
-// It starts the gRPC server
+// IT STARTS THE GRPC SERVER
 func (s *Server) Run() <-chan error {
 	var chErr chan error
 	log.Infoln(fmt.Sprintf("gRPC server has started at port %d", s.port))
@@ -44,7 +44,7 @@ func (s *Server) Run() <-chan error {
 	return chErr
 }
 
-// It closes the gRPC server
+// IT CLOSES THE GRPC SERVER
 func (s *Server) Close() {
 	log.Infoln("gRPC server shutdown")
 	s.server.GracefulStop()

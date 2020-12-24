@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// IT HANDLES A REMOVE CURRENCY REQUEST
 func (h *handlers) RemoveCurrency() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		code := strings.ToUpper(ctx.Param("id"))

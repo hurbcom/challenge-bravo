@@ -11,7 +11,8 @@ import (
 	"testing"
 )
 
-func TestApplication(t *testing.T) {
+// IT REQUIRES CONTAINERS UP THROUGH DOCKER-COMPOSE
+func TestOfIntegration(t *testing.T) {
 	RegisterTestingT(t)
 	t.Run("it tests add a valid currency", func(t *testing.T) {
 		defer deleteCurrencyAnyway("cad")

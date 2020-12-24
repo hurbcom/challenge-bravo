@@ -16,6 +16,7 @@ type convertion struct {
 	Result float64 `json:"result,omitempty"`
 }
 
+// IT HANDLES A CONVERT CURRENCIES REQUEST
 func (h *handlers) ConvertCurrency() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		from := strings.ToUpper(ctx.Query("from"))

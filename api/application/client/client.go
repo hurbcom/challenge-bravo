@@ -20,6 +20,7 @@ func New(cfg Config) (Client, error) {
 	return &client{client: currency.NewCurrencyServiceClient(conn)}, nil
 }
 
+// IT CALLS GRPC SERVER ADD CURRENCY SERVICE
 func (c *client) AddCurrency(code string) error {
 	request := &currency.Request{Code: code}
 	_, err := c.client.AddCurrency(context.Background(), request)
@@ -29,6 +30,7 @@ func (c *client) AddCurrency(code string) error {
 	return nil
 }
 
+// IT CALLS GRPC SERVER REMOVE CURRENCY SERVICE
 func (c *client) RemoveCurrency(code string) error {
 	request := &currency.Request{Code: code}
 	_, err := c.client.RemoveCurrency(context.Background(), request)

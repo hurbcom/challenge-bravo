@@ -23,6 +23,7 @@ func New(cacheModule cache.Cache, currencyModule currency.Currency, allowedCurre
 	}
 }
 
+// IT CONTROLS ADDING NEW CURRENCY CHECKING IF IS VALID OR ALREADY EXIST, ENDING INSERTING WITH VALUE ON CACHE
 func (c *controller) AddCurrency(code string) error {
 	if _, ok := c.existCurrency(code); ok {
 		return customErrors.ErrCurrencyAlreadyExist
@@ -39,6 +40,7 @@ func (c *controller) AddCurrency(code string) error {
 	return nil
 }
 
+// IT CONTROLS REMOVING CURRENCY CHECKING IF EXIST, ENDING REMOVING FROM CACHE AND ALLOWED CURRENCIES LIST
 func (c *controller) RemoveCurrency(code string) error {
 	if ok := c.removeCurrency(code); !ok {
 		return customErrors.ErrCurrencyNotFound
@@ -50,6 +52,7 @@ func (c *controller) RemoveCurrency(code string) error {
 	return nil
 }
 
+// IT UPDATES ALLOWED CURRENCIES IN CERTAIN PULLING TIME
 func (c *controller) UpdateCurrencies() error {
 	currencies, err := c.currencyModule.GetAllCurrenciesRate()
 	if err != nil {
@@ -66,6 +69,7 @@ func (c *controller) UpdateCurrencies() error {
 	return nil
 }
 
+// IT RETURNS ALLOWED CURRENCIES LIST
 func (c *controller) GetAllowedCurrencies() []string {
 	return c.allowedCurrencies
 }

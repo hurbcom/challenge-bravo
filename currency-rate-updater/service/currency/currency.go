@@ -16,7 +16,7 @@ func New(host string) Currency {
 	return &currency{host: host}
 }
 
-// Get specific currency from third party application and hydrate it
+// IT GETS SPECIFIC CURRENCY FROM THIRD PARTY APPLICATION AND HYDRATE IT
 func (c *currency) GetCurrencyRate(code string) (float64, error) {
 	result, err := c.getAllCurrenciesRate()
 	if err != nil {
@@ -29,7 +29,7 @@ func (c *currency) GetCurrencyRate(code string) (float64, error) {
 	return value.Float(), nil
 }
 
-// Get all currencies from third party application and hydrate it
+// IT GETS ALL CURRENCIES FROM THIRD PARTY APPLICATION AND HYDRATE IT
 func (c *currency) GetAllCurrenciesRate() (map[string]float64, error) {
 	currencies := make(map[string]float64)
 	result, err := c.getAllCurrenciesRate()
@@ -42,7 +42,7 @@ func (c *currency) GetAllCurrenciesRate() (map[string]float64, error) {
 	return currencies, nil
 }
 
-// Get all currencies from third party application
+// IT GETS ALL CURRENCIES FROM THIRD PARTY APPLICATION
 func (c *currency) getAllCurrenciesRate() (map[string]gjson.Result, error) {
 	response, err := http.Get(c.host)
 	if err != nil {

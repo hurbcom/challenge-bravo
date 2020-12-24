@@ -19,7 +19,7 @@ func NewCurrencyServer(cntroller controller.Controller) *Server {
 	return &Server{cntroller: cntroller}
 }
 
-// gRPC service to add a new currency to the service
+// GRPC SERVICE TO ADD A NEW CURRENCY TO THE SERVICE
 func (s *Server) AddCurrency(ctx context.Context, req *Request) (*Response, error) {
 	code := strings.ToUpper(req.Code)
 	err := s.cntroller.AddCurrency(code)
@@ -38,7 +38,7 @@ func (s *Server) AddCurrency(ctx context.Context, req *Request) (*Response, erro
 	}, nil
 }
 
-// gRPC service to remove a new currency to the service
+// GRPC SERVICE TO REMOVE A NEW CURRENCY TO THE SERVICE
 func (s *Server) RemoveCurrency(ctx context.Context, req *Request) (*Response, error) {
 	code := strings.ToUpper(req.Code)
 	err := s.cntroller.RemoveCurrency(code)
