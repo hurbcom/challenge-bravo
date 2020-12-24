@@ -4,6 +4,8 @@
 
 **Cadidato**: Iury Dias
 
+**Contato**: iiurydias@hotmail.com
+
 #### Requisitos
 
 * [Docker-compose](https://docs.docker.com/compose/install/)
@@ -55,9 +57,12 @@ Exemplo:
 {
   "status": "success",
   "data": {
-    "code": "CAD"
+    "from": "USD",
+    "to": "BRL",
+    "amount": 1,
+    "result": 5.22
   }
-}  
+} 
 ``` 
 + **Fail** 400
 
@@ -65,9 +70,9 @@ Exemplo:
 {
   "status": "fail",
   "data": {
-    "code": "code has a invalid type"
+    "from": "from currency not found"
   }
-}    
+}   
 ``` 
 
 ##### Adicionar nova moeda suportada
@@ -115,7 +120,7 @@ Parâmetros (**Via URI**)
 
 * **Code**: Código da moeda
 
-```curl -XDELETE 'localhost:3500/currency/CAD''```
+```curl -XDELETE 'localhost:3500/currency/CAD'```
 
 ##### Resposta
 
@@ -132,7 +137,9 @@ Parâmetros (**Via URI**)
 }   
 ```  
 
-*Obs: Códigos das moedas seguem o padrão da [ISO_4217](https://en.wikipedia.org/wiki/ISO_4217).*
+*Obs¹: Códigos das moedas seguem o padrão da [ISO4217](https://en.wikipedia.org/wiki/ISO_4217).*
+
+*Obs²: A nível de teste, está disponível um arquivo na raiz do projeto chamado **make_test_requests.sh** que realiza requisições para os três endpoints via terminal, é necessário o [curl](https://curl.se/) instalado na máquina.*
 
 #### Executando testes
 

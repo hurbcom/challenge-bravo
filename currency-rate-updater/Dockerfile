@@ -1,8 +1,10 @@
-FROM golang:1.15
-RUN apt-get update && apt-get install -y \
-  ca-certificates
-WORKDIR /app
-COPY ./ /app/
+FROM golang:1.15-alpine as builder
+RUN apk update && apk add ca-certificates
+WORKDIR /service
+COPY ./ /service/
 RUN go mod tidy
 RUN go build -o ./ ./
-ENTRYPOINT ["/app/currency-rate-updater", "run"]
+FROM alpine:latest
+WORKDIR /service
+COPY --from=builder /service/currency-rate-updater /service/config.json ./
+ENTRYPOINT ["/service/currency-rate-updater", "run"]

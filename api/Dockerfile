@@ -1,8 +1,10 @@
-FROM golang:1.15
-RUN apt-get update && apt-get install -y \
-  ca-certificates
-WORKDIR /app
-COPY ./ /app/
+FROM golang:1.15-alpine as builder
+RUN apk update && apk add ca-certificates
+WORKDIR /service
+COPY ./ /service/
 RUN go mod tidy
 RUN go build -o ./ ./
-ENTRYPOINT ["/app/api", "run"]
+FROM alpine:latest
+WORKDIR /service
+COPY --from=builder /service/api /service/config.json ./
+ENTRYPOINT ["/seyrvice/api", "run"]
