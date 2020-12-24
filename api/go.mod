@@ -11,6 +11,7 @@ require (
 	github.com/onsi/gomega v1.10.4
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.7.0
+	github.com/tidwall/gjson v1.6.5
 	github.com/urfave/cli/v2 v2.3.0
 	google.golang.org/grpc v1.34.0
 )

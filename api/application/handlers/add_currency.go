@@ -12,7 +12,8 @@ import (
 )
 
 type currency struct {
-	Code string `json:"code"`
+	Code string `json:"code,omitempty"`
+	Body string `json:"body,omitempty"`
 }
 
 func (h *handlers) AddCurrency() gin.HandlerFunc {
@@ -29,7 +30,7 @@ func (h *handlers) AddCurrency() gin.HandlerFunc {
 				return
 			}
 			logError(err)
-			logError(jsend.Error(ctx.Writer, "data has been lost on server", http.StatusInternalServerError))
+			logError(jsend.Fail(ctx.Writer, currency{Body: "invalid json body"}, http.StatusBadRequest))
 			return
 		}
 		if currncy.Code == "" {

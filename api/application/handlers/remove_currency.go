@@ -20,10 +20,10 @@ func (h *handlers) RemoveCurrency() gin.HandlerFunc {
 					logError(jsend.Fail(ctx.Writer, currency{Code: "code not found"}, http.StatusNotFound))
 					return
 				}
-				logError(jsend.Error(ctx.Writer, "data has been lost on server", http.StatusInternalServerError))
-				return
 			}
-			logError(jsend.Success(ctx.Writer, nil, http.StatusNoContent))
+			logError(jsend.Error(ctx.Writer, "data has been lost on server", http.StatusInternalServerError))
+			return
 		}
+		logError(jsend.Success(ctx.Writer, nil, http.StatusNoContent))
 	}
 }
