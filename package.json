@@ -1,0 +1,22 @@
+{
+    "name": "challange-bravo",
+    "version": "1.0.0",
+    "description": "Node JS guide",
+    "main": "./src/app.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start-dev": "nodemon -r dotenv/config ./src/app.js",
+      "start": "node -r dotenv/config ./src/app.js"
+    },
+    "author": "João Gabriel Brouck",
+    "license": "unlicensed",
+    "dependencies": {
+      "dotenv": "^8.2.0",
+      "express": "^4.17.1",
+      "helmet": "^4.3.1"
+    },
+    "devDependencies": {
+      "eslint": "^7.16.0",
+      "nodemon": "^2.0.6"
+    }
+  }
