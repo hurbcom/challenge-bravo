@@ -11,6 +11,7 @@
   "author": "João Gabriel Brouck",
   "license": "unlicensed",
   "dependencies": {
+    "coinbase": "^2.0.8",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^4.3.1",
