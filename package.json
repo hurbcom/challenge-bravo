@@ -1,0 +1,51 @@
+{
+  "name": "ms-converter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git:git@github.com:Jejugo/ecommerce_server.git"
+  },
+  "scripts": {
+    "setup": "npm i; export NVM_DIR=$HOME/.nvm && source $NVM_DIR/nvm.sh; nvm i 14.15.3 && nvm use",
+    "start": "cp config/config.dev.js config/index.js; nodemon server/index.js",
+    "dev": "cp config/config.dev.js config/index.js; node server/index.js",
+    "dev:debug": "cp config/config.dev.js config/index.js; node --inspect server/index.js",
+    "test": "mocha 'test/**/*.js' --recursive --timeout 60000 --exit",
+    "lint": "eslint --fix --ext .json, .js, .spec.js --no-error-on-unmatched-pattern",
+    "docker:build": "docker build . -t converter",
+    "docker:run": "docker run -it -p 3000:3000 --name converter converter:latest"
+  },
+  "author": "Jeff Goes",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-http": "^4.3.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-json": "^2.1.2",
+    "eslint-plugin-standard": "^5.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "nock": "^13.0.5",
+    "node-cache": "^5.1.2",
+    "rootpath": "^0.1.2",
+    "sequelize": "^6.3.3",
+    "sinon": "^9.2.2",
+    "sinon-chai": "^3.5.0",
+    "supertest": "^6.0.1",
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.16.0",
+    "lint": "^0.7.0",
+    "nodemon": "^2.0.4",
+    "sequelize-cli": "^6.2.0"
+  }
+}

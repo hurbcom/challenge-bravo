@@ -1,0 +1,18 @@
+POST http://localhost:3000/currency HTTP/1.1
+content-type: application/json
+
+{
+    "currency": "BRL"
+}
+
+###
+GET http://localhost:3000/conversion?from=USD&to=BRL&amount=10 HTTP/1.1
+content-type: application/json
+
+###
+DELETE http://localhost:3000/currency HTTP/1.1
+content-type: application/json
+
+{
+    "currency": "BRL"
+}

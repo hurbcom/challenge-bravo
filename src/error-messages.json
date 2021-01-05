@@ -1,0 +1,37 @@
+{
+  "WRONG_PASSWORD": {
+    "status": 400,
+    "body": {
+      "code": 1,
+      "message": "Senha inválida."
+    }
+  },
+  "CUSTOMER_NOT_FOUND": {
+    "status": 400,
+    "body": {
+      "code": 1,
+      "message": "Usuário não encontrado com os parâmetros fornecidos ou conexão de banco perdida."
+    }
+  },
+  "DUPLICATED_CURRENCY": {
+    "status": 400,
+    "body": {
+      "code": 1,
+      "message": "Moeda cambial já existente."
+    }
+  },
+  "CURRENCY_DOES_NOT_EXIST": {
+    "status": 400,
+    "body": {
+      "code": 1,
+      "message": "Moeda cambial inexistente."
+    }
+  },
+  "CURRENCY_NOT_SUPPORTED": {
+    "status": 400,
+    "body": {
+      "code": 1,
+      "message": "Moeda cambial não suportada. Por favor, utilize uma nova moeda cambial. "
+    }
+  }
+}
