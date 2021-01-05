@@ -1,0 +1,186 @@
+swagger: "2.0"
+schemes: 
+  - "http"
+host: localhost:3000
+basePath: /
+info:
+  description: 'Challange Bravo'
+  version: 'v1'
+  title: 'Challange Bravo'
+
+produces:
+  - application/json
+consumes: 
+  - application/json
+tags:
+  - name: health
+  - name: conversion
+  - name: currency
+  
+paths:
+  /health:
+    get:
+      tags:
+        - health
+      description: Returns weather the service is up or not
+      operationId: Health Check
+      responses:
+        200:
+          description: Service is up and running
+          schema:
+            type: boolean
+          examples:
+            application/json: 
+              success: true
+        500:
+          description: Service is down
+          schema:
+            type: boolean
+          examples:
+            application/json: 
+             success: false
+              
+  /conversion:
+    get:
+      tags:
+        - conversion
+      description: Returns the currency conversion if the currency is supported.
+      operationId: Currency Conversion
+      parameters:
+        - in: query
+          name: from
+          required: true
+          type: string
+          description: Currency's origin value to convert
+        - in: query
+          name: to
+          required: true
+          type: string
+          description: Currency's destine value to be converted to
+        - in: query
+          name: amount
+          required: true
+          type: string
+          description: Amount of currency
+      responses:
+        200:
+          description: Conversion value
+          schema:
+            type: object
+          examples:
+            application/json: 
+              baseNumber: '10'
+              conversion: 51.432173064000004
+              
+        500:
+          description: Service is down
+          schema:
+            type: boolean
+          examples:
+            application/json: 
+              error:
+                code: 1
+                message: 'Moeda cambial não suportada. Por favor, utilize uma nova moeda cambial. '
+                
+                
+  /currency:
+    post:
+      tags:
+        - currency
+      description: Add supported currency
+      operationId: Currency Deletion
+      responses:
+        200:
+          description: Conversion added successfully
+          schema:
+            type: object
+          examples:
+            application/json: 
+              - CAD
+              - HKD
+              - ISK
+              - PHP
+              - DKK
+              - HUF
+              - CZK
+              - GBP
+              - RON
+              - SEK
+              - IDR
+              - INR
+              - RUB
+              - HRK
+              - JPY
+              - THB
+              - CHF
+              - EUR
+              - MYR
+              - BGN
+              - TRY
+              - CNY
+              - NOK
+              - NZD
+              - ZAR
+              - USD
+              - MXN
+              - SGD
+              - AUD
+              - ILS
+              - KRW
+              - PLN
+                
+        500:
+          description: Currency not supported
+          schema:
+            type: boolean
+          examples:
+            application/json: 
+              error:
+                code: 1
+                message: Moeda cambial inexistente.
+    delete:
+      tags:
+        - currency
+      description: Delete supported currency
+      responses:
+        200:
+          description: Conversion deletion successfull
+          schema:
+            type: object
+          examples:
+            application/json: 
+              - CAD
+              - HKD
+              - ISK
+              - PHP
+              - DKK
+              - HUF
+              - CZK
+              - GBP
+              - RON
+              - SEK
+              - IDR
+              - INR
+              - RUB
+              - HRK
+              - JPY
+              - THB
+              - CHF
+              - EUR
+              - MYR
+              - BGN
+              - TRY
+              - CNY
+              - NOK
+              - NZD
+              - ZAR
+              - USD
+              - MXN
+              - SGD
+              - AUD
+              - ILS
+              - KRW
+              - PLN
+              - BRL
+                
+ 

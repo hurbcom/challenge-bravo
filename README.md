@@ -5,6 +5,11 @@
 - `npm setup`: to setup initial project's configuration (If you don't have nvm installed follow this instructions: https://github.com/nvm-sh/nvm)
 - run `npm run start`
 
+or, if you want to run using docker container:
+
+- npm run docker:build
+- npm run docker:run
+
 ### Project's Layers:
 - controllers: User to convert data in the most accessible format for it to be processed by the deeper layers.
 - use-cases: It is the layer that contains the business logic to perform the actions

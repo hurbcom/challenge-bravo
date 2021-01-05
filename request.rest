@@ -6,7 +6,7 @@ content-type: application/json
 }
 
 ###
-GET http://localhost:3000/conversion?from=USD&to=BRL&amount=10 HTTP/1.1
+GET http://localhost:3000/conversion?from=USD&to=XXX&amount=10 HTTP/1.1
 content-type: application/json
 
 ###
