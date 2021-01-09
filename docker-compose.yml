@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  bravo-db:
+    image: mongo:4.2.11
+    command: mongod --port 27117
+    ports:
+      - 27117:27117

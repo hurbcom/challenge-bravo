@@ -1,0 +1,18 @@
+# IDE
+**/.idea
+vscode
+
+# OS
+.DS_Store
+.tmp
+
+# VENV
+#.env*
+__pycache__
+.pytest_cache
+.coverage*
+venv
+
+htmlcov
+
+*.png
