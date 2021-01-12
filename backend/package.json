@@ -1,0 +1,11 @@
+{
+  "name": "hurb-currency-exchange",
+  "version": "1.0.0",
+  "description": "Currency exchanges API",
+  "main": "server.js",
+  "author": "gabrielmbarboza",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

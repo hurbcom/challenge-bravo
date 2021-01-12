@@ -1,0 +1,4 @@
+backend/node_modules
+backend/DS_store
+backend/.env
+backend/yarn-error.*
