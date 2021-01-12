@@ -20,14 +20,11 @@ class CurrencyApi:
         def add_currency():
             data = request.json
 
-            new_data = {
-                "name": data["name"],
-                "iso_code": data["isoCode"]
-            }
+            new_data = {"name": data["name"], "iso_code": data["isoCode"]}
             app.logger.info(f'Adding currency of iso code {new_data["iso_code"]}')
 
             currency = self.currency_service.add(new_data)
-            return build_response(currency)
+            return build_response(currency, http_status=201)
 
 
 CurrencyApi()

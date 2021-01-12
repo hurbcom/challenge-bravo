@@ -8,8 +8,12 @@ from exception import global_exception_handler
 load_dotenv()
 
 mongodb_uri = getenv("MONGODB_URI")
+env = getenv("ENV")
 
-connect(db=f"bravo", host=mongodb_uri)
+if env == "test":
+    connect(db=f"bravo-{env}", host=mongodb_uri)
+else:
+    connect(db="bravo", host=mongodb_uri)
 
 app = Flask(__name__)
 

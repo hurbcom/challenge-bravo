@@ -2,7 +2,7 @@ from functools import wraps
 from typing import Dict
 from flask import request
 
-from exception import BravoException, GEE003
+from exception import BravoException, GEE003, GEE005
 from validation import is_valid
 
 
@@ -26,7 +26,9 @@ def validate_request(validation_schema: Dict):
 
             errors = is_valid(schema=validation_schema, data=data)
             if errors:
-                raise BravoException(errors)
+                raise BravoException(GEE005(errors))
             return f(*args, **kwargs)
+
         return func
+
     return wrapper

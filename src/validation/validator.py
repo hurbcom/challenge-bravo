@@ -8,3 +8,6 @@ class BravoValidator(Validator):
 
 def is_valid(schema: Dict, data: Optional[Dict] = None) -> Dict:
     data = data if data else {}
+    v = BravoValidator(schema=schema)
+    v.validate(data)
+    return v.errors
