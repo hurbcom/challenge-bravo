@@ -1,7 +1,7 @@
 version: "3.2"
 
 services:
-  challenge-bravo:
+  challenge-bravo-1:
     build: ./
     restart: always
     ports:
@@ -9,6 +9,6 @@ services:
     networks:
       back:
         aliases:
-          - "challenge-bravo.service.com.br"
+          - "challenge-bravo-1.service.com.br"
 networks:
   back:
