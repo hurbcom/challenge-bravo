@@ -149,7 +149,7 @@ _Status http_: `200 OK`
 ## Executar os testes
 ### Requesitos
 
-* GoLang 1:15
+* Golang 1:15
 
 Para executar os testes feitos é necessario entrar na pasta ./api do projeto e rodar o comando:
 
