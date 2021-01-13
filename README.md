@@ -36,7 +36,8 @@ No terminal execute
         "initials": "AUD", 
       }'
 
-Ou em alguma outra interface tipo Postman ou Insomnia
+Ou em alguma outra interface preferência, tipo Postman ou Insomnia por exemplo
+
 **Body** (application/json):
 
     {
@@ -73,7 +74,7 @@ No terminal execute
 
     curl --location --request GET 'http://localhost:8082/v1/currencyConvert?from=USD&to=BRL&amount=70'
 
-Ou em alguma outra interface preferência, tipo Postman ou Insomnia
+Ou em alguma outra interface preferência, tipo Postman ou Insomnia por exemplo
 
 Saída esperada
 
@@ -106,7 +107,7 @@ No terminal execute
 
     curl --location --request DELETE 'http://localhost:8082/v1/deleteCurrency/AUD' 
 
-Ou em alguma outra interface de sua preferência, tipo Postman ou Insomnia
+Ou em alguma outra interface de sua preferência, tipo Postman ou Insomnia por exemplo
 
 Saída esperada
 
@@ -133,7 +134,7 @@ No terminal execute
 
     curl --location --request GET 'http://localhost:8082/v1/getCurrencies' 
 
-Ou em alguma outra interface de sua preferência, tipo Postman ou Insomnia
+Ou em alguma outra interface de sua preferência, tipo Postman ou Insomnia por exemplo
 
 Saída esperada
 
