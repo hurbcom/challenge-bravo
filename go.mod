@@ -1,4 +1,4 @@
-module challenge-bravo
+module challenge-bravo-1
 
 go 1.15
 
