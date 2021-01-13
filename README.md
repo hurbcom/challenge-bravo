@@ -118,16 +118,12 @@ _Status http_: `200 OK`
 }
 ```
 
-### Receber todas moedas
+### Verificar todas moedas presentes na aplicação
 
 METÓDO `GET`v1/
 
     /v1/getCurrencies
-
-**Parametros**: 
-
-* currency: Sigla da moeda a ser deletada
-    
+   
 #### Exemplo
 
 No terminal execute
