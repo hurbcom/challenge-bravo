@@ -1,20 +1,20 @@
 version: "3.5"
 
 services:
-  hurb:
-    image: node:14-alpine
-    command: bash -c "yarn start"
-    working_dir: /home/node/app
-    volumes:
-      - ./backend:/home/node/app
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mongo
-    links:
-      - mongo
+    hurb:
+        image: node:14
+        command: bash -c "yarn start"
+        working_dir: /home/node/app
+        volumes:
+            - ./backend:/home/node/app
+        ports:
+            - "5000:5000"
+        depends_on:
+            - mongo
+        links:
+            - mongo
 
-  mongo:
-    image: mongo:4.2.0
-    ports:
-      - 27017:27017
+    mongo:
+        image: mongo:4.2.0
+        ports:
+            - 27017:27017
