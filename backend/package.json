@@ -5,7 +5,11 @@
   "main": "server.js",
   "author": "gabrielmbarboza",
   "license": "MIT",
+  "scripts": {
+      "start":"node ./server.js"
+  },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.11.11"
   }
