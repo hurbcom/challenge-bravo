@@ -12,6 +12,9 @@ class BaseRepository:
     def get_by_id(self, data_id: str):
         return self._model.objects(id=data_id).first()
 
-    def list_all(self, page_number: int, page_size: int):
+    def list_all(self, page_number: int, page_size: int, ordering: str = None):
         offset = 0 if page_number < 1 else (page_number - 1) * page_size
-        return self._model.objects().skip(offset).limit(page_size)
+        qs = self._model.objects()
+        if ordering:
+            qs = qs.order_by(ordering)
+        return qs.skip(offset).limit(page_size)

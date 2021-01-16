@@ -83,3 +83,15 @@ def test_valid_list_currencies(fixture_client, fixture_currency):
     assert resj[1]["isoCode"] == "EUR"
     assert resj[2]["isoCode"] == "GBP"
     assert resj[3]["isoCode"] == "USD"
+
+    res = fixture_client.get(
+        PREFIX, query_string={"pageNumber": 2, "pageSize": 2, "ordering": "-iso_code"}
+    )
+
+    assert res is not None
+    assert res.status_code == 200
+    assert len(res.json) == 2
+
+    resj = res.json
+    assert resj[0]["isoCode"] == "EUR"
+    assert resj[1]["isoCode"] == "BRL"

@@ -41,13 +41,14 @@ class CurrencyApi:
             req_args = request.args
 
             page_number, page_size = get_pagination(req_args)
+            ordering = req_args.get("ordering")
 
             app.logger.info(
-                f"Listing currencies with page_number {page_number} and page_size {page_size}"
+                f"Listing currencies with page_number {page_number}, page_size {page_size} and ordering {ordering}"
             )
 
             currencies = self.currency_service.list_all(
-                page_number=page_number, page_size=page_size
+                page_number=page_number, page_size=page_size, ordering=ordering
             )
             if not currencies:
                 return build_response([], http_status=200)
