@@ -3,7 +3,7 @@ version: "3.5"
 services:
     hurb:
         image: node:14
-        command: bash -c "yarn start"
+        command: bash -c "yarn dev"
         working_dir: /home/node/app
         volumes:
             - ./backend:/home/node/app
