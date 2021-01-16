@@ -1,7 +1,6 @@
 from datetime import datetime
 from bson import ObjectId
 
-
 PREFIX = "/api/currency"
 
 
@@ -95,3 +94,19 @@ def test_valid_list_currencies(fixture_client, fixture_currency):
     resj = res.json
     assert resj[0]["isoCode"] == "EUR"
     assert resj[1]["isoCode"] == "BRL"
+
+
+def test_valid_delete_currency(fixture_client, fixture_mongo, fixture_currency):
+    currency = fixture_currency()
+
+    currencies = list(fixture_mongo.currency.find({}))
+    assert len(currencies) == 1
+    assert currencies[0]["_id"] == currency.id
+
+    res = fixture_client.delete(f"{PREFIX}/{str(currency.id)}")
+
+    assert res is not None
+    assert res.status_code == 204
+
+    currencies = list(fixture_mongo.currency.find({}))
+    assert len(currencies) == 0

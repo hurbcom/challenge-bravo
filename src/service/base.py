@@ -16,3 +16,6 @@ class BaseService:
 
     def list_all(self, page_number: int, page_size: int, ordering: str = None):
         return self._repository.list_all(page_number, page_size, ordering)
+
+    def delete_by_id(self, data_id: str):
+        self._repository.delete_by_id(data_id)

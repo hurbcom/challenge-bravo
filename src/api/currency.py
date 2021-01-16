@@ -54,5 +54,13 @@ class CurrencyApi:
                 return build_response([], http_status=200)
             return build_response(currencies, http_status=200)
 
+        @app.route(f"{PREFIX}/<currency_id>", methods=["DELETE"])
+        @validate_request(validation_schema=PaginationSchema)
+        def delete_currency(currency_id):
+            app.logger.info(f"Deleting currency of id {currency_id}")
+
+            self.currency_service.delete_by_id(currency_id)
+            return build_response({}, http_status=204)
+
 
 CurrencyApi()

@@ -18,3 +18,8 @@ class BaseRepository:
         if ordering:
             qs = qs.order_by(ordering)
         return qs.skip(offset).limit(page_size)
+
+    def delete_by_id(self, data_id: str):
+        model_obj = self.get_by_id(data_id)
+        if model_obj:
+            model_obj.delete()
