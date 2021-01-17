@@ -1,4 +1,5 @@
 from typing import Dict
+from bson import ObjectId
 
 
 class BaseRepository:
@@ -26,7 +27,18 @@ class BaseRepository:
 
         return {"items": items, "total_items": total_items, "next_page": next_page}
 
+    def update_by_id(self, data_id: str, data: Dict):
+        model_obj = self.get_by_id(data_id)
+        if model_obj:
+            model_obj_dict = model_obj.to_mongo().to_dict()
+            model_obj_dict["id"] = model_obj_dict["_id"]
+            del model_obj_dict["_id"]
+            return self._model(**{**model_obj_dict, **data}).save()
+        return model_obj
+
     def delete_by_id(self, data_id: str):
         model_obj = self.get_by_id(data_id)
         if model_obj:
             model_obj.delete()
+            return data_id
+        return model_obj

@@ -1,14 +1,15 @@
 from datetime import datetime
 from bson import ObjectId
 
+from exception import REP001
+
 PREFIX = "/api/currency"
 
 
-def test_invalid_create_new_currency_with_invalid_payload(fixture_client):
+def test_valid_create_new_currency(fixture_client, fixture_mongo):
     payload = {}
 
     res = fixture_client.post(PREFIX, json=payload)
-    assert res is not None
     assert res.status_code == 400
     assert res.json == {
         "error": {
@@ -17,13 +18,10 @@ def test_invalid_create_new_currency_with_invalid_payload(fixture_client):
         },
     }
 
-
-def test_valid_create_new_currency(fixture_client, fixture_mongo):
     payload = {"name": "Brazilian real", "isoCode": "BRL"}
 
     res = fixture_client.post(PREFIX, json=payload)
 
-    assert res is not None
     assert res.status_code == 201
     assert res.json["id"] is not None
     assert res.json["name"] == payload["name"]
@@ -41,20 +39,16 @@ def test_valid_create_new_currency(fixture_client, fixture_mongo):
     assert isinstance(currencies[0]["update_date"], datetime)
 
 
-def test_invalid_get_non_existing_currency(fixture_client):
+def test_valid_get_currency(fixture_client, fixture_currency):
     res = fixture_client.get(f"{PREFIX}/{str(ObjectId())}")
 
-    assert res is not None
     assert res.status_code == 200
     assert res.json == {}
 
-
-def test_valid_get_currency(fixture_client, fixture_currency):
     currency = fixture_currency()
 
     res = fixture_client.get(f"{PREFIX}/{str(currency.id)}")
 
-    assert res is not None
     assert res.status_code == 200
 
     resj = res.json
@@ -68,7 +62,6 @@ def test_valid_get_currency(fixture_client, fixture_currency):
 def test_valid_list_currencies(fixture_client, fixture_currency):
     res = fixture_client.get(PREFIX)
 
-    assert res is not None
     assert res.status_code == 200
     assert len(res.json["items"]) == 0
     assert res.json["totalItems"] == 0
@@ -81,7 +74,6 @@ def test_valid_list_currencies(fixture_client, fixture_currency):
 
     res = fixture_client.get(PREFIX)
 
-    assert res is not None
     assert res.status_code == 200
 
     resj = res.json
@@ -108,7 +100,35 @@ def test_valid_list_currencies(fixture_client, fixture_currency):
     assert items[0]["isoCode"] == "GBP"
 
 
+def test_valid_update_currency(fixture_client, fixture_mongo, fixture_currency):
+    res = fixture_client.put(f"{PREFIX}/{str(ObjectId())}")
+
+    assert res.status_code == 400
+    assert res.json["error"] == REP001
+
+    currency = fixture_currency()
+
+    currencies = list(fixture_mongo.currency.find({}))
+    assert len(currencies) == 1
+    assert currencies[0]["_id"] == currency.id
+    assert currencies[0]["iso_code"] == "BRL"
+
+    res = fixture_client.put(f"{PREFIX}/{str(currency.id)}", json={"isoCode": "BRR"})
+
+    assert res.status_code == 200
+    assert res.json["id"] == str(currency.id)
+    assert res.json["isoCode"] == "BRR"
+
+    currencies = list(fixture_mongo.currency.find({}))
+    assert len(currencies) == 1
+
+
 def test_valid_delete_currency(fixture_client, fixture_mongo, fixture_currency):
+    res = fixture_client.put(f"{PREFIX}/{str(ObjectId())}")
+
+    assert res.status_code == 400
+    assert res.json["error"] == REP001
+
     currency = fixture_currency()
 
     currencies = list(fixture_mongo.currency.find({}))
@@ -117,7 +137,6 @@ def test_valid_delete_currency(fixture_client, fixture_mongo, fixture_currency):
 
     res = fixture_client.delete(f"{PREFIX}/{str(currency.id)}")
 
-    assert res is not None
     assert res.status_code == 204
 
     currencies = list(fixture_mongo.currency.find({}))

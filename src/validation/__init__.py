@@ -1,2 +1,2 @@
 from .validator import is_valid
-from .schema import CreateCurrencySchema, PaginationSchema
+from .schema import CreateCurrencySchema, UpdateCurrencySchema, PaginationSchema

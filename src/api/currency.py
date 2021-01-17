@@ -1,9 +1,10 @@
 from flask import request
-from common import app, get_pagination
+from json import loads, dumps
 
 from middleware import validate_request, build_response
-from validation import CreateCurrencySchema, PaginationSchema
+from validation import CreateCurrencySchema, UpdateCurrencySchema, PaginationSchema
 from service import CurrencyService
+from common import app, get_pagination, camel_dict_keys_to_underscore
 
 PREFIX = "/api/currency"
 
@@ -52,8 +53,18 @@ class CurrencyApi:
             )
             return build_response(currencies, http_status=200)
 
+        @app.route(f"{PREFIX}/<currency_id>", methods=["PUT"])
+        @validate_request(validation_schema=UpdateCurrencySchema)
+        def update_currency(currency_id):
+            data = request.get_json(silent=True)
+            new_data = camel_dict_keys_to_underscore(data)
+
+            app.logger.info(f"Updating currency of id {currency_id}")
+
+            updated_currency = self.currency_service.update_by_id(currency_id, new_data)
+            return build_response(updated_currency, http_status=200)
+
         @app.route(f"{PREFIX}/<currency_id>", methods=["DELETE"])
-        @validate_request(validation_schema=PaginationSchema)
         def delete_currency(currency_id):
             app.logger.info(f"Deleting currency of id {currency_id}")
 
