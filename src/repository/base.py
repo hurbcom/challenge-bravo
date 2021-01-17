@@ -13,11 +13,18 @@ class BaseRepository:
         return self._model.objects(id=data_id).first()
 
     def list_all(self, page_number: int, page_size: int, ordering: str = None):
-        offset = 0 if page_number < 1 else (page_number - 1) * page_size
         qs = self._model.objects()
         if ordering:
             qs = qs.order_by(ordering)
-        return qs.skip(offset).limit(page_size)
+
+        total_items = qs.count()
+        next_page = total_items > page_number * page_size
+
+        offset = 0 if page_number < 1 else (page_number - 1) * page_size
+
+        items = list(qs.skip(offset).limit(page_size))
+
+        return {"items": items, "total_items": total_items, "next_page": next_page}
 
     def delete_by_id(self, data_id: str):
         model_obj = self.get_by_id(data_id)

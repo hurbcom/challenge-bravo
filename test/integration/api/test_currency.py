@@ -66,6 +66,14 @@ def test_valid_get_currency(fixture_client, fixture_currency):
 
 
 def test_valid_list_currencies(fixture_client, fixture_currency):
+    res = fixture_client.get(PREFIX)
+
+    assert res is not None
+    assert res.status_code == 200
+    assert len(res.json["items"]) == 0
+    assert res.json["totalItems"] == 0
+    assert res.json["nextPage"] is False
+
     fixture_currency({})
     fixture_currency({"name": "United States dollar", "iso_code": "USD"})
     fixture_currency({"name": "British pound", "iso_code": "GBP"})
@@ -75,25 +83,29 @@ def test_valid_list_currencies(fixture_client, fixture_currency):
 
     assert res is not None
     assert res.status_code == 200
-    assert len(res.json) == 4
 
     resj = res.json
-    assert resj[0]["isoCode"] == "BRL"
-    assert resj[1]["isoCode"] == "EUR"
-    assert resj[2]["isoCode"] == "GBP"
-    assert resj[3]["isoCode"] == "USD"
+    assert resj["totalItems"] == 4
+    assert resj["nextPage"] is False
+
+    items = resj["items"]
+    assert len(items) == 4
+    assert items[0]["isoCode"] == "BRL"
+    assert items[1]["isoCode"] == "EUR"
+    assert items[2]["isoCode"] == "GBP"
+    assert items[3]["isoCode"] == "USD"
 
     res = fixture_client.get(
-        PREFIX, query_string={"pageNumber": 2, "pageSize": 2, "ordering": "-iso_code"}
+        PREFIX, query_string={"pageNumber": 2, "pageSize": 1, "ordering": "-iso_code"}
     )
 
-    assert res is not None
-    assert res.status_code == 200
-    assert len(res.json) == 2
-
     resj = res.json
-    assert resj[0]["isoCode"] == "EUR"
-    assert resj[1]["isoCode"] == "BRL"
+    assert resj["totalItems"] == 4
+    assert resj["nextPage"] is True
+
+    items = resj["items"]
+    assert len(items) == 1
+    assert items[0]["isoCode"] == "GBP"
 
 
 def test_valid_delete_currency(fixture_client, fixture_mongo, fixture_currency):

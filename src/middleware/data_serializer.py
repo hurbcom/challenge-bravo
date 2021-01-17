@@ -1,6 +1,6 @@
 import re
 from typing import Dict, Callable, List
-from json import dumps, JSONEncoder
+from json import dumps, loads, JSONEncoder
 from datetime import date, datetime
 from flask import Response
 from mongoengine.base import BaseDocument
@@ -22,13 +22,21 @@ def underscore_to_camel(name: str) -> str:
 def convert_json(d: Dict, convert: Callable) -> Dict:
     new_d = {}
     for k, v in d.items():
-        new_d[convert(k)] = convert_json(v, convert) if isinstance(v, dict) else v
+        if isinstance(v, list):
+            new_v = []
+            for item in v:
+                new_v.append(convert_json(item, convert))
+            new_d[convert(k)] = new_v
+        else:
+            new_d[convert(k)] = convert_json(v, convert) if isinstance(v, dict) else v
     return new_d
 
 
 class CustomEncoder(JSONEncoder):
     def default(self, obj, **kwargs):
-        if isinstance(obj, ObjectId):
+        if isinstance(obj, BaseDocument):
+            return obj.to_mongo().to_dict()
+        elif isinstance(obj, ObjectId):
             return str(obj)
         elif isinstance(obj, datetime):
             return obj.strftime("%Y-%m-%d %H:%M:%S")
@@ -38,9 +46,7 @@ class CustomEncoder(JSONEncoder):
 
 
 def serialize_data(data: [BaseDocument, Dict, List]) -> [Dict, List]:
-    if isinstance(data, BaseDocument):
-        new_data = convert_json(data.to_mongo().to_dict(), underscore_to_camel)
-    elif isinstance(data, list):
+    if isinstance(data, list):
         new_data = []
         for d in data:
             new_data.append(serialize_data(d))
@@ -53,8 +59,8 @@ def serialize_data(data: [BaseDocument, Dict, List]) -> [Dict, List]:
 def build_response(
     data: [BaseDocument, Dict, List], http_status: int = 200
 ) -> Response:
-    new_data = serialize_data(data)
-    res = dumps(new_data, cls=CustomEncoder)
+    new_data = dumps(data, cls=CustomEncoder)
+    res = dumps(serialize_data(loads(new_data)))
 
     if not res:
         return BravoException(GEE004).http_response

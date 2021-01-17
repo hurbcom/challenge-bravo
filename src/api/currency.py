@@ -50,8 +50,6 @@ class CurrencyApi:
             currencies = self.currency_service.list_all(
                 page_number=page_number, page_size=page_size, ordering=ordering
             )
-            if not currencies:
-                return build_response([], http_status=200)
             return build_response(currencies, http_status=200)
 
         @app.route(f"{PREFIX}/<currency_id>", methods=["DELETE"])
