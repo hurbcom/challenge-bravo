@@ -1,5 +1,4 @@
 from flask import request
-from json import loads, dumps
 
 from middleware import validate_request, build_response
 from validation import CreateCurrencySchema, UpdateCurrencySchema, PaginationSchema
@@ -20,8 +19,8 @@ class CurrencyApi:
         @validate_request(validation_schema=CreateCurrencySchema)
         def create_currency():
             data = request.json
+            new_data = camel_dict_keys_to_underscore(data)
 
-            new_data = {"name": data["name"], "iso_code": data["isoCode"]}
             app.logger.info(f'Creating currency of iso code {new_data["iso_code"]}')
 
             currency = self.currency_service.create(new_data)

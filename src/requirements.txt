@@ -1,5 +1,6 @@
 Flask==1.1.2
 mongoengine==0.22.1
+pymongo-migrate==0.11.0
 requests==2.25.1
 dnspython==2.1.0
 gunicorn==20.0.4

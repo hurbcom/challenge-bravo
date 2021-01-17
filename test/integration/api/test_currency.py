@@ -1,7 +1,7 @@
 from datetime import datetime
 from bson import ObjectId
 
-from exception import REP001
+from exception import REP001, CRY001
 
 PREFIX = "/api/currency"
 
@@ -18,7 +18,7 @@ def test_valid_create_new_currency(fixture_client, fixture_mongo):
         },
     }
 
-    payload = {"name": "Brazilian real", "isoCode": "BRL"}
+    payload = {"name": "Brazilian real", "isoCode": "BRL", "standard": True}
 
     res = fixture_client.post(PREFIX, json=payload)
 
@@ -26,6 +26,7 @@ def test_valid_create_new_currency(fixture_client, fixture_mongo):
     assert res.json["id"] is not None
     assert res.json["name"] == payload["name"]
     assert res.json["isoCode"] == payload["isoCode"]
+    assert res.json["standard"] is True
     assert res.json["creationDate"] is not None
     assert res.json["updateDate"] is not None
 
@@ -33,10 +34,18 @@ def test_valid_create_new_currency(fixture_client, fixture_mongo):
     assert len(currencies) == 1
     assert currencies[0]["name"] == payload["name"]
     assert currencies[0]["iso_code"] == payload["isoCode"]
+    assert currencies[0]["standard"] is True
     assert currencies[0]["creation_date"] is not None
     assert isinstance(currencies[0]["creation_date"], datetime)
     assert currencies[0]["update_date"] is not None
     assert isinstance(currencies[0]["update_date"], datetime)
+
+    payload = {"name": "United States dollar", "isoCode": "USD", "standard": True}
+
+    res = fixture_client.post(PREFIX, json=payload)
+
+    assert res.status_code == 400
+    assert res.json["error"] == CRY001
 
 
 def test_valid_get_currency(fixture_client, fixture_currency):
@@ -106,21 +115,36 @@ def test_valid_update_currency(fixture_client, fixture_mongo, fixture_currency):
     assert res.status_code == 400
     assert res.json["error"] == REP001
 
-    currency = fixture_currency()
+    currency = fixture_currency({"standard": True})
 
     currencies = list(fixture_mongo.currency.find({}))
     assert len(currencies) == 1
     assert currencies[0]["_id"] == currency.id
     assert currencies[0]["iso_code"] == "BRL"
+    assert currencies[0]["standard"] is True
 
-    res = fixture_client.put(f"{PREFIX}/{str(currency.id)}", json={"isoCode": "BRR"})
+    res = fixture_client.put(
+        f"{PREFIX}/{str(currency.id)}", json={"isoCode": "BRR", "standard": True}
+    )
 
     assert res.status_code == 200
     assert res.json["id"] == str(currency.id)
     assert res.json["isoCode"] == "BRR"
+    assert res.json["standard"] is True
 
     currencies = list(fixture_mongo.currency.find({}))
     assert len(currencies) == 1
+
+    dollar_currency = fixture_currency(
+        {"name": "United States dollar", "iso_code": "USD"}
+    )
+
+    res = fixture_client.put(
+        f"{PREFIX}/{str(dollar_currency.id)}", json={"isoCode": "UDD", "standard": True}
+    )
+
+    assert res.status_code == 400
+    assert res.json["error"] == CRY001
 
 
 def test_valid_delete_currency(fixture_client, fixture_mongo, fixture_currency):

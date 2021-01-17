@@ -1,5 +1,4 @@
 from typing import Dict
-from bson import ObjectId
 
 
 class BaseRepository:
