@@ -12,7 +12,7 @@ def validate_request(validation_schema: Dict):
         def func(*args, **kwargs):
             http_method = request.method
 
-            query_args = request.args
+            query_args = dict(request.args)
             body = request.get_json(silent=True)
 
             if http_method in ["GET"]:

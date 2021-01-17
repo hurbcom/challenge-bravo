@@ -9,4 +9,4 @@ class Currency(Document):
     creation_date = DateTimeField(default=datetime.utcnow)
     update_date = DateTimeField(default=datetime.utcnow)
 
-    meta = {"indexes": ["$standard"]}
+    meta = {"indexes": ["standard", "$iso_code"]}

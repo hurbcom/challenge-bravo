@@ -1,2 +1,6 @@
-from .currency import CreateCurrencySchema, UpdateCurrencySchema
+from .currency import (
+    CreateCurrencySchema,
+    UpdateCurrencySchema,
+    GetCurrencyConversionSchema,
+)
 from .pagination import PaginationSchema

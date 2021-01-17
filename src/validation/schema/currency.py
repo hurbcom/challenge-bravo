@@ -9,3 +9,9 @@ UpdateCurrencySchema = {
     "isoCode": {"type": "string", "minlength": 3, "maxlength": 3},
     "standard": {"type": "boolean"},
 }
+
+GetCurrencyConversionSchema = {
+    "from": {"type": "string", "minlength": 3, "maxlength": 3, "required": True},
+    "to": {"type": "string", "minlength": 3, "maxlength": 3, "required": True},
+    "amount": {"type": "float", "min": 0, "coerce": float, "required": True},
+}

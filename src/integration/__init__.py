@@ -1,0 +1,1 @@
+from .currency_pair import CurrencyPairIntegration

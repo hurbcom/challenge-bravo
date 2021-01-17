@@ -1,5 +1,6 @@
 from datetime import datetime
 from bson import ObjectId
+from unittest.mock import patch
 
 from exception import REP001, CRY001
 
@@ -140,11 +141,27 @@ def test_valid_update_currency(fixture_client, fixture_mongo, fixture_currency):
     )
 
     res = fixture_client.put(
-        f"{PREFIX}/{str(dollar_currency.id)}", json={"isoCode": "UDD", "standard": True}
+        f"{PREFIX}/{str(dollar_currency.id)}", json={"standard": True}
     )
 
     assert res.status_code == 400
     assert res.json["error"] == CRY001
+
+    res = fixture_client.put(f"{PREFIX}/{str(currency.id)}", json={"standard": False})
+
+    assert res.status_code == 200
+    assert res.json["id"] == str(currency.id)
+    assert res.json["isoCode"] == "BRR"
+    assert res.json["standard"] is False
+
+    res = fixture_client.put(
+        f"{PREFIX}/{str(dollar_currency.id)}", json={"standard": True}
+    )
+
+    assert res.status_code == 200
+    assert res.json["id"] == str(dollar_currency.id)
+    assert res.json["isoCode"] == "USD"
+    assert res.json["standard"] is True
 
 
 def test_valid_delete_currency(fixture_client, fixture_mongo, fixture_currency):
@@ -165,3 +182,30 @@ def test_valid_delete_currency(fixture_client, fixture_mongo, fixture_currency):
 
     currencies = list(fixture_mongo.currency.find({}))
     assert len(currencies) == 0
+
+
+def test_valid_get_currency_conversion(fixture_client, fixture_currency):
+    fixture_currency({"standard": True})
+    fixture_currency({"name": "United States dollar", "iso_code": "USD"})
+    fixture_currency({"name": "Bitcoin", "iso_code": "BTC"})
+    fixture_currency({"name": "Euro", "iso_code": "EUR"})
+
+    with patch(
+        "integration.CurrencyPairIntegration.get_currency_pair"
+    ) as mock_get_currency_pair:
+        mock_payload = {
+            "USD": {"ask": 5.2933},
+            "EUR": {"ask": 6.3985},
+        }
+        mock_get_currency_pair.return_value = mock_payload
+
+        amount = 1500.50
+        currency_value = mock_payload["USD"]["ask"] / mock_payload["EUR"]["ask"]
+
+        res = fixture_client.get(
+            f"{PREFIX}/conversion",
+            query_string={"from": "USD", "to": "EUR", "amount": amount},
+        )
+
+        assert res.status_code == 200
+        assert res.json["amount"] == round(amount * currency_value, 4)

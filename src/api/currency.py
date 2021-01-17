@@ -1,7 +1,12 @@
 from flask import request
 
 from middleware import validate_request, build_response
-from validation import CreateCurrencySchema, UpdateCurrencySchema, PaginationSchema
+from validation import (
+    CreateCurrencySchema,
+    GetCurrencyConversionSchema,
+    UpdateCurrencySchema,
+    PaginationSchema,
+)
 from service import CurrencyService
 from common import app, get_pagination, camel_dict_keys_to_underscore
 
@@ -69,6 +74,23 @@ class CurrencyApi:
 
             self.currency_service.delete_by_id(currency_id)
             return build_response({}, http_status=204)
+
+        @app.route(f"{PREFIX}/conversion", methods=["GET"])
+        @validate_request(validation_schema=GetCurrencyConversionSchema)
+        def get_currency_conversion():
+            req_args = request.args
+            from_currency = req_args["from"]
+            to_currency = req_args["to"]
+            amount = float(req_args["amount"])
+
+            app.logger.info(
+                f"Get currency conversion between {from_currency} and {to_currency} with amount {amount}"
+            )
+
+            result = CurrencyService.get_conversion(
+                from_currency=from_currency, to_currency=to_currency, amount=amount
+            )
+            return build_response(result, http_status=200)
 
 
 CurrencyApi()
