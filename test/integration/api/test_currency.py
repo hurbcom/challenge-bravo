@@ -2,7 +2,7 @@ from datetime import datetime
 from bson import ObjectId
 from unittest.mock import patch
 
-from exception import REP001, CRY001
+from exception import REP001, CRY001, CRY002, CRP001, CRP002, CRP003
 
 PREFIX = "/api/currency"
 
@@ -187,20 +187,38 @@ def test_valid_delete_currency(fixture_client, fixture_mongo, fixture_currency):
 def test_valid_get_currency_conversion(fixture_client, fixture_currency):
     fixture_currency({"standard": True})
     fixture_currency({"name": "United States dollar", "iso_code": "USD"})
-    fixture_currency({"name": "Bitcoin", "iso_code": "BTC"})
     fixture_currency({"name": "Euro", "iso_code": "EUR"})
 
     with patch(
         "integration.CurrencyPairIntegration.get_currency_pair"
     ) as mock_get_currency_pair:
+        mock_payload = {"USD": {"ask": "5.2933"}}
+        mock_get_currency_pair.return_value = mock_payload
+
+        amount = 1500.50
+        currency_value = float(mock_payload["USD"]["ask"])
+
+        res = fixture_client.get(
+            f"{PREFIX}/conversion",
+            query_string={"from": "USD", "to": "BRL", "amount": amount},
+        )
+
+        assert res.status_code == 200
+        assert res.json["amount"] == round(amount * currency_value, 4)
+
+    with patch(
+        "integration.CurrencyPairIntegration.get_currency_pair"
+    ) as mock_get_currency_pair:
         mock_payload = {
-            "USD": {"ask": 5.2933},
-            "EUR": {"ask": 6.3985},
+            "USD": {"ask": "5.2933"},
+            "EUR": {"ask": "6.3985"},
         }
         mock_get_currency_pair.return_value = mock_payload
 
         amount = 1500.50
-        currency_value = mock_payload["USD"]["ask"] / mock_payload["EUR"]["ask"]
+        currency_value = float(mock_payload["USD"]["ask"]) / float(
+            mock_payload["EUR"]["ask"]
+        )
 
         res = fixture_client.get(
             f"{PREFIX}/conversion",
@@ -209,3 +227,65 @@ def test_valid_get_currency_conversion(fixture_client, fixture_currency):
 
         assert res.status_code == 200
         assert res.json["amount"] == round(amount * currency_value, 4)
+
+
+def test_invalid_get_currency_conversion(fixture_client, fixture_currency):
+    fixture_currency({"name": "United States dollar", "iso_code": "USD"})
+
+    res = fixture_client.get(
+        f"{PREFIX}/conversion",
+        query_string={"from": "EUR", "to": "USD", "amount": 1},
+    )
+
+    assert res.status_code == 400
+    assert res.json["error"] == CRY002("EUR")
+
+    res = fixture_client.get(
+        f"{PREFIX}/conversion",
+        query_string={"from": "USD", "to": "BTC", "amount": 1},
+    )
+
+    assert res.status_code == 400
+    assert res.json["error"] == CRY002("BTC")
+
+    btc_currency = fixture_currency(
+        {"name": "Bitcoin", "iso_code": "BTC", "standard": True}
+    )
+
+    res = fixture_client.get(
+        f"{PREFIX}/conversion",
+        query_string={"from": "USD", "to": "BTC", "amount": 1},
+    )
+
+    assert res.status_code == 400
+    assert res.json["error"] == CRP003
+
+    btc_currency.delete()
+
+    fixture_currency({"standard": True})
+
+    with patch(
+        "integration.CurrencyPairIntegration.get_currency_pair"
+    ) as mock_get_currency_pair:
+        mock_get_currency_pair.return_value = None
+
+        res = fixture_client.get(
+            f"{PREFIX}/conversion",
+            query_string={"from": "USD", "to": "BRL", "amount": 1},
+        )
+
+        assert res.status_code == 400
+        assert res.json["error"] == CRP001
+
+    with patch(
+        "integration.CurrencyPairIntegration.get_currency_pair"
+    ) as mock_get_currency_pair:
+        mock_get_currency_pair.return_value = {"status": 404}
+
+        res = fixture_client.get(
+            f"{PREFIX}/conversion",
+            query_string={"from": "USD", "to": "BRL", "amount": 1},
+        )
+
+        assert res.status_code == 400
+        assert res.json["error"] == CRP002
