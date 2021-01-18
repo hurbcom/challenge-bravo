@@ -1,4 +1,5 @@
 from flask import request
+from flasgger import swag_from
 
 from middleware import validate_request, build_response
 from validation import (
@@ -21,6 +22,7 @@ class CurrencyApi:
 
     def trigger_endpoints(self):
         @app.route(PREFIX, methods=["POST"])
+        @swag_from("../api/specs/currency/create.yml")
         @validate_request(validation_schema=CreateCurrencySchema)
         def create_currency():
             data = request.json
@@ -32,6 +34,7 @@ class CurrencyApi:
             return build_response(currency, http_status=201)
 
         @app.route(f"{PREFIX}/<currency_id>", methods=["GET"])
+        @swag_from("../api/specs/currency/get.yml")
         def get_currency(currency_id):
             app.logger.info(f"Get currency of id {currency_id}")
 
@@ -77,7 +80,7 @@ class CurrencyApi:
 
         @app.route(f"{PREFIX}/conversion", methods=["GET"])
         @validate_request(validation_schema=GetCurrencyConversionSchema)
-        def get_currency_conversion():
+        def do_currency_conversion():
             req_args = request.args
             from_currency = req_args["from"]
             to_currency = req_args["to"]
@@ -87,7 +90,7 @@ class CurrencyApi:
                 f"Get currency conversion between {from_currency} and {to_currency} with amount {amount}"
             )
 
-            result = CurrencyService.get_conversion(
+            result = CurrencyService.do_conversion(
                 from_currency=from_currency, to_currency=to_currency, amount=amount
             )
             return build_response(result, http_status=200)

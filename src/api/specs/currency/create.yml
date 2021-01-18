@@ -1,0 +1,98 @@
+Create/add currency
+---
+tags:
+  - Currency
+security:
+  - bearerAuth: []
+requestBody:
+  description: create/add a currency
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - isoCode
+        properties:
+         name:
+           type: string
+           description: the currency name
+           maxLength: 100
+         isoCode:
+           type: string
+           description: the currency ISO code
+           minLength: 3
+           maxLength: 3
+         standard:
+           type: boolean
+           description: if the currency is the standard one for other currencies conversion calculation. There can only be one standard currency registered
+      examples:
+        "Brazilian real":
+          summary: Brazilian real
+          value:
+            name: Brazilian real
+            isoCode: BRL
+            standard: true
+responses:
+  200:
+    description: the currency object corresponding to the requested id
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+            - iso_code
+            - creation_date
+            - update_date
+          properties:
+            name:
+              type: string
+              description: the currency name
+              maxLength: 100
+            isoCode:
+              type: string
+              description: the currency ISO code
+              minLength: 3
+              maxLength: 3
+            standard:
+              type: boolean
+              description: if the currency is the standard one for other currencies conversion calculation
+            creationDate:
+              type: string
+              description: the currency creation date
+              pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$
+            updateDate:
+              type: string
+              description: the currency update date
+              pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$
+        example:
+          name: Brazilian real
+          isoCode: BRL
+          standard: true
+          creationDate: "1994-07-01 00:00:00"
+          updateDate: "1994-07-01 00:00:00"
+  400:
+    description: error object (if any)
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - error
+          properties:
+            error:
+              type: object
+              required:
+                - code
+                - msg
+              properties:
+                code:
+                  type: string
+                  description: the error's code
+                msg:
+                  type: string
+                  description: the error's message
+        example:
+            code: CRY001
+            msg: There can be only one standard currency

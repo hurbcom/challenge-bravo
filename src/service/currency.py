@@ -25,7 +25,7 @@ class CurrencyService(BaseService):
         return currency_pair
 
     @staticmethod
-    def get_conversion(from_currency: str, to_currency: str, amount: float) -> Dict:
+    def do_conversion(from_currency: str, to_currency: str, amount: float) -> Dict:
         from_currency = from_currency.upper()
         to_currency = to_currency.upper()
 

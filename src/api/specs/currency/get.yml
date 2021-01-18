@@ -1,0 +1,54 @@
+Get currency by id
+---
+tags:
+  - Currency
+security:
+  - bearerAuth: []
+parameters:
+  - name: currency_id
+    in: path
+    required: true
+    description: Currency id in the database
+    schema:
+      type: string
+    example: "6004b37a00a10f640bbf2759"
+
+responses:
+  200:
+    description: the currency object corresponding to the requested id
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+            - iso_code
+            - creation_date
+            - update_date
+          properties:
+            name:
+              type: string
+              description: the currency name
+              maxLength: 100
+            isoCode:
+              type: string
+              description: the currency ISO code
+              minLength: 3
+              maxLength: 3
+            standard:
+              type: boolean
+              description: if the currency is the standard one for other currencies conversion calculation
+            creationDate:
+              type: string
+              description: the currency creation date
+              pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$
+            updateDate:
+              type: string
+              description: the currency update date
+              pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$
+        example:
+          name: Brazilian real
+          isoCode: BRL
+          standard: true
+          creationDate: "1994-07-01 00:00:00"
+          updateDate: "1994-07-01 00:00:00"
