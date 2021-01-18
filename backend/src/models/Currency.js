@@ -1,5 +1,4 @@
-const Schema = require("mongoose").Schema;
-const model = require("mongoose").model;
+const { Schema, model } = require("mongoose");
 
 const CurrencySchema = new Schema({
     symbol: {
@@ -12,7 +11,7 @@ const CurrencySchema = new Schema({
         required: false,
     },
 }, {
-    collection: "currency",
+    collection: "currencies",
 });
 
 module.exports = model("Currency", CurrencySchema);
