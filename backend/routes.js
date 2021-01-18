@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
-const CurrenciesController = require('./app/controllers/CurrenciesController');
-const CurrencyExchangesController = require('./app/controllers/CurrencyExchangesController');
+const CurrenciesController = require('./src/controllers/CurrenciesController');
+const CurrencyExchangesController = require('./src/controllers/CurrencyExchangesController');
 
 const routes = Router();
 
