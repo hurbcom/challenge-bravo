@@ -9,7 +9,8 @@ class CurrencyExchangeService {
     async findByBaseSymbol(baseSymbol) {
         const exchangeRates = await CurrencyExchange.findOne({
             baseSymbol: baseSymbol
-        });
+        }).sort({ createdAt: -1 });
+
         return exchangeRates;
     }
 
@@ -17,6 +18,11 @@ class CurrencyExchangeService {
         const currencyExchange = new CurrencyExchange(body);
         await currencyExchange.save();
         return currencyExchange;
+    }
+
+    async createMany(data) {
+        const currencyExchanges = await CurrencyExchange.insertMany(data);
+        return currencyExchanges;
     }
 
     async update(baseSymbol, body) {
@@ -36,7 +42,7 @@ class CurrencyExchangeService {
     }
 
     currencyConvert(amount, rate) {
-        return amount * rate;
+        return (amount * rate).toFixed(2);
     }
 }
 
