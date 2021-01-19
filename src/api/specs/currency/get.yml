@@ -8,7 +8,7 @@ parameters:
   - name: currency_id
     in: path
     required: true
-    description: Currency id in the database
+    description: currency id in the database
     schema:
       type: string
     example: "6004b37a00a10f640bbf2759"

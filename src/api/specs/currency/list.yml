@@ -1,0 +1,77 @@
+List currencies using pagination
+---
+tags:
+  - Currency
+security:
+  - bearerAuth: []
+parameters:
+  - name: pageNumber
+    in: query
+    required: false
+    description: the page number of the list of currencies
+    schema:
+      type: integer
+      minimum: 1
+    example: 1
+  - name: pageSize
+    in: query
+    required: false
+    description: the page size of the list of currencies
+    schema:
+      type: integer
+      minimum: 1
+    example: 10
+  - name: ordering
+    in: query
+    required: false
+    description: the field which the list of currencies will be ordered by
+    schema:
+      type: string
+    example: iso_code
+
+responses:
+  200:
+    description: the currencies corresponding to the pagination informed
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - iso_code
+              - creation_date
+              - update_date
+            properties:
+              name:
+                type: string
+                description: the currency name
+                maxLength: 100
+              isoCode:
+                type: string
+                description: the currency ISO code
+                minLength: 3
+                maxLength: 3
+              standard:
+                type: boolean
+                description: if the currency is the standard one for other currencies conversion calculation
+              creationDate:
+                type: string
+                description: the currency creation date
+                pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$
+              updateDate:
+                type: string
+                description: the currency update date
+                pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$
+        example:
+          - name: Brazilian real
+            isoCode: BRL
+            standard: true
+            creationDate: "1994-07-01 00:00:00"
+            updateDate: "1994-07-01 00:00:00"
+          - name: United States dollar
+            isoCode: USD
+            standard: false
+            creationDate: "1792-04-02 00:00:00"
+            updateDate: "1792-04-02 00:00:00"

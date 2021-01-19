@@ -49,14 +49,14 @@ class CurrencyService(BaseService):
                 from_currencies=[from_currency, to_currency],
                 to_currency=standard_currency.iso_code,
             )
-            from_currency_value = float(currency_pairs[from_currency]["ask"])
+            from_currency_value = float(currency_pairs[from_currency]["bid"])
             to_currency_value = float(currency_pairs[to_currency]["ask"])
             currency_value = from_currency_value / to_currency_value
         else:
             currency_pairs = CurrencyService._get_currency_pair(
                 from_currencies=[from_currency], to_currency=to_currency
             )
-            currency_value = float(currency_pairs[from_currency]["ask"])
+            currency_value = float(currency_pairs[from_currency]["bid"])
 
         return {"amount": round(amount * currency_value, 4)}
 

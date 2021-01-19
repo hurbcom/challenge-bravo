@@ -1,0 +1,41 @@
+Delete a currency by id
+---
+tags:
+  - Currency
+security:
+  - bearerAuth: []
+parameters:
+  - name: currency_id
+    in: path
+    required: true
+    description: currency id in the database
+    schema:
+      type: string
+    example: "6004b37a00a10f640bbf2759"
+responses:
+  204:
+    description: no content is returned if the currency was deleted successfully
+  400:
+    description: error object (if any)
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - error
+          properties:
+            error:
+              type: object
+              required:
+                - code
+                - msg
+              properties:
+                code:
+                  type: string
+                  description: the error's code
+                msg:
+                  type: string
+                  description: the error's message
+        example:
+            code: REP001
+            msg: Resource was not found or resource id is invalid

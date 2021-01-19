@@ -1,0 +1,69 @@
+Do currency conversion with an amount
+---
+tags:
+  - Currency
+security:
+  - bearerAuth: []
+parameters:
+  - name: from
+    in: query
+    required: true
+    description: the desired currency to sell
+    schema:
+      type: string
+    example: USD
+  - name: to
+    in: query
+    required: true
+    description: the desired currency to buy
+    schema:
+      type: string
+    example: BRL
+  - name: amount
+    in: query
+    required: true
+    description: the desired amount to sell of the original currency
+    schema:
+      type: number
+      minimum: 0
+    example: 1500.50
+
+responses:
+  200:
+    description: currency conversion result
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - amount
+          properties:
+            amount:
+              type: number
+              description: the obtained amount of the desired currency
+        example:
+          amount: 2500.30
+  400:
+    description: error object (if any)
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - error
+          properties:
+            error:
+              type: object
+              required:
+                - code
+                - msg
+              properties:
+                code:
+                  type: string
+                  description: the error's code
+                msg:
+                  type: string
+                  description: the error's message
+        example:
+            code: CRY002
+            msg: Currency USD is not registered

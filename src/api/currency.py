@@ -44,6 +44,7 @@ class CurrencyApi:
             return build_response(currency, http_status=200)
 
         @app.route(PREFIX, methods=["GET"])
+        @swag_from("../api/specs/currency/list.yml")
         @validate_request(validation_schema=PaginationSchema)
         def list_currencies():
             req_args = request.args
@@ -61,6 +62,7 @@ class CurrencyApi:
             return build_response(currencies, http_status=200)
 
         @app.route(f"{PREFIX}/<currency_id>", methods=["PUT"])
+        @swag_from("../api/specs/currency/update.yml")
         @validate_request(validation_schema=UpdateCurrencySchema)
         def update_currency(currency_id):
             data = request.get_json(silent=True)
@@ -72,6 +74,7 @@ class CurrencyApi:
             return build_response(updated_currency, http_status=200)
 
         @app.route(f"{PREFIX}/<currency_id>", methods=["DELETE"])
+        @swag_from("../api/specs/currency/delete.yml")
         def delete_currency(currency_id):
             app.logger.info(f"Deleting currency of id {currency_id}")
 
@@ -79,6 +82,7 @@ class CurrencyApi:
             return build_response({}, http_status=204)
 
         @app.route(f"{PREFIX}/conversion", methods=["GET"])
+        @swag_from("../api/specs/currency/do_conversion.yml")
         @validate_request(validation_schema=GetCurrencyConversionSchema)
         def do_currency_conversion():
             req_args = request.args

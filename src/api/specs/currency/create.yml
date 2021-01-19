@@ -5,7 +5,7 @@ tags:
 security:
   - bearerAuth: []
 requestBody:
-  description: create/add a currency
+  description: payload for currency creation
   content:
     application/json:
       schema:
@@ -34,7 +34,7 @@ requestBody:
             isoCode: BRL
             standard: true
 responses:
-  200:
+  201:
     description: the currency object corresponding to the requested id
     content:
       application/json:

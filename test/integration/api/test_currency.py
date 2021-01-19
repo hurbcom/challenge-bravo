@@ -192,11 +192,11 @@ def test_valid_get_currency_conversion(fixture_client, fixture_currency):
     with patch(
         "integration.CurrencyPairIntegration.get_currency_pair"
     ) as mock_get_currency_pair:
-        mock_payload = {"USD": {"ask": "5.2933"}}
+        mock_payload = {"USD": {"bid": "5.2933"}}
         mock_get_currency_pair.return_value = mock_payload
 
         amount = 1500.50
-        currency_value = float(mock_payload["USD"]["ask"])
+        currency_value = float(mock_payload["USD"]["bid"])
 
         res = fixture_client.get(
             f"{PREFIX}/conversion",
@@ -210,13 +210,13 @@ def test_valid_get_currency_conversion(fixture_client, fixture_currency):
         "integration.CurrencyPairIntegration.get_currency_pair"
     ) as mock_get_currency_pair:
         mock_payload = {
-            "USD": {"ask": "5.2933"},
+            "USD": {"bid": "5.2933"},
             "EUR": {"ask": "6.3985"},
         }
         mock_get_currency_pair.return_value = mock_payload
 
         amount = 1500.50
-        currency_value = float(mock_payload["USD"]["ask"]) / float(
+        currency_value = float(mock_payload["USD"]["bid"]) / float(
             mock_payload["EUR"]["ask"]
         )
 
