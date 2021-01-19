@@ -1,3 +1,4 @@
-Your name: ___
-Your Github homepage: ___
-Original challenge URL: http://github.com/hurbcom/challenge-___
+IntelliJ IDEA
+Your name: Leandro Celem Greijal
+Your Github homepage: https://github.com/leandrogreijal/challenge-bravo
+Original challenge URL: http://github.com/hurbcom/challenge-bravo
