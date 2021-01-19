@@ -9,15 +9,7 @@ def configure_swagger(flask_app):
         "version": "0.0.1",
         "hide_top_bar": True,
         "termsOfService": "",
-        "components": {
-            "securitySchemes": {
-                "bearerAuth": {
-                    "type": "http",
-                    "scheme": "bearer",
-                    "bearerFormat": "JWT",
-                }
-            }
-        },
+        "components": {},
     }
     flask_app.config["SWAGGER"] = swagger_config
     Swagger(flask_app)

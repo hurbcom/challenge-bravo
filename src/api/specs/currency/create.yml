@@ -2,8 +2,6 @@ Create/add currency
 ---
 tags:
   - Currency
-security:
-  - bearerAuth: []
 requestBody:
   description: payload for currency creation
   content:

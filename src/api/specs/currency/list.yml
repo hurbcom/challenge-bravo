@@ -2,8 +2,6 @@ List currencies using pagination
 ---
 tags:
   - Currency
-security:
-  - bearerAuth: []
 parameters:
   - name: pageNumber
     in: query

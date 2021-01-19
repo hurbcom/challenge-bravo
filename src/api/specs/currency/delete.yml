@@ -2,8 +2,6 @@ Delete a currency by id
 ---
 tags:
   - Currency
-security:
-  - bearerAuth: []
 parameters:
   - name: currency_id
     in: path

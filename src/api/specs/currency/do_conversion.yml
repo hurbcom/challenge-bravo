@@ -2,8 +2,6 @@ Do currency conversion with an amount
 ---
 tags:
   - Currency
-security:
-  - bearerAuth: []
 parameters:
   - name: from
     in: query
