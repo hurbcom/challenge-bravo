@@ -19,7 +19,7 @@ describe("CurrencyExchange", () => {
         await CurrencyExchangeService.createMany(listCurrencyExchangeParams);
         const currencyExchange = await CurrencyExchangeService.findByBaseSymbol(validCurrencyExchangeParams.baseSymbol);
         const lastCurrencyExchangeParam = listCurrencyExchangeParams.pop();
-console.log(currencyExchange.createdAt)
+
         expect(Date.parse(currencyExchange.createdAt)).toBe(lastCurrencyExchangeParam.createdAt);
     });
 
