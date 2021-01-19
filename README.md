@@ -1,3 +1,40 @@
+## API Bravo
+
+A API Bravo tem a função de registrar e gerenciar (CRUD) o cadastramento de moedas, bem como realizar a conversão monetária entre moedas suportadas. Ela foi desenvolvida utilizando o framework Flask do Python com o MongoDB servindo como banco de dados. A biblioteca `mongoengine` foi utilizada como ODM.
+
+### Execução e documentação
+
+A API pode ser executada através do script de start:
+
+`./start.sh`
+
+Esse script irá subir um docker-compose com três containers:
+
+1. A API em si
+2. O MongoDB
+3. Uma migration inicial para cadastro da moeda padrão da API, no caso o real (código iso: BRL)
+
+A API Bravo é acessível via endereço base: `http://localhost:8080`, contendo uma única API (Currency API) atualmente e acessível via `http://localhost:8080/api/currency`. A documentação da API Bravo pode ser consultada no endereço `http://localhost:8080/apidocs`.
+
+A documentação foi desenvolvida com o padrão OpenAPI e gerada com a biblioteca flasgger do Python. A API também poderá ser utilizada diretamente via Swagger.
+
+### Testes
+
+Testes automatizados também estão disponíveis com **92.57%** de cobertura. Os testes podem ser executados através do script run_docker_test:
+
+`./run_docker_test.sh`
+
+O qual utilizará um docker-compose para realização dos testes.
+
+### Alguns pontos de melhoria
+
+- Foram utilizados arquivos .env* na raíz do projeto para armazenar as credenciais e dados sensíveis da aplicação. Em um contexto real, esses arquivos não seriam versionados no Git, mas o foram aqui para facilitar o uso inicial da aplicação. Além disso, uma melhor abordagem do que a utilização de arquivos .env seria a utilização de serviços com AWS KMS, AWS Parameter Store, Google Cloud Secret Manager, HashiCorp Vault, dentre outros.
+- A API Bravo utiliza no momento uma API externa pública disponível no endereço `https://docs.awesomeapi.com.br/api-de-moedas` para consulta das cotações da moedas. A moeda de lastro utilizada por esta API é o BRL. Assim, a API Bravo apesar de permitir que outra moeda seja escolhida como moeda de lastro, configurando o atributo **standard** para a moeda em questão no banco de dados, esta API externa de conversão só permite que o BRL seja usado. Desta forma, a API Bravo, permite a moeda de mudança de lastro, mas gerará um erro proposital caso uma cotação seja solicitada e a moeda padrão seja diferente de BRL. Por este motivo, a moeda BRL é inserida via migration na aplicação ao ser iniciada, além de facilitar um uso inicial da aplicação.
+- Um pipeline de CI/CD poderia ser configurado para esta aplicação, após escolha de alguma forma de deploy da aplicação.
+
+
+--------------------
+
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
