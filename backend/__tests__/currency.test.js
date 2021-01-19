@@ -2,7 +2,7 @@ const dbHandler = require('../db/database_handler');
 const CurrencyService =  require('../src/services/CurrencyService');
 
 describe("Currency", () => {
-    beforeAll(async () => await dbHandler.dbConnect('currencies', 'test'));
+    beforeAll(async () => await dbHandler.dbConnect('hurb', 'test'));
     afterEach(async () => await dbHandler.dbClear());
     afterAll(async () => await dbHandler.dbClose());
 
@@ -14,7 +14,7 @@ describe("Currency", () => {
         expect(currency.label).toBe(validCurrencyParams.label);
     });
 
-    it("Deve uma excessão quando os parametros forem inválidos", () => {
+    it("Deve ocorrer uma excessão quando os parametros forem inválidos", () => {
         expect(CurrencyService.create(invalidCurrencyParams))
         .rejects
         .toThrow('Currency validation failed: symbol: Path `symbol` is required');
@@ -26,7 +26,21 @@ describe("Currency", () => {
         const currency = await CurrencyService.findBySymbol(validCurrencyParams.symbol);
 
         expect(currency).toBeFalsy();
-    })
+    });
+
+    it("Deve retornar uma lista de moedas", async () => {
+        await CurrencyService.createMany(listCurrencyParams);
+        const symbols = await CurrencyService.allSymbols();
+
+        expect(symbols).toEqual(['USD', 'BRL', 'EUR', 'BTC', 'ETH']);
+    });
+
+    it("Deve retornar uma lista de moedas exceto a moeda base", async () => {
+        await CurrencyService.createMany(listCurrencyParams);
+        const symbols = await CurrencyService.allSymbols('BRL');
+
+        expect(symbols).toEqual(['USD', 'EUR', 'BTC', 'ETH']);
+    });
 });
 
 const validCurrencyParams = {
@@ -38,3 +52,26 @@ const invalidCurrencyParams = {
     symbol: null,
     label: 'Brazilian Real'
 }
+
+const listCurrencyParams = [
+    {
+        symbol: 'USD',
+        label: 'United States dollar'
+    },
+    {
+        symbol: 'BRL',
+        label: 'Brazilian Real'
+    },
+    {
+        symbol: 'EUR',
+        label: 'European Euro'
+    },
+    {
+        symbol: 'BTC',
+        label: 'Bitcoin'
+    },
+    {
+        symbol: 'ETH',
+        label: 'Ethereum'
+    }
+]
