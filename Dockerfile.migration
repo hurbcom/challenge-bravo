@@ -1,0 +1,11 @@
+FROM python:3.8-slim
+
+WORKDIR /app
+
+COPY migrate.sh migrate.sh
+COPY migration migration
+
+RUN pip install pymongo-migrate==0.11.0
+RUN pip install pymongo==3.11.2
+
+CMD exec ./migrate.sh $MONGODB_URI_ARG

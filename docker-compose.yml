@@ -20,6 +20,17 @@ services:
     networks:
       - app-network
 
+  bravo-db-migration:
+    build:
+      context: .
+      dockerfile: Dockerfile.migration
+    environment:
+      MONGODB_URI_ARG: "mongodb://bravo-db:27117/bravo"
+    networks:
+      - app-network
+    depends_on:
+      - bravo-db
+
 networks:
   app-network:
     driver: bridge
