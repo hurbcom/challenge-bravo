@@ -4,7 +4,7 @@ const databaseConfig = require('./config/database');
 
 seeder.connect(databaseConfig.uri, () => {
     seeder.loadModels([
-        'app/models/Currency.js'
+        'src/models/Currency.js'
     ]);
 
 seeder.clearModels(['Currency'], () => {
