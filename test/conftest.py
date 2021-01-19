@@ -1,1 +1,1 @@
-from .integration.fixtures import *
+from .integration import *

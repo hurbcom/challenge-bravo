@@ -1,13 +1,12 @@
 import pytest
 from pymongo import MongoClient
 
-from src.common.config import mongodb_uri
+from src.common.config import mongodb_uri, database
 
 
 @pytest.fixture(scope="function")
 def fixture_mongo():
     client = MongoClient(mongodb_uri)
-    database = "bravo-test"
     db = client[database]
 
     yield db

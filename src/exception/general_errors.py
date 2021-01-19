@@ -12,3 +12,6 @@ GEE004 = {"code": "GEE004", "msg": "Error while serializing data"}
 
 def GEE005(errors: Dict):
     return {"code": "GEE005", "msg": f"The request payload is invalid: {dumps(errors)}"}
+
+
+GEE006 = {"code": "GEE006", "msg": "Route not found"}

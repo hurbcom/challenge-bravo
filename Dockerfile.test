@@ -1,0 +1,19 @@
+FROM python:3.8-slim
+
+ENV ENV test
+
+WORKDIR /app
+
+COPY src/requirements.txt src/requirements.txt
+COPY test/requirements.txt test/requirements.txt
+
+RUN pip install --upgrade pip
+RUN pip install -r src/requirements.txt && pip install -r test/requirements.txt
+
+COPY src src
+COPY .env.test .env.test
+COPY test test
+
+ENV PYTHONPATH=".:src/"
+
+CMD exec pytest -s --cov=src --cov-report term --cov-report html --cov-fail-under 90 test

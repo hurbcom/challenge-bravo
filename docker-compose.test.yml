@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  bravo-api-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    networks:
+      - test-network
+    depends_on:
+      - bravo-db-test
+
+  bravo-db-test:
+    image: mongo:4.2.9
+    command: mongod --port 27117
+    networks:
+      - test-network
+    logging:
+        driver: none
+
+networks:
+  test-network:
+    driver: bridge

@@ -1,7 +1,6 @@
 import logging
 
 from api import *
-from common import app
 
 if __name__ == "__main__":
     app.logger.setLevel(logging.INFO)

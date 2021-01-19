@@ -2,19 +2,34 @@ from os import getenv
 from flask import Flask
 from dotenv import load_dotenv
 from mongoengine import connect
+from pathlib import Path
 
 from exception import global_exception_handler
 from .swagger import configure_swagger
 
-load_dotenv()
-
-mongodb_uri = getenv("MONGODB_URI")
 env = getenv("ENV")
+local_test = getenv("LOCAL_TEST")
+
+base_env_path = Path(__file__).resolve().parent.parent.parent
 
 if env == "test":
-    connect(db=f"bravo-{env}", host=mongodb_uri)
+    database = f"bravo-{env}"
+    if local_test:
+        env_path = base_env_path / ".env.test.local"
+    else:
+        env_path = base_env_path / ".env.test"
 else:
-    connect(db="bravo", host=mongodb_uri)
+    database = "bravo"
+    if local_test:
+        env_path = base_env_path / ".env.local"
+    else:
+        env_path = base_env_path / ".env"
+
+load_dotenv(dotenv_path=env_path)
+
+mongodb_uri = getenv("MONGODB_URI")
+
+connect(db=database, host=mongodb_uri)
 
 app = Flask(__name__)
 
