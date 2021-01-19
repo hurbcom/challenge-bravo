@@ -13,6 +13,11 @@ class CurrencyService {
         return symbols;
     }
 
+    symbolsToString(except, symbols) {
+        if(except) symbols = symbols.filter((symbol) => symbol !== except);
+        return symbols.join(',');
+    }
+
     async findBySymbol(symbol) {
         const currency = await Currency.findOne({
             symbol: symbol
