@@ -16,8 +16,9 @@ routes.delete("/currencies/:id", CurrenciesController.destroy);
 /* CurrencyExchanges */
 
 routes.get("/exchanges", CurrencyExchangesController.index);
-routes.get("/exchanges/:id", CurrencyExchangesController.show);
+routes.get(/exchanges\/convert/, CurrencyExchangesController.convert);
+routes.get("/exchanges/:symbol", CurrencyExchangesController.show);
 routes.post("/exchanges", CurrencyExchangesController.store);
-routes.delete("/exchanges/:id", CurrencyExchangesController.destroy);
+routes.delete("/exchanges/:symbol", CurrencyExchangesController.destroy);
 
 module.exports = routes;
