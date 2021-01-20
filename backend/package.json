@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "nodemon ./server.js",
     "seed": "node ./seeds.js",
+    "load:rates": "node ./lib/load_exchange_rates.js",
     "test": "jest"
   },
   "dependencies": {
