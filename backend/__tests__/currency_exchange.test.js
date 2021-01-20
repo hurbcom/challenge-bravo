@@ -4,7 +4,7 @@ const CurrencyExchangeService =  require('../src/services/CurrencyExchangeServic
 describe("CurrencyExchange", () => {
     beforeAll(async () => await dbHandler.dbConnect('hurb', 'test'));
     afterEach(async () => await dbHandler.dbClear());
-    afterAll(async () => await dbHandler.dbClose());
+    afterAll(async () => await dbHandler.dbClose(true));
 
     it("Deve retornar objeto com a taxa de cambio quando os parametros forem válidos", async () => {
         await CurrencyExchangeService.create(validCurrencyExchangeParams);

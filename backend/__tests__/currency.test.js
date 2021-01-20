@@ -4,7 +4,7 @@ const CurrencyService =  require('../src/services/CurrencyService');
 describe("Currency", () => {
     beforeAll(async () => await dbHandler.dbConnect('hurb', 'test'));
     afterEach(async () => await dbHandler.dbClear());
-    afterAll(async () => await dbHandler.dbClose());
+    afterAll(async () => await dbHandler.dbClose(true));
 
     it("Deve retornar uma moeda quando os parametros forem válidos", async () => {
         await CurrencyService.create(validCurrencyParams);
