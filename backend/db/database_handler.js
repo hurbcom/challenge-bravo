@@ -11,8 +11,8 @@ const dbConnect = async (dbName = null, env = null) => {
     });
 }
 
-const dbClose = async () => {
-    await mongoose.connection.dropDatabase();
+const dbClose = async (forceDrop = false) => {
+    if(forceDrop) await mongoose.connection.dropDatabase();
     await mongoose.connection.close();
 }
 
