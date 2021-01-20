@@ -43,7 +43,6 @@ func TestAInvalidCache(t *testing.T) {
 	}
 	_, err := New(config)
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).Should(BeEquivalentTo("fail to instance cache: dial tcp :0: connect: connection refused"))
 }
 
 func setToMockRedisClient(key string, value float64) {
