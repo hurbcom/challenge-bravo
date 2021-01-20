@@ -37,11 +37,18 @@ describe("CurrencyExchange", () => {
         expect(currencyExchange).toBeFalsy();
     });
 
-    it("Deve retornar o novo valor da moeda convertida", () => {
-        const { rates } = validCurrencyExchangeParams;
+    it("Deve retornar o novo valor da moeda convertida quando os parametros forem válidos", async () => {
+        await CurrencyExchangeService.createMany(listCurrencyExchangeParams);
         const amount = 123.45;
-        const currencyConverted = CurrencyExchangeService.currencyConvert(rates[0].rate, amount);
-        expect(currencyConverted).toEqual((665.3955).toFixed(2));
+        const currencyConverted = await CurrencyExchangeService.converter('USD', 'BRL', amount);
+        expect(currencyConverted.amount).toEqual("665.40");
+    });
+
+    it("Deve retornar zero quando os parametros forem inválidos", async () => {
+        await CurrencyExchangeService.createMany(listCurrencyExchangeParams);
+        const amount = 123.45;
+        const currencyConverted = await CurrencyExchangeService.converter('FOO', 'BRL', amount);
+        expect(currencyConverted.amount).toEqual("0.0");
     });
 });
 
