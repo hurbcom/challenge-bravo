@@ -9,9 +9,16 @@ class CurrencyExchangesController {
 
     async show(req, res) {
         const { symbol } = req.params;
-        const currencyExchange = await CurrencyExchangeService.find(symbol);
+        const currencyExchange = await CurrencyExchangeService.findByBaseSymbol(symbol);
 
         return res.json(currencyExchange);
+    }
+
+    async convert(req, res) {
+        const { from, to, amount = 0 } = req.query;
+        const currencyConverted = await CurrencyExchangeService.converter(from, to, amount);
+
+        return res.json(currencyConverted);
     }
 
     async store(req, res) {

@@ -41,8 +41,20 @@ class CurrencyExchangeService {
         });
     }
 
-    currencyConvert(amount, rate) {
-        return (amount * rate).toFixed(2);
+    async converter(from, to, amount) {
+        const currencyRates = await this.findByBaseSymbol(from);
+        let currencyConverted = "0.00";
+
+        if(currencyRates) {
+            const { rates } = currencyRates || {};
+
+            if(rates) {
+                const { rate } = rates.find((currencyRate) => currencyRate.symbol === to) || 0;
+                if(rate) currencyConverted = (amount * rate).toFixed(2);
+            }
+        }
+
+        return { amount: currencyConverted };
     }
 }
 
