@@ -7,4 +7,4 @@ RUN go build -o ./ ./
 FROM alpine:latest
 WORKDIR /service
 COPY --from=builder /service/api /service/config.json ./
-ENTRYPOINT ["/seyrvice/api", "run"]
+ENTRYPOINT ["/service/api", "run"]
