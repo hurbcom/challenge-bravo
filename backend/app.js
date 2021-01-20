@@ -1,24 +1,16 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const { dbConnect } = require('./db/database_handler');
 
 const routes = require('./routes');
-const databaseConfig = require('./config/database');
 
 class App {
     constructor() {
         this.express = express();
 
-        this.database();
+        dbConnect();
+
         this.middlewares();
         this.routes();
-    }
-
-    database() {
-        mongoose.connect(databaseConfig.uri, {
-            useCreateIndex: true,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
     }
 
     middlewares() {
