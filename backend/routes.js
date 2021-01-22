@@ -8,10 +8,10 @@ const routes = Router();
 /* Currencies */
 
 routes.get("/currencies", CurrenciesController.index);
-routes.get("/currencies/:id", CurrenciesController.show);
+routes.get("/currencies/:symbol", CurrenciesController.show);
 routes.post("/currencies", CurrenciesController.store);
-routes.put("/currencies/:id", CurrenciesController.update);
-routes.delete("/currencies/:id", CurrenciesController.destroy);
+routes.put("/currencies/:symbol", CurrenciesController.update);
+routes.delete("/currencies/:symbol", CurrenciesController.destroy);
 
 /* CurrencyExchanges */
 
