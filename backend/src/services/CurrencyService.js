@@ -10,6 +10,7 @@ class CurrencyService {
         const currencies = await this.all();
         let symbols = currencies.map((currency) => currency.symbol);
         if(except) symbols = symbols.filter((symbol) => symbol !== except);
+
         return symbols;
     }
 
@@ -22,12 +23,14 @@ class CurrencyService {
         const currency = await Currency.findOne({
             symbol: symbol
         });
+
         return currency;
     }
 
     async create(body) {
         const currency = new Currency(body);
         await currency.save();
+
         return currency;
     }
 

@@ -9,7 +9,7 @@ class CurrenciesController {
 
     async show(req, res) {
         const { symbol } = req.params;
-        const currency = await CurrencyService.find(symbol);
+        const currency = await CurrencyService.findBySymbol(symbol);
 
         return res.json(currency);
     }

@@ -1,10 +1,17 @@
 const dbHandler = require('../db/database_handler');
+const cacheClient = require('../lib/cache_client');
 const CurrencyExchangeService =  require('../src/services/CurrencyExchangeService');
 
 describe("CurrencyExchange", () => {
-    beforeAll(async () => await dbHandler.dbConnect('hurb', 'test'));
-    afterEach(async () => await dbHandler.dbClear());
-    afterAll(async () => await dbHandler.dbClose(true));
+    beforeAll(async () =>  await dbHandler.dbConnect('hurb', 'test'));
+    afterEach(async () => {
+        await dbHandler.dbClear();
+        await cacheClient.flushallAsync();
+    });
+    afterAll(async () => {
+        await dbHandler.dbClose(true);
+        cacheClient.close(true);
+    });
 
     it("Deve retornar objeto com a taxa de cambio quando os parametros forem válidos", async () => {
         await CurrencyExchangeService.create(validCurrencyExchangeParams);
@@ -41,14 +48,14 @@ describe("CurrencyExchange", () => {
         await CurrencyExchangeService.createMany(listCurrencyExchangeParams);
         const amount = 123.45;
         const currencyConverted = await CurrencyExchangeService.converter('USD', 'BRL', amount);
-        expect(currencyConverted.amount).toEqual("665.40");
+        expect(currencyConverted.amount).toEqual("665.3955");
     });
 
     it("Deve retornar zero quando os parametros forem inválidos", async () => {
         await CurrencyExchangeService.createMany(listCurrencyExchangeParams);
         const amount = 123.45;
         const currencyConverted = await CurrencyExchangeService.converter('FOO', 'BRL', amount);
-        expect(currencyConverted.amount).toEqual("0.0");
+        expect(currencyConverted.amount).toEqual("0.00");
     });
 });
 
