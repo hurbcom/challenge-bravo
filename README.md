@@ -2,7 +2,8 @@
 
 > Api de conversão de moedas.
 
-O desafio consiste em converter um montante de valor em moedas com diferentes taxas cambiais.
+API para converter valores de moedas usando diferentes taxas cambiais.
+As taxas cambiais são atualizadas de forma automática a cada 30 minutos.
 
 ## Projeto
 
@@ -13,14 +14,6 @@ O projeto foi criado com as seguintes tecnologias:
 * Node
 * MongoDB
 * Redis
-
-### Backend
-
-API Node rodan.
-
-### Frontend
-
-????.
 
 ## Instalação
 
@@ -50,9 +43,31 @@ BODY
   }
 ```
 
+Buscando uma moeda:
+
+`GET 0.0.0.0:5000/currencies/PHP`
+
+```
+  {
+    "_id": "600905bd9640e7037b38209c",
+    "label": "Phillipines Test",
+    "__v": 0
+  }
+```
+
+Removendo uma moeda:
+
+`DELETE 0.0.0.0:5000/currencies/PHP`
+
 Convertendo valores entre diferentes taxas cambiais:
 
 `GET 0.0.0.0:5000/exchanges/convert?from=USD&to=BRL&amount=123.45`
+
+```
+  {
+    "amount": "667.8645"
+  }
+```
 
 ## Rodando os testes
 
