@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { dbConnect } = require('./db/database_handler');
 
 const routes = require('./routes');
@@ -15,6 +16,7 @@ class App {
 
     middlewares() {
         this.express.use(express.json());
+        this.express.use(cors());
     }
 
     routes() {
