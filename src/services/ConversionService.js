@@ -6,10 +6,10 @@ const CoinGeckoService = require('./CoinGeckoService');
 const Error = require('../interfaces/Error');
 
 class ConversionService {
-    constructor() {
-        this.coinService = CoinGeckoService;
-        this.conversionRepository = ConversionRepository;
-        this.currencyRepository = CurrencyRepository;
+    constructor({ coinGeckoService, conversionRepository, currencyRepository }) {
+        this.coinService = coinGeckoService;
+        this.conversionRepository = conversionRepository;
+        this.currencyRepository = currencyRepository;
     }
 
     async getLatestConversionRate() {
@@ -26,7 +26,7 @@ class ConversionService {
             return result;
         }
         const unavailableKey = !fromRate ? from : to;
-        throw new Error(400, `No support provided to given currency: ${unavailableKey}`);
+        throw new Error(400, `${unavailableKey} currency is not supported`);
     }
 
     async updateConversionRates() {
@@ -39,8 +39,8 @@ class ConversionService {
             updatedConversionRate[currencyKey] = conversionRate[currencyKey].value / referenceValue;
         });
         await this.conversionRepository.insert(updatedConversionRate);
-        console.log('Successfully obtained updated conversion rates.');
+        console.log('Conversion rates successfully updated');
         return updatedConversionRate;
     }
 }
-module.exports = new ConversionService();
+module.exports = ConversionService;

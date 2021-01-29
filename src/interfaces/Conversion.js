@@ -1,9 +1,9 @@
 class Conversion {
-    constructor(value, from, to, amount, referenceDate) {
-        this.value = from;
-        this.value = value;
+    constructor(from, to, amount, value, referenceDate) {
+        this.from = from;
         this.to = to;
-        this.amount = amount; 
+        this.amount = amount;
+        this.value = value;
         this.referenceDate = referenceDate;
     }
 }

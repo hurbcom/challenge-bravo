@@ -5,10 +5,10 @@ const CoinGeckoService = require('./CoinGeckoService');
 const ConversionService = require('./ConversionService');
 
 class CurrencyService {
-    constructor() {
-        this.repository = CurrencyRepository;
-        this.coinService = CoinGeckoService;
-        this.conversionService = ConversionService;
+    constructor({ currencyRepository, coinGeckoService, conversionService }) {
+        this.repository = currencyRepository;
+        this.coinService = coinGeckoService;
+        this.conversionService = conversionService;
     }
 
     async listCurrencies() {
@@ -45,7 +45,7 @@ class CurrencyService {
             await this.conversionService.updateConversionRates();
             return newCurrency;
         }
-        throw new Error(400, `No support for given currency key: ${key}`);
+        throw new Error(400, `${key} currency is not supported`);
     }
 
     async removeCurrency(key) {
@@ -54,8 +54,8 @@ class CurrencyService {
             this.repository.delete(key);
             return this.conversionService.updateConversionRates();
         }
-        throw new Error(404, `No currency found with given key: ${key}`);
+        throw new Error(404, `Currency ${key} was not found`);
     }
 }
 
-module.exports = new CurrencyService();
+module.exports = CurrencyService;

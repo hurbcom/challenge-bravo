@@ -1,11 +1,15 @@
 const sanitize = require('mongo-sanitize');
 const Error = require('../interfaces/Error');
-const CurrencyService = require('../services/CurrencyService');
 
 class CurrencyController {
-    constructor() {
-        this.currencyService = CurrencyService;
+    constructor({ currencyService }) {
+        this.currencyService = currencyService;
         this.sanitize = sanitize;
+
+        this.listCurrencies = this.listCurrencies.bind(this);
+        this.addCurrency = this.addCurrency.bind(this);
+        this.removeCurrency = this.removeCurrency.bind(this);
+        this.sanitizeCurrencyKey = this.sanitizeCurrencyKey.bind(this);
     }
 
     async listCurrencies(req, res) {
@@ -19,7 +23,7 @@ class CurrencyController {
 
             const existingKey = await this.currencyService.getCurrency(key);
             if (existingKey) {
-                throw new Error(400, `Key ${key} is already available`);
+                throw new Error(400, `Currency ${key} available`);
             }
 
             const newCurrency = await this.currencyService.addCurrency(key);
@@ -46,7 +50,7 @@ class CurrencyController {
     sanitizeCurrencyKey(key) {
         const mongoSanitizedBody = this.sanitize(key);
         if (!mongoSanitizedBody || typeof mongoSanitizedBody !== 'string') {
-            const message = 'No valid key in body';
+            const message = 'Currency is not valid';
             console.error(message);
             throw new Error(400, message);
         }
@@ -54,4 +58,4 @@ class CurrencyController {
     }
 }
 
-module.exports = new CurrencyController();
+module.exports = CurrencyController;

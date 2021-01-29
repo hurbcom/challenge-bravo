@@ -1,10 +1,8 @@
-const MongoDBConnection = require('../config/mongo-db-config');
-
 const COLLECTION_NAME = 'conversion-rates';
 
 class ConversionRepository {
-    constructor() {
-        this.db = MongoDBConnection.db;
+    constructor({ mongoDBConnection }) {
+        this.db = mongoDBConnection.db;
     }
 
     async insert(conversionRate) {
@@ -23,4 +21,4 @@ class ConversionRepository {
     }
 }
 
-module.exports = new ConversionRepository();
+module.exports = ConversionRepository;

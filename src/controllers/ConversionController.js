@@ -1,11 +1,15 @@
 const sanitize = require('mongo-sanitize');
-const ConversionService = require('../services/ConversionService');
 const Error = require('../interfaces/Error');
 
 class ConversionController {
-    constructor() {
+    constructor({ conversionService }) {
         this.sanitize = sanitize;
-        this.conversionService = ConversionService;
+        this.conversionService = conversionService;
+
+        this.convert = this.convert.bind(this);
+        this.latest = this.latest.bind(this);
+        this.sanitizeAmount = this.sanitizeAmount.bind(this);
+        this.sanitizeCurrencyKey = this.sanitizeCurrencyKey.bind(this);
     }
 
     async convert(req, res) {
@@ -31,7 +35,7 @@ class ConversionController {
         let mongoSanitizedAmount = this.sanitize(amount);
         mongoSanitizedAmount = parseFloat(mongoSanitizedAmount);
         if (!mongoSanitizedAmount || Number.isNaN(mongoSanitizedAmount)) {
-            throw new Error(400, 'No valid amount value in query parameter.');
+            throw new Error(400, 'Amount field not valid');
         }
         return mongoSanitizedAmount;
     }
@@ -39,7 +43,7 @@ class ConversionController {
     sanitizeCurrencyKey(key) {
         const mongoSanitizedKey = this.sanitize(key);
         if (!mongoSanitizedKey) {
-            const message = `No valid key '${key}' in query parameter.`;
+            const message = `${key} is not valid.`;
             console.error(message);
             throw new Error(400, message);
         }
@@ -47,4 +51,4 @@ class ConversionController {
     }
 }
 
-module.exports = new ConversionController();
+module.exports = ConversionController;

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/gconsentini/challenge-bravo#readme",
   "dependencies": {
+    "awilix": "^4.3.1",
     "coingecko-api": "^1.0.10",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

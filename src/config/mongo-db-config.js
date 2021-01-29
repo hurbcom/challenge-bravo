@@ -2,7 +2,6 @@ const { MongoClient } = require('mongodb');
 
 class MongoDBConnection {
     constructor() {
-        console.log(process.env.MONGODB_URL)
         this.mongoClient = new MongoClient(process.env.MONGODB_URL, {
             useUnifiedTopology: true,
         });

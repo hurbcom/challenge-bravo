@@ -1,21 +1,22 @@
 const schedule = require('node-schedule');
-const ConversionService = require('../services/ConversionService');
-const CurrencyService = require('../services/CurrencyService');
 
-const DEFAULT_CURRENCY_KEYS = ['usd', 'brl', 'eur', 'eth', 'btc']
+const DEFAULT_CURRENCY_LIST = ['usd', 'brl', 'eur', 'eth', 'btc']
 
 class UpdateConversionRates {
-    async initJob() {
-        const currencyService = CurrencyService;
+    constructor({ conversionService, currencyService }) {
+        this.currencyService = currencyService
+        this.conversionService = conversionService
+    }
 
-        for await (const currency of DEFAULT_CURRENCY_KEYS) {
-            await currencyService.addCurrency(currency);
+    async initJob() {
+        for await (const currency of DEFAULT_CURRENCY_LIST) {
+            await this.currencyService.addCurrency(currency);
         }
 
         this.job = schedule.scheduleJob('0 * * ? * *', () => {
-            ConversionService.updateConversionRates();
+            this.conversionService.updateConversionRates();
         });
-        console.log('UpdateConversionRates initialized.');
+        console.log('Updating conversion rates');
     }
 
     cancelJob() {
@@ -23,8 +24,9 @@ class UpdateConversionRates {
             this.job.cancel();
             return;
         }
-        console.warn('UpdateConversionRates cancel failed! Job is not running!');
+        console.warn('No job is running!');
     }
 }
 
-module.exports = new UpdateConversionRates();
+module.exports = UpdateConversionRates;
+

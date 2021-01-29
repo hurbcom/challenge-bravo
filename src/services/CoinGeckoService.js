@@ -16,4 +16,4 @@ class CoinGeckoService {
     }
 }
 
-module.exports = new CoinGeckoService();
+module.exports = CoinGeckoService;

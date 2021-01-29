@@ -1,10 +1,8 @@
-const MongoDBConnection = require('../config/mongo-db-config');
-
-const COLLECTION_NAME = 'currecies';
+const COLLECTION_NAME = 'currencies';
 
 class CurrencyRepository {
-    constructor() {
-        this.db = MongoDBConnection.db;
+    constructor({ mongoDBConnection }) {
+        this.db = mongoDBConnection.db;
     }
 
     findByKey(key) {
@@ -23,4 +21,4 @@ class CurrencyRepository {
         this.db.collection(COLLECTION_NAME).deleteOne({ key: currency });
     }
 }
-module.exports = new CurrencyRepository();
+module.exports = CurrencyRepository;
