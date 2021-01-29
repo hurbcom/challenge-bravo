@@ -1,0 +1,17 @@
+version: '2'
+services:
+    challenge-bravo:
+        depends_on:
+            - mongo
+        container_name: node-app
+        restart: always
+        build: .
+        ports:
+            - 3000:3000
+        links:
+            - mongo
+    mongo:
+        container_name: mongo-db
+        image: mongo:latest
+        ports:
+            - '27017:27017'

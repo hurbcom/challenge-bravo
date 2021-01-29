@@ -1,0 +1,27 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2020": true
+    },
+    "extends": [
+        "airbnb",
+        "prettier"
+    ],
+    "plugins": [
+        "prettier"
+    ],
+    "rules": {
+        "no-console": 0,
+        "prettier/prettier": [
+            "error"
+        ],
+        "no-restricted-syntax": 0
+    },
+    "parser": "babel-eslint",
+    "ignorePatterns": [
+        "*.test.js",
+        "/tests/*"
+    ],
+    "parserOptions": {}
+}
