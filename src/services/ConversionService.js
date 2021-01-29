@@ -1,8 +1,5 @@
-const CurrencyRepository = require('../repositories/CurrencyRepository');
-const ConversionRepository = require('../repositories/ConversionRepository');
 const ConversionRate = require('../models/ConversionRate');
 const Conversion = require('../interfaces/Conversion');
-const CoinGeckoService = require('./CoinGeckoService');
 const Error = require('../interfaces/Error');
 
 class ConversionService {

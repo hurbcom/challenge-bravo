@@ -1,8 +1,5 @@
-const CurrencyRepository = require('../repositories/CurrencyRepository');
 const Currency = require('../models/Currency');
 const Error = require('../interfaces/Error');
-const CoinGeckoService = require('./CoinGeckoService');
-const ConversionService = require('./ConversionService');
 
 class CurrencyService {
     constructor({ currencyRepository, coinGeckoService, conversionService }) {
