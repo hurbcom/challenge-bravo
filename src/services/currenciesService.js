@@ -1,4 +1,3 @@
-
 const CurrenciesModel = require("../models/currenciesModel");
 const configService = require("../services/configService");
 const currencyExchangeService = require("../services/currencyExchangeService");
@@ -41,4 +40,18 @@ const addCurrency = async (currency) => {
     }
 };
 
-module.exports = { addCurrency };
+const removeCurrency = async (currency) => {
+    try {
+        const deletedCurrency = await currenciesDao.findOneAndDelete({
+            code: currency,
+        });
+        if (deletedCurrency == null) {
+            throw new Error(`Currency ${currency} is not registered.`);
+        }
+        return `Currency ${currency} successfully deleted.`;
+    } catch (error) {
+        throw new Error(`Error while deleting currency: ${error.message}`);
+    }
+};
+
+module.exports = { addCurrency, removeCurrency };

@@ -29,4 +29,31 @@ const addCurrency = async (req, res) => {
     }
 };
 
-module.exports = { addCurrency };
+const removeCurrency = async (req, res) => {
+    const query = req.query;
+
+    try {
+        await currencyCrudSchema.validateAsync(query, {
+            convert: false
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        });
+        return;
+    }
+
+    try{
+        const response = {
+            result: await currenciesService.removeCurrency(query.currency),
+        };
+
+        res.json(response);
+    }
+    catch(error){
+        res.status(400).json({error: error.message});
+    }
+
+};
+
+module.exports = { addCurrency, removeCurrency };
