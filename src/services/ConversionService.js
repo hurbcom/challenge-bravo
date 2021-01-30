@@ -19,7 +19,13 @@ class ConversionService {
         const fromRate = latestRate[from];
         const toRate = latestRate[to];
         if (fromRate && toRate) {
-            const result = new Conversion(from, to, amount, (toRate * amount) / fromRate, new Date());
+            const result = new Conversion(
+                from,
+                to,
+                amount,
+                (toRate * amount) / fromRate,
+                new Date()
+            );
             return result;
         }
         const unavailableKey = !fromRate ? from : to;

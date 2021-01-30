@@ -5,7 +5,7 @@ const middleware = require('./middlewares/HeaderMiddleware');
 setup();
 const routes = require('./routes/routes');
 
-const updateConversionRatesJob = container.resolve('updateConversionRates')
+const updateConversionRatesJob = container.resolve('updateConversionRates');
 
 class Server {
     constructor() {
@@ -22,8 +22,8 @@ class Server {
     run(port) {
         (async () => {
             this.app.listen(port, () => {
-                console.log(`Server running on http://localhost:${port}`)
-            }); 
+                console.log(`Server running on http://localhost:${port}`);
+            });
 
             await updateConversionRatesJob.initJob();
         })();
@@ -34,4 +34,4 @@ class Server {
     }
 }
 
-module.exports = Server; 
+module.exports = Server;

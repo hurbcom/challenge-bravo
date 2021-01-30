@@ -1,11 +1,11 @@
 const schedule = require('node-schedule');
 
-const DEFAULT_CURRENCY_LIST = ['usd', 'brl', 'eur', 'eth', 'btc']
+const DEFAULT_CURRENCY_LIST = ['usd', 'brl', 'eur', 'eth', 'btc'];
 
 class UpdateConversionRates {
     constructor({ conversionService, currencyService }) {
-        this.currencyService = currencyService
-        this.conversionService = conversionService
+        this.currencyService = currencyService;
+        this.conversionService = conversionService;
     }
 
     async initJob() {
@@ -29,4 +29,3 @@ class UpdateConversionRates {
 }
 
 module.exports = UpdateConversionRates;
-

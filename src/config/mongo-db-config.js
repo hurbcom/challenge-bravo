@@ -8,6 +8,6 @@ class MongoDBConnection {
         this.mongoClient.connect();
         this.db = this.mongoClient.db('CurrencyAPI');
     }
-};
+}
 
 module.exports = new MongoDBConnection();
