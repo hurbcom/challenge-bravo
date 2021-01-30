@@ -64,7 +64,7 @@ const convertCurrency = async (req, res) => {
             .string()
             .required()
             .regex(new RegExp("^(?=.+)(?:[1-9]\\d*|0)?(?:\\.\\d+)?$"))
-            .error(new Error("amount must be a positive float number.")),
+            .error(new Error("amount must be a positive float number with '.' as decimal delimiter.")),
     });
 
     try {
