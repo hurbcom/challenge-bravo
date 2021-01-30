@@ -34,7 +34,7 @@ describe('ConversionService', () => {
             "btc": 1
         })
     })
-''
+
     it('should convert usd to a brl', async () => {
         mock = {
             coinGeckoService: {},

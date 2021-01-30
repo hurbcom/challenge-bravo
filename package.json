@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon",
     "test": "mocha --recursive",
-    "artillery-test": "artillery quick --count 1000 -n 1 -d 30 'http://localhost:3000/api/currency/exchange?from=USD&to=BRL&amount=1.0'",
+    "stress-test": "artillery quick --count 1000 -n 1 -d 30 'http://localhost:3000/api/currency/convert?from=USD&to=BRL&amount=1.0'",
     "test-coverage": "nyc mocha --recursive",
     "lint": "eslint src"
   },
