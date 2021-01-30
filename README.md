@@ -16,7 +16,7 @@ A currency API that allows users to convert money, challenge from HURB
 
 ```docker-compose up --build --force-recreate```
 
-## Load Test
+## Stress Test
 
 Make sure that the app is running on docker or just run the command
 
@@ -26,7 +26,7 @@ To run it detached, after that run:
 
 `yarn` or `npm install` to install the dependencies.
 
-`yarn artillery-test` or `npm run artillery-test` to run the loat test.
+`yarn artillery-test` or `npm run artillery-test` to run the stress test.
 
 
 ## Testing
