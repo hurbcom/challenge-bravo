@@ -8,6 +8,7 @@ A currency API that allows users to convert money, challenge from HURB
 - MongoDB
 - Mocha for testing
 - Docker, Docker-compose
+- [coingecko-api](https://www.npmjs.com/package/coingecko-api) to get the currencies
 
 ## Requirements
 - Docker and docker-compose
