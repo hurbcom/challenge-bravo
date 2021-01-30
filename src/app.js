@@ -1,34 +1,17 @@
-const express = require('express');
-const helmet = require('helmet');
-const routes = require('./routes');
-const mongoose = require('mongoose');
-const configService = require('./services/configService');
+const express = require("express");
+const helmet = require("helmet");
+const routes = require("./routes");
+const configService = require("./services/configService");
+const dbContext = require("./database/dbContext");
 
 const app = express();
-const {
-    MONGO_PORT,
-    MONGO_HOST,
-    MONGO_CURRENCY_COLLECTION,
-    PORT
-} = process.env;
+const { PORT } = process.env;
 
-
-mongoose.connect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_CURRENCY_COLLECTION}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then( () => {
-    console.log('MongoDB Conectado');
-  })
-  .catch(error => {
-    console.error(error);
-  });
-
+dbContext.connect();
+configService.seedDatabase();
 
 app.use(helmet());
 app.use(routes);
-configService.seedDatabase();
-
 app.listen(PORT, () => {
     console.log(`Challenge Bravo server is running on port ${PORT}`);
 });
