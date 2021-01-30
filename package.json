@@ -4,9 +4,10 @@
   "description": "Node JS guide",
   "main": "./src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --runInBand --detectOpenHandles ./test",
     "start-dev": "nodemon -r dotenv/config ./src/app.js",
-    "start": "node ./src/app.js"
+    "start": "node ./src/app.js",
+    "start-job": "nodemon  -r dotenv/config ./src/jobs/updateRatesJob.js"
   },
   "author": "João Gabriel Brouck",
   "license": "unlicensed",
@@ -20,8 +21,17 @@
     "node-cron": "^2.0.3"
   },
   "devDependencies": {
-    "eslint": "^7.16.0",
+    "@types/jest": "^26.0.20",
     "dotenv": "^8.2.0",
+    "eslint": "^7.16.0",
+    "jest": "^26.6.3",
+    "mongodb-memory-server": "^6.9.3",
     "nodemon": "^2.0.6"
+  },
+  "jest": {
+    "setupFiles": [
+      "dotenv/config"
+    ],
+    "testEnvironment": "node"
   }
 }
