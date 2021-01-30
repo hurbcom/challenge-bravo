@@ -1,65 +1,157 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Challenge-Bravo
+A currency API that allows users to convert money, challenge from HURB
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+## Stack
 
-A API deve, originalmente, converter entre as seguintes moedas:
+- NodeJS
+- Express
+- MongoDB
+- Mocha for testing
+- Docker, Docker-compose
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## Requirements
+- Docker and docker-compose
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+## How to run the app locally on Docker
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+```docker-compose up --build --force-recreate```
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+## Load Test
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Make sure that the app is running on docker or just run the command
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+```docker-compose up -d --build --force-recreate```
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+To run it detached, after that run:
 
-## Requisitos
+`yarn` or `npm install` to install the dependencies.
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+`yarn artillery-test` or `npm run artillery-test` to run the loat test.
 
-## Critério de avaliação
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+## Testing
 
-## Dúvidas
+`yarn test`
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+*Only one unit-test was made to show as example, but that is something to improve*
 
-Boa sorte e boa viagem! ;)
+### Environments
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+* Docker: http://localhost:3000
+
+## API examples and docs
+
+**`GET -> /api/currency`**
+
+Get a list from the current currencies
+
+**Response json:**
+```json
+[
+  {
+    "_id": "6014a6a961e9a8df76a4c09d",
+    "key": "usd",
+    "name": "US Dollar",
+    "unit": "$",
+    "type": "fiat"
+  },
+  {
+    "_id": "6014a6a961e9a84ac4a4c09f",
+    "key": "brl",
+    "name": "Brazil Real",
+    "unit": "R$",
+    "type": "fiat"
+  },
+  {
+    "_id": "6014a6a961e9a816d7a4c0a1",
+    "key": "eur",
+    "name": "Euro",
+    "unit": "€",
+    "type": "fiat"
+  },
+  {
+    "_id": "6014a6a961e9a8051da4c0a3",
+    "key": "eth",
+    "name": "Ether",
+    "unit": "ETH",
+    "type": "crypto"
+  },
+  {
+    "_id": "6014a6a961e9a8a8eba4c0a5",
+    "key": "btc",
+    "name": "Bitcoin",
+    "unit": "BTC",
+    "type": "crypto"
+  }
+]
+```
+
+**`GET -> /api/currency/convert/latest`**
+
+Get the latest updated currencies saved on MongoDB
+
+**Response json:**
+```json
+{
+  "_id": "6014a7d4274e94a55f33d113",
+  "referenceDate": "2021-01-30T00:27:00.114Z",
+  "usd": 1,
+  "brl": 5.462234128281574,
+  "eur": 0.8238790070674381,
+  "eth": 0.0007176712274362895,
+  "btc": 0.000028862707719134912
+}
+```
+
+
+**`GET -> /api/currency/convert?from={from_currency}&to={to_currency}&amount={value}`**
+
+Convert a currency to another one given the parameters, change the {from_currency} to for example **brl** {to_currency} for example to **usd** and {value} to **100** for example.
+
+**Response json:**
+```json
+{
+  "from": "brl",
+  "to": "usd",
+  "amount": 100,
+  "value": 18.307527208686135,
+  "referenceDate": "2021-01-30T00:31:04.122Z"
+}
+```
+
+
+**`POST -> /api/currency/`**
+
+Creates a new currency given the currency code.
+
+**Body with a JSON:**
+```json
+{
+    "key": "GBP"
+}
+```
+
+**Return:**
+```json
+{
+  "key": "gbp",
+  "name": "British Pound Sterling",
+  "unit": "£",
+  "type": "fiat",
+  "_id": "6014a9c3274e94282d33d11d"
+}
+```
+
+**`DELETE -> /api/currency/{currency_code}`**
+
+Deletes a currency from the API, to test just change the {currency_code} to a saved currency such as **brl** for example.
+
+**Return:** 
+
+* HTTP status code 204
+
+## What to improve
+
+* Unit-test all of the project
+* create a integration test
+* create a swagger-ui documentation
