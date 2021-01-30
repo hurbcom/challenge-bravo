@@ -12,13 +12,14 @@
   "license": "unlicensed",
   "dependencies": {
     "coinbase": "^2.0.8",
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^4.3.1",
-    "mongoose": "^5.11.9"
+    "mongoose": "^5.11.9",
+    "joi": "^17.3.0"
   },
   "devDependencies": {
     "eslint": "^7.16.0",
+    "dotenv": "^8.2.0",
     "nodemon": "^2.0.6"
   }
 }
