@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-dev": "nodemon -r dotenv/config ./src/app.js",
-    "start": "node -r dotenv/config ./src/app.js"
+    "start": "node ./src/app.js"
   },
   "author": "João Gabriel Brouck",
   "license": "unlicensed",

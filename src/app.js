@@ -27,7 +27,7 @@ mongoose.connect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_CURRENCY_COLLECT
 
 app.use(helmet());
 app.use(routes);
-configService.initialCurrencyConfiguration();
+configService.seedDatabase();
 
 app.listen(PORT, () => {
     console.log(`Challenge Bravo server is running on port ${PORT}`);

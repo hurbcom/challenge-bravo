@@ -1,45 +1,30 @@
-const CurrencyModel = require('../models/currencyModel');
-const SupportedCurrenciesModel = require('../models/supportedCurrenciesModel');
-const AvailableCurrencies =  require('../models/availableCurrenciesModel');
-const currencyExchangeService = require('../services/currencyExchangeService');
+const CurrenciesModel = require("../models/currenciesModel");
+const currencyExchangeService = require("../services/currencyExchangeService");
+const currenciesDao = require("../database/currenciesDao");
 
-const INITIAL_CURRENCY = 'BRL';
-const INITIAL_AVAILABLE_CURRENCIES = ['USD','BRL','EUR','BTC','ETH'];
+const BASE_CURRENCY = "USD";
+const INITIAL_AVAILABLE_CURRENCIES = ["USD", "BRL", "EUR", "BTC", "ETH"];
 
-
-exports.initialCurrencyConfiguration = async () =>{
-    const {data: {rates, currency}} = await currencyExchangeService.getCurrency(INITIAL_CURRENCY);
-    const queryCurrency = await CurrencyModel.findOne({alphaCode: INITIAL_CURRENCY}).exec();
-
-    if(queryCurrency == null){
-        const currencyModel = new CurrencyModel ({
-            alphaCode: currency,
-            rates: rates
-        });
-        await currencyModel.save();
-    } else{
-        await CurrencyModel.updateOne(
-            {alphaCode: INITIAL_CURRENCY},
-            {$set: { rates: rates}}
-        );
+const seedDatabase = async () => {
+    //Validates whether the database has already been initialized
+    const anyCurrency = await currenciesDao.findOne({});
+    if (anyCurrency !== null) {
+        return;
     }
+    const {
+        data: { rates },
+    } = await currencyExchangeService.getCurrency(BASE_CURRENCY);
 
-    const querySupportedCurrencies = await SupportedCurrenciesModel.findOne({}).exec();
-
-    if(querySupportedCurrencies == null){
-        const supportedCurrencies = new SupportedCurrenciesModel ({
-            currencies: Object.keys(rates)
+    for await (const initialCurrency of INITIAL_AVAILABLE_CURRENCIES){
+        const currency = new CurrenciesModel({
+            code: initialCurrency,
+            rateToBase: rates[initialCurrency],
         });
-        await supportedCurrencies.save();
-    }
-
-    const queryAvailableCurrencies = await AvailableCurrencies.findOne({}).exec();
-
-    if(queryAvailableCurrencies == null){
-        const availableCurrencies = new AvailableCurrencies ({
-            currencies: INITIAL_AVAILABLE_CURRENCIES
-        });
-
-        await availableCurrencies.save();
+        await currenciesDao.save(currency);
     }
 }
+module.exports = {
+    seedDatabase,
+    BASE_CURRENCY,
+    INITIAL_AVAILABLE_CURRENCIES
+};
