@@ -11,11 +11,12 @@
   "author": "João Gabriel Brouck",
   "license": "unlicensed",
   "dependencies": {
+    "big.js": "^6.0.3",
     "coinbase": "^2.0.8",
     "express": "^4.17.1",
     "helmet": "^4.3.1",
-    "mongoose": "^5.11.9",
-    "joi": "^17.3.0"
+    "joi": "^17.3.0",
+    "mongoose": "^5.11.9"
   },
   "devDependencies": {
     "eslint": "^7.16.0",

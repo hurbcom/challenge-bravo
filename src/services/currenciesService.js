@@ -2,6 +2,7 @@ const CurrenciesModel = require("../models/currenciesModel");
 const configService = require("../services/configService");
 const currencyExchangeService = require("../services/currencyExchangeService");
 const currenciesDao = require("../database/currenciesDao");
+const Big = require("big.js");
 
 const addCurrency = async (currency) => {
     let responseData;
@@ -54,4 +55,41 @@ const removeCurrency = async (currency) => {
     }
 };
 
-module.exports = { addCurrency, removeCurrency };
+const fetchCurrency = (currency) => currenciesDao.findOne({ code: currency });
+
+const convertCurrency = async (from, to, amount) => {
+    let currencies;
+    try {
+        const fromCurrency = await fetchCurrency(from);
+        currencies = {
+            from: {
+                code: from,
+                model: fromCurrency,
+            },
+            to: {
+                code: to,
+                model: from === to ? fromCurrency : await fetchCurrency(to),
+            },
+        };
+    } catch (error) {
+        // db fetch errors
+        console.error(`Database Error: ${error}`);
+        throw new Error(`Internal server error.`);
+    }
+
+    const unsupportedCurrencies = Object.values(currencies)
+        .filter((currency) => currency.model === null)
+        .map((currency) => currency.code);
+
+    if (unsupportedCurrencies.length > 0) {
+        throw new Error(`Unsupported currencies: ${unsupportedCurrencies}`);
+    }
+
+    const fromRate = new Big(currencies.from.model.rateToBase);
+    const toRate = new Big(currencies.to.model.rateToBase);
+    const bigAmount = new Big(amount);
+
+    return bigAmount.div(fromRate).times(toRate).toFixed(4);
+};
+
+module.exports = { addCurrency, removeCurrency, convertCurrency };
