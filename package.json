@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "test": "jest --coverage",
+    "test": "mocha --recursive",
+    "artillery-test": "artillery quick --count 1000 -n 1 -d 30 'http://localhost:3000/api/currency/exchange?from=USD&to=BRL&amount=1.0'",
+    "test-coverage": "nyc mocha --recursive",
     "lint": "eslint src"
   },
   "repository": {
@@ -41,6 +43,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
     "prettier": "^2.2.1"
   }
 }
