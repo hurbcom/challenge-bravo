@@ -479,7 +479,7 @@ describe("controller", () => {
 
             const expectedResult = {
                 message:
-                    "amount must be a positive float number with '.' as decimal delimiter.",
+                    "Amount must be a positive number with '.' as decimal delimiter.",
             };
 
             await currencyController.convertCurrency(req, res);
@@ -504,7 +504,7 @@ describe("controller", () => {
 
             const expectedResult = {
                 message:
-                    "amount must be a positive float number with '.' as decimal delimiter.",
+                    "Amount must be a positive number with '.' as decimal delimiter.",
             };
 
             await currencyController.convertCurrency(req, res);
@@ -528,7 +528,7 @@ describe("controller", () => {
 
             const expectedResult = {
                 message:
-                    "amount must be a positive float number with '.' as decimal delimiter.",
+                    "Amount must be a positive number with '.' as decimal delimiter.",
             };
 
             await currencyController.convertCurrency(req, res);
