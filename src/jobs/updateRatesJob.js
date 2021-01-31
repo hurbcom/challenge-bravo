@@ -10,6 +10,7 @@ dbContext.connect();
 
 cron.schedule(UPDATE_RATE_JOBS_CRON, async function () {
     try {
+        console.log("INIT - UpdateRatesJob")
         const {
             data: { rates },
         } = await currencyExchangeService.getCurrency(
@@ -24,6 +25,7 @@ cron.schedule(UPDATE_RATE_JOBS_CRON, async function () {
                 { $set: { rateToBase: rates[currency.code] } }
             );
         }
+        console.log("END - UpdateRatesJob")
     } catch (error) {
         console.error(error.message);
         throw error;
