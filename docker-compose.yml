@@ -1,0 +1,44 @@
+version: "3"
+
+services: 
+  app_bravo:
+    build: .
+    ports: 
+      - 3333:3333
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./docker_data/prometheus/:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    restart: always
+    ports: 
+      - 9090:9090
+    links: 
+      - app_bravo
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    user: root
+    container_name: grafana
+    ports: 
+      - 3000:3000
+    environment:
+      - HTTP_USER="admin"
+      - HTTP_PASS="admin"
+    depends_on: 
+      - prometheus
+    links: 
+      - prometheus
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
