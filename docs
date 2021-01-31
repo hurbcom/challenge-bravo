@@ -1,0 +1,19 @@
+/*
+
+https://api.exchangeratesapi.io/latest?base=BTC
+ */
+
+/*
+https://v6.exchangerate-api.com/v6/cc9a96760535b3a7d1cb3942/pair/EUR/BRL
+
+
+https://free.currconv.com/api/v7/convert?apiKey=82bc8e1eb484a8e17ac0&q=USD_PHP
+https://free.currconv.com/others/usage?apiKey=82bc8e1eb484a8e17ac0
+https://free.currconv.com/api/v7/convert?apiKey=82bc8e1eb484a8e17ac0&q=USD_PHP&compact=ultra
+https://free.currconv.com/api/v7/countries?apiKey=82bc8e1eb484a8e17ac0
+https://free.currconv.com/api/v7/currencies?apiKey=82bc8e1eb484a8e17ac0
+
+https://free.currconv.com/api/v7/convert?apiKey=82bc8e1eb484a8e17ac0&q=USD_PHP&compact=ultra
+https://free.currconv.com/api/v7/convert?apiKey=82bc8e1eb484a8e17ac0&q=USD_PHP&compact=y
+https://free.currconv.com/api/v7/convert?apiKey=do-not-use-this-key&q=USD_PHP
+*/
