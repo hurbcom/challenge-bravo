@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+    db:
+        container_name: brouckz-mongodb
+        image: 'mongo'
+        ports:
+          - '27017:27017'
+        volumes:
+          - ./data/db:/data/db
+    web:
+      depends_on:
+        - db
+      container_name: brouckz-challenge-bravo
+      build:
+        context: .
+        target: webserver
+      env_file: .env
+      environment:
+        API_KEY: $API_KEY
+        API_SECRET: $API_SECRET
+        MONGO_PORT: $MONGO_PORT
+        MONGO_HOST: $MONGO_HOST
+        MONGO_CURRENCY_COLLECTION: $MONGO_CURRENCY_COLLECTION
+        PORT: $PORT
+      ports:
+        - '8080:8080'
+    cronjob:
+      depends_on:
+        - db
+      container_name: brouckz-cron-job
+      build:
+        context: .
+        target: cronjob
+      env_file: .env
+      environment:
+        API_KEY: $API_KEY
+        API_SECRET: $API_SECRET
+        MONGO_PORT: $MONGO_PORT
+        MONGO_HOST: $MONGO_HOST
+        MONGO_CURRENCY_COLLECTION: $MONGO_CURRENCY_COLLECTION
