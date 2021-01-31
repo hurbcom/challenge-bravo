@@ -7,7 +7,8 @@
     "test": "jest --runInBand --detectOpenHandles ./test",
     "start-dev": "nodemon -r dotenv/config ./src/app.js",
     "start": "node ./src/app.js",
-    "start-job": "nodemon  -r dotenv/config ./src/jobs/updateRatesJob.js"
+    "start-job-dev": "nodemon  -r dotenv/config ./src/jobs/updateRatesJob.js",
+    "start-job": "node ./src/jobs/updateRatesJob.js"
   },
   "author": "João Gabriel Brouck",
   "license": "unlicensed",
