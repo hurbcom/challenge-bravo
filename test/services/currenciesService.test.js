@@ -41,7 +41,6 @@ describe("service", () => {
         });
 
         it("Should throw an error if the currency provided does not exist", async () => {
-            // Arrange
             const newCurrencyCode = "WRONG";
 
             const expectedMessage =

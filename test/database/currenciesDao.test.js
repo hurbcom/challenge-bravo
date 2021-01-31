@@ -19,7 +19,6 @@ afterAll(() => testDbContext.closeDatabase());
 describe("database", () => {
     describe("save", () => {
         it("Should fail saving empty currenncy", async () => {
-            // Arrange
             const newCurrency = {};
             const expectedError = new Error(
                 "Error - Currency validation failed: rateToBase: Path `rateToBase` is required., code: Path `code` is required."
@@ -110,7 +109,7 @@ describe("database", () => {
                 { code: realCode },
                 { $set: { rateToBase: 1 } }
             );
-            
+
             const real = await currenciesDao.findOne({ code: realCode });
 
             expect(real.rateToBase).toEqual(1);
