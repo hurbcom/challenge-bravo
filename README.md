@@ -1,64 +1,113 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo - Backend API
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+## Overview
+This API was built to provide a currency convertion, which you can convert an amount of money to whatever the unit chosen,since it is valid an available in our API.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## Running the application
+To run the application you just need to run the following command: `docker-compose up --build`.\
+Double check if ports `3333`, `27017`, `9090` are available, our application will need them.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+> You also can run the application by just running `docker build -t carlos/bravo .` and `docker run -p 3333:3333 carlos/bravo`. But in this case, youhave to ensure that you set up all the necessaries services by yourself.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+| Port | Usage | 
+| ------------- |:-------------:|
+| 3333 | Application express serverr |
+| 9090 | Prometheus |
+| 27017 | MongoDB |
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+## Why Prometheus?
+Prometheus is an awesome tool used for collecting metrics of our application, like CPU usage, Memory Usage, number of threads and a bunch of others advantages.\
+Prometheus can use itself as a datasource of these metrics so we can use then in other monitoring systems like Grafana, per exemple.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+## Why JWT?
+One of the requirements of the application is to avoid security troubles, to avoid that, I used authentication by passing a token (JWT), if JWT we can hold user's data and hash them in a secret hash held by us in our application.
+Holding this secret hash, we will be the only who will be able to "revert" the token and get user's data.\
+Another advantage of using JWT is that we don't need to store user's session.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+## Why MongoDB
+MongoDB was needed to hold users registries, mongoDb is usually very fast for reading and very easy to code if Mongoose package.
 
-## Requisitos
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+## Usage
 
-## Critério de avaliação
+### First of all, you need to register a valid user:
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+`POST - /api/v1/users/register`\
+`Payload - {
+    "name" : "Carlos",
+    "email" : "email@email.com",
+    "password" : "102030"
+}`
 
-## Dúvidas
+`Response data example:
+{
+    "data": {
+        "_id": "2222222222",
+        "name": "Carlos",
+        "email": "emaifffl@email.com",
+        "createdAt": "2021-01-31T19:48:33.560Z",
+        "__v": 0
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMTcwOTkxNTdhYmY5MDAxMjEyMjUzZiIsImlhdCI6MTYxMjEyMjUxMywiZXhwIjoxNjEyMjA4OTEzfQ.fqEN790ThFzpe953Nihb6zydVS8GGVhWyYn7zgJBmJo"
+}`
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+Save this token somewhere, you will need it.
 
-Boa sorte e boa viagem! ;)
+### If you already have an user, just authenticate
+
+`POST - /api/v1/users/login`\
+`Payload - {
+    "email" : "email@email.com",
+    "password" : "102030"
+}`
+
+`Response data example:
+{
+    "data": {
+        "_id": "2222222222",
+        "name": "Carlos",
+        "email": "emaifffl@email.com",
+        "createdAt": "2021-01-31T19:48:33.560Z",
+        "__v": 0
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMTcwOTkxNTdhYmY5MDAxMjEyMjUzZiIsImlhdCI6MTYxMjEyMjUxMywiZXhwIjoxNjEyMjA4OTEzfQ.fqEN790ThFzpe953Nihb6zydVS8GGVhWyYn7zgJBmJo"
+}`
+
+Save this token somewhere, you will need it.
+
+**Health endpoint**\
+`GET - /api/v1/health`\
+`Authentication : Bearer Token` -> You must provide the `token` you got in registration/authentication.
+
+This route is only used to check if our API is working properly..
+
+**Available currencies endpoint**\
+`GET - /api/v1/available-currencies`\
+`Authentication : Bearer Token` -> You must provide the `token` you got in registration/authentication.
+
+This route is used to show the currencies that our API accepts.\
+The innitial available currencies are: 
+- USD
+- BRL
+- EUR
+- BTC
+- ETH
+
+**Add available currencies endpoint**\
+ `POST - /api/v1/add-available-currencies`\
+`Authentication : Bearer Token` -> You must provide the `token` you got in registration/authentication.
+ 
+This route is used to add a new valid currency to our API. 
+> A currency must be a string up to 4 characters.
+
+**Convert amount endpoint**\
+`GET - /api/v1/convert?from=USD&to=BRL&amount=136.52`\
+`Authentication : Bearer Token` -> You must provide the `token` you got in registration/authentication.
+
+This endpoint is used to convert an amount "from" to a "to" value.
+> Per example, if you want to convert 1500 dolas to reais then you will convert USD to BRL.
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />

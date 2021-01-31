@@ -4,6 +4,7 @@ const cors = require('cors');
 const client = require('prom-client');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 
 const routes = require('../routes');
 
@@ -11,10 +12,15 @@ class App {
     
     constructor() {
         this.app = express();
+        this.connectDatabase();
         this.middlewares();
         this.metrics();
         this.routes();
         this.setAvailableCurrencies();
+    }
+
+    connectDatabase() {
+        mongoose.connect('mongodb://mongodb:27017/currency_app', {useNewUrlParser: true, useUnifiedTopology: true});
     }
 
     middlewares() {
