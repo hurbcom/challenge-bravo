@@ -24,7 +24,6 @@ cron.schedule(UPDATE_RATE_JOBS_CRON, async function () {
                 { $set: { rateToBase: rates[currency.code] } }
             );
         }
-        console.log("rodou");
     } catch (error) {
         console.error(error.message);
         throw error;

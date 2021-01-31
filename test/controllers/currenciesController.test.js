@@ -3,8 +3,6 @@ const currenciesService = require("../../src/services/currenciesService");
 const currencyExchangeService = require("../../src/services/currencyExchangeService");
 const currencyController = require("../../src/controllers/currenciesController");
 const getCurrencyMockedResponse = require("../getCurrencyMockResponse.json");
-const currenciesDao = require("../../src/database/currenciesDao");
-const { query } = require("express");
 
 beforeAll(() => testDbContext.connect());
 afterAll(() => testDbContext.closeDatabase());

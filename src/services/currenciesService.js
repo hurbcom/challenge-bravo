@@ -72,7 +72,6 @@ const convertCurrency = async (from, to, amount) => {
             },
         };
     } catch (error) {
-        // db fetch errors
         console.error(`Database Error: ${error}`);
         throw new Error(`Internal server error.`);
     }
