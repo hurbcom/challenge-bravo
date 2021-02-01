@@ -1,0 +1,37 @@
+[
+    {
+        "_id": "60171ed3b148061ff7bb34d7",
+        "key": "usd",
+        "name": "US Dollar",
+        "unit": "$",
+        "type": "fiat"
+    },
+    {
+        "_id": "60171ed3b148061ff7bb34d9",
+        "key": "brl",
+        "name": "Brazil Real",
+        "unit": "R$",
+        "type": "fiat"
+    },
+    {
+        "_id": "60171ed3b148061ff7bb34db",
+        "key": "eur",
+        "name": "Euro",
+        "unit": "€",
+        "type": "fiat"
+    },
+    {
+        "_id": "60171ed3b148061ff7bb34dd",
+        "key": "eth",
+        "name": "Ether",
+        "unit": "ETH",
+        "type": "crypto"
+    },
+    {
+        "_id": "60171ed3b148061ff7bb34df",
+        "key": "btc",
+        "name": "Bitcoin",
+        "unit": "BTC",
+        "type": "crypto"
+    }
+]

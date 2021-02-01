@@ -8,7 +8,7 @@ const CurrencyRepository = require('../repositories/CurrencyRepository');
 const CoinGeckoService = require('../services/CoinGeckoService');
 const ConversionService = require('../services/ConversionService');
 const CurrencyService = require('../services/CurrencyService');
-const MongoDBConnection = require('./mongo-db-config');
+const MongoDBConnection = require('./MongoDBConnection');
 
 const container = awilix.createContainer({
     injectionMode: awilix.InjectionMode.PROXY,
