@@ -45,6 +45,7 @@ URL: `addCurrency?currency={moeda}`
 Method: `POST`
 
 #### Validações
+
 - currency:
 --	Deve possuir 3 caracteres e estar em uppercase.
 --	Deve ser suportada pela Coinbase API.
@@ -65,6 +66,7 @@ URL: `removeCurrency?currency={moeda}`
 Method: `DELETE`
 
 #### Validações
+
 - currency:
 --	Deve possuir 3 caracteres e estar em uppercase.
 --	Deve estar cadastrada.
@@ -84,12 +86,15 @@ URL: `convertCurrency?from={moeda}&to={moeda}&amount={valor}`
 Method: `GET`
 
 #### Validações
+
 - from:
 --	Deve possuir 3 caracteres e estar em uppercase.
 --	Deve estar cadastrada.
+
 - to:
 --	Deve possuir 3 caracteres e estar em uppercase.
 --	Deve estar cadastrada
+
 - amount:
 --	Não deve ser negativo.
 --	Deve ser utilizado `.` como separador decimal.
