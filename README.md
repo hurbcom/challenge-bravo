@@ -9,6 +9,7 @@ A currency API that allows users to convert money, challenge from HURB
 - Mocha for testing
 - Docker, Docker-compose
 - [coingecko-api](https://www.npmjs.com/package/coingecko-api) to get the currencies
+- Swagger
 
 ## Requirements
 - Docker and docker-compose
@@ -23,22 +24,25 @@ Make sure that the app is running on docker or just run the command
 
 ```docker-compose up -d --build --force-recreate```
 
-To run it detached, after that run:
+To run it detached and after that run:
 
-`yarn` or `npm install` to install the dependencies.
-
-`yarn artillery-test` or `npm run artillery-test` to run the stress test.
+- `yarn` or `npm install` to install the dependencies.
+- `yarn artillery-test` or `npm run artillery-test` to run the stress test.
 
 
 ## Testing
 
 `yarn test`
 
-*Only one unit-test was made to show as example, but that is something to improve*
+## Swagger Docs Environment
 
-### Environments
+You can run tests from it
 
-* Docker: http://localhost:3000
+- Swagger docs: http://localhost:3000/api-docs
+
+## Local Environment
+
+- Docker: http://localhost:3000
 
 ## API examples and docs
 
@@ -150,9 +154,3 @@ Deletes a currency from the API, to test just change the {currency_code} to a sa
 **Return:** 
 
 * HTTP status code 204
-
-## What to improve
-
-* Unit-test all of the project
-* create a integration test
-* create a swagger-ui documentation
