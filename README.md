@@ -1,65 +1,122 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Challenge-Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+  API que realiza conversão de valores entre moedas ou criptomoedas
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## Requirements
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+- Node (^v14.15.1)
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+- MongoDB
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+- Docker
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+-  [Coinbase](https://developers.coinbase.com/api/v2)
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
 
-## Requisitos
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+## Setup
 
-## Critério de avaliação
+`docker-compose build && docker-compose up`
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+## Environment
 
-## Dúvidas
+- `PORT`: Porta utilizada pela API (8080)
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+- `MONGO_PORT`: Porta utilizada pelo DB (27017)
 
-Boa sorte e boa viagem! ;)
+- `MONGO_HOST`: Nome do host do DB
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+- `MONGO_CURRENCY_COLLECTION`: Nome da coleção no DB (currency)
+
+- `API_KEY`: Chave utilizada pela Coinbase API
+
+- `API_SECRET`: Secret utilizado pela Coinbase API
+
+- `UPDATE_RATE_JOBS_CRON`: Configuração do job que atualiza a cotação das moedas, a cada 2 minutos . ("*/2 * * * *")
+
+## Endpoints
+
+### Cadastrar moeda
+
+URL: `addCurrency?currency={moeda}`
+Method: `POST`
+
+#### Validações
+- currency:
+--	Deve possuir 3 caracteres e estar em uppercase.
+--	Deve ser suportada pela Coinbase API.
+--	Não deve estar cadastrada.
+
+#### Exemplo de requisição
+Requisição: `http://localhost:8080/addCurrency?currency=JPY`
+
+``{
+"result":  "Currency JPY successfully registered."
+}``
+
+
+### Remover moeda
+
+URL: `removeCurrency?currency={moeda}`
+Method: `DELETE`
+
+#### Validações
+- currency:
+--	Deve possuir 3 caracteres e estar em uppercase.
+--	Deve estar cadastrada.
+
+#### Exemplo de requisição
+Requisição: `http://localhost:8080/removeCurrency?currency=JPY`
+
+``{
+"result":  "Currency JPY successfully deleted."
+}``
+
+
+### Converter moedas
+
+URL: `convertCurrency?from={moeda}&to={moeda}&amount={valor}`
+Method: `GET`
+
+#### Validações
+- from:
+--	Deve possuir 3 caracteres e estar em uppercase.
+--	Deve estar cadastrada.
+- to:
+--	Deve possuir 3 caracteres e estar em uppercase.
+--	Deve estar cadastrada
+- amount:
+--	Não deve ser negativo.
+--	Deve ser utilizado `.` como separador decimal.
+
+#### Exemplo de requisição
+Requisição: `http://localhost:8080/convertCurrency?from=USD&to=BRL&amount=10`
+
+``{
+"result":  "54.5005"
+}``
+
+## Jobs
+
+### Update Rates
+Job que atualiza a cotação das moedas a cada 2 minutos.
+
+Para executar separadamente utilizar o comando:
+`npm run start-job`
+
+## Testes
+
+Para executar os testes utilizar o comando:
+`npm run test`
+
+## Aquitetura
+
+- A estrutura de pastas utilizada foi baseada nos projetos MVC que eu participei e tinha mais familiaridade.
+- A escolha da API para consulta das moedas foi baseada em ser umas das mais conhecidas e com um grande número de moedas suportadas além de ter uma biblioteca disponível para o desenvolvimento.
+- Para testes foi utilizado o Jest para fazer os cenários e o Mongo Memory Server para ser utilizado como banco em memória para testar a integração com a base de dados.
+
+## TO-DO
+- Adicionar endpoint de healthcheck.
+- Adicionar endpoint de listagem de moedas suportadas.
