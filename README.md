@@ -1,6 +1,6 @@
 # Currency Converter
 
-> Api de conversão de moedas.
+> API de conversão de moedas.
 
 API para converter valores de moedas usando diferentes taxas cambiais.
 As taxas cambiais são atualizadas de forma automática a cada 30 minutos.
@@ -72,3 +72,18 @@ Convertendo valores entre diferentes taxas cambiais:
 ## Rodando os testes
 
 `docker-compose run --rm hurb yarn test`
+
+## Bonus
+
+No repositório existe um submodulo (frontend) do git, que é um projeto React. Nele exemplifico o uso da API em um projeto web.
+O projeto possuí como dependência a API, ao rodá-lo,  é necessário que a API esteja configurada.
+
+Inicialize o submodulo:
+
+`git submodule init`
+
+Força o git a clonar o submodulo:
+`git submodule update`
+
+Incializa o frontend e suas dependências:
+`docker-compose up app`

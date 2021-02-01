@@ -1,6 +1,22 @@
 version: "3.5"
 
 services:
+    app:
+        tty: true
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        entrypoint: ./entrypoint.sh
+        container_name: hurb-react
+        volumes:
+            - ./frontend:/usr/src/app
+        ports:
+            - "3000:3000"
+        depends_on:
+            - hurb
+        links:
+            - hurb
+
     hurb:
         image: node:14
         command: bash -c "yarn dev"
