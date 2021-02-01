@@ -1,4 +1,5 @@
 const express = require('express');
+
 const routes = express.Router();
 const { container } = require('../config/di-setup');
 
@@ -127,7 +128,6 @@ routes.get('/health-status', (_, res) => res.json({ status: 'ok' }));
  *                 $ref: '#/components/schemas/Currency'
  */
 routes.get('/currency', (req, res) => currencyController.listCurrencies(req, res));
-
 
 /**
  * @swagger
