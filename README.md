@@ -41,6 +41,7 @@
 ### Cadastrar moeda
 
 URL: `addCurrency?currency={moeda}`
+
 Method: `POST`
 
 #### Validações
@@ -60,6 +61,7 @@ Requisição: `http://localhost:8080/addCurrency?currency=JPY`
 ### Remover moeda
 
 URL: `removeCurrency?currency={moeda}`
+
 Method: `DELETE`
 
 #### Validações
@@ -78,6 +80,7 @@ Requisição: `http://localhost:8080/removeCurrency?currency=JPY`
 ### Converter moedas
 
 URL: `convertCurrency?from={moeda}&to={moeda}&amount={valor}`
+
 Method: `GET`
 
 #### Validações
