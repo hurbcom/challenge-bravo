@@ -4,11 +4,7 @@ const authConfig = require('../config/auth.json');
 
 const User = require('../schemas/User');
 
-const generateToken = (params = {}) => {
-    return jwt.sign(params, authConfig.secret, {
-        expiresIn: 86400,
-    });
-}
+const { generateToken } = require('../helpers/tokenHelpers');
 
 class UserController {
 
@@ -22,7 +18,7 @@ class UserController {
         }
 
         if(!await bcrypt.compare(password, user.password)) {
-            return res.status(400).json({ "message" : "Invalid password." });
+            return res.status(401).json({ "message" : "Invalid password." });
         }
 
         user.password = undefined;

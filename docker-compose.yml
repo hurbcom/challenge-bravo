@@ -7,14 +7,23 @@ services:
       - 3333:3333
     links: 
       - mongodb
+      - redis
     depends_on: 
       - mongodb
+      - redis
   
   mongodb:
     image: mongo
     container_name: mongodb
     ports: 
       - 27017:27017
+    restart: always
+
+  redis:
+    image: redis
+    container_name: redis
+    ports: 
+      - 6379:6379
     restart: always
 
   prometheus:

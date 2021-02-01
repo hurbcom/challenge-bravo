@@ -3,11 +3,7 @@ const authConfig = require('../config/auth.json');
 
 const authMiddleware = (req, res, next) => {
 
-    console.log("AUTENTICANDO.... ");
     const authHeader = req.headers.authorization;
-
-    console.log(authHeader);
-
     if (!authHeader) {
         return res.status(401).send({ "error" : "No token provided." });
     }

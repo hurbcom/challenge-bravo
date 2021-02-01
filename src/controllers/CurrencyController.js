@@ -15,11 +15,12 @@ class CurrencyController {
                 return res.status(200).json({ "message" : `This currency already exists.` });
             }
 
-            fs.appendFileSync('./src/available_currencies', "\n"+currencyName);
-
             available_currencies.push(currencyName);
-        
-            return res.status(201).json({ "message" : `Currency ${currencyName} has been added successfully.` });
+            fs.appendFile('./src/available_currencies', "\n"+currencyName, (err) => {
+                if (err) throw err;
+                return res.status(201).json({ "message" : `Currency ${currencyName} has been added successfully.` });
+            });
+            
         } catch(e) {
             return res.status(400).json({ "message" : e.message });
         }

@@ -20,7 +20,11 @@ class App {
     }
 
     connectDatabase() {
-        mongoose.connect('mongodb://mongodb:27017/currency_app', {useNewUrlParser: true, useUnifiedTopology: true});
+        if (process.env.NODE_ENV) {
+            mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+        } else {
+            mongoose.connect('mongodb://mongodb:27017/currency_app', {useNewUrlParser: true, useUnifiedTopology: true});
+        }
     }
 
     middlewares() {

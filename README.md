@@ -16,6 +16,8 @@ Double check if ports `3333`, `27017`, `9090` are available, our application wil
 | 9090 | Prometheus |
 | 27017 | MongoDB |
 
+## Running the tests
+To run the tests you just need to run the following command: `npm run test`.
 
 ## Why Prometheus?
 Prometheus is an awesome tool used for collecting metrics of our application, like CPU usage, Memory Usage, number of threads and a bunch of others advantages.\
