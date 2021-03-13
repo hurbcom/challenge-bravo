@@ -1,0 +1,25 @@
+
+
+### Node ###
+# Dependency directories
+node_modules/
+jspm_packages/
+
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Download folder
+downloads/*
+
+### VisualStudioCode ###
+.vscode/
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+
+# pasta do mongo
+mongodb/*
