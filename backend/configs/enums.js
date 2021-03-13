@@ -10,7 +10,10 @@ module.exports.enums = Object.freeze({
     connString: process.env.MONGO_ADDRESS,
   },
   apiPort: process.env.API_PORT,
-
+  apiCoin: {
+    url: process.env.API_COIN,
+    key: process.env.API_COIN_KEY
+  }
 });
 
 console.log("Conectado ao:", mongoString);
