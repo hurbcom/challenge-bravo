@@ -23,29 +23,43 @@ class GetConversion {
   async get() {
     while (true) {
       await sleep(this.sleep);
-      let getCoin = (await axios({
-        url: this.url,
-        method: "get"
-      })).data.results.currencies
+      // let getCoin = (await axios({
+      //   url: this.url,
+      //   method: "get"
+      // })).data.results.currencies
+
+      let array = {
+        USD: {
+          USD: 1,
+          EUR: .84,
+          BTC: 0.000016,
+          ETH: 0.00052
+        },
+      };
+
+
       let data = Helper.clock()
       let stringData = `${data.dia}/${data.mes}/${data.ano4} ${data.hora}:${data.min}:${data.seg}`
       // save in db
-      let { USD, EUR, BTC } = getCoin
-      let array = [{ USD: USD }, { EUR: EUR }, { BTC: BTC }];
-      console.log(array[0]);
-      console.log(Object.keys(array[0])[0]);
-      console.log(stringData);
+      // let { USD, EUR, BTC } = getCoin
+      // let array = [{ USD: USD }, { EUR: EUR }, { BTC: BTC }];
+      // console.log(array[2]);
+      // console.log(Object.keys(array[0])[0]);
+      // console.log(stringData);
       console.log(Helper.data(stringData));
       // process.exit()
-      for (let i = 0; i < array.length; i++) {
+      // for (let i = 0; i < array.length; i++) {
         let object = {
-          coinName: Object.keys(array[i])[0],
+          coinName: "USD",
+          // coinName: Object.keys(array[i])[0],
+          // coinName: Object.keys(array[i])[0],
           queryDate: Helper.data(stringData),
-          coinBase: getCoin.source,
-          coin: array[i][Object.keys(array[i])[0]]
+          coinBase: "USD",
+          coin:array.USD
+          // coin: array[i][Object.keys(array[i])[0]]
         }
         await Historicalquotes(object).save()
-      }
+      // }
     }
   }
 
@@ -54,7 +68,7 @@ class GetConversion {
    */
   static async delete() {
     while (true) {
-      await sleep(60000 * 60 * 24);
+      await sleep(60000 * 10);
       await Historicalquotes.deleteMany({
         queryDate: {
           "$gt": Helper.subtractDate(new Date(), 7)
@@ -76,6 +90,6 @@ class GetConversion {
     process.exit()
   }
 
-  await new GetConversion().get()
-  await GetConversion.delete()
+  // GetConversion.delete()
+  new GetConversion(false).get()
 })()
