@@ -3,45 +3,35 @@
     "model":"api.Moedas",
     "pk":1,
     "fields":{
-        "simbolo":"BRL",
-        "nome":"Real Brasileiro",
-        "cotacao":0
+        "simbolo":"BRL"
     }
 },
 {
     "model":"api.Moedas",
     "pk":2,
     "fields":{
-        "simbolo":"USD",
-        "nome":"Dólar Americano",
-        "cotacao":0
+        "simbolo":"USD"
     }
 },
 {
     "model":"api.Moedas",
     "pk":3,
     "fields":{
-        "simbolo":"EUR",
-        "nome":"Euro",
-        "cotacao":0
+        "simbolo":"EUR"
     }
 },
 {
     "model":"api.Moedas",
     "pk":4,
     "fields":{
-        "simbolo":"BTC",
-        "nome":"Bitcoin",
-        "cotacao":0
+        "simbolo":"BTC"
     }
 },
 {
     "model":"api.Moedas",
     "pk":5,
     "fields":{
-        "simbolo":"ETH",
-        "nome":"Ethereum",
-        "cotacao":0
+        "simbolo":"ETH"
     }
 }
 ]
