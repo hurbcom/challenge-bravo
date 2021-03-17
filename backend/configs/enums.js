@@ -16,4 +16,4 @@ module.exports.enums = Object.freeze({
   }
 });
 
-console.log("Conectado ao:", mongoString);
+console.log("Connected to:", mongoString);
