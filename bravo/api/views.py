@@ -51,7 +51,7 @@ class GerenciarMoedasView(APIView):
 
         if localizado:
             localizado.delete()
-            return Response({'Sucesso':'Deletado com sucesso.'}, status=status.HTTP_201_OK)
+            return Response({'Sucesso':'Deletado com sucesso.'}, status=status.HTTP_200_OK)
         
         return Response({'Erro':'Simbolo não encontrando na base de dados para deleção.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -99,8 +99,8 @@ def gravarCotacao(id_from, id_to , json):
     modelo.cotacao = json['info']['rate']
     modelo.ultima_atualizacao = json['date']
     modelo.save()
-
-    return modelo
+    
+    return True
 
 
 def buscarCotacao(from_currency, to_currency, amount, id_from_currency, id_to_currency):
@@ -115,7 +115,7 @@ def buscarCotacao(from_currency, to_currency, amount, id_from_currency, id_to_cu
         json_crypto_cotacao = json.loads(cotacao_atual.content.decode("utf-8"))
         
         if json_crypto_cotacao['result'] == None:
-            return {'Error':'Conversão não pode ser realizada, tente com outras moedas'}
+            return Response({'Error':'Conversão não pode ser realizada, tente com outras moedas'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             gravarCotacao(id_from_currency, id_to_currency, json_crypto_cotacao)
             return json_crypto_cotacao['result'] 
