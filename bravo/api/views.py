@@ -1,5 +1,5 @@
 from rest_framework.renderers import JSONRenderer
-from rest_framework import permissions
+from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from datetime import date
@@ -20,17 +20,40 @@ class ConverterView(APIView):
         
         resultado = converterMoedas(from_currency, to_currency, amount_from)
 
-        return Response(resultado)
+        return Response(resultado, status=status.HTTP_200_OK)
 
 class GerenciarMoedasView(APIView):
     permission_classes = [permissions.AllowAny]
     renderer_classes = [JSONRenderer]
 
     def post(self, request):
-        return self
+        simbolo = request.data['simbolo']
+        
+        try:
+            Moedas.objects.get(simbolo=simbolo)
+            return Response({'Erro':'Moeda já cadastrada'}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            pass
+
+        if simbolo:
+            moeda = Moedas.objects.create(simbolo=simbolo)
+            return Response({'Sucesso':'Cadastrada com sucesso.'}, status=status.HTTP_201_CREATED)
+
+        return Response({'Erro':'Simbolo não valido.'}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
-        return self
+        simbolo = request.data['simbolo']
+
+        try:
+            localizado = Moedas.objects.get(simbolo=simbolo)
+        except:
+            return Response({'Erro':'Simbolo não encontrando na base de dados para deleção.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if localizado:
+            localizado.delete()
+            return Response({'Sucesso':'Deletado com sucesso.'}, status=status.HTTP_201_OK)
+        
+        return Response({'Erro':'Simbolo não encontrando na base de dados para deleção.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def converterMoedas(from_currency, to_currency, amount):
@@ -64,7 +87,7 @@ def verificarMoeda(moeda):
     try:
         id_moeda = Moedas.objects.get(simbolo=moeda).id
     except Exception:
-        return {'resultado':'Simbolo' + moeda + '(moeda) não cadastrada, cadastre primeiro pra fazer a busca'}
+        return Response({'Erro':'Simbolo' + moeda + '(moeda) não cadastrada, cadastre primeiro pra fazer a busca'}, status=status.HTTP_400_BAD_REQUEST)
 
     return id_moeda
 
