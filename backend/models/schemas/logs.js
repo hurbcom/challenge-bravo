@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const logRequest = new mongoose.Schema({
-  // send: Boolean,
+  error: Boolean,
+  errorMessage:String,
   creationDate: Date,
   quoteCreated: Date,
   entryRequest: Object,

@@ -1,15 +1,19 @@
+const winston = require('winston');
+const moment = require('moment');
 
-
+/**
+ * Accumulates useful functions for all code
+ */
 class Helper {
   /**
-     * Converte data comum para formato Date. sem alterar o fuso horário
-     * @param {string} data Data comum. Ex.: 25/02/2020 09:40
-     * @returns {string} 2020-01-01T10:10.000Z
-     */
+   * Common date converter for Date format. Prevents the date from being saved in the mongo with a time zone.
+   * @param {string} data Data  Ex.: 25/02/2020 09:40
+   * @returns {string} 2020-01-01T10:10.000Z
+   */
   static data(data) {
-    // O GMT-0000 mantem a hora que você inseriu sem alterar fuso -3
-    // se quiser inserir fuso, ex.: horario de brazilia -3GMT.
-    //GMT-0300
+    // GMT-0000 maintains the time you entered without changing time zone -3
+    //  if you want to insert a time zone, ex: Brazilia time -3GMT.
+    //  GMT-0300
     let regex = data.replace(
       /([0-9]{1,2})\W([0-9]{1,2})\W([0-9]{4})\s([0-9]{1,2}\W[0-9]{1,2}\W[0-9]{1,2})/i,
       '$3-$2-$1 $4 GMT-0000'
@@ -18,20 +22,25 @@ class Helper {
   }
 
   /**
-   * pega uma data e subtrai "x" dias dela
-   * @param {data} data1 colocar new Date()
-   * @param {number} dias numero de dias a subtrair
+   * take a date and subtract "x" days from it
+   * @param {data} data1 put new Date ()
+   * @param {number} dias number of days to subtract
    */
-  static subtractDate(data1, dias) {
+  static subtractDate(data1, days) {
     let d = data1;
-    let novo = new Date(d.setDate(d.getDate() - dias));
-    // Helper.data(`${novo.getDate()}/${novo.getMonth()+1}/${novo.getFullYear()} 00:00`)
-    // console.log(novo.getDate(),novo.getMonth()+1, novo.getFullYear());
+    let newDate = new Date(d.setDate(d.getDate() - days));
     return Helper.data(
-      `${novo.getDate()}/${novo.getMonth() + 1}/${novo.getFullYear()} 00:00`
+      `${newDate.getDate()}/${
+        newDate.getMonth() + 1
+      }/${newDate.getFullYear()} 00:00`
     );
   }
 
+  /**
+   * give me an object with the most used parts of a date
+   * @param {Date} setDate date you want, if you want to use current date leave this field blank
+   * @returns {Object} parts of a date
+   */
   static clock(setDate) {
     let data;
     if (!setDate) {
@@ -47,7 +56,7 @@ class Helper {
     let hora = data.getHours(); // 0-23
     let min = data.getMinutes(); // 0-59
     let seg = data.getSeconds(); // 0-59
-    let mseg = data.getMilliseconds();   // 0-999
+    let mseg = data.getMilliseconds(); // 0-999
     // let tz = data.getTimezoneOffset(); // em minutos
     let arraySemana = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
     let diaSemana = arraySemana[dia_sem];
@@ -56,4 +65,84 @@ class Helper {
   }
 }
 
+/**
+ * @type {Class} Logger
+ * @param {string} logLevel
+ * @param {string} nomeArquivo
+ * @param {object} options
+ * @param {string} options.robotName
+ * @param {null|string} options.processNumber
+ */
+class Logger {
+  constructor(
+    logLevel = 'info',
+    nomeArquivo = '',
+    { robotName, processNumber } = {}
+  ) {
+    this.robotName = robotName;
+    this.number = processNumber;
+  
+    this.logs = [];
+    this.consoleLogger = winston.createLogger({
+      level: 'info',
+      format: winston.format.simple(),
+      transports: [new winston.transports.Console()],
+    });
+    this.fileLogger = winston.createLogger({
+      level: logLevel,
+      format: winston.format.simple(),
+      transports: [
+        new winston.transports.File({
+          filename: nomeArquivo,
+        }),
+      ],
+    });
+  }
+
+  /**
+   * Faz um print no console
+   * @param {string} log mensagem
+   */
+  info(log) {
+    let identificador = this.number
+    this.logs.push(`${this.robotName} - ${identificador} - ${log}`);
+    return this.consoleLogger.info(
+      `${this.robotName} - ${identificador} - ${log}`
+    );
+  }
+
+  /**
+   * Make a print on the console and save the log to file
+   * @param {string} level level of importance of the log
+   * @param {string} log message
+   */
+  log(level, log) {
+    this.info(log);
+    return this.fileLogger.log(level, `[${moment().format()}] ${log}`);
+  }
+  /**
+   * Capture all logs of the desired class
+   */
+  allLog() {
+    return this.logs;
+  }
+
+  /**
+   * removes the logs of the desired class
+   */
+  resetLog() {
+    this.logs = [];
+  }
+/**
+ * adds logs from another class instantiated to the current class.
+ * @param {Array} logs Array of log strings
+ */
+  addLog(logs) {
+    for (let i = 0; i < logs.length; i++) {
+      this.logs.push(logs[i]);
+    }
+  }
+}
+
 module.exports.Helper = Helper;
+module.exports.Logger = Logger;
