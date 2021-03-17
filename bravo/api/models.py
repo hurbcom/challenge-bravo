@@ -1,7 +1,7 @@
 from django.db import models
 
 class Moedas(models.Model):
-    simbolo = models.CharField(max_length=5)
+    simbolo = models.CharField(max_length=15, unique=True)
 
 class Cotacao(models.Model):
     moeda_para = models.ForeignKey('Moedas',on_delete=models.CASCADE, related_name='moeda_para')

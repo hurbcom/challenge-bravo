@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
             name='Moedas',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('simbolo', models.CharField(max_length=5)),
+                ('simbolo', models.CharField(max_length=15, unique=True)),
             ],
         ),
         migrations.CreateModel(
