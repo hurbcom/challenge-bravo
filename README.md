@@ -7,11 +7,11 @@ API construida para converter valores entre moedas diferentes utilizando seus "s
 - GET converter/
     Endpoint para converter as moedas usando a api https://exchangerate.host/#/ e salvar a cotação no banco de dados para consultas no mesmo dia. Exemplo: http://localhost:8000/converter/?from=BRL&to=USD&amount=1
 
-    - ##from: a moeda que está querendo converter;
+    - from: a moeda que está querendo converter;
     
-    - ##to: moeda que se quer convertida;
+    - to: moeda que se quer convertida;
 
-    - ##amount: o valor para conversão;
+    - amount: o valor para conversão;
 
 
 - POST gerenciar-moedas/
@@ -45,6 +45,15 @@ Para relatórios de teste foi usado o Coverage.
 Para o teste de estresse foi utilizado o Locust.
 
 API de consulta e conversão de valores utlizada foi a https://exchangerate.host/#/ que já continham dados das principais moedas internacionais e e crypto moedas. 
+
+## Possíveis vulnerabilidades
+
+- É possível deletar uma moeda do banco sem nenhum tipo de validação de usuário;
+
+- Banco de dados não otimizado para muitas requisições;
+
+- API de consulta e conversão de cambio usada pode ter problemas, o que geraria falha nesta api.
+
 
 ## Requisitos não completos
 
