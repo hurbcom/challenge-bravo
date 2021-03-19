@@ -1,0 +1,10 @@
+FROM node:12.19.0
+WORKDIR /backend
+COPY ./backend ./
+
+RUN npm install
+RUN npm install && npm install -g pm2 nodemon
+
+RUN sed -i 's/DEFAULT\@SECLEVEL\=2/DEFAULT\@SECLEVEL\=1/' /etc/ssl/openssl.cnf
+
+CMD ["node", "server"]

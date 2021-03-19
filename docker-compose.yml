@@ -1,16 +1,12 @@
 version: '3.4'
 services:
-  # server:
-  #   extends:
-  #     file: common-services.yml
-  #     service: base_node
-  #   build:
-  #     context: ./
-  #     dockerfile: dockerfile-node
-  #   command: 'node server.js'
-  #   ports:
-  #     - ${API_PORT}:3300
-  #   restart: always
+  server:
+    build:
+      context: ./
+      dockerfile: dockerfile-node
+    command: node server.js
+    ports:
+      - ${API_PORT}:${API_PORT}
    
   mongodb:
     image: mongo

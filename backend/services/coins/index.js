@@ -28,7 +28,9 @@ class Currencyquotation {
     } catch (e) {
       error = true;
       errorMessage = e;
+      res.send(e.message);
       logger.info(e.message);
+      logger.log(e.message);
     } finally {
       await Logs(
         new Logs({
