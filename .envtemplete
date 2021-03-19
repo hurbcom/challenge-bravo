@@ -1,8 +1,8 @@
 API_PORT=1234
-MONGO_ADDRESS=mongodb://root:root@localhost:12345
-MONGO_DATABASE=crawlersBigdata
+MONGO_ADDRESS2=mongodb://root:root@127.0.0.1:12345
+MONGO_ADDRESS=mongodb+srv://hub:hubhub1234@cluster0.ug69u.mongodb.net/desafio?retryWrites=true&w=majority
 MONGO_PORT=12345
 MONGO_ROOT_USERNAME=root
 MONGO_ROOT_PASSWORD=root
 API_COIN=https://api.hgbrasil.com/finance
-API_COIN_KEY=xxxxx
+API_COIN_KEY=1960d016
