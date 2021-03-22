@@ -1,6 +1,6 @@
 const baseCurrencyConvertion = require('../util/convertionUtil');
 
-const convert = async (from, to, amount) => {
+const convert = async (from, to, amount = 1) => {
     let fromQuote = await baseCurrencyConvertion(from)
     let ToQuote = await baseCurrencyConvertion(to)
 
