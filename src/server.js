@@ -7,8 +7,8 @@ const mongoose = require('mongoose');
 const mongo = mongoose.connect(databaseConfig.uri, databaseConfig.options);
 
 // Routes
-const currencyRoutes = require('./routes/currencyRoutes')
-const convertionRoutes = require('./routes/convertionRoutes')
+const currencyRoutes = require('./routes/currencyRoutes');
+const convertionRoutes = require('./routes/convertionRoutes');
 
 mongo.then(() => {
     console.log('connected');
@@ -19,5 +19,11 @@ mongo.then(() => {
 app.use(express.json());
 app.use(currencyRoutes);
 app.use(convertionRoutes);
+
+// Error Handling
+const erroHandler = require('./error/handlers/errorHandler');
+
+app.use(erroHandler.apiErrorHandler);
+app.use(erroHandler.genericErrorHandler);
 
 module.exports = app;
