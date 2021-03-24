@@ -3,7 +3,6 @@ const { enums } = require('../configs/enums');
 const { Logs } = require('../models/schemas/logs');
 const axios = require('axios');
 
-
 (async () => {
   // try {
   //   mongoose.connect(enums.mongo.connString, {
@@ -15,8 +14,6 @@ const axios = require('axios');
   // } catch (e) {
   //   console.log(e);
   // }
-
-
 
   // try {
   //   const obj = {
@@ -35,26 +32,26 @@ const axios = require('axios');
   //   console.log(e);
   //   process.exit()
   // }
-  let array = []
-  console.time("start")
-  for (let i = 0; i < 201; i++) {
-    let test = axios({
-      url: `http://localhost:1234/coin/?from=BTC&to=EUR&amount=${i * 3.1256}`,
-      method: "get"
-    })
-    // console.log(test.data);
-    // array.push(i)
-    i = i - 1
-  }
-  // array.map(async (x) => {
-  // })
-  console.timeEnd("start")
-
+  // let array = []
+  // console.time("start")
+  // for (let i = 0; i < 201; i++) {
+  //   let test = axios({
+  //     url: `http://localhost:1234/coin/?from=BTC&to=EUR&amount=${i * 3.1256}`,
+  //     method: "get"
+  //   })
+  //   // console.log(test.data);
+  //   // array.push(i)
+  //   i = i - 1
+  // }
+  // // array.map(async (x) => {
+  // // })
+  // console.timeEnd("start")
 
   // process.exit()
 
-
-
-
-})()
-
+  let array = ['btc', 'usd', 'eth'];
+  console.log(array.indexOf('usd'));
+  // array.splice(array.indexOf('usd'), 1);
+  console.log(array.splice(array.indexOf('usd'), 1));
+  console.log(array);
+})();

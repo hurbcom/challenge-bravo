@@ -7,6 +7,7 @@ const logRequest = new mongoose.Schema({
   quoteCreated: Date,
   entryRequest: Object,
   output:Object,
+  ip:String,
   logs:Array
 });
 

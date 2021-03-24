@@ -1,6 +1,6 @@
 API_PORT=1234
 MONGO_ADDRESS2=mongodb://root:root@127.0.0.1:12345
-MONGO_ADDRESS=mongodb+srv://hub:hubhub1234@cluster0.ug69u.mongodb.net/desafio?retryWrites=true&w=majority
+MONGO_ADDRESS=mongodb+srv://hub:xxxxx@cluster0.ug69u.mongodb.net/desafio?retryWrites=true&w=majority
 MONGO_PORT=12345
 MONGO_ROOT_USERNAME=root
 MONGO_ROOT_PASSWORD=root

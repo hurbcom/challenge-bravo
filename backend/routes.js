@@ -2,6 +2,7 @@ const express = require("express");
 const routes = express.Router();
 
 const {Currencyquotation} = require('./services/coins');
+const {UpdateCoin} = require('./services/updateCoins');
 
 routes.get("/", function (req, res) {
   return res.send("Você esta no Desafio");
@@ -12,9 +13,10 @@ routes.post("/", function (req, res) {
 
 
 routes.get("/coin", Currencyquotation.get);
-// routes.post("/limpaMemoria", PostComandos.limpaMemoria);
 
+routes.get("/update", UpdateCoin.add);
 
+routes.delete("/delete", UpdateCoin.delete);
 
 // routes.get("/cpu", CPU.cpuStatus);
 

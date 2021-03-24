@@ -6,15 +6,27 @@ const moment = require('moment');
  */
 class Helper {
   /**
+   *
+   * @param {*} date
+   */
+  static saveDateMongo(date = false) {
+    if (!date) {
+      let date1 = Helper.clock();
+      let date = `${date1.dia}/${date1.mes}/${date1.ano4} ${date1.hora}:${date1.min}:${date1.seg}`;
+      return Helper.date(date)
+    }
+    return Helper.date(date)
+  }
+  /**
    * Common date converter for Date format. Prevents the date from being saved in the mongo with a time zone.
-   * @param {string} data Data  Ex.: 25/02/2020 09:40
+   * @param {string} date date  Ex.: 25/02/2020 09:40
    * @returns {string} 2020-01-01T10:10.000Z
    */
-  static data(data) {
+  static date(date) {
     // GMT-0000 maintains the time you entered without changing time zone -3
     //  if you want to insert a time zone, ex: Brazilia time -3GMT.
     //  GMT-0300
-    let regex = data.replace(
+    let regex = date.replace(
       /([0-9]{1,2})\W([0-9]{1,2})\W([0-9]{4})\s([0-9]{1,2}\W[0-9]{1,2}\W[0-9]{1,2})/i,
       '$3-$2-$1 $4 GMT-0000'
     );
@@ -81,7 +93,7 @@ class Logger {
   ) {
     this.robotName = robotName;
     this.number = processNumber;
-  
+
     this.logs = [];
     this.consoleLogger = winston.createLogger({
       level: 'info',
@@ -104,7 +116,7 @@ class Logger {
    * @param {string} log mensagem
    */
   info(log) {
-    let identificador = this.number
+    let identificador = this.number;
     this.logs.push(`${this.robotName} - ${identificador} - ${log}`);
     return this.consoleLogger.info(
       `${this.robotName} - ${identificador} - ${log}`
@@ -133,10 +145,10 @@ class Logger {
   resetLog() {
     this.logs = [];
   }
-/**
- * adds logs from another class instantiated to the current class.
- * @param {Array} logs Array of log strings
- */
+  /**
+   * adds logs from another class instantiated to the current class.
+   * @param {Array} logs Array of log strings
+   */
   addLog(logs) {
     for (let i = 0; i < logs.length; i++) {
       this.logs.push(logs[i]);
