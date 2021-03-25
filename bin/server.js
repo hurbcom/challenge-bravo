@@ -8,6 +8,6 @@ app.set('port', port);
 const server = http.createServer(app);
 
 server.listen(port);
-console.group('Api rodando na porta ' + port);
+console.group("localhost:" + port);
 
  

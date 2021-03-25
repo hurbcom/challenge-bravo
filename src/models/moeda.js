@@ -4,11 +4,10 @@ const Schema = mongoose.Schema;
 const MoedaSchema = new Schema({
     moeda:{
         type: String,
-        required: true,
+        required: false,
         },
-    cotacao: {
+    cotacaodolar: {
         type: Number,
-        trim:true,
         required: false,
     },    
 });

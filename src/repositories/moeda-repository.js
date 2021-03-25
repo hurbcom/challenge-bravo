@@ -1,8 +1,22 @@
 const mongoose = require('mongoose');
-const lead = mongoose.model('Moeda');
+const moeda = mongoose.model('Moeda');
+
+
+
+exports.get = async(data) => {
+    const res = moeda.find({});
+    console.log(res);
+    return res;
+ }
+
+ exports.post = async(data) => {
+    const moedacreated = new moeda(data);
+    await moedacreated.save();
+}
+
 
 exports.put = async(id, data) => {
-    await lead
+    await moeda
     .findByIdAndUpdate(id,{
         $set: 
         {
@@ -14,7 +28,7 @@ exports.put = async(id, data) => {
  }
 
  exports.delete = async(id) => {
-    return lead
+    return moeda
     .findByIdAndDelete(id);
  }
  
