@@ -8,6 +8,7 @@ class UpdateCoin {
     let obj;
     try {
       let { add } = req.query;
+      // let add = "BTC" 1
       let find = (await validCoins.find({}).sort({ _id: -1 }).limit(1))[0];
 
       if (find == null) {

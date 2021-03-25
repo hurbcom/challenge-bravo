@@ -15,3 +15,8 @@ const log = new mongoose.Schema({
 const Historicalquotes = mongoose.model('Historicalquotes', log, 'historicalquotes');
 
 module.exports.Historicalquotes = Historicalquotes;
+
+
+const HistoricalquotesTest = mongoose.model('HistoricalquotesTest', log, 'historicalquotesTest');
+
+module.exports.HistoricalquotesTest = HistoricalquotesTest;

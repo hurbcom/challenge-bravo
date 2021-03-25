@@ -6,8 +6,7 @@ const moment = require('moment');
  */
 class Helper {
   /**
-   *
-   * @param {*} date
+   *Generates a date with the timeZone set to be used in mongoDB
    */
   static saveDateMongo(date = false) {
     if (!date) {
@@ -112,8 +111,8 @@ class Logger {
   }
 
   /**
-   * Faz um print no console
-   * @param {string} log mensagem
+   * vPrint the Log in the shell
+   * @param {string} log message
    */
   info(log) {
     let identificador = this.number;

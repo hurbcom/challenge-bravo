@@ -2,7 +2,11 @@ const axios = require('axios');
 const sleep = require('await-sleep');
 const mongoose = require('mongoose');
 
-const { Historicalquotes } = require('../../models/schemas/coin');
+require('../../configs/bootstrap');
+const {
+  Historicalquotes,
+  HistoricalquotesTest,
+} = require('../../models/schemas/coin');
 const { enums } = require('../../configs/enums');
 const { Helper } = require('../../lib/util');
 
@@ -10,14 +14,14 @@ class GetConversion {
   constructor(production = false) {
     if (production === false) {
       this.url = enums.apiCoin.url;
-      this.sleep = 6000000;
+      this.sleep = 60000 * 60 * 2; // => 2 hours
     } else {
       this.url = `${enums.apiCoin.url}?key${enums.apiCoin.key}`;
-      this.sleep = 300000;
+      this.sleep = 60000 * 5; // => 5 minutes
     }
   }
   /**
-   * Captura as cotações de moedas
+   * Captures currency quotes
    */
   async get() {
     let array = {
@@ -26,51 +30,51 @@ class GetConversion {
       },
     };
     while (true) {
+      let getCrypto = (
+        await axios({
+          method: 'get',
+          url: enums.apiCrypto.url,
+          headers: { 'X-CMC_PRO_API_KEY': enums.apiCrypto.key },
+        })
+      ).data.data;
+      getCrypto.map((x) => {
+        array.USD[x.symbol] = x.quote.USD.price;
+      });
+
       let getCoin = (
         await axios({
           method: 'get',
-          url:
-            'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
-          headers: {
-            'X-CMC_PRO_API_KEY': '9e009ee7-bc83-4b10-8b17-cd4c8a9b0272',
-          },
+          url: `${enums.apiCoin.url}/api/latest?access_key=${enums.apiCoin.key}`,
         })
-      ).data.data;
-      // console.log(getCoin);
-      getCoin.map((x) => {
-        array.USD[x.symbol] = x.quote.USD.price;
+      ).data.rates;
+ 
+      let coinBase = [];
+      // let usd = getCoin.USD;
+      let eur = 1 / getCoin.USD;
+      Object.keys(getCoin).forEach((x) => {
+        coinBase.push(x);
       });
-      // console.log(array);
-      // process.exit();
-      // let data = Helper.clock()
-      // let stringData = `${data.dia}/${data.mes}/${data.ano4} ${data.hora}:${data.min}:${data.seg}`
-      // save in db
-      // let { USD, EUR, BTC } = getCoin
-      // let array = [{ USD: USD }, { EUR: EUR }, { BTC: BTC }];
-      // console.log(array[2]);
-      // console.log(Object.keys(array[0])[0]);
-      // console.log(stringData);
+      coinBase.map((x) => {
+        if (x != 'USD') {
+          array.USD[x]=getCoin[x] * eur
+        }
+      });
+
       console.log(Helper.saveDateMongo());
-      // process.exit()
-      // for (let i = 0; i < array.length; i++) {
       let object = {
         coinName: 'USD',
-        // coinName: Object.keys(array[i])[0],
-        // coinName: Object.keys(array[i])[0],
         queryDate: Helper.saveDateMongo(),
         coinBase: 'USD',
         coin: array.USD,
-        // coin: array[i][Object.keys(array[i])[0]]
       };
       await Historicalquotes(object).save();
-      // }
-      console.log("save !");
+      console.log('save !');
       await sleep(this.sleep);
     }
   }
 
   /**
-   * Sanitiza o banco de dados a cada dia para um pariodo superior a 7 dias.
+   * Sanitize the database every day for a period greater than 7 days
    */
   static async delete() {
     while (true) {
@@ -82,20 +86,30 @@ class GetConversion {
       });
     }
   }
+
+  async test() {
+    let array = {
+      USD: {
+        USD: 1,
+        BTC: 3.3,
+        ETH: 1.5,
+        EUR: 1.7,
+        BRL: 0.3,
+      },
+    };
+    let object = {
+      coinName: 'USD',
+      queryDate: Helper.saveDateMongo(),
+      coinBase: 'USD',
+      coin: array.USD,
+    };
+    await HistoricalquotesTest(object).save();
+    console.log('save !');
+    await sleep(this.sleep);
+  }
 }
 (async () => {
-  try {
-    mongoose.connect(enums.mongo.connString, {
-      useCreateIndex: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('Conectado ao mongo');
-  } catch (e) {
-    console.log(e);
-    process.exit();
-  }
-
-  // GetConversion.delete()
+  // new GetConversion(false).delete();
   new GetConversion(false).get();
+  new GetConversion(false).test();
 })();

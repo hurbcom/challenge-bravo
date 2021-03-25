@@ -1,0 +1,5 @@
+apps:
+  - script   : ./server.js
+    name     : 'server'
+  - script   : ./services/getCoins/index.js
+    name     : 'getCoin'

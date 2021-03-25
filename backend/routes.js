@@ -14,7 +14,9 @@ routes.post("/", function (req, res) {
 
 routes.get("/coin", Currencyquotation.get);
 
-routes.get("/update", UpdateCoin.add);
+routes.get("/test", Currencyquotation.getTest);
+
+routes.put("/update", UpdateCoin.add);
 
 routes.delete("/delete", UpdateCoin.delete);
 

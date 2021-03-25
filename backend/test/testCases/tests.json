@@ -1,0 +1,2882 @@
+[
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 49.3481,
+    "total": 55.9278
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 23.5408,
+    "total": 45.6968
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 5.031,
+    "total": 28.509
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 26.841,
+    "total": 52.1031
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 76.8456,
+    "total": 51.2304
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 90.0966,
+    "total": 8.1906
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 60.8003,
+    "total": 40.5335
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 40.5514,
+    "total": 78.7174
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 95.2011,
+    "total": 84.001
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 5.5861,
+    "total": 3.2859
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 66.8747,
+    "total": 378.9566
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 62.0189,
+    "total": 18.7936
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 40.5767,
+    "total": 229.9346
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 39.0391,
+    "total": 20.1111
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 81.3435,
+    "total": 157.9021
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 74.2064,
+    "total": 144.0477
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 63.0732,
+    "total": 107.2244
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 51.2095,
+    "total": 9.037
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 98.7246,
+    "total": 87.1099
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 67.7907,
+    "total": 20.5426
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 52.3972,
+    "total": 576.3692
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 93.6565,
+    "total": 8.5142
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 65.7681,
+    "total": 5.9789
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 3.718,
+    "total": 1.1154
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 74.491,
+    "total": 13.1455
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 90.9736,
+    "total": 27.2921
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 80.3172,
+    "total": 455.1308
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 59.4381,
+    "total": 115.3798
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 3.7949,
+    "total": 1.9549
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 92.0058,
+    "total": 54.1211
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 41.1027,
+    "total": 21.1741
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 78.2149,
+    "total": 35.5522
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 18.6192,
+    "total": 204.8112
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 47.935,
+    "total": 159.7833
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 86.7017,
+    "total": 51.001
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 79.6079,
+    "total": 265.3597
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 59.5045,
+    "total": 196.3649
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 24.1603,
+    "total": 14.2119
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 87.9466,
+    "total": 99.6728
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 60.8389,
+    "total": 10.7363
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 86.2773,
+    "total": 50.7514
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 71.4164,
+    "total": 404.6929
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 84.9228,
+    "total": 424.614
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 17.9494,
+    "total": 10.5585
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 88.0323,
+    "total": 99.7699
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 21.2922,
+    "total": 70.974
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 81.9239,
+    "total": 92.8471
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 69.4493,
+    "total": 104.1739
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 9.4685,
+    "total": 5.5697
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 86.9302,
+    "total": 15.3406
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 30.5656,
+    "total": 51.9615
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 43.8461,
+    "total": 144.6921
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 98.4708,
+    "total": 558.0012
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 0.4423,
+    "total": 0.0781
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 59.3712,
+    "total": 34.9242
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 63.4619,
+    "total": 37.3305
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 0.14,
+    "total": 0.1587
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 60.8171,
+    "total": 10.7324
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 62.0468,
+    "total": 204.7544
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 2.4606,
+    "total": 27.0666
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 23.0915,
+    "total": 11.8956
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 56.0203,
+    "total": 280.1015
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 18.8222,
+    "total": 94.111
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 70.2701,
+    "total": 234.2337
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 83.4901,
+    "total": 275.5173
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 47.787,
+    "total": 14.4809
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 54.2096,
+    "total": 596.3056
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 13.5712,
+    "total": 4.1125
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 0.0698,
+    "total": 0.036
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 10.1856,
+    "total": 5.9915
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 6.23,
+    "total": 2.8318
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 86.5558,
+    "total": 952.1138
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 7.6423,
+    "total": 8.6613
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 11.9723,
+    "total": 6.1675
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 94.2149,
+    "total": 55.4205
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 15.5005,
+    "total": 26.3509
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 41.8856,
+    "total": 62.8284
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 59.9867,
+    "total": 39.9911
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 74.177,
+    "total": 244.7841
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 40.6623,
+    "total": 134.1856
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 70.0869,
+    "total": 79.4318
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 47.7828,
+    "total": 157.6832
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 34.7864,
+    "total": 10.5413
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 31.5692,
+    "total": 14.3496
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 91.0954,
+    "total": 41.407
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 29.4874,
+    "total": 44.2311
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 84.7273,
+    "total": 43.6474
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 7.2471,
+    "total": 3.7334
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 34.4635,
+    "total": 379.0985
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 95.2469,
+    "total": 142.8704
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 11.9913,
+    "total": 23.2772
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 18.8827,
+    "total": 32.1006
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 89.357,
+    "total": 40.6168
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 47.9357,
+    "total": 14.526
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 34.7348,
+    "total": 6.947
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 16.3214,
+    "total": 81.607
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 18.6908,
+    "total": 3.7382
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 64.5789,
+    "total": 56.9814
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 18.8361,
+    "total": 36.5642
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 52.2686,
+    "total": 101.4626
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 70.9001,
+    "total": 137.6296
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 86.9429,
+    "total": 286.9116
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 70.0372,
+    "total": 770.4092
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 82.9827,
+    "total": 94.0471
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 64.0079,
+    "total": 140.8174
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 33.1868,
+    "total": 37.6117
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 78.6849,
+    "total": 35.7659
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 63.0922,
+    "total": 94.6383
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 33.515,
+    "total": 111.7167
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 41.3433,
+    "total": 18.7924
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 73.3704,
+    "total": 22.0111
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 28.5983,
+    "total": 162.057
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 60.0128,
+    "total": 198.0422
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 74.0523,
+    "total": 814.5753
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 46.8964,
+    "total": 21.3165
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 65.4278,
+    "total": 111.2273
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 91.6817,
+    "total": 519.5296
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 40.7525,
+    "total": 20.9937
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 92.9081,
+    "total": 526.4792
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 50.1426,
+    "total": 29.4956
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 35.0078,
+    "total": 3.1825
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 48.0505,
+    "total": 32.0337
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 32.9142,
+    "total": 55.9541
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 70.4931,
+    "total": 79.8922
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 65.6096,
+    "total": 74.3575
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 91.8656,
+    "total": 104.1143
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 88.5534,
+    "total": 26.8344
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 40.6621,
+    "total": 7.1757
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 12.6011,
+    "total": 2.2237
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 17.4639,
+    "total": 58.213
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 64.8407,
+    "total": 213.9743
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 42.4387,
+    "total": 141.4623
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 50.2596,
+    "total": 110.5711
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 70.6722,
+    "total": 12.4716
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 0.2741,
+    "total": 0.5321
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 88.7191,
+    "total": 195.182
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 62.2549,
+    "total": 120.8477
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 50.3623,
+    "total": 33.5749
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 40.2931,
+    "total": 12.0879
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 63.824,
+    "total": 37.5435
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 87.1388,
+    "total": 39.6085
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 72.5107,
+    "total": 42.6534
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 62.514,
+    "total": 12.5028
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 37.7366,
+    "total": 7.5473
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 24.2259,
+    "total": 121.1295
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 66.5712,
+    "total": 129.2264
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 1.614,
+    "total": 2.7438
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 99.6141,
+    "total": 66.4094
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 77.2578,
+    "total": 169.9672
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 82.4662,
+    "total": 467.3085
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 95.9736,
+    "total": 479.868
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 81.0645,
+    "total": 47.685
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 71.602,
+    "total": 358.01
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 98.8506,
+    "total": 217.4713
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 21.8,
+    "total": 24.7067
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 16.5663,
+    "total": 55.221
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 77.9454,
+    "total": 13.7551
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 49.0015,
+    "total": 25.2432
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 70.5295,
+    "total": 235.0983
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 70.4468,
+    "total": 154.983
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 11.2414,
+    "total": 9.9189
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 3.4762,
+    "total": 0.6952
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 40.6488,
+    "total": 78.9065
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 4.0377,
+    "total": 0.7125
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 1.9447,
+    "total": 11.02
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 35.6084,
+    "total": 18.3437
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 24.8623,
+    "total": 4.9725
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 68.1109,
+    "total": 224.766
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 48.8615,
+    "total": 43.1131
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 24.0137,
+    "total": 52.8301
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 78.6853,
+    "total": 118.028
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 82.2191,
+    "total": 271.323
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 59.8821,
+    "total": 89.8232
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 99.1617,
+    "total": 29.7485
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 76.0011,
+    "total": 380.0055
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 94.3072,
+    "total": 8.5734
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 6.1535,
+    "total": 0.5594
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 7.3856,
+    "total": 2.2381
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 57.0799,
+    "total": 29.4048
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 96.4624,
+    "total": 43.8465
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 87.3049,
+    "total": 130.9574
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 10.1863,
+    "total": 15.2795
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 97.8191,
+    "total": 166.2925
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 65.8536,
+    "total": 217.3169
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 54.8415,
+    "total": 36.561
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 63.6213,
+    "total": 699.8343
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 82.5117,
+    "total": 907.6287
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 30.8262,
+    "total": 101.7265
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 19.8231,
+    "total": 9.0105
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 1.7511,
+    "total": 5.837
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 62.8253,
+    "total": 18.8476
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 72.9467,
+    "total": 48.6311
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 44.459,
+    "total": 75.5803
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 7.2268,
+    "total": 4.8179
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 28.5049,
+    "total": 12.9568
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 90.8858,
+    "total": 999.7438
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 92.3966,
+    "total": 179.3581
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 12.2442,
+    "total": 3.6733
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 64.3333,
+    "total": 11.3529
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 45.3951,
+    "total": 9.079
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 88.8973,
+    "total": 195.5741
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 7.6791,
+    "total": 8.703
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 59.8034,
+    "total": 197.3512
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 46.9831,
+    "total": 234.9155
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 77.0834,
+    "total": 847.9174
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 55.4483,
+    "total": 28.5643
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 39.7038,
+    "total": 26.4692
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 92.1138,
+    "total": 202.6504
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 4.3679,
+    "total": 2.2501
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 71.511,
+    "total": 36.839
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 69.2103,
+    "total": 6.2918
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 96.5461,
+    "total": 64.3641
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 16.1096,
+    "total": 4.8329
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 33.9509,
+    "total": 65.9047
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 44.0507,
+    "total": 7.7737
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 74.4428,
+    "total": 144.5066
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 70.5407,
+    "total": 21.1622
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 13.3046,
+    "total": 3.9914
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 1.7554,
+    "total": 2.6331
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 8.6457,
+    "total": 14.6977
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 15.3562,
+    "total": 17.4037
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 70.2858,
+    "total": 136.4371
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 29.5189,
+    "total": 26.0461
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 52.5685,
+    "total": 262.8425
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 41.0859,
+    "total": 232.8201
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 34.4101,
+    "total": 38.9981
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 56.976,
+    "total": 626.736
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 74.0923,
+    "total": 38.1688
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 90.7149,
+    "total": 41.234
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 62.4337,
+    "total": 208.1123
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 28.1333,
+    "total": 2.5576
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 5.2246,
+    "total": 3.4831
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 99.12,
+    "total": 58.3059
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 90.3038,
+    "total": 175.2956
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 53.3234,
+    "total": 9.41
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 87.1319,
+    "total": 290.4397
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 82.6504,
+    "total": 72.9268
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 54.312,
+    "total": 47.9224
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 4.1688,
+    "total": 2.1476
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 84.0251,
+    "total": 924.2761
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 20.0812,
+    "total": 34.138
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 72.4987,
+    "total": 140.7328
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 78.0614,
+    "total": 117.0921
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 27.999,
+    "total": 12.7268
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 93.7597,
+    "total": 28.1279
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 2.1563,
+    "total": 3.6657
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 92.4976,
+    "total": 61.6651
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 25.2425,
+    "total": 126.2125
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 48.1544,
+    "total": 9.6309
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 97.4694,
+    "total": 146.2041
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 13.793,
+    "total": 9.1953
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 64.4227,
+    "total": 708.6497
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 54.1862,
+    "total": 270.931
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 6.2854,
+    "total": 13.8279
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 88.9263,
+    "total": 195.6379
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 71.4675,
+    "total": 36.8166
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 28.1513,
+    "total": 140.7565
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 89.9935,
+    "total": 197.9857
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 25.8821,
+    "total": 22.8371
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 57.4703,
+    "total": 29.6059
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 95.2723,
+    "total": 142.9085
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 52.8725,
+    "total": 581.5975
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 94.1306,
+    "total": 533.4067
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 95.236,
+    "total": 28.5708
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 36.0074,
+    "total": 7.2015
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 72.8793,
+    "total": 42.8702
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 70.7959,
+    "total": 106.1939
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 23.2472,
+    "total": 15.4981
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 85.3316,
+    "total": 165.6437
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 26.3175,
+    "total": 15.4809
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 89.6069,
+    "total": 985.6759
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 53.7759,
+    "total": 591.5349
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 7.2415,
+    "total": 41.0352
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 47.5702,
+    "total": 4.3246
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 97.497,
+    "total": 214.4934
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 55.7233,
+    "total": 612.9563
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 78.0995,
+    "total": 171.8189
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 45.7619,
+    "total": 9.1524
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 58.8604,
+    "total": 10.3871
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 59.1499,
+    "total": 10.4382
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 54.0667,
+    "total": 36.0445
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 0.9303,
+    "total": 0.2819
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 31.3385,
+    "total": 35.517
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 95.5146,
+    "total": 1050.6606
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 9.6043,
+    "total": 32.0143
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 95.1382,
+    "total": 28.8298
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 68.2906,
+    "total": 60.2564
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 92.9488,
+    "total": 18.5898
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 10.1703,
+    "total": 1.7948
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 29.6032,
+    "total": 98.6773
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 7.712,
+    "total": 5.1413
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 28.7938,
+    "total": 63.3464
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 11.2693,
+    "total": 12.7719
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 44.6793,
+    "total": 13.4038
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 10.1058,
+    "total": 11.4532
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 22.8486,
+    "total": 10.3857
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 23.4374,
+    "total": 26.5624
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 10.8161,
+    "total": 0.9833
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 82.5593,
+    "total": 48.5643
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 91.9443,
+    "total": 202.2775
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 57.0765,
+    "total": 85.6148
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 21.1126,
+    "total": 4.2225
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 47.2234,
+    "total": 9.4447
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 75.0497,
+    "total": 145.6847
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 35.7119,
+    "total": 21.007
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 76.6138,
+    "total": 114.9207
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 70.8271,
+    "total": 12.4989
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 23.7163,
+    "total": 79.0543
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 99.0812,
+    "total": 1089.8932
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 58.8091,
+    "total": 196.0303
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 93.032,
+    "total": 62.0213
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 66.2332,
+    "total": 13.2466
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 55.2984,
+    "total": 16.5895
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 43.0058,
+    "total": 19.5481
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 91.054,
+    "total": 300.4782
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 73.6738,
+    "total": 143.0138
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 94.7223,
+    "total": 142.0835
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 81.3674,
+    "total": 179.0083
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 27.5312,
+    "total": 2.5028
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 81.0621,
+    "total": 24.5643
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 81.0239,
+    "total": 91.8271
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 41.2277,
+    "total": 206.1385
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 86.0442,
+    "total": 50.6142
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 75.7578,
+    "total": 252.526
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 63.6711,
+    "total": 212.237
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 18.9423,
+    "total": 41.6731
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 13.4244,
+    "total": 11.8451
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 41.8107,
+    "total": 24.5945
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 94.7439,
+    "total": 161.0646
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 36.3464,
+    "total": 181.732
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 57.1164,
+    "total": 17.308
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 41.1477,
+    "total": 69.9511
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 19.663,
+    "total": 111.4237
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 55.2174,
+    "total": 82.8261
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 78.8522,
+    "total": 35.8419
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 61.4964,
+    "total": 135.2921
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 4.4923,
+    "total": 22.4615
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 82.669,
+    "total": 16.5338
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 96.4835,
+    "total": 164.022
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 44.7899,
+    "total": 149.2997
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 45.6438,
+    "total": 150.6245
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 54.5703,
+    "total": 81.8555
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 81.2727,
+    "total": 24.3818
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 68.3098,
+    "total": 116.1267
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 55.5264,
+    "total": 32.6626
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 61.8656,
+    "total": 204.1565
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 25.3738,
+    "total": 11.5335
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 34.9607,
+    "total": 3.1782
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 99.0593,
+    "total": 9.0054
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 80.1529,
+    "total": 155.5909
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 74.1625,
+    "total": 126.0763
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 45.1642,
+    "total": 13.6861
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 29.9084,
+    "total": 2.7189
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 86.4041,
+    "total": 50.8259
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 60.3596,
+    "total": 31.0943
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 65.0176,
+    "total": 33.4939
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 83.3489,
+    "total": 277.8297
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 33.6881,
+    "total": 74.1138
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 53.2562,
+    "total": 103.3797
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 29.5606,
+    "total": 65.0333
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 90.1264,
+    "total": 79.5233
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 0.9549,
+    "total": 0.2894
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 24.5262,
+    "total": 36.7893
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 87.5166,
+    "total": 7.9561
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 18.26,
+    "total": 3.2224
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 9.3081,
+    "total": 10.5492
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 8.6797,
+    "total": 3.9453
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 32.063,
+    "total": 36.3381
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 73.0716,
+    "total": 414.0724
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 94.1921,
+    "total": 533.7552
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 68.5556,
+    "total": 226.2335
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 62.4121,
+    "total": 121.1529
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 55.5448,
+    "total": 49.0101
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 44.5622,
+    "total": 22.9563
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 97.4773,
+    "total": 165.7114
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 41.5679,
+    "total": 235.5514
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 72.2988,
+    "total": 795.2868
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 62.6933,
+    "total": 55.3176
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 68.1618,
+    "total": 227.206
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 74.4013,
+    "total": 126.4822
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 68.0885,
+    "total": 6.1899
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 45.1087,
+    "total": 496.1957
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 90.2929,
+    "total": 41.0422
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 26.7488,
+    "total": 13.7797
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 8.3417,
+    "total": 2.5025
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 61.3737,
+    "total": 347.7843
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 89.3704,
+    "total": 8.1246
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 57.1146,
+    "total": 50.3952
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 27.8313,
+    "total": 24.557
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 99.1186,
+    "total": 112.3344
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 72.3599,
+    "total": 14.472
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 52.409,
+    "total": 89.0953
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 50.468,
+    "total": 97.9673
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 4.1116,
+    "total": 2.4186
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 24.1742,
+    "total": 10.9883
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 67.522,
+    "total": 30.6918
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 73.6752,
+    "total": 13.0015
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 36.7735,
+    "total": 7.3547
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 62.3322,
+    "total": 54.999
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 84.3386,
+    "total": 25.5572
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 28.2916,
+    "total": 24.9632
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 31.674,
+    "total": 104.5242
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 84.1952,
+    "total": 420.976
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 83.8641,
+    "total": 279.547
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 92.8744,
+    "total": 1021.6184
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 3.6746,
+    "total": 8.0841
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 51.0513,
+    "total": 30.0302
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 20.517,
+    "total": 12.0688
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 94.8548,
+    "total": 316.1827
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 57.2457,
+    "total": 17.3472
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 84.6112,
+    "total": 186.1446
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 93.2048,
+    "total": 158.4482
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 21.4908,
+    "total": 11.071
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 49.7508,
+    "total": 96.5751
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 24.0973,
+    "total": 80.3243
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 83.0486,
+    "total": 276.8287
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 19.694,
+    "total": 3.9388
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 68.5349,
+    "total": 342.6745
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 57.7058,
+    "total": 288.529
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 63.814,
+    "total": 123.8742
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 88.3905,
+    "total": 8.0355
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 96.5074,
+    "total": 8.7734
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 13.1628,
+    "total": 3.9488
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 42.0121,
+    "total": 81.5529
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 55.3575,
+    "total": 94.1078
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 71.2289,
+    "total": 235.0554
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 4.1271,
+    "total": 20.6355
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 78.3864,
+    "total": 15.6773
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 27.3198,
+    "total": 16.0705
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 95.4946,
+    "total": 318.3153
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 10.0337,
+    "total": 6.6891
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 88.3221,
+    "total": 26.7643
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 95.3863,
+    "total": 108.1045
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 67.6195,
+    "total": 101.4293
+  },
+  {
+    "from": "USD",
+    "to": "EUR",
+    "amount": 8.1839,
+    "total": 4.8141
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 58.2816,
+    "total": 99.0787
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 31.0817,
+    "total": 16.0118
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 0.4675,
+    "total": 0.0935
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 63.0238,
+    "total": 315.119
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 89.9837,
+    "total": 299.9457
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 59.2539,
+    "total": 26.9336
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 56.7032,
+    "total": 623.7352
+  },
+  {
+    "from": "BTC",
+    "to": "ETH",
+    "amount": 14.8003,
+    "total": 32.5607
+  },
+  {
+    "from": "ETH",
+    "to": "BRL",
+    "amount": 22.0062,
+    "total": 110.031
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 25.2303,
+    "total": 16.8202
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 85.1502,
+    "total": 25.5451
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 13.4889,
+    "total": 76.4371
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 80.8617,
+    "total": 24.5035
+  },
+  {
+    "from": "BRL",
+    "to": "ETH",
+    "amount": 6.7606,
+    "total": 1.3521
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 15.0868,
+    "total": 22.6302
+  },
+  {
+    "from": "USD",
+    "to": "BRL",
+    "amount": 8.9359,
+    "total": 29.7863
+  },
+  {
+    "from": "EUR",
+    "to": "ETH",
+    "amount": 15.5081,
+    "total": 17.5758
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 70.6051,
+    "total": 21.1815
+  },
+  {
+    "from": "EUR",
+    "to": "BRL",
+    "amount": 43.8301,
+    "total": 248.3706
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 17.155,
+    "total": 5.1465
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 82.4845,
+    "total": 123.7268
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 47.2542,
+    "total": 21.4792
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 42.619,
+    "total": 28.4127
+  },
+  {
+    "from": "USD",
+    "to": "BTC",
+    "amount": 90.2745,
+    "total": 27.3559
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 89.2752,
+    "total": 982.0272
+  },
+  {
+    "from": "BRL",
+    "to": "USD",
+    "amount": 50.4607,
+    "total": 15.1382
+  },
+  {
+    "from": "BTC",
+    "to": "USD",
+    "amount": 21.8975,
+    "total": 72.2617
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 35.3047,
+    "total": 3.2095
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 44.5534,
+    "total": 75.7408
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 69.1343,
+    "total": 12.2002
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 37.612,
+    "total": 17.0964
+  },
+  {
+    "from": "BTC",
+    "to": "BRL",
+    "amount": 29.6393,
+    "total": 326.0323
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 25.5274,
+    "total": 2.3207
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 26.3628,
+    "total": 44.8168
+  },
+  {
+    "from": "BRL",
+    "to": "BTC",
+    "amount": 7.3132,
+    "total": 0.6648
+  },
+  {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 57.2806,
+    "total": 97.377
+  },
+  {
+    "from": "BRL",
+    "to": "EUR",
+    "amount": 13.1247,
+    "total": 2.3161
+  },
+  {
+    "from": "ETH",
+    "to": "BTC",
+    "amount": 11.6439,
+    "total": 5.2927
+  },
+  {
+    "from": "USD",
+    "to": "ETH",
+    "amount": 97.2059,
+    "total": 64.8039
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 13.3925,
+    "total": 20.0888
+  },
+  {
+    "from": "EUR",
+    "to": "BTC",
+    "amount": 84.7621,
+    "total": 43.6653
+  },
+  {
+    "from": "BTC",
+    "to": "EUR",
+    "amount": 26.2655,
+    "total": 50.986
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 75.7908,
+    "total": 113.6862
+  },
+  {
+    "from": "ETH",
+    "to": "EUR",
+    "amount": 29.9641,
+    "total": 26.4389
+  },
+  {
+    "from": "ETH",
+    "to": "USD",
+    "amount": 24.1723,
+    "total": 36.2584
+  }
+]

@@ -4,7 +4,7 @@ services:
     build:
       context: ./
       dockerfile: dockerfile-node
-    command: node server.js
+    command: pm2-runtime services.yml --no-daemon
     ports:
       - ${API_PORT}:${API_PORT}
    

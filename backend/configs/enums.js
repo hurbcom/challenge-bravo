@@ -13,6 +13,10 @@ module.exports.enums = Object.freeze({
   apiCoin: {
     url: process.env.API_COIN,
     key: process.env.API_COIN_KEY
+  },
+  apiCrypto:{
+    url: process.env.API_CRYPTO,
+    key: process.env.API_CRYPTO_KEY
   }
 });
 
