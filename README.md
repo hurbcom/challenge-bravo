@@ -48,7 +48,7 @@ GET - exchanges CONVERT AMOUNT : 0.0.0.0:3333/exchanges/convert?from=USD&to=BRL&
 Conforme a regra do teste : from é a origem , to o destino e amount o valor a ser convertido.
 
 Deletando uma moeda pela abreviação:
-DEL - COIN : http://localhost:3333/coins/BRL
+DEL - COIN : 0.0.0.0:3333/coins/BRL
 
 Alterando as informações da moeda:
 PUT - COIN : 0.0.0.0:3333/coins/BRL
