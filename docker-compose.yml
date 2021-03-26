@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+    api:
+        container_name: api
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: node:14
+        command: bash -c "yarn dev"
+        restart: always
+        ports:
+            - "3333:3333"
+        depends_on:
+            - mongo
+            - redis
+        links:
+            - mongo
+            - redis
+
+    mongo:
+        image: mongo:4.2.0
+        ports:
+            - 27017:27017
+
+    redis:
+        image: redis
+        ports:
+            - 6379:6379

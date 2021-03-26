@@ -1,0 +1,235 @@
+_type: export
+__export_format: 4
+__export_date: 2021-03-26T06:02:52.166Z
+__export_source: insomnia.desktop.app:v2021.2.1
+resources:
+  - _id: req_f1a4e9c0cf4041079e30db19f99449f2
+    parentId: fld_f5a08ff298cc4a49b78d0063f58ec6ee
+    modified: 1616738264276
+    created: 1616736761668
+    url: http://localhost:3333/coins/BRL
+    name: DEL Coin
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1616736761668
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_f5a08ff298cc4a49b78d0063f58ec6ee
+    parentId: wrk_d349683dc3234469abb69fd581057f60
+    modified: 1616738257361
+    created: 1616738257361
+    name: TEST ROUTES
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1616738257361
+    _type: request_group
+  - _id: wrk_d349683dc3234469abb69fd581057f60
+    parentId: null
+    modified: 1616735923354
+    created: 1616735923354
+    name: Bravo
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_b8c2e778f9ec49f7a752212a043f3461
+    parentId: fld_f5a08ff298cc4a49b78d0063f58ec6ee
+    modified: 1616738265571
+    created: 1616736701792
+    url: http://localhost:3333/coins/BRL
+    name: PUT Coin
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-2
+          {
+            "to": "BRL",
+            "label": "Brazilian"
+          }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_eb8229b221e443e0980556a7218297f6
+    authentication: {}
+    metaSortKey: -1616736761618
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_f1d287db560a4224bf1347aad2f5511f
+    parentId: fld_f5a08ff298cc4a49b78d0063f58ec6ee
+    modified: 1616738266785
+    created: 1616736417771
+    url: http://localhost:3333/coins
+    name: POST Coin
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-2
+          {
+            "to": "BRL",
+            "label": "Brazilian Real"
+          }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_54b0b8ad00ae434aa6375a1cfb42dc87
+    authentication: {}
+    metaSortKey: -1616736761568
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_a61453ac1d0042e6b70ddd4070dcf61d
+    parentId: fld_f5a08ff298cc4a49b78d0063f58ec6ee
+    modified: 1616738268903
+    created: 1616736038307
+    url: http://localhost:3333/exchanges
+    name: Get CoinConvert
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1616736761543
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_5eefa9aae07a4e739eb74aef25d6a4e6
+    parentId: fld_f5a08ff298cc4a49b78d0063f58ec6ee
+    modified: 1616738271099
+    created: 1616736283390
+    url: http://localhost:3333/exchanges/BRL
+    name: Get Coinverter Sigla
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1616736761536.75
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_9a803656cb8c42d8953b5ccb671aabeb
+    parentId: fld_f5a08ff298cc4a49b78d0063f58ec6ee
+    modified: 1616738272170
+    created: 1616737876003
+    url: http://localhost:3333/exchanges/convert?from=USD&to=BRL&amount=100.00
+    name: "Get Convert AMOUNT "
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1616736761533.625
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_d76d81d4326c46be9de3a0628738b24b
+    parentId: fld_f5a08ff298cc4a49b78d0063f58ec6ee
+    modified: 1616738269974
+    created: 1616736189004
+    url: http://localhost:3333/coins/BRL
+    name: Get Coin Sigla
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1616736761530.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_db71a5c657124e04ad8f83ce457ff0a0
+    parentId: fld_f5a08ff298cc4a49b78d0063f58ec6ee
+    modified: 1616738267856
+    created: 1616735975194
+    url: http://localhost:3333/coins
+    name: Get Coin
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1616736761518
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_bc34afcd53076620bb8bb1f3a975d350e333775e
+    parentId: wrk_d349683dc3234469abb69fd581057f60
+    modified: 1616735923547
+    created: 1616735923547
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1616735923547
+    _type: environment
+  - _id: jar_bc34afcd53076620bb8bb1f3a975d350e333775e
+    parentId: wrk_d349683dc3234469abb69fd581057f60
+    modified: 1616735923550
+    created: 1616735923550
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_790901a47a42465d8cfb61c9cb68ee3b
+    parentId: wrk_d349683dc3234469abb69fd581057f60
+    modified: 1616735923363
+    created: 1616735923363
+    fileName: Bravo
+    contents: ""
+    contentType: yaml
+    _type: api_spec

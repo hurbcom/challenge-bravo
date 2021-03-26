@@ -1,0 +1,21 @@
+Rotas para teste no seu mensageiro favorito .. recomendo o Insomia :p
+
+DEL - COIN : http://localhost:3333/coins/BRL
+
+PUT - COIN : http://localhost:3333/coins/BRL
+  {
+    "to": "BRL",
+    "label": "Brazilian"
+  }
+  
+POST - COIN : http://localhost:3333/coins
+   {
+    "to": "BRL",
+    "label": "Brazilian Real"
+  }
+ 
+GET - exchanges : http://localhost:3333/exchanges
+GET - exchanges SIGLA : http://localhost:3333/exchanges/BRL
+GET - exchanges CONVERT AMOUNT : http://localhost:3333/exchanges/convert?from=USD&to=BRL&amount=100.00
+GET - COIN SIGLA : http://localhost:3333/coins/BRL
+GET - COIN : http://localhost:3333/coins
