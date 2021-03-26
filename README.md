@@ -42,38 +42,38 @@ docker-compose up api OU  docker-compose up --build
 
 Foi deixado um arquivo yaml,json e txt para ajudar no import no POSTMAN ou Insomnia. Minha preferencia é o Insomnia.
 
-Convertendo as moedas de acordo com a cotação:
-GET - exchanges CONVERT AMOUNT : 0.0.0.0:3333/exchanges/convert?from=USD&to=BRL&amount=100.00
+*Convertendo as moedas de acordo com a cotação:
+-GET - exchanges CONVERT AMOUNT : 0.0.0.0:3333/exchanges/convert?from=USD&to=BRL&amount=100.00
 
 Conforme a regra do teste : from é a origem , to o destino e amount o valor a ser convertido.
 
-Deletando uma moeda pela abreviação:
-DEL - COIN : 0.0.0.0:3333/coins/BRL
+*Deletando uma moeda pela abreviação:
+-DEL - COIN : 0.0.0.0:3333/coins/BRL
 
-Alterando as informações da moeda:
-PUT - COIN : 0.0.0.0:3333/coins/BRL
+*Alterando as informações da moeda:
+-PUT - COIN : 0.0.0.0:3333/coins/BRL
   {
     "to": "BRL",
     "label": "REAL BRASILEIRO"
   }
 
-Criando uma nova moeda fora do default
-POST - COIN : 0.0.0.0:3333/coins
+*Criando uma nova moeda fora do default
+-POST - COIN : 0.0.0.0:3333/coins
    {
     "to": "CNY",
     "label": "Renminbi"
   }
-Listando todas as converções:  
-GET - exchanges : 0.0.0.0:3333/exchanges
+*Listando todas as converções:  
+-GET - exchanges : 0.0.0.0:3333/exchanges
 
-Buscando pela
-GET - exchanges SIGLA : 0.0.0.0:3333/exchanges/BRL
+*Buscando pela
+-GET - exchanges SIGLA : 0.0.0.0:3333/exchanges/BRL
 
-Buscando uma moeda:
-GET - COIN SIGLA :0.0.0.0:3333/coins/BRL
+*Buscando uma moeda:
+-GET - COIN SIGLA :0.0.0.0:3333/coins/BRL
 
-Listando todas as moedas:
-GET - COIN : 0.0.0.0:3333/coins
+*Listando todas as moedas:
+-GET - COIN : 0.0.0.0:3333/coins
 
 
 ## Testes
