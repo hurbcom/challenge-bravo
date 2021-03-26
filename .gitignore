@@ -7,7 +7,7 @@ jspm_packages/
 
 
 # dotenv environment variables file
-.env
+# .env
 .env.test
 
 # Download folder
