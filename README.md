@@ -66,15 +66,13 @@ Conforme a regra do teste : from é a origem , to o destino e amount o valor a s
 * Listando todas as converções:  
 - GET - exchanges : 0.0.0.0:3333/exchanges
 
-* Buscando pela
-- GET - exchanges SIGLA : 0.0.0.0:3333/exchanges/BRL
-
 * Buscando uma moeda:
 - GET - COIN SIGLA :0.0.0.0:3333/coins/BRL
 
 * Listando todas as moedas:
 - GET - COIN : 0.0.0.0:3333/coins
 
+Essas são as principais, no arquivo deixado no projeto tem algumas outras rotas testadas.
 
 ## Testes
 
