@@ -6,15 +6,8 @@ const moeda = mongoose.model('Moeda');
 
 exports.get = async(typeMoeda) => {
 
-
-   // const query = moeda.find({moeda:typeMoeda}).select('cotacaodolar -_id').lean().exec();
-
-
-  // return query;
-
   const moedacreated = new moeda(typeMoeda);
   await moedacreated.save();
-
 
 }
 
