@@ -6,7 +6,9 @@ const getCurrencies = async () => {
 };
 
 const getCurrency = async (symbol) => {
-    return await currencyRepository.findOne(symbol);
+    let storedCurrency = await currencyRepository.findOne(symbol);
+    if (!storedCurrency) throw new CurrencyNotFoundError();
+    return storedCurrency;
 };
 
 const createCurrency = async (currency) => {
