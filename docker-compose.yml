@@ -1,0 +1,9 @@
+version: '3'
+services: 
+  web:
+    image: challenge-bravo
+    build: .
+    command: "node ./bin/server.js"
+    ports:
+      - "3000:3000"
+  

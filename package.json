@@ -20,10 +20,14 @@
   },
   "homepage": "https://github.com/max-nb/challenge-bravo#readme",
   "dependencies": {
+    "axion": "^0.1.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "mongoose": "^5.12.2",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "request": "^2.88.2",
+    "run-middleware": "^0.9.10"
   },
   "devDependencies": {}
 }
