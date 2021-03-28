@@ -1,17 +1,13 @@
-const LOGGER_LEVEL = process.env.LOGGER_LEVEL || 'info';
+const LOGGER_LEVEL = process.env.LOGGER_LEVEL || "info";
 
-const {
-    transports,
-    createLogger
-} = require('winston');
-
+const { transports, createLogger } = require("winston");
 
 const winstonLogger = createLogger({
     transports: [
         new transports.Console({
             level: LOGGER_LEVEL,
-        })
-    ]
+        }),
+    ],
 });
 
 const logger = {
@@ -23,7 +19,7 @@ const logger = {
     },
     debug: (message) => {
         winstonLogger.debug(message);
-    }
+    },
 };
 
 module.exports = logger;

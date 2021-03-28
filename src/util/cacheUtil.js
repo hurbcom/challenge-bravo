@@ -1,7 +1,7 @@
-const redis = require('redis');
-const client = redis.createClient(6379, 'redis');
-const util = require('util');
-const getAsync = util.promisify(client.get).bind(client)
+const redis = require("redis");
+const client = redis.createClient(6379, "redis");
+const util = require("util");
+const getAsync = util.promisify(client.get).bind(client);
 
 client.on("error", function (error) {
     console.error(error);
@@ -9,27 +9,26 @@ client.on("error", function (error) {
 
 const getFromCache = async (url) => {
     let value = await getAsync(url);
-    return JSON.parse(value)
-}
+    return JSON.parse(value);
+};
 
 const putToCache = (url, quote) => {
     client.setex(url, 3600, JSON.stringify(quote), (err, data) => {
-        if (err) console.log(err)
-    })
-    return
-}
+        if (err) console.log(err);
+    });
+    return;
+};
 
 module.exports = {
     getFromCache,
-    putToCache
-}
+    putToCache,
+};
 
 // const Redis = require('ioredis')
 
 // function getConnection() {
 //     return new Redis('redis://redis')
 // }
-
 
 // var redis = getConnection()
 

@@ -1,9 +1,8 @@
-const ApiError = require('./apiError');
+const ApiError = require("./apiError");
 
 class BadRequest extends ApiError {
-
     constructor() {
-        super('Bad Request', 500);
+        super("Bad Request", 500);
     }
 }
 
