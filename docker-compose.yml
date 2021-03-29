@@ -8,7 +8,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   web:
-    env_file: docker.local.env
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     entrypoint: /entrypoint.sh
@@ -16,7 +15,6 @@ services:
       - .:/bravo
     ports:
       - "8000:8000"
-      - "4000:4000" # porta ptsvd para debug
 
     depends_on:
       - db
