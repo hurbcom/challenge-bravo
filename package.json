@@ -2,18 +2,24 @@
   "name": "challenge-bravo",
   "version": "1.0.0",
   "description": "Hurb Bravo Challenge",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "migrate": "node database/create_db_default.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/JuniorNunes7/challenge-bravo-js.git"
+    "url": "git+ssh://git@github.com/JuniorNunes7/challenge-bravo.git"
   },
   "author": "Junior Nunes",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JuniorNunes7/challenge-bravo-js/issues"
+    "url": "https://github.com/JuniorNunes7/challenge-bravo/issues"
   },
-  "homepage": "https://github.com/JuniorNunes7/challenge-bravo-js#readme"
+  "homepage": "https://github.com/JuniorNunes7/challenge-bravo#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.5"
+  }
 }
