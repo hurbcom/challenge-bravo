@@ -1,0 +1,17 @@
+version: '3'
+services:
+  node:
+    restart: always
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+volumes:
+ mongodb:
