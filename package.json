@@ -1,0 +1,19 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Hurb Bravo Challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/JuniorNunes7/challenge-bravo-js.git"
+  },
+  "author": "Junior Nunes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JuniorNunes7/challenge-bravo-js/issues"
+  },
+  "homepage": "https://github.com/JuniorNunes7/challenge-bravo-js#readme"
+}
