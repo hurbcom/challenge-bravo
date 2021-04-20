@@ -14,14 +14,19 @@ beforeEach(async () => {
     await Currency.insertMany(currencies);
 });
 
-test('API - convert currency right params', async () => {
-    const response = await request(app).get("/currencies?from=BRL&to=USD&amount=10");
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toMatchObject({total: 1.78});
+test('API - add currency right params', async () => {
+    const response1 = await request(app).post("/currencies").send({currency: 'CAD', usd_value: 0.8});
+    expect(response1.statusCode).toBe(201);
+    expect(response1.body).toMatchObject({status: 201});
+    
+    const response2 = await request(app).post("/currencies").send({currency: 'CAD', usd_value: 0.8});
+    expect(response2.statusCode).toBe(400);
+    expect(response2.body).toHaveProperty('errors');
+    expect(response2.body.errors).toHaveLength(1);
 });
 
-test('API - convert currency wrong params', async () => {
-    const response = await request(app).get("/currencies?from=NOT_EXISTS&to=USD&amount=NOT_NUMERIC");
+test('API - add currency wrong params', async () => {
+    const response = await request(app).post("/currencies").send({currency: 'INV_CURRENCY', usd_value: 'NOT_NUMBER'});
     expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty('errors');
     expect(response.body.errors).toHaveLength(2);

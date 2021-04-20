@@ -13,4 +13,14 @@ const currencyController = require('../controllers/currencyController');
  */
 router.get('/', currencyController.convertCurrency);
 
+/**
+ * Adiciona uma moeda
+ * 
+ * @url /currencies
+ * @method POST
+ * @queryParam {string} currency
+ * @queryParam {float} usd_value
+ */
+router.post('/', currencyController.addCurrency);
+
 module.exports = router;

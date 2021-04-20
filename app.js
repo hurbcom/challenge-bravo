@@ -3,6 +3,9 @@ const currenciesRoutes = require('./src/routes/currencies');
 
 const app = express();
 
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
 if (process.env.NODE_ENV !== 'test') {
     require('./src/db'); // Conexão com o banco.
 } else {

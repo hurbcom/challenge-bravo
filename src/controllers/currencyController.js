@@ -12,14 +12,14 @@ exports.convertCurrency = (req, res) => {
     const data = req.query
 
     // Obtendo as moedas disponíveis
-    Currency.find({}, function(err, docs) {
+    Currency.find({}, function(err, currencies) {
         // Verificando se teve erro ao realizar a consulta
         if (err) {
             return res.status(500).send({status: 500, message: 'Erro ao obter as moedas disponíveis!'});
         }
 
         // Validando campos
-        const availableCurrencies = docs.map((x) => x.currency);
+        const availableCurrencies = currencies.map((x) => x.currency);
         const errors = currencyRequestService.validateConvertCurrencyFields(data, availableCurrencies);
 
         // Verifica se tem algum problema com os campos passados
@@ -29,8 +29,8 @@ exports.convertCurrency = (req, res) => {
         }
 
         // Obtendo os valores em USD registrados no banco para cada moeda
-        const fromUsdValue = docs.find((x) => x.currency === data.from).usd_value;
-        const toUsdValue = docs.find((x) => x.currency === data.to).usd_value;
+        const fromUsdValue = currencies.find((x) => x.currency === data.from).usd_value;
+        const toUsdValue = currencies.find((x) => x.currency === data.to).usd_value;
 
         // Calculando o total da conversão
         let total = ((toUsdValue/fromUsdValue)*data.amount);
@@ -41,3 +41,41 @@ exports.convertCurrency = (req, res) => {
         return res.status(200).send({status: 200, total: total});
     });
 };
+
+/**
+ * Adiciona uma nova moeda
+ * 
+ * @param {object} req
+ * @param {object} res
+ */
+ exports.addCurrency = (req, res) => {
+    // Obtendo campos
+    const data = req.body
+
+    // Obtendo as moedas disponíveis
+    Currency.find({}, function(err, currencies) {
+        // Verificando se teve erro ao realizar a consulta
+        if (err) {
+            return res.status(500).send({status: 500, message: 'Erro ao obter as moedas disponíveis!'});
+        }
+
+        // Validando campos
+        const registeredCurrencies = currencies.map((x) => x.currency);
+        const errors = currencyRequestService.validateAddCurrencyFields(data, registeredCurrencies);
+
+        // Verifica se tem algum problema com os campos passados
+        if (errors.length > 0) {
+            // Retorna os erros encontrados
+            return res.status(400).send({status: 400, message: 'Erro de validação!', errors: errors});
+        }
+
+        // Salvando moeda no banco
+        const currency = new Currency({currency: data.currency, usd_value: data.usd_value});
+        currency.save((err) => {
+            if (err) {
+                return res.status(500).send({status: 500, message: 'Erro ao adicionar a moeda no banco!'});
+            }
+            return res.status(201).send({status: 201, message: 'Moeda adicionada com sucesso!'});
+        });
+    });
+ };
