@@ -1,4 +1,5 @@
 FROM node:latest
 WORKDIR /app
-RUN npm install
+COPY package.json .
+RUN npm install --quiet
 CMD ["npm", "start"]

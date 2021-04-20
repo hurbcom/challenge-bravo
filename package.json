@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest --forceExit --detectOpenHandles --runInBand",
-    "start": "node_modules/nodemon/bin/nodemon.js server.js",
+    "start": "node server.js",
     "migrate": "node database/createDbDefault.js"
   },
   "repository": {

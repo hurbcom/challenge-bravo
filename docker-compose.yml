@@ -7,6 +7,7 @@ services:
       - 8000:8000
     volumes:
       - .:/app
+      - /app/node_modules
   mongo:
     image: mongo
     ports:
