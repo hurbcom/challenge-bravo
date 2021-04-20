@@ -108,7 +108,7 @@
           {
             "name": "usd_value",
             "in": "formData",
-            "description": "Value in USD (a number like: 10.20).",
+            "description": "Value of the currency for 1 USD (a number like: 10.20).",
             "required": true,
             "type": "number"
           }

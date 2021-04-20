@@ -26,7 +26,7 @@ A aplicação estará disponível no endereço: http://localhost:8000.
 curl 'http://localhost:8000/currencies?from=USD&to=BRL&amount=30'
 
 # Adicionar Moeda
-curl 'http://localhost:8000/currencies' -X 'POST' -d 'currency=CAD&usd_value=0.80'
+curl 'http://localhost:8000/currencies' -X 'POST' -d 'currency=CAD&usd_value=1.26'
 
 # Remover Moeda
 curl 'http://localhost:8000/currencies/CAD' -X 'DELETE'
