@@ -1,4 +1,11 @@
 const app = require('./app');
+const sync = require('./sync/updateCurrenciesValue');
+
+// Atualização da taxa de câmbio de 1 em 1 hora
+setInterval(() => {
+    console.log('Sincronizando moedas...');
+    sync.syncCurrencies();
+}, 3600000);
 
 // Server
 const port = 8000;

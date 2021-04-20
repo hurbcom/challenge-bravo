@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --forceExit --detectOpenHandles --runInBand",
     "start": "node_modules/nodemon/bin/nodemon.js server.js",
-    "migrate": "node database/create_db_default.js"
+    "migrate": "node database/createDbDefault.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/JuniorNunes7/challenge-bravo#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "mongoose": "^5.12.5"
   },
