@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "node_modules/nodemon/bin/nodemon.js server.js",
     "migrate": "node database/create_db_default.js"
   },
   "repository": {
@@ -21,5 +21,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "mongoose": "^5.12.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }

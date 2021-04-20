@@ -1,7 +1,7 @@
 require('../src/db'); // Conexão com o banco.
 const Currency = require('../src/models/Currency');
 
-Currency.deleteMany({}, function() {
+Currency.deleteMany({}, () => {
     const currencies = [
         {currency: 'USD', usd_value: 1},
         {currency: 'BRL', usd_value: 5.59},

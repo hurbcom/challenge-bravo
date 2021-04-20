@@ -1,7 +1,43 @@
 const Currency = require('../models/Currency');
+const currencyRequestService = require('../services/currencyRequestService');
 
-exports.convertCurrency = (req, res, next) => {
+/**
+ * Converte a moeda de acordo com os parâmetros passados
+ * 
+ * @param {object} req
+ * @param {object} res
+ */
+exports.convertCurrency = (req, res) => {
+    // Obtendo campos da query
+    const data = req.query
+
+    // Obtendo as moedas disponíveis
     Currency.find({}, function(err, docs) {
-        res.status(200).send(docs);
-    })
+        // Verificando se teve erro ao realizar a consulta
+        if (err) {
+            return res.status(500).send({status: 400, message: 'Erro ao obter as moedas disponíveis!'});
+        }
+
+        // Validando campos
+        const availableCurrencies = docs.map((x) => x.currency);
+        const errors = currencyRequestService.validateConvertCurrencyFields(data, availableCurrencies);
+
+        // Verifica se tem algum problema com os campos passados
+        if (errors.length > 0) {
+            // Retorna os erros encontrados
+            return res.status(400).send({status: 400, message: 'Erro de validação!', errors: errors});
+        }
+
+        // Obtendo os valores em USD registrados no banco para cada moeda
+        const fromUsdValue = docs.find((x) => x.currency === data.from).usd_value;
+        const toUsdValue = docs.find((x) => x.currency === data.to).usd_value;
+
+        // Calculando o total da conversão
+        let total = ((toUsdValue/fromUsdValue)*data.amount);
+
+        // Arredondando o valor para melhorar visualização
+        total = parseFloat(String(total).replace(/(\.0*\d{1,2}).*$/, '$1'));
+
+        return res.status(200).send({status: 200, total: total});
+    });
 };
