@@ -24,3 +24,8 @@ test('validate add currency fields', () => {
   data['usd_value'] = 'NOT_NUMERIC';
   expect(currencyS.validateAddCurrencyFields(data, ['CAD'])).toHaveLength(2);
 });
+
+test('validate remove currency fields', () => {
+  expect(currencyS.validateRemoveCurrencyFields('CAD', ['CAD'])).toEqual([]);
+  expect(currencyS.validateRemoveCurrencyFields('CAD', [])).toHaveLength(1);
+});

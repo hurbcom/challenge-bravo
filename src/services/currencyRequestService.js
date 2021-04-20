@@ -78,3 +78,20 @@ exports.validateAddCurrencyFields = (data, registeredCurrencies) => {
 
     return errors;
 };
+
+/**
+ * Faz a validação dos campos do endpoint para adicionar moeda
+ * 
+ * @param {string} currency 
+ * @param {array} registeredCurrencies 
+ * @returns array
+ */
+exports.validateRemoveCurrencyFields = (currency, registeredCurrencies) => {
+    let errors = [];
+
+    if (registeredCurrencies.indexOf(currency) === -1) {
+        errors.push(`A moeda '${currency}' não está registrada!`);
+    }
+
+    return errors;
+};

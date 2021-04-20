@@ -48,7 +48,7 @@ exports.convertCurrency = (req, res) => {
  * @param {object} req
  * @param {object} res
  */
- exports.addCurrency = (req, res) => {
+exports.addCurrency = (req, res) => {
     // Obtendo campos
     const data = req.body
 
@@ -78,4 +78,41 @@ exports.convertCurrency = (req, res) => {
             return res.status(201).send({status: 201, message: 'Moeda adicionada com sucesso!'});
         });
     });
- };
+};
+
+/**
+ * Remove uma moeda
+ * 
+ * @param {object} req
+ * @param {object} res
+ */
+exports.removeCurrency = (req, res) => {
+    const currency = req.params.currency;
+
+    // Obtendo as moedas disponíveis
+    Currency.find({}, function(err, currencies) {
+        // Verificando se teve erro ao realizar a consulta
+        if (err) {
+            return res.status(500).send({status: 500, message: 'Erro ao obter as moedas disponíveis!'});
+        }
+
+        // Validando campos
+        const registeredCurrencies = currencies.map((x) => x.currency);
+        const errors = currencyRequestService.validateRemoveCurrencyFields(currency, registeredCurrencies);
+
+        // Verifica se tem algum problema com os campos passados
+        if (errors.length > 0) {
+            // Retorna os erros encontrados
+            return res.status(400).send({status: 400, message: 'Erro de validação!', errors: errors});
+        }
+
+        // Removando a moeda
+        Currency.remove({currency: currency}, (err) => {
+            if (err) {
+                return res.status(500).send({status: 500, message: 'Não foi possível remover a moeda!'});
+            }
+            return res.status(200).send({status: 200, message: 'Moeda removida com sucesso!'});
+        });
+
+    });
+};

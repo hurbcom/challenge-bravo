@@ -23,4 +23,12 @@ router.get('/', currencyController.convertCurrency);
  */
 router.post('/', currencyController.addCurrency);
 
+/**
+ * Remove uma moeda
+ * 
+ * @url /currencies/{currency}
+ * @method DELETE
+ */
+router.delete('/:currency', currencyController.removeCurrency);
+
 module.exports = router;
