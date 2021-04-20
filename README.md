@@ -91,6 +91,6 @@ DELETE /currencies/{currency}
 ## Informações adicionais
 ---
 
-#### A atualização das taxas de câmbio está acontecendo de hora em hora, através de um cron configurado dentro do Dockerfile. Não é possível aumentar, pois a API utilizada para consulta é gratuita, e só disponibiliza 1000 requisições por mês. O cálculo feito foi: 1000/31 = 32 requisições por dia (arredondando pra baixo), levando em consideração os testes (que fazem requisição também, 24 requisições por dia seria um número seguro).
+#### A atualização das taxas de câmbio está acontecendo de hora em hora. Não é possível aumentar, pois a API utilizada para consulta é gratuita, e só disponibiliza 1000 requisições por mês. O cálculo feito foi: 1000/31 = 32 requisições por dia (arredondando pra baixo), então 24 requisições por dia seria um número seguro.
 
 ---
