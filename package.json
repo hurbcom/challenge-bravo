@@ -21,7 +21,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "express": "^4.17.1",
-    "mongoose": "^5.12.5"
+    "mongoose": "^5.12.5",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.2.4",

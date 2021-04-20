@@ -1,0 +1,217 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the Bravo Challenge API",
+    "version": "1.0.0",
+    "title": "Bravo Challenge API",
+    "termsOfService": "",
+    "contact": {
+      "email": "nunes.junior92@gmail.com"
+    }
+  },
+  "host": "localhost:8000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Currencies",
+      "description": "Endpoint of currencies"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/currencies": {
+      "get": {
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Covert currency to another",
+        "description": "",
+        "operationId": "CurrencyConvert",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Code of the 'from' currency.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Code of the 'to' currency.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Value to conversion.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Add a new currency",
+        "description": "",
+        "operationId": "CurrencyAdd",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "formData",
+            "description": "Currency code. (USD, BRL...)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "usd_value",
+            "in": "formData",
+            "description": "Value in USD (a number like: 10.20).",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/currencies/{currency}": {
+      "delete": {
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Delete a currency",
+        "description": "",
+        "operationId": "CurrencyDelete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "path",
+            "description": "Currency code. (USD, BRL...)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ErrorMessage": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "nullable": true
+        }
+      }
+    }
+  }
+}

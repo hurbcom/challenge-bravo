@@ -1,65 +1,96 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+# Hurb - Challenge Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
-
-A API deve, originalmente, converter entre as seguintes moedas:
-
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
-
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
-
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
-
-Ex: `?from=BTC&to=EUR&amount=123.45`
-
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Este projeto foi criado através do desafio proposto pelo hurb, seu objetivo é fazer conversão monetária entre duas moedas.
 
 ## Requisitos
+- Node 13 ou mais recente
+- npm
+- mongo
+- [docker-compose](https://docs.docker.com/compose/install) (caso use container)
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+## Docker Setup
 
-## Critério de avaliação
+Suba o container:
+```sh
+docker-compose up -d
+```
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Configure o banco:
+```sh
+docker-compose exec node npm run migrate
+```
 
-## Dúvidas
+A aplicação estará disponível no endereço: http://localhost:8000.
+```sh
+# Converção
+curl 'http://localhost:8000/currencies?from=USD&to=BRL&amount=30'
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+# Adicionar Moeda
+curl 'http://localhost:8000/currencies' -X 'POST' -d 'currency=CAD&usd_value=0.80'
 
-Boa sorte e boa viagem! ;)
+# Remover Moeda
+curl 'http://localhost:8000/currencies/CAD' -X 'DELETE'
+```
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## Setup
+
+Instale as dependências:
+
+```sh 
+npm i
+```
+
+Configure o banco:
+```sh
+npm run migrate
+```
+
+## Comandos
+
+Rodar testes:
+```sh
+npm test
+```
+
+Iniciar projeto:
+```sh
+npm start
+```
+
+Configurar/Limpar banco (com as taxas de câmbio atualizadas):
+```sh
+npm run migrate
+```
+
+## Estrutura do Projeto
+```
+├── database - Arquivos de banco de dados.
+│
+├── src - Arquivos do sistema.
+│   ├── controllers - Controladores do sistema.
+│   ├── models - Modelos do sistema.
+│   ├── routes - Rotas do sistema.
+│   └── services - Classes de serviços para auxiliar na lógica extra.
+│
+├── sync - Arquivos de sincronização.
+|
+├── tests - Testes do sistema.
+│   ├── API - Testes dos endpoints da API.
+│   └── Unit - Testes unitários com componentes do sistema.
+```
+
+## Endpoints
+
+```
+GET /docs (HTML)
+GET /currencies
+POST /currencies
+DELETE /currencies/{currency}
+```
+
+## Informações adicionais
+---
+
+#### A atualização das taxas de câmbio está acontecendo de hora em hora, através de um cron configurado dentro do Dockerfile. Não é possível aumentar, pois a API utilizada para consulta é gratuita, e só disponibiliza 1000 requisições por mês. O cálculo feito foi: 1000/31 = 32 requisições por dia (arredondando pra baixo), levando em consideração os testes (que fazem requisição também, 24 requisições por dia seria um número seguro).
+
+---

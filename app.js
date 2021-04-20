@@ -1,5 +1,6 @@
 const express = require('express');
 const currenciesRoutes = require('./src/routes/currencies');
+swaggerUi = require("swagger-ui-express");
 
 const app = express();
 
@@ -22,6 +23,10 @@ app.use(function (req, res, next) {
 });
 
 // Rotas
+// Documentação
+const swaggerDocument = require('./swagger.json');
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Currencies
 app.use('/currencies', currenciesRoutes);
 
 module.exports = app;
