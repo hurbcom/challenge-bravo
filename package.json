@@ -4,7 +4,7 @@
   "description": "Hurb Bravo Challenge",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --forceExit --detectOpenHandles --runInBand",
     "start": "node_modules/nodemon/bin/nodemon.js server.js",
     "migrate": "node database/create_db_default.js"
   },
@@ -23,6 +23,9 @@
     "mongoose": "^5.12.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "@shelf/jest-mongodb": "^1.2.4",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
   }
 }

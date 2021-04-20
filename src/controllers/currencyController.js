@@ -15,7 +15,7 @@ exports.convertCurrency = (req, res) => {
     Currency.find({}, function(err, docs) {
         // Verificando se teve erro ao realizar a consulta
         if (err) {
-            return res.status(500).send({status: 400, message: 'Erro ao obter as moedas disponíveis!'});
+            return res.status(500).send({status: 500, message: 'Erro ao obter as moedas disponíveis!'});
         }
 
         // Validando campos
