@@ -1,3 +1,3 @@
-Your name: ___
-Your Github homepage: ___
-Original challenge URL: http://github.com/hurbcom/challenge-___
+Your name: Edmilson Machado Nunes Junior
+Your Github homepage: https://github.com/JuniorNunes7
+Original challenge URL: http://github.com/hurbcom/challenge-bravo
