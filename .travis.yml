@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - "13"
+  - "14"
+  - "15"
+
+os: linux
+
+before_script:
+  - npm i
+
+script:
+  - npm test
