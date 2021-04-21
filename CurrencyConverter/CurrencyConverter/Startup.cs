@@ -1,4 +1,5 @@
-using CurrencyConverter.Dao;
+using CurrencyConverter.DBContexts;
+using CurrencyConverter.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,7 @@ namespace CurrencyConverter
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddDbContext<CurrencyConverterContext>(o => o.UseSqlServer(Configuration.GetConnectionString("CurrencyConverterDB")));
+            services.AddTransient<ICurrencyRepository, CurrencyRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

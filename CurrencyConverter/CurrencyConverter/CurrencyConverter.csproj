@@ -14,7 +14,8 @@
     <ItemGroup>
         <Folder Include="Controllers\" />
         <Folder Include="Model\" />
-        <Folder Include="Dao\" />
+        <Folder Include="DBContexts\" />
+        <Folder Include="Repository\" />
     </ItemGroup>
 
 

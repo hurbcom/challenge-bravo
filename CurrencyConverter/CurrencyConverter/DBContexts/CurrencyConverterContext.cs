@@ -1,7 +1,7 @@
 using CurrencyConverter.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyConverter.Dao
+namespace CurrencyConverter.DBContexts
 {
     public class CurrencyConverterContext : DbContext
     {
