@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CurrencyConverter.Repository
 {
-    interface ICurrencyRepository
+    public interface ICurrencyRepository
     {
         IEnumerable<Currency> GetCurrencies();
         Currency GetCurrencyById(long currencyId);
