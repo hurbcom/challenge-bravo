@@ -13,6 +13,8 @@
 
     <ItemGroup>
         <Folder Include="Controllers\" />
+        <Folder Include="Model\" />
+        <Folder Include="Dao\" />
     </ItemGroup>
 
 
