@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace CurrencyConverter.Model
 {
     public class Currency
@@ -11,12 +6,12 @@ namespace CurrencyConverter.Model
         public string Name { get; set; }
         public double ValueComparedToDollar { get; set; }
 
-        public Currency ()
+        public Currency()
         {
             //Empty Constructor
         }
 
-        public Currency (long id, string name, double valueComparedToDollar)
+        public Currency(long id, string name, double valueComparedToDollar)
         {
             this.Id = id;
             this.Name = name;
