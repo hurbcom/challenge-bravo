@@ -1,8 +1,7 @@
 using CurrencyConverter.Model;
-using CurrencyConverter.Repository;
+using CurrencyConverter.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Transactions;
 
 namespace CurrencyConverter.Controllers
 {
@@ -10,42 +9,38 @@ namespace CurrencyConverter.Controllers
     [ApiController]
     public class CurrencyConverterController : ControllerBase
     {
-        private readonly ICurrencyRepository _currencyRepository;
+        private readonly ICurrencyService _currencyService;
 
-        public CurrencyConverterController(ICurrencyRepository currencyRepository)
+        public CurrencyConverterController(ICurrencyService currencyService)
         {
-            _currencyRepository = currencyRepository;
+            _currencyService = currencyService;
         }
 
         [HttpGet]
         public IActionResult GetCurrencies()
         {
-            IEnumerable<Currency> currencies = _currencyRepository.GetCurrencies();
+            IEnumerable<Currency> currencies = _currencyService.GetCurrencies();
             return new OkObjectResult(currencies);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetCurrencyById(long currencyId)
         {
-            Currency currency = _currencyRepository.GetCurrencyById(currencyId);
+            Currency currency = _currencyService.GetCurrencyById(currencyId);
             return new OkObjectResult(currency);
         }
 
         [HttpPost]
         public IActionResult InsertCurrency([FromBody] Currency currency)
         {
-            using (TransactionScope scope = new TransactionScope())
-            {
-                _currencyRepository.InsertCurrency(currency);
-                scope.Complete();
-                return CreatedAtAction(nameof(GetCurrencyById), new { id = currency.Id }, currency);
-            }
+            _currencyService.InsertCurrency(currency);
+            return CreatedAtAction(nameof(GetCurrencyById), new { id = currency.Id }, currency);
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteCurrency(long currencyId)
         {
-            _currencyRepository.DeleteCurrency(currencyId);
+            _currencyService.DeleteCurrency(currencyId);
             return new OkResult();
         }
     }
