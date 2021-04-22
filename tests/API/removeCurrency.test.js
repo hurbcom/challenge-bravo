@@ -1,6 +1,19 @@
 const request = require("supertest");
 const app = require('../../app');
 const Currency = require('../../src/models/Currency');
+const User = require('../../src/models/User');
+const crypto = require('crypto');
+let userToken;
+
+beforeAll(async () => {
+    // Criando usuário de teste e obtendo token
+    const salt = process.env.HASH_SALT || 'secret';
+    const hashedPassword = crypto.createHmac('sha256', salt).update('secret').digest('hex');
+
+    await User.create({username: 'admin', password: hashedPassword});
+    const response = await request(app).post("/login").send({username: 'admin', password: 'secret'});
+    userToken = response.body.token;
+});
 
 beforeEach(async () => {
     const currencies = [
@@ -15,11 +28,16 @@ beforeEach(async () => {
 });
 
 test('API - remove currency right params', async () => {
-    const response = await request(app).delete("/currencies/BRL");
+    const response = await request(app).delete("/currencies/BRL").set('Authorization', `Bearer ${userToken}`);
     expect(response.statusCode).toBe(200);
 });
 
 test('API - remove currency wrong params', async () => {
-    const response = await request(app).delete("/currencies/CAD");
-    expect(response.statusCode).toBe(400);
+    const response1 = await request(app).delete("/currencies/CAD").set('Authorization', `Bearer ${userToken}`);
+    expect(response1.statusCode).toBe(400);
+
+    // Token inválido
+    const response2 = await request(app).delete("/currencies/CAD").set('Authorization', 'INVALID_TOKEN');
+    expect(response2.statusCode).toBe(401);
+    expect(response2.body.message).toEqual('Token Inválido!');
 });
