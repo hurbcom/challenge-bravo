@@ -31,6 +31,6 @@ exports.doLogin = (req, res) => {
         // Gerando JWT
         const token = loginRequestService.generateJwt({id: user._id, username: user.username});
 
-        return res.status(200).send({status: 200, token: token});
+        return res.status(200).send({status: 200, token_type: 'Bearer', token: token});
     });
 }

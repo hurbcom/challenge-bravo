@@ -13,6 +13,10 @@
   "basePath": "/",
   "tags": [
     {
+      "name": "Login",
+      "description": "Endpoint of authentication"
+    },
+    {
       "name": "Currencies",
       "description": "Endpoint of currencies"
     }
@@ -21,6 +25,75 @@
     "http"
   ],
   "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "summary": "Authenticate the user",
+        "description": "",
+        "operationId": "Login",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "formData",
+            "description": "The username of the user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "The password of the user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer"
+                },
+                "token_type": {
+                  "type": "string"
+                },
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
     "/currencies": {
       "get": {
         "tags": [
@@ -111,6 +184,13 @@
             "description": "Value of the currency for 1 USD (a number like: 10.20).",
             "required": true,
             "type": "number"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token generated on /login",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -130,6 +210,12 @@
           },
           "400": {
             "description": "Invalid parameters.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "401": {
+            "description": "Invalid Token.",
             "schema": {
               "$ref": "#/definitions/ErrorMessage"
             }
@@ -161,6 +247,13 @@
             "description": "Currency code. (USD, BRL...)",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token generated on /login",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -180,6 +273,12 @@
           },
           "400": {
             "description": "Invalid parameters.",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "401": {
+            "description": "Invalid Token.",
             "schema": {
               "$ref": "#/definitions/ErrorMessage"
             }

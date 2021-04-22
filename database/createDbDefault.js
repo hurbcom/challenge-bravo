@@ -11,38 +11,47 @@ const password = process.env.DEFAULT_USER_PASSWORD || 'secret';
 const salt = process.env.HASH_SALT || 'secret';
 const hashedPassword = crypto.createHmac('sha256', salt).update(password).digest('hex');
 
-User.create({username: username, password: hashedPassword}, (err) => {
+// Remover todos os usuários
+User.remove({}, (err) => {
     if (err) {
-        console.log('Erro ao criar usuário padrão.', err);
+        console.log('Erro ao remover usuários.', err);
         process.exit();
     }
-    // Limpando o banco e criando um modelo padrão.
-    Currency.remove({}, (err) => {
+    // Criar usuário padrão
+    User.create({username: username, password: hashedPassword}, (err) => {
         if (err) {
-            console.log('Erro ao remover moedas.', err);
+            console.log('Erro ao criar usuário padrão.', err);
             process.exit();
         }
-        const currencies = [
-            {currency: 'USD', usd_value: 1},
-            {currency: 'BRL', usd_value: 5.54},
-            {currency: 'EUR', usd_value: 0.83},
-            {currency: 'BTC', usd_value: 0.000016},
-            {currency: 'ETH', usd_value: 0.00041},
-        ];
-    
-        Currency.insertMany(currencies).then(() => {
-            // Sincronizando taxas de câmbio
-            sync.syncCurrencies(() => {
-                console.log('Banco criado com sucesso!');
-                console.log('Login:', username);
-                console.log('Senha:', password);
-                process.exit();
-            });
-        }).catch((err) => {
+        // Remover todas as moedas
+        Currency.remove({}, (err) => {
             if (err) {
-                console.log('Erro ao inserir moedas.', err);
+                console.log('Erro ao remover moedas.', err);
                 process.exit();
             }
+            const currencies = [
+                {currency: 'USD', usd_value: 1},
+                {currency: 'BRL', usd_value: 5.54},
+                {currency: 'EUR', usd_value: 0.83},
+                {currency: 'BTC', usd_value: 0.000016},
+                {currency: 'ETH', usd_value: 0.00041},
+            ];
+        
+            // Criar moedas padrão
+            Currency.insertMany(currencies).then(() => {
+                // Sincronizando taxas de câmbio
+                sync.syncCurrencies(() => {
+                    console.log('Banco criado com sucesso!');
+                    console.log('Login:', username);
+                    console.log('Senha:', password);
+                    process.exit();
+                });
+            }).catch((err) => {
+                if (err) {
+                    console.log('Erro ao inserir moedas.', err);
+                    process.exit();
+                }
+            });
         });
     });
 });
