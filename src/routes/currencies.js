@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const currencyController = require('../controllers/currencyController');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 /**
  * Faz a conversão da moeda de acordo com os parâmetros passados
@@ -21,7 +22,7 @@ router.get('/', currencyController.convertCurrency);
  * @queryParam {string} currency
  * @queryParam {float} usd_value
  */
-router.post('/', currencyController.addCurrency);
+router.post('/', authMiddleware, currencyController.addCurrency);
 
 /**
  * Remove uma moeda
@@ -29,6 +30,6 @@ router.post('/', currencyController.addCurrency);
  * @url /currencies/{currency}
  * @method DELETE
  */
-router.delete('/:currency', currencyController.removeCurrency);
+router.delete('/:currency', authMiddleware, currencyController.removeCurrency);
 
 module.exports = router;
