@@ -14,11 +14,11 @@ namespace CurrencyConverter.Services
             _currencyRepository = currencyRepository;
         }
 
-        public void DeleteCurrency(long currencyId)
+        public void DeleteCurrency(string currencyName)
         {
             using (TransactionScope scope = new TransactionScope())
             {
-                _currencyRepository.DeleteCurrency(currencyId);
+                _currencyRepository.DeleteCurrency(currencyName);
                 scope.Complete();
             }
         }

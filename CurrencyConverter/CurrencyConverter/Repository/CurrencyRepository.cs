@@ -1,5 +1,6 @@
 using CurrencyConverter.DBContexts;
 using CurrencyConverter.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,11 +16,19 @@ namespace CurrencyConverter.Repository
             _dbContext = dbContext;
         }
 
-        public void DeleteCurrency(long currencyId)
+        public void DeleteCurrency(string currencyName)
         {
-            Currency currency = _dbContext.Currency.Find(currencyId);
-            _dbContext.Currency.Remove(currency);
-            Save();
+            Currency currency = _dbContext.Currency.Where(bean => bean.Name == currencyName).FirstOrDefault();
+            if (currency != null)
+            {
+                _dbContext.Currency.Remove(currency);
+                Save();
+            }
+            else
+            {
+                string message = $"Não foi possível encontrar a moeda {currencyName} cadastrada na base de dados.";
+                throw new ArgumentNullException(message);
+            }
         }
 
         public Currency GetCurrencyById(long currencyId)

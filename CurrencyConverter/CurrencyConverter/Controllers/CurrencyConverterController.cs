@@ -1,4 +1,5 @@
 using CurrencyConverter.Model;
+using CurrencyConverter.Model.Dto;
 using CurrencyConverter.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace CurrencyConverter.Controllers
             return new OkObjectResult(currencies);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{currencyId}")]
         public IActionResult GetCurrencyById(long currencyId)
         {
             Currency currency = _currencyService.GetCurrencyById(currencyId);
@@ -37,10 +38,10 @@ namespace CurrencyConverter.Controllers
             return CreatedAtAction(nameof(GetCurrencyById), new { id = currency.Id }, currency);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteCurrency(long currencyId)
+        [HttpDelete("{currencyName}")]
+        public IActionResult DeleteCurrency(string currencyName)
         {
-            _currencyService.DeleteCurrency(currencyId);
+            _currencyService.DeleteCurrency(currencyName);
             return new OkResult();
         }
     }

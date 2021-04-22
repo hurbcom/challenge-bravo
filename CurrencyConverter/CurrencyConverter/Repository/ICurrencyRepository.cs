@@ -8,7 +8,7 @@ namespace CurrencyConverter.Repository
         IEnumerable<Currency> GetCurrencies();
         Currency GetCurrencyById(long currencyId);
         void InsertCurrency(Currency currency);
-        void DeleteCurrency(long currencyId);
+        void DeleteCurrency(string currencyName);
         void Save();
     }
 }
