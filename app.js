@@ -1,5 +1,7 @@
+require("dotenv-safe").config();
 const express = require('express');
 const currenciesRoutes = require('./src/routes/currencies');
+const loginRoutes = require('./src/routes/login');
 swaggerUi = require("swagger-ui-express");
 
 const app = express();
@@ -26,6 +28,8 @@ app.use(function (req, res, next) {
 // Documentação
 const swaggerDocument = require('./swagger.json');
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Login
+app.use('/login', loginRoutes);
 // Currencies
 app.use('/currencies', currenciesRoutes);
 
