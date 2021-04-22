@@ -39,20 +39,22 @@ Moedas iniciais suportadas:
 <a name="docker-setup"></a>
 ## Docker Setup
 ---
-Crie e configure o arquivo .env com base no .env.example:
-```sh
-cp .env.example .env && nano .env
-```
-<sub>Para funcionar no container, basta copiar o arquivo</sub>
 
 Suba o container:
 ```sh
-docker-compose up -d
+npm run docker
 ```
 
 Configure o banco:
 ```sh
 docker-compose exec node npm run migrate
+```
+
+Configure o arquivo .env com base no .env.example (opcional).
+
+<sub>Ao alterar o arquivo .env, será necessário reinicar a aplicação.</sub>
+```sh
+docker-compose restart node
 ```
 
 A aplicação estará disponível no endereço: http://localhost:8000.
@@ -141,6 +143,11 @@ npm start
 Configurar/Limpar banco (com as taxas de câmbio atualizadas):
 ```sh
 npm run migrate
+```
+
+Iniciar container:
+```sh
+npm run docker
 ```
 
 <a name="filesystem"></a>

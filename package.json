@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --forceExit --detectOpenHandles --runInBand",
     "start": "node server.js",
-    "migrate": "node database/createDbDefault.js"
+    "migrate": "node database/createDbDefault.js",
+    "docker": "cp -n .env.example .env && docker-compose up -d"
   },
   "repository": {
     "type": "git",

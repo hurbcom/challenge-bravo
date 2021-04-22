@@ -8,6 +8,7 @@ os: linux
 
 before_script:
   - npm i
+  - cp .env.example .env
 
 script:
   - npm test
