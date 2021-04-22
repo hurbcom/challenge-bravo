@@ -11,6 +11,8 @@ namespace CurrencyConverter.Repository
 
         private readonly CurrencyConverterContext _dbContext;
 
+        private readonly string BASE_CURRENCY = "USD";
+
         public CurrencyRepository(CurrencyConverterContext dbContext)
         {
             _dbContext = dbContext;
@@ -18,6 +20,12 @@ namespace CurrencyConverter.Repository
 
         public void DeleteCurrency(string currencyName)
         {
+            if (currencyName == BASE_CURRENCY)
+            {
+                string message = $"{BASE_CURRENCY} é a moeda base da API, a mesma não pode ser excluída.";
+                throw new Exception(message);
+            }
+
             Currency currency = _dbContext.Currency.Where(bean => bean.Name == currencyName).FirstOrDefault();
             if (currency != null)
             {
