@@ -1,4 +1,5 @@
 using CurrencyConverter.Model;
+using CurrencyConverter.Model.Dto;
 using CurrencyConverter.Repository;
 using System.Collections.Generic;
 using System.Transactions;
@@ -42,6 +43,12 @@ namespace CurrencyConverter.Services
                 _currencyRepository.InsertCurrency(currency);
                 scope.Complete();
             }
+        }
+
+        public Currency GetCurrencyByName(string currencyName)
+        {
+            Currency currency = _currencyRepository.GetCurrencyByName(currencyName);
+            return currency;
         }
     }
 }

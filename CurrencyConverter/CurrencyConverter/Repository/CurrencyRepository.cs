@@ -41,7 +41,30 @@ namespace CurrencyConverter.Repository
 
         public Currency GetCurrencyById(long currencyId)
         {
-            return _dbContext.Currency.Find(currencyId);
+            Currency currency = _dbContext.Currency.Where(bean => bean.Id == currencyId).FirstOrDefault();
+            if (currency != null)
+            {
+                return currency;
+            }
+            else
+            {
+                string message = $"Não foi possível encontrar a moeda com Id {currencyId} cadastrada na base de dados.";
+                throw new ArgumentNullException(message);
+            }
+        }
+
+        public Currency GetCurrencyByName(string currencyName)
+        {
+            Currency currency = _dbContext.Currency.Where(bean => bean.Name == currencyName).FirstOrDefault();
+            if (currency != null)
+            {
+                return currency;
+            }
+            else
+            {
+                string message = $"Não foi possível encontrar a moeda {currencyName} cadastrada na base de dados.";
+                throw new ArgumentNullException(message);
+            }
         }
 
         public IEnumerable<Currency> GetCurrencies()

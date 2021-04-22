@@ -1,4 +1,5 @@
 using CurrencyConverter.Model;
+using CurrencyConverter.Model.Dto;
 using System.Collections.Generic;
 
 namespace CurrencyConverter.Services
@@ -9,5 +10,7 @@ namespace CurrencyConverter.Services
         Currency GetCurrencyById(long currencyId);
         void InsertCurrency(Currency currency);
         void DeleteCurrency(string currencyName);
+        double ConvertAmountToCurrency(CurrencyToConvertDto currencyToConvertDto);
+        Currency GetCurrencyByName(string currencyName);
     }
 }
