@@ -18,16 +18,31 @@ namespace CurrencyConverter.Controllers
         }
 
         [HttpGet]
+        public IActionResult ConvertAmountToCurrency([FromQuery] string from, string to, decimal amount)
+        {
+            CurrencyToConvertDto currencyToConvertDto = new CurrencyToConvertDto(from, to, amount);
+            decimal convertedAmount = _currencyService.ConvertAmountToCurrency(currencyToConvertDto);
+            return new OkObjectResult(convertedAmount);
+        }
+
+        [HttpGet("getCurrencies")]
         public IActionResult GetCurrencies()
         {
             IEnumerable<Currency> currencies = _currencyService.GetCurrencies();
             return new OkObjectResult(currencies);
         }
 
-        [HttpGet("{currencyId}")]
+        [HttpGet("getCurrenciesById/{currencyId}")]
         public IActionResult GetCurrencyById(long currencyId)
         {
             Currency currency = _currencyService.GetCurrencyById(currencyId);
+            return new OkObjectResult(currency);
+        }
+
+        [HttpGet("getCurrenciesByName/{currencyName}")]
+        public IActionResult GetCurrencyById(string currencyName)
+        {
+            Currency currency = _currencyService.GetCurrencyByName(currencyName);
             return new OkObjectResult(currency);
         }
 
@@ -35,7 +50,7 @@ namespace CurrencyConverter.Controllers
         public IActionResult InsertCurrency([FromBody] Currency currency)
         {
             _currencyService.InsertCurrency(currency);
-            return CreatedAtAction(nameof(GetCurrencyById), new { id = currency.Id }, currency);
+            return new OkObjectResult(currency);
         }
 
         [HttpDelete("{currencyName}")]

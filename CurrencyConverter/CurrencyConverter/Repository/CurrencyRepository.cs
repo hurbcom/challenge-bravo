@@ -26,7 +26,7 @@ namespace CurrencyConverter.Repository
                 throw new Exception(message);
             }
 
-            Currency currency = _dbContext.Currency.Where(bean => bean.Name == currencyName).FirstOrDefault();
+            Currency currency = GetCurrencyByName(currencyName);
             if (currency != null)
             {
                 _dbContext.Currency.Remove(currency);
@@ -41,7 +41,7 @@ namespace CurrencyConverter.Repository
 
         public Currency GetCurrencyById(long currencyId)
         {
-            Currency currency = _dbContext.Currency.Where(bean => bean.Id == currencyId).FirstOrDefault();
+            Currency currency = _dbContext.Currency.FirstOrDefault(bean => bean.Id == currencyId);
             if (currency != null)
             {
                 return currency;
@@ -55,7 +55,7 @@ namespace CurrencyConverter.Repository
 
         public Currency GetCurrencyByName(string currencyName)
         {
-            Currency currency = _dbContext.Currency.Where(bean => bean.Name == currencyName).FirstOrDefault();
+            Currency currency = _dbContext.Currency.FirstOrDefault(bean => bean.Name == currencyName);
             if (currency != null)
             {
                 return currency;

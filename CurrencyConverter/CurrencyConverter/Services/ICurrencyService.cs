@@ -10,7 +10,7 @@ namespace CurrencyConverter.Services
         Currency GetCurrencyById(long currencyId);
         void InsertCurrency(Currency currency);
         void DeleteCurrency(string currencyName);
-        double ConvertAmountToCurrency(CurrencyToConvertDto currencyToConvertDto);
+        decimal ConvertAmountToCurrency(CurrencyToConvertDto currencyToConvertDto);
         Currency GetCurrencyByName(string currencyName);
     }
 }

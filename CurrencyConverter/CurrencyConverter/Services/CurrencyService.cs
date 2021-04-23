@@ -10,6 +10,8 @@ namespace CurrencyConverter.Services
     {
         private readonly ICurrencyRepository _currencyRepository;
 
+        private static readonly IDictionary<string, Currency> CurrenciesByNameCache = new Dictionary<string, Currency>();
+
         public CurrencyService(ICurrencyRepository currencyRepository)
         {
             _currencyRepository = currencyRepository;
@@ -30,6 +32,24 @@ namespace CurrencyConverter.Services
             return currency;
         }
 
+        public Currency GetCurrencyByName(string currencyName)
+        {
+            if (!CurrenciesByNameCache.TryGetValue(currencyName, out Currency currency))
+            {
+                currency = _currencyRepository.GetCurrencyByName(currencyName);
+                try
+                {
+                    CurrenciesByNameCache.Add(currencyName, currency);
+                }
+                catch
+                {
+                    //Caso tenha sido adicionada por outra requisicao durante consulta no DB.
+                    currency = CurrenciesByNameCache[currencyName];
+                }
+            }
+            return currency;
+        }
+
         public IEnumerable<Currency> GetCurrencies()
         {
             IEnumerable<Currency> currencies = _currencyRepository.GetCurrencies();
@@ -45,10 +65,7 @@ namespace CurrencyConverter.Services
             }
         }
 
-        public Currency GetCurrencyByName(string currencyName)
         {
-            Currency currency = _currencyRepository.GetCurrencyByName(currencyName);
-            return currency;
         }
     }
 }
