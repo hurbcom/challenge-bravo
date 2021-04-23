@@ -27,6 +27,7 @@ namespace CurrencyConverter
             services.AddDbContext<CurrencyConverterContext>(o => o.UseSqlServer(Configuration.GetConnectionString("CurrencyConverterDB")));
             services.AddTransient<ICurrencyRepository, CurrencyRepository>();
             services.AddTransient<ICurrencyService, CurrencyService>();
+            services.AddSingleton<ICurrencyCache, CurrencyCache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,12 +9,12 @@ namespace CurrencyConverter.Services
     public class CurrencyService : ICurrencyService
     {
         private readonly ICurrencyRepository _currencyRepository;
+        private readonly ICurrencyCache _currencyCache;
 
-        private static readonly IDictionary<string, Currency> CurrenciesByNameCache = new Dictionary<string, Currency>();
-
-        public CurrencyService(ICurrencyRepository currencyRepository)
+        public CurrencyService(ICurrencyRepository currencyRepository, ICurrencyCache currencyCache)
         {
             _currencyRepository = currencyRepository;
+            _currencyCache = currencyCache;
         }
 
         public void DeleteCurrency(string currencyName)
@@ -34,18 +34,11 @@ namespace CurrencyConverter.Services
 
         public Currency GetCurrencyByName(string currencyName)
         {
-            if (!CurrenciesByNameCache.TryGetValue(currencyName, out Currency currency))
+            Currency currency = _currencyCache.TryGetCurrencyByNameInCache(currencyName);
+            if (currency == null)
             {
                 currency = _currencyRepository.GetCurrencyByName(currencyName);
-                try
-                {
-                    CurrenciesByNameCache.Add(currencyName, currency);
-                }
-                catch
-                {
-                    //Caso tenha sido adicionada por outra requisicao durante consulta no DB.
-                    currency = CurrenciesByNameCache[currencyName];
-                }
+                _currencyCache.AddCurrencyToCache(currency);
             }
             return currency;
         }
