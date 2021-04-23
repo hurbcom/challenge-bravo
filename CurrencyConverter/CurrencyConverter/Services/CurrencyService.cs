@@ -65,7 +65,52 @@ namespace CurrencyConverter.Services
             }
         }
 
+        public decimal ConvertAmountToCurrency(CurrencyToConvertDto currencyToConvertDto)
         {
+            string fromCurrencyName = currencyToConvertDto.From;
+            string toCurrencyName = currencyToConvertDto.To;
+            decimal amountToConvert = currencyToConvertDto.Amount;
+
+            Currency originalCurrency = this.GetCurrencyByName(fromCurrencyName);
+            Currency newCurrency = this.GetCurrencyByName(toCurrencyName);
+
+            decimal fromAmountInBaseCurrency = GetValueInBaseCurrency(originalCurrency, amountToConvert);
+            decimal convertedAmount = GetValueInNewCurrency(newCurrency, fromAmountInBaseCurrency);
+
+            return convertedAmount;
+        }
+
+        private decimal GetValueInBaseCurrency(Currency currency, decimal amount)
+        {
+            decimal convertFactor = this.GetConvertFactorIfValid(currency);
+
+            decimal convertedAmount = amount / convertFactor;
+
+            return convertedAmount;
+        }
+
+        private decimal GetValueInNewCurrency(Currency currency, decimal amount)
+        {
+            decimal convertFactor = this.GetConvertFactorIfValid(currency);
+
+            decimal convertedAmount = amount * convertFactor;
+
+            return convertedAmount;
+        }
+
+        private decimal GetConvertFactorIfValid(Currency currency)
+        {
+            decimal convertFactor = currency.ValueComparedToBaseCurrency;
+
+            if (convertFactor <= 0)
+            {
+                string message = $"A Moeda {currency.Name} possui um valor de conversão {currency.ValueComparedToBaseCurrency}, o mesmo é inválido por ser negativo ou igual a zero.";
+                throw new System.Exception(message);
+            }
+            else
+            {
+                return convertFactor;
+            }
         }
     }
 }
