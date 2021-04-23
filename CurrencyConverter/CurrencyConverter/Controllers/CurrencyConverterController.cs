@@ -3,6 +3,7 @@ using CurrencyConverter.Model.Dto;
 using CurrencyConverter.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CurrencyConverter.Controllers
 {
@@ -46,11 +47,11 @@ namespace CurrencyConverter.Controllers
             return new OkObjectResult(currency);
         }
 
-        [HttpPost]
-        public IActionResult InsertCurrency([FromBody] Currency currency)
+        [HttpPost("{currencyName}")]
+        public async Task<IActionResult> InsertCurrency(string currencyName)
         {
-            _currencyService.InsertCurrency(currency);
-            return new OkObjectResult(currency);
+            string message = await _currencyService.InsertCurrency(currencyName);
+            return new OkObjectResult(message);
         }
 
         [HttpDelete("{currencyName}")]

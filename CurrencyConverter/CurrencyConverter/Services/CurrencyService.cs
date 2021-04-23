@@ -2,6 +2,7 @@ using CurrencyConverter.Model;
 using CurrencyConverter.Model.Dto;
 using CurrencyConverter.Repository;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Transactions;
 
 namespace CurrencyConverter.Services
@@ -10,18 +11,21 @@ namespace CurrencyConverter.Services
     {
         private readonly ICurrencyRepository _currencyRepository;
         private readonly ICurrencyCache _currencyCache;
+        private readonly ICurrencyExternalApi _currencyExternalApi;
 
-        public CurrencyService(ICurrencyRepository currencyRepository, ICurrencyCache currencyCache)
+        public CurrencyService(ICurrencyRepository currencyRepository, ICurrencyCache currencyCache, ICurrencyExternalApi currencyExternalApi)
         {
             _currencyRepository = currencyRepository;
             _currencyCache = currencyCache;
+            _currencyExternalApi = currencyExternalApi;
         }
 
         public void DeleteCurrency(string currencyName)
         {
+            string normalizedCurrencyName = this.NormalizeCurrencyString(currencyName);
             using (TransactionScope scope = new TransactionScope())
             {
-                _currencyRepository.DeleteCurrency(currencyName);
+                _currencyRepository.DeleteCurrency(normalizedCurrencyName);
                 scope.Complete();
             }
         }
@@ -34,10 +38,11 @@ namespace CurrencyConverter.Services
 
         public Currency GetCurrencyByName(string currencyName)
         {
-            Currency currency = _currencyCache.TryGetCurrencyByNameInCache(currencyName);
+            string normalizedCurrencyName = this.NormalizeCurrencyString(currencyName);
+            Currency currency = _currencyCache.TryGetCurrencyByNameInCache(normalizedCurrencyName);
             if (currency == null)
             {
-                currency = _currencyRepository.GetCurrencyByName(currencyName);
+                currency = _currencyRepository.GetCurrencyByName(normalizedCurrencyName);
                 _currencyCache.AddCurrencyToCache(currency);
             }
             return currency;
@@ -49,19 +54,28 @@ namespace CurrencyConverter.Services
             return currencies;
         }
 
-        public void InsertCurrency(Currency currency)
+        public async Task<string> InsertCurrency(string currencyName)
         {
+            string message;
+
+            string normalizedCurrencyName = this.NormalizeCurrencyString(currencyName);
+            decimal currencyValue = await _currencyExternalApi.GetActualCurrencyValueByName(normalizedCurrencyName);
+
             using (TransactionScope scope = new TransactionScope())
             {
-                _currencyRepository.InsertCurrency(currency);
+                _currencyRepository.InsertCurrency(normalizedCurrencyName, currencyValue);
+
                 scope.Complete();
+
+                message = $"A moeda {currencyName} foi cadastrada com sucesso!";
             }
+            return message;
         }
 
         public decimal ConvertAmountToCurrency(CurrencyToConvertDto currencyToConvertDto)
         {
-            string fromCurrencyName = currencyToConvertDto.From;
-            string toCurrencyName = currencyToConvertDto.To;
+            string fromCurrencyName = this.NormalizeCurrencyString(currencyToConvertDto.From);
+            string toCurrencyName = this.NormalizeCurrencyString(currencyToConvertDto.To);
             decimal amountToConvert = currencyToConvertDto.Amount;
 
             Currency originalCurrency = this.GetCurrencyByName(fromCurrencyName);
@@ -104,6 +118,12 @@ namespace CurrencyConverter.Services
             {
                 return convertFactor;
             }
+        }
+
+        private string NormalizeCurrencyString(string currencyName)
+        {
+            string normalizedCurrencyName = currencyName.Trim().ToUpper();
+            return normalizedCurrencyName;
         }
     }
 }

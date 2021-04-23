@@ -15,13 +15,17 @@ namespace CurrencyConverter.Model
             //Empty Constructor
         }
 
-        public Currency(long id, string name, decimal valueComparedToBaseCurrency, DateTime creationDate, DateTime updateDate)
+        public Currency(string name, decimal valueComparedToBaseCurrency, DateTime creationDate, DateTime updateDate)
         {
-            this.Id = id;
             this.Name = name;
             this.ValueComparedToBaseCurrency = valueComparedToBaseCurrency;
             this.CreationDate = creationDate;
             this.UpdateDate = updateDate;
+        }
+
+        public Currency(long id, string name, decimal valueComparedToBaseCurrency, DateTime creationDate, DateTime updateDate) : this(name, valueComparedToBaseCurrency, creationDate, updateDate)
+        {
+            this.Id = id;
         }
     }
 }

@@ -1,6 +1,7 @@
 using CurrencyConverter.Model;
 using CurrencyConverter.Model.Dto;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CurrencyConverter.Services
 {
@@ -8,7 +9,7 @@ namespace CurrencyConverter.Services
     {
         IEnumerable<Currency> GetCurrencies();
         Currency GetCurrencyById(long currencyId);
-        void InsertCurrency(Currency currency);
+        Task<string> InsertCurrency(string currencyName);
         void DeleteCurrency(string currencyName);
         decimal ConvertAmountToCurrency(CurrencyToConvertDto currencyToConvertDto);
         Currency GetCurrencyByName(string currencyName);

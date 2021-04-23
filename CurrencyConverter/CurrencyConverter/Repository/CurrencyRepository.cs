@@ -72,9 +72,11 @@ namespace CurrencyConverter.Repository
             return _dbContext.Currency.ToList();
         }
 
-        public void InsertCurrency(Currency currency)
+        public void InsertCurrency(string currencyName, decimal currencyValue)
         {
-            _dbContext.Add(currency);
+            DateTime now = DateTime.Now;
+            Currency currencyToAdd = new Currency(currencyName, currencyValue, now, now);
+            _dbContext.Add(currencyToAdd);
             Save();
         }
 

@@ -23,11 +23,13 @@ namespace CurrencyConverter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddDbContext<CurrencyConverterContext>(o => o.UseSqlServer(Configuration.GetConnectionString("CurrencyConverterDB")));
             services.AddTransient<ICurrencyRepository, CurrencyRepository>();
             services.AddTransient<ICurrencyService, CurrencyService>();
             services.AddSingleton<ICurrencyCache, CurrencyCache>();
+            services.AddTransient<ICurrencyExternalApi, CurrencyExternalApi>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
