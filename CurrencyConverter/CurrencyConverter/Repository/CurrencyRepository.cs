@@ -3,15 +3,18 @@ using CurrencyConverter.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace CurrencyConverter.Repository
 {
     public class CurrencyRepository : ICurrencyRepository
     {
 
-        private readonly CurrencyConverterContext _dbContext;
+        private CurrencyConverterContext _dbContext;
 
         private readonly string BASE_CURRENCY = "USD";
+
+        private readonly Dictionary<Type, object> repositories = new Dictionary<Type, object>();
 
         public CurrencyRepository(CurrencyConverterContext dbContext)
         {
@@ -72,12 +75,26 @@ namespace CurrencyConverter.Repository
             return _dbContext.Currency.ToList();
         }
 
-        public void InsertCurrency(string currencyName, decimal currencyValue)
+        public void InsertCurrency(Currency currency)
         {
-            DateTime now = DateTime.Now;
-            Currency currencyToAdd = new Currency(currencyName, currencyValue, now, now);
-            _dbContext.Add(currencyToAdd);
-            Save();
+            using (TransactionScope scope = new TransactionScope())
+            {
+                _dbContext.Add(currency);
+                Save();
+
+                scope.Complete();
+            }
+        }
+
+        public void InsertCurrenciesList(IList<Currency> currenciesList)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                _dbContext.AddRange(currenciesList);
+                Save();
+
+                scope.Complete();
+            }
         }
 
         public void Save()

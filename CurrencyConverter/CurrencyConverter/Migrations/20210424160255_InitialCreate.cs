@@ -23,18 +23,6 @@ namespace CurrencyConverter.Migrations
                     table.PrimaryKey("PK_Currency", x => x.Id);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Currency",
-                columns: new[] { "Id", "CreationDate", "Name", "UpdateDate", "ValueComparedToBaseCurrency" },
-                values: new object[,]
-                {
-                    { 1L, new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), "USD", new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), 1.00m },
-                    { 2L, new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), "BRL", new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), 5.4468m },
-                    { 3L, new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), "EUR", new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), 0.8324m },
-                    { 4L, new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), "BTC", new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), 0.0000180180m },
-                    { 5L, new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), "ETH", new DateTime(2021, 4, 22, 19, 56, 28, 498, DateTimeKind.Local).AddTicks(7010), 0.0003784925m }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Currency_Name",
                 table: "Currency",

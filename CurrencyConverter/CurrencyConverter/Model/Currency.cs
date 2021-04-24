@@ -1,9 +1,11 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CurrencyConverter.Model
 {
     public class Currency
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public string Name { get; set; }
         public decimal ValueComparedToBaseCurrency { get; set; }
@@ -21,11 +23,6 @@ namespace CurrencyConverter.Model
             this.ValueComparedToBaseCurrency = valueComparedToBaseCurrency;
             this.CreationDate = creationDate;
             this.UpdateDate = updateDate;
-        }
-
-        public Currency(long id, string name, decimal valueComparedToBaseCurrency, DateTime creationDate, DateTime updateDate) : this(name, valueComparedToBaseCurrency, creationDate, updateDate)
-        {
-            this.Id = id;
         }
     }
 }

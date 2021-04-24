@@ -1,6 +1,7 @@
 using CurrencyConverter.Model;
 using CurrencyConverter.Model.Dto;
 using CurrencyConverter.Repository;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -61,14 +62,12 @@ namespace CurrencyConverter.Services
             string normalizedCurrencyName = this.NormalizeCurrencyString(currencyName);
             decimal currencyValue = await _currencyExternalApi.GetActualCurrencyValueByName(normalizedCurrencyName);
 
-            using (TransactionScope scope = new TransactionScope())
-            {
-                _currencyRepository.InsertCurrency(normalizedCurrencyName, currencyValue);
+            DateTime now = DateTime.Now;
+            Currency currencyToAdd = new Currency(normalizedCurrencyName, currencyValue, now, now);
 
-                scope.Complete();
+            _currencyRepository.InsertCurrency(currencyToAdd);
 
-                message = $"A moeda {currencyName} foi cadastrada com sucesso!";
-            }
+            message = $"A moeda {normalizedCurrencyName} foi cadastrada com sucesso!";
             return message;
         }
 
@@ -124,6 +123,25 @@ namespace CurrencyConverter.Services
         {
             string normalizedCurrencyName = currencyName.Trim().ToUpper();
             return normalizedCurrencyName;
+        }
+
+        public void InsertCurrenciesList(IList<string> currenciesNames)
+        {
+            DateTime now = DateTime.Now;
+
+            IList<Currency> currenciesList = new List<Currency>();
+
+            foreach (string currencyName in currenciesNames)
+            {
+                string normalizedName = this.NormalizeCurrencyString(currencyName);
+                decimal currencyValue = _currencyExternalApi.GetActualCurrencyValueByName(normalizedName).Result;
+
+                Currency currencyToAdd = new Currency(normalizedName, currencyValue, now, now);
+
+                currenciesList.Add(currencyToAdd);
+            }
+
+            _currencyRepository.InsertCurrenciesList(currenciesList);
         }
     }
 }

@@ -8,8 +8,9 @@ namespace CurrencyConverter.Repository
         IEnumerable<Currency> GetCurrencies();
         Currency GetCurrencyById(long currencyId);
         Currency GetCurrencyByName(string currencyName);
-        void InsertCurrency(string currencyName, decimal currencyValue);
+        void InsertCurrency(Currency currency);
         void DeleteCurrency(string currencyName);
         void Save();
+        void InsertCurrenciesList(IList<Currency> currenciesList);
     }
 }

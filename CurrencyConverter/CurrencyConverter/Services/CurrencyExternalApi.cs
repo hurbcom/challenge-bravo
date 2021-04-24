@@ -18,7 +18,7 @@ namespace CurrencyConverter.Services
 
         public async Task<string> GetActualCurrenciesNames()
         {
-            string uri = $"https://openexchangerates.org/api/currencies.json?app_id={this.ExternalApiAppId}";
+            string uri = $"https://openexchangerates.org/api/currencies.json?app_id={this.ExternalApiAppId}&show_alternative=1";
 
             string responseString = await this.SendHttpGetRequestToApi(uri);
             return responseString;
@@ -26,7 +26,7 @@ namespace CurrencyConverter.Services
 
         public async Task<decimal> GetActualCurrencyValueByName(string currencyName)
         {
-            string uri = $"https://openexchangerates.org/api/latest.json?app_id={this.ExternalApiAppId}";
+            string uri = $"https://openexchangerates.org/api/latest.json?app_id={this.ExternalApiAppId}&show_alternative=1";
             string responseString = await this.SendHttpGetRequestToApi(uri);
 
             Dictionary<string, decimal> result = JObject.Parse(responseString)["rates"].ToObject<Dictionary<string, decimal>>();
