@@ -2,6 +2,7 @@ using CurrencyConverter.Model;
 using CurrencyConverter.Model.Dto;
 using CurrencyConverter.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,35 +24,40 @@ namespace CurrencyConverter.Controllers
         {
             CurrencyToConvertDto currencyToConvertDto = new CurrencyToConvertDto(from, to, amount);
             decimal convertedAmount = _currencyService.ConvertAmountToCurrency(currencyToConvertDto);
-            return new OkObjectResult(convertedAmount);
+            string jsonAnswer = JsonConvert.SerializeObject(convertedAmount);
+            return new OkObjectResult(jsonAnswer);
         }
 
         [HttpGet("getCurrencies")]
         public IActionResult GetCurrencies()
         {
             IEnumerable<Currency> currencies = _currencyService.GetCurrencies();
-            return new OkObjectResult(currencies);
+            string jsonAnswer = JsonConvert.SerializeObject(currencies);
+            return new OkObjectResult(jsonAnswer);
         }
 
         [HttpGet("getCurrenciesById/{currencyId}")]
         public IActionResult GetCurrencyById(long currencyId)
         {
             Currency currency = _currencyService.GetCurrencyById(currencyId);
-            return new OkObjectResult(currency);
+            string jsonAnswer = JsonConvert.SerializeObject(currency);
+            return new OkObjectResult(jsonAnswer);
         }
 
         [HttpGet("getCurrenciesByName/{currencyName}")]
-        public IActionResult GetCurrencyById(string currencyName)
+        public IActionResult GetCurrencyByName(string currencyName)
         {
             Currency currency = _currencyService.GetCurrencyByName(currencyName);
-            return new OkObjectResult(currency);
+            string jsonAnswer = JsonConvert.SerializeObject(currency);
+            return new OkObjectResult(jsonAnswer);
         }
 
         [HttpPost("{currencyName}")]
         public async Task<IActionResult> InsertCurrency(string currencyName)
         {
             string message = await _currencyService.InsertCurrency(currencyName);
-            return new OkObjectResult(message);
+            string jsonAnswer = JsonConvert.SerializeObject(message);
+            return new OkObjectResult(jsonAnswer);
         }
 
         [HttpDelete("{currencyName}")]
