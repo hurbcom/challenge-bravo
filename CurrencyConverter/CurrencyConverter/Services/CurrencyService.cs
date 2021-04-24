@@ -28,6 +28,7 @@ namespace CurrencyConverter.Services
             {
                 _currencyRepository.DeleteCurrency(normalizedCurrencyName);
                 scope.Complete();
+                _currencyCache.CleanCache();
             }
         }
 
