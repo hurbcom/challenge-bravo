@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter", "CurrencyConverter\CurrencyConverter.csproj", "{F65D6696-4948-4CAD-8B88-3DBCD75CDFE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyConverter", "CurrencyConverter\CurrencyConverter.csproj", "{F65D6696-4948-4CAD-8B88-3DBCD75CDFE0}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{43A93E91-A01B-4173-B38A-4E38535EA5C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F65D6696-4948-4CAD-8B88-3DBCD75CDFE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F65D6696-4948-4CAD-8B88-3DBCD75CDFE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F65D6696-4948-4CAD-8B88-3DBCD75CDFE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43A93E91-A01B-4173-B38A-4E38535EA5C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43A93E91-A01B-4173-B38A-4E38535EA5C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43A93E91-A01B-4173-B38A-4E38535EA5C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43A93E91-A01B-4173-B38A-4E38535EA5C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
