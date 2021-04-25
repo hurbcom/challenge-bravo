@@ -74,8 +74,8 @@ namespace CurrencyConverter.Services
 
         public decimal ConvertAmountToCurrency(CurrencyToConvertDto currencyToConvertDto)
         {
-            string fromCurrencyName = this.NormalizeCurrencyString(currencyToConvertDto.From);
-            string toCurrencyName = this.NormalizeCurrencyString(currencyToConvertDto.To);
+            string fromCurrencyName = currencyToConvertDto.From;
+            string toCurrencyName = currencyToConvertDto.To;
             decimal amountToConvert = currencyToConvertDto.Amount;
 
             Currency originalCurrency = this.GetCurrencyByName(fromCurrencyName);
