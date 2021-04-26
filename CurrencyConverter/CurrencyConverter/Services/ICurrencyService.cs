@@ -15,5 +15,6 @@ namespace CurrencyConverter.Services
         Currency GetCurrencyByName(string currencyName);
         void InsertCurrenciesList(IList<string> currenciesNames);
         string GetAvailableCurrenciesToInsert();
+        void UpdateAllCurrenciesValueInDatabase();
     }
 }

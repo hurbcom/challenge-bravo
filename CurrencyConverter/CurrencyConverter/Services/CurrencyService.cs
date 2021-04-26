@@ -3,6 +3,7 @@ using CurrencyConverter.Model.Dto;
 using CurrencyConverter.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -157,6 +158,24 @@ namespace CurrencyConverter.Services
         public string GetAvailableCurrenciesToInsert()
         {
             return _currencyExternalApi.GetActualCurrenciesNames().Result;
+        }
+
+        public void UpdateAllCurrenciesValueInDatabase()
+        {
+            IList<Currency> currenciesInDatabase = _currencyRepository.GetCurrencies().ToList();
+
+            DateTime now = DateTime.Now;
+
+            foreach (Currency currency in currenciesInDatabase)
+            {
+                decimal currencyValue = _currencyExternalApi.GetActualCurrencyValueByName(currency.Name).Result;
+
+                currency.ValueComparedToBaseCurrency = currencyValue;
+                currency.UpdateDate = now;
+            }
+
+            _currencyRepository.UpdateCurrenciesList(currenciesInDatabase);
+            _currencyCache.CleanCache();
         }
     }
 }

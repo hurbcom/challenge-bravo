@@ -101,5 +101,16 @@ namespace CurrencyConverter.Repository
         {
             _dbContext.SaveChanges();
         }
+
+        public void UpdateCurrenciesList(IList<Currency> currenciesList)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                _dbContext.UpdateRange(currenciesList);
+                Save();
+
+                scope.Complete();
+            }
+        }
     }
 }

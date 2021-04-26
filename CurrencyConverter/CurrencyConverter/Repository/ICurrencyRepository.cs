@@ -12,5 +12,6 @@ namespace CurrencyConverter.Repository
         void DeleteCurrency(string currencyName);
         void Save();
         void InsertCurrenciesList(IList<Currency> currenciesList);
+        void UpdateCurrenciesList(IList<Currency> currenciesList);
     }
 }
