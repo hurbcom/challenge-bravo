@@ -40,11 +40,10 @@ namespace CurrencyConverter.Services
 
         public Currency GetCurrencyByName(string currencyName)
         {
-            string normalizedCurrencyName = this.NormalizeCurrencyString(currencyName);
-            Currency currency = _currencyCache.TryGetCurrencyByNameInCache(normalizedCurrencyName);
+            Currency currency = _currencyCache.TryGetCurrencyByNameInCache(currencyName);
             if (currency == null)
             {
-                currency = _currencyRepository.GetCurrencyByName(normalizedCurrencyName);
+                currency = _currencyRepository.GetCurrencyByName(currencyName);
                 _currencyCache.AddCurrencyToCache(currency);
             }
             return currency;
@@ -76,15 +75,25 @@ namespace CurrencyConverter.Services
         {
             string fromCurrencyName = currencyToConvertDto.From;
             string toCurrencyName = currencyToConvertDto.To;
-            decimal amountToConvert = currencyToConvertDto.Amount;
 
-            Currency originalCurrency = this.GetCurrencyByName(fromCurrencyName);
-            Currency newCurrency = this.GetCurrencyByName(toCurrencyName);
+            int requiredNameLength = 3;
+            if (fromCurrencyName.Length == requiredNameLength && toCurrencyName.Length == requiredNameLength)
+            {
+                decimal amountToConvert = currencyToConvertDto.Amount;
 
-            decimal fromAmountInBaseCurrency = GetValueInBaseCurrency(originalCurrency, amountToConvert);
-            decimal convertedAmount = GetValueInNewCurrency(newCurrency, fromAmountInBaseCurrency);
+                Currency originalCurrency = this.GetCurrencyByName(fromCurrencyName);
+                Currency newCurrency = this.GetCurrencyByName(toCurrencyName);
 
-            return convertedAmount;
+                decimal fromAmountInBaseCurrency = GetValueInBaseCurrency(originalCurrency, amountToConvert);
+                decimal convertedAmount = GetValueInNewCurrency(newCurrency, fromAmountInBaseCurrency);
+
+                return convertedAmount;
+            }
+            else
+            {
+                string message = "Pelo menos uma das moedas recebidas está diferente do padrão de 3 letras.";
+                throw new ArgumentException(message);
+            }
         }
 
         private decimal GetValueInBaseCurrency(Currency currency, decimal amount)
