@@ -153,5 +153,10 @@ namespace CurrencyConverter.Services
 
             _currencyRepository.InsertCurrenciesList(currenciesList);
         }
+
+        public string GetAvailableCurrenciesToInsert()
+        {
+            return _currencyExternalApi.GetActualCurrenciesNames().Result;
+        }
     }
 }

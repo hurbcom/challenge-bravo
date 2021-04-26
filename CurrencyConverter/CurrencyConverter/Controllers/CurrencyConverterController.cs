@@ -36,6 +36,13 @@ namespace CurrencyConverter.Controllers
             return new OkObjectResult(jsonAnswer);
         }
 
+        [HttpGet("getAvailableCurrenciesToInsert")]
+        public IActionResult GetAvailableCurrenciesToInsert()
+        {
+            string currencies = _currencyService.GetAvailableCurrenciesToInsert();
+            return new OkObjectResult(currencies);
+        }
+
         [HttpGet("getCurrenciesById/{currencyId}")]
         public IActionResult GetCurrencyById(long currencyId)
         {

@@ -14,5 +14,6 @@ namespace CurrencyConverter.Services
         decimal ConvertAmountToCurrency(CurrencyToConvertDto currencyToConvertDto);
         Currency GetCurrencyByName(string currencyName);
         void InsertCurrenciesList(IList<string> currenciesNames);
+        string GetAvailableCurrenciesToInsert();
     }
 }
