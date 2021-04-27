@@ -18,6 +18,8 @@ Ex: `?from=BTC&to=EUR&amount=123.45`
 
 Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
+A API deve suportar conversão de moedas reais->reais, reais->fictícias e fictícias->reais.
+
 Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
 
 -   JavaScript (NodeJS)
