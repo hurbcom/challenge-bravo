@@ -1,17 +1,13 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-
-export class CurrenciesService {
-    async getCurrency(getCurrency: string): Promise<any> {
-        //
-    }
-
-}
+import { CurrenciesService } from '../currencies/currencies.service';
+import { ExchangeInputType } from './types/convert-input.type';
+import { ExchangeType } from './types/convert.type';
 
 @Injectable()
 export class ConvertService {
     constructor(private currenciesServices: CurrenciesService) { }
 
-    async currencyConvert({ from, to, amount }): Promise<any> {
+    async currencyConvert({ from, to, amount }: ExchangeInputType): Promise<ExchangeType> {
 
         if (!from || !to || !amount)
             throw new BadRequestException()
@@ -26,7 +22,8 @@ export class ConvertService {
 
             return {
                 base: 'USD',
-                amount: currencyTo.value
+                amount: currencyTo.value,
+                rate: 1.0
             }
         } catch (error) {
 
