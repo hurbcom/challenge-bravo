@@ -22,8 +22,7 @@ export class ConvertService {
 
             return {
                 base: 'USD',
-                amount: currencyTo.value,
-                rate: 1.0
+                amount: currencyTo.value
             }
         } catch (error) {
 
