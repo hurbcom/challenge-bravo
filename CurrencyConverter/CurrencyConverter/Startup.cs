@@ -59,7 +59,7 @@ namespace CurrencyConverter
             services.AddCronJob<CronUpdateCurrenciesInDatabaseJob>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
-                c.CronExpression = @"* */1 * * *"; // Expressão para que seja executada a cada 1 hora.
+                c.CronExpression = @"0 * * * *"; // Expressão para que seja executada a cada 1 hora.
             });
         }
 
