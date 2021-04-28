@@ -28,7 +28,7 @@ namespace CurrencyConverter.Services
         {
             _logger.LogInformation($"{DateTime.Now:hh:mm:ss} CronUpdateCurrenciesInDatabaseJob is working.");
 
-            string uri = "http://localhost:26764/api/currencyconverter/updateAllCurrenciesValue";
+            string uri = "http://localhost:49153/api/currencyconverter/updateAllCurrenciesValue";
 
             var request = new HttpRequestMessage(HttpMethod.Put, uri);
 
