@@ -41,7 +41,6 @@ namespace CurrencyConverter
 
             services.AddSwaggerGen(c =>
             {
-
                 c.SwaggerDoc("v1",
                     new OpenApiInfo
                     {
@@ -54,6 +53,13 @@ namespace CurrencyConverter
                             Url = new Uri("https://github.com/JoseVictorDF")
                         }
                     });
+            });
+
+            services.AddScoped<IMyScopedService, MyScopedService>();
+            services.AddCronJob<CronUpdateCurrenciesInDatabaseJob>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"* */1 * * *"; // Expressão para que seja executada a cada 1 hora.
             });
         }
 

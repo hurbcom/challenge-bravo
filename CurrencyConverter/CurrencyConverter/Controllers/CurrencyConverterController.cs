@@ -73,5 +73,12 @@ namespace CurrencyConverter.Controllers
             _currencyService.DeleteCurrency(currencyName);
             return new OkResult();
         }
+
+        [HttpPut("updateAllCurrenciesValue")]
+        public IActionResult UpdateAllCurrenciesValue()
+        {
+            _currencyService.UpdateAllCurrenciesValueInDatabase();
+            return new OkResult();
+        }
     }
 }
