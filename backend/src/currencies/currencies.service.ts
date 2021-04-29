@@ -1,30 +1,13 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Currencies } from './currencies.entity';
+import { CurrenciesRepository } from './currencies.repository';
 var validateCurrencyCode = require('validate-currency-code');
 
-export class Currencies {
-    currency: string;
-    value: number;
-    currentRate: number;
-}
-
-export class CurrenciesRepository {
-    async getCurrency(currency: string): Promise<Currencies> {
-        return new Currencies();
-    }
-
-    async createCurrency(currency: string): Promise<Currencies> {
-        return new Currencies();
-    }
-
-    async deleteCurrency(currency: string): Promise<void> {
-
-    }
-}
 
 @Injectable()
 export class CurrenciesService {
     constructor(private currenciesRepository: CurrenciesRepository) { }
-    async getCurrency(currency: string): Promise<any> {
+    async getCurrency(currency: string): Promise<Currencies> {
         try {
 
             if (!currency || !validateCurrencyCode(currency)) {
@@ -41,7 +24,7 @@ export class CurrenciesService {
         //
     }
 
-    async createCurrency(currency: string): Promise<any> {
+    async createCurrency(currency: string): Promise<Currencies> {
 
         if (!currency || !validateCurrencyCode(currency)) {
             throw new Error('Client requested create an unsupported currency');

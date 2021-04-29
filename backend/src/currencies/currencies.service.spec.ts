@@ -1,6 +1,8 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Currencies, CurrenciesRepository, CurrenciesService } from './currencies.service';
+import { Currencies } from './currencies.entity';
+import { CurrenciesRepository } from './currencies.repository';
+import { CurrenciesService } from './currencies.service';
 
 describe('CurrenciesService', () => {
     let service: CurrenciesService;
@@ -96,15 +98,15 @@ describe('CurrenciesService', () => {
         it('should be throw if called with non valid currency', async () => {
             //empty currency string
             await expect(service.deleteCurrency('')).rejects.toThrow(
-                new Error('Client requested create an unsupported currency'),
+                new Error('Client requested delete an unsupported currency'),
             );
             //invalid iso 4217 string
             await expect(service.deleteCurrency('AAA')).rejects.toThrow(
-                new Error('Client requested create an unsupported currency'),
+                new Error('Client requested delete an unsupported currency'),
             );
             //invalid iso 4217 string
             await expect(service.deleteCurrency('DOLAR')).rejects.toThrow(
-                new Error('Client requested create an unsupported currency'),
+                new Error('Client requested delete an unsupported currency'),
             );
         });
 
