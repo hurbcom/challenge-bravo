@@ -1,65 +1,218 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+# Api de conversão de moedas
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## Pré-requisitos
+- Docker: https://docs.docker.com/install/
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## Instruções para configuração/instalação
+A aplicação roda dentro de uma imagem docker, portanto todo o ambiente é instalado diretamente através da mesma.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+### Configuração
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Os comandos a seguir criam e rodam a aplicação dentro de uma rede docker. Dentro da pasta raiz do repositório:
+  - `docker-compose build --no-cache` - Cria imagem chamada flima/bravo-ch:0.1 durante build os testes unitários são executados.
+  - `docker-compose up -d` - Executa imagem em daemon (e cria se o passo anterior não tiver sido executado previamente). Dentro do arquivo <root>/docker-compose.yml estão as configurações de portas que o sistema irá utilizar por default a aplicação irá utilizar a porta 49153 e o banco de dados ficará na porta 1401.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Comandos usados para criar o docker container do banco de dados:
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+- `docker pull mcr.microsoft.com/mssql/server:2019-latest`
+- `docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=PasswordTestDocker" -p 1401:1433 --name sql1 -h sql1 -d mcr.microsoft.com/mssql/server:2019-latest`
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+### Execução dos testes
+#### Unitarios:
 
-## Requisitos
+ #### Load
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 
-## Critério de avaliação
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+## Documentação do endpoint de conversão
 
-## Dúvidas
+### Endpoint de consulta de moedas cadastradas:
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+`GET http://localhost:49153/api/currencyconverter/getCurrencies`
 
-Boa sorte e boa viagem! ;)
+Retorna todas as moedas cadastradas na nossa base de dados, com seu Id na base, a sua sigla, a sua cotação comparada com o Dólar, a data de inserção na base e a data da última vez que a cotação dessa moeda foi atualizada na base de dados.
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Ex. do JSON de Retorno:
+[
+    {
+        "Id": 1,
+        "Name": "USD",
+        "ValueComparedToBaseCurrency": 1.0000000000,
+        "CreationDate": "2021-04-24T23:18:18.305795",
+        "UpdateDate": "2021-04-27T23:00:00.6793702"
+    },
+    {
+        "Id": 4,
+        "Name": "BTC",
+        "ValueComparedToBaseCurrency": 0.0000179968,
+        "CreationDate": "2021-04-24T23:18:18.305795",
+        "UpdateDate": "2021-04-27T23:00:00.6793702"
+    },
+    {
+        "Id": 6,
+        "Name": "BRL",
+        "ValueComparedToBaseCurrency": 5.4531000000,
+        "CreationDate": "2021-04-24T23:36:15.4181994",
+        "UpdateDate": "2021-04-27T23:00:00.6793702"
+    }
+]
+
+### Endpoint da chamada de conversão:
+
+`GET http://localhost:49153/api/currencyconverter`
+
+Endpoint responsável por fazer a conversão entre duas moedas e retorna um JSON com o valor décimal recebido convertido na moeda recebida na propriedade `to`
+Parâmetros:
+- from: (string) 3 caracteres com código de moeda cadastrada
+- to: (string) 3 caracteres com código de moeda cadastrada
+- amount: (string) decimal positivo com separador decimal `.` (Se usar `,` será considerado separador de milhar)
+
+Todos os campos são obrigatórios.
+
+Ex.: `http://localhost:49153/api/currencyconverter?from=BTC&to=EUR&amount=123.45`
+Retorno:
+ - 5679140.3832903627311522048364
+
+ - Caso algum campo ou formato não venha como desejado, haverá retorno de um erro 400 Bad Request.
+
+ - Caso uma moeda não cadastrada seja requisitada haverá retorno de um erro 500 Internal Server Error com a seguinte mensagem:
+ Ex.:
+ System.ArgumentNullException: Value cannot be null. (Parameter 'Não foi possível encontrar a moeda ABC cadastrada na base de dados.')
+
+ - Caso uma moeda venha com mais ou menos do que 3 dígitos, haverá retorno de um erro 500 Internal Server Error com a seguinte mensagem:
+ Ex.:
+ System.ArgumentException: Pelo menos uma das moedas recebidas está diferente do padrão de 3 letras.
+
+ - Caso uma das moedas da requisição tenha sido cadastradas com valor igual à zero ou negativo, haverá retorno de um erro 500 Internal Server Error com a seguinte mensagem:
+ Ex.:
+ System.Exception: A Moeda BRL possui um valor de conversão 0.00000, o mesmo é inválido por ser negativo ou igual a zero.
+
+
+### Endpoint da registro de nova moeda:
+
+`POST http://localhost:49153/api/currencyconverter/{currencyName}`
+
+Endpoint responsável pelo cadastro de novas moedas na base de dados.
+ - Caso `currencyName` não estiver na lista de possíveis moedas ou for vazio, haverá retorno de um erro 400 Bad Request
+
+ - Caso `currencyName` já cadastrado, haverá retorno de um erro 500 Internal Server Error com a seguinte mensagem por tentar inserir uma moeda com um nome já existente na base de dados:
+ Ex.:
+ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert duplicate key row in object 'dbo.Currency' with unique index 'IX_Currency_Name'. The duplicate key value is (BRL).
+The statement has been terminated.
+
+ - Caso `currencyName` não cadastrado, haverá retorno de uma mensagem informando que a moeda foi cadastrada com sucesso.
+ Ex.:
+ "A moeda ARS foi cadastrada com sucesso!"
+
+### Endpoint que retorna as moedas que podem ser cadastradas:
+
+`GET http://localhost:49153/api/currencyconverter/getAvailableCurrenciesToInsert`
+
+Endpoint responsável por retornar um JSON com uma listagem das siglas e nomes das moedas que podem ser cadastradas na base de dados.
+Ex. de Retorno:
+{
+  "AED": "United Arab Emirates Dirham",
+  "AFN": "Afghan Afghani",
+...
+  "ZMW": "Zambian Kwacha",
+  "ZWL": "Zimbabwean Dollar"
+}
+
+### Endpoint de consulta de moeda cadastrada a partir da sigla da moeda:
+
+`GET http://localhost:49153/api/currencyconverter/getCurrenciesByName/{currencyName}`
+
+Endpoint responsável pela consulta de uma moeda cadastrada na base de dados a partir da sigla de 3 letras.
+ - Caso `currencyName` estiver cadastrada na base de dados, a API irá retornar um JSON com o objeto da moeda cadastrada.
+Ex.: de Retorno:
+{
+    "Id": 6,
+    "Name": "BRL",
+    "ValueComparedToBaseCurrency": 5.4531000000,
+    "CreationDate": "2021-04-24T23:36:15.4181994",
+    "UpdateDate": "2021-04-27T23:00:00.6793702"
+}
+
+ - Caso `currencyName` não estiver na base de dados, haverá retorno de um erro 500 Internal Server Error
+ Ex.:
+ System.ArgumentNullException: Value cannot be null. (Parameter 'Não foi possível encontrar a moeda ABC cadastrada na base de dados.')
+
+### Endpoint de consulta de moeda cadastrada a partir do Id da moeda na base de dados:
+
+`GET http://localhost:49153/api/currencyconverter/getCurrenciesById/{currencyId}`
+
+Endpoint responsável pela consulta de uma moeda cadastrada na base de dados a partir do Id que é um número do tipo long.
+ - Caso `currencyId` estiver cadastrada na base de dados, a API irá retornar um JSON com o objeto da moeda cadastrada.
+Ex.: de Retorno:
+{
+    "Id": 6,
+    "Name": "BRL",
+    "ValueComparedToBaseCurrency": 5.4531000000,
+    "CreationDate": "2021-04-24T23:36:15.4181994",
+    "UpdateDate": "2021-04-27T23:00:00.6793702"
+}
+
+ - Caso `currencyId` não estiver cadastrada na base de dados, haverá retorno de um erro 500 Internal Server Error
+ Ex.:
+ System.ArgumentNullException: Value cannot be null. (Parameter 'Não foi possível encontrar a moeda com Id 2 cadastrada na base de dados.')
+
+### Endpoint da deleção de moeda da base de dados:
+
+`DELETE http://localhost:49153/api/currencyconverter/{currencyName}`
+
+Endpoint responsável por excluir a moeda da base de dados da nossa API.
+ - Caso `currencyName` já cadastrado, a moeda será removida da base de dados e haverá retorno de um OK.
+
+ - Caso `currencyName` não cadastrado, haverá retorno de um erro 500 Internal Server Error
+ Ex.:
+ System.ArgumentNullException: Value cannot be null. (Parameter 'Não foi possível encontrar a moeda ABC cadastrada na base de dados.')
+
+ Obs. O cache de dados que é utilizado para evitar ficar consultando a base é sempre limpo quando esse Endpoint finaliza a atualização na base de dados.
+
+### Endpoint de atualização de todas as moedas:
+
+`PUT http://localhost:49153/api/currencyconverter/updateAllCurrenciesValue`
+
+Endpoint responsável por atualizar as cotações (usando o Dólar com base) de todas as moedas cadastradas na base de dados.
+ - Caso sejam atualizadas com sucesso, haverá retorno de um OK.
+
+ - Caso não seja executada com sucesso, haverá retorno de um erro 500 Internal Server Error e uma mensagem com o erro que foi levantado.
+
+ Obs. O cache de dados que é utilizado para evitar ficar consultando a base é sempre limpo quando esse Endpoint finaliza a atualização na base de dados.
+
+### Cron Job de atualização das moedas:
+
+Foi criado um Cron Job que é executado em background a cada virada de hora e o mesmo é responsável por fazer a atualição da cotação de todas as moedas cadastradas na base de dados.
+
+ Obs. O cache de dados que é utilizado para evitar ficar consultando a base é sempre limpo quando essa tarefa é executada.
+
+## Escolhas técnicas
+### Framework
+
+
+### Deploy Method
+Docker foi utilizado para simplicidade de criação e execução de um ambiente isolado e replicável.
+
+### Integração para conversão de moedas
+Foi utilizada a API Open Exchange Rates (https://openexchangerates.org/). A escolha foi baseada nos seguintes motivos:
+ - Possui uma boa quantidade de moedas, incluindo moedas digitais.
+ - Existe por mais de 7 anos e é utilizada por empresas reconhecidas no mercado.
+ - No plano gratuíto aceita até 1000 requisições por mês, utiliza o dólar como base e os valores são atualizados a cada hora, permitindo diversos recursos a mais nos planos pagos caso seja necessário.
+
+### Lib de testes
+
+
+## Links
+- https://docs.docker.com
+
+
+## TODO:
+ - Cheguei a implementar o Swagger para criação de uma documentação mais interativa, mas tive dificuldades para atualizar a documentação criada e deixarei a implementação mais completa da mesma para uma versão 2.0.
+ Link do Swagger: http://localhost:49153/swagger/index.html
+ - Cobertura total com testes automáticos;
+ -
+
