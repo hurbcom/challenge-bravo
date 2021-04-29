@@ -15,6 +15,10 @@ export class CurrenciesRepository {
     async createCurrency(currency: string): Promise<Currencies> {
         return new Currencies();
     }
+
+    async deleteCurrency(currency: string): Promise<void> {
+
+    }
 }
 
 @Injectable()
@@ -24,7 +28,7 @@ export class CurrenciesService {
         try {
 
             if (!currency || !validateCurrencyCode(currency)) {
-                throw new Error('Client requested create an unsupported currency');
+                throw new Error('Client requested an unsupported currency');
             }
 
             return await this.currenciesRepository.getCurrency(currency);
@@ -53,5 +57,24 @@ export class CurrenciesService {
 
         //
     }
+
+    async deleteCurrency(currency: string): Promise<void> {
+
+        if (!currency || !validateCurrencyCode(currency)) {
+            throw new Error('Client requested delete an unsupported currency');
+            //throw new Error();
+        }
+        try {
+            return await this.currenciesRepository.deleteCurrency(currency);
+        } catch (error) {
+            console.log(error)
+            throw new InternalServerErrorException();
+
+        }
+
+        //
+    }
+
+
 
 }

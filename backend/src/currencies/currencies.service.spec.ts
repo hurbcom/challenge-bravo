@@ -14,6 +14,7 @@ describe('CurrenciesService', () => {
                         {
                             getCurrency: jest.fn(),
                             createCurrency: jest.fn(),
+                            deleteCurrency: jest.fn(),
                         })
                 }],
         }).compile();
@@ -85,4 +86,31 @@ describe('CurrenciesService', () => {
         });
 
     });
+
+    describe('deleteCurrency()', () => {
+
+        it('should be not throw if repository returns', async () => {
+          await expect(service.deleteCurrency('USD')).resolves.not.toThrow();
+        });
+
+        it('should be throw if called with non valid currency', async () => {
+            //empty currency string
+            await expect(service.deleteCurrency('')).rejects.toThrow(
+                new Error('Client requested create an unsupported currency'),
+            );
+            //invalid iso 4217 string
+            await expect(service.deleteCurrency('AAA')).rejects.toThrow(
+                new Error('Client requested create an unsupported currency'),
+            );
+            //invalid iso 4217 string
+            await expect(service.deleteCurrency('DOLAR')).rejects.toThrow(
+                new Error('Client requested create an unsupported currency'),
+            );
+        });
+
+        it('should be called repository with correct params', async () => {
+          await service.deleteCurrency('USD');
+          expect(repository.deleteCurrency).toBeCalledWith('USD');
+        });
+      });
 });
