@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace CurrencyConverter
 {
@@ -66,10 +67,9 @@ namespace CurrencyConverter
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ICurrencyService currencyService)
         {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            using (IServiceScope serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetRequiredService<CurrencyConverterContext>();
-                context.Database.Migrate();
+                TryToRunMigrations(serviceScope);
             }
 
             if (env.IsDevelopment())
@@ -99,6 +99,28 @@ namespace CurrencyConverter
                 IList<string> currenciesNames = new List<string>() { "USD", "BRL", "EUR", "BTC", "ETH" };
                 currencyService.InsertCurrenciesList(currenciesNames);
             }
+        }
+
+        private static void TryToRunMigrations(IServiceScope serviceScope)
+        {
+            int maxAttemps = 12;
+            int delay = 5000;
+
+            for (int i = 0; i < maxAttemps; i++)
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<CurrencyConverterContext>();
+                try
+                {
+                    context.Database.Migrate();
+                    return;
+                }
+                catch
+                {
+                    Thread.Sleep(delay);
+                }
+            }
+
+            throw new Exception();
         }
     }
 }

@@ -8,6 +8,8 @@ services:
       dockerfile: CurrencyConverter/Dockerfile
     environment:
       DBServer: "sql1"
+    depends_on:
+      - "sql1"
     ports:
       - "49153:80"
   sql1:
