@@ -4,14 +4,18 @@
 
 ## Pré-requisitos
 - Docker: https://docs.docker.com/install/
+- K6: https://k6.io/ (Apenas caso queira executar testes de estresse)
 
 ## Instruções para configuração/instalação
 A aplicação roda dentro de uma imagem docker, portanto todo o ambiente é instalado diretamente através da mesma.
 
 ### Configuração
+A configuração do sistema é baseada nos valores do arquivo de configurações appsettings.json na raiz da aplicação.
+- ConnectionStrings.CurrencyConverterDB - Chave para a conexão com o banco de dados (no momento apenas MS SQL Server).
+* Como explicado no TODO, a ideia é mover mais entradas que sejam passíveis de alteração para serem lidas a partir do appsettings.json, pois assim quando necessário podemos apenas alterar o valor da chave nesse arquivo e executar a aplicação novamente.
 
 O comando a seguir cria e roda a aplicação dentro de uma rede docker, além de um container rodando MS SQL Server para a base de dados na mesma rede. Dentro da pasta raiz do repositório:
-  - `docker-compose up` - Executa imagem em daemon (e cria se o passo anterior não tiver sido executado previamente). Dentro do arquivo <root>/docker-compose.yml estão as configurações de portas que o sistema irá utilizar por default a aplicação irá utilizar a porta 49153 e o banco de dados ficará na porta 1401.
+  - `docker-compose up` - Executa imagem em daemon (e cria se o passo anterior não tiver sido executado previamente). Dentro do arquivo <root>/docker-compose.yml estão as configurações de portas que o sistema irá utilizar por default a aplicação irá utilizar a porta 80 e o banco de dados ficará na porta 1433, para acesso a esses ambientes a partir da máquina que está executando a mesma, fiz o link da porta da aplicação para a porta 49153 e para a porta do banco de dados o link foi com a porta 1401.
 
 ### Execução dos testes
 #### Unitarios:
@@ -23,7 +27,7 @@ O comando a seguir cria e roda a aplicação dentro de uma rede docker, além de
 
 #### Load
 - Teste de estresse executado no K6 com 3000 VUs fazendo a requisição GET http://localhost:49153/api/currencyconverter?from=BTC&to=EUR&amount=123.45 seguidamente durante 30 segundos, como é possível verificar no resultado abaixo, a API lidou com aproximadamente 2350 requisições por segundo sem elevar muito o tempo de resposta, que ficou abaixo de 530 ms em 95% dos casos.
-k6 run script.js
+Para execução dos testes de estresse: k6 run script.js
 
           /\      |‾‾| /‾‾/   /‾‾/
      /\  /  \     |  |/  /   /  /
@@ -250,4 +254,7 @@ Foi utilizada a API Open Exchange Rates (https://openexchangerates.org/). A esco
  - Implementar um serviço de HealthCheck para o endpoint.
  - Implementar análise de vulnerabilidade na API com o uso do Sonar.
  - Implementar um serviço Redis para gerenciamento do cache da aplicação.
+ - Adicionar mais logs na aplicação.
+ - Fazer com que o código pegue mais variáveis de configuração (Intervalo de execução do Cron Job, endereço e Apllication Id da API externa, etc) a partir do arquivo appsettings.json.
+ - Mover a definição do DbContext para uma interface com base no princípio de injeção de dependência, para que possamos configurar a aplicação para rodar com diversos tipos de banco de dados.
 
