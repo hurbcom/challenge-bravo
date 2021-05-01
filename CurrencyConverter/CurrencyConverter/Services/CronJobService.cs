@@ -101,11 +101,6 @@ namespace CurrencyConverter.Services
 
             services.AddSingleton<IScheduleConfig<T>>(config);
             services.AddHostedService<T>();
-            //services.AddDbContext<CurrencyConverterContext>(o => o.UseSqlServer(configuration.GetConnectionString("CurrencyConverterDB")));
-            //services.AddTransient<ICurrencyRepository, CurrencyRepository>();
-            //services.AddTransient<ICurrencyService, CurrencyService>();
-            //services.AddSingleton<ICurrencyCache, CurrencyCache>();
-            //services.AddTransient<ICurrencyExternalApi, CurrencyExternalApi>();
             return services;
         }
     }
