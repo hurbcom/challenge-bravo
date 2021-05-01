@@ -17,7 +17,7 @@ Os comandos a seguir criam e rodam a aplicação dentro de uma rede docker. Dent
 Comandos usados para criar o docker container do banco de dados:
 
 - `docker pull mcr.microsoft.com/mssql/server:2019-latest`
-- `docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=PasswordTestDocker" -p 1401:1433 --name sql1 -h sql1 -d mcr.microsoft.com/mssql/server:2019-latest`
+- `docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=PasswordTestDocker!@#" -p 1401:1433 --name sql1 -h sql1 -d mcr.microsoft.com/mssql/server:2019-latest`
 
 
 ### Execução dos testes

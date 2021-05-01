@@ -6,3 +6,4 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "80"
+      - "49153"
