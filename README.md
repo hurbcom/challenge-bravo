@@ -11,24 +11,21 @@ A aplicação roda dentro de uma imagem docker, portanto todo o ambiente é inst
 ### Configuração
 
 Os comandos a seguir criam e rodam a aplicação dentro de uma rede docker. Dentro da pasta raiz do repositório:
-  - `docker-compose build --no-cache` - Cria imagem chamada flima/bravo-ch:0.1 durante build os testes unitários são executados.
-  - `docker-compose up -d` - Executa imagem em daemon (e cria se o passo anterior não tiver sido executado previamente). Dentro do arquivo <root>/docker-compose.yml estão as configurações de portas que o sistema irá utilizar por default a aplicação irá utilizar a porta 49153 e o banco de dados ficará na porta 1401.
-
-Comandos usados para criar o docker container do banco de dados:
-
-- `docker pull mcr.microsoft.com/mssql/server:2019-latest`
-- `docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=PasswordTestDocker!@#" -p 1401:1433 --name sql1 -h sql1 -d mcr.microsoft.com/mssql/server:2019-latest`
-
+  - `docker-compose up` - Executa imagem em daemon (e cria se o passo anterior não tiver sido executado previamente). Dentro do arquivo <root>/docker-compose.yml estão as configurações de portas que o sistema irá utilizar por default a aplicação irá utilizar a porta 49153 e o banco de dados ficará na porta 1401.
 
 ### Execução dos testes
 #### Unitarios:
+- Evidência da execução dos testes:
+<img src="UnitTestsExecution.jpg"/>
+- A classe com o desenvolvimento dos testes unitários é a ConvertAmountToCurrencyTest.cs que está no PATH "UnitTests\Services\CurrencyServiceT", para essa primeira versão foram desenvolvidos dois testes:
+- O primeiro valida se a conversão está funcionando corretamente no caso de Sucesso.
+- O segundo está validando que quando recebemos uma moeda com mais de 4 dígitos, a API está retornando uma mensagem dizendo que pelo menos uma das moedas recebidas está fora do padrão de 3 letras que foi estabelecido.
 
- #### Load
+#### Load
 
 
 
 ## Documentação do endpoint de conversão
-
 ### Endpoint de consulta de moedas cadastradas:
 
 `GET http://localhost:49153/api/currencyconverter/getCurrencies`
@@ -204,15 +201,15 @@ Foi utilizada a API Open Exchange Rates (https://openexchangerates.org/). A esco
  - No plano gratuíto aceita até 1000 requisições por mês, utiliza o dólar como base e os valores são atualizados a cada hora, permitindo diversos recursos a mais nos planos pagos caso seja necessário.
 
 ### Lib de testes
-
+ - xUnit - Utilização do xUnit para criação dos testes automáticos no .net core;
+ - k6 - Para fazer os testes de estresse da aplicação;
 
 ## Links
 - https://docs.docker.com
 
-
 ## TODO:
  - Cheguei a implementar o Swagger para criação de uma documentação mais interativa, mas tive dificuldades para atualizar a documentação criada e deixarei a implementação mais completa da mesma para uma versão 2.0.
  Link do Swagger: http://localhost:49153/swagger/index.html
- - Cobertura total com testes automáticos;
+ - Cobertura total com testes unitários e de integração, além da execução dos mesmos no build do docker;
  -
 
