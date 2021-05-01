@@ -10,7 +10,7 @@ A aplicação roda dentro de uma imagem docker, portanto todo o ambiente é inst
 
 ### Configuração
 
-Os comandos a seguir criam e rodam a aplicação dentro de uma rede docker. Dentro da pasta raiz do repositório:
+O comando a seguir cria e roda a aplicação dentro de uma rede docker, além de um container rodando MS SQL Server para a base de dados na mesma rede. Dentro da pasta raiz do repositório:
   - `docker-compose up` - Executa imagem em daemon (e cria se o passo anterior não tiver sido executado previamente). Dentro do arquivo <root>/docker-compose.yml estão as configurações de portas que o sistema irá utilizar por default a aplicação irá utilizar a porta 49153 e o banco de dados ficará na porta 1401.
 
 ### Execução dos testes
@@ -22,7 +22,42 @@ Os comandos a seguir criam e rodam a aplicação dentro de uma rede docker. Dent
 - O segundo está validando que quando recebemos uma moeda com mais de 4 dígitos, a API está retornando uma mensagem dizendo que pelo menos uma das moedas recebidas está fora do padrão de 3 letras que foi estabelecido.
 
 #### Load
+- Teste de estresse executado no K6 com 3000 VUs fazendo a requisição GET http://localhost:49153/api/currencyconverter?from=BTC&to=EUR&amount=123.45 seguidamente durante 30 segundos, como é possível verificar no resultado abaixo, a API lidou com aproximadamente 2350 requisições por segundo sem elevar muito o tempo de resposta, que ficou abaixo de 530 ms em 95% dos casos.
+k6 run script.js
 
+          /\      |‾‾| /‾‾/   /‾‾/
+     /\  /  \     |  |/  /   /  /
+    /  \/    \    |     (   /   ‾‾\
+   /          \   |  |\  \ |  (‾)  |
+  / __________ \  |__| \__\ \_____/ .io
+
+  execution: local
+     script: script.js
+     output: -
+
+  scenarios: (100.00%) 1 scenario, 3000 max VUs, 1m0s max duration (incl. graceful stop):
+           * default: 3000 looping VUs for 30s (gracefulStop: 30s)
+
+
+running (0m31.0s), 0000/3000 VUs, 72912 complete and 0 interrupted iterations
+default ✓ [======================================] 3000 VUs  30s0
+
+     data_received..................: 13 MB  430 kB/s
+     data_sent......................: 9.6 MB 310 kB/s
+     http_req_blocked...............: avg=35.84ms  min=0s     med=0s       max=2.22s    p(90)=0s       p(95)=0s
+     http_req_connecting............: avg=35.7ms   min=0s     med=0s       max=2.22s    p(90)=0s       p(95)=0s
+     http_req_duration..............: avg=170.02ms min=1.99ms med=115.21ms max=1.71s    p(90)=385.05ms p(95)=530.86ms
+       { expected_response:true }...: avg=170.02ms min=1.99ms med=115.21ms max=1.71s    p(90)=385.05ms p(95)=530.86ms
+     http_req_failed................: 0.00%  ✓ 0      ✗ 72912
+     http_req_receiving.............: avg=145.83µs min=0s     med=0s       max=413.7ms  p(90)=0s       p(95)=984.88µs
+     http_req_sending...............: avg=2.89ms   min=0s     med=0s       max=926.72ms p(90)=0s       p(95)=999.7µs
+     http_req_tls_handshaking.......: avg=0s       min=0s     med=0s       max=0s       p(90)=0s       p(95)=0s
+     http_req_waiting...............: avg=166.97ms min=1.99ms med=115.07ms max=1.24s    p(90)=382.06ms p(95)=522.18ms
+     http_reqs......................: 72912  2350.910414/s
+     iteration_duration.............: avg=1.22s    min=1s     med=1.12s    max=3.85s    p(90)=1.43s    p(95)=1.81s
+     iterations.....................: 72912  2350.910414/s
+     vus............................: 92     min=92   max=3000
+     vus_max........................: 3000   min=3000 max=3000
 
 
 ## Documentação do endpoint de conversão
@@ -188,8 +223,9 @@ Foi criado um Cron Job que é executado em background a cada virada de hora e o 
  Obs. O cache de dados que é utilizado para evitar ficar consultando a base é sempre limpo quando essa tarefa é executada.
 
 ## Escolhas técnicas
-### Framework
-
+### Linguagem e Banco de Dados
+Decidi fazer a aplicação em C# .Net Core, pois é uma linguagem robusta e altamente difundinda pelo mercado, além de diversas fontes de informação e ser suportada pela Microsoft.
+Para o banco de dados, decidi pelo Microsoft SQL Server, pelos mesmos motivos da escolha da linguagem, além de se integrar muito bem com a mesma.
 
 ### Deploy Method
 Docker foi utilizado para simplicidade de criação e execução de um ambiente isolado e replicável.
@@ -208,8 +244,10 @@ Foi utilizada a API Open Exchange Rates (https://openexchangerates.org/). A esco
 - https://docs.docker.com
 
 ## TODO:
- - Cheguei a implementar o Swagger para criação de uma documentação mais interativa, mas tive dificuldades para atualizar a documentação criada e deixarei a implementação mais completa da mesma para uma versão 2.0.
+ - Cheguei a implementar o Swagger para criação de uma documentação mais interativa, mas tive dificuldades para atualizar a documentação criada com as descrições e exemplos dos Endpoints, com isso deixarei a implementação mais completa da mesma para a versão 2.0.
  Link do Swagger: http://localhost:49153/swagger/index.html
  - Cobertura total com testes unitários e de integração, além da execução dos mesmos no build do docker;
- -
+ - Implementar um serviço de HealthCheck para o endpoint.
+ - Implementar análise de vulnerabilidade na API com o uso do Sonar.
+ - Implementar um serviço Redis para gerenciamento do cache da aplicação.
 
