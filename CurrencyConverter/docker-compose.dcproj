@@ -3,11 +3,9 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>43a93e91-a01b-4173-b38a-4e38535ea5c7</ProjectGuid>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/currencyconverter</DockerServiceUrl>
-  </PropertyGroup>
-  <PropertyGroup>
+    <ProjectGuid>b7212b54-b0a9-4719-95d0-0950d5d8ff13</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/currencyconverter</DockerServiceUrl>
     <DockerServiceName>currencyconverter</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
@@ -16,6 +14,5 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
-    <None Include="dockerfile.sqlserver" />
   </ItemGroup>
 </Project>

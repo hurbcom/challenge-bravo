@@ -2,22 +2,18 @@ version: '3.4'
 
 services:
   currencyconverter:
-    image: ${DOCKER_REGISTRY-}currencyconverter
+    image: currencyconverter
     build:
       context: .
       dockerfile: CurrencyConverter/Dockerfile
-    depends_on:
-      - sql1
-    ports:
-      - 8080:8080
-  sql1:
-    image:  ${DOCKER_REGISTRY-}mcr.microsoft.com/mssql/server:2019-latest
-    build:
-      context: .
-      dockerfile: ./dockerfile.sqlserver
     environment:
-      - SA_PASSWORD=PasswordTestDocker!@#
-      - ACCEPT_EULA=Y
+      DBServer: "sql1"
     ports:
-      - 1401:1433
-
+      - "49153:80"
+  sql1:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "PasswordTestDocker!@#"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1401:1433"
