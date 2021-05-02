@@ -18,7 +18,7 @@ O comando a seguir cria e roda a aplicação dentro de uma rede docker, além de
   - `docker-compose up` - Executa imagem em daemon (e cria se o passo anterior não tiver sido executado previamente). Dentro do arquivo <root>/docker-compose.yml estão as configurações de portas que o sistema irá utilizar por default a aplicação irá utilizar a porta 80 e o banco de dados ficará na porta 1433, para acesso a esses ambientes a partir da máquina que está executando a mesma, fiz o link da porta da aplicação para a porta 49153 e para a porta do banco de dados o link foi com a porta 1401.
 
 ### Execução dos testes
-#### Unitarios:
+#### Unitários:
 - Evidência da execução dos testes:
 <img src="UnitTestsExecution.jpg"/>
 - A classe com o desenvolvimento dos testes unitários é a ConvertAmountToCurrencyTest.cs que está no PATH "UnitTests\Services\CurrencyServiceT", para essa primeira versão foram desenvolvidos dois testes:
@@ -100,7 +100,7 @@ Ex. do JSON de Retorno:
 
 `GET http://localhost:49153/api/currencyconverter`
 
-Endpoint responsável por fazer a conversão entre duas moedas e retorna um JSON com o valor décimal recebido convertido na moeda recebida na propriedade `to`
+Endpoint responsável por fazer a conversão entre duas moedas e retorna um JSON com o valor decimal recebido convertido na moeda recebida na propriedade `to`
 Parâmetros:
 - from: (string) 3 caracteres com código de moeda cadastrada
 - to: (string) 3 caracteres com código de moeda cadastrada
@@ -222,13 +222,13 @@ Endpoint responsável por atualizar as cotações (usando o Dólar com base) de 
 
 ### Cron Job de atualização das moedas:
 
-Foi criado um Cron Job que é executado em background a cada virada de hora e o mesmo é responsável por fazer a atualição da cotação de todas as moedas cadastradas na base de dados.
+Foi criado um Cron Job que é executado em background a cada virada de hora e o mesmo é responsável por fazer a atualização da cotação de todas as moedas cadastradas na base de dados.
 
  Obs. O cache de dados que é utilizado para evitar ficar consultando a base é sempre limpo quando essa tarefa é executada.
 
 ## Escolhas técnicas
 ### Linguagem e Banco de Dados
-Decidi fazer a aplicação em C# .Net Core, pois é uma linguagem robusta e altamente difundinda pelo mercado, além de diversas fontes de informação e ser suportada pela Microsoft.
+Decidi fazer a aplicação em C# .Net Core, pois é uma linguagem robusta e altamente difundida pelo mercado, além de diversas fontes de informação e ser suportada pela Microsoft.
 Para o banco de dados, decidi pelo Microsoft SQL Server, pelos mesmos motivos da escolha da linguagem, além de se integrar muito bem com a mesma.
 
 ### Deploy Method
@@ -258,4 +258,5 @@ Foi utilizada a API Open Exchange Rates (https://openexchangerates.org/). A esco
  - Fazer com que o código pegue mais variáveis de configuração (Intervalo de execução do Cron Job, endereço e Apllication Id da API externa, etc) a partir do arquivo appsettings.json.
  - Mover a definição do DbContext para uma interface com base no princípio de injeção de dependência, para que possamos configurar a aplicação para rodar com diversos tipos de banco de dados.
  - Verifiquei que o desafio foi atualizado para que a API também possa fazer a conversão de moedas fictícias, nesse caso teria de criar um novo endpoint que possa receber um nome de moeda e o seu valor em comparação a moeda base utilizada na API, como no exemplo é usada uma moeda com a sigla HURB, também seria necessário alterar a verificação que é feita no Endpoint que realiza a conversão de valores para não limitar mais que a sigla da moeda deva ter apenas 3 dígitos.
-
+ - Criar um Endpoint para que as cotações das moedas fictícias pudessem ser atualizadas na base de dados sem precisar excluir e adicionar a mesma novamente.
+ - Além disso, seria necessário criar uma nova variável na base de dados para marcar a moeda como Real ou Fictícia, pois também teria que atualizar a função de atualizar as moedas cadastradas para não tentar pegar a cotação das moedas fictícias na API Externa.
