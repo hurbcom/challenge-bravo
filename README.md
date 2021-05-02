@@ -257,4 +257,5 @@ Foi utilizada a API Open Exchange Rates (https://openexchangerates.org/). A esco
  - Adicionar mais logs na aplicação.
  - Fazer com que o código pegue mais variáveis de configuração (Intervalo de execução do Cron Job, endereço e Apllication Id da API externa, etc) a partir do arquivo appsettings.json.
  - Mover a definição do DbContext para uma interface com base no princípio de injeção de dependência, para que possamos configurar a aplicação para rodar com diversos tipos de banco de dados.
+ - Verifiquei que o desafio foi atualizado para que a API também possa fazer a conversão de moedas fictícias, nesse caso teria de criar um novo endpoint que possa receber um nome de moeda e o seu valor em comparação a moeda base utilizada na API, como no exemplo é usada uma moeda com a sigla HURB, também seria necessário alterar a verificação que é feita no Endpoint que realiza a conversão de valores para não limitar mais que a sigla da moeda deva ter apenas 3 dígitos.
 
