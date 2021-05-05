@@ -1,6 +1,7 @@
 import { Router } from "express";
 
-import { CurrenciesRepository } from "../repositories/CurrenciesRepositories";
+import { CurrenciesRepository } from "../repositories/CurrenciesRepository";
+import { CreateCurrencyService } from "../services/CreateCurrencyService";
 
 const currenciesRoutes = Router();
 const currenciesRepository = new CurrenciesRepository();
@@ -8,13 +9,11 @@ const currenciesRepository = new CurrenciesRepository();
 currenciesRoutes.post("/", (request, response) => {
     const { symbol } = request.body;
 
-    const currencyAlreadyExists = currenciesRepository.findBySymbol(symbol);
+    const createCurrencyService = new CreateCurrencyService(
+        currenciesRepository
+    );
 
-    if (currencyAlreadyExists) {
-        return response.status(400).json({ error: "Currency already exists" });
-    }
-
-    currenciesRepository.create({ symbol });
+    createCurrencyService.execute({ symbol });
 
     return response.status(201).send();
 });

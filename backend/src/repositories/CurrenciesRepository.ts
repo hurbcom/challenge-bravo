@@ -1,10 +1,10 @@
 import { Currency } from "../model/Currency";
+import {
+    ICurrenciesRepository,
+    ICreateCurrencyDTO,
+} from "./ICurrenciesRepositpry";
 
-interface ICreateCurrencyDTO {
-    symbol: string;
-}
-
-class CurrenciesRepository {
+class CurrenciesRepository implements ICurrenciesRepository {
     private currencies: Currency[];
 
     constructor() {
