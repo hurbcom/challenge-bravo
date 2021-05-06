@@ -20,6 +20,7 @@ currenciesRoutes.post("/import", upload.single("file"), (request, response) => {
 });
 
 currenciesRoutes.get("/", (request, response) => {
+    console.log("reload!");
     return listCurrenciesController.handle(request, response);
 });
 

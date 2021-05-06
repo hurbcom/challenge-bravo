@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+    app:
+        build: .
+        container_name: bravoexchange
+        restart: always
+        ports:
+            - 3333:3333
+        volumes:
+            - .:/usr/app

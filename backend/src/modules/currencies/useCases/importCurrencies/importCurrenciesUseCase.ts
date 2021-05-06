@@ -28,6 +28,7 @@ class ImportCurrenciesUseCase {
                     });
                 })
                 .on("end", () => {
+                    fs.promises.unlink(file.path);
                     resolve(currencies);
                 })
                 .on("error", (err) => {
