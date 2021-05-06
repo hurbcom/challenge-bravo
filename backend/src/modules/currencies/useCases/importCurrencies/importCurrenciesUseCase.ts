@@ -8,7 +8,7 @@ interface IImportCurrency {
 }
 
 class ImportCurrenciesUseCase {
-    constructor(private currenciesRepository: ICurrenciesRepository) { }
+    constructor(private currenciesRepository: ICurrenciesRepository) {}
 
     loadCurrencies(file: Express.Multer.File): Promise<IImportCurrency[]> {
         return new Promise((resolve, reject) => {

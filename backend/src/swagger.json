@@ -1,0 +1,70 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Challenge Bravo Exchange API Documentation",
+      "description": "This is an Exchange API",
+      "version": "1.0.0",
+      "contact": {
+        "email":"mail@mail.com.br"
+      }
+    },
+    "paths": {
+        "/currencies": {
+            "post":{
+                "tags": ["Currency"],
+                "summary": "Create a currency",
+                "description": "Create a new currency",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name":{
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "symbol": "BRL"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "500": {
+                        "description": "Currency already exists"
+                    }
+                }
+            },
+            "get":{
+                "tags": ["Currency"],
+                "summary": "List all currencies",
+                "description": "List all currencies",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "symbol:": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        }
+    }
