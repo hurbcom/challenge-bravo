@@ -1,4 +1,4 @@
-import { Currency } from "../model/Currency";
+import { Currency } from "../../../model/Currency";
 
 interface ICreateCurrencyDTO {
     symbol: string;

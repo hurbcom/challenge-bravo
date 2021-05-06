@@ -1,14 +1,23 @@
-import { Currency } from "../model/Currency";
+import { Currency } from "../../../../model/Currency";
 import {
     ICurrenciesRepository,
     ICreateCurrencyDTO,
-} from "./ICurrenciesRepositpry";
+} from "../ICurrenciesRepository";
 
 class CurrenciesRepository implements ICurrenciesRepository {
     private currencies: Currency[];
 
-    constructor() {
+    private static INSTANCE: CurrenciesRepository;
+
+    private constructor() {
         this.currencies = [];
+    }
+
+    public static getInstance(): CurrenciesRepository {
+        if (!CurrenciesRepository.INSTANCE) {
+            CurrenciesRepository.INSTANCE = new CurrenciesRepository();
+        }
+        return CurrenciesRepository.INSTANCE;
     }
 
     create({ symbol }: ICreateCurrencyDTO): void {

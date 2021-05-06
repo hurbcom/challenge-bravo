@@ -1,10 +1,10 @@
-import { ICurrenciesRepository } from "../repositories/ICurrenciesRepositpry";
+import { ICurrenciesRepository } from "../../repositories/ICurrenciesRepository";
 
 interface IRequest {
     symbol: string;
 }
 
-class CreateCurrencyService {
+class CreateCurrencyUseCase {
     constructor(private currenciesRepository: ICurrenciesRepository) {}
     execute({ symbol }: IRequest): void {
         const currencyAlreadyExists = this.currenciesRepository.findBySymbol(
@@ -19,4 +19,4 @@ class CreateCurrencyService {
     }
 }
 
-export { CreateCurrencyService };
+export { CreateCurrencyUseCase };
