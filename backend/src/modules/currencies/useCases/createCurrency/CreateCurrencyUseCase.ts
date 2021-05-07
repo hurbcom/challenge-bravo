@@ -1,5 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
+import { AppError } from "@shared/errors/AppError";
+
 import { ICurrenciesRepository } from "../../repositories/ICurrenciesRepository";
 
 interface IRequest {
@@ -18,7 +20,7 @@ class CreateCurrencyUseCase {
         );
 
         if (currencyAlreadyExists) {
-            throw new Error("Currency already exists");
+            throw new AppError("Currency already exists");
         }
 
         this.currenciesRepository.create({ symbol });

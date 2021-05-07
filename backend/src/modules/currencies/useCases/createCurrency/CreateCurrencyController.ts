@@ -4,7 +4,6 @@ import { container } from "tsyringe";
 import { CreateCurrencyUseCase } from "./CreateCurrencyUseCase";
 
 class CreateCurrencyController {
-
     async handle(request: Request, response: Response): Promise<Response> {
         const { symbol } = request.body;
 

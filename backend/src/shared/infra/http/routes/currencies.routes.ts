@@ -1,10 +1,9 @@
 import { Router } from "express";
 import multer from "multer";
 
-import { CreateCurrencyController } from "../modules/currencies/useCases/createCurrency/CreateCurrencyController";
-import { CreateCurrencyUseCase } from "../modules/currencies/useCases/createCurrency/CreateCurrencyUseCase";
-import { ImportCurrenciesController } from "../modules/currencies/useCases/importCurrencies/importCurrenciesController";
-import { ListCurrenciesController } from "../modules/currencies/useCases/listCurrencies/ListCurrenciesController";
+import { CreateCurrencyController } from "@modules/currencies/useCases/createCurrency/CreateCurrencyController";
+import { ImportCurrenciesController } from "@modules/currencies/useCases/importCurrencies/importCurrenciesController";
+import { ListCurrenciesController } from "@modules/currencies/useCases/listCurrencies/ListCurrenciesController";
 
 const currenciesRoutes = Router();
 

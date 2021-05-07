@@ -1,7 +1,7 @@
 import { container } from "tsyringe";
 
-import { ICurrenciesRepository } from "../../modules/currencies/repositories/ICurrenciesRepository"
-import { CurrenciesRepository } from "../../modules/currencies/repositories/implementations/CurrenciesRepository"
+import { CurrenciesRepository } from "@modules/currencies/infra/typeorm/repositories/CurrenciesRepository";
+import { ICurrenciesRepository } from "@modules/currencies/repositories/ICurrenciesRepository";
 
 container.registerSingleton<ICurrenciesRepository>(
     "CurrenciesRepository",

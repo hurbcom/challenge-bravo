@@ -1,11 +1,11 @@
 import { getRepository, Repository } from "typeorm";
 
-import { Currency } from "../../../entities/Currency";
 import {
-    ICurrenciesRepository,
     ICreateCurrencyDTO,
-} from "../ICurrenciesRepository";
+    ICurrenciesRepository,
+} from "@modules/currencies/repositories/ICurrenciesRepository";
 
+import { Currency } from "../entities/Currency";
 
 class CurrenciesRepository implements ICurrenciesRepository {
     private repository: Repository<Currency>;
