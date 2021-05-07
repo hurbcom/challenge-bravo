@@ -1,9 +1,10 @@
 import { Router } from "express";
 import multer from "multer";
 
-import { createCurrencyController } from "../modules/currencies/useCases/createCurrency";
-import { importCurrenciesController } from "../modules/currencies/useCases/importCurrencies";
-import { listCurrenciesController } from "../modules/currencies/useCases/listCurrencies";
+import { CreateCurrencyController } from "../modules/currencies/useCases/createCurrency/CreateCurrencyController";
+import { CreateCurrencyUseCase } from "../modules/currencies/useCases/createCurrency/CreateCurrencyUseCase";
+import { ImportCurrenciesController } from "../modules/currencies/useCases/importCurrencies/importCurrenciesController";
+import { ListCurrenciesController } from "../modules/currencies/useCases/listCurrencies/ListCurrenciesController";
 
 const currenciesRoutes = Router();
 
@@ -11,16 +12,19 @@ const upload = multer({
     dest: "./tmp",
 });
 
-currenciesRoutes.post("/", (request, response) => {
-    return createCurrencyController.handle(request, response);
-});
+const createCurrencyController = new CreateCurrencyController();
+const importCurrenciesController = new ImportCurrenciesController();
+const listCurrenciesController = new ListCurrenciesController();
 
-currenciesRoutes.post("/import", upload.single("file"), (request, response) => {
-    return importCurrenciesController.handle(request, response);
-});
+currenciesRoutes.post("/", createCurrencyController.handle);
+
+currenciesRoutes.post(
+    "/import",
+    upload.single("file"),
+    importCurrenciesController.handle
+);
 
 currenciesRoutes.get("/", (request, response) => {
-    console.log("reload!");
     return listCurrenciesController.handle(request, response);
 });
 

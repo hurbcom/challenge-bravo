@@ -1,44 +1,49 @@
-import { Currency } from "../../../../model/Currency";
+import { getRepository, Repository } from "typeorm";
+
+import { Currency } from "../../../entities/Currency";
 import {
     ICurrenciesRepository,
     ICreateCurrencyDTO,
 } from "../ICurrenciesRepository";
 
+
 class CurrenciesRepository implements ICurrenciesRepository {
-    private currencies: Currency[];
+    private repository: Repository<Currency>;
 
-    private static INSTANCE: CurrenciesRepository;
+    // private static INSTANCE: CurrenciesRepository;
 
-    private constructor() {
-        this.currencies = [];
+    constructor() {
+        this.repository = getRepository(Currency);
     }
 
-    public static getInstance(): CurrenciesRepository {
-        if (!CurrenciesRepository.INSTANCE) {
-            CurrenciesRepository.INSTANCE = new CurrenciesRepository();
-        }
-        return CurrenciesRepository.INSTANCE;
-    }
+    // public static getInstance(): CurrenciesRepository {
+    //     if (!CurrenciesRepository.INSTANCE) {
+    //         CurrenciesRepository.INSTANCE = new CurrenciesRepository();
+    //     }
+    //     return CurrenciesRepository.INSTANCE;
+    // }
 
-    create({ symbol }: ICreateCurrencyDTO): void {
-        const currency = new Currency();
+    async create({ symbol }: ICreateCurrencyDTO): Promise<void> {
+        // const currency = new Currency();
 
-        Object.assign(currency, {
+        // Object.assign(currency, {
+        //     symbol,
+        // });
+
+        const currency = this.repository.create({
             symbol,
         });
 
-        this.currencies.push(currency);
+        await this.repository.save(currency);
     }
 
-    list(): Currency[] {
-        return this.currencies;
+    async list(): Promise<Currency[]> {
+        const currencies = await this.repository.find();
+        return currencies;
     }
 
-    findBySymbol(symbol: string): Currency | undefined {
-        const currency = this.currencies.find(
-            (currency) => currency.symbol === symbol
-        );
-
+    async findBySymbol(symbol: string): Promise<Currency | undefined> {
+        const currency = await this.repository.findOne({ symbol });
         return currency;
     }
 }

@@ -1,14 +1,16 @@
 import { Response, Request } from "express";
+import { container } from "tsyringe";
 
 import { CreateCurrencyUseCase } from "./CreateCurrencyUseCase";
 
 class CreateCurrencyController {
-    constructor(private createCurrencyUseCase: CreateCurrencyUseCase) {}
 
-    handle(request: Request, response: Response): Response {
+    async handle(request: Request, response: Response): Promise<Response> {
         const { symbol } = request.body;
 
-        this.createCurrencyUseCase.execute({ symbol });
+        const createCurrencyUseCase = container.resolve(CreateCurrencyUseCase);
+
+        await createCurrencyUseCase.execute({ symbol });
 
         return response.status(201).send();
     }

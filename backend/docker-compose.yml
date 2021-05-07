@@ -1,6 +1,18 @@
 version: "3.7"
 
 services:
+    database_bravo:
+        image: postgres
+        container_name: database_bravo
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=docker
+            - POSTGRES_PASSWORD=brex
+            - POSTGRES_DB=bravoexchange
+        volumes:
+            - pgdata:/data/postgres
     app:
         build: .
         container_name: bravoexchange
@@ -9,3 +21,11 @@ services:
             - 3333:3333
         volumes:
             - .:/usr/app
+        links:
+            - database_bravo
+        depends_on:
+            - database_bravo
+
+volumes:
+    pgdata:
+        driver: local

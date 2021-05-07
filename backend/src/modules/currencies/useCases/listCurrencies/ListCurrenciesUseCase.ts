@@ -1,10 +1,17 @@
-import { Currency } from "../../../../model/Currency";
+import { inject, injectable } from "tsyringe";
+
+import { Currency } from "../../../entities/Currency";
 import { ICurrenciesRepository } from "../../repositories/ICurrenciesRepository";
 
+@injectable()
 class ListCurrenciesUseCase {
-    constructor(private currenciesRepository: ICurrenciesRepository) {}
-    execute(): Currency[] {
-        const currencies = this.currenciesRepository.list();
+    constructor(
+        @inject("CurrenciesRepository")
+        private currenciesRepository: ICurrenciesRepository
+    ) {}
+
+    async execute(): Promise<Currency[]> {
+        const currencies = await this.currenciesRepository.list();
 
         return currencies;
     }

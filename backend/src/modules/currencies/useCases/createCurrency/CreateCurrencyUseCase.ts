@@ -1,13 +1,19 @@
+import { inject, injectable } from "tsyringe";
+
 import { ICurrenciesRepository } from "../../repositories/ICurrenciesRepository";
 
 interface IRequest {
     symbol: string;
 }
 
+@injectable()
 class CreateCurrencyUseCase {
-    constructor(private currenciesRepository: ICurrenciesRepository) {}
-    execute({ symbol }: IRequest): void {
-        const currencyAlreadyExists = this.currenciesRepository.findBySymbol(
+    constructor(
+        @inject("CurrenciesRepository")
+        private currenciesRepository: ICurrenciesRepository
+    ) {}
+    async execute({ symbol }: IRequest): Promise<void> {
+        const currencyAlreadyExists = await this.currenciesRepository.findBySymbol(
             symbol
         );
 

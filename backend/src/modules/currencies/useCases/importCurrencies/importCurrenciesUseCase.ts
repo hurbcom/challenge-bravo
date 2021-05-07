@@ -1,5 +1,6 @@
 import csvParse from "csv-parse";
 import fs from "fs";
+import { inject, injectable } from "tsyringe";
 
 import { ICurrenciesRepository } from "../../repositories/ICurrenciesRepository";
 
@@ -7,8 +8,12 @@ interface IImportCurrency {
     symbol: string;
 }
 
+@injectable()
 class ImportCurrenciesUseCase {
-    constructor(private currenciesRepository: ICurrenciesRepository) {}
+    constructor(
+        @inject("CurrenciesRepository")
+        private currenciesRepository: ICurrenciesRepository
+    ) {}
 
     loadCurrencies(file: Express.Multer.File): Promise<IImportCurrency[]> {
         return new Promise((resolve, reject) => {
@@ -42,12 +47,12 @@ class ImportCurrenciesUseCase {
         currencies.map(async (currency) => {
             const { symbol } = currency;
 
-            const existCurrency = this.currenciesRepository.findBySymbol(
+            const existCurrency = await this.currenciesRepository.findBySymbol(
                 symbol
             );
 
             if (!existCurrency) {
-                this.currenciesRepository.create({
+                await this.currenciesRepository.create({
                     symbol,
                 });
             }
