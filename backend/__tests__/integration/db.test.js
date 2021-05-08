@@ -9,8 +9,6 @@ describe('Database',()=>{
             icon:"icone",
             fictional:true
         })
-        console.log(currency)
-
         expect(currency.code).toBe('Alf')
     })
 })

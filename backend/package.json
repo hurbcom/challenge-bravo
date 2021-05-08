@@ -14,7 +14,7 @@
     "build": "build",
     "pretest": "sequelize db:migrate",
     "test": "jest",
-    "posttest": "sequelize db:migrate:undo:all",
+    "posttest": " sequelize db:migrate:undo:all",
     "dev": "nodemon src/server.js --ignore tests"
   },
   "devDependencies": {

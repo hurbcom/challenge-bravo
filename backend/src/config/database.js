@@ -16,7 +16,7 @@ dbConfig = {
     username: DB_USER,
     password: DB_PASS,
     database: DB_NAME,
-    dialect: DB_DIALECT_TEST || "postgres",
+    dialect: NODE_ENV==="test"?DB_DIALECT_TEST:DB_DIALECT_PROD || "postgres",
     storage: "./__tests__/database.sqlite",
     operatorsAliases: false,
     logging: false,
@@ -27,10 +27,4 @@ dbConfig = {
     }
 };
 
-// if(NODE_ENV==="test"){
-//     dbConfig = {
-//         host: DB_HOST,
-//         dialect: DB_DIALECT_TEST || "",
-//     }
-// }
-  module.exports = dbConfig
+module.exports = dbConfig
