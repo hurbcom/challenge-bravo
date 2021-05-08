@@ -1,17 +1,19 @@
 {
     "openapi": "3.0.0",
     "info": {
-      "title": "Challenge Bravo Exchange API Documentation",
-      "description": "This is an Exchange API",
-      "version": "1.0.0",
-      "contact": {
-        "email":"mail@mail.com.br"
-      }
+        "title": "Challenge Bravo Exchange API Documentation",
+        "description": "This is an Exchange API",
+        "version": "1.0.0",
+        "contact": {
+            "email": "mail@mail.com.br"
+        }
     },
     "paths": {
         "/currencies": {
-            "post":{
-                "tags": ["Currency"],
+            "post": {
+                "tags": [
+                    "Currency"
+                ],
                 "summary": "Create a currency",
                 "description": "Create a new currency",
                 "requestBody": {
@@ -20,7 +22,7 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "name":{
+                                    "name": {
                                         "type": "string"
                                     }
                                 }
@@ -40,8 +42,42 @@
                     }
                 }
             },
-            "get":{
-                "tags": ["Currency"],
+            "delete": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Delete a currency",
+                "description": "Delete an existence currency",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "symbol": "BRL"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Removed"
+                    },
+                    "404": {
+                        "description": "Currency not found"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Currency"
+                ],
                 "summary": "List all currencies",
                 "description": "List all currencies",
                 "responses": {
@@ -67,31 +103,108 @@
             }
         },
         "/currencies/import": {
-            "post":{
-                "tags": ["Currency"],
+            "post": {
+                "tags": [
+                    "Currency"
+                ],
                 "summary": "Upload a new currency",
                 "description": "Upload a new currency",
                 "requestBody": {
-                  "content": {
-                    "multipart/form-data": {
-                      "schema": {
-                        "type": "object",
-                        "properties": {
-                          "file": {
-                            "type": "string",
-                            "format": "binary"
-                          }
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
                         }
-                      }
                     }
-                  }
                 },
                 "responses": {
-                  "201": {
-                    "description": "Created"
-                  }
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/exchanges?from={from}&to={to}&amount={amount}": {
+            "get": {
+                "tags": [
+                    "Exchanges"
+                ],
+                "summary": "Convert currencies",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "from",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The symbol of currency to convert from"
+                    },
+                    {
+                        "in": "query",
+                        "name": "to",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The symbol of currency to convert to"
+                    },
+                    {
+                        "in": "query",
+                        "name": "amount",
+                        "schema": {
+                            "type": "numeric"
+                        },
+                        "description": "Amount to be converted"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id:": {
+                                                "type": "string"
+                                            },
+                                            "from:": {
+                                                "type": "string"
+                                            },
+                                            "to:": {
+                                                "type": "string"
+                                            },
+                                            "amount": {
+                                                "type": "numeric"
+                                            },
+                                            "value": {
+                                                "type": "numeric"
+                                            },
+                                            "rate": {
+                                                "type": "string"
+                                            },
+                                            "base": {
+                                                "type": "string"
+                                            },
+                                            "expires_date": {
+                                                "type": "date"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
-        }
     }
+}
