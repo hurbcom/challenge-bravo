@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 import { v4 as uuidv4 } from "uuid";
 
+import appConfig from "@config/app";
 import { ICurrenciesRepository } from "@modules/currencies/repositories/ICurrenciesRepository";
 import { Exchange } from "@modules/exchanges/infra/typeorm/entities/Exchange";
 import { IExchangeRepository } from "@modules/exchanges/repositories/IExchangeRepository";
-import appConfig from "@shared/config/app";
 import { AppError } from "@shared/errors/AppError";
 import { api } from "@shared/services/api";
 import { findValues } from "@shared/utils/jsonHandler.utils";
@@ -12,11 +12,7 @@ import { findValues } from "@shared/utils/jsonHandler.utils";
 interface IRequest {
     from: string;
     to: string;
-    // expires_at: Date;
     amount: number;
-    // value: number;
-    // rate: number;
-    // base: string;
 }
 
 @injectable()
@@ -28,6 +24,13 @@ class CreateExchangeUseCase {
         private currenciesRepository: ICurrenciesRepository
     ) {}
 
+    async getExchangeFromApi(currency: string): Promise<any> {
+        const fromData = await api.get(`/${currency}`).then((res) => {
+            return res.data[0];
+            // convertInfo = res.data;
+        });
+        return fromData.price_usd ?? 1;
+    }
     async execute({ from, to, amount }: IRequest): Promise<Exchange> {
         const currencyFromUnavailable = await this.currenciesRepository.findBySymbol(
             from
@@ -43,7 +46,7 @@ class CreateExchangeUseCase {
             );
         }
 
-        let base = "USD";
+        const base = "USD";
         const today = new Date();
         const expireDate = today.setDate(today.getDate() + 1);
 
@@ -57,15 +60,25 @@ class CreateExchangeUseCase {
 
         // get exchange data from available history
         if (convertExpired) {
+            console.log("historico");
             const now = new Date().getDate();
             const diffTime = Math.abs(
                 now - convertExpired.created_date.getDate()
             );
             const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
 
-            if (diffHours < 24) {
-                const value = (amount * convertExpired.rate).toFixed(2);
+            if (
+                diffHours < 24 &&
+                convertExpired.from === from &&
+                convertExpired.rate.toString() !== "0"
+            ) {
+                console.log("resgate");
+                let value = amount * convertExpired.rate;
 
+                // in case convertion returns very small rates
+                if (!value) {
+                    value = 0;
+                }
                 Object.assign(convertedData, {
                     id: uuidv4(),
                     from,
@@ -81,18 +94,23 @@ class CreateExchangeUseCase {
             }
         }
 
-        let convertInfo;
-        // get exchange data from external API
-        await api
-            .get(`/live?access_key=${appConfig.EXCHANGE_API.apiKey}`)
-            .then((res) => {
-                convertInfo = res.data;
-            });
+        const fromData = await this.getExchangeFromApi(from);
+        const toData = await this.getExchangeFromApi(to);
 
-        base = convertInfo.source;
-        const rateTo = findValues(convertInfo.quotes, `USD${to}`); // .toFixed(2);
-        const rateFrom = findValues(convertInfo.quotes, `USD${from}`); // .toFixed(2);
-        const value = parseInt(((rateTo / rateFrom) * amount).toFixed(2), 10);
+        let rate = fromData / toData;
+
+        let value = rate
+            ? rate * amount // rate valid
+            : (fromData * amount) / toData; // try to compensate rate diference with amount
+
+        // in case convertion returns very small rates
+        if (!value) {
+            value = 0;
+        }
+
+        if (!rate) {
+            rate = 0;
+        }
 
         const exchange = await this.exchangeRepository.create({
             from,
@@ -100,7 +118,7 @@ class CreateExchangeUseCase {
             expires_date: new Date(),
             amount,
             value,
-            rate: rateTo / rateFrom,
+            rate,
             base,
         });
 
