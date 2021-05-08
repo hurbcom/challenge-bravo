@@ -5,8 +5,9 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
-    "mysql2": "^2.2.5",
-    "sequelize": "^6.6.2"
+    "pg": "^7.8.0",
+    "sequelize": "^6.6.2",
+    "dotenv": "^6.2.0"
   },
   "scripts": {
     "start": "node src/server.js",
