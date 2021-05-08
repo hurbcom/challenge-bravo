@@ -1,13 +1,22 @@
 require("dotenv").config({
-    path: process.env.NODE_ENV === "test" ? ".env.test" : ".env"
-  });
+    path: ".env"
+});
+const{
+    DB_HOST,
+    DB_USER,
+    DB_PASS,
+    DB_NAME,
+    DB_DIALECT_PROD,
+    DB_DIALECT_TEST,
+    NODE_ENV
+} = process.env
 
-  module.exports = {
-    host: process.env.DB_HOST,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    dialect: process.env.DB_DIALECT || "postgres",
+dbConfig = {
+    host: DB_HOST,
+    username: DB_USER,
+    password: DB_PASS,
+    database: DB_NAME,
+    dialect: DB_DIALECT_TEST || "postgres",
     storage: "./__tests__/database.sqlite",
     operatorsAliases: false,
     logging: false,
@@ -16,4 +25,12 @@ require("dotenv").config({
       underscored: true,
       underscoredAll: true
     }
-  };
+};
+
+// if(NODE_ENV==="test"){
+//     dbConfig = {
+//         host: DB_HOST,
+//         dialect: DB_DIALECT_TEST || "",
+//     }
+// }
+  module.exports = dbConfig
