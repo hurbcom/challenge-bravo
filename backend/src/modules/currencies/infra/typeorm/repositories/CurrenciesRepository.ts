@@ -46,6 +46,10 @@ class CurrenciesRepository implements ICurrenciesRepository {
         const currency = await this.repository.findOne({ symbol });
         return currency;
     }
+    async delete({ symbol }: ICreateCurrencyDTO): Promise<void> {
+        const currency = await this.repository.findOne({ symbol });
+        await this.repository.delete(currency);
+    }
 }
 
 export { CurrenciesRepository };

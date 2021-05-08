@@ -2,6 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 
 import { CreateCurrencyController } from "@modules/currencies/useCases/createCurrency/CreateCurrencyController";
+import { DeleteCurrencyController } from "@modules/currencies/useCases/deleteCurrency/DeleteCurrencyController";
 import { ImportCurrenciesController } from "@modules/currencies/useCases/importCurrencies/importCurrenciesController";
 import { ListCurrenciesController } from "@modules/currencies/useCases/listCurrencies/ListCurrenciesController";
 
@@ -12,10 +13,12 @@ const upload = multer({
 });
 
 const createCurrencyController = new CreateCurrencyController();
+const deleteCurrencyController = new DeleteCurrencyController();
 const importCurrenciesController = new ImportCurrenciesController();
 const listCurrenciesController = new ListCurrenciesController();
 
 currenciesRoutes.post("/", createCurrencyController.handle);
+currenciesRoutes.delete("/", deleteCurrencyController.handle);
 
 currenciesRoutes.post(
     "/import",

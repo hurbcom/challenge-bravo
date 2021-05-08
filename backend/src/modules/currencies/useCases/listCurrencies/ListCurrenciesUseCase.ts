@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
-import { Currency } from "../../../entities/Currency";
+import { Currency } from "@modules/currencies/infra/typeorm/entities/Currency";
+
 import { ICurrenciesRepository } from "../../repositories/ICurrenciesRepository";
 
 @injectable()

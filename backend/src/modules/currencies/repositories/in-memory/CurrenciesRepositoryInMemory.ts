@@ -26,6 +26,16 @@ class CurrenciesRepositoryInMemory implements ICurrenciesRepository {
 
         this.currencies.push(currency);
     }
+
+    async delete({ symbol }: ICreateCurrencyDTO): Promise<void> {
+        const currency = await this.currencies.find(
+            (currency) => currency.symbol === symbol
+        );
+        const index = this.currencies.indexOf(currency);
+        if (index > -1) {
+            this.currencies.splice(index, 1);
+        }
+    }
 }
 
 export { CurrenciesRepositoryInMemory };
