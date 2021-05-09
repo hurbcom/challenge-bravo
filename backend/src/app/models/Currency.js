@@ -4,7 +4,7 @@ module.exports =(sequelize,DataTypes) =>{
         code:DataTypes.STRING,
         icon:DataTypes.STRING,
         value:DataTypes.FLOAT,
-        fictional:DataTypes.BOOLEAN,
+        fictional:DataTypes.BOOLEAN
     })
     return Currency
 }

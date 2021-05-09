@@ -1,6 +1,10 @@
-const {Currency} = require('../../src/models')
+const {Currency} = require('../../src/app/models')
+const truncate = require("../../src/utils/truncate");
 
 describe('Database',()=>{
+    beforeEach(async () => {
+        await truncate();
+    });
     it('should create new currency',async()=>{
         const currency = await Currency.create({
             name:"Alfaya",

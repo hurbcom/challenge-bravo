@@ -26,7 +26,7 @@ module.exports = {
         },
         value:{
           type:sequelize.FLOAT,
-          allowNull:false
+          allowNull:true
         },
         fictional:{
           type:sequelize.BOOLEAN,

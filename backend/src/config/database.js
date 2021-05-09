@@ -11,7 +11,7 @@ const{
     NODE_ENV
 } = process.env
 
-dbConfig = {
+module.exports =  {
     host: DB_HOST,
     username: DB_USER,
     password: DB_PASS,
@@ -26,5 +26,3 @@ dbConfig = {
       underscoredAll: true
     }
 };
-
-module.exports = dbConfig
