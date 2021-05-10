@@ -1,0 +1,426 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "REST API",
+    "description": ""
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [],
+  "produces": [],
+  "paths": {
+    "/currency": {
+      "post": {
+        "tags": [
+          "Currency"
+        ],
+        "description": "Pega todas as moedas disponiveis no banco e devolve um array em json",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de todas as moedas encontradas",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number",
+                        "example": 3
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Lek"
+                      },
+                      "code": {
+                        "type": "string",
+                        "example": "ALL"
+                      },
+                      "icon": {
+                        "type": "string",
+                        "example": "https://currencyfreaks.com/photos/flags/all.png"
+                      },
+                      "value": {
+                        "type": "number",
+                        "example": 101.086542
+                      },
+                      "fictional": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2021-05-10T11:37:58.002Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "example": "2021-05-10T12:43:04.689Z"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Algum problema no banco",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "data": {
+                  "type": "string",
+                  "example": "Something run bad."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/currency/list": {
+      "get": {
+        "tags": [
+          "Currency"
+        ],
+        "description": "Pega todas as moedas disponiveis no banco e devolve um array em json",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de todas as moedas encontradas",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number",
+                        "example": 3
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Lek"
+                      },
+                      "code": {
+                        "type": "string",
+                        "example": "ALL"
+                      },
+                      "icon": {
+                        "type": "string",
+                        "example": "https://currencyfreaks.com/photos/flags/all.png"
+                      },
+                      "value": {
+                        "type": "number",
+                        "example": 101.086542
+                      },
+                      "fictional": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2021-05-10T11:37:58.002Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "example": "2021-05-10T12:43:04.689Z"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Algum problema no banco",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "data": {
+                  "type": "string",
+                  "example": "Something run bad."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/currency/{code}": {
+      "get": {
+        "tags": [
+          "Currency"
+        ],
+        "description": "Pega uma oeda especifica usando como paramentro seu código de moeda e devolve em json",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Codigo da moeda"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Moeda encontrada no banco com o código passado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 21
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Brazilian Real"
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "BRL"
+                    },
+                    "icon": {
+                      "type": "string",
+                      "example": "https://currencyfreaks.com/photos/flags/brl.png"
+                    },
+                    "value": {
+                      "type": "number",
+                      "example": 5.237
+                    },
+                    "fictional": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2021-05-10T11:37:58.003Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2021-05-10T12:42:14.594Z"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Algum problema no banco",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "data": {
+                  "type": "string",
+                  "example": "Your currency don´t exist in our database."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/currency/transform/{from}/{to}/{amount}": {
+      "get": {
+        "tags": [
+          "Currency"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Codigo da moeda de origem"
+          },
+          {
+            "name": "to",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Codigo da moeda destino"
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Quantidade de moeda a ser convertida"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Moeda encontrada no banco com o código passado e convertida",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 21
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Brazilian Real"
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "BRL"
+                    },
+                    "icon": {
+                      "type": "string",
+                      "example": "https://currencyfreaks.com/photos/flags/brl.png"
+                    },
+                    "value": {
+                      "type": "number",
+                      "example": 5.237
+                    },
+                    "fictional": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2021-05-10T11:37:58.003Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2021-05-10T13:08:08.982Z"
+                    }
+                  }
+                },
+                "to": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 51
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Euro"
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "EUR"
+                    },
+                    "icon": {
+                      "type": "string",
+                      "example": "https://currencyfreaks.com/photos/flags/eur.png"
+                    },
+                    "value": {
+                      "type": "number",
+                      "example": 0.821241
+                    },
+                    "fictional": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2021-05-10T11:37:58.005Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2021-05-10T13:08:08.909Z"
+                    }
+                  }
+                },
+                "result": {
+                  "type": "number",
+                  "example": 3.136303227038381
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Algum problema no banco",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "data": {
+                  "type": "string",
+                  "example": "One of your passed currency don´t exist in our database."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {}
+}

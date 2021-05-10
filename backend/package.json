@@ -9,6 +9,7 @@
     "express": "^4.17.1",
     "pg": "^7.8.0",
     "sequelize": "^6.6.2",
+    "swagger-ui-express": "^4.1.6",
     "utf8": "^3.0.0"
   },
   "scripts": {
@@ -16,12 +17,14 @@
     "build": "build",
     "pretest": "sequelize db:migrate",
     "test": "jest",
+    "swagger": "node swagger.js",
     "posttest": " sequelize db:migrate:undo:all",
     "predev": "sequelize db:migrate",
-    "dev": "nodemon src/server.js --ignore tests",
+    "dev": "nodemon swagger.js --ignore swagger.json",
     "postdev": "sequelize db:migrate:undo:all"
   },
   "devDependencies": {
+    "swagger-autogen": "^2.6.3",
     "jest": "^24.1.0",
     "nodemon": "^2.0.7",
     "sequelize-cli": "^6.2.0",
