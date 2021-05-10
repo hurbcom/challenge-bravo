@@ -1,3 +1,5 @@
 node_modules/
 .env
 yarn.lock
+__test__/database.sqlite
+coverage/
