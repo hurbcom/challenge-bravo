@@ -1,7 +1,12 @@
 const {Currency} = require('../models')
 
 const create = async(obj)=>{
-    return await Currency.create(obj)
+    try {
+        const currency = Currency.create(obj)
+        return Promise.resolve(currency)
+    } catch (error) {
+        return Promise.reject(new Error("Currency already exists")).then(resolved, rejected);
+    }
 }
 
 const findAll = async(obj)=>{

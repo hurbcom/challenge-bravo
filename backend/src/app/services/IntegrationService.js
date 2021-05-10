@@ -25,7 +25,7 @@ const populate = async(currencies)=>{
                 fictional:false
             })
         } catch (error) {
-            return Promise.reject(error)
+            return false
         }
     });
     return Promise.resolve({amount:currencies.length})

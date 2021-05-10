@@ -12,7 +12,7 @@ class IntegrationController {
             Promise.all([currencies, amount, values,populado]).then(() => {
             });
         } catch (error) {
-            return Promise.reject(false)
+            return Promise.reject(new Error(false))
         }
         return Promise.resolve(true)
     }
