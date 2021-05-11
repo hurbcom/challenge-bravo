@@ -12,10 +12,12 @@ class AppController{
 
     middlewares(){
         this.express.use(express.json())
+        this.express.use(require('./app/helpers/checkDate'))
     }
 
     routes(){
         this.express.use(require("./routes"))
+        // this.express.use(require("./app/helpers/checkDate"));
     }
 }
 

@@ -49,6 +49,9 @@ class CurrenciesController {
         const newCurrency = req.body
         const { error }  = validation.currencyValidation.validate(newCurrency);
 
+        // manter todas os codes um upercase
+        newCurrency.code = newCurrency.code.toUpperCase()
+
         if(error){
             res.status(400).json(formatResponse(false,error))
         }
@@ -113,6 +116,11 @@ class CurrenciesController {
         }
 
         const att = req.body
+
+        // manter todas os codes um upercase
+        if (att.code){
+            att.code = att.code.toUpperCase()
+        }
 
         try {
             const currency = await CurrenciesService.findById(id)
