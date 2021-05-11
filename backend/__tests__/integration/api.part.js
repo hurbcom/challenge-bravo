@@ -40,7 +40,7 @@ describe('Api test',()=>{
         expect(response.status).toBe(400)
     })
 
-    it('should get status 200 on /currency',async()=>{
+    it('should get status 200 on post /currency',async()=>{
         const mock = {
             "name":"Moeda alfaya2",
             "code":"Alf2",
@@ -54,7 +54,7 @@ describe('Api test',()=>{
         expect(response.status).toBe(200)
     })
 
-    it('should get status 400 on /currency',async()=>{
+    it('should get status 400 on post /currency',async()=>{
         const mock = {
             "name":"Moeda alfaya2",
             "code":"Alf2",
@@ -68,7 +68,7 @@ describe('Api test',()=>{
         expect(response.status).toBe(400)
     })
 
-    it('should get status 200 on /currency/:id (acredito que esse falhe por causa d tipo do banco)',async()=>{
+    it('should get status 200 on patch /currency/:id (acredito que esse falhe por causa dos testes anteriores eu n sei a referencia)',async()=>{
         // const response = await request(app)
         // .patch("/currency/1")
         // .send({code:"mudado"})
@@ -79,7 +79,7 @@ describe('Api test',()=>{
         expect(response).toBe(true)
     })
 
-    it('should get status 400 on /currency/:id (acredito que esse falhe por causa d tipo do banco)',async()=>{
+    it('should get status 400 on patch /currency/:id (acredito que esse falhe por causa dos testes anteriores eu n sei a referencia)',async()=>{
         // const response = await request(app)
         // .patch("/currency/0")
         // .send({code:"mudado"})
@@ -88,5 +88,14 @@ describe('Api test',()=>{
         const response =  true
 
         expect(response).toBe(true)
+    })
+
+    it('should get status 200 on delete /currency/:id (acredito que esse falhe por causa dos testes anteriores eu n sei a referencia)',async()=>{
+        const response = await request(app)
+        .delete("/currency/400")
+
+        // const response =  true
+
+        expect(response.status).toBe(200)
     })
 })

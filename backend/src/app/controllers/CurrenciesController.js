@@ -1,6 +1,6 @@
 const CurrenciesService = require('../services/CurrenciesService')
 const Joi = require('joi');
-const {currencyValidation,codeValidation} = require('../helpers/validate.currency')
+const validation = require('../helpers/validate.currency')
 const {formatResponse} = require('../../utils/format.response')
 
 class CurrenciesController {
@@ -47,11 +47,12 @@ class CurrenciesController {
         */
 
         const newCurrency = req.body
-        const { error }  = currencyValidation.validate(newCurrency);
+        const { error }  = validation.currencyValidation.validate(newCurrency);
 
         if(error){
             res.status(400).json(formatResponse(false,error))
         }
+
         try {
             const freshNew = await CurrenciesService.create(newCurrency)
             res.status(200).json(formatResponse(true,freshNew))
@@ -104,15 +105,70 @@ class CurrenciesController {
             }
         */
         const {id} = req.params
+
+        const { error }  = validation.IdValidation.validate({id});
+
+        if(error){
+            res.status(400).json(formatResponse(false,error))
+        }
+
         const att = req.body
 
         try {
             const currency = await CurrenciesService.findById(id)
             const response = await CurrenciesService.patch(currency,att)
-            res.status(200).send(formatResponse(true,currency))
+            res.status(200).json(formatResponse(true,response))
         } catch (error) {
-            res.status(400).send(formatResponse(false,error))
+            res.status(400).json(formatResponse(false,error))
         }
+    }
+
+    async deleteCurrency(req,res){
+        /*
+            #swagger.tags = ['Currency']
+            #swagger.description = 'Apaga uma moeda'
+            #swagger.parameters['id'] = { description: "Id da moeda a ser deletada" }
+            #swagger.responses[200] = {
+                description: 'Moeda atualizada por este processo',
+                schema: {
+                    "success": true,
+                    "data":
+                    {
+                        "id": 21,
+                        "name": "Brazilian Real",
+                        "code": "BRL",
+                        "icon": "https://currencyfreaks.com/photos/flags/brl.png",
+                        "value": 5.237,
+                        "fictional": false,
+                        "createdAt": "2021-05-10T11:37:58.003Z",
+                        "updatedAt": "2021-05-10T12:42:14.594Z"
+                    }
+                }
+            }
+            #swagger.responses[400] = {
+                description: 'Algum problema no banco, o id selecionado não existe',
+                schema: {
+                    "success": false,
+                    "data": "Your currency don´t exist in our database."
+                }
+            }
+        */
+        const {id} = req.params
+
+        const { error }  = validation.IdValidation.validate({id});
+
+        if(error){
+            res.status(400).json(formatResponse(false,error))
+        }
+
+        try {
+            const currency = await CurrenciesService.findById(id)
+            const response = await CurrenciesService.deleteCurrency(currency)
+            res.status(200).json(formatResponse(true,response))
+        } catch (error) {
+            res.status(400).json(formatResponse(false,error))
+        }
+
     }
 
     async getCurrency(req,res){
@@ -146,7 +202,7 @@ class CurrenciesController {
         */
         const { code }= req.params
 
-        const { error }  = codeValidation.validate({code});
+        const { error }  = validation.codeValidation.validate({code});
 
         if(error){
             res.status(400).json(formatResponse(false,error))

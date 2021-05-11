@@ -33,6 +33,10 @@ const patch = async(currency,att)=>{
     return await currency.update(att)
 }
 
+const deleteCurrency = async(currency)=>{
+    return await currency.destroy()
+}
+
 const updateValue = async(code,value)=>{
     let local = await Currency.findOne({ where: {code:code} })
     return await local.update({value:value})
@@ -42,6 +46,6 @@ const transform = (valor1,valor2,amount) =>{
     return (valor2/valor1) * amount
 }
 
-const CurrenciesService ={create,findAll,findOneByCode,updateValue,transform,findById,patch}
+const CurrenciesService ={create,findAll,findOneByCode,updateValue,transform,findById,patch,deleteCurrency}
 
 module.exports = CurrenciesService

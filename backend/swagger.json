@@ -247,6 +247,94 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Currency"
+        ],
+        "description": "Apaga uma moeda",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Id da moeda a ser deletada"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Moeda atualizada por este processo",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 21
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Brazilian Real"
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "BRL"
+                    },
+                    "icon": {
+                      "type": "string",
+                      "example": "https://currencyfreaks.com/photos/flags/brl.png"
+                    },
+                    "value": {
+                      "type": "number",
+                      "example": 5.237
+                    },
+                    "fictional": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2021-05-10T11:37:58.003Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2021-05-10T12:42:14.594Z"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Algum problema no banco, o id selecionado não existe",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "data": {
+                  "type": "string",
+                  "example": "Your currency don´t exist in our database."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/currency/list": {

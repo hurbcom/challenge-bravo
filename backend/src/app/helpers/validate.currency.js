@@ -67,10 +67,20 @@ const codeValidation = Joi.object().keys({
 // Objeto para validar quando atualiza uma moeda
 
 
+const IdValidation = Joi.object().keys({
+    id: Joi.number()
+    .greater(0)
+    .required()
+    .messages({
+        "number.base": `"id" should be a type of 'number'`,
+        "number.greater": `"id" must be greather then {#limit}`,
+        "any.required": `"id" is a mandatory field`
+    })
+});
 
 
 
 
+const validation ={currencyValidation,codeValidation,IdValidation}
 
-
-module.exports = {currencyValidation,codeValidation}
+module.exports = validation
