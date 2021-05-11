@@ -3,3 +3,4 @@ node_modules/
 yarn.lock
 __test__/database.sqlite
 coverage/
+database.sqlite
