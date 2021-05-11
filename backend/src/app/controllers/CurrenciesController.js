@@ -1,6 +1,61 @@
 const CurrenciesService = require('../services/CurrenciesService')
+const Joi = require('joi');
+const {currencyValidation,codeValidation} = require('../helpers/validate.currency')
+const {formatResponse} = require('../../utils/format.response')
 
 class CurrenciesController {
+    async makeNewCurrency(req,res){
+        /*
+            #swagger.tags = ['Currency']
+            #swagger.description = 'Cria uma nova moeda'
+            #swagger.parameters['currency'] = {
+                in: 'body',
+                description: 'Moeda nova.',
+                required: true,
+                schema: {
+                    "name":"string",
+                    "code":"string",
+                    "icon":"string",
+                    "value":"float",
+                    "fictional":"boolean"
+                }
+           }
+            #swagger.responses[200] = {
+                description: 'Moeda encontrada no banco com o código passado',
+                schema: {
+                    "success": true,
+                    "data":
+                    {
+                        "id": 21,
+                        "name": "Brazilian Real",
+                        "code": "BRL",
+                        "icon": "https://currencyfreaks.com/photos/flags/brl.png",
+                        "value": 5.237,
+                        "fictional": false,
+                        "createdAt": "2021-05-10T11:37:58.003Z",
+                        "updatedAt": "2021-05-10T12:42:14.594Z"
+                    }
+                }
+            }
+            #swagger.responses[400] = {
+                description: 'Algum problema no banco',
+                schema: {
+                    "success": false,
+                    "data": "Your currency don´t exist in our database."
+                }
+            }
+        */
+
+        const newCurrency = req.body
+        const { error }  = currencyValidation.validate(newCurrency);
+
+        if(error){
+            res.status(400).json(formatResponse(false,error))
+        }
+
+
+    }
+
     async getCurrency(req,res){
         /*
             #swagger.tags = ['Currency']
@@ -30,12 +85,19 @@ class CurrenciesController {
                 }
             }
         */
-          const { code }= req.params
+        const { code }= req.params
+
+        const { error }  = codeValidation.validate({code});
+
+        if(error){
+            res.status(400).json(formatResponse(false,error))
+        }
+
         try {
             const currency = await CurrenciesService.findOneByCode(code)
-            res.status(200).json({'success':true,data:currency})
+            res.status(200).json(formatResponse(true,currency))
         } catch (error) {
-            res.status(400).json({'success':false,data:"Your currency don´t exist in our database."})
+            res.status(400).json(formatResponse(false,"Your currency don´t exist in our database."))
         }
     }
 
@@ -73,9 +135,9 @@ class CurrenciesController {
         */
         try {
             const currencies = await CurrenciesService.findAll()
-            res.status(200).json({'success':true, data:currencies})
+            res.status(200).json(formatResponse(true,currencies))
         } catch (error) {
-            res.status(500).json({'success':false, data:"Something run bad."})
+            res.status(500).json(formatResponse(false,"Something run bad."))
         }
     }
 
@@ -124,9 +186,9 @@ class CurrenciesController {
             const fromUSD           = await CurrenciesService.findOneByCode(from)
             const toUSD             = await CurrenciesService.findOneByCode(to)
             const change            = await CurrenciesService.transform(fromUSD.value,toUSD.value,amount)
-            res.json({from:fromUSD,to:toUSD, result:change}).status(200)
+            res.status(200).json(formatResponse(true,{from:fromUSD,to:toUSD, result:change}))
         } catch (error) {
-            res.status(400).json({'success':false, data:"One of your passed currency don´t exist in our database."})
+            res.status(400).json(formatResponse(false,"One of your passed currency don´t exist in our database."))
         }
     }
 }
