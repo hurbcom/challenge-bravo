@@ -61,6 +61,60 @@ class CurrenciesController {
 
     }
 
+    async updateCurrency(req,res){
+         /*
+            #swagger.tags = ['Currency']
+            #swagger.description = 'Atualiza uma moeda'
+            #swagger.parameters['id'] = { description: "Id da moeda a ser atualizada" }
+            #swagger.parameters['currency'] = {
+                in: 'body',
+                description: 'Dados a serem atualizados na moeda selecionada, ao menos 1 valor deve ser passado.',
+                required: true,
+                schema: {
+                    "name":"string (opcional)",
+                    "code":"string (opcional)",
+                    "icon":"string (opcional)",
+                    "value":"float (opcional)",
+                    "fictional":"boolean (opcional)"
+                }
+           }
+            #swagger.responses[200] = {
+                description: 'Moeda atualizada por este processo',
+                schema: {
+                    "success": true,
+                    "data":
+                    {
+                        "id": 21,
+                        "name": "Brazilian Real",
+                        "code": "BRL",
+                        "icon": "https://currencyfreaks.com/photos/flags/brl.png",
+                        "value": 5.237,
+                        "fictional": false,
+                        "createdAt": "2021-05-10T11:37:58.003Z",
+                        "updatedAt": "2021-05-10T12:42:14.594Z"
+                    }
+                }
+            }
+            #swagger.responses[400] = {
+                description: 'Algum problema no banco, o id selecionado não existe',
+                schema: {
+                    "success": false,
+                    "data": "Your currency don´t exist in our database."
+                }
+            }
+        */
+        const {id} = req.params
+        const att = req.body
+
+        try {
+            const currency = await CurrenciesService.findById(id)
+            const response = await CurrenciesService.patch(currency,att)
+            res.status(200).send(formatResponse(true,currency))
+        } catch (error) {
+            res.status(400).send(formatResponse(false,error))
+        }
+    }
+
     async getCurrency(req,res){
         /*
             #swagger.tags = ['Currency']
