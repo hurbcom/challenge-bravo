@@ -52,7 +52,12 @@ class CurrenciesController {
         if(error){
             res.status(400).json(formatResponse(false,error))
         }
-
+        try {
+            const freshNew = await CurrenciesService.create(newCurrency)
+            res.status(200).json(formatResponse(true,freshNew))
+        } catch (error) {
+            res.status(400).json(formatResponse(false,error))
+        }
 
     }
 
