@@ -2,10 +2,11 @@
 
 **HURB** Challenge feito em **Node.js e REACT**.
 
-## pacotes globais
+## Pacotes globais
  - [Docker-cli - (conteinerização)](https://docs.docker.com/)
  - [Node.js - (js engine)](https://nodejs.org/en/)
-## Pacotes usados no backend
+
+## Bibliotecas / frameworks usadas no backend
  - [Express.js - Framework leve](https://expressjs.com/)
  - [Axios.js - Requisições](https://yarnpkg.com/package/axios)
  - [Postgres - Banco](https://yarnpkg.com/package/pg)
@@ -48,4 +49,6 @@ Cobertura de testes aplicada.
   <img src="coverage.png" alt="Testes" />
 </p>
 
-[Pacote de endpoints no postman](HURB.postman_collection.json)
+## Postman
+
+[Pacote de endpoints do postman](HURB.postman_collection.json)
