@@ -158,8 +158,6 @@ class CurrenciesController {
         */
         const {code} = req.params
 
-        console.log(code)
-
         const { error }  = validation.codeValidation.validate({code});
 
         if(error){
