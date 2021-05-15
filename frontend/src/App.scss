@@ -1,0 +1,76 @@
+.App {
+    text-align: center;
+    background: linear-gradient(90deg , #f2f0fe, #fef1e5);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+header{
+    width: 90%;
+    display: flex;
+    margin: 20px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+.warperBody{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 70px);
+    font-size: 14px;
+    color: #ccc;
+}
+
+.hsize{
+    width: 80%!important;
+    height: 60px;
+    .input-group-prepend{
+        display:flex
+    }
+}
+.warpBody{
+    .col{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.navList{
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    min-width: 260px;
+    margin-left: 2%;
+    a{
+        color: #1e1e1e;
+        font-family: Montserrat, Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.45;
+        cursor:pointer;
+        text-decoration: none;
+    }
+    span:hover{
+        color:#3468fc
+    }
+}
+@media (max-width: 576px){
+
+}
+@media (max-width: 768px){
+    .hsize{
+        height: 38px;
+
+    }
+}

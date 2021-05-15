@@ -1,0 +1,113 @@
+.hurbSize{
+    width: 80%;
+}
+button.hurbSize{
+    margin-bottom: 20px;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+}
+.bi-currency-exchange {
+    margin-right: 10px;
+}
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+div[class*="placeholder"]{
+    font-size: 16px;
+}
+div[class*="control"]{
+    height: 60px;
+}
+
+.borderStyle{
+    border: 1px solid rgba(0,0,0,.125);
+    width: 88%;
+    padding-left: 10px;
+    height: 60px;
+    font-size: 16px;
+}
+.borderStyle:focus{
+    border: 1px solid rgba(0,0,0,.125);
+}
+
+.input-group{
+    .input-group-prepend{
+        width: 12%;
+        .input-group-text{
+            width: 100%;
+            justify-content: center;
+            height: 60px;
+        }
+    }
+}
+
+.input:focus-visible{
+    border: 1px solid rgba(0,0,0,.125);
+}
+.ld-btn{
+    .ex-anim{
+        transform: matrix(0.1, 0, 0, 0.1, 0, 0);
+        animation-duration: 0.7s;
+        animation-name: exchange;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+}
+.transform{
+    color: #ccc;
+}
+
+@keyframes exchange {
+    from{
+        transform: matrix(0.1, 0, 0, 0.1, 0, 0);
+    }
+    to {
+        transform: matrix(1, 0, 0, 1, 0, 0) rotate(90deg);
+    }
+}
+
+@media (min-width: 576px){
+
+}
+@media (max-width: 768px){
+    .borderStyle{
+        height: 38px;
+    }
+    div[class*="placeholder"]{
+        font-size: 14px;
+    }
+    div[class*="control"]{
+        height: 38px;
+    }
+    div[class*="ValueContainer"]{
+        height: 38px;
+    }
+
+    .input-group{
+        .input-group-prepend{
+            .input-group-text{
+                height: 38px;
+            }
+        }
+    }
+    .basic-single{
+        height: 38px;
+    }
+}
+@media (min-width: 992px){
+
+}
+
+@media (min-width: 1200px){
+.warperBody{
+    max-width: 40%;
+}
+}
+
+@media (min-width: 1400px){
+
+}

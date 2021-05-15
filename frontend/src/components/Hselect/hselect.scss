@@ -1,0 +1,9 @@
+.basic-single{
+    color: black;
+    width: 88%;
+}
+@media (max-width: 768px){
+    .basic-single{
+        height: 38px;
+    }
+}

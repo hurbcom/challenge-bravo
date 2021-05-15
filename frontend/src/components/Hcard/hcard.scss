@@ -1,0 +1,71 @@
+.card{
+    border-radius: 7px;
+    overflow: hidden;
+    .imgTitle{
+        position: relative;
+        height: 100%;
+        z-index: 1;
+        img{
+            width: 100%;
+            height: fit-content;
+        }
+        .mascara{
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, #0000009e, transparent);
+            position: absolute;
+        }
+    }
+    .floatTitle{
+        width: 100%;
+        z-index: 2;
+        position: absolute;
+        bottom: 10%;
+        border-radius: 37% 37% 0 0;
+        .title{
+            font-size: 16px;
+            line-height: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+            display: block;
+            transition: height .2s ease;
+            font-family: 'Gotham', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            margin-bottom: 0;
+        }
+        .subtitle{
+            font-size: 10px;
+            line-height: 10px;
+            font-weight: bold;
+            color: #656565;
+            text-transform: uppercase;
+            display: block;
+            transition: height .2s ease;
+            font-family: 'Gotham', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+    }
+    .warpBody{
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        z-index: 2;
+        background-color: #fff;
+        hr{
+            margin: 10px 0 20px 0;
+            width: 30%;
+            height: 5px;
+            background-color: #c1c1c1;
+            border: none;
+            border-radius: 10px;
+        }
+    }
+}
+
+@media (max-height: 550px){
+    .imgTitle{
+        height: 100px!important;
+
+    }
+}
