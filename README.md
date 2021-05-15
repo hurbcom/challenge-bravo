@@ -1,4 +1,4 @@
-# HURB Challenge
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
 **HURB** Challenge feito em **Node.js e REACT**.
 
@@ -29,22 +29,23 @@
 
 ## Instalação
 
-Ter Docker-cli e Nodejs instalado na máquina
+Ter Docker-cli e Nodejs instalado e rodando na máquina
 
 1. Renomear o arquivo .env.exemplo para apenas .env ;
-2. > docker-compose up
-
-## Ferramenta usada em desenvolvimento para fazer a requisições ao BackEnd
-
-Foi usado para desenvolvimento a ferramenta **Postman**
+2. > docker compose up -d --b
+3. Acessar pelo
+    >localhost:81
 
 ## Testes
 
-1. Trocar no .env o valor da variavel NODE_ENV para test
+1. Trocar no .env o valor da variável NODE_ENV para test;
+2. Trocar o DB_HOST para localhost;
 2. rodar o comando:
     > yarn test
 
-cobertura de testes aplicada.
+Cobertura de testes aplicada.
 <p align="center">
-  <img src="coverage.png" alt="Challange accepted" />
+  <img src="coverage.png" alt="Testes" />
 </p>
+
+[Pacote de endpoints no postman](HURB.postman_collection.json)

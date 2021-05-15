@@ -1,0 +1,131 @@
+{
+	"variables": [],
+	"info": {
+		"name": "HURB",
+		"_postman_id": "b50f4fa2-7192-e3b7-32c1-3e21b9b8aa8b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/currency/BRL",
+			"request": {
+				"url": "http://localhost:3000/currency/BRL",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"abacate\",\n\t\"code\":\"FTD\",\n\t\"value\":2,\n\t\"fictional\":true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/currency/BRL",
+			"request": {
+				"url": "http://localhost:3000/currency/BRL",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"abacate\",\n\t\"code\":\"FTD\",\n\t\"value\":2,\n\t\"fictional\":true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/currency",
+			"request": {
+				"url": "http://localhost:3000/currency",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Alfaya 22\",\n\t\"code\":\"Alf\",\n\t\"value\":2,\n\t\"fictional\":true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/currency/ALF",
+			"request": {
+				"url": "http://localhost:3000/currency/BRL",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Alfaya 22\",\n\t\"code\":\"Alf\",\n\t\"value\":2,\n\t\"fictional\":true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/currency/list",
+			"request": {
+				"url": "http://localhost:3000/currency/list",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Alfaya 22\",\n\t\"code\":\"Alf\",\n\t\"value\":2,\n\t\"fictional\":true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/currency/transform/:from/:to/:amount",
+			"request": {
+				"url": "http://localhost:3000/currency/transform/BRL/ALF/200",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Alfaya 22\",\n\t\"code\":\"Alf\",\n\t\"value\":2,\n\t\"fictional\":true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
