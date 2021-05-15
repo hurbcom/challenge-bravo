@@ -36,6 +36,7 @@ services:
             - POSTGRES_DB=${DB_NAME}
             - POSTGRES_USER=${DB_USER}
             - POSTGRES_PASSWORD=${DB_PASS}
+        restart: always
         networks:
             - challenge-bravo
 
