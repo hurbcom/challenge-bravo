@@ -56,9 +56,9 @@ class CurrenciesController {
 
         try {
             const freshNew = await CurrenciesService.create(newCurrency)
-            res.status(200).json(formatResponse(true,freshNew))
+            return res.status(200).json(formatResponse(true,freshNew))
         } catch (error) {
-            res.status(400).json(formatResponse(false,error))
+            return res.status(400).json(formatResponse(false,error))
         }
 
     }
@@ -108,7 +108,7 @@ class CurrenciesController {
         const { error }  = validation.codeValidation.validate({code});
 
         if(error){
-            res.status(400).json(formatResponse(false,error))
+            return  res.status(400).json(formatResponse(false,error))
         }
 
         const att = req.body
@@ -121,9 +121,9 @@ class CurrenciesController {
         try {
             const currency = await CurrenciesService.findOneByCode(code)
             const response = await CurrenciesService.patch(currency,att)
-            res.status(200).json(formatResponse(true,response))
+            return  res.status(200).json(formatResponse(true,response))
         } catch (error) {
-            res.status(400).json(formatResponse(false,error))
+            return  res.status(400).json(formatResponse(false,error))
         }
     }
 
@@ -158,18 +158,20 @@ class CurrenciesController {
         */
         const {code} = req.params
 
+        console.log(code)
+
         const { error }  = validation.codeValidation.validate({code});
 
         if(error){
-            res.status(400).json(formatResponse(false,error))
+            return  res.status(400).json(formatResponse(false,error))
         }
 
         try {
             const currency = await CurrenciesService.findOneByCode(code)
             const response = await CurrenciesService.deleteCurrency(currency)
-            res.status(200).json(formatResponse(true,response))
+            return res.status(200).json(formatResponse(true,response))
         } catch (error) {
-            res.status(400).json(formatResponse(false,error))
+            return res.status(400).json(formatResponse(false,error))
         }
 
     }
@@ -207,14 +209,14 @@ class CurrenciesController {
         const { error }  = validation.codeValidation.validate({code});
 
         if(error){
-            res.status(400).json(formatResponse(false,error))
+            return res.status(400).json(formatResponse(false,error))
         }
 
         try {
             const currency = await CurrenciesService.findOneByCode(code)
-            res.status(200).json(formatResponse(true,currency))
+            return res.status(200).json(formatResponse(true,currency))
         } catch (error) {
-            res.status(400).json(formatResponse(false,"Your currency don´t exist in our database."))
+            return res.status(400).json(formatResponse(false,"Your currency don´t exist in our database."))
         }
     }
 
@@ -251,9 +253,9 @@ class CurrenciesController {
         */
         try {
             const currencies = await CurrenciesService.findAll()
-            res.status(200).json(formatResponse(true,currencies))
+            return res.status(200).json(formatResponse(true,currencies))
         } catch (error) {
-            res.status(500).json(formatResponse(false,"Something run bad."))
+            return res.status(500).json(formatResponse(false,"Something run bad."))
         }
     }
 
@@ -300,9 +302,9 @@ class CurrenciesController {
             const fromUSD           = await CurrenciesService.findOneByCode(from)
             const toUSD             = await CurrenciesService.findOneByCode(to)
             const change            = await CurrenciesService.transform(fromUSD.value,toUSD.value,amount)
-            res.status(200).json(formatResponse(true,{from:fromUSD,to:toUSD, result:change}))
+            return res.status(200).json(formatResponse(true,{from:fromUSD,to:toUSD, result:change}))
         } catch (error) {
-            res.status(400).json(formatResponse(false,"One of your passed currency don´t exist in our database."))
+            return res.status(400).json(formatResponse(false,"One of your passed currency don´t exist in our database."))
         }
     }
 }

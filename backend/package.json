@@ -16,6 +16,7 @@
     "utf8": "^3.0.0"
   },
   "scripts": {
+    "prestart": "sequelize db:migrate",
     "start": "node src/server.js",
     "build": "build",
     "pretest": "sequelize db:migrate",
