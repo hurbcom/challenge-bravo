@@ -66,6 +66,9 @@ div[class*="control"]{
     opacity: 1;
     transition: opacity 0.5s;
 }
+.noBorder{
+    border:none
+}
 .empty {
     opacity: 0;
 }

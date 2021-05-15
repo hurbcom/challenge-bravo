@@ -155,7 +155,9 @@ class Calc extends React.Component {
                         </InputGroup.Prepend>
                         <div className="borderStyle d-flex">
                             {this.state.res?
-                               <span className="transform d-flex a-c"> $ {(this.state.res.result).toFixed(2)}</span>
+                            //    <span className="transform d-flex a-c"> $ {(this.state.res.result).toFixed(2)}</span>
+                            <CurrencyInput className="noBorder" placeholder="$0.00" type="text" value={(this.state.res.result).toFixed(2)} />
+
                             :""}
                         </div>
                     </InputGroup>
