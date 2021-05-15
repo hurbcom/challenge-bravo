@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button,InputGroup,FormControl, Col } from 'react-bootstrap';
+import { Button,InputGroup,FormControl, Col, SafeAnchor } from 'react-bootstrap';
 import bg from '../bg.jpg';
 import HurbCard from '../../components/Hcard/Hcard'
 import '../pages.scss'
-import {exchanceIcon,money,coin,pig} from '../../utils/icons'
+import {exchanceIcon,money,coin,pig,pencil,trash} from '../../utils/icons'
 import CurrencyInput from '../../components/HMoneyInput/HCurrencyInput'
 import HAlert from '../../components/Halert/Halert'
 import {config} from '../../config/config'
@@ -30,17 +30,22 @@ class Att extends React.Component {
                 name:""
             }
         }
-        this.save = this.save.bind(this);
+        this.update = this.update.bind(this);
+        this.delete = this.delete.bind(this);
+        this.onCLick = this.onCLick.bind(this);
         this.changeSelect = this.changeSelect.bind(this);
     }
-
+    // valida se o componente ja esta disponivel
     componentDidMount(){
         this.setState({loading:false});
     }
-
-    async save(){
+    /*
+      update - função para atualizar os dados de uma moeda com os dados inseridos na tela . os valores
+      serão validados no frontend para caso os dados foram preenchidos e no
+      backend se existe alguma moeda com o mesmo código e se os dados passados atendem as expectativas
+    */
+    async update(){
         this.setState({ldgBtn:true})
-        console.log(this.state.currency)
         const {name,value,code}= this.state.currency
         if(name&&value&&code){
             fetch(config.API_URL + 'currency/'+code,{
@@ -99,12 +104,15 @@ class Att extends React.Component {
         }
     }
 
+    /*
+      changeSelect - pega os dados de uma moeda no backend
+    */
+
     changeSelect(currency){
         this.setState({ldgInfo:true})
         fetch(config.API_URL + 'currency/'+currency.value)
         .then(response => response.json())
         .then(json => {
-            console.log(json)
 
             if(json.success){
                 const {name,value,code} = json.data
@@ -118,9 +126,106 @@ class Att extends React.Component {
                     ldgInfo:false
                 })
             }else{
-                this.setState({ldgInfo:true})
+                this.setState(
+                    {
+                        Halert:{
+                            ...this.state.Halert,
+                            msg: "Esta moeda ja não se encontra no nosso banco favor recarregar a página",
+                            type:"Danger",
+                            title: "Falha",
+                            show:true
+                        },
+                        ldgInfo:false
+                    }
+                )
             }
         })
+    }
+     /*
+      delete - Apaga uma moeda usando seu código de referência.
+    */
+
+    delete(){
+        this.setState({ldgInfo:true})
+        const {name,value,code}=this.state.currency
+        if(name&&value&&code){
+
+        fetch(config.API_URL + 'currency/'+this.state.currency.code,{
+            method: 'DELETE',
+            headers: {"content-type": "application/json"}
+        })
+        .then(response => response.json())
+        .then(json => {
+
+            if(json.success){
+                this.setState(
+                    {
+                        Halert:{
+                            ...this.state.Halert,
+                            msg: "Deletado com sucesso",
+                            type:"success",
+                            title: "Sucesso",
+                            show:true
+                        },
+                        currency:{
+                            ...this.state.currency,
+                            name:undefined,
+                            code:undefined,
+                            value:undefined
+
+                        },
+                        ldgInfo:false
+                    }
+                )
+                this.props.onSave()
+
+            }else{
+                this.setState(
+                    {
+                        Halert:{
+                            ...this.state.Halert,
+                            msg: "Algo de errado não está certo",
+                            type:"danger",
+                            title: "Falha",
+                            show:true
+                        }
+                    }
+                )
+                this.setState({ldgInfo:false})
+            }
+        })
+        }else{
+            this.setState(
+                {
+                    Halert:{
+                        ...this.state.Halert,
+                        msg: "Escolha a moeda",
+                        type:"info",
+                        title: "Reveja os dados",
+                        show:true
+                    }
+                }
+            )
+            this.setState({ldgInfo:false})
+        }
+    }
+    /*
+      onCLick - Captura o clino ok do swal para atualizar o front
+      TODO Ainda precisa melhorar.
+    */
+    onCLick = ()=>{
+        this.setState({
+            Halert:{...this.state.Halert, show:false},
+            ldgBtn:false,
+            currency:{
+                ...this.state.currency,
+                name:undefined,
+                code:undefined,
+                value:undefined
+
+            }
+        })
+        this.forceUpdate();
     }
 
     render() {
@@ -181,13 +286,18 @@ class Att extends React.Component {
                 </Col>
                 <Col>
                     <hr/>
-                    <Button variant="primary" size="lg" className={(this.state.ldgBtn?'ld-btn':"")+' hurbSize'} onClick={()=>this.save()} disabled={this.state.ldgBtn}>
-                        {exchanceIcon}<span>Atualizar</span>
-                    </Button>
+                    <div className="dflex">
+                        <Button variant="danger" size="lg" className={(this.state.ldgBtn?'ld-btn':"")+' hurbSize mr-10'} onClick={()=>this.delete()} disabled={this.state.ldgBtn}>
+                            {trash}<span>Deletar</span>
+                        </Button>
+                        <Button variant="primary" size="lg" className={(this.state.ldgBtn?'ld-btn':"")+' hurbSize'} onClick={()=>this.update()} disabled={this.state.ldgBtn}>
+                            {pencil}<span>Atualizar</span>
+                        </Button>
+                    </div>
                 </Col>
             </HurbCard>
             <HAlert
-                onConfirm={()=>this.setState({Halert:{...this.state.Halert, show:false},ldgBtn:false})}
+                onConfirm={()=>this.onCLick()}
                 title={this.state.Halert.title}
                 type={this.state.Halert.type}
                 show={this.state.Halert.show}

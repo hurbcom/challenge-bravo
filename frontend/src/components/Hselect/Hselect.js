@@ -1,3 +1,9 @@
+/****************************************************************************
+
+ WARPER DO REACT-SELECT
+
+*****************************************************************************/
+
 import React, { Component } from 'react';
 import './hselect.scss'
 import Select from 'react-select';

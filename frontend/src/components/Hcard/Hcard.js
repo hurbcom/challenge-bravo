@@ -1,3 +1,9 @@
+/****************************************************************************
+
+ COMPONENT BASEADO NO CARD DO BOOTSTRAP
+
+*****************************************************************************/
+
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import './hcard.scss';

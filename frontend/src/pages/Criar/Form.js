@@ -29,11 +29,17 @@ class Form extends React.Component {
         }
         this.save = this.save.bind(this);
     }
-
+    // valida se o componente ja esta disponivel
     componentDidMount(){
         this.setState({loading:false});
     }
 
+
+    /*
+      save - função para salvar os dados inseridos na tela e criar com isso uma nova moeda. os valores
+      serão validados no frontend para caso os dados foram preenchidos e no
+      backend se existe alguma moeda com o mesmo código e se os dados passados atendem as expectativas
+    */
     async save(){
         this.setState({ldgBtn:true})
         const {name,value,code}= this.state.currency

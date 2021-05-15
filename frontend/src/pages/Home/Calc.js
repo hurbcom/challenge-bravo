@@ -24,18 +24,21 @@ class Calc extends React.Component {
         this.send = this.send.bind(this);
     }
 
+    // valida se o componente ja esta disponivel
     componentDidMount(){
         this.setState({loading:false});
     }
 
+    // função para salvar no state o valor dos selects
     changeSelect(witch,element){
-
        if(witch===1){
            this.setState({selected1:element.value})
        }else{
         this.setState({selected2:element.value})
        }
     }
+
+    // função apr ao envio da converção das moedas
     async send(){
         this.setState({ldgBtn:true})
         let from    = this.state.selected1
@@ -45,6 +48,7 @@ class Calc extends React.Component {
         fetch(config.API_URL + endpoint)
             .then(response => response.json())
             .then(json => {
+                console.log(json)
                 this.setState({res:json.data})
                 this.setState({ldgBtn:false})
         });

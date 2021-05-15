@@ -61,6 +61,11 @@ header{
         cursor:pointer;
         text-decoration: none;
     }
+    a.active {
+        border-bottom: 1px solid #3468fc;
+        padding-bottom: 5px;
+        color: #3468fc;
+    }
     span:hover{
         color:#3468fc
     }

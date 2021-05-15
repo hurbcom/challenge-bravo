@@ -61,6 +61,15 @@ div[class*="control"]{
     color: #ccc;
 }
 
+.dflex{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+.mr-10{
+    margin-right: 20px;
+}
+
 @keyframes exchange {
     from{
         transform: matrix(0.1, 0, 0, 0.1, 0, 0);
