@@ -1,2 +1,10 @@
+# IDEs
 .idea/
+.vscode/
+
+# Python
+__pycache__/
+
+# Environments 
 venv/
+configmap-local.env

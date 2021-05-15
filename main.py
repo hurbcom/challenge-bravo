@@ -1,15 +1,24 @@
-from flask import Flask
-import os
+from src.domain.huby import Huby
+from src.support.configs import Configs
+from src.web_api.urls import Urls
 
-app = Flask(__name__)
 
+class Main:
+    def __init__(self):
+        # Convert environment variables to structure
+        self.config = Configs()
 
-@app.route("/")
-def home():
-    return {"message": "working"}
+        # HUBY instance
+        self.huby = Huby(config=self.config)
+
+        # Routes instance
+        self.urls = Urls(application=self.huby)
+
+    def run(self):
+        # Run web api
+        self.urls.run()
 
 
 if __name__ == "__main__":
-    app.run(host=os.getenv('FLASK_HOT'),
-            port=os.getenv('FLASK_PORT'),
-            debug=True)
+    MAIN = Main()
+    MAIN.run()
