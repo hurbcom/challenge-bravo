@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
+from flasgger import Swagger
 from waitress import serve
 from src.web_api.routes.root import Root
 from src.web_api.routes.version import Version
@@ -16,6 +17,9 @@ class Urls:
             'description': "HUBy Endpoints"
         }
         self.web_api = Api(self.server)
+
+        # Swagger Configuration
+        swagger = Swagger(self.server, template_file='../../src/swagger/template.yml')
 
         # Add routes
         self.add_routes(web_api=self.web_api)

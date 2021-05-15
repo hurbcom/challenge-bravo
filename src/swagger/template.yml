@@ -1,0 +1,18 @@
+info:
+  title: hugy-api
+  description: hugy api
+  version: 1
+
+servers:
+  - url: localhost:5000
+    description: Local development server
+  - url: 
+    description: hugy development server (dev)
+  - url: 
+    description: hugy production server (prd)
+
+tags:
+  - name: root
+    description: Root directory
+  - name: version
+    description: Check app version

@@ -1,0 +1,12 @@
+tags:
+  - version
+
+summary: Shows the HUGy version in use
+
+responses:
+  200:
+    description: OK
+  400:
+    description: BAD REQUEST
+  500:
+    description: INTERNAL SERVER ERROR

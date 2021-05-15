@@ -1,0 +1,10 @@
+tags:
+  - root
+
+summary: Shows if API is running
+
+responses:
+  200:
+    description: OK
+  500:
+    description: INTERNAL SERVER ERROR
