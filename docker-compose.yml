@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+    frontend:
+        build:
+            context: .
+            target: ngix-server
+        image: challenge-bravo/frontend
+        depends_on:
+            - backend
+        ports:
+            - 81:80
+        volumes:
+            - ./.docker/nginx:/etc/nginx/conf.d
+        networks:
+            - challenge-bravo
+
+    backend:
+        build:
+            context: .
+            target: backend
+        image: challenge-bravo/backend
+        depends_on:
+            - postgres
+        ports:
+            - 3000:3000
+        networks:
+            - challenge-bravo
+
+    postgres:
+        image: postgres:13.3-alpine
+        ports:
+            - 5432:5432
+        env_file:
+            - .env
+        environment:
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASS}
+        networks:
+            - challenge-bravo
+
+networks:
+    challenge-bravo:
+        driver: bridge
