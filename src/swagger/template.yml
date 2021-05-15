@@ -5,14 +5,14 @@ info:
 
 servers:
   - url: localhost:5000
-    description: Local development server
-  - url: 
-    description: hugy development server (dev)
-  - url: 
-    description: hugy production server (prd)
+    description: Internal development server (dev)
+  - url: https://hugy.fake.com.br
+    description: HUGy production server (prd)
 
 tags:
   - name: root
     description: Root directory
   - name: version
     description: Check app version
+  - name: currencies
+    description: Shows currency conversion content

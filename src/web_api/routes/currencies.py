@@ -14,7 +14,7 @@ class CurrenciesConverter(Resource):
         self.parser.add_argument("to", required=True)
         self.parser.add_argument("amount", required=True)
 
-    @swag_from("../../swagger/models/currencies/currencies-converter.yml", endpoint="curriencies/converter")
+    @swag_from("../../swagger/models/currencies/currencies-converter.yml", endpoint="huby/currencies/converter")
     def get(self):
         body = self.parser.parse_args()
         if not body["platform"]:

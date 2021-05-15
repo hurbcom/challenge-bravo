@@ -1,0 +1,44 @@
+tags:
+  - currencies
+
+summary: Shows the result of currency conversion via API
+
+parameters:
+  - in: query
+    name: platform
+    schema:
+      example: P-01
+      type: string
+      allowEmptyValues: true
+    description: API Platform (*not required)
+  - in: query
+    name: from
+    schema:
+      example: USD
+      type: string
+      allowEmptyValues: false
+    description: Source currency
+  - in: query
+    name: to
+    schema:
+      example: BRL
+      type: string
+      allowEmptyValues: false
+    description: Final currency
+  - in: query
+    name: amount
+    schema:
+      example: 123.45
+      type: float
+      allowEmptyValues: false
+    description: Value to be converted   
+
+responses:
+  200:
+    description: OK
+  400:
+    description: BAD REQUEST
+  404:
+    description: NOT FOUND    
+  500:
+    description: INTERNAL SERVER ERROR
