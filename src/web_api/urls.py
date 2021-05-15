@@ -5,6 +5,7 @@ from flasgger import Swagger
 from waitress import serve
 from src.web_api.routes.root import Root
 from src.web_api.routes.version import Version
+from src.web_api.routes.currencies import CurrenciesConverter
 
 
 class Urls:
@@ -31,6 +32,8 @@ class Urls:
         web_api.add_resource(Root, "/", endpoint='/')
         web_api.add_resource(Version, "/huby/version", endpoint='huby/version',
                              resource_class_kwargs={"config": self.huby.config})
+        web_api.add_resource(CurrenciesConverter, "/huby/currencies/converter", endpoint='huby/currencies/converter',
+                             resource_class_kwargs={"huby": self.huby})
 
     def run(self):
         if self.huby.config.DEBUG_MODE:

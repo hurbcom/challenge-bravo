@@ -38,3 +38,33 @@ class Functions:
                 return False
         elif type(s) == bool:
             return s
+
+    @staticmethod
+    def validate_fields_and_values(body, fields_to_validate, values_to_validation=None):
+        """
+
+        :param body: request no formato json
+        :param fields_to_validate: atributos que devem estar no body
+        :param values_to_validation: testa o valor de um determinado atributo
+        :return: body validado
+        """
+        if str(body) in ["None", "", "b''"]:
+            return {"message": "request body is empty."}
+
+        fields_name = ""
+        fields_validate_total = len(fields_to_validate)
+        fields_validate_count = len(fields_to_validate)
+        for field in fields_to_validate:
+            if body.get(field) is None:
+                fields_validate_count -= 1
+                fields_name += field + ", "
+        fields_name = fields_name[:-2]
+
+        if not fields_validate_count == fields_validate_total:
+            return {"message": f"[{fields_name}] is not in the request body."}
+
+        if values_to_validation is not None:
+            for value in values_to_validation.keys():
+                if body[value] not in values_to_validation[value]:
+                    return {"message": f"invalid value to '{value}': Valid values is {values_to_validation[value]}"}
+        return body
