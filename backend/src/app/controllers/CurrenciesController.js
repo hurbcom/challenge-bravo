@@ -15,7 +15,6 @@ class CurrenciesController {
                 schema: {
                     "name":"string",
                     "code":"string",
-                    "icon":"string",
                     "value":"float",
                     "fictional":"boolean"
                 }
@@ -29,7 +28,6 @@ class CurrenciesController {
                         "id": 21,
                         "name": "Brazilian Real",
                         "code": "BRL",
-                        "icon": "https://currencyfreaks.com/photos/flags/brl.png",
                         "value": 5.237,
                         "fictional": false,
                         "createdAt": "2021-05-10T11:37:58.003Z",
@@ -69,7 +67,7 @@ class CurrenciesController {
          /*
             #swagger.tags = ['Currency']
             #swagger.description = 'Atualiza uma moeda'
-            #swagger.parameters['id'] = { description: "Id da moeda a ser atualizada" }
+            #swagger.parameters['code'] = { description: "Código da moeda a ser atualizada" }
             #swagger.parameters['currency'] = {
                 in: 'body',
                 description: 'Dados a serem atualizados na moeda selecionada, ao menos 1 valor deve ser passado.',
@@ -77,7 +75,6 @@ class CurrenciesController {
                 schema: {
                     "name":"string (opcional)",
                     "code":"string (opcional)",
-                    "icon":"string (opcional)",
                     "value":"float (opcional)",
                     "fictional":"boolean (opcional)"
                 }
@@ -91,7 +88,6 @@ class CurrenciesController {
                         "id": 21,
                         "name": "Brazilian Real",
                         "code": "BRL",
-                        "icon": "https://currencyfreaks.com/photos/flags/brl.png",
                         "value": 5.237,
                         "fictional": false,
                         "createdAt": "2021-05-10T11:37:58.003Z",
@@ -107,9 +103,9 @@ class CurrenciesController {
                 }
             }
         */
-        const {id} = req.params
+        const {code} = req.params
 
-        const { error }  = validation.IdValidation.validate({id});
+        const { error }  = validation.codeValidation.validate({code});
 
         if(error){
             res.status(400).json(formatResponse(false,error))
@@ -123,7 +119,7 @@ class CurrenciesController {
         }
 
         try {
-            const currency = await CurrenciesService.findById(id)
+            const currency = await CurrenciesService.findOneByCode(code)
             const response = await CurrenciesService.patch(currency,att)
             res.status(200).json(formatResponse(true,response))
         } catch (error) {
@@ -135,9 +131,9 @@ class CurrenciesController {
         /*
             #swagger.tags = ['Currency']
             #swagger.description = 'Apaga uma moeda'
-            #swagger.parameters['id'] = { description: "Id da moeda a ser deletada" }
+            #swagger.parameters['code'] = { description: "Código da moeda a ser deletada" }
             #swagger.responses[200] = {
-                description: 'Moeda atualizada por este processo',
+                description: 'Moeda deletada por este processo',
                 schema: {
                     "success": true,
                     "data":
@@ -145,7 +141,6 @@ class CurrenciesController {
                         "id": 21,
                         "name": "Brazilian Real",
                         "code": "BRL",
-                        "icon": "https://currencyfreaks.com/photos/flags/brl.png",
                         "value": 5.237,
                         "fictional": false,
                         "createdAt": "2021-05-10T11:37:58.003Z",
@@ -161,16 +156,16 @@ class CurrenciesController {
                 }
             }
         */
-        const {id} = req.params
+        const {code} = req.params
 
-        const { error }  = validation.IdValidation.validate({id});
+        const { error }  = validation.codeValidation.validate({code});
 
         if(error){
             res.status(400).json(formatResponse(false,error))
         }
 
         try {
-            const currency = await CurrenciesService.findById(id)
+            const currency = await CurrenciesService.findOneByCode(code)
             const response = await CurrenciesService.deleteCurrency(currency)
             res.status(200).json(formatResponse(true,response))
         } catch (error) {
@@ -192,7 +187,6 @@ class CurrenciesController {
                     "id": 21,
                     "name": "Brazilian Real",
                     "code": "BRL",
-                    "icon": "https://currencyfreaks.com/photos/flags/brl.png",
                     "value": 5.237,
                     "fictional": false,
                     "createdAt": "2021-05-10T11:37:58.003Z",
@@ -238,7 +232,6 @@ class CurrenciesController {
                             "id": 3,
                             "name": "Lek",
                             "code": "ALL",
-                            "icon": "https://currencyfreaks.com/photos/flags/all.png",
                             "value": 101.086542,
                             "fictional": false,
                             "createdAt": "2021-05-10T11:37:58.002Z",
@@ -277,7 +270,6 @@ class CurrenciesController {
                         "id": 21,
                         "name": "Brazilian Real",
                         "code": "BRL",
-                        "icon": "https://currencyfreaks.com/photos/flags/brl.png",
                         "value": 5.237,
                         "fictional": false,
                         "createdAt": "2021-05-10T11:37:58.003Z",
@@ -287,7 +279,6 @@ class CurrenciesController {
                         "id": 51,
                         "name": "Euro",
                         "code": "EUR",
-                        "icon": "https://currencyfreaks.com/photos/flags/eur.png",
                         "value": 0.821241,
                         "fictional": false,
                         "createdAt": "2021-05-10T11:37:58.005Z",

@@ -3,8 +3,8 @@ const routes = require("express").Router()
 const CurrenciesController = require('./app/controllers/CurrenciesController')
 
 routes.post('/currency',CurrenciesController.makeNewCurrency)
-routes.patch('/currency/:id',CurrenciesController.updateCurrency)
-routes.delete('/currency/:id',CurrenciesController.deleteCurrency)
+routes.patch('/currency/:code',CurrenciesController.updateCurrency)
+routes.delete('/currency/:code',CurrenciesController.deleteCurrency)
 
 routes.get('/currency/list',CurrenciesController.getAllCurrency)
 routes.get('/currency/:code',CurrenciesController.getCurrency)

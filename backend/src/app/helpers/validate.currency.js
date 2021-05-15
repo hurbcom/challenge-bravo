@@ -7,44 +7,34 @@ const currencyValidation = Joi.object().keys({
     .max(30)
     .required()
     .messages({
-        "string.base": `"name" should be a type of 'text'`,
-        "string.min": `"name" must have at last {#limit} characters`,
-        "string.max": `"name" must have at maximun {#limit} characters`,
-        "any.required": `"name" is a mandatory field`
+        "string.base": `"name" deve ser um texto`,
+        "string.min": `"name" deve ter no minimo {#limit} caracteres`,
+        "string.max": `"name" deve ter no máximo {#limit} caracteres`,
+        "any.required": `"name" é um campo obrigatório`
     }),
     code: Joi.string()
     .alphanum()
-    .min(3)
+    .min(2)
     .max(10)
     .required()
     .messages({
-        "string.base": `"code" should be a type of 'text'`,
-        "string.alphanum": `"code" must have only alphanumeric characters`,
-        "string.min": `"code" must have at last {#limit} characters`,
-        "string.max": `"code" must have at maximun {#limit} characters`,
-        "any.required": `"code" is a mandatory field`
-    }),
-    icon: Joi.string()
-    .alphanum()
-    .min(3)
-    .required()
-    .messages({
-        "string.base": `"icon" should be a type of 'text'`,
-        "string.alphanum": `"icon" must have only alphanumeric characters`,
-        "string.min": `"icon" must have at last {#limit} characters`,
-        "any.required": `"icon" is a mandatory field`
+        "string.base": `"code" deve ser um texto`,
+        "string.alphanum": `"code" deve ter apenas caracteres alfanuméricos`,
+        "string.min": `"code" deve ter no minimo {#limit} caracteres`,
+        "string.max": `"code" deve ter no máximo {#limit} caracteres`,
+        "any.required": `"code" é um campo obrigatório`
     }),
     value: Joi.number()
     .greater(1)
     .precision(2)
     .required()
     .messages({
-        "number.base": `"value" should be a type of 'number'`,
-        "number.greater": `"value" must be greather then {#limit}`,
-        "any.required": `"value" is a mandatory field`
+        "number.base": `"value" deve ser um número`,
+        "number.greater": `"value" deve ser maior que {#limit}`,
+        "any.required": `"value" é um campo obrigatório`
     }),
     fictional: Joi.boolean().required().messages({
-        "any.required": `"value" is a mandatory field`
+        "any.required": `"fictional" é um campo obrigatório`
     }),
 });
 
@@ -52,15 +42,15 @@ const currencyValidation = Joi.object().keys({
 const codeValidation = Joi.object().keys({
     code: Joi.string()
     .alphanum()
-    .min(3)
+    .min(2)
     .max(10)
     .required()
     .messages({
-        "string.base": `"code" should be a type of 'text'`,
-        "string.alphanum": `"code" must have only alphanumeric characters`,
-        "string.min": `"code" must have at last {#limit} characters`,
-        "string.max": `"code" must have at maximun {#limit} characters`,
-        "any.required": `"code" is a mandatory field`
+        "string.base": `"code" deve ser um texto`,
+        "string.alphanum": `"code" must have only alphanumeric caracteres`,
+        "string.min": `"code" deve ter no minimo {#limit} caracteres`,
+        "string.max": `"code" deve ter no máximo {#limit} caracteres`,
+        "any.required": `"code" é um campo obrigatório`
     })
 });
 
@@ -72,9 +62,9 @@ const IdValidation = Joi.object().keys({
     .greater(0)
     .required()
     .messages({
-        "number.base": `"id" should be a type of 'number'`,
-        "number.greater": `"id" must be greather then {#limit}`,
-        "any.required": `"id" is a mandatory field`
+        "number.base": `"id" deve ser um número`,
+        "number.greater": `"id" deve ser maior que {#limit}`,
+        "any.required": `"id" é um campo obrigatório`
     })
 });
 

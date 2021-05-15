@@ -20,10 +20,6 @@ module.exports = {
           allowNull:false,
           unique:true
         },
-        icon:{
-          type:sequelize.STRING,
-          allowNull:true
-        },
         value:{
           type:sequelize.FLOAT,
           allowNull:true
