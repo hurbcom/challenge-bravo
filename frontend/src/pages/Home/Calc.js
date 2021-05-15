@@ -4,9 +4,11 @@ import bg from '../bg.jpg';
 import HurbCard from '../../components/Hcard/Hcard'
 import Hselect from '../../components/Hselect/Hselect'
 import '../pages.scss'
-import {exchanceIcon,money,moneyCoin} from '../../utils/icons'
+import {exchanceIcon,money,moneyCoin,pig} from '../../utils/icons'
 import CurrencyInput from '../../components/HMoneyInput/HCurrencyInput'
 import {config} from '../../config/config'
+import HAlert from '../../components/Halert/Halert'
+
 
 class Calc extends React.Component {
     constructor(props) {
@@ -18,7 +20,13 @@ class Calc extends React.Component {
             selected2:null,
             amount:0,
             res:false,
-            ldgBtn:false
+            ldgBtn:false,
+            Halert:{
+                show:false,
+                msg:"",
+                type:"",
+                title:""
+            }
         }
         this.changeSelect = this.changeSelect.bind(this);
         this.send = this.send.bind(this);
@@ -40,25 +48,58 @@ class Calc extends React.Component {
 
     // função apr ao envio da converção das moedas
     async send(){
+
         this.setState({ldgBtn:true})
         let from    = this.state.selected1
         let to      = this.state.selected2
         let amount  = this.state.amount
-        const endpoint = `currency/transform/${from}/${to}/${amount}`
-        fetch(config.API_URL + endpoint)
+
+        if(from,to,amount){
+            const endpoint = `currency/transform/${from}/${to}/${amount}`
+            fetch(config.API_URL + endpoint)
             .then(response => response.json())
             .then(json => {
                 console.log(json)
                 this.setState({res:json.data})
                 this.setState({ldgBtn:false})
-        });
+            });
+        }else{
+            this.setState(
+                {
+                    Halert:{
+                        ...this.state.Halert,
+                        msg: "Preencha todos os campos",
+                        type:"info",
+                        title: "Reveja os dados",
+                        show:true
+                    }
+                }
+            )
+        }
     }
+    /*
+      onCLick - Captura o clino ok do swal para atualizar o front
+      TODO Ainda precisa melhorar levar para um service ou algo do tipo externar para não haver repetição de codigo.
+    */
+    onCLick = ()=>{
+        this.setState({
+            Halert:{...this.state.Halert, show:false},
+            ldgBtn:false,
+            currency:{
+                ...this.state.currency,
+                name:undefined,
+                code:undefined,
+                value:undefined
 
-
+            }
+        })
+        this.forceUpdate();
+    }
 
     render() {
         if(!this.state.loading){
             return (
+                <>
                 <HurbCard
                 image ={this.state.bg}
                 title='Calculadora'
@@ -100,18 +141,35 @@ class Calc extends React.Component {
                         <CurrencyInput className="borderStyle" placeholder="$0.00" type="text" onChange={(res)=>this.setState({amount:(res.target.value).replace(",","")}) }/>
                     </InputGroup>
                 </Col>
-                {this.state.res?
-                <Col>
-                    <span className='transform'>$ {(this.state.res.result).toFixed(2)}</span>
-                </Col>
-                :""}
                 <Col>
                     <hr/>
                     <Button variant="primary" size="lg" className={(this.state.ldgBtn?'ld-btn':"")+' hurbSize'} onClick={()=>this.send()} disabled={this.state.ldgBtn}>
                         {exchanceIcon}<span>Calcular</span>
                     </Button>
                 </Col>
+                <Col className={"result "+(this.state.selected2?"":"empty")}>
+                    <span>Valor transformado de {this.state.selected1} para {this.state.selected2}</span>
+                <InputGroup className="mb-3 hsize">
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>{pig}</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <div className="borderStyle d-flex">
+                            {this.state.res?
+                               <span className="transform d-flex a-c"> $ {(this.state.res.result).toFixed(2)}</span>
+                            :""}
+                        </div>
+                    </InputGroup>
+                </Col>
             </HurbCard>
+            <HAlert
+                onConfirm={()=>this.onCLick()}
+                title={this.state.Halert.title}
+                type={this.state.Halert.type}
+                show={this.state.Halert.show}
+            >
+                <p>{this.state.Halert.msg}</p>
+            </HAlert>
+            </>
             )
         }else{
             return ''

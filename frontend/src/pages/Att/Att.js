@@ -286,7 +286,7 @@ class Att extends React.Component {
                 </Col>
                 <Col>
                     <hr/>
-                    <div className="dflex">
+                    <div className="d-flex djc-sb w80">
                         <Button variant="danger" size="lg" className={(this.state.ldgBtn?'ld-btn':"")+' hurbSize mr-10'} onClick={()=>this.delete()} disabled={this.state.ldgBtn}>
                             {trash}<span>Deletar</span>
                         </Button>

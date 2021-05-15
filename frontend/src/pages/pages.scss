@@ -58,13 +58,26 @@ div[class*="control"]{
     }
 }
 .transform{
-    color: #ccc;
+    color: #212529;
+    font-size: 30px;
 }
 
-.dflex{
-    display: flex;
+.result{
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+.empty {
+    opacity: 0;
+}
+.djc-sb{
     justify-content: space-between;
+}
+.w80{
     width: 80%;
+
+}
+.a-c {
+    align-items: center;
 }
 .mr-10{
     margin-right: 20px;
