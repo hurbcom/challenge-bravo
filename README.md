@@ -31,14 +31,20 @@
 
 Ter Docker-cli e Nodejs instalado na máquina
 
-Rodar:
-> npm install
+1. Renomear o arquivo .env.exemplo para apenas .env ;
+2. > docker-compose up
 
-Basta  rodar:
-> docker-compose up
-
-## Ferramenta usada em desenvolviemnto para fazer a requisições ao BackEnd
+## Ferramenta usada em desenvolvimento para fazer a requisições ao BackEnd
 
 Foi usado para desenvolvimento a ferramenta **Postman**
 
+## Testes
 
+1. Trocar no .env o valor da variavel NODE_ENV para test
+2. rodar o comando:
+    > yarn test
+
+cobertura de testes aplicada.
+<p align="center">
+  <img src="coverage.png" alt="Challange accepted" />
+</p>
