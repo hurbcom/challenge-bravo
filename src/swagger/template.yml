@@ -1,18 +1,18 @@
 info:
-  title: hugy-api
-  description: hugy api
+  title: hurby-api
+  description: hurby api
   version: 1
 
 servers:
   - url: localhost:5000
     description: Internal development server (dev)
-  - url: https://hugy.fake.com.br
-    description: HUGy production server (prd)
+  - url: https://hurby.fake.com.br
+    description: HURBy production server (prd)
 
 tags:
   - name: root
     description: Root directory
   - name: version
     description: Check app version
-  - name: currencies
+  - name: currency
     description: Shows currency conversion content

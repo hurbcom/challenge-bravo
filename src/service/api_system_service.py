@@ -22,6 +22,7 @@ class ApiSystemService:
                     from: Source currency
                     to: Final currency
                     amount: Value to be converted
+        :param system: System of Platform
         :return: URL criada
         """
         srv = self.config[platform]['server']

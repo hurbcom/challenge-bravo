@@ -1,13 +1,13 @@
 from src.service.api_system_service import ApiSystemService
 
 
-class Huby:
+class Hurby:
     def __init__(self, config):
         # Environment variables
         self.config = config
 
         self.api_conversion = ApiSystemService(
             config=config.WEB_API_CONFIG,
-            system='huby',
-            time_out=config.HUBY_TIME_OUT
+            system='hurby',
+            time_out=config.HURBY_TIME_OUT
         )

@@ -6,7 +6,7 @@ class Version(Resource):
     def __init__(self, config):
         self.config = config
 
-    @swag_from("../../swagger/models/version/version.yml", endpoint="huby/version")
+    @swag_from("../../swagger/models/version/version.yml", endpoint="hurby/version")
     def get(self):
         content = {
             "HUBy": 1

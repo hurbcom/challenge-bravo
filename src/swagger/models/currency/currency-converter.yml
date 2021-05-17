@@ -1,5 +1,5 @@
 tags:
-  - currencies
+  - currency
 
 summary: Shows the result of currency conversion via API
 
@@ -10,6 +10,7 @@ parameters:
       example: P-01
       type: string
       allowEmptyValues: true
+      requerid: false
     description: API Platform (*not required)
   - in: query
     name: from
@@ -17,6 +18,7 @@ parameters:
       example: USD
       type: string
       allowEmptyValues: false
+      requerid: true
     description: Source currency
   - in: query
     name: to
@@ -24,6 +26,7 @@ parameters:
       example: BRL
       type: string
       allowEmptyValues: false
+      requerid: true
     description: Final currency
   - in: query
     name: amount
@@ -31,7 +34,8 @@ parameters:
       example: 123.45
       type: float
       allowEmptyValues: false
-    description: Value to be converted   
+      requerid: true
+    description: Value to be converted
 
 responses:
   200:
@@ -39,6 +43,6 @@ responses:
   400:
     description: BAD REQUEST
   404:
-    description: NOT FOUND    
+    description: NOT FOUND
   500:
     description: INTERNAL SERVER ERROR

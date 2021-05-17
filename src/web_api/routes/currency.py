@@ -3,9 +3,9 @@ from flasgger import swag_from
 from src.support.functions import Functions
 
 
-class CurrenciesConverter(Resource):
-    def __init__(self, huby):
-        self.huby = huby
+class CurrencyConverter(Resource):
+    def __init__(self, hurby):
+        self.hurby = hurby
         self.parser = reqparse.RequestParser()
 
         # Add the request params (or body arguments)
@@ -14,15 +14,15 @@ class CurrenciesConverter(Resource):
         self.parser.add_argument("to", required=True)
         self.parser.add_argument("amount", required=True)
 
-    @swag_from("../../swagger/models/currencies/currencies-converter.yml", endpoint="huby/currencies/converter")
+    @swag_from("../../swagger/models/currency/currency-converter.yml", endpoint="hurby/currency/converter")
     def get(self):
         body = self.parser.parse_args()
         if not body["platform"]:
-            body["platform"] = self.huby.config.HUBY_PLATFORM_DEFAULT
+            body["platform"] = self.hurby.config.HURBY_PLATFORM_DEFAULT
 
         fields_to_validate = list(self.parser.parse_args().keys())
         values_to_validation = {
-            "platform": self.huby.config.HUBY_PLATFORMS,
+            "platform": self.hurby.config.HURBY_PLATFORMS,
         }
 
         body = Functions.validate_fields_and_values(body, fields_to_validate, values_to_validation)
@@ -35,11 +35,11 @@ class CurrenciesConverter(Resource):
         amount = body["amount"].replace('"', '')
 
         parameters = f"{my_from.upper()}-{to.upper()}"
-        response = self.huby.api_conversion.get_value_by_web_id(
+        response = self.hurby.api_conversion.get_value_by_web_id(
             platform=platform,
             web_id=0,
             parameters=parameters,
-            system='huby'
+            system='hurby'
         )
 
         if isinstance(response.json(), list):

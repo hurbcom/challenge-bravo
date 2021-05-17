@@ -21,7 +21,17 @@ class Functions:
             "prd": True
         }
 
-        stageSetted = os.getenv("STAGE", 'local')
+        if os.getenv("STAGE", None) is None:
+            stage_config_aux = {
+                "development": "dev",  # configmap-dev.env
+                "production": "prd"  # docker-compose.yml
+            }
+            try:
+                stageSetted = stage_config_aux[os.getenv("FLASK_ENV", "local")]
+            except:
+                stageSetted = 'local'
+        else:
+            stageSetted = 'local'
 
         dot_env_path = os.path.join(BASE_DIR, stage_config[stageSetted])
 

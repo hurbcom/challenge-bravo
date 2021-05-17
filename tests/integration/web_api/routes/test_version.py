@@ -1,5 +1,4 @@
 from tests.integration.web_api.test_case_base import TestCaseBase
-from src.support.functions import Functions
 
 
 class TestCaseVersion(TestCaseBase):
@@ -7,5 +6,5 @@ class TestCaseVersion(TestCaseBase):
         data = {
             "HUBy": 1
         }
-        resp = self.client.get("/huby/version")
+        resp = self.client.get("/hurby/version")
         self.custom_assert(response=resp, status_code=200, data_comper=data)

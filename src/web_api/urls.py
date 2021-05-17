@@ -2,20 +2,20 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 from flasgger import Swagger
-from waitress import serve
+import os
 from src.web_api.routes.root import Root
 from src.web_api.routes.version import Version
-from src.web_api.routes.currencies import CurrenciesConverter
+from src.web_api.routes.currency import CurrencyConverter
 
 
 class Urls:
     def __init__(self, application):
-        self.huby = application
+        self.hurby = application
         self.server = Flask(__name__)
         self.server.config["SWAGGER"] = {
-            'title': "HUBy",
+            'title': f'HURBy {os.getenv("FLASK_ENV", "")}',
             'version': 1,
-            'description': "HUBy Endpoints"
+            'description': "HURBy Endpoints"
         }
         self.web_api = Api(self.server)
 
@@ -30,19 +30,14 @@ class Urls:
 
     def add_routes(self, web_api):
         web_api.add_resource(Root, "/", endpoint='/')
-        web_api.add_resource(Version, "/huby/version", endpoint='huby/version',
-                             resource_class_kwargs={"config": self.huby.config})
-        web_api.add_resource(CurrenciesConverter, "/huby/currencies/converter", endpoint='huby/currencies/converter',
-                             resource_class_kwargs={"huby": self.huby})
+        web_api.add_resource(Version, "/hurby/version", endpoint='hurby/version',
+                             resource_class_kwargs={"config": self.hurby.config})
+        web_api.add_resource(CurrencyConverter, "/hurby/currency/converter", endpoint='hurby/currency/converter',
+                             resource_class_kwargs={"hurby": self.hurby})
 
     def run(self):
-        if self.huby.config.DEBUG_MODE:
-            # run application in debug mode
-            self.server.run(
-                host=self.huby.config.FLASK_HOST,
-                port=self.huby.config.FLASK_PORT,
-                debug=self.huby.config.DEBUG_MODE
-            )
-        else:
-            # run application in production
-            serve(self.server, host=self.huby.config.FLASK_HOST, port=self.huby.config.FLASK_PORT)
+        self.server.run(
+            host=self.hurby.config.FLASK_HOST,
+            port=self.hurby.config.FLASK_PORT,
+            debug=self.hurby.config.DEBUG_MODE
+        )
