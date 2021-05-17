@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from decimal import Decimal
 
 
 class Functions:
@@ -78,3 +79,7 @@ class Functions:
                 if body[value] not in values_to_validation[value]:
                     return {"message": f"invalid value to '{value}': Valid values is {values_to_validation[value]}"}
         return body
+
+    @staticmethod
+    def calculate_exchange(from_, to, amount, tx):
+        return float(tx)*float(amount)
