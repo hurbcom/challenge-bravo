@@ -5,11 +5,16 @@
   "repository": "https://github.com/joseluciob/challenge-bravo.git",
   "author": "José Barbosa <joseluciobj@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "npx pm2 start ecosystem.config.json --no-daemon",
+    "dev": "nodemon src/index.js"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "sequelize": "^6.6.2"
   },
   "devDependencies": {
+    "nodemon": "^2.0.7",
     "sequelize-cli": "^6.2.0"
   }
 }
