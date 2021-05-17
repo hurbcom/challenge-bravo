@@ -8,3 +8,4 @@ __pycache__/
 # Environments 
 venv/
 configmap-local.env
+requirements-dev.txt
