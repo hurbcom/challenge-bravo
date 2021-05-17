@@ -1,4 +1,4 @@
-from src.domain.huby import Huby
+from src.domain.hurby import Hurby
 from src.support.configs import Configs
 from src.web_api.urls import Urls
 
@@ -9,10 +9,10 @@ class Main:
         self.config = Configs()
 
         # HUBY instance
-        self.huby = Huby(config=self.config)
+        self.hurby = Hurby(config=self.config)
 
         # Routes instance
-        self.urls = Urls(application=self.huby)
+        self.urls = Urls(application=self.hurby)
 
     def run(self):
         # Run web api

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  hurby:
+    build: .
+    image: antoniojr78/challenge-bravo:Hurby-1.0
+    environment:
+      - FLASK_ENV=production
+    ports:
+      - 5000:5000
