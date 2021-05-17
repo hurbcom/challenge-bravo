@@ -1,0 +1,8 @@
+{
+  "name": "hurb-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/joseluciob/challenge-bravo.git",
+  "author": "José Barbosa <joseluciobj@gmail.com>",
+  "license": "MIT"
+}
