@@ -23,6 +23,7 @@ class CurrencyConverter(Resource):
         fields_to_validate = list(self.parser.parse_args().keys())
         values_to_validation = {
             "platform": self.hurby.config.HURBY_PLATFORMS,
+            "to": self.hurby.config.HURBY_CURRENCIES_TO
         }
 
         body = Functions.validate_fields_and_values(body, fields_to_validate, values_to_validation)

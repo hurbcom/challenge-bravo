@@ -14,11 +14,13 @@ class Configs:
         self.DEBUG_MODE = Functions.str_to_bool(os.getenv("DEBUG_MODE"))
         self.STAGE = os.getenv("STAGE", 'local')
 
-        # HURy
+        # HURBy
         self.HURBY_PLATFORM_DEFAULT = os.getenv("HURBY_PLATFORM_DEFAULT", 'P-01')
         self.HURBY_PLATFORMS = list(os.getenv("HURBY_PLATFORMS").split(","))
         self.HURBY_DATA_FOLDER = os.getenv("HURBY_DATA_FOLDER")
         self.HURBY_TIME_OUT = int(os.getenv("HURBY_TIME_OUT"))
+        self.HURBY_CURRENCY_BALLAST = os.getenv("HURBY_CURRENCY_BALLAST", 'USD')
+        self.HURBY_CURRENCIES_TO = list(os.getenv("HURBY_CURRENCIES_TO").split(","))
 
         # API System: Web Api for currency conversion
         self.WEB_API_CONFIG = {}
