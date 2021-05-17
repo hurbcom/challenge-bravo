@@ -4,5 +4,9 @@
   "main": "index.js",
   "repository": "https://github.com/joseluciob/challenge-bravo.git",
   "author": "José Barbosa <joseluciobj@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sequelize": "^6.6.2"
+  }
 }
