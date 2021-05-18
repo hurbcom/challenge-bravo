@@ -62,11 +62,8 @@ class Hurby:
                 system='hurby'
             )
 
-            # Treatment of xml format
-            root = ET.fromstring(response.content)
-            for child in root.iter('*'):
-                if child.tag != 'xml' and child.text is not None:
-                    currencies.update({child.tag: [child.text, 'API']})  # API or USER
+            # Marking data source
+            currencies = {key: [val, 'API'] for key, val in response.json().items()}  # API or USER
 
             # Writes standardized currencies to Redis
             self.cache.set(key="currencies", value=currencies, serialization=True)
