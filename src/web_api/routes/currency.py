@@ -8,12 +8,35 @@ cache_key = "currencies"
 class Currency(Resource):
     def __init__(self, cache):
         self.cache = cache
+        self.parser = reqparse.RequestParser()
+
+        # Add the request params (or body arguments) for method POST
+        self.parser.add_argument("id", type=str, required=True)
+        self.parser.add_argument("name", type=str, required=True)
 
     @swag_from("../../swagger/models/currency/currency-get.yml",
                endpoint="hurby/currency")
     def get(self):
         content = self.cache.get_cache_value_to_json(key=cache_key)
         return content
+
+    @swag_from("../../swagger/models/currency/currency-post.yml",
+               endpoint="hurby/currency")
+    def post(self):
+        body = self.parser.parse_args()
+        content = self.cache.upd_cache_value_to_json_ins(key=cache_key,
+                                                         dict_id=body['id'],
+                                                         dict_val=body['name'])
+        if content.get(body['id'], None) is not None:
+            return {
+                'success': True,
+                'message': f"Currency Id: {body['id']} was successfully created. "
+            }, 201
+        else:
+            return {
+                'success': False,
+                'message': f"Currency Id: {body['id']} had already been created. "
+            }, 404
 
 
 class CurrencyId(Resource):
@@ -23,17 +46,17 @@ class CurrencyId(Resource):
     @swag_from("../../swagger/models/currency/currency-id-delete.yml",
                endpoint="hurby/currency/id")
     def delete(self, id):
-        result = self.cache.upd_cache_value_to_json_del(key=cache_key,
-                                                        dict_id=id, call=2)
-        if result is True:
+        content = self.cache.upd_cache_value_to_json_del(key=cache_key,
+                                                         dict_id=id)
+        if content.get(id, None) is None:
             return {
                 'success': True,
-                'message': f"Currency {id} was successfully deleted. "
+                'message': f"Currency Id: {id} was successfully deleted. "
             }
         else:
             return {
                 'success': False,
-                'message': f"Currency {id} had already been deleted. "
+                'message': f"Currency Id: {id} has not been deleted. "
             }, 404
 
 
@@ -43,7 +66,7 @@ class CurrencyConverter(Resource):
         self.parser = reqparse.RequestParser()
 
         # Add the request params (or body arguments)
-        self.parser.add_argument("platform", type=str)
+        self.parser.add_argument("platform", type=str, default=self.hurby.config.HURBY_PLATFORM_DEFAULT)
         self.parser.add_argument("from", type=str, required=True)
         self.parser.add_argument("to", type=str, required=True)
         self.parser.add_argument("amount", type=float, required=True)
@@ -52,8 +75,6 @@ class CurrencyConverter(Resource):
                endpoint="hurby/currency/converter")
     def get(self):
         body = self.parser.parse_args()
-        if not body["platform"]:
-            body["platform"] = self.hurby.config.HURBY_PLATFORM_DEFAULT
 
         fields_to_validate = list(self.parser.parse_args().keys())
         values_to_validation = {

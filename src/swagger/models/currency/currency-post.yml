@@ -1,0 +1,30 @@
+tags:
+  - currency
+
+summary: Create a Currency if Id not exists. Update otherwise
+
+parameters:
+  - in: body
+    name: body
+    description: Body Text
+    schema:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          example: XYZ
+          type: string
+          allowEmptyValues: true
+        name:
+          example: XYZ Coin
+          type: string
+          allowEmptyValues: true
+responses:
+  201:
+    description: CREATED
+  404:
+    description: NOT FOUND
+  500:
+    description: INTERNAL SERVER ERROR

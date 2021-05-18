@@ -39,16 +39,27 @@ class RedisCacheService:
             data = {}
         return data
 
-    def upd_cache_value_to_json_del(self, key, dict_id, call=1):
+    def upd_cache_value_to_json_del(self, key, dict_id):
         """
         Updates dictionary saved in the cache key
         :param key: cache key
-        :param dict_id: dictionary key saved in the cache key
-        :param call: <1(return json) or n(return boolean)>
-        :return: json or boolean
+        :param dict_id: Dictionary key Id saved in the cache key
+        :return: content cache key in json
         """
         content = self.get_cache_value_to_json(key=key)
-        if content.pop(dict_id, None) is None:
-            return content if call == 1 else False
+        content.pop(dict_id, None)
         self.set(key=key, value=content, serialization=True)
-        return content if call == 1 else True
+        return content
+
+    def upd_cache_value_to_json_ins(self, key, dict_id, dict_val):
+        """
+        Create if Id not exists. Update otherwise the dictionary saved in the cache key
+        :param key: cache key
+        :param dict_id: Dictionary key Id saved in the cache key
+        :param dict_val: Dictionary key Value
+        :return: content cache key in json
+        """
+        content = self.get_cache_value_to_json(key=key)
+        content.update({dict_id: [dict_val, 'USER']})  # API or USER
+        self.set(key=key, value=content, serialization=True)
+        return content

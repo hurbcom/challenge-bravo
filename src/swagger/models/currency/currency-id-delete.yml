@@ -1,7 +1,7 @@
 tags:
   - currency
 
-summary: Delete especific Currency in REDIS
+summary: Delete a single Currency as defined by the Id provided
 
 parameters:
   - in: path
@@ -14,8 +14,6 @@ parameters:
 responses:
   200:
     description: OK
-  400:
-    description: BAD REQUEST
   404:
     description: NOT FOUND
   500:

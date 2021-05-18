@@ -15,4 +15,4 @@ tags:
   - name: version
     description: Check app version
   - name: currency
-    description: Shows currency conversion content
+    description: Currency management for currency conversion

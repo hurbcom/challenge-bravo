@@ -6,7 +6,6 @@ from src.exception.hurby_exception_hook import HurbyExceptionHook
 from src.service.logger_service import Logger
 from src.service.api_system_service import ApiSystemService
 from src.service.redis_cache_service import RedisCacheService
-from src.support.functions import Functions
 
 
 class Hurby:
@@ -47,10 +46,6 @@ class Hurby:
             if self.cache.get("currencies") is None:
                 self.create_currencies()
 
-            # Records date and time of scheduler
-            timestamp = Functions.get_current_timestamp()
-            self.cache.set(key="scheduler_startup_time", value=timestamp, serialization=True)
-
         if self.config.STAGE in self.config.TASK_SCHEDULER_RUN_AUTHORIZATION:
             thread = Thread(target=job)
             thread.start()
@@ -71,7 +66,7 @@ class Hurby:
             root = ET.fromstring(response.content)
             for child in root.iter('*'):
                 if child.tag != 'xml' and child.text is not None:
-                    currencies.update({child.tag: [child.text, True]})  # True(true) or False(fictitious)
+                    currencies.update({child.tag: [child.text, 'API']})  # API or USER
 
             # Writes standardized currencies to Redis
             self.cache.set(key="currencies", value=currencies, serialization=True)

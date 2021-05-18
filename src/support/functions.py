@@ -1,14 +1,5 @@
 import os
 from dotenv import load_dotenv
-from datetime import datetime
-
-timestamp_formats = {
-    "iso": "%Y-%m-%dT%H:%M:%S.%f",
-    "british": "%d/%m/%Y %H:%M:%S",
-    "american": "%m/%d/%Y %H:%M:%S",
-    "utc": "%Y-%m-%dT%H:%M:%S.%fZ",
-    "local": "%Y-%m-%dT%H:%M:%S.%f"
-}
 
 
 class Functions:
@@ -96,9 +87,3 @@ class Functions:
     @staticmethod
     def calculate_exchange(from_, to, amount, tx):
         return float(tx)*float(amount)
-
-    @staticmethod
-    def get_current_timestamp(timestamp_format="iso"):
-        current_datetime = datetime.now()
-        result = current_datetime.strftime(timestamp_formats[timestamp_format])
-        return result
