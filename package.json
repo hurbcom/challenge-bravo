@@ -7,10 +7,14 @@
   "license": "MIT",
   "scripts": {
     "start": "npx pm2 start ecosystem.config.json --no-daemon",
-    "dev": "nodemon src/index.js"
+    "dev": "cross-env NODE_ENV=development nodemon src/index.js"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "joi": "^17.4.0",
+    "pg": "^8.6.0",
     "sequelize": "^6.6.2"
   },
   "devDependencies": {

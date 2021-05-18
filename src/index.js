@@ -1,5 +1,13 @@
 const app = require('./app');
+const config = require('./config/config');
 
-app.listen(3000, () => {
-    console.log('Run serve')
+let server;
+server = app.listen(config.server_port, () => {
+    console.log('Run server')
+});
+
+process.on('SIGTERM', () => {
+  if (server) {
+    server.close();
+  }
 });
