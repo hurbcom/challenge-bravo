@@ -4,6 +4,7 @@ services:
   hurby:
     build: .
     image: antoniojr78/challenge-bravo:Hurby-1.0
+    container_name: hurby
     environment:
       - FLASK_ENV=production
     ports:

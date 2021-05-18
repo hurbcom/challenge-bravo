@@ -1,6 +1,8 @@
-FROM python:3.7-alpine
+FROM python:3.7-slim
 
-RUN apk update
+RUN apt-get update -y
+RUN apt-get install -y redis-server
+RUN pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir pipenv
 
 WORKDIR /usr/app/hurby
@@ -11,4 +13,4 @@ COPY data ./data
 RUN pipenv install
 
 EXPOSE 5000
-ENTRYPOINT ["/usr/app/hurby/main.sh"]
+ENTRYPOINT ["sh", "/usr/app/hurby/main.sh"]
