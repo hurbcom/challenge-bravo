@@ -13,11 +13,13 @@ class Configs:
         # System
         self.DEBUG_MODE = Functions.str_to_bool(os.getenv("DEBUG_MODE"))
         self.STAGE = os.getenv("STAGE", 'local')
+        self.TASK_SCHEDULER_RUN_AUTHORIZATION = list(os.getenv("TASK_SCHEDULER_RUN_AUTHORIZATION").split(","))
 
         # HURBy
         self.HURBY_PLATFORM_DEFAULT = os.getenv("HURBY_PLATFORM_DEFAULT", 'P-01')
         self.HURBY_PLATFORMS = list(os.getenv("HURBY_PLATFORMS").split(","))
         self.HURBY_DATA_FOLDER = os.getenv("HURBY_DATA_FOLDER")
+        self.HURBY_LOGS_FOLDER = os.getenv("HURBY_LOGS_FOLDER")
         self.HURBY_TIME_OUT = int(os.getenv("HURBY_TIME_OUT"))
         self.HURBY_CURRENCY_BALLAST = os.getenv("HURBY_CURRENCY_BALLAST", 'USD')
         self.HURBY_CURRENCIES_TO = list(os.getenv("HURBY_CURRENCIES_TO").split(","))
@@ -33,6 +35,13 @@ class Configs:
         # FLASK
         self.FLASK_PORT = int(os.getenv("PORT"))
         self.FLASK_HOST = os.getenv("HOST")
+
+        # REDIS
+        self.REDIS_CACHE_HOST = os.getenv("REDIS_CACHE_HOST")
+        self.REDIS_CACHE_PORT = int(os.getenv("REDIS_CACHE_PORT"))
+        self.REDIS_CACHE_DB = int(os.getenv("REDIS_CACHE_DB"))
+        self.REDIS_CACHE_PASSWORD = os.getenv("REDIS_CACHE_PASSWORD")
+        self.REDIS_CACHE_EXPIRATION_TIME = int(os.getenv("REDIS_CACHE_EXPIRATION_TIME"))
 
     def __open_json(self, filename):
         self.FILE_NAME = os.path.join(self.HURBY_DATA_FOLDER, filename)

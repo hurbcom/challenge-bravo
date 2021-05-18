@@ -5,7 +5,7 @@ from flasgger import Swagger
 import os
 from src.web_api.routes.root import Root
 from src.web_api.routes.version import Version
-from src.web_api.routes.currency import CurrencyConverter
+from src.web_api.routes.currency import Currency, CurrencyConverter
 
 
 class Urls:
@@ -32,6 +32,8 @@ class Urls:
         web_api.add_resource(Root, "/", endpoint='/')
         web_api.add_resource(Version, "/hurby/version", endpoint='hurby/version',
                              resource_class_kwargs={"config": self.hurby.config})
+        web_api.add_resource(Currency, "/hurby/currency", endpoint='hurby/currency',
+                             resource_class_kwargs={"hurby": self.hurby})
         web_api.add_resource(CurrencyConverter, "/hurby/currency/converter", endpoint='hurby/currency/converter',
                              resource_class_kwargs={"hurby": self.hurby})
 

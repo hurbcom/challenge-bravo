@@ -5,7 +5,10 @@
 # Python
 __pycache__/
 
-# Environments 
+# Environments
 venv/
 configmap-local.env
 requirements-dev.txt
+
+# Local directories and files
+logs/

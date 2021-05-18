@@ -3,6 +3,17 @@ from flasgger import swag_from
 from src.support.functions import Functions
 
 
+class Currency(Resource):
+    def __init__(self, hurby):
+        self.hurby = hurby
+
+    @swag_from("../../swagger/models/currency/currency-get.yml", endpoint="hurby/currency")
+    def get(self):
+        cache_key = "currencies"
+        content = self.hurby.cache.get_cache_value_to_json(key=cache_key)
+        return content
+
+
 class CurrencyConverter(Resource):
     def __init__(self, hurby):
         self.hurby = hurby
@@ -39,7 +50,7 @@ class CurrencyConverter(Resource):
             parameters = f"{from_.upper()}-{to.upper()}"
             response = self.hurby.api_conversion.get_value_by_web_id(
                 platform=platform,
-                web_id=0,
+                web_id=1,
                 parameters=parameters,
                 system='hurby'
             )
