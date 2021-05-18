@@ -8,6 +8,6 @@
       "Content-Type":"application/json",
       "access-control-allow-origin": "*",
       "X-Requested-With":"worked",
-      "Authorization":"Basic dG9neTpiWGdtQVdXQ3ZLNk15UjckQVAuaU84M25hdnNpU3h3Jg=="
+      "Authorization":null
    }
 }

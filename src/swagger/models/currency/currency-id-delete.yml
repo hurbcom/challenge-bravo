@@ -1,0 +1,22 @@
+tags:
+  - currency
+
+summary: Delete especific Currency in REDIS
+
+parameters:
+  - in: path
+    name: id
+    schema:
+      type: string
+      example: EUR
+    required: true
+
+responses:
+  200:
+    description: OK
+  400:
+    description: BAD REQUEST
+  404:
+    description: NOT FOUND
+  500:
+    description: INTERNAL SERVER ERROR

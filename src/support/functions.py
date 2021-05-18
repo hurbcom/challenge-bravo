@@ -15,7 +15,8 @@ class Functions:
 
     @staticmethod
     def load_all_environment_variables():
-        BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        BASE_DIR = os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__))))
         stage_config = {
             "local": "configmap-local.env",
             "dev": "configmap-dev.env",
@@ -59,16 +60,17 @@ class Functions:
             return s
 
     @staticmethod
-    def validate_fields_and_values(body, fields_to_validate, values_to_validation=None):
+    def validate_fields_and_values(body, fields_to_validate,
+                                   values_to_validation=None):
         """
 
-        :param body: request no formato json
-        :param fields_to_validate: atributos que devem estar no body
-        :param values_to_validation: testa o valor de um determinado atributo
-        :return: body validado
+        :param body: request in json format
+        :param fields_to_validate: attributes that must be in the body
+        :param values_to_validation: tests the value of a given attribute
+        :return: validated body
         """
         if str(body) in ["None", "", "b''"]:
-            return {"message": "request body is empty."}
+            return {'success': False, "message": "request body is empty. "}
 
         fields_name = ""
         fields_validate_total = len(fields_to_validate)
@@ -80,12 +82,15 @@ class Functions:
         fields_name = fields_name[:-2]
 
         if not fields_validate_count == fields_validate_total:
-            return {"message": f"[{fields_name}] is not in the request body."}
+            return {'success': False, "message": f"[{fields_name}] "
+                                                 f"is not in the request body. "}
 
         if values_to_validation is not None:
             for value in values_to_validation.keys():
                 if body[value] not in values_to_validation[value]:
-                    return {"message": f"invalid value to '{value}': Valid values is {values_to_validation[value]}"}
+                    return {'success': False,
+                            "message": f"invalid value to '{value}': Valid "
+                                       f"values is {values_to_validation[value]}"}
         return body
 
     @staticmethod

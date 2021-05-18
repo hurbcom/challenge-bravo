@@ -71,7 +71,7 @@ class Hurby:
             root = ET.fromstring(response.content)
             for child in root.iter('*'):
                 if child.tag != 'xml' and child.text is not None:
-                    currencies.update({child.tag: child.text})
+                    currencies.update({child.tag: [child.text, True]})  # True(true) or False(fictitious)
 
             # Writes standardized currencies to Redis
             self.cache.set(key="currencies", value=currencies, serialization=True)
