@@ -18,7 +18,7 @@ module.exports = {
         },
         rate: {
           allowNull: false,
-          type: Sequelize.DECIMAL(8, 6),
+          type: Sequelize.DECIMAL(10, 4),
         },
         default: {
           allowNull: false,
