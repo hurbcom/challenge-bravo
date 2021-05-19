@@ -81,7 +81,7 @@ class Functions:
                 if body[value] not in values_to_validation[value]:
                     message = f"Invalid value to field '{value}'. " + \
                               message_error if message_error is not None else \
-                        "Invalid value to field '{value}': Valid values is {values_to_validation[value]}"
+                        f"Invalid value to field '{value}': Valid values is {values_to_validation[value]}"
                     return {'success': False,
                             "message": message}
         return body

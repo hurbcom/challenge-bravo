@@ -2,13 +2,12 @@ from flask_restful import Resource, reqparse
 from flasgger import swag_from
 from src.support.functions import Functions
 
-cache_key = "currencies"
-
 
 class Currency(Resource):
     def __init__(self, cache):
         self.cache = cache
         self.parser = reqparse.RequestParser()
+        self.cache_key = "currencies"
 
         # Add the request params (or body arguments) for method POST
         self.parser.add_argument("id", type=str.upper, required=True)
@@ -17,7 +16,7 @@ class Currency(Resource):
     @swag_from("../../swagger/models/currency/currency-get.yml",
                endpoint="hurby/currency")
     def get(self):
-        content = self.cache.get_cache_value_to_json(key=cache_key)
+        content = self.cache.get_cache_value_to_json(key=self.cache_key)
         return content
 
     @swag_from("../../swagger/models/currency/currency-post.yml",
@@ -28,7 +27,7 @@ class Currency(Resource):
         notfictitious = self.cache.check_id_exists_in_cache_value_to_json('currencies_api', body['id'])
         dict_val = [body['name'], 'API'] \
             if notfictitious is True else [body['name'], 'USER']
-        content = self.cache.upd_cache_value_to_json_ins(key=cache_key,
+        content = self.cache.upd_cache_value_to_json_ins(key=self.cache_key,
                                                          dict_id=str(body['id']).upper(),
                                                          dict_val=dict_val)
         if content.get(body['id'], None) is not None:
@@ -46,11 +45,12 @@ class Currency(Resource):
 class CurrencyId(Resource):
     def __init__(self, cache):
         self.cache = cache
+        self.cache_key = "currencies"
 
     @swag_from("../../swagger/models/currency/currency-id-delete.yml",
                endpoint="hurby/currency/id")
     def delete(self, id):
-        content = self.cache.upd_cache_value_to_json_del(key=cache_key,
+        content = self.cache.upd_cache_value_to_json_del(key=self.cache_key,
                                                          dict_id=id)
         if content.get(id, None) is None:
             return {
@@ -68,9 +68,11 @@ class CurrencyConverter(Resource):
     def __init__(self, hurby):
         self.hurby = hurby
         self.parser = reqparse.RequestParser()
+        self.cache_key = "currencies"
 
         # Add the request params (or body arguments)
-        self.parser.add_argument("platform", type=str.upper, default=self.hurby.config.HURBY_PLATFORM_DEFAULT)
+        self.parser.add_argument("platform", type=str.upper,
+                                 default=self.hurby.config.HURBY_PLATFORM_DEFAULT)
         self.parser.add_argument("from", type=str.upper, required=True)
         self.parser.add_argument("to", type=str.upper, required=True)
         self.parser.add_argument("amount", type=float, required=True)
@@ -82,7 +84,7 @@ class CurrencyConverter(Resource):
         fields_to_validate = list(self.parser.parse_args().keys())
 
         # Get the list of available currencies after the user inserts and deletes currencies
-        dict_currencies = self.hurby.cache.get_cache_value_to_json(key=cache_key)
+        dict_currencies = self.hurby.cache.get_cache_value_to_json(key=self.cache_key)
         list_currencies = [*dict_currencies]
         values_to_validation = {
             "from": list_currencies,
@@ -96,17 +98,7 @@ class CurrencyConverter(Resource):
                                                     values_to_validation,
                                                     message_error)
         if "message" in body:
-            return body, 400
-
-        values_to_validation = {
-            "platform": self.hurby.config.HURBY_PLATFORMS,
-            "to": self.hurby.config.HURBY_CURRENCIES_TO
-        }
-
-        body = Functions.validate_fields_and_values(body, fields_to_validate,
-                                                    values_to_validation)
-        if "message" in body:
-            return body, 400
+            return body, 404
 
         try:
             platform = body["platform"]
@@ -119,17 +111,38 @@ class CurrencyConverter(Resource):
                 return {
                            'success': False,
                            'message': f"Invalid value to field 'to'. " + message_error
-                       }, 400
+                       }, 404
 
             to = currency_default if dict_currencies[to][1] == 'USER' else to
+            body["to"] = to
 
             if dict_currencies.get(from_, None) is None:
                 return {
                            'success': False,
                            'message': f"Invalid value to field 'from'. " + message_error
-                       }, 400
+                       }, 404
 
             from_ = currency_default if dict_currencies[from_][1] == 'USER' else from_
+            body["from"] = from_
+
+            field = ["to", "from"]
+            qty_error = 0
+            for i in range(0, len(field)):
+                values_to_validation = {
+                    "platform": self.hurby.config.HURBY_PLATFORMS,
+                    field[i]: self.hurby.config.HURBY_CURRENCIES_BASE
+                }
+
+                body = Functions.validate_fields_and_values(body, fields_to_validate,
+                                                            values_to_validation)
+                if "message" in body:
+                    qty_error += 1
+
+            if qty_error == 2:
+                return {
+                           'success': False,
+                           'message': "Currencies combination not supported by the API. "
+                       }, 400
 
             parameters = f"{from_}-{to}"
             response = self.hurby.api_conversion.get_value_by_web_id(
