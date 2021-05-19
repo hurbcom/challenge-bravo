@@ -7,8 +7,9 @@ from src.web_api.urls import Urls
 class TestCaseBase(TestCase):
     def setUp(self) -> None:
         self.config = Configs()
-        self.huby = Hurby(config=self.config)
-        self.urls = Urls(self.huby)
+        self.hurby = Hurby(config=self.config)
+        self.cache = self.hurby.cache
+        self.urls = Urls(self.hurby)
         self.server = self.urls.server
         self.web_api = self.urls.web_api
         self.client = self.server.test_client()
