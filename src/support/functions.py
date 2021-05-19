@@ -52,12 +52,12 @@ class Functions:
 
     @staticmethod
     def validate_fields_and_values(body, fields_to_validate,
-                                   values_to_validation=None):
+                                   values_to_validation=None, message_error=None):
         """
-
         :param body: request in json format
         :param fields_to_validate: attributes that must be in the body
         :param values_to_validation: tests the value of a given attribute
+        :param message_error: message error
         :return: validated body
         """
         if str(body) in ["None", "", "b''"]:
@@ -79,9 +79,11 @@ class Functions:
         if values_to_validation is not None:
             for value in values_to_validation.keys():
                 if body[value] not in values_to_validation[value]:
+                    message = f"Invalid value to field '{value}'. " + \
+                              message_error if message_error is not None else \
+                        "Invalid value to field '{value}': Valid values is {values_to_validation[value]}"
                     return {'success': False,
-                            "message": f"invalid value to '{value}': Valid "
-                                       f"values is {values_to_validation[value]}"}
+                            "message": message}
         return body
 
     @staticmethod

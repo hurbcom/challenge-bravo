@@ -46,20 +46,30 @@ class RedisCacheService:
         :param dict_id: Dictionary key Id saved in the cache key
         :return: content cache key in json
         """
-        content = self.get_cache_value_to_json(key=key)
-        content.pop(dict_id, None)
-        self.set(key=key, value=content, serialization=True)
-        return content
+        contents = self.get_cache_value_to_json(key=key)
+        contents.pop(dict_id, None)
+        self.set(key=key, value=contents, serialization=True)
+        return contents
 
     def upd_cache_value_to_json_ins(self, key, dict_id, dict_val):
         """
         Create if Id not exists. Update otherwise the dictionary saved in the cache key
         :param key: cache key
         :param dict_id: Dictionary key Id saved in the cache key
-        :param dict_val: Dictionary key Value
+        :param dict_val: List with Dictionary key value [name, API(true) or USER(fictitious)]
         :return: content cache key in json
         """
-        content = self.get_cache_value_to_json(key=key)
-        content.update({dict_id: [dict_val, 'USER']})  # API or USER
-        self.set(key=key, value=content, serialization=True)
-        return content
+        contents = self.get_cache_value_to_json(key=key)
+        contents.update({dict_id: dict_val})
+        self.set(key=key, value=contents, serialization=True)
+        return contents
+
+    def check_id_exists_in_cache_value_to_json(self, key, dict_id):
+        """
+        Create if Id exists in cache value
+        :param key: cache key
+        :param dict_id: Dictionary key Id saved in the cache key
+        :return: boolean
+        """
+        contents = self.get_cache_value_to_json(key=key)
+        return True if contents.get(dict_id, None) is not None else False

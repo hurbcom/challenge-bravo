@@ -63,10 +63,11 @@ class Hurby:
             )
 
             # Marking data source
-            currencies = {key: [val, 'API'] for key, val in response.json().items()}  # API or USER
+            currencies = {key: [val, 'API'] for key, val in response.json().items()}  # API(true) or USER(fictitious)
 
             # Writes standardized currencies to Redis
             self.cache.set(key="currencies", value=currencies, serialization=True)
+            self.cache.set(key="currencies_api", value=currencies, serialization=True)
         except Exception as e:
             self.hurby_exception_hook.logger.exception(e)
         finally:

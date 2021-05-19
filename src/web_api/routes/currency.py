@@ -11,8 +11,8 @@ class Currency(Resource):
         self.parser = reqparse.RequestParser()
 
         # Add the request params (or body arguments) for method POST
-        self.parser.add_argument("id", type=str, required=True)
-        self.parser.add_argument("name", type=str, required=True)
+        self.parser.add_argument("id", type=str.upper, required=True)
+        self.parser.add_argument("name", type=str.upper, required=True)
 
     @swag_from("../../swagger/models/currency/currency-get.yml",
                endpoint="hurby/currency")
@@ -24,9 +24,13 @@ class Currency(Resource):
                endpoint="hurby/currency")
     def post(self):
         body = self.parser.parse_args()
+        # Check if currency is true for API. API(true) or USER(fictitious)
+        notfictitious = self.cache.check_id_exists_in_cache_value_to_json('currencies_api', body['id'])
+        dict_val = [body['name'], 'API'] \
+            if notfictitious is True else [body['name'], 'USER']
         content = self.cache.upd_cache_value_to_json_ins(key=cache_key,
-                                                         dict_id=body['id'],
-                                                         dict_val=body['name'])
+                                                         dict_id=str(body['id']).upper(),
+                                                         dict_val=dict_val)
         if content.get(body['id'], None) is not None:
             return {
                 'success': True,
@@ -66,17 +70,34 @@ class CurrencyConverter(Resource):
         self.parser = reqparse.RequestParser()
 
         # Add the request params (or body arguments)
-        self.parser.add_argument("platform", type=str, default=self.hurby.config.HURBY_PLATFORM_DEFAULT)
-        self.parser.add_argument("from", type=str, required=True)
-        self.parser.add_argument("to", type=str, required=True)
+        self.parser.add_argument("platform", type=str.upper, default=self.hurby.config.HURBY_PLATFORM_DEFAULT)
+        self.parser.add_argument("from", type=str.upper, required=True)
+        self.parser.add_argument("to", type=str.upper, required=True)
         self.parser.add_argument("amount", type=float, required=True)
 
     @swag_from("../../swagger/models/currency/currency-converter.yml",
                endpoint="hurby/currency/converter")
     def get(self):
         body = self.parser.parse_args()
-
         fields_to_validate = list(self.parser.parse_args().keys())
+
+        # Get the list of available currencies after the user inserts and deletes currencies
+        dict_currencies = self.hurby.cache.get_cache_value_to_json(key=cache_key)
+        list_currencies = [*dict_currencies]
+        values_to_validation = {
+            "from": list_currencies,
+            "to": list_currencies
+        }
+
+        # Rule: ...Construa também um endpoint para adicionar e remover moedas suportadas pela API...
+        # Independente da moeda ser verídica ou fictícia, ela tem que estar na base de dados
+        message_error = "The Currency Id entered is not registered in the database. "
+        body = Functions.validate_fields_and_values(body, fields_to_validate,
+                                                    values_to_validation,
+                                                    message_error)
+        if "message" in body:
+            return body, 400
+
         values_to_validation = {
             "platform": self.hurby.config.HURBY_PLATFORMS,
             "to": self.hurby.config.HURBY_CURRENCIES_TO
@@ -89,11 +110,28 @@ class CurrencyConverter(Resource):
 
         try:
             platform = body["platform"]
-            from_ = body["from"].replace('"', '')
-            to = body["to"].replace('"', '')
+            from_ = body["from"]
+            to = body["to"]
             amount = body["amount"]
 
-            parameters = f"{from_.upper()}-{to.upper()}"
+            currency_default = self.hurby.config.HURBY_CURRENCY_BALLAST  # USD
+            if dict_currencies.get(to, None) is None:
+                return {
+                           'success': False,
+                           'message': f"Invalid value to field 'to'. " + message_error
+                       }, 400
+
+            to = currency_default if dict_currencies[to][1] == 'USER' else to
+
+            if dict_currencies.get(from_, None) is None:
+                return {
+                           'success': False,
+                           'message': f"Invalid value to field 'from'. " + message_error
+                       }, 400
+
+            from_ = currency_default if dict_currencies[from_][1] == 'USER' else from_
+
+            parameters = f"{from_}-{to}"
             response = self.hurby.api_conversion.get_value_by_web_id(
                 platform=platform,
                 web_id=1,
