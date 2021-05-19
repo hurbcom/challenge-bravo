@@ -15,19 +15,19 @@ parameters:
   - in: query
     name: from
     schema:
-      example: USD
+      example: CAD
       type: string
       allowEmptyValues: false
       requerid: true
-    description: Source currency
+    description: Source currency (Canadian dollar)
   - in: query
     name: to
     schema:
-      example: BRL
+      example: EUR
       type: string
       allowEmptyValues: false
       requerid: true
-    description: Final currency
+    description: Final currency (Euro)
   - in: query
     name: amount
     schema:

@@ -1,12 +1,15 @@
 info:
-  title: hurby-api
-  description: hurby api
+  title: HURBy-Api - Currency Conversion Service
+  description: This API is intended to perform conversion operations between the following currencies BRL (Brazilian Real), USD (American Dolar), EUR (Euro)
   version: 1
+  contact:
+    url: "https://github.com/antoniojr78"
+    email: "antoniojr78@yahoo.com.br"
 
 servers:
-  - url: localhost:5000
+  - url: localhost:3000
     description: Internal development server (dev)
-  - url: https://hurby.fake.com.br
+  - url: localhost:5000
     description: HURBy production server (prd)
 
 tags:
@@ -16,3 +19,7 @@ tags:
     description: Check app version
   - name: currency
     description: Currency management for currency conversion
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
