@@ -133,9 +133,9 @@ class CurrencyConverter(Resource):
                     field[i]: self.hurby.config.HURBY_CURRENCIES_BASE
                 }
 
-                body = Functions.validate_fields_and_values(body, fields_to_validate,
-                                                            values_to_validation)
-                if "message" in body:
+                result = Functions.validate_fields_and_values(body, fields_to_validate,
+                                                              values_to_validation)
+                if "message" in result:
                     qty_error += 1
 
             if qty_error == 2:
