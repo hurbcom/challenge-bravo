@@ -16,6 +16,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "http-status": "^1.5.0",
     "joi": "^17.4.0",
     "pg": "^8.6.0",
     "sequelize": "^6.6.2"
