@@ -6,6 +6,18 @@ const getAll = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const create = catchAsync(async (req, res) => {
+  const currency = await currencyService.create(req.body);
+  res.status(httpStatus.CREATED).send(currency);
+});
+
+const destroy = catchAsync(async (req, res) => {
+  await currencyService.deleteById(req.params.id);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
-  getAll
+  getAll,
+  destroy,
+  create
 };

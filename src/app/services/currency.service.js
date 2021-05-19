@@ -15,7 +15,7 @@ const getAll = async () => {
  * @param {Object} currencyBody
  * @returns {Promise<Currency>}
  */
- const create = async (currencyBody) => {
+const create = async (currencyBody) => {
   const { symbol } = currencyBody;
 
   if (await Currency.findOne({ where: { symbol } })) {
@@ -26,6 +26,26 @@ const getAll = async () => {
   return currency;
 };
 
+/**
+ * Delete currency by id
+ * @param {ObjectId} id
+ * @returns {Promise<Currency>}
+ */
+const deleteById = async (id) => {
+  const currency = await Currency.findByPk(id);
+
+  clientRedis.del('currencies', currency.symbol);
+
+  if (!currency) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Currency not found');
+  }
+
+  await currency.destroy();
+  return currency;
+};
+
 module.exports = {
-  getAll
+  getAll,
+  create,
+  destroy
 };
