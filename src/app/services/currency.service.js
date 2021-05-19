@@ -27,6 +27,21 @@ const create = async (currencyBody) => {
 };
 
 /**
+ * Get currency by symbol
+ * @param {string} [symbol] - Symbol of currency
+ * @returns {Promise<QueryResult>}
+ */
+ const getBySymbol = async (symbol) => {
+  const currency = await Currency.findOne({ where: { symbol } });
+
+  if (!currency) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Currency not found');
+  }
+
+  return currency;
+};
+
+/**
  * Delete currency by id
  * @param {ObjectId} id
  * @returns {Promise<Currency>}
@@ -47,5 +62,6 @@ const deleteById = async (id) => {
 module.exports = {
   getAll,
   create,
-  destroy
+  deleteById,
+  getBySymbol
 };
