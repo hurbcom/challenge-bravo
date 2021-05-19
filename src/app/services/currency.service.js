@@ -10,6 +10,22 @@ const getAll = async () => {
   return currencies;
 };
 
+/**
+ * Create a currency
+ * @param {Object} currencyBody
+ * @returns {Promise<Currency>}
+ */
+ const create = async (currencyBody) => {
+  const { symbol } = currencyBody;
+
+  if (await Currency.findOne({ where: { symbol } })) {
+    throw new ApiError(httpStatus.UNPROCESSABLE_ENTITY, 'Currency already exists');
+  }
+
+  const currency = await Currency.create(currencyBody);
+  return currency;
+};
+
 module.exports = {
   getAll
 };
