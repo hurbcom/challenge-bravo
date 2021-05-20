@@ -12,7 +12,7 @@ class Configs:
 
         # System
         self.DEBUG_MODE = Functions.str_to_bool(os.getenv("DEBUG_MODE"))
-        self.STAGE = os.getenv("STAGE", 'local')
+        self.STAGE = os.getenv("STAGE", 'dev')
         self.TASK_SCHEDULER_RUN_AUTHORIZATION = list(os.getenv("TASK_SCHEDULER_RUN_AUTHORIZATION").split(","))
 
         # HURBy
