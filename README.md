@@ -1,77 +1,155 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+# HURBy-Api - Currency Conversion Service - May/2021
 
-A API deve, originalmente, converter entre as seguintes moedas:
+Esta API tem por objetivo prover uma solução para o [Desafio Bravo](https://github.com/hurbcom/challenge-bravo).
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Atualmente a API externa disponibiliza aproximadamente 150 moedas com conversão para:
+- BRL (Real Brasileiro)
+- USD (Dolar Americano)
+- EUR (Euro)
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+A requisição para conversão de moedas deve ter como parâmetros: `A moeda de origem, a moeda final e o valor a ser convertido`.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Exemplo utilizando as moedas **CAN** (Dólar Canadense) e **EUR** (Euro): `http://0.0.0.0:5000/hurby/currency/converter?from=CAD&to=EUR&amount=123.45`
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Algumas conversões funcionam em mão dupla. Como, por exemplo, entre as moedas CAN e EUR.
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+A API realiza a conversão de ambas as vias:
+`http://0.0.0.0:5000/hurby/currency/converter?from=CAD&to=EUR&amount=123.45`
+`http://0.0.0.0:5000/hurby/currency/converter?from=EUR&to=CAD&amount=123.45`
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
+Outras conversões, como por exemplo, entre BTC (Bitcoin) e BRL (Real Brasileiro) a API externa só converte de BTC para BRL:
+`http://0.0.0.0:5000/hurby/currency/converter?from=BTC&to=BRL&amount=123.45`
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+### Integração com a API externa para conversão de moedas
+Saiba mais sobre a API **AwesomeAPI** usada para a integração: (https://docs.awesomeapi.com.br/api-de-moedas).
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+A lista de moedas que essa API disponibiliza é copiada uma única vez.
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+Depois todo gerenciamento da lista de moedas é realizado na API **HURBy**.
 
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+O usuário do HURBy pode adicionar e remover moedas.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+### Regras
+- A API deve suportar conversão entre moedas `verídicas` e `fictícias`;
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+  **Verídicas** - moedas que vieram da API externa.
 
-## Requisitos
+  **Fictícias** - moedas que não vieram da API externa (foram cadastradas pelo usuário dessa API).
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+  Obs.: Mesmo que a moeda exista no mundo real, ela será considerada fictícia se não veio da API externa.
+- Toda moeda (fictícia ou não) deve estar na base de dados da API HURBy.
 
-## Critério de avaliação
+  Se o usuário `remover` uma moeda não será possível tentar a conversão.
+- A moeda de lastro da API é a USD;
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+  Se a moeda informada para conversão for fictícia será assumida a moeda lastro (USD).
 
-## Dúvidas
+### Como usar a API HURBy
+- Pré-requisitos:
+  - Git e Docker
+- Execute os seguintes comandos no terminal na pasta raíz do repositório **challenge-bravo**:
+```bash
+$ git clone https://github.com/antoniojr78/challenge-bravo
+$ cd challenge-bravo
+challenge-bravo$ sudo docker-compose up
+challenge-bravo$ docker-compose build --no-cache
+challenge-bravo$ docker-compose up
+Creating network "challenge-bravo_default" with the default driver
+Creating hurby ... done
+Attaching to hurby
+hurby    | The search for available currencies has started
+hurby    |  * Serving Flask app "src.web_api.urls" (lazy loading)
+hurby    |  * Environment: production
+hurby    |    WARNING: This is a development server. Do not use it in a production deployment.
+hurby    |    Use a production WSGI server instead.
+hurby    |  * Debug mode: off
+hurby    |  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+hurby    | The search for available currencies ended with 155 insertions
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+```
+### Como executar os Testar Unitários
+- Pré-requisitos:
+  - Git, Python, pip, pipenv e Redis
+  - Configurar o arquivo `configmap-<stage>.env` (**stage** é uma variável de ambiente que por padrão a aplicação assume o valor `dev` quando não a encontra).
 
-Boa sorte e boa viagem! ;)
+    A aplicação suporta 3 stages: **dev, hmg e prd**. Esses arquivos de extensão **.env** são muito importantes pois é aonde setamos valores das variáveis de ambiente que a aplicação usa.
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+    Se quiser trocar o stage, altere o código em `/src/support/configs.py` ou defina no terminal com o comando `export stage=<value>` a variável stage com um dos valores de sua preferência.
+
+    Evite mexer no `configmap-prd.env` pois ele é usado pelo container Docker.
+
+- Execute os seguintes comandos no terminal na pasta raíz do repositório **challenge-bravo**:
+```bash
+/home/ajunior/my_projects$ git clone https://github.com/antoniojr78/challenge-bravo
+/home/ajunior/my_projects$ cd challenge-bravo
+/home/ajunior/my_projects/challenge-bravo> pipenv install
+/home/ajunior/my_projects/challenge-bravo> export stage=dev
+/home/ajunior/my_projects/challenge-bravo> pipenv run pytest tests -v
+======================================================================= test session starts ========================================================================
+platform linux -- Python 3.7.7, pytest-6.2.4, py-1.10.0, pluggy-0.13.1 -- /home/ajunior/.local/share/virtualenvs/challenge-bravo-Z0t7V9HR/bin/python
+cachedir: .pytest_cache
+rootdir: /home/ajunior/my_projects/challenge-bravo
+collected 7 items
+
+tests/integration/web_api/test_urls.py::TestCaseUrls::test_add_routes PASSED                                                                                  [ 14%]
+tests/integration/web_api/routes/test_currency.py::TestCaseCurrency::test_get PASSED                                                                          [ 28%]
+tests/integration/web_api/routes/test_currency.py::TestCaseCurrency::test_post PASSED                                                                         [ 42%]
+tests/integration/web_api/routes/test_currency.py::TestCaseCurrencyId::test_delete PASSED                                                                     [ 57%]
+tests/integration/web_api/routes/test_currency.py::TestCaseCurrencyConverter::test_get PASSED                                                                 [ 71%]
+tests/integration/web_api/routes/test_root.py::TestCaseRoot::test_get PASSED                                                                                  [ 85%]
+tests/integration/web_api/routes/test_version.py::TestCaseVersion::test_get PASSED                                                                            [100%]
+
+========================================================================= warnings summary =========================================================================
+```
+
+## Escolhas Técnicas:
+
+### Desenvolvimento
+A API Rest é provida pelo framework **Flask** com **Flask-RESTful**.
+
+As requisições a API externa são executadas com a biblioteca **requests**.
+
+Para gerenciamento de dependências utilizei **Pipenv**.
+
+Utilizei **Commits Semânticos** (com uso de types: ix, feat, docs, style...) para melhor identificação dos commits.
+
+
+### Documentação da API
+Com a aplicação no ar conseguimos acessar a documentação elaborada com **Swagger** na url `http://localhost:5000/apidocs/index.html`.
+
+Nessa página conseguimos executar os endpoints e também verificar o formato das requisições e das respostas de cada endpoint.
+
+### Deploy
+Será realizado em ambiente isolado e replicável de container **Docker** conforme descrito mais acima.
+
+### Persistência de dados
+As **moedas**, tanto as disponibilizadas pela API externa quanto as criados pelo usuário, são armazenadas em memória usando o banco de dados NoSql **Redis**.
+
+### Testes de Integração
+Os testes foram elaborados no formato **unittest** e a execução será via framework **pytest**.
+
+Inicialmente os testes serão executados fora do conteiner Docker.
+
+### TODO
+1- Utilizar mais de uma API externa. Usar, por exemplo, módulo python `sched` para a cada x minutos "procurar" cotações de moedas em mais de uma API;
+
+2- Criar mais testes unitários;
+
+3- Mockar os testes unitários para não precisar do Redis;
+
+### Sugestões
+- https://docs.awesomeapi.com.br/api-de-moedas
+- https://flask.palletsprojects.com/en/2.0.x/
+- https://www.python.org/
+- https://pypi.org/project/pipenv/
+- https://flask-restplus.readthedocs.io/en/stable/
+- https://swagger.io/
+- https://docs.pytest.org/en/latest/
+- https://www.conventionalcommits.org/en/v1.0.0/
+- https://docs.docker.com
+- https://redis.io/
+
+#### Autor
+Antônio Júnior - [LinkedIn](https://linkedin.com/in/antoniojr78)
