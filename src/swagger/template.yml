@@ -1,5 +1,5 @@
 info:
-  title: HURBy-Api - Currency Conversion Service
+  title: HURBy - Currency Conversion Api
   description: This API is intended to perform conversion operations between the following currencies BRL (Brazilian Real), USD (American Dolar), EUR (Euro)
   version: 1
   contact:
