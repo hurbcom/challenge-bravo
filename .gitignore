@@ -9,6 +9,7 @@ __pycache__/
 venv/
 configmap-local.env
 requirements-dev.txt
+.env/
 
 # Local directories and files
 logs/
