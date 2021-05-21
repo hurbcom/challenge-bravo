@@ -12,24 +12,26 @@ Atualmente a API externa disponibiliza aproximadamente 150 moedas com conversão
 A requisição para conversão de moedas deve ter como parâmetros: `A moeda de origem, a moeda final e o valor a ser convertido`.
 
 Exemplo utilizando as moedas **CAN** (Dólar Canadense) e **EUR** (Euro):
-`http://0.0.0.0:5000/hurby/currency/converter?from=CAD&to=EUR&amount=123.45`
+`http://localhost:5000/hurby/currency/converter?from=CAD&to=EUR&amount=123.45`
 
 Algumas conversões funcionam em mão dupla. Como, por exemplo, entre as moedas CAN e EUR.
 
 A API realiza a conversão de ambas as vias:
 
-`http://0.0.0.0:5000/hurby/currency/converter?from=CAD&to=EUR&amount=123.45`
-`http://0.0.0.0:5000/hurby/currency/converter?from=EUR&to=CAD&amount=123.45`
+`http://localhost:5000/hurby/currency/converter?from=CAD&to=EUR&amount=123.45`
+
+`http://localhost:5000/hurby/currency/converter?from=EUR&to=CAD&amount=123.45`
 
 Outras conversões, como por exemplo, entre BTC (Bitcoin) e BRL (Real Brasileiro) a API externa só converte de BTC para BRL:
-`http://0.0.0.0:5000/hurby/currency/converter?from=BTC&to=BRL&amount=123.45`
+
+`http://localhost:5000/hurby/currency/converter?from=BTC&to=BRL&amount=123.45`
 
 ### Integração com a API externa para conversão de moedas
 Saiba mais sobre a API **AwesomeAPI** usada para a integração: https://docs.awesomeapi.com.br/api-de-moedas.
 
-A lista de moedas que essa API disponibiliza é copiada uma única vez.
+A lista de moedas que essa API disponibiliza é copiada uma única vez para a API **HURBy**.
 
-Depois todo gerenciamento da lista de moedas é realizado na API **HURBy**.
+Depois todo gerenciamento da lista de moedas é realizado na API HURBy.
 
 O usuário do HURBy pode adicionar e remover moedas.
 
@@ -44,13 +46,13 @@ O usuário do HURBy pode adicionar e remover moedas.
 - Toda moeda (fictícia ou não) deve estar na base de dados da API HURBy.
 
   Se o usuário `remover` uma moeda não será possível tentar uma conversão utilizando ela.
-- A moeda de lastro da API é a USD;
+- A moeda de lastro da API é a `USD`;
 
   Se a moeda informada para conversão for fictícia será assumida a moeda lastro (USD).
 
 ### Como usar a API HURBy
 - Pré-requisitos:
-  - Git e Docker
+  - Git e Docker (veja o tópico **Sugestões**)
 - Execute os seguintes comandos no terminal na pasta raíz do repositório **challenge-bravo**:
 ```bash
 $ git clone https://github.com/antoniojr78/challenge-bravo
@@ -72,21 +74,12 @@ hurby    | The search for available currencies ended with 155 insertions
 ```
 ### Como executar os Testar Unitários
 - Pré-requisitos:
-  - Git, Python, pip, pipenv e Redis
-  - Configurar o arquivo `configmap-<stage>.env` (**stage** é uma variável de ambiente que por padrão a aplicação assume o valor `dev` quando não a encontra).
-
-    A aplicação suporta 3 stages: **dev, hmg e prd**. Esses arquivos de extensão **.env** são muito importantes pois é aonde setamos valores das variáveis de ambiente que a aplicação usa.
-
-    Se quiser trocar o stage, altere o código em `/src/support/configs.py` ou defina no terminal com o comando `export stage=<value>` a variável stage com um dos valores de sua preferência.
-
-    Evite mexer no `configmap-prd.env` pois ele é usado pelo container Docker.
-
+  - Git, Python, pip, pipenv e Redis (veja o tópico **Sugestões**)
 - Execute os seguintes comandos no terminal na pasta raíz do repositório **challenge-bravo**:
 ```bash
 /home/ajunior/my_projects$ git clone https://github.com/antoniojr78/challenge-bravo
 /home/ajunior/my_projects$ cd challenge-bravo
 /home/ajunior/my_projects/challenge-bravo> pipenv install
-/home/ajunior/my_projects/challenge-bravo> export stage=dev
 /home/ajunior/my_projects/challenge-bravo> pipenv run pytest tests -v
 ======================================================================= test session starts ========================================================================
 platform linux -- Python 3.7.7, pytest-6.2.4, py-1.10.0, pluggy-0.13.1 -- /home/ajunior/.local/share/virtualenvs/challenge-bravo-Z0t7V9HR/bin/python
@@ -116,6 +109,21 @@ Para gerenciamento de dependências utilizei **Pipenv**.
 
 Utilizei **Commits Semânticos** (com uso de types: ix, feat, docs, style...) para melhor identificação dos commits.
 
+As variáveis de ambiente são gerenciados com a biblioteca **python-dotenv**.
+
+### Configurações
+
+As variáveis de ambiente usadas pela API HURBy são tratadas em `/src/support/configs.py` e `/src/support/functions.py`.
+
+A aplicação suporta 4 stages: **local, dev, hmg e prd**. Um deles é atribuído à variável de ambiente `STAGE`.
+
+**STAGE** é uma variável de ambiente que por padrão a aplicação assume o valor `dev` quando não a encontra.
+
+A API usa o valor dela para procurar o arquivo `configmap-<STAGE>.env` que fica na raíz do repositório. Ele contém as configurações necessárias para API HURBy funcionar.
+
+Você não vai encontrar o arquivo `configmap-local.env` no repositório. É exclusivo dos desenvolvedores e, por isso, foi informado no `.gitignore`.
+
+O arquivo `configmap-prd.env` é de uso exclusive do container Docker para o funcionamento da aplicação no mesmo. Por isso, evite mexer nele.
 
 ### Documentação da API
 Com a aplicação no ar conseguimos acessar a documentação elaborada com **Swagger** na url `http://localhost:5000/apidocs/index.html`.
@@ -129,9 +137,9 @@ Será realizado em ambiente isolado e replicável de container **Docker** confor
 As **moedas**, tanto as disponibilizadas pela API externa quanto as criados pelo usuário na API HURBy, são armazenadas e gerenciadas em memória usando o banco de dados NoSql **Redis**.
 
 ### Testes de Integração
-Os testes foram elaborados no formato **unittest** e a execução será via framework **pytest**.
+Os testes foram elaborados com framework **unittest** e a execução será via framework **pytest**.
 
-Inicialmente os testes serão executados fora do conteiner Docker.
+Inicialmente os testes serão executados fora do container Docker.
 
 ### TODO
 1- Utilizar mais de uma API externa. Usar, por exemplo, módulo python `sched` para a cada x minutos "procurar" cotações de moedas em mais de uma API;
@@ -141,16 +149,18 @@ Inicialmente os testes serão executados fora do conteiner Docker.
 3- Mockar os testes unitários para não precisar usar o Redis;
 
 ### Sugestões
-- https://docs.awesomeapi.com.br/api-de-moedas
-- https://flask.palletsprojects.com/en/2.0.x/
-- https://www.python.org/
-- https://pypi.org/project/pipenv/
-- https://flask-restplus.readthedocs.io/en/stable/
-- https://swagger.io/
-- https://docs.pytest.org/en/latest/
-- https://www.conventionalcommits.org/en/v1.0.0/
-- https://docs.docker.com
-- https://redis.io/
+- **API Extena**: https://docs.awesomeapi.com.br/api-de-moedas
+- **Git**: https://git-scm.com/
+- **Docker**: https://docs.docker.com
+- **Redis**: https://redis.io/
+- **Flask**: https://flask.palletsprojects.com/en/2.0.x/
+- **Python**: https://www.python.org/
+- **Pipenv**: https://pypi.org/project/pipenv/
+- **Flask-restplus**: https://flask-restplus.readthedocs.io/en/stable/
+- **Swagger**: https://swagger.io/
+- **Pytest**: https://docs.pytest.org/en/latest/
+- **Commits Semânticos**: https://www.conventionalcommits.org/en/v1.0.0/
+- **Unittest**: https://docs.python.org/3/library/unittest.html
 
 #### Autor
 Antônio Júnior - [LinkedIn](https://linkedin.com/in/antoniojr78)
