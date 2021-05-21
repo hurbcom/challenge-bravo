@@ -20,7 +20,7 @@ class Configs:
         self.HURBY_PLATFORMS = list(os.getenv("HURBY_PLATFORMS").split(","))
         self.HURBY_DATA_FOLDER = os.getenv("HURBY_DATA_FOLDER")
         self.HURBY_LOGS_FOLDER = os.getenv("HURBY_LOGS_FOLDER")
-        self.HURBY_TIME_OUT = int(os.getenv("HURBY_TIME_OUT"))  
+        self.HURBY_TIME_OUT = int(os.getenv("HURBY_TIME_OUT"))
         self.HURBY_CURRENCY_BALLAST = os.getenv("HURBY_CURRENCY_BALLAST", 'USD')
         self.HURBY_CURRENCIES_BASE = list(os.getenv("HURBY_CURRENCIES_BASE").split(","))
 
