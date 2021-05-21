@@ -9,7 +9,7 @@ class Functions:
         BASE_DIR = os.path.dirname(os.path.dirname(
             os.path.dirname(os.path.abspath(__file__))))
         stage_config = {
-            "local": "configmap-local.env",
+            "local": "configmap-local.env",  # Is in file .gitignore
             "dev": "configmap-dev.env",
             "hmg": "configmap-hmg.env",
             "prd": "configmap-prd.env"
@@ -23,18 +23,22 @@ class Functions:
         }
 
         if os.getenv("STAGE", None) is None:
-            stage_config_aux = {
-                "development": "dev",  # configmap-dev.env
-                "production": "prd"  # docker-compose.yml
+            stage_config_flask = {
+                "development": "dev",  # configmap-dev.env (after start app)
+                "production": "prd"  # docker-compose.yml (before start app)
             }
             try:
-                stageSetted = stage_config_aux[os.getenv("FLASK_ENV", "local")]
+                stageSetted = stage_config_flask[os.getenv("FLASK_ENV")]
             except:
-                stageSetted = 'local'
+                stageSetted = 'dev'
         else:
-            stageSetted = 'local'
+            stageSetted = os.getenv("STAGE")
 
-        dot_env_path = os.path.join(BASE_DIR, stage_config[stageSetted])
+        try:
+            dot_env_path = os.path.join(BASE_DIR, stage_config[stageSetted])
+        except:
+            stageSetted = 'dev'
+            dot_env_path = os.path.join(BASE_DIR, stage_config[stageSetted])
 
         OVERRIDE_SO_ENV = dotenv_config[stageSetted]
         load_dotenv(dotenv_path=dot_env_path, override=OVERRIDE_SO_ENV)

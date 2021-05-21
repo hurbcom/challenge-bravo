@@ -1,0 +1,13 @@
+{
+   "server":"https://economia.awesomeapi.com.br",
+   "access_key_value": null,
+   "access_key_id":"access_key",
+   "endpoints": ["[srv]/json/available/uniq", "[srv]/[params]", "[srv]/convert?[access_key_id]=[access_key_value][params]"],
+   "verify": true,
+   "headers":{
+      "Content-Type":"application/json",
+      "access-control-allow-origin": "*",
+      "X-Requested-With":"worked",
+      "Authorization":null
+   }
+}
