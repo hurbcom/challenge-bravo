@@ -1,6 +1,6 @@
 import { ConnectionOptions } from "typeorm";
 
-export const ormConfig: ConnectionOptions = {
+export default {
   type: "postgres",
   port: Number(process.env.DB_PORT),
   host: process.env.DB_HOST,
@@ -12,4 +12,4 @@ export const ormConfig: ConnectionOptions = {
   cli: {
     migrationsDir: "./src/shared/infra/typeorm/migrations",
   },
-};
+} as ConnectionOptions;

@@ -6,7 +6,9 @@
   "author": "Eric Martins <ericmartins.martins@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev -r dotenv/config --inspect --transpile-only --ignore-watch node_modules --respawn src/shared/infra/http/server.ts"
+    "dev": "ts-node-dev -r dotenv/config --inspect --transpile-only --ignore-watch node_modules --respawn src/shared/infra/http/server.ts",
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli",
+    "migration:run": "yarn typeorm migration:run"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
