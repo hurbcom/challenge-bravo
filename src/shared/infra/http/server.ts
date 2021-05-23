@@ -1,4 +1,6 @@
+import "reflect-metadata";
 import express from "express";
+import "../typeorm";
 
 const app = express();
 const PORT = process.env.PORT || 3333;
