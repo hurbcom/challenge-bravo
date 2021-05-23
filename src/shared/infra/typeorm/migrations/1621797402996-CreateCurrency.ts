@@ -26,6 +26,10 @@ export class CreateCurrency1621797402996 implements MigrationInterface {
             type: "numeric",
           },
           {
+            name: "isFictional",
+            type: "Boolean",
+          },
+          {
             name: "expire_at",
             type: "timestamp",
           },
