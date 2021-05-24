@@ -12,11 +12,11 @@ class CreateCurrencyController {
       throw new AppError("currencyCode not informed!");
     }
 
-    const upperCaseCurrencyCode = currencyCode.toLocaleUpperCase();
-
     const createCurrencyUseCase = container.resolve(CreateCurrencyUseCase);
 
-    const currency = await createCurrencyUseCase.execute(upperCaseCurrencyCode);
+    const currency = await createCurrencyUseCase.execute(
+      currencyCode.toLocaleUpperCase()
+    );
 
     return response.status(201).json(currency);
   }
