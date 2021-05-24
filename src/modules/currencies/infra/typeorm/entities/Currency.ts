@@ -1,6 +1,7 @@
-import dayjs from "dayjs";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { v4 as uuid } from "uuid";
+
+import { getTomorrowDate } from "../../../../../shared/utils/dateOperation";
 
 @Entity("currencies")
 class Currency {
@@ -25,17 +26,11 @@ class Currency {
   constructor() {
     if (!this.id) {
       this.id = uuid();
-
-      const tomorrow = dayjs()
-        .add(1, "day")
-        .set("hour", 0)
-        .set("minute", 0)
-        .set("second", 0)
-        .set("millisecond", 0)
-        .toDate();
-
-      this.expireAt = tomorrow;
     }
+
+    const tomorrow = getTomorrowDate();
+
+    this.expireAt = tomorrow;
   }
 }
 
