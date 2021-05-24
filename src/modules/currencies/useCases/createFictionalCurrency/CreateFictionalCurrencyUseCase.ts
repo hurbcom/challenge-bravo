@@ -34,7 +34,7 @@ class CreateFictionalCurrencyUseCase {
     const newFictionalCurrency = await this.currenciesRepository.addCurrency({
       currencyCode,
       currencyName,
-      priceUsd,
+      priceUsd: 1 / priceUsd,
       isFictional: true,
     });
 
