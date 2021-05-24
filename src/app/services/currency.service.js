@@ -1,14 +1,6 @@
 const httpStatus = require('http-status');
 const { Currency } = require('../models');
-
-/**
- * Get all currencies
- * @returns {Promise<Array<Currency>>}
- */
-const getAll = async () => {
-  const currencies = await Currency.findAll();
-  return currencies;
-};
+const ApiError = require('../helpers/ApiError');
 
 /**
  * Create a currency
@@ -31,7 +23,7 @@ const create = async (currencyBody) => {
  * @param {string} [symbol] - Symbol of currency
  * @returns {Promise<QueryResult>}
  */
- const getBySymbol = async (symbol) => {
+const getBySymbol = async (symbol) => {
   const currency = await Currency.findOne({ where: { symbol } });
 
   if (!currency) {
@@ -42,14 +34,45 @@ const create = async (currencyBody) => {
 };
 
 /**
+ * Create a currency
+ * @param {string} [symbol] - Symbol of currency
+ * @param {Object} data
+ * @returns {Promise<Currency>}
+ */
+const updateBySymbol = async (symbol, data) => {
+  const currency = await getBySymbol(symbol);
+  return currency.update(data);
+};
+
+/**
+ * Get all currencies
+ * @returns {Promise<Array<Currency>>}
+ */
+const getAll = async () => {
+  const currencies = await Currency.findAll();
+  return currencies;
+};
+
+/**
+ * Get standard currencies
+ * @returns {Promise<Array<Currency>>}
+ */
+const getStandardCurrencies = async () => {
+  const currencies = await Currency.findAll({
+    where: {
+      default: true,
+    },
+  });
+  return currencies;
+};
+
+/**
  * Delete currency by id
  * @param {ObjectId} id
  * @returns {Promise<Currency>}
  */
 const deleteById = async (id) => {
   const currency = await Currency.findByPk(id);
-
-  clientRedis.del('currencies', currency.symbol);
 
   if (!currency) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Currency not found');
@@ -60,8 +83,10 @@ const deleteById = async (id) => {
 };
 
 module.exports = {
-  getAll,
+  getStandardCurrencies,
   create,
+  getAll,
+  getBySymbol,
   deleteById,
-  getBySymbol
+  updateBySymbol,
 };
