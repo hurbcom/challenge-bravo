@@ -18,7 +18,6 @@ class RedisService implements ICacheService {
   async saveAllCurrenciesNames(names: { name: string }[]): Promise<void> {
     const serializeCurrencies = JSON.stringify(names);
     this.client.set("currencies", serializeCurrencies);
-    console.log("salvei todos os nomes!!!!");
   }
   async getCurrencyNameByCode(currencyCode: string): Promise<string> {
     return new Promise((resolve, reject) => {
