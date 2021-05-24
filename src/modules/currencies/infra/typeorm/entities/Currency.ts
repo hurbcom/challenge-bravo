@@ -26,7 +26,14 @@ class Currency {
     if (!this.id) {
       this.id = uuid();
 
-      const tomorrow = dayjs().add(1, "day").toDate();
+      const tomorrow = dayjs()
+        .add(1, "day")
+        .set("hour", 0)
+        .set("minute", 0)
+        .set("second", 0)
+        .set("millisecond", 0)
+        .toDate();
+
       this.expireAt = tomorrow;
     }
   }
