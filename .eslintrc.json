@@ -56,12 +56,10 @@
                 "alphabetize": { "order": "asc", "ignoreCase": true }
             }
         ],
-        "import/no-extraneous-dependencies": [
-            "error",
-            { "devDependencies": ["**/*.spec.js"] }
-        ],
+
         "prettier/prettier": "error",
-        "import/no-extraneous-dependencies": "off"
+        "import/no-extraneous-dependencies": "off",
+        "no-param-reassign": "off"
     },
     "settings": {
         "import/resolver": {
