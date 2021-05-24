@@ -28,6 +28,10 @@ class CurrenciesRepository implements ICurrenciesRepository {
 
     return currency;
   }
+
+  async deleteCurrency(id: string): Promise<void> {
+    await this.repository.delete(id);
+  }
 }
 
 export { CurrenciesRepository };
