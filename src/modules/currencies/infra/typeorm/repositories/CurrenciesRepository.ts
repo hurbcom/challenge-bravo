@@ -14,6 +14,10 @@ class CurrenciesRepository implements ICurrenciesRepository {
   async addCurrency(newCurrencyDTO: ICreateCurrencyDTO): Promise<Currency> {
     const newCurrency = this.repository.create(newCurrencyDTO);
 
+    if (newCurrency.isFictional) {
+      Object.assign(newCurrency, { expireAt: null });
+    }
+
     const currencyCreated = await this.repository.save(newCurrency);
 
     return currencyCreated;
