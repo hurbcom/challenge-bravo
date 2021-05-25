@@ -7,9 +7,8 @@ let server;
 // eslint-disable-next-line prefer-const
 server = app.listen(config.server_port, () => {});
 
-cron.schedule('* * * * *', async () => {
+cron.schedule('* 1 * * *', async () => {
   integration.run();
-  console.log('un')
 });
 
 process.on('SIGTERM', () => {

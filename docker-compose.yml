@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3'
 
 services:
   postgres:
@@ -24,7 +24,6 @@ services:
       - app-network
   app:
     build: .
-    command: yarn dev
     ports:
       - '3000:3000'
     depends_on:
@@ -32,6 +31,7 @@ services:
       - redis
     volumes:
       - .:/usr/src/node-app
+      - node_modules:/usr/src/node-app/node_modules
     networks:
       - app-network
 
@@ -42,3 +42,4 @@ networks:
 volumes:
   pgdata:
     driver: local
+  node_modules:
