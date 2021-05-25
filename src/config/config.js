@@ -29,6 +29,8 @@ module.exports = {
   username: envVars.DB_USER,
   password: envVars.DB_PASS,
   database: envVars.DB_NAME,
+  redis_host: envVars.REDIS_HOST,
+  redis_port: envVars.REDIS_PORT,
   api_currency_convert: envVars.API_CURENCY_CONVERT,
   currency_rate_name: envVars.CURRENCY_RATE_NAME,
   dialect: envVars.NODE_ENV === 'test' ? envVars.DB_DIALECT_TEST : envVars.DB_DIALECT,
