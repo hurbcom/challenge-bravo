@@ -1,6 +1,9 @@
 const httpStatus = require('http-status');
+const redis = require('async-redis');
 const { Currency } = require('../models');
 const ApiError = require('../helpers/ApiError');
+
+const clientRedis = redis.createClient({ host: 'redis' });
 
 /**
  * Create a currency
@@ -13,6 +16,8 @@ const create = async (currencyBody) => {
   if (await Currency.findOne({ where: { symbol } })) {
     throw new ApiError(httpStatus.UNPROCESSABLE_ENTITY, 'Currency already exists');
   }
+
+  clientRedis.del('currencies');
 
   const currency = await Currency.create(currencyBody);
   return currency;
@@ -73,6 +78,8 @@ const getStandardCurrencies = async () => {
  */
 const deleteById = async (id) => {
   const currency = await Currency.findByPk(id);
+
+  clientRedis.del('currencies', currency.symbol);
 
   if (!currency) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Currency not found');

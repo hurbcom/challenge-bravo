@@ -16,6 +16,25 @@ services:
       - pgdata:/data/postgres
     networks:
       - app-network
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    networks:
+      - app-network
+  app:
+    build: .
+    command: yarn dev
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/usr/src/node-app
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
