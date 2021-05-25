@@ -11,6 +11,12 @@ class CurrenciesRepository implements ICurrenciesRepository {
     this.repository = getRepository(Currency);
   }
 
+  async getAll(): Promise<Currency[]> {
+    const all = await this.repository.find();
+
+    return all;
+  }
+
   async addCurrency(newCurrencyDTO: ICreateCurrencyDTO): Promise<Currency> {
     const newCurrency = this.repository.create(newCurrencyDTO);
 
