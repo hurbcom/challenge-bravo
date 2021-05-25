@@ -25,6 +25,8 @@
     "node-cron": "^3.0.0",
     "pg": "^8.6.0",
     "sequelize": "^6.6.2",
+    "swagger-jsdoc": "^6.0.8",
+    "swagger-ui-express": "^4.1.6",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {

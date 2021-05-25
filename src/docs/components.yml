@@ -1,0 +1,74 @@
+components:
+  schemas:
+    Currency:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        symbol:
+          type: string
+        rate:
+          type: number
+          format: float
+      example:
+        id: 1
+        name: PAC Coin
+        symbol: PAC
+        rate: 1.2
+    ResultConvert:
+      type: object
+      properties:
+        query:
+          type: object
+          properties:
+            from:
+              type: string
+            to:
+              type: string
+            amount:
+              type: number
+              format: float
+        updatedAt:
+          type: string
+          format: date
+        result:
+          type: number
+          format: float
+      example:
+        query: 
+          from: BRL
+          to: USD
+          rate: 1.2
+        updatedAt: '2021-05-22T15:32:00.342Z'
+        result: 22.36
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+
+  responses:
+    DuplicateCurrency:
+      description: Currency already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 422
+            message: Currency already exists
+
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
