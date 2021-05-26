@@ -1,0 +1,136 @@
+26/05/2021 06:19:52 ------------------------------------------------ 
+/var/www/html/trait/Request.trait.php -> Formato inválido. Ex.: ?from=BTC&to=EUR&amount=123.45
+[{"file":"\/var\/www\/html\/trait\/Request.trait.php","line":40,"function":"requestValidateConvertCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":23,"function":"requestValidate","class":"Api","type":"-\u003E","args":["convertCurrency"]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["convertCurrency"]}]
+
+26/05/2021 06:19:51 ------------------------------------------------ 
+/var/www/html/trait/Request.trait.php -> Formato inválido. Ex.: ?from=BTC&to=EUR&amount=123.45
+[{"file":"\/var\/www\/html\/trait\/Request.trait.php","line":40,"function":"requestValidateConvertCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":23,"function":"requestValidate","class":"Api","type":"-\u003E","args":["convertCurrency"]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["convertCurrency"]}]
+
+26/05/2021 06:19:41 ------------------------------------------------ 
+/var/www/html/trait/Request.trait.php -> Formato inválido. Ex.: ?from=BTC&to=EUR&amount=123.45
+[{"file":"\/var\/www\/html\/trait\/Request.trait.php","line":40,"function":"requestValidateConvertCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":23,"function":"requestValidate","class":"Api","type":"-\u003E","args":["convertCurrency"]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["convertCurrency"]}]
+
+26/05/2021 06:19:32 ------------------------------------------------ 
+/var/www/html/trait/Request.trait.php -> Formato inválido. Ex.: ?from=BTC&to=EUR&amount=123.45
+[{"file":"\/var\/www\/html\/trait\/Request.trait.php","line":40,"function":"requestValidateConvertCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":23,"function":"requestValidate","class":"Api","type":"-\u003E","args":["convertCurrency"]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["convertCurrency"]}]
+
+26/05/2021 06:19:27 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> BTXX já existe.
+[{"file":"\/var\/www\/html\/class\/Currency.class.php","line":126,"function":"validateDuplicateName","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":63,"function":"save","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"addCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["addCurrency"]}]
+
+26/05/2021 06:19:24 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> BTXX já existe.
+[{"file":"\/var\/www\/html\/class\/Currency.class.php","line":126,"function":"validateDuplicateName","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":63,"function":"save","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"addCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["addCurrency"]}]
+
+26/05/2021 04:38:07 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> Moeda BTXX não encontrada.
+[{"file":"\/var\/www\/html\/class\/Api.class.php","line":78,"function":"getCurrency","class":"Currency","type":"-\u003E","args":["BTXX"]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"removeCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["removeCurrency"]}]
+
+26/05/2021 04:01:45 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> BTXX já existe.
+[{"file":"\/var\/www\/html\/class\/Currency.class.php","line":126,"function":"validateDuplicateName","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":63,"function":"save","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"addCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["addCurrency"]}]
+
+26/05/2021 03:30:04 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> Moeda BTXX não encontrada.
+[{"file":"\/var\/www\/html\/class\/Api.class.php","line":78,"function":"getCurrency","class":"Currency","type":"-\u003E","args":["BTXX"]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"removeCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["removeCurrency"]}]
+
+26/05/2021 03:20:50 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> Moeda BTXX não encontrada.
+[{"file":"\/var\/www\/html\/class\/Api.class.php","line":78,"function":"getCurrency","class":"Currency","type":"-\u003E","args":["BTXX"]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"removeCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["removeCurrency"]}]
+
+26/05/2021 03:20:18 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> BTXX não encontrado.
+[{"file":"\/var\/www\/html\/class\/Api.class.php","line":78,"function":"getCurrency","class":"Currency","type":"-\u003E","args":["BTXX"]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"removeCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["removeCurrency"]}]
+
+26/05/2021 03:19:49 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> BTXX já existe.
+[{"file":"\/var\/www\/html\/class\/Currency.class.php","line":127,"function":"validateDuplicateName","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":63,"function":"save","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"addCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["addCurrency"]}]
+
+26/05/2021 03:13:38 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> BTX já existe.
+[{"file":"\/var\/www\/html\/class\/Currency.class.php","line":127,"function":"validateDuplicateName","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":63,"function":"save","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"addCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["addCurrency"]}]
+
+26/05/2021 03:11:54 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> BTC já existe.
+[{"file":"\/var\/www\/html\/class\/Currency.class.php","line":127,"function":"validateDuplicateName","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":63,"function":"save","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Api.class.php","line":24,"function":"addCurrency","class":"Api","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["addCurrency"]}]
+
+26/05/2021 03:10:52 ------------------------------------------------ 
+/var/www/html/trait/Request.trait.php -> O método requestValidateAdd deve ser implementado na trait Request.trait.php
+[{"file":"\/var\/www\/html\/class\/Api.class.php","line":23,"function":"requestValidate","class":"Api","type":"-\u003E","args":["add"]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["add"]}]
+
+26/05/2021 02:57:02 ------------------------------------------------ 
+/var/www/html/trait/Request.trait.php -> O método requestValidateConvert deve ser implementado na trait Request.trait.php
+[{"file":"\/var\/www\/html\/class\/Api.class.php","line":26,"function":"requestValidate","class":"Api","type":"-\u003E","args":["convert"]},{"file":"\/var\/www\/html\/index.php","line":31,"function":"__construct","class":"Api","type":"-\u003E","args":["convert"]}]
+
+25/05/2021 06:11:19 ------------------------------------------------ 
+/var/www/html/class/Quotation.class.php -> Formato inválido, o atributo amount deve conter um valor numérico maior que zero.
+[{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 06:10:59 ------------------------------------------------ 
+/var/www/html/class/Quotation.class.php -> Formato inválido, o atributo amount deve conter um valor numérico maior que zero.
+[{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 06:10:06 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php -> D&D já existe.
+[{"file":"\/var\/www\/html\/class\/Currency.class.php","line":127,"function":"validateDuplicateName","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":77,"function":"save","class":"Currency","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":10,"function":"add","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:31:52 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:31:04 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:30:51 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:30:31 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:30:04 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:28:38 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":56,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:27:53 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:27:37 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:02:02 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:01:51 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 05:01:25 ------------------------------------------------ 
+/var/www/html/class/Currency.class.php ->  não encontrado.
+[{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":55,"function":"getCurrency","class":"Currency","type":"-\u003E","args":[null]},{"file":"\/var\/www\/html\/class\/Quotation.class.php","line":42,"function":"convertCurrency","class":"Quotation","type":"-\u003E","args":[]},{"file":"\/var\/www\/html\/index.php","line":13,"function":"convert","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 04:31:53 ------------------------------------------------ 
+/var/www/html/class/Quotation.class.php -> D&D não encontrado.
+[{"file":"\/var\/www\/html\/index.php","line":16,"function":"remove","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 03:56:59 ------------------------------------------------ 
+/var/www/html/class/Quotation.class.php -> D&D não encontrado.
+[{"file":"\/var\/www\/html\/index.php","line":17,"function":"remove","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 03:56:58 ------------------------------------------------ 
+/var/www/html/class/Quotation.class.php -> D&D não encontrado.
+[{"file":"\/var\/www\/html\/index.php","line":17,"function":"remove","class":"Quotation","type":"-\u003E","args":[null]}]
+
+25/05/2021 03:53:24 ------------------------------------------------ 
+/var/www/html/class/Quotation.class.php -> D&D não encontrado.
+[{"file":"\/var\/www\/html\/index.php","line":17,"function":"remove","class":"Quotation","type":"-\u003E","args":[null]}]
+
