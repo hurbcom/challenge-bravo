@@ -13,7 +13,7 @@
     * [Deletar moeda](#running-api-delete)
     * [Documentação](#running-api-docs)
 * [Testes](#tests)
-* [Todo](#todo)
+* [TODO](#todo)
 
 
 <a name="about-problem"></a>
@@ -51,7 +51,7 @@ Moedas inicialmente suportadas (chamadas de _default_):
 <a name="instalation"></a>
 ## Instalação
 ---
-Na raiz do projeto existe um arquivo chamado `.env-example`, é necessário renomea-lo para `.env`.
+Na raiz do projeto existe um arquivo denominado `.env-example`, é necessário renomea-lo para `.env`. Pode ser feito através do comando:
 ```sh
 cp .env.example .env
 ```
@@ -65,12 +65,12 @@ ou em modo desenvolvimento:
 yarn docker:dev
 ```
 
-Execute o comando para criar e popular o banco de dados:
+Execute o comando para criar e popular a tabela de moedas:
 ```sh
 yarn config:database
 ```
 
-A aplicação estará disponível através do endereço: http://localhost:3000
+A aplicação estará disponível através do endereço: http://localhost:3000/v1/currencies
 
 <a name="running"></a>
 ## API - Funcionamento (endpoints)
@@ -84,11 +84,11 @@ GET /docs
 ```
 <a name="running-api-all"></a>
 ### GET /currencies - Lista de moedas cadastradas
-Requisição para listar todas as moedas cadastradas
+Recurso para listar todas as moedas cadastradas
 
 <a name="running-api-convert"></a>
-@@### GET /currencies/convert/:from/:to/:amount - Converter moeda
-Requisição para realizar a conversão entre 2 moedas.
+### GET /currencies/convert/:from/:to/:amount - Converter moeda
+Recurso para realizar a conversão entre 2 moedas.
 
 **Parâmetros:**
 - **from**: Moeda de origem.
@@ -97,7 +97,7 @@ Requisição para realizar a conversão entre 2 moedas.
 
 <a name="running-api-create"></a>
 ### POST /currencies - Cadastrar moeda
-Requisição para cadastrar uma nova moeda.
+Recurso para cadastrar uma nova moeda.
 
 **Corpo da requisição:**
 ```
@@ -110,10 +110,10 @@ Requisição para cadastrar uma nova moeda.
 
 <a name="running-api-delete"></a>
 ### DELETE /currencies/{id} - Deletar uma moeda
-Requisição para remover uma moeda
+Recurso para remover uma moeda através do identificador.
 
 **Parâmetros:**
-- **id**: Idenfiticação da moeda no banco de dados (Inteiro).
+- **id**: Idenfiticação da moeda no banco de dados (inteiro).
 
 <a name="running-api-docs"></a>
 ### GET /docs - Documentação da api
@@ -129,7 +129,7 @@ yarn docker:test
 Para exibir a cobertura dos testes, adicione o parametro **`--coverage`** no comando acima.
 
 <a name="running-api-docs"></a>
-## Todo
+## TODO
 ---
 - [ ] Aumentar cobertura dos testes unitários
 - [ ] Separar arquivo de configuração (Ex: config/database.js, config/cache.js, config/app.js)
