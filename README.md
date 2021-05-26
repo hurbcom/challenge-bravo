@@ -1,77 +1,137 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> API Conversão de moedas - HURB TEST
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> API Conversão de moedas - Desafio Hurb
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+## Indíce
+* [Sobre o projeto](#about-problem)
+    * [Desafio Hurb](#about-problem)
+    * [Tecnologias](#about-techs)
+* [Requisitos](#requirements)
+* [Instalação](#instalation)
+* [Funcionamento](#running)
+    * [Listar todas as moedas](#running-api-all)
+    * [Converter moeda](#running-api-convert)
+    * [Cadastrar nova moeda](#running-api-create)
+    * [Deletar moeda](#running-api-delete)
+    * [Documentação](#running-api-docs)
+* [Testes](#tests)
+* [Todo](#todo)
 
-A API deve, originalmente, converter entre as seguintes moedas:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+<a name="about-problem"></a>
+## Desafio - Hurb
+---
+O intuito deste projeto é solucionar o desafio proposto pelo teste técnico _bravo_ da Hurb. O desafio consiste em criar uma aplicação para converter moedas com base no dólar. 
 
 Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Moedas inicialmente suportadas (chamadas de _default_):
+- USD
+- BRL
+- EUR
+- BTC
+- ETH
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+<a name="about-techs"></a>
+## Tecnologias
+---
+- Postgres
+- Node.js
+- Express
+- Sequelize
+- Redis
+- Jest
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
-
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
-
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
-
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
-
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
-
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
-
+<a name="requirements"></a>
 ## Requisitos
+---
+- Git
+- Docker
+- Docker composer
+- Node >= 13
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+<a name="instalation"></a>
+## Instalação
+---
+Na raiz do projeto existe um arquivo chamado `.env-example`, é necessário renomea-lo para `.env`.
+```sh
+cp .env.example .env
+```
 
-## Critério de avaliação
+Inicie o container docker:
+```sh 
+yarn docker:prod
+```
+ou em modo desenvolvimento:
+```sh 
+yarn docker:dev
+```
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Execute o comando para criar e popular o banco de dados:
+```sh
+yarn config:database
+```
 
-## Dúvidas
+A aplicação estará disponível através do endereço: http://localhost:3000
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+<a name="running"></a>
+## API - Funcionamento (endpoints)
+---
+```
+GET /currencies
+GET /currencies/convert/:from/:to/:amount
+POST /currencies
+DELETE /currencies/{currency}
+GET /docs
+```
+<a name="running-api-all"></a>
+### GET /currencies - Lista de moedas cadastradas
+Requisição para listar todas as moedas cadastradas
 
-Boa sorte e boa viagem! ;)
+<a name="running-api-convert"></a>
+@@### GET /currencies/convert/:from/:to/:amount - Converter moeda
+Requisição para realizar a conversão entre 2 moedas.
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+**Parâmetros:**
+- **from**: Moeda de origem.
+- **to**: Moeda para qual o valor será convertido.
+- **amount**: Valor da moeda de origem que será convertido.
+
+<a name="running-api-create"></a>
+### POST /currencies - Cadastrar moeda
+Requisição para cadastrar uma nova moeda.
+
+**Corpo da requisição:**
+```
+{
+    "name": "Doge coin",
+    "symbol": "PAC",
+    "rate": 5
+}
+```
+
+<a name="running-api-delete"></a>
+### DELETE /currencies/{id} - Deletar uma moeda
+Requisição para remover uma moeda
+
+**Parâmetros:**
+- **id**: Idenfiticação da moeda no banco de dados (Inteiro).
+
+<a name="running-api-docs"></a>
+### GET /docs - Documentação da api
+Página responsável por especificar os _endpoints_ da aplicação.
+
+<a name="running-api-docs"></a>
+## Tests
+---
+Para executar os testes, rode o comando:
+```sh 
+yarn docker:test
+```
+Para exibir a cobertura dos testes, adicione o parametro **`--coverage`** no comando acima.
+
+<a name="running-api-docs"></a>
+## Todo
+---
+- [ ] Aumentar cobertura dos testes unitários
+- [ ] Separar arquivo de configuração (Ex: config/database.js, config/cache.js, config/app.js)
+- [ ] Salvar log de erros e eventos
+- [ ] Autorizar consumo da API a partir de token válido
