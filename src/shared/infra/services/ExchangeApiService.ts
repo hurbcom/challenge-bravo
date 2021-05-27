@@ -5,47 +5,34 @@ import { AppError } from "../../errors/AppError";
 import { IExchangeApiService } from "../../services/IExchangeApiService";
 import { api } from "../http/axios/api";
 
-export interface IResponseCurrenciesList {
-  currencies: any;
-}
-
-interface IResponseCurrencyUsdPrice {
-  quotes: any;
+export interface IResponseCurrency {
+  asset_id: string;
+  name: string;
+  price_usd: number;
 }
 
 @injectable()
 class exchangeApiService implements IExchangeApiService {
-  private readonly base_currency = "USD";
-
-  async getAllCurrenciesNames(): Promise<IResponseCurrenciesList> {
+  async getCurrency(currencyCode: string): Promise<IResponseCurrency> {
     let response: AxiosResponse;
 
     try {
-      response = await api.get("/list");
+      response = await api.get(`/${currencyCode}`);
     } catch (err) {
       throw new AppError(`Unexpected integration error - ${err.message}`, 500);
     }
 
-    const result = response.data as IResponseCurrenciesList;
-    return result;
-  }
-  async getCurrencyUsdPrice(currencyCode: string): Promise<number> {
-    let response: AxiosResponse;
+    const result = response.data as IResponseCurrency[];
 
-    try {
-      response = await api.get("/live", {
-        params: {
-          currencies: currencyCode,
-        },
-      });
-    } catch (err) {
-      throw new AppError(`Unexpected integration error - ${err.message}`, 500);
+    if (!result || !result.length) {
+      return null;
     }
 
-    const result = response.data as IResponseCurrencyUsdPrice;
-    const code = `${this.base_currency}${currencyCode}`;
-
-    return result.quotes[code];
+    return {
+      asset_id: result[0].asset_id,
+      name: result[0].name,
+      price_usd: result[0].price_usd,
+    };
   }
 }
 

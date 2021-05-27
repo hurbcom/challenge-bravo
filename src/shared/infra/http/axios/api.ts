@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://api.currencylayer.com",
-  params: {
-    access_key: process.env.EXCHANGE_API_KEY,
+  baseURL: process.env.EXCHANGE_API_BASE_URL,
+  headers: {
+    "X-CoinAPI-Key": process.env.EXCHANGE_API_KEY,
   },
 });
 

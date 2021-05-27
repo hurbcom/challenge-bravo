@@ -1,8 +1,7 @@
-import { IResponseCurrenciesList } from "../infra/services/ExchangeApiService";
+import { IResponseCurrency } from "../infra/services/ExchangeApiService";
 
 interface IExchangeApiService {
-  getAllCurrenciesNames(): Promise<IResponseCurrenciesList>;
-  getCurrencyUsdPrice(currencyCode: string): Promise<number>;
+  getCurrency(currencyCode: string): Promise<IResponseCurrency>;
 }
 
 export { IExchangeApiService };
