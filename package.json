@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "ts-node-dev -r dotenv/config --inspect --transpile-only --ignore-watch node_modules --respawn src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli",
-    "migration:run": "yarn typeorm migration:run"
+    "migration:run": "yarn typeorm migration:run",
+    "seed:default_currencies": "ts-node-dev -r dotenv/config src/shared/infra/typeorm/seeds/defaultCurrencies.ts"
   },
   "dependencies": {
     "axios": "^0.21.1",
