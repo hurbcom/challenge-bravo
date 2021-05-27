@@ -49,7 +49,7 @@ class ConvertCurrencyUseCase {
     await this.updateCurrencyIfExpired(fromCurrency);
     await this.updateCurrencyIfExpired(toCurrency);
 
-    const value = (toCurrency.priceUsd / fromCurrency.priceUsd) * amount;
+    const value = (fromCurrency.priceUsd / toCurrency.priceUsd) * amount;
     const valueRounded = Number(value.toFixed(2));
 
     return {
@@ -59,16 +59,21 @@ class ConvertCurrencyUseCase {
   }
 
   private async updateCurrencyIfExpired(currency: Currency) {
+    // data de expiração nula significa que a moeda é ficticia ou é a moeda base, portanto, não precisa atualizar o valor
+    if (!currency.expireAt) {
+      return;
+    }
+
     const today = dayjs();
     const diff = today.diff(currency.expireAt);
 
-    // se a diferença em ms for positiva, significa que já passou da data de expiraçao
+    // se a diferença em ms for positiva, significa que já passou da data de expiração
     if (diff >= 0) {
-      const newPrice = await this.exchangeApiService.getCurrencyUsdPrice(
+      const newCurrency = await this.exchangeApiService.getCurrency(
         currency.currencyCode
       );
 
-      currency.priceUsd = newPrice;
+      currency.priceUsd = newCurrency.price_usd;
       currency.expireAt = getTomorrowDate();
       await this.currenciesRepository.addCurrency(currency);
     }
