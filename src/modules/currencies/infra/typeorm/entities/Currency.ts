@@ -6,7 +6,7 @@ import { getTomorrowDate } from "../../../../../shared/utils/dateOperation";
 @Entity("currencies")
 class Currency {
   @PrimaryColumn()
-  id: string;
+  id?: string;
 
   @Column({ name: "currency_code" })
   currencyCode: string;
