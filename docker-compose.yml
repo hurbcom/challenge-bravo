@@ -14,13 +14,6 @@ services:
     volumes:
       - pgdata:/data/postgres
 
-  redis:
-    image: redis
-    ports:
-      - 6379:6379
-    volumes:
-      - ./.docker/redis:/data
-
 
 volumes:
   pgdata:
