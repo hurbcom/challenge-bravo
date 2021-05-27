@@ -14,6 +14,18 @@ services:
     volumes:
       - pgdata:/data/postgres
 
+  app:
+    build: .
+    container_name: challenge_bravo
+    ports:
+      - 3333:3333
+      - 9229:9229
+    volumes:
+      - .:/usr/app
+    links:
+      - postgres_currency
+    depends_on:
+      - postgres_currency
 
 volumes:
   pgdata:
