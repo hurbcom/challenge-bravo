@@ -1,13 +1,19 @@
 import "reflect-metadata";
 import express, { Request, Response, NextFunction } from "express";
-import "express-async-errors";
 
-import "../typeorm";
-import "../../container";
+import "express-async-errors";
 import { AppError } from "../../errors/AppError";
+import createConnection from "../typeorm";
+import "../../container";
 import { routes } from "./routes";
 
 const app = express();
+
+createConnection().then((conn) => {
+  console.log("database connected!");
+  conn.runMigrations();
+});
+
 const PORT = process.env.PORT || 3333;
 
 app.use(express.json());

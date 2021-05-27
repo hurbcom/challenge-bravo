@@ -1,8 +1,7 @@
-import { createConnection } from "typeorm";
+import { Connection, createConnection } from "typeorm";
 
 import ORMConfig from "../../../../ormconfig";
 
-createConnection(ORMConfig).then((conn) => {
-  console.log("database connected!");
-  conn.runMigrations();
-});
+export default async (): Promise<Connection> => {
+  return createConnection(ORMConfig);
+};
