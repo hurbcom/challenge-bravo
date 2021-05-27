@@ -1,7 +1,6 @@
 import { injectable, inject } from "tsyringe";
 
 import { AppError } from "../../../../shared/errors/AppError";
-import { ICacheService } from "../../../../shared/services/ICacheService";
 import { IExchangeApiService } from "../../../../shared/services/IExchangeApiService";
 import { Currency } from "../../infra/typeorm/entities/Currency";
 import { ICurrenciesRepository } from "../../repositories/ICurrenciesRepositories";
@@ -11,8 +10,6 @@ class CreateCurrencyUseCase {
   constructor(
     @inject("CurrenciesRepository")
     private currenciesRepository: ICurrenciesRepository,
-    @inject("CacheService")
-    private cacheService: ICacheService,
     @inject("ExchangeApiService")
     private exchangeApiSerice: IExchangeApiService
   ) {}
@@ -26,19 +23,21 @@ class CreateCurrencyUseCase {
       throw new AppError("Currency already exists");
     }
 
-    const currencyName = await this.cacheService.getCurrencyNameByCode(
+    const currencyResult = await this.exchangeApiSerice.getCurrency(
       currencyCode
     );
 
-    const priceUsd = await this.exchangeApiSerice.getCurrencyUsdPrice(
-      currencyCode
-    );
+    if (!currencyResult) {
+      throw new AppError(
+        "This currency does not exists! If you wanna create a new fictional currency, check the documentation to get the right endpoint."
+      );
+    }
 
     const newCurrency = await this.currenciesRepository.addCurrency({
       currencyCode,
-      currencyName,
+      currencyName: currencyResult.name,
       isFictional: false,
-      priceUsd,
+      priceUsd: currencyResult.price_usd,
     });
 
     return newCurrency;
