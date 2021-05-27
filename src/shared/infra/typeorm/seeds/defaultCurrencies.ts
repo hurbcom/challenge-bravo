@@ -45,7 +45,7 @@ const defaultCurrencies: Currency[] = [
 ];
 
 async function create() {
-  const connection = await createConnection();
+  const connection = await createConnection("localhost");
 
   await connection.runMigrations();
 
