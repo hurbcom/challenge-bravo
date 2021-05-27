@@ -9,3 +9,12 @@ export function getTomorrowDate(): Date {
     .set("millisecond", 0)
     .toDate();
 }
+
+export function getTodayDate(): Date {
+  return dayjs()
+    .set("hour", 0)
+    .set("minute", 0)
+    .set("second", 0)
+    .set("millisecond", 0)
+    .toDate();
+}
