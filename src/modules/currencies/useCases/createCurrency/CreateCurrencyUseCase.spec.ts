@@ -1,28 +1,13 @@
 import { AppError } from "../../../../shared/errors/AppError";
 import { IResponseCurrency } from "../../../../shared/infra/services/ExchangeApiService";
 import { IExchangeApiService } from "../../../../shared/services/IExchangeApiService";
+import { makeExchangeApiService } from "../../../../shared/utils/tests/makeExchangeApiServiceStub";
 import { CurrenciesRepositoryInMemory } from "../../repositories/in-memory/CurrenciesRepositoryInMemory";
 import { CreateCurrencyUseCase } from "./CreateCurrencyUseCase";
 
 let createCurrencyUseCase: CreateCurrencyUseCase;
 let currenciesRepositoryInMemory: CurrenciesRepositoryInMemory;
 let exchangeApiServiceStub: IExchangeApiService;
-
-const makeExchangeApiService = (): IExchangeApiService => {
-  class ExchangeApiServiceStub implements IExchangeApiService {
-    async getCurrency(currencyCode: string): Promise<IResponseCurrency> {
-      const response: IResponseCurrency = {
-        asset_id: currencyCode.toLocaleUpperCase(),
-        name: `${currencyCode} currency Test`,
-        price_usd: 5,
-      };
-
-      return response;
-    }
-  }
-
-  return new ExchangeApiServiceStub();
-};
 
 describe("Create currency", () => {
   beforeEach(() => {
