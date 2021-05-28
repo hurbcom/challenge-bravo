@@ -9,6 +9,7 @@ python = "^3.8"
 peewee = "^3.14.4"
 fastapi = "^0.65.1"
 uvicorn = {extras = ["standard"], version = "^0.13.4"}
+python-decouple = "^3.4"
 
 [tool.poetry.dev-dependencies]
 ipython = "^7.23.1"
