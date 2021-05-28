@@ -59,9 +59,18 @@ $ git clone https://github.com/antoniojr78/challenge-bravo
 $ cd challenge-bravo
 challenge-bravo$ docker-compose build --no-cache
 challenge-bravo$ docker-compose up
-Creating network "challenge-bravo_default" with the default driver
-Creating hurby ... done
-Attaching to hurby
+Creating db_cache ... done
+Creating hurby    ... done
+Attaching to db_cache, hurby
+db_cache | 1:C 28 May 2021 18:34:43.323 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+db_cache | 1:C 28 May 2021 18:34:43.323 # Redis version=6.2.3, bits=64, commit=00000000, modified=0, pid=1, just started
+db_cache | 1:C 28 May 2021 18:34:43.323 # Configuration loaded
+db_cache | 1:M 28 May 2021 18:34:43.328 * monotonic clock: POSIX clock_gettime
+db_cache | 1:M 28 May 2021 18:34:43.332 * Running mode=standalone, port=6379.
+db_cache | 1:M 28 May 2021 18:34:43.332 # Server initialized
+db_cache | 1:M 28 May 2021 18:34:43.332 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+db_cache | 1:M 28 May 2021 18:34:43.336 * Ready to accept connections
+db_cache | 1:M 28 May 2021 18:34:56.324 * DB saved on disk
 hurby    | The search for available currencies has started
 hurby    |  * Serving Flask app "src.web_api.urls" (lazy loading)
 hurby    |  * Environment: production
@@ -70,7 +79,6 @@ hurby    |    Use a production WSGI server instead.
 hurby    |  * Debug mode: off
 hurby    |  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 hurby    | The search for available currencies ended with 155 insertions
-
 ```
 ### Como executar os Testar Unitários
 - Pré-requisitos:
@@ -79,8 +87,8 @@ hurby    | The search for available currencies ended with 155 insertions
 ```bash
 /home/ajunior/my_projects$ git clone https://github.com/antoniojr78/challenge-bravo
 /home/ajunior/my_projects$ cd challenge-bravo
-/home/ajunior/my_projects/challenge-bravo> pipenv install
-/home/ajunior/my_projects/challenge-bravo> pipenv run pytest tests -v
+/home/ajunior/my_projects/challenge-bravo$ pipenv install
+/home/ajunior/my_projects/challenge-bravo$ pipenv run pytest tests -v
 ======================================================================= test session starts ========================================================================
 platform linux -- Python 3.7.7, pytest-6.2.4, py-1.10.0, pluggy-0.13.1 -- /home/ajunior/.local/share/virtualenvs/challenge-bravo-Z0t7V9HR/bin/python
 cachedir: .pytest_cache
@@ -132,6 +140,8 @@ Nessa página conseguimos executar os endpoints e também verificar o formato da
 
 ### Deploy
 Será realizado em ambiente isolado e replicável de container **Docker** conforme descrito mais acima.
+
+Teremos dois serviços. O `hurby` para a API web HURBy e o `redis` para o banco de dados NoSql.
 
 ### Persistência de dados
 As **moedas**, tanto as disponibilizadas pela API externa quanto as criados pelo usuário na API HURBy, são armazenadas e gerenciadas em memória usando o banco de dados NoSql **Redis**.

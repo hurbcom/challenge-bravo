@@ -9,3 +9,9 @@ services:
       - FLASK_ENV=production
     ports:
       - 5000:5000
+    depends_on:
+    - redis
+  redis:
+    image: redis
+    container_name: db_cache
+    command: redis-server --requirepass Ch4ll5ngeBr@vo
