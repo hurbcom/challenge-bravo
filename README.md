@@ -20,58 +20,196 @@ Construa também um endpoint para adicionar e remover moedas suportadas pela API
 
 A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+<br />
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+# Requisitos
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+- [x] Deve ser possível adicionar moedas reais ou fictícias que serão suportadas pela API.
+- [x] Deve ser possível remover moedas reais ou fictícias.
+- [x] Deve ser possível listar todas as moedas cadastradas.
+- [x] Deve ser possível realizar conversões monetárias entre as moedas cadastradas.
 
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+<br />
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
+# Observações
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+- A API externa que utilizei, no plano gratuito, atualiza as cotações das moedas diariamente e possui uma limitação de requisições diária. Com isso, ao adicionar uma moeda, a aplicação inclui uma data de expiração no dia seguinte e, ao tentar realizar uma conversão, a aplicação verifica se o valor monetário em dólar das moedas já estão expirados; se estiver, ela faz outra busca na API externa para atualizar o valor. Assim, o número de requisições externas ficam bem controlados.
+- Como a API externa precisa de uma API_KEY, resolvi deixa-la no arquivo ".env", mas num caso real, ela não seria exposta no repositório.
 
-## Requisitos
+<br />
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+# Rotas
 
-## Critério de avaliação
+## Conversão
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+```http
+GET http://localhost:3333/currencies/convert?from={CURRENCY_CODE}&to={CURRENCY_CODE}&amount={AMOUNT}
 
-## Dúvidas
+Examplo:
+http://localhost:3333/currencies/convert?from=BRL&to=USD&amount=100
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+Reposta:
+{
+  "descripition": "100 Brazilian Real em US Dollar",
+  "value": 19.09
+}
+```
 
-Boa sorte e boa viagem! ;)
+<br />
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## Listar todas
+
+```http
+GET http://localhost:3333/currencies/
+
+Reposta:
+[
+  {
+    "id": "3c9b0757-a5a2-457d-ad79-426e51b0403e",
+    "expireAt": "2021-05-27T03:00:00.000Z",
+    "currencyCode": "EUR",
+    "currencyName": "Euro",
+    "priceUsd": "0",
+    "isFictional": false
+  },
+  {
+    "id": "5d972597-a688-4191-af4e-9a8fc5e7aaa2",
+    "expireAt": null,
+    "currencyCode": "USD",
+    "currencyName": "US Dollar",
+    "priceUsd": "1",
+    "isFictional": false
+  },
+  {
+    "id": "fd2a123f-6ce7-4be3-859e-f3beda5a86d8",
+    "expireAt": "2021-05-28T00:00:00.000Z",
+    "currencyCode": "ETH",
+    "currencyName": "Ethereum",
+    "priceUsd": "2776.929315201368",
+    "isFictional": false
+  },
+  {
+    "id": "b61cc7fb-301e-4af2-8403-66fc5d50ebbe",
+    "expireAt": "2021-05-28T00:00:00.000Z",
+    "currencyCode": "BTC",
+    "currencyName": "Bitcoin",
+    "priceUsd": "38824.427814328046",
+    "isFictional": false
+  },
+  {
+    "id": "851e20f3-789b-4ea3-9c1f-f69f5e0266fb",
+    "expireAt": "2021-05-29T00:00:00.000Z",
+    "currencyCode": "BRL",
+    "currencyName": "Brazilian Real",
+    "priceUsd": "0.19089802603858877",
+    "isFictional": false
+  }
+]
+```
+
+<br />
+
+## Cadastrar moeda
+
+```http
+POST http://localhost:3333/currencies/
+
+Body:
+{
+	"currencyCode": "GBP"
+}
+
+Reposta:
+{
+  "id": "8fe8ed1b-d0a8-407b-a1c2-b37464ae0c04",
+  "expireAt": "2021-05-29T00:00:00.000Z",
+  "currencyCode": "GBP",
+  "currencyName": "Pound Sterling",
+  "priceUsd": 1.417654056049924,
+  "isFictional": false
+}
+```
+
+<br />
+
+## Cadastrar moeda fictícia
+
+```http
+POST http://localhost:3333/currencies/fictional
+
+Body:
+{
+	"currencyCode": "HURB",
+	"currencyName": "Hotel urbano",
+	"priceUsd": 347.95
+}
+
+Reposta:
+{
+  "id": "f8ea0a6c-f250-492f-bf11-c148b516d15f",
+  "expireAt": null,
+  "currencyCode": "HURB",
+  "currencyName": "Hotel urbano",
+  "priceUsd": 347.95,
+  "isFictional": true
+}
+```
+
+<br />
+
+## Remover moeda
+
+```http
+DELETE http://localhost:3333/currencies/:currencyCode
+
+Exemplo:
+http://localhost:3333/currencies/BRL
+
+
+Reposta:
+204 - No Content
+```
+
+<br />
+
+
+# Rodando a aplicação
+
+```bash
+#clonando repositório
+$ git clone $fork
+
+#entrando na pasta do projeto
+$ cd $pasta_do_projeto
+
+#rodando a aplicação
+$ docker-compose up -d
+```
+<br />
+
+## ATENÇÃO
+Caso seja a primeira vez que rodou o projeto e o banco de dados não esteja populado, rode o seguinte comando:
+
+Com yarn:
+```bash
+$ yarn seed:default_currencies
+```
+
+Com npm:
+```bash
+$ npm run seed:default_currencies
+```
+
+<br />
+
+# Teste
+
+Com yarn:
+```bash
+$ yarn test
+```
+
+Com npm:
+```bash
+$ npm run test
+```
