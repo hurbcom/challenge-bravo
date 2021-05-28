@@ -1,11 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
 import { AppError } from "../../../../shared/errors/AppError";
-import { ICreateCurrencyDTO } from "../../dtos/ICreateCurrencyDTO";
 import { Currency } from "../../infra/typeorm/entities/Currency";
 import { ICurrenciesRepository } from "../../repositories/ICurrenciesRepositories";
 
-interface ICreateFictionalCurrencyRequest {
+export interface ICreateFictionalCurrencyRequest {
   currencyCode: string;
   currencyName: string;
   priceUsd: number;
