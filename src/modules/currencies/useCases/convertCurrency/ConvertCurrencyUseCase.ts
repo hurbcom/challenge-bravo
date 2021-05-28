@@ -7,7 +7,7 @@ import { getTomorrowDate } from "../../../../shared/utils/dateOperation";
 import { Currency } from "../../infra/typeorm/entities/Currency";
 import { ICurrenciesRepository } from "../../repositories/ICurrenciesRepositories";
 
-interface IConvertCurrencyRequest {
+export interface IConvertCurrencyRequest {
   from: string;
   to: string;
   amount: number;
