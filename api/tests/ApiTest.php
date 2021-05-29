@@ -33,15 +33,15 @@ class ApiTest extends TestCase
 		}
 
 		$curl_exec = curl_exec($curl);
-        $curl_info = curl_getinfo($curl);
-        $curl_error = curl_error($curl);
+		$curl_info = curl_getinfo($curl);
+		$curl_error = curl_error($curl);
 
-        curl_close($curl);
+		curl_close($curl);
 
-        if ($curl_error) {
-            throw new Exception('Curl error: '.$curl_error);
-        }
-   
+		if ($curl_error) {
+			throw new Exception('Curl error: ' . $curl_error);
+		}
+
 		return ['response' => $curl_exec, 'info' => $curl_info];
 	}
 
@@ -93,5 +93,4 @@ class ApiTest extends TestCase
 		self::assertJsonStringEqualsJsonString($request['response'], '{"message": "Moeda TESTE não encontrada."}');
 		self::assertEquals($request['info']['http_code'], 400);
 	}
-
 }
