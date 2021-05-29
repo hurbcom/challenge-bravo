@@ -12,6 +12,8 @@ Esta API foi criada para converter valores entre diferentes tipos de moeda, alé
 * Foi adicionado um arquivo .htaccess para redirecionar qualquer URL para o ```index.php```;
 * A API utiliza uma Exception (```api/class/ExceptionApi.class.php```) que loga qualquer erro de sistema ou de validação em um arquivo de log (```api/data/exception.log```);
 * O docker foi configurado para utilizar a porta 80 para o apache;
+* Não foi utilizado nenhum framework;
+* Não criei testes para todos os cenários;
 
 <br />
 
@@ -48,3 +50,11 @@ REQUEST_METHOD  | ```DELETE```
 ------------- | -------------
 PARAM  | <pre>{"name": "BTC"}</pre>
 RETURN  | <pre>{"message": "Moeda excluída com sucesso."}</pre>
+
+
+# Testes
+O teste foi executado local utilizando PHPUnit6.4. [Link aqui para instalação.](https://phpunit.readthedocs.io/pt_BR/latest/installation.html)
+
+<p align="center">
+  <img src="doc/tests.jpg" alt="mdl" />
+</p>

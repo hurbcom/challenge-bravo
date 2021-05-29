@@ -8,11 +8,6 @@ class Api
 {
     use Request;
 
-    protected $attrName = 'name';
-    protected $attrAmount = 'amount';
-    protected $attrFrom = 'from';
-    protected $attrTo = 'to';
-
     function __construct($method)
     {
         header("Access-Control-Allow-Orgin: *");

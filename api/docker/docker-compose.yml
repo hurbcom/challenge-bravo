@@ -4,4 +4,4 @@ php:
    - "80:80"
    - "443:443"
   volumes:
-   - /opt/lampp/htdocs/challenge-bravo/api:/var/www/html
+   - ../:/var/www/html

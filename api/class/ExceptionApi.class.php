@@ -4,7 +4,7 @@ class ExceptionApi extends \Exception
 {
     private $dataJsonFile = __DIR__ . '/../data/exception.log';
 
-    function __construct(string $message = "", int $code = 0, $previous = null)
+    function __construct($message = "", $code = 0, ?Throwable $previous = null)
     {
         $data = date('d/m/Y H:i:s') . " ------------------------------------------------ \n";
         $data .= $this->getFile() . ' -> ' . $message . "\n";
