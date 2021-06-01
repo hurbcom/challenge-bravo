@@ -1,0 +1,32 @@
+[
+    {
+        "name": "United States Dollar",
+        "code": "USD",
+        "base": "USD",
+        "price": 1.0
+    },
+    {
+        "name": "Brasilian Real",
+        "code": "BRL",
+        "base": "USD",
+        "price": 0.19
+    },
+    {
+        "name": "Euro",
+        "code": "EUR",
+        "base": "USD",
+        "price": 1.22
+    },
+    {
+        "name": "Bitcoin",
+        "code": "BTC",
+        "base": "USD",
+        "price": 36281.50
+    },
+    {
+        "name": "Ether",
+        "code": "ETH",
+        "base": "USD",
+        "price": 2556.54
+    }
+]

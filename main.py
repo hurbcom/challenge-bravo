@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
 
 from challenge_bravo.models import CoinModel
-from challenge_bravo.routes import router as coin_router
+from challenge_bravo.routers import coins_router
+from challenge_bravo.routers import main_router
 from challenge_bravo.settings import db_instance
+from challenge_bravo.utils import create_database_default_coins
 
 
 app = FastAPI()
@@ -11,21 +12,13 @@ app = FastAPI()
 
 @app.on_event('startup')
 def initialize_database():
-    """
-    Startup event to initialize database.
-    """
+    """ Startup event to initialize database. """
+
     db_instance.connect()
     db_instance.create_tables([CoinModel])
+    create_database_default_coins()
     db_instance.close()
 
 
-@app.get('/', status_code=403)
-def main():
-    """ 
-    Main view.
-    If called, redirects to the main API route.
-    """
-    return RedirectResponse('/api/v1/')
-
-
-app.include_router(coin_router, prefix='/api/v1', tags=['coin'])
+app.include_router(main_router)
+app.include_router(coins_router, prefix='/api/v1/coins', tags=['coins'])
