@@ -11,6 +11,20 @@ from challenge_bravo.models import CoinModel
 router = APIRouter()
 
 
+@router.get('/convert')
+def convert_coins(code_from: str, code_to: str, amount: float):
+    """ Coin conversion endpoint. """
+
+    try:
+        coin_from = CoinModel.get(CoinModel.code == code_from)
+        coin_to = CoinModel.get(CoinModel.code == code_to)
+
+        converted_value = coin_from.convert(coin_to.get_as_coin_type(), amount)
+        return converted_value
+    except DoesNotExist:
+        raise ObjectDoesNotExist(detail='One or both codes sent, do not exist')
+
+
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create_coin(coin: Coin) -> Coin:
     """ Coin creation endpoint. """

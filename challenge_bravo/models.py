@@ -32,9 +32,10 @@ class CoinModel(peewee.Model):
     base = peewee.CharField(default='USD')
 
     def convert(self, to: Coin, amount: float) -> float:
-        if self.code == self.base:
+        if self.code == to.code:
             return amount
-        return (amount * self.price) / to.price
+        converted_value = (amount * self.price) / to.price
+        return round(converted_value, 2)
 
     def get_as_coin_type(self) -> Coin:
         return Coin(
