@@ -1,0 +1,9 @@
+.*
+!.coveragerc
+!.pylintrc
+Dockerfile
+docker-compose.yml
+README.md
+poetry.lock
+pyproject.toml
+challenge-bravo.db
