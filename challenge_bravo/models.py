@@ -10,7 +10,7 @@ from .settings import db_instance
 class Coin(BaseModel):
     """ Coin type """
 
-    # coin_id: int = None
+    coin_id: int = None
     name: str
     code: str
     price: float
