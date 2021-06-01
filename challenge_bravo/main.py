@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
-from challenge_bravo.models import CoinModel
-from challenge_bravo.routers import coins_router
-from challenge_bravo.routers import main_router
-from challenge_bravo.settings import db_instance
-from challenge_bravo.utils import create_database_default_coins
+from .models import CoinModel
+from .routers import coins_router
+from .routers import main_router
+from .settings import db_instance
+from .utils import create_database_default_coins
 
 
 app = FastAPI()

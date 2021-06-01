@@ -3,7 +3,7 @@ services:
     challenge-bravo:
         container_name: coin-converter
         build: .
-        command: bash -c "uvicorn main:app --host 0.0.0.0 --port 8000"
+        command: bash -c "uvicorn challenge_bravo.main:app --host 0.0.0.0 --port 8000"
         ports:
             - 80:8000
         env_file:
