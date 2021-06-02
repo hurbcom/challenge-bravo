@@ -15,8 +15,8 @@ def test_root_status_code():
 def test_root_response_json():
     response = client.get('/')
     assert response.json() == {
-        "message": "Welcome to the bravo coin"
-                   " converter, check /docs for allowed routes and methods"}
+        'message': 'Welcome to the bravo coin'
+                   ' converter, check /docs for allowed routes and methods'}
 
 
 def test_welcome_status_code():
@@ -27,5 +27,5 @@ def test_welcome_status_code():
 def test_welcome_response_json():
     response = client.get('/api/v1')
     assert response.json() == {
-        "message": "Welcome to the bravo coin"
-                   " converter, check /docs for allowed routes and methods"}
+        'message': 'Welcome to the bravo coin'
+                   ' converter, check /docs for allowed routes and methods'}

@@ -1,0 +1,44 @@
+fail_fast: true
+repos:
+- repo: git://github.com/pre-commit/pre-commit-hooks
+  rev: v3.2.0
+  hooks:
+    - id: check-added-large-files
+    - id: check-merge-conflict
+    - id: check-symlinks
+    - id: check-yaml
+    - id: debug-statements
+    - id: detect-private-key
+    - id: double-quote-string-fixer
+    - id: end-of-file-fixer
+    - id: no-commit-to-branch
+
+- repo: https://gitlab.com/pycqa/flake8
+  rev: 3.8.3
+  hooks:
+    - id: flake8
+      args: ['--exclude=**/migrations/**,**/__init__.py,manage.py', '--ignore=W605']
+
+- repo: https://github.com/asottile/yesqa
+  rev: v1.2.2
+  hooks:
+    - id: yesqa
+
+- repo: https://github.com/IamTheFij/docker-pre-commit
+  rev: v2.0.0
+  hooks:
+    - id: docker-compose-check
+
+- repo: https://github.com/pryorda/dockerfilelint-precommit-hooks
+  rev: v0.1.0
+  hooks:
+    - id: dockerfilelint
+
+- repo: local
+  hooks:
+  - id: pytest
+    name: Run tests
+    description: Run all tests
+    entry: make test
+    language: system
+    pass_filenames: false
