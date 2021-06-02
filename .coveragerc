@@ -1,0 +1,7 @@
+[run]
+source = challenge_bravo
+branch = True
+omit =
+  challenge_bravo/settings.py
+  challenge_bravo/main.py
+  challenge_bravo/*__init__.py

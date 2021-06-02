@@ -3,6 +3,9 @@ name = "challenge-bravo"
 version = "0.1.0"
 description = "Hurb back-end test"
 authors = ["avlm <victor.luckwu@gmail.com>"]
+packages = [
+    { include = 'challenge_bravo' }
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -19,6 +22,7 @@ flake8 = "^3.9.2"
 pytest = "^6.2.4"
 pre-commit = "^2.13.0"
 pytest-cov = "^2.12.0"
+requests = "^2.25.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

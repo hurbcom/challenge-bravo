@@ -3,3 +3,7 @@
 **/__pychache__/**
 
 **.pyc
+
+.coverage
+
+challenge-bravo.db
