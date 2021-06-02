@@ -3,8 +3,11 @@ import peewee
 
 from decouple import config
 
-if os.environ.get('TEST_ENV'):
-    # Make sure that every test run is made with a clean database
+
+TEST_ENV = config('TEST_ENV', cast=bool)
+
+if TEST_ENV is True:
+    # Make sure that every test run is made with a clean sqlite database
     test_db_path = 'challenge-bravo.db'
     if os.path.exists(test_db_path):
         os.remove(test_db_path)

@@ -6,6 +6,7 @@ from .models import CoinModel
 
 
 def create_database_default_coins() -> None:
+    """ Creates the default coins in the database """
     fixtures_path = FIXTURES_FOLDER + 'coin_fixture.json'
     with open(fixtures_path, 'r') as file_handler:
         fixture = file_handler.read()
