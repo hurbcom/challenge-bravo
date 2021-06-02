@@ -2,7 +2,6 @@ import peewee
 
 from pydantic import BaseModel
 from pydantic import validator
-# from pydantic import ValueError
 
 from .settings import db_instance
 

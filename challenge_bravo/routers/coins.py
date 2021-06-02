@@ -27,7 +27,14 @@ def convert_coins(code_from: str, code_to: str, amount: float):
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create_coin(coin: Coin) -> Coin:
-    """ Coin creation endpoint. """
+    """Coin creation endpoint.
+
+    `coin_id` is ignored if you pass any value on request.
+
+    `base` is an optional parameter,
+    if you send it on request body it must be 'USD'
+    otherwise a ValidationError will be raised.
+    """
 
     coin = CoinModel.create(**coin.dict())
     return coin.get_as_coin_type()

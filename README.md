@@ -1,77 +1,47 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+### Antonio Victor Luckwu Marques
+---
+### Problema
+Desafio de back-end da HURB.
+Conversor de moedas. Deve ser possível cadastrar e converter entre moedas reais e fictícias.
+A moeda de lastro por padrão é o Dolar (USD).
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+As tecnologias escolhidas para o desenvolvimento do projeto foram:
+- Python 3.8+
+- FastAPI
+- Peewee ORM
+- PostgreSQL
+- Sqlite (para testes)
 
-A API deve, originalmente, converter entre as seguintes moedas:
+### Dependências
+- [poetry](https://python-poetry.org/docs/#installation) - utilizado para gerenciamento de dependências / virtualenv
+- [docker-compose](https://docs.docker.com/compose/install/) - utilizado para executar a aplicação
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+### Como rodar a aplicação
+```bash
+$ git clone https://github.com/avlm/challenge-bravo
+$ cd challenge-bravo
+$ poetry install
+$ docker-compose up --build
+```
+O conversor de moedas estará rodando na porta 80 do localhost.
+O endpoint principal estará em http://localhost/api/v1/
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+### Documentação da API
+Os endpoints da API são:
+- http://localhost/api/v1/coins (para o CRUD de moedas)
+- http://localhost/api/v1/coins/convert (para conversão de moedas)
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Para uma documentação mais detalhada da API (parâmetros e retornos), com a aplicação rodando acesse http://localhost/docs
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+### Como rodar os testes
+```bash
+$ make test
+# o comando executado é: TEST_ENV=True poetry run pytest tests --cov --cov-report term-missing
+```
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+### Requirements.txt
+O arquivo requirements é gerado pelo poetry com o comando `poetry export` e não deve ser modificado manualmente. Caso deseje incluir alguma dependência, use o poetry e utilize os comandos de exportação que estão no makefile.
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
-
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
-
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
-
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
-
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
-
-## Requisitos
-
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
-
-## Critério de avaliação
-
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
-
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+- `make export` - Exporta as dependências do projeto (Sem dependências de dev. Requirements padrão do projeto, usado no docker)
+- `make export_dev` - Igual ao anterior, porém incluindo as dependencias de desenvolvimento
