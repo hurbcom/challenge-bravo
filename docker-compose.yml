@@ -1,0 +1,41 @@
+  version: '3.7'
+
+  services:
+    web:
+      restart: always
+      build: .
+      ports:
+        - "8000:8000"
+      expose:
+        - "8000"
+      links:
+        - postgres:postgres
+      volumes:
+        - .:/app
+      environment:
+        DEBUG: 'true'
+        SQL_ENGINE: django.db.backends.postgresql
+        SQL_DATABASE: postgres_dev
+        SQL_USER: postgres
+        SQL_PASSWORD: postgres
+        SQL_HOST: postgres
+        SQL_PORT: 5432
+        SECRET_KEY: 'django-insecure-r)y(umr(c-8w7md1xd2krv-$b66gx-qt#c3@^!mcoztrdylauq'
+        DEBUG: 0
+      command: python /app/manage.py runserver 0.0.0.0:8000
+
+    postgres:
+      restart: always
+      image: postgres:12.0-alpine
+      container_name: pgdb
+      ports:
+        - "5432:5432"
+      volumes:
+        - pgdata:/var/lib/postgresql/data/
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=postgres_dev
+
+  volumes:
+    pgdata:
