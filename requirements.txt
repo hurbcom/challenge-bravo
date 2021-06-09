@@ -9,4 +9,3 @@ pytest-mock
 pytest-cov
 mock
 waitress
-tox

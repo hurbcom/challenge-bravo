@@ -1,7 +1,7 @@
 import logging
 import os
 import json
-from flask import request
+from flask import request, jsonify
 from db.redis import connect_to_redis
 import requests
 
@@ -37,7 +37,7 @@ def convert_two_currencies():
             return json.dumps({'error': 'One or more rates not found, try another! :)'})
         from_amount_in_usd = float(amount)/float(from_rate)
         result_conversion = from_amount_in_usd * float(to_rate)
-        return json.dumps({'convertedValue': result_conversion})
+        return jsonify({'convertedValue': result_conversion})
 
 
 def set_fake_coin_to_redis():
@@ -45,9 +45,9 @@ def set_fake_coin_to_redis():
         try:
             request_body = json.loads(request.data)
             redis.set(request_body['rateName'], request_body['usdValue'])
-            return json.dumps({"message": f'success to register {request_body["rateName"]} to the database!'})
+            return jsonify({"message": f'success to register {request_body["rateName"]} to the database!'})
         except Exception as e:
-           return json.dumps({"error": "Error while executing the rate registering process! Sorry"})
+           return jsonify({"error": "Error while executing the rate registering process! Sorry"})
 
 
 def remove_rate_from_redis():
@@ -55,6 +55,6 @@ def remove_rate_from_redis():
         try:
             request_body = json.loads(request.data)
             redis.delete(request_body['rateName'])
-            return json.dumps({"message": f'success to delete {request_body["rateName"]} from the database!'})
+            return jsonify({"message": f'success to delete {request_body["rateName"]} from the database!'})
         except Exception as e:
-            return json.dumps({"error": "Error while executing the rate deleting process! Sorry"})
+            return jsonify({"error": "Error while executing the rate deleting process! Sorry"})
