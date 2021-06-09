@@ -34,16 +34,8 @@ seguir os seguintes comandos:
 `python -m tox`
 
 ### Execução da api 
-
-#### Local:
+#### docker redis DB:
 `docker run -d -p 6379:6379 --name redis_db redis`
-
-`python -m pip install -r requirements.txt`
-
-`python app.py`
-
-#### docker:
-`docker run -d -p 6379:6379 --name redis_db redis`
-
+#### API:
 `docker build -t testehurb . && docker run -p 5000:5000 --name testehurb-container --link redis_db testehurb`
 
