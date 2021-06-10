@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    command: python main.py
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/challenge_bravo
+    env_file:
+      - challenge_bravo/.env
+    networks:
+      - challenge-bravo-network
+    restart: always
+    depends_on:
+      - mongo
+
+  test:
+    build: .
+    command: python -m unittest discover tests
+    ports:
+      - "5001:5001"
+    volumes:
+      - .:/challenge_bravo
+    env_file:
+      - challenge_bravo/.env
+    networks:
+      - challenge-bravo-network
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: challenge_bravo
+    ports:
+      - "27017:27017"
+    volumes:
+      - dbdata:/data/db
+      - ./init_mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - challenge-bravo-network
+
+networks:
+  challenge-bravo-network:
+    driver: bridge
+
+volumes:
+  dbdata:
