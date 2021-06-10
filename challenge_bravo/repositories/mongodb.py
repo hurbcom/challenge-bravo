@@ -29,18 +29,15 @@ class Mongodb(Repository):
         return f'mongodb://{config.MONGODB_USERNAME}:{config.MONGODB_PASSWORD}' \
                f'@{config.MONGODB_HOST}:{config.MONGODB_PORT}/'
 
-    def update_object(self, currency_code, updated_fields):
+    def update_object(self, currency_id, updated_fields):
         if 'code' in updated_fields.keys():
-            updated_fields.pop('code')
-        try:
-            result = self.db.currencies.update_one({
-                'code': currency_code
-            }, {
-                '$set': updated_fields
-            }, upsert=False)
-            if result.matched_count == 1:
-                return result
-            else:
-                raise NoMatchedCurrency(f'Unable to find currency code {currency_code}')
-        except WriteError:
             raise WriteError("You cant update currency code")
+        result = self.db.currencies.update_one({
+            'code': currency_id
+        }, {
+            '$set': updated_fields
+        }, upsert=False)
+        if result.matched_count == 1:
+            return result
+        else:
+            raise NoMatchedCurrency(f'Unable to find currency code {currency_id}')
