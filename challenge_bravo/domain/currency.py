@@ -1,6 +1,6 @@
 from schema import Schema, SchemaError, Use, And, Optional
 from datetime import datetime
-
+import logging
 from challenge_bravo.repositories.mongodb import Mongodb
 from challenge_bravo.interfaces.domain import Domain
 
@@ -46,11 +46,19 @@ class Currency(Domain):
 
     def update_object(self, currency_id):
         payload = self.to_item()
+        filtered_payload = self.sanitize(payload)
+        return self.mongo.update_object(currency_id, filtered_payload)
+
+    def delete_object(self):
+        filtered_payload = self.sanitize(self.to_item())
+        return self.mongo.remove_from_collection(filtered_payload)
+
+    def sanitize(self, payload):
         filtered_payload = {}
-        for key, val in payload.items():
+        for key, val in self.to_item().items():
             if val != 'None' and key in vars(self):
                 filtered_payload[key] = val
-        return self.mongo.update_object(currency_id, filtered_payload)
+        return filtered_payload
 
     @property
     def validation_schema(self, *args, **kwargs):

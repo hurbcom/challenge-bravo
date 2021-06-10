@@ -26,7 +26,7 @@ Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem d
 
 Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
 
-Ref: 
+Ref:
 Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
 Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
 
@@ -66,11 +66,59 @@ Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lis
 -   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
 -   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
 
-## Dúvidas
+ ---
+ ### Tecnologias Utilizadas
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+ As tecnologias escolhidas para o desenvolvimento do projeto foram:
+ - Python
+ - Flask
+ - Mongodb
+ - Docker
 
-Boa sorte e boa viagem! ;)
+### Para executar a aplicação basta executar um comando:
+ ``` App
+ $ sh start.sh
+ ```
+ ``` Testes
+ $ sh test.sh
+ ```
+A aplicacão estará rodando na porta 5000 do localhost.
+
+ ### Documentação da API
+ Os endpoints da API são:
+### Get
+http://localhost:5000/currencies
+### Post
+http://localhost:5000/currencies
+ ```
+Body = {
+    'code': ,
+    'currency_name':
+    'currency_value_in_usd':
+   }
+```
+PUT:
+ - http://localhost:5000/currencies/{code}
+```
+Body = {
+    'currency_value_in_usd':
+   }
+```
+DELETE:
+- http://localhost:5000/currencies
+```
+Body = {
+    'code': 'HURB',
+  }
+ ```
+Obs: o corpo da requisição delete é uma query e caso haja um "Match", multiplos elementos podem ser removidos
+
+A moeda adicionada a partir do endpoint terá prioridade independentemente se a moeda
+é verídica ou não. Ou seja caso uma moeda verídica seja adicionada a cotação utilizada será aquela
+determinada pelo usuário. Caso ela não tenha sido criada a cotação dela será a atual.
+
+### Convert
+http://localhost:5000/convert?from=BRL&to=HURB&amount=12
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />

@@ -29,6 +29,8 @@ def update_currencies(currency_id):
         return make_response(jsonify({'message': str(e)}), 200)
     except WriteError as e:
         return make_response(jsonify({'message': str(e)}), 400)
+    except SchemaError as e:
+        return make_response(jsonify({'message': str(e)}), 400)
 
 
 @app.route("/currencies", methods=['POST'])
@@ -47,8 +49,8 @@ def add_currency():
 @app.route("/currencies", methods=['DELETE'])
 def delete_currency():
     mongo = get_container().get('mongodb')
-    payload = request.json
-    result = mongo.remove_from_collection(payload)
+    currency = Currency(mongo, **request.json).validate()
+    result = currency.delete_object()
     return make_response(jsonify(f'Currency {str(result)} removed'), 200)
 
 

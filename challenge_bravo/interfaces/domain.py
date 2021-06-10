@@ -14,3 +14,6 @@ class Domain(ABC):
     @abstractmethod
     def validate(self, *args, **kwargs):
         ...
+
+    def sanitize(self, payload):
+        ...
