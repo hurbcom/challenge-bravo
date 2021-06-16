@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+   db:
+      image: postgres
+      restart: unless-stopped
+      volumes:
+         - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/hurb-init.sql
+        
+      ports:
+         - "${DB_PORT}:5432"
+      environment:
+         POSTGRES_USER: ${DB_USERNAME}
+         POSTGRES_PASSWORD: ${DB_PASSWORD}
+         POSTGRES_DB: ${DB_DATABASE}
+     
+

@@ -1,77 +1,69 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+<p align="center">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-A API deve, originalmente, converter entre as seguintes moedas:
+## Sobre
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+O sistema tem o objetivo principal de criar uma api que converta valores monetários  entre cambios diferentes.
+`Ex: ?from=BTC&to=EUR&amount=123.45`
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Para converter BTC (Bitcoin) para EUR (Euro). As moedas aceitas por padrão são as seguintes:
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+- USD
+- BRL
+- EUR
+- BTC
+- ETH
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Mas se a que você procura não esta ai você pode adicionar, para isso basta acessar a api usando o padrão REST no endpoint 
+`	 /currencies`
+Por exemplo, para inserir a moeda GTA Dolar, isso mesmo você também pode usar moedas fictícias! Envie uma requisição POST contendo os seguintes dados:
+```json
+{
+	"st_short_name": "GTA",
+	"st_descrtption": "GTA Dollar"
+}
+```
+E para inserir a cotação de forma manual você pode usar o end point:
+`/quotations`
+No caso da nossa moeda do GTA precisamos informar quanto ela vale, para isso basta enviar uma requisição POST contendo a sua cotação:
+```json
+{
+	"currency_id": 6,
+	"dt_quotation": "2021-06-15",
+	"value": 75757.575757575757576,
+	"st_lastro": "USD",
+	"fictional": true
+}
+```
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Ao inserir a moeda, no caso GTA, você receberá informações sobre o id, mas caso você não tenha gravado, pode acessar o endpoin GET `/currencies` e ver a lista de todas as moedas.
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
-
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
-
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
-
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
-
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Mas quanto vale o GTA? Vamos encontrar a equivalência para do USD (Dolar americano) para que nossa api consiga converter para qual quer uma das moedas cadastradas. Na Playstation Store [Loja Virtual] você pode comprar GTA $1.250.000,00 por R$ 83,50 (https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D), 
+BRL 83,5 equivalem a USD 16,60 logo GTA $ 1.250.000,00 equivalem a USD 16,60.
+Se dividirmos o valor do GTA por sua equivalência em dolar saberemos quantos GTA precisamos para converter em USD 1 o que na cotação do dia 16/06/2021 é **75757.575757575757576** e é esse valor que você vai informar no parâmetro "value" quando informar a cotação da usa moeda GTA. Pronto, agora você já pode saber quanto dinheiro  você teria na vida real depois de cumprir todas as suas missões!
 
 ## Requisitos
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+- Docker
+- Docker-compose
+- Composer
+- PHP 8.0+
 
-## Critério de avaliação
+## Instalação 
+Após fazer clonar o projeto acesse a pasta do projeto pelo terminal em seguida execute `./install.sh` para instalar o projeto, após o termino execute `./run.sh` para iniciar. A api ficará disponível na porta 8000
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+### Dificuldades
 
-## Dúvidas
+Aqui gostaria de explicar rapidamente as dificuldades e falhas do projeto. Estou envolvido em outros projetos e tenho trabalhado 12 horas por dia, por isso nos prazos que me foi passado só consegui dedicar cerca de 10 horas ao projeto, então algumas etapas eu não consegui me dedicar tanto quanto eu gostaria,
+1. Validações, a api esta frágil.
+2. Armazenar os dados em sessões para diminuir o numero de consultas ao banco.
+3. Docker, não tive tempo suficiente para criar o contêiner que receberia a aplicação.
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## Contato
+Em caso de dúvidas estou a disposição.([aureliomoreirared@gmail.com](mailto:aureliomoreirared@gmail.com "aureliomoreirared@gmail.com"))
