@@ -1,0 +1,30 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Desafio hotel urbano",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victorffernandes/challenge-bravo.git"
+  },
+  "author": "victorffernandes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/victorffernandes/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/victorffernandes/challenge-bravo#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.10",
+    "express": "^4.17.1",
+    "glob": "^7.1.7",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
