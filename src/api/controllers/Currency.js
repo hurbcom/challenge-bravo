@@ -3,9 +3,9 @@ export default class Currency {
         this.CurrencyService = CurrencyService;
     }
 
-    list (req, res) {
+    async list (req, res) {
         try {
-            const currenciesList = this.CurrencyService.listSupportedCurrencies();
+            const currenciesList = await this.CurrencyService.listSupportedCurrencies();
 
             return res.status(200).json({ message: `success`, data: currenciesList });
         } catch (err) { 

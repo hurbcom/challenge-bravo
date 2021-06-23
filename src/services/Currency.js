@@ -1,15 +1,9 @@
 export default class Currency {
-    constructor () {
-        // -
+    constructor (CurrencyDB) {
+        this.CurrencyDB = CurrencyDB;
     }
 
     listSupportedCurrencies () {
-        return [
-            'USD',
-            'BRL',
-            'EUR',
-            'BTC',
-            'ETH'
-        ];
+        return this.CurrencyDB.listAll();
     }
 }
