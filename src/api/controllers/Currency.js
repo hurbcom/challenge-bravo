@@ -1,10 +1,16 @@
 export default class Currency {
-    constructor () {
-        // -
+    constructor (CurrencyService) {
+        this.CurrencyService = CurrencyService;
     }
-    
+
     list (req, res) {
-        return res.send(`a list of all currencies`);
+        try {
+            const currenciesList = this.CurrencyService.listSupportedCurrencies();
+
+            return res.status(200).json({ message: `success`, data: currenciesList });
+        } catch (err) { 
+            return res.status(500).json({ message: 'internal server error' });
+        }
     }
 
     store (req, res) {
