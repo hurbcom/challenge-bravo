@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+  php:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: challenge
+    container_name: php
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    # command: bash -c "cp .env.example .env"
+    networks:
+      - rede
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: unless-stopped
+    ports: 
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_USER: user
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    networks:
+      - rede
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/:/etc/nginx/conf.d/
+    networks:
+      - rede
+
+networks:
+  rede:
+    driver: bridge
