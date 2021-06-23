@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\Models\Moeda;
-
-class MoedaRepository extends AbstractRepository
+class MoedaRepository extends RepositoryAbstract
 {
-    public function __construct(Moeda $model)
+    public function __construct()
     {
-        $this->model = $model;
+        parent::__construct(__CLASS__);
+        return $this;
     }
 }

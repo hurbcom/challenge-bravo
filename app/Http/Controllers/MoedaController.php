@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class MoedaController extends BaseController
 {
-    public function __construct()
+    public function __construct(MoedaRepository $moedaRepository)
     {
-        parent::__construct(MoedaRepository::class);
+        parent::__construct($moedaRepository);
     }
 }
