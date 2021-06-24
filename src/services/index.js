@@ -1,4 +1,4 @@
-import { CurrencyDB } from '../db';
+import { CurrencyDB } from '../database';
 import _CurrencyService from './Currency';
 
 const CurrencyService = new _CurrencyService(CurrencyDB);
