@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  php:
+    container_name: hurb_php
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: docker/Dockerfile
+    image: landing-app
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./docker/config/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ~/.ssh:/tmp/teste
+    # COPIA A CHAVE SSH DA SUA MÁQUINA LOCAL PARA A PASTA CORRETA
+    command: bash -c "cp /tmp/teste/* ~/.ssh && chmod 600 ~/.ssh/* && php-fpm"
+    networks:
+      - base
+
+  nginx:
+    container_name: hurb_nginx
+    hostname: hurb.localhost
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d/
+      - ./docker/logs/:/var/log/nginx/
+    networks:
+      - base
+
+networks:
+  base:
+    external: true
