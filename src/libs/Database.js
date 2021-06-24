@@ -24,13 +24,33 @@ class Database {
         }
     }
 
-    async query(qText, qValues) {
+    async query(qText, qValues, { transaction } = {}) {
+        const client = transaction || this.pool;
+
         try {
-            const { rows } = await this.pool.query(qText, qValues);
+            const { rows } = await client.query(qText, qValues);
 
             return rows;
         } catch (err) {
             throw err;
+        }
+    }
+
+    async transaction(callback) {
+        let client;
+        
+        try {
+            client = await this.pool.connect();
+
+            await client.query('BEGIN');
+            await callback(client);
+            await client.query('COMMIT');
+        } catch (err) {
+            client.query('ROLLBACK');
+
+            throw err;
+        } finally {
+            client.release()
         }
     }
 }
