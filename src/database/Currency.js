@@ -3,37 +3,37 @@ export default class Currency {
         this.Database = Database;
     }
 
-    async listAll () {
+    async listCurrencies () {
         try {
-            const currenciesList = await this.Database.query('SELECT symbol FROM currency');
+            const currenciesList = await this.Database.query('SELECT code FROM currency');
 
-            return currenciesList.map(item => item.symbol);
+            return currenciesList.map(currency => currency.code);
         } catch (err) {
             throw err;
         }
     }
 
-    listBySymbol (symbol) {
-        return this.Database.query('SELECT symbol FROM currency WHERE symbol = $1', [symbol]);
+    listCurrencyByCode (currencyCode) {
+        return this.Database.query('SELECT code FROM currency WHERE code = $1', [ currencyCode ]);
     }
-    
+
     storeRealCurrency (currencyDTO) {
-        return this.Database.query('INSERT INTO currency(symbol) VALUES ($1)', [currencyDTO.symbol]);
+        return this.Database.query('INSERT INTO currency(code) VALUES ($1)', [ currencyDTO.currencyCode ]);
     }
 
     async storeFictitiousCurrency (currencyDTO) {
         try {
             return await this.Database.transaction(
                 async (transaction) => {
-                    const [ newCurrency ] = (await this.Database.query(
-                        'INSERT INTO currency(symbol) VALUES ($1) RETURNING id',
-                        [currencyDTO.symbol],
+                    const [ newCurrency ] = await this.Database.query(
+                        'INSERT INTO currency(code) VALUES ($1) RETURNING id',
+                        [ currencyDTO.currencyCode ],
                         { transaction }
-                    ));
+                    );
 
                     await this.Database.query(
-                        'INSERT INTO currency_quote(symbol_id, quotation) VALUES ($1, $2)',
-                        [newCurrency.id, currencyDTO.quotation],
+                        'INSERT INTO currency_quote(code_id, quote_value) VALUES ($1, $2)',
+                        [ newCurrency.id, currencyDTO.currencyQuote ],
                         { transaction }
                     );
                 }

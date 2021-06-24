@@ -8,6 +8,6 @@ const routes = new Router();
 routes.get('/currency', (req, res) => CurrencyController.list(req, res));
 routes.get('/currency/convert', (req, res) => CurrencyConversionController.list(req, res));
 routes.post('/currency', validationMiddleware.currency, (req, res) => CurrencyController.store(req, res));
-routes.delete('/currency/:symbol', (req, res) => CurrencyController.delete(req, res));
+routes.delete('/currency/:currencyCode', (req, res) => CurrencyController.delete(req, res));
 
 export default routes;

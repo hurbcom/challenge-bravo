@@ -4,16 +4,16 @@ export default class Currency {
     }
 
     _isFictitiousCurrency (currencyDTO) {
-        return currencyDTO.quotation;
+        return currencyDTO.currencyQuote;
     }
 
     listSupportedCurrencies () {
-        return this.CurrencyDB.listAll();
+        return this.CurrencyDB.listCurrencies();
     }
 
-    async storeCurrency(currencyDTO) {
+    async storeCurrency (currencyDTO) {
         try {
-            const [ existingCurrency ] = await this.CurrencyDB.listBySymbol(currencyDTO.symbol);
+            const [ existingCurrency ] = await this.CurrencyDB.listCurrencyByCode(currencyDTO.currencyCode);
             
             if (existingCurrency) throw { already_registered: true };
             
