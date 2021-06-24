@@ -15,5 +15,5 @@ class Currency(models.Model):
         choices=_typeCurrency,
         default=1,
     )
-    creationDate = models.DateTimeField(auto_now_add=True)
+    lastUpdateDate = models.DateTimeField(auto_now_add=True)
     quotationDate = models.DateTimeField(auto_now_add=True)

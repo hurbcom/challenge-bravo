@@ -1,11 +1,16 @@
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import CurrencySerializer
 from rest_framework import status
 from rest_framework import viewsets
-from decimal import Decimal
+from django.utils import timezone
+from datetime import timedelta
 from datetime import datetime
 from .models import Currency
-from .serializers import CurrencySerializer
+from decimal import Decimal
+import requests
 import json
+import time
 
 class CurrencyViewSet(viewsets.ModelViewSet):
     serializer_class = CurrencySerializer
@@ -76,11 +81,81 @@ class CurrencyViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
         instance = self.get_object()
         if instance.symbolAlias == 'USD':
             response = {'Result': 'Failed',
                         'Reason': 'Invalid Operation, Currency USD cannot be Updated.',
                         }
             return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
-        self.perform_update(instance)
-        return Response(status=status.HTTP_200_OK)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        response = {'Result': 'Success',
+                    'Reason': 'Currency Updated',
+                    }
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
+
+#METHOD TO UPDATE THE DATABASE QUOTES
+class QuoteUpdate(viewsets.ModelViewSet):
+    serializer_class = CurrencySerializer
+    queryset = Currency.objects.all()
+
+    def list(self, request):
+        quoteDate = Currency.objects.get(symbolAlias='USD').quotationDate
+        lastUpd = Currency.objects.get(symbolAlias='USD').lastUpdateDate
+        dateDiff = (timezone.now() - lastUpd) #OBS IF WANT TO UPDATE BY LAST UPDATE OR LAST QUOTE DATE
+        dateDiff_Obj = time.gmtime(dateDiff.total_seconds())
+
+        print(int(time.strftime('%H', dateDiff_Obj)))
+        if int(time.strftime('%H', dateDiff_Obj)) >= 1: #OBS TO FREQUENCY OF UPDATE (1) = EACH 1 HOUR
+            url = 'https://v6.exchangerate-api.com/v6/4305ebd414a30fbf5d7d8171/latest/USD'
+            result = requests.get(url, headers={'X-CoinAPI-Key': '4305ebd414a30fbf5d7d8171'})
+            print('Acessou o LInk')
+            if result.status_code == 200:
+                dict_result = json.loads(result.content)
+                result = dict_result['conversion_rates']
+                lastTimeUpd = datetime.fromtimestamp(int(dict_result['time_last_update_unix']))
+                lastTimeUpd = lastTimeUpd + timedelta(days=1)
+                print('Link Com sucesso vai Atualizar lista')
+                print(lastTimeUpd)
+                for x, y in result.items():
+                    try:
+                        _Currency = Currency.objects.get(symbolAlias=x)
+                        _Currency.baseUsdValue = Decimal(y)
+                        _Currency.quotationDate = lastTimeUpd
+                        _Currency.lastUpdateDate = timezone.now()
+                        _Currency.save()
+                    except Exception as e:
+                        pass
+
+                response = {
+                    'Result': 'Success',
+                    'QuotationDate': str(quoteDate.strftime(" %d-%m-%y %H:%M:%S")),
+                    'CurrentDate': str(timezone.now().strftime("%d-%m-%y %H:%M:%S")),
+                    'StatusBase': 'Now Up To Date'
+                }
+                return Response(status=status.HTTP_200_OK, data=json.dumps(response))
+            else:
+                response = {
+                    'Result': 'Failed',
+                    'Reason': str(result.content),
+                }
+                return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
+
+        else:
+            response = {
+                'Resultado' : 'Sucesso',
+                'QuotationDate' : str(quoteDate.strftime(" %d-%m-%y %H:%M:%S")),
+                'CurrentDate' : str(timezone.now().strftime("%d-%m-%y %H:%M:%S")),
+                'StatusBase': 'Already Up To Date'
+            }
+            return Response(status=status.HTTP_200_OK, data=json.dumps(response))
+
+        response = {
+            'Result': 'Success',
+            'QuotationDate': str(quoteDate.strftime(" %d-%m-%y %H:%M:%S")),
+            'CurrentDate': str(timezone.now().strftime("%d-%m-%y %H:%M:%S")),
+            'StatusBase': '---'
+        }
+        return Response(status=status.HTTP_200_OK, data=json.dumps(response))
