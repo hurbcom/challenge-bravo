@@ -1,15 +1,15 @@
 export default class Currency {
-    constructor () {
-        // -
+    constructor (Database) {
+        this.Database = Database;
     }
 
-    listAll () {
-        return [
-            'USD',
-            'BRL',
-            'EUR',
-            'BTC',
-            'ETH'
-        ];
+    async listAll () {
+        try {
+            const result = await this.Database.query('SELECT * FROM currency');
+
+            return result.map(item => item.symbol);
+        } catch (err) {
+            throw err;
+        }
     }
 };
