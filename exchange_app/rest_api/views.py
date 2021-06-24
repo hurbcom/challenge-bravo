@@ -93,18 +93,14 @@ class CurrencyViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop('partial', True)
         instance = self.get_object()
         if instance.symbolAlias == 'USD':
             response = {'Result': 'Failed',
                         'Reason': 'Invalid Operation, Currency USD cannot be Updated.',
                         }
             return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
-        #serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        #serializer.is_valid(raise_exception=True)
-        #self.perform_update(serializer)
         url = 'https://v6.exchangerate-api.com/v6/4305ebd414a30fbf5d7d8171/latest/USD'
         result = requests.get(url, headers={'X-CoinAPI-Key': '4305ebd414a30fbf5d7d8171'})
         if result.status_code == 200:
@@ -114,20 +110,25 @@ class CurrencyViewSet(viewsets.ModelViewSet):
             lastTimeUpd = lastTimeUpd + timedelta(days=1)
             for x, y in result.items():
                 try:
+                    #print(str(x)+"-"+str(y))
                     _Currency = Currency.objects.get(symbolAlias=x)
                     _Currency.baseUsdValue = Decimal(y)
-                    _Currency.quotationDate = lastTimeUpd
-                    _Currency.lastUpdateDate = timezone.now()
+                    #_Currency.quotationDate = datetime(lastTimeUpd)
+                    #_Currency.lastUpdateDate = datetime(timezone.now())
                     _Currency.save()
+                    print(str(lastTimeUpd)+"-"+str(timezone.now()))
                 except Exception as e:
                     pass
 
         response = {'Result': 'Success',
                     'Reason': 'Currency Updated',
                     }
-        serializer = self.get_serializer(data=request.data,partial=partial)
+        #serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        #serializer.is_valid(raise_exception=True)
+        #self.perform_update(serializer)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        self.perform_update(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         #return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
