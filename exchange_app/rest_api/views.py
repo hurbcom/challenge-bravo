@@ -70,15 +70,30 @@ class CurrencyViewSet(viewsets.ModelViewSet):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance.symbolAlias == 'USD':
-            response = {'Result': 'Failed',
-                        'Reason': 'Invalid Operation, Currency USD cannot be deleted.',
-                        }
-            return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        url = 'https://v6.exchangerate-api.com/v6/4305ebd414a30fbf5d7d8171/latest/USD'
+        result = requests.get(url, headers={'X-CoinAPI-Key': '4305ebd414a30fbf5d7d8171'})
+        if result.status_code == 200:
+            dict_result = json.loads(result.content)
+            result = dict_result['conversion_rates']
+            lastTimeUpd = datetime.fromtimestamp(int(dict_result['time_last_update_unix']))
+            lastTimeUpd = lastTimeUpd + timedelta(days=1)
+            for x, y in result.items():
+                try:
+                    _Currency = Currency.objects.get(symbolAlias=x)
+                    _Currency.baseUsdValue = Decimal(y)
+                    _Currency.quotationDate = lastTimeUpd
+                    _Currency.lastUpdateDate = timezone.now()
+                    _Currency.save()
+                except Exception as e:
+                    pass
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -91,10 +106,37 @@ class CurrencyViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        url = 'https://v6.exchangerate-api.com/v6/4305ebd414a30fbf5d7d8171/latest/USD'
+        result = requests.get(url, headers={'X-CoinAPI-Key': '4305ebd414a30fbf5d7d8171'})
+        if result.status_code == 200:
+            dict_result = json.loads(result.content)
+            result = dict_result['conversion_rates']
+            lastTimeUpd = datetime.fromtimestamp(int(dict_result['time_last_update_unix']))
+            lastTimeUpd = lastTimeUpd + timedelta(days=1)
+            for x, y in result.items():
+                try:
+                    _Currency = Currency.objects.get(symbolAlias=x)
+                    _Currency.baseUsdValue = Decimal(y)
+                    _Currency.quotationDate = lastTimeUpd
+                    _Currency.lastUpdateDate = timezone.now()
+                    _Currency.save()
+                except Exception as e:
+                    pass
+
         response = {'Result': 'Success',
                     'Reason': 'Currency Updated',
                     }
         return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.symbolAlias == 'USD':
+            response = {'Result': 'Failed',
+                        'Reason': 'Invalid Operation, Currency USD cannot be deleted.',
+                        }
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_200_OK)
 
 #METHOD TO UPDATE THE DATABASE QUOTES
 class QuoteUpdate(viewsets.ModelViewSet):
@@ -107,18 +149,14 @@ class QuoteUpdate(viewsets.ModelViewSet):
         dateDiff = (timezone.now() - lastUpd) #OBS IF WANT TO UPDATE BY LAST UPDATE OR LAST QUOTE DATE
         dateDiff_Obj = time.gmtime(dateDiff.total_seconds())
 
-        print(int(time.strftime('%H', dateDiff_Obj)))
         if int(time.strftime('%H', dateDiff_Obj)) >= 1: #OBS TO FREQUENCY OF UPDATE (1) = EACH 1 HOUR
             url = 'https://v6.exchangerate-api.com/v6/4305ebd414a30fbf5d7d8171/latest/USD'
             result = requests.get(url, headers={'X-CoinAPI-Key': '4305ebd414a30fbf5d7d8171'})
-            print('Acessou o LInk')
             if result.status_code == 200:
                 dict_result = json.loads(result.content)
                 result = dict_result['conversion_rates']
                 lastTimeUpd = datetime.fromtimestamp(int(dict_result['time_last_update_unix']))
                 lastTimeUpd = lastTimeUpd + timedelta(days=1)
-                print('Link Com sucesso vai Atualizar lista')
-                print(lastTimeUpd)
                 for x, y in result.items():
                     try:
                         _Currency = Currency.objects.get(symbolAlias=x)
