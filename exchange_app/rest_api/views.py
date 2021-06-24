@@ -70,7 +70,6 @@ class CurrencyViewSet(viewsets.ModelViewSet):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
 
-
     def create(self, request, *args, **kwargs):
         url = 'https://v6.exchangerate-api.com/v6/4305ebd414a30fbf5d7d8171/latest/USD'
         result = requests.get(url, headers={'X-CoinAPI-Key': '4305ebd414a30fbf5d7d8171'})
@@ -103,9 +102,9 @@ class CurrencyViewSet(viewsets.ModelViewSet):
                         'Reason': 'Invalid Operation, Currency USD cannot be Updated.',
                         }
             return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        #serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        #serializer.is_valid(raise_exception=True)
+        #self.perform_update(serializer)
         url = 'https://v6.exchangerate-api.com/v6/4305ebd414a30fbf5d7d8171/latest/USD'
         result = requests.get(url, headers={'X-CoinAPI-Key': '4305ebd414a30fbf5d7d8171'})
         if result.status_code == 200:
@@ -126,7 +125,12 @@ class CurrencyViewSet(viewsets.ModelViewSet):
         response = {'Result': 'Success',
                     'Reason': 'Currency Updated',
                     }
-        return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
+        serializer = self.get_serializer(data=request.data,partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        #return Response(status=status.HTTP_400_BAD_REQUEST, data=json.dumps(response))
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
