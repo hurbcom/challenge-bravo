@@ -7,9 +7,9 @@ export default class Currency {
         try {
             const currenciesList = await this.CurrencyService.listSupportedCurrencies();
 
-            return res.status(200).json({ message: `success`, data: currenciesList });
+            return res.sendResponse(200, `success`, currenciesList);
         } catch (err) { 
-            return res.status(500).json({ message: 'internal server error' });
+            return res.sendResponse(500, 'internal server error');
         }
     }
     
@@ -17,13 +17,13 @@ export default class Currency {
         try {
             const newCurrency = this.CurrencyService.addCurrency(req.body);
             
-            return res.status(200).json({ message: 'success', data: newCurrency });
+            return res.sendResponse(201, 'success', newCurrency);
         } catch (err) {
-            return res.status(500).json({ message: 'internal server error' });
+            return res.sendResponse(500, 'internal server error');
         }
     }
 
     delete(req, res) {
-        return res.send(`currency ${req.params.symbol} deleted`);
+        return res.sendResponse(200, `currency ${req.params.symbol} deleted`);
     }
 };

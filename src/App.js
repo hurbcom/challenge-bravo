@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import routes from './api/routes';
+import resMiddleware from './api/middlewares/res';
 
 class App {
     constructor () {
@@ -12,6 +13,7 @@ class App {
 
     middlewares () {
         this.server.use(express.json());
+        this.server.use(resMiddleware);
     }
 
     routes () {

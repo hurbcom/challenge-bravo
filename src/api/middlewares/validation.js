@@ -9,7 +9,7 @@ const currency = async (req, res, next) => {
 
         next();
     } catch (err) {
-        return res.status(400).json({ message: 'invalid params', data: { errors: err.errors }});
+        return res.sendResponse(400, 'invalid params', { errors: err.errors });
     }
 };
 

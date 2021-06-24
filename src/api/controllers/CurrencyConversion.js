@@ -4,6 +4,6 @@ export default class CurrencyConvertion {
     }
     
     list (req, res) {
-        return res.send(`${req.query.amount} ${req.query.from} converted to ${req.query.to} is N`);
+        return res.sendResponse(200, `${req.query.amount} ${req.query.from} converted to ${req.query.to} is N`);
     }
 };
