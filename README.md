@@ -26,7 +26,7 @@ Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem d
 
 Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
 
-Ref: 
+Ref:
 Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
 Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
 
@@ -66,12 +66,103 @@ Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lis
 -   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
 -   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
 
-## Dúvidas
+## Instalação
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+Para realizar a instalação basta seguir os passos abaixos:
 
-Boa sorte e boa viagem! ;)
+1 - Crie um Projeto novo e Clone o Diretório:<br>https://github.com/c4rl0s4nt0s/challenge-bravo.git <br><br>
+2 - Realize a Instalação dos Requisitos através do comando:<br><i>pip install -r requirements.txt</i> <br><br>
+3 - Basta Executar o arquivo <b>"start.sh"</b>, abaixo o endereço do endpoint:<br>
+<b>http://127.0.0.1:8000/Currency/ </b>
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## Utilização
+
+Abaixo está a lista de serviços existentes e suas respectivas chamadas:<br><br>
+
+    _________________________________________________________________
+
+    * Função: Converter Moedas (Currency Exchange);
+    * Endereço: http://127.0.0.1:8000/Currency/?from=USD&to=BRL&amount=10;
+    * Método: GET;
+    * Retorno Esperado:
+        "{\"From\": \"USD\", \"To\": \"BRL\", \"Amount\": \"10\", \"FinalValue\": \"49.80\"}"
+    _________________________________________________________________
+
+    * Função: Retornar Lista de Moedas (Currency List);
+    * Endereço: http://127.0.0.1:8000/;
+    * Método: GET;
+    * Retorno Esperado:
+        [
+            {
+                "id": 1,
+                "symbolAlias": "USD",
+                "nameDescription": "Dólar",
+                "baseUsdValue": "1.0000",
+                "typeCurrency": 1,
+                "lastUpdateDate": "2021-06-24T10:17:46.020838Z",
+                "quotationDate": "2021-06-24T21:00:01Z"
+            },
+            {
+                "id": 2,
+                "symbolAlias": "BRL",
+                "nameDescription": "Real",
+                "baseUsdValue": "4.9800",
+                "typeCurrency": 1,
+                "lastUpdateDate": "2021-06-24T10:17:46.057814Z",
+                "quotationDate": "2021-06-24T21:00:01Z"
+            }
+        ]
+    _________________________________________________________________
+
+    * Função: Inserir Uma Nova Moeda (Currency Insert);
+    * Endereço: http://127.0.0.1:8000/;
+    * Método: POST;
+    * Estrutura de Dados:
+        "symbolAlias": "Abreviatura da Moeda (BRL,USD,BTC)",
+        "nameDescription": "Nomenclatura Descritiva",
+        "baseUsdValue": "Valor da Moeda Perante ao Lastro (USD/XXX)",
+        "typeCurrency": "Tipo da Moeda, Caso 1 - Moedas Reais, 2 - Ficticias"
+
+    * Estrutra Envio:
+        {
+            "symbolAlias": "USD",
+            "nameDescription": "Dólar Americano",
+            "baseUsdValue": 1,
+            "typeCurrency": 1
+        }
+    _________________________________________________________________
+
+    * Função: Alterar Informações de Moedas (Currency Update);
+    * Endereço: http://127.0.0.1:8000/<id>;
+    * Método: PUT;
+    * Tipo de Dados:
+        "symbolAlias": "Abreviatura da Moeda (BRL,USD,BTC)",
+        "nameDescription": "Nomenclatura Descritiva",
+        "baseUsdValue": "Valor da Moeda Perante ao Lastro (USD/XXX)",
+        "typeCurrency": "Tipo da Moeda, Caso 1 - Moedas Reais, 2 - Ficticias"
+
+    * Estrutra Envio:
+        {
+            "id": 1,
+            "symbolAlias": "USD",
+            "nameDescription": "Dólar",
+            "baseUsdValue": "1.0000",
+            "typeCurrency": 1,
+            "lastUpdateDate": "2021-06-24T10:17:46.020838Z",
+            "quotationDate": "2021-06-24T21:00:01Z"
+        }
+    _________________________________________________________________
+
+    * Função: Remover Moedas da Base (Currency Delete);
+    * Endereço: http://127.0.0.1:8000/<id>;
+    * Método: DELETE;
+
+## Observações Gerais
+
+Por restrições técnicas não foi possível a realização da instalação do Docker em Máquina.
+assim, ficando como melhoria para futuras atualizações, também deixo como sugestão os seguintes pontos:
+
+* Definição de um provedor de DataMarket (exchangerate-api), assim como sua periodicidade de atualização:<br><br>
+* Estabelecer a períodicidade de atualização bem como categorizar por prioridades;
+* Caso a demanda seja acima da pré-estabelicida nos testes, é recomendável a utilização de bancos não relacionais;
+
