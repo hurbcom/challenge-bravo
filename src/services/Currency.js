@@ -6,4 +6,8 @@ export default class Currency {
     listSupportedCurrencies () {
         return this.CurrencyDB.listAll();
     }
+
+    addCurrency() {
+        return;
+    }
 }

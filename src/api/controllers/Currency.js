@@ -12,9 +12,15 @@ export default class Currency {
             return res.status(500).json({ message: 'internal server error' });
         }
     }
-
+    
     store (req, res) {
-        return res.send(`currency ${req.body.symbol} added with a quitation of ${req.body.quotation}`);
+        try {
+            const newCurrency = this.CurrencyService.addCurrency(req.body);
+            
+            return res.status(200).json({ message: 'success', data: newCurrency });
+        } catch (err) {
+            return res.status(500).json({ message: 'internal server error' });
+        }
     }
 
     delete(req, res) {
