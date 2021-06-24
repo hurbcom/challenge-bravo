@@ -8,7 +8,7 @@ class Schema {
     generateCurrencySchema() {
         const currencySchema = {
             symbol: yup.string().min(3).required(),
-            quotation: yup.number()
+            quotation: yup.number().positive()
         }
         
         return yup.object().shape(currencySchema);
