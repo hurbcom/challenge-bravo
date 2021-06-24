@@ -13,13 +13,21 @@ export default class Currency {
         }
     }
     
-    store (req, res) {
+    async store (req, res) {
         try {
-            const newCurrency = this.CurrencyService.addCurrency(req.body);
+            const newCurrency = await this.CurrencyService.storeCurrency(req.body);
             
             return res.sendResponse(201, 'success', newCurrency);
         } catch (err) {
-            return res.sendResponse(500, 'internal server error');
+            let statusCode = 500;
+            let message = 'internal server error';
+
+            if (err.already_registered) {
+                statusCode = 400;
+                message = 'This currency is already registered'
+            }
+
+            return res.sendResponse(statusCode, message);
         }
     }
 
