@@ -7,8 +7,8 @@
             "nameDescription": "Dólar",
             "baseUsdValue": "1.0000",
             "typeCurrency": 1,
-            "lastUpdateDate": "2021-06-24T10:17:46.020838Z",
-            "quotationDate": "2021-06-24T21:00:01Z"
+            "lastUpdateDate": "2021-06-24 10:17:46",
+            "quotationDate": "2021-06-24 21:00:01"
         }
     },
     {
@@ -19,8 +19,8 @@
             "nameDescription": "Real",
             "baseUsdValue": "4.9800",
             "typeCurrency": 1,
-            "lastUpdateDate": "2021-06-24T10:17:46.057814Z",
-            "quotationDate": "2021-06-24T21:00:01Z"
+            "lastUpdateDate": "2021-06-24 10:17:46",
+            "quotationDate": "2021-06-24 21:00:01"
         }
     },
     {
@@ -31,8 +31,8 @@
             "nameDescription": "Euro",
             "baseUsdValue": "1.1900",
             "typeCurrency": 1,
-            "lastUpdateDate": "2021-06-24T10:27:23.891963Z",
-            "quotationDate": "2021-06-24T10:27:23.891963Z"
+            "lastUpdateDate": "2021-06-24 10:17:46",
+            "quotationDate": "2021-06-24 21:00:01"
         }
     },
     {
@@ -43,8 +43,8 @@
             "nameDescription": "BitCoin",
             "baseUsdValue": "33299.9000",
             "typeCurrency": 1,
-            "lastUpdateDate": "2021-06-24T10:28:06.263537Z",
-            "quotationDate": "2021-06-24T10:28:06.263537Z"
+            "lastUpdateDate": "2021-06-24 10:17:46",
+            "quotationDate": "2021-06-24 21:00:01"
         }
     },
     {
@@ -55,8 +55,8 @@
             "nameDescription": "Ethereum",
             "baseUsdValue": "1939.6800",
             "typeCurrency": 1,
-            "lastUpdateDate": "2021-06-24T10:28:43.994363Z",
-            "quotationDate": "2021-06-24T10:28:43.994363Z"
+            "lastUpdateDate": "2021-06-24 10:17:46",
+            "quotationDate": "2021-06-24 21:00:01"
         }
     }
 ]
