@@ -14,4 +14,7 @@ $router->get('/moedas/{uid}', 'Controller@teste');
 $router->post('/contatos/store', "Controller@store");
 
 
+$router->get('/currency', 'CurrencyController@index');
 $router->post('/currency/store', 'CurrencyController@store');
+$router->delete('/currency/{name}/delete', 'CurrencyController@delete');
+$router->put('/currency/{name}/update', 'CurrencyController@update');
