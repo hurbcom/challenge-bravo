@@ -16,4 +16,19 @@ const currency = async (req, res, next) => {
     }
 };
 
-export { currency };
+const currencyConvertion = async (req, res, next) => {
+    const currencyConvertionDTO = req.query;
+    const currencyConvertionSchema = Schema.generateCurrencyConvertionSchema();
+    
+    try {
+        await Schema.validate(currencyConvertionSchema, currencyConvertionDTO);
+
+        next();
+    } catch (err) {
+        const errMessage = Message.badRequest({ error: err.errors });
+
+        return res.sendResponse(errMessage);
+    }
+};
+
+export { currency, currencyConvertion };
