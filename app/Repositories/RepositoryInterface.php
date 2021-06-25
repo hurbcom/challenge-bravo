@@ -14,7 +14,7 @@ interface RepositoryInterface
 
     public function firstOrCreate(array $data);
 
-    public function delete($id);
+    public function deleteBy(string $key, $value);
 
     public function destroy($id);
 

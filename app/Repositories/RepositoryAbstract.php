@@ -37,10 +37,19 @@ abstract class RepositoryAbstract implements RepositoryInterface
         return $instance;
     }
 
+    public function getModel()
+    {
+        return $this->model;
+    }
 
     public function find($id)
     {
         return $this->model->find($id);
+    }
+
+    public function findBy(string $key, string $value)
+    {
+        return $this->model->where($key, $value)->first();
     }
 
     public function all()
@@ -63,9 +72,9 @@ abstract class RepositoryAbstract implements RepositoryInterface
         return $this->model->firstOrCreate($data);
     }
 
-    public function delete($id)
+    public function deleteBy(string $key, $value)
     {
-        return $this->model->find($id)->delete();
+        return $this->model->where($key, $value)->delete();
     }
 
     public function destroy($id)
