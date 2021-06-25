@@ -1,4 +1,5 @@
 import Schema from '../../libs/Schema';
+import Message from '../../libs/ResMessage';
 
 const currency = async (req, res, next) => {
     const currencyDTO = req.body;
@@ -9,7 +10,9 @@ const currency = async (req, res, next) => {
 
         next();
     } catch (err) {
-        return res.sendResponse(400, 'invalid params', { errors: err.errors });
+        const errMessage = Message.badRequest({ error: err.errors });
+
+        return res.sendResponse(errMessage);
     }
 };
 

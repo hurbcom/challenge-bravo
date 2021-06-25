@@ -1,3 +1,5 @@
+import Message from '../../libs/ResMessage';
+
 export default class Currency {
     constructor (CurrencyService) {
         this.CurrencyService = CurrencyService;
@@ -6,46 +8,47 @@ export default class Currency {
     async list (req, res) {
         try {
             const currenciesList = await this.CurrencyService.listSupportedCurrencies();
+            const resMessage = Message.success({ data: currenciesList });
 
-            return res.sendResponse(200, `success`, currenciesList);
-        } catch (err) { 
-            return res.sendResponse(500, 'internal server error');
+            return res.sendResponse(resMessage);
+        } catch (err) {
+            const errMessage = Message.internalError();
+
+            return res.sendResponse(errMessage);
         }
     }
     
     async store (req, res) {
         try {
             const newCurrency = await this.CurrencyService.storeCurrency(req.body);
+            const resMessage = Message.successCreated({ data: newCurrency });
             
-            return res.sendResponse(201, 'success', newCurrency);
+            return res.sendResponse(resMessage);
         } catch (err) {
-            let statusCode = 500;
-            let message = 'internal server error';
+            let errMessage = Message.internalError();
 
             if (err.already_registered) {
-                statusCode = 400;
-                message = 'This currency is already registered'
+                errMessage = Message.unprocessableEntity({ message: 'This currency is already registered' });
             }
 
-            return res.sendResponse(statusCode, message);
+            return res.sendResponse(errMessage);
         }
     }
 
     async delete(req, res) {
         try {
             const deletedCurrency = await this.CurrencyService.deleteCurrency(req.params);
-
-            return res.sendResponse(200, `success`, deletedCurrency);
+            const resMessage = Message.success({ data: deletedCurrency });
+            
+            return res.sendResponse(resMessage);
         } catch (err) {
-            let statusCode = 500;
-            let message = 'internal server error';
+            let errMessage = Message.internalError();
 
             if (err.not_found) {
-                statusCode = 400;
-                message = 'This currency is not registered'
+                errMessage = Message.unprocessableEntity({ message: 'This currency is not registered' });
             }
 
-            return res.sendResponse(statusCode, message);
+            return res.sendResponse(errMessage);
         }
     }
 };
