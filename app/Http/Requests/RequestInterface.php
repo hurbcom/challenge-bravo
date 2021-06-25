@@ -4,5 +4,7 @@ namespace App\Http\Requests;
 
 interface RequestInterface
 {
-    public static function rules();
+    public static function create();
+
+    public static function update();
 }
