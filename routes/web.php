@@ -9,5 +9,9 @@ $router->group(['prefix' => 'api'], function () use($router) {
 
     $router->group(['prefix' => 'moedas'], function () use($router) {
         $router->get('', 'MoedaController@index');
+        $router->get('{uid}', 'MoedaController@show');
+        $router->post('', 'MoedaController@store');
+        $router->put('{uid}', 'MoedaController@update');
+        $router->delete('{uid}', 'MoedaController@destroy');
     });
 });
