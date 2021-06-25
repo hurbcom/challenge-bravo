@@ -32,7 +32,7 @@ class Request
         switch($this->method)
         {
             case 'post':
-                $this->data = $_POST;
+                $this->data = array_merge($_POST, json_decode(file_get_contents('php://input', true), true));
                 break;
             case 'get':
                 $this->data = $_GET;
@@ -41,7 +41,7 @@ class Request
             case 'put':
             case 'delete':
             case 'options':
-                parse_str(file_get_contents('php://input'), $this->data);
+                parse_str(file_get_contents('php://input', true), $this->data);
         }
     }
 
@@ -67,7 +67,7 @@ class Request
 
     public function all()
     {
-        return $this->data();
+        return $this->data;
     }
 
     public function __isset($key)

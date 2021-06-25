@@ -45,8 +45,8 @@ class Router
         return $this->route_collection->where($request_type, $pattern);
     }
 
-    protected function dispach($route, $params, $namespace = "App\\"){
-        return $this->dispacher->dispach($route->callback, $params, $namespace);
+    protected function dispach($route, $params, Request $request, $namespace = "App\\"){
+        return $this->dispacher->dispach($route->callback, $params, $request, $namespace);
     }
 
     protected function notFound()
@@ -55,13 +55,13 @@ class Router
     }
 
 
-    public function resolve($request){
+    public function resolve(Request $request){
         $route = $this->find($request->method(), $request->uri());
         try {
             if($route)
             {
                 $params = $route->callback['values'] ? $this->getValues($request->uri(), $route->callback['values']) : [];
-                return $this->dispach($route, $params);
+                return $this->dispach($route, $params, $request);
             }
             return $this->notFound();
         } catch (\Exception $e) {

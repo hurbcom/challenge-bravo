@@ -12,3 +12,6 @@ $router->get('/moedas', 'Controller@teste');
 $router->get('/moedas/{uid}', 'Controller@teste');
 
 $router->post('/contatos/store', "Controller@store");
+
+
+$router->post('/currency/store', 'CurrencyController@store');
