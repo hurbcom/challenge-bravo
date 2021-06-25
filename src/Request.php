@@ -39,6 +39,8 @@ class Request
                 break;
             case 'head':
             case 'put':
+                $this->data = array_merge($_POST, json_decode(file_get_contents('php://input', true), true));
+                break;
             case 'delete':
             case 'options':
                 parse_str(file_get_contents('php://input', true), $this->data);
