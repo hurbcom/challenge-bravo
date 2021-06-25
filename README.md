@@ -26,6 +26,8 @@ To have a copy of this project up and running, follow the instructions below
 ## Built With
 
 - [Node](https://nodejs.org/en/) - A JavaScript runtime built on Chrome's V8 JavaScript engine
+- [Jest](https://jestjs.io/) - JavaScript Testing Framework
+- [Yup](https://github.com/jquense/yup) - A JavaScript schema builder for value parsing and validation
 - [PostgreSQL](https://www.postgresql.org/) - The World's Most Advanced Open Source Relational Database
 
 ## Authors
@@ -34,7 +36,8 @@ To have a copy of this project up and running, follow the instructions below
 
 ## Acknowledgments
 
-- Commit's messages convention from [here](https://github.com/pvdlg/conventional-commit-types)
+- Commits messages' convention from [here](https://github.com/pvdlg/conventional-commit-types)
+<!-- - Add documentation link here -->
 
 ### Commands that can help you cope with some problems:
 - 
