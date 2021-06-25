@@ -12,6 +12,9 @@ use Illuminate\Validation\ValidationException;
 
 class BaseController extends Controller
 {
+    const CREATE = 0;
+    const UPDATE = 1;
+
     protected $repository;
     protected $rulesClass;
 
@@ -30,12 +33,29 @@ class BaseController extends Controller
         ], $statusCode);
     }
 
-    public function makeValidation(array $requestData, array $rules)
+    public function makeValidation(array $requestData, int $type)
     {
+        $rules = $this->makeRules($type);
+
         $validator = Validator::make($requestData, $rules);
 
         if ($validator->fails()) {
             throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+    }
+
+    public function makeRules(int $type): array
+    {
+        switch ($type) {
+            case self::CREATE:
+                return $this->rulesClass::create();
+                break;
+            case self::UPDATE:
+                return $this->rulesClass::update();
+                break;
+            default:
+                return [];
+                break;
         }
     }
 
@@ -62,7 +82,7 @@ class BaseController extends Controller
     public function store(Request $request): JsonResponse
     {
         try {
-            $this->makeValidation($request->all(), $this->rulesClass::rules());
+            $this->makeValidation($request->all(), self::CREATE);
         } catch (ValidationException $e) {
             return $this->apiResponse(false, $e->getMessage(), $e->errors(), 400);
         }
@@ -85,7 +105,9 @@ class BaseController extends Controller
     public function show($uid)
     {
         try {
-            $data = $this->repository->find($uid);
+            $searchKey = $this->repository->getModel()->getRouteKeyName();
+            
+            $data = $searchKey != $this->repository->getModel()->getKeyName() ? $this->repository->findBy($searchKey, $uid) : $this->repository->find($uid);
             
             if (is_null($data)) {
                 return $this->apiResponse(false, 'Dados não encontrados.', [], 404);
@@ -107,21 +129,24 @@ class BaseController extends Controller
     public function update(Request $request, $uid)
     {
         try {
-            $this->makeValidation($request->all(), $this->rulesClass::rules());
+            $this->makeValidation($request->all(), self::UPDATE);
         } catch (ValidationException $e) {
             return $this->apiResponse(false, $e->getMessage(), $e->errors(), 400);
         }
-        
+
         try {
-            $data = $this->repository->find($uid);
+            $searchKey = $this->repository->getModel()->getRouteKeyName();
+            
+            $data = $searchKey != $this->repository->getModel()->getKeyName() ? $this->repository->findBy($searchKey, $uid) : $this->repository->find($uid);
             
             if (is_null($data)) {
                 return $this->apiResponse(false, 'Dados não encontrados.', [], 404);
             }
             
             $data->fill($request->all());
+            $data->save();
 
-            return $this->apiResponse(true, 'Dados retornados com sucesso.', $data->toArray());
+            return $this->apiResponse(true, 'Dados atualizados com sucesso.', $data->toArray());
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return $this->apiResponse(false, 'Falha ao criar dados.', [], 500);
@@ -136,13 +161,15 @@ class BaseController extends Controller
     public function destroy($uid)
     {
         try {
-            $data = $this->repository->destroy($uid);
+            $searchKey = $this->repository->getModel()->getRouteKeyName();
+            
+            $data = $searchKey != $this->repository->getModel()->getKeyName() ? $this->repository->deleteBy($searchKey, $uid) : $this->repository->destroy($uid);            
             
             if (!$data) {
                 return $this->apiResponse(false, 'Dados não encontrados.', [], 404);
             }
 
-            return $this->apiResponse(true, 'Dados retornados com sucesso.', []);
+            return $this->apiResponse(true, 'Dados removidos com sucesso.', []);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return $this->apiResponse(false, 'Falha ao criar dados.', [], 500);

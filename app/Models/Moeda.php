@@ -17,4 +17,9 @@ class Moeda extends Model
         'nome_exibicao',
         'lastro',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'nome';
+    }
 }
