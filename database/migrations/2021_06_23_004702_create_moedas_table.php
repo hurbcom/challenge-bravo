@@ -15,8 +15,8 @@ class CreateMoedasTable extends Migration
     {
         Schema::create('moedas', function (Blueprint $table) {
             $table->uuid('uid');
-            $table->string('nome');
-            $table->string('nome_exibicao');
+            $table->string('nome', 10)->unique();
+            $table->string('lastro', 10)->nullable()->default(null);
             $table->timestamps();
         });
     }

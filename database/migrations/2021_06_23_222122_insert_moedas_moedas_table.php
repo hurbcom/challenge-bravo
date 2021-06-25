@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\Models\Moeda;
+use App\Models\Moeda;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class InsertMoedasMoedasTable extends Migration
 {
@@ -15,11 +13,11 @@ class InsertMoedasMoedasTable extends Migration
     public function up()
     {
         $moedas = [
-            ['nome' => 'USD', 'nome_exibicao' => 'Dólar Americano'],
-            ['nome' => 'BRL', 'nome_exibicao' => 'Real'],
-            ['nome' => 'EUR', 'nome_exibicao' => 'Euro'],
-            ['nome' => 'BTC', 'nome_exibicao' => 'Bitcoin'],
-            ['nome' => 'ETH', 'nome_exibicao' => 'Ethereum'],
+            ['nome' => 'USD'],
+            ['nome' => 'BRL'],
+            ['nome' => 'EUR'],
+            ['nome' => 'BTC'],
+            ['nome' => 'ETH'],
         ];
 
         foreach ($moedas as $moeda) {
