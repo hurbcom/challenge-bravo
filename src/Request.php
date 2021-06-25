@@ -65,9 +65,17 @@ class Request
         return $this->method;
     }
 
-    public function all()
+    public function all($fields = [])
     {
-        return $this->data;
+        if (empty($fields)) {
+            return $this->data;
+        }
+
+        $returnedData = [];
+        foreach ($fields as $field) {
+            $returnedData[$field] = $this->data[$field];
+        }
+        return $returnedData;
     }
 
     public function __isset($key)
