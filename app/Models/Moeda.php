@@ -15,5 +15,6 @@ class Moeda extends Model
     public $fillable = [
         'nome',
         'nome_exibicao',
+        'lastro',
     ];
 }
