@@ -1,19 +1,19 @@
-const USD_BTC_Scrapper = require('./USD_BTC_Scrapper');
+const { startBrowser } = require('./browser');
+const InvestingScrapper = require('./scrapper/InvestingCurrenciesScrapper');
+const InvestingCryptoScrapper = require('./scrapper/InvestingCryptoScrapper');
 
-const btc = new USD_BTC_Scrapper();
+const currencies = new InvestingScrapper('');
+const crypto = new InvestingCryptoScrapper('');
 
 
-async function f() {
-    const btcToUSD = await btc.scrap();
+async function exchanges () {
+    const browser = await startBrowser();
+    const [coins, cryptoCoins] = await Promise.all([currencies.scrap(browser), crypto.scrap(browser)]);
 
-    console.log(btcToUSD);
-    return btcToUSD;
+    return {
+        ...coins,
+        ...cryptoCoins
+    };
 }
 
-f();
-
-// module.exports = () => {
-//     const btcToUSD = btc.scrap();
-
-//     return btcToUSD;
-// }
+module.exports = exchanges;
