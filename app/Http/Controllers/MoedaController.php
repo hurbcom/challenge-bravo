@@ -17,8 +17,8 @@ class MoedaController extends BaseController
 
     public function converteMoedas(Request $request): JsonResponse
     {
-        $moedaService = new MoedaService();
-        $convertedValue = $moedaService->conversion($request->input('to'), $request->input('from'), $request->input('amount'));
+        $moedaService = new MoedaService($request->input('to'), $request->input('from'));
+        $convertedValue = $moedaService->getConversion($request->input('amount'));
 
         return $this->apiResponse(true, 'Dados retornados com sucesso', $convertedValue);
     }
