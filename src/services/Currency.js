@@ -46,4 +46,8 @@ export default class Currency {
             throw err;
         }
     }
+
+    convertAmount() {
+        return;
+    }
 }
