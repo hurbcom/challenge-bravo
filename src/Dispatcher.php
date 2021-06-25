@@ -8,7 +8,6 @@ class Dispatcher
     public function dispach($callback, $params = [], $namespace = "App\\")
     {
         if (is_callable($callback['callback'])) {
-            print_r($params);
             return call_user_func_array($callback['callback'], array_values($params));
         }
         return $this->callControllerMethod($callback, $params, $namespace);
