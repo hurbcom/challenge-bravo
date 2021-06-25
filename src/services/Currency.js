@@ -7,8 +7,14 @@ export default class Currency {
         return currencyDTO.currencyQuote;
     }
 
-    listSupportedCurrencies () {
-        return this.CurrencyDB.listCurrencies();
+    async listSupportedCurrencies () {
+        try {
+            const currenciesList = await this.CurrencyDB.listCurrencies();
+
+            return currenciesList.map(currency => currency.code);
+        } catch (err) {
+            throw err;
+        }
     }
 
     async storeCurrency (currencyDTO) {

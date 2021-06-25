@@ -7,7 +7,7 @@ export default class Currency {
         try {
             const currenciesList = await this.Database.query('SELECT code FROM currency');
 
-            return currenciesList.map(currency => currency.code);
+            return currenciesList;
         } catch (err) {
             throw err;
         }
