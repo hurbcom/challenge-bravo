@@ -14,7 +14,7 @@ export default class Currency {
     }
 
     listCurrencyByCode (currencyCode) {
-        return this.Database.query('SELECT code FROM currency WHERE code = $1', [ currencyCode ]);
+        return this.Database.query('SELECT id, code FROM currency WHERE code = $1', [ currencyCode ]);
     }
 
     storeRealCurrency (currencyDTO) {
@@ -34,6 +34,28 @@ export default class Currency {
                     await this.Database.query(
                         'INSERT INTO currency_quote(code_id, quote_value) VALUES ($1, $2)',
                         [ newCurrency.id, currencyDTO.currencyQuote ],
+                        { transaction }
+                    );
+                }
+            );
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async deleteCurrency (currencyId) {
+        try {
+            return await this.Database.transaction(
+                async (transaction) => {
+                    await this.Database.query(
+                        'DELETE FROM currency_quote WHERE code_id = $1',
+                        [ currencyId ],
+                        { transaction }
+                    );
+
+                    await this.Database.query(
+                        'DELETE FROM currency WHERE id = $1',
+                        [ currencyId ],
                         { transaction }
                     );
                 }

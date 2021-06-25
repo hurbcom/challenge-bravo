@@ -26,4 +26,18 @@ export default class Currency {
             throw err;
         }
     }
+
+    async deleteCurrency (currencyDTO) {
+        try {
+            const [ existingCurrency ] = await this.CurrencyDB.listCurrencyByCode(currencyDTO.currencyCode);
+            
+            if (!existingCurrency) throw { not_found: true };
+            
+            await this.CurrencyDB.deleteCurrency(existingCurrency.id);
+
+            return currencyDTO;
+        } catch (err) {
+            throw err;
+        }
+    }
 }

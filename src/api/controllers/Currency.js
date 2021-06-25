@@ -31,7 +31,21 @@ export default class Currency {
         }
     }
 
-    delete(req, res) {
-        return res.sendResponse(200, `currency ${req.params.symbol} deleted`);
+    async delete(req, res) {
+        try {
+            const deletedCurrency = await this.CurrencyService.deleteCurrency(req.params);
+
+            return res.sendResponse(200, `success`, deletedCurrency);
+        } catch (err) {
+            let statusCode = 500;
+            let message = 'internal server error';
+
+            if (err.not_found) {
+                statusCode = 400;
+                message = 'This currency is not registered'
+            }
+
+            return res.sendResponse(statusCode, message);
+        }
     }
 };
