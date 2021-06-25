@@ -17,8 +17,6 @@ services:
       - ~/.ssh:/tmp/teste
     # COPIA A CHAVE SSH DA SUA MÁQUINA LOCAL PARA A PASTA CORRETA
     command: bash -c "cp /tmp/teste/* ~/.ssh && chmod 600 ~/.ssh/* && php-fpm"
-    networks:
-      - base
 
   nginx:
     container_name: hurb_nginx
@@ -29,9 +27,18 @@ services:
       - ./:/var/www
       - ./docker/nginx:/etc/nginx/conf.d/
       - ./docker/logs/:/var/log/nginx/
-    networks:
-      - base
+    ports:
+        - 80:80
+    environment:
+        - NGINX_PORT=80
 
-networks:
-  base:
-    external: true
+  mongo:
+      image: mongo
+      container_name: hurb_mongodb
+      restart: always
+      environment:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: A123456
+      ports:
+          - 27017:27017
+

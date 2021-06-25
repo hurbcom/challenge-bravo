@@ -26,6 +26,9 @@ RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install imap
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
+RUN pecl install mongodb; \
+    docker-php-ext-enable mongodb
+
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
