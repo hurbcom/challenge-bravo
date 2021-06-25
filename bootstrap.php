@@ -15,6 +15,8 @@ try {
     $router = new Router;
 
     require __DIR__ . '/routes/routes.php';
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
 
 } catch(\Exception $e){
 
