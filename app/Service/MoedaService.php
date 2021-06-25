@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Repositories\MoedaRepository;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -37,6 +38,10 @@ class MoedaService
     protected function getLastro(string $currency): string
     {
         $moeda = $this->repository->findBy('nome', Str::upper($currency));
+
+        if (is_null($moeda)) {
+            throw new ModelNotFoundException('Moeda para conversão não encontrada');
+        }
         
         if (!is_null($moeda->lastro)) {
             return $moeda->lastro;
