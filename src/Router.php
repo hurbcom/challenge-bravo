@@ -57,12 +57,17 @@ class Router
 
     public function resolve($request){
         $route = $this->find($request->method(), $request->uri());
-
-        if($route)
-        {
-            return $this->dispach($route);
+        try {
+            if($route)
+            {
+                return $this->dispach($route);
+            }
+            return $this->notFound();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
         }
-        return $this->notFound();
+
+
 
     }
 }
