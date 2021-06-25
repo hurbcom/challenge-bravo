@@ -4,8 +4,9 @@ namespace App;
 
 class Controller
 {
-    public function teste()
+    public function teste($uid)
     {
-        echo 'FOI AQUI';
+
+        echo 'FOI AQUI'.$uid;
     }
 }
