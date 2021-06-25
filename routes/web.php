@@ -14,4 +14,8 @@ $router->group(['prefix' => 'api'], function () use($router) {
         $router->patch('{uid}', 'MoedaController@update');
         $router->delete('{uid}', 'MoedaController@destroy');
     });
+
+    $router->group(['prefix' => 'currency'], function () use($router) {
+        $router->get('', 'MoedaController@converteMoedas');
+    });
 });
