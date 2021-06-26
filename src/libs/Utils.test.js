@@ -36,3 +36,43 @@ describe('#newObject', () => {
         }
     });
 });
+
+describe('#arrayAContainsB', () => {
+    test("it returns true when passed [1, 2] as the A and B", () => {
+        const arrayA = [1, 2];
+
+        try {
+            const result = Utils.arrayAContainsB(arrayA, arrayA);
+
+            expect(result).toBeTruthy();
+        } catch (err) {
+            expect(err).toBeFalsy();
+        }
+    });
+
+    test("it returns true when passed [1, 2] as the A and [2] as the B", () => {
+        const arrayA = [1, 2];
+        const arrayB = [2];
+
+        try {
+            const result = Utils.arrayAContainsB(arrayA, arrayB);
+
+            expect(result).toBeTruthy();
+        } catch (err) {
+            expect(err).toBeFalsy();
+        }
+    });
+
+    test("it returns false when passed [1] as the A and [1, 2] as the B", () => {
+        const arrayA = [1];
+        const arrayB = [1, 2];
+
+        try {
+            const result = Utils.arrayAContainsB(arrayA, arrayB);
+
+            expect(result).toBeFalsy();
+        } catch (err) {
+            expect(err).toBeFalsy();
+        }
+    });
+});
