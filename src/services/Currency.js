@@ -1,3 +1,5 @@
+import Utils from "../libs/Utils";
+
 export default class Currency {
     constructor (CurrencyDB) {
         this.CurrencyDB = CurrencyDB;
@@ -47,7 +49,17 @@ export default class Currency {
         }
     }
 
-    convertAmount() {
-        return;
+    async convertsAmountBetweenCurrencies(currencyConversionDTO) {
+        const { from, to, amount } = currencyConversionDTO;
+
+        try {
+            const supportedCurrencies = await this.listSupportedCurrencies();
+
+            if (!Utils.arrayAContainsB(supportedCurrencies, [ from, to ])) {
+                throw { unknow_source: true };
+            }
+        } catch (err) {
+            throw err;
+        }
     }
 }

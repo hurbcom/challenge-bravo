@@ -1,5 +1,6 @@
 import _CurrencyService from './Currency';
 import { CurrencyDB } from '../database';
+import Utils from '../libs/Utils';
 
 jest.mock('../database');
 
@@ -153,4 +154,36 @@ describe('#deleteCurrency', () => {
             expect(err).toBeFalsy();
         }
     });
+});
+
+describe('#convertsAmountBetweenCurrencies', () => {
+    test('it throws an error when at least one of the provided currencies are not supported', async () => {
+        const currencyConversionDTO = {
+            from: 'ABC',
+            to: 'CBA',
+            amount: 152.98
+        };
+
+        const listSupportedCurrenciesMock = jest.spyOn(CurrencyService, "listSupportedCurrencies");
+        const arrayAContainsBMock = jest.spyOn(Utils, "arrayAContainsB");
+        
+        listSupportedCurrenciesMock.mockImplementation(jest.mock());
+        listSupportedCurrenciesMock.mockResolvedValue([]);
+        arrayAContainsBMock.mockImplementation(jest.mock());
+        arrayAContainsBMock.mockReturnValue(false);
+
+        try {
+            await CurrencyService.convertsAmountBetweenCurrencies(currencyConversionDTO);
+        } catch (err) {
+            expect(err).toBeTruthy();
+            expect(listSupportedCurrenciesMock).toBeCalledTimes(1);
+            expect(listSupportedCurrenciesMock).toReturn();
+            expect(arrayAContainsBMock).toBeCalledTimes(1);
+            expect(arrayAContainsBMock).toReturn();
+        }
+        
+        listSupportedCurrenciesMock.mockRestore();
+        arrayAContainsBMock.mockRestore();
+    });
+    
 });
