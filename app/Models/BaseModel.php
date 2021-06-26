@@ -9,22 +9,38 @@ use \MongoDB\Driver\BulkWrite;
 class BaseModel
 {
     private $manager;
-    private $wheres;
+    private $wheres=[];
     protected $tablename;
 
-    public function __construct()
+    protected $data;
+    public function __get($name)
+    {
+        // TODO: Implement __get() method.
+        if (!in_array($name, array_keys($this->data))) {
+            return null;
+        }
+        return $this->data[$name];
+    }
+
+    public function __construct($data=[])
     {
         $this->manager = new Manager($this->getConnectionString());
+        $this->data = $data;
         return $this;
+    }
+
+    public function first()
+    {
+        return $this->get()[0];
     }
 
     public function get()
     {
-        $query = new Query([], []);
+        $query = new Query($this->wheres, []);
         $cursor = $this->manager->executeQuery('db.'.$this->getTableName(), $query);
         $return = [];
         foreach ($cursor as $document) {
-            $return[] = $document;
+            $return[] = new $this((array)$document);
         }
         return $return;
     }
