@@ -13,6 +13,7 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
+      - ./docker/config/custom.ini:/usr/local/etc/php/conf.d/custom.ini
     # command: bash -c "cp .env.example .env"
     networks:
       - rede
@@ -42,6 +43,16 @@ services:
     volumes:
       - ./:/var/www
       - ./docker/nginx/:/etc/nginx/conf.d/
+    networks:
+      - rede
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+        - "6379:6379"
+    volumes:
+        - ./docker/redis/:/data
     networks:
       - rede
 
