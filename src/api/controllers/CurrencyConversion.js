@@ -7,7 +7,10 @@ export default class CurrencyConversion {
     
     async list (req, res) {
         try {
-            const convertedAmount = await this.CurrencyService.convertsAmountBetweenCurrencies(req.params);
+            const { from, to, amount } = req.query;
+
+            const convertedAmount = await this.CurrencyService.convertsAmountBetweenCurrencies(from, to, amount);
+
             const resMessage = Message.success({ data: convertedAmount });
             
             return res.sendResponse(resMessage);

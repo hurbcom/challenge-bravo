@@ -1,8 +1,8 @@
 import _CurrencyService from './Currency';
-import { CurrencyDB } from '../database';
+import { CurrencyDB } from '../integrations/database';
 import Utils from '../libs/Utils';
 
-jest.mock('../database');
+jest.mock('../integrations/database');
 
 const CurrencyService = new _CurrencyService(CurrencyDB);
 
@@ -158,11 +158,9 @@ describe('#deleteCurrency', () => {
 
 describe('#convertsAmountBetweenCurrencies', () => {
     test('it throws an error when at least one of the provided currencies are not supported', async () => {
-        const currencyConversionDTO = {
-            from: 'ABC',
-            to: 'CBA',
-            amount: 152.98
-        };
+        const currencyCodeFrom = 'ABC';
+        const currencyCodeTo = 'CBA';
+        const amount = 152.98;
 
         const listSupportedCurrenciesMock = jest.spyOn(CurrencyService, "listSupportedCurrencies");
         const arrayAContainsBMock = jest.spyOn(Utils, "arrayAContainsB");
@@ -173,7 +171,7 @@ describe('#convertsAmountBetweenCurrencies', () => {
         arrayAContainsBMock.mockReturnValue(false);
 
         try {
-            await CurrencyService.convertsAmountBetweenCurrencies(currencyConversionDTO);
+            await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount);
         } catch (err) {
             expect(err).toBeTruthy();
             expect(listSupportedCurrenciesMock).toBeCalledTimes(1);
@@ -184,6 +182,81 @@ describe('#convertsAmountBetweenCurrencies', () => {
         
         listSupportedCurrenciesMock.mockRestore();
         arrayAContainsBMock.mockRestore();
+    });
+
+    test('it returns the same amount when the provided currencies are supported and the same', async () => {
+        const currencyCodeFrom = 'HURB';
+        const amount = 152.98;
+
+        const listSupportedCurrenciesMock = jest.spyOn(CurrencyService, "listSupportedCurrencies");
+        const arrayAContainsBMock = jest.spyOn(Utils, "arrayAContainsB");
+        
+        listSupportedCurrenciesMock.mockImplementation(jest.mock());
+        listSupportedCurrenciesMock.mockResolvedValue([ currencyCodeFrom ]);
+        arrayAContainsBMock.mockImplementation(jest.mock());
+        arrayAContainsBMock.mockReturnValue(true);
+
+        try {
+            const convertedAmount = await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeFrom, amount);
+
+            expect(convertedAmount).toBe(amount);
+            expect(listSupportedCurrenciesMock).toBeCalledTimes(1);
+            expect(listSupportedCurrenciesMock).toReturn();
+            expect(arrayAContainsBMock).toBeCalledTimes(1);
+            expect(arrayAContainsBMock).toReturn();
+        } catch (err) {
+            expect(err).toBeFalsy();
+        }
+        
+        listSupportedCurrenciesMock.mockRestore();
+        arrayAContainsBMock.mockRestore();
+    });
+ 
+    test('it returns the converted amount when the provided currencies are supported and ficticious', async () => {
+        const currencyCodeFrom = 'HURB';
+        const currencyCodeTo = 'BRUH';
+        const amount = 152.98;
+        const convertedAmount = 1;
+        const ficticiousCurrenciesList = [
+            {
+                currencyCode: currencyCodeFrom,
+                currencyQuote: 1
+            },
+            {
+                currencyCode: currencyCodeTo,
+                currencyQuote: 1
+            }
+        ];
+
+        const listSupportedCurrenciesMock = jest.spyOn(CurrencyService, "listSupportedCurrencies");
+        const arrayAContainsBMock = jest.spyOn(Utils, "arrayAContainsB");
+        const _convertAmountMock = jest.spyOn(CurrencyService, "_convertAmount");
+        
+        listSupportedCurrenciesMock.mockImplementation(jest.mock());
+        listSupportedCurrenciesMock.mockResolvedValue([ currencyCodeFrom, currencyCodeTo ]);
+        arrayAContainsBMock.mockImplementation(jest.mock());
+        arrayAContainsBMock.mockReturnValue(true);
+        _convertAmountMock.mockImplementation(jest.mock());
+        _convertAmountMock.mockReturnValue(convertedAmount);
+        CurrencyDB.listCurrenciesQuoteByCode.mockResolvedValue(ficticiousCurrenciesList);
+
+        try {
+            const convertedAmount = await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount);
+
+            expect(convertedAmount).toBe(convertedAmount);
+            expect(listSupportedCurrenciesMock).toBeCalledTimes(1);
+            expect(listSupportedCurrenciesMock).toReturn();
+            expect(arrayAContainsBMock).toBeCalledTimes(1);
+            expect(arrayAContainsBMock).toReturn();
+            expect(_convertAmountMock).toBeCalledTimes(1);
+            expect(_convertAmountMock).toReturn();
+        } catch (err) {
+            expect(err).toBeFalsy();
+        }
+        
+        listSupportedCurrenciesMock.mockRestore();
+        arrayAContainsBMock.mockRestore();
+        _convertAmountMock.mockRestore();
     });
     
 });

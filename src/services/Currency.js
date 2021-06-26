@@ -9,6 +9,10 @@ export default class Currency {
         return currencyDTO.currencyQuote;
     }
 
+    _convertAmount (currencyQuoteFrom, currencyQuoteTo, amount) {
+        return amount;
+    }
+
     async listSupportedCurrencies () {
         try {
             const currenciesList = await this.CurrencyDB.listCurrencies();
@@ -49,15 +53,26 @@ export default class Currency {
         }
     }
 
-    async convertsAmountBetweenCurrencies(currencyConversionDTO) {
-        const { from, to, amount } = currencyConversionDTO;
-
+    async convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount) {
         try {
-            const supportedCurrencies = await this.listSupportedCurrencies();
+            const currenciesCodesList = [ currencyCodeFrom, currencyCodeTo ];
+            const supportedCurrenciesCodes = await this.listSupportedCurrencies();
 
-            if (!Utils.arrayAContainsB(supportedCurrencies, [ from, to ])) {
+            if (!Utils.arrayAContainsB(supportedCurrenciesCodes, currenciesCodesList)) {
                 throw { unknow_source: true };
             }
+
+            if (currencyCodeFrom === currencyCodeTo) return amount;
+
+            const ficticiousCurrenciesList = await this.CurrencyDB.listCurrenciesQuoteByCode(currencyCodeFrom, currencyCodeTo);
+
+            if (ficticiousCurrenciesList.length == 2) {
+                const [ currencyFrom, currencyTo ] = ficticiousCurrenciesList;
+                
+                return this._convertAmount(currencyFrom.currencyQuote, currencyTo.currencyQuote, amount);
+            }
+
+            return;
         } catch (err) {
             throw err;
         }

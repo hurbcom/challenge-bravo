@@ -1,6 +1,7 @@
 export default class Currency {
-    constructor (Database) {
+    constructor (Database, CurrencyMapper) {
         this.Database = Database;
+        this.CurrencyMapper = CurrencyMapper;
     }
 
     async listCurrencies () {
@@ -15,6 +16,16 @@ export default class Currency {
 
     listCurrencyByCode (currencyCode) {
         return this.Database.query('SELECT id, code FROM currency WHERE code = $1', [ currencyCode ]);
+    }
+
+    async listCurrenciesQuoteByCode (...codes) {
+        try {
+            const currencies = await this.Database.query('SELECT c.id, c.code, cq.quote_value FROM currency c LEFT JOIN currency_quote cq ON c.id = cq.currency_id WHERE c.code in ($1, $2)', [ codes[0], codes[1] ]);
+
+            return currencies.map(currency => this.CurrencyMapper.toDTO(currency));
+        } catch (err) {
+            throw err;
+        }
     }
 
     storeRealCurrency (currencyDTO) {
@@ -32,7 +43,7 @@ export default class Currency {
                     );
 
                     await this.Database.query(
-                        'INSERT INTO currency_quote(code_id, quote_value) VALUES ($1, $2)',
+                        'INSERT INTO currency_quote(currency_id, quote_value) VALUES ($1, $2)',
                         [ newCurrency.id, currencyDTO.currencyQuote ],
                         { transaction }
                     );
