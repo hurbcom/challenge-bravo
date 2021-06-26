@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MoedaService
 {
@@ -45,7 +46,11 @@ class MoedaService
 
         $request = sprintf('%s/%s.json', Str::lower($this->getLastro($this->to)), $this->getFrom());
         $response = Http::get($this->baseUrl . $request);
-
+        
+        if ($response->clientError()) {
+            throw new NotFoundHttpException('Moedas para cotação não encontradas');
+        }
+        
         Cache::put($this->getCacheKey(), $response->collect(), Carbon::now()->addHours(12));
         Log::info('usou dados da api');
 
