@@ -1,6 +1,6 @@
 import Message from '../../libs/ResMessage';
 
-export default class CurrencyConvertion {
+export default class CurrencyConversion {
     constructor (CurrencyService) {
         this.CurrencyService = CurrencyService;
     }
@@ -15,7 +15,7 @@ export default class CurrencyConvertion {
             let errMessage = Message.internalError();
 
             if (err.unknow_source) {
-                errMessage = Message.unprocessableEntity({ message: "Invalid convertion: currencies' codes are unknown" });
+                errMessage = Message.unprocessableEntity({ message: "Invalid conversion: currencies' codes are unknown" });
             }
 
             return res.sendResponse(errMessage);

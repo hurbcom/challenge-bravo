@@ -15,14 +15,14 @@ class Schema {
         return yup.object().shape(currencySchema);
     }
 
-    generateCurrencyConvertionSchema() {
-        const currencyConvertionSchema = {
+    generateCurrencyConversionSchema() {
+        const currencyConversionSchema = {
             from: this.code.required(),
             to: this.code.required(),
             amount: this.positiveNumber.required()
         }
         
-        return yup.object().shape(currencyConvertionSchema);
+        return yup.object().shape(currencyConversionSchema);
     }
 
     async validate (schema, DTO) {

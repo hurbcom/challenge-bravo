@@ -1,6 +1,6 @@
-# Currencies' Convertion and Quotation API (challenge-bravo)
+# Currencies' Conversion and Quotation API (challenge-bravo)
 
-A REST API for currencies' convertion and quotation using Node.js
+A REST API for currencies' conversion and quotation using Node.js
 
 ## Getting Started
 

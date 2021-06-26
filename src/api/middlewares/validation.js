@@ -16,12 +16,12 @@ const currency = async (req, res, next) => {
     }
 };
 
-const currencyConvertion = async (req, res, next) => {
-    const currencyConvertionDTO = req.query;
-    const currencyConvertionSchema = Schema.generateCurrencyConvertionSchema();
+const currencyConversion = async (req, res, next) => {
+    const currencyConversionDTO = req.query;
+    const currencyConversionSchema = Schema.generateCurrencyConversionSchema();
     
     try {
-        await Schema.validate(currencyConvertionSchema, currencyConvertionDTO);
+        await Schema.validate(currencyConversionSchema, currencyConversionDTO);
 
         next();
     } catch (err) {
@@ -31,4 +31,4 @@ const currencyConvertion = async (req, res, next) => {
     }
 };
 
-export { currency, currencyConvertion };
+export { currency, currencyConversion };
