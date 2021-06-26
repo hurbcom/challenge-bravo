@@ -17,7 +17,6 @@ class ExchangeRatesController extends Controller
 
     public function index()
     {
-
         $currencyFrom = (new Currency())
             ->where('name', $this->request->from)
             ->first();

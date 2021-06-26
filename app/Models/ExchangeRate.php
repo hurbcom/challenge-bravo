@@ -16,14 +16,20 @@ class ExchangeRate
         $this->service = $exangeService;
     }
 
-    public function from(Currency $currency)
+    public function from(?Currency $currency)
     {
+        if (!$currency instanceOf Currency) {
+            throw new \Exception('Currency From Not Found');
+        }
         $this->from = $currency;
         return $this;
     }
 
-    public function to(Currency $currency)
+    public function to(?Currency $currency)
     {
+        if (!$currency instanceOf Currency) {
+            throw new \Exception('Currency To Not Found');
+        }
         $this->to = $currency;
         return $this;
     }

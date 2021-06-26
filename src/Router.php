@@ -65,7 +65,7 @@ class Router
             }
             return $this->notFound();
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            echo '<strong>Erro:</strong> '.$e->getMessage();
         }
     }
 
