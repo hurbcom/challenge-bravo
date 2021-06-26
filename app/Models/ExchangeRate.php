@@ -36,6 +36,19 @@ class ExchangeRate
 
     public function get()
     {
+        if ($this->from->base != 'USD') {
+            $baseAmount = $this->exchange($this->from->baseRate, 1, $this->amount);
+            $this->from = (new Currency())->where('name', $this->from->base)->first();
+            $this->amount = $baseAmount;
+            return $this->get();
+        }
+
+        if ($this->to->base != 'USD') {
+            $originalTo = $this->to;
+            $this->to = (new Currency())->where('name', $this->to->base)->first();
+            $baseAmount = $this->get();
+            return $this->exchange(1, $originalTo->baseRate, $baseAmount);
+        }
         $key = date('Ymd');
         if (!in_array($key, array_keys((array)$this->from->rates)) || !in_array($key, array_keys((array)$this->to->rates))) {
             $rates = $this->service->latest();

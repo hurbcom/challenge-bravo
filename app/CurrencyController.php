@@ -22,7 +22,7 @@ class CurrencyController extends Controller
 
     public function store()
     {
-        echo json_encode($this->model->insert($this->request->all(['name', 'base'])));
+        echo json_encode($this->model->insert($this->request->all(['name', 'base', 'baseRate'])));
     }
 
     public function delete($name)

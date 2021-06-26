@@ -31,6 +31,7 @@ class BaseModel
 
     public function first()
     {
+        //TODO fazer com limit
         return $this->get()[0];
     }
 
