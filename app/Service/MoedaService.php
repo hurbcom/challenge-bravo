@@ -53,11 +53,11 @@ class MoedaService
     }
 
     /**
-     * Cria nome para salvar dados no cache
+     * Cria nome para do cache salvar dados
      */
     public function getCacheKey(): string
     {
-        return Str::lower($this->getLastro($this->to)) . '_to_' . $this->getFrom();
+        return $this->to . '_to_' . $this->from;
     }
 
     /**
