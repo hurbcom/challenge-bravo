@@ -5,7 +5,9 @@ namespace App\Service;
 use App\Repositories\MoedaRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MoedaService
@@ -28,11 +30,25 @@ class MoedaService
     }
 
     protected function getQuotation()
-    {
+    {        
+        if (Cache::get($this->getCacheKey())) {
+            Log::info('usou dados do cache.');
+            
+            return Cache::get($this->getCacheKey());
+        }
+        
         $request = sprintf('%s/%s.json', Str::lower($this->getLastro($this->to)), $this->getFrom());
         $response = Http::get($this->baseUrl . $request);
         
+        Cache::put($this->getCacheKey(), $response->collect(), Carbon::now()->addHours(12));
+        Log::info('usou dados da api');
+
         return $response->collect();
+    }
+
+    public function getCacheKey(): string
+    {
+        return Str::lower($this->getLastro($this->to)).'_to_'.$this->getFrom();
     }
 
     protected function getLastro(string $currency): string
