@@ -76,6 +76,9 @@ class Request
 
         $returnedData = [];
         foreach ($fields as $field) {
+            if (!$this->data[$field]) {
+                continue;
+            }
             $returnedData[$field] = $this->data[$field];
         }
         return $returnedData;
