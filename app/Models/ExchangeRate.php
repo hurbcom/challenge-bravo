@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Models;
+
+use App\Services\BaseService;
+
+class ExchangeRate
+{
+    protected $service;
+    protected $from;
+    protected $to;
+    protected $amount;
+
+    public function __construct(BaseService $exangeService)
+    {
+        $this->service = $exangeService;
+    }
+
+    public function from(Currency $currency)
+    {
+        $this->from = $currency;
+        return $this;
+    }
+
+    public function to(Currency $currency)
+    {
+        $this->to = $currency;
+        return $this;
+    }
+
+    public function amount($ammount)
+    {
+        $this->amount = $ammount;
+        return $this;
+    }
+
+    public function get()
+    {
+        $key = date('Ymd');
+        if (!in_array($key, array_keys((array)$this->from->rates)) || !in_array($key, array_keys((array)$this->to->rates))) {
+            $rates = $this->service->latest();
+            foreach ((new Currency())->where('base', 'USD')->get() as $currency) {
+                $nameLower = strtolower($currency->name);
+                $usdRate = sprintf('%.6f',floatval($rates->usd->$nameLower));
+                (new Currency())->where('_id', $currency->_id)->update(['rates.'.$key => $usdRate]);
+            }
+
+            $fromNameLower = strtolower($this->from->name);
+            $toNameLower = strtolower($this->to->name);
+            return $this->exchange($rates->usd->$fromNameLower, $rates->usd->$toNameLower, $this->amount);
+        }
+
+        return $this->exchange($this->from->rates->$key, $this->to->rates->$key, $this->amount);
+    }
+
+    private function exchange($from, $to, $amount)
+    {
+        $base = $amount / $from;
+        return $base*$to;
+    }
+}
