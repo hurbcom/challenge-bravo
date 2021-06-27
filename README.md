@@ -25,18 +25,21 @@ Devem subir 4 containers:
 Para testar a aplicação basta importar o arquivo challenge-bravo-collection na raiz para o seu postman, lá estão mapeadas as 5 rotas:
 
 GET - api/coin
+
 Query
 ```
     ticket:LUCY
 ```
 
 DEL - api/coin
+
 Query
 ```
     ticket:LUCY
 ```
 
 POST - api/coin
+
 Body
 ```
     {
@@ -46,6 +49,7 @@ Body
 ```
 
 PATCH - api/coin
+
 Body
 ```
     {
@@ -55,6 +59,7 @@ Body
 ```
 
 GET - api/exchange
+
 Query
 ```
     from:BTC
