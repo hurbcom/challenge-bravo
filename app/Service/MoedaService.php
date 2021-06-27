@@ -12,14 +12,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MoedaService
 {
-    protected MoedaRepository $repository;
     protected string $baseUrl, $to, $from;
     protected float $amount;
 
     public function __construct(string $to, string $from, float $amount)
     {
         $this->baseUrl = env('URL_API_CURRENCY');
-        $this->repository = new MoedaRepository();
         $this->to = strtolower($to);
         $this->from = strtolower($from);
         $this->amount = $amount;
@@ -30,12 +28,6 @@ class MoedaService
      */
     public function getQuotation(): array
     {
-        if (Cache::get($this->getCacheKey())) {
-            Log::info('usou dados do cache.', ['data' => Cache::get($this->getCacheKey())]);
-
-            return Cache::get($this->getCacheKey());
-        }
-
         $to = $this->getLastro($this->to);
         $from = $this->getLastro($this->from);
         
@@ -46,16 +38,11 @@ class MoedaService
         }
         
         Log::info('fez a busca na api', ['data' => $response->json()]);
-        
-        $quotation = [
+
+        return [
             'data' => $this->formatDate($response['date']),
             'cotacao' => $response[$from],
         ];
-        
-        // salvando cotação encontrada em cache por 12 horas
-        Cache::put($this->getCacheKey(), $quotation, Carbon::now()->addHours(12));
-
-        return $quotation;
     }
 
     /**
@@ -63,7 +50,13 @@ class MoedaService
      */
     public function getConversion(): array
     {
-        $convertedCurrency = $this->makeConversion(data_get($this->getQuotation(), 'cotacao'), $this->amount);
+        // busca dados salvos no cache caso exista se não busca na api
+        $quotation = Cache::remember($this->getCacheKey(), Carbon::now()->addHours(12), function () {
+            return $this->getQuotation();
+        });
+
+        $convertedCurrency = $this->makeConversion(data_get($quotation, 'cotacao'), $this->amount);
+
         return [
             'valor_origem' => sprintf('%s %s', strtoupper($this->to), $this->formatValue($this->amount)),
             'valor_convertido' => sprintf('%s %s', strtoupper($this->from), $convertedCurrency),
@@ -91,7 +84,7 @@ class MoedaService
      */
     protected function getLastro(string $currency): string
     {
-        $moeda = $this->repository->findBy('nome', strtoupper($currency));
+        $moeda = (new MoedaRepository())->findBy('nome', strtoupper($currency));
 
         if (is_null($moeda)) {
             throw new ModelNotFoundException('Moeda para conversão não encontrada');
