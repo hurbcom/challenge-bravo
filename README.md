@@ -20,10 +20,40 @@ Devem subir 4 containers:
   <img src="containers.png" alt="Containers" />
 </p>
 
-Para testar a aplicação basta importar o arquivo challenge-bravo-collection na raiz para o seu postman, lá estão mapeadas as 4 rotas:
+Para testar a aplicação basta importar o arquivo challenge-bravo-collection na raiz para o seu postman, lá estão mapeadas as 5 rotas:
 
 GET - api/coin
+Query
+'''
+    ticket:LUCY
+'''
 DEL - api/coin
+Query
+'''
+    ticket:LUCY
+'''
 POST - api/coin
+Body
+'''
+    {
+        "ticket": "LUCY",
+        "currency": 1000
+    }
+'''
 PATCH - api/coin
+Body
+'''
+    {
+        "ticket": "LUCY",
+        "currency": 8
+    }
+'''
 GET - api/exchange
+Query
+'''
+    from:BTC
+    to:EUR
+    amount:1
+'''
+
+As moedas válidas para a api/exchange além das fictícias são: USD, EUR, BTC E ETH.
