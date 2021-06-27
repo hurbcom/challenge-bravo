@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-class CurrencyRequest implements RequestInterface
+class CurrencyRequest
 {
-    public static function create(): array
+    public static function conversion(): array
     {
         return [
             'to' => ['required'],
@@ -13,8 +13,11 @@ class CurrencyRequest implements RequestInterface
         ];
     }
 
-    public static function update(): array
+    public static function quotation(): array
     {
-        return [];
+        return [
+            'to' => ['required'],
+            'from' => ['required'],
+        ];
     }
 }
