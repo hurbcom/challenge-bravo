@@ -15,7 +15,7 @@ class FakeCoinRepository {
     }
 
     async update(coin) {
-        const newCoin = await this.model.findOneAndUpdate({ ticket: coin.ticket }, { ticket: coin.newTicket, currency: coin.currency}, { new: true });
+        const newCoin = await this.model.findOneAndUpdate({ ticket: coin.ticket }, { ticket: coin.newTicket || coin.ticket, currency: coin.currency}, { new: true });
         return newCoin;
     }
 

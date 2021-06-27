@@ -8,6 +8,16 @@ class ExchangeService {
         return coin === 'USD';
     }
 
+    async checkUpdateTime(){
+        const updateTime = await this.coinRepository.getUpdateTime();
+
+        if(!updateTime){
+            throw new Error('Moedas estão atualizando...');
+        }
+
+        return updateTime;
+    }
+
     async conversion(from, to, amount) {
         if(to === from){
            return amount;

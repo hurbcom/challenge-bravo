@@ -2,6 +2,7 @@ const CoinService = require('./services/CoinService');
 const updateCoinValidator = require('./validator/update-coin');
 const addCoinValidator = require('./validator/add-coin');
 const removeCoinValidator = require('./validator/remove-coin');
+const getCoinValidator = require('./validator/get-coin');
 class CoinController {
     constructor() {
         this.coinService = new CoinService();
@@ -43,7 +44,7 @@ class CoinController {
                 res.send(400, {mensagem: 'Parâmetros obrigatórios não enviados', reason: errorReason })
             }  
         } catch (e) {
-            res.send(500, { mensagem: 'Ocorreu um erro ao executar a conversão.' })
+            res.send(500, { mensagem: 'Ocorreu um erro ao executar a atualização da moeda' })
         }
 
         return next();
@@ -64,7 +65,29 @@ class CoinController {
                 res.send(400, {mensagem: 'Parâmetros obrigatórios não enviados', reason: errorReason })
             }  
         } catch (e) {
-            res.send(500, { mensagem: 'Ocorreu um erro ao executar a conversão.' })
+            res.send(500, { mensagem: 'Ocorreu um erro ao executar a exclusão da moeda.' })
+        }
+
+        return next();
+    }
+
+    async getCoin(req, res, next) {
+        try {
+            const { query } = req;
+
+            const validQuery = getCoinValidator.validate(query);
+
+            if (!validQuery.error) {
+                const response = await this.coinService.getCoin(query.ticket);
+
+                res.send(200, response);
+            } else {
+                const errorReason = validQuery.error.details[0].message;
+                res.send(400, {mensagem: 'Parâmetros obrigatórios não enviados', reason: errorReason })
+            }  
+        } catch (e) {
+            console.log(e);
+            res.send(500, { mensagem: 'Ocorreu um erro ao executar ao recuperar a moeda.' })
         }
 
         return next();

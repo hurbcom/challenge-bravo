@@ -12,13 +12,14 @@ class CurrencyController {
             const validQuery = currencyValidator.validate(query);
 
             if (!validQuery.error) {
+                const update_time = await this.exchangeService.checkUpdateTime();
                 const response = await this.exchangeService.conversion(query.from, query.to, query.amount);
 
-                res.send(200, response);
+                res.send(200, { amount: response, currency: query.to, update_time });
             } else {
                 const errorReason = validQuery.error.details[0].message;
-                res.send(400, {mensagem: 'Parâmetros obrigatórios não enviados', reason: errorReason })
-            }  
+                res.send(400, { mensagem: 'Parâmetros obrigatórios não enviados', reason: errorReason })
+            }
         } catch (e) {
             res.send(500, { mensagem: 'Ocorreu um erro ao executar a conversão.', reason: e.message })
         }

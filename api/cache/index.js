@@ -1,15 +1,5 @@
-const redis = require('./configRedis');
-const crawler = require('./crawler');
-
-async function updateCache() {
-    console.log('Atualizando cache...');
-    const exchanges = await crawler();
-
-    const exchangePromises = Object.keys(exchanges).map(coin => redis.set(coin, exchanges[coin], 'EX', 10 * 60));
-    await Promise.all(exchangePromises);
-    await redis.set('update_time', new Date().toISOString());
-}
+const updateCache = require('./updateCache');
 
 updateCache();
 
-setInterval(() => updateCache(), 10 * 60 * 1000);
+setInterval(() => updateCache(), 5 * 60 * 1000);

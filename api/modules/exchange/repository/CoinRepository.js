@@ -33,6 +33,10 @@ class CoinRepository {
     async getFakeCoinCurrency(coin){
         return this.fakeCoinRepository.find(coin);
     }
+
+    async getUpdateTime(){
+        return this.redis.get('update_time');
+    }
       
 }
 
