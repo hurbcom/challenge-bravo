@@ -12,7 +12,7 @@ class CoinRepository {
 
         if(!coinValue){
             const fakeCoin = await this.getFakeCoinCurrency(coin);
-            coinValue = fakeCoin.currency;
+            coinValue = fakeCoin?.currency;
         }
 
         if(coinValue) return coinValue;

@@ -20,7 +20,7 @@ class CurrencyController {
                 res.send(400, {mensagem: 'Parâmetros obrigatórios não enviados', reason: errorReason })
             }  
         } catch (e) {
-            res.send(500, { mensagem: 'Ocorreu um erro ao executar a conversão.' })
+            res.send(500, { mensagem: 'Ocorreu um erro ao executar a conversão.', reason: e.message })
         }
 
         return next();

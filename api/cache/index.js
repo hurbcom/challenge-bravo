@@ -1,5 +1,5 @@
 const redis = require('./configRedis');
-const crawler = require('../crawler');
+const crawler = require('./crawler');
 
 async function updateCache() {
     const exchanges = await crawler();
@@ -9,11 +9,4 @@ async function updateCache() {
     await redis.set('update_time', new Date().toISOString());
 }
 
-async function getFromCache(key) {
-    return redis.get(key);
-}
-
 updateCache();
-
-module.exports = { updateCache, getFromCache };
-
