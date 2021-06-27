@@ -20,8 +20,8 @@ class FakeCoinRepository {
     }
 
     async delete(coin) {
-        const newCoin = await this.model.findOneAndDelete({ ticket: coin.ticket }, { returnDocument: true });
-        return;
+        const deletedCoin = await this.model.findOneAndDelete({ ticket: coin.ticket }, { returnDocument: true });
+        return deletedCoin;
     }   
 }
 

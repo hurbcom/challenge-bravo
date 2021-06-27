@@ -65,6 +65,7 @@ class CoinController {
                 res.send(400, {mensagem: 'Parâmetros obrigatórios não enviados', reason: errorReason })
             }  
         } catch (e) {
+            console.log(e);
             res.send(500, { mensagem: 'Ocorreu um erro ao executar a exclusão da moeda.' })
         }
 
@@ -87,7 +88,7 @@ class CoinController {
             }  
         } catch (e) {
             console.log(e);
-            res.send(500, { mensagem: 'Ocorreu um erro ao executar ao recuperar a moeda.' })
+            res.send(500, { mensagem: 'Ocorreu um erro ao recuperar a moeda.' })
         }
 
         return next();
