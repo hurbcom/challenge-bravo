@@ -27,11 +27,13 @@ Query
 '''
     ticket:LUCY
 '''
+
 DEL - api/coin
 Query
 '''
     ticket:LUCY
 '''
+
 POST - api/coin
 Body
 '''
@@ -40,6 +42,7 @@ Body
         "currency": 1000
     }
 '''
+
 PATCH - api/coin
 Body
 '''
@@ -48,6 +51,7 @@ Body
         "currency": 8
     }
 '''
+
 GET - api/exchange
 Query
 '''
