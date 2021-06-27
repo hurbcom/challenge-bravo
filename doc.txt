@@ -1,0 +1,9 @@
+hambiente
+virtualenv -p python3.9 venv
+source venv/bin/activate
+
+Install django
+intall rest framework
+
+django-admin startproject app
+django-admin django-admin core

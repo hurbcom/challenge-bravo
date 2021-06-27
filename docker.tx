@@ -1,0 +1,13 @@
+docker rmi -f $(docker images -a -q)
+
+docker network prune
+
+docker build -t david/img:1.0 .
+
+docker container run --name back -p 8000:80 -p 5432:5432 -v $PWD/../:/var/www/html -it -d david/img:1.0
+
+docker exec -it back /bin/bash
+docker container stop $(docker ps -a -q) && docker container rm $(docker ps -a -q)
+
+docker network create --driver bridge postgres-network
+docker run --name ts-postgres --network=postgres-network -e "POSTGRES_PASSWORD=$Postgres123!" -p 5432:5432 -v $PWD:/var/lib/postgresql/data -d -it postgres

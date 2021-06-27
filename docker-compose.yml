@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  back:
+    restart: "no"
+    build:
+        dockerfile: ./docker/back.dockerfile
+        context: .
+    image: img1
+    container_name: back
+    ports:
+        - "8000:8000"
+    tty: true
+    volumes:
+        - $PWD/:/var/www/html
+    networks:
+        - dev-network
+    depends_on:
+        - postgres
+
+  postgres:
+      container_name: postgres_container
+      image: postgres
+      environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 123
+          PGDATA: /data/postgres
+      volumes:
+          - ./postgres:/data/postgres
+          - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      ports:
+          - "5432:5432"
+      restart: unless-stopped
+      networks:
+          - dev-network
+      tty: true
+
+
+  pgadmin:
+      container_name: pgadmin_container
+      image: dpage/pgadmin4
+      environment:
+          PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+          PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      volumes:
+          - ./pgamin:/root/.pgadmin
+      ports:
+          - "${PGADMIN_PORT:-5050}:80"
+      restart: "no"
+      networks:
+          - dev-network
+      tty: true
+
+networks:
+  dev-network:
+    driver: bridge

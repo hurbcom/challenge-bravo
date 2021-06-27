@@ -1,0 +1,14 @@
+django
+djangorestframework
+markdown
+django-filter
+djangorestframework-jwt
+psycopg2-binary
+django-cors-headers
+django-reset-migrations
+weasyprint
+setuptools
+requests
+pandas
+xlrd
+ofxparse

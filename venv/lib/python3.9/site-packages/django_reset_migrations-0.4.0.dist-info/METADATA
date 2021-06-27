@@ -1,0 +1,90 @@
+Metadata-Version: 2.1
+Name: django-reset-migrations
+Version: 0.4.0
+Summary: Add one command to reset the migrations of one or more app
+Home-page: https://github.com/valdergallo/django_reset_migrations
+Author: valdergallo
+Author-email: valdergallo@gmail.com
+License: Apache Version 2
+Download-URL: https://github.com/valdergallo/django_reset_migrations/tarball/0.4.0/
+Keywords: Django reset migrations
+Platform: UNKNOWN
+Classifier: Framework :: Django
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Utilities
+Requires-Dist: django (>=1.7)
+
+|License| |PyPI Downloads|
+
+Django reset migrations
+=======================
+
+Add one command to reset the django migrations.
+
+Sometimes you have one app that had a lot migrations in development
+process. And this migrations could be deleted, because anybody will need
+this in the future.
+
+Soo, could be stressfull delete the files, reset the database and create
+the first migration again … to start to developer again and bla bla bla
+…
+
+Because this, I made this command to reset the migrations and start the
+first migration.
+
+I hope be usefull to you 2 :D
+
+Features
+========
+
+-  delete migrations files
+-  delete registers in django_migrations
+-  recreate the first migrations
+-  apply fake migration
+-  delete register without delete files with –cached
+
+To install
+----------
+
+::
+
+       pip install django-reset-migrations
+
+Install package in your INSTALLED_APPS
+
+::
+
+   settings.py
+
+   INSTALLED_APPS = (
+       ...
+       'reset_migrations',
+       .....
+   )
+
+Usage
+-----
+
+::
+
+       python manage.py reset_migrations crm
+
+       or
+
+       python manage.py reset_migrations app1 app2
+
+       or
+
+       python manage.py reset_migrations app1 app2 --cached
+
+Options
+-------
+
+**–cached**: Don´t delete the migrations files in apps
+
+.. |License| image:: http://img.shields.io/:license-apache-blue.svg?style=flat-square
+   :target: http://www.apache.org/licenses/LICENSE-2.0.html
+.. |PyPI Downloads| image:: http://img.shields.io/pypi/dm/django-reset-migrations.svg
+   :target: https://pypi.python.org/pypi/django-reset-migrations
+
+
