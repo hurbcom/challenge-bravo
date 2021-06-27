@@ -12,12 +12,4 @@ class CurrencyRequest
             'amount' => ['required', 'numeric'],
         ];
     }
-
-    public static function quotation(): array
-    {
-        return [
-            'to' => ['required'],
-            'from' => ['required'],
-        ];
-    }
 }

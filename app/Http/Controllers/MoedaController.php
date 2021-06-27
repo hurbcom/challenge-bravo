@@ -22,10 +22,10 @@ class MoedaController extends BaseController
     /**
      * @return void|JsonResponse
      */
-    public function validatesRequest(Request $request, string $method)
+    public function validatesRequest(Request $request)
     {
         try {
-            $this->validate($request, CurrencyRequest::$method());
+            $this->validate($request, CurrencyRequest::conversion());
         } catch (ValidationException $e) {
             return $this->apiResponse(false, 'Parametros incorretos.', $e->errors(), 400);
         }
@@ -33,27 +33,12 @@ class MoedaController extends BaseController
 
     public function currencyConverter(Request $request): JsonResponse
     {
-        $this->validatesRequest($request, 'conversion');
+        $this->validatesRequest($request);
 
         try {
             $moedaService = new MoedaService($request->input('to'), $request->input('from'), $request->input('amount'));
 
             return $this->apiResponse(true, 'Dados retornados com sucesso', $moedaService->getConversion());
-        } catch (ModelNotFoundException | NotFoundHttpException $e) {
-            return $this->apiResponse(false, $e->getMessage(), [], 404);
-        } catch (\Throwable $e) {
-            return $this->apiResponse(false, $e->getMessage(), [], 500);
-        }
-    }
-
-    public function currencyQuotation(Request $request): JsonResponse
-    {
-        $this->validatesRequest($request, 'quotation');
-
-        try {
-            $moedaService = new MoedaService($request->input('to'), $request->input('from'), $request->input('amount'));
-
-            return $this->apiResponse(true, 'Dados retornados com sucesso', $moedaService->getQuotation());
         } catch (ModelNotFoundException | NotFoundHttpException $e) {
             return $this->apiResponse(false, $e->getMessage(), [], 404);
         } catch (\Throwable $e) {

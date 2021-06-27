@@ -17,6 +17,5 @@ $router->group(['prefix' => 'api'], function () use($router) {
 
     $router->group(['prefix' => 'currency'], function () use($router) {
         $router->get('', 'MoedaController@currencyConverter');
-        $router->get('quotation', 'MoedaController@currencyQuotation');
     });
 });
