@@ -39,13 +39,13 @@ A API estará rodando na URL `http://localhost:8080`
 #### Lista todas as moedas
 
 ```http
-  GET /api/moedas
+GET /api/moedas
 ```
 
 #### Cria uma moeda
 
 ```http
-  POST /api/moedas
+POST /api/moedas
 ```
 
 | Body | Type     | Description                       |
@@ -57,7 +57,7 @@ A API estará rodando na URL `http://localhost:8080`
 #### Lista uma moeda
 
 ```http
-  GET /api/moedas/{nome}
+GET /api/moedas/{nome}
 ```
 
 | Parameter | Type     | Description                       |
@@ -68,7 +68,7 @@ A API estará rodando na URL `http://localhost:8080`
 #### Edita uma moeda
 
 ```http
-  PATCH /api/moedas/{nome}
+PATCH /api/moedas/{nome}
 ```
 
 | Parameter | Type     | Description                       |
@@ -84,7 +84,7 @@ A API estará rodando na URL `http://localhost:8080`
 #### Remove uma moeda
 
 ```http
-  DELETE /api/moedas/{nome}
+DELETE /api/moedas/{nome}
 ```
 
 | Parameter | Type     | Description                       |
