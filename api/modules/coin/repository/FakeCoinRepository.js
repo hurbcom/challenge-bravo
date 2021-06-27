@@ -4,6 +4,11 @@ class FakeCoinRepository {
         this.model = model;
     }
 
+    async find(coin) {
+        const newCoin = await this.model.findOne({ ticket: coin });
+        return newCoin;
+    }
+
     async create(coin) {
         const newCoin = await this.model.create(coin);
         return newCoin;

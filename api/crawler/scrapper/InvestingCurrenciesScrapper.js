@@ -15,8 +15,8 @@ class InvestingScrapper extends AbstractScrapper{
                         await Promise.all([this.getCurrency("#last_12_35"), this.getCurrency('#last_12_17')]);
 
         return {
-            brl: this.processInformation(usdToBrl),
-            eur: this.processInformation(usdToEur)
+            BRL: this.processInformation(usdToBrl),
+            EUR: this.processInformation(usdToEur)
         };
     }
 }

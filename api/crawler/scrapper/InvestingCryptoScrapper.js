@@ -15,8 +15,8 @@ class InvestingCryptoScrapper extends AbstractScrapper {
                                                             this.getCurrency("[i='1061443'] > .price > a")]);
 
         return {
-            btc: this.processInformation(bitcoin),
-            eth: this.processInformation(ethereum)
+            BTC: this.processInformation(bitcoin),
+            ETH: this.processInformation(ethereum)
         };
     }
 }

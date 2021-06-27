@@ -1,11 +1,23 @@
 const redis = require('../../../cache/configRedis');
+const FakeCoinRepository = require('../../coin/repository/FakeCoinRepository');
+
 class CoinRepository {
     constructor() {
         this.redis = redis;
+        this.fakeCoinRepository = new FakeCoinRepository();
     }
 
     async getCurrency(coin) {
-        return this.getRealCoinCurrency(coin);
+        let coinValue = await this.getRealCoinCurrency(coin);
+
+        if(!coinValue){
+            const fakeCoin = await this.getFakeCoinCurrency(coin);
+            coinValue = fakeCoin.currency;
+        }
+
+        if(coinValue) return coinValue;
+
+        throw new Error('Moeda não existe para conversão.');
     }
 
     async getRealCoinCurrency(coin) {
@@ -19,9 +31,7 @@ class CoinRepository {
     }
 
     async getFakeCoinCurrency(coin){
-        return {
-            hurb: 0.01
-        }
+        return this.fakeCoinRepository.find(coin);
     }
       
 }

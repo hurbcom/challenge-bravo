@@ -1,4 +1,4 @@
-const CoinRepository = require('../repository/CoinRepository');
+const CoinRepository = require('../repository/FakeCoinRepository');
 class CoinService {
     constructor() {
         this.coinRepository = new CoinRepository();

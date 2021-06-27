@@ -1,8 +1,8 @@
-const CoinService = require('./services/CoinService');
+const ExchangeService = require('./services/ExchangeService');
 const currencyValidator = require('./validator/get-currency-validator');
 class CurrencyController {
     constructor() {
-        this.coinService = new CoinService();
+        this.exchangeService = new ExchangeService();
     }
 
     async getCurrency(req, res, next) {
@@ -12,7 +12,7 @@ class CurrencyController {
             const validQuery = currencyValidator.validate(query);
 
             if (!validQuery.error) {
-                const response = await this.coinService.conversion(query.from, query.to, query.amount);
+                const response = await this.exchangeService.conversion(query.from, query.to, query.amount);
 
                 res.send(200, response);
             } else {
