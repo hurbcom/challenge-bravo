@@ -39,13 +39,13 @@ A API estará rodando na URL `http://localhost:8080`
 #### Lista todas as moedas
 
 ```http
-GET /api/moedas
+GET /api/currency
 ```
 
 #### Cria uma moeda
 
 ```http
-POST /api/moedas
+POST /api/currency
 ```
 
 | Body | Type     | Description                       |
@@ -57,7 +57,7 @@ POST /api/moedas
 #### Lista uma moeda
 
 ```http
-GET /api/moedas/{nome}
+GET /api/currency/{nome}
 ```
 
 | Parameter | Type     | Description                       |
@@ -68,7 +68,7 @@ GET /api/moedas/{nome}
 #### Edita uma moeda
 
 ```http
-PATCH /api/moedas/{nome}
+PATCH /api/currency/{nome}
 ```
 
 | Parameter | Type     | Description                       |
@@ -84,7 +84,7 @@ PATCH /api/moedas/{nome}
 #### Remove uma moeda
 
 ```http
-DELETE /api/moedas/{nome}
+DELETE /api/currency/{nome}
 ```
 
 | Parameter | Type     | Description                       |
@@ -96,7 +96,7 @@ DELETE /api/moedas/{nome}
 
 Converter valor de uma moeda para outra
 ```http
-GET /api/moedas?to=USD&from=BRL&amount=150.50
+GET /api/currency/conversion?to=USD&from=BRL&amount=150.50
 ```
 
 | Parameter | Type     | Description                       |
