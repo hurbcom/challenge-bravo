@@ -4,8 +4,8 @@
   "description": "Desafio hotel urbano",
   "main": "index.js",
   "scripts": {
-    "test:coverage": "nyc --reporter=text --reporter=html --reporter=text-summary ./node_modules/mocha/bin/mocha $(find ./api -name '*.unit*.js')",
-    "test": "./node_modules/mocha/bin/mocha  $(find ./api -name '*.unit*.js')",
+    "test:coverage": "MOCK_REDIS=true nyc --reporter=text --reporter=html --reporter=text-summary ./node_modules/mocha/bin/mocha $(find ./api -name '*.unit*.js') --exit",
+    "test": "MOCK_REDIS=true ./node_modules/mocha/bin/mocha  $(find ./api -name '*.unit*.js')",
     "start": "nodemon index.js"
   },
   "repository": {
@@ -28,7 +28,9 @@
     "mongoose": "^5.12.15",
     "node-fetch": "^2.6.1",
     "nyc": "^15.1.0",
-    "promise-redis": "0.0.5"
+    "promise-redis": "0.0.5",
+    "sinon": "^11.1.1",
+    "sinon-chai": "^3.7.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
