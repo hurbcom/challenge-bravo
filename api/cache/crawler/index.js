@@ -10,6 +10,8 @@ async function exchanges () {
     const browser = await startBrowser();
     const [coins, cryptoCoins] = await Promise.all([currencies.scrap(browser), crypto.scrap(browser)]);
 
+    browser.close();
+
     return {
         ...coins,
         ...cryptoCoins

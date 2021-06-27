@@ -1,11 +1,12 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 
-async function startBrowser(){
+async function startBrowser() {
     let browser;
     try {
         browser = await puppeteer.launch({
-            headless: false,
-            args: ["--disable-setuid-sandbox"],
+            headless: true,
+            executablePath: process.env.CHROME_BIN,
+            args: ['--no-sandbox', "--disable-setuid-sandbox", "--disable-gpu"],
             'ignoreHTTPSErrors': true
         });
     } catch (err) {

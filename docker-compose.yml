@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+  backend-job:
+    container_name: backend-job
+    restart: always
+    build: ./api/cache
+    depends_on:
+        - redis_db
+    networks:
+        - app-redis
+  backend:
+    container_name: backend
+    restart: always
+    build: .
+    volumes:
+      - ./:/usr/src/challenge-bravo
+      - /usr/src/challenge-bravo/node_modules
+    depends_on:
+      - mongo_db
+      - redis_db
+    networks:
+      - app-mongo
+      - app-redis
+    ports:
+      - "3000:3000"
+    expose: 
+      - 3000
+  mongo_db:
+    container_name: mongo
+    restart: always
+    image: tutum/mongodb:latest
+    environment: 
+      - AUTH=no
+    volumes:
+      - ./data-mongo:/data/db
+    networks:
+      - app-mongo
+    expose:
+      - 27017
+  redis_db:
+    container_name: redis
+    restart: always
+    image: redis:latest
+    volumes:
+        - ./data:/data/db
+    networks:
+        - app-redis
+    expose:
+        - 6379
+networks:
+  app-mongo:
+  app-redis:

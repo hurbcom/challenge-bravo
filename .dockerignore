@@ -1,0 +1,10 @@
+.vscode
+data-mongo
+node_modules
+.editorconfig
+.gitignore
+ca.jpg
+docker-compose.yml
+DockerFile
+pull-request.txt
+README.md

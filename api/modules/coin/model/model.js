@@ -5,7 +5,7 @@ const CoinSchema = new mongoose.Schema({
     currency: Number
   }, { collection: 'Coins'});
 
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://mongo_db:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
 
 mongoose.connection.once('open', function() {
     console.log('connected to mongodb')

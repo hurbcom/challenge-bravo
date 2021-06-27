@@ -5,7 +5,7 @@ class ExchangeService {
     }
 
     isMainCoin(coin){
-        return coin === 'usd';
+        return coin === 'USD';
     }
 
     async conversion(from, to, amount) {

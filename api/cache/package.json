@@ -1,5 +1,5 @@
 {
-  "name": "challenge-bravo",
+  "name": "cache-redis",
   "version": "1.0.0",
   "description": "Desafio hotel urbano",
   "main": "index.js",
@@ -18,15 +18,7 @@
   },
   "homepage": "https://github.com/victorffernandes/challenge-bravo#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "glob": "^7.1.7",
-    "joi": "^17.4.0",
-    "mongoose": "^5.12.15",
-    "node-fetch": "^2.6.1",
-    "promise-redis": "0.0.5"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.7"
+    "promise-redis": "0.0.5",
+    "puppeteer-core": "^10.0.0"
   }
 }
