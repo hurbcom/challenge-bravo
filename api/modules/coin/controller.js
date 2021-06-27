@@ -1,18 +1,62 @@
 const CoinService = require('./services/CoinService');
-const currencyValidator = require('./validator/get-currency-validator');
-class CurrencyController {
+const updateCoinValidator = require('./validator/update-coin');
+const addCoinValidator = require('./validator/add-coin');
+const removeCoinValidator = require('./validator/remove-coin');
+class CoinController {
     constructor() {
         this.coinService = new CoinService();
     }
 
-    async getCurrency(req, res, next) {
+    async addCoin(req, res, next) { // updateCoin
+        try {
+            const { body } = req;
+
+            const validBody = addCoinValidator.validate(body);
+
+            if (!validBody.error) {
+                const response = await this.coinService.addCoin(body.ticket, body.currency);
+
+                res.send(200, response);
+            } else {
+                const errorReason = validBody.error.details[0].message;
+                res.send(400, {mensagem: 'Parâmetros obrigatórios não enviados', reason: errorReason })
+            }  
+        } catch (e) {
+            res.send(500, { mensagem: 'Ocorreu um erro ao executar a criação da moeda.' })
+        }
+
+        return next();
+    }
+
+    async updateCoin(req, res, next) {
+        try {
+            const { body } = req;
+
+            const validBody = updateCoinValidator.validate(body);
+
+            if (!validBody.error) {
+                const response = await this.coinService.updateCoin(body.ticket, body.newTicket, body.currency);
+
+                res.send(200, response);
+            } else {
+                const errorReason = validBody.error.details[0].message;
+                res.send(400, {mensagem: 'Parâmetros obrigatórios não enviados', reason: errorReason })
+            }  
+        } catch (e) {
+            res.send(500, { mensagem: 'Ocorreu um erro ao executar a conversão.' })
+        }
+
+        return next();
+    }
+
+    async deleteCoin(req, res, next) {
         try {
             const { query } = req;
 
-            const validQuery = currencyValidator.validate(query);
+            const validQuery = removeCoinValidator.validate(query);
 
             if (!validQuery.error) {
-                const response = await this.coinService.conversion(query.from, query.to, query.amount);
+                const response = await this.coinService.delete(query.ticket);
 
                 res.send(200, response);
             } else {
@@ -28,4 +72,4 @@ class CurrencyController {
 }
 
 
-module.exports = CurrencyController;
+module.exports = CoinController;

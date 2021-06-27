@@ -1,30 +1,24 @@
-const redis = require('../../../cache/configRedis');
-class CoinRepository {
+const model = require('../model/model');
+class FakeCoinRepository {
     constructor() {
-        this.redis = redis;
+        this.model = model;
     }
 
-    async getCurrency(coin) {
-        return this.getRealCoinCurrency(coin);
+    async create(coin) {
+        const newCoin = await this.model.create(coin);
+        return newCoin;
     }
 
-    async getRealCoinCurrency(coin) {
-        const coinCotation = await this.redis.get(coin);
+    async update(coin) {
+        const newCoin = await this.model.findOneAndUpdate({ ticket: coin.ticket }, { ticket: coin.newTicket, currency: coin.currency}, { new: true });
+        return newCoin;
+    }
 
-        if(coinCotation){
-            return parseFloat(coinCotation);
-        }
-
+    async delete(coin) {
+        const newCoin = await this.model.findOneAndDelete({ ticket: coin.ticket }, { returnDocument: true });
         return;
-    }
-
-    async getFakeCoinCurrency(coin){
-        return {
-            hurb: 0.01
-        }
-    }
-      
+    }   
 }
 
 
-module.exports = CoinRepository;
+module.exports = FakeCoinRepository;
