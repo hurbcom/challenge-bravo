@@ -9,6 +9,30 @@ export default class Currency {
         return currencyDTO.currencyQuote;
     }
 
+    async _checkSupportedCurrenciesCodes (...currenciesCodesList) {
+        try {
+            const supportedCurrenciesCodes = await this.listSupportedCurrencies();
+
+            return Utils.arrayAContainsB(supportedCurrenciesCodes, currenciesCodesList);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async _retrieveCurrenciesInfo (...currenciesCodes) {
+        try {
+            const ficticiousCurrenciesList = await this.CurrencyDB.listCurrenciesQuoteByCode(...currenciesCodes);
+                
+            if (ficticiousCurrenciesList.length == 2) {
+                return ficticiousCurrenciesList;
+            }
+
+            return;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     _convertAmount (currencyQuoteFrom, currencyQuoteTo, amount) {
         return amount;
     }
@@ -55,24 +79,17 @@ export default class Currency {
 
     async convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount) {
         try {
-            const currenciesCodesList = [ currencyCodeFrom, currencyCodeTo ];
-            const supportedCurrenciesCodes = await this.listSupportedCurrencies();
+            const currenciesCodesSuported = await this._checkSupportedCurrenciesCodes(currencyCodeFrom, currencyCodeTo);
 
-            if (!Utils.arrayAContainsB(supportedCurrenciesCodes, currenciesCodesList)) {
+            if (!currenciesCodesSuported) {
                 throw { unknow_source: true };
             }
 
             if (currencyCodeFrom === currencyCodeTo) return amount;
 
-            const ficticiousCurrenciesList = await this.CurrencyDB.listCurrenciesQuoteByCode(currencyCodeFrom, currencyCodeTo);
+            const [ currencyFrom, currencyTo ] = await this._retrieveCurrenciesInfo(currencyCodeFrom, currencyCodeTo);
 
-            if (ficticiousCurrenciesList.length == 2) {
-                const [ currencyFrom, currencyTo ] = ficticiousCurrenciesList;
-                
-                return this._convertAmount(currencyFrom.currencyQuote, currencyTo.currencyQuote, amount);
-            }
-
-            return;
+            return this._convertAmount(currencyFrom.currencyQuote, currencyTo.currencyQuote, amount);
         } catch (err) {
             throw err;
         }
