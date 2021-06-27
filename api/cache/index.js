@@ -1,15 +1,19 @@
 const redis = require('./configRedis');
 const crawler = require('../crawler');
 
-async function updateCache(){
+async function updateCache() {
     const exchanges = await crawler();
 
-    const exchangePromises = Object.keys(exchanges).map( coin => redis.set(coin, exchanges[coin], 'EX', 10 * 60));
+    const exchangePromises = Object.keys(exchanges).map(coin => redis.set(coin, exchanges[coin], 'EX', 10 * 60));
     await Promise.all(exchangePromises);
     await redis.set('update_time', new Date().toISOString());
-    // const data = await redis.get('update_time');
-    // return data;
 }
 
-module.exports = updateCache;
+async function getFromCache(key) {
+    return redis.get(key);
+}
+
+updateCache();
+
+module.exports = { updateCache, getFromCache };
 

@@ -22,6 +22,7 @@
     "cheerio": "^1.0.0-rc.10",
     "express": "^4.17.1",
     "glob": "^7.1.7",
+    "joi": "^17.4.0",
     "node-fetch": "^2.6.1",
     "promise-redis": "0.0.5",
     "puppeteer": "^10.0.0"
