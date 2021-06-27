@@ -63,10 +63,16 @@ class BaseController extends Controller
      * Display a listing of the resource.
      *
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
-            $data = $this->repository->all();
+            $data = [];
+            
+            if ($request->has('paginate')) {
+                $data = $this->repository->paginate($request->get('paginate'));
+            } else {
+                $data = $this->repository->all();
+            }
             
             return $this->apiResponse(true, 'Dados retornados com sucesso.', $data->toArray());
         } catch (\Throwable $th) {
