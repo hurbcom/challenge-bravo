@@ -15,9 +15,10 @@ try {
     $router = new Router;
 
     require __DIR__ . '/routes/routes.php';
-    echo $_ENV['DB_USERNAME'];exit;
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
+    if (file_exists(__DIR__.'/.env')) {
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+        $dotenv->load();
+    }
 
 } catch(\Exception $e){
 

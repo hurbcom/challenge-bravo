@@ -6,7 +6,7 @@ use \MongoDB\Driver\Manager;
 use \MongoDB\Driver\Query;
 use \MongoDB\Driver\BulkWrite;
 
-class BaseModel
+class BaseModel implements \JsonSerializable
 {
     private $manager;
     private $wheres=[];
@@ -92,5 +92,13 @@ class BaseModel
             .$_ENV['DB_HOST']
             .':'
             .$_ENV['DB_PORT'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return $this->data;
     }
 }

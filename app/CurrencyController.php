@@ -17,6 +17,7 @@ class CurrencyController extends Controller
 
     public function index()
     {
+        echo 'dsa';exit;
         echo json_encode($this->model->get());
     }
 
