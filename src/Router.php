@@ -60,7 +60,6 @@ class Router
         try {
             if($route)
             {
-                echo 'ACHOU';exit;
                 $params = $route->callback['values'] ? $this->getValues($request->uri(), $route->callback['values']) : [];
                 return $this->dispach($route, $params, $request);
             }

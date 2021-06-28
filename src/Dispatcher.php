@@ -12,6 +12,9 @@ class Dispatcher
         if (is_callable($callback['callback'])) {
             return call_user_func_array($callback['callback'], array_values($params));
         }
+
+        print_r($callback);exit;
+
         return $this->callControllerMethod($callback, $params, $request, $namespace);
     }
 
