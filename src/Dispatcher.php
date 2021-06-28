@@ -3,6 +3,7 @@
 namespace Src;
 
 use Src\Request;
+use App\CurrencyController;
 
 class Dispatcher
 {
@@ -25,6 +26,8 @@ class Dispatcher
         echo $controller;
         echo ' - '.$method;
         echo '<pre>';
+        print_r((new CurrencyController($request)));
+        echo '----------------------------------------------------';
         print_r((new $controller($request)));
         if (!class_exists($controller) || !method_exists($controller, $method)) {
             echo 'Não achou a classe';exit;
