@@ -28,6 +28,7 @@ class Dispatcher
             throw new \Exception("Erro ao despachar: controller não pode ser instanciado, ou método não exite");
         }
 
+        echo call_user_func_array(array(new $controller($request), $method), array_values($params));
         exit;
         return call_user_func_array(array(new $controller($request), $method), array_values($params));
     }
