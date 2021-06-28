@@ -17,28 +17,20 @@ class ExchangeRatesController extends Controller
 
     public function index()
     {
-        echo 'dsa';exit;
-//        $currencies = (new Currency())
-//            ->whereIn('name', [$this->request->from, $this->request->to])
-//            ->get();
-//
-//        foreach ($this->request->all(['from', 'to']) as $param => $currName) {
-//            if ($currencies[0]->name == $currName) {
-//
-//            }
-//        }
-//
-//        print_r($this->request->all(['from', 'to']));
-//
-//        exit;
+        $currencies = (new Currency())
+            ->whereIn('name', [$this->request->from, $this->request->to])
+            ->get();
 
-        $currencyFrom = (new Currency())
-            ->where('name', $this->request->from)
-            ->first();
+        $currencyFrom = $currencies[0];
+        $currencyTo = $currencies[1];
 
-        $currencyTo = (new Currency())
-            ->where('name', $this->request->to)
-            ->first();
+        /*
+         * Se currencies[0] for o from inverte as variáveis
+         */
+        if ($currencies[1]->name == $this->request->from) {
+            $currencyFrom = $currencies[1];
+            $currencyTo = $currencies[0];
+        }
 
         $convert = $this->model->from($currencyFrom)
             ->to($currencyTo)

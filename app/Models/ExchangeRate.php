@@ -75,6 +75,6 @@ class ExchangeRate
     private function exchange($from, $to, $amount)
     {
         $base = $amount / $from;
-        return $base*$to;
+        return sprintf('%.6f',$base*$to);
     }
 }
