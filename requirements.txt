@@ -8,7 +8,7 @@ django-cors-headers
 django-reset-migrations
 weasyprint
 setuptools
-requests
 pandas
 xlrd
 ofxparse
+gunicorn

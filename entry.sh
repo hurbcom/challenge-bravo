@@ -1,11 +1,17 @@
 #bin/bash
 echo "subindo servidor"
-python3.9 -m pip install -r requirements.txt
-python3.9 -m pip install gunicorn
+python3.8 -m pip install -r requirements.txt
+
+echo "instalando gunicorn"
+python3.8 -m pip install gunicorn
 
 echo "subindo ngnix"
 /etc/init.d/nginx start
 
-python3.9 manage.py migrate
+python3.8 manage.py migrate
 
-python3.9 manage.py runserver 0.0.0.0:8000
+python manage.py collectstatic
+
+gunicorn app.wsgi:application --bind 0.0.0.0:8000
+
+htop

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
   back:
@@ -10,47 +10,57 @@ services:
     container_name: back
     ports:
         - "8000:8000"
+    expose:
+        - 8000
+    env_file:
+        - dev.env
     tty: true
+#    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     volumes:
-        - $PWD/:/var/www/html
-    networks:
-        - dev-network
+        - ./:/app
+#    networks:
+#        - dev-network
     depends_on:
-        - postgres
+        - db
+  nginx:
+      container_name: web
+      restart: unless-stopped
+      image: nginx
+      volumes:
+          - ./nginx/prod/nginx.conf:/etc/nginx/conf.d/default.conf
+          - static_volume:/app/static/
+          - media_volume:/app/media
+      ports:
+          - "80:80"
+      depends_on:
+          - back
+#      networks:
+#          - dev-network
+      tty: true
 
-  postgres:
+  db:
       container_name: postgres_container
       image: postgres
+      env_file: dev.env
       environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: 123
           PGDATA: /data/postgres
       volumes:
-          - ./postgres:/data/postgres
+          - postgres_data:/data/postgres
           - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      ports:
-          - "5432:5432"
+#      ports:
+#          - "5432:5432"
       restart: unless-stopped
-      networks:
-          - dev-network
+#      networks:
+#          - dev-network
       tty: true
 
+#networks:
+#  dev-network:
+#    driver: bridge
 
-  pgadmin:
-      container_name: pgadmin_container
-      image: dpage/pgadmin4
-      environment:
-          PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-          PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      volumes:
-          - ./pgamin:/root/.pgadmin
-      ports:
-          - "${PGADMIN_PORT:-5050}:80"
-      restart: "no"
-      networks:
-          - dev-network
-      tty: true
-
-networks:
-  dev-network:
-    driver: bridge
+volumes:
+    static_volume:
+    postgres_data:
+    media_volume:
