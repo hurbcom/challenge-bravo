@@ -7,6 +7,7 @@ class AbstractScrapper{
         this.page = await instance.newPage();
 
         await this.page.setRequestInterception(true);
+
         this.page.on('request', (request) => {
             if (request.resourceType() === 'image') request.abort()
             if (request.resourceType() === 'stylesheet') request.abort()
@@ -16,7 +17,6 @@ class AbstractScrapper{
             if (request.resourceType() === 'sub_frame') request.abort()
             if (request.resourceType() === 'csp_report') request.abort()
             if (request.resourceType() === 'main_frame') request.abort()
-            if (request.resourceType() === 'other') request.abort()
             else request.continue()
         })
 
@@ -38,7 +38,7 @@ class AbstractScrapper{
     }
 
     async goToPage(browserInstance){
-        return this.page.goto(this.url, { { waitUntil: 'domcontentloaded' }});
+        return this.page.goto(this.url, {  waitUntil: 'domcontentloaded' });
     }
 }
 
