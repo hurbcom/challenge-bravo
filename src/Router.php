@@ -63,6 +63,7 @@ class Router
                 $params = $route->callback['values'] ? $this->getValues($request->uri(), $route->callback['values']) : [];
                 return $this->dispach($route, $params, $request);
             }
+            echo 'Não achou URL';
             return $this->notFound();
         } catch (\Exception $e) {
             echo '<strong>Erro:</strong> '.$e->getMessage();

@@ -237,14 +237,11 @@ class RouteCollection
     {
         $pattern_sent = $this->parseUri($pattern_sent);
         foreach($this->routes_get as $pattern => $callback) {
-            echo $pattern.' - '. $pattern_sent;
             if(preg_match($pattern, $pattern_sent, $pieces))
             {
-                echo ': achou aqui';
                 return (object) ['callback' => $callback, 'uri' => $pieces];
             }
         }
-        echo 'ERRO';
         return false;
     }
 
