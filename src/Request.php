@@ -15,13 +15,11 @@ class Request
 
     public function __construct()
     {
-        echo '<pre>';
-        print_r($_SERVER);
         $this->base = $_SERVER['HTTP_HOST'];
         list($uri, $getParams) = explode('?', $_SERVER['REQUEST_URI']);
         $this->uri = $uri;
         $this->method = strtolower($_SERVER['REQUEST_METHOD']);
-        $this->protocol = isset($_SERVER["HTTPS"]) ? 'https' : 'http';
+        $this->protocol = (isset($_SERVER["HTTPS"]) || $_SERVER['HTTP_X_FORWARDED_PROTO']) ? 'https' : 'http';
         $this->setData();
 
         if(count($_FILES) > 0) {
