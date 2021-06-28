@@ -23,7 +23,7 @@ class Dispatcher
         list($controller, $method) = explode('@', $callback['callback']);
         $controller = "App\\".$controller;
 
-        print_r($request);exit;
+//        print_r($request);exit;
         echo call_user_func_array(array(new $controller($request), $method), array_values($params));
 
         exit;
