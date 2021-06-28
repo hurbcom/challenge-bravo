@@ -38,9 +38,6 @@ RUN mkdir -p /home/$user/.composer && \
 COPY . /var/www
 COPY ./entrypoint.sh /var/www
 
-RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
-    composer clear-cache
-
 # Copy existing application directory permissions
 COPY --chown=$user:$user . /var/www
 
