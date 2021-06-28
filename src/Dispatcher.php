@@ -23,17 +23,10 @@ class Dispatcher
         list($controller, $method) = explode('@', $callback['callback']);
         $controller = "App\\".$controller;
 
-//        print_r($request);exit;
-        echo call_user_func_array(array(new $controller($request), $method), array_values($params));
-
-        exit;
         if (!class_exists($controller) || !method_exists($controller, $method)) {
             echo 'Não achou a classe';exit;
             throw new \Exception("Erro ao despachar: controller não pode ser instanciado, ou método não exite");
         }
-
-        echo call_user_func_array(array(new $controller($request), $method), array_values($params));
-        exit;
         return call_user_func_array(array(new $controller($request), $method), array_values($params));
     }
 }
