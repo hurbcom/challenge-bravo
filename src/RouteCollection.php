@@ -240,9 +240,11 @@ class RouteCollection
             echo $pattern.' - '. $pattern_sent;
             if(preg_match($pattern, $pattern_sent, $pieces))
             {
+                echo ': achou aqui';
                 return (object) ['callback' => $callback, 'uri' => $pieces];
             }
         }
+        echo 'ERRO';
         return false;
     }
 
