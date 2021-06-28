@@ -36,16 +36,11 @@ RUN mkdir -p /home/$user/.composer && \
 
 # Copy existing application directory contents
 COPY . /var/www
-COPY ./entrypoint.sh /var/www
 
 # Copy existing application directory permissions
 COPY --chown=$user:$user . /var/www
 
 USER $user
-
-RUN chmod +x /var/www/entrypoint.sh
-
-ENTRYPOINT ["sh","/var/www/entrypoint.sh"]
 
 # Expose port 9000 and start php-fpm server
 CMD ["php-fpm"] 
