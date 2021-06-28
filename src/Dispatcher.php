@@ -22,7 +22,7 @@ class Dispatcher
             //ERRO
         }
         list($controller, $method) = explode('@', $callback['callback']);
-        $controller = "App\\".$controller;
+        $controller = "\\App\\".$controller;
         echo $controller;
         echo ' - '.$method;
         echo '<pre>';
