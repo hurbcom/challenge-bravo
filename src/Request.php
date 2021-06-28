@@ -15,6 +15,8 @@ class Request
 
     public function __construct()
     {
+        echo '<pre>';
+        print_r($_SERVER);
         $this->base = $_SERVER['HTTP_HOST'];
         list($uri, $getParams) = explode('?', $_SERVER['REQUEST_URI']);
         $this->uri = $uri;
