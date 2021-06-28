@@ -42,7 +42,6 @@ class Router
 
     public function find($request_type, $pattern)
     {
-        echo $pattern;exit;
         return $this->route_collection->where($request_type, $pattern);
     }
 
