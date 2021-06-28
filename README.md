@@ -31,8 +31,13 @@ Após inicializar a API rode o comando: `docker-compose exec php php artisan mig
   docker-compose up -d --build
 ```
 
-A API estará rodando na URL `http://localhost:8080`
+A API estará rodando na endereço `http://localhost:8080`
 
+Para rodar os testes, execute o comando:
+
+```bash
+  docker-compose exec php vendor/bin/phpunit
+```
   
 ## CRUD De Moedas
 
@@ -122,4 +127,5 @@ também são de minha autoria como:
 - Moeda em Models
 - Rotas em Routes
 - Arquivos de migrations em database/migrations
+- MoedaTest em tests
 
