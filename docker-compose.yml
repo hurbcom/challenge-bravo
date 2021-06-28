@@ -14,7 +14,8 @@ services:
     volumes:
       - ./:/var/www
       - ./docker/config/custom.ini:/usr/local/etc/php/conf.d/custom.ini
-    # command: bash -c "cp .env.example .env"
+    depends_on: 
+      - db
     networks:
       - rede
 

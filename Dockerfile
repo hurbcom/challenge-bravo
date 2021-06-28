@@ -38,14 +38,18 @@ RUN mkdir -p /home/$user/.composer && \
 COPY . /var/www
 COPY ./entrypoint.sh /var/www
 
+RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
+    composer clear-cache
+
 # Copy existing application directory permissions
 COPY --chown=$user:$user . /var/www
 
 USER $user
 
-RUN ["chmod", "+x", "/var/www/entrypoint.sh"]
+RUN chmod +x /var/www/entrypoint.sh
+
+ENTRYPOINT ["sh","/var/www/entrypoint.sh"]
 
 # Expose port 9000 and start php-fpm server
-ENTRYPOINT ["sh", "/var/www/entrypoint.sh" ]
 CMD ["php-fpm"] 
 EXPOSE 9000
