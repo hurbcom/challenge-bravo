@@ -11,6 +11,7 @@ class BaseModel implements \JsonSerializable
     private $manager;
     private $wheres=[];
     protected $tablename;
+    protected $limit;
 
     protected $data;
     public function __get($name)
@@ -42,6 +43,7 @@ class BaseModel implements \JsonSerializable
     public function get()
     {
         $query = new Query($this->wheres, []);
+//        $query = new Query(['name' => ['$in' => ['BTC', 'EUR']]], []);
         $cursor = $this->manager->executeQuery('db.'.$this->getTableName(), $query);
         $return = [];
         foreach ($cursor as $document) {
@@ -50,12 +52,24 @@ class BaseModel implements \JsonSerializable
         return $return;
     }
 
+    public function limit($number)
+    {
+        $this->limit = $number;
+        return $this;
+    }
+
     public function insert($params)
     {
         $bulk = new BulkWrite;
         $bulk->insert($params);
         $write = $this->manager->executeBulkWrite('db.'.$this->getTableName(), $bulk);
         print_r($write);
+    }
+
+    public function whereIn($tableField, $tableValue)
+    {
+        $this->wheres[$tableField]['$in'] = $tableValue;
+        return $this;
     }
 
     public function where($tableField, $tableValue)
@@ -88,15 +102,15 @@ class BaseModel implements \JsonSerializable
 
     protected function getConnectionString()
     {
-        return 'mongodb+srv://root:mOiOM5E5CcMO0qMH@cluster0.e4qlz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-        /*return "mongodb://".
+//        return 'mongodb+srv://root:mOiOM5E5CcMO0qMH@cluster0.e4qlz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+        return "mongodb://".
             $_ENV['DB_USERNAME']
             .':'
             .$_ENV['DB_PASSWORD']
             .'@'
             .$_ENV['DB_HOST']
             .':'
-            .$_ENV['DB_PORT'];*/
+            .$_ENV['DB_PORT'];
     }
 
     /**
