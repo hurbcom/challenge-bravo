@@ -22,6 +22,11 @@ class Request
         $this->protocol = isset($_SERVER["HTTPS"]) ? 'https' : 'http';
         $this->setData();
 
+        echo $this->base;
+        echo '<br/>'.$this->uri;
+        echo '<br/>'.$this->method;
+        exit;
+
         if(count($_FILES) > 0) {
             $this->setFiles();
         }
