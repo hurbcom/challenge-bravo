@@ -15,7 +15,6 @@ class BaseModel implements \JsonSerializable
     protected $data;
     public function __get($name)
     {
-        // TODO: Implement __get() method.
         if (!in_array($name, array_keys($this->data))) {
             return null;
         }
@@ -24,9 +23,14 @@ class BaseModel implements \JsonSerializable
 
     public function __construct($data=[])
     {
-        $this->manager = new Manager($this->getConnectionString());
-        $this->data = $data;
-        return $this;
+        try {
+            $this->manager = new Manager($this->getConnectionString());
+            $this->data = $data;
+            return $this;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            exit;
+        }
     }
 
     public function first()
