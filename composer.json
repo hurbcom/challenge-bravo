@@ -7,8 +7,8 @@
         }
     },
     "require": {
-        "ext-mongodb": "*",
         "vlucas/phpdotenv": "^5.3",
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "ext-mongodb": "*"
     }
 }
