@@ -84,6 +84,7 @@ class BaseModel implements \JsonSerializable
 
     protected function getConnectionString()
     {
+        return 'mongodb+srv://root:mOiOM5E5CcMO0qMH@cluster0.e4qlz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
         return "mongodb://".
             $_ENV['DB_USERNAME']
             .':'

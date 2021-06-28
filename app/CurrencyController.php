@@ -11,13 +11,12 @@ class CurrencyController extends Controller
 
     public function __construct(Request $request)
     {
-//        $this->model = new Currency();
+        $this->model = new Currency();
         parent::__construct($request);
     }
 
     public function index()
     {
-        echo 'dsa';exit;
         echo json_encode($this->model->get());
     }
 
