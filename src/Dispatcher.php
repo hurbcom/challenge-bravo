@@ -23,6 +23,7 @@ class Dispatcher
         list($controller, $method) = explode('@', $callback['callback']);
         $controller = "App\\".$controller;
         echo $controller;
+        echo ' - '.$method;
         if (!class_exists($controller) || !method_exists($controller, $method)) {
             echo 'Não achou a classe';exit;
             throw new \Exception("Erro ao despachar: controller não pode ser instanciado, ou método não exite");
