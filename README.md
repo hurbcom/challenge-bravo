@@ -5,38 +5,50 @@ A API realiza conversão de moedas se baseando na cotação do dia.
 A cotação é buscada na api pública https://github.com/fawazahmed0/currency-api
 
 A API permite fazer CRUD de moedas, podendo registrar moedas fictícias atribuindo a elas 
-a referência de uma moeda existente como lastro. 
+a referência de uma moeda existente como lastro.
+
 ## Tecnologias Utilizadas
 
 - **PHP** 
 - **MYSQL** 
 - **LUMEN** 
 - **DOCKER**
-  
-## Variáveis de Ambiente
 
-Esta API roda em DOCKER. É recomendado ter um banco de dados chamado `api_conversao`
-pois ao levantar o container as tabelas já serão criadas neste banco de dados.
-
-Porém é possível customizar, para isso insira o nome do banco de dados na variável
-`DB_DATABASE` no arquivo .env
-
-Após inicializar a API rode o comando: `docker-compose exec php php artisan migrate`
-
-  
 ## Inicializar API
 
+Esta API roda em DOCKER. Para levantar o container
+
 ```bash
-  composer install
-  docker-compose up -d --build
+docker-compose up -d --build
+```
+
+Instale as dependências
+
+```bash
+composer install
+```
+
+Crie um arquivo .env
+
+```bash  
+cp .env.example .env  
+```
+
+Por padrão no arquivo .env na variável `DB_DATABASE` o banco de dados recebe o nome de `api_conversao`, 
+é necessário criar um banco de dados com o nome que está atribuído nesta variável de ambiente
+
+Após criar o banco de dados rodar o comando 
+
+```bash
+php artisan migrate
 ```
 
 A API estará rodando na endereço `http://localhost:8080`
 
-Para rodar os testes, execute o comando:
+Para executar os testes, rodar o comando:
 
 ```bash
-  docker-compose exec php vendor/bin/phpunit
+vendor/bin/phpunit
 ```
   
 ## CRUD De Moedas
