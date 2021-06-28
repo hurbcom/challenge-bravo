@@ -32,10 +32,9 @@ class ExchangeRatesController extends Controller
             $currencyTo = $currencies[0];
         }
 
-        $convert = $this->model->from($currencyFrom)
+        echo $this->model->from($currencyFrom)
             ->to($currencyTo)
             ->amount($this->request->amount)
             ->get();
-        echo $convert;
     }
 }
