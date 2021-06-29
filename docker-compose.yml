@@ -1,0 +1,21 @@
+version: "3"
+services:
+  api:
+    build: .
+    image: danirs/node
+    container_name: api
+    ports:
+      - "3001:3001"
+    depends_on:
+      - database
+  database:
+    image: postgres
+    container_name: db_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: challenge_bravo
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
