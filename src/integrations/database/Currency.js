@@ -18,11 +18,26 @@ export default class Currency {
         return this.Database.query('SELECT id, code FROM currency WHERE code = $1', [ currencyCode ]);
     }
 
+    _countValuesFromList (list) {
+        return list.reduce((acc, value, index) => acc += `$${++index},`, "").slice(0, -1);
+    }
+
     async listCurrenciesQuoteByCode (...codes) {
         try {
-            const currencies = await this.Database.query('SELECT c.id, c.code, cq.quote_value FROM currency c LEFT JOIN currency_quote cq ON c.id = cq.currency_id WHERE c.code in ($1, $2)', [ codes[0], codes[1] ]);
-
+            const valuesCount = this._countValuesFromList(codes);
+            const currencies = await this.Database.query(`SELECT c.id, c.code, cq.quote_value FROM currency c LEFT JOIN currency_quote cq ON c.id = cq.currency_id WHERE c.code in (${valuesCount})`, [ ...codes ]);
+            
             return currencies.map(currency => this.CurrencyMapper.toDTO(currency));
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async listBackingCurrency () {
+        try {
+            const backingCurrency = await this.Database.query('SELECT c.code FROM currency c LEFT JOIN backing_currency bc ON c.id = bc.currency_id');
+            
+            return this.CurrencyMapper.toDTO(backingCurrency[0]);
         } catch (err) {
             throw err;
         }

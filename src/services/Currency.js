@@ -9,7 +9,7 @@ export default class Currency {
         return currencyDTO.currencyQuote;
     }
 
-    async _checkSupportedCurrenciesCodes (...currenciesCodesList) {
+    async checkSupportedCurrenciesCodes (...currenciesCodesList) {
         try {
             const supportedCurrenciesCodes = await this.listSupportedCurrencies();
 
@@ -19,22 +19,85 @@ export default class Currency {
         }
     }
 
-    async _retrieveCurrenciesInfo (...currenciesCodes) {
-        try {
-            const ficticiousCurrenciesList = await this.CurrencyDB.listCurrenciesQuoteByCode(...currenciesCodes);
-                
-            if (ficticiousCurrenciesList.length == 2) {
-                return ficticiousCurrenciesList;
-            }
+    _groupCurrenciesCodesInfoByType (currenciesCodes, ficticiousCurrenciesList) {
+        const currenciesCodesObj = {
+            ficticious: [],
+            real: []
+        };
+        
+        currenciesCodes.reduce((acc, code) => {
+            const isCurrentCodeFicticious = ficticiousCurrenciesList.find(currency => currency.currencyCode === code );
+             
+            (isCurrentCodeFicticious)
+                ? acc.ficticious.push(code)
+                : acc.real.push(code);
 
-            return;
+            return acc;
+        }, currenciesCodesObj);
+
+        return currenciesCodesObj;
+    }
+
+    async listBackingCurrency () {
+        try {
+            const backingCurrency = await this.CurrencyDB.listBackingCurrency();
+
+            backingCurrency.currencyQuote = 1;
+
+            return backingCurrency;
         } catch (err) {
             throw err;
         }
     }
 
-    _convertAmount (currencyQuoteFrom, currencyQuoteTo, amount) {
-        return amount;
+    async listFicticiousCurrenciesByCode (...currenciesCodes) {
+        try {
+            const currenciesList = await this.CurrencyDB.listCurrenciesQuoteByCode(...currenciesCodes);
+
+            return currenciesList.filter(currency => this._isFictitiousCurrency(currency));
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    listRealCurrenciesByCode (backingCurrencyCode, currenciesCodes) {
+        return;
+    }
+
+    async retrieveCurrenciesInfo (...currenciesCodes) {
+        try {
+            const currenciesList = [];
+            const backingCurrency = await this.listBackingCurrency();
+            const backingCurrencyIndex = currenciesCodes.indexOf(backingCurrency.currencyCode);
+
+            if (backingCurrencyIndex !== -1) {
+                currenciesList.push(backingCurrency);
+                currenciesCodes.splice(backingCurrencyIndex, 1);
+            }
+
+            const ficticiousCurrenciesList = await this.listFicticiousCurrenciesByCode(...currenciesCodes);
+                
+            if (ficticiousCurrenciesList.length == currenciesCodes.length) {
+                return currenciesList.concat(ficticiousCurrenciesList);
+            }
+
+            const currenciesCodesObj = this._groupCurrenciesCodesInfoByType(currenciesCodes, ficticiousCurrenciesList);
+            const realCurrenciesList = await this.listRealCurrenciesByCode(backingCurrency.currencyCode, currenciesCodesObj.real);
+
+            if (realCurrenciesList.length != currenciesCodesObj.real.length) {
+                throw { unknow_source: true };
+            }
+
+            return currenciesList.concat(ficticiousCurrenciesList, realCurrenciesList);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    _calculatesConvertedAmount (amount, currencyQuoteFrom, currencyQuoteTo) {
+        const amountAtBase = amount * currencyQuoteFrom;
+        
+        return +(amountAtBase / currencyQuoteTo).toFixed(2);
     }
 
     async listSupportedCurrencies () {
@@ -78,18 +141,30 @@ export default class Currency {
     }
 
     async convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount) {
+        const convertedObj = {
+            amount,
+            currencyCode: currencyCodeTo
+        };
+    
         try {
-            const currenciesCodesSuported = await this._checkSupportedCurrenciesCodes(currencyCodeFrom, currencyCodeTo);
+            const currenciesCodesSuported = await this.checkSupportedCurrenciesCodes(currencyCodeFrom, currencyCodeTo);
 
             if (!currenciesCodesSuported) {
                 throw { unknow_source: true };
             }
 
-            if (currencyCodeFrom === currencyCodeTo) return amount;
+            if (currencyCodeFrom === currencyCodeTo) {
+                return convertedObj;
+            }
 
-            const [ currencyFrom, currencyTo ] = await this._retrieveCurrenciesInfo(currencyCodeFrom, currencyCodeTo);
+            let currencyFrom, currencyTo;
+            const currenciesList = await this.retrieveCurrenciesInfo(currencyCodeFrom, currencyCodeTo);
 
-            return this._convertAmount(currencyFrom.currencyQuote, currencyTo.currencyQuote, amount);
+            currenciesList.map(currency => (currency.currencyCode === currencyCodeFrom) ? currencyFrom = currency : currencyTo = currency);
+
+            convertedObj.amount = this._calculatesConvertedAmount(amount, currencyFrom.currencyQuote, currencyTo.currencyQuote);
+
+            return convertedObj;
         } catch (err) {
             throw err;
         }
