@@ -7,7 +7,7 @@ class Currency {
         return {
             currencyId: currencyObj.id,
             currencyCode: currencyObj.from || currencyObj.to || currencyObj.code,
-            currencyQuote: +currencyObj.quote_value
+            currencyQuote: +currencyObj.quote_value || +currencyObj.bid
         }
     }
 
