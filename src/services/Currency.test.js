@@ -156,7 +156,7 @@ describe('#deleteCurrency', () => {
     });
 });
 
-describe('#_checkSupportedCurrenciesCodes', () => {
+describe('#checkSupportedCurrenciesCodes', () => {
     test('it throws an error when the supported currencies cannot be listed', async () => {
         const currencyCode1 = 'HURB';
 
@@ -165,7 +165,7 @@ describe('#_checkSupportedCurrenciesCodes', () => {
         listSupportedCurrenciesMock.mockImplementation(() => new Error());
 
         try {
-            await CurrencyService._checkSupportedCurrenciesCodes(currencyCode1);
+            await CurrencyService.checkSupportedCurrenciesCodes(currencyCode1);
         } catch (err) {
             expect(err).toBeTruthy();
             expect(listSupportedCurrenciesMock).toBeCalledTimes(1);
@@ -184,7 +184,7 @@ describe('#_checkSupportedCurrenciesCodes', () => {
         arrayAContainsBMock.mockImplementation(() => false);
 
         try {
-            const result = await CurrencyService._checkSupportedCurrenciesCodes(currencyCode1);
+            const result = await CurrencyService.checkSupportedCurrenciesCodes(currencyCode1);
 
             expect(result).toBe(false);
             expect(listSupportedCurrenciesMock).toBeCalledTimes(1);
@@ -210,7 +210,7 @@ describe('#_checkSupportedCurrenciesCodes', () => {
         arrayAContainsBMock.mockImplementation(() => true);
 
         try {
-            const result = await CurrencyService._checkSupportedCurrenciesCodes(currencyCode1, currencyCode2);
+            const result = await CurrencyService.checkSupportedCurrenciesCodes(currencyCode1, currencyCode2);
 
             expect(result).toBe(true);
             expect(listSupportedCurrenciesMock).toBeCalledTimes(1);
@@ -226,46 +226,366 @@ describe('#_checkSupportedCurrenciesCodes', () => {
     });
 });
 
-describe('#_retrieveCurrenciesInfo', () => {
-    test('it throws an error when ficticious currencies info cannot be listed', async () => {
+describe('#retrieveCurrenciesInfo', () => {
+    test('it throws an error when the backing currency info cannot be listed', async () => {
         const currencyCode1 = 'HURB';
         const currencyCode2 = 'BRUH';
 
-        CurrencyDB.listCurrenciesQuoteByCode.mockRejectedValue(new Error());
+        const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
+
+        listBackingCurrencyMock.mockImplementation(() => new Error());
 
         try {
-            await CurrencyService._retrieveCurrenciesInfo(currencyCode1, currencyCode2);
+            await CurrencyService.retrieveCurrenciesInfo(currencyCode1, currencyCode2);
         } catch (err) {
             expect(err).toBeTruthy();
-            expect(CurrencyDB.listCurrenciesQuoteByCode).toBeCalledTimes(1);
+            expect(listBackingCurrencyMock).toBeCalledTimes(1);
         }
+
+        listBackingCurrencyMock.mockRestore();
     });
 
-    test('it returns a list with the ficticious currencies when all provided currencies can be listed and are ficticious', async () => {
+    test('it throws an error when ficticious currencies info cannot be listed', async () => {
+        const currencyCode1 = 'HURB';
+        const currencyCode2 = 'BRUH';
+        const backingCurrency = {
+            currencyCode: 'USD',
+            currencyQuote: 1
+        };
+
+        const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
+        const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
+
+        listBackingCurrencyMock.mockImplementation(() => backingCurrency);
+        listFicticiousCurrenciesByCodeMock.mockImplementation(() => new Error());
+
+        try {
+            await CurrencyService.retrieveCurrenciesInfo(currencyCode1, currencyCode2);
+        } catch (err) {
+            expect(err).toBeTruthy();
+            expect(listBackingCurrencyMock).toBeCalledTimes(1);
+            expect(listBackingCurrencyMock).toReturn();
+            expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
+        }
+
+        listBackingCurrencyMock.mockRestore();
+        listFicticiousCurrenciesByCodeMock.mockRestore();
+    });
+
+    test('it throws an error when real currencies info cannot be listed', async () => {
+        const currencyCode1 = 'BRL';
+        const currencyCode2 = 'EUR';
+        const backingCurrency = {
+            currencyCode: 'USD',
+            currencyQuote: 1
+        };
+        const currenciesCodesObj = {
+            ficticious: [],
+            real: [currencyCode1, currencyCode2]
+        };
+
+        const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
+        const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
+        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
+        const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
+
+        listBackingCurrencyMock.mockImplementation(() => backingCurrency);
+        listFicticiousCurrenciesByCodeMock.mockImplementation(() => []);
+        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
+        listRealCurrenciesByCodeMock.mockImplementation(() => new Error());
+
+        try {
+            await CurrencyService.retrieveCurrenciesInfo(currencyCode1, currencyCode2);
+        } catch (err) {
+            expect(err).toBeTruthy();
+            expect(listBackingCurrencyMock).toBeCalledTimes(1);
+            expect(listBackingCurrencyMock).toReturn();
+            expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listFicticiousCurrenciesByCodeMock).toReturn();
+            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
+            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
+            expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
+        }
+
+        listBackingCurrencyMock.mockRestore();
+        listFicticiousCurrenciesByCodeMock.mockRestore();
+        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
+        listRealCurrenciesByCodeMock.mockRestore();
+    });
+    
+    test('it throws an error when the provided currencies are not supported', async () => {
+        const currencyCode1 = 'BRL';
+        const currencyCode2 = 'EUR';
+        const backingCurrency = {
+            currencyCode: 'USD',
+            currencyQuote: 1
+        };
+        const currenciesCodesObj = {
+            ficticious: [],
+            real: [ currencyCode1, currencyCode2 ]
+        };
+
+        const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
+        const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
+        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
+        const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
+
+        listBackingCurrencyMock.mockImplementation(() => backingCurrency);
+        listFicticiousCurrenciesByCodeMock.mockImplementation(() => []);
+        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
+        listRealCurrenciesByCodeMock.mockImplementation(() => []);
+
+        try {
+            await CurrencyService.retrieveCurrenciesInfo(currencyCode1, currencyCode2);
+        } catch (err) {
+            expect(err).toBeTruthy();
+            expect(listBackingCurrencyMock).toBeCalledTimes(1);
+            expect(listBackingCurrencyMock).toReturn();
+            expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listFicticiousCurrenciesByCodeMock).toReturn();
+            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
+            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
+            expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listRealCurrenciesByCodeMock).toReturn();
+        }
+
+        listBackingCurrencyMock.mockRestore();
+        listFicticiousCurrenciesByCodeMock.mockRestore();
+        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
+        listRealCurrenciesByCodeMock.mockRestore();
+    });
+
+    test('it returns a list with the currencies info when one is ficticious and the other is the backing currency', async () => {
+        const currencyCode1 = 'HURB';
+        const currencyCode2 = 'USD';
+        const ficticiousCurrency = {
+            currencyCode: currencyCode1,
+            currencyQuote: 0.76
+        };
+        const backingCurrency = {
+            currencyCode: currencyCode2,
+            currencyQuote: 1
+        };
+
+        const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
+        const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
+
+        listBackingCurrencyMock.mockImplementation(() => backingCurrency);
+        listFicticiousCurrenciesByCodeMock.mockImplementation(() => [ ficticiousCurrency ]);
+
+        try {
+            const currenciesList = await CurrencyService.retrieveCurrenciesInfo(currencyCode1, currencyCode2);
+
+            expect(currenciesList).toBeTruthy();
+            expect(currenciesList).toEqual(expect.arrayContaining([ backingCurrency, ficticiousCurrency ]));
+            expect(listBackingCurrencyMock).toBeCalledTimes(1);
+            expect(listBackingCurrencyMock).toReturn();
+            expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listFicticiousCurrenciesByCodeMock).toReturn();
+        } catch (err) {
+            expect(err).toBeFalsy();
+        }
+
+        listBackingCurrencyMock.mockRestore();
+        listFicticiousCurrenciesByCodeMock.mockRestore();
+    });
+
+    test('it returns a list with the currencies info when both are ficticious', async () => {
         const currencyCode1 = 'HURB';
         const currencyCode2 = 'BRUH';
         const ficticiousCurrenciesList = [
             {
                 currencyCode: currencyCode1,
-                currencyQuote: 0.78
-            }, 
+                currencyQuote: 0.76
+            },
             {
                 currencyCode: currencyCode2,
-                currencyQuote: 8.05
-            },
+                currencyQuote: 7.06
+            }
         ];
+        const backingCurrency = {
+            currencyCode: 'USD',
+            currencyQuote: 1
+        };
 
-        CurrencyDB.listCurrenciesQuoteByCode.mockResolvedValue(ficticiousCurrenciesList);
+        const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
+        const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
+
+        listBackingCurrencyMock.mockImplementation(() => backingCurrency);
+        listFicticiousCurrenciesByCodeMock.mockImplementation(() => ficticiousCurrenciesList);
 
         try {
-            const result = await CurrencyService._retrieveCurrenciesInfo(currencyCode1, currencyCode2);
+            const currenciesList = await CurrencyService.retrieveCurrenciesInfo(currencyCode1, currencyCode2);
 
-            expect(result).toBe(ficticiousCurrenciesList);
-            expect(CurrencyDB.listCurrenciesQuoteByCode).toBeCalledTimes(1);
-            expect(CurrencyDB.listCurrenciesQuoteByCode).toReturn();
+            expect(currenciesList).toBeTruthy();
+            expect(currenciesList).toEqual(expect.arrayContaining(ficticiousCurrenciesList));
+            expect(listBackingCurrencyMock).toBeCalledTimes(1);
+            expect(listBackingCurrencyMock).toReturn();
+            expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listFicticiousCurrenciesByCodeMock).toReturn();
         } catch (err) {
             expect(err).toBeFalsy();
         }
+
+        listBackingCurrencyMock.mockRestore();
+        listFicticiousCurrenciesByCodeMock.mockRestore();
+    });
+
+    test('it returns a list with the currencies info when one is ficticious and the other is real', async () => {
+        const currencyCode1 = 'HURB';
+        const currencyCode2 = 'BRL';
+        const ficticiousCurrency = {
+            currencyCode: currencyCode1,
+            currencyQuote: 0.76
+        };
+        const realCurrency = {
+            currencyCode: currencyCode2,
+            currencyQuote: 7.06
+        };
+        const backingCurrency = {
+            currencyCode: 'USD',
+            currencyQuote: 1
+        };
+        const currenciesCodesObj = {
+            ficticious: [ currencyCode1 ],
+            real: [ currencyCode2 ]
+        };
+
+        const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
+        const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
+        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
+        const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
+
+        listBackingCurrencyMock.mockImplementation(() => backingCurrency);
+        listFicticiousCurrenciesByCodeMock.mockImplementation(() => [ ficticiousCurrency ]);
+        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
+        listRealCurrenciesByCodeMock.mockImplementation(() => [ realCurrency ]);
+
+        try {
+            const currenciesList = await CurrencyService.retrieveCurrenciesInfo(currencyCode1, currencyCode2);
+
+            expect(currenciesList).toBeTruthy();
+            expect(currenciesList).toEqual(expect.arrayContaining([ ficticiousCurrency, realCurrency ]));
+            expect(listBackingCurrencyMock).toBeCalledTimes(1);
+            expect(listBackingCurrencyMock).toReturn();
+            expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listFicticiousCurrenciesByCodeMock).toReturn();
+            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
+            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
+            expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listRealCurrenciesByCodeMock).toReturn();
+        } catch (err) {
+            expect(err).toBeFalsy();
+        }
+
+        listBackingCurrencyMock.mockRestore();
+        listFicticiousCurrenciesByCodeMock.mockRestore();
+        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
+        listRealCurrenciesByCodeMock.mockRestore();
+    });
+
+    test('it returns a list with the currencies info when one is real and the other is the backing currency', async () => {
+        const currencyCode1 = 'USD';
+        const currencyCode2 = 'BRL';
+        const backingCurrency = {
+            currencyCode: currencyCode1,
+            currencyQuote: 1
+        };
+        const realCurrency = {
+            currencyCode: currencyCode2,
+            currencyQuote: 7.06
+        };
+        const currenciesCodesObj = {
+            ficticious: [],
+            real: [ currencyCode2 ]
+        };
+
+        const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
+        const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
+        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
+        const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
+
+        listBackingCurrencyMock.mockImplementation(() => backingCurrency);
+        listFicticiousCurrenciesByCodeMock.mockImplementation(() => []);
+        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
+        listRealCurrenciesByCodeMock.mockImplementation(() => [ realCurrency ]);
+
+        try {
+            const currenciesList = await CurrencyService.retrieveCurrenciesInfo(currencyCode1, currencyCode2);
+
+            expect(currenciesList).toBeTruthy();
+            expect(currenciesList).toEqual(expect.arrayContaining([ backingCurrency, realCurrency ]));
+            expect(listBackingCurrencyMock).toBeCalledTimes(1);
+            expect(listBackingCurrencyMock).toReturn();
+            expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listFicticiousCurrenciesByCodeMock).toReturn();
+            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
+            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
+            expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listRealCurrenciesByCodeMock).toReturn();
+        } catch (err) {
+            expect(err).toBeFalsy();
+        }
+
+        listBackingCurrencyMock.mockRestore();
+        listFicticiousCurrenciesByCodeMock.mockRestore();
+        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
+        listRealCurrenciesByCodeMock.mockRestore();
+    });
+
+    test('it returns a list with the currencies info when both are real', async () => {
+        const currencyCode1 = 'BRL';
+        const currencyCode2 = 'EUR';
+        const realCurrenciesList = [
+            {
+                currencyCode: currencyCode1,
+                currencyQuote: 0.06
+            },
+            {
+                currencyCode: currencyCode2,
+                currencyQuote: 7.06
+            }
+        ];
+        const backingCurrency = {
+            currencyCode: 'USD',
+            currencyQuote: 1
+        };
+        const currenciesCodesObj = {
+            ficticious: [],
+            real: [ currencyCode1, currencyCode2 ]
+        };
+
+        const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
+        const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
+        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
+        const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
+
+        listBackingCurrencyMock.mockImplementation(() => backingCurrency);
+        listFicticiousCurrenciesByCodeMock.mockImplementation(() => []);
+        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
+        listRealCurrenciesByCodeMock.mockImplementation(() => realCurrenciesList);
+
+        try {
+            const currenciesList = await CurrencyService.retrieveCurrenciesInfo(currencyCode1, currencyCode2);
+
+            expect(currenciesList).toBeTruthy();
+            expect(currenciesList).toEqual(expect.arrayContaining(realCurrenciesList));
+            expect(listBackingCurrencyMock).toBeCalledTimes(1);
+            expect(listBackingCurrencyMock).toReturn();
+            expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listFicticiousCurrenciesByCodeMock).toReturn();
+            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
+            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
+            expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
+            expect(listRealCurrenciesByCodeMock).toReturn();
+        } catch (err) {
+            expect(err).toBeFalsy();
+        }
+
+        listBackingCurrencyMock.mockRestore();
+        listFicticiousCurrenciesByCodeMock.mockRestore();
+        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
+        listRealCurrenciesByCodeMock.mockRestore();
     });
 });
 
@@ -275,18 +595,18 @@ describe('#convertsAmountBetweenCurrencies', () => {
         const currencyCodeTo = 'BRUH';
         const amount = 152.98;
 
-        const _checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "_checkSupportedCurrenciesCodes");
+        const checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "checkSupportedCurrenciesCodes");
         
-        _checkSupportedCurrenciesCodesMock.mockImplementation(() => new Error());
+        checkSupportedCurrenciesCodesMock.mockImplementation(() => new Error());
 
         try {
             await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount);
         } catch (err) {
             expect(err).toBeTruthy();
-            expect(_checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
+            expect(checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
         }
         
-        _checkSupportedCurrenciesCodesMock.mockRestore();
+        checkSupportedCurrenciesCodesMock.mockRestore();
     });
     
     test('it throws an error when the provided currencies are not supported', async () => {
@@ -294,40 +614,40 @@ describe('#convertsAmountBetweenCurrencies', () => {
         const currencyCodeTo = 'BRUH';
         const amount = 152.98;
 
-        const _checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "_checkSupportedCurrenciesCodes");
+        const checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "checkSupportedCurrenciesCodes");
         
-        _checkSupportedCurrenciesCodesMock.mockImplementation(() => false);
+        checkSupportedCurrenciesCodesMock.mockImplementation(() => false);
 
         try {
             await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount);
         } catch (err) {
             expect(err).toBeTruthy();
-            expect(_checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
-            expect(_checkSupportedCurrenciesCodesMock).toReturn();
+            expect(checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
+            expect(checkSupportedCurrenciesCodesMock).toReturn();
         }
         
-        _checkSupportedCurrenciesCodesMock.mockRestore();
+        checkSupportedCurrenciesCodesMock.mockRestore();
     });
 
     test('it returns the same amount when the provided currencies are supported and the same', async () => {
         const currencyCodeFrom = 'HURB';
         const amount = 152.98;
 
-        const _checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "_checkSupportedCurrenciesCodes");
+        const checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "checkSupportedCurrenciesCodes");
         
-        _checkSupportedCurrenciesCodesMock.mockImplementation(() => [ currencyCodeFrom ]);
+        checkSupportedCurrenciesCodesMock.mockImplementation(() => [ currencyCodeFrom ]);
 
         try {
-            const convertedAmount = await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeFrom, amount);
+            const { amount : convertedAmount } = await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeFrom, amount);
 
             expect(convertedAmount).toBe(amount);
-            expect(_checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
-            expect(_checkSupportedCurrenciesCodesMock).toReturn();
+            expect(checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
+            expect(checkSupportedCurrenciesCodesMock).toReturn();
         } catch (err) {
             expect(err).toBeFalsy();
         }
         
-        _checkSupportedCurrenciesCodesMock.mockRestore();
+        checkSupportedCurrenciesCodesMock.mockRestore();
     });
  
     test('it throws an error when the provided currencies are supported, but cannot be retrieved', async () => {
@@ -335,22 +655,22 @@ describe('#convertsAmountBetweenCurrencies', () => {
         const currencyCodeTo = 'BRUH';
         const amount = 152.98;
 
-        const _checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "_checkSupportedCurrenciesCodes");
-        const _retrieveCurrenciesInfoMock = jest.spyOn(CurrencyService, "_retrieveCurrenciesInfo");
+        const checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "checkSupportedCurrenciesCodes");
+        const _retrieveCurrenciesInfoMock = jest.spyOn(CurrencyService, "retrieveCurrenciesInfo");
         
-        _checkSupportedCurrenciesCodesMock.mockImplementation(() => true);
+        checkSupportedCurrenciesCodesMock.mockImplementation(() => true);
         _retrieveCurrenciesInfoMock.mockImplementation(() => new Error());
 
         try {
             await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount);
         } catch (err) {
             expect(err).toBeTruthy();
-            expect(_checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
-            expect(_checkSupportedCurrenciesCodesMock).toReturn();
+            expect(checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
+            expect(checkSupportedCurrenciesCodesMock).toReturn();
             expect(_retrieveCurrenciesInfoMock).toBeCalledTimes(1);
         }
         
-        _checkSupportedCurrenciesCodesMock.mockRestore();
+        checkSupportedCurrenciesCodesMock.mockRestore();
         _retrieveCurrenciesInfoMock.mockRestore();
     });
  
@@ -358,21 +678,21 @@ describe('#convertsAmountBetweenCurrencies', () => {
         const currencyCodeFrom = 'HURB';
         const currencyCodeTo = 'BRUH';
         const amount = 152.98;
-        const convertedAmount = 52.9;
+        const finalAmount = 52.9;
 
-        const _checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "_checkSupportedCurrenciesCodes");
-        const _retrieveCurrenciesInfoMock = jest.spyOn(CurrencyService, "_retrieveCurrenciesInfo");
-        const _convertAmountMock = jest.spyOn(CurrencyService, "_convertAmount");
+        const checkSupportedCurrenciesCodesMock = jest.spyOn(CurrencyService, "checkSupportedCurrenciesCodes");
+        const _retrieveCurrenciesInfoMock = jest.spyOn(CurrencyService, "retrieveCurrenciesInfo");
+        const _convertAmountMock = jest.spyOn(CurrencyService, "_calculatesConvertedAmount");
         
-        _checkSupportedCurrenciesCodesMock.mockImplementation(() => true);
-        _retrieveCurrenciesInfoMock.mockImplementation(() => convertedAmount);
+        checkSupportedCurrenciesCodesMock.mockImplementation(() => true);
+        _retrieveCurrenciesInfoMock.mockImplementation(() => finalAmount);
 
         try {
-            const result = await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount);
+            const { amount : convertedAmount } = await CurrencyService.convertsAmountBetweenCurrencies(currencyCodeFrom, currencyCodeTo, amount);
 
-            expect(result).toBe(convertedAmount);
-            expect(_checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
-            expect(_checkSupportedCurrenciesCodesMock).toReturn();
+            expect(convertedAmount).toBe(finalAmount);
+            expect(checkSupportedCurrenciesCodesMock).toBeCalledTimes(1);
+            expect(checkSupportedCurrenciesCodesMock).toReturn();
             expect(_retrieveCurrenciesInfoMock).toBeCalledTimes(1);
             expect(_retrieveCurrenciesInfoMock).toReturn();
             expect(_convertAmountMock).toBeCalledTimes(1);
@@ -381,7 +701,7 @@ describe('#convertsAmountBetweenCurrencies', () => {
             expect(err).toBeTruthy();
         }
         
-        _checkSupportedCurrenciesCodesMock.mockRestore();
+        checkSupportedCurrenciesCodesMock.mockRestore();
         _retrieveCurrenciesInfoMock.mockRestore();
         _convertAmountMock.mockRestore();
     });
