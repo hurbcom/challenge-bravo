@@ -1,8 +1,9 @@
 import Utils from "../libs/Utils";
 
 export default class Currency {
-    constructor (CurrencyDB) {
+    constructor (CurrencyDB, CurrencyQuoteAPI) {
         this.CurrencyDB = CurrencyDB;
+        this.CurrencyQuoteAPI = CurrencyQuoteAPI;
     }
 
     _isFictitiousCurrency (currencyDTO) {
@@ -61,7 +62,7 @@ export default class Currency {
     }
 
     listRealCurrenciesByCode (backingCurrencyCode, currenciesCodes) {
-        return;
+        return this.CurrencyQuoteAPI.listCurrenciesQuoteByCode(backingCurrencyCode, ...currenciesCodes);
     }
 
     async retrieveCurrenciesInfo (...currenciesCodes) {
