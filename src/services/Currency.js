@@ -10,16 +10,6 @@ export default class Currency {
         return currencyDTO.currencyQuote;
     }
 
-    async checkSupportedCurrenciesCodes (...currenciesCodesList) {
-        try {
-            const supportedCurrenciesCodes = await this.listSupportedCurrencies();
-
-            return Utils.arrayAContainsB(supportedCurrenciesCodes, currenciesCodesList);
-        } catch (err) {
-            throw err;
-        }
-    }
-
     _groupCurrenciesCodesInfoByType (currenciesCodes, ficticiousCurrenciesList) {
         const currenciesCodesObj = {
             ficticious: [],
@@ -37,6 +27,32 @@ export default class Currency {
         }, currenciesCodesObj);
 
         return currenciesCodesObj;
+    }
+
+    _calculatesConvertedAmount (amount, currencyQuoteFrom, currencyQuoteTo) {
+        const amountAtBase = amount * currencyQuoteFrom;
+        
+        return +(amountAtBase / currencyQuoteTo).toFixed(2);
+    }
+
+    async checkSupportedCurrenciesCodes (...currenciesCodesList) {
+        try {
+            const supportedCurrenciesCodes = await this.listSupportedCurrencies();
+
+            return Utils.arrayAContainsB(supportedCurrenciesCodes, currenciesCodesList);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async listSupportedCurrencies () {
+        try {
+            const currenciesList = await this.CurrencyDB.listCurrencies();
+
+            return currenciesList.map(currency => currency.code);
+        } catch (err) {
+            throw err;
+        }
     }
 
     async listBackingCurrency () {
@@ -90,22 +106,6 @@ export default class Currency {
             }
 
             return currenciesList.concat(ficticiousCurrenciesList, realCurrenciesList);
-        } catch (err) {
-            throw err;
-        }
-    }
-
-    _calculatesConvertedAmount (amount, currencyQuoteFrom, currencyQuoteTo) {
-        const amountAtBase = amount * currencyQuoteFrom;
-        
-        return +(amountAtBase / currencyQuoteTo).toFixed(2);
-    }
-
-    async listSupportedCurrencies () {
-        try {
-            const currenciesList = await this.CurrencyDB.listCurrencies();
-
-            return currenciesList.map(currency => currency.code);
         } catch (err) {
             throw err;
         }
