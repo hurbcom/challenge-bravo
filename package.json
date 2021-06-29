@@ -10,7 +10,9 @@
     "test": "jest --verbose",
     "test:coverage": "jest --verbose --coverage",
     "dev": "nodemon src/App.js",
-    "dev:debug": "nodemon --inspect src/App.js"
+    "dev:debug": "nodemon --inspect src/App.js",
+    "build": "sucrase ./src -d ./dist --transforms imports",
+    "start": "node ./dist/App.js"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
