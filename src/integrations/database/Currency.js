@@ -74,7 +74,7 @@ export default class Currency {
             return await this.Database.transaction(
                 async (transaction) => {
                     await this.Database.query(
-                        'DELETE FROM currency_quote WHERE code_id = $1',
+                        'DELETE FROM currency_quote WHERE currency_id = $1',
                         [ currencyId ],
                         { transaction }
                     );
