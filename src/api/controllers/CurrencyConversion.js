@@ -9,7 +9,7 @@ export default class CurrencyConversion {
         try {
             const { from, to, amount } = req.query;
 
-            const convertedAmount = await this.CurrencyService.convertsAmountBetweenCurrencies(from, to, amount);
+            const convertedAmount = await this.CurrencyService.convertsAmountBetweenCurrencies(from, to, +amount);
 
             const resMessage = Message.success({ data: convertedAmount });
             
