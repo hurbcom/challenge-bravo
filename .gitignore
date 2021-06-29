@@ -2,4 +2,3 @@ node_modules/
 .vscode/
 coverage/
 dist/
-pgdata/
