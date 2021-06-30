@@ -65,9 +65,15 @@ export default class Currency {
 
     async listBackingCurrency () {
         try {
-            const backingCurrency = await this.CurrencyDB.listBackingCurrency();
+            let backingCurrency = this.Cache.get('backingCurrency');
+    
+            if (backingCurrency) return backingCurrency;
+
+            backingCurrency = await this.CurrencyDB.listBackingCurrency();
 
             backingCurrency.currencyQuote = 1;
+
+            this.Cache.set({ backingCurrency });
 
             return backingCurrency;
         } catch (err) {
