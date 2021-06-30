@@ -1,7 +1,7 @@
 {
   "name": "challenge-bravo",
   "version": "1.0.0",
-  "description": "A REST API for currency quotation using Node.js",
+  "description": "A REST API for currencies' conversion using Node.js",
   "main": "App.js",
   "repository": "git@github.com:danirocha/challenge-bravo.git",
   "author": "Daniela Rocha <danirocha.rmd@gmail.com>",
