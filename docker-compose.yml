@@ -41,4 +41,9 @@ services:
           MONGO_INITDB_ROOT_PASSWORD: A123456
       ports:
           - 27017:27017
+  redis:
+      image: redis
+      container_name: hurb_redis
+      ports:
+          - "6379:6379"
 
