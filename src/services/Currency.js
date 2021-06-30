@@ -136,6 +136,8 @@ export default class Currency {
                 await this.CurrencyDB.storeFictitiousCurrency(currencyDTO) :
                 await this.CurrencyDB.storeRealCurrency(currencyDTO);
 
+            this.Cache.delete('supportedCurrencies');
+
             return currencyDTO;
         } catch (err) {
             throw err;

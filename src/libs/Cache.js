@@ -29,6 +29,10 @@ class Cache {
     get (dataKey) {
         return this.cache.get(dataKey);
     }
+
+    delete (dataKey) {
+        this.cache.del(dataKey);
+    }
 }
 
 export default new Cache();
