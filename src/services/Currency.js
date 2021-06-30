@@ -64,7 +64,13 @@ export default class Currency {
 
     async listFicticiousCurrenciesByCode (currenciesCodes) {
         try {
-            const ficticiousCurrencies = await this.CurrencyDB.listCurrenciesWithQuoteByCode();    
+            let ficticiousCurrencies = this.Cache.get('ficticiousCurrencies');
+
+            if (!ficticiousCurrencies) {
+                ficticiousCurrencies = await this.CurrencyDB.listCurrenciesWithQuoteByCode();    
+
+                this.Cache.set({ ficticiousCurrencies })
+            }
             
             return ficticiousCurrencies.filter(currency => currenciesCodes.indexOf(currency.currencyCode) !== -1);
         } catch (err) {
@@ -74,10 +80,16 @@ export default class Currency {
 
     async listRealCurrenciesByCode (backingCurrencyCode, currenciesCodes) {
         try {
-            const currenciesList = await this.CurrencyDB.listCurrenciesWithoutQuoteByCode();
-            const realCurrenciesCodes = currenciesList.map(currency => currency.currencyCode);
+            let realCurrencies = this.Cache.get('realCurrencies');
 
-            const realCurrencies = await this.CurrencyQuoteAPI.listCurrenciesQuoteByCode(backingCurrencyCode, realCurrenciesCodes);
+            if (!realCurrencies) {
+                const currenciesList = await this.CurrencyDB.listCurrenciesWithoutQuoteByCode();
+                const realCurrenciesCodes = currenciesList.map(currency => currency.currencyCode);
+
+                realCurrencies = await this.CurrencyQuoteAPI.listCurrenciesQuoteByCode(backingCurrencyCode, realCurrenciesCodes);
+                
+                this.Cache.set({ realCurrencies });
+            }
 
             return realCurrencies.filter(currency => currenciesCodes.indexOf(currency.currencyCode) !== -1);
         } catch (err) {

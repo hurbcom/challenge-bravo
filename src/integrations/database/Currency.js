@@ -1,7 +1,8 @@
 export default class Currency {
-    constructor (Database, CurrencyMapper) {
+    constructor (Database, CurrencyMapper, Cache) {
         this.Database = Database;
         this.CurrencyMapper = CurrencyMapper;
+        this.Cache = Cache;
     }
 
     async listCurrencies () {
@@ -18,8 +19,20 @@ export default class Currency {
         return this.Database.query('SELECT id, code FROM currency WHERE code = $1', [ currencyCode ]);
     }
 
-    _listCurrenciesQuoteByCode () {
-        this.Database.query('SELECT c.id, c.code, cq.quote_value FROM currency c LEFT JOIN currency_quote cq ON c.id = cq.currency_id LEFT JOIN backing_currency bc ON c.id = bc.currency_id WHERE bc.currency_id IS NULL');
+    async _listCurrenciesQuoteByCode () {
+        try {
+            let dbCurrenciesQuote = this.Cache.get('dbCurrenciesQuote');
+
+            if (dbCurrenciesQuote) return dbCurrenciesQuote;
+            
+            dbCurrenciesQuote = await this.Database.query('SELECT c.id, c.code, cq.quote_value FROM currency c LEFT JOIN currency_quote cq ON c.id = cq.currency_id LEFT JOIN backing_currency bc ON c.id = bc.currency_id WHERE bc.currency_id IS NULL');
+
+            this.Cache.set({ dbCurrenciesQuote });
+
+            return dbCurrenciesQuote;
+        } catch (err) {
+            throw err;
+        }
     }
 
     async listCurrenciesWithQuoteByCode () {
