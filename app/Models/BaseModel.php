@@ -25,7 +25,6 @@ class BaseModel implements \JsonSerializable
     public function __construct($data=[])
     {
         try {
-            $this->manager = new Manager($this->getConnectionString());
             $this->data = $data;
             return $this;
         } catch (\Exception $e) {
@@ -42,6 +41,7 @@ class BaseModel implements \JsonSerializable
 
     public function get()
     {
+        $this->manager = new Manager($this->getConnectionString());
         $query = new Query($this->wheres, []);
 //        $query = new Query(['name' => ['$in' => ['BTC', 'EUR']]], []);
         $cursor = $this->manager->executeQuery('db.'.$this->getTableName(), $query);
@@ -60,6 +60,7 @@ class BaseModel implements \JsonSerializable
 
     public function insert($params)
     {
+        $this->manager = new Manager($this->getConnectionString());
         $bulk = new BulkWrite;
         $bulk->insert($params);
         $write = $this->manager->executeBulkWrite('db.'.$this->getTableName(), $bulk);
@@ -80,6 +81,7 @@ class BaseModel implements \JsonSerializable
 
     public function update($params)
     {
+        $this->manager = new Manager($this->getConnectionString());
         $bulk = new BulkWrite;
         $bulk->update($this->wheres, ['$set' => $params]);
         $result = $this->manager->executeBulkWrite('db.'.$this->getTableName(), $bulk);
@@ -88,6 +90,7 @@ class BaseModel implements \JsonSerializable
 
     public function delete()
     {
+        $this->manager = new Manager($this->getConnectionString());
         $bulk = new BulkWrite;
         $bulk->delete($this->wheres, ['limit' => 1]);
         $result = $this->manager->executeBulkWrite('db.'.$this->getTableName(), $bulk);
