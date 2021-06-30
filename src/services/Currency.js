@@ -1,9 +1,10 @@
 import Utils from "../libs/Utils";
 
 export default class Currency {
-    constructor (CurrencyDB, CurrencyQuoteAPI) {
+    constructor (CurrencyDB, CurrencyQuoteAPI, Cache) {
         this.CurrencyDB = CurrencyDB;
         this.CurrencyQuoteAPI = CurrencyQuoteAPI;
+        this.Cache = Cache;
     }
 
     _isFictitiousCurrency (currencyDTO) {
@@ -47,9 +48,16 @@ export default class Currency {
 
     async listSupportedCurrencies () {
         try {
-            const currenciesList = await this.CurrencyDB.listCurrencies();
+            let supportedCurrencies = this.Cache.get('supportedCurrencies');
 
-            return currenciesList.map(currency => currency.code);
+            if (supportedCurrencies) return supportedCurrencies;
+
+            const currenciesList = await this.CurrencyDB.listCurrencies();
+            supportedCurrencies = currenciesList.map(currency => currency.currencyCode);
+            
+            this.Cache.set({ supportedCurrencies });
+
+            return supportedCurrencies;
         } catch (err) {
             throw err;
         }
