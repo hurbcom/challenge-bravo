@@ -50,7 +50,7 @@ class Database {
 
             throw err;
         } finally {
-            client.release()
+            client.release();
         }
     }
 }

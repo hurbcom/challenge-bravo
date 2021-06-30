@@ -10,7 +10,7 @@ const currency = async (req, res, next) => {
 
         next();
     } catch (err) {
-        const errMessage = Message.badRequest({ error: err.errors });
+        const errMessage = Message.badRequest({ error: { errors: err.errors } });
 
         return res.sendResponse(errMessage);
     }
@@ -25,7 +25,7 @@ const currencyConversion = async (req, res, next) => {
 
         next();
     } catch (err) {
-        const errMessage = Message.badRequest({ error: err.errors });
+        const errMessage = Message.badRequest({ error: { errors: err.errors } });
 
         return res.sendResponse(errMessage);
     }
