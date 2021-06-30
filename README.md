@@ -26,6 +26,100 @@ To have a copy of this project up and running, follow the instructions below
 
 ```docker-compose up -d```
 
+## How To Use
+
+Once you start the project, the api base url will be `http://localhost:3001`
+
+### List all supported currencies
+
+```
+// request
+GET:{{base_url}}/currency
+
+// response
+{
+    "message": "Success",
+    "data": {
+        "list": [
+            "USD",
+            "BRL",
+            "EUR",
+            "BTC",
+            "ETH"
+        ]
+    }
+}
+```
+
+### Convert an amount from a currency to another
+
+```
+// request
+GET:{{base_url}}/currency/convert?from=BRL&to=USD&amount=12.99
+
+// response
+{
+    "message": "Success",
+    "data": {
+        "amount": 2.59,
+        "currencyCode": "USD"
+    }
+}
+```
+
+### Add a new ficticious currency
+
+```
+// request
+POST:{{base_url}}/currency
+body: {
+    "currencyCode": "HURB",
+    "currencyQuote": 0.27
+}
+
+// response
+{
+    "message": "Successfully created",
+    "data": {
+        "currencyCode": "HURB",
+        "currencyQuote": 0.27
+    }
+}
+```
+
+### Add a new real currency
+
+```
+// request
+POST:{{base_url}}/currency
+body: {
+    "currencyCode": "EUR"
+}
+
+// response
+{
+    "message": "Successfully created",
+    "data": {
+        "currencyCode": "EUR"
+    }
+}
+```
+
+### Delete a currency
+
+```
+// request
+DELETE:{{base_url}}/currency/BRL
+
+// response
+{
+    "message": "Success",
+    "data": {
+        "currencyCode": "BRL"
+    }
+}
+```
+
 ## Built With
 
 - [Express](https://expressjs.com/) - Fast, unopinionated, minimalist web framework for Node.js
@@ -40,7 +134,7 @@ To have a copy of this project up and running, follow the instructions below
 ## Acknowledgments
 
 - Commits messages' convention from [here](https://github.com/pvdlg/conventional-commit-types)
-<!-- - Add documentation link here -->
+- Complete postman collection with response examples [here](https://github.com/danirocha/challenge-bravo/blob/main/docs/challenge_bravo_2021-06-30.postman_collection)
 
 ### Commands that can help you cope with some problems:
 - `docker-compose down` - Stops all docker services that are running
