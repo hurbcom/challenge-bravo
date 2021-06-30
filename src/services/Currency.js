@@ -1,5 +1,3 @@
-import Utils from "../libs/Utils";
-
 export default class Currency {
     constructor (CurrencyDB, CurrencyQuoteAPI, Cache) {
         this.CurrencyDB = CurrencyDB;
@@ -21,7 +19,7 @@ export default class Currency {
         try {
             const supportedCurrenciesCodes = await this.listSupportedCurrencies();
 
-            return Utils.arrayAContainsB(supportedCurrenciesCodes, currenciesCodesList);
+            return utils.arrayAContainsB(supportedCurrenciesCodes, currenciesCodesList);
         } catch (err) {
             throw err;
         }
