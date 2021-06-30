@@ -1,8 +1,11 @@
 import _CurrencyService from './Currency';
 import { CurrencyDB } from '../integrations/database';
-import Utils from '../libs/Utils';
+import utils from '../libs/Utils';
 
+jest.mock('../libs/Utils');
 jest.mock('../integrations/database');
+
+global.utils = utils;
 
 const CurrencyService = new _CurrencyService(CurrencyDB);
 
@@ -178,10 +181,9 @@ describe('#checkSupportedCurrenciesCodes', () => {
         const currencyCode1 = 'HURB';
 
         const listSupportedCurrenciesMock = jest.spyOn(CurrencyService, 'listSupportedCurrencies');
-        const arrayAContainsBMock = jest.spyOn(Utils, 'arrayAContainsB');
 
         listSupportedCurrenciesMock.mockImplementation(() => new Error());
-        arrayAContainsBMock.mockImplementation(() => false);
+        utils.arrayAContainsB.mockReturnValue(false);
 
         try {
             const result = await CurrencyService.checkSupportedCurrenciesCodes(currencyCode1);
@@ -189,14 +191,13 @@ describe('#checkSupportedCurrenciesCodes', () => {
             expect(result).toBe(false);
             expect(listSupportedCurrenciesMock).toBeCalledTimes(1);
             expect(listSupportedCurrenciesMock).toReturn();
-            expect(arrayAContainsBMock).toBeCalledTimes(1);
-            expect(arrayAContainsBMock).toReturn();
+            expect(utils.arrayAContainsB).toBeCalledTimes(1);
+            expect(utils.arrayAContainsB).toReturn();
         } catch (err) {
             expect(err).toBeFalsy();
         }
 
         listSupportedCurrenciesMock.mockRestore();
-        arrayAContainsBMock.mockRestore();
     });
 
     test("it returns true when the provided currencies' codes are supported", async () => {
@@ -204,10 +205,9 @@ describe('#checkSupportedCurrenciesCodes', () => {
         const currencyCode2 = 'BRUH';
 
         const listSupportedCurrenciesMock = jest.spyOn(CurrencyService, 'listSupportedCurrencies');
-        const arrayAContainsBMock = jest.spyOn(Utils, 'arrayAContainsB');
 
         listSupportedCurrenciesMock.mockImplementation(() => new Error());
-        arrayAContainsBMock.mockImplementation(() => true);
+        utils.arrayAContainsB.mockReturnValue(true);
 
         try {
             const result = await CurrencyService.checkSupportedCurrenciesCodes(currencyCode1, currencyCode2);
@@ -215,14 +215,13 @@ describe('#checkSupportedCurrenciesCodes', () => {
             expect(result).toBe(true);
             expect(listSupportedCurrenciesMock).toBeCalledTimes(1);
             expect(listSupportedCurrenciesMock).toReturn();
-            expect(arrayAContainsBMock).toBeCalledTimes(1);
-            expect(arrayAContainsBMock).toReturn();
+            expect(utils.arrayAContainsB).toBeCalledTimes(1);
+            expect(utils.arrayAContainsB).toReturn();
         } catch (err) {
             expect(err).toBeFalsy();
         }
 
         listSupportedCurrenciesMock.mockRestore();
-        arrayAContainsBMock.mockRestore();
     });
 });
 
@@ -279,19 +278,13 @@ describe('#retrieveCurrenciesInfo', () => {
             currencyCode: 'USD',
             currencyQuote: 1
         };
-        const currenciesCodesObj = {
-            ficticious: [],
-            real: [currencyCode1, currencyCode2]
-        };
 
         const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
         const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
-        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
         const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
 
         listBackingCurrencyMock.mockImplementation(() => backingCurrency);
         listFicticiousCurrenciesByCodeMock.mockImplementation(() => []);
-        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
         listRealCurrenciesByCodeMock.mockImplementation(() => new Error());
 
         try {
@@ -302,14 +295,11 @@ describe('#retrieveCurrenciesInfo', () => {
             expect(listBackingCurrencyMock).toReturn();
             expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
             expect(listFicticiousCurrenciesByCodeMock).toReturn();
-            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
-            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
             expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
         }
 
         listBackingCurrencyMock.mockRestore();
         listFicticiousCurrenciesByCodeMock.mockRestore();
-        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
         listRealCurrenciesByCodeMock.mockRestore();
     });
     
@@ -320,19 +310,13 @@ describe('#retrieveCurrenciesInfo', () => {
             currencyCode: 'USD',
             currencyQuote: 1
         };
-        const currenciesCodesObj = {
-            ficticious: [],
-            real: [ currencyCode1, currencyCode2 ]
-        };
 
         const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
         const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
-        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
         const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
 
         listBackingCurrencyMock.mockImplementation(() => backingCurrency);
         listFicticiousCurrenciesByCodeMock.mockImplementation(() => []);
-        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
         listRealCurrenciesByCodeMock.mockImplementation(() => []);
 
         try {
@@ -343,15 +327,12 @@ describe('#retrieveCurrenciesInfo', () => {
             expect(listBackingCurrencyMock).toReturn();
             expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
             expect(listFicticiousCurrenciesByCodeMock).toReturn();
-            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
-            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
             expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
             expect(listRealCurrenciesByCodeMock).toReturn();
         }
 
         listBackingCurrencyMock.mockRestore();
         listFicticiousCurrenciesByCodeMock.mockRestore();
-        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
         listRealCurrenciesByCodeMock.mockRestore();
     });
 
@@ -446,19 +427,13 @@ describe('#retrieveCurrenciesInfo', () => {
             currencyCode: 'USD',
             currencyQuote: 1
         };
-        const currenciesCodesObj = {
-            ficticious: [ currencyCode1 ],
-            real: [ currencyCode2 ]
-        };
 
         const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
         const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
-        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
         const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
 
         listBackingCurrencyMock.mockImplementation(() => backingCurrency);
         listFicticiousCurrenciesByCodeMock.mockImplementation(() => [ ficticiousCurrency ]);
-        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
         listRealCurrenciesByCodeMock.mockImplementation(() => [ realCurrency ]);
 
         try {
@@ -470,8 +445,6 @@ describe('#retrieveCurrenciesInfo', () => {
             expect(listBackingCurrencyMock).toReturn();
             expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
             expect(listFicticiousCurrenciesByCodeMock).toReturn();
-            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
-            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
             expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
             expect(listRealCurrenciesByCodeMock).toReturn();
         } catch (err) {
@@ -480,7 +453,6 @@ describe('#retrieveCurrenciesInfo', () => {
 
         listBackingCurrencyMock.mockRestore();
         listFicticiousCurrenciesByCodeMock.mockRestore();
-        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
         listRealCurrenciesByCodeMock.mockRestore();
     });
 
@@ -495,19 +467,13 @@ describe('#retrieveCurrenciesInfo', () => {
             currencyCode: currencyCode2,
             currencyQuote: 7.06
         };
-        const currenciesCodesObj = {
-            ficticious: [],
-            real: [ currencyCode2 ]
-        };
 
         const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
         const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
-        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
         const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
 
         listBackingCurrencyMock.mockImplementation(() => backingCurrency);
         listFicticiousCurrenciesByCodeMock.mockImplementation(() => []);
-        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
         listRealCurrenciesByCodeMock.mockImplementation(() => [ realCurrency ]);
 
         try {
@@ -519,8 +485,6 @@ describe('#retrieveCurrenciesInfo', () => {
             expect(listBackingCurrencyMock).toReturn();
             expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
             expect(listFicticiousCurrenciesByCodeMock).toReturn();
-            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
-            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
             expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
             expect(listRealCurrenciesByCodeMock).toReturn();
         } catch (err) {
@@ -529,7 +493,6 @@ describe('#retrieveCurrenciesInfo', () => {
 
         listBackingCurrencyMock.mockRestore();
         listFicticiousCurrenciesByCodeMock.mockRestore();
-        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
         listRealCurrenciesByCodeMock.mockRestore();
     });
 
@@ -550,19 +513,13 @@ describe('#retrieveCurrenciesInfo', () => {
             currencyCode: 'USD',
             currencyQuote: 1
         };
-        const currenciesCodesObj = {
-            ficticious: [],
-            real: [ currencyCode1, currencyCode2 ]
-        };
 
         const listBackingCurrencyMock = jest.spyOn(CurrencyService, 'listBackingCurrency');
         const listFicticiousCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listFicticiousCurrenciesByCode');
-        const _groupCurrenciesCodesInfoByTypeMock = jest.spyOn(CurrencyService, '_groupCurrenciesCodesInfoByType');
         const listRealCurrenciesByCodeMock = jest.spyOn(CurrencyService, 'listRealCurrenciesByCode');
 
         listBackingCurrencyMock.mockImplementation(() => backingCurrency);
         listFicticiousCurrenciesByCodeMock.mockImplementation(() => []);
-        _groupCurrenciesCodesInfoByTypeMock.mockImplementation(() => currenciesCodesObj);
         listRealCurrenciesByCodeMock.mockImplementation(() => realCurrenciesList);
 
         try {
@@ -574,8 +531,6 @@ describe('#retrieveCurrenciesInfo', () => {
             expect(listBackingCurrencyMock).toReturn();
             expect(listFicticiousCurrenciesByCodeMock).toBeCalledTimes(1);
             expect(listFicticiousCurrenciesByCodeMock).toReturn();
-            expect(_groupCurrenciesCodesInfoByTypeMock).toBeCalledTimes(1);
-            expect(_groupCurrenciesCodesInfoByTypeMock).toReturn();
             expect(listRealCurrenciesByCodeMock).toBeCalledTimes(1);
             expect(listRealCurrenciesByCodeMock).toReturn();
         } catch (err) {
@@ -584,7 +539,6 @@ describe('#retrieveCurrenciesInfo', () => {
 
         listBackingCurrencyMock.mockRestore();
         listFicticiousCurrenciesByCodeMock.mockRestore();
-        _groupCurrenciesCodesInfoByTypeMock.mockRestore();
         listRealCurrenciesByCodeMock.mockRestore();
     });
 });
@@ -705,5 +659,4 @@ describe('#convertsAmountBetweenCurrencies', () => {
         _retrieveCurrenciesInfoMock.mockRestore();
         _convertAmountMock.mockRestore();
     });
-    
 });
