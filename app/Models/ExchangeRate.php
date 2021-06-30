@@ -42,6 +42,7 @@ class ExchangeRate
 
     public function get()
     {
+        
         if ($this->from->base != 'USD') {
             $baseAmount = $this->exchange($this->from->baseRate, 1, $this->amount);
             $this->from = (new Currency())->where('name', $this->from->base)->first();
@@ -55,20 +56,30 @@ class ExchangeRate
             $baseAmount = $this->get();
             return $this->exchange(1, $originalTo->baseRate, $baseAmount);
         }
-        $key = date('Ymd');
-        if (!in_array($key, array_keys((array)$this->from->rates)) || !in_array($key, array_keys((array)$this->to->rates))) {
-            $rates = $this->service->latest();
-            foreach ((new Currency())->where('base', 'USD')->get() as $currency) {
-                $nameLower = strtolower($currency->name);
-                $usdRate = sprintf('%.6f',floatval($rates->usd->$nameLower));
-                (new Currency())->where('_id', $currency->_id)->update(['rates.'.$key => $usdRate]);
-            }
 
-            $fromNameLower = strtolower($this->from->name);
-            $toNameLower = strtolower($this->to->name);
-            return $this->exchange($rates->usd->$fromNameLower, $rates->usd->$toNameLower, $this->amount);
+        $key = date('Ymd');
+        $inCache = $this->getInCache($key);
+        if ($inCache) {
+            return $inCache;
         }
 
+        $rates = $this->service->latest();
+        foreach ((new Currency())->where('base', 'USD')->get() as $currency) {
+            $nameLower = strtolower($currency->name);
+            $usdRate = sprintf('%.6f',floatval($rates->usd->$nameLower));
+            (new Currency())->where('_id', $currency->_id)->update(['rates.'.$key => $usdRate]);
+        }
+
+        $fromNameLower = strtolower($this->from->name);
+        $toNameLower = strtolower($this->to->name);
+        return $this->exchange($rates->usd->$fromNameLower, $rates->usd->$toNameLower, $this->amount);
+    }
+
+    private function getInCache($key)
+    {
+        if (!in_array($key, array_keys((array)$this->from->rates)) || !in_array($key, array_keys((array)$this->to->rates))) {
+            return false;
+        }
         return $this->exchange($this->from->rates->$key, $this->to->rates->$key, $this->amount);
     }
 
