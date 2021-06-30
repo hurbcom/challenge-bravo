@@ -15,63 +15,130 @@ Onde:
 	• Moeda Destino: . Moeda que será convertida de acordo com o valor a ser cotado.
 	• Valor a Converter: . Montante a ser convertido de acordo com a paridade entre a "moeda origem" e a "moeda destino".
 	
-Exemplo (Request):
-
-	http://localhost:3000/cotacao/api/cotar/EUR/BRL/10000
-	
+	• Exemplo (Request):
+http://localhost:3000/cotacao/api/cotar/EUR/BRL/10000
 A API devolverá (response) um objeto do tipo JSON, informando o valor convertido, indicando a cotação máxima e mínima para a data informada.
 
-Exemplo (Response):
-
-	{
+	• Exemplo (Response):
+{
 "cotacaomax": 654900,
   "cotacaomin": 566100
 }
-	
-Códigos de Status
 
+Códigos de Status
 	• Código 200 : OK - Estas requisição foi bem sucedida.
 	• Código 204 : Não há conteúdo para enviar para esta solicitação.
 	• Código 400 : Requisição Inválida.
 	• Código 412 : Cabeçalhos pré-condições que o servidor não atende.
 	• Código 500 : O servidor encontrou uma situação com a qual não sabe lidar.
-	
+
 GET
 
-API para conversão de moedas
+API - Cotar Moedas
 
-	• Request
+Exemplo | Request | Response - Cotar Moedas
 
-	javascript - jQuery
-	
-	var settings = {
-	  "url": "http://localhost:3000/cotacao/api/cotar/BRL/EUR/1000",
-	  "method": "GET",
-	  "timeout": 0,
-	};
-	 
-	$.ajax(settings).done(function (response) {
-	  console.log(response);
-	});
-	
-	• Response
-	
-	Body
-	
-	Json:
-	{
-	  "cotacaomax": "",
-	  "cotacaomin": ""
-	}
-	
-	Headers:
-	
-	X-Powered-By 	Express
-	Access-Control-Allow-Origin	*
-	Content-Type	application/json; charset=utf-8
-	Content-Length	33
-	Etag	W/"21-DhNOgJAIh871bE9sknnmCzkUHMs"
-	Date	Wed, 30 Jun 2021 11:53:42 GMT
-	Connection	keep-alive
-	Keep-Alive	timeout=5
+Request
 
+javascript - jQuery
+
+var settings = {
+  "url": "http://localhost:3000/cotacao/api/cotar/EUR/BRL/1000/25-06-2021%2018:56:39",
+  "method": "GET",
+  "timeout": 0,
+};
+ 
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+
+
+Response
+
+json
+{
+  "cotacaomax": "",
+  "cotacaomin": ""
+}
+
+API - Deletar Paridade
+
+Exemplo | Request | Response - Deletar Paridade
+
+Request
+
+javascript - jQuery
+
+var settings = {
+  "url": "http://localhost:3000/cotacao/api/deletar/01-01-2000%2000:00:00/BRL/EUR",
+  "method": "GET",
+  "timeout": 0,
+};
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+
+Response
+
+Json
+{
+  "Mensagem": "Moeda Deletada com Sucesso",
+  "Moeda": []
+}
+
+API - Adicionar Paridade
+
+Example | Request | Response - Adicionar Paridade
+
+Request
+
+javascript - jQuery
+var settings = {
+  "url": "http://localhost:3000/cotacao/api/adicionar/2021-06-59%2016:37:35/RRR/TTT/MOEDA%20TESTE%202/11/22",
+  "method": "GET",
+  "timeout": 0,
+};
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+
+Response
+
+Json
+{
+  "Mensagem": "Moeda Cadastrada com Sucesso"
+}
+
+API - Update Paridade
+
+Examplo
+
+Request
+
+javascript - jQuery
+
+var settings = {
+  "url": "http://localhost:3000/cotacao/api/alterar/2021-06-59%2016:37:35/RRR/TTT/MOEDA%20TESTE%202/11/223333",
+  "method": "GET",
+  "timeout": 0,
+};
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+
+Response
+
+Json
+{
+  "Mensagem": "Moeda Alterada com sucesso",
+  "Moeda": [
+    {
+      "data": "2021-06-59 16:37:35",
+      "code": "RRR",
+      "codein": "TTT",
+      "name": "MOEDA TESTE 2",
+      "high": "11",
+      "low": "223333"
+    }
+   ]
+}
