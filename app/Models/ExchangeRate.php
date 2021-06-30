@@ -10,9 +10,12 @@ class ExchangeRate
     protected $from;
     protected $to;
     protected $amount;
+    protected $redis;
 
     public function __construct(BaseService $exangeService)
     {
+        $this->redis = new \Redis();
+        $this->redis->connect('hurb_redis', 6379);
         $this->service = $exangeService;
     }
 
@@ -42,7 +45,6 @@ class ExchangeRate
 
     public function get()
     {
-        
         if ($this->from->base != 'USD') {
             $baseAmount = $this->exchange($this->from->baseRate, 1, $this->amount);
             $this->from = (new Currency())->where('name', $this->from->base)->first();
@@ -63,12 +65,7 @@ class ExchangeRate
             return $inCache;
         }
 
-        $rates = $this->service->latest();
-        foreach ((new Currency())->where('base', 'USD')->get() as $currency) {
-            $nameLower = strtolower($currency->name);
-            $usdRate = sprintf('%.6f',floatval($rates->usd->$nameLower));
-            (new Currency())->where('_id', $currency->_id)->update(['rates.'.$key => $usdRate]);
-        }
+        $this->storeInCache($key, $rates = $this->service->latest());
 
         $fromNameLower = strtolower($this->from->name);
         $toNameLower = strtolower($this->to->name);
@@ -77,10 +74,16 @@ class ExchangeRate
 
     private function getInCache($key)
     {
-        if (!in_array($key, array_keys((array)$this->from->rates)) || !in_array($key, array_keys((array)$this->to->rates))) {
+        if (!$this->redis->exists($key)) {
             return false;
         }
-        return $this->exchange($this->from->rates->$key, $this->to->rates->$key, $this->amount);
+        $rates = json_decode($this->redis->get($key));
+        return $this->exchange($rates->{strtolower($this->from->name)}, $rates->{strtolower($this->to->name)}, $this->amount);
+    }
+
+    private function storeInCache($key, $rates)
+    {
+        return $this->redis->set($key, json_encode($rates->usd));
     }
 
     private function exchange($from, $to, $amount)
