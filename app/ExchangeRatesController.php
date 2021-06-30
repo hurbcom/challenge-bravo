@@ -17,9 +17,9 @@ class ExchangeRatesController extends Controller
 
     public function index()
     {
-        echo $this->model->from(new Currency(['name' => $this->request->from]))
+        echo json_encode($this->model->from(new Currency(['name' => $this->request->from]))
             ->to(new Currency(['name' => $this->request->to]))
             ->amount($this->request->amount)
-            ->get();
+            ->get());
     }
 }
