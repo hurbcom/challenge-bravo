@@ -17,23 +17,8 @@ class ExchangeRatesController extends Controller
 
     public function index()
     {
-        $currencies = (new Currency())
-            ->whereIn('name', [$this->request->from, $this->request->to])
-            ->get();
-
-        $currencyFrom = $currencies[0];
-        $currencyTo = $currencies[1];
-
-        /*
-         * Se currencies[0] for o from inverte as variáveis
-         */
-        if ($currencies[1]->name == $this->request->from) {
-            $currencyFrom = $currencies[1];
-            $currencyTo = $currencies[0];
-        }
-
-        echo $this->model->from($currencyFrom)
-            ->to($currencyTo)
+        echo $this->model->from(new Currency(['name' => $this->request->from]))
+            ->to(new Currency(['name' => $this->request->to]))
             ->amount($this->request->amount)
             ->get();
     }

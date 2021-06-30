@@ -43,33 +43,35 @@ class ExchangeRate
         return $this;
     }
 
+    private function getRates()
+    {
+        if ($this->redis->exists($this->from->name)) {
+            return json_decode($this->redis->get($this->from->name));
+        }
+        $ratesFrom = $this->service->latest($this->from->name);
+        if (!$ratesFrom) {
+            return false;
+        }
+        $this->redis->setex($this->from->name, 300, json_encode($ratesFrom));
+        return $ratesFrom;
+    }
+
     public function get()
     {
-        if ($this->from->base != 'USD') {
-            $baseAmount = $this->exchange($this->from->baseRate, 1, $this->amount);
-            $this->from = (new Currency())->where('name', $this->from->base)->first();
-            $this->amount = $baseAmount;
-            return $this->get();
-        }
-
-        if ($this->to->base != 'USD') {
-            $originalTo = $this->to;
-            $this->to = (new Currency())->where('name', $this->to->base)->first();
+        $ratesFrom = $this->getRates();
+        if (!$ratesFrom) {
+            $currencyFrom = (new Currency())->where('name', $this->from->name)->first();
+            $this->from = new Currency(['name' => $currencyFrom->base]);
             $baseAmount = $this->get();
-            return $this->exchange(1, $originalTo->baseRate, $baseAmount);
+            return $baseAmount*$currencyFrom->baseRate;
         }
 
-        $key = date('Ymd');
-        $inCache = $this->getInCache($key);
-        if ($inCache) {
-            return $inCache;
+        if (!$ratesFrom->{strtolower($this->to->name)}) {
+            $currencyTo = (new Currency())->where('name', $this->to->name)->first();
+            $this->to = new Currency(['name' => $currencyTo->base]);
+            $baseAmount = $this->get();
+            return $baseAmount*$currencyTo->baseRate;
         }
-
-        $this->storeInCache($key, $rates = $this->service->latest());
-
-        $fromNameLower = strtolower($this->from->name);
-        $toNameLower = strtolower($this->to->name);
-        return $this->exchange($rates->usd->$fromNameLower, $rates->usd->$toNameLower, $this->amount);
     }
 
     private function getInCache($key)
@@ -78,6 +80,24 @@ class ExchangeRate
             return false;
         }
         $rates = json_decode($this->redis->get($key));
+
+        $notFound = [];
+        if (!isset($rates->{strtolower($this->from->name)})) {
+            $notFound['error']['notFound']['from'] = $this->from->name;
+        }
+
+        if (!isset($rates->{strtolower($this->to->name)})) {
+            $notFound['error']['notFound']['to'] = $this->to->name;
+        }
+
+        if (!empty($notFound)) {
+            return ['success' => false]+$notFound;
+        }
+
+        return ['success' => true]+['data' => $this->exchange($rates->{strtolower($this->from->name)}, $rates->{strtolower($this->to->name)}, $this->amount)];
+        print_r(['success' => true]+['data' => $this->exchange($rates->{strtolower($this->from->name)}, $rates->{strtolower($this->to->name)}, $this->amount)]);
+        exit;
+
         return $this->exchange($rates->{strtolower($this->from->name)}, $rates->{strtolower($this->to->name)}, $this->amount);
     }
 
@@ -88,6 +108,7 @@ class ExchangeRate
 
     private function exchange($from, $to, $amount)
     {
+//        echo $from.'-'.$to.'-'.$amount;
         $base = $amount / $from;
         return sprintf('%.6f',$base*$to);
     }
