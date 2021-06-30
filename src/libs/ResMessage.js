@@ -40,9 +40,9 @@ class ResMessage {
         const messageObj = this.messages[messageCode];
         const customObj = {};
 
-        if (customData.message) customObj.message = message;
-
-        const { data, error } = customData;
+        const { message, data, error } = customData;
+        
+        if (message) customObj.message = message;
 
         if (this._isSuccessCode(messageCode)) {
             customObj.data = data || {};
