@@ -1,3 +1,4 @@
+from coin.model.CoinModel import CoinModel
 from coin.repository.CoinRepository import CoinRepository
 from decimal import Decimal
 
@@ -6,13 +7,39 @@ class ConvertService:
     def __init__(self):
         self._coin_repository = CoinRepository()
 
-    def convert(self, params):
+    def _to_dollar(self, param: str):
+        res: CoinModel
+        res = self._coin_repository.list_for_initials(param)
+
+        while res.bslt != 'USD':
+            res = self._coin_repository.list_for_initials(param)
+
+
+        return res
+
+    def convert(self, params: dict) -> Decimal:
+
+        if Decimal(params['amount']) < 0:
+            return Decimal(-1)
+
         amount = params['amount']
-        if params['to'] == 'USD':
-            coin_from = self._coin_repository.list_for_initials(coin_initials=params['from'])
-            return float(amount) * coin_from.price
         coin_from = self._coin_repository.list_for_initials(coin_initials=params['from'])
         coin_to = self._coin_repository.list_for_initials(coin_initials=params['to'])
-        to_dollar = Decimal(amount) * Decimal(coin_from.price)
-        to_final = Decimal(to_dollar) / Decimal(coin_to.price)
-        return to_final
+
+        if coin_from.amount_coint_bslt == 1 and coin_to.amount_coint_bslt == 1 and coin_from.bslt == coin_to.bslt:
+            coin_from_prince = Decimal(coin_from.price) / Decimal(coin_from.amount_coint_bslt)
+            coin_to_price = Decimal(coin_to.price) / Decimal(coin_from.amount_coint_bslt)
+            to_bslt = Decimal(amount) / Decimal(coin_from_prince)
+            to_final = Decimal(to_bslt) * Decimal(coin_to_price)
+            return to_final
+
+        if coin_from.bslt == coin_to.coin_initials:
+            coin_from_prince = Decimal(coin_from.price) / Decimal(coin_from.amount_coint_bslt)
+            to_final = Decimal(amount) * Decimal(coin_from_prince)
+            return to_final
+
+        if coin_from.coin_initials == coin_to.bslt:
+            coin_to_price = Decimal(amount) / Decimal(coin_to.price)
+            return coin_to_price
+
+        return Decimal(-1)

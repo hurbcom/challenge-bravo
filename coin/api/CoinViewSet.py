@@ -16,7 +16,7 @@ class CointViewSet(CoreViewSets):
             res = self._coin_service.list(request)
             return Response(res, status=status.HTTP_200_OK)
         except Exception as erro:
-            return Response({'erro ao salvar'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'erro ao listar'}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['post'], detail=True)
     def create(self, request):
@@ -24,7 +24,7 @@ class CointViewSet(CoreViewSets):
             res = self._coin_service.create(request)
             return Response(res, status=status.HTTP_200_OK)
         except Exception as error:
-            return Response({'Erro ao criar'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'Erro ao criar'}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['put'], detail=True)
     def update(self, request, pk=None):

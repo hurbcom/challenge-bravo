@@ -1,4 +1,5 @@
 from coin.api.CoinSerializer import CoinSerializer
+from coin.model.CoinModel import CoinModel
 from coin.repository.CoinRepository import CoinRepository
 
 class CoinService:
@@ -40,3 +41,7 @@ class CoinService:
     def delete(self, coin: str) -> bool:
         res = self._coin_repository.delete(coin)
         return True
+
+    def get_for_bslt(self, param: str) -> CoinModel:
+        res = self._coin_repository.get_for_bstl(param)
+        return res

@@ -15,6 +15,8 @@ class ConvertViewSet(viewsets.ViewSet):
     def convert(self, request):
         try:
             res = self._coin_service.convert(request.query_params)
+            if res == -1:
+                return Response({'erro': 'Conversão não possível'})
             return Response(res)
         except Exception as erro:
-            return Response({"Erro ao salvar"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"Erro ao converter"}, status=status.HTTP_400_BAD_REQUEST)

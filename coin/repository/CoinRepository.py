@@ -38,3 +38,7 @@ class CoinRepository:
         query = CoinModel.objects.get(coin_initials=coin)
         query.delete()
         return True
+
+    def get_for_bstl(self, bstl: str):
+        query = CoinModel.objects.get(bslt=bstl)
+        return query
