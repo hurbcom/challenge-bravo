@@ -1,80 +1,77 @@
 class ResMessage {
     constructor () {
-        // -
+        this.messages = {
+            success: {
+                status: 200,
+                message: 'Success'
+            },
+            success_created: {
+                status: 201,
+                message: 'Successfully created'
+            },
+            error_bad_request: {
+                status: 400,
+                message: 'Invalid params'
+            },
+            error_unprocessable_entity: {
+                status: 422,
+                message: 'Cannot process data'
+            },
+            error: {
+                status: 500,
+                message: 'Internal server error'
+            }
+        };
+
+        this.codes = Object.keys(this.messages);
     }
 
-    _generateCustomSuccessObj ({ message, data } = {}) {
-        const successObj = {}
-
-        if (message) successObj.message = message;
-        if (data) successObj.data = data;
-
-        return successObj; 
+    _isSuccessCode (code) {
+        return code.includes('success');
     }
 
-    _generateCustomErrorObj ({ message, error } = {}) {
-        const errorObj = {}
-
-        if (message) errorObj.message = message;
-        if (error) errorObj.error = error;
-
-        return errorObj; 
+    _isErrorCode (code) {
+        return code.includes('error');
     }
 
-    success (params) {
-        const resObj = {
-            status: 200,
-            message: 'Success',
-            data: {}
-        };
-        const customResObj = this._generateCustomSuccessObj(params);
+    _createMessage (messageCode, customData = {}) {
+        if (!this.codes.includes(messageCode)) throw new Error('unknown message code');
 
-        return utils.newObject(resObj, customResObj);  
-    };
+        const messageObj = this.messages[messageCode];
+        const customObj = {};
 
-    successCreated (params) {
-        const resObj = {
-            status: 201,
-            message: 'Successfully created',
-            data: {}
-        };
-        const customResObj = this._generateCustomSuccessObj(params);
+        if (customData.message) customObj.message = message;
 
-        return utils.newObject(resObj, customResObj);  
-    };
+        const { data, error } = customData;
 
-    badRequest (params) {
-        const resObj = {
-            status: 400,
-            message: 'Invalid params',
-            error: {}
-        };
-        const customResObj = this._generateCustomErrorObj(params);
+        if (this._isSuccessCode(messageCode)) {
+            customObj.data = data || {};
+        } else if (this._isErrorCode(messageCode)) {
+            customObj.error = error || {};
+        }
 
-        return utils.newObject(resObj, customResObj);
-    };
+        return utils.newObject(messageObj, customObj);  
+    }
 
-    unprocessableEntity (params) {
-        const resObj = {
-            status: 422,
-            message: 'Cannot process data',
-            error: {}
-        };
-        const customResObj = this._generateCustomErrorObj(params);
+    success (customData) {
+        return this._createMessage('success', customData);
+    }
 
-        return utils.newObject(resObj, customResObj);
-    };
+    successCreated (customData) {
+        return this._createMessage('success_created', customData);
+    }
 
-    internalError (params) {
-        const resObj = {
-            status: 500,
-            message: 'Internal server error',
-            error: {}
-        };
-        const customResObj = this._generateCustomErrorObj(params);
+    badRequest (customData) {
+        return this._createMessage('error_bad_request', customData);
+    }
 
-        return utils.newObject(resObj, customResObj);
-    };
+    unprocessableEntity (customData) {
+        return this._createMessage('error_unprocessable_entity', customData);
+    }
+
+    internalError (customData) {
+        return this._createMessage('error', customData);
+    }
 }
 
 export default new ResMessage();
