@@ -72,6 +72,7 @@ class ExchangeRate
             $baseAmount = $this->get();
             return $baseAmount*$currencyTo->baseRate;
         }
+        return sprintf('%.6f',$ratesFrom->{strtolower($this->to->name)}*$this->amount);
     }
 
     private function getInCache($key)
