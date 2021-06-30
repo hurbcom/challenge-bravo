@@ -8,7 +8,7 @@ export default class Currency {
         try {
             const currenciesList = await this.Database.query('SELECT code FROM currency');
 
-            return currenciesList;
+            return currenciesList.map(currency => this.CurrencyMapper.toDTO(currency));
         } catch (err) {
             throw err;
         }
@@ -18,16 +18,41 @@ export default class Currency {
         return this.Database.query('SELECT id, code FROM currency WHERE code = $1', [ currencyCode ]);
     }
 
-    _countValuesFromList (list) {
-        return list.reduce((acc, value, index) => acc += `$${++index},`, "").slice(0, -1);
+    _listCurrenciesQuoteByCode () {
+        this.Database.query('SELECT c.id, c.code, cq.quote_value FROM currency c LEFT JOIN currency_quote cq ON c.id = cq.currency_id LEFT JOIN backing_currency bc ON c.id = bc.currency_id WHERE bc.currency_id IS NULL');
     }
 
-    async listCurrenciesQuoteByCode (...codes) {
+    async listCurrenciesWithQuoteByCode () {
         try {
-            const valuesCount = this._countValuesFromList(codes);
-            const currencies = await this.Database.query(`SELECT c.id, c.code, cq.quote_value FROM currency c LEFT JOIN currency_quote cq ON c.id = cq.currency_id WHERE c.code in (${valuesCount})`, [ ...codes ]);
+            const currenciesList = await this._listCurrenciesQuoteByCode();
             
-            return currencies.map(currency => this.CurrencyMapper.toDTO(currency));
+            return currenciesList.reduce((acc, currency) => {
+                if (currency.quote_value) {
+                    const mappedCurrency = this.CurrencyMapper.toDTO(currency);
+                    
+                    acc.push(mappedCurrency);
+                }
+
+                return acc;
+            }, []);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async listCurrenciesWithoutQuoteByCode () {
+        try {
+            const currenciesList = await this._listCurrenciesQuoteByCode();
+            
+            return currenciesList.reduce((acc, currency) => {
+                if (!currency.quote_value) {
+                    const mappedCurrency = this.CurrencyMapper.toDTO(currency);
+                    
+                    acc.push(mappedCurrency);
+                }
+
+                return acc;
+            }, []);
         } catch (err) {
             throw err;
         }
@@ -35,9 +60,9 @@ export default class Currency {
 
     async listBackingCurrency () {
         try {
-            const backingCurrency = await this.Database.query('SELECT c.code FROM currency c LEFT JOIN backing_currency bc ON c.id = bc.currency_id');
+            const [ backingCurrency ] = await this.Database.query('SELECT c.code FROM currency c JOIN backing_currency bc ON c.id = bc.currency_id');
             
-            return this.CurrencyMapper.toDTO(backingCurrency[0]);
+            return this.CurrencyMapper.toDTO(backingCurrency);
         } catch (err) {
             throw err;
         }

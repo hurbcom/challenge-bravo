@@ -10,7 +10,7 @@ export default class CurrencyQuoteAPI {
         return currenciesCodes.reduce((acc, value) => acc += `${value}-${backingCurrencyCode},`, this.baseURL).slice(0, -1);
     }
 
-    async listCurrenciesQuoteByCode (backingCurrencyCode, ...currenciesCodes) {
+    async listCurrenciesQuoteByCode (backingCurrencyCode, currenciesCodes) {
         const fetchURL = this._generateUrl(currenciesCodes, backingCurrencyCode);
 
         try {

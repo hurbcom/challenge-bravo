@@ -11,25 +11,6 @@ export default class Currency {
         return currencyDTO.currencyQuote;
     }
 
-    _groupCurrenciesCodesInfoByType (currenciesCodes, ficticiousCurrenciesList) {
-        const currenciesCodesObj = {
-            ficticious: [],
-            real: []
-        };
-        
-        currenciesCodes.reduce((acc, code) => {
-            const isCurrentCodeFicticious = ficticiousCurrenciesList.find(currency => currency.currencyCode === code );
-             
-            (isCurrentCodeFicticious)
-                ? acc.ficticious.push(code)
-                : acc.real.push(code);
-
-            return acc;
-        }, currenciesCodesObj);
-
-        return currenciesCodesObj;
-    }
-
     _calculatesConvertedAmount (amount, currencyQuoteFrom, currencyQuoteTo) {
         const amountAtBase = amount * currencyQuoteFrom;
         
@@ -81,45 +62,55 @@ export default class Currency {
         }
     }
 
-    async listFicticiousCurrenciesByCode (...currenciesCodes) {
+    async listFicticiousCurrenciesByCode (currenciesCodes) {
         try {
-            const currenciesList = await this.CurrencyDB.listCurrenciesQuoteByCode(...currenciesCodes);
-
-            return currenciesList.filter(currency => this._isFictitiousCurrency(currency));
+            const ficticiousCurrencies = await this.CurrencyDB.listCurrenciesWithQuoteByCode();    
+            
+            return ficticiousCurrencies.filter(currency => currenciesCodes.indexOf(currency.currencyCode) !== -1);
         } catch (err) {
             throw err;
         }
     }
 
-    listRealCurrenciesByCode (backingCurrencyCode, currenciesCodes) {
-        return this.CurrencyQuoteAPI.listCurrenciesQuoteByCode(backingCurrencyCode, ...currenciesCodes);
+    async listRealCurrenciesByCode (backingCurrencyCode, currenciesCodes) {
+        try {
+            const currenciesList = await this.CurrencyDB.listCurrenciesWithoutQuoteByCode();
+            const realCurrenciesCodes = currenciesList.map(currency => currency.currencyCode);
+
+            const realCurrencies = await this.CurrencyQuoteAPI.listCurrenciesQuoteByCode(backingCurrencyCode, realCurrenciesCodes);
+
+            return realCurrencies.filter(currency => currenciesCodes.indexOf(currency.currencyCode) !== -1);
+        } catch (err) {
+            throw err;
+        }
     }
 
     async retrieveCurrenciesInfo (...currenciesCodes) {
         try {
             const currenciesList = [];
             const backingCurrency = await this.listBackingCurrency();
-            const backingCurrencyIndex = currenciesCodes.indexOf(backingCurrency.currencyCode);
 
-            if (backingCurrencyIndex !== -1) {
+            if (currenciesCodes.includes(backingCurrency.currencyCode)) {
                 currenciesList.push(backingCurrency);
-                currenciesCodes.splice(backingCurrencyIndex, 1);
             }
 
-            const ficticiousCurrenciesList = await this.listFicticiousCurrenciesByCode(...currenciesCodes);
+            const ficticiousCurrenciesList = await this.listFicticiousCurrenciesByCode(currenciesCodes);
                 
-            if (ficticiousCurrenciesList.length == currenciesCodes.length) {
-                return currenciesList.concat(ficticiousCurrenciesList);
+            currenciesList.push(...ficticiousCurrenciesList);
+
+            if (currenciesList.length === currenciesCodes.length) {
+                return currenciesList;
             }
 
-            const currenciesCodesObj = this._groupCurrenciesCodesInfoByType(currenciesCodes, ficticiousCurrenciesList);
-            const realCurrenciesList = await this.listRealCurrenciesByCode(backingCurrency.currencyCode, currenciesCodesObj.real);
+            const realCurrenciesList = await this.listRealCurrenciesByCode(backingCurrency.currencyCode, currenciesCodes);
 
-            if (realCurrenciesList.length != currenciesCodesObj.real.length) {
+            currenciesList.push(...realCurrenciesList);
+
+            if (currenciesList.length !== currenciesCodes.length) {
                 throw { unknow_source: true };
             }
 
-            return currenciesList.concat(ficticiousCurrenciesList, realCurrenciesList);
+            return currenciesList;
         } catch (err) {
             throw err;
         }
