@@ -1,0 +1,756 @@
+{
+	"info": {
+		"_postman_id": "fc7b8e65-7895-4337-920c-70e42af2aa40",
+		"name": "challenge_bravo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET:/currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/currency",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"currency"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "SUCCESS",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/currency",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "60"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"3c-7hN7Mimg2RKVe8vNwJwh3kNnveI\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:17:46 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Success\",\n    \"data\": {\n        \"list\": [\n            \"USD\",\n            \"BRL\",\n            \"EUR\",\n            \"BTC\",\n            \"ETH\"\n        ]\n    }\n}"
+				},
+				{
+					"name": "INTERNAL_ERROR",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/currency",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "60"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"3c-7hN7Mimg2RKVe8vNwJwh3kNnveI\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:17:46 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Internal server error\",\n    \"error\": {}\n}"
+				}
+			]
+		},
+		{
+			"name": "GET:/currency/convert",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/currency/convert?from=&to=&amount=",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"currency",
+						"convert"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": ""
+						},
+						{
+							"key": "to",
+							"value": ""
+						},
+						{
+							"key": "amount",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "SUCCESS",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/currency/convert?from=BRL&to=USD&amount=12.99",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency",
+								"convert"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BRL"
+								},
+								{
+									"key": "to",
+									"value": "USD"
+								},
+								{
+									"key": "amount",
+									"value": "12.99"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "65"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"41-VOLMDPyF/6tN8bY79R/X1a6HVYA\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:21:46 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Success\",\n    \"data\": {\n        \"amount\": 2.59,\n        \"currencyCode\": \"USD\"\n    }\n}"
+				},
+				{
+					"name": "BAD_REQUEST",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/currency/convert?from=BR&amount=12,99",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency",
+								"convert"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BR"
+								},
+								{
+									"key": "to",
+									"value": "USD",
+									"disabled": true
+								},
+								{
+									"key": "amount",
+									"value": "12,99"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "200"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"c8-760cfMk3b7eAl8wUJnual/PF560\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:22:44 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid params\",\n    \"error\": {\n        \"errors\": [\n            \"from must be at least 3 characters\",\n            \"to is a required field\",\n            \"amount must be a `number` type, but the final value was: `NaN` (cast from the value `\\\"12,99\\\"`).\"\n        ]\n    }\n}"
+				},
+				{
+					"name": "INTERNAL_ERROR",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/currency/convert?from=BRL&to=USD&amount=12.99",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency",
+								"convert"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BRL"
+								},
+								{
+									"key": "to",
+									"value": "USD"
+								},
+								{
+									"key": "amount",
+									"value": "12.99"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "200"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"c8-760cfMk3b7eAl8wUJnual/PF560\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:22:44 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Internal server error\",\n    \"error\": {}\n}"
+				}
+			]
+		},
+		{
+			"name": "POST:/currency",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"currencyCode\": \"[CURRENCY_CODE]\",\r\n    \"currencyQuote\": \"[CURRENCY_QUOTE]\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/currency",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"currency"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "SUCCESS",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currencyCode\": \"HURB\",\r\n    \"currencyQuote\": 0.27\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/currency",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "86"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"56-+fd1VWKwnOCrXcgyr8/7bRzX81U\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:33:09 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Successfully created\",\n    \"data\": {\n        \"currencyCode\": \"HURB\",\n        \"currencyQuote\": 0.27\n    }\n}"
+				},
+				{
+					"name": "BAD_REQUEST",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currencyCode\": \"HU\",\r\n    \"currencyQuote\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/currency",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "125"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"7d-UEM95YKuCEzlqVMfdFBw3Ko4pcM\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:33:41 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid params\",\n    \"error\": {\n        \"errors\": [\n            \"currencyCode must be at least 3 characters\",\n            \"currencyQuote must be a positive number\"\n        ]\n    }\n}"
+				},
+				{
+					"name": "INTERNAL_ERROR",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currencyCode\": \"HURB\",\r\n    \"currencyQuote\": 0.27\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/currency",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "125"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"7d-UEM95YKuCEzlqVMfdFBw3Ko4pcM\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:33:41 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Internal server error\",\n    \"error\": {}\n}"
+				}
+			]
+		},
+		{
+			"name": "DELETE:/currency/:code",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"currencyCode\": \"HURB\",\r\n    \"currencyQuote\": 0.56\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/currency/:currencyCode",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"currency",
+						":currencyCode"
+					],
+					"variable": [
+						{
+							"key": "currencyCode",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "SUCCESS",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currencyCode\": \"HURB\",\r\n    \"currencyQuote\": 0.56\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/currency/:currencyCode",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency",
+								":currencyCode"
+							],
+							"variable": [
+								{
+									"key": "currencyCode",
+									"value": "HURB"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "52"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"34-LnqiKJR7BuA0PNWiSrbemU5fBdI\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:37:15 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Success\",\n    \"data\": {\n        \"currencyCode\": \"HURB\"\n    }\n}"
+				},
+				{
+					"name": "INTERNAL_ERROR",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currencyCode\": \"HURB\",\r\n    \"currencyQuote\": 0.56\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/currency/:currencyCode",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"currency",
+								":currencyCode"
+							],
+							"variable": [
+								{
+									"key": "currencyCode",
+									"value": "HURB"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "52"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"34-LnqiKJR7BuA0PNWiSrbemU5fBdI\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 30 Jun 2021 19:37:15 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Internal server error\",\n    \"error\": {}\n}"
+				}
+			]
+		}
+	]
+}
