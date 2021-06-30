@@ -1,77 +1,72 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
+Documentação - API Cotações
+Introdução
+API desenvolvida com o objetivo de permitir a conversão de valores entre moedas de acordo com a paridade cadastrada para o período cotado.
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+Sobre a API
+A API poderá ser consumida por qualquer tipo de aplicação. Ao ser chamada (request), a app origem deverá passar os seguintes parâmetros:
 
-A API deve, originalmente, converter entre as seguintes moedas:
+/:[moeda origem]/:[moeda destino]/:[valor a converter]
+Onde:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Moeda Origem: . Moeda para a qual deseja converter o valor informado.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Moeda Destino: . Moeda que será convertida de acordo com o valor a ser cotado.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Valor a Converter: . Montante a ser convertido de acordo com a paridade entre a "moeda origem" e a "moeda destino".
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Exemplo (Request):
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+http://localhost:3000/cotacao/api/cotar/EUR/BRL/10000
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
+A API devolverá (response) um objeto do tipo JSON, informando o valor convertido, indicando a cotação máxima e mínima para a data informada.
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+Exemplo (Response):
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+{
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+"cotacaomax": 654900,
+  "cotacaomin": 566100
+}
+Códigos de Status
+Código 200 : OK - Estas requisição foi bem sucedida.
+Código 204 : Não há conteúdo para enviar para esta solicitação.
+Código 400 : Requisição Inválida.
+Código 412 : Cabeçalhos pré-condições que o servidor não atende.
+Código 500 : O servidor encontrou uma situação com a qual não sabe lidar.
+GET
+API para conversão de moedas
+Make things easier for your teammates with a complete request description.
+Example
+Request
+javascript - jQuery
+var settings = {
+  "url": "http://localhost:3000/cotacao/api/cotar/BRL/EUR/1000",
+  "method": "GET",
+  "timeout": 0,
+};
 
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
-
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
-
-## Requisitos
-
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
-
-## Critério de avaliação
-
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
-
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+Response
+json
+{
+  "cotacaomax": "",
+  "cotacaomin": ""
+}
+JUMP TO
+Introduction
+Introdução
+Sobre a API
+Códigos de Status
+GET
+API para conversão de moedas
+ 
+GET http://localhost:3000/cotacao/api/listar/%20/%20/%20/%20
+500
+171 ms
+ 
+GET http://localhost:3000/cotacao/api/cotar/eur/brl/20%20
+500
+41 ms
+GET http://localhost:3000/cotacao/api/cotar/eur/brl/20%20
