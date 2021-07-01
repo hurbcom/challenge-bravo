@@ -10,5 +10,8 @@
         "vlucas/phpdotenv": "^5.3",
         "guzzlehttp/guzzle": "^7.0",
         "ext-mongodb": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
     }
 }

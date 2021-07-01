@@ -11,6 +11,7 @@ class Validator {
 
     public static function make($params, $rules) : ValidatorReturn
     {
+        self::$errors = [];
         self::$params = $params;
 
         foreach ($rules as $fieldName => $rule) {
@@ -66,6 +67,12 @@ class Validator {
             switch ($comparasion) {
                 case '<>':
                     if (self::$params[$fieldToCompare] == $valueToCompare || !empty(self::$params[$fieldName])) {
+                        continue 2;
+                    }
+                    $errorMessageParams = [$fieldName, $fieldToCompare, $comparasion, $valueToCompare];
+                    break;
+                case '=':
+                    if (self::$params[$fieldToCompare] != $valueToCompare || !empty(self::$params[$fieldName])) {
                         continue 2;
                     }
                     $errorMessageParams = [$fieldName, $fieldToCompare, $comparasion, $valueToCompare];
