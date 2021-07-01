@@ -23,9 +23,10 @@ class CurrencyController extends Controller
 
     public function store()
     {
-        $validator = Validator::make($this->request->all(['name', 'base', 'baseRate']), [
-            'name' => 'required|is_upercase',
-            'base' => 'required|is_upercase',
+        $params = $this->request->all(['name', 'base', 'baseRate']);
+        $validator = Validator::make($params, [
+            'name' => 'required|is_upercase|unique:currency',
+            'base' => 'is_upercase',
             'baseRate' => 'required_if:base<>USD|numeric'
         ]);
 
@@ -33,7 +34,12 @@ class CurrencyController extends Controller
             echo json_encode($validator->getErrors());
             exit;
         }
-        echo json_encode($this->model->insert($this->request->all(['name', 'base', 'baseRate'])));
+
+        if (empty($params['base'])) {
+            $params['base'] = 'USD';
+        }
+
+        echo json_encode($this->model->insert($params));
     }
 
     public function delete($name)
@@ -43,6 +49,16 @@ class CurrencyController extends Controller
 
     public function update($name)
     {
-        echo json_encode($this->model->where('name', $name)->update($this->request->all(['name', 'base'])));
+        $validator = Validator::make($this->request->all(['name', 'base', 'baseRate']), [
+            'name' => 'is_upercase|unique:currency',
+            'base' => 'is_upercase',
+            'baseRate' => 'required_if:base<>USD|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            echo json_encode($validator->getErrors());
+            exit;
+        }
+        echo json_encode($this->model->where('name', $name)->update($this->request->all(['name', 'base', 'baseRate'])));
     }
 }
