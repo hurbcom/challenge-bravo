@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Currency;
 use Src\Request;
+use Src\Validator;
 
 class CurrencyController extends Controller
 {
@@ -22,6 +23,16 @@ class CurrencyController extends Controller
 
     public function store()
     {
+        $validator = Validator::make($this->request->all(['name', 'base', 'baseRate']), [
+            'name' => 'required|is_upercase',
+            'base' => 'required|is_upercase',
+            'baseRate' => 'required_if:base<>USD|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            echo json_encode($validator->getErrors());
+            exit;
+        }
         echo json_encode($this->model->insert($this->request->all(['name', 'base', 'baseRate'])));
     }
 
