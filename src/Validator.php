@@ -81,9 +81,18 @@ class Validator {
 
     static function numeric($fieldName)
     {
-        if (is_numeric(self::$params[$fieldName])) {
+        if (empty(self::$params[$fieldName]) || is_numeric(self::$params[$fieldName])) {
             return false;
         }
         self::addErrors($fieldName, vsprintf('%s must be contain a numeric value', [$fieldName]));
+    }
+
+    static function unique($fieldName, $ruleParams)
+    {
+        $modelName = '\App\Models\\'.ucfirst($ruleParams);
+        if (!(new $modelName())->where($fieldName, self::$params[$fieldName])->exists()) {
+            return false;
+        }
+        self::addErrors($fieldName, vsprintf('%s must be a unique', [$fieldName]));
     }
 }
