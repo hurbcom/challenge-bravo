@@ -11,7 +11,7 @@ class BaseModel implements \JsonSerializable
     private $manager;
     private $wheres=[];
     protected $tablename;
-    protected $limit;
+    protected $options=[];
 
     protected $data;
     public function __get($name)
@@ -35,15 +35,13 @@ class BaseModel implements \JsonSerializable
 
     public function first()
     {
-        //TODO fazer com limit
-        return $this->get()[0];
+        return $this->limit(1)->get()[0];
     }
 
     public function get()
     {
         $this->manager = new Manager($this->getConnectionString());
-        $query = new Query($this->wheres, []);
-//        $query = new Query(['name' => ['$in' => ['BTC', 'EUR']]], []);
+        $query = new Query($this->wheres, $this->options);
         $cursor = $this->manager->executeQuery('db.'.$this->getTableName(), $query);
         $return = [];
         foreach ($cursor as $document) {
@@ -54,17 +52,21 @@ class BaseModel implements \JsonSerializable
 
     public function limit($number)
     {
-        $this->limit = $number;
+        $this->options['limit'] = $number;
         return $this;
     }
 
     public function insert($params)
     {
+        $params['_id'] = md5(uniqid(""));
         $this->manager = new Manager($this->getConnectionString());
         $bulk = new BulkWrite;
         $bulk->insert($params);
         $write = $this->manager->executeBulkWrite('db.'.$this->getTableName(), $bulk);
-        print_r($write);
+        if ($write->getInsertedCount() != 1) {
+            return false;
+        }
+        return $params;
     }
 
     public function whereIn($tableField, $tableValue)
@@ -94,7 +96,10 @@ class BaseModel implements \JsonSerializable
         $bulk = new BulkWrite;
         $bulk->delete($this->wheres, ['limit' => 1]);
         $result = $this->manager->executeBulkWrite('db.'.$this->getTableName(), $bulk);
-        print_r($result);
+        if ($result->getDeletedCount()!=1) {
+            return false;
+        }
+        return true;
     }
 
     private function getTableName()
