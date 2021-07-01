@@ -61,6 +61,9 @@ class ExchangeRate
         $ratesFrom = $this->getRates();
         if (!$ratesFrom) {
             $currencyFrom = (new Currency())->where('name', $this->from->name)->first();
+            if (!$currencyFrom) {
+                throw new \Exception('Currency From not found');
+            }
             $baseAmount = (new ExchangeRate($this->service))
                 ->from(new Currency(['name' => $currencyFrom->base]))
                 ->to($this->to)
@@ -71,6 +74,9 @@ class ExchangeRate
 
         if (!$ratesFrom->{strtolower($this->to->name)}) {
             $currencyTo = (new Currency())->where('name', $this->to->name)->first();
+            if (!$currencyTo) {
+                throw new \Exception('Currency To not found');
+            }
             $baseAmount = (new ExchangeRate($this->service))
                 ->from($this->from)
                 ->to(new Currency(['name' => $currencyTo->base]))
