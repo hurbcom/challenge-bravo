@@ -33,6 +33,11 @@ class BaseModel implements \JsonSerializable
         }
     }
 
+    public function exists()
+    {
+        return !empty($this->first());
+    }
+
     public function first()
     {
         return $this->limit(1)->get()[0];
@@ -83,6 +88,9 @@ class BaseModel implements \JsonSerializable
 
     public function update($params)
     {
+        if (empty($params)) {
+            return false;
+        }
         $this->manager = new Manager($this->getConnectionString());
         $bulk = new BulkWrite;
         $bulk->update($this->wheres, ['$set' => $params]);
