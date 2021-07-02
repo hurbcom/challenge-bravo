@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Currency;
+use App\Services\ExchangeService;
 use Src\Request;
 use Src\Validator;
 
@@ -18,7 +19,24 @@ class CurrencyController extends Controller
 
     public function index()
     {
-        echo json_encode($this->model->get());
+        $return = [];
+        $apiRates = (new ExchangeService())->latest();
+        foreach ($apiRates as $currName => $base) {
+            if (isset($this->request->base) && strtoupper($this->request->base) != 'USD') {
+                continue;
+            }
+            if (isset($this->request->name) && strtoupper($currName) != strtoupper($this->request->name)) {
+                continue;
+            }
+            $return[] = ['name' => strtoupper($currName), 'base' => 'USD', 'baseRate' => $base];
+        }
+        $model = $this->model;
+        if ($this->request->all(['name', 'base'])) {
+            foreach ($this->request->all(['name', 'base']) as $field => $value) {
+                $model = $model->where($field, $value);
+            }
+        }
+        echo json_encode($model->get()+$return);
     }
 
     public function store()
