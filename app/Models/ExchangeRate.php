@@ -43,7 +43,7 @@ class ExchangeRate
         return $this;
     }
 
-    private function getRates()
+    protected function getRates()
     {
         if ($this->redis->exists($this->from->name)) {
             return json_decode($this->redis->get($this->from->name));

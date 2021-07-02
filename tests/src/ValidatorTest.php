@@ -8,10 +8,9 @@ class ValidatorTest extends TestCase
     /**
      * @dataProvider additionProvider
      */
-    public function testAdd($params, $rules, $expected)
+    public function testErrors($params, $rules, $expected)
     {
         $validator = Validator::make($params, $rules);
-//        print_r(json_encode($validator->getErrors()));
         $errors = json_encode($validator->getErrors());
         $this->assertEquals($expected, $errors);
     }
