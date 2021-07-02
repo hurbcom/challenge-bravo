@@ -1,4 +1,6 @@
 .idea
+.idea/
 /venv
 /postgres
 __paycahe__
+__paycache__/
