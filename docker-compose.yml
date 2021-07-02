@@ -1,6 +1,19 @@
 version: '3.7'
 
 services:
+  nginx:
+    container_name: web
+    restart: unless-stopped
+    image: nginx
+    volumes:
+        - ./nginx/prod/core:/etc/nginx/sites-enabled/core
+        - static_volume:/app/static/
+    ports:
+        - "80:80"
+    depends_on:
+        - back
+    tty: true
+
   back:
     restart: "no"
     build:
@@ -15,28 +28,12 @@ services:
     env_file:
         - dev.env
     tty: true
-#    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     volumes:
         - ./:/app
-#    networks:
-#        - dev-network
+        - static_volume:/app/static
     depends_on:
         - db
-  nginx:
-      container_name: web
-      restart: unless-stopped
-      image: nginx
-      volumes:
-          - ./nginx/prod/nginx.conf:/etc/nginx/conf.d/default.conf
-          - static_volume:/app/static/
-          - media_volume:/app/media
-      ports:
-          - "80:80"
-      depends_on:
-          - back
-#      networks:
-#          - dev-network
-      tty: true
 
   db:
       container_name: postgres_container
@@ -52,15 +49,10 @@ services:
 #      ports:
 #          - "5432:5432"
       restart: unless-stopped
-#      networks:
-#          - dev-network
       tty: true
 
-#networks:
-#  dev-network:
-#    driver: bridge
 
 volumes:
     static_volume:
     postgres_data:
-    media_volume:
+    media_data:

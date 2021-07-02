@@ -31,8 +31,8 @@ class ConvertService:
         if coin_from.amount_coint_bslt == 1 and coin_to.amount_coint_bslt == 1 and coin_from.bslt == coin_to.bslt:
             coin_from_prince = Decimal(coin_from.price) / Decimal(coin_from.amount_coint_bslt)
             coin_to_price = Decimal(coin_to.price) / Decimal(coin_from.amount_coint_bslt)
-            to_bslt = Decimal(amount) / Decimal(coin_from_prince)
-            to_final = Decimal(to_bslt) * Decimal(coin_to_price)
+            to_bslt = Decimal(amount) * Decimal(coin_from_prince)
+            to_final = Decimal(to_bslt) / Decimal(coin_to_price)
 
             return {
                 'from': coin_from.coin,

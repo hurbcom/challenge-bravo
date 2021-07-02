@@ -7,7 +7,6 @@ from drf_yasg import openapi
 
 class ConvertViewSet(viewsets.ViewSet):
 
-    lastro = 'USD'
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

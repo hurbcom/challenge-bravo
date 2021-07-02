@@ -1,4 +1,4 @@
-#!/home/david/Documentos/challenge-bravo/back-end/challenge-bravo/venv/bin/python
+#!/app/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

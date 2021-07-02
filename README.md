@@ -30,8 +30,11 @@ exemplo do cadastro de uma moeda com lastro no USD:
         },
 Existe um exemplo de payload de cadastro no diretŕio "postman_payload", que poderá ser impotando para o seu Postman
 
+OBS: Existem dois metodos de update, uma que atuliza uma lista de payload e outro que atualiza apenas uma moeda pelo seu id
+
 #Documentação
-Para ver a documentação da API acesse http://localhost:8000/
+sh docke.sh
+Para ver a documentação da API acesse http://localhost:8001/
 
 ## Como iniciar a aplicação
 para iniciar a aplicação rode no terminal o comando "sh upDev.sh", este arquivo chama o docker-compose e sobe os containers docker

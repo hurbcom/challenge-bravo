@@ -1,5 +1,5 @@
-django==3.2.5
-djangorestframework==3.12.4
+django
+djangorestframework
 markdown
 django-filter
 djangorestframework-jwt
@@ -15,3 +15,4 @@ gunicorn
 coreapi
 pygments
 drf-yasg
+gunicorn
