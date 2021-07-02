@@ -1,5 +1,5 @@
-django
-djangorestframework
+django==3.2.5
+djangorestframework==3.12.4
 markdown
 django-filter
 djangorestframework-jwt

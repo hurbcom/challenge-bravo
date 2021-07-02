@@ -1,6 +1,10 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
 ##Escolha Técnica
+Versão do Python é a 3.8
+Versão do Django é a 3.2.5
+Versão do Django REST Framework é a 3.12.4
+
 A aplicação foi desenvolvida com Django REST Framework
 O banco de dados em postgreSQL
 A documentação foi desenvolvida em Swagger
@@ -38,11 +42,15 @@ OBS: Pode ser que seja necessário parar o postgres na sua maquina local ou outr
 
 Os container podem demorar uns 20 segundos para subir e rodar a aplicação completa, mesmo com os conatainer em up, o Gunicor pode ainda estar subindo dentro do container.
 
-Apos subir a aplicação rode a requisição POST localhost:8000/api/v1/coin/create/ com as moedas inicias que pode ser importada pelo arquivo no diretório
+Apos subir a aplicação rode a requisição POST localhost:8000/api/v1/coin/create/ com as moedas inicias que podem ser importadas pelo arquivo no diretório
 postman_payload
-
 
 ##rodar os testes
 sudo docker-compose exec back python3 manage.py test
+
+##O que faltou ou deveria melhorar
+Não possui sistema de autenticação
+Maior cobertura de testes
+Uma melhor organização dos container, separar o Gunicor em um container separado por exemplo
 
 
