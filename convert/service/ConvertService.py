@@ -2,6 +2,7 @@ from coin.model.CoinModel import CoinModel
 from coin.repository.CoinRepository import CoinRepository
 from decimal import Decimal
 
+
 class ConvertService:
 
     def __init__(self):
@@ -14,13 +15,14 @@ class ConvertService:
         while res.bslt != 'USD':
             res = self._coin_repository.list_for_initials(param)
 
-
         return res
 
-    def convert(self, params: dict) -> Decimal:
+    def convert(self, params: dict) -> dict:
 
         if Decimal(params['amount']) < 0:
-            return Decimal(-1)
+            return {
+                'msg': 'Valor não pode ser convertido'
+            }
 
         amount = params['amount']
         coin_from = self._coin_repository.list_for_initials(coin_initials=params['from'])
@@ -31,15 +33,35 @@ class ConvertService:
             coin_to_price = Decimal(coin_to.price) / Decimal(coin_from.amount_coint_bslt)
             to_bslt = Decimal(amount) / Decimal(coin_from_prince)
             to_final = Decimal(to_bslt) * Decimal(coin_to_price)
-            return to_final
+
+            return {
+                'from': coin_from.coin,
+                'to': coin_to.coin,
+                'final': to_final,
+                'msg': 'success'
+            }
 
         if coin_from.bslt == coin_to.coin_initials:
             coin_from_prince = Decimal(coin_from.price) / Decimal(coin_from.amount_coint_bslt)
             to_final = Decimal(amount) * Decimal(coin_from_prince)
-            return to_final
+            return {
+                'from': coin_from.coin,
+                'to': coin_to.coin,
+                'final': to_final,
+                'msg': 'success'
+            }
 
         if coin_from.coin_initials == coin_to.bslt:
             coin_to_price = Decimal(amount) / Decimal(coin_to.price)
-            return coin_to_price
+            return {
+                'from': coin_from.coin,
+                'to': coin_to.coin,
+                'final': coin_to_price,
+                'msg': 'success'
+            }
 
-        return Decimal(-1)
+        return {
+            'from': coin_from.coin,
+            'to': coin_to.coin,
+            'msg': 'success'
+        }

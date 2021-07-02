@@ -1,8 +1,10 @@
+from rest_framework.exceptions import APIException
 from coin.api.CoinSerializer import CoinSerializer
 from coin.model.CoinModel import CoinModel
 from coin.repository.CoinRepository import CoinRepository
+from core.service.PaginatorService import PaginatorService
 
-class CoinService:
+class CoinService(PaginatorService):
 
     def __init__(self):
         self._coin_repository = CoinRepository()
@@ -15,31 +17,36 @@ class CoinService:
             serializer = CoinSerializer(data=r, many=False)
             serializer.is_valid(raise_exception=True)
             res = self._coin_repository.create(serializer.data)
+        return True
 
-        return params.data
-
-    def list(self, params):
+    def list(self, param):
         query = self._coin_repository.list()
-        serializer = CoinSerializer(query, many=True)
-        return serializer.data
+        pages = self.paginar(query, CoinSerializer, param)
+        return pages
 
-    def update(self, params, pk) -> bool:
-        coin = self._coin_repository.list_for_coin(params.data['coin'])
-        serializer = CoinSerializer(coin, data=params.data)
-        serializer.is_valid(raise_exception=True)
-        res = self._coin_repository.update(params.data, params.data['coin'])
-        return True
-
-    def update_coin(self, params) -> bool:
-        for r in params.data:
-            coin = self._coin_repository.list_for_coin(r['coin'])
-            serializer = CoinSerializer(coin, data=r)
+    def update_for_pk(self, params, pk) -> bool:
+        coin = self._coin_repository.get_for_pk(pk)
+        try:
+            serializer = CoinSerializer(coin, data=params.data)
             serializer.is_valid(raise_exception=True)
-            res = self._coin_repository.update_for_coin(r, r['coin'])
-        return True
+            res = self._coin_repository.update_for_pk(params.data, pk)
+            return True
+        except Exception as e:
+            raise APIException('Erro ao atualizar')
 
-    def delete(self, coin: str) -> bool:
-        res = self._coin_repository.delete(coin)
+    def update_all_coin(self, params) -> bool:
+        try:
+            for r in params.data:
+                coin = self._coin_repository.list_for_coin(r['coin'])
+                serializer = CoinSerializer(coin, data=r)
+                serializer.is_valid(raise_exception=True)
+                res = self._coin_repository.update_all_coin(r, r['coin'])
+            return True
+        except Exception as error:
+            raise APIException(error)
+
+    def delete(self, pk) -> bool:
+        res = self._coin_repository.delete(pk)
         return True
 
     def get_for_bslt(self, param: str) -> CoinModel:

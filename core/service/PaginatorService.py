@@ -1,3 +1,4 @@
+from rest_framework.exceptions import APIException
 from rest_framework.pagination import PageNumberPagination
 
 class PaginatorService:

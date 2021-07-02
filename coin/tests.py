@@ -18,6 +18,7 @@ class CointTests(APITestCase, URLPatternsTestCase):
         {
             "coin": "DOLLAR",
             "coin_initials": "USD",
+            "amount_coint_bslt": 1,
             "price": 1,
             "country": "United State of America",
             "country_initials": "USA",
@@ -27,6 +28,7 @@ class CointTests(APITestCase, URLPatternsTestCase):
         {
             "coin": "REAL",
             "coin_initials": "BRL",
+            "amount_coint_bslt": 1,
             "price": 0.2029,
             "country": "BRAZIL",
             "country_initials": "BR",
@@ -37,6 +39,7 @@ class CointTests(APITestCase, URLPatternsTestCase):
             "coin": "EURO",
             "coin_initials": "EUR",
             "price": 1.1925,
+            "amount_coint_bslt": 1,
             "country": "EUROPEN UNION",
             "country_initials": "EU",
             "bslt": "USD"
@@ -46,6 +49,7 @@ class CointTests(APITestCase, URLPatternsTestCase):
             "coin": "BITCOIN",
             "coin_initials": "BTC",
             "price": 34713.90,
+            "amount_coint_bslt": 1,
             "country": "GLOBAL",
             "country_initials": "GB",
             "bslt": "USD"
@@ -55,6 +59,7 @@ class CointTests(APITestCase, URLPatternsTestCase):
             "coin": "ETHERIUN",
             "coin_initials": "ETH",
             "price": 1991.50,
+            "amount_coint_bslt": 1,
             "country": "GLOBAL",
             "country_initials": "GB",
             "bslt": "USD"
@@ -65,6 +70,7 @@ class CointTests(APITestCase, URLPatternsTestCase):
             "price": 0.1433,
             "coin": "BOLIVIANO",
             "coin_initials": "BOB",
+            "amount_coint_bslt": 1,
             "country": "BOLIVIA",
             "country_initials": "BL",
             "bslt": "USD"
@@ -84,14 +90,14 @@ class CointTests(APITestCase, URLPatternsTestCase):
         self.test_create_coin()
         coin = CoinModel.objects.all()
         factory = APIRequestFactory()
-        view = CointViewSet.as_view({'put': 'update_coin'})
+        view = CointViewSet.as_view({'put': 'update_all_coin'})
         request = factory.put('coin/update_coin/', self._data)
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_list(self):
         view = CointViewSet.as_view({'get': 'list'})
-        request = self._factory.get('coin/list/')
+        request = self._factory.get('coin/list/?page=1&size=20')
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -100,5 +106,5 @@ class CointTests(APITestCase, URLPatternsTestCase):
         coin = CoinModel.objects.all()
         view = CointViewSet.as_view({'delete': 'delete'})
         request = self._factory.delete('coin/delete/', self._data)
-        response = view(request,coin.first().coin_initials)
+        response = view(request, coin.first().id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

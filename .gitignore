@@ -1,1 +1,4 @@
-venv
+.idea
+/venv
+/postgres
+__paycahe__

@@ -1,3 +1,6 @@
+from rest_framework import status
+from rest_framework.exceptions import APIException
+
 from coin.model.CoinModel import CoinModel
 
 class CoinRepository:
@@ -6,21 +9,25 @@ class CoinRepository:
         res = CoinModel.objects.create(**params)
         return res
 
-    def list(self, params=None):
+    def list(self):
         query = CoinModel.objects.all()
         return query
 
-    def update(self, params=None, coin=None):
+    def update_for_pk(self, params: list, pk: str):
+        query = CoinModel.objects.filter(pk=pk).update(**params)
+        return query
+
+    def update_all_coin(self, params: list, coin=None):
         query = CoinModel.objects.filter(coin=coin).update(**params)
         return query
 
-    def update_for_coin(self, params=None, coin=None):
-        query = CoinModel.objects.filter(coin=coin).update(**params)
-        return query
+    def get_for_pk(self, pk):
+        try:
+            query = CoinModel.objects.get(pk=pk)
+            return query
+        except Exception as e:
+            raise APIException('Moeda não cadastrada.')
 
-    def list_for_pk(self, pk):
-        query = CoinModel.objects.get(pk=pk)
-        return query
 
     def list_for_coin(self, coin):
         query = CoinModel.objects.get(coin=coin)
@@ -34,8 +41,10 @@ class CoinRepository:
         query = CoinModel.objects.get(coin_initials=coin_initials)
         return query
 
-    def delete(self, coin: str) -> bool:
-        query = CoinModel.objects.get(coin_initials=coin)
+    def delete(self, pk) -> bool:
+        query = CoinModel.objects.filter(pk=pk)
+        if len(query) == 0:
+            raise APIException('Moeda não cadastrada.')
         query.delete()
         return True
 
