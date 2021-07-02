@@ -8,7 +8,7 @@ class ValidatorTest extends TestCase
     /**
      * @dataProvider additionProvider
      */
-    public function testErrors($params, $rules, $expected)
+    public function testValidators($params, $rules, $expected)
     {
         $validator = Validator::make($params, $rules);
         $errors = json_encode($validator->getErrors());
@@ -29,7 +29,36 @@ class ValidatorTest extends TestCase
             [['field' => 'fo'], ['field2' => 'required_if:field=foo'], '[]'],
             [['field' => 'foo'], ['field2' => 'required_if:field=foo'], '{"field2":["field2 is required if field = foo"]}'],
             [['field' => 'foo'], ['field2' => 'required_if:field<>fo'], '{"field2":["field2 is required if field <> fo"]}'],
-            //TODO testar unique
         ];
+    }
+
+    public function testUniqueValidatorReturnErrorIfFieldExists()
+    {
+        $mock = $this->getMockBuilder(\App\Models\Currency::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['exists'])
+            ->getMock();
+        $mock->expects($this->once())
+            ->method('exists')
+            ->will($this->returnValue(true));
+        $validator = Validator::attach($mock);
+
+        $validatorReturn = Validator::make(['field' => 'foo'], ['field' => 'unique:currency']);
+        $this->assertEquals('{"field":["field must be a unique"]}', json_encode($validatorReturn->getErrors()));
+    }
+
+    public function testUniqueValidatorPassIfFieldNotExists()
+    {
+        $mock = $this->getMockBuilder(\App\Models\Currency::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['exists'])
+            ->getMock();
+        $mock->expects($this->once())
+            ->method('exists')
+            ->will($this->returnValue(false));
+        $validator = Validator::attach($mock);
+
+        $validatorReturn = Validator::make(['field' => 'foo'], ['field' => 'unique:currency']);
+        $this->assertEquals('[]', json_encode($validatorReturn->getErrors()));
     }
 }
