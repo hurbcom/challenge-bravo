@@ -49,8 +49,8 @@ services:
       volumes:
           - postgres_data:/data/postgres
           - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      ports:
-          - "5432:5432"
+#      ports:
+#          - "5432:5432"
       restart: unless-stopped
 #      networks:
 #          - dev-network

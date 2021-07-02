@@ -2,7 +2,6 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
-
 from coin.api.CoinSerializer import CoinSerializer
 from core.api.CoreViewSets import CoreViewSets
 from coin.service.CoinService import CoinService

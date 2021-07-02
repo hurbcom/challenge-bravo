@@ -83,7 +83,7 @@ DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
-    # },
+    # },    #     'PASSWORD': '123',
 
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
@@ -94,23 +94,22 @@ DATABASES = {
     #     'PORT': '5432',
     # }
 
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'admin',
-        'PASSWORD': '123',
-        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
-        'PORT': '5432',
-    }
-
-    # "default": {
-    #     "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.postgresql"),
-    #     "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "postgres")),
-    #     "USER": os.environ.get("SQL_USER", "postgres"),
-    #     "PASSWORD": os.environ.get("SQL_PASSWORD", "123"),
-    #     "HOST": os.environ.get("SQL_HOST", "db"),
-    #     "PORT": os.environ.get("SQL_PORT", "5432"),
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'postgres',
+    #     'USER': 'admin',
+    #     'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
+    #     'PORT': '5432',
     # }
+
+    "default": {
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.postgresql"),
+        "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "postgres")),
+        "USER": os.environ.get("SQL_USER", "postgres"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "123"),
+        "HOST": os.environ.get("SQL_HOST", "db"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
+    }
 
 }
 
