@@ -34,7 +34,7 @@ OBS: Existem dois metodos de update, uma que atuliza uma lista de payload e outr
 
 #Documentação
 sh docke.sh
-Para ver a documentação da API acesse http://localhost:8001/
+Para ver a documentação da API acesse http://localhost:9000/
 
 ## Como iniciar a aplicação
 para iniciar a aplicação rode no terminal o comando "sh upDev.sh", este arquivo chama o docker-compose e sobe os containers docker
