@@ -60,32 +60,40 @@ class ExchangeRate
     {
         $ratesFrom = $this->getRates();
         if (!$ratesFrom) {
-            $currencyFrom = (new Currency())->where('name', $this->from->name)->first();
-            if (!$currencyFrom) {
-                throw new \Exception('Currency From not found');
-            }
-            $baseAmount = (new ExchangeRate($this->service))
-                ->from(new Currency(['name' => $currencyFrom->base]))
-                ->to($this->to)
-                ->amount(1)
-                ->get()['data']['exchange'];
-            return $this->response($baseAmount*$currencyFrom->baseRate);
+            return $this->getExchangeToUserCreatedCurrency($this->from, 'from');
         }
 
         if (!$ratesFrom->{strtolower($this->to->name)}) {
-            $currencyTo = (new Currency())->where('name', $this->to->name)->first();
-            if (!$currencyTo) {
-                throw new \Exception('Currency To not found');
-            }
-            $baseAmount = (new ExchangeRate($this->service))
-                ->from($this->from)
-                ->to(new Currency(['name' => $currencyTo->base]))
-                ->amount(1)
-                ->get()['data']['exchange'];
-            return $this->response($baseAmount*$currencyTo->baseRate);
+            return $this->getExchangeToUserCreatedCurrency($this->to, 'to');
         }
 
         return $this->response($ratesFrom->{strtolower($this->to->name)});
+    }
+
+    protected function getExchangeToUserCreatedCurrency(Currency $currency, $rateSearched)
+    {
+        $BdCurrency = (new Currency())->where('name', $currency->name)->first();
+        if (!$BdCurrency) {
+            throw new \Exception('Currency '.$currency->name.' not found');
+        }
+        $baseAmount = $this->getBaseAmount($BdCurrency, $rateSearched);
+        return $this->response($baseAmount*$BdCurrency->baseRate);
+    }
+
+    protected function getBaseAmount(Currency $currency, $rateSearched)
+    {
+        if ($rateSearched == 'from') {
+            return (new ExchangeRate($this->service))
+                ->from(new Currency(['name' => $currency->base]))
+                ->to($this->to)
+                ->amount(1)
+                ->get()['data']['exchange'];
+        }
+        return (new ExchangeRate($this->service))
+            ->from($this->from)
+            ->to(new Currency(['name' => $currency->base]))
+            ->amount(1)
+            ->get()['data']['exchange'];
     }
 
     private function response($exchangeRate)
