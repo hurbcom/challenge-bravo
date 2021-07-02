@@ -70,12 +70,18 @@ class ExchangeRate
         return $this->response($ratesFrom->{strtolower($this->to->name)});
     }
 
-    protected function getExchangeToUserCreatedCurrency(Currency $currency, $rateSearched)
+    protected function getCurrencyByName($name)
     {
-        $BdCurrency = (new Currency())->where('name', $currency->name)->first();
-        if (!$BdCurrency) {
+        $currency = (new Currency())->where('name', $name)->first();
+        if (!$currency) {
             throw new \Exception('Currency '.$currency->name.' not found');
         }
+        return $currency;
+    }
+
+    protected function getExchangeToUserCreatedCurrency(Currency $currency, $rateSearched)
+    {
+        $BdCurrency = $this->getCurrencyByName($currency->name);
         $baseAmount = $this->getBaseAmount($BdCurrency, $rateSearched);
         return $this->response($baseAmount*$BdCurrency->baseRate);
     }
