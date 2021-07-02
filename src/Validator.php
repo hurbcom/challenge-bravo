@@ -8,6 +8,7 @@ class Validator {
 
     static $errors=[];
     static $params=[];
+    static $model;
 
     public static function make($params, $rules) : ValidatorReturn
     {
@@ -94,10 +95,23 @@ class Validator {
         self::addErrors($fieldName, vsprintf('%s must be contain a numeric value', [$fieldName]));
     }
 
+    static function attach($model)
+    {
+        self::$model = $model;
+    }
+
+    static function getModel($modelName)
+    {
+        if (self::$model) {
+            return self::$model;
+        }
+        $modelName = '\App\Models\\'.ucfirst($modelName);
+        return new $modelName();
+    }
+
     static function unique($fieldName, $ruleParams)
     {
-        $modelName = '\App\Models\\'.ucfirst($ruleParams);
-        if (!(new $modelName())->where($fieldName, self::$params[$fieldName])->exists()) {
+        if (!self::getModel($ruleParams)->where($fieldName, self::$params[$fieldName])->exists()) {
             return false;
         }
         self::addErrors($fieldName, vsprintf('%s must be a unique', [$fieldName]));
