@@ -9,7 +9,6 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 class CointViewSet(CoreViewSets):
-    serializer_class = CoinSerializer
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "8dfe8f8f-aba6-44c9-8b48-e73f448861a1",
+		"name": "convert_coin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "coin",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"coin\": \"DOLLAR\",\n        \"coin_initials\": \"USD\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 1.0,\n        \"country\": \"United State of America\",\n        \"country_initials\": \"USA\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"REAL\",\n        \"coin_initials\": \"BRL\",\n            \n        \"price\": 4.96,\n        \"country\": \"BRAZIL\",\n        \"country_initials\": \"BR\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"EURO\",\n        \"coin_initials\": \"EUR\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 0.84,\n        \"country\": \"EUROPEN UNION\",\n        \"country_initials\": \"EU\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"BITCOIN\",\n        \"coin_initials\": \"BTC\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 0.000028,\n        \"country\": \"GLOBAL\",\n        \"country_initials\": \"GB\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"ETHERIUN\",\n        \"coin_initials\": \"ETH\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 0.00046,\n        \"country\": \"GLOBAL\",\n        \"country_initials\": \"GB\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"BOLIVIANO\",\n        \"coin_initials\": \"BL\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 6.92,\n        \"country\": \"GLOBAL\",\n        \"country_initials\": \"GB\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"AFEGANE\",\n        \"coin_initials\": \"AFN\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 79.50,\n        \"country\": \"AFEGANISTÂO\",\n        \"country_initials\": \"AF\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"GTA$\",\n        \"coin_initials\": \"GTA$\",\n        \"amount_coint_bslt\": 1250000,\n        \"price\": 83.50,\n        \"country\": \"global\",\n        \"country_initials\": \"GB\",\n        \"bslt\": \"BRL\"\n    },\n\n    {\n        \"coin\": \"DVD\",\n        \"coin_initials\": \"DVD\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 0.50,\n        \"country\": \"global\",\n        \"country_initials\": \"BR\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"ST\",\n        \"coin_initials\": \"ST\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 2.0,\n        \"country\": \"global\",\n        \"country_initials\": \"BR\",\n        \"bslt\": \"BRL\"\n    }\n\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/coin/create/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"coin",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/coin/list/?page=1&size=4",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"coin",
+								"list",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_pk",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \"coin\": \"DOLLAR\",\n    \"coin_initials\": \"USD\",\n    \"amount_coint_bslt\": 1,\n    \"price\": 1.0,\n    \"country\": \"United State of America\",\n    \"country_initials\": \"USA\",\n    \"bslt\": \"USD\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/coin/update/16/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"coin",
+								"update",
+								"16",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_coin",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"coin\": \"DOLLAR\",\n        \"coin_initials\": \"USD\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 1,\n        \"country\": \"United State of America\",\n        \"country_initials\": \"USA\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"REAL\",\n        \"coin_initials\": \"BRL\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 4.96,\n        \"country\": \"BRAZIL\",\n        \"country_initials\": \"BR\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"EURO\",\n        \"coin_initials\": \"EUR\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 0.84,\n        \"country\": \"EUROPEN UNION\",\n        \"country_initials\": \"EU\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"BITCOIN\",\n        \"coin_initials\": \"BTC\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 0.000028,\n        \"country\": \"GLOBAL\",\n        \"country_initials\": \"GB\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"ETHERIUN\",\n        \"coin_initials\": \"ETH\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 0.00046,\n        \"country\": \"GLOBAL\",\n        \"country_initials\": \"GB\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"BOLIVIANO\",\n        \"coin_initials\": \"BL\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 6.92,\n        \"country\": \"GLOBAL\",\n        \"country_initials\": \"GB\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"AFEGANE\",\n        \"coin_initials\": \"AFN\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 79.50,\n        \"country\": \"AFEGANISTÂO\",\n        \"country_initials\": \"AF\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"GTA$\",\n        \"coin_initials\": \"GTA$\",\n        \"amount_coint_bslt\": 1250000,\n        \"price\": 83.50,\n        \"country\": \"global\",\n        \"country_initials\": \"GB\",\n        \"bslt\": \"BRL\"\n    },\n\n    {\n        \"coin\": \"DVD\",\n        \"coin_initials\": \"DVD\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 0.50,\n        \"country\": \"global\",\n        \"country_initials\": \"BR\",\n        \"bslt\": \"USD\"\n    },\n\n    {\n        \"coin\": \"ST\",\n        \"coin_initials\": \"ST\",\n        \"amount_coint_bslt\": 1,\n        \"price\": 2,\n        \"country\": \"global\",\n        \"country_initials\": \"BR\",\n        \"bslt\": \"BRL\"\n    }\n\n]"
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/coin/update_coin/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"coin",
+								"update_coin",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_coin",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/coin/delete/46/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"coin",
+								"delete",
+								"46",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "convert",
+			"item": [
+				{
+					"name": "convert",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/convert/?from=BRL&to=USD&amount=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"convert",
+								""
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BRL"
+								},
+								{
+									"key": "to",
+									"value": "USD"
+								},
+								{
+									"key": "amount",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
