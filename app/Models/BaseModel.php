@@ -95,7 +95,10 @@ class BaseModel implements \JsonSerializable
         $bulk = new BulkWrite;
         $bulk->update($this->wheres, ['$set' => $params]);
         $result = $this->manager->executeBulkWrite('db.'.$this->getTableName(), $bulk);
-        print_r($result);
+        if ($result->getModifiedCount() != 1) {
+            return false;
+        }
+        return true;
     }
 
     public function delete()

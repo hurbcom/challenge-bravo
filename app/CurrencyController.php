@@ -77,6 +77,12 @@ class CurrencyController extends Controller
             echo json_encode($validator->getErrors());
             exit;
         }
-        echo json_encode($this->model->where('name', $name)->update($this->request->all(['name', 'base', 'baseRate'])));
+        $currency = $this->model->where('name', $name)->first();
+        if (!$currency) {
+            throw new \Exception('Currency not found');
+        }
+        if ($this->model->where('name', $name)->update($this->request->all(['name', 'base', 'baseRate']))) {
+            echo json_encode(array_merge(json_decode(json_encode($currency), true), $this->request->all(['name', 'base', 'baseRate'])));
+        }
     }
 }
