@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13.3
+    container_name: "database"
+    env_file:
+      - build/.env.db
+    networks:
+      - default
+    ports:
+      - "5432:5432"
+    volumes:
+        - db-data:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "rest-api"
+    env_file: build/.env
+    depends_on:
+      - db
+    networks:
+      - default
+    ports:
+    - "5000:5000"
+volumes:
+    db-data:
+
+networks:
+    default:
+        driver: bridge
