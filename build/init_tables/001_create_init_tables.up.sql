@@ -1,4 +1,4 @@
-CREATE TABLE currencies (
+CREATE TABLE IF NOT EXISTS currencies (
     id SERIAL PRIMARY KEY,
     symbol VARCHAR(3) NOT NULL UNIQUE,
     value decimal NOT NULL

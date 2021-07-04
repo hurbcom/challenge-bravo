@@ -12,6 +12,9 @@ services:
       - "5432:5432"
     extra_hosts:
         - "host.docker.internal:172.17.0.1"
+    volumes:
+        - ./build/init_tables/001_create_init_tables.up.sql:/docker-entrypoint-initdb.d/001_create_init_tables.up.sql
+        - ./build/init_tables/001_create_init_tables.down.sql:/docker-entrypoint-initdb.d/001_create_init_tables.down.sql
     restart: unless-stopped
 
   server:
