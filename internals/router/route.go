@@ -13,7 +13,7 @@ func SetupRoutes (app *fiber.App) {
     api.Get("/currency", handlers.GetCurrencies)
 
     api.Post("/currency/new", handlers.PostCurrency)
-    api.Get("/currency/:id", handlers.GetCurrency)
-    api.Put("/currency/:id", handlers.PutCurrency)
-    api.Delete("/currency/:id", handlers.DeleteCurrency)
+    api.Get("/currency/:symbol", handlers.GetCurrencyFromSymbol)
+    api.Put("/currency/:symbol", handlers.PutCurrency)
+    api.Delete("/currency/:symbol", handlers.DeleteCurrency)
 }

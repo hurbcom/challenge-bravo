@@ -1,38 +1,33 @@
-package db
+package database
 
 import (
     "database/sql"
     "fmt"
+    _ "github.com/lib/pq"
     "log"
     "os"
     "strconv"
-
-    _ "github.com/lib/pq"
 )
 
-func Initialize() {
+func InitializeConnection() (*sql.DB, error) {
     // fetch the url
     connStr := GetDatabaseURL()
     // establish the connection
     db, err := sql.Open("postgres", connStr)
     if err != nil {
         log.Println("Unable to connect to database : ", err)
-        os.Exit(1)
+        return nil, err
     }
-    // defer close the conn, with error handling
-    defer func() {
-        err = db.Close()
-        if err != nil {
-            log.Println("Error on closing the connection: ", err)
-        }
-    } ()
+
     // ping the conn
     err = db.Ping()
     if err != nil {
         log.Println("Error on ping: ", err)
+        defer db.Close()
+        return nil, fmt.Errorf("error on ping, %w", err)
     }
-    // success msg
-    log.Println("Database connection test successful.")
+
+    return db, nil
 }
 
 func GetDatabaseURL() string {
@@ -50,6 +45,5 @@ func GetDatabaseURL() string {
         os.Getenv("DATABASE_PASS"),
         os.Getenv("DATABASE_NAME"),
     )
-
     return url
 }
