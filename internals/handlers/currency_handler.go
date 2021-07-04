@@ -7,6 +7,7 @@ import (
     "github.com/MA-Andrade/challenge-bravo/internals/models"
     "github.com/gofiber/fiber/v2"
     "strconv"
+    "strings"
 )
 
 func GetCurrencies(c *fiber.Ctx) error {
@@ -54,16 +55,17 @@ func GetCurrencies(c *fiber.Ctx) error {
         currs.Currencies = append(currs.Currencies, curr)
     }
     // success response
-    return c.Status(fiber.StatusOK).JSON(fiber.Map{
+    c.Status(fiber.StatusOK).JSON(fiber.Map{
         "error": false,
         "message": nil,
         "currencies": currs.Currencies,
     })
-
+    return nil
 }
 
 func GetCurrencyFromSymbol(c *fiber.Ctx) error {
-    symbol := c.Params("symbol")
+    // bruteforcing the uppercase for the query
+    symbol := strings.ToUpper(c.Params("symbol"))
     curr := models.Currency{}
     query := `SELECT id, symbol, value FROM currencies WHERE symbol = $1;`
 
@@ -104,6 +106,15 @@ func PostCurrency(c *fiber.Ctx) error {
             "message": err.Error(),
         })
     }
+    // checking if the Symbol length is equals to 3 (including special characters)
+    if len([]rune(curr.Symbol)) != 3 {
+        return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+            "error":   true,
+            "message": "currency symbol needs to be exactly 3 characters long.",
+        })
+    }
+    // bruteforcing the uppercase on the symbol param
+    curr.Symbol = strings.ToUpper(curr.Symbol)
 
     // initialize connection
     db, err := database.InitializeConnection()
@@ -148,7 +159,15 @@ func PostCurrency(c *fiber.Ctx) error {
 
 func PutCurrencyFromSymbol(c *fiber.Ctx) error {
     curr := models.Currency{}
-    curr.Symbol = c.Params("symbol")
+    curr.Symbol = strings.ToUpper(c.Params("symbol"))
+
+    // lock usd currency alteration
+    if curr.Symbol == "USD" {
+        return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+            "error": true,
+            "message": "cannot alter the USD currency since it is the baseline currency",
+        })
+    }
 
     query := `UPDATE currencies set value = $1 WHERE symbol = $2;`
 
@@ -206,8 +225,16 @@ func PutCurrencyFromSymbol(c *fiber.Ctx) error {
 }
 
 func DeleteCurrencyFromSymbol(c *fiber.Ctx) error {
-    currSymbol := c.Params("symbol")
+    currSymbol := strings.ToUpper(c.Params("symbol"))
     query := `DELETE FROM currencies WHERE symbol = $1 RETURNING *;`
+
+    // lock USD currency alteration
+    if currSymbol == "USD" {
+        return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+            "error": true,
+            "message": "cannot delete the USD currency since it is the baseline currency",
+        })
+    }
 
     // initialize connection
     db, err := database.InitializeConnection()
@@ -246,8 +273,8 @@ func GetConversion(c *fiber.Ctx) error {
     fromCurr := models.Currency{}
     toCurr := models.Currency{}
 
-    fromCurr.Symbol = c.Params("from")
-    toCurr.Symbol = c.Params("to")
+    fromCurr.Symbol = strings.ToUpper(c.Params("from"))
+    toCurr.Symbol = strings.ToUpper(c.Params("to"))
 
     query := `SELECT value FROM currencies WHERE symbol = $1;`
 
