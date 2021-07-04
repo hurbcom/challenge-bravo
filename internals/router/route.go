@@ -8,12 +8,18 @@ import (
 )
 
 func SetupRoutes (app *fiber.App) {
-    api := app.Group("/api", logger.New())
+    // Currency handling group and routes
+    apiCurrency := app.Group("/api/currency", logger.New())
 
-    api.Get("/currency", handlers.GetCurrencies)
+    apiCurrency.Get("/", handlers.GetCurrencies)
+    apiCurrency.Post("/new", handlers.PostCurrency)
+    apiCurrency.Get("/:symbol", handlers.GetCurrencyFromSymbol)
+    apiCurrency.Put("/:symbol", handlers.PutCurrencyFromSymbol)
+    apiCurrency.Delete("/:symbol", handlers.DeleteCurrencyFromSymbol)
 
-    api.Post("/currency/new", handlers.PostCurrency)
-    api.Get("/currency/:symbol", handlers.GetCurrencyFromSymbol)
-    api.Put("/currency/:symbol", handlers.PutCurrency)
-    api.Delete("/currency/:symbol", handlers.DeleteCurrency)
+    // Conversion handling group and routes
+    apiConvert := app.Group("/api/convert", logger.New())
+
+    apiConvert.Get("/:from-:to-:value", handlers.GetConversion)
+
 }

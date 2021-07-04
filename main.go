@@ -10,19 +10,14 @@ import (
 
 func main() {
     app := fiber.New()
-
-    app.Get("/", func(c *fiber.Ctx) error {
-        return c.SendString("Hello, World 👋!")
-    })
+    // testing the connection
     log.Println("Initializing DB")
     db, err := database.InitializeConnection()
     if err != nil {
         log.Println("error on initializing the connection: ", err.Error())
         os.Exit(1)
     }
-
     defer db.Close()
-
 
     router.SetupRoutes(app)
 
