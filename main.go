@@ -18,8 +18,8 @@ func main() {
         os.Exit(1)
     }
     defer db.Close()
-
+    // setuping the application routes
     router.SetupRoutes(app)
-
+    // serving the app
     app.Listen(":5000")
 }

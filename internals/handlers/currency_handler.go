@@ -1,6 +1,7 @@
 package handlers
 
 import (
+    "database/sql"
     "fmt"
     "github.com/MA-Andrade/challenge-bravo/internals/database"
     "github.com/MA-Andrade/challenge-bravo/internals/models"
@@ -9,19 +10,62 @@ import (
 )
 
 func GetCurrencies(c *fiber.Ctx) error {
-    // low priority
-    err := c.SendString("To be implemented: GetCurrencies, low business value!")
+    currs := models.Currencies{}
+    query := `SELECT id, symbol, value FROM currencies;`
 
+    // initialize connection
+    db, err := database.InitializeConnection()
     if err != nil {
-        return err
+        return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+            "error":   true,
+            "message": err.Error(),
+        })
+
     }
-    return nil
+    // execute selection
+    resultSet, err := db.Query(query)
+    if err != nil {
+        c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+            "error": true,
+            "message": err.Error(),
+        })
+    }
+    defer resultSet.Close()
+    // iterate over resultset
+    for resultSet.Next() {
+        curr := models.Currency{}
+        // scanning into objects
+        err = resultSet.Scan(&curr.ID, &curr.Symbol, &curr.Value)
+        // complex error handling (can be empty with no error thrown)
+        switch err {
+        case sql.ErrNoRows:
+            return c.Status(fiber.StatusNotFound).JSON(&fiber.Map{
+                "error": true,
+                "message": "currencies table is empty",
+            })
+        default:
+            return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+                "error": true,
+                "message": err.Error(),
+            })
+        case nil:
+        }
+        // appending to collection
+        currs.Currencies = append(currs.Currencies, curr)
+    }
+    // success response
+    return c.Status(fiber.StatusOK).JSON(fiber.Map{
+        "error": false,
+        "message": nil,
+        "currencies": currs.Currencies,
+    })
+
 }
 
 func GetCurrencyFromSymbol(c *fiber.Ctx) error {
-    curr := models.Currency{}
     symbol := c.Params("symbol")
-    query := `SELECT * FROM currencies WHERE symbol = $1;`
+    curr := models.Currency{}
+    query := `SELECT id, symbol, value FROM currencies WHERE symbol = $1;`
 
     // initialize connection
     db, err := database.InitializeConnection()
@@ -34,22 +78,20 @@ func GetCurrencyFromSymbol(c *fiber.Ctx) error {
     }
     // query the row with the symbol from the params
     row := db.QueryRow(query, symbol)
-
+    // error handling for no row (no error thrown)
     switch err := row.Scan(&curr.ID, &curr.Symbol, &curr.Value); err {
-    case nil:
-        c.Status(fiber.StatusOK).JSON(&fiber.Map{
-            "error":    false,
-            "message":  nil,
-            "currency": curr,
-        })
-        return nil
-    default:
-        errorMsg := fmt.Sprintf("Currency: %v not found. : %v", symbol, err.Error())
+    case sql.ErrNoRows:
+        errorMsg := fmt.Sprintf("currency: %v not found.", symbol)
         return c.Status(fiber.StatusNotFound).JSON(&fiber.Map{
             "error":   true,
             "message": errorMsg,
         })
     }
+    return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+        "error":    false,
+        "message":  nil,
+        "currency": curr,
+    })
 }
 
 func PostCurrency(c *fiber.Ctx) error {
@@ -81,14 +123,14 @@ func PostCurrency(c *fiber.Ctx) error {
         })
     }
     defer foundCurr.Close()
-
+    // check if there is a row in the resultset
     if foundCurr.Next() {
         return c.Status(fiber.StatusConflict).JSON(&fiber.Map{
             "error":   true,
             "message": "currency is already in the database",
         })
     }
-
+    // inserting
     query := "INSERT INTO currencies (symbol, value) VALUES ($1, $2) RETURNING id"
     if err = db.QueryRow(query, curr.Symbol, curr.Value).Scan(&curr.ID); err != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
@@ -207,6 +249,8 @@ func GetConversion(c *fiber.Ctx) error {
     fromCurr.Symbol = c.Params("from")
     toCurr.Symbol = c.Params("to")
 
+    query := `SELECT value FROM currencies WHERE symbol = $1;`
+
     // checking for bad numbers
     conversionValue, err := strconv.ParseFloat(c.Params("value"), 64) //64 bits bc crypto curr
     if err != nil {
@@ -226,7 +270,7 @@ func GetConversion(c *fiber.Ctx) error {
     }
 
     // check if from currency exists
-    foundCurr := db.QueryRow(`SELECT value FROM currencies WHERE symbol = $1;`, fromCurr.Symbol)
+    foundCurr := db.QueryRow(query, fromCurr.Symbol)
     if err = foundCurr.Scan(&fromCurr.Value); err != nil {
         errorMsg = fmt.Sprintf("Currency: %v not found. : %v", fromCurr.Symbol, err.Error())
         return c.Status(fiber.StatusNotFound).JSON(&fiber.Map{
@@ -236,7 +280,7 @@ func GetConversion(c *fiber.Ctx) error {
     }
 
     // check if from currency exists
-    foundCurr = db.QueryRow(`SELECT value FROM currencies WHERE symbol = $1;`, toCurr.Symbol)
+    foundCurr = db.QueryRow(query, toCurr.Symbol)
     if err = foundCurr.Scan(&toCurr.Value); err != nil {
         errorMsg = fmt.Sprintf("Currency: %v not found. : %v", toCurr.Symbol, err.Error())
         return c.Status(fiber.StatusNotFound).JSON(&fiber.Map{
