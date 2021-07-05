@@ -15,6 +15,7 @@ services:
     volumes:
         - ./build/init_tables/001_create_init_tables.up.sql:/docker-entrypoint-initdb.d/001_create_init_tables.up.sql
         - ./build/init_tables/001_create_init_tables.down.sql:/docker-entrypoint-initdb.d/001_create_init_tables.down.sql
+        - ./postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
 
   server:
