@@ -18,13 +18,12 @@ class Dispatcher
     protected function callControllerMethod($callback, $params = [], Request $request, $namespace = "App\\")
     {
         if (strpos($callback['callback'], '@') === false) {
-            //ERRO
+            throw new \Exception("Erro na formatação da url");
         }
         list($controller, $method) = explode('@', $callback['callback']);
         $controller = "App\\".$controller;
 
         if (!class_exists($controller) || !method_exists($controller, $method)) {
-            echo 'Não achou a classe';exit;
             throw new \Exception("Erro ao despachar: controller não pode ser instanciado, ou método não exite");
         }
         return call_user_func_array(array(new $controller($request), $method), array_values($params));

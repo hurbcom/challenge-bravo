@@ -29,7 +29,6 @@ class BaseService
         $request = new Request($method, $uri);
         $request = $response = $this->client->send($request, $data);
 
-        //TODO fazer tratamento de erros
         $logData = [
             'url' => $uri,
             'data' => $data,
