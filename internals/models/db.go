@@ -1,13 +1,17 @@
-package database
+package models
 
 import (
+    "context"
     "database/sql"
     "fmt"
+    "github.com/jackc/pgx/v4/pgxpool"
     _ "github.com/lib/pq"
     "log"
     "os"
     "strconv"
 )
+
+var pool *pgxpool.Pool
 
 func InitializeConnection() (*sql.DB, error) {
     // fetch the url
@@ -47,3 +51,22 @@ func GetDatabaseURL() string {
     )
     return url
 }
+
+func InitializeDB() {
+
+    config, err := pgxpool.ParseConfig(GetDatabaseURL())
+    if err != nil{
+        panic(err.Error())
+    }
+
+    pool, err = pgxpool.Connect(context.Background(), config.ConnString())
+    if err != nil {
+        panic(err.Error())
+    }
+}
+
+func CloseDB() {
+    // close the pool :(
+    pool.Close()
+}
+

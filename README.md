@@ -32,5 +32,3 @@ O padrão dos valores utilizado é baseado no Dólar Americano, fornecido atrav�
     - **GET** - ``api/currency/$SYMBOL`` Retorna uma moeda e seu valor. ``$SYMBOL`` deve corresponder ao seu símbolo.
     - **PUT** - ``api/currency/$SYMBOL`` Altera o valor de uma moeda. ``$SYMBOL`` deve corresponder ao seu símbolo e deve-se fornecer no body da request um único parâmetro numérico chamado ``"value"`` correspondente ao seu valor em relação ao Dólar Americano.
     - **DELETE** - ``api/currency/$SYMBOL`` Remove uma moeda. ``$SYMBOL`` deve corresponder ao seu símbolo.
-
-Dúvidas e sugestões, entrar em contato pelo linkedin com link no meu profile do github ou criar uma issue no repo.
