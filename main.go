@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	database.Connect()
+	database.RunMigrations()
 	fmt.Println("Desafio Bravo - Hurb")
 }
