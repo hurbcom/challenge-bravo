@@ -6,15 +6,21 @@ import (
 	"gorm.io/driver/mysql"
 )
 
+var database *gorm.DB;
+
 type Currency struct {
 	gorm.Model
 
-	Code string
-	IsFictional bool
+	Code string `gorm:"unique"`
+	IsReal bool
 	ExchangeRate float32
 }
 
 func connection() *gorm.DB {
+	if (database != nil) {
+		return database
+	}
+
 	database, error := gorm.Open(mysql.Open(os.Getenv("DATA_SOURCE_NAME")), &gorm.Config{})
 	if error != nil {
 		panic("Failed to connect database")
@@ -24,6 +30,9 @@ func connection() *gorm.DB {
 }
 
 func RunMigrations() {
-	database := connection()
-	database.AutoMigrate(&Currency{})
+	connection().AutoMigrate(&Currency{})
+}
+
+func StoreCurrency(currency *Currency) {
+	connection().Create(&currency)
 }
