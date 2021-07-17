@@ -43,3 +43,7 @@ func GetExchangeRate(code string) float64 {
 	
 	return currency.ExchangeRate
 }
+
+func DeleteCurrency(code string) {
+	connection().Where("code = ?", code).Delete(&Currency{})
+}

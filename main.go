@@ -15,8 +15,10 @@ func main() {
 
 func startRouter() {
 	router := gin.Default()
+
 	router.POST("/currency", createCurrency)
 	router.GET("/currency/convert/:from/:to/:amount", convertCurrency)
+	router.DELETE("/currency/:code", deleteCurrency)
 
 	router.Run("localhost:8080")
 }
@@ -47,4 +49,10 @@ func convertCurrency(c *gin.Context) {
 		database.GetExchangeRate(c.Param("from"));
 
 	c.IndentedJSON(http.StatusOK, gin.H{"result": result})
+}
+
+func deleteCurrency(c *gin.Context) {
+	database.DeleteCurrency(c.Param("code"))
+
+	c.IndentedJSON(http.StatusOK, nil)
 }
