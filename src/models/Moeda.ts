@@ -10,11 +10,13 @@ export interface Moeda {
 
   const schema = new mongoose.Schema(
     {
-        valorEmReal: { type: Number, required: true },
-      name: { type: String, required: true },
-      sigla: { type: String, required: true }
+
+      name: { type: String, required: true  },
+      sigla: { type: String, required: true },
+      valorEmReal: { type: Number, required: true },
 
     },
+
     {
       toJSON: {
         transform: (_, ret): void => {

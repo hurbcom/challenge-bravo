@@ -1,21 +1,15 @@
-import {  Router } from "express";
+import { Router } from "express";
 
-import {Moeda} from './models/Moeda'
+import { Moeda } from './models/Moeda';
+
+import { MoedaController } from './controllers/MoedaController'
 
 const router = Router();
 
-router.get("/", async (request, response) => {
-    const moeda = await Moeda.find();
+const moedaController = new MoedaController();
 
-    response.json(moeda);
+router.get("/", moedaController.listAll);
 
-})
-
-router.post("/", async (request, response)=>{
-        const {name, sigla, valorEmReal } = request.body;
-
-    const respo = await new Moeda({name, sigla, valorEmReal}).save();
-    response.json( respo);
-})
+router.post("/",moedaController.create);
 
 export { router };
