@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gustavowiller/challengebravo/database"
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,7 @@ func main() {
 func startRouter() {
 	router := gin.Default()
 	router.POST("/currency", createCurrency)
+	router.GET("/currency/convert/:from/:to/:amount", convertCurrency)
 
 	router.Run("localhost:8080")
 }
@@ -35,4 +37,14 @@ func createCurrency(c *gin.Context) {
 	database.StoreCurrency(&currency)
 
 	c.IndentedJSON(http.StatusCreated, nil)
+}
+
+func convertCurrency(c *gin.Context) {
+	amount, _ := strconv.ParseFloat(c.Param("amount"), 64)
+	result :=
+		amount *
+		database.GetExchangeRate(c.Param("to")) /
+		database.GetExchangeRate(c.Param("from"));
+
+	c.IndentedJSON(http.StatusOK, gin.H{"result": result})
 }

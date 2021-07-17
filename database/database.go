@@ -13,7 +13,7 @@ type Currency struct {
 
 	Code string `gorm:"unique"`
 	IsReal bool
-	ExchangeRate float32
+	ExchangeRate float64
 }
 
 func connection() *gorm.DB {
@@ -35,4 +35,11 @@ func RunMigrations() {
 
 func StoreCurrency(currency *Currency) {
 	connection().Create(&currency)
+}
+
+func GetExchangeRate(code string) float64 {
+	var currency Currency
+	connection().Where("code = ?", code).First(&currency)
+	
+	return currency.ExchangeRate
 }
