@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { Moeda } from "../models/Moeda";
+
+import { MoedaService } from "../services/MoedaService";
 
 
 class MoedaController {
@@ -8,14 +9,18 @@ class MoedaController {
 
         const { name, sigla, valorEmReal } = request.body;
 
-        const moeda = await new Moeda({ name, sigla, valorEmReal }).save();
+        const moedaService = new MoedaService();
+
+        const moeda = await moedaService.create({ name, sigla, valorEmReal });
 
         return response.json(moeda);
     }
 
     async listAll(request: Request, response: Response): Promise<Response> {
 
-        const moedas = await Moeda.find();
+        const moedaService = new MoedaService();
+
+        const moedas = await moedaService.listAll();
 
         return response.json(moedas);
     }
