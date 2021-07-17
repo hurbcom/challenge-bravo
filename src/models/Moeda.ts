@@ -1,4 +1,4 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, {  Model } from 'mongoose';
 
 export interface IMoeda {
     _id?: string;
@@ -28,5 +28,5 @@ const schema = new mongoose.Schema(
     }
 );
 
-interface MoedaModel extends Omit<IMoeda, '_id'>, Document { }
-export const Moeda: Model<MoedaModel> = mongoose.model('Moeda', schema);
+
+export const Moeda: Model<IMoeda> = mongoose.model('Moeda', schema);
