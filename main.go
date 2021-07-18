@@ -47,7 +47,7 @@ func convertCurrency(c *gin.Context) {
 		amount *
 		database.GetExchangeRate(c.Param("to")) /
 		database.GetExchangeRate(c.Param("from"));
-
+	
 	c.IndentedJSON(http.StatusOK, gin.H{"result": result})
 }
 

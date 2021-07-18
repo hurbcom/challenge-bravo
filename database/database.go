@@ -6,8 +6,6 @@ import (
 	"gorm.io/driver/mysql"
 )
 
-var database *gorm.DB;
-
 type Currency struct {
 	gorm.Model
 
@@ -16,11 +14,7 @@ type Currency struct {
 	ExchangeRate float64
 }
 
-func connection() *gorm.DB {
-	if (database != nil) {
-		return database
-	}
-
+func openConnection() *gorm.DB {
 	database, error := gorm.Open(mysql.Open(os.Getenv("DATA_SOURCE_NAME")), &gorm.Config{})
 	if error != nil {
 		panic("Failed to connect database")
@@ -29,21 +23,38 @@ func connection() *gorm.DB {
 	return database
 }
 
+func closeConnection(database *gorm.DB) {
+	sqlDB, _ := database.DB()
+	defer sqlDB.Close()
+}
+
 func RunMigrations() {
-	connection().AutoMigrate(&Currency{})
+	database := openConnection()
+	database.AutoMigrate(&Currency{})
+
+	closeConnection(database)
 }
 
 func StoreCurrency(currency *Currency) {
-	connection().Create(&currency)
+	database := openConnection()
+	database.Create(&currency)
+
+	closeConnection(database)
 }
 
 func GetExchangeRate(code string) float64 {
 	var currency Currency
-	connection().Where("code = ?", code).First(&currency)
+	database := openConnection()
+
+	database.Where("code = ?", code).First(&currency)
 	
+	closeConnection(database)
+
 	return currency.ExchangeRate
 }
 
 func DeleteCurrency(code string) {
-	connection().Where("code = ?", code).Delete(&Currency{})
+	database := openConnection()
+	database.Where("code = ?", code).Delete(&Currency{})
+	closeConnection(database)
 }
