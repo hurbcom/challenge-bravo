@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { MoedaService } from "../services/MoedaService";
+import {  MoedaService } from "../services/MoedaService";
 
 
 class MoedaController {
@@ -13,7 +13,7 @@ class MoedaController {
 
         const moeda = await moedaService.create({ name, sigla, valorEmReal });
 
-        return response.json(moeda);
+        return response.status(201).json(moeda);
     }
 
     async listAll(request: Request, response: Response): Promise<Response> {
@@ -49,6 +49,17 @@ class MoedaController {
         await moedaService.delete(_id);
 
         return response.json({ message: 'Moeda Excluída' });
+    }
+
+    async conversionOfMoeda(request: Request, response: Response): Promise<Response> {
+
+        const { from, to, amount} = request.query;
+
+        const moedaService = new MoedaService();
+
+        const convertedAmount = await moedaService.conversionOfMoeda(from as string, to as string, amount as string );
+
+        return response.json(convertedAmount);
     }
 }
 

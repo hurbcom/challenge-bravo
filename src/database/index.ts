@@ -1,7 +1,7 @@
 import mongoose, { Mongoose } from 'mongoose';
 
 export const connect = async (): Promise<Mongoose> =>
-  await mongoose.connect('mongodb+srv://admin:root@cluster0.pamgw.mongodb.net/test', {
+  await mongoose.connect('mongodb+srv://admin:root@cluster0.pamgw.mongodb.net/chBravoDb', {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,

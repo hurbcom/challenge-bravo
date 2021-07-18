@@ -10,6 +10,8 @@ const moedaController = new MoedaController();
 
 router.get("/", moedaController.listAll);
 
+router.get("/conversion", moedaController.conversionOfMoeda);
+
 router.post("/",moedaController.create);
 
 router.put("/edit/:id",moedaController.update);
