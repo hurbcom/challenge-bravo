@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gustavowiller/challengebravo/database"
 	"github.com/gustavowiller/challengebravo/models"
@@ -33,20 +32,24 @@ func CreateCurrency(c *gin.Context) {
 }
 
 func ConvertCurrency(c *gin.Context) {
+	var conversion models.Conversion
 	var currencyFrom models.Currency
 	var currencyTo models.Currency
 
-	amount, _ := strconv.ParseFloat(c.Param("amount"), 64)
+	if error := c.ShouldBindUri(&conversion); error != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": error.Error()})
+		return
+	}
 
 	database := database.Connect()
 	sqlDB, _ := database.DB()
 	defer sqlDB.Close()
 
-	database.Where("code = ?", c.Param("from")).First(&currencyFrom)
-	database.Where("code = ?", c.Param("to")).First(&currencyTo)
+	database.Where("code = ?", conversion.From).First(&currencyFrom)
+	database.Where("code = ?", conversion.To).First(&currencyTo)
 	
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"result": amount * currencyTo.ExchangeRate / currencyFrom.ExchangeRate})
+		"result": conversion.Amount * currencyTo.ExchangeRate / currencyFrom.ExchangeRate})
 }
 
 func DeleteCurrency(c *gin.Context) {
