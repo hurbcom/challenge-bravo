@@ -18,9 +18,9 @@ func CreateCurrency(c *gin.Context) {
 		return
 	}
 
-	if currency.Code == "" {
-		c.IndentedJSON(http.StatusBadRequest, nil)
-		return
+	if error := models.ValidateStoreCurrency(&currency); error != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": error.Error()})
+		return 
 	}
 
 	database := database.Connect()
