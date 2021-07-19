@@ -1,6 +1,6 @@
-import { Router } from "express";
+import  Router  from "express-promise-router";
 
-import { Moeda } from './models/Moeda';
+
 
 import { MoedaController } from './controllers/MoedaController'
 

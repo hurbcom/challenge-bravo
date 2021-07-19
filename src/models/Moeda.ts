@@ -12,7 +12,7 @@ const schema = new mongoose.Schema(
     {
 
         name: { type: String, required: true },
-        sigla: { type: String, required: true },
+        sigla: { type: String, required: true, unique: true },
         valorEmReal: { type: Number, required: true },
 
     },
