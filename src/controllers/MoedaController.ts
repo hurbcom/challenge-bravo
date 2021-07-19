@@ -7,11 +7,11 @@ class MoedaController {
 
     async create(request: Request, response: Response): Promise<Response> {
 
-        const { name, sigla, valorEmReal } = request.body;
+        const { name, sigla, valueInReal } = request.body;
 
         const moedaService = new MoedaService();
 
-        const moeda = await moedaService.create({ name, sigla, valorEmReal });
+        const moeda = await moedaService.create({ name, sigla, valueInReal });
 
         return response.status(201).json(moeda);
     }
@@ -26,7 +26,7 @@ class MoedaController {
     }
 
     async update(request: Request, response: Response): Promise<Response> {
-        const { name, sigla, valorEmReal } = request.body;
+        const { name, sigla, valueInReal } = request.body;
 
         const { id } = request.params;
 
@@ -34,7 +34,7 @@ class MoedaController {
 
         const moedaService = new MoedaService();
 
-        const moeda = await moedaService.update({ _id, name, sigla, valorEmReal });
+        const moeda = await moedaService.update({ _id, name, sigla, valueInReal });
 
         return response.json(moeda);
     }

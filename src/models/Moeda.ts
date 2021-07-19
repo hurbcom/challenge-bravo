@@ -4,7 +4,7 @@ export interface IMoeda {
     _id?: string;
     name: string;
     sigla: string;
-    valorEmReal: number;
+    valueInReal: number;
 
 }
 
@@ -13,7 +13,7 @@ const schema = new mongoose.Schema(
 
         name: { type: String, required: true },
         sigla: { type: String, required: true, unique: true },
-        valorEmReal: { type: Number, required: true },
+        valueInReal: { type: Number, required: true },
 
     },
 

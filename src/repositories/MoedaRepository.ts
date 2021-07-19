@@ -3,8 +3,8 @@ import { IMoeda, Moeda } from "../models/Moeda";
 
 class MoedaRepository {
 
-    async create({ name, sigla, valorEmReal }: IMoeda): Promise<IMoeda> {
-        const moeda = await new Moeda({ name, sigla, valorEmReal }).save();
+    async create({ name, sigla, valueInReal }: IMoeda): Promise<IMoeda> {
+        const moeda = await new Moeda({ name, sigla, valueInReal }).save();
         return moeda;
     }
 
@@ -33,9 +33,9 @@ class MoedaRepository {
         await Moeda.deleteOne({ _id });
     }
 
-    async update({ _id, name, sigla, valorEmReal }: IMoeda): Promise<IMoeda> {
+    async update({ _id, name, sigla, valueInReal }: IMoeda): Promise<IMoeda> {
 
-        const moeda = await Moeda.findByIdAndUpdate({_id},{name, sigla, valorEmReal})
+        const moeda = await Moeda.findByIdAndUpdate({_id},{name, sigla, valueInReal})
 
         return moeda;
     }

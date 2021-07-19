@@ -9,6 +9,7 @@
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/server.ts"
   },
   "dependencies": {
+    "celebrate": "^15.0.0",
     "connect-mongo": "^4.4.1",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
