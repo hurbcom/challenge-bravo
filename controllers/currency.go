@@ -53,11 +53,18 @@ func ConvertCurrency(c *gin.Context) {
 }
 
 func DeleteCurrency(c *gin.Context) {
+	var currency models.Currency
+
+	if error := c.ShouldBindUri(&currency); error != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": error.Error()})
+		return
+	}
+
 	database := database.Connect()
 	sqlDB, _ := database.DB()
 	defer sqlDB.Close()
 
-	database.Where("code = ?", c.Param("code")).Delete(&models.Currency{})
+	database.Where("code = ?", currency.Code).Delete(&models.Currency{})
 
 	c.IndentedJSON(http.StatusOK, nil)
 }
