@@ -10,14 +10,14 @@ const router = Router();
 
 const moedaController = new MoedaController();
 
-router.get("/", moedaController.listAll);
+router.get("/coin", moedaController.listAll);
 
-router.get("/conversion", conversionMoedaValidator, moedaController.conversionOfMoeda);
+router.get("/coin/conversion", conversionMoedaValidator, moedaController.conversionOfMoeda);
 
-router.post("/", createMoedaValidator, moedaController.create);
+router.post("/coin", createMoedaValidator, moedaController.create);
 
-router.put("/edit/:id", createMoedaValidator, moedaController.update);
+router.put("/coin/edit/:id", createMoedaValidator, moedaController.update);
 
-router.delete("/:id", moedaController.delete);
+router.delete("/coin/:id", moedaController.delete);
 
 export { router };

@@ -34,9 +34,9 @@ class MoedaController {
 
         const moedaService = new MoedaService();
 
-        const moeda = await moedaService.update({ _id, name, sigla, valueInReal });
+        await moedaService.update({ _id, name, sigla, valueInReal });
 
-        return response.json(moeda);
+        return response.status(204).json({message: 'Success!'});
     }
 
     async delete(request: Request, response: Response): Promise<Response> {
