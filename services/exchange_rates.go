@@ -7,6 +7,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
+
+	"github.com/gustavowiller/challengebravo/database"
+	"github.com/gustavowiller/challengebravo/models"
+
 )
 
 const baseCurrency = "USD"
@@ -43,4 +48,33 @@ func GetExchangeRates() map[string]string {
 	json.Unmarshal(responseData, &responseApi)
 
 	return responseApi.Data.Rates
+}
+
+func UpdateExchangeRates() {
+	var currencies []map[string]interface{}
+	exchangeRates := GetExchangeRates()
+	
+	database := database.Connect()
+	sqlDB, _ := database.DB()
+	defer sqlDB.Close()
+
+	database.Model(&models.Currency{}).Where("is_real = 1").Find(&currencies)
+
+	for _, currency := range currencies {
+
+		exchangeRate, found := exchangeRates[currency["code"].(string)]
+		if !found {
+			log.Fatal(fmt.Sprintf("No real value exchange rate found for the currency %s", currency["code"]))
+			return
+		}
+
+		database.Model(&models.Currency{}).Where("id = ?", currency["id"]).Update("exchange_rate", exchangeRate)
+	}
+}
+
+func HourlyUpdateExchangeRates() {
+	for {
+		UpdateExchangeRates()
+		time.Sleep(time.Hour)
+	}
 }
