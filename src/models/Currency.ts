@@ -1,9 +1,9 @@
-import mongoose, {  Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
-export interface IMoeda {
+export interface ICurrency {
     _id?: string;
     name: string;
-    sigla: string;
+    code: string;
     valueInReal: number;
 
 }
@@ -12,7 +12,7 @@ const schema = new mongoose.Schema(
     {
 
         name: { type: String, required: true },
-        sigla: { type: String, required: true, unique: true },
+        code: { type: String, required: true, unique: true },
         valueInReal: { type: Number, required: true },
 
     },
@@ -29,4 +29,4 @@ const schema = new mongoose.Schema(
 );
 
 
-export const Moeda: Model<IMoeda> = mongoose.model('Moeda', schema);
+export const Currency: Model<ICurrency> = mongoose.model('Currency', schema);

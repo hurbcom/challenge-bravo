@@ -2,22 +2,22 @@ import Router from "express-promise-router";
 
 
 
-import { MoedaController } from './controllers/MoedaController'
-import conversionMoedaValidator from "./validators/conversionMoedaValidator";
-import createMoedaValidator from "./validators/createMoedaValidator";
+import { CurrencyController } from './controllers/CurrencyController'
+import conversionCurrencyValidator from "./validators/conversionCurrencyValidator";
+import createCurrencyValidator from "./validators/createCurrencyValidator";
 
 const router = Router();
 
-const moedaController = new MoedaController();
+const currencyController = new CurrencyController();
 
-router.get("/coin", moedaController.listAll);
+router.get("/currency", currencyController.listAll);
 
-router.get("/coin/conversion", conversionMoedaValidator, moedaController.conversionOfMoeda);
+router.get("/currency/conversion", conversionCurrencyValidator, currencyController.conversionOfCurrency);
 
-router.post("/coin", createMoedaValidator, moedaController.create);
+router.post("/currency", createCurrencyValidator, currencyController.create);
 
-router.put("/coin/edit/:id", createMoedaValidator, moedaController.update);
+router.put("/currency/edit/:id", createCurrencyValidator, currencyController.update);
 
-router.delete("/coin/:id", moedaController.delete);
+router.delete("/currency/:id", currencyController.delete);
 
 export { router };

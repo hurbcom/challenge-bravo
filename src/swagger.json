@@ -8,13 +8,13 @@
         }
     },
     "paths": {
-        "/coin": {
+        "/currency": {
             "post": {
                 "tags": [
-                    "Coins"
+                    "Currencies"
                 ],
-                "summary": "Create a coin",
-                "description": "Create a new coin",
+                "summary": "Create a currency",
+                "description": "Create a new currency",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -24,7 +24,7 @@
                                     "name": {
                                         "type": "string"
                                     },
-                                    "sigla": {
+                                    "code": {
                                         "type": "string"
                                     },
                                     "valueInReal": {
@@ -32,8 +32,8 @@
                                     }
                                 },
                                 "example": {
-                                    "name": "Moeda de Teste",
-                                    "sigla": "MDT",
+                                    "name": "Currency de Teste",
+                                    "code": "MDT",
                                     "valueInReal": 1.34
                                 }
                             }
@@ -45,7 +45,7 @@
                         "description": "Created"
                     },
                     "500": {
-                        "description": "Moeda already exists"
+                        "description": "Currency already exists"
                     },
                     "500": {
                         "description": "internal Error"
@@ -54,10 +54,10 @@
             },
             "get": {
                 "tags": [
-                    "Coins"
+                    "Currencies"
                 ],
-                "summary": "List all coins",
-                "description": "List all coins",
+                "summary": "List all Currencies",
+                "description": "List all Currencies",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -74,7 +74,7 @@
                                             "name": {
                                                 "type": "string"
                                             },
-                                            "sigla": {
+                                            "code": {
                                                 "type": "string"
                                             },
                                             "valueInReal": {
@@ -89,13 +89,13 @@
                 }
             }
         },
-        "/coin/edit/{id}": {
+        "/currency/edit/{id}": {
             "put": {
                 "tags": [
-                    "Coins"
+                    "Currencies"
                 ],
-                "summary": "Update a coin",
-                "description": "Update a new coin",
+                "summary": "Update a currency",
+                "description": "Update a new currency",
                 "parameters": [
                     {
                         "name": "id",
@@ -116,7 +116,7 @@
                                     "name": {
                                         "type": "string"
                                     },
-                                    "sigla": {
+                                    "code": {
                                         "type": "string"
                                     },
                                     "valueInReal": {
@@ -124,8 +124,8 @@
                                     }
                                 },
                                 "example": {
-                                    "name": "Moeda de Teste",
-                                    "sigla": "MDT",
+                                    "name": "Currency de Teste",
+                                    "code": "MDT",
                                     "valueInReal": 1.34
                                 }
                             }
@@ -142,13 +142,13 @@
                 }
             }
         },
-        "/coin/{id}": {
+        "/currency/{id}": {
             "delete": {
                 "tags": [
-                    "Coins"
+                    "Currencies"
                 ],
-                "summary": "Update a coin",
-                "description": "Update a new coin",
+                "summary": "Update a currency",
+                "description": "Update a new currency",
                 "parameters": [
                     {
                         "name": "id",
@@ -162,7 +162,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Moeda Excluída"
+                        "description": "Currency Excluída"
                     },
                     "500": {
                         "description": "internal Error"
@@ -170,13 +170,13 @@
                 }
             }
         },
-        "/coin/conversion": {
+        "/currency/conversion": {
             "get": {
                 "tags": [
-                    "Coins"
+                    "Currencies"
                 ],
-                "summary": "conversion of coins",
-                "description": "conversion of coins",
+                "summary": "conversion of Currencies",
+                "description": "conversion of Currencies",
                 "parameters": [
                     {
                         "name": "params",
@@ -207,7 +207,6 @@
                 "responses": {
                     "200": {
                         "description": "Success"
-
                     }
                 }
             }

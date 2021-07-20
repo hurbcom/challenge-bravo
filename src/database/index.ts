@@ -15,7 +15,7 @@ export const connect = async (): Promise<Mongoose> =>
 
 export const close = (): Promise<void> => mongoose.connection.close();
 
-export const dropCollection = () : Promise<void> =>  mongoose.connection.dropCollection('Moeda');
+export const dropCollection = () : Promise<void> =>  mongoose.connection.dropCollection('Currency');
 
 
 
