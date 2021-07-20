@@ -52,9 +52,9 @@ class MoedaService {
             throw new AppError("Invalid Amount!");
         }
 
-        const fromMoeda = await this.moedaRepository.getBySigla(from);
+        const fromMoeda = await this.moedaRepository.getBySigla(from.toUpperCase());
 
-        const toMoeda = await this.moedaRepository.getBySigla(to);
+        const toMoeda = await this.moedaRepository.getBySigla(to.toUpperCase());
 
         if(!fromMoeda || !toMoeda){
 
