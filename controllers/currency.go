@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gustavowiller/challengebravo/database"
 	"github.com/gustavowiller/challengebravo/models"
-
+	"github.com/gustavowiller/challengebravo/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,13 +23,29 @@ func CreateCurrency(c *gin.Context) {
 		return 
 	}
 
+	if (currency.IsReal == true) {
+		exchangeRate, found := services.GetExchangeRates()[currency.Code]
+		if !found {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "No real value exchange rate found for this currency" })
+			return
+		}
+
+		rate, error := strconv.ParseFloat(exchangeRate, 64)
+		if (error != nil) {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": error.Error()})
+			return
+		}
+
+		currency.ExchangeRate = rate
+	}
+
 	database := database.Connect()
 	sqlDB, _ := database.DB()
 	defer sqlDB.Close()
 
 	database.Create(&currency)
 
-	c.IndentedJSON(http.StatusCreated, nil)
+	c.IndentedJSON(http.StatusCreated, currency)
 }
 
 func ConvertCurrency(c *gin.Context) {
