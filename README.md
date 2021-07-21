@@ -1,8 +1,12 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com cotações de verdade e atuais.
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=sos_pet_api&uri=https%3A%2F%2Fgithub.com%2FWallaceMachado%2FSOS_PET_API%2Fblob%2Fmaster%2FInsomnia.json)
 
-A API deve, originalmente, converter entre as seguintes moedas:
+> status:	🚧  Challenge-Bravo 🚀 em construção..  🚧
+
+API, que responde JSON, para conversão monetária. Ela tem uma moeda de lastro (USD) e faz conversões entre diferentes moedas com cotações.
+
+A API, originalmente, converte entre as seguintes moedas:
 
 -   USD
 -   BRL
@@ -12,66 +16,89 @@ A API deve, originalmente, converter entre as seguintes moedas:
 
 Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+## Indice
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+* <p><a href="#pré-requisitos">Pré Requisitos</a> </p>
+* <p><a href="#iniciando-projeto">Iniciando Projeto</a></p>
+* <p><a href="#rotas">Rotas</a></p>
+* <p><a href="#executando-os-testes">Executando os testes</a></p>
+* <p><a href="#relatório-de-cobertura-de-testes">Relatório de cobertura de Testes</a></p>
+* <p><a href="#autor">Autor</a></p>
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+## Pré Requisitos
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+Antes de começar, você precisará ter as seguintes ferramentas instaladas em sua máquina:
+* [Git](https://git-scm.com)
+* [Node.js](https://nodejs.org/en/)
 
-Ref:
-Wikipedia [Site Institucion al]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+Além disso, é bom ter um editor para trabalhar com o código como: [VSCode](https://code.visualstudio.com/)
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do HU temos mais afinidade:
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
 
-## Requisitos
+## Iniciando Projeto
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+```bash
+# Clone este repositório
+$ git clone https://github.com/WallaceMachado/challenge-bravo.git
 
-## Critério de avaliação
+# Acesse a pasta do projeto no terminal / cmd
+$ cd challenge-bravo
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+# Instale as dependências
+$ npm install
 
-## Dúvidas
+or
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+$ yarn
 
-Boa sorte e boa viagem! ;)
+# Rode o projeto
+$ yarn dev
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+# Server is running:3333 - acesse <http://localhost:3333>
+```
+
+
+
+## Rotas
+
+| Rotas  |  HTTP Method  | Params  |  Desccrição  |
+| :---: | :---: | :---: | :---: |
+|  /currency |  POST |  Body: ``` name ```, ``` code ``` e ``` valueInUSD ``` |  Crie uma nova moeda |
+|  /currency |  GET |  -  | Recupere uma lista com todas as moedas |
+|  /currency/conversion |  GET |  Query: ```from ``` (moeda de origem), ``` to ``` (moeda de conversão), ``` amount ``` (valor a ser convertido)  |  Consulte uma conversão monetária |
+|  /currency/edit/:id |  PUT |  Body: ``` name ```, ``` code ``` e ``` valueInUSD ```  |  Edite uma moeda |
+|  /currenc/:id |  DELETE |  -  |  Exclua uma moeda |
+
+
+
+
+
+## Executando os testes
+
+[Jest](https://jestjs.io/) foi a escolha de testar o projeto, para executar:
+
+```bash
+
+$ yarn test
+
+```
+
+
+
+## Relatório de cobertura de Testes
+
+Você pode ver o relatório de cobertura dentro ``` tests/coverage ```. Eles são criados automaticamente após a execução dos testes.
+
+
+
+## Autor
+
+
+Feito com ❤️ por [Wallace Machado](https://github.com/WallaceMachado) 🚀🏽 Entre em contato!
+
+[<img src="https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" />](https://www.linkedin.com/in/wallace-machado-b2054246/)
+
+
