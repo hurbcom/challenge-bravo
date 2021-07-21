@@ -44,9 +44,9 @@ describe('Currency Controller', () => {
         const response = await request(app)
             .post('/')
             .send({
-                name: "Test Coin",
+                name: "Test Currency",
                 code: "TCO",
-                valueInReal: "2"
+                valueInUSD: "2"
 
             })
 
@@ -64,9 +64,9 @@ describe('Currency Controller', () => {
         const response = await request(app)
             .post('/')
             .send({
-                name: "Test Coin",
+                name: "Test Currency",
                 code: "TCO",
-                valueInReal: "2"
+                valueInUSD: "2"
 
             })
 
@@ -92,7 +92,7 @@ describe('Currency Controller', () => {
             .send({
                 name: "Test update",
                 code: "TCO",
-                valueInReal: "2"
+                valueInUSD: "2"
             })
 
         expect(response.status).toBe(200);
@@ -134,7 +134,7 @@ describe('Currency Controller', () => {
 
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Invalid Coin!");
+        expect(response.body.message).toBe("Invalid Currency!");
 
     });
 
@@ -147,7 +147,7 @@ describe('Currency Controller', () => {
 
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Invalid Coin!");
+        expect(response.body.message).toBe("Invalid Currency!");
 
     });
 

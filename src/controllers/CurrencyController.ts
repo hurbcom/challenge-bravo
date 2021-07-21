@@ -7,11 +7,11 @@ class CurrencyController {
 
     async create(request: Request, response: Response): Promise<Response> {
 
-        const { name, code, valueInReal } = request.body;
+        const { name, code, valueInUSD } = request.body;
 
         const currencyService = new CurrencyService();
 
-        const currency = await currencyService.create({ name, code, valueInReal });
+        const currency = await currencyService.create({ name, code, valueInUSD });
 
         return response.status(201).json(currency);
     }
@@ -26,7 +26,7 @@ class CurrencyController {
     }
 
     async update(request: Request, response: Response): Promise<Response> {
-        const { name, code, valueInReal } = request.body;
+        const { name, code, valueInUSD } = request.body;
 
         const { id } = request.params;
 
@@ -34,7 +34,7 @@ class CurrencyController {
 
         const currencyService = new CurrencyService();
 
-        await currencyService.update({ _id, name, code, valueInReal });
+        await currencyService.update({ _id, name, code, valueInUSD });
 
         return response.status(204).json({ message: 'Success!' });
     }

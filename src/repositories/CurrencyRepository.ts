@@ -3,8 +3,8 @@ import { ICurrency, Currency } from "../models/Currency";
 
 class CurrencyRepository {
 
-    async create({ name, code, valueInReal }: ICurrency): Promise<ICurrency> {
-        const currency = await new Currency({ name, code, valueInReal }).save();
+    async create({ name, code, valueInUSD }: ICurrency): Promise<ICurrency> {
+        const currency = await new Currency({ name, code, valueInUSD }).save();
         return currency;
     }
 
@@ -33,9 +33,9 @@ class CurrencyRepository {
         await Currency.deleteOne({ _id });
     }
 
-    async update({ _id, name, code, valueInReal }: ICurrency): Promise<ICurrency> {
+    async update({ _id, name, code, valueInUSD }: ICurrency): Promise<ICurrency> {
 
-        const currency = await Currency.findByIdAndUpdate({ _id }, { name, code, valueInReal })
+        const currency = await Currency.findByIdAndUpdate({ _id }, { name, code, valueInUSD })
 
         return currency;
     }

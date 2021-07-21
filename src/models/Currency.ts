@@ -4,7 +4,7 @@ export interface ICurrency {
     _id?: string;
     name: string;
     code: string;
-    valueInReal: number;
+    valueInUSD: number;
 
 }
 
@@ -13,7 +13,7 @@ const schema = new mongoose.Schema(
 
         name: { type: String, required: true },
         code: { type: String, required: true, unique: true },
-        valueInReal: { type: Number, required: true },
+        valueInUSD: { type: Number, required: true },
 
     },
 

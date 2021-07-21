@@ -4,7 +4,7 @@ export default celebrate({
     [Segments.BODY]: Joi.object().keys({
         name: Joi.string().required(),
         code: Joi.string().required().min(3),
-        valueInReal: Joi.number().required(),
+        valueInUSD: Joi.number().required(),
 
     }),
 });

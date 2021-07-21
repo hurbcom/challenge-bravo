@@ -9,7 +9,7 @@ class CurrencyService {
 
     private currencyRepository = new CurrencyRepository();
 
-    async create({ name, code, valueInReal }: ICurrency): Promise<ICurrency> {
+    async create({ name, code, valueInUSD }: ICurrency): Promise<ICurrency> {
 
         const currencyAlreadyExists = await this.currencyRepository.getBySigla(code);
 
@@ -17,7 +17,7 @@ class CurrencyService {
             throw new AppError("Currency Already Exists");
         }
 
-        const currency = await this.currencyRepository.create({ name, code, valueInReal });
+        const currency = await this.currencyRepository.create({ name, code, valueInUSD });
 
         return currency;
     }
@@ -29,10 +29,10 @@ class CurrencyService {
         return currencies;
     }
 
-    async update({ _id, name, code, valueInReal }: ICurrency): Promise<ICurrency> {
+    async update({ _id, name, code, valueInUSD }: ICurrency): Promise<ICurrency> {
 
 
-        const currency = await this.currencyRepository.update({ _id, name, code, valueInReal });
+        const currency = await this.currencyRepository.update({ _id, name, code, valueInUSD });
 
         return currency;
     }
@@ -58,12 +58,12 @@ class CurrencyService {
 
         if (!fromCurrency || !toCurrency) {
 
-            throw new AppError("Invalid Coin!");
+            throw new AppError("Invalid Currency!");
         }
 
-        const fromValueInReal = fromCurrency.valueInReal;
+        const fromValueInReal = fromCurrency.valueInUSD;
 
-        const toValueInReal = toCurrency.valueInReal;
+        const toValueInReal = toCurrency.valueInUSD;
 
         const convertedAmount = parseFloat((amountFloat * (fromValueInReal / toValueInReal)).toFixed(4))
 
