@@ -75,7 +75,6 @@ $ yarn dev
 
 
 
-
 ## Executando os testes
 
 [Jest](https://jestjs.io/) foi a escolha de testar o projeto, para executar:
@@ -100,5 +99,3 @@ Você pode ver o relatório de cobertura dentro ``` tests/coverage ```. Eles sã
 Feito com ❤️ por [Wallace Machado](https://github.com/WallaceMachado) 🚀🏽 Entre em contato!
 
 [<img src="https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" />](https://www.linkedin.com/in/wallace-machado-b2054246/)
-
-
