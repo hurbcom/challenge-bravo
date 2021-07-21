@@ -14,10 +14,13 @@ router.get("/currency", currencyController.listAll);
 
 router.get("/currency/conversion", conversionCurrencyValidator, currencyController.conversionOfCurrency);
 
+router.get("/currency/currentQuote", currencyController.currentQuote);
+
 router.post("/currency", createCurrencyValidator, currencyController.create);
 
 router.put("/currency/edit/:id", createCurrencyValidator, currencyController.update);
 
 router.delete("/currency/:id", currencyController.delete);
+
 
 export { router };

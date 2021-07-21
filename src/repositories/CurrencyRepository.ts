@@ -22,7 +22,7 @@ class CurrencyRepository {
         return currency;
     }
 
-    async getBySigla(code: string): Promise<ICurrency> {
+    async getByCode(code: string): Promise<ICurrency> {
 
         const currency = await Currency.findOne({ code })
 
@@ -33,11 +33,10 @@ class CurrencyRepository {
         await Currency.deleteOne({ _id });
     }
 
-    async update({ _id, name, code, valueInUSD }: ICurrency): Promise<ICurrency> {
+    async update({ _id, name, code, valueInUSD, updated_at }: ICurrency): Promise<void> {
 
-        const currency = await Currency.findByIdAndUpdate({ _id }, { name, code, valueInUSD })
+        await Currency.findByIdAndUpdate({ _id }, { name, code, valueInUSD, updated_at })
 
-        return currency;
     }
 
 }

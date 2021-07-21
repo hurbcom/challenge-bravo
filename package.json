@@ -10,10 +10,12 @@
         "test": "SET NODE_ENV=test&&jest --runInBand --forceExit --detectOpenHandles"
     },
     "dependencies": {
+        "axios": "^0.21.1",
         "celebrate": "^15.0.0",
         "connect-mongo": "^4.4.1",
         "express": "^4.17.1",
         "express-promise-router": "^4.1.0",
+        "fs-extra": "^10.0.0",
         "jest": "^27.0.6",
         "mongoose": "^5.13.3",
         "reflect-metadata": "^0.1.13",

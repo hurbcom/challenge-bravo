@@ -5,6 +5,8 @@ export interface ICurrency {
     name: string;
     code: string;
     valueInUSD: number;
+    created_at?: Date;
+    updated_at?: Date;
 
 }
 
@@ -14,6 +16,8 @@ const schema = new mongoose.Schema(
         name: { type: String, required: true },
         code: { type: String, required: true, unique: true },
         valueInUSD: { type: Number, required: true },
+        created_at: { type: Date, default: Date.now },
+        updated_at: { type: Date, default: Date.now },
 
     },
 

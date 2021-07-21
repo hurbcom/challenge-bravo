@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 
+
+
 import { CurrencyService } from "../services/CurrencyService";
 
 
@@ -60,6 +62,26 @@ class CurrencyController {
         const convertedAmount = await currencyService.conversionOfCurrency(from as string, to as string, amount as string);
 
         return response.json(convertedAmount);
+    }
+
+    async currentQuote(request: Request, response: Response): Promise<Response> {
+
+        const currencyService = new CurrencyService();
+
+        const {BRLInUSD, EURInUSD,BTCInUSD, ETHInUSD} = await currencyService.currentQuote();
+
+      const currentsQuotes =  {
+            BRL: BRLInUSD + ' USD',
+            BTC: BTCInUSD + ' USD',
+            EUR: EURInUSD + ' USD',
+            ETH: ETHInUSD + ' USD'
+        }
+
+        return response.json({
+            message: 'Updated Quotes!',
+            currentsQuotes,
+            source:'Exchange data provided by HGBrasil and cryptocurrency by Coinbase'
+        });
     }
 }
 
