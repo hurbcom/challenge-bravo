@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"os"
 
 	"github.com/joho/godotenv"
 )
@@ -11,5 +12,17 @@ func Load() {
 
 	if error != nil {
 		log.Fatal("Error loading .env file")
+	}
+
+	setDefaults()
+}
+
+func setDefaults() {
+	if len(os.Getenv("HTTP_HOST")) == 0 {
+		os.Setenv("HTTP_HOST", "localhost")
+	}
+
+	if len(os.Getenv("HTTP_PORT")) == 0 {
+		os.Setenv("HTTP_PORT", "8080")
 	}
 }

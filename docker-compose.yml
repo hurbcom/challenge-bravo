@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+    app:
+        container_name: cb_app
+        build: .
+        ports: 
+            - "8080:8080"
+        restart: on-failure
+        environment:
+            HTTP_HOST: "0.0.0.0"
+            MYSQL_USER: root
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_HOST: mysql
+        depends_on:
+            - mysql
+
+    mysql:
+        image: mysql:latest
+        container_name: cb_mysql
+        environment:
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
