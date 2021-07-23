@@ -43,8 +43,7 @@ export class PuppeteerProvider implements ICurrencyConverterProvider {
 
       await page.waitForSelector(this.fromSelector);
       await page.$eval(this.fromSelector, element => {
-        // eslint-disable-next-line no-param-reassign
-        element.value = '';
+        (element as HTMLInputElement).value = ''; // eslint-disable-line no-param-reassign
       });
 
       await page.type(this.fromSelector, `${amount}`);
