@@ -1,11 +1,5 @@
+import { IConvertCurrencyDTO } from '../dtos/IConvertCurrencyDTO';
+
 export interface ICurrencyConverterProvider {
-  convert({
-    from,
-    to,
-    amount,
-  }: {
-    from: string;
-    to: string;
-    amount: number;
-  }): Promise<number>;
+  convert({ from, to, amount }: IConvertCurrencyDTO): Promise<number>;
 }

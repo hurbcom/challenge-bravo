@@ -1,5 +1,6 @@
 import puppeteer, { Browser } from 'puppeteer';
 
+import { IConvertCurrencyDTO } from '../dtos/IConvertCurrencyDTO';
 import { ICurrencyConverterProvider } from '../models/ICurrencyConverterProvider';
 
 export class PuppeteerProvider implements ICurrencyConverterProvider {
@@ -21,20 +22,38 @@ export class PuppeteerProvider implements ICurrencyConverterProvider {
     return browser;
   }
 
-  private formatUrl({ from, to }: { from: string; to: string }): string {
+  private formatUrl({ from, to }: Omit<IConvertCurrencyDTO, 'amount'>): string {
     return `${this.baseURL}from+${from}+to+${to}`;
   }
 
-  public async convert({
+  private formatExceptions({
     from,
     to,
+  }: Omit<IConvertCurrencyDTO, 'amount'>): Omit<IConvertCurrencyDTO, 'amount'> {
+    let formattedFrom = from;
+    let formattedTo = to;
+
+    if (from === 'eth') {
+      formattedFrom = 'ether' as 'eth';
+    }
+
+    if (from === 'eth') {
+      formattedTo = 'ether' as 'eth';
+    }
+
+    return { from: formattedFrom, to: formattedTo };
+  }
+
+  public async convert({
+    from: originalFrom,
+    to: originalTo,
     amount,
-  }: {
-    from: string;
-    to: string;
-    amount: number;
-  }): Promise<number> {
+  }: IConvertCurrencyDTO): Promise<number> {
     const browser = await this.launch();
+    const { from, to } = this.formatExceptions({
+      from: originalFrom,
+      to: originalTo,
+    });
 
     try {
       const page = await browser.newPage();
