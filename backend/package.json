@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
-    "dev": "cross-env NODE_ENV=dev ts-node-dev -r tsconfig-paths/register --inspect --no-notify --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
-    "start": "node dist/shared/infra/http/server.js"
+    "dev": "cross-env NODE_ENV=dev ts-node-dev -r tsconfig-paths/register --inspect --no-notify --transpile-only --ignore-watch node_modules src/infra/http/server.ts",
+    "start": "node dist/infra/http/server.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
