@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import '../../container';
+import '@container/index';
 
 import express from 'express';
 
