@@ -14,7 +14,8 @@
       "@infra/*": ["infra/*"],
       "@interfaces/*": ["interfaces/*"],
       "@repositories/*": ["repositories/*"],
-      "@services/*": ["services/*"]
+      "@services/*": ["services/*"],
+      "@utils/*": ["utils/*"]
     },
     "esModuleInterop": true,
     "experimentalDecorators": true,

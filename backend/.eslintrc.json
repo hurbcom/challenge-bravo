@@ -56,9 +56,13 @@
         "groups": [
           "module",
           "/^@config/",
-          "/^@shared/errors/",
-          "/^@shared/",
-          "/^@module/",
+          "/^@container/",
+          "/^@errors/",
+          "/^@infra/",
+          "/^@interfaces/",
+          "/^@repositories/",
+          "/^@services/",
+          "/^@utils/",
           ["parent", "sibling", "index"]
         ],
         "alphabetize": { "order": "asc", "ignoreCase": true }
