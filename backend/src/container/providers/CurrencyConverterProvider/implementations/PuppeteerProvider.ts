@@ -15,9 +15,19 @@ export class PuppeteerProvider implements ICurrencyConverterProvider {
   }
 
   private async launch(): Promise<Browser> {
+    console.log(
+      '\nCurrencyConverter (PuppeteerProvider) |'.blue,
+      'Launching browser...',
+    );
+
     const browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
+
+    console.log(
+      'CurrencyConverter (PuppeteerProvider) |'.blue,
+      'Browser is ready!',
+    );
 
     return browser;
   }
@@ -56,27 +66,53 @@ export class PuppeteerProvider implements ICurrencyConverterProvider {
     });
 
     try {
+      console.log(
+        'CurrencyConverter (PuppeteerProvider) |'.blue,
+        `Converting ${from.toUpperCase()} to ${to.toUpperCase()}...`,
+      );
+
       const page = await browser.newPage();
 
       await page.goto(this.formatUrl({ from, to }));
 
       await page.waitForSelector(this.fromSelector);
+      await page.waitForSelector(this.toSelector);
       await page.$eval(this.fromSelector, element => {
         (element as HTMLInputElement).value = ''; // eslint-disable-line no-param-reassign
       });
 
       await page.type(this.fromSelector, `${amount}`);
 
+      await page.waitForTimeout(1200);
+
       const result: number = await page.evaluate(
         browserToSelector => document.querySelector(browserToSelector).value,
         this.toSelector,
       );
 
+      console.log(
+        'CurrencyConverter (PuppeteerProvider) |'.blue,
+        'Successful conversion!',
+      );
+
       return result;
     } catch (error) {
+      console.log(
+        'CurrencyConverter (PuppeteerProvider) |'.red,
+        'Error performing conversion!',
+        error,
+      );
       throw new Error();
     } finally {
+      console.log(
+        'CurrencyConverter (PuppeteerProvider) |'.blue,
+        'Closing browser...',
+      );
       await browser.close();
+      console.log(
+        'CurrencyConverter (PuppeteerProvider) |'.blue,
+        'Browser closed.',
+      );
     }
   }
 }

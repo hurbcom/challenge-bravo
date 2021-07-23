@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import '@container/index';
+import 'colors';
 
 import express from 'express';
 

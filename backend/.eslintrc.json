@@ -21,6 +21,7 @@
   },
   "plugins": ["@typescript-eslint", "eslint-plugin-import-helpers", "prettier"],
   "rules": {
+    "no-console": "off",
     "no-underscore-dangle": "off",
     "prettier/prettier": "error",
     "import/no-unresolved": "error",
