@@ -85,7 +85,7 @@ export class PuppeteerProvider implements ICurrencyConverterProvider {
 
       await page.waitForTimeout(1200);
 
-      const result: number = await page.evaluate(
+      const result: string = await page.evaluate(
         browserToSelector => document.querySelector(browserToSelector).value,
         this.toSelector,
       );
@@ -95,7 +95,7 @@ export class PuppeteerProvider implements ICurrencyConverterProvider {
         'Successful conversion!',
       );
 
-      return result;
+      return Number(result);
     } catch (error) {
       console.log(
         'CurrencyConverter (PuppeteerProvider) |'.red,
