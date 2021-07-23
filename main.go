@@ -10,6 +10,7 @@ import (
 func main() {
 	config.Load()
 	database.RunMigrations()
+	database.SeederCurrencies()
 	go services.HourlyUpdateExchangeRates()
 	router.Run()
 }
