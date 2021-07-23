@@ -18,6 +18,10 @@ func Load() {
 }
 
 func setDefaults() {
+	if len(os.Getenv("BASE_CURRENCY")) == 0 {
+		os.Setenv("BASE_CURRENCY", "USD")
+	}
+
 	if len(os.Getenv("HTTP_HOST")) == 0 {
 		os.Setenv("HTTP_HOST", "localhost")
 	}

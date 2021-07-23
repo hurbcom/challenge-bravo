@@ -1,4 +1,14 @@
 package services
+/**
+* The purpose of this package is get the actual real exchange rates.
+* The api used is provided by Coinbase https://www.coinbase.com/
+* 
+* This code only works for consume the api provided by Coinbase.
+* The documentation used can be accessed at this
+* link: https://developers.coinbase.com/api/
+* 
+* Gustavo Willer - 23/07/2021
+*/
 
 import (
 	"encoding/json"
@@ -31,7 +41,7 @@ type ResponseApiCoinbase struct {
 }
 
 func GetExchangeRates() map[string]string {
-	response, error :=  http.Get(fmt.Sprintf("https://api.coinbase.com/v2/exchange-rates?currency=%s", baseCurrency))
+	response, error :=  http.Get(getApiURI())
 
 	if error != nil {
         fmt.Print(error.Error())
@@ -77,4 +87,11 @@ func HourlyUpdateExchangeRates() {
 		UpdateExchangeRates()
 		time.Sleep(time.Hour)
 	}
+}
+
+func getApiURI() string {
+	return fmt.Sprintf(
+		"https://api.coinbase.com/v2/exchange-rates?currency=%s",
+		os.Getenv("BASE_CURRENCY"),
+	)
 }
