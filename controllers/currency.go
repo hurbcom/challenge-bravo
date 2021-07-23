@@ -83,5 +83,5 @@ func DeleteCurrency(c *gin.Context) {
 
 	database.Where("code = ?", currency.Code).Delete(&models.Currency{})
 
-	c.IndentedJSON(http.StatusOK, nil)
+	c.IndentedJSON(http.StatusNoContent, nil)
 }
