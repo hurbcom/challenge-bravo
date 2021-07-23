@@ -61,3 +61,93 @@ As bibliotecas externas do ecossistema de Go, que auxiliaram no desenvolvimento:
 - [gin web framework](https://github.com/gin-gonic/gin) 
 - [gorm](https://gorm.io/docs/index.html)
 - [godotenv](https://github.com/joho/godotenv)
+
+
+## 📖 Documentação API
+
+### Cria uma nova moeda
+
+Http Request
+`POST /currency`
+
+Parâmetros Body:
+```
+{
+  "Code": string,
+  "IsReal": boolean,
+  "ExchangeRate": float64
+}
+```
+
+Descrição dos parâmetros:
+ - `Code` Representa o código monetário da moeda. Ex: BTC, BRL, USD
+ - `IsReal` Valor booleano para representar se a moeda é de cotação verdadeira ou ficticia.
+ - `ExchangeRate` Taxa de conversão de acordo com a moeda de lastro informada na aplicação.
+
+<br />
+Respostas
+HTTP Code: 400 / Contém a descrição do erro devido aos parâmetros de request.
+
+```
+{
+  "error": string
+}
+```
+HTTP Code: 201 Contém os dados de inserção da nova moeda
+```
+{
+  "Code": string,
+  "IsReal": boolean,
+  "ExchangeRate": float64
+}
+```
+<br />
+
+### Exclui uma moeda
+
+Http Request
+`DELETE /currency/{code}`
+
+
+Descrição dos parâmetros:
+ - `Code` Representa o código monetário da moeda. Ex: BTC, BRL, USD
+
+
+<br />
+Respostas: <br />
+HTTP Code: 400 / Contém a descrição do erro devido aos parâmetros de request.
+
+```
+{
+  "error": string
+}
+```
+HTTP Code: 204 / Representa o sucesso da operação de exclusão de moeda.
+```
+{}
+```
+<br />
+
+### Realiza uma conversão monetária
+Http Request
+`GET /currency/convert/:from:/:to:/:amount:`
+
+Descrição dos parâmetros:
+ - `:from:` Representa o código monetário da moeda de origem para realizar a conversão. Tipo: `string`
+ - `:to:` Representa o código monetário da moeda de destino para realizar a conversão. Tipo: `string`
+- `amount` Representa a quantidade monetária a ser convertida. Tipo: `float64`
+
+Respostas
+HTTP Code: 400 / Contém a descrição do erro devido aos parâmetros de request.
+
+```
+{
+  "error": string
+}
+```
+HTTP Code: 200 / Retorna o resultado da operação de conversão monetária
+```
+{
+  "Result": float64
+}
+```
