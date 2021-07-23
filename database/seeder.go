@@ -4,6 +4,7 @@ import (
 	"github.com/gustavowiller/challengebravo/models"
 )
 
+// Insert the data of default currencies at database
 func SeederCurrencies() {
 	database := Connect()
 	sqlDB, _ := database.DB()

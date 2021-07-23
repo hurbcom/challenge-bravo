@@ -24,8 +24,6 @@ import (
 	"github.com/gustavowiller/challengebravo/models"
 )
 
-const baseCurrency = "USD"
-
 /**
 * This type struct represents the interface that map the output
 * response of endpoint https://api.coinbase.com/v2/exchange-rates
@@ -40,6 +38,7 @@ type ResponseApiCoinbase struct {
 	}
 }
 
+// Get all current exchange rates provided by External Api
 func GetExchangeRates() map[string]string {
 	response, error := http.Get(getApiURI())
 
@@ -60,6 +59,7 @@ func GetExchangeRates() map[string]string {
 	return responseApi.Data.Rates
 }
 
+// Update real currencies with the current enchange rates
 func UpdateExchangeRates() {
 	var currencies []map[string]interface{}
 	exchangeRates := GetExchangeRates()
@@ -82,6 +82,7 @@ func UpdateExchangeRates() {
 	}
 }
 
+// The application Hourly executes the update of real currencies
 func HourlyUpdateExchangeRates() {
 	for {
 		UpdateExchangeRates()

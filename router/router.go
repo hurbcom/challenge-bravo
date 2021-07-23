@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Instance the router to handle request to our api
 func Run() {
 	router := gin.Default()
 

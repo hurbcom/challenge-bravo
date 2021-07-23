@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Represents the structure of Real Currency or Fictional Currency
 type Currency struct {
 	gorm.Model
 
@@ -14,6 +15,7 @@ type Currency struct {
 	ExchangeRate float64
 }
 
+// Performs more validation to store a new currency at database
 func ValidateStoreCurrency(currency *Currency) error {
 
 	if currency.IsReal == false && currency.ExchangeRate == 0 {

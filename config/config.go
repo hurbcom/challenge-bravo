@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Load the environment variables from the default file .env
 func Load() {
 	error := godotenv.Load()
 

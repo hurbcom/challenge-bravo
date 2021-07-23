@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Create a connection with database MySQL
 func Connect() *gorm.DB {
 	database, error := gorm.Open(mysql.Open(getDataSourceName()), &gorm.Config{})
 	if error != nil {

@@ -10,6 +10,7 @@ import (
 	"github.com/gustavowiller/challengebravo/services"
 )
 
+// Handle of request create the new currency
 func CreateCurrency(c *gin.Context) {
 	var currency models.Currency
 
@@ -48,6 +49,7 @@ func CreateCurrency(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, currency)
 }
 
+// Handle of request to convert two currencies
 func ConvertCurrency(c *gin.Context) {
 	var conversion models.Conversion
 	var currencyFrom models.Currency
@@ -69,6 +71,7 @@ func ConvertCurrency(c *gin.Context) {
 		"result": conversion.Amount * currencyTo.ExchangeRate / currencyFrom.ExchangeRate})
 }
 
+// Handle of request to delete a currency
 func DeleteCurrency(c *gin.Context) {
 	var currency models.Currency
 
