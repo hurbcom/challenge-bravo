@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gin-gonic/gin"
 	"github.com/gustavowiller/challengebravo/database"
 	"github.com/gustavowiller/challengebravo/models"
 	"github.com/gustavowiller/challengebravo/services"
-	"github.com/gin-gonic/gin"
 )
 
 func CreateCurrency(c *gin.Context) {
@@ -20,18 +20,18 @@ func CreateCurrency(c *gin.Context) {
 
 	if error := models.ValidateStoreCurrency(&currency); error != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": error.Error()})
-		return 
+		return
 	}
 
-	if (currency.IsReal == true) {
+	if currency.IsReal == true {
 		exchangeRate, found := services.GetExchangeRates()[currency.Code]
 		if !found {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "No real value exchange rate found for this currency" })
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "No real value exchange rate found for this currency"})
 			return
 		}
 
 		rate, error := strconv.ParseFloat(exchangeRate, 64)
-		if (error != nil) {
+		if error != nil {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": error.Error()})
 			return
 		}
@@ -64,7 +64,7 @@ func ConvertCurrency(c *gin.Context) {
 
 	database.Where("code = ?", conversion.From).First(&currencyFrom)
 	database.Where("code = ?", conversion.To).First(&currencyTo)
-	
+
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"result": conversion.Amount * currencyTo.ExchangeRate / currencyFrom.ExchangeRate})
 }

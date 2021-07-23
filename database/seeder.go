@@ -12,32 +12,32 @@ func SeederCurrencies() {
 	/**
 	* This code prevents the seeder from creating duplicates
 	* It only works at early stage creation of database
-	*/
+	 */
 	var totalCurrencies int64
 	database.Model(&models.Currency{}).Count(&totalCurrencies)
-	if (totalCurrencies > 0) {
+	if totalCurrencies > 0 {
 		return
 	}
 
 	currencies := []models.Currency{
 		models.Currency{
-			Code: "USD",
+			Code:   "USD",
 			IsReal: true,
 		},
 		models.Currency{
-			Code: "BRL",
+			Code:   "BRL",
 			IsReal: true,
 		},
 		models.Currency{
-			Code: "EUR",
+			Code:   "EUR",
 			IsReal: true,
 		},
 		models.Currency{
-			Code: "BTC",
+			Code:   "BTC",
 			IsReal: true,
 		},
 		models.Currency{
-			Code: "ETH",
+			Code:   "ETH",
 			IsReal: true,
 		},
 	}

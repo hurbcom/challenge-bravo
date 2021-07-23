@@ -1,14 +1,15 @@
 package services
+
 /**
 * The purpose of this package is get the actual real exchange rates.
 * The api used is provided by Coinbase https://www.coinbase.com/
-* 
+*
 * This code only works for consume the api provided by Coinbase.
 * The documentation used can be accessed at this
 * link: https://developers.coinbase.com/api/
-* 
+*
 * Gustavo Willer - 23/07/2021
-*/
+ */
 
 import (
 	"encoding/json"
@@ -21,7 +22,6 @@ import (
 
 	"github.com/gustavowiller/challengebravo/database"
 	"github.com/gustavowiller/challengebravo/models"
-
 )
 
 const baseCurrency = "USD"
@@ -33,7 +33,7 @@ const baseCurrency = "USD"
 * link: https://developers.coinbase.com/api/v2#get-exchange-rates
 *
 * Gustavo Willer - 20/07/2021
-*/
+ */
 type ResponseApiCoinbase struct {
 	Data struct {
 		Rates map[string]string
@@ -41,11 +41,11 @@ type ResponseApiCoinbase struct {
 }
 
 func GetExchangeRates() map[string]string {
-	response, error :=  http.Get(getApiURI())
+	response, error := http.Get(getApiURI())
 
 	if error != nil {
-        fmt.Print(error.Error())
-        os.Exit(1)
+		fmt.Print(error.Error())
+		os.Exit(1)
 	}
 
 	responseData, error := ioutil.ReadAll(response.Body)
@@ -63,7 +63,7 @@ func GetExchangeRates() map[string]string {
 func UpdateExchangeRates() {
 	var currencies []map[string]interface{}
 	exchangeRates := GetExchangeRates()
-	
+
 	database := database.Connect()
 	sqlDB, _ := database.DB()
 	defer sqlDB.Close()

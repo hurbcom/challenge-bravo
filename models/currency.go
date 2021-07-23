@@ -9,8 +9,8 @@ import (
 type Currency struct {
 	gorm.Model
 
-	Code string `gorm:"unique" uri:"code" binding:"required"`
-	IsReal bool
+	Code         string `gorm:"unique" uri:"code" binding:"required"`
+	IsReal       bool
 	ExchangeRate float64
 }
 

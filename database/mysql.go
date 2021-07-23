@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func Connect() *gorm.DB {
