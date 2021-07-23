@@ -1,3 +1,4 @@
+import { AppError } from "../AppError";
 import { ICurrency, Currency } from "../models/Currency";
 
 
@@ -30,7 +31,10 @@ class CurrencyRepository {
     }
 
     async delete(_id: string): Promise<void> {
+
         await Currency.deleteOne({ _id });
+
+
     }
 
     async update({ _id, name, code, valueInUSD, updated_at }: ICurrency): Promise<void> {

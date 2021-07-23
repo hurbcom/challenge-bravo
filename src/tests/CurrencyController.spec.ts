@@ -42,11 +42,11 @@ describe('Currency Controller', () => {
 
     it('Should be able to create a new currency', async () => {
         const response = await request(app)
-            .post('/')
+            .post('/currency')
             .send({
                 name: "Test Currency",
                 code: "TCO",
-                valueInUSD: "2"
+                valueInUSD: 2
 
             })
 
@@ -62,7 +62,7 @@ describe('Currency Controller', () => {
     it('Should not be able to create a currency to code Already Exists', async () => {
 
         const response = await request(app)
-            .post('/')
+            .post('/currency')
             .send({
                 name: "Test Currency",
                 code: "TCO",
@@ -77,7 +77,7 @@ describe('Currency Controller', () => {
     it('Should be able to get all coins', async () => {
 
         const response = await request(app)
-            .get('/')
+            .get('/currency')
             .send()
 
         expect(response.status).toBe(200);
@@ -88,34 +88,51 @@ describe('Currency Controller', () => {
     it('Should be able to update a currency', async () => {
         const id = _id;
         const response = await request(app)
-            .put(`/edit/${id}`)
+            .put(`/currency/edit/${id}`)
             .send({
                 name: "Test update",
                 code: "TCO",
                 valueInUSD: "2"
             })
 
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(204);
+
+    });
+
+    it('should be able to update to a non-existent currency', async () => {
+
+        const id = '60f8041b75d32924f41a5dd7';
+        const response = await request(app)
+            .put(`/currency/edit/${id}`)
+            .send({
+                name: "Test update",
+                code: "TCO",
+                valueInUSD: "2"
+            })
+
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Currency don't Exists");
 
     });
 
     it('Should be able to conversion a currency', async () => {
 
         const response = await request(app)
-            .get(`/conversion?from=btc&to=eur&amount=123.48`)
+            .get(`/currency/conversion?from=TCO&to=usd&amount=120.48`)
             .send()
 
 
 
         expect(response.status).toBe(200);
-        expect(response.body).toEqual(3325169.8844);
+        expect(response.body.convertedAmount).toEqual(240.96);
 
     });
 
     it('Should not be able to convert an amount that is not a number', async () => {
 
         const response = await request(app)
-            .get(`/conversion?from=btc&to=eur&amount=invalid`)
+            .get(`/currency/conversion?from=btc&to=eur&amount=invalid`)
             .send()
 
 
@@ -128,7 +145,7 @@ describe('Currency Controller', () => {
     it('should not be able to convert from a non-existent currency', async () => {
 
         const response = await request(app)
-            .get(`/conversion?from=invalid&to=eur&amount=123.45`)
+            .get(`/currency/conversion?from=invalid&to=eur&amount=123.45`)
             .send()
 
 
@@ -141,7 +158,7 @@ describe('Currency Controller', () => {
     it('should not be able to convert to a non-existent currency', async () => {
 
         const response = await request(app)
-            .get(`/conversion?from=btc&to=invalid&amount=123.45`)
+            .get(`/currency/conversion?from=btc&to=invalid&amount=123.45`)
             .send()
 
 
@@ -154,13 +171,39 @@ describe('Currency Controller', () => {
     it('should be able to delete a currency', async () => {
         const id = _id;
         const response = await request(app)
-            .delete(`/${id}`)
+            .delete(`/currency/${id}`)
             .send()
 
 
 
         expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Currency Excluída');
+        expect(response.body.message).toBe('Currency Deleted');
+
+    });
+
+    it('should not be able to delete a currency to a non-existent currency', async () => {
+        const id = '60f8041b75d32924f41a5dd7';
+        const response = await request(app)
+            .delete(`/currency/${id}`)
+            .send()
+
+
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Currency don't Exists");
+
+    });
+
+    it('should be able to get current quote', async () => {
+
+        const response = await request(app)
+            .get(`/currency/currentQuote`)
+            .send()
+
+
+
+        expect(response.status).toBe(200);
+       
 
     });
 

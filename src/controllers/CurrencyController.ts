@@ -9,6 +9,7 @@ class CurrencyController {
 
     async create(request: Request, response: Response): Promise<Response> {
 
+
         const { name, code, valueInUSD } = request.body;
 
         const currencyService = new CurrencyService();
@@ -16,6 +17,7 @@ class CurrencyController {
         const currency = await currencyService.create({ name, code, valueInUSD });
 
         return response.status(201).json(currency);
+
     }
 
     async listAll(request: Request, response: Response): Promise<Response> {
@@ -32,11 +34,9 @@ class CurrencyController {
 
         const { id } = request.params;
 
-        const _id = id;
-
         const currencyService = new CurrencyService();
 
-        await currencyService.update({ _id, name, code, valueInUSD });
+        await currencyService.update({ _id: id, name, code, valueInUSD });
 
         return response.status(204).json({ message: 'Success!' });
     }
@@ -50,7 +50,7 @@ class CurrencyController {
 
         await currencyService.delete(_id);
 
-        return response.json({ message: 'Currency Excluída' });
+        return response.json({ message: 'Currency Deleted' });
     }
 
     async conversionOfCurrency(request: Request, response: Response): Promise<Response> {
@@ -76,6 +76,8 @@ class CurrencyController {
             EUR: EURInUSD + ' USD',
             ETH: ETHInUSD + ' USD'
         }
+
+
 
         return response.json({
             message: 'Updated Quotes!',

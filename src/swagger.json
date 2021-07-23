@@ -13,7 +13,7 @@
                 "tags": [
                     "Currencies"
                 ],
-                "summary": "Create a currency",
+                "summary": "Create a Currency",
                 "description": "Create a new currency",
                 "requestBody": {
                     "content": {
@@ -60,31 +60,8 @@
                 "description": "List all Currencies",
                 "responses": {
                     "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "id": {
-                                                "type": "string"
-                                            },
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "code": {
-                                                "type": "string"
-                                            },
-                                            "valueInUSD": {
-                                                "type": "string"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        "description": "Success"
+
                     }
                 }
             }
@@ -94,7 +71,7 @@
                 "tags": [
                     "Currencies"
                 ],
-                "summary": "Update a currency",
+                "summary": "Update a Currency",
                 "description": "Update a new currency",
                 "parameters": [
                     {
@@ -134,7 +111,7 @@
                 },
                 "responses": {
                     "204": {
-                        "description": "Success"
+                        "description": "Success!"
                     },
                     "500": {
                         "description": "internal Error"
@@ -147,7 +124,7 @@
                 "tags": [
                     "Currencies"
                 ],
-                "summary": "Update a currency",
+                "summary": "Update a Currency",
                 "description": "Update a new currency",
                 "parameters": [
                     {
@@ -162,7 +139,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Currency Excluída"
+                        "description": "Currency Deleted"
                     },
                     "500": {
                         "description": "internal Error"
@@ -175,8 +152,8 @@
                 "tags": [
                     "Currencies"
                 ],
-                "summary": "conversion of Currencies",
-                "description": "conversion of Currencies",
+                "summary": "Conversion of Currencies",
+                "description": "Conversion of Currencies",
                 "parameters": [
                     {
                         "name": "params",
@@ -204,6 +181,20 @@
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/currency/currentQuote": {
+            "get": {
+                "tags": [
+                    "Currencies"
+                ],
+                "summary": "Get Current Quote",
+                "description": "Get Current Quote",
                 "responses": {
                     "200": {
                         "description": "Success"

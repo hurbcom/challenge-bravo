@@ -11,6 +11,7 @@ export const connect = async (): Promise<Mongoose> =>
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useFindAndModify: false
     });
 
 export const close = (): Promise<void> => mongoose.connection.close();

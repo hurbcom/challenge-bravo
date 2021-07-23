@@ -9,6 +9,13 @@ interface ICurrentQuote {
     EURInUSD: number;
     BTCInUSD: number;
     ETHInUSD: number;
+
+}
+
+interface IConversionCurrency {
+    convertedAmount:Number;
+    currencyFrom: {};
+    currencyTo: {}
 }
 
 class CurrencyService {
@@ -37,6 +44,12 @@ class CurrencyService {
 
     async update({ _id, name, code, valueInUSD }: ICurrency): Promise<void> {
 
+        const currencyAlreadyExists = await this.currencyRepository.getById(_id);
+
+        if (!currencyAlreadyExists) {
+            throw new AppError("Currency don't Exists");
+        }
+
         const updated_at = new Date();
 
         await this.currencyRepository.update({ _id, name, code, valueInUSD, updated_at });
@@ -45,12 +58,18 @@ class CurrencyService {
     }
 
     async delete(_id: string): Promise<void> {
+        
+        const currencyAlreadyExists = await this.currencyRepository.getById(_id);
+
+        if (!currencyAlreadyExists) {
+            throw new AppError("Currency don't Exists");
+        }
 
         await this.currencyRepository.delete(_id);
 
     }
 
-    async conversionOfCurrency(from: string, to: string, amount: string): Promise<Number> {
+    async conversionOfCurrency(from: string, to: string, amount: string): Promise<IConversionCurrency> {
 
         const amountFloat = parseFloat(amount);
 
@@ -72,12 +91,28 @@ class CurrencyService {
 
         const toValueInUSD = toCurrency.valueInUSD;
 
-        const convertedAmount = parseFloat((amountFloat * (fromValueInUSD / toValueInUSD)).toFixed(2))
+        const convertedAmount = parseFloat((amountFloat * (fromValueInUSD / toValueInUSD)).toFixed(2));
 
-        return convertedAmount;
+        const conversion = {
+            convertedAmount,
+            currencyFrom: {
+                amount: amount + ' ' + from.toUpperCase(),
+                quoteUSD: '1 ' + from.toUpperCase() + " is worth " + fromCurrency.valueInUSD + ' USD',
+                quoteUSDUpdatedAt:fromCurrency.updated_at
+            },
+            currencyTo: {
+                convertedAmount: convertedAmount + to.toUpperCase(),
+                quoteUSD: '1 ' + to.toUpperCase() + " is worth " + toCurrency.valueInUSD + ' USD',
+                quoteUSDUpdatedAt:toCurrency.updated_at
+            }
+
+        }
+
+        return conversion;
     }
 
     async currentQuote(): Promise<ICurrentQuote> {
+
         const currentQuoteInBRL = await axios.get("https://api.hgbrasil.com/finance/quotations?key=b9524aa8");
         const { USD, EUR } = currentQuoteInBRL.data.results.currencies
 
@@ -117,6 +152,7 @@ class CurrencyService {
             EURInUSD,
             BTCInUSD,
             ETHInUSD
+
         }
 
         return currentsQuotes
