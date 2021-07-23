@@ -18,9 +18,9 @@ A API, originalmente, converte entre as seguintes moedas:
 
 Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-Para as moedas acima, os dados de câmbio são obtidos via consumo das seguintes APIs externas: moeda via [HGBRASIL](https://hgbrasil.com/status/finance) e de criptomoeda via [Coinbase](https://developers.coinbase.com/api/v2#get-buy-price). Para isso deverá ser usada a rota ``` /currency/currentQuote ```
+Para as moedas acima, a cotação do USD é obtida via consumo das seguintes APIs externas: moeda via [HGBRASIL](https://hgbrasil.com/status/finance) e de criptomoeda via [Coinbase](https://developers.coinbase.com/api/v2#get-buy-price). Para isso deverá ser usada a rota ``` /currency/currentQuote ```
 
-Para cadastro de nova moeda, deverá ser informado a cotação do dólar e a atualização do valor será realizada pelo usuário através do campo ```valueInUSD``` via rota ``` /currency/edit/:id ```
+No cadastro de nova moeda, rota ``` /currency ```, deverá ser informado a cotação do dólar. A atualização do valor do dólar para a nova moeda, será realizada pelo usuário através do campo ```valueInUSD``` via rota ``` /currency/edit/:id ```
 
 ## Indice
 
@@ -75,7 +75,7 @@ $ yarn dev
 |  /currency |  POST |  Body: ``` name ```, ``` code ``` e ``` valueInUSD ``` |  Crie uma nova moeda |
 |  /currency |  GET |  -  | Recupere uma lista com todas as moedas |
 |  /currency/conversion |  GET |  Query: ```from ``` (moeda de origem), ``` to ``` (moeda de conversão), ``` amount ``` (valor a ser convertido)  |  Consulte uma conversão monetária |
-|  /currency/currentQuote |  GET | -  |  Atualize os dados de cambio das moedas originais do sistema (USD, BRL, EUR, BTC, ETH)  |
+|  /currency/currentQuote |  GET | -  |  Atualize a cotação do USD das moedas originais do sistema (USD, BRL, EUR, BTC, ETH)  |
 |  /currency/edit/:id |  PUT |  Body: ``` name ```, ``` code ``` e ``` valueInUSD ```  |  Edite uma moeda |
 |  /currenc/:id |  DELETE |  -  |  Exclua uma moeda |
 
