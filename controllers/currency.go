@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -25,15 +27,25 @@ func CreateCurrency(c *gin.Context) {
 	}
 
 	if currency.IsReal == true {
-		exchangeRate, found := services.GetExchangeRates()[currency.Code]
+		exchangeRates, error := services.AllExchangeRates()
+		if error != nil {
+			c.IndentedJSON(http.StatusInternalServerError, nil)
+			return
+		}
+
+		exchangeRate, found := exchangeRates[currency.Code]
 		if !found {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "No real value exchange rate found for this currency"})
+			c.IndentedJSON(
+				http.StatusBadRequest,
+				gin.H{"error": "No real value exchange rate found for this currency"})
+
 			return
 		}
 
 		rate, error := strconv.ParseFloat(exchangeRate, 64)
 		if error != nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": error.Error()})
+			log.Printf(error.Error())
+			c.IndentedJSON(http.StatusInternalServerError, nil)
 			return
 		}
 
@@ -44,7 +56,11 @@ func CreateCurrency(c *gin.Context) {
 	sqlDB, _ := database.DB()
 	defer sqlDB.Close()
 
-	database.Create(&currency)
+	if error := database.Create(&currency).Error; error != nil {
+		log.Printf(error.Error())
+		c.IndentedJSON(http.StatusInternalServerError, nil)
+		return
+	}
 
 	c.IndentedJSON(http.StatusCreated, currency)
 }
@@ -64,8 +80,21 @@ func ConvertCurrency(c *gin.Context) {
 	sqlDB, _ := database.DB()
 	defer sqlDB.Close()
 
-	database.Where("code = ?", conversion.From).First(&currencyFrom)
-	database.Where("code = ?", conversion.To).First(&currencyTo)
+	if error := database.Where("code = ?", conversion.From).First(&currencyFrom).Error; error != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": fmt.Sprintf("The code currency '%s' not found", conversion.From)})
+		return
+	}
+
+	if error := database.Where("code = ?", conversion.To).First(&currencyTo).Error; error != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": fmt.Sprintf("The code currency '%s' not found", conversion.To)})
+		return
+	}
 
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"result": conversion.Amount * currencyTo.ExchangeRate / currencyFrom.ExchangeRate})
@@ -83,6 +112,14 @@ func DeleteCurrency(c *gin.Context) {
 	database := database.Connect()
 	sqlDB, _ := database.DB()
 	defer sqlDB.Close()
+
+	if error := database.Where("code = ?", currency.Code).First(&currency).Error; error != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": fmt.Sprintf("The code currency '%s' not found", currency.Code)})
+		return
+	}
 
 	database.Where("code = ?", currency.Code).Delete(&models.Currency{})
 

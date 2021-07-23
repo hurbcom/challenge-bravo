@@ -38,31 +38,36 @@ type ResponseApiCoinbase struct {
 	}
 }
 
-// Get all current exchange rates provided by External Api
-func GetExchangeRates() map[string]string {
+// Get all current exchange rates provided by an external api
+func AllExchangeRates() (map[string]string, error) {
 	response, error := http.Get(getApiURI())
 
 	if error != nil {
-		fmt.Print(error.Error())
-		os.Exit(1)
+		fmt.Printf(error.Error())
+		return nil, error
 	}
 
 	responseData, error := ioutil.ReadAll(response.Body)
 	if error != nil {
-		log.Fatal(error)
+		log.Printf(error.Error())
+		return nil, error
 	}
 
 	var responseApi ResponseApiCoinbase
 
 	json.Unmarshal(responseData, &responseApi)
 
-	return responseApi.Data.Rates
+	return responseApi.Data.Rates, nil
 }
 
-// Update real currencies with the current enchange rates
-func UpdateExchangeRates() {
+func updateExchangeRates() {
 	var currencies []map[string]interface{}
-	exchangeRates := GetExchangeRates()
+
+	exchangeRates, error := AllExchangeRates()
+	if error != nil {
+		log.Printf(error.Error())
+		return
+	}
 
 	database := database.Connect()
 	sqlDB, _ := database.DB()
@@ -82,10 +87,10 @@ func UpdateExchangeRates() {
 	}
 }
 
-// The application Hourly executes the update of real currencies
+// Create the routine hourly for update the exchage rates of real currencies
 func HourlyUpdateExchangeRates() {
 	for {
-		UpdateExchangeRates()
+		updateExchangeRates()
 		time.Sleep(time.Hour)
 	}
 }
