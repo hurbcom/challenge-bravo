@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/server.ts",
-        "test": "SET NODE_ENV=test&&jest --runInBand --forceExit --detectOpenHandles"
+        "test": "jest --runInBand --forceExit --detectOpenHandles"
     },
     "dependencies": {
         "axios": "^0.21.1",

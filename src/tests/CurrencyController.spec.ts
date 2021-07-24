@@ -59,7 +59,7 @@ describe('Currency Controller', () => {
     });
 
 
-    it('Should not be able to create a currency to code Already Exists', async () => {
+    it('should not be able to create a currency for existing code', async () => {
 
         const response = await request(app)
             .post('/currency')
@@ -112,11 +112,11 @@ describe('Currency Controller', () => {
 
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Currency don't Exists");
+        expect(response.body.message).toBe("Currency does not exist");
 
     });
 
-    it('Should be able to conversion a currency', async () => {
+    it('Should be able to convert a currency', async () => {
 
         const response = await request(app)
             .get(`/currency/conversion?from=TCO&to=usd&amount=120.48`)
@@ -126,6 +126,8 @@ describe('Currency Controller', () => {
 
         expect(response.status).toBe(200);
         expect(response.body.convertedAmount).toEqual(240.96);
+        expect(response.body).toHaveProperty('currencyFrom');
+        expect(response.body).toHaveProperty('currencyTo');
 
     });
 
@@ -190,7 +192,7 @@ describe('Currency Controller', () => {
 
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Currency don't Exists");
+        expect(response.body.message).toBe("Currency does not exist");
 
     });
 
@@ -203,6 +205,8 @@ describe('Currency Controller', () => {
 
 
         expect(response.status).toBe(200);
+        expect(response.body.message).toEqual('Updated Quotes!');
+        expect(response.body).toHaveProperty('currentsQuotes');
        
 
     });

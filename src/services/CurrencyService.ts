@@ -47,7 +47,7 @@ class CurrencyService {
         const currencyAlreadyExists = await this.currencyRepository.getById(_id);
 
         if (!currencyAlreadyExists) {
-            throw new AppError("Currency don't Exists");
+            throw new AppError("Currency does not exist");
         }
 
         const updated_at = new Date();
@@ -62,7 +62,7 @@ class CurrencyService {
         const currencyAlreadyExists = await this.currencyRepository.getById(_id);
 
         if (!currencyAlreadyExists) {
-            throw new AppError("Currency don't Exists");
+            throw new AppError("Currency does not exist");
         }
 
         await this.currencyRepository.delete(_id);
