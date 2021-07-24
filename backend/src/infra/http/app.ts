@@ -5,6 +5,7 @@ import '@configs/dotenv';
 import '@container/index';
 import '@infra/databases/mongoose/connection';
 
+import { errors as celebrateErrors } from 'celebrate';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 app.use(routes);
 
+app.use(celebrateErrors());
 app.use((error: Error, req: Request, res: Response, _: NextFunction) => {
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({
