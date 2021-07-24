@@ -1,6 +1,14 @@
 version: "3.8"
 
 services:
+  cache:
+    image: redis:alpine
+    container_name: bravoCache_development
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_PASSWORD=password
+
   db:
     image: mongo
     container_name: bravoDB_development
@@ -28,6 +36,8 @@ services:
     environment:
       - NODE_ENV=dev
       - MONGODB_HOST=bravoDB_development
+      - REDIS_HOST=bravoCache_development
     depends_on:
+      - cache
       - db
       
