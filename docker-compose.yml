@@ -1,6 +1,17 @@
 version: "3.8"
 
 services:
+  db:
+    image: mongo
+    container_name: bravoDB_development
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONG_INITDB_DATABASE=bravodb
+    ports:
+      - 27017:27017
+    command: [--auth]
+
   backend:
     image: node:14-slim
     container_name: bravoBackend_development
@@ -16,4 +27,6 @@ services:
       - ./backend/node_modules:/app/node_modules
     environment:
       - NODE_ENV=dev
+    depends_on:
+      - db
       
