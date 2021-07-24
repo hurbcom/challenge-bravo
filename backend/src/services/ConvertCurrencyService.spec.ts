@@ -1,7 +1,9 @@
 import 'reflect-metadata';
 
+import { FakeCacheProvider } from '@container/providers/CacheProvider/fakes/FakeCacheProvider';
 import { FakeCurrencyConverterProvider } from '@container/providers/CurrencyConverterProvider/fakes/FakeCurrencyConverterProvider';
 import * as currencies from '@container/providers/CurrencyConverterProvider/fakes/mocks/currencyQuotation.mock';
+import { FakeDateProvider } from '@container/providers/DateProvider/fakes/FakeDateProvider';
 
 import { AppError } from '@errors/AppError';
 
@@ -10,6 +12,8 @@ import { FakeCurrenciesRepository } from '@repositories/fakes/FakeCurrenciesRepo
 import { ConvertCurrencyService } from './ConvertCurrencyService';
 
 let fakeCurrencyConverterProvider: FakeCurrencyConverterProvider;
+let fakeCacheProvider: FakeCacheProvider;
+let fakeDateProvider: FakeDateProvider;
 
 let fakeCurrenciesRepository: FakeCurrenciesRepository;
 let convertCurrencyService: ConvertCurrencyService;
@@ -20,16 +24,37 @@ function round(number: number): number {
 
 describe('ConvertCurrencyService', () => {
   beforeEach(() => {
-    fakeCurrencyConverterProvider = new FakeCurrencyConverterProvider();
     fakeCurrenciesRepository = new FakeCurrenciesRepository();
+
+    fakeCurrencyConverterProvider = new FakeCurrencyConverterProvider();
+    fakeCacheProvider = new FakeCacheProvider();
+    fakeDateProvider = new FakeDateProvider();
 
     convertCurrencyService = new ConvertCurrencyService(
       fakeCurrencyConverterProvider,
       fakeCurrenciesRepository,
+      fakeCacheProvider,
+      fakeDateProvider,
     );
   });
 
   it('should be able to convert original currencies', async () => {
+    const result = await convertCurrencyService.execute({
+      from: 'brl',
+      to: 'usd',
+      amount: '1',
+    });
+
+    expect(result).toBe(currencies.brl.usd);
+  });
+
+  it('should be able to convert original currencies (with cache)', async () => {
+    await convertCurrencyService.execute({
+      from: 'brl',
+      to: 'usd',
+      amount: '1',
+    });
+
     const result = await convertCurrencyService.execute({
       from: 'brl',
       to: 'usd',

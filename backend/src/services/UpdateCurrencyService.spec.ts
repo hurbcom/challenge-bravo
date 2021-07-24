@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 
+import { FakeCacheProvider } from '@container/providers/CacheProvider/fakes/FakeCacheProvider';
+
 import { AppError } from '@errors/AppError';
 
 import { FakeCurrenciesRepository } from '@repositories/fakes/FakeCurrenciesRepository';
@@ -8,14 +10,22 @@ import { originalCurrencyCodes } from '@utils/originalCurrencyCodes';
 
 import { UpdateCurrencyService } from './UpdateCurrencyService';
 
+let fakeCacheProvider: FakeCacheProvider;
+
 let fakeCurrenciesRepository: FakeCurrenciesRepository;
+
 let updateCurrencyService: UpdateCurrencyService;
 
 describe('UpdateCurrencyService', () => {
   beforeEach(() => {
     fakeCurrenciesRepository = new FakeCurrenciesRepository();
 
-    updateCurrencyService = new UpdateCurrencyService(fakeCurrenciesRepository);
+    fakeCacheProvider = new FakeCacheProvider();
+
+    updateCurrencyService = new UpdateCurrencyService(
+      fakeCurrenciesRepository,
+      fakeCacheProvider,
+    );
   });
 
   it('should be able to update currency', async () => {
