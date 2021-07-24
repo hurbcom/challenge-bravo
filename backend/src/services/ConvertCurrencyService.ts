@@ -1,7 +1,9 @@
 import { Decimal } from 'decimal.js';
 import { inject, injectable } from 'tsyringe';
 
+import { ICacheProvider } from '@container/providers/CacheProvider/models/ICacheProvider';
 import { ICurrencyConverterProvider } from '@container/providers/CurrencyConverterProvider/models/ICurrencyConverterProvider';
+import { IDateProvider } from '@container/providers/DateProvider/models/IDateProvider';
 
 import { AppError } from '@errors/AppError';
 
@@ -28,6 +30,12 @@ export class ConvertCurrencyService {
 
     @inject('CurrenciesRepository')
     private currenciesRepository: ICurrenciesRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
+
+    @inject('DateProvider')
+    private dateProvider: IDateProvider,
   ) {}
 
   public async execute({
@@ -35,6 +43,13 @@ export class ConvertCurrencyService {
     to: inputTo,
     amount: inputAmount,
   }: IRequest): Promise<number> {
+    const cacheKey = `convert-currency:${inputFrom},${inputTo},${inputAmount}`;
+    const cache = await this.cacheProvider.recover<number>(cacheKey);
+
+    if (cache?.data) {
+      return cache.data;
+    }
+
     let from = inputFrom;
     let to = inputTo;
     let amount = Number(inputAmount);
@@ -71,6 +86,14 @@ export class ConvertCurrencyService {
       result /= toCurrency.backingCurrency.amount;
     }
 
-    return Number(new Decimal(result));
+    const formattedResult = Number(new Decimal(result));
+
+    await this.cacheProvider.save(
+      cacheKey,
+      formattedResult,
+      this.dateProvider.addHours(new Date(), 1),
+    );
+
+    return formattedResult;
   }
 }

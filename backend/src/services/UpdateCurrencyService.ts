@@ -1,5 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
+import { ICacheProvider } from '@container/providers/CacheProvider/models/ICacheProvider';
+
 import { AppError } from '@errors/AppError';
 
 import { ICurrency } from '@interfaces/ICurrency';
@@ -24,6 +26,9 @@ export class UpdateCurrencyService {
   constructor(
     @inject('CurrenciesRepository')
     private currenciesRepository: ICurrenciesRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -46,6 +51,9 @@ export class UpdateCurrencyService {
     if (!updatedCurrency) {
       throw new AppError(`Currency with code "${code}" doesn't exist.`, 404);
     }
+
+    await this.cacheProvider.invalidatePrefix('list-all-currencies');
+    await this.cacheProvider.invalidate(`list-one-currency:${code}`);
 
     return updatedCurrency;
   }

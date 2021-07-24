@@ -1,5 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
+import { ICacheProvider } from '@container/providers/CacheProvider/models/ICacheProvider';
+
 import { AppError } from '@errors/AppError';
 
 import { ICurrency } from '@interfaces/ICurrency';
@@ -24,6 +26,9 @@ export class CreateCurrencyService {
   constructor(
     @inject('CurrenciesRepository')
     private currenciesRepository: ICurrenciesRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -56,6 +61,8 @@ export class CreateCurrencyService {
       code,
       backingCurrency,
     });
+
+    await this.cacheProvider.invalidatePrefix('list-all-currencies');
 
     return currency;
   }
