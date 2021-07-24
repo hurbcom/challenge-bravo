@@ -58,6 +58,7 @@
         "groups": [
           "/^react$/",
           "/^next$|next//*/",
+          "/^@chakra-ui$|@chakra-ui//*/",
           "module",
           "/^~/interfaces/",
           "/^~/hooks/",
