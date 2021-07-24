@@ -7,7 +7,7 @@ interface IRequest {
 }
 
 @injectable()
-export class ListOneCurrencyService {
+export class DeleteCurrencyService {
   constructor(
     @inject('CurrenciesRepository')
     private currenciesRepository: ICurrenciesRepository,
