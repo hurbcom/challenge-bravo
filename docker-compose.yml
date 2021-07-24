@@ -40,3 +40,20 @@ services:
     depends_on:
       - cache
       - db
+
+  frontend:
+    image: node:alpine
+    container_name: bravoFrontend_development
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: frontend_development
+    volumes:
+      - ./frontend:/app
+      - ./frontend/node_modules:/app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
