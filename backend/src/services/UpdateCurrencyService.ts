@@ -6,7 +6,10 @@ import { ICurrency } from '@interfaces/ICurrency';
 
 import { ICurrenciesRepository } from '@repositories/models/ICurrenciesRepository';
 
-import { OriginalCurrencyCode } from '@utils/originalCurrencyCodes';
+import {
+  OriginalCurrencyCode,
+  originalCurrencyCodes,
+} from '@utils/originalCurrencyCodes';
 
 interface IRequest {
   code: string;
@@ -27,6 +30,15 @@ export class UpdateCurrencyService {
     code,
     backingCurrency,
   }: IRequest): Promise<ICurrency> {
+    if (!originalCurrencyCodes.includes(backingCurrency.code)) {
+      throw new AppError(
+        `Invalid backing currency code. Valid codes: ${originalCurrencyCodes.join(
+          ', ',
+        )}`,
+        400,
+      );
+    }
+
     const updatedCurrency = await this.currenciesRepository.updateByCode(code, {
       backingCurrency,
     });

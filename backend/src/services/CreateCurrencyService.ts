@@ -37,6 +37,15 @@ export class CreateCurrencyService {
       );
     }
 
+    if (!originalCurrencyCodes.includes(backingCurrency.code)) {
+      throw new AppError(
+        `Invalid backing currency code. Valid codes: ${originalCurrencyCodes.join(
+          ', ',
+        )}`,
+        400,
+      );
+    }
+
     const currencyExists = await this.currenciesRepository.findOne({ code });
 
     if (currencyExists) {

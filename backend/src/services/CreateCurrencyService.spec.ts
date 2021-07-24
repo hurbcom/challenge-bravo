@@ -4,6 +4,8 @@ import { AppError } from '@errors/AppError';
 
 import { FakeCurrenciesRepository } from '@repositories/fakes/FakeCurrenciesRepository';
 
+import { originalCurrencyCodes } from '@utils/originalCurrencyCodes';
+
 import { CreateCurrencyService } from './CreateCurrencyService';
 
 let fakeCurrenciesRepository: FakeCurrenciesRepository;
@@ -45,6 +47,22 @@ describe('CreateCurrencyService', () => {
       new AppError(
         'The currency code cannot be the same as the original currencies.',
         409,
+      ),
+    );
+  });
+
+  it('should not be able to create currency with invalid backing currency code', async () => {
+    await expect(
+      createCurrencyService.execute({
+        code: 'abc',
+        backingCurrency: { code: 'invalid-code' as 'usd', amount: 100 },
+      }),
+    ).rejects.toEqual(
+      new AppError(
+        `Invalid backing currency code. Valid codes: ${originalCurrencyCodes.join(
+          ', ',
+        )}`,
+        400,
       ),
     );
   });
