@@ -20,10 +20,25 @@ export class CurrenciesRepository implements ICurrenciesRepository {
     this.mongooseRepository = CurrencyEntity;
   }
 
+  private logger({
+    method,
+    message,
+  }: {
+    method: string;
+    message?: string;
+  }): void {
+    console.log(
+      'MongoDB (bravodb) |'.blue,
+      `CurrenciesRepository (${method})${message ? ` - ${message}` : ''}`,
+    );
+  }
+
   public async create({
     code,
     backingCurrency,
   }: ICreateCurrencyDTO): Promise<ICurrency> {
+    this.logger({ method: 'create' });
+
     const currency = await this.mongooseRepository.create({
       code,
       backingCurrency,
@@ -40,6 +55,8 @@ export class CurrenciesRepository implements ICurrenciesRepository {
   }
 
   public async findAll(): Promise<ICurrency[]> {
+    this.logger({ method: 'findAll' });
+
     const currencies = await this.mongooseRepository
       .find()
       .select(this.selectFields)
@@ -49,6 +66,8 @@ export class CurrenciesRepository implements ICurrenciesRepository {
   }
 
   public async findOne({ code }: { code: string }): Promise<ICurrency | null> {
+    this.logger({ method: 'findOne' });
+
     const currency = await this.mongooseRepository
       .findOne({ code })
       .select(this.selectFields)
@@ -61,6 +80,8 @@ export class CurrenciesRepository implements ICurrenciesRepository {
     code: string,
     { backingCurrency }: IUpdateCurrencyDTO,
   ): Promise<ICurrency | null> {
+    this.logger({ method: 'updateByCode' });
+
     const updatedCurrency = await this.mongooseRepository
       .findOneAndUpdate(
         {
@@ -76,6 +97,8 @@ export class CurrenciesRepository implements ICurrenciesRepository {
   }
 
   public async deleteByCode(code: string): Promise<void> {
+    this.logger({ method: 'deleteByCode' });
+
     await this.mongooseRepository.deleteOne({ code });
   }
 }
