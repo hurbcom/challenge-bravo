@@ -27,6 +27,7 @@ services:
       - ./backend/node_modules:/app/node_modules
     environment:
       - NODE_ENV=dev
+      - MONGODB_HOST=bravoDB_development
     depends_on:
       - db
       
