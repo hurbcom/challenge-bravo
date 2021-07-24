@@ -91,7 +91,7 @@ $ docker run -p 3333:3333 --name=challenge-bravo -d wallacemachado/challenge-bra
 |  /currency/conversion |  GET |  Query: ```from ``` (moeda de origem), ``` to ``` (moeda de conversão), ``` amount ``` (valor a ser convertido)  |  Consulte uma conversão monetária |
 |  /currency/currentQuote |  GET | -  |  Atualize a cotação do USD das moedas originais do sistema (USD, BRL, EUR, BTC, ETH)  |
 |  /currency/edit/:id |  PUT |  Body: ``` name ```, ``` code ``` e ``` valueInUSD ```  |  Edite uma moeda |
-|  /currenc/:id |  DELETE |  -  |  Exclua uma moeda |
+|  /currency/:id |  DELETE |  -  |  Exclua uma moeda |
 
 
 
