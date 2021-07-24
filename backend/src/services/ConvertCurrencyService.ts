@@ -1,8 +1,13 @@
+import { Decimal } from 'decimal.js';
 import { inject, injectable } from 'tsyringe';
 
 import { ICurrencyConverterProvider } from '@container/providers/CurrencyConverterProvider/models/ICurrencyConverterProvider';
 
+import { AppError } from '@errors/AppError';
+
 import { ICurrency } from '@interfaces/ICurrency';
+
+import { ICurrenciesRepository } from '@repositories/models/ICurrenciesRepository';
 
 import {
   OriginalCurrencyCode,
@@ -20,6 +25,9 @@ export class ConvertCurrencyService {
   constructor(
     @inject('CurrencyConverterProvider')
     private currencyConverterProvider: ICurrencyConverterProvider,
+
+    @inject('CurrenciesRepository')
+    private currenciesRepository: ICurrenciesRepository,
   ) {}
 
   public async execute({
@@ -33,28 +41,22 @@ export class ConvertCurrencyService {
     let toCurrency: ICurrency | null = null;
 
     if (!originalCurrencyCodes.includes(from)) {
-      // Buscar no banco de dados
-      const currency: ICurrency = {
-        code: 'example1',
-        backingCurrency: {
-          code: 'usd',
-          amount: 10.5,
-        },
-      };
+      const currency = await this.currenciesRepository.findOne({ code: from });
+
+      if (!currency) {
+        throw new AppError(`Currency with code "${from}" does not exist`, 404);
+      }
 
       from = currency.backingCurrency.code;
       amount *= currency.backingCurrency.amount;
     }
 
     if (!originalCurrencyCodes.includes(to)) {
-      // Buscar no banco de dados
-      toCurrency = {
-        code: 'example2',
-        backingCurrency: {
-          code: 'brl',
-          amount: 5.19,
-        },
-      };
+      toCurrency = await this.currenciesRepository.findOne({ code: to });
+
+      if (!toCurrency) {
+        throw new AppError(`Currency with code "${to}" does not exist`, 404);
+      }
 
       to = toCurrency.backingCurrency.code;
     }
@@ -69,6 +71,6 @@ export class ConvertCurrencyService {
       result /= toCurrency.backingCurrency.amount;
     }
 
-    return parseFloat(result.toFixed(2));
+    return Number(new Decimal(result));
   }
 }
