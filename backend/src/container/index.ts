@@ -7,6 +7,7 @@ import { ICurrenciesRepository } from '@repositories/models/ICurrenciesRepositor
 // Providers
 import './providers/CacheProvider';
 import './providers/CurrencyConverterProvider';
+import './providers/DateProvider';
 
 // Repositories
 container.registerSingleton<ICurrenciesRepository>(
