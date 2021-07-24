@@ -1,6 +1,7 @@
 import 'colors';
 import 'reflect-metadata';
 import 'express-async-errors';
+import '@configs/dotenv';
 import '@container/index';
 import '@infra/databases/mongoose/connection';
 
