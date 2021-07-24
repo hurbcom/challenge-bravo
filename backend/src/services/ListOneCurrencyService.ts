@@ -21,7 +21,7 @@ export class ListOneCurrencyService {
     const currency = await this.currenciesRepository.findOne({ code });
 
     if (!currency) {
-      throw new AppError(`Currency with code "${code}" doesn't exist.`);
+      throw new AppError(`Currency with code "${code}" doesn't exist.`, 404);
     }
 
     return currency;
