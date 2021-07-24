@@ -34,10 +34,10 @@ Antes de começar, você vai precisar ter instalado em sua máquina as seguintes
 ```bash
 
 # Clone este repositório
-$ git clone https://github.com/gustavowiller/challenge-bravo
+$ git clone https://github.com/gustavowiller/challenge-bravo.git
 
 # Acesse a pasta do projeto no terminal/cmd
-$ cd challengebravo
+$ cd challenge-bravo
 
 # Comando para copiar o arquivo template de configuração de variaveis de ambiente
 $ cp .env-example .env
