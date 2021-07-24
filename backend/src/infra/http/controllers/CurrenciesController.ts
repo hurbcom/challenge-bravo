@@ -42,7 +42,8 @@ export class CurrenciesController {
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
-    const { code, backingCurrency } = req.body;
+    const { code } = req.params;
+    const { backingCurrency } = req.body;
 
     const updateCurrencyService = container.resolve(UpdateCurrencyService);
 

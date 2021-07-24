@@ -1,7 +1,8 @@
-import 'express-async-errors';
-import 'reflect-metadata';
-import '@container/index';
 import 'colors';
+import 'reflect-metadata';
+import 'express-async-errors';
+import '@container/index';
+import '@infra/databases/mongoose/connection';
 
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';

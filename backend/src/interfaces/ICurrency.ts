@@ -6,4 +6,7 @@ export interface ICurrency {
     code: OriginalCurrencyCode;
     amount: number;
   };
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }

@@ -9,10 +9,10 @@ currenciesRouter.post('/', currenciesController.store);
 
 currenciesRouter.get('/', currenciesController.index);
 
-currenciesRouter.get('/:currencyId', currenciesController.show);
+currenciesRouter.get('/:code', currenciesController.show);
 
-currenciesRouter.put('/:currencyId', currenciesController.update);
+currenciesRouter.put('/:code', currenciesController.update);
 
-currenciesRouter.delete('/:currencyId', currenciesController.destroy);
+currenciesRouter.delete('/:code', currenciesController.destroy);
 
 export { currenciesRouter };
