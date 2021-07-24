@@ -25,8 +25,8 @@ services:
     container_name: bravoBackend_development
     working_dir: /app
     build:
-      context: .
-      dockerfile: Dockerfile.backend
+      context: ./backend
+      dockerfile: Dockerfile
       target: backend_development
     ports:
       - 3333:3333
@@ -40,4 +40,3 @@ services:
     depends_on:
       - cache
       - db
-      
