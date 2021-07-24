@@ -29,6 +29,7 @@ No cadastro de nova moeda, rota ``` /currency ```, deverá ser informado a cota�
 * <p><a href="#rotas">Rotas</a></p>
 * <p><a href="#executando-os-testes">Executando os testes</a></p>
 * <p><a href="#relatório-de-cobertura-de-testes">Relatório de cobertura de Testes</a></p>
+* <p><a href="#documentação">Documentação</a></p>
 * <p><a href="#autor">Autor</a></p>
 
 
@@ -39,12 +40,15 @@ No cadastro de nova moeda, rota ``` /currency ```, deverá ser informado a cota�
 Antes de começar, você precisará ter as seguintes ferramentas instaladas em sua máquina:
 * [Git](https://git-scm.com)
 * [Node.js](https://nodejs.org/en/)
+(
 
 Além disso, é bom ter um editor para trabalhar com o código como: [VSCode](https://code.visualstudio.com/)
 
 
 
-## Iniciando Projeto
+## Iniciando Projeto 
+
+### Local
 
 ```bash
 # Clone este repositório
@@ -66,7 +70,17 @@ $ yarn dev
 # Server is running:3333 - acesse <http://localhost:3333>
 ```
 
+### Via Docker local
 
+```bash
+
+# baixar imagem docker deste repositório
+$ docker pull wallacemachado/challenge-bravo:latest
+
+# Acesse a pasta do projeto no terminal
+$ docker run -p 3333:3333 --name=challenge-bravo -d wallacemachado/challenge-bravo:latest
+
+```
 
 ## Rotas
 
@@ -97,6 +111,12 @@ $ yarn test
 ## Relatório de cobertura de Testes
 
 Você pode ver o relatório de cobertura dentro ``` tests/coverage ```. Eles são criados automaticamente após a execução dos testes.
+
+
+
+## Documentação
+
+Após iniciar a aplicação, você poderá acessar a documentação gerada com [SWAGGER](https://swagger.io/docs/) via rota ```/api-docs``` 
 
 
 
