@@ -5,6 +5,7 @@ import { CurrenciesRepository } from '@infra/databases/mongoose/repositories/Cur
 import { ICurrenciesRepository } from '@repositories/models/ICurrenciesRepository';
 
 // Providers
+import './providers/CacheProvider';
 import './providers/CurrencyConverterProvider';
 
 // Repositories
