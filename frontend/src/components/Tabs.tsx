@@ -2,24 +2,35 @@ import { ReactElement } from 'react';
 
 import {
   Tabs as ChakraTabs,
+  TabsProps as ChakraTabsProps,
   TabList,
   Tab,
   TabPanels,
   TabPanel,
+  TabPanelsProps,
+  TabPanelProps,
 } from '@chakra-ui/react';
 
 import { renderToString } from 'react-dom/server';
 
-export interface TabsProps {
+export interface TabsProps extends Omit<ChakraTabsProps, 'children'> {
   tabList: {
     title: string;
   }[];
   tabPanels: ReactElement[];
+  tabPanelsContainerStyles?: TabPanelsProps;
+  tabPanelStyles?: TabPanelProps[];
 }
 
-export function Tabs({ tabList = [], tabPanels = [] }: TabsProps) {
+export function Tabs({
+  tabList = [],
+  tabPanels = [],
+  tabPanelsContainerStyles,
+  tabPanelStyles,
+  ...rest
+}: TabsProps) {
   return (
-    <ChakraTabs w="100%" variant="enclosed">
+    <ChakraTabs w="100%" variant="enclosed" {...rest}>
       <TabList bg="gray.50" border="none">
         {tabList.map(tab => (
           <Tab
@@ -38,9 +49,14 @@ export function Tabs({ tabList = [], tabPanels = [] }: TabsProps) {
         ))}
       </TabList>
 
-      <TabPanels px="6" py="8">
-        {tabPanels.map(tabPanel => (
-          <TabPanel key={renderToString(tabPanel)}>{tabPanel}</TabPanel>
+      <TabPanels {...tabPanelsContainerStyles}>
+        {tabPanels.map((tabPanel, index) => (
+          <TabPanel
+            key={renderToString(tabPanel)}
+            {...(tabPanelStyles ? tabPanelStyles[index] : {})}
+          >
+            {tabPanel}
+          </TabPanel>
         ))}
       </TabPanels>
     </ChakraTabs>
