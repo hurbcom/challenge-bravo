@@ -14,18 +14,23 @@ const Tabs = dynamic<TabsProps>(
 
 export default function Home() {
   return (
-    <Flex w="100%" h="100vh">
+    <Flex w="100%" h={['unset', 'unset', '100vh']}>
       <Box bg="blue.800" w="100%" h="45vh" position="absolute" />
 
       <Flex
         w="100%"
         maxW="1140px"
         position="relative"
-        px="6"
+        px={['2', '4', '6']}
         justify="center"
         margin="0 auto"
       >
-        <Flex w="100%" direction="column" align="center" mt="13vh">
+        <Flex
+          w="100%"
+          direction="column"
+          align="center"
+          mt={['2rem', '4rem', '13vh']}
+        >
           <Heading color="white" fontWeight="500" fontSize="2rem">
             Bravo Currency Conversion
           </Heading>
@@ -41,6 +46,7 @@ export default function Home() {
             borderRadius="12"
             overflow="hidden"
             mt="8"
+            mb={['4rem', '4rem', '0']}
           >
             <Tabs
               tabList={[{ title: 'Convert' }, { title: 'Currencies' }]}

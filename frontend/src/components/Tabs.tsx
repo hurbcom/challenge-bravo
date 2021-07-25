@@ -24,6 +24,7 @@ export function Tabs({ tabList = [], tabPanels = [] }: TabsProps) {
         {tabList.map(tab => (
           <Tab
             key={tab.title}
+            h="56px"
             _focus={{ outline: 0 }}
             flex="1"
             _selected={{
