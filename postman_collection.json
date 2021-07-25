@@ -1,0 +1,161 @@
+{
+	"info": {
+		"_postman_id": "c4298120-8ace-4982-95cf-42286e4a1df8",
+		"name": "challenge-bravo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/currency",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"currency"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Teste no Postman\",\r\n    \"code\": \"TNP\",\r\n    \"valueInUSD\": 2\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3333/currency",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"currency"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Teste no Postman Editado\",\r\n    \"code\": \"TNP\",\r\n    \"valueInUSD\": 2\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3333/currency/edit/60fda88224cedf237cd93388",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"currency",
+						"edit",
+						"60fda88224cedf237cd93388"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/currency/60fda88224cedf237cd93388",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"currency",
+						"60fda88224cedf237cd93388"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "conversion",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/currency/conversion?from=btc&to=eur&amount=10.25",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"currency",
+						"conversion"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "btc"
+						},
+						{
+							"key": "to",
+							"value": "eur"
+						},
+						{
+							"key": "amount",
+							"value": "10.25"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "currentQuote",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/currency/currentQuote",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"currency",
+						"currentQuote"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
