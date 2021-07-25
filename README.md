@@ -1,6 +1,12 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="HU" width="24" /> Desafio Bravo
 
-[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=sos_pet_api&uri=https%3A%2F%2Fgithub.com%2FWallaceMachado%2FSOS_PET_API%2Fblob%2Fmaster%2FInsomnia.json)
+
+
+
+
+
+
+
 
 > status:	🚧  Challenge-Bravo 🚀 em construção..  🚧
 
@@ -94,6 +100,16 @@ $ docker run -p 3333:3333 --name=challenge-bravo -d wallacemachado/challenge-bra
 |  /currency/:id |  DELETE |  -  |  Exclua uma moeda |
 
 
+## Testes de Requisições
+
+### Via Postman
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/12278440-c4298120-8ace-4982-95cf-42286e4a1df8?action=collection%2Ffork&collection-url=entityId%3D12278440-c4298120-8ace-4982-95cf-42286e4a1df8%26entityType%3Dcollection%26workspaceId%3D7182ff02-089c-4684-b262-77612e73637b)
+
+
+### Via Insomnia
+
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=challenge-bravo&uri=https%3A%2F%2Fgithub.com%2FWallaceMachado%2Fchallenge-bravo%2Fblob%2Fmaster%2FInsomnia.json)
 
 
 ## Executando os testes
