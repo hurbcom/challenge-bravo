@@ -151,3 +151,14 @@ HTTP Code: 200 / Retorna o resultado da operação de conversão monetária
   "Result": float64
 }
 ```
+
+<br />
+
+## ⏭️ Próximos Passos 
+
+ - [ ] Refatorar código para possibilitar mockar acesso a banco de dados e requisições http.
+ - [ ] Adicionar testes unitários para a camada de services
+ - [ ] Garantir que a Api suporte um volume de requisições maior com o uso de banco de dados em memória 
+ - [ ] Retornar mensagem de erro descritiva para tentativa de inserção de registro duplicado.
+ - [ ] Realizar tratativas para o caso de reinserção de uma moeda excluída.
+ - [ ] Fornecer documentação detalhada da api com o swagger.
