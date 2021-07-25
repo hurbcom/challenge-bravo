@@ -3,6 +3,9 @@ import dynamic from 'next/dynamic';
 
 import { Flex, Box, Heading, Text } from '@chakra-ui/react';
 
+import { FaCoins } from 'react-icons/fa';
+import { RiCoinsFill } from 'react-icons/ri';
+
 import { Currency } from '~/interfaces/Currency';
 
 import { ConversionForm } from '~/components/ConversionForm';
@@ -29,7 +32,7 @@ interface HomeProps {
 
 export default function Home({ currencies = [] }: HomeProps) {
   return (
-    <Flex w="100%" h={['unset', 'unset', '100vh']} overflow="hidden">
+    <Flex w="100%" overflow="hidden">
       <Box bg="blue.800" w="100%" h="45vh" position="absolute" />
 
       <Flex
@@ -59,12 +62,14 @@ export default function Home({ currencies = [] }: HomeProps) {
             bg="white"
             boxShadow="2px 2px 16px #0007"
             borderRadius="12"
-            overflow="hidden"
             mt="8"
-            mb={['4rem', '4rem', '0']}
+            mb="4rem"
           >
             <Tabs
-              tabList={[{ title: 'Convert' }, { title: 'Currencies' }]}
+              tabList={[
+                { title: 'Convert', Icon: RiCoinsFill },
+                { title: 'Currencies', Icon: FaCoins },
+              ]}
               tabPanelsContainerStyles={{
                 px: ['2', '4', '6'],
                 py: ['4', '6', '8'],

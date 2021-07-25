@@ -1,38 +1,43 @@
 import { useState } from 'react';
 
-import {
-  Box,
-  Button,
-  Flex,
-  Text,
-  useToast,
-  Heading,
-  Skeleton,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, useToast } from '@chakra-ui/react';
 
 import { useForm } from 'react-hook-form';
 
 import { convertCurrency } from '~/services/api/functions/convertCurrency';
 
-import { Input } from '../Form/Input';
-import { SwitchButton } from './SwitchButton';
+import { Fields } from './Fields';
+import { Result } from './Result';
 
 interface FormData {
   amount: number;
-  from: string;
-  to: string;
+  from: {
+    label: string;
+    value: string;
+  };
+  to: {
+    label: string;
+    value: string;
+  };
 }
 
 export function ConversionForm() {
   const [result, setResult] = useState<number | null>(null);
 
-  const { register, handleSubmit, setValue, getValues, formState } = useForm();
+  const { register, handleSubmit, setValue, getValues, formState, control } =
+    useForm();
   const toast = useToast();
 
-  async function onSubmit({ amount, from, to }: FormData) {
+  async function onSubmit({
+    amount,
+    from: fromOption,
+    to: toOption,
+  }: FormData) {
     try {
       setResult(null);
+
+      const from = fromOption?.value;
+      const to = toOption?.value;
 
       const resultData = await convertCurrency({ from, to, amount });
       setResult(resultData);
@@ -47,14 +52,6 @@ export function ConversionForm() {
     }
   }
 
-  function switchValues() {
-    const fromValue = getValues('from');
-    const toValue = getValues('to');
-
-    setValue('from', toValue);
-    setValue('to', fromValue);
-  }
-
   return (
     <Flex direction="column" as="form" onSubmit={handleSubmit(onSubmit)}>
       <Flex
@@ -63,17 +60,12 @@ export function ConversionForm() {
         w="100%"
         direction={['column', 'column', 'row']}
       >
-        <Input
-          name="amount"
-          type="number"
-          label="Amount"
-          {...register('amount')}
+        <Fields
+          setValue={setValue}
+          getValues={getValues}
+          register={register}
+          control={control}
         />
-        <Input name="from" label="From" {...register('from')} />
-
-        <SwitchButton mb="26px" onClick={switchValues} />
-
-        <Input name="to" label="To" {...register('to')} />
       </Flex>
 
       <Flex
@@ -81,29 +73,12 @@ export function ConversionForm() {
         direction={['column-reverse', 'column-reverse', 'row']}
         gridGap="4"
       >
-        <Box minH="88px">
-          {(formState.isSubmitting || result) && (
-            <VStack h={['unset', 'unset', '88px']} align="flex-start">
-              <Skeleton isLoaded={!formState.isSubmitting} w="70px" minW="70px">
-                <Text fontWeight="600" color="gray.500">
-                  {`${getValues('amount')} ${getValues('from')}`} =
-                </Text>
-              </Skeleton>
-
-              <Skeleton isLoaded={!formState.isSubmitting}>
-                <Heading size="lg" color="gray.700" minW="120px">
-                  {result} {getValues('to')}
-                </Heading>
-              </Skeleton>
-
-              <Skeleton isLoaded={!formState.isSubmitting} minW="120px">
-                <Text color="gray.500" fontWeight="300">
-                  {`${getValues('amount')} ${getValues('to')}`} ={' '}
-                  {getValues('amount') / result} {getValues('from')}
-                </Text>
-              </Skeleton>
-            </VStack>
-          )}
+        <Box minH="124px">
+          <Result
+            isLoading={formState.isSubmitting}
+            result={result}
+            getValues={getValues}
+          />
         </Box>
 
         <Button

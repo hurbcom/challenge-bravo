@@ -69,6 +69,8 @@
           "/./pages//*/",
           "/^~/services/",
           "/./services//*/",
+          "/^~/functions/",
+          "/./functions//*/",
           "/^~/utils/",
           "/./utils//*/",
           "/^~/styles/",
