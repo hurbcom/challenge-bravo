@@ -301,7 +301,7 @@ docker-compose -f docker-compose.yml up
 
 ## **Manualmente (mais rápida)**
 
-Para ver as instruções de como rodar o projeto manualmente clique [aqui](./docs/RUN.md#manualmente).
+Para ver as instruções de como rodar o projeto manualmente clique [aqui](./docs/RUN.md#manualmente-mais-rápida).
 
 ## **Docker run**
 

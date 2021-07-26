@@ -124,22 +124,17 @@ yarn dev
 
 ### **Produção**
 
-Primeiramente entre no diretório do projeto back-end:
+Para executar o projeto em produção, será necessário criar um arquivo ``.env`` na raiz do projeto **back-end** e preenche-lo, caso seja apenas um teste, basta copiar os valores de ``.env.example``.
 
 ```sh
 cd backend
 ```
 
-
-Para executar o projeto em produção, será necessário criar um arquivo ``.env`` na raiz do projeto e preenche-lo, caso seja apenas um teste, basta copiar os valores de ``.env.example``.
-
 ```sh
 cp .env.example .env
-
-# Ou faça isso manualmente
 ```
 
-Com o ``.env`` criado e preenchido, siga os seguintes passos:
+Com o ``.env`` criado e preenchido, volte a raiz do projeto com ``cd ..`` e siga os seguintes passos:
 
 **Subir container do MongoDB:**
 
@@ -158,6 +153,10 @@ docker-compose -f docker-compose.yml up -d cache
 **Instale as dependências:**
 
 ```sh
+cd backend
+```
+
+```sh
 yarn
 ```
 
@@ -173,9 +172,10 @@ yarn build
 yarn start
 ```
 
-**Rodando projeto front-end**
+**Rodando projeto front-end:**
 
 Caso deseje executar a aplicação front-end, execute os seguintes comando:
+
 ```sh
 # Partindo da raiz do projeto
 cd frontend
