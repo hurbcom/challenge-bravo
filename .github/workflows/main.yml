@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5      
+        with:
+          node-version: 14.x
+          
+      # Instalar as dependências NPM/Yarn
+      - name: Install dependencies
+        run: yarn
+        
+      # Copiar código para Digital Ocean
+      - name: Copy repo to Digital Ocean
+        uses: appleboy/scp-action@master    
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          source: ".,!node_modules"
+          target: "~/app/challenge-bravo/backend"
+          
+      # Executar "yarn" e restartar containers do Docker na Digital Ocean
+      - name: Install dependencies on Digital Ocean and restart Docker containers
+        uses: appleboy/ssh-action@master    
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/app/challenge-bravo/backend
+            yarn
+            docker-compose -f docker-compose.yml restart backend
