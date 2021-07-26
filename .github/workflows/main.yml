@@ -31,7 +31,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           source: ".,!node_modules"
-          target: "~/app/challenge-bravo/backend"
+          target: "~/app/challenge-bravo"
           
       # Executar "yarn" e restartar containers do Docker na Digital Ocean
       - name: Install dependencies on Digital Ocean and restart Docker containers
