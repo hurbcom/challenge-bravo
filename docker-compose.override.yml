@@ -3,7 +3,7 @@ version: "3.8"
 services:
   cache:
     image: redis:alpine
-    container_name: bravoCache_production
+    container_name: bravoCache_development
     ports:
       - 6379:6379
     environment:
@@ -11,7 +11,7 @@ services:
 
   db:
     image: mongo
-    container_name: bravoDB_production
+    container_name: bravoDB_development
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=password
@@ -22,14 +22,14 @@ services:
 
   backend:
     image: node:14-slim
-    container_name: bravoBackend_production
+    container_name: bravoBackend_development
     working_dir: /app
     build:
       context: ./backend
       dockerfile: Dockerfile
-      target: backend_production
+      target: backend_development
     command: >
-      sh -c "yarn && yarn build && yarn start"
+      sh -c "yarn && yarn dev"
     ports:
       - 3333:3333
     volumes:
@@ -37,25 +37,27 @@ services:
       - ./backend/node_modules:/app/node_modules
     environment:
       - NODE_ENV=dev
-      - MONGODB_HOST=bravoDB_production
-      - REDIS_HOST=bravoCache_production
+      - MONGODB_HOST=bravoDB_development
+      - REDIS_HOST=bravoCache_development
     depends_on:
       - cache
       - db
 
   frontend:
     image: node:alpine
-    container_name: bravoFrontend_production
+    container_name: bravoFrontend_development
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: frontend_production
+      target: frontend_development
     command: >
-      sh -c "yarn && yarn build && yarn start"
+      sh -c "yarn && yarn dev"
     volumes:
       - ./frontend:/app
       - ./frontend/node_modules:/app/node_modules
     ports:
       - 3000:3000
+    environment:
+      - NODE_ENV=development
     # depends_on:
     #   - backend
