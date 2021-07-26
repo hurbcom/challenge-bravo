@@ -76,11 +76,15 @@ export class ConvertCurrencyService {
       to = toCurrency.backingCurrency.code;
     }
 
-    let result = await this.currencyConverterProvider.convert({
-      from: from as OriginalCurrencyCode,
-      to: to as OriginalCurrencyCode,
-      amount: Number(amount),
-    });
+    let result = amount;
+
+    if (from !== to) {
+      result = await this.currencyConverterProvider.convert({
+        from: from as OriginalCurrencyCode,
+        to: to as OriginalCurrencyCode,
+        amount: Number(amount),
+      });
+    }
 
     if (toCurrency) {
       result /= toCurrency.backingCurrency.amount;
