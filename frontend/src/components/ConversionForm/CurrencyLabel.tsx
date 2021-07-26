@@ -8,7 +8,7 @@ import {
 } from '~/utils/originalCurrencyCodes';
 
 interface CurrencyLabel {
-  currencyCode: OriginalCurrencyCode;
+  currencyCode: OriginalCurrencyCode | string;
 }
 
 export function CurrencyLabel({ currencyCode }: CurrencyLabel) {

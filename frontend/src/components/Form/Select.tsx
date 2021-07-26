@@ -56,6 +56,11 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> = (
                     borderColor: '#0033',
                   },
                 }),
+
+                menu: provided => ({
+                  ...provided,
+                  boxShadow: '2px 2px 16px #0005',
+                }),
               }}
             />
           )}

@@ -11,13 +11,13 @@ import {
 
 import { Currency } from '~/interfaces/Currency';
 
+import { useCurrencies } from '~/hooks/currencies';
+
 import { Table } from '../Table';
 
-export interface CurrencyListProps {
-  currencies: Currency[];
-}
+export function CurrencyList() {
+  const { currencies } = useCurrencies();
 
-export function CurrencyList({ currencies }: CurrencyListProps) {
   return (
     <Flex direction="column">
       <Table<Currency>

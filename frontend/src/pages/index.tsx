@@ -1,4 +1,3 @@
-import { GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 
 import { Flex, Box, Heading, Text } from '@chakra-ui/react';
@@ -6,10 +5,7 @@ import { Flex, Box, Heading, Text } from '@chakra-ui/react';
 import { FaCoins } from 'react-icons/fa';
 import { RiCoinsFill } from 'react-icons/ri';
 
-import { Currency } from '~/interfaces/Currency';
-
 import { ConversionForm } from '~/components/ConversionForm';
-import { CurrencyListProps } from '~/components/CurrencyList';
 import { TabsProps } from '~/components/Tabs';
 
 const Tabs = dynamic<TabsProps>(
@@ -19,20 +15,16 @@ const Tabs = dynamic<TabsProps>(
   },
 );
 
-const CurrencyList = dynamic<CurrencyListProps>(
+const CurrencyList = dynamic(
   () => import('~/components/CurrencyList').then(mod => mod.CurrencyList),
   {
     ssr: false,
   },
 );
 
-interface HomeProps {
-  currencies: Currency[];
-}
-
-export default function Home({ currencies = [] }: HomeProps) {
+export default function Home() {
   return (
-    <Flex w="100%" overflow="hidden">
+    <Flex w="100%" h={['unset', 'unset', '100vh']} overflow="hidden">
       <Box bg="blue.800" w="100%" h="45vh" position="absolute" />
 
       <Flex
@@ -52,6 +44,7 @@ export default function Home({ currencies = [] }: HomeProps) {
           <Heading color="white" fontWeight="500" fontSize="2rem">
             Bravo Currency Conversion
           </Heading>
+
           <Text color="white" fontSize="1rem">
             Free tool for converting values between multiple currencies!
           </Text>
@@ -74,31 +67,11 @@ export default function Home({ currencies = [] }: HomeProps) {
                 px: ['2', '4', '6'],
                 py: ['4', '6', '8'],
               }}
-              tabPanels={[
-                <ConversionForm />,
-                <CurrencyList currencies={currencies} />,
-              ]}
+              tabPanels={[<ConversionForm />, <CurrencyList />]}
             />
-
-            {/* <CurrencyList currencies={currencies} /> */}
           </Flex>
         </Flex>
       </Flex>
     </Flex>
   );
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  const { getAllCurrencies } = await import(
-    '~/services/api/functions/getAllCurrencies'
-  );
-
-  const { currencies } = await getAllCurrencies();
-
-  return {
-    props: {
-      currencies,
-    },
-    revalidate: 60 * 60 * 0.25, // 15 minutes
-  };
-};

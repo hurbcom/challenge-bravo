@@ -1,8 +1,10 @@
 import { useState } from 'react';
 
-import { Box, Button, Flex, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Skeleton, useToast } from '@chakra-ui/react';
 
 import { useForm } from 'react-hook-form';
+
+import { useCurrencies } from '~/hooks/currencies';
 
 import { convertCurrency } from '~/services/api/functions/convertCurrency';
 
@@ -22,10 +24,19 @@ interface FormData {
 }
 
 export function ConversionForm() {
+  const { isLoading } = useCurrencies();
+
   const [result, setResult] = useState<number | null>(null);
 
-  const { register, handleSubmit, setValue, getValues, formState, control } =
-    useForm();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState,
+    control,
+  } = useForm();
   const toast = useToast();
 
   async function onSubmit({
@@ -54,7 +65,9 @@ export function ConversionForm() {
 
   return (
     <Flex direction="column" as="form" onSubmit={handleSubmit(onSubmit)}>
-      <Flex
+      <Skeleton
+        isLoaded={!isLoading}
+        as={Flex}
         gridGap="4"
         align="flex-end"
         w="100%"
@@ -64,9 +77,10 @@ export function ConversionForm() {
           setValue={setValue}
           getValues={getValues}
           register={register}
+          watch={watch}
           control={control}
         />
-      </Flex>
+      </Skeleton>
 
       <Flex
         justify="space-between"

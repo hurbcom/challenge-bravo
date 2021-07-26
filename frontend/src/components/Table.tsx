@@ -25,7 +25,7 @@ interface TableProps<T> {
 
 export function Table<T>({
   keyExtractor,
-  data,
+  data = [],
   columns,
   columnsThStyles,
   columnsTdStyles,
