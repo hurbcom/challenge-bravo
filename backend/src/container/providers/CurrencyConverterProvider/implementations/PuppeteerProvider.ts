@@ -47,7 +47,7 @@ export class PuppeteerProvider implements ICurrencyConverterProvider {
       formattedFrom = 'ether' as 'eth';
     }
 
-    if (from === 'eth') {
+    if (to === 'eth') {
       formattedTo = 'ether' as 'eth';
     }
 
