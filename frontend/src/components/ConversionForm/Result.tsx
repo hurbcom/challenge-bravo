@@ -2,34 +2,30 @@ import { useMemo } from 'react';
 
 import { Heading, Skeleton, VStack, Text } from '@chakra-ui/react';
 
-import { FieldValues, UseFormGetValues } from 'react-hook-form';
-
 import { formatCurrency } from '~/functions/formatCurrency';
 
 interface ResultProps {
   isLoading?: boolean;
   result: null | number;
-  getValues: UseFormGetValues<FieldValues>;
+  from: string | null;
+  to: string | null;
+  amount: number | null;
 }
 
-export function Result({ isLoading, result, getValues }: ResultProps) {
-  const from = getValues('from').value.toUpperCase();
-  const to = getValues('to').value.toUpperCase();
-  const amount = Number(getValues('amount'));
-
+export function Result({ isLoading, result, from, to, amount }: ResultProps) {
   const unitResultValue = useMemo(
     () => formatCurrency({ value: result / amount, currency: to }),
-    [result, amount],
+    [result, amount, to],
   );
 
   const inverseResultValue = useMemo(
     () => formatCurrency({ value: 1 / (result / amount), currency: from }),
-    [result, amount],
+    [result, amount, from],
   );
 
   return (
     <>
-      {(isLoading || result) && (
+      {(isLoading || (result && from && to && amount)) && (
         <VStack align="flex-start">
           <Skeleton isLoaded={!isLoading} w="100px" minW="100px">
             <Text fontWeight="600" color="gray.500">

@@ -12,8 +12,8 @@ export function formatCurrency({
   minimumFractionDigits = 2,
 }: FormatCurrencyProps) {
   return `${new Intl.NumberFormat('de-DE', {
-    currency,
+    // currency,
     maximumFractionDigits,
     minimumFractionDigits,
-  }).format(value)} ${currency.toUpperCase()}`;
+  }).format(value)} ${currency?.toUpperCase()}`;
 }

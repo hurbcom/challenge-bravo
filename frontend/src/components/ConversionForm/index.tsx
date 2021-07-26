@@ -27,6 +27,9 @@ export function ConversionForm() {
   const { isLoading } = useCurrencies();
 
   const [result, setResult] = useState<number | null>(null);
+  const [resultFrom, setResultFrom] = useState<string | null>(null);
+  const [resultTo, setResultTo] = useState<string | null>(null);
+  const [resultAmount, setResultAmount] = useState<number | null>(null);
 
   const {
     register,
@@ -52,6 +55,9 @@ export function ConversionForm() {
 
       const resultData = await convertCurrency({ from, to, amount });
       setResult(resultData);
+      setResultFrom(from);
+      setResultTo(to);
+      setResultAmount(Number(amount));
     } catch (error) {
       toast({
         title: 'Currency conversion error',
@@ -91,7 +97,9 @@ export function ConversionForm() {
           <Result
             isLoading={formState.isSubmitting}
             result={result}
-            getValues={getValues}
+            from={resultFrom?.toUpperCase()}
+            to={resultTo?.toUpperCase()}
+            amount={resultAmount}
           />
         </Box>
 
