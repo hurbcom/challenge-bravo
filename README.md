@@ -311,8 +311,8 @@ As rotas da aplicação podem ser testadas localmente com o repositório clonado
 
 Caso seja preciso, as *requests collections* para testar as rotas no **Postman** e/ou **Insomnia**, o download pode ser feito clicando na opção desejada:
 
-- Insomnia;
-- Postman.
+- [Insomnia](https://drive.google.com/file/d/1mC6l-l-5zg8KXnzOtSJ4pcBKr77rLFUl/view?usp=sharing)
+- [Postman](https://drive.google.com/file/d/1HJ5wsOSvZiEESbsT2Bug5kLs810D1PhO/view?usp=sharing)
 
 ---
 
