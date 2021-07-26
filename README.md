@@ -7,7 +7,7 @@
 > API RESTful capaz de realizar conversões monetárias e cadastrar novas moedas.
 
 - [Tecnologias](#Tecnologias)
-- [Decisões Técnicas](#Decisoes-Tecnicas)
+- [Decisões Técnicas](#decisões-técnicas)
 - [Desafios](#Desafios)
 - [Melhorias](#Melhorias)
 - [Arquitetura](#Arquitetura)
@@ -248,8 +248,8 @@ As rotas da aplicação podem ser testadas localmente ou em pode seguir uma das 
 
 Opções:
 
-- [Docker Compose](#docker-compose-recomendada); (Recomendada)
-- [Manualmente](#manualmente);
+- [Docker Compose](#docker-compose-recomendada); (recomendada)
+- [Manualmente](#manualmente-mais-rápida); (mais rápida)
 - [Docker run](#docker-run).
 
 ## **Docker Compose (Recomendada)**
@@ -277,23 +277,29 @@ docker-compose up
 
 ### **Produção**
 
-Para executar o projeto em produção, será necessário criar um arquivo ``.env`` na raiz do projeto e preenche-lo, caso seja apenas um teste, basta copiar os valores de ``.env.example``.
+Para executar o projeto em produção, será necessário criar um arquivo ``.env`` na raiz do projeto **back-end** e preenche-lo, caso seja apenas um teste, basta copiar os valores de ``.env.example``.
+
+```sh
+cd backend
+```
 
 ```sh
 cp .env.example .env
 ```
 
-Com o ``.env`` criado e preenchido, rode o seguinte comando:
+Com o ``.env`` criado e preenchido, volte a raiz do projeto com ``cd ..`` e rode o seguinte comando:
 
 ```sh
 docker-compose -f docker-compose.yml up
 ```
+
 > back-end: [http://localhost:3333/](http://localhost:3333/)
 
 > front-end: [http://localhost:3000/](http://localhost:3000/)
+
 ---
 
-## **Manualmente**
+## **Manualmente (mais rápida)**
 
 Para ver as instruções de como rodar o projeto manualmente clique [aqui](./docs/RUN.md#manualmente).
 
@@ -329,7 +335,7 @@ yarn test
 <img src="https://i.ibb.co/JkMBBNq/Screenshot-20210726-044342.png" alt="Cobertura dos testes" width="480"/>
 
 
-Para visualizar a cobertura dos testes de uma maneira mais intuítiva, acesse o diretório ``challenge-bravo/coverage/lcov-report``.
+Para visualizar a cobertura dos testes de uma maneira mais intuítiva, acesse o diretório ``challenge-bravo/backend/coverage/lcov-report``.
 
 Esta pasta possuí um arquivo ``index.html``, que ao ser aberto exibirá a cobertura de todos os testes em uma página web.
 

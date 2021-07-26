@@ -19,29 +19,31 @@ Opções:
 
 ### **Desenvolvimento**
 
-Após clonar o projeto e instalar as dependências, execute o seguinte comando para rodar a aplicação:
+Após clonar o projeto, execute o seguinte comando para rodar a aplicação:
 
 ```sh
 docker-compose up
 ```
 
-> Após os containers subirem, a aplicação (back-end) estará disponível em [http://localhost:3333/](http://localhost:3333/)
+> Após os containers subirem, a aplicação (back-end) estará disponível em: [http://localhost:3333/](http://localhost:3333/)
 
-> O front-end estará disponível em: [http://localhost:3000/](http://localhost:3000/)
+> A aplicação front-end irá subir em: [http://localhost:3000/](http://localhost:3000/)
 
 ---
 
 ### **Produção**
 
-Para executar o projeto em produção, será necessário criar um arquivo ``.env`` na raiz do projeto e preenche-lo, caso seja apenas um teste, basta copiar os valores de ``.env.example``.
+Para executar o projeto em produção, será necessário criar um arquivo ``.env`` na raiz do projeto **back-end** e preenche-lo, caso seja apenas um teste, basta copiar os valores de ``.env.example``.
+
+```sh
+cd backend
+```
 
 ```sh
 cp .env.example .env
-
-# Ou faça isso manualmente
 ```
 
-Com o ``.env`` criado e preenchido, rode o seguinte comando:
+Com o ``.env`` criado e preenchido, volte a raiz do projeto com ``cd ..`` e rode o seguinte comando:
 
 ```sh
 docker-compose -f docker-compose.yml up
@@ -53,7 +55,7 @@ docker-compose -f docker-compose.yml up
 
 ---
 
-## **Manualmente**
+## **Manualmente (mais rápida)**
 
 ### **Requisitos**
 
