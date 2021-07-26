@@ -24,7 +24,7 @@ const CurrencyList = dynamic(
 
 export default function Home() {
   return (
-    <Flex w="100%" h={['unset', 'unset', '100vh']} overflow="hidden">
+    <Flex w="100%" minH="100vh" overflow="hidden">
       <Box bg="blue.800" w="100%" h="45vh" position="absolute" />
 
       <Flex

@@ -25,7 +25,7 @@ export function Result({ isLoading, result, from, to, amount }: ResultProps) {
 
   return (
     <>
-      {(isLoading || (result && from && to && amount)) && (
+      {(isLoading || (result && from && to && amount && from !== to)) && (
         <VStack align="flex-start">
           <Skeleton isLoaded={!isLoading} w="100px" minW="100px">
             <Text fontWeight="600" color="gray.500">
