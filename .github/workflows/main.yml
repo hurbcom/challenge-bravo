@@ -42,5 +42,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/app/challenge-bravo/backend
+            cd ~/app/challenge-bravo
             docker-compose -f docker-compose.yml restart backend
