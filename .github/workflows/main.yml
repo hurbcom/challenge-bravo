@@ -43,5 +43,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/app/challenge-bravo/backend
-            yarn
             docker-compose -f docker-compose.yml restart backend
