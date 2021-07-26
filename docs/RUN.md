@@ -217,7 +217,7 @@ docker network create bravo-network
 **Subir container do MongoDB:**
 
 ```sh
-
+docker run --net bravo-network --name bravoDB -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=password -e MONG_INITDB_DATABASE=bravodb -d mongo
 ```
 
 **Subir container do Redis:**
@@ -225,14 +225,17 @@ docker network create bravo-network
 O Redis é opcional, a aplicação funcionará normalmente sem ele, porém não irá se beneficiar da melhoria nos tempos de resposta das requisições que o cache de dados traz.
 
 ```sh
-docker run --net bravo-network --name bravoCache -p 6379:6379 -d redis:alpine
+docker run --net bravo-network --name bravoCache -p 6379:6379 -e REDIS_PASSWORD=password -d redis:alpine
 ```
 
 **Gerar build da imagem:**
 
 ```sh
-# Desenvolvimento
 cd backend
+```
+
+```sh
+# Desenvolvimento
 docker build -f Dockerfile -t bravo:node . --target backend_development
 
 # Produção
@@ -244,5 +247,31 @@ docker build -f Dockerfile -t bravo:node . --target backend_production
 Com a build da imagem já criada, vamos executa-la:
 
 ```sh
-docker run --net bravo-network -it --rm -v ${PWD}/backend:/app -v /app/node_modules -p 3333:3333 -e REDIS_HOST=bravoCache -e POSTGRESQL_HOST=bravoDB bravo:node
+# Certifique-se de estar em /challenge-bravo/backend (diretório do back-end)
+
+docker run --net bravo-network -it --rm -v ${PWD}:/app -v /app/node_modules -p 3333:3333 -e REDIS_HOST=bravoCache -e MONGODB_HOST=bravoDB -e NODE_ENV=dev bravo:node
 ```
+
+> Use o ``-e NODE_ENV=dev`` somente para desenvolvimento
+
+**Rodando o front-end com ``docker run``:**
+
+```sh
+# Partindo da raiz do projeto
+cd frontend
+
+# Desenvolvimento
+docker build -f Dockerfile -t bravo_frontend:node . --target frontend_development
+
+# Produção
+docker build -f Dockerfile -t bravo_frontend:node . --target frontend_production
+```
+
+Com a build da imagem já criada, vamos executa-la:
+```sh
+# Certifique-se de estar em /challenge-bravo/frontend (diretório do front-end)
+
+docker run --net bravo-network -it --rm -v ${PWD}:/app -v /app/node_modules -p 3000:3000 -e NODE_ENV=development bravo_frontend:node 
+```
+
+> Use o ``-e NODE_ENV=development`` somente para desenvolvimento

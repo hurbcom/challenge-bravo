@@ -9,7 +9,7 @@
 - [Tecnologias](#Tecnologias)
 - [Decisões Técnicas](#decisões-técnicas)
 - [Desafios](#Desafios)
-- [Melhorias](#Melhorias)
+- [Melhorias](#possíveis-melhorias)
 - [Arquitetura](#Arquitetura)
 - [Instalação](#Instalação)
 - [Testes](#Testes)
@@ -349,4 +349,4 @@ Qualquer dúvida, sugestão ou crítica construtiva estarei à disposição! :)
 
 E-mail: **ribeirogabx@gmail.com**
 
-LinkedIn: [**https://www.linkedin.com/in/ribeirogab/**](https://www.linkedin.com/in/ribeirogab/*)
+LinkedIn: [**https://www.linkedin.com/in/ribeirogab/**](https://www.linkedin.com/in/ribeirogab/)
