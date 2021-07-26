@@ -1,0 +1,339 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bravo Currency Conversion",
+    "description": "API RESTful capaz de realizar conversões monetárias e cadastrar novas moedas.\n\n**Arquivos para download:**\n- [**Insomnia Request Collection**](https://drive.google.com/file/d/1mC6l-l-5zg8KXnzOtSJ4pcBKr77rLFUl/view?usp=sharing)\n- [**Postman Request Collection**](https://drive.google.com/file/d/1HJ5wsOSvZiEESbsT2Bug5kLs810D1PhO/view?usp=sharing)\n---",
+    "version": "1.0.0",
+    "contact": {
+      "email": "ribeirogabx@gmail.com"
+    }
+  },
+  "schemes": ["https", "http"],
+  "paths": {
+    "/currency-converter": {
+      "get": {
+        "tags": [{ "name": "CurrencyConverter" }],
+        "summary": "Converter moedas",
+        "description": "Rota utilizada para realizar a conversão monetária entre duas moedas.\n\nMoedas disponíveis por padrão: usd, brl, eur, btc e eth",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "default": 1,
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "example": 1
+                    },
+                    "currencies": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/Currency"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+
+    "/currencies": {
+      "post": {
+        "tags": [{ "name": "Currencies" }],
+        "summary": "Criar uma moeda",
+        "description": "Rota utilizada para criação de uma nova moeda.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/CurrencyBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currency": {
+                      "$ref": "#/definitions/Currency"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "get": {
+        "tags": [{ "name": "Currencies" }],
+        "summary": "Listar todos as moedas",
+        "description": "Rota utilizada para listar todas as moedas cadastradas.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "example": 1
+                    },
+                    "currencies": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/Currency"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/currencies/{code}": {
+      "get": {
+        "tags": [{ "name": "Currencies" }],
+        "summary": "Listar uma moeda",
+        "description": "Rota utilizada para listar uma única moeda.",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Código da moeda",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currency": {
+                      "$ref": "#/definitions/Currency"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Currency not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "put": {
+        "tags": [{ "name": "Currencies" }],
+        "summary": "Atualizar uma moeda",
+        "description": "Rota utilizada para atualizar os dados de uma moeda.",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Código da moeda",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "backingCurrency": {
+                    "code": "usd",
+                    "amount": 15
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currency": {
+                      "$ref": "#/definitions/Currency"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Currency does not exist."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "delete": {
+        "tags": [{ "name": "Currencies" }],
+        "summary": "Deletar uma moeda",
+        "description": "Rota utilizada para deletar uma moeda.",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Código da moeda",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Currency": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "abc"
+        },
+        "backingCurrency": {
+          "type": "object",
+          "example": {
+            "code": "usd",
+            "amount": 15
+          }
+        },
+        "createdAt": {
+          "example": "2021-07-19T02:55:09.543Z"
+        },
+        "updatedAt": {
+          "example": "2021-07-19T02:55:09.543Z"
+        }
+      },
+      "workSchedules": {
+        "type": "object",
+        "example": {
+          "sunday": {
+            "startHour": null,
+            "finishHour": null
+          },
+          "monday": {
+            "startHour": "09:00",
+            "finishHour": "17:00"
+          },
+          "tuesday": {
+            "startHour": "09:00",
+            "finishHour": "17:00"
+          },
+          "wednesday": {
+            "startHour": "08:00",
+            "finishHour": "12:00"
+          },
+          "thursday": {
+            "startHour": "09:00",
+            "finishHour": "17:00"
+          },
+          "friday": {
+            "startHour": "09:00",
+            "finishHour": "17:00"
+          },
+          "saturday": {
+            "startHour": null,
+            "finishHour": null
+          }
+        }
+      }
+    },
+
+    "CurrencyBody": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "abc"
+        },
+        "backingCurrency": {
+          "type": "object",
+          "example": {
+            "code": "usd",
+            "amount": 15
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
