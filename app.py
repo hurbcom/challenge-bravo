@@ -44,6 +44,15 @@ def authenticate():
     else:
         return make_response(jsonify({"message": "Login failed! Please verify your credentials and try again."}), 401)
 
+@app.route("/logout", methods=['GET'])
+def logout():
+
+    if current_user.is_authenticated:
+        logout_user()
+        return make_response(jsonify({"message": "User logged out"}), 200)
+    else:
+        return make_response(jsonify({"message": "User is not logged"}), 403)
+
 
 if __name__ == "__main__":
   app.run(host=HOST, port=PORT, threaded=True)
