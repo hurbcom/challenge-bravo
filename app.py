@@ -4,12 +4,13 @@ import sqlite3
 from models.user import UserModel
 from flask_cors import CORS
 import os
+from project.settings import HOST, PORT, DEBUG
 
 
 app = Flask(__name__)
 app.secret_key =  os.getenv('SECRET_KEY')
 CORS(app)
-app.debug = True
+app.debug = DEBUG
 authManager = LoginManager(app)
 
 @authManager.user_loader
@@ -19,7 +20,6 @@ def load_user(user_id):
         return None
     else:
         return user
-
 
 @app.route("/auth", methods=['POST'])
 def authenticate():
@@ -32,13 +32,12 @@ def authenticate():
 
     email = request.json['email']
     password = request.json['password']
-    result = UserModel.selectOneByEmail(email)
+    user = UserModel.selectOneByEmail(email)
 
-    if not result:
+    if not user:
         return make_response(jsonify({"message": "Email not found"}), 404)
 
-    user = list(result)
-    Us = load_user(user[0])
+    Us = load_user(user.id)
     if email == Us.email and password == Us.password:
         login_user(Us, remember=False)
         return make_response(jsonify({"message": "Login successfull"}), 200)
@@ -47,4 +46,4 @@ def authenticate():
 
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0',port=8080,threaded=True)
+  app.run(host=HOST, port=PORT, threaded=True)

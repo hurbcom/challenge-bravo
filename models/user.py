@@ -14,7 +14,8 @@ class UserModel(UserMixin):
 
     def selectOneByEmail(email):
         db = Connector()
-        return db.selectOne(f"SELECT * FROM auth where email = '{email}'")
+        user = db.selectOne(f"SELECT * FROM auth where email = '{email}'")
+        return UserModel(int(user[0]), user[1], user[2])
 
     def selectOneById(id):
         db = Connector()
