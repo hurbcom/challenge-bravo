@@ -53,6 +53,7 @@ Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lis
 -   A API pode ser escrita com ou sem a ajuda de _frameworks_
     -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
 -   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+-   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
 
 ## Critério de avaliação
 
