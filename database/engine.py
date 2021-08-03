@@ -2,6 +2,7 @@ import sqlite3
 import os
 import time
 
+
 class Connector(object):
 
     def __init__(self):
@@ -12,3 +13,4 @@ class Connector(object):
         cursor = connection.cursor()
         cursor.execute(query)
         return cursor.fetchone()
+
