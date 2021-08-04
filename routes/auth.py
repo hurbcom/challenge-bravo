@@ -1,11 +1,17 @@
 from flask_login import LoginManager, login_user, logout_user, current_user
 from flask import Flask, request, make_response, jsonify
 from models.user import UserModel
+from controllers.auth import AuthController
+
+
 
 def authRoutes(app, authManager):
+
+    ctrl = AuthController()
+
     @authManager.user_loader
     def load_user(user_id):
-        user = UserModel.selectOneById(user_id)
+        user = ctrl.selectOneById(user_id)
         if user is None:
             return None
         else:
@@ -26,25 +32,15 @@ def authRoutes(app, authManager):
         if not request.json:
             return make_response(jsonify({"message": "You need provide email and password"}), 400)
 
-        email = request.json['email']
-        password = request.json['password']
-        user = UserModel.selectOneByEmail(email)
-
+        user = ctrl.selectOneByEmail(request.json['email'])
         if not user:
             return make_response(jsonify({"message": "Email not found"}), 404)
 
         Us = load_user(user.id)
-        if email == Us.email and password == Us.password:
-            login_user(Us, remember=False)
-            return make_response(jsonify({"message": "Login successfull"}), 200)
-        else:
-            return make_response(jsonify({"message": "Login failed! Please verify your credentials and try again."}), 401)
+        return ctrl.validateUserAndStartSession(request, Us)
 
     @app.route("/logout", methods=['GET'])
     def logout():
+        return ctrl.closeSession()
 
-        if current_user.is_authenticated:
-            logout_user()
-            return make_response(jsonify({"message": "User logged out"}), 200)
-        else:
-            return make_response(jsonify({"message": "User is not logged"}), 403)
+
