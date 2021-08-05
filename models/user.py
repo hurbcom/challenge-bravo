@@ -1,24 +1,25 @@
 from flask_login import UserMixin
-from database.engine import Connector
+from database.sharedConnector import db
 
 
-class UserModel(UserMixin):
-    def __init__(self, id, email, password):
-         self.id = int(id)
-         self.email = email
-         self.password = password
-         self.authenticated = False
+class User(db.Model):
+
+    __tablename__ = 'user'
+
+    def __init__(self, **kwargs):
+        self.authenticated = False
+        super(User, self).__init__(**kwargs)
+
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(), nullable=False)
+    password = db.Column(db.TEXT(), nullable=False)
+    is_active = db.Column(db.Boolean(), default=False)
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
     def is_authenticated(self):
-         return self.authenticated
+        return self.authenticated
 
-    def selectOneByEmail(email):
-        db = Connector()
-        user = db.selectOne(f"SELECT * FROM auth where email = '{email}'")
-        return UserModel(int(user[0]), user[1], user[2])
-
-    def selectOneById(id):
-        db = Connector()
-        user = db.selectOne(f"SELECT * FROM auth where id = {id}")
-        return UserModel(int(user[0]), user[1], user[2])
-
+    def get_id(self):
+        return self.id

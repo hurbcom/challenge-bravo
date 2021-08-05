@@ -1,14 +1,17 @@
 from flask import Flask, request, make_response, jsonify
 from flask_login import LoginManager, login_user, logout_user, current_user
-from models.user import UserModel
+from models.user import User
+
+
+
 
 class AuthController(object):
 
     def selectOneById(self, user_id):
-        return UserModel.selectOneById(user_id)
+        return User.query.filter_by(id=user_id).first()
 
     def selectOneByEmail(self, email):
-        return UserModel.selectOneByEmail(email)
+        return User.query.filter_by(email=email).first()
 
     def validateUserAndStartSession(self, request, _user):
         email = request.json['email']
@@ -25,3 +28,4 @@ class AuthController(object):
             return make_response(jsonify({"message": "User logged out"}), 200)
         else:
             return make_response(jsonify({"message": "User is not logged"}), 403)
+

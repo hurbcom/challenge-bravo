@@ -1,6 +1,5 @@
 from flask_login import LoginManager, login_user, logout_user, current_user
 from flask import Flask, request, make_response, jsonify
-from models.user import UserModel
 from controllers.auth import AuthController
 
 
