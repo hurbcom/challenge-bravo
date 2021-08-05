@@ -3,6 +3,7 @@ from flask import Flask, request, make_response, jsonify
 import os
 from controllers.currency import CurrencyController
 
+
 def currencyRoutes(app):
 
     ctrl = CurrencyController()
