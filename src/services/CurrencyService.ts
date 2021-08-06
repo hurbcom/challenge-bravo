@@ -1,8 +1,12 @@
 import { AppError } from "../AppError";
+import { inject, injectable } from "tsyringe";
 import axios from 'axios';
-import { ICurrency } from "../models/Currency";
+
 
 import { CurrencyRepository } from "../repositories/CurrencyRepository";
+import { ICurrency } from "../models/ICurrency";
+import { ICurrencyRepository } from "../repositories/ICurrencyRepository";
+
 
 interface ICurrentQuote {
     BRLInUSD: number;
@@ -17,10 +21,16 @@ interface IConversionCurrency {
     currencyFrom: {};
     currencyTo: {}
 }
-
+@injectable()
 class CurrencyService {
 
-    private currencyRepository = new CurrencyRepository();
+   // private currencyRepository = new CurrencyRepository();
+
+   constructor(
+
+    @inject("CurrencyRepository")
+    private currencyRepository: ICurrencyRepository
+  ) { }
 
     async create({ name, code, valueInUSD }: ICurrency): Promise<ICurrency> {
 

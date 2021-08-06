@@ -1,8 +1,10 @@
-import { AppError } from "../AppError";
-import { ICurrency, Currency } from "../models/Currency";
+import { ICurrency } from "../models/ICurrency";
+import { Currency } from "../models/mongo/Currency";
+import { ICurrencyRepository } from "./ICurrencyRepository";
 
 
-class CurrencyRepository {
+
+class CurrencyRepository implements ICurrencyRepository {
 
     async create({ name, code, valueInUSD }: ICurrency): Promise<ICurrency> {
         const currency = await new Currency({ name, code, valueInUSD }).save();

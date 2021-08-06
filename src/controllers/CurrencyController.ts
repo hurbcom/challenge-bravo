@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { container } from "tsyringe";
 
 
 
@@ -12,7 +13,7 @@ class CurrencyController {
 
         const { name, code, valueInUSD } = request.body;
 
-        const currencyService = new CurrencyService();
+        const currencyService = container.resolve(CurrencyService);
 
         const currency = await currencyService.create({ name, code, valueInUSD });
 
@@ -22,7 +23,7 @@ class CurrencyController {
 
     async listAll(request: Request, response: Response): Promise<Response> {
 
-        const currencyService = new CurrencyService();
+        const currencyService = container.resolve(CurrencyService);
 
         const currencies = await currencyService.listAll();
 
@@ -34,7 +35,7 @@ class CurrencyController {
 
         const { id } = request.params;
 
-        const currencyService = new CurrencyService();
+        const currencyService = container.resolve(CurrencyService);
 
         await currencyService.update({ _id: id, name, code, valueInUSD });
 
@@ -46,7 +47,7 @@ class CurrencyController {
 
         const _id = id;
 
-        const currencyService = new CurrencyService();
+        const currencyService = container.resolve(CurrencyService);;
 
         await currencyService.delete(_id);
 
@@ -57,7 +58,7 @@ class CurrencyController {
 
         const { from, to, amount } = request.query;
 
-        const currencyService = new CurrencyService();
+        const currencyService = container.resolve(CurrencyService);
 
         const convertedAmount = await currencyService.conversionOfCurrency(from as string, to as string, amount as string);
 
@@ -66,7 +67,7 @@ class CurrencyController {
 
     async currentQuote(request: Request, response: Response): Promise<Response> {
 
-        const currencyService = new CurrencyService();
+        const currencyService = container.resolve(CurrencyService);
 
         const {BRLInUSD, EURInUSD,BTCInUSD, ETHInUSD} = await currencyService.currentQuote();
 

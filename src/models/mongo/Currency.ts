@@ -1,14 +1,7 @@
 import mongoose, { Model } from 'mongoose';
+import { ICurrency } from '../ICurrency';
 
-export interface ICurrency {
-    _id?: string;
-    name: string;
-    code: string;
-    valueInUSD: number;
-    created_at?: Date;
-    updated_at?: Date;
 
-}
 
 const schema = new mongoose.Schema(
     {
