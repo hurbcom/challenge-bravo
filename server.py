@@ -8,7 +8,7 @@ from routes.auth import authRoutes
 from routes.test import testRoutes
 from routes.currency import currencyRoutes
 from database.sharedConnector import db
-
+from models.currency import Currency
 
 api = Flask(__name__)
 api.secret_key =  os.getenv('SECRET_KEY')
@@ -20,11 +20,14 @@ CORS(api)
 authManager = LoginManager(api)
 authRoutes(api, authManager)
 currencyRoutes(api)
-testRoutes(api)
 
 api.config ['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///database/{os.getenv('DB_NAME')}"
 db.init_app(api)
 
+
+with api.app_context():
+    Currency.__table__.create(db.session.bind, checkfirst=True)
+    db.create_all()
 
 api.run(HOST, PORT, threaded = True)
 

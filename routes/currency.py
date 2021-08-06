@@ -27,9 +27,26 @@ def currencyRoutes(app):
 
         return ctrl.converter(source, destiny, amount)
 
+    @app.route(base+'/add', methods=['POST'])
+    @login_required
+    def create():
+        code = request.get_json()['code']
+        in_usd = request.get_json()['in_usd']
+        return ctrl.create(code, in_usd)
 
-    @app.route(base, methods=['GET'])
-    def list():
-        return make_response(jsonify({"message": "This will list all Currency!"+ os.path.abspath(f"database/{os.getenv('DB_NAME')}")}), 200)
+    @app.route(base+'/list', methods=['GET'])
+    def listAll():
+        return ctrl.getAll()
+
+    @app.route(base+'/<code>/', methods=['GET'])
+    def getOne(code):
+        return ctrl.get(code)
+
+    @app.route(base+'/delete/<code>/', methods=['DELETE'])
+    @login_required
+    def delete(code):
+        return ctrl.delete(code)
+
+
 
 

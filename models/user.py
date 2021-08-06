@@ -1,7 +1,8 @@
 from flask_login import UserMixin
+from dataclasses import dataclass
 from database.sharedConnector import db
 
-
+@dataclass
 class User(db.Model):
 
     __tablename__ = 'user'
@@ -11,7 +12,7 @@ class User(db.Model):
         super(User, self).__init__(**kwargs)
 
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, auto_increment=True)
     email = db.Column(db.String(), nullable=False)
     password = db.Column(db.TEXT(), nullable=False)
     is_active = db.Column(db.Boolean(), default=False)
@@ -23,3 +24,8 @@ class User(db.Model):
 
     def get_id(self):
         return self.id
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
