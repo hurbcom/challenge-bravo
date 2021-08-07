@@ -5,17 +5,24 @@ from requests import Session
 import requests
 import os
 from models.currency import Currency
+from google_currency import convert
+from project.settings import default_currencies
+import re
 
-default_money = ['USD', 'BRL', 'EUR']
-default_criptocurrency = ['BTC', 'ETH']
+USD_REFERENCE = 1
 
-
-headers = {'Accepts': 'application/json'}
 
 class CurrencyController(object):
 
     def create(self, code, in_usd):
         try:
+            if code in default_currencies:
+                return make_response(jsonify({"message": "You can't use a default currency code."}), 400)
+
+            if not bool(re.match('^[A-Z]+$', code)):
+                return make_response(jsonify({"message": "Currency code must contains only uppercase letters."}), 400)
+
+
             currency = Currency(code=code, in_usd=in_usd)
             currency.save()
             return make_response(jsonify({"message": "Currency created successfully"}), 200)
@@ -44,207 +51,70 @@ class CurrencyController(object):
         except Exception as e:
             return make_response(jsonify({"err": "Could not get currencies list!: "+str(e)}), 500)
 
+    def getAllCustomCurrenciesCodes(self):
+        allCurrenciesCodes = []
+        rows = Currency.query.with_entities(Currency.code).all()
+        for row in rows:
+            allCurrenciesCodes.append(row[0])
+        return allCurrenciesCodes
 
 
     def converter(self, source, destiny, amount):
+        default_response = {
+            "converted": True,
+            "from": source,
+            "to": destiny,
+        }
         session = Session()
-        session.headers.update(headers)
+        session.headers.update({'Accepts': 'application/json'})
         try:
+            customCurrenciesCodes = self.getAllCustomCurrenciesCodes()
 
-            if (source in default_money and destiny in default_money):
-                # getting converted values from an existing service. Life don't need to be hard ;) - Rafael Sampaio
-                # The Frankfurter API tracks foreign exchange references rates published by the European Central Bank.
-                # The data refreshes around 16:00 CET every working day.
-                url = os.getenv('FRANK_FURTER_SERVICE')+f'/latest?amount={amount}&from={source}&to={destiny}'
-                with requests.request('get', url=url, stream=True) as response:
-                    data = json.loads(response.text)
-                    result =  next(iter(data['rates'].values()))
-                    return make_response(jsonify({source: amount, destiny: float("{:.2f}".format(result))}), 200)
+            if (source in customCurrenciesCodes or source in default_currencies) and (destiny in customCurrenciesCodes or destiny in default_currencies):
 
-            elif( (source in default_money or source in default_criptocurrency) and (destiny in default_money or destiny in default_criptocurrency)):
+                if source in customCurrenciesCodes and destiny in customCurrenciesCodes:
+                    """
+                        It is not possible to perform the conversion between two fictitious currencies because
+                        this use case is not covered by the challenge specification. Please check the challenge
+                        description at: https://github.com/hurbcom/challenge-bravo#-desafio-bravo
+                    """
+                    return make_response(jsonify({"err": "It is not possible to perform the conversion between two fictitious currencies"}), 400)
 
-                if(source == 'BRL' and destiny == 'BTC'):
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        return make_response(jsonify({source: amount, destiny: (amount / float(data[34]['rate']))}), 200)
-
-                elif(source == 'BRL' and destiny == 'ETH'):
-                    eth_as_btc = None
-                    brl_as_bct = None
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        eth_as_btc = float(data[13]['rate'])
-
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        brl_as_bct = float(data[34]['rate'])
-
-                    result = (eth_as_btc / brl_as_bct) * amount
-                    return make_response(jsonify({source: amount, destiny: result}), 200)
-
-                elif(source == 'USD' and destiny == 'BTC'):
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        return make_response(jsonify({source: amount, destiny: (amount / float(data[2]['rate']))}), 200)
-
-                elif(source == 'USD' and destiny == 'ETH'):
-                    eth_as_btc = None
-                    usd_as_bct = None
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        eth_as_btc = float(data[13]['rate'])
-
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        usd_as_bct = float(data[2]['rate'])
-
-                    result = (eth_as_btc / usd_as_bct) * amount
-                    return make_response(jsonify({source: amount, destiny: result}), 200)
-
-                elif(source == 'EUR' and destiny == 'BTC'):
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        return make_response(jsonify({source: amount, destiny: (amount / float(data[3]['rate']))}), 200)
-
-                elif(source == 'EUR' and destiny == 'ETH'):
-                    eth_as_btc = None
-                    eur_as_bct = None
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        eth_as_btc = float(data[13]['rate'])
-
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        eur_as_bct = float(data[3]['rate'])
-
-                    result = (eth_as_btc / eur_as_bct) * amount
-                    return make_response(jsonify({source: amount, destiny: result}), 200)
-
-                elif(source == 'ETH' and destiny == 'BRL'):
-                    eth_as_btc = None
-                    brl_as_bct = None
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        eth_as_btc = float(data[13]['rate'])
-
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        brl_as_bct = float(data[34]['rate'])
-
-                    result = (brl_as_bct / eth_as_btc) * amount
-                    return make_response(jsonify({source: amount, destiny: result}), 200)
-
-                elif(source == 'ETH' and destiny == 'BTC'):
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        return make_response(jsonify({source: amount, destiny: (amount / float(data[13]['rate']))}), 200)
-
-                elif(source == 'ETH' and destiny == 'EUR'):
-                    eth_as_btc = None
-                    eur_as_bct = None
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        eth_as_btc = float(data[13]['rate'])
-
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        eur_as_bct = float(data[3]['rate'])
-
-                    result = (eur_as_bct / eth_as_btc) * amount
-                    return make_response(jsonify({source: amount, destiny: result}), 200)
-
-                elif(source == 'ETH' and destiny == 'USD'):
-                    eth_as_btc = None
-                    usd_as_bct = None
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        eth_as_btc = float(data[13]['rate'])
-
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        usd_as_bct = float(data[2]['rate'])
-
-                    result = (usd_as_bct / eth_as_btc) * amount
-                    return make_response(jsonify({source: amount, destiny: result}), 200)
-
-                elif(source == 'BTC' and destiny == 'BRL'):
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        return make_response(jsonify({source: amount, destiny: (amount * float(data[34]['rate']))}), 200)
-
-                elif(source == 'BTC' and destiny == 'EUR'):
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        return make_response(jsonify({source: amount, destiny: (amount * float(data[3]['rate']))}), 200)
-
-                elif(source == 'BTC' and destiny == 'ETH'):
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        return make_response(jsonify({source: amount, destiny: (amount * float(data[13]['rate']))}), 200)
-
-                elif(source == 'BTC' and destiny == 'USD'):
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        return make_response(jsonify({source: amount, destiny: (amount * float(data[2]['rate']))}), 200)
-            else:
-                print('aqui')
-                if source == 'BRL':
-                    btc = None
-                    usd_as_bct = None
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        btc = float(data[1]['rate'])
-
-                    with requests.request('get', url=os.getenv('BIT_PAY_SERVICE'), stream=True) as response:
-                        data = json.loads(response.text)
-                        usd_as_bct = float(data[2]['rate'])
-
-                    result = ( btc/ usd_as_bct) * amount
-                    return make_response(jsonify({source: amount, destiny: result}), 200)
-
-                    # destiny_curr = Currency.query.filter_by(code=destiny).first()
-                    # if(destiny_curr):
-                    #     url = os.getenv('FRANK_FURTER_SERVICE')+f'/latest?amount=1&from=BRL&to=USD'
-                    #     with requests.request('get', url=url, stream=True) as response:
-                    #         data = json.loads(response.text)
-                    #         brl_as_usd =  next(iter(data['rates'].values()))
-                    #         result = brl_as_usd  * amount
-
-                    #         return make_response(jsonify({source: amount, destiny: float("{:.2f}".format(result))}), 200)
-                    # else:
-                    #     return make_response(jsonify({"err": f"Currency {destiny} not found!"}), 404)
+                if source in customCurrenciesCodes:
+                    if destiny == 'USD':
+                        customCurrency = Currency.query.filter_by(code=source).first()
+                        result = (USD_REFERENCE / customCurrency.in_usd ) * amount
+                        default_response.update({'amount': str(result)})
+                        return make_response(jsonify(default_response), 200)
+                    else:
+                        customCurrency = Currency.query.filter_by(code=source).first()
+                        destiny_as_usd = convert(destiny, 'USD', USD_REFERENCE)
+                        destiny_as_usd = float(json.loads(destiny_as_usd)['amount'])
+                        result = USD_REFERENCE / ((customCurrency.in_usd * destiny_as_usd) * amount)
+                        default_response.update({'amount': str(result)})
+                        return make_response(jsonify(default_response), 200)
 
 
-                elif source == 'BTC':
-                    pass
+                elif destiny in customCurrenciesCodes:
+                    if source == 'USD':
+                        customCurrency = Currency.query.filter_by(code=destiny).first()
+                        result = (customCurrency.in_usd ) * amount
+                        default_response.update({'amount': str(result)})
+                        return make_response(jsonify(default_response), 200)
+                    else:
+                        customCurrency = Currency.query.filter_by(code=destiny).first()
+                        source_as_usd = convert(source, 'USD', USD_REFERENCE)
+                        source_as_usd = float(json.loads(source_as_usd)['amount'])
+                        result = (customCurrency.in_usd * source_as_usd) * amount
+                        default_response.update({'amount': str(result)})
+                        return make_response(jsonify(default_response), 200)
 
-                elif source == 'EUR':
-                    pass
-
-                elif source == 'ETH':
-                    pass
-
-                elif source == 'USD':
-                    pass
-
-                elif destiny == 'BRL':
-                    pass
-
-                elif destiny == 'BTC':
-                    pass
-
-                elif destiny == 'EUR':
-                    pass
-
-                elif destiny == 'ETH':
-                    pass
-
-                elif destiny == 'USD':
-                    pass
                 else:
-                    pass
-
-
+                    converted = convert(source, destiny, amount)
+                    converted = json.loads(converted)
+                    return make_response(converted, 200)
+            else:
+                return make_response(jsonify({"err": "Our API dosen't suport this convertion"}), 404)
 
         except (ConnectionError, Timeout, TooManyRedirects, ChunkedEncodingError) as e:
             return make_response(jsonify({"err": "Could not cornvet amount value!: "+str(e)}), 500)
