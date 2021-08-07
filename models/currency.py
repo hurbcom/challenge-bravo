@@ -4,13 +4,6 @@ from database.sharedConnector import db
 import json
 from flask import jsonify
 
-# from flask_sqlalchemy import declarative_base
-# # from flask.ext.jsontools import JsonSerializableBase
-# from flask_jsontools import JsonSerializableBase
-
-
-
-# Base = declarative_base(cls=(JsonSerializableBase,))
 
 @dataclass
 class Currency(db.Model):
@@ -28,15 +21,5 @@ class Currency(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
-
-    def getAllCustomCurrenciesCodes():
-        allCustomCurrencies = db.session.query(Currency.code).all()
-        res = Currency.query.with_entities(Currency.code).all()
-        # allCustomCurrencies = jsonify(allCustomCurrencies)
-
-        # if 'HRB' not in allCustomCurrencies:
-        #     print('MIGA SUA LOKA')
-        # else:
-        #     print('OMG')
 
 

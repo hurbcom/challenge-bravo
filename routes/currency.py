@@ -34,6 +34,13 @@ def currencyRoutes(app):
         in_usd = request.get_json()['in_usd']
         return ctrl.create(code, in_usd)
 
+    @app.route(base+'/update', methods=['PUT'])
+    @login_required
+    def update():
+        code = request.get_json()['code']
+        in_usd = request.get_json()['in_usd']
+        return ctrl.update(code, in_usd)
+
     @app.route(base+'/list', methods=['GET'])
     def listAll():
         return ctrl.getAll()

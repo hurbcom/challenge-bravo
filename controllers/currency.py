@@ -39,6 +39,18 @@ class CurrencyController(object):
         except Exception as e:
             return make_response(jsonify({"err": "Could not delete currencies list!: "+str(e)}), 500)
 
+    def update(self, code, in_usd):
+        try:
+            curr = Currency.query.filter_by(code=code).first()
+            if curr:
+                curr.in_usd = in_usd
+                curr.save()
+                return make_response(jsonify({"message": "Currency updated successfully!"}), 200)
+            else:
+               return make_response(jsonify({"err": "Currency not found!"}), 404)
+        except Exception as e:
+            return make_response(jsonify({"err": "Could not update currencies list!: "+str(e)}), 500)
+
     def get(self, code):
         try:
             return make_response(jsonify(Currency.query.filter_by(code=code).first()), 200)
