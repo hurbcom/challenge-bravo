@@ -1,3 +1,56 @@
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Respostas ao Desafio Bravo
+
+Veja todas as ações executadas durante o desenvolvimento da API do desafio em [BACKLOG.md](BACKLOG.md)
+e arquivos criados em [CHANGELOG.md](CHANGELOG.md)
+
+- Atenção:
+  - os comandos abaixo rodam nos sistemas operacionais MacOSX e Ubuntu
+  - pacotes necessários:
+    - python3.9
+    - docker
+    - docker-compose
+    - MAKE (para executar comandos do Makefile)
+
+Para ver os comandos MAKE disponíveis, abra o terminal, **navegue até a pasta do projeto** e execute o comando abaixo:
+```shell
+$ make help
+```
+
+Para executar o desafio localmente, abra o terminal, **navegue até a pasta do projeto** e execute os comandos abaixo:
+ - primeira vez, criar virtualenv localmente e instalar dependências do python:
+```shell
+$ pip3 install --upgrade pip
+$ pip3 install virtualenv
+$ virtualenv venv/
+$ source venv/bin/activate
+$ pip3 install -r requirements.txt
+```
+ - todas as vezes:
+```shell
+$ make load
+```
+ - caso pacote MAKE não esteja disponível, execute:
+```shell
+$ python3 api/manage.py runserver
+```
+Após executar o comando acima, abrir no browser o endereço [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+
+Para executar o desafio em um container Docker, navegue até a pasta do projeto e execute os comandos abaixo:
+```shell
+$ make compose
+```
+- caso pacote MAKE não esteja disponível, execute:
+```shell
+$ docker-compose up --build
+```
+- caso pacote docker-compose não esteja disponível, execute:
+```shell
+$ docker build . -t challenge-bravo
+# $ docker run -it -w /challenge-bravo/api challenge-bravo python3 manage.py runserver
+$ docker run -it -w /challenge-bravo challenge-bravo sh docker-entrypoint.sh
+```
+Após executar o comando acima, abrir no browser o endereço [http://127.0.0.1:8008/admin](http://127.0.0.1:8008/admin)
+
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
@@ -26,7 +79,7 @@ Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem d
 
 Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
 
-Ref: 
+Ref:
 Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
 Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
 

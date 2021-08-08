@@ -1,0 +1,11 @@
+.DS_Store
+/venv/
+/tmp/
+/logs/*
+**/migrations/*
+**/__pycache__/*
+/.vscode/
+**/.vscode/*
+.ideia/
+/.ideia/
+/.ideia/*

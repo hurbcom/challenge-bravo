@@ -1,0 +1,19 @@
+version: '3.2'
+services:
+  api:
+    env_file: ./.env
+    container_name: ${CONTAINER_NAME_APP}
+    user: root
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./api:/api:consistent
+      - ./logs:/logs:consistent
+    ports:
+      - "8008:8008"
+    tty: true
+    networks:
+      bravo_net:
+networks:
+  bravo_net:

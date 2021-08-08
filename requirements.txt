@@ -1,0 +1,16 @@
+setuptools
+python-dotenv
+PyYAML
+Pygments
+pytest
+pytest-cov
+json-serializer
+requests
+markdown
+prettyprinter
+PyJWT
+werkzeug
+
+django
+djangorestframework
+django-filter
