@@ -35,19 +35,29 @@ $ python3 api/manage.py runserver
 ```
 Após executar o comando acima, abrir no browser o endereço [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
 
-Para executar o desafio em um container Docker, navegue até a pasta do projeto e execute os comandos abaixo:
+Para executar o desafio em um container Docker, abra o terminal, **navegue até a pasta do projeto** e execute os comandos abaixo:
+- primeira vez:
 ```shell
 $ make compose
 ```
+- demais vezes:
+```shell
+$ make up
+```
 - caso pacote MAKE não esteja disponível, execute:
+- primeira vez:
 ```shell
 $ docker-compose up --build
+```
+- demais vezes:
+```shell
+$ docker-compose up
 ```
 - caso pacote docker-compose não esteja disponível, execute:
 ```shell
 $ docker build . -t challenge-bravo
-# $ docker run -it -w /challenge-bravo/api challenge-bravo python3 manage.py runserver
-$ docker run -it -w /challenge-bravo challenge-bravo sh docker-entrypoint.sh
+$ docker run -p 8008:8008 -it -w /challenge-bravo challenge-bravo sh docker-entrypoint.sh
+# $ docker run -p 8008:8008 -it -w /challenge-bravo/api challenge-bravo python3 manage.py runserver
 ```
 Após executar o comando acima, abrir no browser o endereço [http://127.0.0.1:8008/admin](http://127.0.0.1:8008/admin)
 

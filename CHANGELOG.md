@@ -3,6 +3,7 @@
 ## [1.0] Desafio HURBCOM - Challenge Bravo :zap: :hammer: :construction:
 
 ### Added
+- api/
 - logs/
 - venv/
 - .env
