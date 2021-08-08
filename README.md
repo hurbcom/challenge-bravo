@@ -1,5 +1,9 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Respostas ao Desafio Bravo
 
+Para executar o desafio, foi escolhida a linguagem Python 3.9 em conjunto com DRT - Django REST Framework.
+A escolha desse Framework em específico se deve a sua facilidade em criar projetos de REST APIs com uma interface web,
+fácil utilização e manutenção.
+
 Veja todas as ações executadas durante o desenvolvimento da API do desafio em [BACKLOG.md](BACKLOG.md)
 e arquivos criados em [CHANGELOG.md](CHANGELOG.md)
 
@@ -59,7 +63,14 @@ $ docker build . -t challenge-bravo
 $ docker run -p 8008:8008 -it -w /challenge-bravo challenge-bravo sh docker-entrypoint.sh
 # $ docker run -p 8008:8008 -it -w /challenge-bravo/api challenge-bravo python3 manage.py runserver
 ```
-Após executar o comando acima, abrir no browser o endereço [http://127.0.0.1:8008/admin](http://127.0.0.1:8008/admin)
+Após executar o comando acima, os seguintes endereços estarão disponíveis no browser:
+- [http://127.0.0.1:8008/admin](http://127.0.0.1:8008/admin)
+- [http://127.0.0.1:8008/](http://127.0.0.1:8008/)
+- [http://127.0.0.1:8008/currency/](http://127.0.0.1:8008/currency/)
+- [http://127.0.0.1:8008/currency_exchange/](http://127.0.0.1:8008/currency_exchange/)
+- [http://127.0.0.1:8008/calculate/](http://127.0.0.1:8008/calculate/)
+- [http://127.0.0.1:8008/calculate/from/BRL/to/USD/amount/10](http://127.0.0.1:8008/calculate/from/BRL/to/USD/amount/10)
+- [http://127.0.0.1:8008/calculate/?from=BRL&to=USD&amount=10](http://127.0.0.1:8008/calculate/?from=BRL&to=USD&amount=10)
 
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
