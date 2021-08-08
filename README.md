@@ -37,7 +37,14 @@ $ make load
 ```shell
 $ python3 api/manage.py runserver
 ```
-Após executar o comando acima, abrir no browser o endereço [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+Após executar o comando acima, os seguintes endereços estarão disponíveis no browser:
+- [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+- [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+- [http://127.0.0.1:8000/currency/](http://127.0.0.1:8000/currency/)
+- [http://127.0.0.1:8000/currency_exchange/](http://127.0.0.1:8000/currency_exchange/)
+- [http://127.0.0.1:8000/calculate/](http://127.0.0.1:8000/calculate/)
+- [http://127.0.0.1:8000/calculate/from/BRL/to/USD/amount/10](http://127.0.0.1:8000/calculate/from/BRL/to/USD/amount/10)
+- [http://127.0.0.1:8000/calculate/?from=BRL&to=USD&amount=10](http://127.0.0.1:8000/calculate/?from=BRL&to=USD&amount=10)
 
 Para executar o desafio em um container Docker, abra o terminal, **navegue até a pasta do projeto** e execute os comandos abaixo:
 - primeira vez:
