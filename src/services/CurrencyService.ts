@@ -6,6 +6,7 @@ import axios from 'axios';
 import { CurrencyRepository } from "../repositories/CurrencyRepository";
 import { ICurrency } from "../models/ICurrency";
 import { ICurrencyRepository } from "../repositories/ICurrencyRepository";
+import RedisCache from "../cache/RedisCache";
 
 
 interface ICurrentQuote {
@@ -26,6 +27,8 @@ class CurrencyService {
 
    // private currencyRepository = new CurrencyRepository();
 
+   
+
    constructor(
 
     @inject("CurrencyRepository")
@@ -42,12 +45,27 @@ class CurrencyService {
 
         const currency = await this.currencyRepository.create({ name, code, valueInUSD });
 
+        const redisCache = new RedisCache();
+        await redisCache.delete('currencyLIST');
+
         return currency;
     }
 
     async listAll(): Promise<ICurrency[]> {
 
-        const currencies = await this.currencyRepository.listAll();
+        const redisCache = new RedisCache();
+
+        let currencies = await redisCache.recover<ICurrency[]>(
+      'currencyLIST',
+    );
+
+    if (!currencies) {
+        currencies = await this.currencyRepository.listAll();
+       const expiryTimeInSeconds = 10
+        await redisCache.save('currencyLIST', currencies, expiryTimeInSeconds);
+      }
+
+        
 
         return currencies;
     }
@@ -64,6 +82,10 @@ class CurrencyService {
 
         await this.currencyRepository.update({ _id, name, code, valueInUSD, updated_at });
 
+        const redisCache = new RedisCache();
+
+         await redisCache.delete('currencyLIST');
+
 
     }
 
@@ -76,6 +98,10 @@ class CurrencyService {
         }
 
         await this.currencyRepository.delete(_id);
+
+        const redisCache = new RedisCache();
+
+         await redisCache.delete('currencyLIST');
 
     }
 
@@ -101,7 +127,7 @@ class CurrencyService {
 
         const toValueInUSD = toCurrency.valueInUSD;
 
-        const convertedAmount = parseFloat((amountFloat * (fromValueInUSD / toValueInUSD)).toFixed(2));
+        const convertedAmount = amountFloat * (fromValueInUSD / toValueInUSD);
 
         const conversion = {
             convertedAmount,
@@ -122,6 +148,14 @@ class CurrencyService {
     }
 
     async currentQuote(): Promise<ICurrentQuote> {
+
+        const redisCache = new RedisCache();
+
+        let currentsQuotes = await redisCache.recover<ICurrentQuote>('CurrentQuote');
+
+        if(currentsQuotes){
+            return currentsQuotes 
+        }
 
         const currentQuoteInBRL = await axios.get("https://api.hgbrasil.com/finance/quotations?key=b9524aa8");
         const { USD, EUR } = currentQuoteInBRL.data.results.currencies
@@ -157,13 +191,16 @@ class CurrencyService {
         await this.currencyRepository.update(ETHCurrency);
 
 
-        const currentsQuotes: ICurrentQuote = {
+        currentsQuotes = {
             BRLInUSD,
             EURInUSD,
             BTCInUSD,
             ETHInUSD
 
         }
+
+        const expiryTimeInSeconds = 10;
+        await redisCache.save('CurrentQuote', currentsQuotes, expiryTimeInSeconds);
 
         return currentsQuotes
 
