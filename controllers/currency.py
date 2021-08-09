@@ -11,7 +11,6 @@ import re
 
 USD_REFERENCE = 1
 
-
 class CurrencyController(object):
 
     def create(self, code, in_usd):

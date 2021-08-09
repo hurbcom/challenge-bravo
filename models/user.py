@@ -12,7 +12,7 @@ class User(db.Model):
         super(User, self).__init__(**kwargs)
 
 
-    id = db.Column(db.Integer, primary_key=True, auto_increment=True)
+    id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(), nullable=False)
     password = db.Column(db.TEXT(), nullable=False)
     is_active = db.Column(db.Boolean(), default=False)

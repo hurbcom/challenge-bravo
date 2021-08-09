@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+    currency_converter:
+        # image: tecktron/python-bjoern:latest
+        build: .
+        container_name: hurb_currency_converter
+        environment:
+            DB_NAME: db.sqlite3
+            SECRET_KEY: thisIsASuperSecretKeyForHurbChallengeDevEnvOnlyPleaseDoNotUseThisKeyInProductionEnvs
+        restart: always
+        ports:
+            - "8080:80"
