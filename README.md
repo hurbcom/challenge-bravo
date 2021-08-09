@@ -42,8 +42,8 @@ Use the following JSON message structure:
 
 ```bash
 {
- "email":"you@yourdomain.com",
-    "password": "anyPassYouHave"
+"email":"you@yourdomain.com",
+"password": "anyPassYouHave"
 }
 ```
 
@@ -52,7 +52,7 @@ Use the following JSON message structure:
 ### Close Session
 User logout from API using a GET request to the following route:
 ```bash
-http://127.0.0.1:8080/currency/logout
+http://127.0.0.1:8080/logout
 ```
 
 <hr>
@@ -75,8 +75,8 @@ You must be logged into the API. Use the following JSON message structure:
 
 ```bash
 {
- "code":"ABC",
-    "in_usd": 1.23
+"code":"ABC",
+"in_usd": 1.23
 }
 ```
 
@@ -90,8 +90,8 @@ You must be logged into the API. Use the following JSON message structure:
 
 ```bash
 {
- "code":"ABC",
-    "in_usd": 1.23
+"code":"ABC",
+"in_usd": 1.23
 }
 ```
 
