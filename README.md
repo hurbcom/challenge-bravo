@@ -1,8 +1,9 @@
 
-Quick Start
+## Quick Start
+
 1 - Clone this repo.
 2 - In terminal go to the root directory
-3 - Build the docker image:
+3 - Build the docker image (it will install all dependencies):
 ```bash
 docker build -t hurb_challenge_bravo ./
 ```
@@ -11,10 +12,17 @@ docker build -t hurb_challenge_bravo ./
 docker-compose up
 ```
 
+## About this Project
 This project is part of the Bravo challenge proposed by Hurb, which consists in developing an API for currency conversion.
 The proposed solution is an API is based on the RESTFull standards and was implemented using the following technologies:
+<p align="center">
+  <img src="misc/images/core_technologies.fw.png" alt="Core technologies involved" />
+</p>
 
-User can converte values using a GET request in the `/currency/convert?from=<SOURCE>&to=<DESTINY>&amount=<VALUE>` route.
+User can converte values using a GET request to the fallow route
+```bash
+/currency/convert?from=<SOURCE>&to=<DESTINY>&amount=<VALUE>
+```
 
 The following figure presents the architecture and data flow within the proposed application.
 

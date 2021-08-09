@@ -1,0 +1,3 @@
+# api.run(HOST, PORT, threaded = True)
+
+#docker run -p 8080:80 -it -e APP_MODULE="server:api" myimage

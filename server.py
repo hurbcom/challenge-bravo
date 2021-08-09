@@ -1,14 +1,12 @@
-from flask import Flask, request, make_response, jsonify
-from flask_login import LoginManager, current_user
-import sqlite3
+from flask import Flask
+from flask_login import LoginManager
 from flask_cors import CORS
-import os
 from project.settings import HOST, PORT, DEBUG
 from routes.auth import authRoutes
-from routes.test import testRoutes
 from routes.currency import currencyRoutes
 from database.sharedConnector import db
 from models.currency import Currency
+import os
 
 api = Flask(__name__)
 api.name = 'HURB Converter v1.0'
@@ -30,7 +28,3 @@ db.init_app(api)
 with api.app_context():
     Currency.__table__.create(db.session.bind, checkfirst=True)
     db.create_all()
-
-# api.run(HOST, PORT, threaded = True)
-
-#docker run -p 8080:80 -it -e APP_MODULE="server:api" myimage
