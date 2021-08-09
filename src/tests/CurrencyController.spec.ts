@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from "../app";
+require('dotenv').config();
 
 
 let server;
@@ -10,10 +11,12 @@ let _id = '';
 describe('Currency Controller', () => {
     jest.setTimeout(90000);
     beforeAll(async () => {
-        await mongoose.connect('mongodb+srv://admin:root@cluster0.pamgw.mongodb.net/test', {
+        
+        await mongoose.connect(process.env.MONGODB_REMOTE_TEST, {
             useCreateIndex: true,
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            useFindAndModify: false
         });
 
         server = app.listen(4000, () => {

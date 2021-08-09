@@ -6,13 +6,14 @@ export default class RedisCache {
 
   constructor() {
     this.client = new Redis(cacheConfig.config.redis);
+    
   }
 
-  public async save(key: string, value: any, expiryTimeInSeconds: number): Promise<void> {
+  async save(key: string, value: any, expiryTimeInSeconds: number): Promise<void> {
     await this.client.set(key, JSON.stringify(value), "EX", expiryTimeInSeconds);
   }
 
-  public async recover<T>(key: string): Promise<T | null> {
+  async recover<T>(key: string): Promise<T | null> {
     const data = await this.client.get(key);
     
 
@@ -21,11 +22,16 @@ export default class RedisCache {
     }
 
     const parsedData = JSON.parse(data) as T;
-    console.log(parsedData);
+    
     return parsedData;
   }
 
-  public async delete(key: string): Promise<void> {
+   async delete(key: string): Promise<void> {
     await this.client.del(key);
   }
+
+   disconect () {
+     this.client.disconnect();
+  }
+  
 }

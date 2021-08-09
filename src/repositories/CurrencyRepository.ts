@@ -45,6 +45,8 @@ class CurrencyRepository implements ICurrencyRepository {
 
     }
 
+   
+
 }
 
 export { CurrencyRepository }

@@ -3,7 +3,7 @@ import { inject, injectable } from "tsyringe";
 import axios from 'axios';
 
 
-import { CurrencyRepository } from "../repositories/CurrencyRepository";
+
 import { ICurrency } from "../models/ICurrency";
 import { ICurrencyRepository } from "../repositories/ICurrencyRepository";
 import RedisCache from "../cache/RedisCache";
@@ -61,12 +61,13 @@ class CurrencyService {
 
     if (!currencies) {
         currencies = await this.currencyRepository.listAll();
-       const expiryTimeInSeconds = 10
+        const expiryTimeInSeconds = 24 * 60 * 60;
         await redisCache.save('currencyLIST', currencies, expiryTimeInSeconds);
+        
       }
 
         
-
+        redisCache.disconect();
         return currencies;
     }
 
@@ -107,16 +108,39 @@ class CurrencyService {
 
     async conversionOfCurrency(from: string, to: string, amount: string): Promise<IConversionCurrency> {
 
+
         const amountFloat = parseFloat(amount);
 
         if (!amountFloat) {
 
             throw new AppError("Invalid Amount!");
         }
+        
+        let fromCurrency = null;
+        let toCurrency =  null;
 
-        const fromCurrency = await this.currencyRepository.getByCode(from.toUpperCase());
+        const redisCache = new RedisCache();
 
-        const toCurrency = await this.currencyRepository.getByCode(to.toUpperCase());
+        let currencies = await redisCache.recover<ICurrency[]>('currencyLIST');
+
+        if(currencies){
+            fromCurrency = currencies.find(c => c.code === from.toUpperCase());
+
+            toCurrency = currencies.find(c => c.code === to.toUpperCase());
+
+            
+
+        } else {
+
+         fromCurrency = await this.currencyRepository.getByCode(from.toUpperCase());
+
+         toCurrency = await this.currencyRepository.getByCode(to.toUpperCase());
+
+
+         currencies = await this.currencyRepository.listAll();
+         const expiryTimeInSeconds = 24 * 60 * 60;
+         await redisCache.save('currencyLIST', currencies, expiryTimeInSeconds);
+        }
 
         if (!fromCurrency || !toCurrency) {
 
@@ -137,7 +161,7 @@ class CurrencyService {
                 quoteUSDUpdatedAt:fromCurrency.updated_at
             },
             currencyTo: {
-                convertedAmount: convertedAmount + to.toUpperCase(),
+                convertedAmount: convertedAmount +' ' + to.toUpperCase(),
                 quoteUSD: '1 ' + to.toUpperCase() + " is worth " + toCurrency.valueInUSD + ' USD',
                 quoteUSDUpdatedAt:toCurrency.updated_at
             }
@@ -154,6 +178,7 @@ class CurrencyService {
         let currentsQuotes = await redisCache.recover<ICurrentQuote>('CurrentQuote');
 
         if(currentsQuotes){
+            redisCache.disconect();
             return currentsQuotes 
         }
 
@@ -199,8 +224,9 @@ class CurrencyService {
 
         }
 
-        const expiryTimeInSeconds = 10;
+        const expiryTimeInSeconds = 24 * 60 * 60;
         await redisCache.save('CurrentQuote', currentsQuotes, expiryTimeInSeconds);
+        redisCache.disconect();
 
         return currentsQuotes
 

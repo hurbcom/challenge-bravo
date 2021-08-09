@@ -1,10 +1,11 @@
 import mongoose, { Mongoose } from 'mongoose';
+require('dotenv').config();
 
 let stringConnectBd = '';
-
+;
 process.env.NODE_ENV === 'test'
-?  stringConnectBd = 'mongodb+srv://admin:root@cluster0.pamgw.mongodb.net/test'
-: stringConnectBd = 'mongodb+srv://admin:root@cluster0.pamgw.mongodb.net/chBravoDb';
+?  stringConnectBd = process.env.MONGODB_REMOTE_TEST
+: stringConnectBd = process.env.MONGODB_REMOTE;
 
 export const connect = async (): Promise<Mongoose> =>
     await mongoose.connect(stringConnectBd, {
