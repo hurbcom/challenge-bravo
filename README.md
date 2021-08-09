@@ -1,8 +1,8 @@
 
 ## Quick Start
 
-1 - Clone this repo.
-2 - In terminal go to the root directory
+1 - Clone this repo.<br>
+2 - In terminal go to the root directory<br>
 3 - Build the docker image (it will install all dependencies):
 ```bash
 docker build -t hurb_challenge_bravo ./
@@ -19,19 +19,38 @@ The proposed solution is an API is based on the RESTFull standards and was imple
   <img src="misc/images/core_technologies.fw.png" alt="Core technologies involved" />
 </p>
 
-User can converte values using a GET request to the fallow route
-```bash
-/currency/convert?from=<SOURCE>&to=<DESTINY>&amount=<VALUE>
-```
-# Solution Architecture
+
+## Solution Architecture
 The following figure presents the architecture and data flow within the proposed application:
 
 <p align="center">
   <img src="misc/images/archteture.fw.png" alt="Solution Architecture" />
 </p>
 
-# How this Works
+## How this Works
 The google currency library was used to fetch the updated values from the google finance service.
+
+# Converter
+User can convert values using a GET request to the following route:
+```bash
+http://127.0.0.1:8080/currency/converter/?from=<SOURCE>&to=<DESTINY>&amount=<VALUE>
+```
+
+# Create New Currency
+The user can register new currencies by passing an identifier code and the equivalent value in USD through the following endpoint:
+
+```bash
+http://127.0.0.1:8080/currency/add
+```
+You must be logged into the API. Use the following JSON message structure:
+
+```bash
+{
+	"code":"ABC",
+    "in_usd": 1.23
+}
+```
+
 
 <!-- docker run -p 8080:80 -it -e APP_MODULE="server:api" myimage -->
 
