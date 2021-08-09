@@ -28,7 +28,34 @@ The following figure presents the architecture and data flow within the proposed
 </p>
 
 ## How this Works
+
+### Third Part Library
 The google currency library was used to fetch the updated values from the google finance service.
+
+### Authentication
+The user can get logged in using a POST request through the following endpoint:
+
+```bash
+http://127.0.0.1:8080/auth
+```
+Use the following JSON message structure:
+
+```bash
+{
+"email":"you@yourdomain.com",
+    "password": "anyPassYouHave"
+}
+```
+
+ **PS: For tests you can use these credentials: email: rafael.pereira@hurb.com password: HurB@2021#**
+
+### Close Session
+User logout from API using a GET request to the following route:
+```bash
+http://127.0.0.1:8080/currency/logout
+```
+
+<hr>
 
 ### Converter
 User can convert values using a GET request to the following route:
@@ -36,7 +63,9 @@ User can convert values using a GET request to the following route:
 http://127.0.0.1:8080/currency/converter/?from=<SOURCE>&to=<DESTINY>&amount=<VALUE>
 ```
 
-### Create New Currency
+<hr>
+
+### Create New Fictitious Currency
 The user can register new currencies by passing an identifier code and the equivalent value in USD in a POST request through the following endpoint:
 
 ```bash
@@ -51,8 +80,8 @@ You must be logged into the API. Use the following JSON message structure:
 }
 ```
 
-### Update Currency (fictitious only)
-The user can update an currencies by passing an identifier code and the new equivalent value in USD in a PUT request through the following endpoint:
+### Update An Currency (fictitious only)
+The user can update an fictitious currency by passing an identifier code and the new equivalent value in USD in a PUT request through the following endpoint:
 
 ```bash
 http://127.0.0.1:8080/currency/update
@@ -72,11 +101,18 @@ User can list all fictitious currencies using a GET request to the following rou
 http://127.0.0.1:8080/currency/list
 ```
 
+###  Delete An Currency (fictitious only)
+You must be logged into the API. User can delete an fictitious currency using a DELETE request to the following route:
+```bash
+http://127.0.0.1:8080/currency/delete/<currency_code>/
+```
+
+
 
 <!-- docker run -p 8080:80 -it -e APP_MODULE="server:api" myimage -->
 
 
-**It is not possible to perform the conversion between two fictitious currencies because this use case is not covered by the challenge specification. Please check the challenge description at: https://github.com/hurbcom/challenge-bravo#-desafio-bravo**
+**PS: It is not possible to perform the conversion between two fictitious currencies because this use case is not covered by the challenge specification. Please check the challenge description at: https://github.com/hurbcom/challenge-bravo#-desafio-bravo**
 
 
 
