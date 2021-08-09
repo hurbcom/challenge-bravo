@@ -42,7 +42,7 @@ Use the following JSON message structure:
 
 ```bash
 {
-"email":"you@yourdomain.com",
+ "email":"you@yourdomain.com",
     "password": "anyPassYouHave"
 }
 ```
@@ -75,7 +75,7 @@ You must be logged into the API. Use the following JSON message structure:
 
 ```bash
 {
-"code":"ABC",
+ "code":"ABC",
     "in_usd": 1.23
 }
 ```
@@ -90,7 +90,7 @@ You must be logged into the API. Use the following JSON message structure:
 
 ```bash
 {
-"code":"ABC",
+ "code":"ABC",
     "in_usd": 1.23
 }
 ```
