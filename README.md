@@ -27,6 +27,13 @@ The following figure presents the architecture and data flow within the proposed
   <img src="misc/images/archteture.fw.png" alt="Solution Architecture" />
 </p>
 
+Bjoern WSGI was chosen because it is the most suitable for scaling python applications and supports many requests in parallel.
+
+<p align="center">
+  <img src="misc/images/wsgi_python.png" alt="Solution Architecture" />
+</p>
+Look at: https://www.appdynamics.com/blog/engineering/a-performance-analysis-of-python-wsgi-servers-part-2/
+
 ## How this Works
 
 ### Third Part Library
