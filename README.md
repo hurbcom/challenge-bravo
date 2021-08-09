@@ -112,7 +112,9 @@ http://127.0.0.1:8080/currency/delete/<currency_code>/
 <!-- docker run -p 8080:80 -it -e APP_MODULE="server:api" myimage -->
 
 
-**PS: It is not possible to perform the conversion between two fictitious currencies because this use case is not covered by the challenge specification. Please check the challenge description at: https://github.com/hurbcom/challenge-bravo#-desafio-bravo**
+**PS1: It is not possible to perform the conversion between two fictitious currencies because this use case is not covered by the challenge specification. Please check the challenge description at: https://github.com/hurbcom/challenge-bravo#-desafio-bravo**
+
+**PS2: In this challenge, our main focus was on the scalability and availability of the application, which prevented us from performing unit and functional tests in a timely manner**
 
 
 
