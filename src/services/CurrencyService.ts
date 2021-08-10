@@ -6,7 +6,8 @@ import axios from 'axios';
 
 import { ICurrency } from "../models/ICurrency";
 import { ICurrencyRepository } from "../repositories/ICurrencyRepository";
-import RedisCache from "../cache/RedisCache";
+
+import { ICache } from "../cache/ICache";
 
 
 interface ICurrentQuote {
@@ -32,7 +33,10 @@ class CurrencyService {
    constructor(
 
     @inject("CurrencyRepository")
-    private currencyRepository: ICurrencyRepository
+    private currencyRepository: ICurrencyRepository,
+
+    @inject("RedisCache")
+    private cache: ICache
   ) { }
 
     async create({ name, code, valueInUSD }: ICurrency): Promise<ICurrency> {
@@ -45,29 +49,28 @@ class CurrencyService {
 
         const currency = await this.currencyRepository.create({ name, code, valueInUSD });
 
-        const redisCache = new RedisCache();
-        await redisCache.delete('currencyLIST');
+        
+        await this.cache.delete('currencyLIST');
 
         return currency;
     }
 
     async listAll(): Promise<ICurrency[]> {
 
-        const redisCache = new RedisCache();
+        
 
-        let currencies = await redisCache.recover<ICurrency[]>(
+        let currencies = await this.cache.recover<ICurrency[]>(
       'currencyLIST',
     );
 
     if (!currencies) {
         currencies = await this.currencyRepository.listAll();
         const expiryTimeInSeconds = 24 * 60 * 60;
-        await redisCache.save('currencyLIST', currencies, expiryTimeInSeconds);
+        await this.cache.save('currencyLIST', currencies, expiryTimeInSeconds);
         
       }
 
-        
-        redisCache.disconect();
+              
         return currencies;
     }
 
@@ -83,9 +86,9 @@ class CurrencyService {
 
         await this.currencyRepository.update({ _id, name, code, valueInUSD, updated_at });
 
-        const redisCache = new RedisCache();
+        
 
-         await redisCache.delete('currencyLIST');
+         await this.cache.delete('currencyLIST');
 
 
     }
@@ -100,9 +103,9 @@ class CurrencyService {
 
         await this.currencyRepository.delete(_id);
 
-        const redisCache = new RedisCache();
+        
 
-         await redisCache.delete('currencyLIST');
+         await this.cache.delete('currencyLIST');
 
     }
 
@@ -119,16 +122,16 @@ class CurrencyService {
         let fromCurrency = null;
         let toCurrency =  null;
 
-        const redisCache = new RedisCache();
+        console.log(from);
 
-        let currencies = await redisCache.recover<ICurrency[]>('currencyLIST');
+        let currencies = await this.cache.recover<ICurrency[]>('currencyLIST');
 
         if(currencies){
             fromCurrency = currencies.find(c => c.code === from.toUpperCase());
 
             toCurrency = currencies.find(c => c.code === to.toUpperCase());
 
-            
+            console.log(currencies);
 
         } else {
 
@@ -139,7 +142,7 @@ class CurrencyService {
 
          currencies = await this.currencyRepository.listAll();
          const expiryTimeInSeconds = 24 * 60 * 60;
-         await redisCache.save('currencyLIST', currencies, expiryTimeInSeconds);
+         await this.cache.save('currencyLIST', currencies, expiryTimeInSeconds);
         }
 
         if (!fromCurrency || !toCurrency) {
@@ -173,12 +176,12 @@ class CurrencyService {
 
     async currentQuote(): Promise<ICurrentQuote> {
 
-        const redisCache = new RedisCache();
+        
 
-        let currentsQuotes = await redisCache.recover<ICurrentQuote>('CurrentQuote');
+        let currentsQuotes = await this.cache.recover<ICurrentQuote>('CurrentQuote');
 
         if(currentsQuotes){
-            redisCache.disconect();
+            
             return currentsQuotes 
         }
 
@@ -225,8 +228,8 @@ class CurrencyService {
         }
 
         const expiryTimeInSeconds = 24 * 60 * 60;
-        await redisCache.save('CurrentQuote', currentsQuotes, expiryTimeInSeconds);
-        redisCache.disconect();
+        await this.cache.save('CurrentQuote', currentsQuotes, expiryTimeInSeconds);
+        
 
         return currentsQuotes
 
