@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==3.2.6"
+djangorestframework = "==3.12.4"
+djangorestframework-simplejwt = "==4.7.1"
+django-cors-headers = "==3.7.0"
+drf-yasg = "==1.20.0"
+python-decouple = "==3.3"
+dj-database-url = "==0.5.0"
+django-filter = "==2.4.0"
+
+[dev-packages]
+flake8 = "==3.9.2"
+autopep8 = "==1.5.7"
+
+[requires]
+python_version = "3.9"
