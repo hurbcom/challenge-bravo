@@ -148,3 +148,6 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+API_COIN = config('API_COIN')
+API_COIN_KEY = config('API_COIN_KEY')
