@@ -16,3 +16,11 @@ class ApiCoin():
             return response.json()
         else:
             return response.status_code
+
+
+class Convert():
+
+    def __init__(self, from_coin, to_coin, amount):
+        self.from_coin = from_coin
+        self.to_coin = to_coin
+        self.amount = amount
