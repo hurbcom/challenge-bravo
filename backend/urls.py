@@ -21,4 +21,5 @@ from .urls_api import urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(urlpatterns)),
+    path('', include('backend.core.urls', namespace='site')),
 ]
