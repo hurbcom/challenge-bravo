@@ -1,8 +1,12 @@
-// const Forex = require("../models/forex/finnHubForex.model.js");
-const Forex = require("../models/forex/Forex.model.js");
+const appConfig = require("../config/app.config.js");
+const Forex = require("../models/forex/forex.model.js");
 
 // Get currency rate
 exports.rate = (req, res) => {
+
+  let base = req.query.base;
+  if(!base)
+    base = appConfig.CURRENCY_BASE;
 
   let currency = req.query.currency;
   if(!currency)
@@ -10,7 +14,7 @@ exports.rate = (req, res) => {
 
   // Create a Forex
   let forex = new Forex();
-  forex.getRate(currency)
+  forex.getRate(base, currency)
     .then(result => {
 
       res.send(result);
@@ -26,9 +30,13 @@ exports.rate = (req, res) => {
 // Get all currencies rates
 exports.rates = (req, res) => {
 
+  let base = req.query.base;
+  if(!base)
+    base = appConfig.CURRENCY_BASE;
+
   // Create a Forex
   let forex = new Forex();
-  forex.getRates()
+  forex.getRates(base)
     .then(result => {
 
       res.send(result);

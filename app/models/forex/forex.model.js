@@ -6,35 +6,35 @@ const FinnHubForex = require("./finnHubForex.model.js");
 const Forex = class {
 
   // get all currencies rates
-  getRates = () => {
+  getRates = (base) => {
     
     const cryptoCompareForex = new CryptoCompareForex();
     const finnHubForex = new FinnHubForex();
 
     return Promise.all([
-        finnHubForex.getRates(),
-        cryptoCompareForex.getRates()
+        finnHubForex.getRates(base),
+        cryptoCompareForex.getRates(base)
       ])
       .then((values) => {
 
         let data = {...values[0].rates, ...values[1].rates};
         return {
-          'base': appConfig.CURRENCY_BASE,
+          'base': base,
           'rates': data
         };
       });
   };
 
   // get currency rate
-  getRate = (currency) => {
+  getRate = (base, currency) => {
     
     return new Promise( (resolve, reject) => { 
-      this.getRates()
+      this.getRates(base)
         .then(data => {
 
           resolve({
             'currency': currency,
-            'base': data.base,
+            'base': base,
             'rate': data.rates[currency]
           })
         })
@@ -46,8 +46,8 @@ const Forex = class {
   convertCurrencyValue = (from, to, amount) => {
     
     return Promise.all([
-        this.getRate(from), 
-        this.getRate(to)
+        this.getRate(appConfig.CURRENCY_BASE, from), 
+        this.getRate(appConfig.CURRENCY_BASE, to)
       ])
       .then((values) => {
 
