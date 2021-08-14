@@ -1,5 +1,5 @@
-// const Forex = require("../models/finnHubForex.model.js");
-const Forex = require("../models/cryptoCompareForex.model.js");
+// const Forex = require("../models/forex/finnHubForex.model.js");
+const Forex = require("../models/forex/Forex.model.js");
 
 // Retrieve all Customers from the database.
 exports.convert = (req, res) => {
@@ -18,8 +18,20 @@ exports.convert = (req, res) => {
   //     });
   //   });
 
-  forex.getRate("BTC")
+  // forex.getRate("BTC")
+  //   .then(result => {
+  //     res.send(result);
+  //   })
+  //   .catch(error => {
+  //     res.status(500).send({
+  //       message:
+  //         error.message || "Some error occurred while retrieving customers."
+  //     });
+  //   });
+
+  forex.convertCurrencyValue('BRL', 'EUR', 100)
     .then(result => {
+
       res.send(result);
     })
     .catch(error => {
