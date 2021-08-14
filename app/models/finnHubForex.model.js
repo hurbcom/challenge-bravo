@@ -1,5 +1,6 @@
 const NodeCache = require( "node-cache" );
 const finnHub = require('finnhub');
+const appConfig = require("../config/app.config.js");
 const finnHubConfig = require("../config/finnHub.config.js");
 
 const rateCache = 'finnHubRateCache';
@@ -7,7 +8,7 @@ const cache = new NodeCache();
 
 const api_key = finnHub.ApiClient.instance.authentications['api_key'];
 api_key.apiKey = finnHubConfig.KEY;
-const FinnHub = new finnHub.DefaultApi();
+const finnhubClient = new finnHub.DefaultApi();
 
 // constructor
 const FinnHubForex = class {
@@ -20,7 +21,7 @@ const FinnHubForex = class {
       if(rateData)
         resolve(rateData)
 
-      FinnHub.forexRates({"base": finnHubConfig.CURRENCY_BASE}, (error, data, response) => {
+      finnhubClient.forexRates({"base": appConfig.CURRENCY_BASE}, (error, data, response) => {
 
         if(error)
           reject(new Error("Você passou um número ímpar!"));
@@ -39,7 +40,7 @@ const FinnHubForex = class {
 
           resolve({
             'currency': currency,
-            'base': finnHubConfig.CURRENCY_BASE,
+            'base': appConfig.CURRENCY_BASE,
             'rate': result[currency]
           })
         })
