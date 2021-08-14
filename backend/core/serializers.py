@@ -10,6 +10,6 @@ class MyCoinSerializer(serializers.ModelSerializer):
 
 
 class ConvertSerializer(serializers.Serializer):
-    from_coin = serializers.CharField()
-    to_coin = serializers.CharField()
-    amount = serializers.FloatField()
+    _from_coin = serializers.CharField()
+    _to_coin = serializers.CharField()
+    _amount = serializers.FloatField()
