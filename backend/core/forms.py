@@ -10,7 +10,13 @@ from .models import MyCoin
 def get_coins():
     apicoin = ApiCoin()
     currencies = apicoin.get_currencies()
-    currencies = tuple([(k, v['currencyName']) for k, v in currencies.items()])
+    currencies = [(k, v['currencyName']) for k, v in currencies.items()]
+
+    mycoin = MyCoin.objects.all()
+    for coin in mycoin:
+        currencies.append((coin.codecoin, coin.namecoin))
+
+    currencies = tuple(currencies)
     return sorted(currencies, key=lambda col: col[1])
 
 
@@ -22,11 +28,9 @@ def get_value_converter(from_coin, to_coin, amount):
 
 
 class ConverterForm(forms.Form):
-    CHOICES = get_coins()
 
     from_coin = forms.ChoiceField(
         label=_('From Currency'),
-        choices=CHOICES,
         widget=forms.Select(
             attrs={
                 'class': 'form-select'
@@ -35,7 +39,6 @@ class ConverterForm(forms.Form):
     )
     to_coin = forms.ChoiceField(
         label=_('To Currency'),
-        choices=CHOICES,
         widget=forms.Select(
             attrs={
                 'class': 'form-select'
@@ -63,6 +66,10 @@ class ConverterForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(ConverterForm, self).__init__(*args, **kwargs)
+
+        self.fields['from_coin'].choices = get_coins()
+        self.fields['to_coin'].choices = self.fields['from_coin'].choices
+
         if self.is_bound:
             self.data = self.data.copy()
             from_coin = self.data['from_coin']
