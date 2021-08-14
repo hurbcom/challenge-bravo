@@ -18,36 +18,31 @@
 
             <div class="row">
                 <div class="form-group">
-                    <h5 class="text-center">Informe o valor a ser convertido</h5>
+                    <h5 class="text-center">Cadastro Nova Moeda</h5>
                 </div>
-                <form action="." novalidate method="post" class="col-sm-6  offset-sm-3">
+                <form action="/new" novalidate method="post" class="col-sm-6  offset-sm-3">
                     {% csrf_token %}
                     {{ form.non_field_errors }}
 
                     <div class="form-group">
                         <div class="form-floating">
-                            {{ form.from_coin.errors }}
-                            {{ form.from_coin }}
-                            <label for="{{ form.from_coin.id_for_label }}">{{ form.from_coin.label }}</label>
+                            {{ form.codecoin }}
+                            <label for="{{ form.codecoin.id_for_label }}">{{ form.codecoin.label }}</label>
+                            {{ form.codecoin.errors }}
                         </div>
                         <div class="form-floating">
-                            {{ form.to_coin.errors }}
-                            {{ form.to_coin }}
-                            <label for="{{ form.to_coin.id_for_label }}">{{ form.to_coin.label }}</label>
+                            {{ form.namecoin }}
+                            <label for="{{ form.namecoin.id_for_label }}">{{ form.namecoin.label }}</label>
+                            {{ form.namecoin.errors }}
                         </div>
                         <div class="form-floating mb-3">
-                            {{ form.amount.errors }}
-                            {{ form.amount }}
-                            <label for="{{ form.amount.id_for_label }}">{{ form.amount.label }}</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            {{ form.value_converter.errors }}
-                            {{ form.value_converter }}
-                            <label for="{{ form.value_converter.id_for_label }}">{{ form.value_converter.label }}</label>
+                            {{ form.price }}
+                            <label for="{{ form.price.id_for_label }}">{{ form.price.label }}</label>
+                            {{ form.price.errors }}
                         </div>
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-outline-secondary">Converter</button>
-                            <a class="btn btn-success" href="{% url 'site:new' %}" role="button">Cadastrar</a>
+                            <button type="submit" class="btn btn-outline-secondary">Cadastrar</button>
+                            <!-- <a class="btn btn-success" href="#" role="button">Cadastrar</a> -->
                         </div>
                     </div>
                 </form>

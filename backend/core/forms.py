@@ -1,8 +1,10 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.forms.widgets import TextInput
 
 from backend.services import ApiCoin, Convert
+from .models import MyCoin
 
 
 def get_coins():
@@ -80,3 +82,37 @@ class ConverterForm(forms.Form):
         if not self.cleaned_data.get('amount') or \
                 self.cleaned_data.get('amount') <= 0:
             raise ValidationError(_('Please enter a valid value.'))
+
+
+class MyCoinModelForm(forms.ModelForm):
+    price = forms.FloatField(
+        label=_('Value in USD'),
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control'
+            }
+        )
+    )
+
+    class Meta:
+        model = MyCoin
+        fields = ('codecoin', 'namecoin', 'price')
+        widgets = {
+            'codecoin': TextInput(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+            'namecoin': TextInput(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+        }
+
+    def clean_price(self):
+        price = self.cleaned_data['price']
+        if price < 1:
+            raise ValidationError(_('Please enter a valid value.'))
+
+        return price
