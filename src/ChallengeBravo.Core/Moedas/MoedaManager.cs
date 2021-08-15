@@ -38,7 +38,7 @@ namespace ChallengeBravo.Moedas
             ApgarPorId(idMoeda);
         }
 
-        public float ConverterMoedas(string codigoOrigem, string codigoDestino, float valorOrigem)
+        public double ConverterMoedas(string codigoOrigem, string codigoDestino, double valorOrigem)
         {
 
             //Se a moeda de origem e/ou destino forem iguais a nulo.
@@ -83,7 +83,7 @@ namespace ChallengeBravo.Moedas
 
                             if (consultaDaCotacaoOrigem != null && consultaDaCotacaoDestino != null)
                             {
-                                return (float)Math.Round((valorOrigem * consultaDaCotacaoOrigem.ValorUSD) / consultaDaCotacaoDestino.ValorUSD, 2);
+                                return Math.Round((valorOrigem * consultaDaCotacaoOrigem.ValorUSD) / consultaDaCotacaoDestino.ValorUSD, 2);
                             }
                             else
                             {

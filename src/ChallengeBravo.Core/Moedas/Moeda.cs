@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities.Auditing;
+using Abp.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +12,7 @@ namespace ChallengeBravo.Moedas
         public virtual string Nome { get; set; }
         public virtual string Codigo { get; set; }
 
-        public virtual float ValorUSD { get; set; }
+        public virtual double ValorUSD { get; set; }
         
     }
 }

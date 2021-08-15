@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services.Dto;
+using Abp.Application.Services.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +12,6 @@ namespace ChallengeBravo.Moedas
         public string Nome { get; set; }
         public string Codigo { get; set; }
 
-        public float ValorUSD { get; set; }
+        public double ValorUSD { get; set; }
     }
 }

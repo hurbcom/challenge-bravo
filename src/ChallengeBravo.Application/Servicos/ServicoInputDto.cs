@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace ChallengeBravo.Servicos
         public string pctChange { get; set; }
 
         [JsonProperty(PropertyName = "bid")]
-        public float bid { get; set; }
+        public double bid { get; set; }
 
         [JsonProperty(PropertyName = "ask")]
         public string ask { get; set; }

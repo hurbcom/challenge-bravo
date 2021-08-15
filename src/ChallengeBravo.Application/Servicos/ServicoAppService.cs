@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services;
+using Abp.Application.Services;
 using Abp.Authorization;
 using Abp.UI;
 using ChallengeBravo.Base.Consts;
@@ -55,7 +55,7 @@ namespace ChallengeBravo.Servicos
                             input.varBid = singleProp.Value["varBid"].ToString();
                             input.pctChange = singleProp.Value["pctChange"].ToString();
                             //input.bid = float.Parse(singleProp.Value["bid"].ToString());
-                            input.bid = float.Parse(singleProp.Value["bid"].ToString().Replace('.', ','));
+                            input.bid = Convert.ToDouble(singleProp.Value["bid"].ToString().Replace('.', ','));
                             input.ask = singleProp.Value["ask"].ToString();
                             input.timestamp = singleProp.Value["timestamp"].ToString();
                             input.create_date = singleProp.Value["create_date"].ToString();

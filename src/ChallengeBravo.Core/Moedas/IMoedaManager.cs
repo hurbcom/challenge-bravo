@@ -1,4 +1,4 @@
-﻿using ChallengeBravo.Base;
+using ChallengeBravo.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace ChallengeBravo.Moedas
     {
         Guid ObterIdPorCodigo(string codigo);
 
-        float ConverterMoedas(string codigoOrigem, string codigoDestino, float valorOrigem);
+        double ConverterMoedas(string codigoOrigem, string codigoDestino, double valorOrigem);
 
         void ApagarPorCodigo(string codigo);
     }

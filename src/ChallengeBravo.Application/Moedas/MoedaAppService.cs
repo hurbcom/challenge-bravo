@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services;
+using Abp.Application.Services;
 using Abp.Authorization;
 using Abp.UI;
 using ChallengeBravo.Base;
@@ -75,7 +75,7 @@ namespace ChallengeBravo.Moedas
      
         [AbpAuthorize]
         [HttpGet]
-        public float ConverterMoedas(string codigoOrigem, string codigoDestino, float valorOrigem)
+        public double ConverterMoedas(string codigoOrigem, string codigoDestino, double valorOrigem)
         {
             //Toda vez que o método de ConverterMoedas for chamado, a aplicação chamará o método assíncrono de ImportarCotacoes 
             //para atualizar a base de dados. A execução do método ConverterMoedas não depende da finalização dessa chamada.
