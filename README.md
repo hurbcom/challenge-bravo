@@ -1,78 +1,86 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+## <img  src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg"  alt="Hurb"  width="24" /> Desenvolvimento da solução para o Desafio Bravo
 
-A API deve, originalmente, converter entre as seguintes moedas:
+O objetivo do desafio é o desenvolvimento de uma API que responde em JSON uma conversão monetária.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Para a criação dessa solução, utilizei o framework ASPNET Boilerplate sobre a paltaforma .NET 5 e banco de dados PostgreSQL em um docker.
+O fluxo básico da solução consiste em:
+1. Importa as cotações do serviço de Cotação de Moedas em Awesome API;
+2. Insere ou atualiza esses dados na base de dados.;
+3. O usuário solicita a cotação através do endpoint ConverterMoedas
+4. A aplicação busca na base de dados a cotação de cada moeda e realiza o cálculo a partir dos valores que estão armazenados na base.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Usei uma base intermediária para armazenar as cotações em dólar para que houvesse uma maior disponibilidade do serviço, independendo de instabilidade de APIs terceiras. Assim, caso a API terceira não consiga atualizar os dados da base de dados, o nosso serviço ainda estará funcional e oferecendo a última cotação que foi armazenada no banco de dados.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Sobre a atualização, ela ocorre de forma assíncrona a cada chamada de conversão de moedas, assim a aplicação não cria um "lock" na requisição. Mesmo a operação de importação levar pouco tempo de execução, a ideia dessa abordagem é pensando em um cenário onde há centenas de moedas fictícias. Dessa forma, a importação tende a levar mais tempo.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Um dos recursos que costumo utilizar para automatizar esse processo de importação de dados a partir de outras APIs é o hangfire, que é um orquestrador de jobs. Infelizmente, até o presente momento, não consegui implementá-lo nesse projeto, pois demanda um tempo maior de testes, pois mesmo sendo um dos mais utilizados em ambiente .NET, ele apresenta alguns problemas quando utilizado em bancos não-SQL Server.
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Em termos de arquitetura da solução, utilizei o modelo de Domain Driven Design, onde, neste framework, se divide basicamente em 3 partes: Application Service, Managers das Classes e seus repositórios.
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
+Tentei agrupar a maior parte das regras de negócio na camada de Managers, onde ocorrem as interações com o banco de dados a partir dos repositórios implementados com o auxílio do Entity Framework. Para expor esses métodos para a camada de aplicação, usei as Application Services que basicamente chamam os métodos expostos pelas interfaces dos Managers, e assim, interage com o usuário e/ou outras aplicações. Esse tráfego de dados é feito com a o auxílio dos DTOs criados na camada de aplicação.
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+Para auxiliar no processo de importação e consulta de recursos externos, criei um AppService chamado ServiceAppService e seu respectivo DTO.
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+A aplicação permite que sejam feitas conversões das seguintes moedas:
+- USD
+- BRL
+- EUR
+- BTC
+- ETH
+ 
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+Entretanto, é possível cadastrar moedas realizando um POST no seguinte endpoint: `/api/services/app/Moeda/Inserir`
+Estrutura do JSON:
+```
+{
+  "nome": "string",
+  "codigo": "string",
+  "valorUSD": 0,
+  "id": 0
+}
+```
 
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+Para importar todas as cotações da Awesome API, se faz necessário fazer um POST no endpoint: 
+`/api/services/app/Moeda/ImportarCotacoes`
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+Além disso, para viabilizar o CRUD na aplicação, foram crios os seguintes endpoints:
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+# PRINT MATHEUS AQUI
+## Tecnologias utilizadas
 
-## Requisitos
+  - .NET 5
+  - PostgreSQL
+  - Docker
+  - [Dillinger](https://dillinger.io/) - editor de markdown.
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+### Instalação e execução
 
-## Critério de avaliação
+Realizar o clone do repositório:
+```
+$ python -m venv env
+```
+Instalar o .NET 5 pelo snap, suas configurações, subir o banco de dados pelo docker-compose, realizar as migrations para a base e por fim, executar o comando para subir o projeto:
+```
+$ sudo snap install dotnet-sdk --classic --channel=5.0 && sudo snap alias dotnet-sdk.dotnet dotnet && export DOTNET_ROOT=/snap/dotnet-sdk/current && sudo dotnet tool install --local dotnet-ef && sudo docker-compose up -d && sudo dotnet ef database update && sudo dotnet run --project ChallengeBravo.Web.Host.csproj
+```
+Abrir no navegador a seguinte url:
+```
+$ http://localhost:21021/
+```
+Por questões de segurança, é necessário realizar o login pelo Swagger ou pelo endpoint:
+`/api/TokenAuth/Authenticate`
+Estrutura do JSON:
+```
+{
+  "userNameOrEmailAddress": "admin",
+  "password": "123qwe",
+  "rememberClient": true
+}
+```
+Com isso, a requisição retornará um accesstoken, que deverá ser utilizando no header das demais requisições, com authorization do tipo Bearer Token.
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+A forma mais fácil é pelo próprio Swagger. Basta preencher os dados de usuário e senha, deixando o tenant em branco. Assim, poderá utilizar todos os métodos expostos na documentação.
 
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Para deixar o ambiente com pelo menos todas as moedas iniciais, por favor, chame o endpoint de importação de cotações: 
+Para fazer as migrações ao banco de dados, execute: `/api/services/app/Moeda/ImportarCotacoes`
