@@ -54,8 +54,7 @@ namespace ChallengeBravo.Servicos
                             input.low = singleProp.Value["low"].ToString();
                             input.varBid = singleProp.Value["varBid"].ToString();
                             input.pctChange = singleProp.Value["pctChange"].ToString();
-                            //input.bid = float.Parse(singleProp.Value["bid"].ToString());
-                            input.bid = Convert.ToDouble(singleProp.Value["bid"].ToString().Replace('.', ','));
+                            input.bid = Double.Parse(singleProp.Value["bid"].ToString());
                             input.ask = singleProp.Value["ask"].ToString();
                             input.timestamp = singleProp.Value["timestamp"].ToString();
                             input.create_date = singleProp.Value["create_date"].ToString();
@@ -96,7 +95,7 @@ namespace ChallengeBravo.Servicos
                 {
                     if(item == "USD")
                     {
-                        servicoInputDtos.Add(new ServicoInputDto { bid = 1.0f, code = "USD", name = "Dólar Americano" });
+                        servicoInputDtos.Add(new ServicoInputDto { bid = 1.0, code = "USD", name = "Dólar Americano" });
                     }
                 }
 
