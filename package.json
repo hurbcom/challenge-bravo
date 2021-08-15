@@ -20,8 +20,10 @@
     "express": "^4.17.1",
     "finnhub": "^1.2.5",
     "mysql": "^2.17.1",
+    "mysql2": "^2.3.0",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "sequelize": "^6.6.5"
   }
 }
