@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
@@ -90,13 +90,12 @@ namespace ChallengeBravo.Web.Host.Startup
                 {
                     Version = _apiVersion,
                     Title = "ChallengeBravo API",
-                    Description = "ChallengeBravo",
-                    // uncomment if needed TermsOfService = new Uri("https://example.com/terms"),
+                    Description = "Desenvolvimento de uma solução para conversão de Moedas.",
                     Contact = new OpenApiContact
                     {
-                        Name = "ChallengeBravo",
+                        Name = "Repositório ChallengeBravo",
                         Email = string.Empty,
-                        Url = new Uri("https://twitter.com/aspboilerplate"),
+                        Url = new Uri("https://github.com/mattvidal/challenge-bravo"),
                     },
                     License = new OpenApiLicense
                     {

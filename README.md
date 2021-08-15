@@ -17,6 +17,7 @@ Sobre a atualização, ela ocorre de forma assíncrona a cada chamada de convers
 Um dos recursos que costumo utilizar para automatizar esse processo de importação de dados a partir de outras APIs é o hangfire, que é um orquestrador de jobs. Infelizmente, até o presente momento, não consegui implementá-lo nesse projeto, pois demanda um tempo maior de testes, pois mesmo sendo um dos mais utilizados em ambiente .NET, ele apresenta alguns problemas quando utilizado em bancos não-SQL Server.
 
 Em termos de arquitetura da solução, utilizei o modelo de Domain Driven Design, onde, neste framework, se divide basicamente em 3 partes: Application Service, Managers das Classes e seus repositórios.
+<img src="https://raw.githubusercontent.com/mattvidal/challenge-bravo/main/img/abp-concerns.png" alt=“Hurb” width=“24” />
 
 Tentei agrupar a maior parte das regras de negócio na camada de Managers, onde ocorrem as interações com o banco de dados a partir dos repositórios implementados com o auxílio do Entity Framework. Para expor esses métodos para a camada de aplicação, usei as Application Services que basicamente chamam os métodos expostos pelas interfaces dos Managers, e assim, interage com o usuário e/ou outras aplicações. Esse tráfego de dados é feito com a o auxílio dos DTOs criados na camada de aplicação.
 
@@ -46,15 +47,7 @@ Para importar todas as cotações da Awesome API, se faz necessário fazer um PO
 
 Além disso, para viabilizar o CRUD na aplicação, foram crios os seguintes endpoints:
 
-`/api/services/app/Moeda/ImportarCotacoes`
-`/api/services/app/Moeda/ConverterMoedas`
-`/api/services/app/Moeda/ObterIdPorCodigo`
-`/api/services/app/Moeda/ApagarPorCodigo`
-`/api/services/app/Moeda/ObterMensagemNaoEncontrado`
-`/api/services/app/Moeda/Inserir`
-`/api/services/app/Moeda/ObterPorId`
-`/api/services/app/Moeda/ObterTodos`
-`/api/services/app/Moeda/ApgarPorId`
+<img src="https://raw.githubusercontent.com/mattvidal/challenge-bravo/main/img/swagger3.png" alt=“Hurb” width=“24” /> 
 
 ## Tecnologias utilizadas
 
@@ -67,11 +60,7 @@ Além disso, para viabilizar o CRUD na aplicação, foram crios os seguintes end
 
 Realizar o clone do repositório:
 ```
-$ https://github.com/mattvidal/challenge-bravo.git
-```
-Ir para o local do projeto inicial da solução:
-```
-$ cd challenge-bravo\src\ChallengeBravo.Web.Host
+$ python -m venv env
 ```
 Instalar o .NET 5 pelo snap, suas configurações, subir o banco de dados pelo docker-compose, realizar as migrations para a base e por fim, executar o comando para subir o projeto:
 ```
@@ -94,6 +83,10 @@ Estrutura do JSON:
 Com isso, a requisição retornará um accesstoken, que deverá ser utilizando no header das demais requisições, com authorization do tipo Bearer Token.
 
 A forma mais fácil é pelo próprio Swagger. Basta preencher os dados de usuário e senha, deixando o tenant em branco. Assim, poderá utilizar todos os métodos expostos na documentação.
+
+<img src="https://raw.githubusercontent.com/mattvidal/challenge-bravo/main/img/swagger1.png" alt=“Hurb” width=“24” />
+
+<img src="https://raw.githubusercontent.com/mattvidal/challenge-bravo/main/img/swagger2.png" alt=“Hurb” width=“24” />
 
 Para deixar o ambiente com pelo menos todas as moedas iniciais, por favor, chame o endpoint de importação de cotações: 
 Para fazer as migrações ao banco de dados, execute: `/api/services/app/Moeda/ImportarCotacoes`
