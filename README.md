@@ -67,7 +67,11 @@ Além disso, para viabilizar o CRUD na aplicação, foram crios os seguintes end
 
 Realizar o clone do repositório:
 ```
-$ python -m venv env
+$ https://github.com/mattvidal/challenge-bravo.git
+```
+Ir para o local do projeto inicial da solução:
+```
+$ cd challenge-bravo\src\ChallengeBravo.Web.Host
 ```
 Instalar o .NET 5 pelo snap, suas configurações, subir o banco de dados pelo docker-compose, realizar as migrations para a base e por fim, executar o comando para subir o projeto:
 ```
