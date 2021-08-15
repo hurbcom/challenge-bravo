@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "challenge-bravo", "challenge-bravo\challenge-bravo.csproj", "{896CE617-881E-4D69-8E78-171A3799F2F3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{896CE617-881E-4D69-8E78-171A3799F2F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{896CE617-881E-4D69-8E78-171A3799F2F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{896CE617-881E-4D69-8E78-171A3799F2F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{896CE617-881E-4D69-8E78-171A3799F2F3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {760B82C3-D166-40BC-A9C0-160C79BB4F56}
+	EndGlobalSection
+EndGlobal

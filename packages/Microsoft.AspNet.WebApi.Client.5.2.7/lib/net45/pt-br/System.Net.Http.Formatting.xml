@@ -1,0 +1,2087 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.Net.Http.Formatting</name>
+  </assembly>
+  <members>
+    <member name="T:System.Net.Http.ByteRangeStreamContent">
+      <summary>Implementação de <see cref="T:System.Net.Http.HttpContent" /> que fornece uma exibição de intervalo de bytes por um fluxo usado para gerar respostas de intervalo de bytes HTTP 206 (Conteúdo Parcial).O <see cref="T:System.Net.Http.ByteRangeStreamContent" /> dá suporte a um ou mais intervalos de bytes, independentemente de serem consecutivos ou não.Se houver apenas um intervalo, um único corpo de resposta parcial contendo um cabeçalho Content-Range será gerado.Se houver mais de um intervalo, uma resposta de partes múltiplas/intervalos de byte será gerada, onde cada parte do corpo conterá um intervalo indicado pelo campo do cabeçalho Content-Range associado.</summary>
+    </member>
+    <member name="M:System.Net.Http.ByteRangeStreamContent.#ctor(System.IO.Stream,System.Net.Http.Headers.RangeHeaderValue,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary>Implementação de <see cref="T:System.Net.Http.HttpContent" /> que fornece uma exibição de intervalo de bytes por um fluxo usado para gerar respostas de intervalo de bytes HTTP 206 (Conteúdo Parcial).Se nenhum dos intervalos solicitados se sobrepuser à extensão atual do recurso selecionado representado pelo parâmetro content, um <see cref="T:System.Net.Http.InvalidByteRangeException" /> será gerado, indicando o Content-Range válido do conteúdo.</summary>
+      <param name="content">O fluxo pelo qual gerar uma exibição de intervalo de bytes.</param>
+      <param name="range">O intervalo ou intervalos, geralmente obtidos do campo do cabeçalho de solicitação HTTP de Intervalo.</param>
+      <param name="mediaType">O tipo de mídia do fluxo de conteúdo.</param>
+    </member>
+    <member name="M:System.Net.Http.ByteRangeStreamContent.#ctor(System.IO.Stream,System.Net.Http.Headers.RangeHeaderValue,System.Net.Http.Headers.MediaTypeHeaderValue,System.Int32)">
+      <summary>Implementação de <see cref="T:System.Net.Http.HttpContent" /> que fornece uma exibição de intervalo de bytes por um fluxo usado para gerar respostas de intervalo de bytes HTTP 206 (Conteúdo Parcial).Se nenhum dos intervalos solicitados se sobrepuser à extensão atual do recurso selecionado representado pelo parâmetro content, um <see cref="T:System.Net.Http.InvalidByteRangeException" /> será gerado, indicando o Content-Range válido do conteúdo.</summary>
+      <param name="content">O fluxo pelo qual gerar uma exibição de intervalo de bytes.</param>
+      <param name="range">O intervalo ou intervalos, geralmente obtidos do campo do cabeçalho de solicitação HTTP de Intervalo.</param>
+      <param name="mediaType">O tipo de mídia do fluxo de conteúdo.</param>
+      <param name="bufferSize">O tamanho do buffer usado ao copiar o fluxo de conteúdo.</param>
+    </member>
+    <member name="M:System.Net.Http.ByteRangeStreamContent.#ctor(System.IO.Stream,System.Net.Http.Headers.RangeHeaderValue,System.String)">
+      <summary>Implementação de <see cref="T:System.Net.Http.HttpContent" /> que fornece uma exibição de intervalo de bytes por um fluxo usado para gerar respostas de intervalo de bytes HTTP 206 (Conteúdo Parcial).Se nenhum dos intervalos solicitados se sobrepuser à extensão atual do recurso selecionado representado pelo parâmetro content, um <see cref="T:System.Net.Http.InvalidByteRangeException" /> será gerado, indicando o Content-Range válido do conteúdo.</summary>
+      <param name="content">O fluxo pelo qual gerar uma exibição de intervalo de bytes.</param>
+      <param name="range">O intervalo ou intervalos, geralmente obtidos do campo do cabeçalho de solicitação HTTP de Intervalo.</param>
+      <param name="mediaType">O tipo de mídia do fluxo de conteúdo.</param>
+    </member>
+    <member name="M:System.Net.Http.ByteRangeStreamContent.#ctor(System.IO.Stream,System.Net.Http.Headers.RangeHeaderValue,System.String,System.Int32)">
+      <summary>Implementação de <see cref="T:System.Net.Http.HttpContent" /> que fornece uma exibição de intervalo de bytes por um fluxo usado para gerar respostas de intervalo de bytes HTTP 206 (Conteúdo Parcial).Se nenhum dos intervalos solicitados se sobrepuser à extensão atual do recurso selecionado representado pelo parâmetro content, um <see cref="T:System.Net.Http.InvalidByteRangeException" /> será gerado, indicando o Content-Range válido do conteúdo.</summary>
+      <param name="content">O fluxo pelo qual gerar uma exibição de intervalo de bytes.</param>
+      <param name="range">O intervalo ou intervalos, geralmente obtidos do campo do cabeçalho de solicitação HTTP de Intervalo.</param>
+      <param name="mediaType">O tipo de mídia do fluxo de conteúdo.</param>
+      <param name="bufferSize">O tamanho do buffer usado ao copiar o fluxo de conteúdo.</param>
+    </member>
+    <member name="M:System.Net.Http.ByteRangeStreamContent.Dispose(System.Boolean)">
+      <summary>Libera os recursos usados ​​pela instância atual da classe <see cref="T:System.Net.Http.ByteRangeStreamContent" />.</summary>
+      <param name="disposing">verdadeiro para liberar os recursos gerenciados e os não gerenciados; falso para liberar apenas os recursos não gerenciados.</param>
+    </member>
+    <member name="M:System.Net.Http.ByteRangeStreamContent.SerializeToStreamAsync(System.IO.Stream,System.Net.TransportContext)">
+      <summary>Serialize e grave de forma assíncrona o intervalo de bytes em um fluxo de conteúdo HTTP.</summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="stream">O fluxo de destino.</param>
+      <param name="context">Informações sobre o transporte.</param>
+    </member>
+    <member name="M:System.Net.Http.ByteRangeStreamContent.TryComputeLength(System.Int64@)">
+      <summary>Determina se uma matriz de bytes tem um tamanho em bytes válido.</summary>
+      <returns>verdadeiro se o tamanho for válido; caso contrário, falso.</returns>
+      <param name="length">O tamanho em bytes da matriz de bytes.</param>
+    </member>
+    <member name="T:System.Net.Http.HttpClientExtensions">
+      <summary>Fornece métodos de extensão que ajudam a fazer as solicitações formatadas usando o <see cref="T:System.Net.Http.HttpClient" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.String,``0)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.Uri,``0)">
+      <summary> Envia uma solicitação POST como uma operação assíncrona ao URI especificado com o valor determinado serializado como JSON. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação POST como uma operação assíncrona ao URI especificado com o valor determinado serializado como JSON. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsXmlAsync``1(System.Net.Http.HttpClient,System.String,``0)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsXmlAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsXmlAsync``1(System.Net.Http.HttpClient,System.Uri,``0)">
+      <summary> Envia uma solicitação POST como uma operação assíncrona para o URI especificado com o valor determinado serializado como XML. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsXmlAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação POST como uma operação assíncrona para o URI especificado com o valor determinado serializado como XML. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.String)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.String,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary> Envia uma solicitação POST como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação POST como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Tipo de conteúdo do conteúdo da solicitação. Pode ser nulo e, neste caso, o tipo de conteúdo padrão do <paramref name="formatter" /> será usado.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.String)">
+      <summary> Envia uma solicitação POST como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Tipo de conteúdo do conteúdo da solicitação. Pode ser nulo e, neste caso, o tipo de conteúdo padrão do <paramref name="formatter" /> será usado.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.String,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação POST como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Tipo de conteúdo do conteúdo da solicitação. Pode ser nulo e, neste caso, o tipo de conteúdo padrão do <paramref name="formatter" /> será usado.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PostAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação POST como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsJsonAsync``1(System.Net.Http.HttpClient,System.String,``0)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsJsonAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsJsonAsync``1(System.Net.Http.HttpClient,System.Uri,``0)">
+      <summary> Envia uma solicitação PUT como uma operação assíncrona para o URI especificado com o valor determinado serializado como JSON. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsJsonAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação PUT como uma operação assíncrona para o URI especificado com o valor determinado serializado como JSON. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsXmlAsync``1(System.Net.Http.HttpClient,System.String,``0)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsXmlAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsXmlAsync``1(System.Net.Http.HttpClient,System.Uri,``0)">
+      <summary> Envia uma solicitação PUT como uma operação assíncrona para o URI especificado com o valor determinado serializado como XML. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsXmlAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação PUT como uma operação assíncrona para o URI especificado com o valor determinado serializado como XML. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.String)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.String,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.Threading.CancellationToken)">
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary> Envia uma solicitação PUT como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação PUT como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Tipo de conteúdo do conteúdo da solicitação. Pode ser nulo e, neste caso, o tipo de conteúdo padrão do <paramref name="formatter" /> será usado.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.String)">
+      <summary> Envia uma solicitação PUT como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Tipo de conteúdo do conteúdo da solicitação. Pode ser nulo e, neste caso, o tipo de conteúdo padrão do <paramref name="formatter" /> será usado.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.String,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação PUT como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Tipo de conteúdo do conteúdo da solicitação. Pode ser nulo e, neste caso, o tipo de conteúdo padrão do <paramref name="formatter" /> será usado.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpClientExtensions.PutAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Net.Http.Formatting.MediaTypeFormatter,System.Threading.CancellationToken)">
+      <summary> Envia uma solicitação PUT como uma operação assíncrona para o URI especificado com o valor serializado usando o formatador determinado. </summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="client">O cliente usado para fazer a solicitação.</param>
+      <param name="requestUri">O URI para o qual a solicitação é enviada.</param>
+      <param name="value">O valor que será colocado no corpo da entidade da solicitação.</param>
+      <param name="formatter">O formatador usado para serializar o value.</param>
+      <param name="cancellationToken">Um token de cancelamento que pode ser usado ​​por outros objetos ou threads para receber aviso de cancelamento.</param>
+      <typeparam name="T">O tipo do value.</typeparam>
+    </member>
+    <member name="T:System.Net.Http.HttpClientFactory">
+      <summary>Representa a fábrica para criar nova instância de <see cref="T:System.Net.Http.HttpClient" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.HttpClientFactory.Create(System.Net.Http.DelegatingHandler[])">
+      <summary>Cria uma nova instância de <see cref="T:System.Net.Http.HttpClient" />.</summary>
+      <returns>Uma nova instância de <see cref="T:System.Net.Http.HttpClient" />.</returns>
+      <param name="handlers">A lista do manipulador HTTP que delega o processamento das mensagens de respostas HTTP para outro manipulador.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpClientFactory.Create(System.Net.Http.HttpMessageHandler,System.Net.Http.DelegatingHandler[])">
+      <summary>Cria uma nova instância de <see cref="T:System.Net.Http.HttpClient" />.</summary>
+      <returns>Uma nova instância de <see cref="T:System.Net.Http.HttpClient" />.</returns>
+      <param name="innerHandler">O manipulador interno que é responsável pelo processamento das mensagens de resposta HTTP.</param>
+      <param name="handlers">A lista do manipulador HTTP que delega o processamento das mensagens de respostas HTTP para outro manipulador.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpClientFactory.CreatePipeline(System.Net.Http.HttpMessageHandler,System.Collections.Generic.IEnumerable{System.Net.Http.DelegatingHandler})">
+      <summary>Cria uma nova instância de <see cref="T:System.Net.Http.HttpClient" /> que deve ser colocada em pipeline.</summary>
+      <returns>Uma nova instância de <see cref="T:System.Net.Http.HttpClient" /> que deve ser colocada em pipeline.</returns>
+      <param name="innerHandler">O manipulador interno que é responsável pelo processamento das mensagens de resposta HTTP.</param>
+      <param name="handlers">A lista do manipulador HTTP que delega o processamento das mensagens de respostas HTTP para outro manipulador.</param>
+    </member>
+    <member name="T:System.Net.Http.HttpContentExtensions">
+      <summary>Especifica métodos de extensão para permitir que objetos fortemente tipados sejam lidos a partir de instâncias do HttpContent.</summary>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync``1(System.Net.Http.HttpContent)">
+      <summary> Retorna uma tarefa que produzirá um objeto do tipo especificado &lt;typeparamref name="T" /&gt; a partir da instância conteúdo. </summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <typeparam name="T">O tipo de objeto a ser lido.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync``1(System.Net.Http.HttpContent,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+      <summary> Retorna uma tarefa que produzirá um objeto do tipo especificado &lt;typeparamref name="T" /&gt; a partir da instância conteúdo. </summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="formatters">A coleção de instâncias MediaTyepFormatter a ser usada.</param>
+      <typeparam name="T">O tipo de objeto a ser lido.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync``1(System.Net.Http.HttpContent,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter},System.Net.Http.Formatting.IFormatterLogger)">
+      <summary> Retorna uma tarefa que produzirá um objeto do tipo especificado &lt;typeparamref name="T" /&gt; a partir da instância conteúdo. </summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="formatters">A coleção de instâncias MediaTypeFormatter a ser usada.</param>
+      <param name="formatterLogger">O IFormatterLogger em que se registrarão os eventos.</param>
+      <typeparam name="T">O tipo de objeto a ser lido.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync``1(System.Net.Http.HttpContent,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter},System.Net.Http.Formatting.IFormatterLogger,System.Threading.CancellationToken)">
+      <summary>Retorna uma Tarefa que produzirá um objeto do tipo especificado a partir da instância conteúdo.</summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="formatters">A coleção de instâncias MediaTypeFormatter a ser usada.</param>
+      <param name="formatterLogger">O IFormatterLogger em que se registrarão os eventos.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+      <typeparam name="T">O tipo de objeto a ser lido.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync``1(System.Net.Http.HttpContent,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter},System.Threading.CancellationToken)">
+      <summary>Retorna uma Tarefa que produzirá um objeto do tipo especificado a partir da instância conteúdo.</summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="formatters">A coleção de instâncias MediaTypeFormatter a ser usada.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+      <typeparam name="T">O tipo de objeto a ser lido.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync``1(System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+      <summary>Retorna uma Tarefa que produzirá um objeto do tipo especificado a partir da instância conteúdo.</summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+      <typeparam name="T">O tipo de objeto a ser lido.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync(System.Net.Http.HttpContent,System.Type)">
+      <summary> Retorna uma tarefa que produzirá um objeto do tipo especificado a partir da instância conteúdo. </summary>
+      <returns>Uma Tarefa que produzirá uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="type">O tipo de objeto a ser lido.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync(System.Net.Http.HttpContent,System.Type,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+      <summary> Retorna uma Tarefa que produzirá um objeto do tipo especificado a partir da instância conteúdo usando um dos formatadores fornecidos para desserializar o conteúdo. </summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="formatters">A coleção de instâncias MediaTypeFormatter a ser usada.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync(System.Net.Http.HttpContent,System.Type,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter},System.Net.Http.Formatting.IFormatterLogger)">
+      <summary> Retorna uma Tarefa que produzirá um objeto do tipo especificado a partir da instância conteúdo usando um dos formatadores fornecidos para desserializar o conteúdo. </summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="formatters">A coleção de instâncias MediaTypeFormatter a ser usada.</param>
+      <param name="formatterLogger">O IFormatterLogger em que se registrarão os eventos.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync(System.Net.Http.HttpContent,System.Type,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter},System.Net.Http.Formatting.IFormatterLogger,System.Threading.CancellationToken)">
+      <summary>Retorna uma Tarefa que produzirá um objeto do tipo especificado a partir da instância conteúdo usando um dos formatadores fornecidos para desserializar o conteúdo.</summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="formatters">A coleção de instâncias MediaTypeFormatter a ser usada.</param>
+      <param name="formatterLogger">O IFormatterLogger em que se registrarão os eventos.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync(System.Net.Http.HttpContent,System.Type,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter},System.Threading.CancellationToken)">
+      <summary>Retorna uma Tarefa que produzirá um objeto do tipo especificado a partir da instância conteúdo usando um dos formatadores fornecidos para desserializar o conteúdo.</summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="formatters">A coleção de instâncias MediaTypeFormatter a ser usada.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentExtensions.ReadAsAsync(System.Net.Http.HttpContent,System.Type,System.Threading.CancellationToken)">
+      <summary>Retorna uma Tarefa que produzirá um objeto do tipo especificado a partir da instância conteúdo usando um dos formatadores fornecidos para desserializar o conteúdo.</summary>
+      <returns>Uma instância de objeto do tipo especificado.</returns>
+      <param name="content">A instância HttpContent a partir da qual será feita a leitura.</param>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="T:System.Net.Http.HttpContentFormDataExtensions">
+      <summary>Métodos de extensão para ler dados codificados de URL do formulário HTML a partir de instâncias <see cref="T:System.Net.Http.HttpContent" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.HttpContentFormDataExtensions.IsFormData(System.Net.Http.HttpContent)">
+      <summary>Determina se o conteúdo especificado é de dados codificados de URL do formulário HTML.</summary>
+      <returns>verdadeiro se o conteúdo especificado for dados codificados de URL do formulário HTML; caso contrário, falso.</returns>
+      <param name="content">O conteúdo.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentFormDataExtensions.ReadAsFormDataAsync(System.Net.Http.HttpContent)">
+      <summary>Lê, de forma assíncrona, dados codificados de URL do formulário HTML de uma instância <see cref="T:System.Net.Http.HttpContent" /> e armazena os resultados em um objeto <see cref="T:System.Collections.Specialized.NameValueCollection" />.</summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="content">O conteúdo.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentFormDataExtensions.ReadAsFormDataAsync(System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+      <summary>Lê, de forma assíncrona, dados codificados de URL do formulário HTML de uma instância <see cref="T:System.Net.Http.HttpContent" /> e armazena os resultados em um objeto <see cref="T:System.Collections.Specialized.NameValueCollection" />.</summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="content">O conteúdo.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="T:System.Net.Http.HttpContentMessageExtensions">
+      <summary>Fornece métodos de extensão para ler entidades <see cref="T:System.Net.Http.HttpRequestMessage" /> e <see cref="T:System.Net.Http.HttpResponseMessage" /> a partir de instâncias <see cref="T:System.Net.Http.HttpContent" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.IsHttpRequestMessageContent(System.Net.Http.HttpContent)">
+      <summary>Determina se o conteúdo especificado é de mensagem de solicitação HTTP.</summary>
+      <returns>verdadeiro se o conteúdo especificado for de mensagem HTTP; caso contrário, falso.</returns>
+      <param name="content">O conteúdo a ser verificado.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.IsHttpResponseMessageContent(System.Net.Http.HttpContent)">
+      <summary>Determina se o conteúdo especificado é de mensagem de resposta HTTP.</summary>
+      <returns>verdadeiro se o conteúdo especificado for de mensagem HTTP; caso contrário, falso.</returns>
+      <param name="content">O conteúdo a ser verificado.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpRequestMessageAsync(System.Net.Http.HttpContent)">
+      <summary> Lê o <see cref="T:System.Net.Http.HttpContent" /> como uma <see cref="T:System.Net.Http.HttpRequestMessage" />. </summary>
+      <returns>A instância <see cref="T:System.Net.Http.HttpRequestMessage" /> analisada.</returns>
+      <param name="content">O conteúdo a ser lido.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpRequestMessageAsync(System.Net.Http.HttpContent,System.String)">
+      <summary> Lê o <see cref="T:System.Net.Http.HttpContent" /> como uma <see cref="T:System.Net.Http.HttpRequestMessage" />. </summary>
+      <returns>A instância <see cref="T:System.Net.Http.HttpRequestMessage" /> analisada.</returns>
+      <param name="content">O conteúdo a ser lido.</param>
+      <param name="uriScheme">O esquema do URI a ser usado para o URI da solicitação.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpRequestMessageAsync(System.Net.Http.HttpContent,System.String,System.Int32)">
+      <summary> Lê o <see cref="T:System.Net.Http.HttpContent" /> como uma <see cref="T:System.Net.Http.HttpRequestMessage" />. </summary>
+      <returns>A instância <see cref="T:System.Net.Http.HttpRequestMessage" /> analisada.</returns>
+      <param name="content">O conteúdo a ser lido.</param>
+      <param name="uriScheme">O esquema do URI a ser usado para o URI da solicitação.</param>
+      <param name="bufferSize">O tamanho do buffer.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpRequestMessageAsync(System.Net.Http.HttpContent,System.String,System.Int32,System.Int32)">
+      <summary>Lê o <see cref="T:System.Net.Http.HttpContent" /> como uma <see cref="T:System.Net.Http.HttpRequestMessage" />.</summary>
+      <returns>A instância <see cref="T:System.Net.Http.HttpRequestMessage" /> analisada.</returns>
+      <param name="content">O conteúdo a ser lido.</param>
+      <param name="uriScheme">O esquema do URI a ser usado para o URI da solicitação.</param>
+      <param name="bufferSize">O tamanho do buffer.</param>
+      <param name="maxHeaderSize">O comprimento máximo do cabeçalho HTTP.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpRequestMessageAsync(System.Net.Http.HttpContent,System.String,System.Int32,System.Int32,System.Threading.CancellationToken)"></member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpRequestMessageAsync(System.Net.Http.HttpContent,System.String,System.Int32,System.Threading.CancellationToken)"></member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpRequestMessageAsync(System.Net.Http.HttpContent,System.String,System.Threading.CancellationToken)"></member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpRequestMessageAsync(System.Net.Http.HttpContent,System.Threading.CancellationToken)"></member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpResponseMessageAsync(System.Net.Http.HttpContent)">
+      <summary> Lê o <see cref="T:System.Net.Http.HttpContent" /> como uma <see cref="T:System.Net.Http.HttpResponseMessage" />. </summary>
+      <returns>A instância <see cref="T:System.Net.Http.HttpResponseMessage" /> analisada.</returns>
+      <param name="content">O conteúdo a ser lido.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpResponseMessageAsync(System.Net.Http.HttpContent,System.Int32)">
+      <summary>Lê o <see cref="T:System.Net.Http.HttpContent" /> como uma <see cref="T:System.Net.Http.HttpResponseMessage" />. </summary>
+      <returns>A instância <see cref="T:System.Net.Http.HttpResponseMessage" /> analisada.</returns>
+      <param name="content">O conteúdo a ser lido.</param>
+      <param name="bufferSize">O tamanho do buffer.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpResponseMessageAsync(System.Net.Http.HttpContent,System.Int32,System.Int32)">
+      <summary>Lê o <see cref="T:System.Net.Http.HttpContent" /> como uma <see cref="T:System.Net.Http.HttpResponseMessage" />.</summary>
+      <returns>A instância <see cref="T:System.Net.Http.HttpResponseMessage" /> analisada.</returns>
+      <param name="content">O conteúdo a ser lido.</param>
+      <param name="bufferSize">O tamanho do buffer.</param>
+      <param name="maxHeaderSize">O comprimento máximo do cabeçalho HTTP.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpResponseMessageAsync(System.Net.Http.HttpContent,System.Int32,System.Int32,System.Threading.CancellationToken)"></member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpResponseMessageAsync(System.Net.Http.HttpContent,System.Int32,System.Threading.CancellationToken)"></member>
+    <member name="M:System.Net.Http.HttpContentMessageExtensions.ReadAsHttpResponseMessageAsync(System.Net.Http.HttpContent,System.Threading.CancellationToken)"></member>
+    <member name="T:System.Net.Http.HttpContentMultipartExtensions">
+      <summary>Os métodos de extensão que lerão entidades multipartes MIME de instâncias do <see cref="T:System.Net.Http.HttpContent" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMultipartExtensions.IsMimeMultipartContent(System.Net.Http.HttpContent)">
+      <summary>Determina se o conteúdo especificado é conteúdo com diversas partes MIME.</summary>
+      <returns>verdadeiro se o conteúdo especificado for conteúdo com diversas partes MIME; caso contrário, falso.</returns>
+      <param name="content">O conteúdo.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMultipartExtensions.IsMimeMultipartContent(System.Net.Http.HttpContent,System.String)">
+      <summary>Determina se o conteúdo especificado é conteúdo com diversas partes MIME com o subtipo especificado.</summary>
+      <returns>verdadeiro se o conteúdo especificado for conteúdo com diversas partes MIME com o subtipo especificado; caso contrário, falso.</returns>
+      <param name="content">O conteúdo.</param>
+      <param name="subtype">O subtipo com diversas partes MIME a ser correspondido.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMultipartExtensions.ReadAsMultipartAsync(System.Net.Http.HttpContent)">
+      <summary>Lê todas as partes de corpo dentro de uma mensagem MIME de partes múltiplas e produz um conjunto de instâncias <see cref="T:System.Net.Http.HttpContent" /> como resultado.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task`1" /> que representa as tarefas de obtenção da coleção de instâncias de <see cref="T:System.Net.Http.HttpContent" /> onde cada instância representa uma parte do corpo.</returns>
+      <param name="content">Uma instância <see cref="T:System.Net.Http.HttpContent" />  existente a ser usada para o conteúdo do objeto.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMultipartExtensions.ReadAsMultipartAsync(System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+      <summary>Lê todas as partes de corpo dentro de uma mensagem MIME de partes múltiplas e produz um conjunto de instâncias <see cref="T:System.Net.Http.HttpContent" /> como resultado.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task`1" /> que representa as tarefas de obtenção da coleção de instâncias de <see cref="T:System.Net.Http.HttpContent" /> onde cada instância representa uma parte do corpo.</returns>
+      <param name="content">Uma instância <see cref="T:System.Net.Http.HttpContent" />  existente a ser usada para o conteúdo do objeto.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMultipartExtensions.ReadAsMultipartAsync``1(System.Net.Http.HttpContent,``0)">
+      <summary>Lê todas as partes de corpo dentro de uma mensagem MIME de partes múltiplas e produz um conjunto de instâncias <see cref="T:System.Net.Http.HttpContent" /> como resultado da utilização da instância streamProvider para determinar onde o conteúdo de cada parte de corpo está gravado.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task`1" /> que representa as tarefas de obtenção da coleção de instâncias de <see cref="T:System.Net.Http.HttpContent" /> onde cada instância representa uma parte do corpo.</returns>
+      <param name="content">Uma instância <see cref="T:System.Net.Http.HttpContent" />  existente a ser usada para o conteúdo do objeto.</param>
+      <param name="streamProvider">Um provedor de fluxo fornecendo fluxos de saída para onde gravar partes de corpo conforme elas são analisadas.</param>
+      <typeparam name="T">O tipo das várias partes de MIME.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMultipartExtensions.ReadAsMultipartAsync``1(System.Net.Http.HttpContent,``0,System.Int32)">
+      <summary>Lê todas as partes de corpo dentro de uma mensagem MIME de partes múltiplas e produz um conjunto de instância <see cref="T:System.Net.Http.HttpContent" /> como resultado da utilização da instância streamProvider para determinar onde o conteúdo de cada parte de corpo está gravado e bufferSize como tamanho do buffer de leitura.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task`1" /> que representa as tarefas de obtenção da coleção de instâncias de <see cref="T:System.Net.Http.HttpContent" /> onde cada instância representa uma parte do corpo.</returns>
+      <param name="content">Uma instância <see cref="T:System.Net.Http.HttpContent" />  existente a ser usada para o conteúdo do objeto.</param>
+      <param name="streamProvider">Um provedor de fluxo fornecendo fluxos de saída para onde gravar partes de corpo conforme elas são analisadas.</param>
+      <param name="bufferSize">Tamanho do buffer usado para ler o conteúdo.</param>
+      <typeparam name="T">O tipo das várias partes de MIME.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMultipartExtensions.ReadAsMultipartAsync``1(System.Net.Http.HttpContent,``0,System.Int32,System.Threading.CancellationToken)">
+      <summary>Lê todas as partes de corpo dentro de uma mensagem MIME de partes múltiplas e produz um conjunto de instância <see cref="T:System.Net.Http.HttpContent" /> como resultado da utilização da instância streamProvider para determinar onde o conteúdo de cada parte de corpo está gravado e bufferSize como tamanho do buffer de leitura.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task`1" /> que representa as tarefas de obtenção da coleção de instâncias de <see cref="T:System.Net.Http.HttpContent" /> onde cada instância representa uma parte do corpo.</returns>
+      <param name="content">Uma instância <see cref="T:System.Net.Http.HttpContent" />  existente a ser usada para o conteúdo do objeto.</param>
+      <param name="streamProvider">Um provedor de fluxo fornecendo fluxos de saída para onde gravar partes de corpo conforme elas são analisadas.</param>
+      <param name="bufferSize">Tamanho do buffer usado para ler o conteúdo.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+      <typeparam name="T">O tipo das várias partes de MIME.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.HttpContentMultipartExtensions.ReadAsMultipartAsync``1(System.Net.Http.HttpContent,``0,System.Threading.CancellationToken)">
+      <summary>Lê todas as partes de corpo dentro de uma mensagem MIME de partes múltiplas e produz um conjunto de instâncias <see cref="T:System.Net.Http.HttpContent" /> como resultado da utilização da instância streamProvider para determinar onde o conteúdo de cada parte de corpo está gravado.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task`1" /> que representa as tarefas de obtenção da coleção de instâncias de <see cref="T:System.Net.Http.HttpContent" /> onde cada instância representa uma parte do corpo.</returns>
+      <param name="content">Uma instância <see cref="T:System.Net.Http.HttpContent" />  existente a ser usada para o conteúdo do objeto.</param>
+      <param name="streamProvider">Um provedor de fluxo fornecendo fluxos de saída para onde gravar partes de corpo conforme elas são analisadas.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+      <typeparam name="T">O tipo das várias partes de MIME.</typeparam>
+    </member>
+    <member name="T:System.Net.Http.HttpMessageContent">
+      <summary> A classe derivada <see cref="T:System.Net.Http.HttpContent" /> que pode encapsular uma <see cref="P:System.Net.Http.HttpMessageContent.HttpResponseMessage" /> ou uma <see cref="P:System.Net.Http.HttpMessageContent.HttpRequestMessage" /> como entidade com o tipo de mídia "application/http". </summary>
+    </member>
+    <member name="M:System.Net.Http.HttpMessageContent.#ctor(System.Net.Http.HttpRequestMessage)">
+      <summary> Inicializa uma nova instância da classe <see cref="T:System.Net.Http.HttpMessageContent" /> encapsulando uma <see cref="P:System.Net.Http.HttpMessageContent.HttpRequestMessage" />. </summary>
+      <param name="httpRequest">A instância <see cref="P:System.Net.Http.HttpMessageContent.HttpResponseMessage" /> a ser encapsulada.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpMessageContent.#ctor(System.Net.Http.HttpResponseMessage)">
+      <summary> Inicializa uma nova instância da classe <see cref="T:System.Net.Http.HttpMessageContent" /> encapsulando uma <see cref="P:System.Net.Http.HttpMessageContent.HttpResponseMessage" />. </summary>
+      <param name="httpResponse">A instância <see cref="P:System.Net.Http.HttpMessageContent.HttpResponseMessage" /> a ser encapsulada.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpMessageContent.Dispose(System.Boolean)">
+      <summary> Libera recursos não gerenciados e, opcionalmente, gerenciados </summary>
+      <param name="disposing">verdadeiro para liberar os recursos gerenciados e os não gerenciados; falso para liberar apenas os recursos não gerenciados.</param>
+    </member>
+    <member name="P:System.Net.Http.HttpMessageContent.HttpRequestMessage">
+      <summary> Obtém a mensagem de solicitação HTTP. </summary>
+    </member>
+    <member name="P:System.Net.Http.HttpMessageContent.HttpResponseMessage">
+      <summary> Obtém a mensagem de resposta HTTP. </summary>
+    </member>
+    <member name="M:System.Net.Http.HttpMessageContent.SerializeToStreamAsync(System.IO.Stream,System.Net.TransportContext)">
+      <summary> Serializa de forma assíncrona o conteúdo do objeto para o fluxo fornecido. </summary>
+      <returns>Uma instância <see cref="T:System.Threading.Tasks.Task" /> que serializa de forma assíncrona o conteúdo do objeto.</returns>
+      <param name="stream">O <see cref="T:System.IO.Stream" /> no qual será gravado.</param>
+      <param name="context">O <see cref="T:System.Net.TransportContext" /> associado.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpMessageContent.TryComputeLength(System.Int64@)">
+      <summary> Calcula o comprimento do fluxo, se possível. </summary>
+      <returns>verdadeiro se o comprimento foi calculado; caso contrário, falso.</returns>
+      <param name="length">O comprimento calculado do fluxo.</param>
+    </member>
+    <member name="T:System.Net.Http.HttpRequestHeadersExtensions">
+      <summary>Fornece métodos de extensão para a classe <see cref="T:System.Net.Http.Headers.HttpRequestHeaders" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.HttpRequestHeadersExtensions.GetCookies(System.Net.Http.Headers.HttpRequestHeaders)">
+      <summary>Obtém quaisquer cabeçalhos de cookies presentes na solicitação.</summary>
+      <returns>Um conjunto de instâncias de <see cref="T:System.Net.Http.Headers.CookieHeaderValue" />.</returns>
+      <param name="headers">Os cabeçalhos da solicitação.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpRequestHeadersExtensions.GetCookies(System.Net.Http.Headers.HttpRequestHeaders,System.String)">
+      <summary>Obtém quaisquer cabeçalhos de cookies presentes na solicitação que contenham um estado de cookie cujo nome corresponda ao valor especificado.</summary>
+      <returns>Um conjunto de instâncias de <see cref="T:System.Net.Http.Headers.CookieHeaderValue" />.</returns>
+      <param name="headers">Os cabeçalhos da solicitação.</param>
+      <param name="name">O nome do estado de cookie para corresponder.</param>
+    </member>
+    <member name="M:System.Net.Http.HttpRequestMessageExtensions.CreateResponse(System.Net.Http.HttpRequestMessage)"></member>
+    <member name="M:System.Net.Http.HttpRequestMessageExtensions.CreateResponse(System.Net.Http.HttpRequestMessage,System.Net.HttpStatusCode)"></member>
+    <member name="T:System.Net.Http.HttpResponseHeadersExtensions">
+      <summary> Fornece métodos de extensão para a classe <see cref="T:System.Net.Http.Headers.HttpResponseHeaders" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.HttpResponseHeadersExtensions.AddCookies(System.Net.Http.Headers.HttpResponseHeaders,System.Collections.Generic.IEnumerable{System.Net.Http.Headers.CookieHeaderValue})">
+      <summary> Adiciona cookies a uma resposta. Cada cabeçalho Set-Cookie é representado por uma instância de <see cref="T:System.Net.Http.Headers.CookieHeaderValue" />. Um <see cref="T:System.Net.Http.Headers.CookieHeaderValue" /> contém informações sobre o domínio, o caminho e outras informações sobre o cookie, bem como uma ou mais instâncias de <see cref="T:System.Net.Http.Headers.CookieState" />. Cada instância de <see cref="T:System.Net.Http.Headers.CookieState" /> contém o nome de um cookie e seja qual for o estado do cookie associado a esse nome. O estado está na forma de um <see cref="T:System.Collections.Specialized.NameValueCollection" />, o qual na transferência eletrônica é codificado como dados codificados da URL do formulário HTML.  Essa representação permite que vários "cookies" relacionados sejam transportados com o mesmo cabeçalho do cookie, enquanto ainda fornecem separação entre cada estado do cookie. Um cabeçalho do cookie de exemplo é mostrado abaixo. Neste exemplo, há dois <see cref="T:System.Net.Http.Headers.CookieState" /> com nomes state1 e state2, respectivamente. Além disso, cada estado do cookie contém dois pares de nome/valor (name1/value1 e name2/value2) e (name3/value3 e name4/value4). Set-cookie &lt;code&gt;: state1:name1=value1&amp;name2=value2; state2:name3=value3&amp;name4=value4; domain=domain1; path=path1; &lt;/code&gt;</summary>
+      <param name="headers">Os cabeçalhos de resposta</param>
+      <param name="cookies">Os valores do cookie a serem adicionados na resposta.</param>
+    </member>
+    <member name="T:System.Net.Http.InvalidByteRangeException">
+      <summary>Uma exceção gerada por <see cref="T:System.Net.Http.ByteRangeStreamContent" />, caso nenhum dos intervalos solicitados se sobreponha à extensão atual do recurso selecionado.A extensão atual do recurso é indicada na propriedade ContentRange.</summary>
+    </member>
+    <member name="M:System.Net.Http.InvalidByteRangeException.#ctor(System.Net.Http.Headers.ContentRangeHeaderValue)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.InvalidByteRangeException" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.InvalidByteRangeException.#ctor(System.Net.Http.Headers.ContentRangeHeaderValue,System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.InvalidByteRangeException" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.InvalidByteRangeException.#ctor(System.Net.Http.Headers.ContentRangeHeaderValue,System.String)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.InvalidByteRangeException" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.InvalidByteRangeException.#ctor(System.Net.Http.Headers.ContentRangeHeaderValue,System.String,System.Exception)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.InvalidByteRangeException" />.</summary>
+    </member>
+    <member name="P:System.Net.Http.InvalidByteRangeException.ContentRange">
+      <summary> A extensão atual do recurso indicada em termos de um campo de cabeçalho ContentRange. </summary>
+    </member>
+    <member name="T:System.Net.Http.MultipartFileData">
+      <summary>Representa dados de um arquivo com várias partes.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartFileData.#ctor(System.Net.Http.Headers.HttpContentHeaders,System.String)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.MultipartFileData" />.</summary>
+      <param name="headers">Os cabeçalhos dos dados do arquivo com várias partes.</param>
+      <param name="localFileName">O nome do arquivo local para os dados do arquivo com várias partes.</param>
+    </member>
+    <member name="P:System.Net.Http.MultipartFileData.Headers">
+      <summary>Obtém ou define os cabeçalhos dos dados do arquivo com várias partes.</summary>
+      <returns>Os cabeçalhos dos dados do arquivo com várias partes.</returns>
+    </member>
+    <member name="P:System.Net.Http.MultipartFileData.LocalFileName">
+      <summary>Obtém ou define o nome do arquivo local para os dados do arquivo com várias partes.</summary>
+      <returns>O nome do arquivo local para os dados do arquivo com várias partes.</returns>
+    </member>
+    <member name="T:System.Net.Http.MultipartFileStreamProvider">
+      <summary>Representa um <see cref="T:System.Net.Http.IMultipartStreamProvider" /> adequado para gravar cada parte do corpo MIME da mensagem MIME de várias partes em um arquivo usando um <see cref="T:System.IO.FileStream" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartFileStreamProvider.#ctor(System.String)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.MultipartFileStreamProvider" />.</summary>
+      <param name="rootPath">O caminho raiz em que o conteúdo das partes do corpo com diversas partes MIME está gravado.</param>
+    </member>
+    <member name="M:System.Net.Http.MultipartFileStreamProvider.#ctor(System.String,System.Int32)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.MultipartFileStreamProvider" />.</summary>
+      <param name="rootPath">O caminho raiz em que o conteúdo das partes do corpo com diversas partes MIME está gravado.</param>
+      <param name="bufferSize">A quantidade de bytes em buffer para gravações no arquivo.</param>
+    </member>
+    <member name="P:System.Net.Http.MultipartFileStreamProvider.BufferSize">
+      <summary>Obtém ou define o número de bytes em buffer para gravações no arquivo.</summary>
+      <returns>A quantidade de bytes em buffer para gravações no arquivo.</returns>
+    </member>
+    <member name="P:System.Net.Http.MultipartFileStreamProvider.FileData">
+      <summary>Obtém ou define os dados do arquivo de várias partes.</summary>
+      <returns>Os dados do arquivo de várias partes.</returns>
+    </member>
+    <member name="M:System.Net.Http.MultipartFileStreamProvider.GetLocalFileName(System.Net.Http.Headers.HttpContentHeaders)">
+      <summary>Obtém o nome do arquivo local que será combinado com o caminho raiz para criar um nome de arquivo absoluto em que o conteúdo da parte do corpo MIME será armazenado.</summary>
+      <returns>Um nome de arquivo relativo sem componentes de caminho.</returns>
+      <param name="headers">Os cabeçalhos da parte de corpo MIME atual.</param>
+    </member>
+    <member name="M:System.Net.Http.MultipartFileStreamProvider.GetStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)">
+      <summary>Obtém a instância do fluxo em que a parte do corpo da mensagem será gravada.</summary>
+      <returns>A instância <see cref="T:System.IO.Stream" /> em que a parte do corpo da mensagem será gravada.</returns>
+      <param name="parent">O conteúdo do HTTP.</param>
+      <param name="headers">Os campos de cabeçalho que descrevem a parte do corpo.</param>
+    </member>
+    <member name="P:System.Net.Http.MultipartFileStreamProvider.RootPath">
+      <summary>Obtém ou define o caminho raiz em que o conteúdo das partes do corpo da MIME de várias partes está gravado.</summary>
+      <returns>O caminho raiz em que o conteúdo das partes do corpo com diversas partes MIME está gravado.</returns>
+    </member>
+    <member name="T:System.Net.Http.MultipartFormDataRemoteStreamProvider">
+      <summary>Uma implementação do <see cref="T:System.Net.Http.MultipartStreamProvider" /> adequada para ser usado com carregamentos de arquivos HTML para gravação de conteúdo de arquivos em um armazenamento remoto <see cref="T:System.IO.Stream" />.O provedor do fluxo vê o campo de cabeçalho Content-Disposition e determina um <see cref="T:System.IO.Stream" /> de saída com base na presença de um parâmetro de nome de arquivo.Se um parâmetro de nome de arquivo estiver presente no campo do cabeçalho Content-Disposition, a parte do corpo será gravada em um <see cref="T:System.IO.Stream" /> remoto fornecido por <see cref="M:System.Net.Http.MultipartFormDataRemoteStreamProvider.GetRemoteStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)" />.Caso contrário, será gravado em um <see cref="T:System.IO.MemoryStream" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataRemoteStreamProvider.#ctor">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.MultipartFormDataRemoteStreamProvider" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataRemoteStreamProvider.ExecutePostProcessingAsync">
+      <summary>Lê o conteúdo que não é de arquivo como dados de formulário.</summary>
+      <returns>Um <see cref="T:System.Threading.Tasks.Task" /> que representa o pós-processamento.</returns>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataRemoteStreamProvider.ExecutePostProcessingAsync(System.Threading.CancellationToken)">
+      <summary>Lê o conteúdo que não é de arquivo como dados de formulário.</summary>
+      <returns>Um <see cref="T:System.Threading.Tasks.Task" /> que representa o pós-processamento.</returns>
+      <param name="cancellationToken">O token para monitorar quanto às solicitações de cancelamento.</param>
+    </member>
+    <member name="P:System.Net.Http.MultipartFormDataRemoteStreamProvider.FileData">
+      <summary>Obtém uma coleção de dados de arquivo passados como parte dos dados do formulário de várias partes.</summary>
+    </member>
+    <member name="P:System.Net.Http.MultipartFormDataRemoteStreamProvider.FormData">
+      <summary>Obtém uma <see cref="T:System.Collections.Specialized.NameValueCollection" /> dos dados do formulário passados como parte dos dados do formulário de várias partes.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataRemoteStreamProvider.GetRemoteStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)">
+      <summary>Fornece um <see cref="T:System.Net.Http.RemoteStreamInfo" /> para <see cref="M:System.Net.Http.MultipartFormDataRemoteStreamProvider.GetStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)" />.Substitua esse método para fornecer um fluxo remoto no qual os dados devem ser gravados.</summary>
+      <returns>Um resultado especificando um fluxo remoto no qual o arquivo será gravado e um local onde o arquivo possa ser acessado.Não pode ser nulo e o fluxo precisa ser gravável.</returns>
+      <param name="parent">A instância MIME pai com várias partes <see cref="T:System.Net.Http.HttpContent" />.</param>
+      <param name="headers">Os campos de cabeçalho que descrevem o conteúdo da parte do corpo.</param>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataRemoteStreamProvider.GetStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)"></member>
+    <member name="T:System.Net.Http.MultipartFormDataStreamProvider">
+      <summary>Representa um <see cref="T:System.Net.Http.IMultipartStreamProvider" /> adequado para ser usado com carregamentos de arquivos HTML para gravação de conteúdo de arquivos em um <see cref="T:System.IO.FileStream" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataStreamProvider.#ctor(System.String)">
+      <summary> Inicia uma nova instância da classe <see cref="T:System.Net.Http.MultipartFormDataStreamProvider" />. </summary>
+      <param name="rootPath">O caminho raiz em que o conteúdo das partes do corpo com diversas partes MIME está gravado.</param>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataStreamProvider.#ctor(System.String,System.Int32)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.MultipartFormDataStreamProvider" />.</summary>
+      <param name="rootPath">O caminho raiz em que o conteúdo das partes do corpo com diversas partes MIME está gravado.</param>
+      <param name="bufferSize">A quantidade de bytes em buffer para gravações no arquivo.</param>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataStreamProvider.ExecutePostProcessingAsync">
+      <summary>Lê o conteúdo que não é de arquivo como dados de formulário</summary>
+      <returns>Uma tarefa que representa a operação assíncrona.</returns>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataStreamProvider.ExecutePostProcessingAsync(System.Threading.CancellationToken)"></member>
+    <member name="P:System.Net.Http.MultipartFormDataStreamProvider.FormData">
+      <summary>Obtém uma <see cref="T:System.Collections.Specialized.NameValueCollection" /> dos dados do formulário passados como parte dos dados do formulário de várias partes.</summary>
+      <returns>A <see cref="T:System.Collections.Specialized.NameValueCollection" /> dos dados do formulário.</returns>
+    </member>
+    <member name="M:System.Net.Http.MultipartFormDataStreamProvider.GetStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)">
+      <summary>Obtém a instância do fluxo em que a parte do corpo da mensagem está gravada.</summary>
+      <returns>A instância <see cref="T:System.IO.Stream" /> em que a parte do corpo da mensagem será gravada.</returns>
+      <param name="parent">O conteúdo HTTP que contém essa parte do corpo.</param>
+      <param name="headers">Campos de cabeçalho que descrevem a parte do corpo.</param>
+    </member>
+    <member name="T:System.Net.Http.MultipartMemoryStreamProvider">
+      <summary>Representa um provedor de fluxo de memória de várias partes.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartMemoryStreamProvider.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.MultipartMemoryStreamProvider" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartMemoryStreamProvider.GetStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)">
+      <summary>Retorna o <see cref="T:System.IO.Stream" /> para o <see cref="T:System.Net.Http.MultipartMemoryStreamProvider" />.</summary>
+      <returns>A <see cref="T:System.IO.Stream" /> do <see cref="T:System.Net.Http.MultipartMemoryStreamProvider" />.</returns>
+      <param name="parent">Um objeto <see cref="T:System.Net.Http.HttpContent" />.</param>
+      <param name="headers">Os cabeçalhos do conteúdo HTTP.</param>
+    </member>
+    <member name="T:System.Net.Http.MultipartRelatedStreamProvider">
+      <summary>Representa o provedor para o multistream relacionado a várias partes.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartRelatedStreamProvider.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.MultipartRelatedStreamProvider" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartRelatedStreamProvider.GetStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)">
+      <summary>Obtém o fluxo relacionado para o provedor.</summary>
+      <returns>Os cabeçalhos do conteúdo.</returns>
+      <param name="parent">O conteúdo pai.</param>
+      <param name="headers">Os cabeçalhos do conteúdo http.</param>
+    </member>
+    <member name="P:System.Net.Http.MultipartRelatedStreamProvider.RootContent">
+      <summary>Obtém o conteúdo raiz do <see cref="T:System.Net.Http.MultipartRelatedStreamProvider" />.</summary>
+      <returns>O conteúdo raiz do <see cref="T:System.Net.Http.MultipartRelatedStreamProvider" />.</returns>
+    </member>
+    <member name="T:System.Net.Http.MultipartRemoteFileData">
+      <summary>Representa dados de um arquivo com várias partes para armazenamento remoto.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartRemoteFileData.#ctor(System.Net.Http.Headers.HttpContentHeaders,System.String,System.String)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.MultipartRemoteFileData" />.</summary>
+      <param name="headers">Os cabeçalhos dos dados do arquivo com várias partes.</param>
+      <param name="location">O local do arquivo remoto.</param>
+      <param name="fileName">O nome do arquivo remoto.</param>
+    </member>
+    <member name="P:System.Net.Http.MultipartRemoteFileData.FileName">
+      <summary>Obtém o nome do arquivo remoto.</summary>
+    </member>
+    <member name="P:System.Net.Http.MultipartRemoteFileData.Headers">
+      <summary>Obtém os cabeçalhos dos dados do arquivo com várias partes.</summary>
+    </member>
+    <member name="P:System.Net.Http.MultipartRemoteFileData.Location">
+      <summary>Obtém o local do arquivo remoto.</summary>
+    </member>
+    <member name="T:System.Net.Http.MultipartStreamProvider">
+      <summary>Representa um provedor de fluxo que examina os cabeçalhos fornecidos pelo analisador MIME de várias partes como parte dos métodos de extensão do MIME de várias partes (consulte <see cref="T:System.Net.Http.HttpContentMultipartExtensions" />) e decide qual tipo de fluxo retornar para a parte do corpo na qual ser gravado.</summary>
+    </member>
+    <member name="M:System.Net.Http.MultipartStreamProvider.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.MultipartStreamProvider" />.</summary>
+    </member>
+    <member name="P:System.Net.Http.MultipartStreamProvider.Contents">
+      <summary>Obtém ou define os conteúdos para este <see cref="T:System.Net.Http.MultipartStreamProvider" />.</summary>
+      <returns>Os conteúdos para este <see cref="T:System.Net.Http.MultipartStreamProvider" />.</returns>
+    </member>
+    <member name="M:System.Net.Http.MultipartStreamProvider.ExecutePostProcessingAsync">
+      <summary>Executa a operação de pós-processamento para este <see cref="T:System.Net.Http.MultipartStreamProvider" />.</summary>
+      <returns>A tarefa assíncrona para esta operação.</returns>
+    </member>
+    <member name="M:System.Net.Http.MultipartStreamProvider.ExecutePostProcessingAsync(System.Threading.CancellationToken)">
+      <summary>Executa a operação de pós-processamento para este <see cref="T:System.Net.Http.MultipartStreamProvider" />.</summary>
+      <returns>A tarefa assíncrona para esta operação.</returns>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="M:System.Net.Http.MultipartStreamProvider.GetStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)">
+      <summary>Obtém o fluxo no qual gravar a parte do corpo.Este método é chamado quando uma parte do corpo da MIME de várias partes tiver sido analisada.</summary>
+      <returns>A instância <see cref="T:System.IO.Stream" /> em que a parte do corpo da mensagem será gravada.</returns>
+      <param name="parent">O conteúdo do HTTP.</param>
+      <param name="headers">Os campos de cabeçalho que descrevem a parte do corpo.</param>
+    </member>
+    <member name="T:System.Net.Http.ObjectContent">
+      <summary> Contém um valor e um <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> associado que será usado para serializar o valor durante a gravação deste conteúdo. </summary>
+    </member>
+    <member name="M:System.Net.Http.ObjectContent.#ctor(System.Type,System.Object,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.ObjectContent" />.</summary>
+      <param name="type">O tipo de objeto que esta instância conterá.</param>
+      <param name="value">O valor do objeto que esta instância conterá.</param>
+      <param name="formatter">O formatador a ser usado ao serializar o valor.</param>
+    </member>
+    <member name="M:System.Net.Http.ObjectContent.#ctor(System.Type,System.Object,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary> Inicia uma nova instância da classe <see cref="T:System.Net.Http.ObjectContent" />. </summary>
+      <param name="type">O tipo de objeto que esta instância conterá.</param>
+      <param name="value">O valor do objeto que esta instância conterá.</param>
+      <param name="formatter">O formatador a ser usado ao serializar o valor.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Content-Type.Pode ser nulo, caso em que será usado o tipo de conteúdo padrão do formatador.</param>
+    </member>
+    <member name="M:System.Net.Http.ObjectContent.#ctor(System.Type,System.Object,System.Net.Http.Formatting.MediaTypeFormatter,System.String)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.ObjectContent" />.</summary>
+      <param name="type">O tipo de objeto que esta instância conterá.</param>
+      <param name="value">O valor do objeto que esta instância conterá.</param>
+      <param name="formatter">O formatador a ser usado ao serializar o valor.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Content-Type.</param>
+    </member>
+    <member name="P:System.Net.Http.ObjectContent.Formatter">
+      <summary>Obtém o formatador do tipo de mídia associado a esta instância de conteúdo.</summary>
+      <returns>O formatador do tipo de mídia associado a esta instância de conteúdo.</returns>
+    </member>
+    <member name="P:System.Net.Http.ObjectContent.ObjectType">
+      <summary>Obtém o tipo de objeto gerenciado por esta instância <see cref="T:System.Net.Http.ObjectContent" />.</summary>
+      <returns>O tipo de objeto.</returns>
+    </member>
+    <member name="M:System.Net.Http.ObjectContent.SerializeToStreamAsync(System.IO.Stream,System.Net.TransportContext)">
+      <summary>Serializa de forma assíncrona o conteúdo do objeto para o fluxo em questão.</summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="stream">O fluxo para o qual gravar.</param>
+      <param name="context">O <see cref="T:System.Net.TransportContext" /> associado.</param>
+    </member>
+    <member name="M:System.Net.Http.ObjectContent.TryComputeLength(System.Int64@)">
+      <summary>Calcula o comprimento do fluxo, se possível.</summary>
+      <returns>verdadeiro se o comprimento foi calculado; caso contrário, falso.</returns>
+      <param name="length">Recebe o comprimento calculado do fluxo.</param>
+    </member>
+    <member name="P:System.Net.Http.ObjectContent.Value">
+      <summary>Obtém ou define o valor do conteúdo.</summary>
+      <returns>O valor do conteúdo.</returns>
+    </member>
+    <member name="T:System.Net.Http.ObjectContent`1">
+      <summary> Formulário genérico de <see cref="T:System.Net.Http.ObjectContent" />. </summary>
+      <typeparam name="T">O tipo de objeto que esta classe conterá.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.ObjectContent`1.#ctor(`0,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.ObjectContent`1" />.</summary>
+      <param name="value">O valor do objeto que esta instância conterá.</param>
+      <param name="formatter">O formatador a ser usado ao serializar o valor.</param>
+    </member>
+    <member name="M:System.Net.Http.ObjectContent`1.#ctor(`0,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary> Inicializa uma nova instância da classe &lt;consulte cref="T:System.Net.Http.ObjectContent`1" /&gt;. </summary>
+      <param name="value">O valor do objeto que esta instância conterá.</param>
+      <param name="formatter">O formatador a ser usado ao serializar o valor.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Content-Type.Pode ser nulo, caso em que será usado o tipo de conteúdo padrão do formatador.</param>
+    </member>
+    <member name="M:System.Net.Http.ObjectContent`1.#ctor(`0,System.Net.Http.Formatting.MediaTypeFormatter,System.String)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.ObjectContent`1" />.</summary>
+      <param name="value">O valor do objeto que esta instância conterá.</param>
+      <param name="formatter">O formatador a ser usado ao serializar o valor.</param>
+      <param name="mediaType">O valor autoritativo do cabeçalho Content-Type.</param>
+    </member>
+    <member name="T:System.Net.Http.PushStreamContent">
+      <summary>Possibilita cenários em que um produtor de dados deseja gravar diretamente (de maneira síncrona ou assíncrona) usando um fluxo.</summary>
+    </member>
+    <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Action{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext})">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.PushStreamContent" />.</summary>
+      <param name="onStreamAvailable">Uma ação que é chamada quando um fluxo de saída está disponível, permitindo à ação gravar diretamente nele. </param>
+    </member>
+    <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Action{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext},System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.PushStreamContent" />.</summary>
+      <param name="onStreamAvailable">Uma ação que é chamada quando um fluxo de saída está disponível, permitindo à ação gravar diretamente nele.</param>
+      <param name="mediaType">O tipo de mídia.</param>
+    </member>
+    <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Action{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext},System.String)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.PushStreamContent" />.</summary>
+      <param name="onStreamAvailable">Uma ação que é chamada quando um fluxo de saída está disponível, permitindo à ação gravar diretamente nele.</param>
+      <param name="mediaType">O tipo de mídia.</param>
+    </member>
+    <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Func{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.Tasks.Task})">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.PushStreamContent" />.</summary>
+      <param name="onStreamAvailable">Uma ação que é chamada quando um fluxo de saída está disponível, permitindo à ação gravar diretamente nele.</param>
+    </member>
+    <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Func{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.Tasks.Task},System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.PushStreamContent" />.</summary>
+      <param name="onStreamAvailable">Uma ação que é chamada quando um fluxo de saída está disponível, permitindo à ação gravar diretamente nele.</param>
+      <param name="mediaType">O tipo de mídia.</param>
+    </member>
+    <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Func{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.Tasks.Task},System.String)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.PushStreamContent" />.</summary>
+      <param name="onStreamAvailable">Uma ação que é chamada quando um fluxo de saída está disponível, permitindo à ação gravar diretamente nele.</param>
+      <param name="mediaType">O tipo de mídia.</param>
+    </member>
+    <member name="M:System.Net.Http.PushStreamContent.SerializeToStreamAsync(System.IO.Stream,System.Net.TransportContext)">
+      <summary>Serializa, de forma assíncrona, o conteúdo de ação no fluxo.</summary>
+      <returns>O conteúdo de ação serializado.</returns>
+      <param name="stream">O fluxo no qual o conteúdo de ação será serializado.</param>
+      <param name="context">O contexto.</param>
+    </member>
+    <member name="M:System.Net.Http.PushStreamContent.TryComputeLength(System.Int64@)">
+      <summary>Determina se o conteúdo do fluxo possui um tamanho em bytes válido.</summary>
+      <returns>verdadeiro se o tamanho for válido; caso contrário, falso.</returns>
+      <param name="length">O tamanho em bytes do conteúdo do fluxo.</param>
+    </member>
+    <member name="T:System.Net.Http.RemoteStreamInfo">
+      <summary>Representa o resultado para <see cref="M:System.Net.Http.MultipartFormDataRemoteStreamProvider.GetRemoteStream(System.Net.Http.HttpContent,System.Net.Http.Headers.HttpContentHeaders)" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.RemoteStreamInfo.#ctor(System.IO.Stream,System.String,System.String)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.RemoteStreamInfo" />.</summary>
+      <param name="remoteStream">A instância de fluxo remoto na qual o arquivo será gravado.</param>
+      <param name="location">O local do arquivo remoto.</param>
+      <param name="fileName">O nome do arquivo remoto.</param>
+    </member>
+    <member name="P:System.Net.Http.RemoteStreamInfo.FileName">
+      <summary>Obtém o local do arquivo remoto.</summary>
+    </member>
+    <member name="P:System.Net.Http.RemoteStreamInfo.Location">
+      <summary>Obtém o local do arquivo remoto.</summary>
+    </member>
+    <member name="P:System.Net.Http.RemoteStreamInfo.RemoteStream">
+      <summary>Obtém a instância de fluxo remoto na qual o arquivo será gravado.</summary>
+    </member>
+    <member name="T:System.Net.Http.UnsupportedMediaTypeException">
+      <summary> Define um tipo de exceção para sinalizar que o tipo de mídia de uma solicitação não tinha suporte. </summary>
+    </member>
+    <member name="M:System.Net.Http.UnsupportedMediaTypeException.#ctor(System.String,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary> Inicia uma nova instância da classe <see cref="T:System.Net.Http.UnsupportedMediaTypeException" />. </summary>
+      <param name="message">A mensagem que descreve o erro.</param>
+      <param name="mediaType">O tipo de mídia sem suporte.</param>
+    </member>
+    <member name="P:System.Net.Http.UnsupportedMediaTypeException.MediaType">
+      <summary>Obtém ou define o tipo de mídia.</summary>
+      <returns>O tipo de mídia.</returns>
+    </member>
+    <member name="T:System.Net.Http.UriExtensions">
+      <summary>Contém métodos de extensão para permitir que objetos fortemente tipados sejam lidos a partir do componente da consulta de instâncias <see cref="T:System.Uri" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.UriExtensions.ParseQueryString(System.Uri)">
+      <summary>Analisa a parte da consulta do URI especificado.</summary>
+      <returns>Uma <see cref="T:System.Collections.Specialized.NameValueCollection" /> que contém os parâmetros da consulta.</returns>
+      <param name="address">O URI a ser analisado.</param>
+    </member>
+    <member name="M:System.Net.Http.UriExtensions.TryReadQueryAs(System.Uri,System.Type,System.Object@)">
+      <summary>Lê dados codificados de URL do formulário HTML fornecidos na cadeia de consulta do URI como um objeto do tipo especificado.</summary>
+      <returns>verdadeiro se o componente da consulta do URI puder ser lido como o tipo especificado; caso contrário, falso.</returns>
+      <param name="address">O URI a ser lido.</param>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="value">Quando este método retorna, contém um objeto que é inicializado a partir do componente de consulta do URI. Este parâmetro é tratado como não inicializado.</param>
+    </member>
+    <member name="M:System.Net.Http.UriExtensions.TryReadQueryAs``1(System.Uri,``0@)">
+      <summary>Lê dados codificados de URL do formulário HTML fornecidos na cadeia de consulta do URI como um objeto do tipo especificado.</summary>
+      <returns>verdadeiro se o componente da consulta do URI puder ser lido como o tipo especificado; caso contrário, falso.</returns>
+      <param name="address">O URI a ser lido.</param>
+      <param name="value">Quando este método retorna, contém um objeto que é inicializado a partir do componente de consulta do URI. Este parâmetro é tratado como não inicializado.</param>
+      <typeparam name="T">O tipo de objeto a ser lido.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.UriExtensions.TryReadQueryAsJson(System.Uri,Newtonsoft.Json.Linq.JObject@)">
+      <summary>Lê dados codificados de URL do formulário HTML fornecidos no componente de consulta da <see cref="T:System.Uri" /> como um objeto <see cref="T:Newtonsoft.Json.Linq.JObject" />.</summary>
+      <returns>verdadeiro se o componente da consulta puder ser lido como <see cref="T:Newtonsoft.Json.Linq.JObject" />; caso contrário, falso.</returns>
+      <param name="address">A instância <see cref="T:System.Uri" /> a partir da qual será feita a leitura.</param>
+      <param name="value">Um objeto a ser iniciado com esta instância ou nulo se a conversão não puder ser realizada.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter">
+      <summary>Classe de formatador do tipo de mídia abstrata para suportar Bson e Json.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.#ctor(System.Net.Http.Formatting.BaseJsonMediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter" />.</summary>
+      <param name="formatter">A instância de <see cref="T:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter" /> da qual copiar configurações.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.CanReadType(System.Type)">
+      <summary>Determina se este formatador pode ler objetos do tipo especificado.</summary>
+      <returns>verdadeiro se os objetos deste tipo puderem ser lidos, caso contrário, falso.</returns>
+      <param name="type">O tipo do objeto que será lido.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.CanWriteType(System.Type)">
+      <summary>Determina se este formatador pode gravar objetos do tipo especificado.</summary>
+      <returns>verdadeiro se os objetos deste tipo puderem ser gravados, caso contrário, falso.</returns>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.CreateDefaultSerializerSettings">
+      <summary>Cria uma instância <see cref="T:Newtonsoft.Json.JsonSerializerSettings" /> com as configurações padrão usadas pelo <see cref="T:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter" />.</summary>
+      <returns>Retorna <see cref="T:Newtonsoft.Json.JsonSerializerSettings" />.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.CreateJsonReader(System.Type,System.IO.Stream,System.Text.Encoding)">
+      <summary>Chamado durante a desserialização a obter o <see cref="T:Newtonsoft.Json.JsonReader" />.</summary>
+      <returns>O leitor a ser usado durante desserialização.</returns>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a leitura.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.CreateJsonSerializer">
+      <summary>Chamado durante a serialização e desserialização a obter o <see cref="T:Newtonsoft.Json.JsonSerializer" />.</summary>
+      <returns>O JsonSerializer usado durante a serialização e desserialização.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.CreateJsonWriter(System.Type,System.IO.Stream,System.Text.Encoding)">
+      <summary>Chamado durante a serialização a obter o <see cref="T:Newtonsoft.Json.JsonWriter" />.</summary>
+      <returns>O gravador a ser usado durante serialização.</returns>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a gravação.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.MaxDepth">
+      <summary>Obtém ou define a profundidade máxima permitida para este formatador.</summary>
+      <returns>A profundidade máxima permitida por este formatador.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.ReadFromStream(System.Type,System.IO.Stream,System.Text.Encoding,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary>Chamado durante a desserialização para ler um objeto do tipo especificado a partir do fluxo especificado.</summary>
+      <returns>O objeto que foi lido.</returns>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a leitura.</param>
+      <param name="formatterLogger">O agente em que se registrarão os eventos.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.ReadFromStreamAsync(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary>Chamado durante a desserialização para ler um objeto do tipo especificado a partir do fluxo especificado.</summary>
+      <returns>Uma tarefa cujo resultado será a instância do objeto lido.</returns>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo lido.</param>
+      <param name="formatterLogger">O agente em que se registrarão os eventos.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.SerializerSettings">
+      <summary>Obtém ou define as JsonSerializerSettings usadas para configurar o JsonSerializer.</summary>
+      <returns>As JsonSerializerSettings usadas para configurar o JsonSerializer.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.WriteToStream(System.Type,System.Object,System.IO.Stream,System.Text.Encoding)">
+      <summary>Chamado durante a serialização para gravar um objeto do tipo especificado para o fluxo especificado.</summary>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="value">O objeto a ser gravado.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a gravação.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BaseJsonMediaTypeFormatter.WriteToStreamAsync(System.Type,System.Object,System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.CancellationToken)">
+      <summary>Chamado durante a serialização para gravar um objeto do tipo especificado para o fluxo especificado.</summary>
+      <returns>Retorna <see cref="T:System.Threading.Tasks.Task" />.</returns>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="value">O objeto a ser gravado.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo gravado.</param>
+      <param name="transportContext">O contexto do transporte.</param>
+      <param name="cancellationToken">O token para monitorar o cancelamento.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.BsonMediaTypeFormatter">
+      <summary>Representa um formatador de tipo de mídia a manipular o Bson.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BsonMediaTypeFormatter.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.BsonMediaTypeFormatter" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BsonMediaTypeFormatter.#ctor(System.Net.Http.Formatting.BsonMediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.BsonMediaTypeFormatter" />.</summary>
+      <param name="formatter">O formatador do qual copiar configurações.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BsonMediaTypeFormatter.CreateJsonReader(System.Type,System.IO.Stream,System.Text.Encoding)">
+      <summary>Chamado durante a desserialização a obter o <see cref="T:Newtonsoft.Json.JsonReader" />.</summary>
+      <returns>O leitor a ser usado durante desserialização.</returns>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a leitura.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BsonMediaTypeFormatter.CreateJsonWriter(System.Type,System.IO.Stream,System.Text.Encoding)">
+      <summary>Chamado durante a serialização a obter o <see cref="T:Newtonsoft.Json.JsonWriter" />.</summary>
+      <returns>O gravador a ser usado durante serialização.</returns>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a gravação.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.BsonMediaTypeFormatter.DefaultMediaType">
+      <summary>Obtém o tipo de mídia padrão para Json, ou seja, "application/bson".</summary>
+      <returns>O tipo de mídia padrão para Json, ou seja, "application/bson".</returns>
+    </member>
+    <member name="P:System.Net.Http.Formatting.BsonMediaTypeFormatter.MaxDepth">
+      <summary>Obtém ou define a profundidade máxima permitida para este formatador.</summary>
+      <returns>A profundidade máxima permitida por este formatador.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BsonMediaTypeFormatter.ReadFromStream(System.Type,System.IO.Stream,System.Text.Encoding,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary>Chamado durante a desserialização para ler um objeto do tipo especificado a partir do fluxo especificado.</summary>
+      <returns>O objeto que foi lido.</returns>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a leitura.</param>
+      <param name="formatterLogger">O agente em que se registrarão os eventos.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BsonMediaTypeFormatter.ReadFromStreamAsync(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary>Chamado durante a desserialização para ler um objeto do tipo especificado a partir do fluxo especificado.</summary>
+      <returns>Uma tarefa cujo resultado será a instância do objeto lido.</returns>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo lido.</param>
+      <param name="formatterLogger">O agente em que se registrarão os eventos.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BsonMediaTypeFormatter.WriteToStream(System.Type,System.Object,System.IO.Stream,System.Text.Encoding)">
+      <summary>Chamado durante a serialização para gravar um objeto do tipo especificado para o fluxo especificado.</summary>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="value">O objeto a ser gravado.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a gravação.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.BufferedMediaTypeFormatter">
+      <summary>Representa uma classe auxiliar para permitir um formatador síncrono sobre a infraestrutura do formatador assíncrono.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.BufferedMediaTypeFormatter" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.#ctor(System.Net.Http.Formatting.BufferedMediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.BufferedMediaTypeFormatter" />.</summary>
+      <param name="formatter">A instância de <see cref="T:System.Net.Http.Formatting.BufferedMediaTypeFormatter" /> da qual copiar configurações.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.BufferedMediaTypeFormatter.BufferSize">
+      <summary>Obtém ou define o tamanho sugerido do buffer a ser usado com fluxos em bytes.</summary>
+      <returns>O tamanho sugerido do buffer a ser usado com fluxos em bytes.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.ReadFromStream(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary>Lê de forma síncrona a partir do fluxo armazenado em buffer.</summary>
+      <returns>Um objeto do <paramref name="type" /> em questão.</returns>
+      <param name="type">O tipo de objeto a ser desserializado.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nulo.</param>
+      <param name="formatterLogger">O <see cref="T:System.Net.Http.Formatting.IFormatterLogger" /> em que se registrará os eventos.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.ReadFromStream(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger,System.Threading.CancellationToken)">
+      <summary>Lê de forma síncrona a partir do fluxo armazenado em buffer.</summary>
+      <returns>Um objeto do <paramref name="type" /> em questão.</returns>
+      <param name="type">O tipo de objeto a ser desserializado.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nulo.</param>
+      <param name="formatterLogger">O <see cref="T:System.Net.Http.Formatting.IFormatterLogger" /> em que se registrará os eventos.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.ReadFromStreamAsync(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary>Lê, de forma assíncrona, a partir do fluxo armazenado em buffer.</summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="type">O tipo de objeto a ser desserializado.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nulo.</param>
+      <param name="formatterLogger">O <see cref="T:System.Net.Http.Formatting.IFormatterLogger" /> em que se registrará os eventos.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.ReadFromStreamAsync(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger,System.Threading.CancellationToken)">
+      <summary>Lê, de forma assíncrona, a partir do fluxo armazenado em buffer.</summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="type">O tipo de objeto a ser desserializado.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nulo.</param>
+      <param name="formatterLogger">O <see cref="T:System.Net.Http.Formatting.IFormatterLogger" /> em que se registrará os eventos.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.WriteToStream(System.Type,System.Object,System.IO.Stream,System.Net.Http.HttpContent)">
+      <summary>Grava de forma síncrona no fluxo armazenado em buffer.</summary>
+      <param name="type">O tipo de objeto a ser serializado.</param>
+      <param name="value">O valor do objeto a ser gravado.Pode ser nulo.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nulo.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.WriteToStream(System.Type,System.Object,System.IO.Stream,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+      <summary>Grava de forma síncrona no fluxo armazenado em buffer.</summary>
+      <param name="type">O tipo de objeto a ser serializado.</param>
+      <param name="value">O valor do objeto a ser gravado.Pode ser nulo.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nulo.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.WriteToStreamAsync(System.Type,System.Object,System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext)">
+      <summary>Grava de forma assíncrona no fluxo armazenado em buffer.</summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="type">O tipo de objeto a ser serializado.</param>
+      <param name="value">O valor do objeto a ser gravado.Pode ser nula.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nulo.</param>
+      <param name="transportContext">O contexto do transporte.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.BufferedMediaTypeFormatter.WriteToStreamAsync(System.Type,System.Object,System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.CancellationToken)">
+      <summary>Grava de forma assíncrona no fluxo armazenado em buffer.</summary>
+      <returns>Um objeto de tarefa que representa a operação assíncrona.</returns>
+      <param name="type">O tipo de objeto a ser serializado.</param>
+      <param name="value">O valor do objeto a ser gravado.Pode ser nula.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nulo.</param>
+      <param name="transportContext">O contexto do transporte.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.ContentNegotiationResult">
+      <summary> Representa o resultado da negociação de conteúdo realizada usando &lt;see cref="M:System.Net.Http.Formatting.IContentNegotiator.Negotiate(System.Type,System.Net.Http.HttpRequestMessage,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})" /&gt;</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.ContentNegotiationResult.#ctor(System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary> Cria o objeto de resultado da negociação de conteúdo. </summary>
+      <param name="formatter">O formatador.</param>
+      <param name="mediaType">O tipo de mídia preferido.Pode ser nulo.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.ContentNegotiationResult.Formatter">
+      <summary> O formatador escolhido para a serialização. </summary>
+    </member>
+    <member name="P:System.Net.Http.Formatting.ContentNegotiationResult.MediaType">
+      <summary>O tipo de mídia associado ao formatador escolhido para a serialização.Pode ser nulo.</summary>
+    </member>
+    <member name="T:System.Net.Http.Formatting.DefaultContentNegotiator">
+      <summary> A implementação padrão do <see cref="T:System.Net.Http.Formatting.IContentNegotiator" />, que é usada para selecionar um <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> para um <see cref="T:System.Net.Http.HttpRequestMessage" /> ou <see cref="T:System.Net.Http.HttpResponseMessage" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.#ctor">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Formatting.DefaultContentNegotiator" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.#ctor(System.Boolean)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Formatting.DefaultContentNegotiator" />.</summary>
+      <param name="excludeMatchOnTypeOnly">verdadeiro para excluir os formatadores que correspondam somente ao tipo de objeto; caso contrário, falso.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.ComputeFormatterMatches(System.Type,System.Net.Http.HttpRequestMessage,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+      <summary>Determina quão bem cada formatador corresponde a uma solicitação HTTP.</summary>
+      <returns>Retorna uma coleção de objetos <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterMatch" /> que representam todas as correspondências.</returns>
+      <param name="type">O tipo a ser serializado.</param>
+      <param name="request">A solicitação.</param>
+      <param name="formatters">O conjunto de objetos de <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> entre os quais escolher.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.DefaultContentNegotiator.ExcludeMatchOnTypeOnly">
+      <summary>Se verdadeiro, excluir os formatadores que correspondam somente ao tipo de objeto; caso contrário, falso.</summary>
+      <returns>Retorna um <see cref="T:System.Boolean" />.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.MatchAcceptHeader(System.Collections.Generic.IEnumerable{System.Net.Http.Headers.MediaTypeWithQualityHeaderValue},System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Corresponde um conjunto de campos do cabeçalho Accept aos tipos de mídia que um formatador suporta.</summary>
+      <returns>Retorna um objeto <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterMatch" /> que indica a qualidade da correspondência, ou nulo se não houver nenhuma correspondência.</returns>
+      <param name="sortedAcceptValues">Uma lista de valores do cabeçalho Accept, classificados na ordem decrescente do fator q. É possível criar essa lista chamando o método <see cref="M:System.Net.Http.Formatting.DefaultContentNegotiator.SortStringWithQualityHeaderValuesByQFactor(System.Collections.Generic.ICollection{System.Net.Http.Headers.StringWithQualityHeaderValue})" />.</param>
+      <param name="formatter">O formatador ao qual corresponder.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.MatchMediaTypeMapping(System.Net.Http.HttpRequestMessage,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Corresponde uma solicitação aos objetos <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" /> no formatador do tipo de mídia.</summary>
+      <returns>Retorna um objeto <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterMatch" /> que indica a qualidade da correspondência, ou nulo se não houver nenhuma correspondência.</returns>
+      <param name="request">A solicitação a ser correspondida.</param>
+      <param name="formatter">O formatador do tipo de mídia.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.MatchRequestMediaType(System.Net.Http.HttpRequestMessage,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Corresponde o tipo de conteúdo de uma solicitação aos tipos de mídia que um formatador suporta.</summary>
+      <returns>Retorna um objeto <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterMatch" /> que indica a qualidade da correspondência, ou nulo se não houver nenhuma correspondência.</returns>
+      <param name="request">A solicitação a ser correspondida.</param>
+      <param name="formatter">O formatador ao qual corresponder.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.MatchType(System.Type,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Seleciona o primeiro tipo de mídia suportado de um formatador.</summary>
+      <returns>Retorna um <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterMatch" /> com <see cref="P:System.Net.Http.Formatting.MediaTypeFormatterMatch.Ranking" /> definido como MatchOnCanWriteType ou nulo, se não houver correspondência. Um <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterMatch" /> que indica a qualidade da correspondência, ou nulo se não houver nenhuma correspondência.</returns>
+      <param name="type">O tipo a ser correspondido.</param>
+      <param name="formatter">O formatador ao qual corresponder.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.Negotiate(System.Type,System.Net.Http.HttpRequestMessage,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+      <summary>Realiza a negociação de conteúdo selecionando o <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> mais adequado dentre os passados nos <paramref name="formatters" /> para a <paramref name="request" /> em questão, que pode serializar um objeto do <paramref name="type" /> determinado.</summary>
+      <returns>O resultado da negociação que contém a instância <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> mais adequada, ou null se não houver formatador adequado.</returns>
+      <param name="type">O tipo a ser serializado.</param>
+      <param name="request">A solicitação.</param>
+      <param name="formatters">O conjunto de objetos de <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> entre os quais escolher.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.SelectResponseCharacterEncoding(System.Net.Http.HttpRequestMessage,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Determina a melhor codificação de caractere para gravar a resposta.</summary>
+      <returns>Retorna a <see cref="T:System.Text.Encoding" /> que representa a melhor correspondência.</returns>
+      <param name="request">A solicitação.</param>
+      <param name="formatter">O formatador de mídia selecionado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.SelectResponseMediaTypeFormatter(System.Collections.Generic.ICollection{System.Net.Http.Formatting.MediaTypeFormatterMatch})">
+      <summary>Selecione a melhor correspondência entre as opções candidatas encontradas.</summary>
+      <returns>Retorna o objeto <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterMatch" /> que representa a melhor correspondência. </returns>
+      <param name="matches">A coleção de correspondências.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.ShouldMatchOnType(System.Collections.Generic.IEnumerable{System.Net.Http.Headers.MediaTypeWithQualityHeaderValue})">
+      <summary> Determina se irá corresponder com o tipo ou não. Isso é usado para determinar se deve-se gerar uma resposta 406 ou utilizar o formatador do tipo de mídia padrão caso não haja correspondência com algo na solicitação. Se ExcludeMatchOnTypeOnly for verdadeiro, não há correspondência de tipo a menos que não haja cabeçalhos de aceitação. </summary>
+      <returns>Verdadeiro se nenhum ExcludeMatchOnTypeOnly e cabeçalhos de aceitação com um fator q maior que 0,0 estiver presente.</returns>
+      <param name="sortedAcceptValues">Os valores de cabeçalho de aceitação classificados a corresponder.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.SortMediaTypeWithQualityHeaderValuesByQFactor(System.Collections.Generic.ICollection{System.Net.Http.Headers.MediaTypeWithQualityHeaderValue})">
+      <summary>Classifica os valores do cabeçalho Accept na ordem decrescente do fator q.</summary>
+      <returns>Retorna a lista classificada dos objetos MediaTypeWithQualityHeaderValue.</returns>
+      <param name="headerValues">Uma coleção de objetos StringWithQualityHeaderValue, representando os campos do cabeçalho.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.SortStringWithQualityHeaderValuesByQFactor(System.Collections.Generic.ICollection{System.Net.Http.Headers.StringWithQualityHeaderValue})">
+      <summary>Classifica uma lista de Accept-Charset, Accept-Encoding, Accept-Language ou de valores dos cabeçalhos relacionados por ordem decrescente ou de fator q.</summary>
+      <returns>Retorna a lista classificada dos objetos StringWithQualityHeaderValue.</returns>
+      <param name="headerValues">Uma coleção de objetos StringWithQualityHeaderValue, representando os campos do cabeçalho.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DefaultContentNegotiator.UpdateBestMatch(System.Net.Http.Formatting.MediaTypeFormatterMatch,System.Net.Http.Formatting.MediaTypeFormatterMatch)">
+      <summary>Avalia se uma correspondência é melhor que a atual.</summary>
+      <returns>Retorna qualquer objeto <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterMatch" /> que seja uma correspondência melhor.</returns>
+      <param name="current">A correspondência atual.</param>
+      <param name="potentialReplacement">A correspondência a ser avaliada em relação à correspondência atual.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.DelegatingEnumerable`1">
+      <summary> Classe auxiliar para serializar os tipos &lt;consulte cref="T:System.Collections.Generic.IEnumerable`1" /&gt; delegando-os a uma implementação concreta."/&amp;gt;. </summary>
+      <typeparam name="T">A implementação de interface para o proxy.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DelegatingEnumerable`1.#ctor">
+      <summary>Inicializa um DelegatingEnumerable.Esse construtor é necessário para que o <see cref="T:System.Runtime.Serialization.DataContractSerializer" /> funcione.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DelegatingEnumerable`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+      <summary>Inicializa um DelegatingEnumerable com &lt;consulte cref="T:System.Collections.Generic.IEnumerable`1" /&gt;.Essa é uma classe auxiliar para passar por proxy as interfaces &lt;consulte cref="T:System.Collections.Generic.IEnumerable`1" /&gt; do <see cref="T:System.Xml.Serialization.XmlSerializer" />.</summary>
+      <param name="source">A instância &lt;consulte cref="T:System.Collections.Generic.IEnumerable`1" /&gt; a partir da qual obter o enumerador.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DelegatingEnumerable`1.Add(System.Object)">
+      <summary>Este método não está implementado, mas é necessário para que a serialização funcione.Não utilize.</summary>
+      <param name="item">O item a ser adicionado.Não utilizado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DelegatingEnumerable`1.GetEnumerator">
+      <summary> Obtenha o enumerador da &lt;consulte cref="T:System.Collections.Generic.IEnumerable`1" /&gt; associada. </summary>
+      <returns>O enumerador da fonte &lt;consulte cref="T:System.Collections.Generic.IEnumerable`1" /&gt;.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.DelegatingEnumerable`1.System#Collections#IEnumerable#GetEnumerator">
+      <summary> Obtenha o enumerador da &lt;consulte cref="T:System.Collections.Generic.IEnumerable`1" /&gt; associada. </summary>
+      <returns>O enumerador da fonte &lt;consulte cref="T:System.Collections.Generic.IEnumerable`1" /&gt;.</returns>
+    </member>
+    <member name="T:System.Net.Http.Formatting.FormDataCollection">
+      <summary>Representa a coleção de dados do formulário.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormDataCollection.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Formatting.FormDataCollection" />.</summary>
+      <param name="pairs">Os pares.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormDataCollection.#ctor(System.String)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Formatting.FormDataCollection" />.</summary>
+      <param name="query">A consulta.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormDataCollection.#ctor(System.Uri)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Formatting.FormDataCollection" />.</summary>
+      <param name="uri">O URI</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormDataCollection.Get(System.String)">
+      <summary>Obtém a coleção de dados do formulário.</summary>
+      <returns>A coleção de dados do formulário.</returns>
+      <param name="key">A chave.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormDataCollection.GetEnumerator">
+      <summary>Obtém um enumerável que itera por meio da coleção.</summary>
+      <returns>O enumerável que itera por meio da coleção.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormDataCollection.GetValues(System.String)">
+      <summary>Obtém os valores da coleção de dados do formulário.</summary>
+      <returns>Os valores da coleção de dados do formulário.</returns>
+      <param name="key">A chave.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.FormDataCollection.Item(System.String)">
+      <summary>Obtém os valores associados a determinada chave.Se houver vários valores, eles serão encadeados.</summary>
+      <returns>Valores associados a determinada chave.Se houver vários valores, eles serão encadeados.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormDataCollection.ReadAsNameValueCollection">
+      <summary>Lê a coleção de dados do formulário como uma coleção de valor do nome.</summary>
+      <returns>A coleção de dados do formulário como uma coleção de valor do nome.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormDataCollection.System#Collections#IEnumerable#GetEnumerator">
+      <summary>Obtém um enumerável que itera por meio da coleção.</summary>
+      <returns>O enumerável que itera por meio da coleção.</returns>
+    </member>
+    <member name="T:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter">
+      <summary>A classe <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> para lidar com dados terminados em URL do formulário HTML, também conhecidos como application/x-www-form-urlencoded.  </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter.#ctor(System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter" />.</summary>
+      <param name="formatter">A instância de <see cref="T:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter" /> da qual copiar configurações.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter.CanReadType(System.Type)">
+      <summary>Consulta se o <see cref="T:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter" /> pode desserializar um objeto do tipo especificado.</summary>
+      <returns>verdadeiro se o <see cref="T:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter" /> puder desserializar o tipo; caso contrário, falso.</returns>
+      <param name="type">O tipo a ser desserializado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter.CanWriteType(System.Type)">
+      <summary>Consulta se o <see cref="T:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter" /> pode serializar um objeto do tipo especificado.</summary>
+      <returns>verdadeiro se o <see cref="T:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter" /> puder serializar o tipo; caso contrário, falso.</returns>
+      <param name="type">O tipo a ser serializado.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter.DefaultMediaType">
+      <summary>Obtém o tipo de mídia padrão para os dados codificados de URL do formulário HTML, que é application/x-www-form-urlencoded.</summary>
+      <returns>O tipo de mídia padrão para os dados codificados de URL do formulário HTML.</returns>
+    </member>
+    <member name="P:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter.MaxDepth">
+      <summary>Obtém ou define a profundidade máxima permitida para este formatador.</summary>
+      <returns>A profundidade máxima.</returns>
+    </member>
+    <member name="P:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter.ReadBufferSize">
+      <summary>Obtém ou define o tamanho do buffer ao ler o fluxo de entrada.</summary>
+      <returns>O tamanho do buffer.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter.ReadFromStreamAsync(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary> Desserializa um objeto do tipo especificado de forma assíncrona.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task" /> cujo resultado será a instância do objeto lido.</returns>
+      <param name="type">O tipo de objeto a ser desserializado.</param>
+      <param name="readStream">O <see cref="T:System.IO.Stream" /> a ser lido.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo lido.</param>
+      <param name="formatterLogger">O <see cref="T:System.Net.Http.Formatting.IFormatterLogger" /> em que se registrará os eventos.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.IContentNegotiator">
+      <summary>Realiza a negociação de conteúdo.Este é o processo de seleção de um gravador de resposta (formatador) em conformidade com os valores de cabeçalho na solicitação.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.IContentNegotiator.Negotiate(System.Type,System.Net.Http.HttpRequestMessage,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+      <summary> Realiza a negociação de conteúdo selecionando o <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> mais adequado entre os passados nos formatadores para a solicitação fornecida que pode serializar um objeto do tipo fornecido. </summary>
+      <returns>O resultado da negociação que contém a instância do <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> mais adequada, ou nulo se não houver formatador adequado.</returns>
+      <param name="type">O tipo a ser serializado.</param>
+      <param name="request">A mensagem de solicitação, que contém os valores de cabeçalho usados para realizar a negociação.</param>
+      <param name="formatters">O conjunto de objetos de <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> entre os quais escolher.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.IFormatterLogger">
+      <summary>Especifica uma interface de retorno de chamada que o formatador poderá usar para registrar erros em log durante a leitura.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.IFormatterLogger.LogError(System.String,System.Exception)">
+      <summary>Registra um erro.</summary>
+      <param name="errorPath">O caminho para o membro para o qual o erro está sendo registrado.</param>
+      <param name="exception">A mensagem de erro.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.IFormatterLogger.LogError(System.String,System.String)">
+      <summary>Registra um erro.</summary>
+      <param name="errorPath">O caminho para o membro para o qual o erro está sendo registrado.</param>
+      <param name="errorMessage">A mensagem de erro a ser registrada.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.IRequiredMemberSelector">
+      <summary>Define o método que determina se um membro em particular é necessário na desserialização.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.IRequiredMemberSelector.IsRequiredMember(System.Reflection.MemberInfo)">
+      <summary>Determina se um membro em particular é necessário na desserialização.</summary>
+      <returns>verdadeiro se o <paramref name="member" /> deve ser tratado como um membro necessário, caso contrário, falso.</returns>
+      <param name="member">O <see cref="T:System.Reflection.MemberInfo" /> a ser desserializado.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.JsonContractResolver">
+      <summary>Representa o <see cref="T:Newtonsoft.Json.Serialization.IContractResolver" /> padrão usado por <see cref="T:System.Net.Http.Formatting.JsonMediaTypeFormatter" />.Usa o <see cref="T:System.Net.Http.Formatting.IRequiredMemberSelector" /> do formatador para selecionar os membros necessários e reconhece a anotação do tipo <see cref="T:System.SerializableAttribute" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonContractResolver.#ctor(System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.JsonContractResolver" />.</summary>
+      <param name="formatter">O formatador a ser usado para resolver membros necessários.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)">
+      <summary>Cria uma propriedade na classe especificada usando os parâmetros especificados.</summary>
+      <returns>Um <see cref="T:Newtonsoft.Json.Serialization.JsonProperty" /> a ser criado na classe especificada usando os parâmetros especificados.</returns>
+      <param name="member">As informações do membro.</param>
+      <param name="memberSerialization">A serialização do membro.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.JsonMediaTypeFormatter">
+      <summary>Representa a classe de <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> para lidar com JSON. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.#ctor">
+      <summary> Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.JsonMediaTypeFormatter" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.#ctor(System.Net.Http.Formatting.JsonMediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.JsonMediaTypeFormatter" />.</summary>
+      <param name="formatter">A instância de <see cref="T:System.Net.Http.Formatting.JsonMediaTypeFormatter" /> da qual copiar configurações.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.CanReadType(System.Type)">
+      <summary>Determina se este <see cref="T:System.Net.Http.Formatting.JsonMediaTypeFormatter" /> pode ler objetos do <paramref name="type" /> especificado.</summary>
+      <returns>verdadeiro se os objetos deste <paramref name="type" /> puderem ser lidos, caso contrário, falso.</returns>
+      <param name="type">O tipo do objeto que será lido.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.CanWriteType(System.Type)">
+      <summary>Determina se este <see cref="T:System.Net.Http.Formatting.JsonMediaTypeFormatter" /> pode gravar objetos do <paramref name="type" /> especificado.</summary>
+      <returns>verdadeiro se os objetos deste <paramref name="type" /> puderem ser gravados, caso contrário, falso.</returns>
+      <param name="type">O tipo do objeto que será gravado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.CreateDataContractSerializer(System.Type)">
+      <summary>Chamado durante a desserialização a obter o <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" />.</summary>
+      <returns>O objeto usado para serialização.</returns>
+      <param name="type">O tipo de objeto que será serializado ou desserializado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.CreateJsonReader(System.Type,System.IO.Stream,System.Text.Encoding)">
+      <summary>Chamado durante a desserialização a obter o <see cref="T:Newtonsoft.Json.JsonReader" />.</summary>
+      <returns>O leitor a ser usado durante desserialização.</returns>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a leitura.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.CreateJsonWriter(System.Type,System.IO.Stream,System.Text.Encoding)">
+      <summary>Chamado durante a serialização a obter o <see cref="T:Newtonsoft.Json.JsonWriter" />.</summary>
+      <returns>O gravador a ser usado durante serialização.</returns>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a gravação.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.JsonMediaTypeFormatter.DefaultMediaType">
+      <summary>Obtém o tipo de mídia padrão para JSON, ou seja, "application/json".</summary>
+      <returns>O <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> para JSON.</returns>
+    </member>
+    <member name="P:System.Net.Http.Formatting.JsonMediaTypeFormatter.Indent">
+      <summary> Obtém ou define um valor que indica se é preciso recuar os elementos ao gravar dados.  </summary>
+      <returns>verdadeiro se para recuar os elementos ao gravar os dados; caso contrário, falso.</returns>
+    </member>
+    <member name="P:System.Net.Http.Formatting.JsonMediaTypeFormatter.MaxDepth">
+      <summary>Obtém ou define a profundidade máxima permitida para este formatador.</summary>
+      <returns>A profundidade máxima permitida por este formatador.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.ReadFromStream(System.Type,System.IO.Stream,System.Text.Encoding,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary>Chamado durante a desserialização para ler um objeto do tipo especificado a partir do fluxo especificado.</summary>
+      <returns>O objeto que foi lido.</returns>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="readStream">O fluxo a partir do qual será feita a leitura.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a leitura.</param>
+      <param name="formatterLogger">O agente em que se registrarão os eventos.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.JsonMediaTypeFormatter.UseDataContractJsonSerializer">
+      <summary> Obtém ou define um valor que indica se é preciso usar o <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" /> por padrão. </summary>
+      <returns>verdadeiro se <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" /> estiver como padrão; caso contrário, falso.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.WriteToStream(System.Type,System.Object,System.IO.Stream,System.Text.Encoding)">
+      <summary>Chamado durante a serialização para gravar um objeto do tipo especificado para o fluxo especificado.</summary>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="value">O objeto a ser gravado.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="effectiveEncoding">A codificação a ser usada durante a gravação.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.JsonMediaTypeFormatter.WriteToStreamAsync(System.Type,System.Object,System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.CancellationToken)">
+      <summary>Chamado durante a serialização para gravar um objeto do tipo especificado para o fluxo especificado.</summary>
+      <returns>Retorna <see cref="T:System.Threading.Tasks.Task" />.</returns>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="value">O objeto a ser gravado.</param>
+      <param name="writeStream">O fluxo para o qual gravar.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo gravado.</param>
+      <param name="transportContext">O contexto do transporte.</param>
+      <param name="cancellationToken">O token para monitorar o cancelamento.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.MediaTypeFormatter">
+      <summary> Classe básica que lida com a serialização e desserialização de objetos fortemente tipados que usam <see cref="T:System.Net.Http.ObjectContent" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.#ctor(System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" />.</summary>
+      <param name="formatter">A instância de <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> da qual copiar configurações.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.CanReadType(System.Type)">
+      <summary>Consulta se este <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> pode desserializar um objeto do tipo especificado.</summary>
+      <returns>verdadeiro se o <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> puder desserializar o tipo; caso contrário, falso.</returns>
+      <param name="type">O tipo a ser desserializado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.CanWriteType(System.Type)">
+      <summary>Consulta se este <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> pode serializar um objeto do tipo especificado.</summary>
+      <returns>verdadeiro se o <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> puder serializar o tipo; caso contrário, falso.</returns>
+      <param name="type">O tipo a ser serializado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.GetDefaultValueForType(System.Type)">
+      <summary>Obtém o valor padrão do tipo especificado.</summary>
+      <returns>O valor padrão.</returns>
+      <param name="type">O tipo para o qual obter o valor padrão.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.GetPerRequestFormatterInstance(System.Type,System.Net.Http.HttpRequestMessage,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary>Retorna uma instância especializada do <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> que pode formatar uma resposta para os parâmetros em questão.</summary>
+      <returns>Retorna <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" />.</returns>
+      <param name="type">O tipo a ser formatado.</param>
+      <param name="request">A solicitação.</param>
+      <param name="mediaType">O tipo de mídia.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatter.MaxHttpCollectionKeys">
+      <summary>Obtém ou define o número máximo de chaves armazenadas em um T: <see cref="System.Collections.Specialized.NameValueCollection" />.</summary>
+      <returns>O número máximo de chaves.</returns>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatter.MediaTypeMappings">
+      <summary>Obtém a coleção mutável de objetos <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" /> que correspondem às solicitações HTTP para os tipos de mídia.</summary>
+      <returns>A coleção <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" />.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.ReadFromStreamAsync(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary>Desserializa um objeto do tipo especificado de forma assíncrona.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task" /> cujo resultado será um objeto do tipo determinado.</returns>
+      <param name="type">O tipo de objeto a ser desserializado.</param>
+      <param name="readStream">O <see cref="T:System.IO.Stream" /> a ser lido.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nula.</param>
+      <param name="formatterLogger">O <see cref="T:System.Net.Http.Formatting.IFormatterLogger" /> em que se registrará os eventos.</param>
+      <exception cref="T:System.NotSupportedException">Os tipos derivados precisam ser compatíveis com a gravação.</exception>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.ReadFromStreamAsync(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger,System.Threading.CancellationToken)">
+      <summary>Desserializa um objeto do tipo especificado de forma assíncrona.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task" /> cujo resultado será um objeto do tipo determinado.</returns>
+      <param name="type">O tipo de objeto a ser desserializado.</param>
+      <param name="readStream">O <see cref="T:System.IO.Stream" /> a ser lido.</param>
+      <param name="content">O <see cref="T:System.Net.Http.HttpContent" />, se disponível.Pode ser nula.</param>
+      <param name="formatterLogger">O <see cref="T:System.Net.Http.Formatting.IFormatterLogger" /> em que se registrará os eventos.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatter.RequiredMemberSelector">
+      <summary>Obtém ou define a instância do <see cref="T:System.Net.Http.Formatting.IRequiredMemberSelector" /> usado para determinar os membros necessários.</summary>
+      <returns>A instância <see cref="T:System.Net.Http.Formatting.IRequiredMemberSelector" />.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.SelectCharacterEncoding(System.Net.Http.Headers.HttpContentHeaders)">
+      <summary>Determina a melhor codificação de caractere para ler ou gravar um corpo de entidade HTTP, tendo em vista um conjunto de cabeçalhos de conteúdo.</summary>
+      <returns>A codificação que representa a melhor opção.</returns>
+      <param name="contentHeaders">Os cabeçalhos do conteúdo.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.SetDefaultContentHeaders(System.Type,System.Net.Http.Headers.HttpContentHeaders,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary>Define os cabeçalhos padrão para o conteúdo que será formatado usando este formatador.Este método é chamado pelo construtor de <see cref="T:System.Net.Http.ObjectContent" />.Esta implementação define o cabeçalho Content-Type para o valor do mediaType, caso este não seja nulo.Se for nulo, define o Content-Type para o tipo de mídia padrão deste formatador.Se o Content-Type não especificar um conjunto de caracteres, ele será definido usando a <see cref="T:System.Text.Encoding" /> configurada deste formatador.</summary>
+      <param name="type">O tipo do objeto que está sendo serializado.Consulte <see cref="T:System.Net.Http.ObjectContent" />.</param>
+      <param name="headers">Os cabeçalhos de conteúdo que devem ser configurados.</param>
+      <param name="mediaType">O tipo de mídia autorizado.Pode ser nulo.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatter.SupportedEncodings">
+      <summary>Obtém a coleção mutável de codificações de caracteres suportadas por este <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" />.</summary>
+      <returns>A coleção de objetos <see cref="T:System.Text.Encoding" />.</returns>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatter.SupportedMediaTypes">
+      <summary>Obtém a coleção mutável de tipos de mídia suportados por este <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" />.</summary>
+      <returns>A coleção de objetos <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" />.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.WriteToStreamAsync(System.Type,System.Object,System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext)">
+      <summary>Grava um objeto do tipo especificado de forma assíncrona.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task" /> que realizará a gravação.</returns>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="value">O valor do objeto a ser gravado.Pode ser nula.</param>
+      <param name="writeStream">O <see cref="T:System.IO.Stream" /> no qual será gravado.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" />, se houver.Pode ser nula.</param>
+      <param name="transportContext">Os <see cref="T:System.Net.TransportContext" />, se houver.Pode ser nula.</param>
+      <exception cref="T:System.NotSupportedException">Os tipos derivados precisam ser compatíveis com a gravação.</exception>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatter.WriteToStreamAsync(System.Type,System.Object,System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.CancellationToken)">
+      <summary>Grava um objeto do tipo especificado de forma assíncrona.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task" /> que realizará a gravação.</returns>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="value">O valor do objeto a ser gravado.Pode ser nula.</param>
+      <param name="writeStream">O <see cref="T:System.IO.Stream" /> no qual será gravado.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" />, se houver.Pode ser nula.</param>
+      <param name="transportContext">Os <see cref="T:System.Net.TransportContext" />, se houver.Pode ser nula.</param>
+      <param name="cancellationToken">O token para cancelar a operação.</param>
+      <exception cref="T:System.NotSupportedException">Os tipos derivados precisam ser compatíveis com a gravação.</exception>
+    </member>
+    <member name="T:System.Net.Http.Formatting.MediaTypeFormatterCollection">
+      <summary> A classe da coleção que contém as instâncias do <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.#ctor">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterCollection" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.#ctor(System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterCollection" />.</summary>
+      <param name="formatters">Uma coleção de instâncias do <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> a ser colocada na coleção.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.AddRange(System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+      <summary>Adiciona os elementos da coleção especificada no final de <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterCollection" />.</summary>
+      <param name="items">Os itens que devem ser adicionado no final de <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterCollection" />. A própria coleção de itens não pode ser <see cref="null" />, mas pode conter elementos que sejam <see cref="null" />.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.ClearItems">
+      <summary>Remove todos os itens da coleção.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.FindReader(System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary>Auxiliar para pesquisar uma coleção para um formatador que pode ler o tipo .NET no mediaType fornecido.</summary>
+      <returns>O formatador que pode ler o tipo. Nulo se nenhum formatador for encontrado.</returns>
+      <param name="type">O tipo .NET a ser lido</param>
+      <param name="mediaType">O tipo de mídia com o qual corresponder.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.FindWriter(System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary>Auxiliar para pesquisar uma coleção para um formatador que pode gravar o tipo .NET no mediaType em questão.</summary>
+      <returns>O formatador que pode gravar o tipo. Nulo se nenhum formatador for encontrado.</returns>
+      <param name="type">O tipo .NET a ser lido</param>
+      <param name="mediaType">O tipo de mídia com o qual corresponder.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatterCollection.FormUrlEncodedFormatter">
+      <summary>Obtém o <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> a ser usado para dados application/x-www-form-urlencoded.</summary>
+      <returns>O <see cref="T:System.Net.Http.Formatting.FormUrlEncodedMediaTypeFormatter" /> a ser usado para dados application/x-www-form-urlencoded.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.InsertItem(System.Int32,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Insere o item especificado no índice especificado na coleção.</summary>
+      <param name="index">O índice no qual inserir.</param>
+      <param name="item">O item a inserir.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.InsertRange(System.Int32,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+      <summary>Insere os elementos de uma coleção no <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterCollection" /> no índice especificado.</summary>
+      <param name="index">O índice baseado em zero em que os novos elementos devem ser inseridos.</param>
+      <param name="items">Os itens que devem ser inseridos no <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterCollection" />. A própria coleção de itens não pode ser <see cref="null" />, mas pode conter elementos que sejam <see cref="null" />.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.IsTypeExcludedFromValidation(System.Type)">
+      <summary>Retorna verdadeiro se o tipo é um dos tipos definidos de forma flexível que devem ser excluídos da validação.</summary>
+      <returns>verdadeiro se o tipo deve ser excluído; caso contrário, falso.</returns>
+      <param name="type">O <see cref="T:System.Type" /> .NET a ser validado.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatterCollection.JsonFormatter">
+      <summary>Obtém o <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> a ser usado para JSON.</summary>
+      <returns>O <see cref="T:System.Net.Http.Formatting.JsonMediaTypeFormatter" /> a ser usado para JSON.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.RemoveItem(System.Int32)">
+      <summary>Remove o item no índice especificado.</summary>
+      <param name="index">O índice do item a ser removido.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterCollection.SetItem(System.Int32,System.Net.Http.Formatting.MediaTypeFormatter)">
+      <summary>Atribui o item no índice especificado na coleção.</summary>
+      <param name="index">O índice no qual inserir.</param>
+      <param name="item">O item a ser atribuído.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatterCollection.XmlFormatter">
+      <summary>Obtém o <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> a ser usado para XML.</summary>
+      <returns>O <see cref="T:System.Net.Http.Formatting.XmlMediaTypeFormatter" /> a ser usado para XML.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterExtensions.AddQueryStringMapping(System.Net.Http.Formatting.MediaTypeFormatter,System.String,System.String,System.Net.Http.Headers.MediaTypeHeaderValue)"></member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterExtensions.AddQueryStringMapping(System.Net.Http.Formatting.MediaTypeFormatter,System.String,System.String,System.String)"></member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterExtensions.AddRequestHeaderMapping(System.Net.Http.Formatting.MediaTypeFormatter,System.String,System.String,System.StringComparison,System.Boolean,System.Net.Http.Headers.MediaTypeHeaderValue)"></member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterExtensions.AddRequestHeaderMapping(System.Net.Http.Formatting.MediaTypeFormatter,System.String,System.String,System.StringComparison,System.Boolean,System.String)"></member>
+    <member name="T:System.Net.Http.Formatting.MediaTypeFormatterMatch">
+      <summary> Esta classe descreve quão bem um <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> específico corresponde a uma solicitação. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeFormatterMatch.#ctor(System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,System.Nullable{System.Double},System.Net.Http.Formatting.MediaTypeFormatterMatchRanking)">
+      <summary> Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.MediaTypeFormatterMatch" />. </summary>
+      <param name="formatter">O formatador correspondente.</param>
+      <param name="mediaType">O tipo de mídia.Pode ser nulo, caso em que o tipo de mídia application/octet-stream é usado.</param>
+      <param name="quality">A qualidade da correspondência.Pode ser nula, caso em que é considerada uma correspondência total com um valor de 1,0</param>
+      <param name="ranking">O tipo de correspondência.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatterMatch.Formatter">
+      <summary> Obtém os formatadores de tipo de mídia. </summary>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatterMatch.MediaType">
+      <summary> Obtém o tipo de mídia correspondente. </summary>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatterMatch.Quality">
+      <summary> Obtém a qualidade da correspondência </summary>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeFormatterMatch.Ranking">
+      <summary> Obtém o tipo de correspondência que ocorreu. </summary>
+    </member>
+    <member name="T:System.Net.Http.Formatting.MediaTypeFormatterMatchRanking">
+      <summary> Contém informações sobre em que grau um <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> corresponde às preferências explícitas ou implícitas encontradas em uma solicitação de entrada. </summary>
+    </member>
+    <member name="F:System.Net.Http.Formatting.MediaTypeFormatterMatchRanking.MatchOnCanWriteType">
+      <summary> Correspondeu a um tipo, o que significa que o formatador pode serializar o tipo.</summary>
+    </member>
+    <member name="F:System.Net.Http.Formatting.MediaTypeFormatterMatchRanking.MatchOnRequestAcceptHeaderAllMediaRange">
+      <summary>Correspondeu a um intervalo explícito “*/*” no cabeçalho Accept.</summary>
+    </member>
+    <member name="F:System.Net.Http.Formatting.MediaTypeFormatterMatchRanking.MatchOnRequestAcceptHeaderLiteral">
+      <summary>Correspondeu a um cabeçalho Accept literal explícito, como “application/json”.</summary>
+    </member>
+    <member name="F:System.Net.Http.Formatting.MediaTypeFormatterMatchRanking.MatchOnRequestAcceptHeaderSubtypeMediaRange">
+      <summary>Correspondeu a um intervalo de subtipo explícito em um cabeçalho Accept, como “application/*”.</summary>
+    </member>
+    <member name="F:System.Net.Http.Formatting.MediaTypeFormatterMatchRanking.MatchOnRequestMediaType">
+      <summary> Correspondeu ao tipo de mídia do corpo da entidade na mensagem de solicitação HTTP.</summary>
+    </member>
+    <member name="F:System.Net.Http.Formatting.MediaTypeFormatterMatchRanking.MatchOnRequestWithMediaTypeMapping">
+      <summary> Correspondeu ao <see cref="T:System.Net.Http.HttpRequestMessage" /> após ter aplicado as várias <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" />s. </summary>
+    </member>
+    <member name="F:System.Net.Http.Formatting.MediaTypeFormatterMatchRanking.None">
+      <summary> Nenhuma correspondência foi encontrada </summary>
+    </member>
+    <member name="T:System.Net.Http.Formatting.MediaTypeMapping">
+      <summary> Uma classe básica abstrata usada para criar uma associação entre instâncias de <see cref="T:System.Net.Http.HttpRequestMessage" /> ou de <see cref="T:System.Net.Http.HttpResponseMessage" /> que têm certas características e um <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> específico.  </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeMapping.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary> Inicializa uma nova instância de um <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" /> com o valor de mediaType fornecido. </summary>
+      <param name="mediaType"> A <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> associada às instâncias de <see cref="T:System.Net.Http.HttpRequestMessage" /> ou de <see cref="T:System.Net.Http.HttpResponseMessage" /> que têm as características fornecidas do <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" />. </param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeMapping.#ctor(System.String)">
+      <summary> Inicializa uma nova instância de um <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" /> com o valor de mediaType fornecido. </summary>
+      <param name="mediaType"> A <see cref="T:System.String" /> associada às instâncias de <see cref="T:System.Net.Http.HttpRequestMessage" /> ou de <see cref="T:System.Net.Http.HttpResponseMessage" /> que têm as características fornecidas do <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" />. </param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.MediaTypeMapping.MediaType">
+      <summary> Obtém o <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> associado às instâncias de <see cref="T:System.Net.Http.HttpRequestMessage" /> ou de <see cref="T:System.Net.Http.HttpResponseMessage" /> que têm as características fornecidas do <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.MediaTypeMapping.TryMatchMediaType(System.Net.Http.HttpRequestMessage)">
+      <summary> Retorna a qualidade da correspondência do <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> associado à solicitação. </summary>
+      <returns>A qualidade da correspondência.Deve estar entre 0.0 e 1.0.O valor igual a 0.0 significa que não houve correspondência.O valor igual a 1.0 significa que houve correspondência completa.</returns>
+      <param name="request"> A <see cref="T:System.Net.Http.HttpRequestMessage" /> a ser avaliada para as características associadas ao <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> do <see cref="T:System.Net.Http.Formatting.MediaTypeMapping" />. </param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.QueryStringMapping">
+      <summary> A classe que fornece os <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" />s das cadeias de consulta. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.QueryStringMapping.#ctor(System.String,System.String,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary> Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.QueryStringMapping" />. </summary>
+      <param name="queryStringParameterName">O nome do parâmetro da cadeia de consulta a ser correspondido, se houver.</param>
+      <param name="queryStringParameterValue">O valor do parâmetro da cadeia de consulta especificado pelo queryStringParameterName.</param>
+      <param name="mediaType">O <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> a ser usado se o parâmetro de consulta especificado pelo queryStringParameterName estiver presente e atribuído ao valor especificado pelo queryStringParameterValue.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.QueryStringMapping.#ctor(System.String,System.String,System.String)">
+      <summary> Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.QueryStringMapping" />. </summary>
+      <param name="queryStringParameterName">O nome do parâmetro da cadeia de consulta a ser correspondido, se houver.</param>
+      <param name="queryStringParameterValue">O valor do parâmetro da cadeia de consulta especificado pelo queryStringParameterName.</param>
+      <param name="mediaType">O tipo de mídia a ser usado se o parâmetro de consulta especificado pelo queryStringParameterName estiver presente e atribuído ao valor especificado pelo queryStringParameterValue.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.QueryStringMapping.QueryStringParameterName">
+      <summary> Obtém o nome do parâmetro da cadeia de consulta. </summary>
+    </member>
+    <member name="P:System.Net.Http.Formatting.QueryStringMapping.QueryStringParameterValue">
+      <summary> Obtém o valor do parâmetro da cadeia de consulta. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.QueryStringMapping.TryMatchMediaType(System.Net.Http.HttpRequestMessage)">
+      <summary> Retorna um valor que indica se a instância <see cref="T:System.Net.Http.Formatting.QueryStringMapping" /> atual pode retornar um <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> da solicitação. </summary>
+      <returns>Se esta instância puder produzir um <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> da solicitação, retorna 1.0; caso contrário, 0.0.</returns>
+      <param name="request">O <see cref="T:System.Net.Http.HttpRequestMessage" /> a ser verificado.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.RequestHeaderMapping">
+      <summary>Esta classe fornece um mapeamento de um campo de cabeçalho de solicitação HTTP arbitrário para um <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> usado para selecionar instâncias <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" />, a fim de manipular o corpo da entidade de um <see cref="T:System.Net.Http.HttpRequestMessage" /> ou <see cref="T:System.Net.Http.HttpResponseMessage" />.&lt;comentários&gt;Esta classe verifica apenas os campos de cabeçalho associados a <see cref="M:HttpRequestMessage.Headers" /> para uma correspondência.Ele não verifica os campos de cabeçalho associados às instâncias de <see cref="M:HttpResponseMessage.Headers" /> ou de <see cref="M:HttpContent.Headers" />.&lt;/comentários&gt;</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.RequestHeaderMapping.#ctor(System.String,System.String,System.StringComparison,System.Boolean,System.Net.Http.Headers.MediaTypeHeaderValue)">
+      <summary> Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.RequestHeaderMapping" />. </summary>
+      <param name="headerName">Nome do cabeçalho a ser correspondido.</param>
+      <param name="headerValue">O valor do cabeçalho a ser correspondido.</param>
+      <param name="valueComparison">A <see cref="T:System.StringComparison" /> a ser usada ao corresponder o headerValue.</param>
+      <param name="isValueSubstring">se definido como verdadeiro, headerValue será considerado uma correspondência se for igual à subcadeia de caracteres do valor de cabeçalho real.</param>
+      <param name="mediaType">O <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> a ser usado se headerName e headerValue forem considerados correspondências.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.RequestHeaderMapping.#ctor(System.String,System.String,System.StringComparison,System.Boolean,System.String)">
+      <summary> Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.RequestHeaderMapping" />. </summary>
+      <param name="headerName">Nome do cabeçalho a ser correspondido.</param>
+      <param name="headerValue">O valor do cabeçalho a ser correspondido.</param>
+      <param name="valueComparison">A comparação de valor a ser usada ao corresponder o headerValue.</param>
+      <param name="isValueSubstring">se definido como verdadeiro, headerValue será considerado uma correspondência se for igual à subcadeia de caracteres do valor de cabeçalho real.</param>
+      <param name="mediaType">O tipo de mídia a ser usado se o headerName e o headerValue  forem considerados correspondências.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.RequestHeaderMapping.HeaderName">
+      <summary> Obtém o nome do cabeçalho a corresponder. </summary>
+    </member>
+    <member name="P:System.Net.Http.Formatting.RequestHeaderMapping.HeaderValue">
+      <summary> Obtém o valor do cabeçalho a corresponder. </summary>
+    </member>
+    <member name="P:System.Net.Http.Formatting.RequestHeaderMapping.HeaderValueComparison">
+      <summary> Obtém a <see cref="T:System.StringComparison" /> a ser usada ao corresponder com o <see cref="M:HeaderValue" />. </summary>
+    </member>
+    <member name="P:System.Net.Http.Formatting.RequestHeaderMapping.IsValueSubstring">
+      <summary>Obtém um valor que indica se <see cref="M:HeaderValue" /> tem correspondência como subcadeia de caracteres do valor real do cabeçalho.Esta instância é uma subcadeia de caracteres do valor.</summary>
+      <returns>verdadeiro<see cref="P:System.Net.Http.Formatting.RequestHeaderMapping.HeaderValue" />falso</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.RequestHeaderMapping.TryMatchMediaType(System.Net.Http.HttpRequestMessage)">
+      <summary> Retorna um valor que indica se a instância <see cref="T:System.Net.Http.Formatting.RequestHeaderMapping" /> atual pode retornar um <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> da solicitação. </summary>
+      <returns>A qualidade da correspondência.Deve estar entre 0.0 e 1.0.O valor igual a 0.0 significa que não houve correspondência.O valor igual a 1.0 significa que houve correspondência completa.</returns>
+      <param name="request">O <see cref="T:System.Net.Http.HttpRequestMessage" /> a ser verificado.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.XmlHttpRequestHeaderMapping">
+      <summary> Um <see cref="T:System.Net.Http.Formatting.RequestHeaderMapping" /> que mapeia o campo do cabeçalho http X-Requested-With definido por AJAX XmlHttpRequest (XHR) para o tipo de mídia application/json se nenhum campo de cabeçalho Accept explícito estiver presente na solicitação. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlHttpRequestHeaderMapping.#ctor">
+      <summary> Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Formatting.XmlHttpRequestHeaderMapping" />. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlHttpRequestHeaderMapping.TryMatchMediaType(System.Net.Http.HttpRequestMessage)">
+      <summary> Retorna um valor que indica se a instância <see cref="T:System.Net.Http.Formatting.RequestHeaderMapping" /> atual pode retornar um <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue" /> da solicitação. </summary>
+      <returns>A qualidade da correspondência.O valor igual a 0,0 significa que não houve correspondência.Um valor de 1,0 significa uma correspondência total e que a solicitação foi feita usando XmlHttpRequest sem um cabeçalho Accept.</returns>
+      <param name="request">O <see cref="T:System.Net.Http.HttpRequestMessage" /> a ser verificado.</param>
+    </member>
+    <member name="T:System.Net.Http.Formatting.XmlMediaTypeFormatter">
+      <summary>A classe do <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter" /> para lidar com Xml. </summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.XmlMediaTypeFormatter" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.#ctor(System.Net.Http.Formatting.XmlMediaTypeFormatter)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Formatting.XmlMediaTypeFormatter" />.</summary>
+      <param name="formatter">A instância de <see cref="T:System.Net.Http.Formatting.XmlMediaTypeFormatter" /> da qual copiar configurações.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.CanReadType(System.Type)">
+      <summary>Consulta se o <see cref="T:System.Net.Http.Formatting.XmlMediaTypeFormatter" /> pode desserializar um objeto do tipo especificado.</summary>
+      <returns>verdadeiro se o <see cref="T:System.Net.Http.Formatting.XmlMediaTypeFormatter" /> puder desserializar o tipo; caso contrário, falso.</returns>
+      <param name="type">O tipo a ser desserializado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.CanWriteType(System.Type)">
+      <summary>Consulta se o <see cref="T:System.Net.Http.Formatting.XmlMediaTypeFormatter" /> pode serializar um objeto do tipo especificado.</summary>
+      <returns>verdadeiro se o <see cref="T:System.Net.Http.Formatting.XmlMediaTypeFormatter" /> puder serializar o tipo; caso contrário, falso.</returns>
+      <param name="type">O tipo a ser serializado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.CreateDataContractSerializer(System.Type)">
+      <summary>Chamado durante a desserialização a obter o serializador DataContractSerializer.</summary>
+      <returns>O objeto usado para serialização.</returns>
+      <param name="type">O tipo de objeto que será serializado ou desserializado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.CreateXmlReader(System.IO.Stream,System.Net.Http.HttpContent)">
+      <summary>Chamado durante a desserialização para obter o leitor de XML a ser usado para ler objetos do fluxo.</summary>
+      <returns>O <see cref="T:System.Xml.XmlReader" /> a ser usado para ler objetos.</returns>
+      <param name="readStream">O <see cref="T:System.IO.Stream" /> de onde ler.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo lido.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.CreateXmlSerializer(System.Type)">
+      <summary>Chamado durante a desserialização a obter o serializador XML.</summary>
+      <returns>O objeto usado para serialização.</returns>
+      <param name="type">O tipo de objeto que será serializado ou desserializado.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.CreateXmlWriter(System.IO.Stream,System.Net.Http.HttpContent)">
+      <summary>Chamado durante a serialização para obter o gravador XML a ser usado para gravar objetos no fluxo.</summary>
+      <returns>O <see cref="T:System.Xml.XmlWriter" /> a ser usado para gravar objetos.</returns>
+      <param name="writeStream">O <see cref="T:System.IO.Stream" /> para o qual gravar.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo gravado.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.XmlMediaTypeFormatter.DefaultMediaType">
+      <summary>Obtém o tipo de mídia padrão para o formatador XML.</summary>
+      <returns>O tipo de mídia padrão, que é "application/xml".</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.GetDeserializer(System.Type,System.Net.Http.HttpContent)">
+      <summary>Chamado durante a desserialização para obter o serializador XML a ser usado para desserializar objetos.</summary>
+      <returns>Uma instância de <see cref="T:System.Runtime.Serialization.XmlObjectSerializer" /> ou <see cref="T:System.Xml.Serialization.XmlSerializer" /> a ser usada para desserializar o objeto.</returns>
+      <param name="type">O tipo de objeto a ser desserializado.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo lido.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.GetSerializer(System.Type,System.Object,System.Net.Http.HttpContent)">
+      <summary>Chamado durante a serialização para obter o serializador XML a ser usado para serializar objetos.</summary>
+      <returns>Uma instância de <see cref="T:System.Runtime.Serialization.XmlObjectSerializer" /> ou <see cref="T:System.Xml.Serialization.XmlSerializer" /> a ser usada para serializar o objeto.</returns>
+      <param name="type">O tipo de objeto a ser serializado.</param>
+      <param name="value">O objeto a ser serializado.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo gravado.</param>
+    </member>
+    <member name="P:System.Net.Http.Formatting.XmlMediaTypeFormatter.Indent">
+      <summary>Obtém ou define um valor que indica se é preciso recuar os elementos ao gravar dados.</summary>
+      <returns>verdadeiro para elementos de recuo; caso contrário, falso.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.InvokeCreateXmlReader(System.IO.Stream,System.Net.Http.HttpContent)">
+      <summary>Este método é compatível com a infraestrutura e não se destina a ser usado diretamente de seu código.</summary>
+      <returns>Retorna <see cref="T:System.Xml.XmlReader" />.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.InvokeCreateXmlWriter(System.IO.Stream,System.Net.Http.HttpContent)">
+      <summary>Este método é compatível com a infraestrutura e não se destina a ser usado diretamente de seu código.</summary>
+      <returns>Retorna <see cref="T:System.Xml.XmlWriter" />.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.InvokeGetDeserializer(System.Type,System.Net.Http.HttpContent)">
+      <summary>Este método é compatível com a infraestrutura e não se destina a ser usado diretamente de seu código.</summary>
+      <returns>Retorna <see cref="T:System.Object" />.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.InvokeGetSerializer(System.Type,System.Object,System.Net.Http.HttpContent)">
+      <summary>Este método é compatível com a infraestrutura e não se destina a ser usado diretamente de seu código.</summary>
+      <returns>Retorna <see cref="T:System.Object" />.</returns>
+    </member>
+    <member name="P:System.Net.Http.Formatting.XmlMediaTypeFormatter.MaxDepth">
+      <summary>Obtém e define a profundidade máxima do nó aninhado.</summary>
+      <returns>A profundidade máxima do nó aninhado.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.ReadFromStreamAsync(System.Type,System.IO.Stream,System.Net.Http.HttpContent,System.Net.Http.Formatting.IFormatterLogger)">
+      <summary> Chamado durante a desserialização para ler um objeto do tipo especificado a partir do readStream especificado. </summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task" /> cujo resultado será a instância do objeto lido.</returns>
+      <param name="type">O tipo de objeto a ser lido.</param>
+      <param name="readStream">A <see cref="T:System.IO.Stream" /> a partir da qual será feita a leitura.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo lido.</param>
+      <param name="formatterLogger">O <see cref="T:System.Net.Http.Formatting.IFormatterLogger" /> em que se registrará os eventos.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.RemoveSerializer(System.Type)">
+      <summary>Cancela o registro do serializador atualmente associado ao tipo em questão.</summary>
+      <returns>verdadeiro se um serializador foi anteriormente registrado para o tipo; caso contrário, falso.</returns>
+      <param name="type">O tipo de objeto cujo serializador deve ser removido.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.SetSerializer``1(System.Runtime.Serialization.XmlObjectSerializer)">
+      <summary>Registra um <see cref="T:System.Runtime.Serialization.XmlObjectSerializer" /> para ler ou gravar objetos de um tipo especificado.</summary>
+      <param name="serializer">A instância <see cref="T:System.Runtime.Serialization.XmlObjectSerializer" />.</param>
+      <typeparam name="T">O tipo de objeto que será serializado ou desserializado com o <paramref name="serializer" />.</typeparam>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.SetSerializer(System.Type,System.Runtime.Serialization.XmlObjectSerializer)">
+      <summary>Registra um <see cref="T:System.Runtime.Serialization.XmlObjectSerializer" /> para ler ou gravar objetos de um tipo especificado.</summary>
+      <param name="type">O tipo de objeto que será serializado ou desserializado com o <paramref name="serializer" />.</param>
+      <param name="serializer">A instância <see cref="T:System.Runtime.Serialization.XmlObjectSerializer" />.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.SetSerializer(System.Type,System.Xml.Serialization.XmlSerializer)">
+      <summary>Registra um <see cref="T:System.Xml.Serialization.XmlSerializer" /> para ler ou gravar objetos de um tipo especificado.</summary>
+      <param name="type">O tipo de objeto que será serializado ou desserializado com o <paramref name="serializer" />.</param>
+      <param name="serializer">A instância <see cref="T:System.Xml.Serialization.XmlSerializer" />.</param>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.SetSerializer``1(System.Xml.Serialization.XmlSerializer)">
+      <summary>Registra um <see cref="T:System.Xml.Serialization.XmlSerializer" /> para ler ou gravar objetos de um tipo especificado.</summary>
+      <param name="serializer">A instância <see cref="T:System.Xml.Serialization.XmlSerializer" />.</param>
+      <typeparam name="T">O tipo de objeto que será serializado ou desserializado com o <paramref name="serializer" />.</typeparam>
+    </member>
+    <member name="P:System.Net.Http.Formatting.XmlMediaTypeFormatter.UseXmlSerializer">
+      <summary>Obtém ou define um valor, indicando se o formatador XML utiliza o <see cref="T:System.Xml.Serialization.XmlSerializer" /> como serializador padrão, em vez de usar o <see cref="T:System.Runtime.Serialization.DataContractSerializer" />.</summary>
+      <returns>Se verdadeiro, o formatador utiliza o <see cref="T:System.Xml.Serialization.XmlSerializer" /> por padrão; caso contrário, utiliza o <see cref="T:System.Runtime.Serialization.DataContractSerializer" /> por padrão.</returns>
+    </member>
+    <member name="P:System.Net.Http.Formatting.XmlMediaTypeFormatter.WriterSettings">
+      <summary>Obtém as configurações a serem usadas durante a gravação.</summary>
+      <returns>As configurações a serem usadas durante a gravação.</returns>
+    </member>
+    <member name="M:System.Net.Http.Formatting.XmlMediaTypeFormatter.WriteToStreamAsync(System.Type,System.Object,System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.CancellationToken)">
+      <summary>Chamado durante a serialização para gravar um objeto do tipo especificado no writeStream especificado.</summary>
+      <returns>Uma <see cref="T:System.Threading.Tasks.Task" /> que gravará o valor no fluxo.</returns>
+      <param name="type">O tipo de objeto a ser gravado.</param>
+      <param name="value">O objeto a ser gravado.</param>
+      <param name="writeStream">O <see cref="T:System.IO.Stream" /> no qual será gravado.</param>
+      <param name="content">Os <see cref="T:System.Net.Http.HttpContent" /> do conteúdo que está sendo gravado.</param>
+      <param name="transportContext">A <see cref="T:System.Net.TransportContext" />.</param>
+      <param name="cancellationToken">O token para monitorar o cancelamento.</param>
+    </member>
+    <member name="T:System.Net.Http.Handlers.HttpProgressEventArgs">
+      <summary>Representa os argumentos do evento para o progresso do HTTP.</summary>
+    </member>
+    <member name="M:System.Net.Http.Handlers.HttpProgressEventArgs.#ctor(System.Int32,System.Object,System.Int64,System.Nullable{System.Int64})">
+      <summary> Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Handlers.HttpProgressEventArgs" />. </summary>
+      <param name="progressPercentage">A porcentagem do progresso.</param>
+      <param name="userToken">O token do usuário.</param>
+      <param name="bytesTransferred">O número de bytes transferidos.</param>
+      <param name="totalBytes">O número total de bytes transferidos.</param>
+    </member>
+    <member name="P:System.Net.Http.Handlers.HttpProgressEventArgs.BytesTransferred"></member>
+    <member name="P:System.Net.Http.Handlers.HttpProgressEventArgs.TotalBytes"></member>
+    <member name="T:System.Net.Http.Handlers.ProgressMessageHandler">
+      <summary>Gera a notificação do progresso de ambas as entidades de solicitação sendo carregadas e as entidades de resposta sendo baixadas.</summary>
+    </member>
+    <member name="M:System.Net.Http.Handlers.ProgressMessageHandler.#ctor">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Handlers.ProgressMessageHandler" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Handlers.ProgressMessageHandler.#ctor(System.Net.Http.HttpMessageHandler)">
+      <summary>Inicia uma nova instância da classe <see cref="T:System.Net.Http.Handlers.ProgressMessageHandler" />.</summary>
+      <param name="innerHandler">O manipulador de mensagens internas.</param>
+    </member>
+    <member name="E:System.Net.Http.Handlers.ProgressMessageHandler.HttpReceiveProgress">
+      <summary>Ocorre quando as entidades do evento estão sendo baixadas.</summary>
+    </member>
+    <member name="E:System.Net.Http.Handlers.ProgressMessageHandler.HttpSendProgress">
+      <summary>Ocorre quando as entidades do evento estão sendo carregadas.</summary>
+    </member>
+    <member name="M:System.Net.Http.Handlers.ProgressMessageHandler.OnHttpRequestProgress(System.Net.Http.HttpRequestMessage,System.Net.Http.Handlers.HttpProgressEventArgs)">
+      <summary>Gera o evento que manipula a solicitação do progresso.</summary>
+      <param name="request">A solicitação.</param>
+      <param name="e">O manipulador de evento da solicitação.</param>
+    </member>
+    <member name="M:System.Net.Http.Handlers.ProgressMessageHandler.OnHttpResponseProgress(System.Net.Http.HttpRequestMessage,System.Net.Http.Handlers.HttpProgressEventArgs)">
+      <summary>Gera o evento que manipula a resposta do progresso.</summary>
+      <param name="request">A solicitação.</param>
+      <param name="e">O manipulador de evento da solicitação.</param>
+    </member>
+    <member name="M:System.Net.Http.Handlers.ProgressMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+      <summary>Envia a mensagem de progresso especificada para um servidor HTTP para entrega.</summary>
+      <returns>A mensagem de progresso enviada.</returns>
+      <param name="request">A solicitação.</param>
+      <param name="cancellationToken">O token de cancelamento.</param>
+    </member>
+    <member name="T:System.Net.Http.Headers.CookieHeaderValue">
+      <summary>Fornece o valor do cabeçalho de cookie.</summary>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieHeaderValue.#ctor">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Headers.CookieHeaderValue" />.</summary>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieHeaderValue.#ctor(System.String,System.Collections.Specialized.NameValueCollection)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Headers.CookieHeaderValue" />.</summary>
+      <param name="name">O valor do nome.</param>
+      <param name="values">Os valores.</param>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieHeaderValue.#ctor(System.String,System.String)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Headers.CookieHeaderValue" />.</summary>
+      <param name="name">O valor do nome.</param>
+      <param name="value">O valor.</param>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieHeaderValue.Clone">
+      <summary>Cria uma cópia superficial do valor do cookie.</summary>
+      <returns>Uma cópia superficial do valor do cookie.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieHeaderValue.Cookies">
+      <summary>Obtém uma coleção de cookies enviados pelo cliente.</summary>
+      <returns>Um objeto da coleção que representa as variáveis de cookie do cliente.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieHeaderValue.Domain">
+      <summary>Obtém ou define o domínio com o qual associar o cookie.</summary>
+      <returns>O nome do domínio com o qual associar o cookie.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieHeaderValue.Expires">
+      <summary>Obtém ou define a data e a hora de expiração do cookie.</summary>
+      <returns>A hora do dia (no cliente) em que o cookie expira.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieHeaderValue.HttpOnly">
+      <summary>Obtém ou define um valor que especifica se um cookie pode ser acessado pelo script do lado do cliente.</summary>
+      <returns>verdadeiro se o cookie tiver o atributo HttpOnly e não puder ser acessado através de um script do lado do cliente; caso contrário, falso.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieHeaderValue.Item(System.String)">
+      <summary>Obtém um atalho para a propriedade do cookie.</summary>
+      <returns>O valor do cookie.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieHeaderValue.MaxAge">
+      <summary>Obtém ou define a idade máxima permitida para um recurso.</summary>
+      <returns>A idade máxima permitida para um recurso.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieHeaderValue.Path">
+      <summary>Obtém ou define o caminho virtual para transmitir com o cookie atual.</summary>
+      <returns>O caminho virtual para transmitir com o cookie.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieHeaderValue.Secure">
+      <summary>Obtém ou define um valor que indica se deve transmitir o cookie usando SSl (Secure Sockets Layer) — ou seja, sobre HTTPS apenas.</summary>
+      <returns>verdadeiro para transmitir o cookie sobre uma conexão SSL (HTTPS); caso contrário, falso.</returns>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieHeaderValue.ToString">
+      <summary>Retorna uma cadeia de caracteres que representa o objeto atual.</summary>
+      <returns>Uma cadeia de caracteres que representa o objeto atual.</returns>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieHeaderValue.TryParse(System.String,System.Net.Http.Headers.CookieHeaderValue@)">
+      <summary>Indica um valor se a representação da cadeia de caracteres irá ser convertida.</summary>
+      <returns>verdadeiro se a representação da cadeia de caracteres irá ser convertida; caso contrário, falso.</returns>
+      <param name="input">O valor de entrada.</param>
+      <param name="parsedValue">O valor analisado a ser convertido.</param>
+    </member>
+    <member name="T:System.Net.Http.Headers.CookieState">
+      <summary>Contém o nome do cookie e o estado associado ao cookie.</summary>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieState.#ctor(System.String)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Headers.CookieState" />.</summary>
+      <param name="name">O nome do cookie.</param>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieState.#ctor(System.String,System.Collections.Specialized.NameValueCollection)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Headers.CookieState" />.</summary>
+      <param name="name">O nome do cookie.</param>
+      <param name="values">A coleção do par nome/valor do cookie.</param>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieState.#ctor(System.String,System.String)">
+      <summary>Inicializa uma nova instância da classe <see cref="T:System.Net.Http.Headers.CookieState" />.</summary>
+      <param name="name">O nome do cookie.</param>
+      <param name="value">O valor do cookie.</param>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieState.Clone">
+      <summary>Retorna um objeto novo que é uma cópia da instância atual.</summary>
+      <returns>Um objeto novo que é uma cópia da instância atual.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieState.Item(System.String)">
+      <summary>Obtém ou define o valor do cookie com o nome do cookie especificado, se os dados do cookie estiverem estruturados.</summary>
+      <returns>O valor do cookie com o nome do cookie especificado.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieState.Name">
+      <summary>Obtém ou define o nome do cookie.</summary>
+      <returns>O nome do cookie.</returns>
+    </member>
+    <member name="M:System.Net.Http.Headers.CookieState.ToString">
+      <summary>Retorna a representação da cadeia de caracteres do objeto atual.</summary>
+      <returns>A representação da cadeia de caracteres do objeto atual.</returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieState.Value">
+      <summary>Obtém ou define o valor do cookie, se os dados do cookie forem um valor de cadeia de caracteres simples.</summary>
+      <returns>O valor do cookie. </returns>
+    </member>
+    <member name="P:System.Net.Http.Headers.CookieState.Values">
+      <summary>Obtém ou define o conjunto do par nome/valor, se os dados do cookie estiverem estruturados.</summary>
+      <returns>A coleção do par nome/valor do cookie.</returns>
+    </member>
+  </members>
+</doc>

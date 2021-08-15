@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.Web.WebPages.Deployment</name>
+  </assembly>
+  <members>
+    <member name="T:System.Web.WebPages.Deployment.PreApplicationStartCode">
+      <summary>Fornece um ponto de registro para o código inicial pré-aplicativo para implantação das Páginas da Web.</summary>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.PreApplicationStartCode.Start">
+      <summary>Registra o código inicial pré-aplicativo para implantação das Páginas da Web.</summary>
+    </member>
+    <member name="T:System.Web.WebPages.Deployment.WebPagesDeployment">
+      <summary>Este tipo/membro é compatível com a infraestrutura .NET Framework e não se destina a ser usado diretamente de seu código.Fornece métodos que são usados ​​para obter informações de implantação sobre o aplicativo Web.</summary>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.WebPagesDeployment.GetAssemblyPath(System.Version)">
+      <summary>Este tipo/membro é compatível com a infraestrutura .NET Framework e não se destina a ser usado diretamente de seu código.Obtém o caminho de assembly para a implantação de Páginas da Web.</summary>
+      <returns>O caminho de assembly para a implantação de Páginas da Web.</returns>
+      <param name="version">A versão de Páginas da Web.</param>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.WebPagesDeployment.GetExplicitWebPagesVersion(System.String)">
+      <summary>Este tipo/membro é compatível com a infraestrutura .NET Framework e não se destina a ser usado diretamente de seu código.Obtém a versão de Páginas da Web de um determinado caminho binário.</summary>
+      <returns>A versão de Páginas da Web.</returns>
+      <param name="path">O caminho binário para as Páginas da Web.</param>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.WebPagesDeployment.GetIncompatibleDependencies(System.String)">
+      <summary>Este tipo/membro é compatível com a infraestrutura .NET Framework e não se destina a ser usado diretamente de seu código.Obtém as referências de assembly do caminho determinado independentemente da versão de Páginas da Web.</summary>
+      <returns>O dicionário contendo as referências assembly de Páginas da Web e sua versão.</returns>
+      <param name="appPath">O caminho para o aplicativo Páginas da Web.</param>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.WebPagesDeployment.GetMaxVersion">
+      <summary>Este tipo/membro é compatível com a infraestrutura .NET Framework e não se destina a ser usado diretamente de seu código.Obtém a versão máxima dos assemblies Páginas da Web carregados.</summary>
+      <returns>A versão máxima dos assemblies Páginas da Web carregados.</returns>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.WebPagesDeployment.GetVersion(System.String)">
+      <summary>Obtém a versão de Páginas da Web de um determinado caminho.</summary>
+      <returns>A versão de Páginas da Web.</returns>
+      <param name="path">O caminho do diretório raiz para o aplicativo.</param>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.WebPagesDeployment.GetVersionWithoutEnabledCheck(System.String)">
+      <summary>Este tipo/membro é compatível com a infraestrutura .NET Framework e não se destina a ser usado diretamente de seu código.Obtém a versão de Páginas da Web usando as definições de configuração com o caminho especificado.</summary>
+      <returns>A versão de Páginas da Web.</returns>
+      <param name="path">O caminho para as configurações do aplicativo.</param>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.WebPagesDeployment.GetWebPagesAssemblies">
+      <summary>Este tipo/membro é compatível com a infraestrutura .NET Framework e não se destina a ser usado diretamente de seu código.Retorna os assemblies para a implantação de Páginas da Web.</summary>
+      <returns>Uma lista contendo os assemblies para a implantação de Páginas da Web.</returns>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.WebPagesDeployment.IsEnabled(System.String)">
+      <summary>Este tipo/membro é compatível com a infraestrutura .NET Framework e não se destina a ser usado diretamente de seu código.Indica se a implantação de Páginas da Web está ativada.</summary>
+      <returns>verdadeiro se a implantação de Páginas da Web estiver ativada; caso contrário, falso.</returns>
+      <param name="path">O caminho para a implantação de Páginas da Web.</param>
+    </member>
+    <member name="M:System.Web.WebPages.Deployment.WebPagesDeployment.IsExplicitlyDisabled(System.String)">
+      <summary>Este tipo/membro é compatível com a infraestrutura .NET Framework e não se destina a ser usado diretamente de seu código.Indica se a implantação de Páginas da Web está desativada explicitamente.</summary>
+      <returns>verdadeiro se a implantação de Páginas da Web estiver desativada explicitamente; caso contrário, falso.</returns>
+      <param name="path">O caminho para a implantação de Páginas da Web.</param>
+    </member>
+  </members>
+</doc>
