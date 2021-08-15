@@ -46,7 +46,16 @@ Para importar todas as cotações da Awesome API, se faz necessário fazer um PO
 
 Além disso, para viabilizar o CRUD na aplicação, foram crios os seguintes endpoints:
 
-# PRINT MATHEUS AQUI
+`/api/services/app/Moeda/ImportarCotacoes`
+`/api/services/app/Moeda/ConverterMoedas`
+`/api/services/app/Moeda/ObterIdPorCodigo`
+`/api/services/app/Moeda/ApagarPorCodigo`
+`/api/services/app/Moeda/ObterMensagemNaoEncontrado`
+`/api/services/app/Moeda/Inserir`
+`/api/services/app/Moeda/ObterPorId`
+`/api/services/app/Moeda/ObterTodos`
+`/api/services/app/Moeda/ApgarPorId`
+
 ## Tecnologias utilizadas
 
   - .NET 5
