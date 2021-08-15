@@ -10,7 +10,7 @@ O fluxo básico da solução consiste em:
 3. O usuário solicita a cotação através do endpoint ConverterMoedas
 4. A aplicação busca na base de dados a cotação de cada moeda e realiza o cálculo a partir dos valores que estão armazenados na base.
 
-Usei uma base intermediária para armazenar as cotações em dólar para que houvesse uma maior disponibilidade do serviço, independendo de instabilidade de APIs terceiras. Assim, caso a API terceira não consiga atualizar os dados da base de dados, o nosso serviço ainda estará funcional e oferecendo a última cotação que foi armazenada no banco de dados.
+Usei uma base intermediária para armazenar as cotações em dólar para que houvesse uma maior disponibilidade do serviço, independendo de instabilidade de APIs terceiras. Assim, caso a API terceira não consiga atualizar os dados no PostgrezQL, o nosso serviço ainda estará funcional e oferecendo a última cotação que foi armazenada na base.
 
 Sobre a atualização, ela ocorre de forma assíncrona a cada chamada de conversão de moedas, assim a aplicação não cria um "lock" na requisição. Mesmo a operação de importação levar pouco tempo de execução, a ideia dessa abordagem é pensando em um cenário onde há centenas de moedas fictícias. Dessa forma, a importação tende a levar mais tempo.
 
@@ -60,8 +60,14 @@ Além disso, para viabilizar o CRUD na aplicação, foram crios os seguintes end
 
 Realizar o clone do repositório:
 ```
-$ python -m venv env
+$ git clone https://github.com/mattvidal/challenge-bravo.git
 ```
+
+Ir para o diretório do projeto principal da solução:
+```
+$ cd challenge-bravo\src\ChallengeBravo.Web.Host
+```
+
 Instalar o .NET 5 pelo snap, suas configurações, subir o banco de dados pelo docker-compose, realizar as migrations para a base e por fim, executar o comando para subir o projeto:
 ```
 $ sudo snap install dotnet-sdk --classic --channel=5.0 && sudo snap alias dotnet-sdk.dotnet dotnet && export DOTNET_ROOT=/snap/dotnet-sdk/current && sudo dotnet tool install --local dotnet-ef && sudo docker-compose up -d && sudo dotnet ef database update && sudo dotnet run --project ChallengeBravo.Web.Host.csproj
@@ -82,11 +88,14 @@ Estrutura do JSON:
 ```
 Com isso, a requisição retornará um accesstoken, que deverá ser utilizando no header das demais requisições, com authorization do tipo Bearer Token.
 
-A forma mais fácil é pelo próprio Swagger. Basta preencher os dados de usuário e senha, deixando o tenant em branco. Assim, poderá utilizar todos os métodos expostos na documentação.
+A forma mais fácil de testar essa web API é pelo próprio Swagger. Basta preencher os dados de usuário e senha, deixando o tenant em branco. Assim, poderá utilizar todos os métodos expostos na documentação.
 
 <img src="https://raw.githubusercontent.com/mattvidal/challenge-bravo/main/img/swagger1.png" alt=“Hurb” width=“24” />
 
 <img src="https://raw.githubusercontent.com/mattvidal/challenge-bravo/main/img/swagger2.png" alt=“Hurb” width=“24” />
 
-Para deixar o ambiente com pelo menos todas as moedas iniciais, por favor, chame o endpoint de importação de cotações: 
-Para fazer as migrações ao banco de dados, execute: `/api/services/app/Moeda/ImportarCotacoes`
+Para deixar o ambiente com pelo menos todas as moedas iniciais, por favor, chame o endpoint de importação de cotações: `/api/services/app/Moeda/ImportarCotacoes`
+
+Infelizmente não consegui colocar essa solução em um docker. O Visual Studio até oferece uns recursos para conteinerizar os projetos, mas não obtive sucesso para torná-lo funcional em tempo de entrega do desafio.
+
+Agradeço pela oportunidade e fico à disposição para possíveis esclarecimentos através do meu e-mail: matheuso.vidal@hotmail.com
