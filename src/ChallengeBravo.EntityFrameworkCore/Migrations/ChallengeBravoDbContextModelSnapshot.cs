@@ -1558,8 +1558,8 @@ namespace ChallengeBravo.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("text");
 
-                    b.Property<float>("ValorUSD")
-                        .HasColumnType("real");
+                    b.Property<double>("ValorUSD")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
