@@ -6,12 +6,14 @@ from rest_framework.decorators import action
 from .models import MyCoin
 from .serializers import MyCoinSerializer, ConvertSerializer
 from backend.services import Convert
+from .filterset import MyCoinFilter
 
 
 class MyCoinViewSet(viewsets.ModelViewSet):
     queryset = MyCoin.objects.all()
     serializer_class = MyCoinSerializer
     filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = MyCoinFilter
 
     @action(detail=False, methods=['get'], serializer_class=ConvertSerializer)
     def convert(self, request):
