@@ -1,13 +1,12 @@
 module.exports = {
-  HOST: "localhost",
-  USER: "root",
-  PASSWORD: "",
-  DB: "hurb",
-  dialect: "mysql",
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
+  dialect: 'mysql',
+  host: '127.0.0.1',
+  username: 'root',
+  password: '',
+  database: 'hurb',
+  define: {
+    timestamps: false,
+    underscored: true,
+    underscoredAll: true,
+  },
 };
