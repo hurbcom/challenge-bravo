@@ -1,3 +1,24 @@
+## Sobre o desenvolvimento
+
+A API suporta conversão entre moedas verídicas e fictícias. A cotação das moedas EUR, USD e BRL são retiradas da API FinnHub, já as cripto moedas BTC e ETH, tem suas cotações tiradas da API cryptoCompare. Para que o numero de requisições dessas APIs sejam esgotados e para que não haja disperdicio, foi adicionado um cache que atualiza as cotações apenas após 1 minuto ( esse tempo é configuravel) da ultima requisição.
+
+## API
+
+Segue abaixo o link da documentação da API pelo Postman:
+https://documenter.getpostman.com/view/2728659/Tzz8qwfn
+
+## Como rodar a aplicação
+
+A aplicação pode ser inicializado por Docker através dos comandos abaixo:
+
+`docker-compose build`
+
+`docker-compose up`
+
+
+A rota do aplicação será `http://localhost:3000`.
+O banco de dados pode ser acessado pela rota `localhost:3308`, usuário `root` e senha `root`.
+
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
