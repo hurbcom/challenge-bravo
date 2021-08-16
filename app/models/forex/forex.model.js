@@ -1,23 +1,35 @@
 const appConfig = require("../../config/app.config.js");
+const LocalForex = require("./localForex.model.js");
 const CryptoCompareForex = require("./cryptoCompareForex.model.js");
 const FinnHubForex = require("./finnHubForex.model.js");
 
 // constructor
 const Forex = class {
 
+  getCurrencies = () => {
+    const cryptoCompareForex = new CryptoCompareForex();
+    const finnHubForex = new FinnHubForex();
+
+    let data = [];
+    data = data.concat(cryptoCompareForex.getCurrencies(), finnHubForex.getCurrencies());
+    return data;
+  }
+
   // get all currencies rates
   getRates = (base) => {
     
+    const localForex = new LocalForex();
     const cryptoCompareForex = new CryptoCompareForex();
     const finnHubForex = new FinnHubForex();
 
     return Promise.all([
+        localForex.getRates(base),
         finnHubForex.getRates(base),
         cryptoCompareForex.getRates(base)
       ])
       .then((values) => {
 
-        let data = {...values[0].rates, ...values[1].rates};
+        let data = {...values[0].rates, ...values[1].rates, ...values[2].rates};
         return {
           'base': base,
           'rates': data

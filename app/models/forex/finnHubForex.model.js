@@ -1,3 +1,4 @@
+const appConfig = require("../../config/app.config.js");
 const finnHubConfig = require("../../config/finnHub.config.js");
 
 const NodeCache = require( "node-cache" );
@@ -9,6 +10,10 @@ api_key.apiKey = finnHubConfig.KEY;
 const finnhubClient = new FinnHub.DefaultApi();
 
 const FinnHubForex = class {
+
+  getCurrencies = () => {
+    return ['USD', 'BRL', 'EUR'];
+  }
 
   // get all currencies rates
   getRates = (base) => {
@@ -36,11 +41,16 @@ const FinnHubForex = class {
 
         // correcting rate for system format
         let processedData = {};
-        for(let currencyRow in data.quote)
-            processedData[currencyRow] = 1/data.quote[currencyRow];
+        for(let currencyRow in data.quote){
+
+          if(!this.getCurrencies().includes(currencyRow))
+            continue;
+          
+          processedData[currencyRow] = 1/data.quote[currencyRow];
+        }
 
         // updating cache
-        cache.set(cacheName, processedData, finnHubConfig.TTL);
+        cache.set(cacheName, processedData, appConfig.TTL);
 
         result['rates'] = processedData;
         resolve(result);

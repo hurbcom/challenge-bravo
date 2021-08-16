@@ -32,22 +32,27 @@ exports.create = (req, res) => {
 
   // transforming currency code to uppercase
   code = code.toUpperCase();
+  
+  // Create a Forex
+  let forex = new Forex();
+  if(forex.getCurrencies().includes(code))
+    res.status(400).send({ message: "Currency already registered" });
 
   // Create a Tutorial
-  const teste = {
+  const newCurrency = {
     'code': code,
     'usd_value': usd_value
   };
 
   // Save Tutorial in the database
-  Currency.create(teste)
+  Currency.create(newCurrency)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          "Currency already registered"
       });
     });
 };

@@ -1,3 +1,4 @@
+const appConfig = require("../../config/app.config.js");
 const cryptoCompareConfig = require("../../config/cryptoCompare.config.js");
 
 const NodeCache = require( "node-cache" );
@@ -8,6 +9,10 @@ const cryptoCompareClient = require('cryptocompare')
 cryptoCompareClient.setApiKey(cryptoCompareConfig.KEY)
 
 const cryptoCompareForex = class {
+
+  getCurrencies = () => {
+    return ['BTC', 'ETH'];
+  }
 
   // get all currencies rates
   getRates = (base) => {
@@ -33,11 +38,18 @@ const cryptoCompareForex = class {
 
           // correcting rate for system format
           let processedData = {};
-          for(let currencyRow in data)
+          for(let currencyRow in data){
+
+            if(!this.getCurrencies().includes(currencyRow))
+              continue;
+
             processedData[currencyRow] = data[currencyRow][base]
-  
+          }
+          
+          console.log(processedData);
+
           // updating cache          
-          cache.set(cacheName, processedData, cryptoCompareConfig.TTL);
+          cache.set(cacheName, processedData, appConfig.TTL);
 
           result['rates'] = processedData;
           resolve(result)
