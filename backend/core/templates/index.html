@@ -36,9 +36,9 @@
                             <label for="{{ form.to_coin.id_for_label }}">{{ form.to_coin.label }}</label>
                         </div>
                         <div class="form-floating mb-3">
-                            {{ form.amount.errors }}
                             {{ form.amount }}
                             <label for="{{ form.amount.id_for_label }}">{{ form.amount.label }}</label>
+                            {{ form.amount.errors }}
                         </div>
                         <div class="form-floating mb-3">
                             {{ form.value_converter.errors }}
