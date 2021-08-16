@@ -10,7 +10,10 @@ from .models import MyCoin
 def get_coins():
     apicoin = ApiCoin()
     currencies = apicoin.get_currencies()
-    currencies = [(k, v['currencyName']) for k, v in currencies.items()]
+    if not isinstance(currencies, int):
+        currencies = [(k, v['currencyName']) for k, v in currencies.items()]
+    else:
+        currencies = []
 
     mycoin = MyCoin.objects.all()
     for coin in mycoin:
