@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'backend.core',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,18 @@ SIMPLE_JWT = {
 
 API_COIN = config('API_COIN')
 API_COIN_KEY = config('API_COIN_KEY')
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis-app:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+CACHE_TTL = 60 * 4

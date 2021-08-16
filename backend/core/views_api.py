@@ -2,6 +2,10 @@ from rest_framework import viewsets, status
 from django_filters import rest_framework as filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
+from django.conf import settings
 
 from .models import MyCoin
 from .serializers import MyCoinSerializer, ConvertSerializer
@@ -33,3 +37,8 @@ class MyCoinViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @method_decorator(vary_on_cookie)
+    @method_decorator(cache_page(settings.CACHE_TTL))
+    def dispatch(self, *args, **kwargs):
+        return super(MyCoinViewSet, self).dispatch(*args, **kwargs)

@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+
+    backend-app:
+        build: .
+        container_name: backend-app
+        entrypoint: .docker/entrypoint.sh
+
+        volumes:
+            - ./:/var/www
+        ports:
+            - 8000:8000
+        env_file:
+            - ./.env
+        networks:
+            - app-network
+        depends_on:
+            - postgres-db
+            - redis
+        links:
+            - postgres-db
+            - redis
+
+    redis:
+        image: redis:alpine
+        container_name: redis-app
+        ports:
+            - 6379:6379
+        networks:
+            - app-network
+
+    postgres-db:
+        image: postgres:alpine
+        container_name: postgres-db
+        tty: true
+        ports:
+            - 5432:5432
+        volumes:
+            - ./.docker/dbdata:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_PASSWORD=gy49y6.@!.,
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=bravo_challenge
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
