@@ -1,3 +1,32 @@
+# Executando a Solução:
+- git clone
+- Crie o arquivo .env com base no .env_example
+- Preencher com os valores:
+```
+SECRET_KEY='django-insecure-(^*gx-!-rukm_l2#w0_eonuqio8&(v$*8*@xoi764tvdzo9n#u'
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1, .localhost
+API_COIN=https://prepaid.currconv.com/api/v7
+API_COIN_KEY=pr_4fe56e210684490c8b55360eda7b84dd
+REDIS_URL=redis://redis-app:6379
+```
+- docker-compose up
+- http://127.0.0.1:8000/ -> Página inicial
+- http://127.0.0.1:8000/api/v1/swagger/ -> Documentação e Testes API
+
+
+Caso não seja possível efetuar o cálculo substituir a API_COIN e API_COIN_KEY por abaixo, o plano no outro endereço é limitado.
+```
+API_COIN=https://free.currconv.com/api/v7
+API_COIN_KEY=5faaa7ebaa9306a86c30
+```
+Caso queira utilizar o banco de dados Postgres, é necessário conectar via psql para criação do banco de dados e setar a variável DATABASE_URL no arquivo .env conforme abaixo:
+```
+DATABASE_URL=postgres://postgres:gy49y6.@!.,@postgres-db:5432/bravo_challenge
+```
+
+#
+
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
@@ -26,7 +55,7 @@ Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem d
 
 Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
 
-Ref: 
+Ref:
 Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
 Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
 
