@@ -10,7 +10,7 @@ from django.conf import settings
 from .models import MyCoin
 from .serializers import MyCoinSerializer, ConvertSerializer
 from backend.services import Convert
-from .filterset import MyCoinFilter
+from .filterset import ConvertFilter, MyCoinFilter
 
 
 class MyCoinViewSet(viewsets.ModelViewSet):
@@ -19,9 +19,14 @@ class MyCoinViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = MyCoinFilter
 
-    @action(detail=False, methods=['get'], serializer_class=ConvertSerializer)
+    @action(
+        detail=False,
+        methods=['get'],
+        serializer_class=ConvertSerializer,
+        filter_class=ConvertFilter
+    )
     def convert(self, request):
-        from_coin = request.query_params.get('from')
+        from_coin = request.query_params.get('from_coin')
         to_coin = request.query_params.get('to')
         amount = float(request.query_params.get('amount', '1'))
 

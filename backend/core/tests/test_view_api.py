@@ -80,7 +80,7 @@ class ApiTest(TestCase):
         self.assertEqual(response.status_code, 204)
 
     def test_convert_coin(self):
-        querystring = '?from={}&to={}&amount=1'.format(
+        querystring = '?from_coin={}&to={}&amount=1'.format(
             self.mycoin_from.codecoin, self.mycoin_to.codecoin
         )
         response = self.client.get(
