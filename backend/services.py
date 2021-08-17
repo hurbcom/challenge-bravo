@@ -55,7 +55,7 @@ class Convert():
         apicoin = ApiCoin()
         convert = apicoin.set_convert(self._from_coin, self._to_coin)
 
-        if not isinstance(convert, int):
+        if not isinstance(convert, int) and convert:
             value_api_coin = convert[f'{self._from_coin}_{self._to_coin}']
             if mycoin_price_from > 1:
                 value_convert = (self._amount * (
