@@ -24,6 +24,8 @@ Caso queira utilizar o banco de dados Postgres, é necessário conectar via psql
 ```
 DATABASE_URL=postgres://postgres:gy49y6.@!.,@postgres-db:5432/bravo_challenge
 ```
+- A solução também encontra-se hospeda em: ``` https://challenge-bravo-talvane.herokuapp.com/ ```
+- Para suportar alta demanda foi adicionado o Redis como solução de cache para a api, atualizado a cada hora.
 
 #
 
