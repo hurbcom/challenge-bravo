@@ -156,10 +156,12 @@ API_COIN_KEY = config('API_COIN_KEY')
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
+REDIS_URL = config('REDIS_URL')
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis-app:6379/1",
+        "LOCATION": REDIS_URL + "/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
