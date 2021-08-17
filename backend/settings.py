@@ -168,4 +168,4 @@ CACHES = {
     }
 }
 
-CACHE_TTL = 60 * 4
+CACHE_TTL = 60 * 1
