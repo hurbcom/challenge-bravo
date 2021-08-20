@@ -1,0 +1,7 @@
+bottle
+sanic
+locust
+coverage
+redis
+autopep8
+pylint

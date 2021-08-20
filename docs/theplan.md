@@ -13,11 +13,11 @@
 2. USD must be the base currency for conversions;
 3. Must perform conversions using up-to-date and real rates;
 4. Must have these five currencies working by default: USD, BRL, EUR, BTC and ETH;
-5. Conversion API path must receive the following parameters: **originalCurrency**, **finalCurrency** and **valueToConvert**;
+5. Conversion API path must receive parameters that represent the following values: **original currency**, **target currency** and **value to convert**;
 6. Must have an endpoint for performing CRUD operations on fictitious currencies (user defined);
 7. Must support convertion between real and fictitious currencies;
 8. Project must run on macOS or Ubuntu;
-9. Project must be executed by means of only 4 commands: clone -> change into project directory -> dependency installation -> launch;
+9. Project must be executed by means of up to 4 commands: clone -> change into project directory -> dependency installation -> launch;
 10. API must pass a stress test of 1000 requests per second;
 11. API must use real convertion rates provided by other public convertion rate APIs;
 ### Optional:
@@ -27,17 +27,16 @@
 Predominant language: Python  
 
 Production libs:
-- Bottle;  
+- Bottle or Sanic;  
 - sqlite3;
-- psycopg2-binary;
+- redis;
 
 Development libs:  
-- Locust.io (relates #10);
+- locust (relates #10);
 - coverage;
 - unittest;
 
 Persistance:
-- PostgreSQL (production - relates #06, #07);
 - SQLite (development - relates #06, #07);
 - Redis (? - relates #10);
 
