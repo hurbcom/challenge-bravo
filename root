@@ -1,1 +1,2 @@
-# cronjob TBD
+# cronjob TBD 0 */1 * * *
+* * * * * curl http://localhost:8033 & echo "Cron ran!"

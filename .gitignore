@@ -1,5 +1,7 @@
 # Project specific
 docs/*.json
+utils/
+redis-bkp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

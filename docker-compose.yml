@@ -1,0 +1,18 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api.dockerfile
+    network_mode: host
+  cron:
+    build:
+      context: .
+      dockerfile: cron.dockerfile
+    network_mode: host
+  redis:
+    image: "redis:alpine"
+    volumes:
+      - ./redis-bkp:/data
+    ports:
+      - "6379:6379"
