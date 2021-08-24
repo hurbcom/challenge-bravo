@@ -2,6 +2,7 @@
 docs/*.json
 utils/
 redis-bkp/
+*.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

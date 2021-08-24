@@ -9,3 +9,6 @@ class RedisConnector:
 
     def get_connection(self):
         return self.__conn
+
+    def __del__(self):
+        self.__conn.close()

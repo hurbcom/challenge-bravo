@@ -1,10 +1,10 @@
 from sanic import Sanic
 from sanic.response import json
 
-from .redis_connector import RedisConnector
+from .convertion_service import ConvertionService
 
 app = Sanic("Currency convertion API")
-connection = RedisConnector().get_connection()
+convertion_service = ConvertionService()
 
 # TODO: remove def test() once completed
 
@@ -36,22 +36,17 @@ async def delete_currency(request):
 
 @app.get('/allUserCreated')
 async def get_all_user_created_currencies(request):
-    return json({'/getAllUserCreated': 'TODO: implementation pending'})
+    return json(convertion_service.get_all_user_created_currencies())
 
 
 @app.get('/allReal')
 async def get_all_real_currencies(request):
-    # manual exploration test only, will be removed in order to not break RGF
-    return_dict = {'currencies': []}
-    for currency in connection.scan_iter('curr_*'):
-        return_dict['currencies'].append(currency.decode('utf-8').replace('curr_', ''))
-    print(return_dict)
-    return json(return_dict)
+    return json(convertion_service.get_all_real_currencies())
 
 
 @app.get('/allCurrencies')
 async def get_all_currencies(request):
-    return json({'/getAllCurrencies': 'TODO: implementation pending'})
+    return json(convertion_service.get_all_currencies())
 
 
 if __name__ == '__main__':
