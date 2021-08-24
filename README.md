@@ -13,6 +13,9 @@ REDIS_URL=redis://redis-app:6379
 - docker-compose up
 - http://127.0.0.1:8000/ -> Página inicial
 - http://127.0.0.1:8000/api/v1/swagger/ -> Documentação e Testes API
+- https://challenge-bravo-talvane.herokuapp.com/api/v1/swagger/
+- Login: talvane
+- Pass: gy49y6.@!.,
 
 
 Caso não seja possível efetuar o cálculo substituir a API_COIN e API_COIN_KEY por abaixo, o plano no outro endereço é limitado.
