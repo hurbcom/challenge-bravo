@@ -87,6 +87,14 @@ class ConvertionService:
     # TODO: add guard clauses for empty args
     # TODO: add try-except structure for handling db errors
     def convert(self, currency_from, currency_to, amount):
+        cached_conversion = self.__redis_conn.get(
+            f'{currency_from}_{amount}_{currency_to}')
+
+        if(cached_conversion):
+            print(
+                f'Cached conversion found for {currency_from}_{amount}_{currency_to}. Returning cached value.')
+            return {'conversion': float(cached_conversion.decode('utf-8'))}
+
         from_rate = self.__redis_conn.get(f'curr_{currency_from}')
         to_rate = self.__redis_conn.get(f'curr_{currency_to}')
 
@@ -98,17 +106,9 @@ class ConvertionService:
             to_rate = self.get_by_name_user_created(currency_to)[
                 'result'][0][1]
 
-        cached_conversion = self.__redis_conn.get(
-            f'{currency_from}_{amount}_{currency_to}')
-        conversion = None
-
-        if(cached_conversion):
-            conversion = cached_conversion
-        else:
-            conversion = self.__calculate_conversion(
-                to_rate, from_rate, amount)
-            self.__redis_conn.setex(
-                f'{currency_from}_{amount}_{currency_to}', 120, conversion)
+        conversion = self.__calculate_conversion(to_rate, from_rate, amount)
+        self.__redis_conn.setex(
+            f'{currency_from}_{amount}_{currency_to}', 120, conversion)
 
         return {'conversion': conversion}
 

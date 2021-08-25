@@ -11,7 +11,7 @@ convertion_service = ConvertionService()
 async def convert(request):
     currency_to = request.args.get('to')
     currency_from = request.args.get('from')
-    amount = request.args.get('amount')
+    amount = float(request.args.get('amount'))
     return json(convertion_service.convert(currency_from, currency_to, amount))
 
 

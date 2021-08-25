@@ -1,2 +1,1 @@
-# cronjob TBD 0 */1 * * *
-* * * * * curl http://localhost:8033 & echo "Cron ran!"
+0 */1 * * * python3 /bin/cache_updater.py

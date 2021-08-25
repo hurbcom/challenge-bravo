@@ -66,7 +66,7 @@ class ConvertionServiceTestSuite(unittest.TestCase):
         currency_to = 'EUR'  # (to/from)*amount
         amount = 16
         response = service.convert(currency_from, currency_to, amount)
-        self.assertAlmostEqual(response['conversion'], 2.54, places=1)
+        self.assertAlmostEqual(response['conversion'], 2.60, places=1)
 
     def test_conversion_one_real_one_created(self):
         currency_from = 'USD'
@@ -83,7 +83,7 @@ class ConvertionServiceTestSuite(unittest.TestCase):
         amount = 16
         response = service.convert(
             currency_from, currency_to, amount)
-        self.assertAlmostEqual(response['conversion'], 11.41, places=1)
+        self.assertAlmostEqual(response['conversion'], 11.31, places=1)
 
     def test_conversion_both_created(self):
         currency_from = 'TEST'
