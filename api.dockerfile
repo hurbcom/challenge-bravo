@@ -8,4 +8,4 @@ COPY requirements.txt /app/requirements.txt
 RUN pip3 install -r requirements.txt
 # execution
 EXPOSE 8033
-CMD sanic src.api.app --port=8033
+CMD sanic src.api.app --port=8033 --workers=$(echo "$(expr $(nproc) - 1)")

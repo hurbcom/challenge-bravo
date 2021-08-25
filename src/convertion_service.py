@@ -91,8 +91,6 @@ class ConvertionService:
             f'{currency_from}_{amount}_{currency_to}')
 
         if(cached_conversion):
-            print(
-                f'Cached conversion found for {currency_from}_{amount}_{currency_to}. Returning cached value.')
             return {'conversion': float(cached_conversion.decode('utf-8'))}
 
         from_rate = self.__redis_conn.get(f'curr_{currency_from}')

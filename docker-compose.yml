@@ -10,6 +10,11 @@ services:
       context: .
       dockerfile: cron.dockerfile
     network_mode: host
+  locust:
+    build:
+      context: .
+      dockerfile: locust.dockerfile
+    network_mode: host
   redis:
     image: "redis:alpine"
     volumes:
