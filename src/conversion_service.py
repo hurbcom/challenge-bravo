@@ -14,51 +14,51 @@ class ConversionService:
     def get_all_real_currencies(self):
         currencies = [currency.decode('utf-8').replace(CURRENCY_PREFIX, '')
                       for currency in self.__redis_conn.scan_iter(f'{CURRENCY_PREFIX}*')]
-        return {'currencies': currencies}
+        return [{'currencies': currencies}, 200]
 
     def get_all_user_created_currencies(self):
         result = self.__reldb_connector.run_select_query(
             'SELECT NAME FROM USER_CURRENCY;')
-        return {'currencies': [entry[0] for entry in result]}
+        return [{'currencies': [entry[0] for entry in result]}, 200]
 
     # TODO: make query executions parallel
     def get_all_currencies(self):
-        real_currencies = self.get_all_real_currencies()
-        user_created_currencies = self.get_all_user_created_currencies()
+        [real_currencies, _] = self.get_all_real_currencies()
+        [user_created_currencies, _] = self.get_all_user_created_currencies()
         real_currencies['currencies'].extend(
             user_created_currencies['currencies'])
-        return {'currencies': real_currencies['currencies']}
+        return [{'currencies': real_currencies['currencies']}, 200]
 
     def get_by_name_user_created(self, target):
         result = self.__reldb_connector.run_select_query(
             'SELECT NAME, BASE_VALUE FROM USER_CURRENCY WHERE NAME = ?;', [target])
-        return {'result': result}
+        return [{'result': result}, 200]
 
     def get_by_name_real_currency(self, target):
         base_value = self.__redis_conn.get(f'{CURRENCY_PREFIX}{target}')
         if(base_value):
-            return {'name': target, 'base_value': float(base_value.decode('utf-8'))}
+            return [{'name': target, 'base_value': float(base_value.decode('utf-8'))}, 200]
         else:
-            return {}
+            return [{}, 404]
 
     def create_currency(self, name, base_value):
         result = self.__reldb_connector.run_insert_or_delete_query('''
             INSERT INTO USER_CURRENCY (NAME, BASE_VALUE)
             VALUES (?,?);
         ''', [name, base_value])
-        return result
+        return [{'success': result}, 200]
 
     def delete_currency(self, name):
         result = self.__reldb_connector.run_insert_or_delete_query('''
             DELETE FROM USER_CURRENCY WHERE NAME = ?;
         ''', [name])
-        return result
+        return [{'success': result}, 200]
 
     def update_currency(self, name, new_base_value):
         rows_affected = self.__reldb_connector.run_update_query('''
             UPDATE USER_CURRENCY SET BASE_VALUE = ? WHERE NAME = ?;
         ''', [new_base_value, name])
-        return {'rows_affected': rows_affected}
+        return [{'rows_affected': rows_affected}, 200]
 
     # TODO: add try-except for handling db errors
     def convert(self, currency_from, currency_to, amount):
@@ -68,29 +68,29 @@ class ConversionService:
         conversion = self.__guard_conversion(
             currency_from, currency_to, amount, cache_key)
         if(conversion != None):
-            return {'conversion': conversion}
+            return conversion
         # attempt conversion from scratch
         from_rate = self.__get_rate(currency_from)
         to_rate = self.__get_rate(currency_to)
         if(not from_rate or not to_rate):
-            return {'conversion':  "One of the currencies provided was not found. Double check your currencies and try again."}
+            return [{'conversion':  "One of the currencies provided was not found. Double check your currencies and try again."}, 404]
         # cache the conversion results
         conversion = self.__calculate_conversion(to_rate, from_rate, amount)
         self.__redis_conn.setex(cache_key, 120, conversion)
         # return conversion result
-        return {'conversion': conversion}
+        return [{'conversion': conversion}, 200]
 
     def __guard_conversion(self, currency_from, currency_to, amount, cache_key):
         # guard: amount must be valid
         if(amount <= 0.0):
-            return 'Amount must be higher than zero!'
+            return [{'conversion': 'Amount must be higher than zero!'}, 400]
         # guard: conversion currencies must be different
         if(currency_from == currency_to):
-            return amount
+            return [{'conversion': amount}, 200]
         # guard: check cache for this conversion and return it if found
         cached_conversion = self.__redis_conn.get(cache_key)
         if(cached_conversion):
-            return float(cached_conversion.decode('utf-8'))
+            return [{'conversion': float(cached_conversion.decode('utf-8'))}, 200]
         # return none if all guards passed
         return None
 
@@ -98,7 +98,8 @@ class ConversionService:
         try:
             rate = self.__redis_conn.get(f'{CURRENCY_PREFIX}{currency}')
             if(not rate):
-                rate = self.get_by_name_user_created(currency)['result'][0][1]
+                [result, _] = self.get_by_name_user_created(currency)
+                rate = result['result'][0][1]
             return rate
         except IndexError:
             return None
