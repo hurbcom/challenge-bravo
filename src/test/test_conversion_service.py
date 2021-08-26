@@ -128,3 +128,19 @@ class ConversionServiceTestSuite(unittest.TestCase):
         target = 'INVALID'
         result = service.get_by_name_real_currency(target)
         self.assertTrue(result == {})
+
+    def test_conversion_amount_zero_or_less(self):
+        currency_from = 'BRL'
+        currency_to = 'ETH'
+        amount = -101.03
+        response = service.convert(currency_from, currency_to, amount)
+        self.assertEqual(
+            response['conversion'], "Amount must be higher than zero!")
+
+    def test_conversion_currency_not_found(self):
+        currency_from = 'BRL'
+        currency_to = 'INVALID'
+        amount = 12.1
+        response = service.convert(currency_from, currency_to, amount)
+        self.assertEqual(
+            response['conversion'], "One of the currencies provided was not found. Double check your currencies and try again.")

@@ -27,7 +27,7 @@
 Predominant language: Python  
 
 Production libs:
-- Bottle or Sanic;  
+- Sanic;  
 - sqlite3;
 - redis;
 
@@ -38,11 +38,11 @@ Development libs:
 
 Persistance:
 - SQLite (development - relates #06, #07);
-- Redis (? - relates #10);
+- Redis (relates #10);
 
 Others:
 - GNU Make (relates #09);
-- Docker (relates optional #01);
+- Docker + docker-compose (relates optional #01);
 - Public API: https://openexchangerates.org (relates #02, #03, #04, #11);
 - Insomnia;
 ---

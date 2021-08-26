@@ -60,34 +60,48 @@ class ConversionService:
         ''', [new_base_value, name])
         return {'rows_affected': rows_affected}
 
-    # TODO: add guard clauses for checking the args
     # TODO: add try-except for handling db errors
     def convert(self, currency_from, currency_to, amount):
+        # check guards before attempting a conversion from scratch
         amount = float(amount)
-        if(currency_from == currency_to):
-            return {'conversion': amount}
-
         cache_key = f'{currency_from}_{amount}_{currency_to}'
-        cached_conversion = self.__redis_conn.get(cache_key)
-        if(cached_conversion):
-            return {'conversion': float(cached_conversion.decode('utf-8'))}
-
-        [from_rate, to_rate] = self.__get_rates(currency_from, currency_to)
+        conversion = self.__guard_conversion(
+            currency_from, currency_to, amount, cache_key)
+        if(conversion != None):
+            return {'conversion': conversion}
+        # attempt conversion from scratch
+        from_rate = self.__get_rate(currency_from)
+        to_rate = self.__get_rate(currency_to)
+        if(not from_rate or not to_rate):
+            return {'conversion':  "One of the currencies provided was not found. Double check your currencies and try again."}
+        # cache the conversion results
         conversion = self.__calculate_conversion(to_rate, from_rate, amount)
         self.__redis_conn.setex(cache_key, 120, conversion)
-
+        # return conversion result
         return {'conversion': conversion}
 
-    def __get_rates(self, currency_from, currency_to):
-        from_rate = self.__redis_conn.get(f'{CURRENCY_PREFIX}{currency_from}')
-        to_rate = self.__redis_conn.get(f'{CURRENCY_PREFIX}{currency_to}')
-        if(not from_rate):
-            from_rate = self.get_by_name_user_created(currency_from)[
-                'result'][0][1]
-        if(not to_rate):
-            to_rate = self.get_by_name_user_created(currency_to)[
-                'result'][0][1]
-        return [from_rate, to_rate]
+    def __guard_conversion(self, currency_from, currency_to, amount, cache_key):
+        # guard: amount must be valid
+        if(amount <= 0.0):
+            return 'Amount must be higher than zero!'
+        # guard: conversion currencies must be different
+        if(currency_from == currency_to):
+            return amount
+        # guard: check cache for this conversion and return it if found
+        cached_conversion = self.__redis_conn.get(cache_key)
+        if(cached_conversion):
+            return float(cached_conversion.decode('utf-8'))
+        # return none if all guards passed
+        return None
+
+    def __get_rate(self, currency):
+        try:
+            rate = self.__redis_conn.get(f'{CURRENCY_PREFIX}{currency}')
+            if(not rate):
+                rate = self.get_by_name_user_created(currency)['result'][0][1]
+            return rate
+        except IndexError:
+            return None
 
     def __calculate_conversion(self, to_rate, from_rate, amount):
         if(type(to_rate).__name__ == 'bytes'):

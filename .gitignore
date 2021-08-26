@@ -1,5 +1,4 @@
 # Project specific
-redis-bkp/
 *.db
 
 # Byte-compiled / optimized / DLL files
