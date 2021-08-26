@@ -1,11 +1,11 @@
-from src.convertion_service import ConvertionService
+from src.conversion_service import ConversionService
 from src.redis_connector import RedisConnector
 import unittest
 
-service = ConvertionService()
+service = ConversionService()
 
 
-class ConvertionServiceTestSuite(unittest.TestCase):
+class ConversionServiceTestSuite(unittest.TestCase):
     def tearDown(self):
         service.delete_currency('OTHER_TEST')
 
@@ -61,7 +61,7 @@ class ConvertionServiceTestSuite(unittest.TestCase):
         service.delete_currency(name)
 
     # TODO: have a safer way of testing conversion results with assertAlmostEquals
-    def test_convertion_both_real(self):
+    def test_conversion_both_real(self):
         currency_from = 'BRL'
         currency_to = 'EUR'  # (to/from)*amount
         amount = 16
@@ -95,10 +95,17 @@ class ConvertionServiceTestSuite(unittest.TestCase):
         self.assertEqual(response['conversion'], 7.51)
         service.delete_currency(currency_to)
 
+    def test_conversion_both_currencies_are_equal(self):
+        currency_from = 'BRL'
+        currency_to = 'BRL'
+        amount = 32.1
+        response = service.convert(currency_from, currency_to, amount)
+        self.assertEqual(response['conversion'], amount)
+
     def test_conversion_save_operation_to_cache(self):
         currency_from = 'BTC'
         currency_to = 'ETH'
-        amount = 8
+        amount = 8.0
         response = service.convert(currency_from, currency_to, amount)
         connector = RedisConnector()
         cached_operation = connector.get_connection().get(
@@ -107,4 +114,17 @@ class ConvertionServiceTestSuite(unittest.TestCase):
             cached_operation.decode('utf-8')))
         del connector
 
-    # TODO: maybe find a way to test if the api is using the cached conversions?
+    # TODO: find a better way to test if the cache is being used by the api
+    def test_conversion_cache_is_being_used(self):
+        currency_from = 'BRL'
+        currency_to = 'ETH'
+        amount = 8123.56
+        first_response = service.convert(currency_from, currency_to, amount)
+        second_response = service.convert(currency_from, currency_to, amount)
+        self.assertEqual(
+            first_response['conversion'], second_response['conversion'])
+
+    def test_conversion_get_by_name_real_currency_empty(self):
+        target = 'INVALID'
+        result = service.get_by_name_real_currency(target)
+        self.assertTrue(result == {})
