@@ -8,11 +8,13 @@ redis:
 	docker run --name redis-dev -v $(PWD)/redis-bkp:/data -d -p 6379:6379 redis:alpine
 kill-redis:
 	docker stop redis-dev && docker rm redis-dev
-cron:
-	docker build . -t api-cron-dev -f cron.dockerfile && docker run --name cron-dev api-cron-dev:latest
-kill-cron:
-	docker stop cron-dev && docker rm cron-dev
 locust:
-	docker build . -t locust-container -f locust.dockerfile && docker run --name locust-dev -p 8089:8089 --add-host="localhost:192.168.2.XX" -d locust-container:latest
-kill-locust:
-	docker stop locust-dev && docker rm locust-dev
+	locust -f script/locustfile.py
+# cron:
+# 	docker build . -t api-cron-dev -f dockerfile/cron.dockerfile && docker run --name cron-dev api-cron-dev:latest
+# kill-cron:
+# 	docker stop cron-dev && docker rm cron-dev
+# docker-locust:
+# 	docker build . -t locust-container -f dockerfile/locust.dockerfile && docker run --name locust-dev -p 8089:8089 --add-host="localhost:192.168.2.XX" -d locust-container:latest
+# kill-locust:
+# 	docker stop locust-dev && docker rm locust-dev

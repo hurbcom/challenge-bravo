@@ -3,17 +3,21 @@ services:
   api:
     build:
       context: .
-      dockerfile: api.dockerfile
+      dockerfile: dockerfile/api.dockerfile
     network_mode: host
+    depends_on:
+      - "redis"
   cron:
     build:
       context: .
-      dockerfile: cron.dockerfile
+      dockerfile: dockerfile/cron.dockerfile
     network_mode: host
+    depends_on:
+      - "redis"
   locust:
     build:
       context: .
-      dockerfile: locust.dockerfile
+      dockerfile: dockerfile/locust.dockerfile
     network_mode: host
   redis:
     image: "redis:alpine"

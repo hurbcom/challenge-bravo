@@ -1,6 +1,4 @@
 # Project specific
-docs/*.json
-utils/
 redis-bkp/
 *.db
 
