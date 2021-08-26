@@ -166,3 +166,48 @@ class ConversionServiceTestSuite(unittest.TestCase):
         self.assertEqual(
             response['conversion'], "One of the currencies provided was not found. Double check your currencies and try again.")
         self.assertTrue(status == 404)
+
+    def test_conversion_create_blank_param(self):
+        name = ''
+        base_value = None
+        [response, status] = service.create_currency(name, base_value)
+        self.assertFalse(response['success'])
+        self.assertEqual(
+            response['error'], 'One or more parameters were invalid or blank.')
+        self.assertTrue(status == 400)
+
+    def test_conversion_create_negative_base_value(self):
+        name = 'TEST_FAIL'
+        base_value = -100.01
+        [response, status] = service.create_currency(name, base_value)
+        self.assertFalse(response['success'])
+        self.assertEqual(
+            response['error'], 'One or more parameters were invalid or blank.')
+        self.assertTrue(status == 400)
+
+    def test_conversion_update_blank_param(self):
+        name = ''
+        new_base_value = 3.56
+        [response, status] = service.update_currency(name, new_base_value)
+        self.assertEqual(response['rows_affected'], 0)
+        self.assertEqual(
+            response['error'], 'One or more parameters were invalid or blank.')
+        self.assertTrue(status == 400)
+
+    def test_conversion_update_negative_base_value(self):
+        name = 'TEST_FAIL'
+        new_base_value = -13.56
+        [response, status] = service.update_currency(name, new_base_value)
+        self.assertEqual(response['rows_affected'], 0)
+        self.assertEqual(
+            response['error'], 'One or more parameters were invalid or blank.')
+        self.assertTrue(status == 400)
+
+    def test_conversion_update_param_is_NoneType(self):
+        name = None
+        new_base_value = None
+        [response, status] = service.update_currency(name, new_base_value)
+        self.assertEqual(response['rows_affected'], 0)
+        self.assertEqual(
+            response['error'], 'One or more parameters were invalid or blank.')
+        self.assertTrue(status == 400)

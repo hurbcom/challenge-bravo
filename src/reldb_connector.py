@@ -19,7 +19,6 @@ class RelationalDBConnector:
     def get_connection(self):
         return self.__conn
 
-    # TODO: add try-except structure for handling db errors
     def run_select_query(self, query, params=[]):
         cursor = self.__conn.cursor()
         cursor.execute(query, params)
@@ -28,24 +27,36 @@ class RelationalDBConnector:
         cursor.close()
         return result
 
-    # TODO: add guard clauses for empty params
-    # TODO: add try-except structure for handling db errors
     def run_insert_or_delete_query(self, query, params):
+        if(not self.__check_params(params)):
+            return [{'success': False, 'error': 'One or more parameters were invalid or blank.'}, 400]
         cursor = self.__conn.cursor()
         cursor.execute(query, params)
         self.__conn.commit()
         cursor.close()
-        return True
+        return [{'success': True}, 200]
 
-    # TODO: add guard clauses for empty params
-    # TODO: add try-except structure for handling db errors
     def run_update_query(self, query, params):
+        if(not self.__check_params(params)):
+            return [{'rows_affected': 0, 'error': 'One or more parameters were invalid or blank.'}, 400]
         cursor = self.__conn.cursor()
         cursor.execute(query, params)
         self.__conn.commit()
         rows_affected = cursor.rowcount
         cursor.close()
-        return rows_affected
+        return [{'rows_affected': rows_affected}, 200]
+
+    def __check_params(self, params):
+        for param in params:
+            if(type(param).__name__ == 'str'):
+                if(len(param) == 0):
+                    return False
+            elif(type(param).__name__ == 'float'):
+                if(param <= 0.0):
+                    return False
+            else:
+                return False
+        return True
 
     def __del__(self):
         self.__conn.close()
