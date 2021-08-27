@@ -5,7 +5,6 @@
 > - 2 days (26, 27): Final testing, review and delivery  
 > ##### *MVP should be reached by the end of 25/08 by completing all mandatory requirements
 > ##### **Due to the volatility of software development, the plan may be updated even after days 18 and 19
-> ##### ***If MVP is reached way before deadline, try to implement as many bonuses as possible
 ---
 ## Observed requirements
 ### Mandatory:
@@ -45,13 +44,3 @@ Others:
 - Docker + docker-compose (relates optional #01);
 - Public API: https://openexchangerates.org (relates #02, #03, #04, #11);
 - Insomnia;
----
-## Bonuses/nice-to-haves
-- Simple frontend to showcase the whole thing, from client to backend to database;
-- Simple auth system for extra API security;
-- 100% code coverage;
-- Get Travis working for the CI! :rocket: ;
-- Get it integrated with Heroku for the CD! :speedboat: ;  
-<p align="center">
-  <img src="https://i.giphy.com/media/W5WwFpEtd5Tvq/giphy.webp" alt="lets get rambling" />
-</p>

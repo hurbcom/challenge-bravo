@@ -1,78 +1,63 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+## Introduction
+This project was built with a few things in mind:
+- To build the smallest and simplest piece of software that meets the provided requirements;
+- To use the least amount of external dependencies possible; 
 
-A API deve, originalmente, converter entre as seguintes moedas:
+The language of choice was Python, using Sanic as the api framework due to it's high performance and simplicity.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+For more detailed info, refer to the docs folder, starting with [the plan](docs/theplan.md).
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+![flow overview](docs/flow_overview.png "Flow overview")
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+## Routes (@ localhost:8033)
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+| Route          | HTTP Method | Required params                    | Description |
+| :---:          | :---:       | :---:                              | :---:       |
+| /allCurrencies | GET         | N/A                                | Gets all currencies known by the api
+| /allUserCreated| GET         | N/A                                | Gets all user created currencies
+| /allReal       | GET         | N/A                                | Gets all "real" currencies (the ones acquired via the external api)
+| /create        | POST        | name(str), base_value(float)       | Creates a new currency
+| /update        | PUT         | name(str), new_base_value(float)   | Updates an already existing user created currency
+| /delete        | DELETE      | name(str)                          | Deletes an user created currency
+| /convert       | GET         | from(str), to(str), amount(float)  | Performs a conversion operation of the specified amount between the two provided currencies (from and to)
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Note: For creating and updating user created currencies, keep in mind the values refer to USD.
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
+## On running the project
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+To run the project in the most "automatic" way:  
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+1. `git clone git@github.com:lgcavalheiro/challenge-bravo.git `
+2. `cd challenge-bravo`
+3. `make dbu-dev` *dbu stands for docker-compose Down && Build && Up
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+This should launch the whole project using docker and docker-compose and is the fastest way to get it up and running. After the last command completes, you can access the api at `http://localhost:8033` and locust (used for load testing) at `http://localhost:8089`.
 
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+For development purposes, other commands are provided that can launch only certain parts of the project at a time, these are all defined inside the Makefile.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+Note: The api uses `nproc - 1` workers in order to reach the 1000+ rps requirement, if launching using `make api`, the worker count is hardcoded to 3, if that needs changing it will need to be done by hand inside the Makefile.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+## On running the unit tests
 
-## Requisitos
+In order to run the unit tests:
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+1. `python3 -m venv venv`
+2. `source venv/bin/activate`
+3. `make redis`
+4. `make test`
 
-## Critério de avaliação
+Note: It is possible that some tests will fail at the very first launch, due to some data being missing in the sqlite database or the redis database, in this case, just run `make test` again, if there are still failing tests, run `python3 script/cache_updater.py`.
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+After running the unit tests, you can check the coverage report at `htmlcov/index.html`, you can use an extension such as Live Server to serve this file.
 
-## Dúvidas
+![coverage report](docs/coverage.png "Coverage report")
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+## On running load tests
 
-Boa sorte e boa viagem! ;)
+For running load tests, launch the project using docker-compose (`make dbu-dev`) and access locust's web interface at http://localhost:8089, fill out the form that is shown and press `start swarming`.
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+![locust](docs/locust.png "Locust")
+
+![stress test report](docs/rps.png "Stress test report")
