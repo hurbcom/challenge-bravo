@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  currencyquotation:
+    image: ${DOCKER_REGISTRY-}currencyquotation
+    build:
+      context: .
+      dockerfile: CurrencyQuotation/Dockerfile
