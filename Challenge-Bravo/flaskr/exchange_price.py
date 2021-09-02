@@ -24,14 +24,14 @@ def getExchangePrice():
         final_value = None
         if symbol_currency_to.upper() == "USD":
             currency_obj = currency_dao.Currency("USD")
-            usd_value = currency_dao.retrieveValue(currency_obj)
-            final_value = usd_value * amount
+            value_usd = currency_dao.retrieveValue(currency_obj)
+            final_value = value_usd * amount
         else:
             currency_obj = currency_dao.Currency(symbol_currency_from)
-            usd_value_currency_from = currency_dao.retrieveValue(currency_obj)
+            value_usd_currency_from = currency_dao.retrieveValue(currency_obj)
             currency_obj = currency_dao.Currency(symbol_currency_to)
-            usd_value_currency_to = currency_dao.retrieveValue(currency_obj)
-            final_value = currency_amount * usd_value_currency_from / usd_value_currency_to
+            value_usd_currency_to = currency_dao.retrieveValue(currency_obj)
+            final_value = currency_amount * value_usd_currency_from / value_usd_currency_to
         return jsonify(final_value), 200
     return jsonify(error), 400
 

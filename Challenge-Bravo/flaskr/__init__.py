@@ -10,7 +10,12 @@ import os
 
 from flask import Flask
 from flask_apscheduler import APScheduler
+from . import coinbase_caller
 
+def currency_updater():
+    app = Flask(__name__)
+    with app.app_context():
+        coinbase_caller.update_currency_values()
 
 def create_app(test_config=None):
     # create and configure the app
@@ -35,7 +40,7 @@ def create_app(test_config=None):
 
     scheduler = APScheduler()
     scheduler.init_app(app)
-    scheduler.add_job(func=scheduled_task, trigger="interval", seconds="1")
+    scheduler.add_job(func=currency_updater, trigger="interval", seconds=1, id='currencyUpdater')
     scheduler.start()
 
     from . import db

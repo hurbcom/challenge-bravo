@@ -8,28 +8,28 @@ Created on Tue Aug 31 22:13:15 2021
 from . import db
         
 class Currency:
-    def __init__(self, symbol = None, usd_value = None):
+    def __init__(self, symbol = None, value_usd = None):
         self.symbol = symbol
-        self.usd_value = usd_value
+        self.value_usd = value_usd
 
 def create(currency):
     con = db.get_db()
     cur = con.cursor()
     if (db.retrieve(currency) != None):
         return
-    cur.execute("INSERT INTO currency (symbol, usd_value) VALUES (?, ?)", (currency.symbol, currency.usd_value,))
+    cur.execute("INSERT INTO currency (symbol, value_usd) VALUES (?, ?)", (currency.symbol, currency.value_usd,))
     con.commit()
     
 def retrieveValue(currency):
     con = db.get_db()
     cur = con.cursor()
-    row = cur.execute("SELECT usd_value FROM currency WHERE symbol = ?", (currency.symbol,))
+    cur.execute("SELECT value_usd FROM currency WHERE symbol = ?", (currency.symbol,))
     return float(cur.fetchone()[0])
     
 def update(currency):
     con = db.get_db()
     cur = con.cursor()
-    cur.execute("UPDATE currency SET usd_value = ? WHERE symbol = ?", (currency.usd_value, currency.symbol,))
+    cur.execute("UPDATE currency SET value_usd = ? WHERE symbol = ?", (currency.value_usd, currency.symbol,))
     con.commit()
         
     
@@ -39,3 +39,10 @@ def delete(currency):
     cur.execute("DELETE FROM currency WHERE symbol = ?", (currency.symbol,))
     con.commit()
          
+
+def retrieveCurrencies():
+    con = db.get_db()
+    cur = con.cursor()
+    cur.execute("SELECT symbol FROM currency")
+    currencies = [item[0] for item in cur.fetchall()]
+    return currencies
