@@ -1,8 +1,22 @@
 version: '3.4'
 
+networks: 
+  dockersql-network:
+    driver: bridge
+
 services:
   currencyquotation:
     image: ${DOCKER_REGISTRY-}currencyquotation
     build:
       context: .
       dockerfile: CurrencyQuotation/Dockerfile
+    networks:
+      - dockersql-network
+    depends_on:
+      - sql.database
+
+  sql.database:
+    container_name: dockersql.database
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      - dockersql-network
