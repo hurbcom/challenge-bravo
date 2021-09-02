@@ -1,7 +1,9 @@
+using CurrencyQuotation.DatabaseContext;
 using CurrencyQuotation.Services;
 using CurrencyQuotation.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +28,9 @@ namespace CurrencyQuotation
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CurrencyQuotation", Version = "v1" });
             });
+
+            services.AddDbContext<QuotationContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("default")));
 
             services.AddScoped<ICurrencyQuotationService, CurrencyQuotationService>();
         }
