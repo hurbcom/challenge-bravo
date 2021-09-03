@@ -21,5 +21,19 @@ namespace CurrencyQuotation.Daos
                .Where(c => currenciesName.Contains(c.Name))
                .ToList();
         }
+
+        public decimal GetDolarAmountByName(string nameCurrency)
+        {
+            return this._context.Currency
+                           .Where(c => nameCurrency.Equals(c.Name))
+                           .Select(bean => bean.DolarAmount)
+                           .First();
+        }
+
+        public void InsertNewCurrency(Currency currency)
+        {
+            this._context.Currency.Add(currency);
+            this._context.SaveChanges();
+        }
     }
 }
