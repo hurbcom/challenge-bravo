@@ -1,3 +1,4 @@
+using CurrencyQuotation.Models.Dtos;
 using CurrencyQuotation.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -30,6 +31,22 @@ namespace CurrencyQuotation.Controllers
             this._logger.LogInformation($"END - GetQuotation");
 
             return Ok(jsonResult);
+        }
+
+        [HttpPost]
+        [Route("Currency")]
+        public IActionResult InsertNewCurrency([FromBody] CurrencyDto currencyDto)
+        {
+            this._logger.LogInformation($"INIT - InsertNewCurrency - Currency: {currencyDto.Name}, Real Amount: {currencyDto.RealAmount}");
+
+            bool success = this._currencyQuotationService.InsertNewCurrency(currencyDto);
+
+            const string successMessage = "Moeda criada com sucesso";
+            const string ErrorMessage = "Erro ao criar a moeda especificada";
+
+            this._logger.LogInformation($"END - InsertNewCurrency");
+
+            return success ? base.Ok(successMessage) : base.BadRequest(ErrorMessage);
         }
     }
 }
