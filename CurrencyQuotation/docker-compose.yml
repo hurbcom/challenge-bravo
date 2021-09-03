@@ -6,17 +6,20 @@ networks:
 
 services:
   currencyquotation:
-    image: ${DOCKER_REGISTRY-}currencyquotation
+    image: currencyquotation
     build:
       context: .
       dockerfile: CurrencyQuotation/Dockerfile
+    environment:
+      DBServer: "dockersql.database"
     networks:
       - dockersql-network
     depends_on:
       - sql.database
+    ports:
+      - "62637:80"
 
   sql.database:
-    container_name: dockersql.database
     image: mcr.microsoft.com/mssql/server:2019-latest
     networks:
       - dockersql-network
