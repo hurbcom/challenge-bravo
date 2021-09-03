@@ -1,5 +1,6 @@
 using CurrencyQuotation.Daos.Interfaces;
 using CurrencyQuotation.Models;
+using CurrencyQuotation.Models.Dtos;
 using CurrencyQuotation.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ namespace CurrencyQuotation.Services
 {
     public class CurrencyQuotationService : ICurrencyQuotationService
     {
+        private const string REAL_CURRENCY = "BRL";
+
         private readonly ICurrencyQuotationDao _currencyQuotationDao;
 
         public CurrencyQuotationService(ICurrencyQuotationDao currencyQuotationDao)
@@ -24,6 +27,17 @@ namespace CurrencyQuotation.Services
             Currency toCurrency = currencies.First(c => from.Equals(c.Name));
 
             decimal result = (fromCurrency.DolarAmount * amount) / toCurrency.DolarAmount;
+            return result;
+        }
+
+        public bool InsertNewCurrency(CurrencyDto currencyDto)
+        {
+            decimal dolarAmountForRealCurrency = this._currencyQuotationDao.GetDolarAmountByName(REAL_CURRENCY);
+            decimal dolarAmountNewCurrency = currencyDto.RealAmount * dolarAmountForRealCurrency;
+
+            Currency currency = new(currencyDto.Name, dolarAmountNewCurrency);
+            bool result = this._currencyQuotationDao.InsertNewCurrency(currency);
+
             return result;
         }
     }

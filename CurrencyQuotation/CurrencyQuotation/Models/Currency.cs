@@ -23,5 +23,13 @@ namespace CurrencyQuotation.Models
 
         [Column("last_update")]
         public DateTime LastUpdate { get; set; }
+
+        public Currency(string name, decimal dolarAmount)
+        {
+            this.Name = name;
+            this.DolarAmount = dolarAmount;
+            this.CreationDate = DateTime.Now;
+            this.LastUpdate = DateTime.Now;
+        }
     }
 }
