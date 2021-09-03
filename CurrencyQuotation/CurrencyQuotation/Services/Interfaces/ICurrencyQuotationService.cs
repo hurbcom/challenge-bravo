@@ -6,5 +6,6 @@ namespace CurrencyQuotation.Services.Interfaces
     {
         decimal GetQuotation(string from, string to, decimal amount);
         bool InsertNewCurrency(CurrencyDto currencyDto);
+        bool DeleteCurrencyByName(string name);
     }
 }

@@ -40,5 +40,10 @@ namespace CurrencyQuotation.Services
 
             return result;
         }
+
+        public bool DeleteCurrencyByName(string name)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -46,7 +46,23 @@ namespace CurrencyQuotation.Controllers
 
             this._logger.LogInformation($"END - InsertNewCurrency");
 
-            return success ? base.Ok(successMessage) : base.BadRequest(ErrorMessage);
+            return success ? Ok(successMessage) : BadRequest(ErrorMessage);
+        }
+
+        [HttpDelete]
+        [Route("Currency/{name}")]
+        public IActionResult DeleteCurrency(string name)
+        {
+            this._logger.LogInformation($"INIT - DeleteCurrency - Currency: {name}");
+
+            bool success = this._currencyQuotationService.DeleteCurrencyByName(name);
+
+            const string successMessage = "Moeda deletada com sucesso";
+            const string ErrorMessage = "Erro ao deletar a moeda especificada";
+
+            this._logger.LogInformation($"END - DeleteCurrency");
+
+            return success ? Ok(successMessage) : BadRequest(ErrorMessage);
         }
     }
 }
