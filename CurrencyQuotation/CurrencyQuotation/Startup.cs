@@ -1,3 +1,5 @@
+using CurrencyQuotation.Daos;
+using CurrencyQuotation.Daos.Interfaces;
 using CurrencyQuotation.DatabaseContext;
 using CurrencyQuotation.Services;
 using CurrencyQuotation.Services.Interfaces;
@@ -29,10 +31,10 @@ namespace CurrencyQuotation
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CurrencyQuotation", Version = "v1" });
             });
 
-            services.AddDbContext<QuotationContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("default")));
+            services.AddDbContext<QuotationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
 
             services.AddScoped<ICurrencyQuotationService, CurrencyQuotationService>();
+            services.AddScoped<ICurrencyQuotationDao, CurrencyQuotationDao>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
