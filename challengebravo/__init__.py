@@ -12,17 +12,12 @@ from flask import Flask
 from flask_apscheduler import APScheduler
 from . import coinbase_caller
 
-def currency_updater():
-    app = Flask(__name__)
-    with app.app_context():
-        coinbase_caller.update_currency_values()
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        DATABASE=os.path.join(app.instance_path, 'challengebravo.sqlite'),
     )
 
     if test_config is None:
@@ -50,3 +45,8 @@ def create_app(test_config=None):
     app.register_blueprint(exchange_price.bp)
 
     return app
+
+def currency_updater():
+    app = Flask(__name__)
+    with app.app_context():
+        coinbase_caller.update_currency_values()

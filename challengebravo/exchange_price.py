@@ -48,7 +48,11 @@ def createNewCurrency():
             submission_keys.remove(k)
     if not submission_keys:
         symbol = json_request['symbol']
-        keep_updated = json_request['keep_updated']
+        keep_updated = None
+        try:
+            keep_updated = json_request['keep_updated']
+        except KeyError:
+            pass
         try:
             equivalent_to_usd = float(json_request['equivalent_to_usd'])
         except ValueError:
