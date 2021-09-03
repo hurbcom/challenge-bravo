@@ -2,6 +2,8 @@ using CurrencyQuotation.Daos.Interfaces;
 using CurrencyQuotation.Models;
 using CurrencyQuotation.Models.Dtos;
 using CurrencyQuotation.Services.Interfaces;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,11 +13,14 @@ namespace CurrencyQuotation.Services
     {
         private const string REAL_CURRENCY = "BRL";
 
+        private readonly ILogger<CurrencyQuotationService> _logger;
+
         private readonly ICurrencyQuotationDao _currencyQuotationDao;
 
-        public CurrencyQuotationService(ICurrencyQuotationDao currencyQuotationDao)
+        public CurrencyQuotationService(ICurrencyQuotationDao currencyQuotationDao, ILogger<CurrencyQuotationService> logger)
         {
             this._currencyQuotationDao = currencyQuotationDao;
+            this._logger = logger;
         }
 
         public decimal GetQuotation(string from, string to, decimal amount)
@@ -32,13 +37,23 @@ namespace CurrencyQuotation.Services
 
         public bool InsertNewCurrency(CurrencyDto currencyDto)
         {
-            decimal dolarAmountForRealCurrency = this._currencyQuotationDao.GetDolarAmountByName(REAL_CURRENCY);
-            decimal dolarAmountNewCurrency = currencyDto.RealAmount * dolarAmountForRealCurrency;
+            try
+            {
+                decimal dolarAmountForRealCurrency = this._currencyQuotationDao.GetDolarAmountByName(REAL_CURRENCY);
+                decimal dolarAmountNewCurrency = currencyDto.RealAmount * dolarAmountForRealCurrency;
 
-            Currency currency = new(currencyDto.Name, dolarAmountNewCurrency);
-            bool result = this._currencyQuotationDao.InsertNewCurrency(currency);
+                Currency currency = new(currencyDto.Name, dolarAmountNewCurrency);
+                this._currencyQuotationDao.InsertNewCurrency(currency);
 
-            return result;
+                _logger.LogInformation("Nova moeda salva com sucesso");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return false;
+            }
         }
 
         public bool DeleteCurrencyByName(string name)
