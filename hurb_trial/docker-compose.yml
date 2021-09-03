@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  database:
+    container_name: hurb_trial_db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: hurb_trial
+      POSTGRES_USER: hurb_trial
+      POSTGRES_DB: currency_exchanger
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
