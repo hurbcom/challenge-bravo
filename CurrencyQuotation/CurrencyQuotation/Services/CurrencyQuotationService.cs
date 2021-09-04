@@ -29,7 +29,7 @@ namespace CurrencyQuotation.Services
             IList<Currency> currencies = this._currencyQuotationDao.GetQuotationByCurrencies(currenciesName);
 
             Currency fromCurrency = currencies.First(c => from.Equals(c.Name));
-            Currency toCurrency = currencies.First(c => from.Equals(c.Name));
+            Currency toCurrency = currencies.First(c => to.Equals(c.Name));
 
             decimal result = (fromCurrency.DolarAmount * amount) / toCurrency.DolarAmount;
             return result;
