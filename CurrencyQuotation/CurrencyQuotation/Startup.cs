@@ -32,8 +32,11 @@ namespace CurrencyQuotation
             });
 
             services.AddDbContext<QuotationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
+            services.AddHttpClient();
 
             services.AddScoped<ICurrencyQuotationService, CurrencyQuotationService>();
+            services.AddScoped<IExternalQuotationApiService, ExternalQuotationApiService>();
+
             services.AddScoped<ICurrencyQuotationDao, CurrencyQuotationDao>();
         }
 
