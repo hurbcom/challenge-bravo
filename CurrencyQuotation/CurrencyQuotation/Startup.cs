@@ -5,22 +5,33 @@ using CurrencyQuotation.Services;
 using CurrencyQuotation.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using System.Threading;
 
 namespace CurrencyQuotation
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private const int MAX_ATTEMPS = 10;
+
+        private const int DELAY_EXECUTE_MIGRATION = 1000;
+
+        private int CountRetriesMigrations { get; set; }
 
         public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            this.Configuration = configuration;
+
+            this.CountRetriesMigrations = 1;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,8 +52,10 @@ namespace CurrencyQuotation
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, QuotationContext context, ILogger<Startup> logger)
         {
+            ExecuteMigrations(context, logger);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -60,6 +73,33 @@ namespace CurrencyQuotation
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void ExecuteMigrations(QuotationContext context, ILogger<Startup> logger)
+        {
+            try
+            {
+                context.Database.Migrate();
+                logger.LogInformation("Migrations executadas com sucesso!");
+            }
+            catch (SqlException ex)
+            {
+                logger.LogError($"Erro: {ex.Message}");
+
+                if (this.CountRetriesMigrations <= MAX_ATTEMPS)
+                {
+                    logger.LogError($"Erro ao executar as migrations. Tentativa {this.CountRetriesMigrations} de {MAX_ATTEMPS}");
+
+                    this.CountRetriesMigrations++;
+                    Thread.Sleep(DELAY_EXECUTE_MIGRATION);
+
+                    ExecuteMigrations(context, logger);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
     }
 }
