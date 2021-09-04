@@ -20,7 +20,7 @@ namespace CurrencyQuotation
     {
         private const int MAX_ATTEMPS = 10;
 
-        private const int DELAY_EXECUTE_MIGRATION = 1000;
+        private const int DELAY_EXECUTE_MIGRATION = 5000;
 
         private int CountRetriesMigrations { get; set; }
 
