@@ -1,6 +1,7 @@
 using CurrencyQuotation.Daos;
 using CurrencyQuotation.Daos.Interfaces;
 using CurrencyQuotation.DatabaseContext;
+using CurrencyQuotation.Jobs;
 using CurrencyQuotation.Services;
 using CurrencyQuotation.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -42,8 +43,9 @@ namespace CurrencyQuotation
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CurrencyQuotation", Version = "v1" });
             });
 
-            services.AddDbContext<QuotationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
+            services.AddDbContext<QuotationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")), ServiceLifetime.Singleton);
             services.AddHttpClient();
+            services.AddHostedService<ExternalQuotationJob>();
 
             services.AddScoped<ICurrencyQuotationService, CurrencyQuotationService>();
             services.AddScoped<IExternalQuotationApiService, ExternalQuotationApiService>();

@@ -26,10 +26,12 @@ namespace CurrencyQuotation.Models
 
         public Currency(string name, decimal dolarAmount)
         {
+            DateTime now = DateTime.Now;
+
             this.Name = name;
             this.DolarAmount = dolarAmount;
-            this.CreationDate = DateTime.Now;
-            this.LastUpdate = DateTime.Now;
+            this.CreationDate = now;
+            this.LastUpdate = now;
         }
     }
 }

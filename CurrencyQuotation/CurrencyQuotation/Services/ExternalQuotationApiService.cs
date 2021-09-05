@@ -3,7 +3,6 @@ using CurrencyQuotation.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -28,11 +27,11 @@ namespace CurrencyQuotation.Services
             this._logger = logger;
         }
 
-        public IList<ExternalApiDto> GetCurrenciesQuotationsInDolar()
+        public ExternalApiDto GetCurrenciesQuotationsInDolar()
         {
             string requestUri = string.Concat(this.ExternalApiUrl, this.TokenApi);
 
-            IList<ExternalApiDto> currenciesQuotations = SendHttpGetRequest<IList<ExternalApiDto>>(requestUri).Result;
+            ExternalApiDto currenciesQuotations = SendHttpGetRequest<ExternalApiDto>(requestUri).Result;
 
             return currenciesQuotations;
         }

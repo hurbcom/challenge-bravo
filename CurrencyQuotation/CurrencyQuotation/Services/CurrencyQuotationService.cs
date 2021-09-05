@@ -60,5 +60,13 @@ namespace CurrencyQuotation.Services
         {
             throw new System.NotImplementedException();
         }
+
+        public void SaveAll(IEnumerable<Currency> currencies)
+        {
+            foreach (Currency currency in currencies)
+            {
+                this._currencyQuotationDao.InsertNewCurrency(currency);
+            }
+        }
     }
 }
