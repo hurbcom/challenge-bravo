@@ -31,9 +31,7 @@ namespace CurrencyQuotation.Services
             Currency fromCurrency = currencies.First(c => from.Equals(c.Name));
             Currency toCurrency = currencies.First(c => to.Equals(c.Name));
 
-            decimal fromAmount = GetQuotation("USD", from, amount);
-
-            decimal result = fromAmount * amount * toCurrency.DolarAmount;
+            decimal result = (toCurrency.DolarAmount / fromCurrency.DolarAmount) * amount;
             return result;
         }
 
