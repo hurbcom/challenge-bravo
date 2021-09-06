@@ -13,7 +13,7 @@ namespace CurrencyQuotation.Services
     {
         private readonly IHttpClientFactory _clientFactory;
 
-        private readonly ILogger _logger;
+        private readonly ILogger<ExternalQuotationApiService> _logger;
 
         private string ExternalApiUrl { get; set; }
         private string TokenApi { get; set; }

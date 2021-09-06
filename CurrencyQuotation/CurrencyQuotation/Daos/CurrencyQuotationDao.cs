@@ -35,5 +35,16 @@ namespace CurrencyQuotation.Daos
             this._context.Currency.Add(currency);
             this._context.SaveChanges();
         }
+
+        public IList<Currency> GetAllCurrencies()
+        {
+            return this._context.Currency.ToList();
+        }
+
+        public void Update(Currency currency)
+        {
+            this._context.Currency.Update(currency);
+            this._context.SaveChanges();
+        }
     }
 }

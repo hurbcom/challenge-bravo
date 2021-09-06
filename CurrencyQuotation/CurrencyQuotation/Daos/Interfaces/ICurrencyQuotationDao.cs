@@ -8,5 +8,7 @@ namespace CurrencyQuotation.Daos.Interfaces
         IList<Currency> GetQuotationByCurrencies(IList<string> currenciesName);
         decimal GetDolarAmountByName(string nameCurrency);
         void InsertNewCurrency(Currency currency);
+        IList<Currency> GetAllCurrencies();
+        void Update(Currency currency);
     }
 }

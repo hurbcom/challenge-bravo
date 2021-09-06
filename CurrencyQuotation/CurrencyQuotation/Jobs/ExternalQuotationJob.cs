@@ -18,9 +18,9 @@ namespace CurrencyQuotation.Jobs
 
         public readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public Timer Timer { get; set; }
         private IExternalQuotationApiService ExternalQuotationApiService { get; set; }
         private ICurrencyQuotationService CurrencyQuotationService { get; set; }
+        public Timer Timer { get; set; }
 
         public ExternalQuotationJob(
             ILogger<ExternalQuotationJob> logger,
@@ -50,9 +50,24 @@ namespace CurrencyQuotation.Jobs
         {
             ExternalApiDto externalApiDto = this.ExternalQuotationApiService.GetCurrenciesQuotationsInDolar();
 
-            IEnumerable<Currency> currencies = externalApiDto.Rates.Select(bean => new Currency(bean.Key, bean.Value));
+            IList<Currency> currenciesInDb = this.CurrencyQuotationService.GetAllCurrencies();
 
-            this.CurrencyQuotationService.SaveAll(currencies);
+            if (currenciesInDb.Any())
+            {
+                IDictionary<string, decimal> rates = externalApiDto.Rates;
+
+                foreach (Currency currencyToUpdate in currenciesInDb)
+                {
+                    currencyToUpdate.DolarAmount = rates.ContainsKey(currencyToUpdate.Name) ? rates[currencyToUpdate.Name] : currencyToUpdate.DolarAmount;
+                }
+
+                this.CurrencyQuotationService.UpdateAll(currenciesInDb);
+            }
+            else
+            {
+                IEnumerable<Currency> currenciesToSave = externalApiDto.Rates.Select(bean => new Currency(bean.Key, bean.Value));
+                this.CurrencyQuotationService.SaveAll(currenciesToSave);
+            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
