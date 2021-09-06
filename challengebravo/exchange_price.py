@@ -1,5 +1,5 @@
 from flask import jsonify, request, Blueprint
-from . import currency_dao
+from .db import currency_dao
 
 bp = Blueprint('exchangePrice', __name__, url_prefix='/exchangePrice')
 

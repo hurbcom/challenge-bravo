@@ -6,7 +6,7 @@ Created on Tue Aug 31 14:09:46 2021
 """
 
 import requests
-from . import currency_dao
+from ..db import currency_dao
 
 def update_currency_values():
     currencies_to_update = currency_dao.retrieveCurrenciesToUpdate()
