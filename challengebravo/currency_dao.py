@@ -8,9 +8,9 @@ Created on Tue Aug 31 22:13:15 2021
 from . import db
         
 class Currency:
-    def __init__(self, symbol = None, equivalent_to_usd = None, keep_updated = None):
-        self.symbol = symbol
-        self.equivalent_to_usd = equivalent_to_usd
+    def __init__(self, symbol = None, usd_value = None, keep_updated = None):
+        self.symbol = symbol.upper()
+        self.usd_value = usd_value
         self.keep_updated = keep_updated
 
 def create(currency):
@@ -18,13 +18,13 @@ def create(currency):
     cur = con.cursor()
     if (retrieveValue(currency) is not None):
         return
-    cur.execute("INSERT INTO currency (symbol, equivalent_to_usd, keep_updated) VALUES (?, ?, ?)", (currency.symbol, currency.equivalent_to_usd, currency.keep_updated,))
+    cur.execute("INSERT INTO currency (symbol, usd_value, keep_updated) VALUES (?, ?, ?)", (currency.symbol.upper(), currency.usd_value, currency.keep_updated,))
     con.commit()
     
 def retrieveValue(currency):
     con = db.get_db()
     cur = con.cursor()
-    cur.execute("SELECT equivalent_to_usd FROM currency WHERE symbol = ?", (currency.symbol,))
+    cur.execute("SELECT usd_value FROM currency WHERE symbol = ?", (currency.symbol,))
     row = cur.fetchone()
     if row is not None:
         return float(row[0])
@@ -34,7 +34,7 @@ def retrieveValue(currency):
 def update(currency):
     con = db.get_db()
     cur = con.cursor()
-    cur.execute("UPDATE currency SET equivalent_to_usd = ? WHERE symbol = ?", (currency.equivalent_to_usd, currency.symbol,))
+    cur.execute("UPDATE currency SET usd_value = ? WHERE symbol = ?", (currency.usd_value, currency.symbol,))
     con.commit()
     
 def delete(currency):
@@ -47,5 +47,16 @@ def retrieveCurrencies():
     con = db.get_db()
     cur = con.cursor()
     cur.execute("SELECT symbol FROM currency WHERE keep_updated = true")
-    currencies = [item[0] for item in cur.fetchall()]
+    currencies = [item[0].upper() for item in cur.fetchall()]
     return currencies
+
+def retrieveCurrency(symbol):
+    con = db.get_db()
+    cur = con.cursor()
+    cur.execute("SELECT symbol, usd_value FROM currency WHERE symbol = ?", (symbol,))
+    row = cur.fetchone()
+    if row is not None:
+        retrievedCurrency = Currency(row[0], row[1])
+        return retrievedCurrency
+    else:
+        return

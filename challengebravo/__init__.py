@@ -8,7 +8,7 @@ Created on Tue Aug 31 22:03:23 2021
 
 import os
 
-from flask import Flask
+from flask import Flask, g, current_app
 from flask_apscheduler import APScheduler
 from . import coinbase_caller
 
@@ -43,6 +43,13 @@ def create_app(test_config=None):
 
     from . import exchange_price
     app.register_blueprint(exchange_price.bp)
+
+    @app.teardown_appcontext
+    def close_connection(exception):
+        db = getattr(g, '_database', None)
+        if db is not None:
+            db.close()
+    # app.teardown_appcontext(db.close_connection())
 
     return app
 
