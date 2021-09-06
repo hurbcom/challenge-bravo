@@ -56,9 +56,11 @@ namespace CurrencyQuotation.Services
             }
         }
 
-        public bool DeleteCurrencyByName(string name)
+        public void DeleteCurrencyByName(string name)
         {
-            throw new System.NotImplementedException();
+            Currency currencyToRemove = this._currencyQuotationDao.GetCurrencyByName(name);
+
+            this._currencyQuotationDao.DeleteByName(currencyToRemove);
         }
 
         public void SaveAll(IEnumerable<Currency> currencies)

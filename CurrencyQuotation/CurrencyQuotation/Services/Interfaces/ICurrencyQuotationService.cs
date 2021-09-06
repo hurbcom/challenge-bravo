@@ -8,7 +8,7 @@ namespace CurrencyQuotation.Services.Interfaces
     {
         decimal GetQuotation(string from, string to, decimal amount);
         bool InsertNewCurrency(CurrencyDto currencyDto);
-        bool DeleteCurrencyByName(string name);
+        void DeleteCurrencyByName(string name);
         void SaveAll(IEnumerable<Currency> currencies);
         IList<Currency> GetAllCurrencies();
         void UpdateAll(IList<Currency> currenciesInDb);

@@ -10,5 +10,7 @@ namespace CurrencyQuotation.Daos.Interfaces
         void InsertNewCurrency(Currency currency);
         IList<Currency> GetAllCurrencies();
         void Update(Currency currency);
+        void DeleteByName(Currency currency);
+        Currency GetCurrencyByName(string name);
     }
 }

@@ -24,10 +24,8 @@ namespace CurrencyQuotation.Daos
 
         public decimal GetDolarAmountByName(string nameCurrency)
         {
-            return this._context.Currency
-                           .Where(c => nameCurrency.Equals(c.Name))
-                           .Select(bean => bean.DolarAmount)
-                           .First();
+            IQueryable<Currency> queryable = GetByName(nameCurrency);
+            return queryable.Select(bean => bean.DolarAmount).First();
         }
 
         public void InsertNewCurrency(Currency currency)
@@ -45,6 +43,23 @@ namespace CurrencyQuotation.Daos
         {
             this._context.Currency.Update(currency);
             this._context.SaveChanges();
+        }
+
+        public void DeleteByName(Currency currency)
+        {
+            this._context.Currency.Remove(currency);
+            this._context.SaveChanges();
+        }
+
+        public Currency GetCurrencyByName(string name)
+        {
+            IQueryable<Currency> queryable = GetByName(name);
+            return queryable.FirstOrDefault();
+        }
+
+        private IQueryable<Currency> GetByName(string nameCurrency)
+        {
+            return this._context.Currency.Where(c => nameCurrency.Equals(c.Name));
         }
     }
 }
