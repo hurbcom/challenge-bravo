@@ -57,7 +57,7 @@ def createNewCurrency():
             usd_value = float(json_request['usd_value'])
         except ValueError:
             error = "Input value as equivalent to USD must be numerical"
-        if keep_updated is not None and keep_updated != True and keep_updated != False:
+        if keep_updated is not None and keep_updated != 1 and keep_updated != 0:
             error = "The value of keep updated must be true or false"
         new_currency = currency_dao.Currency(symbol, usd_value, keep_updated)
         if currency_dao.retrieveValue(new_currency) is not None:

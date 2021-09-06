@@ -46,7 +46,7 @@ def delete(currency):
 def retrieveCurrencies():
     con = db.get_db()
     cur = con.cursor()
-    cur.execute("SELECT symbol FROM currency WHERE keep_updated = true")
+    cur.execute("SELECT symbol FROM currency WHERE keep_updated = 1")
     currencies = [item[0].upper() for item in cur.fetchall()]
     return currencies
 

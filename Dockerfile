@@ -23,4 +23,6 @@ RUN pip3 install -r requirements.txt
 # Copy all directories and files from host to container
 COPY . /app
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+# CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+RUN chmod u+x ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
