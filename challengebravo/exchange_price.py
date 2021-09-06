@@ -1,10 +1,9 @@
-# Importing the libraries
 from flask import jsonify, request, Blueprint
 from . import currency_dao
 
 bp = Blueprint('exchangePrice', __name__, url_prefix='/exchangePrice')
 
-# API de conversão de moeda
+# currency conversion API
 @bp.route('/convertCurrency', methods = ['GET'])
 def getConvertedValue():
     error = None
@@ -38,7 +37,7 @@ def getConvertedValue():
     return jsonify({'error': error}), 400
 
 
-# API de criação de moeda
+# currency creation API
 @bp.route('/createCurrency', methods = ['PUT'])
 def createNewCurrency():
     json_request = request.get_json()
@@ -74,7 +73,7 @@ def createNewCurrency():
         return jsonify({'message': 'An error has ocurred', 'error': error}), 400
 
     
-# API de deleção de moeda
+# currency deletion API
 @bp.route('/deleteCurrency', methods = ['DELETE'])
 def deleteCurrency():
     json_request = request.get_json()

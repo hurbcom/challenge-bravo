@@ -33,6 +33,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # define the scheduler structure and call
     scheduler = APScheduler()
     scheduler.init_app(app)
     scheduler.add_job(func=currency_updater, trigger="interval", seconds=30, id='currencyUpdater')
@@ -49,10 +50,10 @@ def create_app(test_config=None):
         db = getattr(g, '_database', None)
         if db is not None:
             db.close()
-    # app.teardown_appcontext(db.close_connection())
 
     return app
 
+# method to be scheduled responsible to update the currency values
 def currency_updater():
     app = Flask(__name__)
     with app.app_context():

@@ -6,7 +6,8 @@ Created on Tue Aug 31 22:13:15 2021
 """
 
 from . import db
-        
+
+# defining the currency class structure 
 class Currency:
     def __init__(self, symbol = None, usd_value = None, keep_updated = None):
         self.symbol = symbol.upper()
@@ -20,7 +21,9 @@ def create(currency):
         return
     cur.execute("INSERT INTO currency (symbol, usd_value, keep_updated) VALUES (?, ?, ?)", (currency.symbol.upper(), currency.usd_value, currency.keep_updated,))
     con.commit()
-    
+
+
+# retrieves the equivalent to USD value
 def retrieveValue(currency):
     con = db.get_db()
     cur = con.cursor()
@@ -42,14 +45,16 @@ def delete(currency):
     cur = con.cursor()
     cur.execute("DELETE FROM currency WHERE symbol = ?", (currency.symbol,))
     con.commit()
-        
-def retrieveCurrencies():
+
+# retrieves the currencies with the update enabled
+def retrieveCurrenciesToUpdate():
     con = db.get_db()
     cur = con.cursor()
     cur.execute("SELECT symbol FROM currency WHERE keep_updated = 1")
     currencies = [item[0].upper() for item in cur.fetchall()]
     return currencies
 
+# retrieves the currency object based on its symbol
 def retrieveCurrency(symbol):
     con = db.get_db()
     cur = con.cursor()

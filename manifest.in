@@ -1,2 +1,0 @@
-include challengebravo/schema.sql
-global-exclude *.pyc

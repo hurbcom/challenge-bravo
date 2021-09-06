@@ -41,6 +41,7 @@ Method: `PUT`
 #### Exemplo de requisição
 Requisição: `http://localhost:5000/exchangePrice/createCurrency`
 
+JSON:
 ``{
     "symbol": "ADA",
     "usd_value": "0.34131440176118233",
@@ -49,6 +50,8 @@ Requisição: `http://localhost:5000/exchangePrice/createCurrency`
 
 
 #### Retorno
+
+JSON:
 ``{
     "error": null,
     "message": "Currency successfully created"
@@ -70,12 +73,14 @@ Method: `DELETE`
 #### Exemplo de requisição
 Requisição: `http://localhost:5000/exchangePrice/deleteCurrency`
 
+JSON:
 ``{
     "symbol": "ADA"
 }``
 
 #### Retorno
 
+JSON:
 ``{
     "error": null,
     "message": "Currency successfully deleted"
@@ -91,19 +96,20 @@ Method: `GET`
 #### Validações
 
 - from:
---	Deve estar cadastrada.
+	Deve estar cadastrada.
 
 - to:
---	Deve estar cadastrada
+	Deve estar cadastrada
 
 - amount:
---	Deve ser um valor numérico utilizando '.' como separador decimal.
+	Deve ser um valor numérico utilizando '.' como separador decimal.
 
 #### Exemplo de requisição
 Requisição: `http://localhost:5000/exchangePrice/convertCurrency?from=BTC&to=EUR&amount=5`
 
 #### Retorno
 
+JSON:
 ``{
   "convertedValue": "0.00011562"
 }``

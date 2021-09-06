@@ -9,7 +9,7 @@ import requests
 from . import currency_dao
 
 def update_currency_values():
-    currencies_to_update = currency_dao.retrieveCurrencies()
+    currencies_to_update = currency_dao.retrieveCurrenciesToUpdate()
     currency = 'USD'
     query = {'currency':currency}
     response = requests.get("https://api.coinbase.com/v2/exchange-rates", params=query)
