@@ -11,7 +11,7 @@ namespace CurrencyQuotation.Services
 {
     public class CurrencyQuotationService : ICurrencyQuotationService
     {
-        private const string REAL_CURRENCY = "BRL";
+        private const string DOLAR_CURRENCY = "USD";
 
         private readonly ILogger<CurrencyQuotationService> _logger;
 
@@ -39,8 +39,9 @@ namespace CurrencyQuotation.Services
         {
             try
             {
-                decimal dolarAmountForRealCurrency = this._currencyQuotationDao.GetDolarAmountByName(REAL_CURRENCY);
-                decimal dolarAmountNewCurrency = currencyDto.RealAmount * dolarAmountForRealCurrency;
+                string baseQuotation = currencyDto.BaseQuotation ?? DOLAR_CURRENCY;
+                decimal dolarAmountForRealCurrency = this._currencyQuotationDao.GetDolarAmountByName(baseQuotation);
+                decimal dolarAmountNewCurrency = currencyDto.Amount * dolarAmountForRealCurrency;
 
                 Currency currency = new(currencyDto.Name, dolarAmountNewCurrency);
                 this._currencyQuotationDao.InsertNewCurrency(currency);

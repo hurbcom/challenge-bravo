@@ -39,16 +39,17 @@ namespace CurrencyQuotation.Controllers
         [HttpPost]
         public IActionResult InsertNewCurrency([FromBody] CurrencyDto currencyDto)
         {
-            this._logger.LogInformation($"INIT - InsertNewCurrency - Currency: {currencyDto.Name}, Real Amount: {currencyDto.RealAmount}");
+            string successMessage = $"A moeda {currencyDto.Name} foi criada com sucesso";
+            string ErrorMessage = $"Erro ao criar a moeda {currencyDto.Name}";
+
+            this._logger.LogInformation($"INIT - InsertNewCurrency - Currency: {currencyDto.Name}, Amount: {currencyDto.Amount}, BaseQuotation: {currencyDto.BaseQuotation}");
 
             bool success = this._currencyQuotationService.InsertNewCurrency(currencyDto);
-
-            const string successMessage = "Moeda criada com sucesso";
-            const string ErrorMessage = "Erro ao criar a moeda especificada";
 
             this._logger.LogInformation($"END - InsertNewCurrency");
 
             return success ? Ok(successMessage) : BadRequest(ErrorMessage);
+
         }
 
         [HttpPut("{name}")]
