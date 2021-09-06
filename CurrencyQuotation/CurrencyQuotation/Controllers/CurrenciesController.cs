@@ -1,3 +1,4 @@
+using CurrencyQuotation.Models;
 using CurrencyQuotation.Models.Dtos;
 using CurrencyQuotation.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -48,6 +49,30 @@ namespace CurrencyQuotation.Controllers
             this._logger.LogInformation($"END - InsertNewCurrency");
 
             return success ? Ok(successMessage) : BadRequest(ErrorMessage);
+        }
+
+        [HttpPut("{name}")]
+        public IActionResult UpdateCurrency(string name, [FromBody] Currency currency)
+        {
+            try
+            {
+                decimal dolarAmount = currency.DolarAmount;
+                this._logger.LogInformation($"INIT - UpdateCurrency - Currency: {name}, dolarAmount: {dolarAmount}");
+
+                this._currencyQuotationService.UpdateCurrencyByName(name, dolarAmount);
+
+                this._logger.LogInformation($"END - UpdateCurrency");
+
+                string successMessage = "Moeda atualizada com sucesso";
+                return Ok(successMessage);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"Erro ao atualizar a moeda {name}.";
+                this._logger.LogError(errorMessage + $" Erro: {ex}");
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+            }
         }
 
         [HttpDelete("{name}")]

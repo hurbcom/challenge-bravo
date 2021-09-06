@@ -82,7 +82,14 @@ namespace CurrencyQuotation.Services
             {
                 this._currencyQuotationDao.Update(currency);
             }
+        }
 
+        public void UpdateCurrencyByName(string name, decimal dolarAmount)
+        {
+            Currency currencyToUpdate = this._currencyQuotationDao.GetCurrencyByName(name);
+            currencyToUpdate.DolarAmount = dolarAmount;
+
+            this._currencyQuotationDao.Update(currencyToUpdate);
         }
     }
 }
