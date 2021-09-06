@@ -1,20 +1,22 @@
 using CurrencyQuotation.Models.Dtos;
 using CurrencyQuotation.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Text.Json;
 
 namespace CurrencyQuotation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CurrencyQuotationController : ControllerBase
+    public class CurrenciesController : ControllerBase
     {
-        private readonly ILogger<CurrencyQuotationController> _logger;
+        private readonly ILogger<CurrenciesController> _logger;
 
         private readonly ICurrencyQuotationService _currencyQuotationService;
 
-        public CurrencyQuotationController(ILogger<CurrencyQuotationController> logger, ICurrencyQuotationService quotationService)
+        public CurrenciesController(ILogger<CurrenciesController> logger, ICurrencyQuotationService quotationService)
         {
             this._currencyQuotationService = quotationService;
             this._logger = logger;
@@ -34,7 +36,6 @@ namespace CurrencyQuotation.Controllers
         }
 
         [HttpPost]
-        [Route("Currency")]
         public IActionResult InsertNewCurrency([FromBody] CurrencyDto currencyDto)
         {
             this._logger.LogInformation($"INIT - InsertNewCurrency - Currency: {currencyDto.Name}, Real Amount: {currencyDto.RealAmount}");
@@ -49,20 +50,27 @@ namespace CurrencyQuotation.Controllers
             return success ? Ok(successMessage) : BadRequest(ErrorMessage);
         }
 
-        [HttpDelete]
-        [Route("Currency/{name}")]
+        [HttpDelete("{name}")]
         public IActionResult DeleteCurrency(string name)
         {
-            this._logger.LogInformation($"INIT - DeleteCurrency - Currency: {name}");
+            try
+            {
+                this._logger.LogInformation($"INIT - DeleteCurrency - Currency: {name}");
 
-            bool success = this._currencyQuotationService.DeleteCurrencyByName(name);
+                this._currencyQuotationService.DeleteCurrencyByName(name);
 
-            const string successMessage = "Moeda deletada com sucesso";
-            const string ErrorMessage = "Erro ao deletar a moeda especificada";
+                this._logger.LogInformation($"END - DeleteCurrency");
 
-            this._logger.LogInformation($"END - DeleteCurrency");
+                string successMessage = "Moeda deletada com sucesso";
+                return Ok(successMessage);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"Erro ao deletar a moeda {name}.";
+                this._logger.LogError(errorMessage + $" Erro: {ex}");
 
-            return success ? Ok(successMessage) : BadRequest(ErrorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+            }
         }
     }
 }
