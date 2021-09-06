@@ -1,5 +1,5 @@
-﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace CurrencyQuotation.Migrations
 {
@@ -13,7 +13,7 @@ namespace CurrencyQuotation.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    name = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     dolar_amount = table.Column<decimal>(type: "decimal(22,10)", precision: 22, scale: 10, nullable: false),
                     creation_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     last_update = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -21,6 +21,7 @@ namespace CurrencyQuotation.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_currency", x => x.id);
+                    table.UniqueConstraint("Unique_name", x => x.name);
                 });
         }
 
