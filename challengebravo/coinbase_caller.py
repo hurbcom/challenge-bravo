@@ -18,7 +18,6 @@ def update_currency_values():
     if (data['currency'] != currency):
         return 'Unexpected error while requesting price API'
     rates = data['rates']
-    print(currencies_to_update)
     for k,v in rates.items():
         if k in currencies_to_update:
             #update currency rate to main currency

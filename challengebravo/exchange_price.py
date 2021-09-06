@@ -33,12 +33,13 @@ def getConvertedValue():
             else:
                 error = "Expected currency 'to' currently does not exist"
         if converted_value != None:
+            converted_value = '{:.8f}'.format(converted_value)
             return jsonify({'convertedValue': converted_value}), 200
     return jsonify({'error': error}), 400
 
 
 # API de criação de moeda
-@bp.route('/createCurrency', methods = ['POST'])
+@bp.route('/createCurrency', methods = ['PUT'])
 def createNewCurrency():
     json_request = request.get_json()
     submission_keys = ['symbol','usd_value']
@@ -55,16 +56,18 @@ def createNewCurrency():
             pass
         try:
             usd_value = float(json_request['usd_value'])
-        except ValueError:
-            error = "Input value as equivalent to USD must be numerical"
+            if usd_value < 0:
+                error = "Input currency value in USD must be positive"
+        except:
+            error = "Input currency value in USD must be numerical with '.' as decimal separator"
         if keep_updated is not None and keep_updated != 1 and keep_updated != 0:
             error = "The value of keep updated must be true or false"
-        new_currency = currency_dao.Currency(symbol, usd_value, keep_updated)
-        if currency_dao.retrieveValue(new_currency) is not None:
-            error = "Currency symbol already exists"
     else:
         error = "There are missing keys in JSON request, please read the documentation for help"
     if not error:
+        new_currency = currency_dao.Currency(symbol.upper(), usd_value, keep_updated)
+        if currency_dao.retrieveValue(new_currency) is not None:
+            error = "Currency symbol already exists"
         currency_dao.create(new_currency)
         return jsonify({'message': 'Currency successfully created','error': None}), 200
     else:
@@ -72,7 +75,7 @@ def createNewCurrency():
 
     
 # API de deleção de moeda
-@bp.route('/deleteCurrency', methods = ['POST'])
+@bp.route('/deleteCurrency', methods = ['DELETE'])
 def deleteCurrency():
     json_request = request.get_json()
     submission_keys = ['symbol']

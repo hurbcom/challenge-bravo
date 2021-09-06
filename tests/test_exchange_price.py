@@ -6,7 +6,7 @@ from challengebravo.currency_dao import Currency, retrieveCurrency, retrieveValu
 
 @pytest.mark.parametrize('symbol, usd_value', [('ADA', 0.34131440176118233), ('XRP', 0.8058215514298602), ('doge', 3.434655675768504)])
 def test_create(client, app, symbol, usd_value):
-    response = client.post('/exchangePrice/createCurrency', json={'symbol': symbol, 'usd_value': usd_value})
+    response = client.put('/exchangePrice/createCurrency', json={'symbol': symbol, 'usd_value': usd_value})
     assert response.status_code == 200
 
     with app.app_context():
@@ -16,42 +16,30 @@ def test_create(client, app, symbol, usd_value):
 @pytest.mark.parametrize('symbol, usd_value', [('WLUNA', 0.03069838833461243), ('aed', 3.6732), ('ANG', 1.790838)])
 def test_create_delete(client, app, symbol, usd_value):
     with app.app_context():
-        response = client.post('/exchangePrice/createCurrency', json={'symbol': symbol, 'usd_value': usd_value})
+        response = client.put('/exchangePrice/createCurrency', json={'symbol': symbol, 'usd_value': usd_value})
         assert response.status_code == 200
         assert retrieveCurrency(symbol.upper()) is not None
-        response = client.post('exchangePrice/deleteCurrency', json={'symbol': symbol})
+        response = client.delete('exchangePrice/deleteCurrency', json={'symbol': symbol})
         assert response.status_code == 200
         assert retrieveCurrency(symbol.upper()) is None
 
 
+@pytest.mark.parametrize('symbol_currency_from, symbol_currency_to, amount', [('BRL', 'BTC', '10'),('EUR', 'BRL', '3'),('ETH', 'USD', '8')])
+def test_convert_currency(client, app, symbol_currency_from, symbol_currency_to, amount):
+    response = client.get('exchangePrice/convertCurrency?from={currency_from}&to={currency_to}&amount={amount}'.format(currency_from = symbol_currency_from, currency_to = symbol_currency_to, amount = amount))
+    assert response.status_code == 200
+    with app.app_context():
+        obj_currency_from = retrieveCurrency(symbol_currency_from)
+        obj_currency_to = retrieveCurrency(symbol_currency_to)
+        print(obj_currency_from.usd_value)
+        print(obj_currency_to.usd_value)
+        print(amount)
+        if symbol_currency_to.upper() == "USD":
+            converted_value = obj_currency_from.usd_value * float(amount);
+        else:
+            converted_value = obj_currency_to.usd_value / obj_currency_from.usd_value * float(amount)
+        json_data = response.get_json()
+        assert '{:.8f}'.format(converted_value) == json_data['convertedValue']
 
 
-# def test_update(client, auth, app):
-#     auth.login()
-#     assert client.get('/1/update').status_code == 200
-#     client.post('/1/update', data={'title': 'updated', 'body': ''})
 
-#     with app.app_context():
-#         db = get_db()
-#         post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
-#         assert post['title'] == 'updated'
-
-
-# @pytest.mark.parametrize('path', (
-#     '/create',
-#     '/1/update',
-# ))
-# def test_create_update_validate(client, auth, path):
-#     auth.login()
-#     response = client.post(path, data={'title': '', 'body': ''})
-#     assert b'Title is required.' in response.data
-
-# def test_delete(client, auth, app):
-#     auth.login()
-#     response = client.post('/1/delete')
-#     assert response.headers['Location'] == 'http://localhost/'
-
-#     with app.app_context():
-#         db = get_db()
-#         post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
-#         assert post is None
