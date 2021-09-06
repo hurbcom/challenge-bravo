@@ -48,7 +48,7 @@ Requisição: `http://localhost:5000/exchangePrice/createCurrency`
 }``
 
 
-## Retorno
+#### Retorno
 ``{
     "error": null,
     "message": "Currency successfully created"
@@ -74,7 +74,7 @@ Requisição: `http://localhost:5000/exchangePrice/deleteCurrency`
     "symbol": "ADA"
 }``
 
-## Retorno
+#### Retorno
 
 ``{
     "error": null,
@@ -91,21 +91,18 @@ Method: `GET`
 #### Validações
 
 - from:
---	Deve possuir 3 caracteres e estar em uppercase.
 --	Deve estar cadastrada.
 
 - to:
---	Deve possuir 3 caracteres e estar em uppercase.
 --	Deve estar cadastrada
 
 - amount:
---	Não deve ser negativo.
---	Deve ser utilizado `.` como separador decimal.
+--	Deve ser um valor numérico utilizando '.' como separador decimal.
 
 #### Exemplo de requisição
 Requisição: `http://localhost:5000/exchangePrice/convertCurrency?from=BTC&to=EUR&amount=5`
 
-## Retorno
+#### Retorno
 
 ``{
   "convertedValue": "0.00011562"
@@ -133,7 +130,7 @@ Para executar os testes utilizar o comando:
 
 ## Aquitetura
 
-- Foi utilizado o flask em conjunto ao SQLite devido a familiaridade da praticidade tanto de criação de APIs com o uso do flask quanto a de configuração do banco.
+- Foi utilizado o flask em conjunto ao SQLite devido a familiaridade e da praticidade tanto de criação de APIs com o uso do flask quanto a de configuração do banco com o SQLite.
 - A Coinbase foi utilizada para consultar os valores das moedas pelo grande número de moedas suportadas, assim como a sua popularidade em busca de cotações.
 - Para testes foi utilizado o Pytest, sendo possível testar desde a inicialização da aplicação, as APIs e a integração com o banco de dados de maneira prática.
 
