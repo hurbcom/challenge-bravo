@@ -32,12 +32,16 @@ namespace CurrencyQuotation.Jobs
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            this._logger.LogInformation("INIT - MigrationJob");
+
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 this.Context = scope.ServiceProvider.GetRequiredService<QuotationContext>();
 
                 ExecuteMigrations();
             }
+
+            this._logger.LogInformation("END - MigrationJob");
 
             return Task.CompletedTask;
         }

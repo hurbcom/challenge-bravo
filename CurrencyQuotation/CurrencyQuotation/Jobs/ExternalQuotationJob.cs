@@ -43,6 +43,8 @@ namespace CurrencyQuotation.Jobs
                 this.Timer = new Timer(Execute, null, TimeSpan.Zero, TimeSpan.FromHours(1));
             }
 
+            this._logger.LogInformation("END - ExternalQuotationJob");
+
             return Task.CompletedTask;
         }
 
@@ -72,7 +74,6 @@ namespace CurrencyQuotation.Jobs
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            this._logger.LogInformation("END - ExternalQuotationJob");
             return Task.CompletedTask;
         }
     }
