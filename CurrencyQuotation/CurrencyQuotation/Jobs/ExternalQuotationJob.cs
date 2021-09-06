@@ -16,7 +16,7 @@ namespace CurrencyQuotation.Jobs
     {
         private readonly ILogger<ExternalQuotationJob> _logger;
 
-        public readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
         private IExternalQuotationApiService ExternalQuotationApiService { get; set; }
         private ICurrencyQuotationService CurrencyQuotationService { get; set; }

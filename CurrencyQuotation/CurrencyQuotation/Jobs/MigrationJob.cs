@@ -13,7 +13,7 @@ namespace CurrencyQuotation.Jobs
     {
         private readonly ILogger<MigrationJob> _logger;
 
-        public readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
         private QuotationContext Context { get; set; }
 
