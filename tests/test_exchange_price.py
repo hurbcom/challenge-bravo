@@ -1,6 +1,6 @@
 import pytest
-from challengebravo.db import get_db
-from challengebravo.currency_dao import Currency, retrieveCurrency, retrieveValue
+from challengebravo.db.db import get_db
+from challengebravo.db.currency_dao import Currency, retrieveCurrency, retrieveValue
 
 
 

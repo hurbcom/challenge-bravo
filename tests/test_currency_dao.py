@@ -1,7 +1,5 @@
 import pytest
-from challengebravo import currency_dao
-from challengebravo.db import get_db
-from challengebravo.currency_dao import Currency, retrieveCurrenciesToUpdate, retrieveCurrency, retrieveValue, create
+from challengebravo.db.currency_dao import Currency, retrieveCurrenciesToUpdate, retrieveCurrency, retrieveValue, create
 
 
 @pytest.mark.parametrize('symbol, usd_value', [('ada', 0.34131440176118233), ('xrp', 0.8058215514298602), ('doge', 3.434655675768504)])

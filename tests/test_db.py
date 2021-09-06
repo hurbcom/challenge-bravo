@@ -1,7 +1,7 @@
 import sqlite3
 
 import pytest
-from challengebravo.db  import get_db
+from challengebravo.db.db import get_db
 
 def test_get_close_db(app):
     with app.app_context():
@@ -20,7 +20,7 @@ def test_init_db_command(runner, monkeypatch):
     def fake_init_db():
         Recorder.called = True
 
-    monkeypatch.setattr('challengebravo.db.init_db', fake_init_db)
+    monkeypatch.setattr('challengebravo.db.db.init_db', fake_init_db)
     result = runner.invoke(args=['init-db'])
     assert 'Database initialized' in result.output
     assert Recorder.called
