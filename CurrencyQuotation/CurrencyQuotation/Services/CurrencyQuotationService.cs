@@ -15,18 +15,28 @@ namespace CurrencyQuotation.Services
 
         private readonly ILogger<CurrencyQuotationService> _logger;
 
+        private readonly IRedisCacheService _redisCacheService;
+
         private readonly ICurrencyQuotationDao _currencyQuotationDao;
 
-        public CurrencyQuotationService(ICurrencyQuotationDao currencyQuotationDao, ILogger<CurrencyQuotationService> logger)
+        public CurrencyQuotationService(ILogger<CurrencyQuotationService> logger,
+            ICurrencyQuotationDao currencyQuotationDao, IRedisCacheService redisCacheService)
         {
-            this._currencyQuotationDao = currencyQuotationDao;
             this._logger = logger;
+            this._currencyQuotationDao = currencyQuotationDao;
+            this._redisCacheService = redisCacheService;
         }
 
         public decimal GetQuotation(string from, string to, decimal amount)
         {
-            IList<string> currenciesName = new List<string>() { from, to };
-            IList<Currency> currencies = this._currencyQuotationDao.GetQuotationByCurrencies(currenciesName);
+            Func<IList<Currency>> func = () =>
+             {
+                 IList<string> currenciesName = new List<string>() { from, to };
+                 return this._currencyQuotationDao.GetQuotationByCurrencies(currenciesName);
+             };
+
+            string key = RedisCacheService.CreateKeyCacheByParams(from, to);
+            IList<Currency> currencies = this._redisCacheService.GetRedisCacheForConverter<IList<Currency>>(func, key, TimeSpan.FromMinutes(60)).Result;
 
             Currency fromCurrency = currencies.First(c => from.Equals(c.Name));
             Currency toCurrency = currencies.First(c => to.Equals(c.Name));
