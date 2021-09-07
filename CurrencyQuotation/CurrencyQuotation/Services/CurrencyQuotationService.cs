@@ -1,11 +1,10 @@
-using CurrencyQuotation.Daos.Interfaces;
+﻿using CurrencyQuotation.Daos.Interfaces;
 using CurrencyQuotation.Models;
 using CurrencyQuotation.Models.Dtos;
 using CurrencyQuotation.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CurrencyQuotation.Services
 {
@@ -29,17 +28,8 @@ namespace CurrencyQuotation.Services
 
         public decimal GetQuotation(string from, string to, decimal amount)
         {
-            Func<IList<Currency>> func = () =>
-             {
-                 IList<string> currenciesName = new List<string>() { from, to };
-                 return this._currencyQuotationDao.GetQuotationByCurrencies(currenciesName);
-             };
-
-            string key = RedisCacheService.CreateKeyCacheByParams(from, to);
-            IList<Currency> currencies = this._redisCacheService.GetRedisCacheForConverter<IList<Currency>>(func, key, TimeSpan.FromMinutes(60)).Result;
-
-            Currency fromCurrency = currencies.First(c => from.Equals(c.Name));
-            Currency toCurrency = currencies.First(c => to.Equals(c.Name));
+            Currency fromCurrency = GetCurrencyByName(from);
+            Currency toCurrency = GetCurrencyByName(to);
 
             decimal result = (toCurrency.DolarAmount / fromCurrency.DolarAmount) * amount;
             return result;
@@ -69,7 +59,7 @@ namespace CurrencyQuotation.Services
 
         public void DeleteCurrencyByName(string name)
         {
-            Currency currencyToRemove = this._currencyQuotationDao.GetCurrencyByName(name);
+            Currency currencyToRemove = GetCurrencyByName(name);
 
             this._currencyQuotationDao.DeleteByName(currencyToRemove);
         }
@@ -97,10 +87,21 @@ namespace CurrencyQuotation.Services
 
         public void UpdateCurrencyByName(string name, decimal dolarAmount)
         {
-            Currency currencyToUpdate = this._currencyQuotationDao.GetCurrencyByName(name);
+            Currency currencyToUpdate = GetCurrencyByName(name);
             currencyToUpdate.DolarAmount = dolarAmount;
 
             this._currencyQuotationDao.Update(currencyToUpdate);
+        }
+
+        public Currency GetCurrencyByName(string name)
+        {
+            string key = RedisCacheService.CreateKeyCacheByParams(name);
+
+            Func<Currency> func = () => this._currencyQuotationDao.GetCurrencyByName(name);
+
+            Currency currency = this._redisCacheService.GetRedisCache<Currency>(func, key, TimeSpan.FromMinutes(60)).Result;
+
+            return currency;
         }
     }
 }

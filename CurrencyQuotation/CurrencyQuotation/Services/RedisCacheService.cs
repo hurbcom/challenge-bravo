@@ -1,4 +1,4 @@
-using CurrencyQuotation.Services.Interfaces;
+﻿using CurrencyQuotation.Services.Interfaces;
 using StackExchange.Redis;
 using System;
 using System.Text;
@@ -14,27 +14,6 @@ namespace CurrencyQuotation.Services
         public RedisCacheService(IConnectionMultiplexer connectionMultiplexer)
         {
             _connectionMultiplexer = connectionMultiplexer;
-        }
-
-        public async Task<T> GetRedisCacheForConverter<T>(Func<T> func, string key, TimeSpan expireCache)
-        {
-            string newKey = InvertKey(key);
-
-            T value = GetRedisCache<T>(func, key, expireCache).Result;
-
-            string valueStr = JsonSerializer.Serialize(value);
-            await SetCacheValueAsync(newKey, valueStr, expireCache);
-
-            return value;
-        }
-
-        private string InvertKey(string key)
-        {
-            string[] keys = key.Split("_");
-            string first = keys[0];
-            string Second = keys[1];
-
-            return string.Concat(Second, "_", first);
         }
 
         public async Task<T> GetRedisCache<T>(Func<T> func, string key, TimeSpan expireCache)
