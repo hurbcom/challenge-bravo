@@ -11,8 +11,12 @@ services:
       DBServer: "sql1"
     depends_on:
       - "sql1"
+      - "cache"
     ports:
       - "9091:80"
   sql1:
     container_name: SqlServer
     image: mcr.microsoft.com/mssql/server:2019-latest
+  cache:
+    container_name: Redis
+    image: redis:latest

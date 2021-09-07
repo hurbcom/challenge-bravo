@@ -12,3 +12,6 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "1401:1433"
+  cache:
+    ports:
+      - "6379:6379"
