@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 namespace CurrencyQuotation
 {
@@ -34,6 +35,9 @@ namespace CurrencyQuotation
 
             services.AddDbContext<QuotationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")), ServiceLifetime.Singleton);
             services.AddHttpClient();
+
+            services.AddSingleton<IConnectionMultiplexer>(con => ConnectionMultiplexer.Connect(Configuration.GetValue<string>("RedisConnection")));
+            services.AddSingleton<IRedisCacheService, RedisCacheService>();
 
             services.AddHostedService<MigrationJob>();
             services.AddHostedService<ExternalQuotationJob>();
