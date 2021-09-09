@@ -1,8 +1,22 @@
 version: '3.4'
 
 services:
-  currencyquotation:
-    container_name: CurrencyQuotation
+  proxy:
+    container_name: LoadBalance-Nginx
+    image: currencyquotation-nginx
+    build:
+      context: .
+    ports:
+      - "20000:80"
+    depends_on:
+      - currencyquotation01
+      - currencyquotation02
+      - currencyquotation03
+    networks:
+      - currencyquotation-network
+
+  currencyquotation01:
+    container_name: CurrencyQuotation01
     image: currencyquotation
     build:
       context: .
@@ -13,10 +27,54 @@ services:
       - "sql1"
       - "cache"
     ports:
-      - "9091:80"
+      - "20001:80"
+    networks:
+      - currencyquotation-network
+
+  currencyquotation02:
+    container_name: CurrencyQuotation02
+    image: currencyquotation
+    build:
+      context: .
+      dockerfile: CurrencyQuotation/Dockerfile
+    environment:
+      DBServer: "sql1"
+    depends_on:
+      - "sql1"
+      - "cache"
+    ports:
+      - "20002:80"
+    networks:
+      - currencyquotation-network
+
+  currencyquotation03:
+    container_name: CurrencyQuotation03
+    image: currencyquotation
+    build:
+      context: .
+      dockerfile: CurrencyQuotation/Dockerfile
+    environment:
+      DBServer: "sql1"
+    depends_on:
+      - "sql1"
+      - "cache"
+    ports:
+      - "20003:80"
+    networks:
+      - currencyquotation-network
+
   sql1:
     container_name: SqlServer
     image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      - currencyquotation-network
+
   cache:
     container_name: Redis
     image: redis:latest
+    networks:
+      - currencyquotation-network
+
+networks: 
+    currencyquotation-network:
+      driver: bridge

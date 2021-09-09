@@ -1,11 +1,26 @@
 version: '3.4'
 
 services:
-  currencyquotation:
+  proxy:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "80"
+      - "20000:80"
+  currencyquotation01:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "20001:80"
+  currencyquotation02:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "20002:80"
+  currencyquotation03:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "20003:80"
   sql1:
     environment:
       SA_PASSWORD: "SenhaTeste123#*"
