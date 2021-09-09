@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
+using System.Threading;
 
 namespace CurrencyQuotation
 {
@@ -27,6 +28,8 @@ namespace CurrencyQuotation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ThreadPool.SetMinThreads(200, 200);
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
