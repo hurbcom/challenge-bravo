@@ -13,6 +13,6 @@ namespace CurrencyQuotation.Services.Interfaces
         void SaveAll(IEnumerable<Currency> currencies);
         IList<Currency> GetAllCurrencies();
         void UpdateAll(IList<Currency> currenciesInDb);
-        void UpdateCurrencyByName(string name, decimal dolarAmount);
+        Task UpdateCurrencyByName(string name, decimal dolarAmount);
     }
 }

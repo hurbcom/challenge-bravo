@@ -50,14 +50,14 @@ namespace CurrencyQuotation.Controllers
         }
 
         [HttpPut("{name}")]
-        public IActionResult UpdateCurrency(string name, [FromBody] Currency currency)
+        public async Task<IActionResult> UpdateCurrency(string name, [FromBody] Currency currency)
         {
             try
             {
                 decimal dolarAmount = currency.DolarAmount;
                 this._logger.LogInformation($"INIT - UpdateCurrency - Currency: {name}, dolarAmount: {dolarAmount}");
 
-                this._currencyQuotationService.UpdateCurrencyByName(name, dolarAmount);
+                await this._currencyQuotationService.UpdateCurrencyByName(name, dolarAmount);
 
                 this._logger.LogInformation($"END - UpdateCurrency");
 

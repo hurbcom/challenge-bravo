@@ -1,4 +1,4 @@
-﻿using CurrencyQuotation.Daos.Interfaces;
+using CurrencyQuotation.Daos.Interfaces;
 using CurrencyQuotation.Models;
 using CurrencyQuotation.Models.Dtos;
 using CurrencyQuotation.Services.Interfaces;
@@ -86,9 +86,9 @@ namespace CurrencyQuotation.Services
             }
         }
 
-        public void UpdateCurrencyByName(string name, decimal dolarAmount)
+        public async Task UpdateCurrencyByName(string name, decimal dolarAmount)
         {
-            Currency currencyToUpdate = this._currencyQuotationDao.GetCurrencyByName(name);
+            Currency currencyToUpdate = await GetCurrencyByName(name);
             currencyToUpdate.DolarAmount = dolarAmount;
 
             this._currencyQuotationDao.Update(currencyToUpdate);
@@ -98,9 +98,8 @@ namespace CurrencyQuotation.Services
         {
             string key = RedisCacheService.CreateKeyCacheByParams(name);
 
-            Func<Currency> func = () => this._currencyQuotationDao.GetCurrencyByName(name);
-
-            Currency currency = await this._redisCacheService.GetRedisCache<Currency>(func, key, TimeSpan.FromMinutes(60));
+            Currency function() => this._currencyQuotationDao.GetCurrencyByName(name);
+            Currency currency = await this._redisCacheService.GetRedisCache<Currency>(function, key, TimeSpan.FromMinutes(60));
 
             return currency;
         }
