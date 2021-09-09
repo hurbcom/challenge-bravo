@@ -5,6 +5,7 @@ using CurrencyQuotation.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CurrencyQuotation.Services
 {
@@ -26,10 +27,10 @@ namespace CurrencyQuotation.Services
             this._redisCacheService = redisCacheService;
         }
 
-        public decimal GetQuotation(string from, string to, decimal amount)
+        public async Task<decimal> GetQuotation(string from, string to, decimal amount)
         {
-            Currency fromCurrency = GetCurrencyByName(from);
-            Currency toCurrency = GetCurrencyByName(to);
+            Currency fromCurrency = await GetCurrencyByName(from);
+            Currency toCurrency = await GetCurrencyByName(to);
 
             decimal result = (toCurrency.DolarAmount / fromCurrency.DolarAmount) * amount;
             return result;
@@ -59,7 +60,7 @@ namespace CurrencyQuotation.Services
 
         public void DeleteCurrencyByName(string name)
         {
-            Currency currencyToRemove = GetCurrencyByName(name);
+            Currency currencyToRemove = this._currencyQuotationDao.GetCurrencyByName(name);
 
             this._currencyQuotationDao.DeleteByName(currencyToRemove);
         }
@@ -87,19 +88,19 @@ namespace CurrencyQuotation.Services
 
         public void UpdateCurrencyByName(string name, decimal dolarAmount)
         {
-            Currency currencyToUpdate = GetCurrencyByName(name);
+            Currency currencyToUpdate = this._currencyQuotationDao.GetCurrencyByName(name);
             currencyToUpdate.DolarAmount = dolarAmount;
 
             this._currencyQuotationDao.Update(currencyToUpdate);
         }
 
-        public Currency GetCurrencyByName(string name)
+        public async Task<Currency> GetCurrencyByName(string name)
         {
             string key = RedisCacheService.CreateKeyCacheByParams(name);
 
             Func<Currency> func = () => this._currencyQuotationDao.GetCurrencyByName(name);
 
-            Currency currency = this._redisCacheService.GetRedisCache<Currency>(func, key, TimeSpan.FromMinutes(60)).Result;
+            Currency currency = await this._redisCacheService.GetRedisCache<Currency>(func, key, TimeSpan.FromMinutes(60));
 
             return currency;
         }

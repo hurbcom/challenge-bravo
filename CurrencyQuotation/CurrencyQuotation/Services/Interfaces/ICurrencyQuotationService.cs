@@ -1,12 +1,13 @@
 using CurrencyQuotation.Models;
 using CurrencyQuotation.Models.Dtos;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CurrencyQuotation.Services.Interfaces
 {
     public interface ICurrencyQuotationService
     {
-        decimal GetQuotation(string from, string to, decimal amount);
+        Task<decimal> GetQuotation(string from, string to, decimal amount);
         bool InsertNewCurrency(CurrencyDto currencyDto);
         void DeleteCurrencyByName(string name);
         void SaveAll(IEnumerable<Currency> currencies);

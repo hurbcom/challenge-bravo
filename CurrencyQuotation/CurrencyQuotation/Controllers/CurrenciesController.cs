@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace CurrencyQuotation.Controllers
 {
@@ -24,14 +25,10 @@ namespace CurrencyQuotation.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetQuotation([FromQuery] string from, string to, decimal amount)
+        public async Task<IActionResult> GetQuotation([FromQuery] string from, string to, decimal amount)
         {
-            this._logger.LogInformation($"INIT - GetQuotation - From: {from}, To: {to} e Amount: {amount}");
-
-            decimal result = this._currencyQuotationService.GetQuotation(from, to, amount);
+            decimal result = await this._currencyQuotationService.GetQuotation(from, to, amount);
             string jsonResult = JsonSerializer.Serialize(result);
-
-            this._logger.LogInformation($"END - GetQuotation");
 
             return Ok(jsonResult);
         }
