@@ -14,5 +14,6 @@ namespace CurrencyQuotation.Services.Interfaces
         IList<Currency> GetAllCurrencies();
         void UpdateAll(IList<Currency> currenciesInDb);
         Task UpdateCurrencyByName(string name, decimal dolarAmount);
+        Task<Currency> GetCurrencyByName(string name);
     }
 }
