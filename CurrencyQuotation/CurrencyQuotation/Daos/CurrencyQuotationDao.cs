@@ -29,12 +29,10 @@ namespace CurrencyQuotation.Daos
             return Task.FromResult(queryable.Select(bean => bean.DolarAmount).First());
         }
 
-        public Task InsertNewCurrency(Currency currency)
+        public async Task InsertNewCurrency(Currency currency)
         {
-            this._context.Currency.Add(currency);
-            this._context.SaveChanges();
-
-            return Task.CompletedTask;
+            this._context.Currency.AddAsync(currency);
+            await this._context.SaveChangesAsync();
         }
 
         public IList<Currency> GetAllCurrencies()
