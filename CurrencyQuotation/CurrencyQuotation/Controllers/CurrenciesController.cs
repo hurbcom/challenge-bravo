@@ -64,10 +64,16 @@ namespace CurrencyQuotation.Controllers
                 string successMessage = "Moeda atualizada com sucesso";
                 return Ok(successMessage);
             }
+            catch (ArgumentNullException e)
+            {
+                this._logger.LogError($" Erro: {e.Message}");
+
+                return NotFound(e.ParamName);
+            }
             catch (Exception ex)
             {
                 string errorMessage = $"Erro ao atualizar a moeda {name}.";
-                this._logger.LogError(errorMessage + $" Erro: {ex}");
+                this._logger.LogError(errorMessage + $" Erro: {ex.Message}");
 
                 return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
@@ -86,6 +92,12 @@ namespace CurrencyQuotation.Controllers
 
                 string successMessage = "Moeda deletada com sucesso";
                 return Ok(successMessage);
+            }
+            catch (ArgumentNullException e)
+            {
+                this._logger.LogError($" Erro: {e.Message}");
+
+                return NotFound(e.ParamName);
             }
             catch (Exception ex)
             {

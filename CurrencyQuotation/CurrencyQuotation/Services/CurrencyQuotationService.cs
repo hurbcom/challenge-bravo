@@ -62,7 +62,10 @@ namespace CurrencyQuotation.Services
         {
             Currency currencyToRemove = await this._currencyQuotationDao.GetCurrencyByName(name);
 
-            this._currencyQuotationDao.DeleteByName(currencyToRemove);
+            if (currencyToRemove == null)
+            {
+                throw new ArgumentNullException($"A moeda {name} não foi encontrada na base");
+            }
 
             await this._currencyQuotationDao.DeleteByName(currencyToRemove);
         }
@@ -90,7 +93,13 @@ namespace CurrencyQuotation.Services
 
         public async Task UpdateCurrencyByName(string name, decimal dolarAmount)
         {
-            Currency currencyToUpdate = await GetCurrencyByName(name);
+            Currency currencyToUpdate = await this._currencyQuotationDao.GetCurrencyByName(name);
+
+            if (currencyToUpdate == null)
+            {
+                throw new ArgumentNullException($"A moeda {name} não foi encontrada na base");
+            }
+
             currencyToUpdate.DolarAmount = dolarAmount;
 
             this._currencyQuotationDao.Update(currencyToUpdate);
