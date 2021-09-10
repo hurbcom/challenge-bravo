@@ -41,8 +41,8 @@ namespace CurrencyQuotation.Services
             try
             {
                 string baseQuotation = currencyDto.BaseQuotation ?? DOLAR_CURRENCY;
-                decimal dolarAmountForRealCurrency = this._currencyQuotationDao.GetDolarAmountByName(baseQuotation);
-                decimal dolarAmountNewCurrency = currencyDto.Amount * dolarAmountForRealCurrency;
+                decimal dolarAmountBaseQuotation = this._currencyQuotationDao.GetDolarAmountByName(baseQuotation);
+                decimal dolarAmountNewCurrency = currencyDto.Amount * dolarAmountBaseQuotation;
 
                 Currency currency = new(currencyDto.Name, dolarAmountNewCurrency);
                 this._currencyQuotationDao.InsertNewCurrency(currency);
