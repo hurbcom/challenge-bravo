@@ -7,11 +7,10 @@ services:
     build:
       context: .
     ports:
-      - "20000:80"
+      - "5000:80"
     depends_on:
       - currencyquotation01
       - currencyquotation02
-      - currencyquotation03
     networks:
       - currencyquotation-network
 
@@ -27,7 +26,7 @@ services:
       - "sql1"
       - "cache"
     ports:
-      - "20001:80"
+      - "5001:80"
     networks:
       - currencyquotation-network
 
@@ -43,23 +42,7 @@ services:
       - "sql1"
       - "cache"
     ports:
-      - "20002:80"
-    networks:
-      - currencyquotation-network
-
-  currencyquotation03:
-    container_name: CurrencyQuotation03
-    image: currencyquotation
-    build:
-      context: .
-      dockerfile: CurrencyQuotation/Dockerfile
-    environment:
-      DBServer: "sql1"
-    depends_on:
-      - "sql1"
-      - "cache"
-    ports:
-      - "20003:80"
+      - "5002:80"
     networks:
       - currencyquotation-network
 

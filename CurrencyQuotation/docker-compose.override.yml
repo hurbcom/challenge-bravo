@@ -5,22 +5,17 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "20000:80"
+      - "5000:80"
   currencyquotation01:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "20001:80"
+      - "5001:80"
   currencyquotation02:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "20002:80"
-  currencyquotation03:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "20003:80"
+      - "5002:80"
   sql1:
     environment:
       SA_PASSWORD: "SenhaTeste123#*"
