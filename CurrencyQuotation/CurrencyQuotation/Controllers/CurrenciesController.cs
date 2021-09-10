@@ -74,13 +74,13 @@ namespace CurrencyQuotation.Controllers
         }
 
         [HttpDelete("{name}")]
-        public IActionResult DeleteCurrency(string name)
+        public async Task<IActionResult> DeleteCurrency(string name)
         {
             try
             {
                 this._logger.LogInformation($"INIT - DeleteCurrency - Currency: {name}");
 
-                this._currencyQuotationService.DeleteCurrencyByName(name);
+                await this._currencyQuotationService.DeleteCurrencyByName(name);
 
                 this._logger.LogInformation($"END - DeleteCurrency");
 

@@ -58,9 +58,9 @@ namespace CurrencyQuotation.Services
             }
         }
 
-        public void DeleteCurrencyByName(string name)
+        public async Task DeleteCurrencyByName(string name)
         {
-            Currency currencyToRemove = this._currencyQuotationDao.GetCurrencyByName(name);
+            Currency currencyToRemove = await GetCurrencyByName(name);
 
             this._currencyQuotationDao.DeleteByName(currencyToRemove);
         }
