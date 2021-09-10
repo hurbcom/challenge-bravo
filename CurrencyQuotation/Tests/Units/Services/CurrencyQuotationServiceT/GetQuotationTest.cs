@@ -14,9 +14,6 @@ namespace Tests.Units.Services.CurrencyQuotationServiceT
     public class GetQuotationTest
     {
         private ICurrencyQuotationService CurrencyQuotationService { get; set; }
-        public GetQuotationTest()
-        {
-        }
 
         [Theory]
         [InlineData("USD", "BRL", 100, 1.000000, 5.198200, "519.82")]
