@@ -3,6 +3,7 @@ using CurrencyQuotation.DatabaseContext;
 using CurrencyQuotation.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CurrencyQuotation.Daos
 {
@@ -22,16 +23,18 @@ namespace CurrencyQuotation.Daos
                .ToList();
         }
 
-        public decimal GetDolarAmountByName(string nameCurrency)
+        public Task<decimal> GetDolarAmountByName(string nameCurrency)
         {
             IQueryable<Currency> queryable = GetByName(nameCurrency);
-            return queryable.Select(bean => bean.DolarAmount).First();
+            return Task.FromResult(queryable.Select(bean => bean.DolarAmount).First());
         }
 
-        public void InsertNewCurrency(Currency currency)
+        public Task InsertNewCurrency(Currency currency)
         {
             this._context.Currency.Add(currency);
             this._context.SaveChanges();
+
+            return Task.CompletedTask;
         }
 
         public IList<Currency> GetAllCurrencies()

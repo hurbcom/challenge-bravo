@@ -36,16 +36,16 @@ namespace CurrencyQuotation.Services
             return result;
         }
 
-        public bool InsertNewCurrency(CurrencyDto currencyDto)
+        public async Task<bool> InsertNewCurrency(CurrencyDto currencyDto)
         {
             try
             {
                 string baseQuotation = currencyDto.BaseQuotation ?? DOLAR_CURRENCY;
-                decimal dolarAmountBaseQuotation = this._currencyQuotationDao.GetDolarAmountByName(baseQuotation);
+                decimal dolarAmountBaseQuotation = await this._currencyQuotationDao.GetDolarAmountByName(baseQuotation);
                 decimal dolarAmountNewCurrency = currencyDto.Amount * dolarAmountBaseQuotation;
 
                 Currency currency = new(currencyDto.Name, dolarAmountNewCurrency);
-                this._currencyQuotationDao.InsertNewCurrency(currency);
+                await this._currencyQuotationDao.InsertNewCurrency(currency);
 
                 _logger.LogInformation("Nova moeda salva com sucesso");
 

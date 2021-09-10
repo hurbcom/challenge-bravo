@@ -6,6 +6,7 @@ using CurrencyQuotation.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests.Units.Services.CurrencyQuotationServiceT
@@ -37,7 +38,7 @@ namespace Tests.Units.Services.CurrencyQuotationServiceT
             Mock<ICurrencyQuotationDao> daoMock = new();
 
             daoMock.Setup(m => m.GetDolarAmountByName(It.IsAny<string>()))
-                .Returns(DolarAmountBase);
+                .Returns(Task.FromResult(DolarAmountBase));
 
             Currency currencyToSave = null;
             daoMock.Setup(h => h.InsertNewCurrency(It.IsAny<Currency>()))
@@ -45,7 +46,7 @@ namespace Tests.Units.Services.CurrencyQuotationServiceT
 
             //Act
             this.CurrencyQuotationService = new CurrencyQuotationService(loggerMock.Object, daoMock.Object, cacheMock.Object);
-            bool result = this.CurrencyQuotationService.InsertNewCurrency(currencyDto);
+            bool result = this.CurrencyQuotationService.InsertNewCurrency(currencyDto).Result;
 
             //Assert
             Assert.Equal(expectedDolarAmount, currencyToSave.DolarAmount);
@@ -72,7 +73,7 @@ namespace Tests.Units.Services.CurrencyQuotationServiceT
 
             //Act
             this.CurrencyQuotationService = new CurrencyQuotationService(loggerMock.Object, daoMock.Object, cacheMock.Object);
-            bool result = this.CurrencyQuotationService.InsertNewCurrency(currencyDto);
+            bool result = this.CurrencyQuotationService.InsertNewCurrency(currencyDto).Result;
 
             //Assert
             Assert.False(result);
