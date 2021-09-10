@@ -1,9 +1,11 @@
+from os import environ
+
 db_config = {
     "connections": {
         "default": {
             "engine": "tortoise.backends.asyncpg",
             "credentials": {
-                "host": "localhost",
+                "host": environ.get("DATABASE_HOST"),
                 "port": "5432",
                 "user": "hurb_trial",
                 "password": "hurb_trial",

@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 services:
   database:
     container_name: hurb_trial_db
@@ -13,6 +13,23 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
-
+  backend:
+    image: python:3.9-slim
+    command: sh -c "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --reload"
+    container_name: hurb_trial_backend
+    restart: on-failure
+    working_dir: /hurb_trial_backend
+    environment:
+      DATABASE_HOST: "database"
+    volumes:
+      - .:/hurb_trial_backend
+    ports:
+      - 8000:8000
+    expose:
+      - "8000"
+    depends_on:
+      - database
+    tty: true
+    stdin_open: true
 volumes:
   pgdata:

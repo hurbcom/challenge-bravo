@@ -1,3 +1,4 @@
+from typing import Dict
 from tortoise.contrib.pydantic.creator import (
     pydantic_model_creator,
 )
@@ -20,5 +21,26 @@ custom_currency_pydantic_upd = pydantic_model_creator(
 )
 
 
-class ExternalCurrencySchema(BaseModel):
-    pass
+class ExternalExchangeDataSchema(BaseModel):
+    code: str
+    codein: str
+    name: str
+    high: str
+    low: str
+    varBid: str
+    pctChange: str
+    bid: str
+    ask: str
+    timestamp: str
+    create_date: str
+
+
+class ExternalExchangeSchema(BaseModel):
+    data: Dict[str, ExternalExchangeDataSchema]
+
+
+class ExchangedCurrencySchema(BaseModel):
+    from_currency: str
+    to_currency: str
+    name: str
+    value: str

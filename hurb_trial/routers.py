@@ -1,6 +1,11 @@
+from exceptions import (
+    ExchangeGenericException,
+    NotFoundException,
+    AlreadyExistsException,
+)
+from schemas import ExchangedCurrencySchema
 from typing import List
-from fastapi.exceptions import HTTPException
-
+from services import CurrencyExchangeService
 from starlette.responses import JSONResponse
 from schemas import (
     custom_currency_pydantic,
@@ -10,6 +15,7 @@ from schemas import (
 from models import CustomCurrency
 from fastapi import APIRouter
 from tortoise.exceptions import IntegrityError
+from requests.exceptions import HTTPError
 
 router = APIRouter(prefix="/custom-currencies", tags=["CustomCurrency"])
 
@@ -20,7 +26,7 @@ async def get_all():
 
 
 @router.get("/{cc_id}", response_model=custom_currency_pydantic)
-async def get_one(cc_id: str):
+async def get_one(cc_id: int):
     return await custom_currency_pydantic.from_queryset_single(
         CustomCurrency.get(id=cc_id)
     )
@@ -35,13 +41,11 @@ async def create(custom_currency: custom_currency_pydantic_create):
             )
         )
     except IntegrityError:
-        raise HTTPException(
-            status_code=400, detail="This currency already exists"
-        )
+        raise AlreadyExistsException(obj_name="Currency")
 
 
 @router.put("/{cc_id}", response_model=custom_currency_pydantic_upd)
-async def update(cc_id: str, custom_currency: custom_currency_pydantic_upd):
+async def update(cc_id: int, custom_currency: custom_currency_pydantic_upd):
     await CustomCurrency.filter(id=cc_id).update(
         **custom_currency.dict(exclude_unset=True)
     )
@@ -52,9 +56,24 @@ async def update(cc_id: str, custom_currency: custom_currency_pydantic_upd):
 
 
 @router.delete("/{cc_id}", response_model=None)
-async def delete(cc_id: str):
+async def delete(cc_id: int):
     deleted = await CustomCurrency.filter(id=cc_id).delete()
 
     if not deleted:
-        return HTTPException(status_code=404, detail="User not found")
+        raise NotFoundException(obj_name="Currency")
     return JSONResponse(status_code=200)
+
+
+@router.get(
+    "/exchange/", response_model=ExchangedCurrencySchema, status_code=200
+)
+async def exchange(from_currency: str, to_currency: str, value: float):
+    try:
+        service_class = CurrencyExchangeService(
+            from_currency.upper(), to_currency.upper(), value
+        )
+        data = await service_class.get_currency_data()
+    except HTTPError:
+        raise ExchangeGenericException(from_currency, to_currency)
+
+    return data

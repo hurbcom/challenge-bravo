@@ -3,10 +3,9 @@ from fastapi.responses import JSONResponse
 from tortoise.contrib.fastapi import register_tortoise
 from config.db import db_config
 from fastapi.exceptions import HTTPException
-from routers import custom_currencies_routers
+import routers
 
 app = FastAPI(name="Currency Exchanger")
-
 
 register_tortoise(
     app=app,
@@ -16,7 +15,7 @@ register_tortoise(
     add_exception_handlers=True,
 )
 
-app.include_router(custom_currencies_routers.router)
+app.include_router(routers.router)
 
 
 @app.exception_handler(HTTPException)
