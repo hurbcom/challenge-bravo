@@ -67,10 +67,10 @@ async def delete(cc_id: int):
 @router.get(
     "/exchange/", response_model=ExchangedCurrencySchema, status_code=200
 )
-async def exchange(from_currency: str, to_currency: str, value: float):
+async def exchange(from_currency: str, to_currency: str, amount: float):
     try:
         service_class = CurrencyExchangeService(
-            from_currency.upper(), to_currency.upper(), value
+            from_currency.upper(), to_currency.upper(), amount
         )
         data = await service_class.get_currency_data()
     except HTTPError:
