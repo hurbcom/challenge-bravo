@@ -60,9 +60,11 @@ namespace CurrencyQuotation.Services
 
         public async Task DeleteCurrencyByName(string name)
         {
-            Currency currencyToRemove = await GetCurrencyByName(name);
+            Currency currencyToRemove = await this._currencyQuotationDao.GetCurrencyByName(name);
 
             this._currencyQuotationDao.DeleteByName(currencyToRemove);
+
+            await this._currencyQuotationDao.DeleteByName(currencyToRemove);
         }
 
         public void SaveAll(IEnumerable<Currency> currencies)

@@ -48,16 +48,16 @@ namespace CurrencyQuotation.Daos
             this._context.SaveChanges();
         }
 
-        public void DeleteByName(Currency currency)
+        public async Task DeleteByName(Currency currency)
         {
             this._context.Currency.Remove(currency);
-            this._context.SaveChanges();
+            await this._context.SaveChangesAsync();
         }
 
-        public Currency GetCurrencyByName(string name)
+        public Task<Currency> GetCurrencyByName(string name)
         {
             IQueryable<Currency> queryable = GetByName(name);
-            return queryable.FirstOrDefault();
+            return Task.FromResult(queryable.FirstOrDefault());
         }
 
         private IQueryable<Currency> GetByName(string nameCurrency)
