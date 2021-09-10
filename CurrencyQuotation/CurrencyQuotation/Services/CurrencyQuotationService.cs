@@ -98,7 +98,7 @@ namespace CurrencyQuotation.Services
         {
             string key = RedisCacheService.CreateKeyCacheByParams(name);
 
-            Currency function() => this._currencyQuotationDao.GetCurrencyByName(name);
+            Func<Task<Currency>> function = async () => await this._currencyQuotationDao.GetCurrencyByName(name);
             Currency currency = await this._redisCacheService.GetRedisCache<Currency>(function, key, TimeSpan.FromMinutes(60));
 
             return currency;

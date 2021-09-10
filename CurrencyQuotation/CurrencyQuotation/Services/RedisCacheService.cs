@@ -1,4 +1,4 @@
-﻿using CurrencyQuotation.Services.Interfaces;
+using CurrencyQuotation.Services.Interfaces;
 using StackExchange.Redis;
 using System;
 using System.Text;
@@ -16,7 +16,7 @@ namespace CurrencyQuotation.Services
             _connectionMultiplexer = connectionMultiplexer;
         }
 
-        public async Task<T> GetRedisCache<T>(Func<T> func, string key, TimeSpan expireCache)
+        public async Task<T> GetRedisCache<T>(Func<Task<T>> func, string key, TimeSpan expireCache)
         {
             RedisValue redisValue = await GetCacheValueAsync(key);
 
@@ -29,7 +29,7 @@ namespace CurrencyQuotation.Services
             }
             else
             {
-                dto = func();
+                dto = func().Result;
 
                 string value = JsonSerializer.Serialize(dto);
                 await SetCacheValueAsync(key, value, expireCache);

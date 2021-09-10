@@ -12,6 +12,6 @@ namespace CurrencyQuotation.Daos.Interfaces
         IList<Currency> GetAllCurrencies();
         void Update(Currency currency);
         void DeleteByName(Currency currency);
-        Currency GetCurrencyByName(string name);
+        Task<Currency> GetCurrencyByName(string name);
     }
 }

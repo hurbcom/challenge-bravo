@@ -35,13 +35,13 @@ namespace Tests.Units.Services.CurrencyQuotationServiceT
             Mock<IRedisCacheService> cacheMock = new();
 
             cacheMock.Setup(m => m.GetRedisCache(
-                It.IsAny<Func<Currency>>(),
+                It.IsAny<Func<Task<Currency>>>(),
                 It.Is<string>(key => from.Equals(key)),
                 It.IsAny<TimeSpan>()))
                      .Returns(Task.FromResult(currencyFrom));
 
             cacheMock.Setup(m => m.GetRedisCache(
-                It.IsAny<Func<Currency>>(),
+                It.IsAny<Func<Task<Currency>>>(),
                 It.Is<string>(key => to.Equals(key)),
                 It.IsAny<TimeSpan>()))
                      .Returns(Task.FromResult(currencyTo));
