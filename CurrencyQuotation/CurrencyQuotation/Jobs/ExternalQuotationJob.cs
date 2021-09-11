@@ -51,23 +51,24 @@ namespace CurrencyQuotation.Jobs
         private void Execute(object state)
         {
             ExternalApiDto externalApiDto = this.ExternalQuotationApiService.GetCurrenciesQuotationsInDolar();
+            IDictionary<string, decimal> rates = externalApiDto != null ? externalApiDto.Rates : new Dictionary<string, decimal>();
 
             IList<Currency> currenciesInDb = this.CurrencyQuotationService.GetAllCurrencies().Result;
 
             if (currenciesInDb.Any())
             {
-                IDictionary<string, decimal> rates = externalApiDto.Rates;
 
                 foreach (Currency currencyToUpdate in currenciesInDb)
                 {
                     currencyToUpdate.DolarAmount = rates.ContainsKey(currencyToUpdate.Name) ? rates[currencyToUpdate.Name] : currencyToUpdate.DolarAmount;
+                    currencyToUpdate.LastUpdate = DateTime.Now;
                 }
 
                 this.CurrencyQuotationService.UpdateAll(currenciesInDb);
             }
             else
             {
-                IEnumerable<Currency> currenciesToSave = externalApiDto.Rates.Select(bean => new Currency(bean.Key, bean.Value));
+                IEnumerable<Currency> currenciesToSave = rates.Select(bean => new Currency(bean.Key, bean.Value));
                 this.CurrencyQuotationService.SaveAll(currenciesToSave);
             }
         }
