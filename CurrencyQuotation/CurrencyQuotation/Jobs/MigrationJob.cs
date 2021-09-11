@@ -1,9 +1,12 @@
 using CurrencyQuotation.DatabaseContext;
+using CurrencyQuotation.Services.Interfaces;
+using CurrencyQuotation.Utils;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,30 +18,44 @@ namespace CurrencyQuotation.Jobs
 
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
+        private readonly IRedisCacheService _redisCacheService;
+
         private QuotationContext Context { get; set; }
 
         private const int MAX_ATTEMPS = 10;
 
         private const int DELAY_EXECUTE_MIGRATION = 5000;
 
+        private const string KEY_CACHE_RUNNING = "MigrationRunning";
+
         private int CountRetriesMigrations { get; set; }
 
-        public MigrationJob(ILogger<MigrationJob> logger, IServiceScopeFactory serviceScopeFactory)
+        public MigrationJob(ILogger<MigrationJob> logger, IServiceScopeFactory serviceScopeFactory, IRedisCacheService redisCacheService)
         {
             this.CountRetriesMigrations = 1;
             this._logger = logger;
             this._serviceScopeFactory = serviceScopeFactory;
+            this._redisCacheService = redisCacheService;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
             this._logger.LogInformation("INIT - MigrationJob");
 
-            using (var scope = _serviceScopeFactory.CreateScope())
+            try
             {
-                this.Context = scope.ServiceProvider.GetRequiredService<QuotationContext>();
+                UtilitiesJob.CheckRunningInAnotherAppContainer(this._redisCacheService, KEY_CACHE_RUNNING);
 
-                ExecuteMigrations();
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    this.Context = scope.ServiceProvider.GetRequiredService<QuotationContext>();
+
+                    ExecuteMigrations();
+                }
+            }
+            catch (AggregateException ex)
+            {
+                this._logger.LogWarning(ex.Message);
             }
 
             this._logger.LogInformation("END - MigrationJob");
