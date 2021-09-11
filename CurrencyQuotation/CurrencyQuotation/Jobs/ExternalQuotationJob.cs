@@ -1,6 +1,7 @@
 using CurrencyQuotation.Models;
 using CurrencyQuotation.Models.Dtos;
 using CurrencyQuotation.Services.Interfaces;
+using CurrencyQuotation.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -14,9 +15,13 @@ namespace CurrencyQuotation.Jobs
 {
     public class ExternalQuotationJob : IHostedService
     {
+        private const string KEY_CACHE_RUNNING = "ExternalApiRunning";
+
         private readonly ILogger<ExternalQuotationJob> _logger;
 
         private readonly IServiceScopeFactory _serviceScopeFactory;
+
+        private readonly IRedisCacheService _redisCacheService;
 
         private IExternalQuotationApiService ExternalQuotationApiService { get; set; }
         private ICurrencyQuotationService CurrencyQuotationService { get; set; }
@@ -24,27 +29,39 @@ namespace CurrencyQuotation.Jobs
 
         public ExternalQuotationJob(
             ILogger<ExternalQuotationJob> logger,
-            IServiceScopeFactory serviceScopeFactory)
+            IServiceScopeFactory serviceScopeFactory,
+            IRedisCacheService redisCacheService)
         {
             this._logger = logger;
             this._serviceScopeFactory = serviceScopeFactory;
+            this._redisCacheService = redisCacheService;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
             this._logger.LogInformation("INIT - ExternalQuotationJob");
 
-            using (var scope = _serviceScopeFactory.CreateScope())
+            try
             {
-                this.ExternalQuotationApiService = scope.ServiceProvider.GetRequiredService<IExternalQuotationApiService>();
-                this.CurrencyQuotationService = scope.ServiceProvider.GetRequiredService<ICurrencyQuotationService>();
+                TimeSpan period = TimeSpan.FromHours(1);
 
-                //Do your stuff
-                this.Timer = new Timer(Execute, null, TimeSpan.Zero, TimeSpan.FromHours(1));
+                UtilitiesJob.CheckRunningInAnotherAppContainer(this._redisCacheService, KEY_CACHE_RUNNING);
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    this.ExternalQuotationApiService = scope.ServiceProvider.GetRequiredService<IExternalQuotationApiService>();
+                    this.CurrencyQuotationService = scope.ServiceProvider.GetRequiredService<ICurrencyQuotationService>();
+
+                    //Do your stuff
+                    this.Timer = new Timer(Execute, null, TimeSpan.Zero, period);
+                }
+            }
+            catch (AggregateException ex)
+            {
+                this._logger.LogWarning(ex.Message);
             }
 
             this._logger.LogInformation("END - ExternalQuotationJob");
-
             return Task.CompletedTask;
         }
 
