@@ -38,13 +38,25 @@ namespace CurrencyQuotation.Services
             return dto;
         }
 
+        public async Task<string> GetCacheValueStringAsync(string key)
+        {
+            RedisValue value = await GetCacheValueAsync(key);
+
+            if (!value.HasValue)
+            {
+                return default;
+            }
+
+            return value.ToString();
+        }
+
         private async Task<RedisValue> GetCacheValueAsync(string key)
         {
             var db = _connectionMultiplexer.GetDatabase();
             return await db.StringGetAsync(key);
         }
 
-        private async Task SetCacheValueAsync(string key, string value, TimeSpan expireCache)
+        public async Task SetCacheValueAsync(string key, string value, TimeSpan expireCache)
         {
             var db = _connectionMultiplexer.GetDatabase();
             await db.StringSetAsync(key, value, expireCache);
