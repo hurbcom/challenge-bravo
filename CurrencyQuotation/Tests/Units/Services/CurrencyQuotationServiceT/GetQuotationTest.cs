@@ -55,5 +55,82 @@ namespace Tests.Units.Services.CurrencyQuotationServiceT
             //Assert
             Assert.Equal(expectedAmount, resultAmount);
         }
+
+        [Fact]
+        public void GetQuotationWithCurrencyFromIsNull_ReturnsThrow()
+        {
+            //Arrange
+            string from = "XPTO";
+            string to = "BRL";
+            decimal amount = 10.25642m;
+
+            string expectedMessage = $"A moeda {from} ou a moeda {to} não foi encontrada";
+
+            Currency currencyFrom = null;
+            Currency currencyTo = new(to, 100);
+
+            Mock<ILogger<CurrencyQuotationService>> loggerMock = new();
+            Mock<ICurrencyQuotationDao> daoMock = new();
+            Mock<IRedisCacheService> cacheMock = new();
+
+            cacheMock.Setup(m => m.GetRedisCache(
+                It.IsAny<Func<Task<Currency>>>(),
+                It.Is<string>(key => from.Equals(key)),
+                It.IsAny<TimeSpan>()))
+                     .Returns(Task.FromResult(currencyFrom));
+
+            cacheMock.Setup(m => m.GetRedisCache(
+               It.IsAny<Func<Task<Currency>>>(),
+               It.Is<string>(key => to.Equals(key)),
+               It.IsAny<TimeSpan>()))
+                    .Returns(Task.FromResult(currencyTo));
+
+            //Act 
+            this.CurrencyQuotationService = new CurrencyQuotationService(loggerMock.Object, daoMock.Object, cacheMock.Object);
+            Action act = () => this.CurrencyQuotationService.GetQuotation(from, to, amount).GetAwaiter().GetResult();
+
+            //Assert
+            ArgumentNullException argumentNullException = Assert.Throws<ArgumentNullException>(act);
+            Assert.Equal(expectedMessage, argumentNullException.ParamName);
+        }
+
+        [Fact]
+        public void GetQuotationWithCurrencyToIsNull_ReturnsThrow()
+        {
+            //Arrange
+            string from = "BRL";
+            string to = "XPTO";
+            decimal amount = 10.25642m;
+
+            string expectedMessage = $"A moeda {from} ou a moeda {to} não foi encontrada";
+
+            Currency currencyFrom = new(from, 100);
+            Currency currencyTo = null;
+
+            Mock<ILogger<CurrencyQuotationService>> loggerMock = new();
+            Mock<ICurrencyQuotationDao> daoMock = new();
+            Mock<IRedisCacheService> cacheMock = new();
+
+            cacheMock.Setup(m => m.GetRedisCache(
+                It.IsAny<Func<Task<Currency>>>(),
+                It.Is<string>(key => from.Equals(key)),
+                It.IsAny<TimeSpan>()))
+                     .Returns(Task.FromResult(currencyFrom));
+
+            cacheMock.Setup(m => m.GetRedisCache(
+                It.IsAny<Func<Task<Currency>>>(),
+                It.Is<string>(key => to.Equals(key)),
+                It.IsAny<TimeSpan>()))
+                     .Returns(Task.FromResult(currencyTo));
+
+            //Act
+            this.CurrencyQuotationService = new CurrencyQuotationService(loggerMock.Object, daoMock.Object, cacheMock.Object);
+            Action act = () => this.CurrencyQuotationService.GetQuotation(from, to, amount).GetAwaiter().GetResult();
+
+            //Assert
+            ArgumentNullException argumentNullException = Assert.Throws<ArgumentNullException>(act);
+            Assert.Equal(expectedMessage, argumentNullException.ParamName);
+        }
+
     }
 }
