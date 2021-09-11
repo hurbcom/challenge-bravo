@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace CurrencyQuotation.Controllers
         /// <summary>
         ///     Converte o valor de uma moeda para outra
         /// </summary>
-        [HttpGet]
+        [HttpGet("convert")]
         public async Task<IActionResult> GetQuotation([FromQuery] string from, string to, decimal amount)
         {
             try
@@ -42,6 +43,27 @@ namespace CurrencyQuotation.Controllers
                 this._logger.LogError($" Erro: {ex.Message}");
 
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.ParamName);
+            }
+        }
+
+        /// <summary>
+        ///     Retorna todas as moedas da base
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetAllCurrencies()
+        {
+            try
+            {
+                IList<Currency> currencies = await this._currencyQuotationService.GetAllCurrencies();
+                string jsonResult = JsonSerializer.Serialize(currencies);
+
+                return Ok(jsonResult);
+            }
+            catch (ArgumentNullException ex)
+            {
+                this._logger.LogError($" Erro: {ex.Message}");
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao retornar todas as moedas");
             }
         }
 
@@ -62,7 +84,6 @@ namespace CurrencyQuotation.Controllers
             this._logger.LogInformation($"END - InsertNewCurrency");
 
             return success ? Ok(successMessage) : BadRequest(ErrorMessage);
-
         }
 
         /// <summary>
