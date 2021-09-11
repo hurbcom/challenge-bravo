@@ -60,7 +60,7 @@ namespace CurrencyQuotation.Daos
 
         private IQueryable<Currency> GetByName(string nameCurrency)
         {
-            return this._context.Currency.Where(c => nameCurrency.Equals(c.Name));
+            return this._context.Currency.Where(c => c.Name.Equals(nameCurrency));
         }
     }
 }
