@@ -54,7 +54,7 @@ namespace Tests.Units.Services.CurrencyQuotationServiceT
         }
 
         [Fact]
-        public void InsertNewCurrency_WithError()
+        public void InsertNewCurrencyWithErrorInSave_ReturnsFalse()
         {
             //Arrange
             CurrencyDto currencyDto = new()
@@ -70,6 +70,37 @@ namespace Tests.Units.Services.CurrencyQuotationServiceT
 
             daoMock.Setup(h => h.InsertNewCurrency(It.IsAny<Currency>()))
                 .Throws<Exception>();
+
+            //Act
+            this.CurrencyQuotationService = new CurrencyQuotationService(loggerMock.Object, daoMock.Object, cacheMock.Object);
+            bool result = this.CurrencyQuotationService.InsertNewCurrency(currencyDto).Result;
+
+            //Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData("", 50.0000)]
+        [InlineData(null, 80.0000)]
+        [InlineData("HURB", -50.0000)]
+        [InlineData("HURB", 0)]
+        [InlineData("", 0)]
+        [InlineData("", -200.65482)]
+        [InlineData(null, 0)]
+        [InlineData(null, -50.0000)]
+        public void InsertNewCurrencyWithInvalidParameters_ReturnsFalse(string name, decimal amount)
+        {
+            //Arrange
+            CurrencyDto currencyDto = new()
+            {
+                Name = name,
+                Amount = amount,
+                BaseQuotation = null
+            };
+
+            Mock<ILogger<CurrencyQuotationService>> loggerMock = new();
+            Mock<IRedisCacheService> cacheMock = new();
+            Mock<ICurrencyQuotationDao> daoMock = new();
 
             //Act
             this.CurrencyQuotationService = new CurrencyQuotationService(loggerMock.Object, daoMock.Object, cacheMock.Object);
