@@ -27,10 +27,19 @@ namespace CurrencyQuotation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetQuotation([FromQuery] string from, string to, decimal amount)
         {
-            decimal result = await this._currencyQuotationService.GetQuotation(from, to, amount);
-            string jsonResult = JsonSerializer.Serialize(result);
+            try
+            {
+                decimal result = await this._currencyQuotationService.GetQuotation(from, to, amount);
+                string jsonResult = JsonSerializer.Serialize(result);
 
-            return Ok(jsonResult);
+                return Ok(jsonResult);
+            }
+            catch (ArgumentNullException ex)
+            {
+                this._logger.LogError($" Erro: {ex.Message}");
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.ParamName);
+            }
         }
 
         [HttpPost]

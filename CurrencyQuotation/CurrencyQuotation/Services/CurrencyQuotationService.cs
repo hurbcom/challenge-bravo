@@ -32,8 +32,12 @@ namespace CurrencyQuotation.Services
             Currency fromCurrency = await GetCurrencyByName(from);
             Currency toCurrency = await GetCurrencyByName(to);
 
-            decimal result = (toCurrency.DolarAmount / fromCurrency.DolarAmount) * amount;
-            return result;
+            if (fromCurrency == null || toCurrency == null)
+            {
+                throw new ArgumentNullException($"A moeda {from} ou a moeda {to} não foi encontrada");
+            }
+
+            return (toCurrency.DolarAmount / fromCurrency.DolarAmount) * amount;
         }
 
         public async Task<bool> InsertNewCurrency(CurrencyDto currencyDto)
