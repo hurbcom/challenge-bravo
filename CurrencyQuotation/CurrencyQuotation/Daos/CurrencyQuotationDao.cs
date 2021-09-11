@@ -63,5 +63,11 @@ namespace CurrencyQuotation.Daos
         {
             return this._context.Currency.Where(c => c.Name.Equals(nameCurrency));
         }
+
+        public void SaveAll(IEnumerable<Currency> currencies)
+        {
+            this._context.Currency.AddRange(currencies);
+            this._context.SaveChanges();
+        }
     }
 }

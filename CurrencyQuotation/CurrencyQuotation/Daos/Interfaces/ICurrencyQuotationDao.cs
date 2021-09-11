@@ -13,5 +13,6 @@ namespace CurrencyQuotation.Daos.Interfaces
         void Update(Currency currency);
         Task DeleteByName(Currency currency);
         Task<Currency> GetCurrencyByName(string name);
+        void SaveAll(IEnumerable<Currency> currencies);
     }
 }

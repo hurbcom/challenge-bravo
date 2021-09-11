@@ -81,10 +81,7 @@ namespace CurrencyQuotation.Services
 
         public void SaveAll(IEnumerable<Currency> currencies)
         {
-            foreach (Currency currency in currencies)
-            {
-                this._currencyQuotationDao.InsertNewCurrency(currency);
-            }
+            this._currencyQuotationDao.SaveAll(currencies);
         }
 
         public async Task<IList<Currency>> GetAllCurrencies()
