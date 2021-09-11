@@ -31,7 +31,7 @@ namespace CurrencyQuotation.Daos
 
         public async Task InsertNewCurrency(Currency currency)
         {
-            this._context.Currency.AddAsync(currency);
+            await this._context.Currency.AddAsync(currency);
             await this._context.SaveChangesAsync();
         }
 
