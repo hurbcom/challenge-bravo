@@ -24,6 +24,9 @@ namespace CurrencyQuotation.Controllers
             this._logger = logger;
         }
 
+        /// <summary>
+        ///     Converte o valor de uma moeda para outra
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetQuotation([FromQuery] string from, string to, decimal amount)
         {
@@ -42,6 +45,10 @@ namespace CurrencyQuotation.Controllers
             }
         }
 
+        /// <summary>
+        ///     Insere uma nova moeda a partir de um nome, uma quantia e uma base de cotação.
+        ///     Tendo a base como valor default o dolar caso não seja preenchida.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> InsertNewCurrency([FromBody] CurrencyDto currencyDto)
         {
@@ -58,6 +65,9 @@ namespace CurrencyQuotation.Controllers
 
         }
 
+        /// <summary>
+        ///     Atualizar o valor de uma moeda existente na base.
+        /// </summary>
         [HttpPut("{name}")]
         public async Task<IActionResult> UpdateCurrency(string name, [FromBody] Currency currency)
         {
@@ -88,6 +98,9 @@ namespace CurrencyQuotation.Controllers
             }
         }
 
+        /// <summary>
+        ///     Remove uma moeda existente na base
+        /// </summary>
         [HttpDelete("{name}")]
         public async Task<IActionResult> DeleteCurrency(string name)
         {
