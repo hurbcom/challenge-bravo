@@ -87,9 +87,9 @@ namespace CurrencyQuotation.Services
             }
         }
 
-        public IList<Currency> GetAllCurrencies()
+        public async Task<IList<Currency>> GetAllCurrencies()
         {
-            return this._currencyQuotationDao.GetAllCurrencies();
+            return await this._currencyQuotationDao.GetAllCurrencies();
         }
 
         public void UpdateAll(IList<Currency> currenciesInDb)

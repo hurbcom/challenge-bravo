@@ -11,7 +11,7 @@ namespace CurrencyQuotation.Services.Interfaces
         Task<bool> InsertNewCurrency(CurrencyDto currencyDto);
         Task DeleteCurrencyByName(string name);
         void SaveAll(IEnumerable<Currency> currencies);
-        IList<Currency> GetAllCurrencies();
+        Task<IList<Currency>> GetAllCurrencies();
         void UpdateAll(IList<Currency> currenciesInDb);
         Task UpdateCurrencyByName(string name, decimal dolarAmount);
         Task<Currency> GetCurrencyByName(string name);

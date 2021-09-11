@@ -9,7 +9,7 @@ namespace CurrencyQuotation.Daos.Interfaces
         IList<Currency> GetQuotationByCurrencies(IList<string> currenciesName);
         Task<decimal> GetDolarAmountByName(string nameCurrency);
         Task InsertNewCurrency(Currency currency);
-        IList<Currency> GetAllCurrencies();
+        Task<IList<Currency>> GetAllCurrencies();
         void Update(Currency currency);
         Task DeleteByName(Currency currency);
         Task<Currency> GetCurrencyByName(string name);

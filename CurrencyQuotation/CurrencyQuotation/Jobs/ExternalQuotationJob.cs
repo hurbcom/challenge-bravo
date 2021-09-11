@@ -52,7 +52,7 @@ namespace CurrencyQuotation.Jobs
         {
             ExternalApiDto externalApiDto = this.ExternalQuotationApiService.GetCurrenciesQuotationsInDolar();
 
-            IList<Currency> currenciesInDb = this.CurrencyQuotationService.GetAllCurrencies();
+            IList<Currency> currenciesInDb = this.CurrencyQuotationService.GetAllCurrencies().Result;
 
             if (currenciesInDb.Any())
             {

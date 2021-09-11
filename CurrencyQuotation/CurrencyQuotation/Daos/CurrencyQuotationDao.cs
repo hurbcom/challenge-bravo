@@ -1,6 +1,7 @@
 using CurrencyQuotation.Daos.Interfaces;
 using CurrencyQuotation.DatabaseContext;
 using CurrencyQuotation.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,9 +36,9 @@ namespace CurrencyQuotation.Daos
             await this._context.SaveChangesAsync();
         }
 
-        public IList<Currency> GetAllCurrencies()
+        public async Task<IList<Currency>> GetAllCurrencies()
         {
-            return this._context.Currency.ToList();
+            return await this._context.Currency.ToListAsync();
         }
 
         public void Update(Currency currency)
