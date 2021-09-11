@@ -40,6 +40,11 @@ namespace CurrencyQuotation.Services
         {
             try
             {
+                if (string.IsNullOrEmpty(currencyDto.Name) || currencyDto.Amount <= 0)
+                {
+                    return false;
+                }
+
                 string baseQuotation = currencyDto.BaseQuotation ?? DOLAR_CURRENCY;
                 decimal dolarAmountBaseQuotation = await this._currencyQuotationDao.GetDolarAmountByName(baseQuotation);
                 decimal dolarAmountNewCurrency = currencyDto.Amount * dolarAmountBaseQuotation;
