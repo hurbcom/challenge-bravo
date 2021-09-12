@@ -7,6 +7,6 @@ export let options = {
 };
 
 export default function () {
-  http.get('http://localhost:5000/api/Currencies?from=CAD&to=BRL&amount=150.80');
+  http.get('http://localhost:5000/api/Currencies/convert?from=CAD&to=BRL&amount=150.80');
   sleep(1);
 }
