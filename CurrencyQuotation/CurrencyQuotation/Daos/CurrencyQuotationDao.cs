@@ -24,10 +24,10 @@ namespace CurrencyQuotation.Daos
                .ToList();
         }
 
-        public Task<decimal> GetDolarAmountByName(string nameCurrency)
+        public async Task<decimal> GetDolarAmountByName(string nameCurrency)
         {
-            IQueryable<Currency> queryable = GetByName(nameCurrency);
-            return Task.FromResult(queryable.Select(bean => bean.DolarAmount).First());
+            IQueryable<Currency> queryable = await GetByName(nameCurrency);
+            return await queryable.Select(bean => bean.DolarAmount).FirstAsync();
         }
 
         public async Task InsertNewCurrency(Currency currency)
