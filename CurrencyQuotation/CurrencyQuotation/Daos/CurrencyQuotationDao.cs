@@ -55,13 +55,13 @@ namespace CurrencyQuotation.Daos
 
         public async Task<Currency> GetCurrencyByName(string name)
         {
-            IQueryable<Currency> queryable = GetByName(name);
+            IQueryable<Currency> queryable = await GetByName(name);
             return await queryable.FirstOrDefaultAsync();
         }
 
-        private IQueryable<Currency> GetByName(string nameCurrency)
+        private async Task<IQueryable<Currency>> GetByName(string nameCurrency)
         {
-            return this._context.Currency.Where(c => c.Name.Equals(nameCurrency));
+            return await Task.FromResult(this._context.Currency.Where(c => c.Name.Equals(nameCurrency)));
         }
 
         public void SaveAll(IEnumerable<Currency> currencies)
