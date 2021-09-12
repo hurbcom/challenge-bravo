@@ -39,6 +39,66 @@ Para executar a aplicação é necessário que abra o cmd e entre na pasta raíz
 Caso queria, também adicionei o json `currency_api.postman_collection.json` que pode ser importado no Postman (https://www.postman.com/) com todas as requisições prontas para serem usadas. 
 
 
+## Documentação da API
+
+
+### Endpoint de conversão da moeda
+
+`GET /api/Currencies/convert`
+
+Converte o valor de uma moeda para outra. A Api utiliza o tipo decimal que no .Net significa um tipo primitivo de ponto flutuante com alta precisão, sendo ideal para valores monetários.
+
+Ex: `http://localhost:5000/api/Currencies/convert?from=BTC&to=USD&amount=50`
+
+- Em caso de não encontrar uma das moedas passadas, irá retornar erro 500 e exibir a mensagem "A moeda XPTO ou a moeda XPTO2 não foi encontrada"
+
+### Endpoint que retorna todas as moedas
+
+`GET /api/Currencies`
+Retorna todas as moedas que estão registradas na base
+
+Exemplo de retorno:
+```
+[{"Id":1,"Name":"AED","DolarAmount":3.67296,"CreationDate":"2021-09-11T23:56:20.3193625+00:00","LastUpdate":"2021-09-11T23:56:20.3193625+00:00"},{"Id":2,"Name":"NPR","DolarAmount":117.469115,"CreationDate":"2021-09-11T23:56:20.4350083+00:00","LastUpdate":"2021-09-11T23:56:20.4350083+00:00"},{"Id":3,"Name":"NZD","DolarAmount":1.405778,"CreationDate":"2021-09-11T23:56:20.4350281+00:00","LastUpdate":"2021-09-11T23:56:20.4350281+00:00"},{"Id":4,"Name":"OMR","DolarAmount":0.385029,"CreationDate":"2021-09-11T23:56:20.4350476+00:00","LastUpdate":"2021-09-11T23:56:20.4350476+00:00"},{"Id":5,"Name":"PAB","DolarAmount":1,"CreationDate":"2021-09-11T23:56:20.4350801+00:00","LastUpdate":"2021-09-11T23:56:20.4350801+00:00"},{"Id":6,"Name":"PEN","DolarAmount":4.104062,"CreationDate":"2021-09-11T23:56:20.4351011+00:00","LastUpdate":"2021-09-11T23:56:20.4351011+00:00"}]
+```
+- Em caso de falha irá retornar erro 500 e a mensagem "Erro ao retornar todas as moedas".
+
+### Endpoint que insere uma nova moeda
+
+`POST /api/Currencies`
+Insere uma nova moeda a partir de um nome, uma quantia e uma base de cotação (Opcional). Tendo a base como valor default o dolar caso não seja preenchida.
+
+Ex de body:
+```
+{
+    "Name": "XPTO",
+    "Amount": "100",
+    "BaseQuotation": "BRL"
+}
+```
+ou
+
+```
+{
+    "Name": "XPTO",
+    "Amount": "100"
+}
+```
+Neste segundo caso ele irá colocar como base o dolar. Na base de dados a cotação é salva sempre em dolar então caso seja passado uma base diferente é feita a conversão antes.
+
+- 
+
+### Endpoint que atualiza uma moeda
+
+`PUT /api/Currencies/{name}`
+Atualizar o valor de uma moeda existente na base.
+
+### Endpoint que exclui uma moeda
+
+`DELETE /api/Currencies/{name}`
+Remove uma moeda existente na base
+
+
 ## Testes
 
 ### Testes Unitários
@@ -51,19 +111,40 @@ Para realizar os testes unitários eu utilizei a bibliotece xUnit que já vem no
 
 ### Teste de estresse
 
-Para realizar o teste de estresse utilizei a ferramenta chamada K6 pela facilicadade de configuração e execução. Montei um teste que testa a API mandando requisições de conversão para ela. Configurei o script de teste para criar 3000 VUs (Máquinas) para ficarem mandando requisições para a API durante 30s e ele me retorna as estatíticas de resultado.
+Para realizar o teste de estresse utilizei a ferramenta chamada K6 pela facilicadade de configuração e execução. Montei um teste que testa a API mandando requisições de conversão para ela. Configurei o script de teste para criar 3000 VUs (máquinas) para ficarem mandando requisições para a API durante 30s. Ele me retornou as seguintes estatíticas de resultado:
 
-<p align="center">
-  <img src="testesUnitarios.png" alt="Testes Unitários" />
-</p>
+```
+scenarios: (100.00%) 1 scenario, 3000 max VUs, 1m0s max duration (incl. graceful stop):
+     * default: 3000 looping VUs for 30s (gracefulStop: 30s)
 
+running (0m31.2s), 0000/3000 VUs, 82465 complete and 0 interrupted iterations
+default ✓ [======================================] 3000 VUs  30s
 
+     data_received..................: 18 MB 561 kB/s
+     data_sent......................: 11 MB 350 kB/s
+     http_req_blocked...............: avg=28.9ms   min=0s     med=0s      max=2.02s    p(90)=0s       p(95)=506.29µs
+     http_req_connecting............: avg=28.85ms  min=0s     med=0s      max=2.02s    p(90)=0s       p(95)=0s
+     http_req_duration..............: avg=74.27ms  min=2.63ms med=55.74ms max=454.77ms p(90)=158.45ms p(95)=197.24ms
+       { expected_response:true }...: avg=74.27ms  min=2.63ms med=55.74ms max=454.77ms p(90)=158.45ms p(95)=197.24ms
+     http_req_failed................: 0.00% ✓ 0           ✗ 82465
+     http_req_receiving.............: avg=58.44µs  min=0s     med=0s      max=15.04ms  p(90)=0s       p(95)=526µs
+     http_req_sending...............: avg=169.63µs min=0s     med=0s      max=118.35ms p(90)=0s       p(95)=0s
+     http_req_tls_handshaking.......: avg=0s       min=0s     med=0s      max=0s       p(90)=0s       p(95)=0s
+     http_req_waiting...............: avg=74.04ms  min=2.14ms med=55.65ms max=454.77ms p(90)=157.66ms p(95)=196.41ms
+     http_reqs......................: 82465 2644.199512/s
+     iteration_duration.............: avg=1.1s     min=1s     med=1.05s   max=3.04s    p(90)=1.17s    p(95)=1.24s
+     iterations.....................: 82465 2644.199512/s
+     vus............................: 295   min=295       max=3000
+     vus_max........................: 3000  min=3000      max=3000
+```
 
+**Como podemos ver acima foram respondidas 82465 requisições com uma média de 2644 por segundo. Mantendo como média de duração em 74.27ms e em p(95) com 197.24ms.**
 
+## Melhorias futuras
 
-
-
-
-
+- Pode se pensar em configurar a aplicação para escalar de acordo com a necessidade. Ao invés de se criar uma quantidade de instâncias fixas, subir uma nova instância quando precisar.
+- Aumentar a quantidade de testes unitários para garantir que tudo está certo e melhorando a manutenibilidade do código
+- Fazer análises do código com o Sonar para garantir a qualidade e a segurança da API.
+- Criação de um healthCheck que pode ser usado em ferramentas de monitoramento de disponibilidade/performance.
 
 
