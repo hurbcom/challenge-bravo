@@ -17,7 +17,7 @@ Para conseguir rodar a aplicação na sua máquina você ter instalado na sua m�
 - **Nginx** - Foi usado para criar um load balance, pois sua configuração básica é simples. Ele nos permite diminuir a carga de requisições na aplicação dividindo entre as instâncias, conseguindo manter a API em funcionamento no caso de uma das intâncias ficar fora do ar. 
 - **Docker** - Foi Escolhido para permitir que a aplicação seja executada de forma isolada, evitando ter que ficar instalando e configurando cada tecnologia.
 
-Foi projetada uma arquitetura para essa API para que pudesse ser executada independente do sistema operacional e de forma que não necessitasse de muitas configurações. Para isso, utilizamos o docker para gerar conteineres de acordo com as imagens necessárias para a execução da aplicação. A aplicação conta com um conteiner de banco de dados (SQL Server), um com o cache de dados distribuído (Redis), dois conteineres com a aplicação e um conteiner com o load balance (Nginx).
+Foi projetada uma arquitetura para essa API para que pudesse ser executada independente do sistema operacional e de forma que não necessitasse de muitas configurações. Para isso, utilizamos o docker para gerar conteineres de acordo com as imagens necessárias para a execução da aplicação. A aplicação conta com um conteiner de banco de dados (SQL Server), um com o cache de dados distribuído (Redis), dois conteineres com a aplicação (.net Core) e um conteiner com o load balance (Nginx).
 
 <p align="center">
   <img src="arquitetura.jpeg" alt="arquitetura" />
@@ -27,7 +27,9 @@ Foi utilizado o cache com Redis para poder ganhar performance nas repostas das r
 
 A aplicação possui um load balance com Nginx que serve como um proxy que recebe as requisições dos diversos usuários e vai repassando para as instâncias da aplicação de acordo com a quantidade de conexões que cada um tem no momento dividindo a carga entre eles.
 
-Para manter as moedas existentes atualizadas a API possui um serviço hospedado (HostedService) que é executado a cada 1 hora, podendo ser alterado para o tempo que seja necessário. Esse serviço consume a API Open Exchange Rates (https://openexchangerates.org/) para conseguir o valor das contações das moedas reais. Ela foi escolhida por possuir uma grande variedade de moedas incluindo as criptomoedas, no plano gratuito consegue fazer 1000 requisições no mês e ela utiliza como base o dolar.
+Para manter as moedas existentes atualizadas a API possui um serviço hospedado (HostedService) que é executado a cada 1 hora, podendo ser alterado para o tempo que seja necessário. Esse serviço consume a API Open Exchange Rates (https://openexchangerates.org/) para conseguir o valor das contações das moedas reais. Ela foi escolhida por possuir uma grande variedade de moedas incluindo as criptomoedas, no plano gratuito conseguimos fazer 1000 requisições no mês e ela utiliza como base o dolar.
+
+Como possuimos duas instâncias da aplicação rodando esse job que chama api externa acaba sendo iniciado 2 vezes. Para tentar ter um orquestração dessa execução concorrente, utilizei o cache do Redis para fazer a comunicação entre as instâncias e bloquear uma delas na hora da execução. Permitindo que apenas uma instância execute o job. O mesmo vale para o job que executa as migrations que geram a base e a tabela no banco de dados.
 
 ## Instruções para executar a aplicação
 
@@ -126,7 +128,7 @@ Ex: http://localhost:5000/api/Currencies/XPTO
 
 ### Testes Unitários
 
-Para realizar os testes unitários eu utilizei a bibliotece xUnit que já vem no C#.
+Para realizar os testes unitários eu utilizei a biblioteca xUnit que já vem no C#. Utilizei também a biblioteca Moq que serve para mockar métodos internos ao método a ser testado matendo o teste isolado e unitário. Como por exemplo método de conexão com o banco de dados ou outra integração.
 
 <p align="center">
   <img src="testesUnitarios.png" alt="Testes Unitários" />
@@ -166,8 +168,9 @@ default ✓ [======================================] 3000 VUs  30s
 ## Melhorias futuras
 
 - Pode se pensar em configurar a aplicação para escalar de acordo com a necessidade. Ao invés de se criar uma quantidade de instâncias fixas, subir uma nova instância quando precisar.
-- Aumentar a quantidade de testes unitários para garantir que tudo está certo e melhorando a manutenibilidade do código
+- Aumentar a quantidade de testes unitários para garantir que tudo está certo e melhorando a manutenibilidade do código.
+- Realizar testes integrados para garantir a persistência dos dados.
 - Fazer análises do código com o Sonar para garantir a qualidade e a segurança da API.
 - Criação de um healthCheck que pode ser usado em ferramentas de monitoramento de disponibilidade/performance.
-
+- Melhorar o controle concorrente entre os jobs quando temos mais de uma instância da aplicação.
 
