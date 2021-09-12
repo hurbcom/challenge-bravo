@@ -6,6 +6,7 @@
 Para conseguir rodar a aplicação na sua máquina você ter instalado na sua máquina os seguintos softwares:
 - Docker - Para rodar a aplicação em conteineres (https://www.docker.com/)
 - K6 - Para executar o teste de estresse (https://k6.io/)
+- (Opcional) Postman - Usado para fazer requisições a api em caso de testes (https://www.postman.com/)
 
 ## Arquitetura
 
@@ -36,7 +37,7 @@ Para executar a aplicação é necessário que abra o cmd e entre na pasta raíz
   <img src="swagger.png" alt="swagger" />
 </p>
 
-Caso queria, também adicionei o json `currency_api.postman_collection.json` que pode ser importado no Postman (https://www.postman.com/) com todas as requisições prontas para serem usadas. 
+Caso queria, também adicionei o json `currency_api.postman_collection.json` que pode ser importado no Postman com todas as requisições prontas para serem usadas. 
 
 
 ## Documentação da API
@@ -50,14 +51,16 @@ Converte o valor de uma moeda para outra. A Api utiliza o tipo decimal que no .N
 
 Ex: `http://localhost:5000/api/Currencies/convert?from=BTC&to=USD&amount=50`
 
+- Em caso de sucesso ele irá retornar a conversão de forma bem precisa. Ex: 2264033.8971155076133799875252
 - Em caso de não encontrar uma das moedas passadas, irá retornar erro 500 e exibir a mensagem "A moeda XPTO ou a moeda XPTO2 não foi encontrada"
 
 ### Endpoint que retorna todas as moedas
 
 `GET /api/Currencies`
+
 Retorna todas as moedas que estão registradas na base
 
-Exemplo de retorno:
+Exemplo de retorno de sucesso:
 ```
 [{"Id":1,"Name":"AED","DolarAmount":3.67296,"CreationDate":"2021-09-11T23:56:20.3193625+00:00","LastUpdate":"2021-09-11T23:56:20.3193625+00:00"},{"Id":2,"Name":"NPR","DolarAmount":117.469115,"CreationDate":"2021-09-11T23:56:20.4350083+00:00","LastUpdate":"2021-09-11T23:56:20.4350083+00:00"},{"Id":3,"Name":"NZD","DolarAmount":1.405778,"CreationDate":"2021-09-11T23:56:20.4350281+00:00","LastUpdate":"2021-09-11T23:56:20.4350281+00:00"},{"Id":4,"Name":"OMR","DolarAmount":0.385029,"CreationDate":"2021-09-11T23:56:20.4350476+00:00","LastUpdate":"2021-09-11T23:56:20.4350476+00:00"},{"Id":5,"Name":"PAB","DolarAmount":1,"CreationDate":"2021-09-11T23:56:20.4350801+00:00","LastUpdate":"2021-09-11T23:56:20.4350801+00:00"},{"Id":6,"Name":"PEN","DolarAmount":4.104062,"CreationDate":"2021-09-11T23:56:20.4351011+00:00","LastUpdate":"2021-09-11T23:56:20.4351011+00:00"}]
 ```
@@ -66,6 +69,7 @@ Exemplo de retorno:
 ### Endpoint que insere uma nova moeda
 
 `POST /api/Currencies`
+
 Insere uma nova moeda a partir de um nome, uma quantia e uma base de cotação (Opcional). Tendo a base como valor default o dolar caso não seja preenchida.
 
 Ex de body:
@@ -86,18 +90,37 @@ ou
 ```
 Neste segundo caso ele irá colocar como base o dolar. Na base de dados a cotação é salva sempre em dolar então caso seja passado uma base diferente é feita a conversão antes.
 
-- 
+- Em caso de sucesso ele retornará a mensagem "A moeda XPTO foi criada com sucesso".
+- Em caso de falha será retornado erro 400 bad request com a mensagem "Erro ao criar a moeda XPTO"
 
 ### Endpoint que atualiza uma moeda
 
 `PUT /api/Currencies/{name}`
-Atualizar o valor de uma moeda existente na base.
+
+Atualizar o valor de cotação de uma moeda existente na base. É passado via query o nome da moeda que se deseja alterar e no body a quantia nova em dolar.
+
+Ex: http://localhost:5000/api/Currencies/XPTO
+
+```
+{
+    "dolarAmount": 500
+}
+```
+- Em caso de sucesso ele retornará a mensagem "Moeda atualizada com sucesso".
+- Caso ele não encontre a moeda ele irá retornar o erro 404 Not Found e a mensagem "A moeda XPTO não foi encontrada na base".
+- Caso aconteça qualquer outro erro durante a operação irá retornar o erro 500 e a mensage "Erro ao atualizar a moeda XPTO".
 
 ### Endpoint que exclui uma moeda
 
 `DELETE /api/Currencies/{name}`
-Remove uma moeda existente na base
 
+Remove uma moeda existente na base de acordo com nome passado via query
+
+Ex: http://localhost:5000/api/Currencies/XPTO
+
+- Em caso de sucesso ele retornará a mensagem "Moeda deletada com sucesso".
+- Caso ele não encontre a moeda ele irá retornar o erro 404 Not Found e a mensagem "A moeda XPTO não foi encontrada na base".
+- Caso aconteça qualquer outro erro durante a operação irá retornar o erro 500 e a mensage "Erro ao deletar a moeda XPTO".
 
 ## Testes
 
@@ -111,7 +134,7 @@ Para realizar os testes unitários eu utilizei a bibliotece xUnit que já vem no
 
 ### Teste de estresse
 
-Para realizar o teste de estresse utilizei a ferramenta chamada K6 pela facilicadade de configuração e execução. Montei um teste que testa a API mandando requisições de conversão para ela. Configurei o script de teste para criar 3000 VUs (máquinas) para ficarem mandando requisições para a API durante 30s. Ele me retornou as seguintes estatíticas de resultado:
+Para realizar o teste de estresse utilizei a ferramenta chamada K6 pela facilicadade de configuração e execução. Para executar o teste deve-se entrar na pasta CurrencyQuotation, abrir o cmd e executar o arquivo script.js com o comando `k6 run script.js`. O teste será iniciado e ele começará a mandar várias requisições de conversão para a API. Configurei o script de teste para criar 3000 VUs (máquinas) para ficarem mandando requisições para a API durante 30s. Ele me retornou as seguintes estatíticas de resultado:
 
 ```
 scenarios: (100.00%) 1 scenario, 3000 max VUs, 1m0s max duration (incl. graceful stop):
@@ -138,7 +161,7 @@ default ✓ [======================================] 3000 VUs  30s
      vus_max........................: 3000  min=3000      max=3000
 ```
 
-**Como podemos ver acima foram respondidas 82465 requisições com uma média de 2644 por segundo. Mantendo como média de duração em 74.27ms e em p(95) com 197.24ms.**
+**Como podemos ver acima foram respondidas 82.465 requisições com uma média de 2.644 por segundo. Mantendo como média de duração em 74.27ms e em p(95) com 197.24ms.**
 
 ## Melhorias futuras
 
