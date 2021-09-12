@@ -1,0 +1,173 @@
+{
+	"info": {
+		"_postman_id": "f6b3068b-e17c-4e8f-94b1-da851eab4e81",
+		"name": "CurrencyQuotation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ConvertCurrencies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/Currencies/convert?from=BTC&to=USD&amount=50",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Currencies",
+						"convert"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "BTC"
+						},
+						{
+							"key": "to",
+							"value": "USD"
+						},
+						{
+							"key": "amount",
+							"value": "50"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllCurrencies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/Currencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InsertNewCurrency",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\": \"XPTO\",\r\n    \"Amount\": \"100\",\r\n    \"BaseQuotation\": \"USD\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/Currencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateCurrencyByName",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dolarAmount\": 500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/Currencies/XPTO",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Currencies",
+						"XPTO"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteCurrencyByName",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/Currencies/XPTO",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Currencies",
+						"XPTO"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(API Externa) - OpenExchangeRatesApi",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://openexchangerates.org/api/latest.json?app_id=b8fa7ad3123e47f1aa60198e40e7d209",
+					"protocol": "https",
+					"host": [
+						"openexchangerates",
+						"org"
+					],
+					"path": [
+						"api",
+						"latest.json"
+					],
+					"query": [
+						{
+							"key": "app_id",
+							"value": "b8fa7ad3123e47f1aa60198e40e7d209"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
