@@ -53,10 +53,10 @@ namespace CurrencyQuotation.Daos
             await this._context.SaveChangesAsync();
         }
 
-        public Task<Currency> GetCurrencyByName(string name)
+        public async Task<Currency> GetCurrencyByName(string name)
         {
             IQueryable<Currency> queryable = GetByName(name);
-            return Task.FromResult(queryable.FirstOrDefault());
+            return await queryable.FirstOrDefaultAsync();
         }
 
         private IQueryable<Currency> GetByName(string nameCurrency)

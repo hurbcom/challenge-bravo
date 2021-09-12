@@ -29,7 +29,7 @@ namespace CurrencyQuotation.Services
             }
             else
             {
-                dto = func().Result;
+                dto = await func();
 
                 string value = JsonSerializer.Serialize(dto);
                 await SetCacheValueAsync(key, value, expireCache);
