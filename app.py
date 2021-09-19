@@ -4,6 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Query, Depends, Path, UploadFile, File
 from fastapi.openapi.models import APIKey
 
+from exceptions.exception_handler import exception_handler
 from models.AdicionaCurrencyResponse import AdicionaCurrencyResponse
 from models.ConversionResponse import ConversionResponse
 from models.RemoveCurrencyResponse import RemoveCurrencyResponse
@@ -37,6 +38,7 @@ app = FastAPI(title="ConversorDeMoedasAPI",
 
 
 @app.get("/conversao", response_model=ConversionResponse, tags=["conversao"])
+@exception_handler
 async def conversao_route(orig: str = Query(..., title="Moeda de Origem", description="Moeda de origem da conversão"),
                           dest: str = Query(..., title="Moeda de Destino", description="Moeda de destino da conversão"),
                           orig_value: float = Query(..., title="Valor a ser Convertido",
@@ -47,6 +49,7 @@ async def conversao_route(orig: str = Query(..., title="Moeda de Origem", descri
 
 
 @app.delete("/currency/{currency_to_delete}", response_model=RemoveCurrencyResponse, tags=["currency"])
+@exception_handler
 async def remove_suporte_moeda_route(currency_to_delete: str = Path(..., title="Moeda que deixará de ser suportada",
                                                                     description="A moeda que será apagada da lista de moedas suportadas pela API"),
                                      api_key: APIKey = Depends(get_api_key)) -> RemoveCurrencyResponse:
@@ -54,11 +57,13 @@ async def remove_suporte_moeda_route(currency_to_delete: str = Path(..., title="
 
 
 @app.get("/currency", response_model=List[str], tags=["currency"])
+@exception_handler
 async def mostra_moedas_suportadas_route(api_key: APIKey = Depends(get_api_key)) -> List[str]:
     return currency.mostra_moedas_suportadas()
 
 
 @app.post("/currency/{currency_to_add}", response_model=AdicionaCurrencyResponse, tags=["currency"])
+@exception_handler
 async def adiciona_moedas_suportadas_route(currency_to_add: str = Path(..., title="Moeda que passará de ser suportada",
                                                                        description="A moeda que será adicionada na "
                                                                                    "lista de moedas suportadas pela "
@@ -70,6 +75,7 @@ async def adiciona_moedas_suportadas_route(currency_to_add: str = Path(..., titl
 
 
 @app.post("/custom/currency", response_model=AdicionaCurrencyResponse, tags=["currency"])
+@exception_handler
 async def adiciona_moedas_custom_route(file: UploadFile = File(...,
                                                                title="Arquvio com o código que será usado para obter o valor da moeda customizada",
                                                                description="Arquivo com o código que será "
