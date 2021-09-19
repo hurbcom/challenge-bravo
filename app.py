@@ -9,6 +9,7 @@ from models.ConversionResponse import ConversionResponse
 from models.RemoveCurrencyResponse import RemoveCurrencyResponse
 from routes import currency
 from routes import conversao
+from security.apikey_validation import get_api_key
 
 tags_metadata = [
     {
@@ -39,21 +40,21 @@ app = FastAPI(title="ConversorDeMoedasAPI",
 async def conversao_route(orig: str = Query(..., title="Moeda de Origem", description="Moeda de origem da conversão"),
                           dest: str = Query(..., title="Moeda de Destino", description="Moeda de destino da conversão"),
                           orig_value: float = Query(..., title="Valor a ser Convertido",
-                                                    description="Valor que deverá ser convertido")
+                                                    description="Valor que deverá ser convertido"),
+                          api_key: APIKey = Depends(get_api_key)
                           ) -> ConversionResponse:
     return conversao.conversao(orig, dest, orig_value)
 
 
 @app.delete("/currency/{currency_to_delete}", response_model=RemoveCurrencyResponse, tags=["currency"])
 async def remove_suporte_moeda_route(currency_to_delete: str = Path(..., title="Moeda que deixará de ser suportada",
-                                                                    description="A moeda que será apagada da lista de "
-                                                                                "moedas suportadas pela API")) -> \
-    RemoveCurrencyResponse:
+                                                                    description="A moeda que será apagada da lista de moedas suportadas pela API"),
+                                     api_key: APIKey = Depends(get_api_key)) -> RemoveCurrencyResponse:
     return currency.remove_suporte_moeda(currency_to_delete)
 
 
 @app.get("/currency", response_model=List[str], tags=["currency"])
-async def mostra_moedas_suportadas_route() -> List[str]:
+async def mostra_moedas_suportadas_route(api_key: APIKey = Depends(get_api_key)) -> List[str]:
     return currency.mostra_moedas_suportadas()
 
 
@@ -62,7 +63,8 @@ async def adiciona_moedas_suportadas_route(currency_to_add: str = Path(..., titl
                                                                        description="A moeda que será adicionada na "
                                                                                    "lista de moedas suportadas pela "
                                                                                    "API. Apenas moedas existentes são "
-                                                                                   "suportadas por esse método")
+                                                                                   "suportadas por esse método"),
+                                           api_key: APIKey = Depends(get_api_key)
                                            ) -> AdicionaCurrencyResponse:
     return await currency.adiciona_moeda_default(currency_to_add)
 
@@ -77,7 +79,8 @@ async def adiciona_moedas_custom_route(file: UploadFile = File(...,
                                                                            "que o nome do arquivo. Essa "
                                                                            "classe precisa ser subclasse de "
                                                                            "CustomCurrencyAbstract para que o "
-                                                                           "request seja um sucesso")
+                                                                           "request seja um sucesso"),
+                                       api_key: APIKey = Depends(get_api_key)
                                        ) -> AdicionaCurrencyResponse:
     return await currency.adiciona_moedas_custom(file)
 
