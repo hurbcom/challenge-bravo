@@ -9,6 +9,8 @@ def exception_handler(func):
     async def wrapper(*args, **kwargs):
         try:
             return await func(*args, **kwargs)
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=HTTP_500_INTERNAL_SERVER_ERROR,
