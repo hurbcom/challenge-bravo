@@ -1,6 +1,5 @@
 import os
 
-import pytest
 from fastapi.testclient import TestClient
 
 from app import app
@@ -64,6 +63,7 @@ def test_insere_moeda_default():
         "name": "CAD",
         "success": True
     }
+
 
 def test_insere_moeda_custom():
     os.chdir("../")

@@ -10,6 +10,14 @@ from currencies_store.AllowedCurrencies import AllowedCurrencies
 from custom_currencies.abstract.CustomCurrencyAbstract import CustomCurrencyAbstract
 from utils.redis.RedisUtils import RedisUtils
 
+"""
+Nesse método o valor convertido de todas as moedas são salvas no Redis.
+Foi salvo no Redis o valor da conversão de cada moeda para cada moeda por duas razões:
+1. Aumentar a velocidade de processamento dos requests de conversão. A maior parte das contas realizadas pela conversão
+são feitas nesse método ao invés de serem feitas na hora em que o request é feito. Isso agiliza a execução da conversão.
+2. Reduzir a criação de "hot_keys" no Redis.
+"""
+
 
 def update_redis_currencies(actual_currency: dict) -> None:
     RedisUtils.salva_objeto("currency:base", os.getenv("base_currency", "USD"))
@@ -67,12 +75,25 @@ async def update_currencies(ctx):
     print("corrotina rodada!!")
 
 
+"""
+Vale notar aqui que a rotina está sendo rodada de 1 em 1 hora pois a versão gratuita da API utilizada para obter a
+cotação de cada moeda só oferece atualizações de cotação de 1 em 1 hora. Caso fosse usada uma API de cotação com uma
+taxa de atualização maior, seria necessário trocar esse cron para executar de menos em menos tempo
+"""
+
+
 class WorkerSettings:
     cron_jobs = [
         cron(update_currencies, second=0, minute=0)
     ]
     on_startup = update_currencies
     redis_settings = RedisSettings(password=os.getenv("redis_access"))
+
+
+"""
+arq é um módulo utilizado para a criação e execução de tarefas. Este módulo utiliza nativamente o redis para orquestrar
+a execução de tarefas
+"""
 
 
 def inicia_rotinas():

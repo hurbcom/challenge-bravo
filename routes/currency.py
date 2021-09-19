@@ -12,10 +12,20 @@ from models.RemoveCurrencyResponse import RemoveCurrencyResponse
 from routines import update_currencies
 from utils.redis.RedisUtils import RedisUtils
 
+"""
+Método que remove uma moeda da lista de moedas suportadas.
+Tal método também limpa o Redis das conversões entre moedas
+"""
+
 
 def remove_suporte_moeda(currency_to_delete: str) -> RemoveCurrencyResponse:
     AllowedCurrencies.remove_allowed_currency(currency_to_delete)
     return RemoveCurrencyResponse(name=currency_to_delete, success=True)
+
+
+"""
+Método que exibe as moedas atualmente suportadas pelo aplicativo
+"""
 
 
 def mostra_moedas_suportadas() -> List[str]:
@@ -25,6 +35,11 @@ def mostra_moedas_suportadas() -> List[str]:
 def verifica_se_moeda_existe(currency_to_add: str):
     moedas_default_suportadas = RedisUtils.recupera_objeto("currency:default_currencies")
     return currency_to_add in moedas_default_suportadas
+
+
+"""
+Método que adiciona uma moeda que existe e que já tem uma conversão padrão de fácil acesso em APIs externas
+"""
 
 
 async def adiciona_moeda_default(currency_to_add: str) -> AdicionaCurrencyResponse:
@@ -94,6 +109,15 @@ def verifica_validade_metodo_obtencao_rate(custom_currency_clazz):
             status_code=HTTP_400_BAD_REQUEST,
             detail=f"Classe {custom_currency_clazz} com erro na execucao do método obtem_rate_default!"
         )
+
+
+"""
+Método feito para adicionar uma moeda imaginária ao aplicativo.
+esse método salva a classe subida num módulo específico para moedas imaginárias.
+em seguida carrega a classe da moeda imaginária via reflections
+confirma que o código para a conversão da moeda está funcionando sem que nenhuma exceção seja levantada
+e adiciona a moeda à lista de moedas imaginárias suportadas pelo aplicativo
+"""
 
 
 async def adiciona_moedas_custom(file: UploadFile):
