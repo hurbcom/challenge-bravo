@@ -38,3 +38,6 @@ Para que o projeto fosse de fácil visualização e avaliação, foram colocados
 ## Testes
 Para avaliar o funcionamento da API foram criados diversos testes unitários contidos no arquivo `tests/main_test.py`.
 Já para avaliação do teste de carga do aplicativo foi utilizada a aplicação **JMeter**. Tanto a aplicação **JMeter** como a configuração utilizada para o teste de carga estão inclusos na pasta `load_tests`
+
+## Documentação
+Para acessar o Swagger da API, basta-se acessar a rota `/docs` da mesma
