@@ -16,7 +16,8 @@ Para instalar e executar a aplicação o usuário:
 2. Rodar via linha de comando o script: `./install.sh`
 3. Rodar via linha de comando o script: `sudo docker run --network="host" conversor_de_moedas:latest`
 
-Vale notar que, conforme explicado depois na documentação a instalação sobe em um docker um servidor redis para uso pela aplicação
+Vale notar que, conforme explicado depois na documentação a instalação sobe em um docker um servidor redis para uso pela aplicação.
+Também é importante notar que os comandos de docker foram escritos com o uso de sudo para que não haja nenhum problema de permissão na sua execução.
 
 ## Escolhas de Projeto
 Uma das escolhas principais do projeto foi o uso do Redis para persistência de informação. Tal escolha foi feita principalmente para que a API conseguisse acessar mais rápida os valores convertidos de cada moeda. Um Banco de Dados Relacional não foi utilizado para que o projeto não tivesse sua complexidade aumentada ainda mais. Vale notar que caso os requisitos da aplicação sejam modificados para que ela englobe uma maior complexidade se faz necessário avaliar novamente a necessidade de se usar um Banco de Dados Relacional em conjunto com a aplicação. 
