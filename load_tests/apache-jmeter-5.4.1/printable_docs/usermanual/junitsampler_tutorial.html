@@ -1,0 +1,453 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- start the processing -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../docs/css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="author" value="JMeter developers">
+<meta name="email" value="dev@jmeter.apache.org">
+
+<title>Apache JMeter - JUnit Sampler Tutorial</title>
+<style>
+  .code { font-weight: bold; }
+</style>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<tr>
+<td align="left">
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="../../docs/images/asf-logo.png" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jmeter.apache.org/"><img width="259" height="88" src="../../docs/images/jmeter.png" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" cellspacing="4">
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_accesslog_sampler_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_proxy_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="junit"><strong>27. JUnit Sampler Tutorial</strong></a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+This tutorial attempts to explain the basic design, functionality and usage of the new JUnit Sampler for JMeter.
+The sampler was introduced in version 2.1.2 release of JMeter. Earlier releases do not have the sampler.
+</p><table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="design"><strong>27.1 Design</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+The current implementation supports standard JUnit convention and extensions, like <tt class="code">oneTimeSetUp</tt>
+and <tt class="code">oneTimeTearDown</tt>. Other features can be added on request. The sampler works like the JavaSampler
+with some differences.
+</p><ul>
+  <li>Rather than use JMeter's test interface, it scans the jar files for classes extending JUnit's
+      <tt class="code">TestCase</tt> class. This means any class or subclass.</li>
+  <li>JUnit test jar files are copied to <tt class="code">jmeter/lib/junit</tt> instead of
+      <tt class="code">jmeter/lib</tt></li>
+  <li>JUnit sampler does not use name/value pairs for configuration. The sampler assumes
+      <tt class="code">setUp</tt> and <tt class="code">tearDown</tt> will configure the test correctly.
+      <p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Note: <tt class="code">setUp</tt> and <tt class="code">tearDown</tt> methods must be declared <tt class="code">public</tt>,
+       so that JMeter can use it.</td></tr>
+</table>
+</p>
+
+  </li>
+  <li>The sampler measures the elapsed time only for the test method and does not include
+      <tt class="code">setUp</tt> and <tt class="code">tearDown</tt>.
+  </li>
+  <li>Each time the test method is called, JMeter will pass the result to the listeners.</li>
+  <li>Support for <tt class="code">oneTimeSetUp</tt> and <tt class="code">oneTimeTearDown</tt> is done as a method.
+      Since JMeter is multi-threaded, we cannot call <tt class="code">oneTimeSetUp</tt>/<tt class="code">oneTimeTearDown</tt>
+      the same way maven does it.</li>
+  <li>The sampler reports unexpected exceptions as errors.</li>
+</ul></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="functionality"><strong>27.2 Functionality</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Here is a description of the functionality.
+</p><dl>
+  <dt>Name</dt><dd>name for the sample. This is the same as all JMeter samplers.</dd>
+  <dt>Package Filter</dt><dd>provides a way to filter the classes by package name.</dd>
+  <dt>Classname</dt><dd>the name of the class to test. The sampler will scan the jar files in
+      <tt class="code">jmeter/lib/ext</tt> and <tt class="code">jmeter/lib/junit</tt> for classes extending
+      JUnit's <tt class="code">TestCase</tt>.</dd>
+  <dt>Constructor String</dt><dd>a string to pass to the string constructor of the test class.</dd>
+  <dt>Test Method</dt><dd>the name of the method to test in the sampler.</dd>
+  <dt>Success message</dt><dd>a descriptive message indicating what success means.</dd>
+  <dt>Success code</dt><dd>an unique code indicating the test was successful.</dd>
+  <dt>Failure message</dt><dd>a descriptive message indicating what failure means.</dd>
+  <dt>Failure code</dt><dd>an unique code indicating the test failed</dd>
+  <dt>Error message</dt><dd>a description for errors</dd>
+  <dt>Error code</dt><dd>some code for errors. Does not need to be unique</dd>
+  <dt>Do not call <tt class="code">setUp</tt> and <tt class="code">tearDown</tt></dt><dd>set the sampler not
+      to call <tt class="code">setUp</tt> and <tt class="code">tearDown</tt>. By default, <tt class="code">setUp</tt> and
+      <tt class="code">tearDown</tt> should be called. Not calling those methods could affect the test and
+      make it inaccurate. This option should be used with caution.
+      <p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>If the selected method is <tt class="code">oneTimeSetUp</tt> or <tt class="code">oneTimeTearDown</tt>,
+      this option should be checked.</td></tr>
+</table>
+</p>
+</dd>
+  <dt>Append assertion error</dt><dd>By default, the sampler will not append the assert failures
+      to the failure message. To see the message in the result tree, check the option.</dd>
+  <dt>Append runtime exception</dt><dd>By default, the sampler will not append the exceptions
+      to the failure message. To see the stacktrace, check the option</dd>
+</dl><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='397' height='536' src="../../docs/images/screenshots/junit_sampler.png"/><br>
+<font size="-1">JUnit Request</font></td></tr></table>
+<p>
+The current implementation of the sampler will try to create an instance using the string constructor
+first. If the test class does not declare a string constructor, the sampler will look for an empty
+constructor. Example below:
+</p><a name="constructor-examples"/>
+<p><b>Constructor Examples</b></p>
+
+Empty Constructor:
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public class myTestCase {
+  public myTestCase() {}
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+
+String Constructor:
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public class myTestCase {
+  public myTestCase(String text) {
+    super(text);
+  }
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+<p>
+By default, JMeter will provide some default values for the success/failure code and message.
+Users should define a set of unique success and failure codes and use them uniformly across all tests.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="usage"><strong>27.3 Usage</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Here is a short step-by-step.
+</p><ol>
+  <li>Write your JUnit test and jar the classes</li>
+  <li>Copy and paste the jar files into <tt class="code">jmeter/lib/junit</tt> directory</li>
+  <li>Start JMeter</li>
+  <li>Select <tt class="code">Test Plan</tt></li>
+  <li>Right click
+      <span class="menuchoice">
+ <span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Thread Group</span>  </span>
+</li>
+  <li>Select <tt class="code">Thread Group</tt></li>
+  <li>Right click
+       <span class="menuchoice">
+ <span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Sampler</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">JUnit Request</span>  </span>
+</li>
+  <li>Enter <tt class="code">my unit test</tt> in the name</li>
+  <li>Enter the package of your JUnit test</li>
+  <li>Select the class you want to test</li>
+  <li>Select a method to test</li>
+  <li>Enter <tt class="code">test successful</tt> in success message</li>
+  <li>Enter <tt class="code">1000</tt> in success code</li>
+  <li>Enter <tt class="code">test failed</tt> in failure message</li>
+  <li>Enter <tt class="code">0001</tt> in failure code</li>
+  <li>Select the Thread Group</li>
+  <li>Right click
+       <span class="menuchoice">
+ <span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Listener</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">View Results Tree</span>  </span>
+</li>
+</ol><p>
+One benefit of the JUnit sampler is it allows the user to select any method from a variety
+of unit tests to create a test plan. This should reduce the amount of code an user needs to
+write to create a variety of test scenarios. From a basic set of test methods, different
+sequences and tests can be created using JMeter's GUI.
+</p><p>
+For example:
+</p><p>
+Test Plan1
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+TestCase1.testImportCustomer
+TestCase2.testUpdateRandomCustomer
+TestCase1.testSelect100
+TestCase2.testUpdateOrder
+TestCase1.testSelect1000
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+</p><p>
+TestPlan2
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+TestCase1.testImportCustomer
+TestCase1.testSelect100
+TestCase1.testSelect1000
+TestCase2.testAdd100Customers
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="guidelines"><strong>27.4 General Guidelines</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Here are some general guidelines for writing JUnit tests so they work well with JMeter. Since JMeter
+runs multi-threaded, it is important to keep certain things in mind.
+</p><ul>
+  <li>Write the <tt class="code">setUp</tt> and <tt class="code">tearDown</tt> methods so they are thread safe. This
+      generally means avoid using static members.</li>
+  <li>Make the test methods discrete units of work and not long sequences of actions. By keeping
+      the test method to a discrete operation, it makes it easier to combine test methods to create
+      new test plans.</li>
+  <li>Avoid making test methods depend on each other. Since JMeter allows arbitrary sequencing of
+      test methods, the runtime behavior is different than the default JUnit behavior.</li>
+  <li>If a test method is configurable, be careful about where the properties are stored. Reading
+      the properties from the Jar file is recommended.</li>
+  <li>Each sampler creates an instance of the test class, so write your test so the setup happens
+      in <tt class="code">oneTimeSetUp</tt> and <tt class="code">oneTimeTearDown</tt>.</li>
+  <li>If you select a class and no methods show up, it means the sampler had a problem creating an
+      instance of the test class. The best way to debug this is to add some <tt class="code">System.out</tt>
+      to your class constructor and see what is happening.</li>
+</ul></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<br>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_accesslog_sampler_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_proxy_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td>
+<table width=100%>
+<tr>
+<td>
+<font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2021, Apache Software Foundation
+</em></font>
+</td>
+<td align="right">
+<font color="#525D76" size="-1"><em>
+$Id$
+</em></font>
+</td>
+</tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

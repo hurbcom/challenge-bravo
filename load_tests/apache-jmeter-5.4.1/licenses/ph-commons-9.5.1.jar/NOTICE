@@ -1,0 +1,19 @@
+=============================================================================
+= NOTICE file corresponding to section 4d of the Apache License Version 2.0 =
+=============================================================================
+This product includes Open Source Software developed by
+Philip Helger - https://www.helger.com/
+
+This product includes Open Source Software developed by phloc systems (http://www.phloc.com/)
+
+This product includes/uses software(s) developed by 'Apache Software Foundation' (http://www.apache.org/)
+  - Abdera I18N (http://abdera.apache.org/)
+  - commons-primitives (http://commons.apache.org/proper/commons-primitives/)
+  - commons-codec (http://commons.apache.org/proper/commons-codec/)
+  - commons-lang3 (http://commons.apache.org/proper/commons-lang/)
+
+This product includes/uses software(s) developed by 'Robert Harder' (http://iharder.net/)
+  - Base64 (http://iharder.net/base64)
+
+This product includes/uses software(s) developed by 'Bytecode Pty Ltd.'
+  - OpenCSV (http://sourceforge.net/projects/opencsv/)

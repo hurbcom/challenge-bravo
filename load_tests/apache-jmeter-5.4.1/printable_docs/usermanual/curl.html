@@ -1,0 +1,459 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- start the processing -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../docs/css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Apache JMeter - User's Manual: Curl</title>
+<style>
+  .code { font-weight: bold; }
+</style>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<tr>
+<td align="left">
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="../../docs/images/asf-logo.png" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jmeter.apache.org/"><img width="259" height="88" src="../../docs/images/jmeter.png" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" cellspacing="4">
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="history_future.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="glossary.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="hints"><strong>24. Curl</strong></a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>This method is to create http requests from curl command. If you want to know more about curl, please click the <a href="https://curl.haxx.se/">
+Curl document</a>.
+</p><table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="enter_command"><strong>24.1 How to enter (a) command(s)</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Create a Test Plan From a cURL Command
+</p><ol>
+  <li>To create an import from a cURL, open the <tt class="code">Tools</tt> menu and click <tt class="code">Import from cURL</tt>.
+    <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='768' height='339' src="../../docs/images/screenshots/curl/choose_curl.png"/><br>
+<font size="-1">Figure 1 - The menu where curl is located</font></td></tr></table>
+
+  </li>
+    <li>There are two ways to enter the curl command line. Firstly, we can enter it manually. Secondly, we can import a file containing the curl command line.
+    This tool supports input of multiple curl command lines at the same time.
+    <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='767' height='443' src="../../docs/images/screenshots/curl/enter_command.png"/><br>
+<font size="-1">Figure 2.1 - Enter curl command in text panel</font></td></tr></table>
+
+    <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='767' height='449' src="../../docs/images/screenshots/curl/enter_command_from_file.png"/><br>
+<font size="-1">Figure 2.2 - Enter curl command from file</font></td></tr></table>
+
+  </li>
+  <li>Then, click <tt class="code">Create Test Plan</tt> button and a new HTTP Sample will be added to the Test Plan.
+    <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='767' height='464' src="../../docs/images/screenshots/curl/result.png"/><br>
+<font size="-1">Figure 3 - result of Test Plan</font></td></tr></table>
+
+  </li>
+</ol></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="curl_options"><strong>24.2 Curl options supported</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<dl>
+  <dt><tt class="code">-H</tt>, <tt class="code">--header &lt;header&gt;</tt></dt>
+  <dd>Extra header to use when getting a web page.</dd>
+  <dt><tt class="code">-X</tt>, <tt class="code">--request &lt;command&gt;</tt></dt>
+  <dd>Specifies a custom request method to use when communicating with the HTTP server.</dd>
+  <dt><tt class="code">--compressed</tt></dt>
+  <dd>Request a compressed response using one of the algorithms curl supports, and return the uncompressed document.</dd>
+  <dt><tt class="code">-A</tt>, <tt class="code">--user-agent &lt;agent string&gt;</tt></dt>
+  <dd>Specify the User-Agent string to send to the HTTP server.</dd>
+  <dt><tt class="code">-b</tt>, <tt class="code">--cookie &lt;name=data&gt;</tt></dt>
+  <dd>Pass the data to the HTTP server as a cookie.</dd>
+  <dt><tt class="code">-d</tt> and friends</dt>
+  <dd><p>Sending data via POST request</p>
+    <p>Sends the specified data in a POST request to the HTTP server. If this option is used more than
+    once on the same command line, the data pieces specified will be merged together with a
+    separating '<tt class="code">&amp;</tt>' character. Thus, using '<tt class="code">-d name=daniel -d skill=lousy</tt>' would generate a POST
+    chunk that looks like '<tt class="code">name=daniel&amp;skill=lousy</tt>'.</p>
+    <dl>
+      <dt><tt class="code">-d</tt>, <tt class="code">--data &lt;data&gt;</tt>, <tt class="code">--data-ascii &lt;data&gt;</tt></dt>
+      <dd>use <tt class="code">@</tt> to upload a file</dd>
+      <dt><tt class="code">--data-raw &lt;data&gt;</tt>gt;</dt>
+      <dd></dd>
+      <dt><tt class="code">--data-raw &lt;data&gt;</tt></dt>
+      <dd>This posts data exactly as specified with no extra processing whatsoever.
+        If you start the data with the character <tt class="code">@,</tt> the rest should be a filename.</dd>
+      <dt><tt class="code">--data-raw &lt;data&gt;</tt>ta&gt;</dt>
+      <dd>This posts data, similar to the other <tt class="code">--data</tt> options with the exception that this performs
+        URL-encoding.</dd>
+      <dt><tt class="code">--data-raw &lt;data&gt;</tt></dt>
+      <dd>This posts data similarly to <tt class="code">--data</tt> but without the special interpretation
+        of the <tt class="code">@</tt> character.</dd>
+    </dl>
+  </dd>
+  <dt><tt class="code">-F</tt> and friends</dt>
+  <dd>
+    <p>This lets curl emulate a filled-in form in which a user has pressed the submit button.</p>
+    <dl>
+      <dt><tt class="code">-F</tt>, <tt class="code">--form &lt;name=content&gt;</tt></dt>
+      <dd>use <tt class="code">@</tt> to upload a file</dd>
+      <dt><tt class="code">--form-string &lt;name=content&gt;</tt></dt>
+      <dd></dd>
+    </dl>
+  </dd>
+  <dt><tt class="code">-u</tt>, --user &lt;user:password &gt;</dt>
+  <dd>Specify user and password to use for server authentication.</dd>
+  <dt><tt class="code">--basic</tt>, <tt class="code">--digest</tt></dt>
+  <dd>Tells curl to use HTTP authentication.</dd>
+  <dt><tt class="code">--cacert</tt> and friends</dt>
+  <dd>
+    <p>Tells curl to use the specified client certificate file when getting a file with HTTPS</p>
+    <dl>
+      <dt><tt class="code">--cacert &lt;CA certificate&gt;</tt></dt>
+      <dt><tt class="code">--capath  &lt;CA certificate directory&gt;</tt></dt>
+      <dt><tt class="code">--ciphers &lt;list of ciphers&gt;</tt></dt>
+      <dt><tt class="code">--cert-status</tt></dt>
+      <dt><tt class="code">--cert-type &lt;type&gt;</tt></dt>
+    </dl>
+  </dd>
+  <dt><tt class="code">-G</tt>, <tt class="code">--get</tt></dt>
+  <dd>put the post data in the URL and use get to replace post.</dd>
+  <dt><tt class="code">--no-keepalive</tt></dt>
+  <dd>Disables the use of keepalive messages on the TCP connection.</dd>
+  <dt><tt class="code">-e</tt>, <tt class="code">--referer &lt;URL&gt;</tt></dt>
+  <dd>Sends the <em>Referer Page</em> information to the HTTP server.</dd>
+  <dt><tt class="code">-L</tt>, <tt class="code">--location</tt></dt>
+  <dd>If the server reports that the requested page has moved to a different location
+    this option will make curl redo the request on the new place.</dd>
+  <dt><tt class="code">-i</tt>, <tt class="code">--include</tt></dt>
+  <dd>Include the HTTP-header in the output.</dd>
+  <dt><tt class="code">--connect-timeout &lt;seconds&gt;</tt></dt>
+  <dd>Maximum time in seconds that the connection to the server may take.</dd>
+  <dt><tt class="code">--keepalive-time &lt;seconds&gt;</tt></dt>
+  <dd>This option sets the time a connection needs to remain idle before sending keepalive probes
+    and the time between individual keepalive probes.</dd>
+  <dt><tt class="code">-m</tt>, <tt class="code">--max-time  &lt;seconds&gt;</tt></dt>
+  <dd>Maximum time in seconds that you allow the whole operation to take.</dd>
+  <dt><tt class="code">-x</tt>, <tt class="code">--proxy &lt;[protocol://][user:password@]proxyhost[:port]&gt;</tt></dt>
+  <dd>Use the specified HTTP proxy. If the port number is not specified,
+    it is assumed at port <tt class="code">1080</tt>.</dd>
+  <dt><tt class="code">-U</tt>, <tt class="code">--proxy-user  &lt;user:password&gt;</tt></dt>
+  <dd>Specify user and password to use for proxy authentication.</dd>
+  <dt><tt class="code">-k</tt>, <tt class="code">--insecure</tt></dt>
+  <dd>This option explicitly allows curl to perform <em>insecure</em> SSL connections and transfers.</dd>
+  <dt><tt class="code">--raw</tt></dt>
+  <dd>When used, it disables all internal HTTP decoding of content or transfer encodings and instead makes them passed on unaltered,raw.</dd>
+  <dt><tt class="code">-I</tt>, <tt class="code">--head</tt></dt>
+  <dd>Fetch the HTTP-header only. HTTP-servers feature the method <tt class="code">HEAD</tt> which this uses to get nothing but the header of a document.</dd>
+  <dt><tt class="code">--interface &lt;name&gt;</tt></dt>
+  <dd>Perform an operation using a specified interface. You can enter interface name, IP address or host name.</dd>
+  <dt><tt class="code">--proxy-ntlm</tt>/<tt class="code">--proxy-negotiate</tt></dt>
+  <dd>Tells curl to use HTTP BASIC/NTLM/Digest authentication when communicating with the given proxy.</dd>
+  <dt><tt class="code">--dns-servers &lt;addresses&gt;</tt></dt>
+  <dd>Resolve host name over DOH.</dd>
+  <dt><tt class="code">--resolve &lt;host:port:address&gt;</tt></dt>
+  <dd>Provide a custom address for a specific host and port pair.</dd>
+  <dt><tt class="code">--limit-rate &lt;speed&gt;</tt></dt>
+  <dd>Specify the maximum transfer rate you want curl to use.</dd>
+  <dt><tt class="code">--max-redirs &lt;num&gt;</tt></dt>
+  <dd>Set maximum number of redirections which may be followed.</dd>
+  <dt><tt class="code">--noproxy &lt;no-proxy-list&gt;</tt></dt>
+  <dd>Comma-separated list of hosts which do not use a proxy, if one is specified.</dd>
+</dl></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="warning"><strong>24.3 Warning</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+When the command you entered is ignored or contains warning content, we will display warning in the comment section of HTTP Request.
+</p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='768' height='464' src="../../docs/images/screenshots/curl/http_request_warning.png"/><br>
+<font size="-1">Figure 1 -Warning</font></td></tr></table>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="example"><strong>24.4 Examples</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p><b>Use cookie</b><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>curl -X POST  &quot;https://example.invalid&quot; -b 'username=Tom;password=123456'</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+</p><p><b>Use data</b><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>curl -X POST  &quot;https://example.invalid&quot; --data 'fname=a&amp;lname=b'</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+</p><p><b>Use form</b><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>curl -X POST  &quot;https://example.invalid&quot; -F 'lname=a'  -F 'fname=b' -F 'c=@C:\Test\test.txt'</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+</p><p><b>Use proxy</b><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>curl 'https://example.invalid/' -x 'https://aa:bb@proxy.invalid:8042'</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+</p><p><b>Use authorization</b><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>curl &quot;https://example.invalid&quot; -u 'user:passwd' --basic</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+</p><p><b>Use DNS</b><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>curl &quot;https://example.invalid&quot; --dns-servers '0.0.0.0,1.1.1.1'</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<br>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="history_future.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="glossary.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td>
+<table width=100%>
+<tr>
+<td>
+<font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2021, Apache Software Foundation
+</em></font>
+</td>
+<td align="right">
+<font color="#525D76" size="-1"><em>
+$Id$
+</em></font>
+</td>
+</tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

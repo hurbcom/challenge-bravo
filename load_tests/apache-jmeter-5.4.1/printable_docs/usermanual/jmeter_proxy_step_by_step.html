@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- start the processing -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../docs/css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="author" value="JMeter developers">
+<meta name="email" value="dev@jmeter.apache.org">
+
+<title>Apache JMeter - Apache JMeter HTTP(S) Test Script Recorder</title>
+<style>
+  .code { font-weight: bold; }
+</style>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<tr>
+<td align="left">
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="../../docs/images/asf-logo.png" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jmeter.apache.org/"><img width="259" height="88" src="../../docs/images/jmeter.png" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" cellspacing="4">
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="junitsampler_tutorial.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_distributed_testing_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="script-recorder"><strong>26. Apache JMeter HTTP(S) Test Script Recorder</strong></a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+This tutorial attempts to explain the exact steps for recording HTTP/HTTPS. For those new to JMeter, one easy way to create a test plan is to use the Recorder.
+</p><table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="configuration"><strong>26.1 JMeter configuration</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Since JMeter 2.10, recording has been improved to better handle embedded resources and creation of certificates on the fly.
+To enable these features, JMeter uses <tt class="code">keytool</tt> utility (available in JRE/JDK) so you need to ensure your
+configuration is correct, read <a href="https://cwiki.apache.org/confluence/display/JMETER/TestRecording210">this wiki page before starting.</a>
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="basic-instructions"><strong>26.2 Basic Instructions</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<ol>
+  <li>Go to <tt class="code">JMETER_HOME/bin</tt> and start JMeter with <tt class="code">jmeterw.bat</tt> on Windows
+      and <tt class="code">jmeter.sh
+      </tt> on Linux/Unix</li>
+  <li>Select <tt class="code">Templates…</tt> on the menu bar</li>
+  <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../../docs/images/screenshots/Select-Templates-Icon.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+  <li>Select <tt class="code">Recording template</tt> on the list</li>
+  <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../../docs/images/screenshots/Select-Recording-Template.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+  <li>A complete <tt class="code">Test Plan</tt> is generated</li>
+  <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../../docs/images/screenshots/Test_Generated.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+  <li>In the <tt class="code">HTTP Request Defaults</tt> element:
+    <dl>
+      <dt><tt class="code">Server name or IP</tt></dt><dd>enter <tt class="code">example.com</tt></dd>
+      <dt><tt class="code">Path</tt></dt><dd>leave blank</dd>
+    </dl>
+    <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../../docs/images/screenshots/http-config/http-request-defaults.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+  </li>
+  <li>Return to <tt class="code">HTTP(S) Test Script Recorder</tt>, and click the <tt class="code">Start</tt> button at the top.</li>
+  <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../../docs/images/screenshots/Proxy_Run.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+</ol><p>
+This will start the JMeter proxy server which is used to intercept the browser requests.
+A file called <tt class="code">ApacheJMeterTemporaryRootCA.crt</tt> will be generated in <tt class="code">JMETER_HOME/bin</tt>
+folder. Install this certificate in your browser, if you don't know how to do it,
+read <a href="component_reference.html#HTTP%28S%29_Test_Script_Recorder">Installing the JMeter CA certificate for HTTPS recording</a>
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="configure-browser"><strong>26.3 Configure your browser to use the JMeter Proxy</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+At this point, JMeter's proxy is running. For this exercise, we will use Iceweasel/Firefox
+to view some pages on the JMeter website.
+</p><ol>
+  <li>Start Iceweasel/Firefox, but do not close JMeter.</li>
+  <li>From the tool bar, click
+       <span class="menuchoice">
+ <span class="guimenuitem">Edit</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Preferences</span>  </span>
+ (or
+       <span class="menuchoice">
+ <span class="guimenuitem">Tools</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Preferences</span>  </span>
+ or type <tt class="code">about:preferences#advanced</tt>
+      as URL). This should bring up the options.
+    <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='914' height='566' src="../../docs/images/screenshots/firefox-network-settings.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+  </li>
+  <li>Select the <tt class="code">Advanced</tt> tab, and <tt class="code">Network</tt> tab</li>
+  <li>Click <tt class="code">Settings</tt> button near the top.</li>
+  <li>On the new pop-up, check <tt class="code">Manual proxy configuration</tt>. The address and
+      port fields should be enabled now.
+    <dl>
+      <dt><tt class="code">Address</tt></dt><dd>enter <tt class="code">localhost</tt> or the IP address of your system</dd>
+      <dt><tt class="code">Port</tt></dt><dd>enter <tt class="code">8888</tt>.</dd>
+    </dl>
+    <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='532' height='240' src="../../docs/images/screenshots/firefox-configure-proxy.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+  </li>
+  <li>Check <tt class="code">Use this proxy server for all protocols</tt></li>
+  <li>Click <tt class="code">OK</tt> button. This should return you to the browser</li>
+</ol></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="navigation-recording"><strong>26.4 Record your navigation</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<ol>
+  <li>With your browser, in the <tt class="code">Address</tt> bar at the top, enter <tt class="code">http://example.com/index.html</tt> (replace <tt class="code">example.com</tt> with your websites address).
+  and hit the <tt class="code">enter</tt> key.</li>
+  <li>Click on a few links on your sites pages.</li>
+  <li>Close your browser and bring up the JMeter window.</li>
+</ol><p>
+Expand the <tt class="code">Thread Group</tt> and there should be several samplers. At this point, the test plan can
+be saved as is.
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>If you forget to add default HTTP Request settings, you will have to manually
+delete the server name, and port.</td></tr>
+</table>
+</p>
+
+</p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='258' height='194' src="../../docs/images/screenshots/example-recording.png"/><br>
+<font size="-1"></font></td></tr></table>
+<p>
+In this sample, there aren't any default request parameters. If a particular request parameter
+is required by all pages, the request defaults is where one would add the entries.
+</p><ol>
+  <li>Select <tt class="code">Thread Group</tt> and change a few defaults:
+    <dl>
+      <dt><tt class="code">Number of Threads (users)</tt></dt><dd>enter <tt class="code">5</tt></dd>
+      <dt><tt class="code">Ramp-Up Period (in seconds)</tt></dt><dd>do not change</dd>
+      <dt><tt class="code">Loop Count</tt></dt><dd>enter <tt class="code">100</tt></dd>
+    </dl>
+    <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='357' height='288' src="../../docs/images/screenshots/example-thread-group.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+  </li>
+</ol></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="validate-script"><strong>26.5 Validate the script</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Now we need to validate the script before to run our test plan. Save the test plan.
+</p><p>
+Right click on the <tt class="code">Thread Group</tt>
+   <span class="menuchoice">
+ <span class="guimenuitem">Validate</span>  </span>
+
+  <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../../docs/images/screenshots/Validate-Test-Plan.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+</p><p>
+Check with <tt class="code">View Results Tree</tt> element if all is ok.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="correlate-start"><strong>26.6 Variabilize and Correlate the script</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+In some scripts, we will need to:
+<ul>
+  <li>Variabilize some input (login, password, search words, …)</li>
+  <li>Correlate some data (session variable, …) between two requests</li>
+</ul>
+</p><p>
+To variabilize, we can use:
+<ul>
+  <li><tt class="code">CSV Data Set Config</tt> to get input data from csv file</li>
+  <li>JMeter functions like <tt class="code">__counter</tt>, <tt class="code">__time</tt>, …</li>
+  <li>etc.</li>
+</ul>
+</p><p>
+To correlate, we can get data from a request with <tt class="code">Post Processors</tt> like <tt class="code">JSON Extractor</tt>, <tt class="code">Regular Expression Extractor</tt>, … and inject it in another request.
+</p><p>
+To find data to correlate, the easiest way to do it is to use the Search function in <tt class="code">View Results Tree</tt>.
+<table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../../docs/images/screenshots/Search-Correlation.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="test-start"><strong>26.7 Start the test</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+At this point, we are ready to run our test plan and see what happens. When you're
+ready to run the test, there are two ways:
+<ol>
+  <li>With the gui, but it's not recommended to big load test.</li>
+  <li>With the command line.</li>
+</ol>
+</p><p>
+Solution 1, with the gui, but just during debug phase, use CLI mode (Non GUI) for your load test.
+</p><p>
+   <span class="menuchoice">
+ <span class="guimenuitem">Run</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Start</span>  </span>
+
+or use the keyboard and press <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">R</span></span>
+</p><p>
+  Before you start the test,  add a <tt class="code">Summary Report</tt> element and select it. As the test runs, the statistics will change
+  until the test is done. At the end of the test, the summary report should look like this.
+  <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='984' height='220' src="../../docs/images/screenshots/example-summary-report.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+</p><p>
+  While the test is running, in the upper right-hand corner, there should be a green circle. When the test is done, the circle should be grey.
+  <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='132' height='39' src="../../docs/images/screenshots/example-running.png"/><br>
+<font size="-1"></font></td></tr></table>
+
+</p><p>
+Solution 2, in command line, use <tt class="code">jmeter -n -t [jmx file] -l [results file] -e -o [Path to output folder]</tt>
+</p><p>
+At the end of the test, an HTML report will be generated and available in [Path to output folder] used in command line.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<br>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="junitsampler_tutorial.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_distributed_testing_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td>
+<table width=100%>
+<tr>
+<td>
+<font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2021, Apache Software Foundation
+</em></font>
+</td>
+<td align="right">
+<font color="#525D76" size="-1"><em>
+$Id$
+</em></font>
+</td>
+</tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- start the processing -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../docs/css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="author" value="JMeter developers">
+<meta name="email" value="dev@jmeter.apache.org">
+
+<title>Apache JMeter - Include Controller Tutorial</title>
+<style>
+  .code { font-weight: bold; }
+</style>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<tr>
+<td align="left">
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="../../docs/images/asf-logo.png" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jmeter.apache.org/"><img width="259" height="88" src="../../docs/images/jmeter.png" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" cellspacing="4">
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="component_reference.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="best-practices.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="include"><strong>42. Include Controller Tutorial</strong></a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+This is a short tutorial explaining the basics of the Include Controller. The Include Controller
+provides an easy way to include modules in a test plan. It is different than the Module Controller
+in a couple of ways.
+</p><ul>
+<li>the Include Controller loads a simple controller with all it's samples, where as the Module
+    Controller can use any controller</li>
+<li>the Include Controller doesn't use the workbench</li>
+<li>the Module Controller doesn't load from a file</li>
+<li>the Include Controller loads the module at runtime and doesn't display the contents of the
+    Simple Controller</li>
+</ul><p>
+There are a couple of reasons why one might want to use the include controller.
+</p><ul>
+  <li>Break a test plan into reusable modules</li>
+  <li>Reduce the cost of maintaining test plans</li>
+  <li>Reduce duplication of common process</li>
+</ul><p>
+For example, say you need to test an application that requires login. If each test plan had the login requests,
+a change in the login process would require updating all test plans. By making the login a module, all other
+test plans can reuse it. When the login process changes, the change is made to the module and all other test
+plans get the change. One limitation of the current implementation is the contents of the module are only
+loaded at runtime, so users can't view or edit the contents of an included module.
+</p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='417' height='130' src="../../docs/images/screenshots/includecontroller.png"/><br>
+<font size="-1">Include Controller</font></td></tr></table>
+<p>
+The Include Controller has two properties. The <tt class="code">name</tt> and the <tt class="code">filename</tt>. The <tt class="code">name</tt>
+is the descriptive name for the controller in the test plan. The <tt class="code">filename</tt> is the name of the <tt class="code">.jmx</tt> file.
+</p><table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="step-by-step"><strong>42.1 Step-by-step</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<ol>
+  <li>Start JMeter</li>
+  <li>Select the workbench</li>
+  <li> <span class="menuchoice">
+ <span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Logic Controller</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Simple Controller</span>  </span>
+
+  </li>
+  <li>Enter <tt class="code">module1</tt> in the name</li>
+  <li>Now add one or more samples to the controller</li>
+  <li>Once the samples are added, right click on <tt class="code">module1</tt></li>
+  <li>Select <tt class="code">save as</tt> and save it as <tt class="code">module1.jmx</tt></li>
+</ol></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<p>
+<tt class="code">module1.jmx</tt> can now be used with any test plan. The Include Controller hasn't been tested
+with other controllers as the root element. If you need to use other controllers, use a Simple Controller
+as the root and add other controllers to it.
+</p></blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<br>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="component_reference.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="best-practices.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td>
+<table width=100%>
+<tr>
+<td>
+<font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2021, Apache Software Foundation
+</em></font>
+</td>
+<td align="right">
+<font color="#525D76" size="-1"><em>
+$Id$
+</em></font>
+</td>
+</tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

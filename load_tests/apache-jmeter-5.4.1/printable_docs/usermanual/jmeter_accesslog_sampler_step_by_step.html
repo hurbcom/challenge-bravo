@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- start the processing -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../docs/css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="author" value="JMeter developers">
+<meta name="email" value="dev@jmeter.apache.org">
+
+<title>Apache JMeter - Access log sampler Step-by-step</title>
+<style>
+  .code { font-weight: bold; }
+</style>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<tr>
+<td align="left">
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="../../docs/images/asf-logo.png" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jmeter.apache.org/"><img width="259" height="88" src="../../docs/images/jmeter.png" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" cellspacing="4">
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_tutorial.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="junitsampler_tutorial.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="access-log-sampler"><strong>28. Access log sampler Step-by-step</strong></a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+This is a short tutorial on JMeter's access log sampler. The purpose of the Access Log Sampler
+is to provide an easy way to simulate production traffic. There are several benefits to using access logs.
+</p><ul>
+  <li>Rather than guess what users are doing, the test plan is using real traffic data</li>
+  <li>As the traffic pattern changes, the access log provides a record of individual changes and general shifts in usage</li>
+  <li>Access logs contain a lot of useful data, which may provide some insight</li>
+  <li>Access logs can be minded to determine different types of users</li>
+  <li>Access logs can capture detailed session information</li>
+</ul><p>
+The down side of using access logs for test plans is you have to configure the webserver to output the request
+information. This may not be appropriate where security is an issue. For example, if the webserver dumps the post
+data from each request to the access logs, users login and password would be stored in plain text. Here are some
+general cases where access logs might be inappropriate.
+</p><ul>
+  <li>Security sensitive applications where the data is encrypted</li>
+  <li>The application does not allow fine grain control of which request parameters are written to the access logs</li>
+  <li>The application needs correlation between requests</li>
+  <li>The webserver cannot be configured to append the post data to the access log</li>
+  <li>The webserver is hosting multiple applications, but doesn't provide a way to log the requests of one application to a separate file</li>
+</ul><p>
+To take advantage of access logs, the first thing is the webserver needs to be configured to use extended
+log format. Links for configuring the popular containers are provided below.
+</p><ul>
+  <li><a href="http://e-docs.bea.com/wls/docs70/adminguide/web_server.html#113868">BEA Weblogic</a></li>
+  <li><a href="http://tomcat.apache.org/tomcat-8.5-doc/config/valve.html#Access_Log_Valve">Tomcat</a></li>
+  <li><a href="http://e-docs.bea.com/wls/docs61/adminguide/web_server.html#113868">Websphere</a></li>
+  <li><a href="http://www.caucho.com/resin-3.0/config/log.xtp#access-log">Resin</a></li>
+</ul><p>
+In some cases, it may be desirable to write custom logging, so that sensitive information is not written
+to the access logs. This article does not cover the techniques for writing custom logging.
+</p><table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="step-by-step"><strong>28.1 Step-by-Step</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<ol>
+  <li>Start JMeter</li>
+  <li>Select <tt class="code">Test Plan</tt></li>
+  <li>Right click
+       <span class="menuchoice">
+ <span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Threads (Users)</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Thread Group</span>  </span>
+
+      <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='676' height='233' src="../../docs/images/screenshots/add-threadgroup.png"/><br>
+<font size="-1">Add Thread Group</font></td></tr></table>
+
+   </li>
+  <li>Select <tt class="code">Thread Group</tt></li>
+  <li>Right click
+       <span class="menuchoice">
+ <span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Sampler</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Access Log Sampler</span>  </span>
+
+      <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='704' height='283' src="../../docs/images/screenshots/add-access-log-sampler.png"/><br>
+<font size="-1">Add Access Log Sampler</font></td></tr></table>
+
+  </li>
+  <li>Right click on <tt class="code">Thread Group</tt>
+       <span class="menuchoice">
+ <span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Listener</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Aggregate Report</span>  </span>
+
+      <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='752' height='326' src="../../docs/images/screenshots/add-aggregate-report.png"/><br>
+<font size="-1">Add Aggregate Report</font></td></tr></table>
+
+  </li>
+  <li>Select the <tt class="code">Access Log Sampler</tt>
+      <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='702' height='305' src="../../docs/images/screenshots/accesslogsampler.png"/><br>
+<font size="-1">Access Log Sampler</font></td></tr></table>
+
+  </li>
+  <li>Enter the IP address or hostname in <tt class="code">Server</tt></li>
+  <li>Enter the port in <tt class="code">Port</tt></li>
+  <li>If you want to download the images, set <tt class="code">Parse images</tt> to <tt class="code">true</tt>.</li>
+  <li>Select a file for <tt class="code">Log File Location</tt>
+      <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='703' height='315' src="../../docs/images/screenshots/example-access-log-sampler.png"/><br>
+<font size="-1">Filled in Access Log Sampler</font></td></tr></table>
+
+  </li>
+  <li>Select Aggregate Report</li>
+  <li>Enter <tt class="code">results.jtl</tt> for filename
+      <table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='344' height='150' src="../../docs/images/screenshots/example-aggregate-report.png"/><br>
+<font size="-1">Aggregate Report with filename</font></td></tr></table>
+
+  </li>
+</ol><p>
+At this point, the test plan is ready. Start the test with
+  <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">R</span></span>
+or from the menu
+    <span class="menuchoice">
+ <span class="guimenuitem">Start</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Run</span>  </span>
+.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<br>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_tutorial.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="junitsampler_tutorial.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td>
+<table width=100%>
+<tr>
+<td>
+<font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2021, Apache Software Foundation
+</em></font>
+</td>
+<td align="right">
+<font color="#525D76" size="-1"><em>
+$Id$
+</em></font>
+</td>
+</tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

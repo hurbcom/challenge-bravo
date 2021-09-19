@@ -1,0 +1,367 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- start the processing -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="./../docs/css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Apache JMeter - User guide: Customizables templates</title>
+<style>
+  .code { font-weight: bold; }
+</style>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<tr>
+<td align="left">
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="./../docs/images/asf-logo.png" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jmeter.apache.org/"><img width="259" height="88" src="./../docs/images/jmeter.png" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" cellspacing="4">
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td align="left" valign="top">
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<strong>Customizable template</strong></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+                This document describes how to create a customizable template.
+            </p><table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="folder_structure"><strong>1 Folder structure</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+                        The template feature uses the bin/templates folder which contains :<br>
+
+                        <ul>
+                            <li>templates.xml, the file where you declare the templates you want to be able to use</li>
+                            <li>some .jmx and .jmx.fmkr files which are the templates</li>
+                        </ul>
+                    </p><p>Here is how it looks like:
+                    <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="./../docs/images/screenshots/templates/template_folder.png"/><br>
+<font size="-1">Figure 1 - template folder</font></td></tr></table>
+
+                    </p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="template_creation"><strong>2 Template declaration</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="basic_template_declaration"><strong>2.1 Basic template declaration</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+                        First of all you must declare your template. To do that, look into the templates.xml file.<br>
+
+                        This file respect a DTD <br>
+
+                        Below is the already existing Recording template declaration inside the templates.xml :
+                        <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="./../docs/images/screenshots/templates/templates_xml.png"/><br>
+<font size="-1">Figure 2 - recording template declaration</font></td></tr></table>
+
+                        A template declaration is made as follow :<br>
+
+                        <ul>
+                            <li><tt class="code">template</tt> element which contains the information described in the following tags</li>
+                            <li><tt class="code">name</tt> element which contains the template name the user will see</li>
+                            <li><tt class="code">fileName</tt> element which contains the relative path of the template.</li>
+                            <li><tt class="code">description</tt> element which uses html to describe the template</li>
+                            <li><tt class="code">optional</tt> parameters tag (will be discussed later)</li>
+                        </ul>
+                    </p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="customizable_template_declaration"><strong>2.2 Customizable template declaration</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+                        Let's say we want the exact same Recording template as in the 2.1 section, but we want to choose the name
+                        of the xml file where the recording of view result tree will be saved.<br>
+<br>
+
+                        To do so we will use the parameters tag to tell JMeter to ask the user about a name for the concerned file :
+                        <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="./../docs/images/screenshots/templates/templates_xml_parameters.png"/><br>
+<font size="-1">Figure 3 - recording template with parameters</font></td></tr></table>
+
+                        <p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>You can put as many parameter tags as you want in the parameters tag.</td></tr>
+</table>
+</p>
+
+                        Let's see what changed here.<br>
+
+                        Firstly, customs templates are <tt class="code">.jmx.fmkr</tt> files and not only <tt class="code">.jmx</tt>.<br>
+<br>
+
+                        Lastly, we added a <tt class="code">parameters</tt> tag.<br>
+ As you can see in the image, a <tt class="code">parameters</tt> tag contains <tt class="code">parameter</tt> tags.<br>
+
+                        Parameter tags are empty and contains 2 attributes :
+                        <ul>
+                            <li><tt class="code">key</tt> is the name of the parameter you will ask the user to fill.</li>
+                            <li><tt class="code">defaultValue</tt> is as its name says, the default value the user will see for the parameter.</li>
+                        </ul>
+                    </p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="template_file"><strong>3 Template file</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="basic_template_file"><strong>3.1 Basic template file</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+                        The template file is the one you used in the fileName tag when you declared your template.
+                        A template file is just the saving of a JMeter test plan.
+                    </p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="customizable_template_file"><strong>3.2 Customizable template file</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+                        In the 2.2 section we saw that a custom template file is a .jmx.fmkr file.<br>
+
+                        The single difference between them is the .jmx.fmkr will be analyzed by JMeter to<br>
+
+                        detect customs tag. If a custom tag is found, JMeter will try to replace it by the corresponding
+                        given value from the user.<br>
+<br>
+
+                        A custom tag is defined as follow :
+                        <div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>[=&lt;key&gt;]</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+                        This is based on <a href="https://freemarker.apache.org/docs/dgui_misc_alternativesyntax.html#dgui_misc_alternativesyntax_interpolation">Freemarker alternative Interpolation syntax</a>.
+                        Let's illustrate how it works with an example.<br>
+
+                        Consider the following part of the recording.jmx template file : <br>
+
+                        <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="./../docs/images/screenshots/templates/template_recording_filename.png"/><br>
+<font size="-1">Figure 4 - recording.jmx save file</font></td></tr></table>
+
+                        The surrounded area correspond to the name of the xml file where the View Results Tree output will be saved.
+                        As it is, when you use the template you will always have the same saving filename : <tt class="code">recording.xml</tt>.<br>
+<br>
+
+                        To make it customizable, change your recording template declaration in the templates.xml files by the<br>
+
+                        one shown in the 2.2 section. Then, rename the recording.jmx file to recording.jmx.fmkr.<br>
+<br>
+
+                        When it's done, Change the above selected line by this one :
+                        <div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>&lt;stringProp name=&quot;filename&quot;&gt;[=xmlFileName]&lt;/stringProp&gt;</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+                        <br>
+
+                        It's over ! With this configuration, if you chose to use the recording template, JMeter will ask you
+                        a xmlFileName (correspond to the key value in the declaration).
+                        <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="./../docs/images/screenshots/templates/template_parameters_window.png"/><br>
+<font size="-1">Figure 5 - JMeter asks you the value you want to put for the key</font></td></tr></table>
+
+                        Then, you will find the expected value in the created template where you placed the [=xmlFileName] tag :
+                        <table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="./../docs/images/screenshots/templates/template_recording_retrieved_value.png"/><br>
+<font size="-1">Figure 6 - the value changed</font></td></tr></table>
+
+                    </p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<br>
+</td>
+</tr>
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td>
+<table width=100%>
+<tr>
+<td>
+<font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2021, Apache Software Foundation
+</em></font>
+</td>
+<td align="right">
+<font color="#525D76" size="-1"><em>
+$Id$
+</em></font>
+</td>
+</tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

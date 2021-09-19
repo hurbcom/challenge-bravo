@@ -1,0 +1,1347 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- start the processing -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../docs/css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="author" value="JMeter developers">
+<meta name="email" value="dev@jmeter.apache.org">
+
+<title>Apache JMeter - How to write a plugin for JMeter</title>
+<style>
+  .code { font-weight: bold; }
+</style>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<tr>
+<td align="left">
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="../../docs/images/asf-logo.png" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jmeter.apache.org/"><img width="259" height="88" src="../../docs/images/jmeter.png" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" cellspacing="4">
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_accesslog_sampler_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="howto"><strong>29. How to write a plugin for JMeter</strong></a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<h3>Introduction from Peter Lin</h3><p>
+On more than one occasion, users have complained JMeter's developer documentation is out of
+date and not very useful. In an effort to make it easier for developers, I decided to write a simple
+step-by-step tutorial. When I mentioned this to mike, he had some ideas about what the tutorial
+should cover.
+</p><p>
+Before we dive into the tutorial, I'd like to say writing a plugin isn't necessarily easy, even for
+someone with several years of java experience. The first extension I wrote for JMeter was a
+simple utility to parse HTTP access logs and produce requests in XML format. It wasn't really a
+plugin, since it was a stand alone command line utility. My first real plugin for JMeter was the
+webservice sampler. I was working on a .NET project and needed to stress test a webservice.
+Most of the commercial tools out there for testing .NET webservices suck and cost too much.
+Rather than fork over several hundred dollars for a lame testing tool, or a couple thousand dollars
+for a good one, I decided it was easier and cheaper to write a plugin for JMeter.
+</p><p>
+After a two weeks of coding on my free time, I had a working prototype using Apache Soap driver.
+I submitted it back to JMeter and mike asked me if I want to be a committer. I had contributed
+patches to Jakarta JSTL and tomcat in the past, so I considered it an honor. Since then, I've
+written the access log sampler, Tomcat 5 monitor and distribution graph. Mike has since then
+improved the access log sampler tremendously and made it much more useful.
+</p><h3>Introduction from Mike Stover</h3><p>
+One of my primary goals in designing JMeter was to make it easy to write plugins to enhance as
+many of JMeter's features as possible. Part of the benefit of being open-source is that a lot of
+people could potentially lend their efforts to improve the application. I made a conscious decision
+to sacrifice some simplicity in the code to make plugin writing a way of life for a JMeter developer.
+</p><p>
+While some folks have successfully dug straight into the code and made improvements to JMeter,
+a real tutorial on how to do this has been lacking. I tried a long time ago to write some
+documentation about it, but most people did not find it useful. Hopefully, with Peter's help, this
+attempt will be more successful.
+</p><table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="basic-structure"><strong>29.1 Basic structure of JMeter</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+JMeter is organized by protocols and functionality. This is done so that developers can build new
+jars for a single protocol without having to build the entire application. We'll go into the details of
+building JMeter later in the tutorial. Since most of the JMeter developers use eclipse, the article will
+use eclipse directory as a reference point.
+</p><p>
+Root directory - <tt class="code">/eclipse/workspace/apache-jmeter/</tt>
+</p><p>
+The folders inside of <tt class="code">apache-jmeter</tt>
+</p><dl>
+  <dt><tt class="code">bin</tt></dt><dd>contains the <tt class="code">.bat</tt> and <tt class="code">.sh</tt> files for starting JMeter.
+      It also contains <tt class="code">ApacheJMeter.jar</tt> and properties file</dd>
+  <dt><tt class="code">build/docs</tt></dt><dd>directory contains the JMeter documentation files</dd>
+  <dt><tt class="code">extras</tt></dt><dd>ant related extra files</dd>
+  <dt><tt class="code">lib</tt></dt><dd>contains the required jar files for JMeter</dd>
+  <dt><tt class="code">lib/ext</tt></dt><dd>contains the core jar files for JMeter and the protocols</dd>
+  <dt><tt class="code">src</tt></dt><dd>contains subdirectory for each protocol and component</dd>
+  <dt><tt class="code">src/*/test</tt></dt><dd>unit test related directory</dd>
+  <dt><tt class="code">xdocs</tt></dt><dd>XML files for documentation. JMeter generates its documentation from XML.</dd>
+</dl><p>
+As the tutorial progresses, an explanation of the subdirectories will be provided. For now, lets
+focus on <tt class="code">src</tt> directory.
+</p><p>
+The folders inside of <tt class="code">src</tt>
+</p><dl>
+
+  &lt;dt&gt;&lt;code&gt;bom&lt;/code&gt;&lt;/dt&gt;&lt;dd&gt;&lt;/dd&gt;
+
+  <dt><tt class="code">bshclient</tt></dt><dd>code for the BeanShell based client</dd>
+  <dt><tt class="code">bolt</tt></dt><dd>code for the Bolt protocol</dd>
+  <dt><tt class="code">components</tt></dt><dd>contains non-protocol-specific components like visualizers, assertions, etc.</dd>
+
+  &lt;dt&gt;&lt;code&gt;config&lt;/code&gt;&lt;/dt&gt;&lt;dd&gt;XXX&lt;/dd&gt;
+
+  <dt><tt class="code">core</tt></dt><dd>the core code of JMeter including all core interfaces and abstract classes.</dd>
+  <dt><tt class="code">dist</tt></dt><dd>builds script that creates a distribution</dd>
+  <dt><tt class="code">dist-check</tt></dt><dd>code related to testing the distribution. It is the place to look for
+    when you want to update the contents of the resulting source/binary archive</dd>
+  <dt><tt class="code">examples</tt></dt><dd>example sampler demonstrating how to use the new bean framework</dd>
+  <dt><tt class="code">functions</tt></dt><dd>standard functions used by all components</dd>
+  <dt><tt class="code">generator</tt></dt><dd>code to generate a test plan with all elements. Used for testing the distribution</dd>
+  <dt><tt class="code">jorphan</tt></dt><dd>utility classes providing common utility functions</dd>
+  <dt><tt class="code">launcher</tt></dt><dd>code to help start and stop JMeter through API</dd>
+  <dt><tt class="code">licenses</tt></dt><dd>contains information about the licenses used in JMeters dependencies</dd>
+  <dt><tt class="code">protocol</tt></dt><dd>contains the different protocols JMeter supports</dd>
+  <dt><tt class="code">release</tt></dt><dd>code related to releasing JMeter distribution</dd>
+  <dt><tt class="code">testkit</tt></dt><dd>utility code for testing</dd>
+  <dt><tt class="code">testkit-wiremock</tt></dt><dd>utility code for testing with WireMock</dd>
+</dl><p>
+Within <tt class="code">protocol</tt> directory, are the protocol specific components.
+</p><p>
+The folders inside of <tt class="code">protocol</tt>
+</p><dl>
+  <dt><tt class="code">ftp</tt></dt><dd>components for load testing ftp servers</dd>
+  <dt><tt class="code">http</tt></dt><dd>components for load testing web servers</dd>
+  <dt><tt class="code">java</tt></dt><dd>components for load testing java components</dd>
+  <dt><tt class="code">jdbc</tt></dt><dd>components for load testing database servers using JDBC</dd>
+  <dt><tt class="code">jms</tt></dt><dd>components for load testing JMS servers</dd>
+  <dt><tt class="code">junit</tt></dt><dd>components for load testing using JUnit tests</dd>
+  <dt><tt class="code">junit-sample</tt></dt><dd>examples for JUnit based test implementations</dd>
+  <dt><tt class="code">ldap</tt></dt><dd>components for load testing LDAP servers</dd>
+  <dt><tt class="code">mail</tt></dt><dd>components for load testing mail servers</dd>
+  <dt><tt class="code">native</tt></dt><dd>components for load testing OS native commands</dd>
+  <dt><tt class="code">tcp</tt></dt><dd>components for load testing TCP services</dd>
+</dl><p>
+As a general rule, all samplers related to HTTP will reside in <tt class="code">http</tt> directory. The exception to the
+rule is the Tomcat5 monitor. It is separate, because the functionality of the monitor is slightly
+different than stress or functional testing. It may eventually be reorganized, but for now it is in its
+own directory. In terms of difficulty, writing visualizers is probably one of the harder plugins to
+write.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="testelement-contract"><strong>29.2 JMeter Gui – TestElement Contract</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+When writing any JMeter component, there are certain contracts you must be aware of – ways a
+JMeter component is expected to behave if it will run properly in the JMeter environment. This
+section describes the contract that the GUI part of your component must fulfill.
+</p><p>
+GUI code in JMeter is strictly separated from Test Element code. Therefore, when you write a
+component, there will be a class for the Test Element, and another for the GUI presentation. The
+GUI presentation class is stateless in the sense that it should never hang onto a reference to the
+Test Element (there are exceptions to this though).
+</p><p>
+A GUI element should extend the appropriate abstract class provided:
+</p><ul>
+  <li><tt class="code">AbstractSamplerGui</tt></li>
+  <li><tt class="code">AbstractAssertionGui</tt></li>
+  <li><tt class="code">AbstractConfigGui</tt></li>
+  <li><tt class="code">AbstractControllerGui</tt></li>
+  <li><tt class="code">AbstractPostProcessorGui</tt></li>
+  <li><tt class="code">AbstractPreProcessorGui</tt></li>
+  <li><tt class="code">AbstractVisualizer</tt></li>
+  <li><tt class="code">AbstractTimerGui</tt></li>
+</ul><p>
+These abstract classes provide so much plumbing work for you that not extending them, and
+instead implementing the interfaces directly is hardly an option. If you have some burning need to
+not extend these classes, then you can join me in IRC where I can convince you otherwise :-).
+</p><p>
+So, you've extended the appropriate GUI class, what's left to do? Follow these steps:
+</p><ol>
+  <li>Implement <tt class="code">getLabelResource()</tt>
+    <ol>
+      <li>This method should return the name of the resource that represents the title/name of the
+component. The resource will have to be entered into JMeters <tt class="code">messages.properties</tt> file
+(and possibly translations as well).</li>
+    </ol>
+  </li>
+  <li>Create your GUI. Whatever style you like, layout your GUI. Your class ultimately extends
+    <tt class="code">JPanel</tt>, so your layout must be in your class's own <tt class="code">ContentPane</tt>.
+    Do not hook up GUI elements to your <tt class="code">TestElement</tt> class via actions and events.
+    Let swing's internal model hang onto all the data as much as you possibly can.
+    <ol>
+      <li>Some standard GUI stuff should be added to all JMeter GUI components:
+        <ol>
+          <li>Call <tt class="code">setBorder(makeBorder())</tt> for your class. This will give it the standard JMeter
+border</li>
+          <li>Add the title pane via <tt class="code">makeTitlePanel()</tt>. Usually this is the first thing added to your
+            GUI, and should be done in a Box vertical layout scheme, or with JMeter's <tt class="code">VerticalLayout</tt>
+            class. Here is an example <tt class="code">init()</tt> method:
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+private void init() {
+    setLayout(new BorderLayout());
+    setBorder(makeBorder());
+    Box box = Box.createVerticalBox();
+    box.add(makeTitlePanel());
+    box.add(makeSourcePanel());
+    add(box,BorderLayout.NORTH);
+    add(makeParameterPanel(),BorderLayout.CENTER);
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>Implement <tt class="code">public void configure(TestElement el)</tt>
+    <ol>
+      <li>Be sure to call <tt class="code">super.configure(e)</tt>. This will populate some of the data for you, like
+         the name of the element.</li>
+      <li>Use this method to set data into your GUI elements. Example:
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public void configure(TestElement el) {
+    super.configure(el);
+    useHeaders.setSelected(
+            el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
+    useBody.setSelected(
+            !el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
+    regexField.setText(
+            el.getPropertyAsString(RegexExtractor.REGEX));
+    templateField.setText(
+            el.getPropertyAsString(RegexExtractor.TEMPLATE));
+    defaultField.setText(
+            el.getPropertyAsString(RegexExtractor.DEFAULT));
+    matchNumberField.setText(
+            el.getPropertyAsString(RegexExtractor.MATCH_NUM));
+    refNameField.setText(
+            el.getPropertyAsString(RegexExtractor.REFNAME));
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+      </li>
+      <li>Implement <tt class="code">public void modifyTestElement(TestElement e)</tt>. This is where you
+         move the data from your GUI elements to the <tt class="code">TestElement</tt>. It is the logical reverse of the
+         previous method.
+         <ol>
+           <li>Call <tt class="code">super.configureTestElement(e)</tt>. This will take care of some default data for
+             you.</li>
+           <li>Example:
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public void modifyTestElement(TestElement e) {
+    super.configureTestElement(e);
+    e.setProperty(new BooleanProperty(
+            RegexExtractor.USEHEADERS,
+            useHeaders.isSelected()));
+    e.setProperty(RegexExtractor.MATCH_NUMBER,
+            matchNumberField.getText());
+    if (e instanceof RegexExtractor) {
+        RegexExtractor regex = (RegexExtractor)e;
+        regex.setRefName(refNameField.getText());
+        regex.setRegex(regexField.getText());
+        regex.setTemplate(templateField.getText());
+        regex.setDefaultValue(defaultField.getText());
+    }
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+           </li>
+         </ol>
+       </li>
+       <li>Implement <tt class="code">public TestElement createTestElement()</tt>. This method should create a
+         new instance of your <tt class="code">TestElement</tt> class, and then pass it to the <tt class="code">modifyTestElement(TestElement)</tt>
+         method you made above
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public TestElement createTestElement() {
+    RegexExtractor extractor = new RegexExtractor();
+    modifyTestElement(extractor);
+    return extractor;
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+       </li>
+    </ol>
+  </li>
+</ol><p>
+The reason you cannot hold onto a reference for your Test Element is because JMeter reuses
+instance of GUI class objects for multiple Test Elements. This saves a lot of memory. It also
+makes it incredibly easy to write the GUI part of your new component. You still have to struggle
+with the layout in Swing, but you don't have to worry about creating the right events and actions for
+getting the data from the GUI elements into the <tt class="code">TestElement</tt> where it can do some good. JMeter
+knows when to call your configure, and <tt class="code">modifyTestElement</tt> methods where you can do it in a very
+straightforward way.
+</p><p>
+Writing Visualizers is somewhat of a special case, however.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="visualizer"><strong>29.3 Writing a Visualizer</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
+a look at more up to date components like:
+<ul>
+<li><a href="generating-dashboard.html">Web report</a></li>
+<li><a href="realtime-results.html">Real-Time results</a> with <a href="../../docs/api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a></li>
+</ul>
+</td></tr>
+</table>
+</p>
+<p>
+Of the component types, visualizers require greater depth in Swing than something like controllers,
+functions or samplers. You can find the full source for the distribution graph in
+<tt class="code">components/org/apache/jmeter/visualizers/</tt>. The distribution graph visualizer is divided into two
+classes.
+</p><dl>
+  <dt><tt class="code">DistributionGraphVisualizer</tt></dt><dd>visualizer which JMeter instantiates</dd>
+  <dt><tt class="code">DistributionGraph</tt></dt><dd>JComponent which draws the actual graph</dd>
+</dl><p>
+The easiest way to write a visualizer is to do the following:
+</p><ol>
+  <li>Extend <tt class="code">org.apache.jmeter.visualizers.gui.AbstractVisualizer</tt></li>
+  <li>Implement any additional interfaces need for call back and event notification.
+     For example, the <tt class="code">DistributionGraphVisualizer</tt> implements the following interfaces:
+     <ul>
+       <li><tt class="code">ImageVisualizer</tt></li>
+       <li><tt class="code">ItemListener</tt> – according to the comments in the class,
+         <tt class="code">ItemListener</tt> is out of date and isn't used anymore.</li>
+       <li><tt class="code">GraphListener</tt></li>
+       <li><tt class="code">Clearable</tt></li>
+     </ul>
+   </li>
+</ol><p>
+<tt class="code">AbstractVisualizer</tt> provides some common functionality, which most visualizers like
+<tt class="code">Graph Results</tt> use. The common functionality provided by the abstract class includes:
+</p><ul>
+  <li>Configure test elements – This means it create a new <tt class="code">ResultCollector</tt>, sets the file and sets the error log</li>
+  <li>Create the stock menu</li>
+  <li>Update the test element when changes are made</li>
+  <li>Create a file panel for the log file</li>
+  <li>Create the title panel</li>
+</ul><p>
+In some cases, you may not want to display the menu for the file textbox. In that case, you can
+override the <tt class="code">init()</tt> method. Here is the implementation for <tt class="code">DistributionGraphVisualizer</tt>.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+/**
+ * Initialize the GUI.
+ */
+private void init() {
+    this.setLayout(new BorderLayout());
+
+    // MAIN PANEL
+    Border margin = new EmptyBorder(10, 10, 5, 10);
+    this.setBorder(margin);
+
+    // Set up the graph with header, footer, Y axis and graph display
+    JPanel graphPanel = new JPanel(new BorderLayout());
+    graphPanel.add(createGraphPanel(), BorderLayout.CENTER);
+    graphPanel.add(createGraphInfoPanel(), BorderLayout.SOUTH);
+
+    // Add the main panel and the graph
+    this.add(makeTitlePanel(), BorderLayout.NORTH);
+    this.add(graphPanel, BorderLayout.CENTER);
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+The first thing the <tt class="code">init</tt> method does is create a new <tt class="code">BorderLayout</tt>. Depending on how you want to
+layout the widgets, you may want to use a different layout manager. Keep mind using different
+layout managers is for experts.
+</p><p>
+The second thing the <tt class="code">init</tt> method does is create a border. If you want to increase or decrease
+the border, change the four integer values. Each integer value represents pixels. If you want your
+visualizer to have no border, skip lines 8 and 9. Line 13 calls <tt class="code">createGraphPanel</tt>, which is
+responsible for configuring and adding the <tt class="code">DistributionGraph</tt> to the visualizer.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+private Component createGraphPanel() {
+    graphPanel = new JPanel();
+    graphPanel.setBorder(BorderFactory.createBevelBorder(
+    BevelBorder.LOWERED,Color.lightGray,Color.darkGray));
+    graphPanel.add(graph);
+    graphPanel.setBackground(Color.white);
+    return graphPanel;
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+At line 5, the graph component is added to the graph panel. The constructor is where a new
+instance of <tt class="code">DistributionGraph</tt> is created.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public DistributionGraphVisualizer() {
+    model = new SamplingStatCalculator(&quot;Distribution&quot;);
+    graph = new DistributionGraph(model);
+    graph.setBackground(Color.white);
+    init();
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+The constructor of <tt class="code">DistributionGraphVisualizer</tt> is responsible for creating the model and the
+graph. Every time a new result is complete, the engine passes the result to all the listeners by
+calling <tt class="code">add(SampleResult res)</tt>. The visualizer passes the new <tt class="code">SampleResult</tt> to the model.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public synchronized void add(SampleResult res) {
+    model.addSample(res);
+    updateGui(model.getCurrentSample());
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+In the case of the <tt class="code">DistributionGraphVisualizer</tt>, the <tt class="code">add</tt> method doesn't actually update the
+graph. Instead, it calls <tt class="code">updateGui</tt> in line three.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public synchronized void updateGui(Sample s) {
+    // We have received one more sample
+    if (delay == counter) {
+        updateGui();
+        counter = 0;
+    } else {
+        counter++;
+    }
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+Unlike <tt class="code">GraphVisualizer</tt>, the distribution graph attempts to show how the results clump; therefore
+the <tt class="code">DistributionGraphVisualizer</tt> delays the update. The default delay is <tt class="code">10</tt> sampleresults.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public synchronized void updateGui() {
+    if (graph.getWidth() &lt; 10) {
+        graph.setPreferredSize(
+                new Dimension(getWidth() - 40,
+                getHeight() - 160));
+    }
+    graphPanel.updateUI();
+    graph.repaint();
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+Lines 2 to 3 are suppose to resize the graph, if the user resizes the window or drags the divider.
+Line 7 updates the panel containing the graph. Line 8 triggers the update of the <tt class="code">DistributionGraph</tt>.
+Before we cover writing graphs, there are a couple of important methods visualizer must
+implement.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public String getLabelResource() {
+    return &quot;distribution_graph_title&quot;;
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+The label resource retrieves the name of the visualizer from the properties file. The file is located
+in <tt class="code">core/org/apache/jmeter/resources</tt>. It's best not to hardcode the name of the visualizer.
+<tt class="code">Message.properties</tt> file is organized alphabetically, so adding a new entry is easy.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public synchronized void clear() {
+    this.graph.clear();
+    model.clear();
+    repaint();
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+Every component in JMeter should implement logic for <tt class="code">clear()</tt> method. If this isn't done, the
+component will not clear the UI or model when the user tries to clear the last results and run a
+new test. If clear is not implemented, it can result in a memory leak.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public JComponent getPrintableComponent() {
+    return this.graphPanel;
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+The last method visualizers should implement is <tt class="code">getPrintableComponent()</tt>. The method is
+responsible for returning the JComponent that can be saved or printed. This feature was recently
+added so that users can save a screen capture of any given visualizer.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="graphlistener"><strong>29.4 GraphListener</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
+a look at more up to date components like:
+<ul>
+<li><a href="generating-dashboard.html">Web report</a></li>
+<li><a href="realtime-results.html">Real-Time results</a> with <a href="../../docs/api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a></li>
+</ul>
+</td></tr>
+</table>
+</p>
+<p>
+Visualizers should implement <tt class="code">GraphListener</tt>. This is done to make it simpler to add new Sample
+instances to listeners. As a general rule, if the custom graph does not plot every single sample,
+it does not need to implement the interface.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public interface GraphListener {
+    public void updateGui(Sample s);
+    public void updateGui();
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+The important method in the interface is <tt class="code">updateGui(Sample s)</tt>. From
+<tt class="code">DistributionGraphVisualizer</tt>, we see it calls <tt class="code">graph.repaint()</tt>
+to refresh the graph. In most cases,
+the implementation of <tt class="code">updateGui(Sample s)</tt> should do just that.
+<tt class="code">ItemListenerVisualizers</tt> generally do not need to implement this interface. The interface is used with combo
+boxes, checkbox and lists. If your visualizer uses one of these and needs to know when it has
+been updated, the visualizer will need to implement the interface. For an example of how to
+implement the interface, please look at <tt class="code">GraphVisualizer</tt>.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="custom-graphs"><strong>29.5 Writing Custom Graphs</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
+a look at more up to date components like:
+<ul>
+<li><a href="generating-dashboard.html">Web report</a></li>
+<li><a href="realtime-results.html">Real-Time results</a> with <a href="../../docs/api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a></li>
+</ul>
+</td></tr>
+</table>
+</p>
+<p>
+For those new to Swing and haven't written custom JComponents yet, I would suggest getting a
+book on Swing and get a good feel for how Swing widgets work. This tutorial will not attempt to
+explain basic Swing concepts and assumes the reader is already familiar with the Swing API and
+MVC (Model View Controller) design pattern. From the constructor of <tt class="code">DistributionGraphVisualizer</tt>,
+we see a new instance of <tt class="code">DistributionGraph</tt> is created with an instance of the model.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public DistributionGraph(SamplingStatCalculator model) {
+    this();
+    setModel(model);
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+The implementation of <tt class="code">setModel</tt> method is straight forward.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+private void setModel(Object model) {
+    this.model = (SamplingStatCalculator) model;
+    repaint();
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+Notice the method calls <tt class="code">repaint</tt> after it sets the model. If <tt class="code">repaint</tt> isn't called, it can cause the
+GUI to not draw the graph. Once the test starts, the graph would redraw, so calling <tt class="code">repaint</tt> isn't
+critical.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    final SamplingStatCalculator m = this.model;
+    synchronized (m) {
+        drawSample(m, g);
+    }
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+The other important aspect of updating the widget is placing the call to <tt class="code">drawSample</tt> within a
+synchronized block. If <tt class="code">drawSample</tt> wasn't synchronized, JMeter would throw a
+<tt class="code">ConcurrentModificationException</tt> at runtime. Depending on the test plan, there may be a dozen or
+more threads adding results to the model. The synchronized block does not affect the accuracy of
+each individual request and time measurement, but it does affect JMeter's ability to generate large
+loads. As the number of threads in a test plan increases, the likelihood a thread will have to wait
+until the graph is done redrawing before starting a new request increases. Here is the
+implementation of <tt class="code">drawSample</tt>.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+private void drawSample(SamplingStatCalculator model, Graphics g) {
+    width = getWidth();
+    double height = (double)getHeight() - 1.0;
+
+    // first lets draw the grid
+    for (int y=0; y &lt; 4; y++){
+        int q1 = (int)(height - (height * 0.25 * y));
+        g.setColor(Color.lightGray);
+        g.drawLine(xborder,q1,width,q1);
+        g.setColor(Color.black);
+        g.drawString(String.valueOf((25 * y) + &quot;%&quot;),0,q1);
+    }
+    g.setColor(Color.black);
+    // draw the X axis
+    g.drawLine(xborder,(int)height,width,(int)height);
+    // draw the Y axis
+    g.drawLine(xborder,0,xborder,(int)height);
+    // the test plan has to have more than 200 samples
+    // for it to generate half way decent distribution
+    // graph. The larger the sample, the better the
+    // results.
+    if (model != null &amp;&amp; model.getCount() &gt; 50) {
+        // now draw the bar chart
+        Number ninety = model.getPercentPoint(0.90);
+        Number fifty = model.getPercentPoint(0.50);
+        total = model.getCount();
+        Collection values = model.getDistribution().values();
+        Object[] objval = new Object[values.size()];
+        objval = values.toArray(objval);
+        // we sort the objects
+        Arrays.sort(objval,new NumberComparator());
+        int len = objval.length;
+        for (int count=0; count &lt; len; count++) {
+            // calculate the height
+            Number[] num = (Number[])objval[count];
+            double iper = (double)num[1].intValue() / (double)total;
+            double iheight = height * iper;
+            // if the height is less than one, we set it
+            // to one pixel
+            if (iheight &lt; 1) {
+                iheight = 1.0;
+            }
+            int ix = (count * 4) + xborder + 5;
+            int dheight = (int)(height - iheight);
+            g.setColor(Color.blue);
+            g.drawLine(ix -1,(int)height,ix -1,dheight);
+            g.drawLine(ix,(int)height,ix,dheight);
+            g.setColor(Color.black);
+            // draw a red line for 90% point
+            if (num[0].longValue() == ninety.longValue()) {
+                g.setColor(Color.red);
+                g.drawLine(ix,(int)height,ix,55);
+                g.drawLine(ix,(int)35,ix,0);
+                g.drawString(&quot;90%&quot;,ix - 30,20);
+                g.drawString(
+                        String.valueOf(num[0].longValue()),
+                        ix + 8, 20);
+            }
+            // draw an orange line for 50% point
+            if (num[0].longValue() == fifty.longValue()) {
+                g.setColor(Color.orange);
+                g.drawLine(ix,(int)height,ix,30);
+                g.drawString(&quot;50%&quot;,ix - 30,50);
+                g.drawString(
+                        String.valueOf(num[0].longValue()),
+                        ix + 8, 50);
+            }
+        }
+    }
+}
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+In general, the rendering of the graph should be fairly quick and shouldn't be a bottleneck. As a
+general rule, it is a good idea to profile custom plugins. The only way to make sure a visualizer
+isn't a bottleneck is to run it with a tool like Borland OptimizeIt. A good way to test a plugin is to
+create a simple test plan and run it. The heap and garbage collection behavior should be regular
+and predictable.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="testbean"><strong>29.6 Making a TestBean Plugin For JMeter</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+In this part, we will go through the process of creating a simple component for JMeter that uses
+the new <tt class="code">TestBean</tt> framework.
+</p><p>
+This component will be a CSV file reading element that will let users easily vary their input data
+using CSV files. To most effectively use this tutorial, open the three files specified below (found in
+JMeter's <tt class="code">src/components</tt> directory).
+</p><ol>
+  <li>Pick a package and make three files:
+    <ul>
+      <li>[ComponentName].java (org.apache.jmeter.config.CSVDataSet.java)</li>
+      <li>[ComponentName]BeanInfo.java (org.apache.jmeter.config.CSVDataSetBeanInfo.java)</li>
+      <li>[ComponentName]Resources.properties (org.apache.jmeter.config.CSVDataSetResources.properties)</li>
+    </ul>
+  </li>
+  <li><tt class="code">CSVDataSet.java</tt> must implement the <tt class="code">TestBean</tt> interface. In addition, it will extend
+    <tt class="code">ConfigTestElement</tt>, and implement <tt class="code">LoopIterationListener</tt>.
+    <ul>
+      <li><tt class="code">TestBean</tt> is a marker interface, so there are no methods to implement.</li>
+      <li>Extending <tt class="code">ConfigTestElement</tt> will make our component a <tt class="code">Config</tt> element in a test
+        plan. By extending different abstract classes, you can control the type of element your
+        component will be (i.e. <tt class="code">AbstractSampler</tt>, <tt class="code">AbstractVisualizer</tt>, <tt class="code">GenericController</tt>, etc -
+        though you can also make different types of elements just by instantiating the right
+        interfaces, the abstract classes can make your life easier).
+      </li>
+    </ul>
+  </li>
+  <li><tt class="code">CSVDataSetBeanInfo.java</tt> should extend <tt class="code">org.apache.jmeter.testbeans.BeanInfoSupport</tt>
+    <ul>
+      <li>create a zero-parameter constructor in which we call <tt class="code">super(CSVDataSet.class);</tt></li>
+      <li>we'll come back to this.</li>
+    </ul>
+  </li>
+  <li><tt class="code">CSVDataSetResources.properties</tt> - blank for now</li>
+  <li>Implement your special logic for you plugin class.
+    <ol>
+      <li>The <tt class="code">CSVDataSet</tt> will read a single CSV file and will store the values it finds into
+        JMeter's running context. The user will define the file, define the variable names for
+        each &quot;<tt class="code">column</tt>&quot;. The <tt class="code">CSVDataSet</tt> will open the file when the test starts, and close it
+        when the test ends (thus we implement <tt class="code">TestListener</tt>). The <tt class="code">CSVDataSet</tt> will update
+        the contents of the variables for every test thread, and for each iteration through its
+        parent controller, by reading new lines in the file. When we reach the end of the file,
+        we'll start again at the beginning.
+        When implementing a <tt class="code">TestBean</tt>, pay careful
+        attention to your properties. These properties will become the basis of a GUI form by
+        which users will configure the <tt class="code">CSVDataSet</tt> element.
+      </li>
+      <li>Your element will be cloned by JMeter when the test starts. Each thread will get it's
+        own instance. However, you will have a chance to control how the cloning is done, if
+        you need it.
+      </li>
+      <li>Properties: <tt class="code">filename</tt>, <tt class="code">variableNames</tt>. With public getters and setters.
+        <ul>
+          <li><tt class="code">filename</tt> is self-explanatory, it will hold the name of the CSV file we'll read</li>
+          <li><tt class="code">variableNames</tt> is a String which will allow a user to enter the names of the
+            variables we'll assign values to. Why a String? Why not a Collection? Surely
+            users will need to enter multiple (and unknown number of) variable names? True,
+            but if we used a List or Collection, we'd have to write a GUI component to handle
+            collections, and I just want to do this quickly. Instead, we'll let users input
+            comma-delimited list of variable names.</li>
+        </ul>
+      </li>
+      <li>I then implemented the <tt class="code">IterationStart</tt> method of the <tt class="code">LoopIterationListener</tt> interface.
+        The point of this &quot;event&quot; is that your component is notified of when the test has entered
+        it's parent controller. For our purposes, every time the <tt class="code">CSVDataSet</tt>'s parent controller
+        is entered, we will read a new line of the data file and set the variables. Thus, for a
+        regular controller, each loop through the test will result in a new set of values being
+        read. For a loop controller, each iteration will do likewise. Every test thread will get
+        different values as well.
+      </li>
+    </ol>
+  </li>
+  <li>Setting up your GUI elements in <tt class="code">CSVDataSetBeanInfo</tt>:
+    <ul>
+      <li>You can create groupings for your component's properties. Each grouping you create
+        needs a label and a list of property names to include in that grouping. I.e.:
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+createPropertyGroup(&quot;csv_data&quot;,
+        new String[] { &quot;filename&quot;, &quot;variableNames&quot; });
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+      </li>
+      <li>Creates a grouping called <tt class="code">csv_data</tt> that will include GUI input elements for the
+        <tt class="code">filename</tt> and <tt class="code">variableNames</tt> properties of <tt class="code">CSVDataSet</tt>.
+        Then, we need to define what kind of properties we want these to be:
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+p = property(&quot;filename&quot;);
+p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+p.setValue(DEFAULT, &quot;&quot;);
+p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+
+p = property(&quot;variableNames&quot;);
+p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+p.setValue(DEFAULT, &quot;&quot;);
+p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+        This essentially creates two properties whose value is not allowed to be <tt class="code">null</tt>, and
+        whose default values are <tt class="code">&quot;&quot;</tt>. There are several such attributes that can be set for each
+        property. Here is a rundown:
+
+        <dl>
+          <dt><tt class="code">NOT_UNDEFINED</tt></dt><dd>The property will not be left <tt class="code">null</tt>.</dd>
+          <dt><tt class="code">DEFAULT</tt></dt><dd>A default values must be given if <tt class="code">NOT_UNDEFINED</tt> is <tt class="code">true</tt>.</dd>
+          <dt><tt class="code">NOT_EXPRESSION</tt></dt><dd>The value will not be parsed for functions if this is <tt class="code">true</tt>.</dd>
+          <dt><tt class="code">NOT_OTHER</tt></dt><dd>This is not a free form entry field – a list of values has to be provided.</dd>
+          <dt><tt class="code">TAGS</tt></dt><dd>With a <tt class="code">String[]</tt> as the value, this sets up a predefined
+            list of acceptable values, and JMeter will create a dropdown select.</dd>
+        </dl>
+
+        Additionally, a custom property editor can be specified for a property:
+
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+p.setPropertyEditorClass(FileEditor.class);
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+
+        This will create a text input plus browse button that opens a dialog for finding a file.
+        Usually, complex property settings are not needed, as now. For a more complex
+        example, look at <tt class="code">org.apache.jmeter.protocol.http.sampler.AccessLogSamplerBeanInfo</tt>
+      </li>
+    </ul>
+  </li>
+  <li>Defining your resource strings. In <tt class="code">CSVDataSetResources.properties</tt> we have to define all our
+    string resources. To provide translations, one would create additional files such as
+    <tt class="code">CSVDataSetResources_ja.properties</tt>, and <tt class="code">CSVDataSetResources_de.properties</tt>. For our
+    component, we must define the following resources:
+    <dl>
+      <dt><tt class="code">displayName</tt></dt><dd>This will provide a name for the element that will appear in menus.</dd>
+      <dt><tt class="code">csv_data.displayName</tt></dt><dd>we create a property grouping called <tt class="code">csv_data</tt>,
+         so we have to provide a label for the grouping</dd>
+      <dt><tt class="code">filename.displayName</tt></dt><dd>a label for the filename input element.</dd>
+      <dt><tt class="code">filename.shortDescription</tt></dt><dd>a tool-tip-like help text blurb.</dd>
+      <dt><tt class="code">variableNames.displayName</tt></dt><dd>a label for the variable name input element.</dd>
+      <dt><tt class="code">variableNames.shortDescription</tt></dt><dd>tool tip for the <tt class="code">variableNames</tt> input element.</dd>
+    </dl>
+  </li>
+  <li>Debug your component.</li>
+</ol></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="building"><strong>29.6 Building JMeter</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+JMeter uses Gradle to compile and build the distribution. JMeter has
+several tasks defined, which make it easier for developers to build the complete project.
+For those unfamiliar with Gradle, it's a build tool similar to make on Unix.
+A list of the Gradle tasks with a short description is provided
+in <a href="https://github.com/apache/jmeter/blob/master/gradle.md">gradle.md</a>, which can be found
+ in the root source directory.
+</p><p>
+Here are some example commands.
+</p><dl>
+  <dt><tt class="code">./gradlew runGui</tt></dt><dd>Build and start JMeter GUI</dd>
+  <dt><tt class="code">./gradlew createDist</tt></dt><dd>Build project and copy relevant jar files to <tt class="code">./lib</tt> folder</dd>
+  <dt><tt class="code">./gradlew :src:dist:previewSite</tt></dt><dd>Creates preview of a site to <tt class="code">./build/docs/site</tt></dd>
+</dl></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<br>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_accesslog_sampler_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td>
+<table width=100%>
+<tr>
+<td>
+<font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2021, Apache Software Foundation
+</em></font>
+</td>
+<td align="right">
+<font color="#525D76" size="-1"><em>
+$Id$
+</em></font>
+</td>
+</tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

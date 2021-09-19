@@ -1,0 +1,421 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- start the processing -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../docs/css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="author" value="JMeter developers">
+<meta name="email" value="dev@jmeter.apache.org">
+
+<title>Apache JMeter - Apache JMeter Distributed Testing Step-by-step</title>
+<style>
+  .code { font-weight: bold; }
+</style>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<tr>
+<td align="left">
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="../../docs/images/asf-logo.png" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jmeter.apache.org/"><img width="259" height="88" src="../../docs/images/jmeter.png" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" cellspacing="4">
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_proxy_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="distributed-testing"><strong>25. Apache JMeter Distributed Testing Step-by-step</strong></a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+This short tutorial explains how to use multiple systems to perform stress testing. Before we start, there are a couple of things to check.
+</p><ul>
+  <li>the firewalls on the systems are turned off or correct ports are opened.</li>
+  <li>all the clients are on the same subnet.</li>
+  <li>the server is in the same subnet, if <tt class="code">192.x.x.x</tt> or <tt class="code">10.x.x.x</tt> IP addresses are used.
+      If the server doesn't use <tt class="code">192.xx</tt> or <tt class="code">10.xx</tt> IP address, there shouldn't be any problems.</li>
+  <li>Make sure JMeter can access the server.</li>
+  <li>Make sure you use the same version of JMeter and Java on all the systems. Mixing versions will not work correctly.</li>
+  <li>You have <a href="remote-test.html#setup_ssl">setup SSL for RMI</a> or disabled it.</li>
+</ul><p>
+Once you've made sure the systems are ready, it's time to setup remote testing. The tutorial assumes you already
+have JMeter installed on all the systems. The way JMeter works is one controller node initiates the test on multiple worker nodes.
+</p><p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>In this tutorial we use GUI Mode just for demonstration. In real life you should use CLI mode (NON GUI) to start your load test</td></tr>
+</table>
+</p>
+<table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='610' height='462' src="../../docs/images/screenshots/distributed-jmeter.svg"/><br>
+<font size="-1">One controller node with multiple worker nodes</font></td></tr></table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="terminology"><strong>25.1 Terminology</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Before we dive into the step-by-step instructions, it's a good idea to define the terms and make sure the definition is clear.
+</p><dl>
+  <dt>Controller Node</dt><dd>the system running JMeter GUI, which controls the test</dd>
+  <dt>Worker Node</dt><dd>the system running <tt class="code">jmeter-server</tt>, which takes commands from
+      the GUI and send requests to the target system(s)</dd>
+  <dt>Target</dt><dd>the webserver we plan to stress test</dd>
+</dl><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='602' height='360' src="../../docs/images/screenshots/distributed-names.svg"/><br>
+<font size="-1">Categories of systems</font></td></tr></table>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="step-by-step"><strong>25.2 Step-by-Step</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<ol>
+  <li>On the worker nodes, go to <tt class="code">jmeter/bin</tt> directory and execute
+     <tt class="code">jmeter-server.bat</tt> (<tt class="code">jmeter-server</tt> on unix).
+  </li>
+  <li>On controller node acting as the console, open windows explorer and go to
+      <tt class="code">jmeter/bin</tt> directory</li>
+  <li>Open <tt class="code">jmeter.properties</tt> in a text editor</li>
+  <li>Edit the line <tt class="code">remote_hosts=127.0.0.1</tt></li>
+  <li>Add the IP address. For example, if I have JMeter server running on <tt class="code">192.168.0.10</tt>,
+    …, <tt class="code">192.168.0.15</tt>, the entry would look like this:
+    <div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>remote_hosts=192.168.0.10,192.168.0.11,192.168.0.12,192.168.0.13,192.168.0.14</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+  </li>
+  <li>Start JMeter.</li>
+  <li>Open the test plan you want to use</li>
+</ol><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='483' height='266' src="../../docs/images/screenshots/example-simple-plan.png"/><br>
+<font size="-1">Simple test plan</font></td></tr></table>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="starting"><strong>25.2 Starting the Test</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+At this point, you are ready to start load testing. If you want to double check
+the worker nodes are working, open <tt class="code">jmeter.log</tt> in your editor. You should see the following in the log.
+</p><div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>
+Writing log file to: /XXXX/XXXXX/bin/jmeter-server.log
+Created remote object: UnicastServerRef [liveRef: [endpoint:[192.X.X.X:XXXXX](local),objID:[-6a665beb:15a2c8b9419:-7fff, 3180474504933847586]]]
+</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+<p>
+If you do not see this message, it means <tt class="code">jmeter-server</tt> did not start correctly. For tips on
+debugging the issue, <a href="#tips">go to the tips section</a>. There are two ways to
+initiate the test: a single system and all systems.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="start-single-client"><strong>25.3 Start a single clients</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<ol>
+  <li>Click Run at the top</li>
+  <li>Select Remote Start</li>
+  <li>Select the IP address</li>
+</ol><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='490' height='196' src="../../docs/images/screenshots/example-remote-start.png"/><br>
+<font size="-1">Start a single worker node</font></td></tr></table>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="start-all-clients"><strong>25.4 Start all clients</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<ol>
+  <li>Click Run at the top</li>
+  <li>Select Remote Start all or use <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">Shift</span>&nbsp;+&nbsp;<span class="keysym">R</span></span></li>
+</ol><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='410' height='155' src="../../docs/images/screenshots/example-remote-start-all.png"/><br>
+<font size="-1">Start all worker nodes</font></td></tr></table>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="limitations"><strong>25.5 Limitations</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+There are some basic limitations for distributed testing. Here's the list of the known items in no specific order.
+</p><ol>
+  <li>RMI cannot communicate across subnets without a proxy; therefore neither can JMeter without a proxy.</li>
+  <li>Since version 2.9, JMeter sends all the test results stripping Response data to the controlling console, this allows
+      us to reduce impact on network IO. Ensure you monitor your network traffic so that this traffic does not incur contention</li>
+  <li>A single JMeter client running on a 2-3 GHz CPU (recent CPU) can handle 1000-2000 threads depending on the type of test.</li>
+</ol></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="additional-resources"><strong>25.6 Additional resources</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+  <a href="https://cwiki.apache.org/confluence/display/JMETER/JMeterFAQ#JMeterFAQ-Howtodoremotetestingthe'properway'?">Wiki page on remote testing</a>
+</p><p>
+  <a href="remote-test.html">Remote Testing in the user manual</a>
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="tips"><strong>25.7 Tips</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+In some cases, the firewall may still be blocking RMI traffic.
+</p><h3>Anti Virus and Firewall</h3><p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Antivirus should be stopped during a Load Test as it can drastically impact timings leading to wrong results.</td></tr>
+</table>
+</p>
+<p>
+Firewall needs to be stopped from windows services or at least some ports need to be opened.
+</p><ol>
+  <li>Open control panel</li>
+  <li>Open administrative tools</li>
+  <li>Double click services</li>
+  <li>Go to down to Symantec anti virus, right click and select stop</li>
+</ol><h3>Windows firewall</h3><ol>
+  <li>Open network connections</li>
+  <li>Select the network connection</li>
+  <li>Right click and select properties</li>
+  <li>Select advanced tab</li>
+  <li>Uncheck internet connection firewall</li>
+</ol><h3>Linux</h3><p>
+On Linux, iptables might be turned on by default. For instructions, please refer to the
+  <a href="remote-test.html">Remote Testing in the user manual</a>
+</p><p>
+On RedHat (or derivatives), iptables is turned on by default. Execute
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>service iptables stop</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+
+to stop the Linux firewall or ensure you open the correct ports.
+</p></blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<br>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="jmeter_proxy_step_by_step.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td>
+<table width=100%>
+<tr>
+<td>
+<font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2021, Apache Software Foundation
+</em></font>
+</td>
+<td align="right">
+<font color="#525D76" size="-1"><em>
+$Id$
+</em></font>
+</td>
+</tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
