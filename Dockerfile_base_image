@@ -1,0 +1,9 @@
+FROM python:3.7-slim
+
+RUN apt-get update -y
+RUN apt-get install -y systemctl
+RUN apt-get install -y redis-server
+COPY ./config_files/redis.conf /etc/redis/redis.conf
+ENV currencies_api_id=277a6098e8514980b5cf07e2e48a307d
+ENV redis_access=1EnsvG7x0/Q1l4/MQGmihU28KZDMUa1nwkGqdHQ0aJGvKBimEKn8XELp9mkH5niKPOQIlCEfSm1L9mw8
+ENV api-key=9931dcb4-a346-42de-9079-1fcb6fd79d20

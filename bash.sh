@@ -1,0 +1,1 @@
+nohup python routines.py & python app.py
