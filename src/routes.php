@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Routing
+ * Map routes to controllers
  *
  * @var \League\Route\Router $router
  */
