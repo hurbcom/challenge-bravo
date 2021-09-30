@@ -1,0 +1,13 @@
+{
+    "name": "naaando/hurb-challenge-bravo",
+    "description": "Currency convertion REST API",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Fernando da Silva Sousa",
+            "email": "wild.nando@gmail.com"
+        }
+    ],
+    "require": {}
+}
