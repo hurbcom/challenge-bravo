@@ -3,7 +3,7 @@
 /**
  * Routing
  *
- * @var $router Router
+ * @var \League\Route\Router $router
  */
 
 use App\Controller\HelloWorld;
