@@ -9,5 +9,14 @@
             "email": "wild.nando@gmail.com"
         }
     ],
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "laminas/laminas-diactoros": "^2.8",
+        "league/route": "^5.1",
+        "laminas/laminas-httphandlerrunner": "^2.1"
+    }
 }
