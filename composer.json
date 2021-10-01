@@ -18,6 +18,7 @@
         "laminas/laminas-diactoros": "^2.8",
         "league/route": "^5.1",
         "laminas/laminas-httphandlerrunner": "^2.1",
-        "robmorgan/phinx": "^0.12.8"
+        "robmorgan/phinx": "^0.12.8",
+        "php-di/php-di": "^6.3"
     }
 }
