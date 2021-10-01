@@ -17,6 +17,7 @@
     "require": {
         "laminas/laminas-diactoros": "^2.8",
         "league/route": "^5.1",
-        "laminas/laminas-httphandlerrunner": "^2.1"
+        "laminas/laminas-httphandlerrunner": "^2.1",
+        "robmorgan/phinx": "^0.12.8"
     }
 }
