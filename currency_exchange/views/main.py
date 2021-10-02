@@ -4,7 +4,15 @@ from config import app
 
 
 @app.route('/convert', methods=['GET', ])
-async def convert_curriencies():
+async def convert_curriencies() -> object:
+    """
+    This is the method responsible for API conversion.
+    This method will only do a validation before sending all the information to the CONTROLLER.
+
+    :methods available: GET
+    :return: A object with JSON and status code
+    """
+
     from currency_exchange.blueprints.return_message.json_return_with_code import custom_error
 
     if not request.args.get("from") or not request.args.get("to"):
@@ -20,7 +28,15 @@ async def convert_curriencies():
 
 
 @app.route("/currencies", methods=['POST', 'DELETE', 'GET'])
-async def create_and_delete_currencie():
+async def create_and_delete_currencie() -> object:
+    """
+    Here is the view of /currencies, user can send 3 type of method, POST, DELETE and GET.
+    This method will get all informations in body of message ( in the case of DELETE and POST ) and send to
+    method in CONTROLLER.
+
+    :methods available: GET, POST and DELETE
+    :return: A object with JSON and status code
+    """
     request_data = request.get_json()
 
     if request.method == 'GET':

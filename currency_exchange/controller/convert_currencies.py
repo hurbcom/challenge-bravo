@@ -3,7 +3,18 @@ from currency_exchange.blueprints.scrapping.publicAPI import update_specific_cur
 from currency_exchange.blueprints.return_message.json_return_with_code import custom_error, sucessfully
 
 
-def converting_currencies_and_return_dict(from_currency, to_currency, amount):
+def converting_currencies_and_return_dict(from_currency: str, to_currency: str, amount: str) -> object:
+    """
+    This method will receive the parameters and will convert the currencies and return a object to be sent in API.
+    The method will verify if both symbols exists in database and check the amount sent in body of POST,
+    after this, it will check if both currencies are available in datbaase to be converted. If all conditions,
+    it will update the currencies in database and do the logic to convert all currencies based on USD.
+
+    :from_currency: Must be a string with the currency to convert.
+    :to_currency: Must be a string with the currency to be converted.
+    :amount: This paramenter must be a string and will be converted to float to do the logic of conversion.
+    :return: It will return a object with dict and status code.
+    """
     from_currency_in_database = reading_specific_symbol_from_table_exchange_rate(from_currency)
     to_currency_in_database = reading_specific_symbol_from_table_exchange_rate(to_currency)
 
@@ -27,18 +38,6 @@ def converting_currencies_and_return_dict(from_currency, to_currency, amount):
             return custom_error(data, 404)
         data = {'return_message': f'{to_currency_in_database.symbol} not available'}
         return custom_error(data, 404)
-
-    # from requests import get as request_get
-    # json_request = request_get(f"https://api.exchangerate.host/symbols").json()
-    # if from_currency and to_currency in json_request["symbols"]:
-    #     req = request_get(f"https://api.exchangerate.host/convert?from={from_currency}&to={to_currency}").json()
-    #     data = {
-    #         'from': from_currency,
-    #         'to': to_currency,
-    #         'amount': amount.replace(".", ","),
-    #         'rate': float(req["info"]["rate"]) * float(amount)
-    #     }
-    #     return sucessfully(data, 200)
 
     # Updating both currencies in database
     update_specific_currency(currency=from_currency)

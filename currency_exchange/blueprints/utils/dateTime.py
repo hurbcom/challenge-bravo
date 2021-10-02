@@ -1,3 +1,5 @@
+"""Is only used to convert format full datetime."""
+
 from datetime import datetime as d
 date = d.now()
 ymdhms = date.strftime("%Y-%m-%d %H:%M:%S")

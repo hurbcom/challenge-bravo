@@ -33,7 +33,7 @@ def get_creating_and_deleting_currencies() -> dict:
     return sucessfully(currencies, 200)
 
 
-def post_creating_and_deleting_currencies(request_data: dict) -> dict:
+def post_creating_and_deleting_currencies(request_data: dict) -> object:
     """
     This method is responsible for POST to the URL (/currencies). This method is responsible for
     creating the new currency and also for checks before adding it to the database.
@@ -41,10 +41,13 @@ def post_creating_and_deleting_currencies(request_data: dict) -> dict:
     :return: It return a JSON with status code.
     """
 
+    # If RATE in param and not SYMBOL or vice-versa, it will return a error. The param must contain both.
     if ("rate" and not "symbol") or ("symbol" and not "rate") in request_data.keys():
         data = {"error": f"symbol not available."}
         return custom_error(data, 404)
 
+    # if user sent the "available" in body of post.
+    # Here you will update the method to available or unavailable. Necessary to "available" and "symbol"
     if 'available' in request_data:
         if 'symbol' in request_data:
             if reading_specific_symbol_from_table_exchange_rate(request_data["symbol"]):
@@ -69,16 +72,17 @@ def post_creating_and_deleting_currencies(request_data: dict) -> dict:
         data = {'error': 'please, add a symbol and the rate to add the currency.'}
         return custom_error(data, 409)
 
-    symbol = str(request_data['symbol']).upper() or None
+    symbol = str(request_data['symbol']).upper()
     rate = request_data['rate']
     symbol_information = reading_specific_symbol_from_table_exchange_rate(symbol)
 
     # if the symbol in database and if is available to consulting:
-    if symbol_information and symbol_information.available == True:
+    if symbol_information and symbol_information.available is True:
         data = {'error': 'currency available, please add another currency.'}
         return custom_error(data, 409)
 
-    # Adding a new currency to database. Thats necessary to add the rate 1 from USD and the symbol.
+    # Adding a new currency to database. Thats necessary to add the rate 1 from USD from the new currency
+    # and the symbol. Here will return a object with sucessfully message and status code.
     saving_table_exchange_rate(currency=symbol, price_information=rate)
     new_currency = reading_specific_symbol_from_table_exchange_rate(symbol)
     data = {

@@ -19,7 +19,11 @@ in `config.py`. The recommendation is use postgreSQL in production. The Flask wi
 
 
 ### Tests
+**Unittest**:
 <img src="https://raw.githubusercontent.com/ricardopereirasilveira/challenge-bravo/main/unittest-test-passed.png">
+
+**Perfomaced**:
+<img src="https://raw.githubusercontent.com/ricardopereirasilveira/challenge-bravo/main/locust-perfomaced-test.png" width="500">
 
 
 ### Perfomance
@@ -29,19 +33,15 @@ If the API was for production, just add PostgreSQL with psycopg2. The flask 2.x 
 The test was perfomaced using the `locust`.
 To use the `locust`, run the command in root project folder
 `locust -f currency_exchange/tests/perfomance/api_convert.py`
-Test perfomaced:
-<img src="https://raw.githubusercontent.com/ricardopereirasilveira/challenge-bravo/main/locust-perfomaced-test.png" width="500">
-
 
 ### Docker
-I configured the docker but I didn't use it for it, because I was losing the API perfomance through the docker.
 I configured the docker but I didn't use it for it, because I was losing the API perfomance through the docker.
 Messages were taking longer to respond and with concurrent users it was failing with few users
 
 
 ### About API
 This API is for converting between two available currencies released by us.
-With this API, you can convert, add and remove currencies.
+With this API, you can convert, add and remove currencies (real and fictive).
 
 
 ### How to usage

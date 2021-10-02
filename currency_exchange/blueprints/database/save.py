@@ -3,7 +3,13 @@ from currency_exchange.models.Currency import ExchangeRate, db
 from datetime import datetime as d
 
 
-def saving_table_exchange_rate(currency: str, price_information: float, available: bool = True) -> object:
+def saving_table_exchange_rate(currency: str, price_information: float, available: bool = True) -> object or None:
+    """
+    This method will save the information received in table "exchange_rate".
+
+    :return: It will return the same object in case if the symbols exists, or will return None.
+    """
+
     time = d.now().strftime("%Y-%m-%d %H:%M:%S")
 
     symbol = ExchangeRate.query.filter_by(symbol=currency).first()
@@ -28,7 +34,6 @@ def saving_table_exchange_rate(currency: str, price_information: float, availabl
             available=available,
         ))
         db.session.commit()
-        return symbol
 
     except:
         db.session.rollback()
