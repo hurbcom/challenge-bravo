@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Model\Currency as Currency;
+use Brick\Math\Exception\NumberFormatException;
 use DateTime;
 use DateTimeInterface;
-use Money\Money;
 use PHPUnit\Framework\TestCase;
 
 final class CurrencyTest extends TestCase
@@ -30,9 +30,9 @@ final class CurrencyTest extends TestCase
         $cur->setCode($code);
         $this->assertEquals($code, $cur->getCode());
 
-        $value = Money::USD(1);
+        $value = '0.005';
         $cur->setValue($value);
-        $this->assertTrue($value->equals($cur->getValue()));
+        $this->assertEquals($value, $cur->getValue());
 
         $source = 'static';
         $cur->setSource($source);
@@ -56,13 +56,13 @@ final class CurrencyTest extends TestCase
     public function testCreateConstructorMethod()
     {
         $code = 'BRL';
-        $value = Money::USD(1);
+        $value = '0.001';
         $source = 'static';
 
         $cur = Currency::create($code, $value, $source);
 
         $this->assertEquals($code, $cur->getCode());
-        $this->assertTrue($value->equals($cur->getValue()));
+        $this->assertEquals($value, $cur->getValue());
         $this->assertEquals($source, $cur->getSource());
         $this->assertInstanceOf(
             DateTimeInterface::class,
@@ -74,21 +74,11 @@ final class CurrencyTest extends TestCase
         );
     }
 
-    public function testCreateConstructorMethodWithString()
+    public function testCreateConstructorMethodWithInvalidString()
     {
         $code = 'BRL';
-        $stringValue = '2';
-        $value = Money::USD('2');
-        $cur = Currency::create($code, $stringValue);
-        $this->assertTrue($value->equals($cur->getValue()));
-    }
-
-    public function testCreateConstructorMethodWithInt()
-    {
-        $code = 'BRL';
-        $intValue = 2;
-        $value = Money::USD(2);
-        $cur = Currency::create($code, $intValue);
-        $this->assertTrue($value->equals($cur->getValue()));
+        $stringValue = 'test';
+        $this->expectException(NumberFormatException::class);
+        Currency::create($code, $stringValue);
     }
 }
