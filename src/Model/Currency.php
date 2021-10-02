@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use DateTime;
 use DateTimeInterface;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency as MoneyCurrency;
