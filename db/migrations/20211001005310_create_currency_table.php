@@ -24,6 +24,7 @@ final class CreateCurrencyTable extends AbstractMigration
             ->addColumn('value', 'decimal')
             ->addColumn('source', 'string')
             ->addTimestamps()
+            ->addIndex(['code'], ['unique' => true])
             ->create();
     }
 }
