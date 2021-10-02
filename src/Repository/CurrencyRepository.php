@@ -7,7 +7,7 @@ namespace App\Repository;
 use App\Model\Currency;
 use PDO;
 
-class CurrencyRepository
+class CurrencyRepository implements CurrencyRepositoryInterface
 {
     public function __construct(
         private PDO $pdo
