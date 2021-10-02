@@ -19,7 +19,7 @@ in `config.py`. The recommendation is use postgreSQL in production. The Flask wi
 
 
 ### Tests
-`unittest-test-passed.png`
+<img src="https://raw.githubusercontent.com/ricardopereirasilveira/challenge-bravo/main/unittest-test-passed.png">
 
 
 ### Perfomance
@@ -29,7 +29,8 @@ If the API was for production, just add PostgreSQL with psycopg2. The flask 2.x 
 The test was perfomaced using the `locust`.
 To use the `locust`, run the command in root project folder
 `locust -f currency_exchange/tests/perfomance/api_convert.py`
-Test perfomaced: `locust-perfomaced-test.png`
+Test perfomaced:
+<img src="https://raw.githubusercontent.com/ricardopereirasilveira/challenge-bravo/main/locust-perfomaced-test.png" width="500">
 
 
 ### Docker
