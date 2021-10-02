@@ -73,4 +73,22 @@ final class CurrencyTest extends TestCase
             $cur->getUpdatedAt()
         );
     }
+
+    public function testCreateConstructorMethodWithString()
+    {
+        $code = 'BRL';
+        $stringValue = '2';
+        $value = Money::USD('2');
+        $cur = Currency::create($code, $stringValue);
+        $this->assertTrue($value->equals($cur->getValue()));
+    }
+
+    public function testCreateConstructorMethodWithInt()
+    {
+        $code = 'BRL';
+        $intValue = 2;
+        $value = Money::USD(2);
+        $cur = Currency::create($code, $intValue);
+        $this->assertTrue($value->equals($cur->getValue()));
+    }
 }
