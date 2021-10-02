@@ -1,4 +1,4 @@
-## [Challange Bravo - HURB](https://github.com/hurbcom/challenge-bravo)
+## [Challenge Bravo - HURB](https://github.com/hurbcom/challenge-bravo)
 
 
 ### Used in project:
@@ -15,7 +15,7 @@
 ### Databased used in project:
 - SQLite: As its a local API to testing only, was used the SQLite3, if it goes to production, its necessary change
 in `config.py`. The recommendation is use postgreSQL in production. The Flask will create a database called
-`hurbchallange.sqlite3`
+`hurbchallenge.sqlite3`
 
 
 ### Tests
