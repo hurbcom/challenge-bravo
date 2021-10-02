@@ -9,6 +9,7 @@
 - Unittest (library) [Python official Library](https://docs.python.org/3/library/unittest.html)
 - Locust (Framework) [oficial website](https://locust.io/)
 - Logging (Framework) [Python official Library](https://docs.python.org/3/library/logging.html)
+- Pytest (Framework) [official website](https://pytest.org/)
 
 
 ### Databased used in project:
@@ -50,50 +51,52 @@ With this API, you can convert, add and remove currencies.
 
 
 ### Usage
-Currencies Exchanger. If user don't informing the parameter "amount", it by default will assuming with 1
-```
+**Currencies Exchanger**, if user don't informing the parameter "amount", it by default will assuming with 1
+```http
 GET /convert?from=BRL&to=USD&amount=1
 ```
 
-Get the all available currencies.
-```
+**Get the all available currencies**, will display all currencies available (*real and fictional*)
+```http
 GET /currencies
 ```
 
-Insert a new currency. The rate is worth 1 USD of the new currency.
+**Insert a new currency**, the rate is worth **1 USD** of the new currency.
 This calculation is necessary as all currencies are dollar based, although it is possible to do
 for any available currency.
-```
+```http
 POST /currencies
 ```
-parameter necessary to insert, symbol and rate. The symbol should be a STR and the rate should be a float or int
-```
+*parameter necessary to insert, symbol and rate. The symbol should be a STR and the rate should be a float or int*
+```json
 {
     "symbol": "XYZ",
     "rate": 1
 }
 ```
 
-Delete a currency. By default, no currencies are deleted from the database, they are just "disabled",
+**Delete a currency**, by default, no currencies are deleted from the database, they are just "disabled",
 ie to keep a history. Although the currency is in the database, if it is turned off, you cannot do any queries on it.
-```
+```http
 DELETE /currencies
 ```
-parameter necessary to insert
-```
+*parameter necessary to insert*
+```json
 {
     "symbol": "XYZ",
 }
 ```
 
-Enable/Unable a currency
-```
+**Enable/Unable a currency**, you can enable or disable all kind of currency. You must informing in parameters
+the symbol and available
+```http
 POST /currencies
 ```
-parameter necessary to enable/disable
-```
+*parameter necessary to enable/disable*
+```json
 {
-    "available": True or False,
+    "symbol": "XYZ",
+    "available": false,
 }
 ```
 

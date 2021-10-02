@@ -36,10 +36,8 @@ msgpack==1.0.2
 packaging==21.0
 pluggy==1.0.0
 psutil==5.8.0
-psycopg2==2.9.1
 py==1.10.0
 pyparsing==2.4.7
-pytest==6.2.5
 pytz==2021.1
 pyzmq==22.3.0
 requests==2.26.0
@@ -49,7 +47,6 @@ six==1.16.0
 sniffio==1.2.0
 soupsieve==2.2.1
 SQLAlchemy==1.4.25
-toml==0.10.2
 typing-extensions==3.10.0.0
 urllib3==1.26.6
 Werkzeug==2.0.1

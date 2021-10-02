@@ -5,7 +5,7 @@ from config import app
 
 @app.route('/convert', methods=['GET', ])
 async def convert_curriencies():
-    from currency_exchange.blueprints.return_message.message_return import custom_error
+    from currency_exchange.blueprints.return_message.json_return_with_code import custom_error
 
     if not request.args.get("from") or not request.args.get("to"):
         data = {"error": "please, verify the URL contains all paraments"}
@@ -38,21 +38,3 @@ async def create_and_delete_currencie():
         from currency_exchange.controller.create_and_delete_currencies \
             import delete_creating_and_deleting_currencies
         return delete_creating_and_deleting_currencies(request_data)
-
-#
-# @app.before_first_request
-# def creating_database():
-#     from currency_exchange.blueprints.database.read import reading_all_symbols_from_table_exchange_rate
-#     from currency_exchange.blueprints.scrapping.publicAPI import default_currencies
-#
-#     # Updating database with default currencies if database empty.
-#     if not bool(reading_all_symbols_from_table_exchange_rate()):
-#         default_currencies()
-#
-#
-# @app.route("/testing")
-# async def testing_gargalo():
-#     import requests
-#     r = requests.get("https://api.exchangerate.host/convert?from=BRL&to=USD")
-#     return r.json()
-

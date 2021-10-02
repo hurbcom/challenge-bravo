@@ -1,6 +1,6 @@
 from currency_exchange.blueprints.database.read import reading_specific_symbol_from_table_exchange_rate
 from currency_exchange.blueprints.scrapping.publicAPI import update_specific_currency
-from currency_exchange.blueprints.return_message.message_return import custom_error, sucessfully
+from currency_exchange.blueprints.return_message.json_return_with_code import custom_error, sucessfully
 
 
 def converting_currencies_and_return_dict(from_currency, to_currency, amount):
