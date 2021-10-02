@@ -49,6 +49,11 @@ class Currency
         return $money;
     }
 
+    public function getValueAsString(): string
+    {
+        return $this->value;
+    }
+
     public function getSource(): string
     {
         return $this->source;
