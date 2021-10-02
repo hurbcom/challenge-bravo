@@ -68,7 +68,11 @@ class OpenExangeRatesUpdater implements CurrencyUpdaterInterface
         }
 
         $key = $_ENV['OPEN_EXANGE_RATE_KEY'];
-        $latest = file_get_contents("https://openexchangerates.org/api/latest.json?app_id=" . $key);
+
+        $latest = file_get_contents(
+            "https://openexchangerates.org/api/latest.json?app_id={$key}&show_alternative=1"
+        );
+
         $response = json_decode($latest);
 
         if ($response->base !== 'USD') {
