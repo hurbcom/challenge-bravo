@@ -23,14 +23,16 @@ class CurrencyRepository implements CurrencyRepositoryInterface
 
     public function set(Currency $currency): void
     {
-        $sql = "INSERT OR REPLACE INTO currency (code, value, source, created_at, updated_at) VALUES (?,?,?,?,?)";
+        if ($this->get($currency->getCode())) {
+            $sql = "UPDATE currency SET code = :code, value = :value, source = :source WHERE code = :code";
+        } else {
+            $sql = "INSERT INTO currency (code, value, source) VALUES (:code, :value, :source)";
+        }
 
         $this->pdo->prepare($sql)->execute([
-            $currency->getCode(),
-            $currency->getValueAsString(),
-            $currency->getSource(),
-            $currency->getCreatedAtAsSQLString(),
-            $currency->getUpdatedAtAsSQLString(),
+            'code' => $currency->getCode(),
+            'value' => $currency->getValueAsString(),
+            'source' => $currency->getSource(),
         ]);
     }
 }
