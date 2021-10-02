@@ -31,7 +31,7 @@ class CurrencyRepository implements CurrencyRepositoryInterface
 
         $this->pdo->prepare($sql)->execute([
             'code' => $currency->getCode(),
-            'value' => $currency->getValueAsString(),
+            'value' => $currency->getValue(),
             'source' => $currency->getSource(),
         ]);
     }
