@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run -it -v $(pwd):/app -w /app --rm php:8-cli php vendor/bin/phinx
+docker run -it -v $(pwd):/app -w /app --rm php:8-cli php vendor/bin/phinx $1
