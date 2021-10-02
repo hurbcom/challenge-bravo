@@ -1,5 +1,17 @@
+# IDE FILES
 .idea/
 .venv/
-*__pychache__/
 
+# PYCACHE
+currency_exchange/views/__pycache__/
+currency_exchange/controller/__pycache__/
+currency_exchange/blueprints/utils/__pycache__/
+currency_exchange/blueprints/scrapping/__pycache__/
+currency_exchange/blueprints/database/__pycache__/
+*__pycache__/
+
+# LOCAL DATABASE
 *.sqlite3
+
+# LOG FILE
+*.log

@@ -1,4 +1,4 @@
-from challenge_bravo.currency_exchange.models.Currency import ExchangeRate, db
+from currency_exchange.models.Currency import ExchangeRate, db
 
 from datetime import datetime as d
 

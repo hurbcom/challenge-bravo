@@ -1,7 +1,7 @@
 from unittest import TestCase
 import requests
 
-from challenge_bravo.app import HOST, PORT
+from app import HOST, PORT
 
 URL_ADDRESS = f"http://{HOST}:{PORT}"
 

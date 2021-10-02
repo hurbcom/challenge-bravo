@@ -1,8 +1,8 @@
-from challenge_bravo.currency_exchange.blueprints.database.read \
+from currency_exchange.blueprints.database.read \
     import reading_all_symbols_from_table_exchange_rate, reading_specific_symbol_from_table_exchange_rate
-from challenge_bravo.currency_exchange.blueprints.scrapping.publicAPI import default_currencies
-from challenge_bravo.currency_exchange.blueprints.scrapping.publicAPI import update_specific_currency
-from challenge_bravo.currency_exchange.blueprints.return_message.message_return import custom_error, sucessfully
+from currency_exchange.blueprints.scrapping.publicAPI import default_currencies
+from currency_exchange.blueprints.scrapping.publicAPI import update_specific_currency
+from currency_exchange.blueprints.return_message.message_return import custom_error, sucessfully
 
 
 def converting_currencies_and_return_dict(f, t, a):

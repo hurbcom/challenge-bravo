@@ -2,7 +2,7 @@ from unittest import TestCase
 import requests
 import json
 
-from challenge_bravo.app import HOST, PORT
+from app import HOST, PORT
 
 URL_ADDRESS = f"http://{HOST}:{PORT}"
 
@@ -17,7 +17,7 @@ class ViewConvertApiTesting(TestCase):
         #         the API endpoint must contains the symbol and available = False
         # Expected Result: The API endpoint must disable all currencies.
 
-        from challenge_bravo.currency_exchange.blueprints.database.read import \
+        from currency_exchange.blueprints.database.read import \
             reading_all_symbols_from_table_exchange_rate
         all_symbols = reading_all_symbols_from_table_exchange_rate()
         url = f"{URL_ADDRESS}/currencies"
@@ -35,7 +35,7 @@ class ViewConvertApiTesting(TestCase):
         #         the API endpoint must contains the symbol and available = True
         # Expected Result: The API endpoint must enable all currencies.
 
-        from challenge_bravo.currency_exchange.blueprints.database.read import \
+        from currency_exchange.blueprints.database.read import \
             reading_all_symbols_from_table_exchange_rate
         all_symbols = reading_all_symbols_from_table_exchange_rate()
         url = f"{URL_ADDRESS}/currencies"
@@ -164,7 +164,7 @@ class ViewConvertApiTesting(TestCase):
         # Expected Result: All currencies must be converted sucessfully and return the status code 200.
 
         self.test_enable_all_currencies()
-        from challenge_bravo.currency_exchange.blueprints.database.read import \
+        from currency_exchange.blueprints.database.read import \
             reading_all_symbols_from_table_exchange_rate
         all_symbols = reading_all_symbols_from_table_exchange_rate()
         for symbol in all_symbols:

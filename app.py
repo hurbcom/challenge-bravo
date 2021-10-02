@@ -1,8 +1,8 @@
-from challenge_bravo.config import app
-import challenge_bravo.currency_exchange.views
+from config import app
+import currency_exchange.views
 
 import os
-from challenge_bravo.config import DEBUG
+from config import DEBUG
 
 HOST = os.getenv("IP_ADDRESS") or "0.0.0.0"
 PORT = 8080

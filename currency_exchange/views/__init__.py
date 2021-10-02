@@ -1,1 +1,1 @@
-from challenge_bravo.currency_exchange.views import main
+from currency_exchange.views import main

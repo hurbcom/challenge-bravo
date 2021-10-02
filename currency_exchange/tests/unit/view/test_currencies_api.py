@@ -2,7 +2,7 @@ from unittest import TestCase
 import requests
 import json
 
-from challenge_bravo.app import HOST, PORT
+from app import HOST, PORT
 
 URL_ADDRESS = f"http://{HOST}:{PORT}"
 
@@ -16,8 +16,7 @@ class ViewCurrenciesApiTesting(TestCase):
         # step 2: Do a for in the list and if the symbol is avialable, do the unavailable.
         # Expected result: If the symbol is available, it will unavailable the currency.
 
-        from challenge_bravo.currency_exchange.blueprints.database.read import \
-            reading_all_symbols_from_table_exchange_rate
+        from currency_exchange.blueprints.database.read import reading_all_symbols_from_table_exchange_rate
         all_symbols = reading_all_symbols_from_table_exchange_rate()
 
         for symbol in all_symbols:
@@ -35,8 +34,7 @@ class ViewCurrenciesApiTesting(TestCase):
         # step 2: Do a for in the list and if the symbol is unavailable, do the available.
         # Expected result: If the symbol is unavailable, it will avialable the currency.
 
-        from challenge_bravo.currency_exchange.blueprints.database.read import \
-            reading_all_symbols_from_table_exchange_rate
+        from currency_exchange.blueprints.database.read import reading_all_symbols_from_table_exchange_rate
         all_symbols_from_database = reading_all_symbols_from_table_exchange_rate()
 
         for symbol in all_symbols_from_database:
@@ -56,8 +54,8 @@ class ViewCurrenciesApiTesting(TestCase):
         # step 4: find the currency added in step 2 in the /currencies endpoint
         # Expeted result: The API endpoint must add sucessfully the currency.
 
-        from challenge_bravo.currency_exchange.blueprints.utils.randomReturn import randomic_letters_uppercase
-        from challenge_bravo.currency_exchange.blueprints.utils.randomReturn import random_float_number
+        from currency_exchange.blueprints.utils.randomReturn import randomic_letters_uppercase
+        from currency_exchange.blueprints.utils.randomReturn import random_float_number
 
         self.test_enable_all_currencies_from_api()
         url = f"{URL_ADDRESS}/currencies"
@@ -120,8 +118,7 @@ class ViewCurrenciesApiTesting(TestCase):
         # Expected Result: The symbol must be deleted sucessfuly.
 
         self.test_enable_all_currencies_from_api()
-        from challenge_bravo.currency_exchange.blueprints.database.read import \
-            reading_all_symbols_from_table_exchange_rate
+        from currency_exchange.blueprints.database.read import reading_all_symbols_from_table_exchange_rate
         all_symbols = reading_all_symbols_from_table_exchange_rate()
 
         for symbol in all_symbols:

@@ -1,4 +1,4 @@
-from challenge_bravo.config import db
+from config import db
 
 
 class ExchangeRate(db.Model):

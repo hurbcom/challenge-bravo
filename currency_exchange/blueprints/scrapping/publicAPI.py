@@ -1,6 +1,6 @@
-from challenge_bravo.currency_exchange.blueprints.database.read import reading_all_symbols_from_table_exchange_rate
-from challenge_bravo.currency_exchange.blueprints.utils.apiRequest import parsing_api
-from challenge_bravo.currency_exchange.blueprints.database.save import saving_table_exchange_rate
+from currency_exchange.blueprints.database.read import reading_all_symbols_from_table_exchange_rate
+from currency_exchange.blueprints.utils.apiRequest import parsing_api
+from currency_exchange.blueprints.database.save import saving_table_exchange_rate
 
 
 def default_currencies():
