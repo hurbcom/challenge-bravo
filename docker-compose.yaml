@@ -1,0 +1,13 @@
+version: '2'
+services:
+    web:
+        build: .
+        ports:
+            - "5000:5000"
+        volumes:
+            - /Users/ricardopereira/PycharmProjects/hurb_challange/challenge_bravo:/code
+        depends_on:
+            - redis
+    redis:
+        image: redis
+
