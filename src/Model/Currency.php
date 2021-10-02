@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency as MoneyCurrency;
@@ -17,8 +17,8 @@ class Currency
     private string $code;
     private string $value;
     private string $source;
-    private DateTimeInterface $createdAt;
-    private DateTimeInterface $updatedAt;
+    private string $createdAt;
+    private string $updatedAt;
 
     public static function create(
         string $code,
@@ -31,8 +31,8 @@ class Currency
         $cur->setCode($code);
         $cur->setValue($value instanceof Money ? $value : Money::USD($value));
         $cur->setSource($source ?? 'undefined');
-        $cur->setCreatedAt($createdAt ?? new DateTime());
-        $cur->setUpdatedAt($updatedAt ?? new DateTime());
+        $cur->setCreatedAt($createdAt ?? new DateTimeImmutable());
+        $cur->setUpdatedAt($updatedAt ?? new DateTimeImmutable());
 
         return $cur;
     }
@@ -61,12 +61,22 @@ class Currency
 
     public function getCreatedAt(): DateTimeInterface
     {
-        return $this->createdAt;
+        return new DateTimeImmutable($this->createdAt);
     }
 
     public function getUpdatedAt(): DateTimeInterface
     {
-        return $this->updatedAt;
+        return new DateTimeImmutable($this->updatedAt);
+    }
+
+    public function getCreatedAtAsSQLString(): string
+    {
+        return (new DateTimeImmutable($this->createdAt))->format("Y-m-d H:i:s");
+    }
+
+    public function getUpdatedAtAsSQLString(): string
+    {
+        return (new DateTimeImmutable($this->updatedAt))->format("Y-m-d H:i:s");
     }
 
     public function setCode(string $code)
@@ -87,11 +97,11 @@ class Currency
 
     public function setCreatedAt(DateTimeInterface $createdAt)
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = $createdAt->format("Y-m-d H:i:s");
     }
 
     public function setUpdatedAt(DateTimeInterface $updatedAt)
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = $updatedAt->format("Y-m-d H:i:s");
     }
 }
