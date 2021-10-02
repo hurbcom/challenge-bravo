@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use Brick\Math\BigDecimal;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Money\Currencies\ISOCurrencies;
-use Money\Currency as MoneyCurrency;
-use Money\Formatter\DecimalMoneyFormatter;
-use Money\Money;
-use Money\Parser\DecimalMoneyParser;
 
 class Currency
 {
@@ -18,18 +14,18 @@ class Currency
     private string $value;
     private string $source;
     private string $created_at;
-    private string $updated_at;
+    private ?string $updated_at;
 
     public static function create(
         string $code,
-        int|string|Money $value,
+        string $value,
         ?string $source = null,
         ?DateTimeInterface $createdAt = null,
         ?DateTimeInterface $updatedAt = null
     ) {
         $cur = new Currency();
         $cur->setCode($code);
-        $cur->setValue($value instanceof Money ? $value : Money::USD($value));
+        $cur->setValue($value);
         $cur->setSource($source ?? 'undefined');
         $cur->setCreatedAt($createdAt ?? new DateTimeImmutable());
         $cur->setUpdatedAt($updatedAt ?? new DateTimeImmutable());
@@ -42,16 +38,9 @@ class Currency
         return $this->code;
     }
 
-    public function getValue(): Money
+    public function getValue(): BigDecimal
     {
-        $moneyParser = new DecimalMoneyParser(new ISOCurrencies());
-        $money = $moneyParser->parse($this->value, new MoneyCurrency('USD'));
-        return $money;
-    }
-
-    public function getValueAsString(): string
-    {
-        return $this->value;
+        return BigDecimal::of($this->value);
     }
 
     public function getSource(): string
@@ -66,6 +55,10 @@ class Currency
 
     public function getUpdatedAt(): DateTimeInterface
     {
+        if (empty($this->updated_at)) {
+            return new DateTimeImmutable();
+        }
+
         return new DateTimeImmutable($this->updated_at);
     }
 
@@ -74,8 +67,12 @@ class Currency
         return (new DateTimeImmutable($this->created_at))->format("Y-m-d H:i:s");
     }
 
-    public function getUpdatedAtAsSQLString(): string
+    public function getUpdatedAtAsSQLString(): ?string
     {
+        if (empty($this->updated_at)) {
+            return (new DateTimeImmutable())->format("Y-m-d H:i:s");
+        }
+
         return (new DateTimeImmutable($this->updated_at))->format("Y-m-d H:i:s");
     }
 
@@ -84,10 +81,9 @@ class Currency
         $this->code = $code;
     }
 
-    public function setValue(Money $value)
+    public function setValue(string $value)
     {
-        $formatter = new DecimalMoneyFormatter(new ISOCurrencies());
-        $this->value = $formatter->format($value);
+        $this->value = (string) BigDecimal::of($value);
     }
 
     public function setSource(string $source)
