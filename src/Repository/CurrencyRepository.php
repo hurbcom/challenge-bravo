@@ -35,4 +35,14 @@ class CurrencyRepository implements CurrencyRepositoryInterface
             'source' => $currency->getSource(),
         ]);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBySource(string $source): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM currency WHERE source=?");
+        $stmt->execute([$source]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS, Currency::class);
+    }
 }
