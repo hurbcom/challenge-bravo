@@ -17,8 +17,8 @@ class Currency
     private string $code;
     private string $value;
     private string $source;
-    private string $createdAt;
-    private string $updatedAt;
+    private string $created_at;
+    private string $updated_at;
 
     public static function create(
         string $code,
@@ -61,22 +61,22 @@ class Currency
 
     public function getCreatedAt(): DateTimeInterface
     {
-        return new DateTimeImmutable($this->createdAt);
+        return new DateTimeImmutable($this->created_at);
     }
 
     public function getUpdatedAt(): DateTimeInterface
     {
-        return new DateTimeImmutable($this->updatedAt);
+        return new DateTimeImmutable($this->updated_at);
     }
 
     public function getCreatedAtAsSQLString(): string
     {
-        return (new DateTimeImmutable($this->createdAt))->format("Y-m-d H:i:s");
+        return (new DateTimeImmutable($this->created_at))->format("Y-m-d H:i:s");
     }
 
     public function getUpdatedAtAsSQLString(): string
     {
-        return (new DateTimeImmutable($this->updatedAt))->format("Y-m-d H:i:s");
+        return (new DateTimeImmutable($this->updated_at))->format("Y-m-d H:i:s");
     }
 
     public function setCode(string $code)
@@ -97,11 +97,11 @@ class Currency
 
     public function setCreatedAt(DateTimeInterface $createdAt)
     {
-        $this->createdAt = $createdAt->format("Y-m-d H:i:s");
+        $this->created_at = $createdAt->format("Y-m-d H:i:s");
     }
 
     public function setUpdatedAt(DateTimeInterface $updatedAt)
     {
-        $this->updatedAt = $updatedAt->format("Y-m-d H:i:s");
+        $this->updated_at = $updatedAt->format("Y-m-d H:i:s");
     }
 }
