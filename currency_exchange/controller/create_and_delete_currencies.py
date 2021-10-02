@@ -2,16 +2,11 @@ from currency_exchange.blueprints.database.read import reading_all_symbols_from_
     reading_specific_symbol_from_table_exchange_rate
 from currency_exchange.blueprints.database.save import update_available_table_exchange_rate, \
     saving_table_exchange_rate
-from currency_exchange.blueprints.scrapping.publicAPI import default_currencies
 from currency_exchange.blueprints.scrapping.publicAPI import update_specific_currency
 from currency_exchange.blueprints.return_message.message_return import custom_error, sucessfully
 
 
 def get_creating_and_deleting_currencies():
-    # If database is empty, add the default currencies
-    if not bool(reading_all_symbols_from_table_exchange_rate()):
-        default_currencies()
-
     single_currencie = {}
     currencies = {}
 
@@ -60,7 +55,6 @@ def post_creating_and_deleting_currencies(request_data):
     symbol = str(request_data['symbol']).upper()
     rate = request_data['rate']
     symbol_information = reading_specific_symbol_from_table_exchange_rate(symbol)
-    default_currencies()
 
     # if the symbol in database and if is available to consulting:
     if symbol_information and symbol_information.available == True:
@@ -81,10 +75,6 @@ def post_creating_and_deleting_currencies(request_data):
 
 
 def delete_creating_and_deleting_currencies(request_data):
-    # if database is empty, add the default currencies
-    if not bool(reading_all_symbols_from_table_exchange_rate()):
-        default_currencies()
-
     # Check if the param "symbol" was sent in body.
     if 'symbol' not in request_data:
         data = {'error': 'please, add a symbol to delete the currency'}

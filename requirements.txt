@@ -1,4 +1,5 @@
 aniso8601==9.0.1
+asgiref==3.4.1
 attrs==21.2.0
 Brotli==1.0.9
 certifi==2021.5.30

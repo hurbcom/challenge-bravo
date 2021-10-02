@@ -3,7 +3,6 @@ from currency_exchange.models.Currency import ExchangeRate, db
 
 def reading_all_symbols_from_table_exchange_rate() -> list:
     symbols = []
-    db.create_all()
 
     informations = db.session.query(ExchangeRate).all()
 

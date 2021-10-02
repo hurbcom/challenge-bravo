@@ -1,13 +1,17 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Aug 02 01:18:51 2021
+@author: Wilson Ricardo Pereira Silveira
+"""
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
 
-DEBUG = True
-API_VERSION = 'v1'
+DEBUG = False
 
 HOST = os.getenv("IP_ADDRESS") or "0.0.0.0"
-BASE_DIR = ''
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
@@ -25,3 +29,8 @@ else:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+db.init_app(app)
+db.create_all()
+
+from currency_exchange.blueprints.scrapping.publicAPI import default_currencies
+default_currencies()

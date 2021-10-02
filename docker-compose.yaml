@@ -1,13 +1,35 @@
-version: '2'
+version: '3'
 services:
-    web:
-        build: .
-        ports:
-            - "5000:5000"
-        volumes:
-            - /Users/ricardopereira/PycharmProjects/hurb_challange/challenge_bravo:/code
-        depends_on:
-            - redis
-    redis:
-        image: redis
-
+  database:
+    container_name: hurb_trial_db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: hurb_trial
+      POSTGRES_USER: hurb_trial
+      POSTGRES_DB: currency_exchanger
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  backend:
+    image: python:3.9-slim
+    command: sh -c "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --reload"
+    container_name: hurb
+    restart: on-failure
+    working_dir: /Users/ricardopereira/Desktop/a
+    environment:
+      DATABASE_HOST: "database"
+    volumes:
+      - .:/hurb_trial_backend
+    ports:
+      - 8000:8000
+    expose:
+      - "8000"
+    depends_on:
+      - database
+    tty: true
+    stdin_open: true
+volumes:
+  pgdata:

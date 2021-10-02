@@ -2,7 +2,7 @@ from config import db
 
 
 class ExchangeRate(db.Model):
-    __tablename__ = "google-currency-information"
+    __tablename__ = "currency-information"
 
     id = db.Column(
         db.Integer,

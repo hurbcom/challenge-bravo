@@ -1,78 +1,100 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
+## [Challange Bravo - HURB](https://github.com/hurbcom/challenge-bravo)
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+### Used in project:
+- Flask (Framework) [github repo](https://github.com/pallets/flask)
+- Flask-SQLALchemy (Framework) [github repo](https://github.com/pallets/flask-sqlalchemy)
+- Requests (Library) [github repo](https://github.com/psf/requests)
+- os (Library) [Python official Library](https://docs.python.org/3/library/os.html)
+- Unittest (library) [Python official Library](https://docs.python.org/3/library/unittest.html)
+- Locust (Framework) [oficial website](https://locust.io/)
+- Logging (Framework) [Python official Library](https://docs.python.org/3/library/logging.html)
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+### Databased used in project:
+- SQLite: As its a local API to testing only, was used the SQLite3, if it goes to production, its necessary change
+in `config.py`. The recommendation is use postgreSQL in production. The Flask will create a database called
+`hurbchallange.sqlite3`
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+### Tests
+`unittest-test-passed.png`
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
+### Perfomance
+The API supported about 200 users per second This is because the database is not asyncronous,
+so it is only making one request at a time. Flask-SQLAlchemy does not handle information with asyncronity as well.
+If the API was for production, just add PostgreSQL with psycopg2. The flask 2.x support multithreading requests (about 1500 user per secound).
+The test was perfomaced using the `locust`.
+To use the `locust`, run the command in root project folder
+`locust -f currency_exchange/tests/perfomance/api_convert.py`
+Test perfomaced: `locust-perfomaced-test.png`
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+### Docker
+I configured the docker but I didn't use it for it, because I was losing the API perfomance through the docker.
+I configured the docker but I didn't use it for it, because I was losing the API perfomance through the docker.
+Messages were taking longer to respond and with concurrent users it was failing with few users
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
 
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+### About API
+This API is for converting between two available currencies released by us.
+With this API, you can convert, add and remove currencies.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+### How to usage
+1. clone the repository
+2. Access the project folder
+3. FLASK_APP=app.py flask run --host=0.0.0.0 --port=8080 ( or you can run the app.py in your IDE )
+4. Access the [webpage](http://0.0.0.0:8080/currencies) and verify its working.
 
-## Requisitos
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+### Usage
+Currencies Exchanger. If user don't informing the parameter "amount", it by default will assuming with 1
+```
+GET /convert?from=BRL&to=USD&amount=1
+```
 
-## Critério de avaliação
+Get the all available currencies.
+```
+GET /currencies
+```
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Insert a new currency. The rate is worth 1 USD of the new currency.
+This calculation is necessary as all currencies are dollar based, although it is possible to do
+for any available currency.
+```
+POST /currencies
+```
+parameter necessary to insert, symbol and rate. The symbol should be a STR and the rate should be a float or int
+```
+{
+    "symbol": "XYZ",
+    "rate": 1
+}
+```
 
-## Dúvidas
+Delete a currency. By default, no currencies are deleted from the database, they are just "disabled",
+ie to keep a history. Although the currency is in the database, if it is turned off, you cannot do any queries on it.
+```
+DELETE /currencies
+```
+parameter necessary to insert
+```
+{
+    "symbol": "XYZ",
+}
+```
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+Enable/Unable a currency
+```
+POST /currencies
+```
+parameter necessary to enable/disable
+```
+{
+    "available": True or False,
+}
+```
 
-Boa sorte e boa viagem! ;)
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
