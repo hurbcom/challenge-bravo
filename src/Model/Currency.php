@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Model;
 
 use DateTimeInterface;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency as MoneyCurrency;
+use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
+use Money\Parser\DecimalMoneyParser;
 
 class Currency
 {
     private string $code;
-    private Money $value;
+    private string $value;
     private string $source;
     private DateTimeInterface $createdAt;
     private DateTimeInterface $updatedAt;
@@ -22,7 +26,9 @@ class Currency
 
     public function getValue(): Money
     {
-        return $this->value;
+        $moneyParser = new DecimalMoneyParser(new ISOCurrencies());
+        $money = $moneyParser->parse($this->value, new MoneyCurrency('USD'));
+        return $money;
     }
 
     public function getSource(): string
@@ -47,7 +53,8 @@ class Currency
 
     public function setValue(Money $value)
     {
-        $this->value = $value;
+        $formatter = new DecimalMoneyFormatter(new ISOCurrencies());
+        $this->value = $formatter->format($value);
     }
 
     public function setSource(string $source)
