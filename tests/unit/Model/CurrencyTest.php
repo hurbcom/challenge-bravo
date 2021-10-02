@@ -52,4 +52,25 @@ final class CurrencyTest extends TestCase
             $cur->getUpdatedAt()
         );
     }
+
+    public function testCreateConstructorMethod()
+    {
+        $code = 'BRL';
+        $value = Money::USD(1);
+        $source = 'static';
+
+        $cur = Currency::create($code, $value, $source);
+
+        $this->assertEquals($code, $cur->getCode());
+        $this->assertTrue($value->equals($cur->getValue()));
+        $this->assertEquals($source, $cur->getSource());
+        $this->assertInstanceOf(
+            DateTimeInterface::class,
+            $cur->getCreatedAt()
+        );
+        $this->assertInstanceOf(
+            DateTimeInterface::class,
+            $cur->getUpdatedAt()
+        );
+    }
 }

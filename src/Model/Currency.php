@@ -19,6 +19,23 @@ class Currency
     private DateTimeInterface $createdAt;
     private DateTimeInterface $updatedAt;
 
+    public static function create(
+        string $code,
+        int|string|Money $value,
+        ?string $source = null,
+        ?DateTimeInterface $createdAt = null,
+        ?DateTimeInterface $updatedAt = null
+    ) {
+        $cur = new Currency();
+        $cur->setCode($code);
+        $cur->setValue($value instanceof Money ? $value : Money::USD($value));
+        $cur->setSource($source ?? 'undefined');
+        $cur->setCreatedAt($createdAt ?? new DateTime());
+        $cur->setUpdatedAt($updatedAt ?? new DateTime());
+
+        return $cur;
+    }
+
     public function getCode(): string
     {
         return $this->code;
