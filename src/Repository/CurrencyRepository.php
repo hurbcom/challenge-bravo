@@ -18,7 +18,7 @@ class CurrencyRepository implements CurrencyRepositoryInterface
         $stmt = $this->pdo->prepare("SELECT * FROM currency WHERE code=?");
         $stmt->execute([$code]);
         $currency = $stmt->fetchObject(Currency::class);
-        return $currency;
+        return $currency ?: null;
     }
 
     public function set(Currency $currency): void
