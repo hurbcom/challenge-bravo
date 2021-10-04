@@ -97,7 +97,6 @@ final class CurrencyTest extends TestCase
 
         // Should throw exception
         $this->expectException(CurrencyCodeException::class);
-        $code2 = 'dasdwqe';
-        $current2 = Currency::normalizeCode($code2);
+        Currency::normalizeCode('dasdwqe');
     }
 }
