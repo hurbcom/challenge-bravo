@@ -7,7 +7,6 @@ namespace App\Repository;
 use App\Connection;
 use App\Model\Currency;
 use DateTimeInterface;
-use Money\Money;
 use PHPUnit\Framework\TestCase;
 
 final class CurrencyRepositoryTest extends TestCase
@@ -17,7 +16,7 @@ final class CurrencyRepositoryTest extends TestCase
         $conn = new Connection();
 
         $code = 'BRL';
-        $value = Money::USD('100');
+        $value = '100';
         $source = 'undefined';
         $currency = Currency::create($code, $value);
 
@@ -27,7 +26,7 @@ final class CurrencyRepositoryTest extends TestCase
 
         $this->assertNotEmpty($cur);
         $this->assertEquals($code, $cur->getCode());
-        $this->assertTrue($value->equals($cur->getValue()));
+        $this->assertEquals($value, $cur->getValue());
         $this->assertEquals($source, $cur->getSource());
         $this->assertInstanceOf(
             DateTimeInterface::class,
