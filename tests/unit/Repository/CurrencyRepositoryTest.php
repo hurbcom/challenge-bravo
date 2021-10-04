@@ -37,4 +37,26 @@ final class CurrencyRepositoryTest extends TestCase
             $cur->getUpdatedAt()
         );
     }
+
+    public function testDelete()
+    {
+        $conn = new Connection();
+        $repo = new CurrencyRepository($conn);
+        $code = 'BRL';
+
+        $this->assertTrue($repo->delete($code));
+        $cur = $repo->get($code);
+        $this->assertEmpty($cur);
+    }
+
+    public function testDeleteNotExistent()
+    {
+        $conn = new Connection();
+        $repo = new CurrencyRepository($conn);
+        $code = 'xxxxxx';
+
+        $cur = $repo->get($code);
+        $this->assertEmpty($cur);
+        $this->assertFalse($repo->delete($code));
+    }
 }

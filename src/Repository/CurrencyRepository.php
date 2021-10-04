@@ -36,6 +36,13 @@ class CurrencyRepository implements CurrencyRepositoryInterface
         ]);
     }
 
+    public function delete(string $code): bool
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM currency WHERE code=?");
+        $stmt->execute([$code]);
+        return (bool) $stmt->rowCount();
+    }
+
     /**
      * @inheritDoc
      */

@@ -10,6 +10,7 @@ interface CurrencyRepositoryInterface
 {
     public function get(string $code): ?Currency;
     public function set(Currency $currency): void;
+    public function delete(string $code): bool;
 
     /**
      * Get currencies by source
