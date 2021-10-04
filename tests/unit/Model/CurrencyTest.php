@@ -81,4 +81,23 @@ final class CurrencyTest extends TestCase
         $this->expectException(NumberFormatException::class);
         Currency::create($code, $stringValue);
     }
+
+    public function testNormalizeCodeStaticMethod()
+    {
+        // Should return uppercase
+        $code1 = 'brl';
+        $expected1 = 'BRL';
+        $current1 = Currency::normalizeCode($code1);
+        $this->assertEquals($expected1, $current1);
+
+        // Should be equal
+        $code2 = 'USD';
+        $current2 = Currency::normalizeCode($code2);
+        $this->assertEquals($code2, $current2);
+
+        // Should throw exception
+        $this->expectException(CurrencyCodeException::class);
+        $code2 = 'dasdwqe';
+        $current2 = Currency::normalizeCode($code2);
+    }
 }
