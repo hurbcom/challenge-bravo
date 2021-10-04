@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Exception\CurrencyCodeException;
 use App\Model\Currency as Currency;
 use Brick\Math\Exception\NumberFormatException;
 use DateTime;
