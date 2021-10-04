@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Exception\CurrencyCodeException;
 use Brick\Math\BigDecimal;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -31,6 +32,24 @@ class Currency
         $cur->setUpdatedAt($updatedAt ?? new DateTimeImmutable());
 
         return $cur;
+    }
+
+    /**
+     * Validate and makes the currency code uppercase
+     *
+     * @param string $code
+     * @return string
+     * @throws CurrencyCodeException on invalid currency format
+     */
+    public static function normalizeCode(string $code): string
+    {
+        $normalizedCode = strtoupper($code);
+
+        if (!preg_match('/^[A-Z]{3}$/', $normalizedCode)) {
+            throw new CurrencyCodeException("Invalid format: Don't match 3 letters code format.");
+        }
+
+        return $normalizedCode;
     }
 
     public function getCode(): string
