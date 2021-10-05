@@ -13,6 +13,13 @@ class CurrencyRepository implements CurrencyRepositoryInterface
         private PDO $pdo
     ) {}
 
+    public function getAll(): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM currency");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_CLASS, Currency::class);
+    }
+
     public function get(string $code): ?Currency
     {
         $stmt = $this->pdo->prepare("SELECT * FROM currency WHERE code=?");

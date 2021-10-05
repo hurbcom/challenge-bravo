@@ -8,6 +8,7 @@ use App\Model\Currency;
 
 interface CurrencyRepositoryInterface
 {
+    public function getAll(): array;
     public function get(string $code): ?Currency;
     public function set(Currency $currency): void;
     public function delete(string $code): bool;
