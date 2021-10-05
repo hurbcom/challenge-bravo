@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
-use DI\Container;
+use DI\ContainerBuilder;
 use Laminas\Diactoros\ResponseFactory;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
@@ -79,6 +79,14 @@ class Application
      */
     protected function getContainer(): ContainerInterface
     {
-        return $this->container ??= new Container();
+        if ($this->container instanceof ContainerInterface) {
+            return $this->container;
+        }
+
+        $builder = new ContainerBuilder();
+        $builder->enableCompilation(__DIR__ . '/../storage/tmp');
+        $builder->writeProxiesToFile(true, __DIR__ . '/../storage/tmp/proxies');
+        $builder->addDefinitions('config.php');
+        return $this->container = $builder->build();
     }
 }
