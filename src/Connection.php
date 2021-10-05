@@ -10,7 +10,7 @@ class Connection extends PDO
 {
     public function __construct()
     {
-        $path = realpath(__DIR__ . '/../db/db.sqlite3');
+        $path = realpath(__DIR__ . '/../storage/db.sqlite3');
 
         $args = [
             "sqlite:$path",

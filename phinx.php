@@ -11,7 +11,7 @@ return
         'default_environment' => 'production',
         'production' => [
             'adapter' => 'sqlite',
-            'name' => './db/db',
+            'name' => './storage/db',
             'charset' => 'utf8',
         ],
         'testing' => [
