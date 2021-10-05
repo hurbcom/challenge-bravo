@@ -15,12 +15,20 @@ class ConverterService implements ConverterInterface
 
     public function from(Currency $cur): ConverterInterface
     {
+        if ($cur->getValue()->isNegativeOrZero()) {
+            throw new CurrencyValueException();
+        }
+
         $this->from = $cur;
         return $this;
     }
 
     public function to(Currency $cur): ConverterInterface
     {
+        if ($cur->getValue()->isNegativeOrZero()) {
+            throw new CurrencyValueException();
+        }
+
         $this->to = $cur;
         return $this;
     }
