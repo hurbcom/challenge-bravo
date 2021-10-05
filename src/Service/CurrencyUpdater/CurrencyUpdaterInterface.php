@@ -13,7 +13,7 @@ interface CurrencyUpdaterInterface
      *
      * @return string
      */
-    public function getId(): string;
+    public static function getId(): string;
 
     /**
      * A call to update currencies belonging to this source
