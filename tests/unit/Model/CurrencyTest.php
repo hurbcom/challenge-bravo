@@ -92,4 +92,30 @@ final class CurrencyTest extends TestCase
         $this->expectException(CurrencyCodeException::class);
         Currency::normalizeCode('dasdwqe');
     }
+
+    public function testToArrayMethod()
+    {
+        $code = 'BRL';
+        $value = BigDecimal::of('0.001');
+        $source = 'static';
+        $created = new DateTimeImmutable('-15 minutes');
+        $updated = new DateTimeImmutable('now');
+
+        $cur = Currency::create(
+            $code,
+            $value,
+            $source,
+            $created,
+            $updated
+        );
+
+        $arr = $cur->toArray();
+
+        $this->assertCount(5, $arr);
+        $this->assertEquals($code, $arr['code']);
+        $this->assertTrue($value->isEqualTo($arr['value']));
+        $this->assertEquals($source, $arr['source']);
+        $this->assertTrue($cur->getCreatedAt()->diff($created)->s === 0);
+        $this->assertTrue($cur->getUpdatedAt()->diff($updated)->s === 0);
+    }
 }
