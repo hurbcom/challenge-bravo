@@ -77,11 +77,11 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
 
     private function fetchRates(ItemInterface $item)
     {
-        $exp = filter_var($_ENV['OPEN_EXCHANGE_CACHE_EXPIRATION'], FILTER_VALIDATE_INT);
+        $exp = filter_var($_ENV['OPEN_EXCHANGE_CACHE_EXPIRATION_SECONDS'], FILTER_VALIDATE_INT);
 
         if (!is_integer($exp)) {
             throw new RuntimeException(
-                "Environment variable [OPEN_EXCHANGE_CACHE_EXPIRATION] malformatted or missing."
+                "Environment variable [OPEN_EXCHANGE_CACHE_EXPIRATION_SECONDS] malformatted or missing."
             );
         }
 
