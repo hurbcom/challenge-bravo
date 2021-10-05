@@ -9,18 +9,18 @@ use App\Repository\CurrencyRepositoryInterface;
 use RuntimeException;
 
 /**
- * Currency updater using OpenExangeRate API
+ * Currency updater using OpenExchangeRate API
  *
  * @link https://openexchangerates.org/
  */
-class OpenExangeRatesUpdater implements CurrencyUpdaterInterface
+class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
 {
     /**
      * @inheritDoc
      */
-    public function getId(): string
+    public static function getId(): string
     {
-        return 'openexangerates';
+        return 'open-exchange-rates';
     }
 
     /**
@@ -28,7 +28,7 @@ class OpenExangeRatesUpdater implements CurrencyUpdaterInterface
      */
     public function update(CurrencyRepositoryInterface $currencyRepository): void
     {
-        $allUpdateableCurrencies = $currencyRepository->getBySource($this->getId());
+        $allUpdateableCurrencies = $currencyRepository->getBySource(self::getId());
         $updateableCodes = array_map(fn ($c) => $c->getCode(), $allUpdateableCurrencies);
 
         // Should update only available codes on our currency database
@@ -44,7 +44,7 @@ class OpenExangeRatesUpdater implements CurrencyUpdaterInterface
          * @var $newCurrencies Currency[]
          */
         $newCurrencies = array_map(
-            fn ($code, $amount) => Currency::create($code, $amount, $this->getId()),
+            fn ($code, $amount) => Currency::create($code, $amount, self::getId()),
             array_keys($requiredCurrencies),
             $requiredCurrencies
         );
@@ -63,11 +63,11 @@ class OpenExangeRatesUpdater implements CurrencyUpdaterInterface
 
     private function fetchRates()
     {
-        if (empty($_ENV['OPEN_EXANGE_RATE_KEY'])) {
-            throw new RuntimeException('OpenExangeRate key is not set');
+        if (empty($_ENV['OPEN_EXCHANGE_RATE_KEY'])) {
+            throw new RuntimeException('OpenExchangeRate key is not set');
         }
 
-        $key = $_ENV['OPEN_EXANGE_RATE_KEY'];
+        $key = $_ENV['OPEN_EXCHANGE_RATE_KEY'];
 
         $latest = file_get_contents(
             "https://openexchangerates.org/api/latest.json?app_id={$key}&show_alternative=1"
