@@ -14,5 +14,6 @@ use function DI\get;
 return [
     ConverterInterface::class => get(ConverterService::class),
     CurrencyRepositoryInterface::class => get(CurrencyRepository::class),
+    PDO::class => get(Connection::class),
     ResponseFactoryInterface::class => get(ResponseFactory::class),
 ];
