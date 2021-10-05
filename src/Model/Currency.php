@@ -19,14 +19,14 @@ class Currency
 
     public static function create(
         string $code,
-        string $value,
+        ?BigDecimal $value = null,
         ?string $source = null,
         ?DateTimeInterface $createdAt = null,
         ?DateTimeInterface $updatedAt = null
     ) {
         $cur = new Currency();
         $cur->setCode($code);
-        $cur->setValue($value);
+        $cur->setValue($value ?? BigDecimal::of('0'));
         $cur->setSource($source ?? 'undefined');
         $cur->setCreatedAt($createdAt ?? new DateTimeImmutable());
         $cur->setUpdatedAt($updatedAt ?? new DateTimeImmutable());
@@ -100,9 +100,9 @@ class Currency
         $this->code = $code;
     }
 
-    public function setValue(string $value)
+    public function setValue(BigDecimal $value)
     {
-        $this->value = (string) BigDecimal::of($value);
+        $this->value = (string) $value;
     }
 
     public function setSource(string $source)

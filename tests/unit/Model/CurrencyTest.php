@@ -6,6 +6,7 @@ namespace App\Model;
 
 use App\Exception\CurrencyCodeException;
 use App\Model\Currency as Currency;
+use Brick\Math\BigDecimal;
 use Brick\Math\Exception\NumberFormatException;
 use DateTime;
 use DateTimeInterface;
@@ -31,9 +32,9 @@ final class CurrencyTest extends TestCase
         $cur->setCode($code);
         $this->assertEquals($code, $cur->getCode());
 
-        $value = '0.005';
+        $value = BigDecimal::of('0.005');
         $cur->setValue($value);
-        $this->assertEquals($value, $cur->getValue());
+        $this->assertTrue($value->isEqualTo($cur->getValue()));
 
         $source = 'static';
         $cur->setSource($source);
@@ -57,13 +58,13 @@ final class CurrencyTest extends TestCase
     public function testCreateConstructorMethod()
     {
         $code = 'BRL';
-        $value = '0.001';
+        $value = BigDecimal::of('0.001');
         $source = 'static';
 
         $cur = Currency::create($code, $value, $source);
 
         $this->assertEquals($code, $cur->getCode());
-        $this->assertEquals($value, $cur->getValue());
+        $this->assertTrue($value->isEqualTo($cur->getValue()));
         $this->assertEquals($source, $cur->getSource());
         $this->assertInstanceOf(
             DateTimeInterface::class,
