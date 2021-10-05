@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Service\CurrencyUpdater;
 
+use App\Logger\UpdaterLogger;
 use App\Model\Currency;
 use App\Repository\CurrencyRepositoryInterface;
+use Brick\Math\BigDecimal;
 use RuntimeException;
 
 /**
@@ -15,6 +17,10 @@ use RuntimeException;
  */
 class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
 {
+    public function __construct(
+        private UpdaterLogger $logger
+    ) {}
+
     /**
      * @inheritDoc
      */
@@ -44,7 +50,7 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
          * @var $newCurrencies Currency[]
          */
         $newCurrencies = array_map(
-            fn ($code, $amount) => Currency::create($code, $amount, self::getId()),
+            fn ($code, $amount) => Currency::create($code, BigDecimal::of($amount), self::getId()),
             array_keys($requiredCurrencies),
             $requiredCurrencies
         );
@@ -73,12 +79,13 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
             "https://openexchangerates.org/api/latest.json?app_id={$key}&show_alternative=1"
         );
 
+        $this->logger->debug("OpenExangeRates response: " . $latest);
         $response = json_decode($latest);
 
         if ($response->base !== 'USD') {
             throw new RuntimeException("Endpoint base currency is not USD");
         }
 
-        return $response->rates;
+        return (array) $response->rates;
     }
 }
