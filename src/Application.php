@@ -79,14 +79,14 @@ class Application
      */
     protected function getContainer(): ContainerInterface
     {
-        if ($this->container instanceof ContainerInterface) {
+        if (!empty($this->container)) {
             return $this->container;
         }
 
         $builder = new ContainerBuilder();
         $builder->enableCompilation(__DIR__ . '/../storage/tmp');
         $builder->writeProxiesToFile(true, __DIR__ . '/../storage/tmp/proxies');
-        $builder->addDefinitions('config.php');
+        $builder->addDefinitions(__DIR__ . '/config.php');
         return $this->container = $builder->build();
     }
 }
