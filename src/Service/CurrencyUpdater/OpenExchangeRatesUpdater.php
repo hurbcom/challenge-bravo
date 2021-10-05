@@ -9,6 +9,8 @@ use App\Model\Currency;
 use App\Repository\CurrencyRepositoryInterface;
 use Brick\Math\BigDecimal;
 use RuntimeException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Currency updater using OpenExchangeRate API
@@ -18,7 +20,8 @@ use RuntimeException;
 class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
 {
     public function __construct(
-        private UpdaterLogger $logger
+        private UpdaterLogger $logger,
+        private FilesystemAdapter $cache
     ) {}
 
     /**
@@ -37,9 +40,14 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
         $allUpdateableCurrencies = $currencyRepository->getBySource(self::getId());
         $updateableCodes = array_map(fn ($c) => $c->getCode(), $allUpdateableCurrencies);
 
+        $fetchRates = $this->cache->get(
+            'open_exchange',
+            fn (ItemInterface $i) => $this->fetchRates($i)
+        );
+
         // Should update only available codes on our currency database
         $requiredCurrencies = array_filter(
-            $this->fetchRates(),
+            $fetchRates,
             fn ($code) => in_array($code, $updateableCodes),
             ARRAY_FILTER_USE_KEY
         );
@@ -67,8 +75,18 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
         }
     }
 
-    private function fetchRates()
+    private function fetchRates(ItemInterface $item)
     {
+        $exp = filter_var($_ENV['OPEN_EXCHANGE_CACHE_EXPIRATION'], FILTER_VALIDATE_INT);
+
+        if (!is_integer($exp)) {
+            throw new RuntimeException(
+                "Environment variable [OPEN_EXCHANGE_CACHE_EXPIRATION] malformatted or missing."
+            );
+        }
+
+        $item->expiresAfter($exp);
+
         if (empty($_ENV['OPEN_EXCHANGE_RATE_KEY'])) {
             throw new RuntimeException('OpenExchangeRate key is not set');
         }
