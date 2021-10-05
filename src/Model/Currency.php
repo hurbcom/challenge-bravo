@@ -52,6 +52,17 @@ class Currency
         return $normalizedCode;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'code' => $this->getCode(),
+            'value' => $this->getValue(),
+            'source' => $this->getSource(),
+            'created_at' => $this->getCreatedAt()->format(DateTimeInterface::ISO8601),
+            'updated_at' => $this->getUpdatedAt()->format(DateTimeInterface::ISO8601),
+        ];
+    }
+
     public function getCode(): string
     {
         return $this->code;
