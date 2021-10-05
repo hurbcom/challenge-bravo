@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Connection;
 use App\Model\Currency;
+use Brick\Math\BigDecimal;
 use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +17,7 @@ final class CurrencyRepositoryTest extends TestCase
         $conn = new Connection();
 
         $code = 'BRL';
-        $value = '100';
+        $value = BigDecimal::of('100');
         $source = 'undefined';
         $currency = Currency::create($code, $value);
 

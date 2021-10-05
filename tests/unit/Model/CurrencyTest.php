@@ -7,7 +7,6 @@ namespace App\Model;
 use App\Exception\CurrencyCodeException;
 use App\Model\Currency as Currency;
 use Brick\Math\BigDecimal;
-use Brick\Math\Exception\NumberFormatException;
 use DateTime;
 use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
@@ -74,14 +73,6 @@ final class CurrencyTest extends TestCase
             DateTimeInterface::class,
             $cur->getUpdatedAt()
         );
-    }
-
-    public function testCreateConstructorMethodWithInvalidString()
-    {
-        $code = 'BRL';
-        $stringValue = 'test';
-        $this->expectException(NumberFormatException::class);
-        Currency::create($code, $stringValue);
     }
 
     public function testNormalizeCodeStaticMethod()
