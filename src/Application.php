@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Command\UpdateCurrenciesCommand;
 use DI\ContainerBuilder;
+use Invoker\Invoker;
+use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Laminas\Diactoros\ResponseFactory;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
@@ -18,6 +21,16 @@ class Application
 {
     // Use getContainer
     private ?ContainerInterface $container;
+
+    public function __construct()
+    {
+        $i = new Invoker(
+            new TypeHintContainerResolver($this->getContainer()),
+            $this->getContainer()
+        );
+
+        $i->call(UpdateCurrenciesCommand::class);
+    }
 
     /**
      * Runs application's web entrypoint
