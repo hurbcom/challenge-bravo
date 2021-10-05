@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Connection;
 use App\Repository\CurrencyRepository;
 use App\Repository\CurrencyRepositoryInterface;
 use App\Service\Converter\ConverterInterface;
