@@ -7,3 +7,5 @@ services:
       - 80:80
     volumes:
       - ./:/var/www/
+    environment:
+      OPEN_EXCHANGE_CACHE_EXPIRATION: 3600
