@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Converter;
 
+use App\Exception\CurrencyValueException;
 use App\Model\Currency;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
