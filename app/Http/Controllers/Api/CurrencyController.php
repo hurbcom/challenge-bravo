@@ -68,7 +68,7 @@ class CurrencyController extends Controller
         }
 
         if(!$currency) {
-            return response()->json(['error' => 'Currency Not Found.'], 403);
+            return response()->json(['error' => 'Currency Not Found.'], 404);
         }
 
         return response()->json([], 204);
