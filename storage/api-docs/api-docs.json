@@ -1,0 +1,494 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "HURB - Challenge Bravo",
+        "description": "API Mannagement",
+        "contact": {
+            "email": "thiagoluna2@gmail.comr"
+        },
+        "license": {
+            "name": "© 2021",
+            "url": "https://lt.coop.br/"
+        },
+        "version": "0.0.1"
+    },
+    "paths": {
+        "/api/v1/currencies": {
+            "get": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Lista de todas as Moedas cadastradas na API",
+                "description": "Lista de todas as Moedas cadastradas na API",
+                "operationId": "id",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrencyResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Cadastrar uma Moeda",
+                "description": "Cadastrar uma nova Moeda. Toda moeda Fictícia terá USD como moeda de lastro. No momento do cadastro o sistema verifica se a moeda informada é real ou fictícia. Se for real, mesmo que o usuário informe o 'Valor Equivalente', ele não será gravado. Se for moeda fictícia, este valor é obrigatório. Retorna a moeda cadastrada.\n * Valor Equivalente: representa o quanto a moeda fictícia vale em relação a 1 dolar (USD). Ex.: 1 HURB equivale 3 USD.\n * O sistema utiliza uma API pública para verificar se a moeda informada é real.\n * code_currency é obrigatório",
+                "operationId": "createCurrency",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CurrencyRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "{'success': 'Currency json data'}"
+                    },
+                    "420": {
+                        "description": "{'error': 'For fictitious Currency you should fill equivalent_value field.'}"
+                    },
+                    "422": {
+                        "description": "Retorno será um array contendo a informação do(s) campo(s) obrigatório(s)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code_currency": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "The code currency field is required."
+                                                ]
+                                            }
+                                        },
+                                        "code_currency ": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "The code currency has already been taken."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/currencies/{id}": {
+            "get": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Retornar 1 Moeda",
+                "description": "Retorna uma moeda pelo ID",
+                "operationId": "UmaMoeda",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da Moeda",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "1"
+                                                    },
+                                                    "code_currency": {
+                                                        "type": "string",
+                                                        "example": "hurb"
+                                                    },
+                                                    "base_currency": {
+                                                        "type": "string",
+                                                        "example": "usd"
+                                                    },
+                                                    "equivalente_value": {
+                                                        "type": "decimal",
+                                                        "example": "1.2456"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "{'error': 'ID must be a number.}"
+                    },
+                    "404": {
+                        "description": "{'error': 'Currency Not Found.' }"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Deletar uma Moeda",
+                "description": "Deletar uma Moeda.\n * Somente a moeda USD não pode ser deletada. Ela é a moeda de Lastro usada por todas as moedas Fictícias.",
+                "operationId": "deleteCurrency",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da Moeda",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "{ }"
+                    },
+                    "400": {
+                        "description": "{'error': 'ID must be a number.'}"
+                    },
+                    "403": {
+                        "description": "{'error': 'Not allowed to delete USD currency.'}"
+                    },
+                    "404": {
+                        "description": "{'error': 'Currency Not Found.'}"
+                    }
+                }
+            }
+        },
+        "/api/v1/currencies/convert-amount?from={code_currency}&to={to_code_currency}&amount={amount}": {
+            "get": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Converter Moeda",
+                "description": "Retorna o valor informado convertido na moeda desejada. A conversão será feita apenas para as moedas cadastradas. Caso alguma moeda informada nos parâmetros não esteja cadastrada, o endpoint retornará uma mensagem de Moeda não Encontrada. 3 parametros obrigatórios:\n * from (modeda a ser convertida)\n * to (moeda após converrsão)\n * amount (valor a ser convertido)",
+                "operationId": "ConvertCurrency",
+                "parameters": [
+                    {
+                        "name": "code_currency",
+                        "in": "path",
+                        "description": "Modeda a ser convertida. Ex.: USD",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "to_code_currency",
+                        "in": "path",
+                        "description": "Moeda após converrsão. Ex.: BRL",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "amount",
+                        "in": "path",
+                        "description": "Valor a ser convertido. Ex.: 10.25",
+                        "required": false,
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "amount": {
+                                                        "type": "string",
+                                                        "example": "1"
+                                                    },
+                                                    "currency": {
+                                                        "type": "string",
+                                                        "example": "usd"
+                                                    },
+                                                    "amountConverted": {
+                                                        "type": "string",
+                                                        "example": "5,4771"
+                                                    },
+                                                    "currencyAmountConverted": {
+                                                        "type": "string",
+                                                        "example": "brl"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Retorno será um array contendo a informação do(s) campo(s) obrigatório(s)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "to": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "The to field is required."
+                                                ]
+                                            }
+                                        },
+                                        "from": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "The from field is required."
+                                                ]
+                                            }
+                                        },
+                                        "amount ": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "float",
+                                                "enum": [
+                                                    "The amount field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "{'error': 'Could not resolve host: cdn.jsdelivr.net'}"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ConvertRequest": {
+                "title": "Validation Rules to convert currencies",
+                "description": "Regras de Validação dos parâmetros que são informados no endpoint de conversão de moeda",
+                "required": [
+                    "to",
+                    "from",
+                    "amount"
+                ],
+                "properties": {
+                    "from": {
+                        "title": "from",
+                        "description": "Sigla da Moeda a ser convertida",
+                        "type": "string",
+                        "example": "HURB"
+                    },
+                    "to": {
+                        "title": "to",
+                        "description": "Sigla da moeda após conversão.",
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "amount": {
+                        "title": "amount",
+                        "description": "Valor a ser convertido",
+                        "type": "number",
+                        "format": "float",
+                        "example": "200.70"
+                    }
+                },
+                "type": "object"
+            },
+            "CurrencyRequest": {
+                "title": "Validation Rules to Store new Currency",
+                "description": "Regras de Validação dos parâmetros que são informados no cadastro de uma nova Moeda",
+                "required": [
+                    "code_currency"
+                ],
+                "properties": {
+                    "code_currency": {
+                        "title": "code_currency",
+                        "description": "Sigla da Moeda",
+                        "type": "string",
+                        "example": "HURB"
+                    },
+                    "equivalent_value": {
+                        "title": "equivalent_value",
+                        "description": "Valor para relação entre a moeda fictícia e o dolar",
+                        "type": "number",
+                        "format": "float",
+                        "example": "1.25"
+                    }
+                },
+                "type": "object"
+            },
+            "CurrencyResource": {
+                "title": "Currency Resource",
+                "description": "Resource para padronizar as respostas dos endpoints em formato json:api. https://jsonapi.org/",
+                "properties": {
+                    "data": {
+                        "title": "Data",
+                        "description": "Data wrapper",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Currency"
+                        }
+                    },
+                    "links": {
+                        "title": "links",
+                        "description": "Data wrapper",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "first": {
+                                    "type": "integer",
+                                    "example": ".../api/v1/currencies?page=1"
+                                },
+                                "last": {
+                                    "type": "integer",
+                                    "example": ".../api/v1/currencies?page=2"
+                                },
+                                "prev": {
+                                    "type": "integer",
+                                    "example": "null"
+                                },
+                                "next": {
+                                    "type": "integer",
+                                    "example": "null"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "meta": {
+                        "title": "Meta",
+                        "description": "Data wrapper",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "current_page": {
+                                    "type": "integer",
+                                    "example": "1"
+                                },
+                                "from": {
+                                    "type": "integer",
+                                    "example": "1"
+                                },
+                                "last_page": {
+                                    "type": "integer",
+                                    "example": "1"
+                                },
+                                "path": {
+                                    "type": "string",
+                                    "example": ".../api/v1/currencies"
+                                },
+                                "per_page": {
+                                    "type": "integer",
+                                    "example": "15"
+                                },
+                                "to": {
+                                    "type": "integer",
+                                    "example": "2"
+                                },
+                                "total": {
+                                    "type": "integer",
+                                    "example": "2"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "CurrencyResource"
+                }
+            },
+            "Currency": {
+                "title": "Currency model",
+                "description": "Currency model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": "22"
+                    },
+                    "code_currency": {
+                        "title": "Code Currency",
+                        "description": "Code Currency",
+                        "type": "string",
+                        "example": "hurb"
+                    },
+                    "base_currency": {
+                        "title": "Base Currency",
+                        "description": "Base Currenci (Lastro)",
+                        "type": "string",
+                        "example": "usd"
+                    },
+                    "equivalent_value": {
+                        "title": "Equivalent Value",
+                        "description": "Equivalent Value",
+                        "type": "number",
+                        "format": "float",
+                        "example": 3.1456
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Challenge Bravo",
+            "description": "API Endpoints of Project"
+        }
+    ],
+    "security": [
+        []
+    ]
+}
