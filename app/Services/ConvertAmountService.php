@@ -22,7 +22,7 @@ class ConvertAmountService
          * Conversion between True Currencies - e.g USD to BRL
          */
         if ($from[1] === null && $to[1] === null) {
-            $url = env('URL_API_CURRENCY') . "{$from[0]}/{$to[0]}.json";
+            $url = env('URL_API_CURRENCY') . "/{$from[0]}/{$to[0]}.json";
 
             try {
                 $currencyRate    = $this->getCurrencyRate($url);
@@ -40,7 +40,7 @@ class ConvertAmountService
          */
         if ($from[1] === null && $to[1] !== null) {
 
-            $url = env('URL_API_CURRENCY') . "{$from[0]}/usd.json";
+            $url = env('URL_API_CURRENCY') . "/{$from[0]}/usd.json";
 
             try {
                 $currencyRate = $this->getCurrencyRate($url);
@@ -62,7 +62,7 @@ class ConvertAmountService
          * Conversion between fictitious Currency and True Currency - e.g. PSN x BRL
          */
         if ($from[1] !== null && $to[1] === null) {
-            $url = env('URL_API_CURRENCY') . "usd/{$to[0]}.json";
+            $url = env('URL_API_CURRENCY') . "/usd/{$to[0]}.json";
 
             try {
                 $currencyRate = $this->getCurrencyRate($url);
@@ -84,15 +84,8 @@ class ConvertAmountService
          * Conversion between fictitious Currencies - e.g. PSN to XBX
          */
         if ($from[1] !== null && $to[1] !== null) {
-
-            try {
-                $amountConverted = $amount * $from[1] / $to[1];
-
-                return number_format($amountConverted, 4, ',', '.');
-            } catch (\Exception $e) {
-                $error_msg = $e->getMessage();
-                throw new \Exception($error_msg);
-            }
+            $amountConverted = $amount * $from[1] / $to[1];
+            return number_format($amountConverted, 4, ',', '.');
         }
     }
 
@@ -103,7 +96,7 @@ class ConvertAmountService
     protected function getCurrencyRate(string $url) : array
     {
         try{
-            return Cache::remember($url, 60, function () use ($url) {
+            return Cache::remember($url, env('CACHE_LIFETIME'), function () use ($url) {
                 return $this->httpClient->startHttpClient($url, 'GET');
             });
         } catch (\Exception $e) {

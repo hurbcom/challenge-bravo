@@ -127,9 +127,9 @@ class CurrencyService
      */
     protected function getAllCurrencies() : array
     {
-        $url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json';
+        $url = env('URL_API_CURRENCY') . ".json";
         try{
-            return Cache::remember($url, 60 * 60 * 24, function () use ($url) {
+            return Cache::remember($url, env('CACHE_LIFETIME_1_DAY'), function () use ($url) {
                 return $this->httpClient->startHttpClient($url, 'GET');
             });
         } catch (\Exception $e) {
