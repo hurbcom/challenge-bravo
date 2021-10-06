@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+
+  app:
+    build:
+      context: .
+      args:
+        user: user
+        uid: 1000
+    container_name: app
+    restart: unless-stopped
+    entrypoint: dockerize -template ./.docker/app/.env:.env -wait tcp://db:3306 -timeout 40s ./.docker/entrypoint.sh
+    environment:
+      - _DB_HOST=db
+      - _DB_DATABASE=hurb_bravo
+      - _DB_USERNAME=root
+      - _DB_PASSWORD=root
+      - _REDIS_HOST=redis
+    volumes:
+      - .:/var/www
+    networks:
+      - app-network
+    depends_on:
+      - db
+      - redis
+
+  nginx:
+    build: .docker/nginx
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+    networks:
+      - app-network
+    depends_on:
+      - app
+
+  db:
+    build: ./.docker/mysql
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "33006:3306"
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=hurb_bravo
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_USER=root
+    networks:
+      - app-network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
