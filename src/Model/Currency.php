@@ -11,6 +11,8 @@ use DateTimeInterface;
 
 class Currency
 {
+    public const STATIC_SOURCE_ID = 'static';
+
     private string $code;
     private string $value;
     private string $source;
