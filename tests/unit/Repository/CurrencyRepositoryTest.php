@@ -44,6 +44,7 @@ final class CurrencyRepositoryTest extends TestCase
         $conn = new Connection();
         $repo = new CurrencyRepository($conn);
         $code = 'BRL';
+        $repo->set(Currency::create($code, BigDecimal::zero()));
 
         $this->assertTrue($repo->delete($code));
         $cur = $repo->get($code);
