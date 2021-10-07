@@ -1,4 +1,8 @@
 <phpunit colors="true" bootstrap="src/bootstrap.php">
+    <php>
+        <env name="APP_ENV" value="testing"/>
+    </php>
+
     <testsuites>
         <testsuite name="All">
             <directory>tests/unit/</directory>
