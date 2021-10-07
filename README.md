@@ -1,78 +1,79 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+## 💻 Resumo do projeto
 
-A API deve, originalmente, converter entre as seguintes moedas:
+Este projeto foi realizado utilizando sem a utilização de um framework, todo código não originário das pastas vendors e db (templates gerados pelo phinx) é de minha autoria.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Tecnologias:
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+- Docker
+- PHP 8
+- Nginx
+- SQLite
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+### 📑 Framework MVC e componentes
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+O sistema MVC foi desenvolvido com o auxilio do ecossistema de pacotes do PHP e utilizando os padrões da PSR de interfaces interoperaveis. Com isso foi construído um sistema MVC simples e eficiente, onde o maior tempo de processamento (avaliado pelo profiler do xdebug com kcachegrid) se dá no autoloading do composer, mesmo após as [otimizações recomendadas pelo fornecedor](https://getcomposer.org/doc/articles/autoloader-optimization.md).
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+- [Laminas diactoros](https://docs.laminas.dev/laminas-diactoros/) - Responsável pela criação de Requisições e Respostas conforme o padrão [PSR-7](https://www.php-fig.org/psr/psr-7/) e fábricas de Respostas [PSR-17](https://www.php-fig.org/psr/psr-17/)
+- [League Route](https://route.thephpleague.com/) - Interpretador de rotas, um wrapper para o [fastrouter](https://github.com/nikic/FastRoute) compatível com [PSR-7](https://www.php-fig.org/psr/psr-7/) e [PSR-15](https://www.php-fig.org/psr/psr-15/)
+- [Laminas Http Request Handler Runner](https://docs.laminas.dev/laminas-httphandlerrunner/) - Emissor de respostas
+- [php-di](https://php-di.org/) - Container de injeção de dependecias compatível com [PSR-11](https://www.php-fig.org/psr/psr-11/)
+- [phinx](https://phinx.org/) - Sistema de migrações de banco de dados
+- [monolog](https://github.com/Seldaek/monolog) - Sistema de logs padrão de mercado compatível com [PSR-3](https://www.php-fig.org/psr/psr-3/)
+- [brick/math](https://github.com/brick/math) - Biblioteca de operações de cálculo de precisão arbitrária, é necessário uma vez que o php não lida bem com operações de ponto flutuante
+- [symfony/cache](https://symfony.com/doc/current/components/cache.html) - Componente cache do symfony responsável por armazenar a requisição da API
+- [phpunit](https://phpunit.de/) - Suite de testes automatizados da família xUnit
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
+### 💱 API de Conversão
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+Rotas para API de conversão, as duas são sinônimos
+A requisição recebe como parâmetro: A moeda de origem, o valor a ser convertido e a moeda final.
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+- \[GET\] /?from=BTC&to=EUR&amount=123.45
+- \[GET\] /api/v1/converter?from=BTC&to=EUR&amount=123.45
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+### 💲 API de Controle das moedas suportadas
 
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+Rotas para API de controle de moedas:
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+| METODO | URL                    | EXPLICAÇÃO                                |
+|--------|------------------------|-------------------------------------------|
+| GET    | /api/v1/currencies     | Lista moedas suportadas com suas cotações |
+| GET    | /api/v1/currencies/ABC | Lista moeda ABC com sua cotação           |
+| PUT    | /api/v1/currencies/ABC | Cria/Atualiza cotação de moeda ABC        |
+| DELETE | /api/v1/currencies/ABC | Deleta moeda ABC                          |
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+* Obs: As APIs não foram protegidas em nível de aplicação pois acredita-se que em produção elas seriam protegidas à nível de borda.
 
-## Requisitos
+## 🔧 Instalação
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+Para iniciar a aplicação é necessário copiar o arquivo _.env.example_ para _.env_
 
-## Critério de avaliação
+```bash
+# Instalação das dependencias/pacotes
+./composer install -o --apcu-autoloader --no-dev
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+# Executando migrações de banco de dados e seeding
+./phinx migrate
+./phinx seed:run
 
-## Dúvidas
+# Inicia sistema na porta 80
+docker-compose up -d
+```
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+## 🔨 Testes
 
-Boa sorte e boa viagem! ;)
+Para rodar os testes
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+```bash
+# Instalação das dependencias/pacotes
+./composer install
+
+# Executando a suite de testes
+./phpunit
+```
+
+## 🎯 Teste de carga
+
+O teste de carga realizado utilizando JMeter constatou uma taxa de 300reqs/sec com a stack php-apache, ao trocar e configurar uma stack nginx/php-fpm a taxa foi para **1200reqs/sec**.
