@@ -4,7 +4,7 @@
 
 Este projeto foi realizado utilizando sem a utilização de um framework, todo código não originário das pastas vendors e db (templates gerados pelo phinx) é de minha autoria.
 
-Tecnologias:
+**Tecnologias:**
 
 - Docker
 - PHP 8
@@ -13,7 +13,9 @@ Tecnologias:
 
 ### 📑 Framework MVC e componentes
 
-O sistema MVC foi desenvolvido com o auxilio do ecossistema de pacotes do PHP e utilizando os padrões da PSR de interfaces interoperaveis. Com isso foi construído um sistema MVC simples e eficiente, onde o maior tempo de processamento (avaliado pelo profiler do xdebug com kcachegrid) se dá no autoloading do composer, mesmo após as [otimizações recomendadas pelo fornecedor](https://getcomposer.org/doc/articles/autoloader-optimization.md).
+O sistema MVC foi desenvolvido com o auxilio do ecossistema de pacotes do PHP e utilizando os padrões da PSR de interfaces interoperaveis.
+
+Com isso foi construído um sistema MVC simples e eficiente, onde o maior tempo de processamento (avaliado pelo profiler do xdebug com kcachegrid) se dá no autoloading do composer, mesmo após as [otimizações recomendadas pelo fornecedor](https://getcomposer.org/doc/articles/autoloader-optimization.md).
 
 - [Laminas diactoros](https://docs.laminas.dev/laminas-diactoros/) - Responsável pela criação de Requisições e Respostas conforme o padrão [PSR-7](https://www.php-fig.org/psr/psr-7/) e fábricas de Respostas [PSR-17](https://www.php-fig.org/psr/psr-17/)
 - [League Route](https://route.thephpleague.com/) - Interpretador de rotas, um wrapper para o [fastrouter](https://github.com/nikic/FastRoute) compatível com [PSR-7](https://www.php-fig.org/psr/psr-7/) e [PSR-15](https://www.php-fig.org/psr/psr-15/)
@@ -30,8 +32,11 @@ O sistema MVC foi desenvolvido com o auxilio do ecossistema de pacotes do PHP e 
 Rotas para API de conversão, as duas são sinônimos
 A requisição recebe como parâmetro: A moeda de origem, o valor a ser convertido e a moeda final.
 
-- \[GET\] /?from=BTC&to=EUR&amount=123.45
-- \[GET\] /api/v1/converter?from=BTC&to=EUR&amount=123.45
+
+| METODO | URL                                                  | EXPLICAÇÃO       |
+|--------|------------------------------------------------------|------------------|
+| GET    | /?from=BTC&to=EUR&amount=123.45                      | Converte cotação |
+| GET    | /api/v1/converter??from=BTC&to=EUR&amount=123.45     | Converte cotação |
 
 ### 💲 API de Controle das moedas suportadas
 
