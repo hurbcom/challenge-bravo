@@ -41,11 +41,11 @@ class Currency
      * @return string
      * @throws CurrencyCodeException on invalid currency format
      */
-    public static function normalizeCode(string $code): string
+    public static function normalizeCode(string $code, bool $forceValidation = false): string
     {
         $normalizedCode = strtoupper($code);
 
-        if (!preg_match('/^[A-Z]{3}$/', $normalizedCode)) {
+        if ($forceValidation && !preg_match('/^[A-Z]{3}$/', $normalizedCode)) {
             throw new CurrencyCodeException("Invalid format: Don't match 3 letters code format.");
         }
 
