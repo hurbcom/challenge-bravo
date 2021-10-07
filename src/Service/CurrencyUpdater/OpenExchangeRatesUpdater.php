@@ -32,6 +32,9 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
         return 'open-exchange-rates';
     }
 
+    /**
+     * @inheritDoc
+     */
     public function lookup(Currency $currency): ?BigDecimal
     {
         $rates = $this->getRates();
