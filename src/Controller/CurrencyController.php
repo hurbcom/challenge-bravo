@@ -67,7 +67,7 @@ class CurrencyController
         if ($filledAmount) {
             $value = BigDecimal::of($input['amount']);
             $currency->setValue($value);
-            $currency->setSource('static');
+            $currency->setSource(Currency::STATIC_SOURCE_ID);
         }
 
         if ($filledSource) {
