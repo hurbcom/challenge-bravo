@@ -86,12 +86,12 @@ final class CurrencyTest extends TestCase
 
         // Should be equal
         $code2 = 'USD';
-        $current2 = Currency::normalizeCode($code2);
+        $current2 = Currency::normalizeCode($code2, true);
         $this->assertEquals($code2, $current2);
 
         // Should throw exception
         $this->expectException(CurrencyCodeException::class);
-        Currency::normalizeCode('dasdwqe');
+        Currency::normalizeCode('dasdwqe', true);
     }
 
     public function testToArrayMethod()
