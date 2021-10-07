@@ -36,7 +36,7 @@ A requisição recebe como parâmetro: A moeda de origem, o valor a ser converti
 | METODO | URL                                                  | EXPLICAÇÃO       |
 |--------|------------------------------------------------------|------------------|
 | GET    | /?from=BTC&to=EUR&amount=123.45                      | Converte cotação |
-| GET    | /api/v1/converter??from=BTC&to=EUR&amount=123.45     | Converte cotação |
+| GET    | /api/v1/converter?from=BTC&to=EUR&amount=123.45     | Converte cotação |
 
 ### 💲 API de Controle das moedas suportadas
 
@@ -51,9 +51,9 @@ Rotas para API de controle de moedas:
 
 * Obs: As APIs não foram protegidas em nível de aplicação pois acredita-se que em produção elas seriam protegidas à nível de borda.
 
-## 🔧 Instalação
+## 🚀 Instalação
 
-Para iniciar a aplicação é necessário copiar o arquivo _.env.example_ para _.env_
+Para iniciar a aplicação é necessário copiar o arquivo **.env.example** para **.env**
 
 ```bash
 # Instalação das dependencias/pacotes
