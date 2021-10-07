@@ -77,7 +77,7 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
 
     private function fetchRates(ItemInterface $item)
     {
-        $exp = filter_var($_ENV['OPEN_EXCHANGE_CACHE_EXPIRATION_SECONDS'], FILTER_VALIDATE_INT);
+        $exp = filter_var($_SERVER['OPEN_EXCHANGE_CACHE_EXPIRATION_SECONDS'], FILTER_VALIDATE_INT);
 
         if (!is_integer($exp)) {
             throw new RuntimeException(
@@ -87,11 +87,11 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
 
         $item->expiresAfter($exp);
 
-        if (empty($_ENV['OPEN_EXCHANGE_RATE_KEY'])) {
+        if (empty($_SERVER['OPEN_EXCHANGE_RATE_KEY'])) {
             throw new RuntimeException('OpenExchangeRate key is not set');
         }
 
-        $key = $_ENV['OPEN_EXCHANGE_RATE_KEY'];
+        $key = $_SERVER['OPEN_EXCHANGE_RATE_KEY'];
 
         $latest = file_get_contents(
             "https://openexchangerates.org/api/latest.json?app_id={$key}&show_alternative=1"
