@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run -it -v $(pwd):/app -w /app --rm php:8-cli php vendor/bin/phpunit
+docker run -it --env-file ./.env -v $(pwd):/app -w /app --rm php:8-cli php vendor/bin/phpunit
