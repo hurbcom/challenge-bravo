@@ -1,11 +1,23 @@
 version: "3.3"
 
 services:
-  server:
-    build: ./docker/php
-    ports:
-      - 80:80
-    volumes:
-      - ./:/var/www/
+  php-fpm:
+    build: ./docker/php-fpm
     environment:
       OPEN_EXCHANGE_CACHE_EXPIRATION_SECONDS: 3600
+    volumes:
+      - ./:/var/www/
+      - ./docker/php-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf
+      - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/logs/php-fpm:/var/log/php-fpm
+
+  nginx:
+    image: nginx
+    ports:
+      - 81:80
+    links:
+      - php-fpm:php-fpm
+    volumes:
+      - ./:/var/www/
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/logs/nginx:/var/log/nginx
