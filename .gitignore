@@ -1,3 +1,4 @@
 /vendor/
 /storage/
 /docker/logs
+/.phpunit.result.cache
