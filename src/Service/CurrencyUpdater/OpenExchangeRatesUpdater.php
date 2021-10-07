@@ -88,7 +88,7 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
      *
      * @return array of rates
      */
-    private function getRates()
+    protected function getRates()
     {
         return $this->cache->get(
             'open_exchange',
@@ -96,7 +96,7 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
         );
     }
 
-    private function fetchRates(ItemInterface $item)
+    protected function fetchRates(ItemInterface $item)
     {
         $exp = filter_var($_SERVER['OPEN_EXCHANGE_CACHE_EXPIRATION_SECONDS'], FILTER_VALIDATE_INT);
 
