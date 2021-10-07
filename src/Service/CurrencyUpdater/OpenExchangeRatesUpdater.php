@@ -116,7 +116,7 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
         );
 
         $this->logger->debug("OpenExangeRates response: " . $latest);
-        $response = json_decode($latest);
+        $response = json_decode($latest, false, 512, JSON_BIGINT_AS_STRING);
 
         if ($response->base !== 'USD') {
             throw new RuntimeException("Endpoint base currency is not USD");
