@@ -15,7 +15,7 @@ services:
   nginx:
     image: nginx
     ports:
-      - 81:80
+      - 80:80
     links:
       - php-fpm:php-fpm
     volumes:
