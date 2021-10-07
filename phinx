@@ -1,2 +1,7 @@
 #!/bin/bash
-docker run -it --env-file ./.env -v $(pwd):/app -w /app --rm php:8-cli php vendor/bin/phinx $*
+docker run --rm -it \
+    --env-file ./.env \
+    --user $(id -u):$(id -g) \
+    --volume $(pwd):/app \
+    --workdir /app \
+    php:8-cli php vendor/bin/phinx $*
