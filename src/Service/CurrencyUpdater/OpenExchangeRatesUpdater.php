@@ -32,6 +32,16 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
         return 'open-exchange-rates';
     }
 
+    public function lookup(Currency $currency): ?BigDecimal
+    {
+        $rates = $this->getRates();
+        try {
+            return BigDecimal::of($rates[$currency->getCode()]);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
     /**
      * @inheritDoc
      */
@@ -40,14 +50,9 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
         $allUpdateableCurrencies = $currencyRepository->getBySource(self::getId());
         $updateableCodes = array_map(fn ($c) => $c->getCode(), $allUpdateableCurrencies);
 
-        $fetchRates = $this->cache->get(
-            'open_exchange',
-            fn (ItemInterface $i) => $this->fetchRates($i)
-        );
-
         // Should update only available codes on our currency database
         $requiredCurrencies = array_filter(
-            $fetchRates,
+            $this->getRates(),
             fn ($code) => in_array($code, $updateableCodes),
             ARRAY_FILTER_USE_KEY
         );
@@ -73,6 +78,19 @@ class OpenExchangeRatesUpdater implements CurrencyUpdaterInterface
         foreach ($newCurrencies as $currency) {
             $currencyRepository->set($currency);
         }
+    }
+
+    /**
+     * Get cached rates
+     *
+     * @return array of rates
+     */
+    private function getRates()
+    {
+        return $this->cache->get(
+            'open_exchange',
+            fn (ItemInterface $i) => $this->fetchRates($i)
+        );
     }
 
     private function fetchRates(ItemInterface $item)
