@@ -29,14 +29,15 @@ Com isso foi construído um sistema MVC simples e eficiente, onde o maior tempo 
 
 ### 💱 API de Conversão
 
-Rotas para API de conversão, as duas são sinônimos
+Rotas para API de conversão, as duas são sinônimos.
+
 A requisição recebe como parâmetro: A moeda de origem, o valor a ser convertido e a moeda final.
 
 
 | METODO | URL                                                  | EXPLICAÇÃO       |
 |--------|------------------------------------------------------|------------------|
 | GET    | /?from=BTC&to=EUR&amount=123.45                      | Converte cotação |
-| GET    | /api/v1/converter?from=BTC&to=EUR&amount=123.45     | Converte cotação |
+| GET    | /api/v1/converter?from=BTC&to=EUR&amount=123.45      | Converte cotação |
 
 ### 💲 API de Controle das moedas suportadas
 
@@ -49,7 +50,27 @@ Rotas para API de controle de moedas:
 | PUT    | /api/v1/currencies/ABC | Cria/Atualiza cotação de moeda ABC        |
 | DELETE | /api/v1/currencies/ABC | Deleta moeda ABC                          |
 
-* Obs: As APIs não foram protegidas em nível de aplicação pois acredita-se que em produção elas seriam protegidas à nível de borda.
+* Obs: As APIs não foram protegidas em nível de aplicação pois acredita-se que em produção elas seriam protegidas à nível de borda (API Gateway).
+
+#### Criando ou atualizando moedas suportadas
+
+Ao utilizar \[PUT\]/api/v1/currencies/ABC deve se passar o valor fixado da moeda ou provedor
+
+**Valor fixado**
+
+```json
+{
+    "amount": 123
+}
+```
+
+**Provedor**
+
+```json
+{
+    "source": "open-exchange-rates"
+}
+```
 
 ## 🚀 Instalação
 
@@ -67,6 +88,8 @@ Para iniciar a aplicação é necessário copiar o arquivo **.env.example** para
 docker-compose up -d
 ```
 
+* Obs: Os comandos ./phinx, ./phpunit e ./composer são wrappers em bash para comandos em docker
+
 ## 🔨 Testes
 
 Para rodar os testes
@@ -78,6 +101,8 @@ Para rodar os testes
 # Executando a suite de testes
 ./phpunit
 ```
+
+* Obs: Os comandos ./phinx, ./phpunit e ./composer são wrappers em bash para comandos em docker
 
 ## 🎯 Teste de carga
 
