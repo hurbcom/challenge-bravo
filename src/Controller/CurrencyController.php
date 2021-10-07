@@ -13,14 +13,20 @@ use Laminas\Diactoros\Response\JsonResponse;
 use League\Route\Http\Exception\NotFoundException;
 use League\Route\Http\Exception\UnprocessableEntityException;
 use PDOException;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class CurrencyController
 {
+    private const SUPPORTED_UPDATERS = [
+        'open-exchange-rates' => OpenExchangeRatesUpdater::class
+    ];
+
     public function __construct(
         protected ResponseFactoryInterface $responseFactory,
-        protected CurrencyRepositoryInterface $currencyRepository
+        protected CurrencyRepositoryInterface $currencyRepository,
+        protected ContainerInterface $container
     ) {}
 
     public function list(ServerRequestInterface $request, $args): array
@@ -71,14 +77,9 @@ class CurrencyController
         }
 
         if ($filledSource) {
-            $oerId = OpenExchangeRatesUpdater::getId();
-
-            if ($input['source'] === $oerId) {
-                $currency->setValue(BigDecimal::zero());
-                $currency->setSource($oerId);
-            } else {
-                throw new UnprocessableEntityException("Source not compatible.");
-            }
+            $value = $this->getValueFromSource($input['source'], $currency);
+            $currency->setValue($value);
+            $currency->setSource($input['source']);
         }
 
         try {
@@ -100,5 +101,28 @@ class CurrencyController
         }
 
         return new JsonResponse(null, 204);
+    }
+
+    /**
+     * Make a lookup on source to find the actual currency value
+     *
+     * @param string $source
+     * @param Currency $currency
+     * @return BigDecimal
+     */
+    private function getValueFromSource($source, Currency $currency): BigDecimal
+    {
+        $updater = self::SUPPORTED_UPDATERS[$source] ?? null;
+
+        if (empty($updater)) {
+            throw new UnprocessableEntityException("Source not found.");
+        }
+
+        $value = $this->container->get($updater)->lookup($currency);
+        if (empty($value)) {
+            throw new UnprocessableEntityException("Source not compatible with currency.");
+        }
+
+        return $value;
     }
 }
