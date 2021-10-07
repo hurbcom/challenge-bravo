@@ -19,7 +19,7 @@ final class CreateCurrencyTable extends AbstractMigration
      */
     public function change(): void
     {
-        $this->table('currency')
+        $this->table('currencies')
             ->addColumn('code', 'string')
             ->addColumn('value', 'decimal')
             ->addColumn('source', 'string')
