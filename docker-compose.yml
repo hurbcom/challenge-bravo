@@ -4,7 +4,8 @@ services:
   php-fpm:
     build: ./docker/php-fpm
     environment:
-      OPEN_EXCHANGE_CACHE_EXPIRATION_SECONDS: 3600
+      OPEN_EXCHANGE_RATE_KEY: ${OPEN_EXCHANGE_RATE_KEY}
+      OPEN_EXCHANGE_CACHE_EXPIRATION_SECONDS: ${OPEN_EXCHANGE_CACHE_EXPIRATION_SECONDS}
     volumes:
       - ./:/var/www/
       - ./docker/php-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf
