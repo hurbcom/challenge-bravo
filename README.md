@@ -54,7 +54,7 @@ Rotas para API de controle de moedas:
 
 #### Criando ou atualizando moedas suportadas
 
-Ao utilizar \[PUT\]/api/v1/currencies/ABC deve se passar o valor fixado da moeda ou provedor
+Ao utilizar **PUT /api/v1/currencies/ABC** deve se passar o valor fixado da moeda ou provedor
 
 **Valor fixado**
 
