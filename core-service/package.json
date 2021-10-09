@@ -1,0 +1,24 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bocampagni/challenge-bravo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bocampagni/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/Bocampagni/challenge-bravo#readme",
+  "dependencies": {
+    "axios": "^0.22.0",
+    "express": "^4.17.1"
+  }
+}
