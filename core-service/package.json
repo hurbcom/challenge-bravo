@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Bocampagni/challenge-bravo#readme",
   "dependencies": {
     "axios": "^0.22.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "redis": "^3.1.2"
   }
 }
