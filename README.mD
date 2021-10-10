@@ -74,7 +74,9 @@ As seguintes moedas serão criadas assim que a aplicação for iniciada pela pri
     <li>to: moeda que será calculada
     <li>amount: valor a ser calculado
 </ul>
+<p>ex. http://localhost:5000?from=BTC&to=EUR&amount=123.45</p>
 <p>Todos os 3 campos são obrigatorios, se tudo ocorrer bem, recebera o seguinte resultado</p>
+
 
 ```
 {
