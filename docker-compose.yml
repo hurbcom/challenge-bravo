@@ -1,0 +1,26 @@
+version: "3.1"
+services:
+  db:
+    image: mongo:4.2
+    container_name: db_coins
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: coins
+      MONGO_INITDB_ROOT_USERNAME: usermongo
+      MONGO_INITDB_ROOT_PASSWORD: mypass
+  api_coins:
+    container_name: api_coins
+    image: api-flask
+    build:
+      context: ./
+      dockerfile: dockerfile
+    environment:
+      mongohost: db_coins
+      mongoport: 27017
+      mongouser: usermongo
+      mongopassword: mypass
+    ports:
+      - 5000:5000
+  
