@@ -6,6 +6,7 @@ const areCurrenciesExist = require("./service/sanitaze");
 const requestInfoService = require("./service/requestInfoService");
 const exchangeService = require("./service/exchangeService");
 const createCurrencyService = require("./service/createCurrencyService");
+const removeCurrencyService = require("./service/removeCurrencyService");
 app.use(express.json());
 
 app.get("/", function(req,res){
@@ -53,20 +54,22 @@ app.post("/", function(req,res){
 
 app.delete("/", function(req,res){
     redis.get("currencies", (err, reply) => {
+        redis.get("convertingRules", (err, convertingRules) => {
         
-        const data = JSON.parse(reply);
-        const requestInfo = requestInfoService(req);
+        const currenciesData = JSON.parse(reply);
+        const convertingRulesData = JSON.parse(convertingRules)
+        
+        if(currenciesData.hasOwnProperty(req.query.currencyName) && convertingRulesData.hasOwnProperty(req.query.currencyName)){
+            
+            const removeCurrencyRef = removeCurrencyService(req,currenciesData,convertingRulesData);
 
-        if(data.hasOwnProperty(req.query.currencyName)){
-            delete data[req.query.currencyName];
-            const updateExchangePairs = redis.set("currencies", JSON.stringify(data));
             res.json({"message": "Currency removed"})
 
         }else{
             res.json({"message": "Currency does not exist"})
         }
 
-        
+        })
     })
 })
 
