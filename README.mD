@@ -2,7 +2,7 @@ para iniciar a aplicação basta executar o comando <b>docker-compose up</b>
 
 Por padrão a aplicação ira ser executada no caminho localhost:5000.
 
-As seguintes moedas serão criadas assim que a aplicação for iniciada pela primeira vez:
+As seguintes moedas ja podem ser utilizada sem a necessidade de cadastro:
 <ul>
     <li>USD
     <li>BRL
@@ -11,20 +11,20 @@ As seguintes moedas serão criadas assim que a aplicação for iniciada pela pri
     <li>ETH
 </ul>
 
-<p>A moeda USD não podera ser altera e nem excluida, pois os valores de todas as outras moedas são basedas nela</p>
+<p>Estas moedas não poderão ser alteradas e nem excluidas</p>
 
-<h3> Criando Moedas </h3>
+<h3> Criando Novas Moedas </h3>
 <p><b> POST: http://localhost:5000</b></p>
 <p>Deve ser enviado no corpo da requisição</p>
 
 ```
 {
     "name":"COIN",
-    "price":0.18
+    "price":3.12
 }
 ```
 
-<p>lembrando que o campo price deve ser baseado na cotação do dolar Americano</p>
+<p>lembrando que o campo price deve ser baseado no valor do Real Brasileiro</p>
 
 <br>
 <h3> Atualizando Moedas </h3>
@@ -33,26 +33,28 @@ As seguintes moedas serão criadas assim que a aplicação for iniciada pela pri
 
 ```
 {
-    "price":0.18
+    "price":2.48
 }
 ```
 
 <br>
 <h3> Listando Moedas </h3>
+<p>Só serão listadas as moedas cadastradas no banco, as moedas descritas acima não serão listadas</p>
 <p><b> GET: http://localhost:5000</b></p>
+
 <p>recebera a seguinte lista</p>
 
 ```
 [
     {
         "id": "d37c337d-92f1-4d24-b9af-548995c5adfe"
-        "name": "BRL",
-        "price": 0.18,
+        "name": "ABC",
+        "price": 10.50,
     },
     {
         "id": "d57c337d-92f1-3d24-b9ac-548995c5adfa"
-        "name": "USD",
-        "price": 1,
+        "name": "IAH",
+        "price": 1.19,
     },
 ]
 ```
@@ -67,7 +69,7 @@ As seguintes moedas serão criadas assim que a aplicação for iniciada pela pri
 
 <br>
 <h3> Convertendo Valores</h3>
-<p><b> DELETE: http://localhost:5000/calculate</b></p>
+<p><b> GET: http://localhost:5000/calculate</b></p>
 <p>Deve ser enviado via query params os seguintes campos</p>
 <ul>
     <li>from: Moeda de origem para o calculo

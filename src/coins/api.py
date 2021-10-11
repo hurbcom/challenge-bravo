@@ -4,6 +4,7 @@ from json import loads
 from src.validators.validator import validator
 from src.validators.coinsValidator import coins_validator, list_coins_validator, calculate_price_validator
 from .Coins import Coins
+from .Calculate import Calculate
 
 app = Blueprint('coins', __name__)
 
@@ -34,7 +35,7 @@ def update_coin(name):
 @app.route("/<name>", methods=['DELETE'])
 def delete_coin(name):
     Coins().delete(name)
-    return Response(status=HTTPStatus.OK)
+    return Response(status=HTTPStatus.NO_CONTENT)
 
 
 @app.route("/calculate", methods=['GET'])
@@ -45,7 +46,7 @@ def calculate():
         'to': params.get('to'),
         'amount':float(params.get('amount'))
     })
-    return Coins().calculate(
+    return Calculate().calculate(
         params.get('from'),
         params.get('to'),
         float(params.get('amount'))

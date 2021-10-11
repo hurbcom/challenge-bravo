@@ -13,6 +13,8 @@ RUN pip install Flask-Cors
 RUN pip install Flask
 RUN pip install Cerberus
 RUN pip install pymongo
+RUN pip install BRCurrencyPy
+RUN pip install Flask-Caching
 
 EXPOSE 5000
 

@@ -32,3 +32,5 @@ uuid==1.30
 websocket-client==1.2.1
 Werkzeug==2.0.2
 zipp==3.6.0
+BRCurrencyPy==0.3
+Flask-Caching==1.10.1
