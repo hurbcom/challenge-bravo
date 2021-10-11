@@ -1,10 +1,11 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-const redis = require("./cache_config/redisConfig")
-const areCurrenciesExist = require("./service/sanitaze")
-const requestInfoService = require("./service/requestInfoService")
-const exchangeService = require("./service/exchangeService")
+const redis = require("./cache_config/redisConfig");
+const areCurrenciesExist = require("./service/sanitaze");
+const requestInfoService = require("./service/requestInfoService");
+const exchangeService = require("./service/exchangeService");
+const createCurrencyService = require("./service/createCurrencyService");
 app.use(express.json());
 
 app.get("/", function(req,res){
@@ -29,25 +30,24 @@ app.get("/", function(req,res){
     })
 })
 
-app.post("/", async function(req,res){
+app.post("/", function(req,res){
     redis.get("currencies", (err, reply) => {
+        redis.get("convertingRules", (err, convertingRules) => {
 
-        var data = JSON.parse(reply);
-        const pairUsd = data[req.body.exchangePairName] * req.body.exchangePairValue;
-        data[req.body.currencyName] = pairUsd;
-
-        const insertCurrency = redis.set("currencies", JSON.stringify(data));
-
-        if(insertCurrency){
-            res.json({
-                "CurrencyCreated": req.body.currencyName,
-                "ExchangeUSDpair": pairUsd
-            });
-        }else{
-            res.json({
-                "Error": "Currency could not be created"
-            });
-        }
+            //Call routine to create currency and Currency rule of conversion.
+            const response = createCurrencyService(reply,req,convertingRules);
+            
+            if(response.flag){
+                res.json({
+                    "CurrencyCreated": req.body.currencyName,
+                    "ExchangeUSDpair": response.pairUsd
+                });
+            }else{
+                res.json({
+                    "Error": "Currency could not be created"
+                });
+            }
+        })
     })
 })
 
