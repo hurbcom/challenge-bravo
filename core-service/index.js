@@ -7,8 +7,8 @@ const requestInfoService = require("./service/requestInfoService");
 const exchangeService = require("./service/exchangeService");
 const createCurrencyService = require("./service/createCurrencyService");
 const removeCurrencyService = require("./service/removeCurrencyService");
+const defaultCurrencies = require("./resource/defaultCurrencies");
 app.use(express.json());
-const defaultCurrencies = ["USD","BRL","EUR","BTC","ETH"]
 
 app.get("/", function(req,res){
     redis.get("currencies", (err, reply) => {
@@ -25,7 +25,7 @@ app.get("/", function(req,res){
                     "to": requestInfo.to
                 });
         }else{
-            res.json({"Error": "Currency exchange not supported"})
+            res.status(400).send({"message": "Currency exchange not supported"})
         }
 
         
@@ -53,7 +53,7 @@ app.post("/", function(req,res){
             })
         })
     }else{
-        res.json({"message": "Change such currency is not supported"})
+        res.status(403).send({"message": "Change such currency is not supported"})
     }
 
 })
@@ -79,14 +79,14 @@ app.delete("/", function(req,res){
             })
         })
     }else{
-        res.json({"message":"Remove such currency is not supported"})
+        res.status(403).send({"message":"Remove such currency is not supported"})
     }
     
 })
 
-app.listen(port, () => {
+const appServer = app.listen(port, () => {
     console.log("Listening on port: " + port);
 })
 
 
-
+module.exports = appServer

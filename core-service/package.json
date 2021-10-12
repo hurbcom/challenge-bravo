@@ -4,7 +4,7 @@
   "description": "Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,9 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "redis": "^3.1.2"
+  },
+  "devDependencies": {
+    "jest": "^27.2.5",
+    "supertest": "^6.1.6"
   }
 }
