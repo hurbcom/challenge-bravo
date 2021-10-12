@@ -13,10 +13,13 @@ const syncer = () => {
             //Creating USDUSD to return trivial context
             data["USDUSD"] = {code: "USD", codeIn: "USD", bid: 1};
             redis.get("currencies", (err, reply) => {
+                if(err) console.log(err)
+                
                 const jsonData = JSON.parse(reply);
+                //Logging
                 console.log(jsonData);
 
-                if(err) console.log(err)
+                
                 if(jsonData){
                     //Since there is data, update its value.
                     const updateCurrencies = updateCurrenciesService(reply,data,jsonData);

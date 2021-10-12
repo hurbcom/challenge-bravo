@@ -5,7 +5,6 @@ module.exports = (reply,data,jsonData) => {
     redis.get("convertingRules", (err, rulesReturn) => {
 
         const rules = JSON.parse(rulesReturn);
-        console.log(rules);
         for(currKey in jsonData){
             if(currKey == "USD"){
                 continue
