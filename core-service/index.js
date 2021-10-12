@@ -8,6 +8,7 @@ const exchangeService = require("./service/exchangeService");
 const createCurrencyService = require("./service/createCurrencyService");
 const removeCurrencyService = require("./service/removeCurrencyService");
 app.use(express.json());
+const defaultCurrencies = ["USD","BRL","EUR","BTC","ETH"]
 
 app.get("/", function(req,res){
     redis.get("currencies", (err, reply) => {
@@ -32,45 +33,55 @@ app.get("/", function(req,res){
 })
 
 app.post("/", function(req,res){
-    redis.get("currencies", (err, reply) => {
-        redis.get("convertingRules", (err, convertingRules) => {
-
-            //Call routine to create currency and Currency rule of conversion.
-            const response = createCurrencyService(reply,req,convertingRules);
-            
-            if(response.flag){
-                res.json({
-                    "CurrencyCreated": req.body.currencyName,
-                    "ExchangeUSDpair": response.pairUsd
-                });
-            }else{
-                res.json({
-                    "Error": "Currency could not be created"
-                });
-            }
+    if(!defaultCurrencies.includes(req.body.currencyName)){
+        redis.get("currencies", (err, reply) => {
+            redis.get("convertingRules", (err, convertingRules) => {
+    
+                //Call routine to create currency and Currency rule of conversion.
+                const response = createCurrencyService(reply,req,convertingRules);
+                
+                if(response.flag){
+                    res.json({
+                        "CurrencyCreated": req.body.currencyName,
+                        "ExchangeUSDpair": response.pairUsd
+                    });
+                }else{
+                    res.json({
+                        "Error": "Currency could not be created"
+                    });
+                }
+            })
         })
-    })
+    }else{
+        res.json({"message": "Change such currency is not supported"})
+    }
+
 })
 
 app.delete("/", function(req,res){
-    redis.get("currencies", (err, reply) => {
-        redis.get("convertingRules", (err, convertingRules) => {
-        
-        const currenciesData = JSON.parse(reply);
-        const convertingRulesData = JSON.parse(convertingRules)
-        
-        if(currenciesData.hasOwnProperty(req.query.currencyName) && convertingRulesData.hasOwnProperty(req.query.currencyName)){
+    if(!defaultCurrencies.includes(req.query.currencyName)){
+        redis.get("currencies", (err, reply) => {
+            redis.get("convertingRules", (err, convertingRules) => {
             
-            const removeCurrencyRef = removeCurrencyService(req,currenciesData,convertingRulesData);
-
-            res.json({"message": "Currency removed"})
-
-        }else{
-            res.json({"message": "Currency does not exist"})
-        }
-
+            const currenciesData = JSON.parse(reply);
+            const convertingRulesData = JSON.parse(convertingRules)
+            
+            if(currenciesData.hasOwnProperty(req.query.currencyName) && convertingRulesData.hasOwnProperty(req.query.currencyName)){
+                
+                const removeCurrencyRef = removeCurrencyService(req,currenciesData,convertingRulesData);
+    
+                res.json({"message": "Currency removed"})
+    
+            }else{
+                res.json({"message": "Currency does not exist"})
+            }
+    
+            })
         })
-    })
+    }else{
+        res.json({"message":"Remove such currency is not supported"})
+    }
+    
 })
 
 app.listen(port, () => {
