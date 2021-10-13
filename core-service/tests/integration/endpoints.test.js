@@ -63,7 +63,7 @@ describe("Testing bad form requests", () => {
 
     it("Should return bad request for not supporting such exchange", async () => {
         const res = await request(app)
-            .get("?from=ADA&to=USD&amount=1")
+            .get("?from=CARDANO&to=USD&amount=1")
         
         expect(res.statusCode).toEqual(400);
         expect(res.body).toEqual({
