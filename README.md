@@ -45,7 +45,7 @@ Como mencionado na descrição do desafio, era parte integrante da solução agu
 Assim, tornou-se possível pensar em como um serviço principal iria responder as requisições de conversão de moedas sem pensar em como o mesmo serviço iria atualizar as cotações presentes.
 
 
-![](Hurb currency exchange architecture.png)
+<img src="C:\Users\fabio\dev\bravo\challenge-bravo\Hurb currency exchange architecture.png" width="700"/>
 
 
 ##Serviços
@@ -80,7 +80,7 @@ O core da aplicação (Lógica de conversão) também é testado com teste unit�
 Para testar a performance da aplicação, foi criado o `loadTest.js` que é executado via `k6 run loadTest.js`.
 Assumindo que esteja presente na máquina onde vá ser executado o projeto, o comando anteriormente mencionado irá produzir um resultado similar ao apresentado a seguir:
 
-![](C:\Users\fabio\dev\bravo\challenge-bravo\loadTest.jpeg)
+<img src="C:\Users\fabio\dev\bravo\challenge-bravo\loadTest.jpeg" width="1000"/>
 
 Dessa imagem, podemos tirar algumas métricas importantes:
 
