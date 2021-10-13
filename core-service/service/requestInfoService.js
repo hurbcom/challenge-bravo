@@ -1,5 +1,4 @@
-
-//Serviço para pegar os parametros da url da requisição.
+//Service to get req params
 module.exports = function requestInfoService(req){
     return {
         from: req.query.from,

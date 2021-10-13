@@ -10,16 +10,13 @@ const createCurrenciesService = require("./service/createCurrenciesService");
 const syncer = () => {
     getCurrency()
         .then((data) => {
-            //Creating USDUSD to return trivial context
-            data["USDUSD"] = {code: "USD", codeIn: "USD", bid: 1};
+            
+            includeTrivialContext(data);
             redis.get("currencies", (err, reply) => {
-                if(err) console.log(err)
+                if(err){console.log(err); return;}
                 
                 const jsonData = JSON.parse(reply);
-                //Logging
-                console.log(jsonData);
 
-                
                 if(jsonData){
                     //Since there is data, update its value.
                     const updateCurrencies = updateCurrenciesService(reply,data,jsonData);
@@ -41,3 +38,9 @@ cron.schedule('30 * * * * *', function() {
     console.log('Fetching currency data on ' + time.toUTCString());
     syncer();
 });
+
+function includeTrivialContext(data){
+
+    //Creating from USD to USD in order to return trivial context
+    data["USDUSD"] = {code: "USD", codeIn: "USD", bid: 1};
+}

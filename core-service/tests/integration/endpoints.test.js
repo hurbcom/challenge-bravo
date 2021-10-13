@@ -71,7 +71,7 @@ describe("Testing bad form requests", () => {
         });
     })
 
-    //Can create/update/remove default currencies
+    //Cannot create/update/remove default currencies
     it("Shoud not create a currency and return forbidden action", async() => {
         const res = await request(app)
             .post("/")
