@@ -18,7 +18,7 @@ describe("Testing core routes", () => {
     it("Shoud get main route", async () => {
         const res = await request(app)
             .get("?from=BRL&to=USD&amount=1")
-        
+
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
             "data": res.body.data,
@@ -28,7 +28,7 @@ describe("Testing core routes", () => {
     })
 
 
-    it("Shoud create a currency", async() => {
+    it("Should create a currency", async() => {
         const res = await request(app)
             .post("/")
             .send({
@@ -45,7 +45,7 @@ describe("Testing core routes", () => {
 
 
 
-    it("Shoud remove a currency", async() => {
+    it("Should remove a currency", async() => {
         const res = await request(app)
             .delete("/?currencyName=ADA")
 
@@ -64,7 +64,7 @@ describe("Testing bad form requests", () => {
     it("Should return bad request for not supporting such exchange", async () => {
         const res = await request(app)
             .get("?from=CARDANO&to=USD&amount=1")
-        
+
         expect(res.statusCode).toEqual(400);
         expect(res.body).toEqual({
             "message": "Currency exchange not supported"
@@ -72,7 +72,7 @@ describe("Testing bad form requests", () => {
     })
 
     //Cannot create/update/remove default currencies
-    it("Shoud not create a currency and return forbidden action", async() => {
+    it("Should not create a currency and return forbidden action", async() => {
         const res = await request(app)
             .post("/")
             .send({
@@ -87,7 +87,7 @@ describe("Testing bad form requests", () => {
     })
 
 
-    it("Shoud not remove a currency and return forbidden action", async() => {
+    it("Should not remove a currency and return forbidden action", async() => {
         const res = await request(app)
             .delete("/?currencyName=USD")
 
