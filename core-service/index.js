@@ -11,8 +11,13 @@ const defaultCurrencies = require("./resource/defaultCurrencies");
 app.use(express.json());
 
 app.get("/", function(req,res){
+
+    //Preventing typo
+    req.query.from =  req.query.from.toUpperCase();
+    req.query.to = req.query.to.toUpperCase();
+
     redis.get("currencies", (err, reply) => {
-        
+    
         const data = JSON.parse(reply);
         const requestInfo = requestInfoService(req);
 
@@ -33,7 +38,13 @@ app.get("/", function(req,res){
 })
 
 app.post("/", function(req,res){
-    if(!defaultCurrencies.includes(req.body.currencyName)){
+
+    //Preventing typo
+    req.body.currencyName = req.body.currencyName.toUpperCase();
+    req.body.exchangePairName = req.body.exchangePairName.toUpperCase();
+
+    //If currency to be created is not default currency and it is indexed with default currencies, create it.
+    if(!defaultCurrencies.includes(req.body.currencyName) && defaultCurrencies.includes(req.body.exchangePairName)){
         redis.get("currencies", (err, reply) => {
             redis.get("convertingRules", (err, convertingRules) => {
     
@@ -59,6 +70,10 @@ app.post("/", function(req,res){
 })
 
 app.delete("/", function(req,res){
+    
+    //Preventing typo
+    req.query.currencyName = req.query.currencyName.toUpperCase();
+
     if(!defaultCurrencies.includes(req.query.currencyName)){
         redis.get("currencies", (err, reply) => {
             redis.get("convertingRules", (err, convertingRules) => {
