@@ -1,5 +1,9 @@
 const redis = require("redis");
-const client  = redis.createClient(7001,"127.0.0.1");
+const client  = redis.createClient({
+  port: 6379,
+  host: 'cache'
+});
+
 
 client.on('connect', function() {
     console.log('Connected');
