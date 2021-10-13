@@ -13,9 +13,6 @@
       <ul>
         <li><a href="#built-with">Testes e Performance</a></li>
       </ul>
-      <ul>
-        <li><a href="#built-with">Performance e Load test</a></li>
-      </ul>
     </li>
     <li>
       <a href="#getting-started">Executando o projeto</a>
@@ -47,8 +44,9 @@ Assim, tornou-se possível pensar em como um serviço principal iria responder a
 
 <img src="hurbArch.png" width="700"/>
 
+A arquitetura proposta está exemplificada acima.
 
-##Serviços
+##Serviços da arquitetura
 
 ### Core-service
 
@@ -84,4 +82,27 @@ Assumindo que esteja presente na máquina onde vá ser executado o projeto, o co
 
 Dessa imagem, podemos tirar algumas métricas importantes:
 
-Em média, a aplicação respondeu 2501 requisições por segundo, com um tempo média de 157ms de tempo de resposta. Vale ressaltar também que foi obtido 100% de respostas com status code 200, ou seja, nenhuma requisição falhou em chegar ao servidor.
+Em média, a aplicação respondeu **2501** requisições por **segundo**, com um tempo médio de **157ms** de tempo de resposta. Vale ressaltar também que foi obtido **100% de respostas com status code 200**, ou seja, nenhuma requisição falhou em chegar ao servidor.
+
+
+
+##Executando o projeto
+
+###Explicações iniciais
+
+Todos os componentes da aplicação foram conteinarizados e estão sendo orquestrados pelo docker-compose. Toda as informações refentes a orquestração podem ser encontradas no arquivo `docker-compose.yml`.
+
+Os testes unitários e de integração são executados de forma automática, logo, quando executado o projeto, é necessário esperar que os testes rodem e sejam logados no terminal para que possa ser possível receber as requisições.
+
+###Executando o projeto
+
+Depois de clonar e mudar o diretório para o root deste projeto, basta apenas executar o comando:
+
+`docker-compose up`
+
+O log dos 3 serviços serão logados de forma independente no mesmo terminal.
+
+Caso haja a necessidade de executar o projeto de forma _detached_, acrescente a tag `-d` no comando acima.
+
+###Considerações finais e melhorias
+
