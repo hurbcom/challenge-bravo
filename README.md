@@ -46,7 +46,7 @@ Assim, tornou-se possível pensar em como um serviço principal iria responder a
 
 A arquitetura proposta está exemplificada acima.
 
-##Serviços da arquitetura
+## Serviços da arquitetura
 
 ### Core-service
 
@@ -62,18 +62,18 @@ Começando por currencies, é armazenado nessa chave um json onde temos basicame
 
 A chave de regra de conversão nos da a regra pela qual uma moeda será atualizada, por exemplo, se criarmos a moeda ADA (Cardano) sendo 12 BRL, o valor de proporcionalidade será 12 e a indexação será BRL -> USD, ou seja, apesar de passar 12 R$ como valor, será armazenado o valor referente a conversão do real em relação ao dolar, logo, ADA é aproximadamente 2 dolares. (Cálculo feito em 13/10/2021)
 
-###Sync-er
+### Sync-er
 
 O serviço de sincronização tem como principal objetivo consumir uma api pública e atualizar os dados das duas chaves a cada 30 segundos (Tempo de atualização da API pública)
 
-##Testes e Performance
+## Testes e Performance
 
 A aplicação é testada tanto de forma unitário quanto de forma integral. Ambas usando o Jest como fonte principal de meios de teste.
 
 Para os testes de integração, foi testado todos os endpoints em seus diferentes cenários.
 O core da aplicação (Lógica de conversão) também é testado com teste unitário.
 
-###Testes de performance
+### Testes de performance
 
 Para testar a performance da aplicação, foi criado o `loadTest.js` que é executado via `k6 run loadTest.js`.
 Assumindo que esteja presente na máquina onde vá ser executado o projeto, o comando anteriormente mencionado irá produzir um resultado similar ao apresentado a seguir:
@@ -86,15 +86,15 @@ Em média, a aplicação respondeu **2501** requisições por **segundo**, com u
 
 
 
-##Executando o projeto
+## Executando o projeto
 
-###Explicações iniciais
+### Explicações iniciais
 
 Todos os componentes da aplicação foram conteinarizados e estão sendo orquestrados pelo docker-compose. Toda as informações refentes a orquestração podem ser encontradas no arquivo `docker-compose.yml`.
 
 Os testes unitários e de integração são executados de forma automática, logo, quando executado o projeto, é necessário esperar que os testes rodem e sejam logados no terminal para que possa ser possível receber as requisições.
 
-###Executando o projeto
+### Executando o projeto
 
 Depois de clonar e mudar o diretório para o root deste projeto, basta apenas executar o comando:
 
@@ -104,5 +104,4 @@ O log dos 3 serviços serão logados de forma independente no mesmo terminal.
 
 Caso haja a necessidade de executar o projeto de forma _detached_, acrescente a tag `-d` no comando acima.
 
-###Considerações finais e melhorias
-
+### Considerações finais e melhorias
