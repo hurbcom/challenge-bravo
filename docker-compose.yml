@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  redis-server:
+    image: redis
+    container_name: cache
+    volumes:
+      - ./:/var/www/app
+    expose:
+      - 6379
+  
+  sync-er:
+    container_name: sync-er
+    build: ./sync-er
+    volumes: 
+      - ./sync-er:/var/www/app
+    command:
+      sh -c 'npm i && node index.js'
+    
+  core-service:
+    container_name: core-service
+    build: ./core-service
+    volumes:
+    - ./core-service:/var/www/app
+    ports:
+      - 3000:3000
+    command:
+      sh -c 'npm i && npm start'
+  
