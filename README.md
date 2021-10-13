@@ -1,78 +1,87 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Bravo</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">Sobre o projeto</a>
+      <ul>
+        <li><a href="#built-with">Arquitetura</a></li>
+      </ul>
+      <ul>
+        <li><a href="#built-with">Serviços</a></li>
+      </ul>
+      <ul>
+        <li><a href="#built-with">Testes e Performance</a></li>
+      </ul>
+      <ul>
+        <li><a href="#built-with">Performance e Load test</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Executando o projeto</a>
+      <ul>
+         <li><a href="#usage">Explicações iniciais</a></li>
+      </ul>
+      <ul>
+         <li><a href="#usage">Executando o docker</a></li>
+      </ul>
+    </li>
+    <li><a href="#license">Considerações finais e melhorias</a></li>
+  </ol>
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+</details>
 
-A API deve, originalmente, converter entre as seguintes moedas:
+<!-- ABOUT THE PROJECT -->
+# Sobre o projeto
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+O desafio Bravo pedia que fosse desenvolvido um sistema de conversão de moedas, sejam elas reais ou ficticias. Importante notarmos que é necessária que a base de conversão esteja indexada no **dolar**.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Dada as especificações, foi desenvolvido um sistema na arquitetura de micro serviços, onde encontra-se presente o core-service, sync-er service e nosso serviço de banco.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+## Arquitetura
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Como mencionado na descrição do desafio, era parte integrante da solução aguentar um teste de estresse de 1.000 requisições por segundo, motivo o qual me levou a optar por tal arquitetura, pois, com ela, posso tornar cada módulo independente e otimiza-lo sem pensar no tempo de resposta das outras sub rotinas presentes.
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Assim, tornou-se possível pensar em como um serviço principal iria responder as requisições de conversão de moedas sem pensar em como o mesmo serviço iria atualizar as cotações presentes.
 
-A API deve suportar conversão entre moedas verídicas e fictícias. Exemplo: BRL->HURB, HURB->ETH
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+![](Hurb currency exchange architecture.png)
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de D&D sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+##Serviços
 
-Ref: 
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+### Core-service
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+Esse serviço tem como função resolver todas as questões que envolvem moeda e usuário, ou seja, converter as moedas e devolver ao usuário final o resultado esperado, criar moedas novas indexando-as a qualquer moeda padrão do sistema e remover moedas criadas.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+O core-service tem conexão direta com o **redis-server**, onde é armazenado os dados da aplicação.
 
-## Requisitos
+### Redis-server
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **master** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+O Redis foi escolhido como opção para armazenamento devido a velocidade de resposta do mesmo dada a sua natureza. Nele, foi implementado um armazenado padrão de chave-valor onde as chaves são **currencies** e **convertingRules**.
 
-## Critério de avaliação
+Começando por currencies, é armazenado nessa chave um json onde temos basicamente o nome da moeda com o valor indexado em dolar. A conversão e atualização dessa moeda é diretamente dependente da chave **convertingRules**.
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+A chave de regra de conversão nos da a regra pela qual uma moeda será atualizada, por exemplo, se criarmos a moeda ADA (Cardano) sendo 12 BRL, o valor de proporcionalidade será 12 e a indexação será BRL -> USD, ou seja, apesar de passar 12 R$ como valor, será armazenado o valor referente a conversão do real em relação ao dolar, logo, ADA é aproximadamente 2 dolares. (Cálculo feito em 13/10/2021)
 
-## Dúvidas
+###Sync-er
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+O serviço de sincronização tem como principal objetivo consumir uma api pública e atualizar os dados das duas chaves a cada 30 segundos (Tempo de atualização da API pública)
 
-Boa sorte e boa viagem! ;)
+##Testes e Performance
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+A aplicação é testada tanto de forma unitário quanto de forma integral. Ambas usando o Jest como fonte principal de meios de teste.
+
+Para os testes de integração, foi testado todos os endpoints em seus diferentes cenários.
+O core da aplicação (Lógica de conversão) também é testado com teste unitário.
+
+###Testes de performance
+
+Para testar a performance da aplicação, foi criado o `loadTest.js` que é executado via `k6 run loadTest.js`.
+Assumindo que esteja presente na máquina onde vá ser executado o projeto, o comando anteriormente mencionado irá produzir um resultado similar ao apresentado a seguir:
+
+![](C:\Users\fabio\dev\bravo\challenge-bravo\loadTest.jpeg)
+
+Dessa imagem, podemos tirar algumas métricas importantes:
+
+Em média, a aplicação respondeu 2501 requisições por segundo, com um tempo média de 157ms de tempo de resposta. Vale ressaltar também que foi obtido 100% de respostas com status code 200, ou seja, nenhuma requisição falhou em chegar ao servidor.
