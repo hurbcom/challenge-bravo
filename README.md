@@ -87,6 +87,14 @@ Moedas padrões não podem ter seu valor atualizado, pois os dados corretos cheg
 "exchangePairValue": {Valor de proporcionalidade}
 }`
 
+Por exemplo, para criarmos a moeda ADA, fariamos:
+`{
+"currencyName": "ADA",
+"exchangePairName": "BRL",
+"exchangePairValue": 12
+}`
+E teriamos o Json de resposta: `{"CurrencyCreated": "ADA", "ExchangeUSDpair": 2.1744}`, pois ADA = 12BRL, E 12 BRL é equivalente a 2.1744USD. **(Cotação de 13/10/21)**
+
 #### Para remover uma moeda: <br>
 
 `DELETE 127.0.0.1:3000/?currencyName={MOEDA-NÃO-DEFAULT}`
@@ -118,5 +126,11 @@ Poderíamos escalar o core-service quantas vezes fossem necessárias e ter, ante
 A criação e remoção de moedas poderia ser isolada também. Poderíamos criar um outro serviço, que teria autenticação, para criar e remover moedas. Assim, teríamos um controle maior do que está sendo criado e removido da plataforma.
 
 Um banco relacional como Postgres poderia ser usado para dar suporte a autenticação/autorização de usuários.
+
+### Ubuntu
+
+Como segue a imagem, a aplicação funcionou bem no ubuntu 20.04 **(vm Hyper-v)**.
+
+<img src="C:\Users\fabio\dev\bravo\challenge-bravo\ubuntu.jpeg"/>
 
 
