@@ -26,15 +26,17 @@ O core-service tem conexão direta com o **redis-server**, onde é armazenado os
 
 ### Redis-server
 
-O Redis foi escolhido como opção para armazenamento devido a velocidade de resposta do mesmo dada a sua natureza. Nele, foi implementado um armazenado padrão de chave-valor onde as chaves são **currencies** e **convertingRules**.
+O Redis foi escolhido como opção para armazenamento devido a velocidade de resposta do mesmo dada a sua natureza. Nele, foi implementado um armazenamento padrão de chave-valor onde as chaves são **currencies** e **convertingRules**.
 
-Começando por currencies, é armazenado nessa chave um json onde temos basicamente o nome da moeda com o valor indexado em dólar. A conversão e atualização dessa moeda é diretamente dependente da chave **convertingRules**.
+Começando por **currencies**, é armazenado nessa chave um json onde temos basicamente o nome da moeda com o valor indexado em dólar. A conversão e atualização dessa moeda é diretamente dependente da chave **convertingRules**.
 
-A chave de regra de conversão nos dá a regra pela qual uma moeda será atualizada, por exemplo, se criarmos a moeda ADA (Cardano) sendo 12 BRL, o valor de proporcionalidade será 12 e a indexação será BRL -> USD, ou seja, apesar de passar 12 R$ como valor, será armazenado o valor referente a conversão do real em relação ao dólar, logo, ADA é aproximadamente 2 dólares. (Cálculo feito em 13/10/2021)
+A chave de regra de conversão nos dá a regra pela qual uma moeda será atualizada, por exemplo, se criarmos a moeda ADA (Cardano) sendo 12 BRL, o valor de proporcionalidade será 12 e a indexação será BRL -> USD, ou seja, apesar de passar 12 R$ como valor, será armazenado o valor referente a conversão do real em relação ao dólar, logo, ADA é aproximadamente 2 dólares. **(Cálculo feito em 13/10/2021)**
 
 ### Sync-er
 
 O serviço de sincronização tem como principal objetivo consumir uma api pública e atualizar os dados das duas chaves a cada 30 segundos (Tempo de atualização da API pública)
+
+API: https://docs.awesomeapi.com.br/api-de-moedas
 
 ## Testes e Performance
 
@@ -110,7 +112,7 @@ Para olhar os logs da aplicação, podemos descobrir o id do container por
 Como o desafio abre espaço para soluções simples e elaboradas, sempre há espaço para melhorias, sempre há espaço para mais uma feature que iria melhorar em algo o projeto. Esta sessão é justamente para adereçar funcionalidades que não foram desenvolvidas, mas que eu gostaria de desenvolver se tivesse mais tempo e se fosse realmente necessárias.
 
 ### Load Balancing
-Poderíamos escalar o core-service quantas vezes fossem necessárias e ter, antes de chegar no servidor do node-se, um servidor NGINX, que iria balancear as requisições que chegam, fazendo que o response time caísse, pois teríamos várias instâncias do core-service respondendo.
+Poderíamos escalar o core-service quantas vezes fossem necessárias e ter, antes de chegar no servidor do node.js, um servidor NGINX, que iria balancear as requisições que chegam, fazendo que o response time caísse, pois teríamos várias instâncias do core-service respondendo.
 
 ### Serviço de criação de moedas com autenticação
 A criação e remoção de moedas poderia ser isolada também. Poderíamos criar um outro serviço, que teria autenticação, para criar e remover moedas. Assim, teríamos um controle maior do que está sendo criado e removido da plataforma.
