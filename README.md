@@ -131,6 +131,6 @@ Um banco relacional como Postgres poderia ser usado para dar suporte a autentica
 
 Como segue a imagem, a aplicação funcionou bem no ubuntu 20.04 **(vm Hyper-v)**.
 
-<img src="C:\Users\fabio\dev\bravo\challenge-bravo\ubuntu.jpeg"/>
+<img src="ubuntu.jpeg"/>
 
 
