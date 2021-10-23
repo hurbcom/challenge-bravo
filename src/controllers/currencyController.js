@@ -18,4 +18,4 @@ class CurrencyController {
     }
 }
 
-module.exports = CurrencyController
+module.exports = new CurrencyController()

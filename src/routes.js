@@ -2,9 +2,9 @@
 
 const routes = require('express').Router()
 require('express-group-routes')
-const currencyController = require('./controllers/SignUpController')
+let currencyController = require('./controllers/currencyController')
 
-routes.group("/", (router) => {
+routes.group("/", async (router) => {
 
     var checkCache = (req, res, next) => {
         let search = req.params.search;

@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express');
+require('dotenv').config()
 const redis = require('redis');
 const dbConnection = require('./database/database-connection')
 
@@ -10,7 +11,7 @@ class AppController {
         this.middlewares()
         this.routes()
         this.db()
-        this.redis = redis()
+        this.cache()
     }
 
     middlewares() {
@@ -22,12 +23,12 @@ class AppController {
     }
 
     async db() {
-        await dbConnection.db()
+        await dbConnection.conn
     }
 
     cache() {
         try{
-            this.redis.createClient(process.env.REDIS_PORT);
+            redis.createClient(process.env.REDIS_PORT);
         }catch(e){
             throw new Error(e)
         }
