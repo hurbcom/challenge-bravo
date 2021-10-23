@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    volumes:
+      - "./Database:/app/database/"
