@@ -120,7 +120,7 @@ No corpo da requisição deve ser enviado os parâmetros descritos. Exemplo:
 Permite consultar uma moeda já registrada e retornar as informações sobre ela. Recebe como parâmetro apenas um campo:
 - **Name**: O nome da moeda a ser consultada. Deve necessariamente coincidir com uma moeda existente na base e não pode estar vazio.
 
-**Resposta**: Além dos campos padrões de Result e Status, retorna também todas as informações sobre uma determinada moeda descritos anteriormente: Name, contendo o seu nome, PriceValue, com o valor de uma unidade dela na moeda de lastro, e AutoUpdateValue, indicando se trata-se de uma moeda que tem seu valor atualizado automaticamente
+**Resposta**: Além dos campos padrões de Result e Status, retorna também todas as informações sobre uma determinada moeda descritos anteriormente: Name, contendo o seu nome, PriceValue, com o valor de uma unidade dela na moeda de lastro, e AutoUpdatePrice, indicando se trata-se de uma moeda que tem seu valor atualizado automaticamente
 
 Pode ser acessada através da requisição:
 
@@ -158,7 +158,7 @@ No corpo da requisição deve ser enviado o parâmetro descrito. Exemplo:
 
 Retorna uma lista contendo todas as moedas que foram adicioandas até então. Não precisa receber nenhum parâmetro.
 
-**Resposta**: Retorna uma lista contendo todos os campos de informações de moedas descritos anteriormente para cada elemento encontrado: Name, PriceValue e AutoUpdateValue.
+**Resposta**: Retorna uma lista contendo todos os campos de informações de moedas descritos anteriormente para cada elemento encontrado: Name, PriceValue e AutoUpdatePrice.
 
 Pode ser acessada através da requisição:
 	```
