@@ -10,8 +10,8 @@ namespace CurrencyAPI.Models
 
     public class CurrencyChangeObject : CurrencyBaseRequestObject
     {
-        public double RateValue     { get; set; }
-        public string RateCurrency  { get; set; }
-        public bool AutoUpdateRate  { get; set; }
+        public double PriceValue     { get; set; }
+        public string PriceCurrency  { get; set; }
+        public bool AutoUpdatePrice  { get; set; }
     }
 }

@@ -42,21 +42,21 @@ namespace ConversionAPI.Controllers
 
             CurrencyObject newCurrency  = new CurrencyObject();
             newCurrency.Name            = request.Name;
-            newCurrency.Price       = request.RateValue;
-            newCurrency.AutoUpdateRate  = request.AutoUpdateRate;
+            newCurrency.Price           = request.PriceValue;
+            newCurrency.AutoUpdatePrice = request.AutoUpdatePrice;
 
-            // In this case we need to convert the given rate value to the default currency
-            if(!String.IsNullOrEmpty(request.RateCurrency) && request.RateCurrency != "USD")
+            // In this case we need to convert the given price value to the default currency
+            if(!String.IsNullOrEmpty(request.PriceCurrency) && request.PriceCurrency != "USD")
             {
-                CurrencyObject rateCurrency = await _dbContext.FindOne(request.RateCurrency);
-                if(rateCurrency == null)
+                CurrencyObject priceCurrency = await _dbContext.FindOne(request.PriceCurrency);
+                if(priceCurrency == null)
                 {
                     response.Success    = false;
-                    response.Status     = String.Format("Could not found rate currency '{0}'. Please change the currency used or add it first", request.Name);
+                    response.Status     = String.Format("Could not found price currency '{0}'. Please change the currency used or add it first", request.Name);
                     return response;
                 }
 
-                newCurrency.Price   = rateCurrency.Price * request.RateValue;
+                newCurrency.Price   = priceCurrency.Price * request.PriceValue;
             }
 
             if(await _dbContext.Insert(newCurrency))
@@ -102,23 +102,23 @@ namespace ConversionAPI.Controllers
                 return response;
             }
 
-            CurrencyObject newCurrency  = new CurrencyObject();
-            newCurrency.Name            = request.Name;
-            newCurrency.Price       = request.RateValue;
-            newCurrency.AutoUpdateRate  = request.AutoUpdateRate;
+            CurrencyObject newCurrency      = new CurrencyObject();
+            newCurrency.Name                = request.Name;
+            newCurrency.Price               = request.PriceValue;
+            newCurrency.AutoUpdatePrice     = request.AutoUpdatePrice;
 
-            // In this case we need to convert the given rate value to the default currency
-            if(!String.IsNullOrEmpty(request.RateCurrency) && request.RateCurrency != "USD")
+            // In this case we need to convert the given price value to the default currency
+            if(!String.IsNullOrEmpty(request.PriceCurrency) && request.PriceCurrency != "USD")
             {
-                CurrencyObject rateCurrency = await _dbContext.FindOne(request.RateCurrency);
-                if(rateCurrency == null)
+                CurrencyObject priceCurrency = await _dbContext.FindOne(request.PriceCurrency);
+                if(priceCurrency == null)
                 {
                     response.Success    = false;
-                    response.Status     = String.Format("Could not found rate currency '{0}'. Please change the currency used or add it first", request.RateCurrency);
+                    response.Status     = String.Format("Could not found price currency '{0}'. Please change the currency used or add it first", request.PriceCurrency);
                     return response;
                 }
 
-                newCurrency.Price   = rateCurrency.Price * request.RateValue;
+                newCurrency.Price   = priceCurrency.Price * request.PriceValue;
             }
 
             if (await _dbContext.Update(newCurrency))
@@ -154,8 +154,8 @@ namespace ConversionAPI.Controllers
             if (currency != null)
             {
                 response.Name               = currency.Name;
-                response.RateValue          = currency.Price;
-                response.AutoUpdateRate   = currency.AutoUpdateRate;
+                response.PriceValue          = currency.Price;
+                response.AutoUpdateValue   = currency.AutoUpdatePrice;
 
                 response.Success            = true;
                 response.Status             = "Found currency information";                
@@ -232,8 +232,8 @@ namespace ConversionAPI.Controllers
             {
                 ListCurrencyObject newListCurrency  = new ListCurrencyObject();
                 newListCurrency.Name                = currency.Name;
-                newListCurrency.RateValue           = currency.Price;
-                newListCurrency.AutoUpdateRate      = currency.AutoUpdateRate;
+                newListCurrency.PriceValue           = currency.Price;
+                newListCurrency.AutoUpdateValue      = currency.AutoUpdatePrice;
 
                 response.Currencies.Add(newListCurrency);
             }

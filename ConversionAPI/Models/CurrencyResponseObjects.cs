@@ -6,8 +6,8 @@ namespace CurrencyAPI.Models
     public class CurrencyResponseObject : BaseResponseObject
     {
         public string Name          { get; set; }    
-        public double RateValue     { get; set; }
-        public bool AutoUpdateRate  { get; set; }
+        public double PriceValue    { get; set; }
+        public bool AutoUpdateValue  { get; set; }
     }
 
     public class ListCurrenciesResponseObject : BaseResponseObject
@@ -17,9 +17,9 @@ namespace CurrencyAPI.Models
 
     public class ListCurrencyObject
     {
-        public string Name          { get; set; }
-        public double RateValue     { get; set; }
-        public bool AutoUpdateRate  { get; set; }
+        public string Name              { get; set; }
+        public double PriceValue        { get; set; }
+        public bool AutoUpdateValue     { get; set; }
     }
 
 }

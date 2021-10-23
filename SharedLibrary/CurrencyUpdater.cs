@@ -79,37 +79,37 @@ namespace SharedLibrary
                     // Work on each available currency
                     foreach (CurrencyObject currency in currencies)
                     {
-                        if (!currency.AutoUpdateRate)
+                        if (!currency.AutoUpdatePrice)
                             continue;
                         
-                        // Get API response with current rate value
+                        // Get API response with current price value
                         string finalUrl         = String.Format(_apiUrl, currency.Name, _defaultCurrency);
                         RestRequest request     = new RestRequest(finalUrl);
                         IRestResponse response  = _client.Get(request);
                         if (response == null || !response.IsSuccessful)
                         {
-                            _logger.LogError("Could not get expected response with updated rate value for " + currency.Name);
+                            _logger.LogError("Could not get expected response with updated price value for " + currency.Name);
                             continue;
                         }
 
                         string jsonResponse = response.Content;
                         if (String.IsNullOrWhiteSpace(jsonResponse) || jsonResponse.IndexOf("CoinNotExists", StringComparison.OrdinalIgnoreCase) > -1)
                             continue;
-                        double newRate = -1;
+                        double newPrice = -1;
 
                         try
                         {
                             RootResponseObject responseObj  = JsonConvert.DeserializeObject<RootResponseObject>(jsonResponse);
-                            string newRateText              = responseObj.First().Value.bid;
-                            newRate                         = Double.Parse(newRateText, CultureInfo.InvariantCulture);
+                            string newPriceText             = responseObj.First().Value.bid;
+                            newPrice                        = Double.Parse(newPriceText, CultureInfo.InvariantCulture);
                         }
                         catch (Exception)
                         {
-                            _logger.LogError("Could not convert response with updated rate value for " + currency.Name);
+                            _logger.LogError("Could not convert response with updated price value for " + currency.Name);
                             continue;
                         }
 
-                        currency.Price  = newRate;
+                        currency.Price  = newPrice;
                         bool result     = _dbService.Update(currency).Result;
                         if(!result)
                         {

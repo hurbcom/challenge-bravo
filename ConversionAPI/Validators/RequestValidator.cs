@@ -23,7 +23,7 @@ namespace CurrencyAPI.Validators
             errorMessage = String.Empty;
             if (String.IsNullOrWhiteSpace(request.Name))
                 errorMessage = "Could not find expected field with currency name";
-            else if (request.RateValue <= 0)
+            else if (request.PriceValue <= 0)
                 errorMessage = "Invalid amount received. Please use a positive value";
 
             if (!String.IsNullOrWhiteSpace(errorMessage))
