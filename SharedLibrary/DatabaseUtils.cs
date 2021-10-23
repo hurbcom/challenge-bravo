@@ -34,7 +34,7 @@ namespace SharedLibrary
         public async Task<bool> Update(CurrencyObject updatedCurrency)
         {
             CurrencyObject obj  = await _currencies.FindAsync(updatedCurrency.Name);
-            obj                 = updatedCurrency;
+            this.Entry(obj).CurrentValues.SetValues(updatedCurrency);
             await this.SaveChangesAsync();
             return true;
         }

@@ -145,8 +145,8 @@ namespace ConversionAPI.Controllers
             string errorMessage = String.Empty;
             if (!RequestValidator.CurrencyValidation(request, out errorMessage))
             {
-                response.Success = false;
-                response.Status = errorMessage;
+                response.Success    = false;
+                response.Status     = errorMessage;
                 return response;
             }
 
@@ -154,8 +154,8 @@ namespace ConversionAPI.Controllers
             if (currency != null)
             {
                 response.Name               = currency.Name;
-                response.PriceValue          = currency.Price;
-                response.AutoUpdateValue   = currency.AutoUpdatePrice;
+                response.PriceValue         = currency.Price;
+                response.AutoUpdatePrice    = currency.AutoUpdatePrice;
 
                 response.Success            = true;
                 response.Status             = "Found currency information";                
@@ -232,8 +232,8 @@ namespace ConversionAPI.Controllers
             {
                 ListCurrencyObject newListCurrency  = new ListCurrencyObject();
                 newListCurrency.Name                = currency.Name;
-                newListCurrency.PriceValue           = currency.Price;
-                newListCurrency.AutoUpdateValue      = currency.AutoUpdatePrice;
+                newListCurrency.PriceValue          = currency.Price;
+                newListCurrency.AutoUpdatePrice     = currency.AutoUpdatePrice;
 
                 response.Currencies.Add(newListCurrency);
             }
