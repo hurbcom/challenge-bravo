@@ -1,3 +1,5 @@
+'use strict'
+
 const { Schema, model } = require('mongoose');
 
 const CurrencySchema = new Schema({
@@ -49,6 +51,6 @@ const CurrencySchema = new Schema({
     }
 },{
     timestamps: true
-});
+})
 
-module.exports = model('Currency', CurrencySchema);
+module.exports = model('Currency', CurrencySchema)

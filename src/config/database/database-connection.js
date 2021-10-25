@@ -9,7 +9,7 @@ async function conn() {
             useNewUrlParser: true
         })
         return conn
-    }catch (e) {
+    } catch (e) {
         throw new Error(e)
     }
 }

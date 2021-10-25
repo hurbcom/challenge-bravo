@@ -1,7 +1,7 @@
 'use strict'
 
 const Currency = require('../models/Currency')
-const db = require('../config/database/database-connection')
+const client = require('../config/cache/redis-connection')
 const Validator = require('Validator');
 const { default: axios } = require('axios')
 const base_url = process.env.CONVERSION_ENDPOINT
@@ -31,10 +31,16 @@ class CurrencyController {
 
                 allCurrencies.push(currency)
             })
-            console.log(allCurrencies)
-            await Currency.insertMany(allCurrencies)
 
-            res.status(200).json('rodou')
+            await Currency.insertMany(allCurrencies)
+            await client.setex('allCurrencies', 600, JSON.stringify(allCurrencies))
+
+            res
+            .status(200)
+            .json({
+                data: data,
+                info: 'data from external api'
+            })
         } catch (e) {
             throw new Error(e)
         }
