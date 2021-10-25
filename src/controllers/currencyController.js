@@ -32,14 +32,14 @@ class CurrencyController {
                 allCurrencies.push(currency)
             })
 
-            await Currency.insertMany(allCurrencies)
-            await client.setex('allCurrencies', 600, JSON.stringify(allCurrencies))
+            // await Currency.insertMany(allCurrencies)
+            await client.setex('allCurrencies', process.env.REDIS_TTL, JSON.stringify(allCurrencies))
 
             res
             .status(200)
             .json({
-                data: data,
-                info: 'data from external api'
+                data: JSON.stringify(allCurrencies),
+                info: 'data from database'
             })
         } catch (e) {
             throw new Error(e)
