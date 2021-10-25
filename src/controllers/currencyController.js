@@ -32,13 +32,17 @@ class CurrencyController {
                 allCurrencies.push(currency)
             })
 
-            // await Currency.insertMany(allCurrencies)
-            await client.setex('allCurrencies', process.env.REDIS_TTL, JSON.stringify(allCurrencies))
+            await Currency.insertMany(allCurrencies)
+            await client.setex(
+                'allCurrencies',
+                process.env.REDIS_TTL,
+                JSON.stringify(allCurrencies)
+            )
 
             res
             .status(200)
             .json({
-                data: JSON.stringify(allCurrencies),
+                data: allCurrencies,
                 info: 'data from database'
             })
         } catch (e) {
@@ -51,7 +55,98 @@ class CurrencyController {
     }
 
     async addCurrency(req, res){
-        res.status(200).json()
+
+        const {
+            code,
+            codein,
+            name,
+            high,
+            low,
+            varBid,
+            pctChange,
+            bid,
+            ask,
+            timestamp,
+            create_date
+        } = req.body;
+
+        const data = {
+            code,
+            codein,
+            name,
+            high,
+            low,
+            varBid,
+            pctChange,
+            bid,
+            ask,
+            timestamp,
+            create_date
+        };
+
+        const rules = {
+            code       : 'required',
+            codein     : 'required',
+            name       : 'required',
+            high       : 'required',
+            low        : 'required',
+            varBid     : 'required',
+            pctChange  : 'required',
+            bid        : 'required',
+            ask        : 'required',
+            timestamp  : 'required',
+            create_date: 'required|dateformat'
+        };
+
+        const messages = {
+            'code.required'          : 'code is required',
+            'codein.required'        : 'codein is required',
+            'name.required'          : 'name is required',
+            'high.required'          : 'high is required',
+            'low.required'           : 'low is required',
+            'varBid.required'        : 'varBid is required',
+            'pctChange.required'     : 'pctChange is required',
+            'bid.required'           : 'bid is required',
+            'ask.required'           : 'ask is required',
+            'timestamp.required'     : 'timestamp is required',
+            'create_date.required'   : 'create_date is required',
+            'create_date.dateformat' : 'create_date format invalid'
+
+        }
+
+        const v = Validator.make(data, rules, messages)
+
+        if (v.fails()) {
+            const errors = v.getErrors();
+            res
+            .status(400)
+            .json(errors)
+        }
+
+        try {
+            const currencyExists = await Currency.findOne({ code: data.code });
+            if(currencyExists){
+                res
+                .status(400)
+                .json({
+                    data: currencyExists,
+                    info: 'currency already exists.'
+                });
+            }
+            const newCurrency = await Currency.create({
+                data
+            })
+
+            res
+            .status(201)
+            .json({
+                data: newCurrency,
+                info: 'currency created!'
+            })
+        }catch (e) {
+            res.json(e);
+        }
+
     }
 
     async deleteCurrency(req, res){
