@@ -10,12 +10,11 @@ const checkDatabase = require('./middlewares/checkDatabase')
 
 routes.group("/", async (router) => {
 
-    router.use(checkCache)
-    router.use(checkDatabase)
+    router.get("/", currencyController.index)
 
-    router.get("/", currencyController.getAllSupportedCurrencies)
+})
 
-    router.get("/conversion", conversionController.getConversion)
+routes.group("/currency", async (router) => {
 
     router.put("/add", currencyController.addCurrency)
 
@@ -23,6 +22,15 @@ routes.group("/", async (router) => {
 
 })
 
+routes.group("/", async (router) => {
 
+    router.use(checkCache)
+    router.use(checkDatabase)
+
+    router.get("/all", currencyController.getAllSupportedCurrencies)
+
+    router.get("/conversion", conversionController.getConversion)
+
+})
 
 module.exports = routes

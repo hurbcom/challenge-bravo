@@ -7,6 +7,12 @@ const { default: axios } = require('axios')
 const base_url = process.env.CONVERSION_ENDPOINT
 
 class CurrencyController {
+
+    async index(req, res){
+        res.status(200).json({
+            info: "hey HURB :)"
+        })
+    }
     async getAllSupportedCurrencies(req, res){
         try {
             const { data } = await axios.get(`${base_url}/json/all`)
@@ -33,7 +39,8 @@ class CurrencyController {
             })
 
             await Currency.insertMany(allCurrencies)
-            await client.setex(
+
+            client.setex(
                 'allCurrencies',
                 process.env.REDIS_TTL,
                 JSON.stringify(allCurrencies)
@@ -46,7 +53,9 @@ class CurrencyController {
                 info: 'data from database'
             })
         } catch (e) {
-            throw new Error(e)
+            return res
+            .status(500)
+            .json(e)
         }
     }
 
@@ -82,7 +91,7 @@ class CurrencyController {
         }
 
         const rules = {
-            code        : 'required',
+            code        : 'required|exists',
             codein      : 'required',
             name        : 'required',
             high        : 'required',
@@ -94,48 +103,50 @@ class CurrencyController {
         }
 
         const messages = {
-            'code.required'           : 'code is required',
-            'codein.required'         : 'codein is required',
-            'name.required'           : 'name is required',
-            'high.required'           : 'high is required',
-            'low.required'            : 'low is required',
-            'varBid.required'         : 'varBid is required',
-            'pctChange.required'      : 'pctChange is required',
-            'bid.required'            : 'bid is required',
-            'ask.required'            : 'ask is required'
+            required: ':attr is required',
+            exists: ':attr already exists'
+        }
+
+        const existsCurrency = await Currency.exists({ code: data.code })
+
+        function exists(name, value, params) {
+            if (existsCurrency) {
+                return false
+            }
+            return true
         }
 
         const v = Validator.make(data, rules, messages)
+        v.extend('exists', exists, ':attr already exists.')
 
         if (v.fails()) {
-            const errors = v.getErrors();
-            res
+            const errors = v.getErrors()
+
+            return res
             .status(400)
             .json(errors)
         }
 
         try {
-            const currencyExists = await Currency.findOne({ code: data.code })
-            if(currencyExists){
-                res
-                .status(400)
-                .json({
-                    data: currencyExists,
-                    info: 'currency already exists.'
-                });
-            }
-            const newCurrency = await Currency.create({
-                data
-            })
 
-            res
+            const newCurrency = await Currency.create(data)
+
+            client.setex(
+                'allCurrencies',
+                process.env.REDIS_TTL,
+                JSON.stringify(newCurrency)
+            )
+
+            return res
             .status(201)
             .json({
                 data: newCurrency,
                 info: 'currency created!'
             })
         }catch (e) {
-            res.json(e);
+            return res
+            .status(400)
+            .json(e)
         }
 
     }
@@ -151,7 +162,7 @@ class CurrencyController {
         }
 
         const rules = {
-            code       : 'required'
+            code: 'required'
         }
 
         const messages = {
@@ -171,7 +182,7 @@ class CurrencyController {
         }
 
         const v = Validator.make(data, rules, messages)
-        v.extend('backingcurrency', validateDefaultCurrency, ':attr is a backing currency, impossible to delete')
+        v.extend('backingcurrency', validateDefaultCurrency, ':attr is the api support currency, it is not possible to delete')
 
         if (v.fails()) {
             const errors = v.getErrors();

@@ -18,27 +18,27 @@ const CurrencySchema = new Schema({
         required: true
     },
     high: {
-        type: Number,
+        type: String,
         required: true
     },
     low: {
-        type: Number,
+        type: String,
         required: true
     },
     varBid: {
-        type: Number,
+        type: String,
         required: true
     },
     pctChange: {
-        type: Number,
+        type: String,
         required: true
     },
     bid: {
-        type: Number,
+        type: String,
         required: true
     },
     ask: {
-        type: Number,
+        type: String,
         required: true
     }
 },{
