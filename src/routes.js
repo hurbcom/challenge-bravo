@@ -3,19 +3,23 @@
 const routes = require('express').Router()
 require('express-group-routes')
 let currencyController = require('./controllers/currencyController')
+let conversionController = require('./controllers/conversionController')
+
 const checkCache = require('./middlewares/checkCache')
 const checkDatabase = require('./middlewares/checkDatabase')
 
 routes.group("/", async (router) => {
-    router.use(checkCache, checkDatabase)
+
+    router.use(checkCache)
+    router.use(checkDatabase)
 
     router.get("/", currencyController.getAllSupportedCurrencies)
 
-    router.get("/conversion", currencyController.getConversion)
+    router.get("/conversion", conversionController.getConversion)
 
-    router.post("/add", currencyController.addCurrency)
+    router.put("/add", currencyController.addCurrency)
 
-    router.delete("/delete/:slug", currencyController.deleteCurrency)
+    router.delete("/delete/:code", currencyController.deleteCurrency)
 
 })
 

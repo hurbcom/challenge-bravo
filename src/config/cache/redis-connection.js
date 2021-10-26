@@ -8,6 +8,7 @@ function create() {
             host: process.env.REDIS_ENDPOINT || '127.0.0.1',
             port: process.env.REDIS_PORT || 6379
         })
+        console.log('connect to Redis')
         return client
     } catch (e) {
         throw new Error(e)

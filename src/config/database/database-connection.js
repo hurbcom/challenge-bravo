@@ -1,6 +1,6 @@
 'use strict'
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose")
 
 async function conn() {
     try{
@@ -8,6 +8,7 @@ async function conn() {
             useUnifiedTopology: true,
             useNewUrlParser: true
         })
+        console.log('connect to DB')
         return conn
     } catch (e) {
         throw new Error(e)

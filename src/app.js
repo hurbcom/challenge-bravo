@@ -3,11 +3,14 @@
 const express = require('express');
 require('dotenv').config()
 
+const db = require('./config/database/database-connection')
+
 class AppController {
     constructor() {
         this.express = express()
         this.middlewares()
         this.routes()
+        this.connectDB()
     }
 
     middlewares() {
@@ -17,6 +20,10 @@ class AppController {
 
     routes() {
         this.express.use(require('./routes'))
+    }
+
+    connectDB() {
+        db.conn
     }
 }
 

@@ -40,14 +40,6 @@ const CurrencySchema = new Schema({
     ask: {
         type: Number,
         required: true
-    },
-    timestamp: {
-        type: Date,
-        required: true
-    },
-    create_date: {
-        type: Date,
-        required: true
     }
 },{
     timestamps: true

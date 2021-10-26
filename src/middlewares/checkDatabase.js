@@ -2,6 +2,7 @@
 
 const Currency = require('../models/Currency')
 
+
 var checkDatabase = async (req, res, next) => {
 
     Currency.estimatedDocumentCount(function (err, count){
@@ -14,7 +15,7 @@ var checkDatabase = async (req, res, next) => {
                     data: JSON.stringify(allCurrencies),
                     info: 'data from database'
                 })
-            });
+            })
         }else{
             console.log('nothing in database')
             return next()
