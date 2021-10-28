@@ -36,9 +36,8 @@ class CurrencyController {
                 }
 
                 allCurrencies.push(currency)
+                await Currency.updateOne({code: currency.code}, currency, {upsert: true})
             })
-
-            await Currency.insertMany(allCurrencies)
 
             client.setex(
                 'allCurrencies',
@@ -162,7 +161,7 @@ class CurrencyController {
         }
 
         const rules = {
-            code: 'required'
+            code: 'required|backingcurrency'
         }
 
         const messages = {
@@ -170,6 +169,7 @@ class CurrencyController {
         }
 
         function validateDefaultCurrency(name, value, params) {
+            console.log(value)
             if (typeof value !== 'string') {
                 return false
             }
@@ -182,7 +182,7 @@ class CurrencyController {
         }
 
         const v = Validator.make(data, rules, messages)
-        v.extend('backingcurrency', validateDefaultCurrency, ':attr is the api support currency, it is not possible to delete')
+        v.extend('backingcurrency', validateDefaultCurrency, ':attr is the api backing currency, it is not possible to delete')
 
         if (v.fails()) {
             const errors = v.getErrors();
@@ -191,7 +191,20 @@ class CurrencyController {
             .json(errors)
         }
 
-        res.status(200).json()
+        try {
+
+            await Currency.deleteOne({code: data.code})
+
+            return res
+            .status(201)
+            .json({
+                info: 'currency deleted!'
+            })
+        }catch (e) {
+            return res
+            .status(400)
+            .json(e)
+        }
     }
 }
 

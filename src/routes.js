@@ -7,30 +7,22 @@ let conversionController = require('./controllers/conversionController')
 
 const checkCache = require('./middlewares/checkCache')
 const checkDatabase = require('./middlewares/checkDatabase')
+const checkNotExists = require('./middlewares/checkNotExists')
+const checkExists = require('./middlewares/checkExists')
+
+const checkBackingCurrency = require('./middlewares/checkBackingCurrency')
 
 routes.group("/", async (router) => {
 
     router.get("/", currencyController.index)
 
-})
+    router.get("/all", [checkCache, checkDatabase], currencyController.getAllSupportedCurrencies)
 
-routes.group("/currency", async (router) => {
+    router.get("/conversion", [checkCache], conversionController.getConversion)
 
-    router.put("/add", currencyController.addCurrency)
+    router.put("/add", [checkBackingCurrency, checkExists], currencyController.addCurrency)
 
-    router.delete("/delete/:code", currencyController.deleteCurrency)
-
-})
-
-routes.group("/", async (router) => {
-
-    router.use(checkCache)
-    router.use(checkDatabase)
-
-    router.get("/all", currencyController.getAllSupportedCurrencies)
-
-    router.get("/conversion", conversionController.getConversion)
-
+    router.delete("/delete", [checkBackingCurrency, checkNotExists], currencyController.deleteCurrency)
 })
 
 module.exports = routes
