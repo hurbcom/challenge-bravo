@@ -6,7 +6,6 @@ var checkConversionInCache = (req, res, next) => {
     const { to, from, amount } = req.query
 
     client.get(`${from}${to}`, (err, data) => {
-        console.log(`${from}${to}`)
         if (err) throw err;
         if (!data) {
             console.log('nothing conversion in cache')
@@ -18,7 +17,7 @@ var checkConversionInCache = (req, res, next) => {
             return res
             .status(200)
             .json({
-                data: data,
+                data: JSON.parse(data),
                 converted_value: parseFloat(converted_value).toFixed(process.env.DECIMAL_PLACES),
                 info: "data from cache"
             })

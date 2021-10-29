@@ -10,6 +10,14 @@ class CurrencyController {
 
     async index(req, res){
         res.status(200).json({
+            labels: {
+                bid: "Compra",
+                ask: "Venda",
+                varBid: "Variação",
+                pctChange: "Porcentagem de Variação",
+                high: "Máximo",
+                low: "Mínimo"
+            },
             info: "hey HURB :)"
         })
     }
@@ -106,7 +114,7 @@ class CurrencyController {
             exists: ':attr already exists'
         }
 
-        const existsCurrency = await Currency.exists({ code: data.code })
+        const existsCurrency = await Currency.exists({ code: data.code, codein: data.codein })
 
         function exists(name, value, params) {
             if (existsCurrency) {
