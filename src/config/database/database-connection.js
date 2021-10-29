@@ -2,7 +2,7 @@
 
 const mongoose = require("mongoose")
 
-async function conn() {
+module.exports = async function conn() {
     try{
         const conn = await mongoose.connect(process.env.DB_URI, {
             useUnifiedTopology: true,
@@ -11,8 +11,7 @@ async function conn() {
         console.log("\x1b[32m", 'Connected to DB')
         return conn
     } catch (e) {
-        throw new Error(e)
+        console.log("\x1b[31m", 'Failed connected to DB XXXXXXXX')
+        return new Error(e)
     }
 }
-
-module.exports = conn()

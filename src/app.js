@@ -5,6 +5,7 @@ require('dotenv').config()
 
 const db = require('./config/database/database-connection')
 
+
 class AppController {
     constructor() {
         this.express = express()
@@ -23,7 +24,7 @@ class AppController {
     }
 
     connectDB() {
-        db.conn
+        return db()
     }
 }
 

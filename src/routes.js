@@ -23,7 +23,7 @@ routes.group("/", async (router) => {
 
     router.put("/add", [checkExists, checkBackingCurrency], currencyController.addCurrency)
 
-    router.delete("/delete", [checkNotExists, checkBackingCurrency ], currencyController.deleteCurrency)
+    router.delete("/delete", [checkNotExists], currencyController.deleteCurrency)
 
     router.get("/conversion", [checkAmountIsNumber, checkConversionInCache, checkConversionInDB], conversionController.getConversion)
 

@@ -4,7 +4,8 @@
   "description": "API para conversão de moedas (Desafio Hurb)",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:watch": "jest --watchAll --detectOpenHandles --no-cache",
     "dev": "nodemon src/server.js"
   },
   "repository": {
@@ -28,6 +29,8 @@
     "Validator": "^1.1.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.14"
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.14",
+    "supertest": "^6.1.6"
   }
 }

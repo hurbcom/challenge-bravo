@@ -9,26 +9,20 @@ const base_url = process.env.CONVERSION_ENDPOINT
 class CurrencyController {
 
     async index(req, res){
-        try {
-            res.status(200).json({
-                currency_labels: {
-                    bid: "Compra",
-                    ask: "Venda",
-                    varBid: "Variação",
-                    pctChange: "Porcentagem de Variação",
-                    high: "Máximo",
-                    low: "Mínimo"
-                },
-                api_responses_labels:{
-                    converted_value: "O valor da conversão utilizando amount"
-                },
-                info: "hey HURB :)"
-            })
-        } catch (e) {
-            return res
-            .status(500)
-            .json(e)
-        }
+        return res.status(200).json({
+            currency_labels: {
+                bid: "Compra",
+                ask: "Venda",
+                varBid: "Variação",
+                pctChange: "Porcentagem de Variação",
+                high: "Máximo",
+                low: "Mínimo"
+            },
+            api_responses_labels:{
+                converted_value: "O valor da conversão utilizando amount"
+            },
+            info: "hey HURB :)"
+        })
     }
     async getAllSupportedCurrencies(req, res){
         try {
@@ -189,19 +183,21 @@ class CurrencyController {
     async deleteCurrency(req, res){
 
         const {
-            code
+            code, codein
         } = req.body
 
         const data = {
-            code
+            code,
+            codein
         }
 
         const rules = {
-            code: 'required'
+            code: 'required',
+            codein: 'required'
         }
 
         const messages = {
-            'code.required' : 'code is required'
+            'required' : ':attr is required'
         }
 
         const v = Validator.make(data, rules, messages)
@@ -215,10 +211,10 @@ class CurrencyController {
 
         try {
 
-            await Currency.deleteOne({code: data.code})
+            await Currency.deleteOne({code: data.code, codein: data.codein})
 
             return res
-            .status(201)
+            .status(200)
             .json({
                 info: 'currency deleted!'
             })
