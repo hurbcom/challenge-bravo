@@ -28,7 +28,7 @@ class ConversionController {
             .status(200)
             .json({
                 data: data,
-                converted_value: converted_value,
+                converted_value: parseFloat(converted_value).toFixed(process.env.DECIMAL_PLACES),
                 info: "data from api"
             })
 

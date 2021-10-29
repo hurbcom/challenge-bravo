@@ -9,8 +9,8 @@ const checkCache = require('./middlewares/checkCache')
 const checkDatabase = require('./middlewares/checkDatabase')
 const checkNotExists = require('./middlewares/checkNotExists')
 const checkExists = require('./middlewares/checkExists')
-
 const checkBackingCurrency = require('./middlewares/checkBackingCurrency')
+const checkConversionInCache = require('./middlewares/checkConversionInCache')
 
 routes.group("/", async (router) => {
 
@@ -22,7 +22,7 @@ routes.group("/", async (router) => {
 
     router.delete("/delete", [checkBackingCurrency, checkNotExists], currencyController.deleteCurrency)
 
-    router.get("/conversion", conversionController.getConversion)
+    router.get("/conversion", [checkConversionInCache], conversionController.getConversion)
 
 })
 
