@@ -4,16 +4,16 @@ const Currency = require('../models/Currency')
 
 var checkNotExists = async (req, res, next) => {
 
-    const { code } = req.body
+    const { code, codein } = req.body
 
     try {
-        const q = await Currency.exists({code: code})
+        const q = await Currency.exists({code: code, codein: codein})
 
         if(!q){
             res
             .status(400)
             .json({
-                info: `currency with code ${code} does not exists!`
+                info: `currency does not exists!`
             })
         }else{
             return next()

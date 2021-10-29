@@ -9,17 +9,23 @@ const base_url = process.env.CONVERSION_ENDPOINT
 class CurrencyController {
 
     async index(req, res){
-        res.status(200).json({
-            labels: {
-                bid: "Compra",
-                ask: "Venda",
-                varBid: "Variação",
-                pctChange: "Porcentagem de Variação",
-                high: "Máximo",
-                low: "Mínimo"
-            },
-            info: "hey HURB :)"
-        })
+        try {
+            res.status(200).json({
+                labels: {
+                    bid: "Compra",
+                    ask: "Venda",
+                    varBid: "Variação",
+                    pctChange: "Porcentagem de Variação",
+                    high: "Máximo",
+                    low: "Mínimo"
+                },
+                info: "hey HURB :)"
+            })
+        } catch (e) {
+            return res
+            .status(500)
+            .json(e)
+        }
     }
     async getAllSupportedCurrencies(req, res){
         try {

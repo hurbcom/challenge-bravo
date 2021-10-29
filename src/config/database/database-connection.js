@@ -8,7 +8,7 @@ async function conn() {
             useUnifiedTopology: true,
             useNewUrlParser: true
         })
-        console.log('connect to DB')
+        console.log("\x1b[32m", 'Connected to DB')
         return conn
     } catch (e) {
         throw new Error(e)
