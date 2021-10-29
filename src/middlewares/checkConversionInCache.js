@@ -2,10 +2,11 @@
 
 let client = require('../config/cache/redis-connection')
 
-var checkCache = (req, res, next) => {
+var checkConversionInCache = (req, res, next) => {
     const { to, from, amount } = req.query
 
     client.get(`${from}${to}`, (err, data) => {
+        console.log(`${from}${to}`)
         if (err) throw err;
         if (!data) {
             console.log('nothing conversion in cache')
@@ -25,4 +26,4 @@ var checkCache = (req, res, next) => {
     })
 }
 
-module.exports = checkCache
+module.exports = checkConversionInCache
