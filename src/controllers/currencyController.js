@@ -24,7 +24,7 @@ class CurrencyController {
                 let currency = {
                     code: value.code,
                     codein: value.codein,
-                    name: value.name.split('/')[0],
+                    name: value.name,
                     high: value.high,
                     low: value.low,
                     varBid: value.varBid,
