@@ -11,13 +11,16 @@ class CurrencyController {
     async index(req, res){
         try {
             res.status(200).json({
-                labels: {
+                currency_labels: {
                     bid: "Compra",
                     ask: "Venda",
                     varBid: "Variação",
                     pctChange: "Porcentagem de Variação",
                     high: "Máximo",
                     low: "Mínimo"
+                },
+                api_responses_labels:{
+                    converted_value: "O valor da conversão utilizando amount"
                 },
                 info: "hey HURB :)"
             })
@@ -38,7 +41,7 @@ class CurrencyController {
                 let currency = {
                     code: value.code,
                     codein: value.codein,
-                    name: value.name.split('/')[0],
+                    name: value.name,
                     high: value.high,
                     low: value.low,
                     varBid: value.varBid,
@@ -50,7 +53,26 @@ class CurrencyController {
                 }
 
                 allCurrencies.push(currency)
-                await Currency.updateOne({code: currency.code}, currency, {upsert: true})
+            })
+
+            const createdCurrencies = await Currency.find({})
+
+            Object.entries(createdCurrencies).forEach(async([key, value]) => {
+                let currency = {
+                    code: value.code,
+                    codein: value.codein,
+                    name: value.name,
+                    high: value.high,
+                    low: value.low,
+                    varBid: value.varBid,
+                    pctChange: value.pctChange,
+                    bid: value.bid,
+                    ask: value.ask,
+                    timestamp: value.timestamp,
+                    create_date: value.create_date
+                }
+
+                allCurrencies.push(currency)
             })
 
             client.setex(
@@ -63,7 +85,7 @@ class CurrencyController {
             .status(200)
             .json({
                 data: allCurrencies,
-                info: 'data from database'
+                info: 'data from api and database'
             })
         } catch (e) {
             return res
@@ -175,28 +197,14 @@ class CurrencyController {
         }
 
         const rules = {
-            code: 'required|backingcurrency'
+            code: 'required'
         }
 
         const messages = {
             'code.required' : 'code is required'
         }
 
-        function validateDefaultCurrency(name, value, params) {
-            console.log(value)
-            if (typeof value !== 'string') {
-                return false
-            }
-
-            if (value === process.env.BACKING_CURRENCY) {
-                return false
-            }
-
-            return true
-        }
-
         const v = Validator.make(data, rules, messages)
-        v.extend('backingcurrency', validateDefaultCurrency, ':attr is the api backing currency, it is not possible to delete')
 
         if (v.fails()) {
             const errors = v.getErrors();
