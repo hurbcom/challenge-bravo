@@ -3,8 +3,8 @@
 let client = require('../config/cache/redis-connection')
 
 var checkCache = (req, res, next) => {
-
-    client.get('allCurrencies', (err, data) => {
+    let search = req.params.search || 'allCurrencies';
+    client.get(search, (err, data) => {
         if (err) throw err;
         if (!data) {
             console.log('nothing in cache')
