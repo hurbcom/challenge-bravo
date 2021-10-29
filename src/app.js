@@ -5,9 +5,6 @@ require('dotenv').config()
 
 const db = require('./config/database/database-connection')
 
-let currencyController = require('./controllers/currencyController')
-
-
 class AppController {
     constructor() {
         this.express = express()

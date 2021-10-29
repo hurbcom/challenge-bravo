@@ -6,12 +6,13 @@ let currencyController = require('./controllers/currencyController')
 let conversionController = require('./controllers/conversionController')
 
 const checkCache = require('./middlewares/checkCache')
-const checkDatabase = require('./middlewares/checkDatabase')
 const checkNotExists = require('./middlewares/checkNotExists')
 const checkExists = require('./middlewares/checkExists')
 const checkBackingCurrency = require('./middlewares/checkBackingCurrency')
 const checkConversionInCache = require('./middlewares/checkConversionInCache')
 const checkConversionInDB = require('./middlewares/checkConversionInDB')
+const checkAmountIsNumber = require('./middlewares/checkAmountIsNumber')
+
 
 
 routes.group("/", async (router) => {
@@ -24,7 +25,7 @@ routes.group("/", async (router) => {
 
     router.delete("/delete", [checkNotExists, checkBackingCurrency ], currencyController.deleteCurrency)
 
-    router.get("/conversion", [checkConversionInCache, checkConversionInDB], conversionController.getConversion)
+    router.get("/conversion", [checkAmountIsNumber, checkConversionInCache, checkConversionInDB], conversionController.getConversion)
 
 })
 

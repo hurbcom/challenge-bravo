@@ -25,12 +25,11 @@ class ConversionController {
         const rules = {
             to        : 'required',
             from      : 'required',
-            amount    : 'required|numeric',
+            amount    : 'required',
         }
 
         const messages = {
-            required: ':attr is required',
-            numeric: ':attr needs to be a number'
+            required: ':attr is required'
         }
 
         const v = Validator.make(data, rules, messages)
