@@ -1,1 +1,8 @@
 version: "3.2"
+services:
+    redis:
+        image: redis:latest
+        container_name: redis
+        restart: always
+        ports:
+            -${REDIS_PORT}:6379
