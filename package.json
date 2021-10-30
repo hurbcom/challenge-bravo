@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll --detectOpenHandles --no-cache",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "start": "pm2 start src/server.js --watch --no-daemon"
   },
   "repository": {
     "type": "git",
