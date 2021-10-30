@@ -5,4 +5,21 @@ services:
         container_name: redis
         restart: always
         ports:
-            -${REDIS_PORT}:6379
+            - ${REDIS_PORT}:6379
+    api:
+        image: node:latest
+        container_name: api
+        restart: always
+        depends_on:
+            - redis
+        ports:
+            - ${PORT}:${PORT}
+        volumes:
+            - .:/usr/src/app
+        working_dir: /usr/src/app
+        command: npm start
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "5"
