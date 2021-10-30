@@ -121,7 +121,7 @@ class CurrencyController {
 
         const rules = {
             code        : 'required|exists',
-            codein      : 'required',
+            codein      : 'required|exists',
             name        : 'required',
             high        : 'required',
             low         : 'required',
@@ -138,7 +138,7 @@ class CurrencyController {
 
         const existsCurrency = await Currency.exists({ code: data.code, codein: data.codein })
 
-        function exists(name, value, params) {
+        function exists() {
             if (existsCurrency) {
                 return false
             }
