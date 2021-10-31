@@ -13,7 +13,8 @@ services:
         env_file:
             - .env
         depends_on:
-            - db
+            db:
+                condition: service_started
     db:
         image: postgres:12.0-alpine
         ports:
