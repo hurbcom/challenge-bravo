@@ -79,3 +79,15 @@ def test_delete_currency_not_exists(client: TestClient) -> None:
     response = client.delete(f"{settings.API_V1_STR}/currencies/999")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+def test_exchange_currency(client: TestClient) -> None:
+    response = client.get(f"{settings.API_V1_STR}/currencies/convert/?code_from=EUR&code_to=BRL&amount=1")
+
+    assert response.status_code == status.HTTP_200_OK
+
+
+def test_exchange_currency_doesnt_exists(client: TestClient) -> None:
+    response = client.get(f"{settings.API_V1_STR}/currencies/convert/?code_from=PLO&code_to=BRL&amount=1")
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
