@@ -17,6 +17,7 @@ class CurrencyUpdate(CurrencyBase):
 
 
 class CurrencyInDB(CurrencyBase):
+    id: Optional[int]
     code: str
     rate: float
 
