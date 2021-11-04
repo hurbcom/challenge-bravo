@@ -1,1 +1,1 @@
-from .currency import currency
+from .currency import currency # noqa

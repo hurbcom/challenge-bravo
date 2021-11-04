@@ -1,1 +1,1 @@
-from .currency import Currency, CurrencyCreate, CurrencyUpdate, CurrencyInDB
+from .currency import Currency, CurrencyCreate, CurrencyUpdate, CurrencyInDB # noqa
