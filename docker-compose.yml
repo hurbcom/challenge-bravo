@@ -14,13 +14,17 @@ services:
             - .env
         depends_on:
             db:
-                condition: service_started
+                condition: service_healthy
     db:
         image: postgres:12.0-alpine
         ports:
             - "49166:5432"
         volumes:
             - postgres_data:/var/lib/postgresql/data/
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 7s
+            timeout: 5s
         environment:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=senha
