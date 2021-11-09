@@ -43,8 +43,7 @@ class ConversionController {
 
         try {
 
-            const responseAPI = await axios.get(`${base_url}/last/${from}-${to}`)
-            console.log(responseAPI)
+            const { data } = await axios.get(`${base_url}/last/${from}-${to}`)
 
             if(!data){
                 return res
