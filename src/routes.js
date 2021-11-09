@@ -13,7 +13,7 @@ const checkConversionInCache = require('./middlewares/checkConversionInCache')
 const checkConversionInDB = require('./middlewares/checkConversionInDB')
 const checkAmountIsNumber = require('./middlewares/checkAmountIsNumber')
 
-
+// [checkAmountIsNumber, checkConversionInCache, checkConversionInDB]
 
 routes.group("/", async (router) => {
 

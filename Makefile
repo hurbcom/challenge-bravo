@@ -10,7 +10,7 @@ up:
 down:
 	docker-compose down
 
-.PHONY: down
+.PHONY: logs
 
 logs:
 	docker-compose logs -f
