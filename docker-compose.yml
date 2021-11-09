@@ -17,7 +17,10 @@ services:
         volumes:
             - .:/usr/src/app
         working_dir: /usr/src/app
-        command: NODE_ENV=production npm start
+        command: npm start
+        environment:
+            - NODE_ENV=production
+
         logging:
             driver: "json-file"
             options:
