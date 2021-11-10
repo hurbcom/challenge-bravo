@@ -4,13 +4,15 @@
 
 Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live quotes**.
 
-The API must originally convert between the following currencies:
+The API must convert between the following currencies:
 
 -   USD
 -   BRL
 -   EUR
 -   BTC
 -   ETH
+
+Other coins could be added as usage.
 
 Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
 

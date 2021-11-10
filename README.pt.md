@@ -4,13 +4,15 @@
 
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
 
-A API deve, originalmente, converter entre as seguintes moedas:
+A API precisa converter entre as seguintes moedas:
 
 -   USD
 -   BRL
 -   EUR
 -   BTC
 -   ETH
+
+Outras moedas podem ser adicionadas conforme o uso.
 
 Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
