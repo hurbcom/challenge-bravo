@@ -2,7 +2,7 @@
 
 [[English](README.md) | [Portuguese](README.pt.md)]
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live quotes**.
+Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
 
 The API must convert between the following currencies:
 
