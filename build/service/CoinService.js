@@ -9,21 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CotationRepository = void 0;
-const connection_1 = require("../connection");
-class CotationRepository {
+exports.CoinService = void 0;
+const CoinRepository_1 = require("../repository/CoinRepository");
+class CoinService {
     constructor() {
-        this.create = (cotation) => __awaiter(this, void 0, void 0, function* () {
-            const result = yield connection_1.connection.raw(`
-
-        INSERT INTO hurb_cotation (code, codein, name, varBid,
-             pctChange, bid, ask, createDate) VALUES ('${cotation.code}', '${cotation.codein}','${cotation.name}',
-             '${cotation.varBid}','${cotation.pctChange}','${cotation.bid}',
-             '${cotation.ask}', ${cotation.createDate})
-    `);
-            return result[0][0];
+        this.create = (coin) => __awaiter(this, void 0, void 0, function* () {
+            const coinRepository = new CoinRepository_1.CoinRepository();
+            const createdCoin = yield coinRepository.create(coin);
+            console.log(createdCoin);
+            return createdCoin;
         });
     }
 }
-exports.CotationRepository = CotationRepository;
-//# sourceMappingURL=CotationRepository.js.map
+exports.CoinService = CoinService;
+//# sourceMappingURL=CoinService.js.map

@@ -2,7 +2,6 @@ import { Cotation } from "../entity/Cotation"
 import { CotationService } from "../service/CotationService"
 import { Request, Response } from "express"
 import { ValidationUtil } from "../util/ValidationUtil"
-import { CotationRepository } from "../repository/CotationRepository"
 
 export class CotationController {
 
@@ -27,13 +26,12 @@ export class CotationController {
         if (cotation != null && cotation != undefined) {
 
             const cotationService = new CotationService()
-            const createdCotation = cotationService.create(cotation)
+            const createdCotation = await cotationService.create(cotation)
             res.status(201).send(createdCotation)
 
         } else {
             res.status(500).send("Erro ao criar nova moeda.")
         }
     }
-
 
 }

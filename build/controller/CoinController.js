@@ -9,21 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CotationRepository = void 0;
-const connection_1 = require("../connection");
-class CotationRepository {
+exports.CoinController = void 0;
+const CoinService_1 = require("../service/CoinService");
+class CoinController {
     constructor() {
-        this.create = (cotation) => __awaiter(this, void 0, void 0, function* () {
-            const result = yield connection_1.connection.raw(`
-
-        INSERT INTO hurb_cotation (code, codein, name, varBid,
-             pctChange, bid, ask, createDate) VALUES ('${cotation.code}', '${cotation.codein}','${cotation.name}',
-             '${cotation.varBid}','${cotation.pctChange}','${cotation.bid}',
-             '${cotation.ask}', ${cotation.createDate})
-    `);
-            return result[0][0];
+        this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const coin = req.body;
+            if (coin != null && coin != undefined) {
+                const coinService = new CoinService_1.CoinService();
+                const createdCoin = yield coinService.create(coin);
+                res.status(201).send(createdCoin);
+                console.log(createdCoin);
+            }
+            else {
+                res.status(500).send("Erro ao criar nova moeda.");
+            }
         });
     }
 }
-exports.CotationRepository = CotationRepository;
-//# sourceMappingURL=CotationRepository.js.map
+exports.CoinController = CoinController;
+//# sourceMappingURL=CoinController.js.map

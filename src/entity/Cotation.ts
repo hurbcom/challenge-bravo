@@ -28,7 +28,6 @@ export class Cotation {
             this.bid = bid
             this.ask = ask
             this.timesTamp = timesTamp
-            this.createDate = createDate
-
+           this.createDate = createDate
     }
 }

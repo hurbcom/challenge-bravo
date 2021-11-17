@@ -14,7 +14,6 @@ export class CotationService {
         const cotationRepositoy = new CotationRepository()
         const createdCotation = await cotationRepositoy.create(cotation)
         return createdCotation
-
     }
 
 }
