@@ -3,7 +3,11 @@ import { Request, Response, Router } from "express";
 import { CotationController } from "./controller/CotationController";
 
 app.get("/cotation", (req: Request, res: Response) => {
-    console.log("entrou aqui")
     const cotationController = new CotationController()
-    cotationController.get(req, res)
+    return cotationController.get(req, res)
+})
+
+app.post("/cotation", (req: Request, res: Response) => {
+    const cotationController = new CotationController()
+    return cotationController.create(req, res)
 })

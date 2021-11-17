@@ -24,6 +24,17 @@ class CotationController {
             const cotation = yield cotationService.get(req.query.from, req.query.to, Number(req.query.amout));
             res.send(`Conversion from ${req.query.from} to ${req.query.to} is: ${Number(req.query.amount) * Number(cotation.ask)}`);
         });
+        this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const cotation = req.body;
+            if (cotation != null && cotation != undefined) {
+                const cotationService = new CotationService_1.CotationService();
+                const createdCotation = yield cotationService.create(cotation);
+                res.status(201).send(createdCotation);
+            }
+            else {
+                res.status(500).send("Erro ao criar nova moeda.");
+            }
+        });
     }
 }
 exports.CotationController = CotationController;

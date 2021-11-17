@@ -6,8 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
 const CotationController_1 = require("./controller/CotationController");
 app_1.default.get("/cotation", (req, res) => {
-    console.log("entrou aqui");
     const cotationController = new CotationController_1.CotationController();
-    cotationController.get(req, res);
+    return cotationController.get(req, res);
+});
+app_1.default.post("/cotation", (req, res) => {
+    const cotationController = new CotationController_1.CotationController();
+    return cotationController.create(req, res);
 });
 //# sourceMappingURL=index.js.map

@@ -6,4 +6,6 @@ export default (router: Router): void => {
         const cotationController = new CotationController()
         cotationController.get(req, res)
     })
+
+    
 }
