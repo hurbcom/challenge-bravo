@@ -21,8 +21,13 @@ class CotationController {
                 return res.status(400).send("Dados inválidos.");
             }
             const cotationService = new CotationService_1.CotationService();
-            const cotation = yield cotationService.get(req.query.from, req.query.to, Number(req.query.amout));
-            res.send(`Conversion from ${req.query.from} to ${req.query.to} is: ${Number(req.query.amount) * Number(cotation.ask)}`);
+            const cotation = yield cotationService.get(req.query.from, req.query.to);
+            if (ValidationUtil_1.ValidationUtil.validValue(cotation)) {
+                res.send(`Conversion from ${req.query.from} to ${req.query.to} is: ${Number(req.query.amount) * Number(cotation.ask)}`);
+            }
+            else {
+                res.status(404);
+            }
         });
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const cotation = req.body;

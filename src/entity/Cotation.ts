@@ -10,12 +10,12 @@ export class Cotation {
     pctChange: string
     bid: string
     ask: string
-    timesTamp: string
+    timestamp: string
     createDate: Date
  
 
     constructor(id: number, code: string, codein: string, name: string, high: string, low: string, varBid: string, 
-        pctChange: string, bid: string, ask: string, timesTamp: string, createDate: Date) {
+        pctChange: string, bid: string, ask: string, timestamp: string, createDate: Date) {
 
             this.id = id
             this.code = code
@@ -27,7 +27,7 @@ export class Cotation {
             this.pctChange = pctChange
             this.bid = bid
             this.ask = ask
-            this.timesTamp = timesTamp
+            this.timestamp = timestamp
            this.createDate = createDate
     }
 }

@@ -14,15 +14,27 @@ const AwesomeApi_1 = require("../client/AwesomeApi");
 const CotationRepository_1 = require("../repository/CotationRepository");
 class CotationService {
     constructor() {
-        this.get = (from, to, amout) => __awaiter(this, void 0, void 0, function* () {
+        this.get = (from, to) => __awaiter(this, void 0, void 0, function* () {
             const api = new AwesomeApi_1.AwesomeApi();
-            const cotation = yield api.getCotation(from, to);
-            return cotation.data[`${from}${to}`];
+            try {
+                const cotation = yield api.getCotation(from, to);
+                return cotation.data[`${from}${to}`];
+            }
+            catch (error) {
+                console.log("Não foi possível obter cotação da api externa");
+                const cotationFromDatabase = this.getDatabaseByCodeAndCodeIn(from, to);
+                return (!cotationFromDatabase) ? null : cotationFromDatabase;
+            }
         });
         this.create = (cotation) => __awaiter(this, void 0, void 0, function* () {
             const cotationRepositoy = new CotationRepository_1.CotationRepository();
             const createdCotation = yield cotationRepositoy.create(cotation);
             return createdCotation;
+        });
+        this.getDatabaseByCodeAndCodeIn = (code, codeIn) => __awaiter(this, void 0, void 0, function* () {
+            const cotationRepositoy = new CotationRepository_1.CotationRepository();
+            const cotation = yield cotationRepositoy.getByCodeAndCodeIn(code, codeIn);
+            return cotation;
         });
     }
 }

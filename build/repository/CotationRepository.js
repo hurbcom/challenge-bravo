@@ -16,11 +16,17 @@ class CotationRepository {
         this.create = (cotation) => __awaiter(this, void 0, void 0, function* () {
             const result = yield connection_1.connection.raw(`
 
-        INSERT INTO hurb_cotation (code, codein, name, varBid,
-             pctChange, bid, ask, createDate) VALUES ('${cotation.code}', '${cotation.codein}','${cotation.name}',
-             '${cotation.varBid}','${cotation.pctChange}','${cotation.bid}',
-             '${cotation.ask}', ${cotation.createDate})
+        INSERT INTO hurb_cotation (code, codein, name, high, low, varBid,
+             pctChange, bid, ask, timestamp, createDate) VALUES ('${cotation.code}', '${cotation.codein}','${cotation.name}',
+             '${cotation.high}', '${cotation.low}', '${cotation.varBid}','${cotation.pctChange}','${cotation.bid}',
+             '${cotation.ask}', '${cotation.timestamp}', '${cotation.createDate}')
     `);
+            return result[0][0];
+        });
+        this.getByCodeAndCodeIn = (code, codeIn) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield connection_1.connection.raw(`
+            SELECT * FROM hurb_cotation WHERE code = ('${code}') AND codein = ('${codeIn}')
+        `);
             return result[0][0];
         });
     }

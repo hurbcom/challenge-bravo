@@ -17,7 +17,6 @@ const axios_1 = __importDefault(require("axios"));
 class AwesomeApi {
     constructor() {
         this.getCotation = (from, to) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`http://economia.awesomeapi.com.br/json/last/${from}-${to}`);
             const cotation = yield axios_1.default.get(`http://economia.awesomeapi.com.br/json/last/${from}-${to}`);
             return cotation;
         });

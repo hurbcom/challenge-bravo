@@ -14,11 +14,15 @@ export class CotationController {
         }
 
         const cotationService = new CotationService()
-        const cotation = await cotationService.get(req.query.from as string, req.query.to as string, Number(req.query.amout))
+        const cotation = await cotationService.get(req.query.from as string, req.query.to as string)
 
-        res.send(`Conversion from ${req.query.from} to ${req.query.to} is: ${Number(req.query.amount) * Number(cotation.ask)}`)
+        if (ValidationUtil.validValue(cotation)) {
+            res.send(`Conversion from ${req.query.from} to ${req.query.to} is: ${Number(req.query.amount) * Number(cotation.ask)}`)
+        } else {
+            res.status(404)
+        }
+
     }
-
 
     public create = async (req: Request, res: Response) => {
         const cotation = req.body as Cotation
