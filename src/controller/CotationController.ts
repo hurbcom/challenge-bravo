@@ -34,7 +34,7 @@ export class CotationController {
             res.status(201).send(createdCotation)
 
         } else {
-            res.status(500).send("Erro ao criar nova moeda.")
+            res.status(500).send("Erro ao criar cotação.")
         }
     }
 

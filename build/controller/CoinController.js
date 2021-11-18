@@ -19,7 +19,6 @@ class CoinController {
                 const coinService = new CoinService_1.CoinService();
                 const createdCoin = yield coinService.create(coin);
                 res.status(201).send(createdCoin);
-                console.log(createdCoin);
             }
             else {
                 res.status(500).send("Erro ao criar nova moeda.");
