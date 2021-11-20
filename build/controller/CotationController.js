@@ -13,6 +13,7 @@ exports.CotationController = void 0;
 const CotationService_1 = require("../service/CotationService");
 const ValidationUtil_1 = require("../util/ValidationUtil");
 const express_1 = require("express");
+const CotationAlreadyExistsError_1 = require("../error/CotationAlreadyExistsError");
 class CotationController {
     constructor() {
         this.path = '/cotations';
@@ -34,11 +35,21 @@ class CotationController {
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const cotation = req.body;
             if (cotation != null && cotation != undefined) {
-                const createdCotation = yield this.cotationService.create(cotation);
-                res.status(201).send(createdCotation);
+                try {
+                    const createdCotation = yield this.cotationService.create(cotation);
+                    res.status(201).send(createdCotation);
+                }
+                catch (error) {
+                    if (error instanceof CotationAlreadyExistsError_1.CotationAlreadyExistsError) {
+                        res.status(400).send(error.message);
+                    }
+                    else {
+                        res.status(500).send();
+                    }
+                }
             }
             else {
-                res.status(500).send("Can't possible create cotation");
+                res.status(400).send("Can't possible create cotation");
             }
         });
         this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {

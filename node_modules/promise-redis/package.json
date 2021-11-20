@@ -1,0 +1,24 @@
+{
+    "name": "promise-redis",
+    "version": "0.0.5",
+    "description": "Tiny library that adds promise awareness to node_redis",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/maxbrieiev/promise-redis"
+    },
+    "keywords": [
+        "redis",
+        "promise",
+        "when",
+        "q",
+        "bluebird",
+        "then"
+    ],
+    "author": "Maksym Brieiev",
+    "license": "MIT",
+    "dependencies": {
+        "redis": "*",
+        "redis-commands": "*"
+    }
+}

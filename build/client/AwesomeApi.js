@@ -14,12 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AwesomeApi = void 0;
 const axios_1 = __importDefault(require("axios"));
+const dotenv_1 = __importDefault(require("dotenv"));
 class AwesomeApi {
     constructor() {
         this.getCotation = (from, to) => __awaiter(this, void 0, void 0, function* () {
-            const cotation = yield axios_1.default.get(`http://economia.awesomeapi.com.br/json/last/${from}-${to}`);
+            const cotation = yield axios_1.default.get(`${process.env.API_AWESOME}json/last/${from}-${to}`);
             return cotation;
         });
+        dotenv_1.default.config();
     }
 }
 exports.AwesomeApi = AwesomeApi;

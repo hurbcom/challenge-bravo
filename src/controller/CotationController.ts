@@ -4,6 +4,7 @@ import { Request, Response } from "express"
 import { ValidationUtil } from "../util/ValidationUtil"
 import Controller from "./ControllerInterface"
 import { Router } from "express"
+import { CotationAlreadyExistsError } from "../error/CotationAlreadyExistsError"
 
 export class CotationController implements Controller {
 
@@ -42,11 +43,19 @@ export class CotationController implements Controller {
 
         if (cotation != null && cotation != undefined) {
 
-            const createdCotation = await this.cotationService.create(cotation)
-            res.status(201).send(createdCotation)
+            try {
+                const createdCotation = await this.cotationService.create(cotation)
+                res.status(201).send(createdCotation)
+            } catch (error) {
+                if (error instanceof CotationAlreadyExistsError) {
+                    res.status(400).send(error.message)
+                } else {
+                    res.status(500).send()
+                }
+            }
 
         } else {
-            res.status(500).send("Can't possible create cotation")
+            res.status(400).send("Can't possible create cotation")
         }
     }
 
