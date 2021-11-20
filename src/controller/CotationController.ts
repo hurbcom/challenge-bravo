@@ -31,7 +31,8 @@ export class CotationController implements Controller {
         const cotation = await this.cotationService.get(req.query.from as string, req.query.to as string)
 
         if (ValidationUtil.validValue(cotation)) {
-            res.send(`Conversion from ${req.query.from} to ${req.query.to} is: ${Number(req.query.amount) * Number(cotation.ask)}`)
+            const convertedAmount = (Number(req.query.amount) * Number(cotation.ask)).toFixed(2)
+            res.send(`Conversion from ${req.query.from} to ${req.query.to} is: ${convertedAmount}`)
         } else {
             res.status(404)
         }

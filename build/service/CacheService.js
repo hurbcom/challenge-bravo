@@ -11,11 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheService = void 0;
 const redis = require('promise-redis')();
-console.log("CACHE");
-console.log(process.env.REDIS_URL);
 const redisClient = redis.createClient({
-    host: process.env.REDIS_URL,
-    port: process.env.REDIS_PORT
+    host: process.env.REDIS_URL || 'localhost',
+    port: process.env.REDIS_PORT || 6379
 });
 class CacheService {
     constructor() {

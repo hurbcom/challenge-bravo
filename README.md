@@ -30,5 +30,5 @@ Foi criada uma API para realizar conversões monetárias. Neste desafio utilizei
 
 # Observações
     - A api não possui autenticação, sendo assim, qualquer um pode criar ou converter
-    - A solução ideal na minha opinião seria, ao invés de cadastrar uma cotação, cadastrar uma moeda e armazenar o valor dela baseada numa moeda existe, como dólar por exemplo. Assim, poderia ser feito qualquer conversão para qualquer moeda, desde que fosse realizada a conversão primeiro para dólar.
+    * A solução ideal na minha opinião seria, ao invés de cadastrar uma cotação, cadastrar uma moeda e armazenar o valor dela baseada numa moeda existente, como dólar por exemplo. Assim, poderia ser feito qualquer conversão para qualquer moeda, desde que fosse realizada a conversão primeiro para dólar. Não implementei desta forma, pois teria chances de não conseguir terminar devido ao tempo que tive disponível para me dedicar ao desafio.
 

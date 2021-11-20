@@ -1,7 +1,7 @@
 const redis = require('promise-redis')()
 const redisClient = redis.createClient({
-    host: process.env.REDIS_URL, 
-    port: process.env.REDIS_PORT
+    host: process.env.REDIS_URL || 'localhost', 
+    port: process.env.REDIS_PORT || 6379
 })
 
 export class CacheService {

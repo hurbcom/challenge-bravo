@@ -26,7 +26,8 @@ class CotationController {
             }
             const cotation = yield this.cotationService.get(req.query.from, req.query.to);
             if (ValidationUtil_1.ValidationUtil.validValue(cotation)) {
-                res.send(`Conversion from ${req.query.from} to ${req.query.to} is: ${Number(req.query.amount) * Number(cotation.ask)}`);
+                const convertedAmount = (Number(req.query.amount) * Number(cotation.ask)).toFixed(2);
+                res.send(`Conversion from ${req.query.from} to ${req.query.to} is: ${convertedAmount}`);
             }
             else {
                 res.status(404);
