@@ -13,13 +13,13 @@ Foi criada uma API para realizar conversões monetárias. Neste desafio utilizei
 
 # Execução da API:
     Instalar as dependências do projeto:
-    ```
-    npm install
-    ``` 
+    
+     - npm install
+    
     Executar aplicação através do docker-compose
-    ```
-    docker-compose up
-    ```
+    
+    - docker-compose up
+    
 
 # Rotas
 ```
@@ -29,6 +29,12 @@ Foi criada uma API para realizar conversões monetárias. Neste desafio utilizei
 ```
 
 # Observações
+<<<<<<< HEAD
     - A api não possui autenticação, sendo assim, qualquer um pode criar ou converter
     * A solução ideal na minha opinião seria, ao invés de cadastrar uma cotação, cadastrar uma moeda e armazenar o valor dela baseada numa moeda existente, como dólar por exemplo. Assim, poderia ser feito qualquer conversão para qualquer moeda, desde que fosse realizada a conversão primeiro para dólar. Não implementei desta forma, pois teria chances de não conseguir terminar devido ao tempo que tive disponível para me dedicar ao desafio.
+=======
+A api não possui autenticação, sendo assim, qualquer um pode criar ou converter.
+
+A solução ideal na minha opinião seria, ao invés de cadastrar uma cotação, cadastrar uma moeda e armazenar o valor dela baseada numa moeda existe, como dólar por exemplo. Assim, poderia ser feito qualquer conversão para qualquer moeda, desde que fosse realizada a conversão primeiro para dólar.
+>>>>>>> 6fd9c9dfaeea4a0bf2718b1243eb0b024a890cb5
 
