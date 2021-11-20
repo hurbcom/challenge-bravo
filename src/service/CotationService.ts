@@ -1,8 +1,14 @@
 import { AwesomeApi } from "../client/AwesomeApi"
 import { Cotation } from "../entity/Cotation"
-import { CotationRepository } from "../repository/CotationRepository"
+import { CotationRepository } from '../repository/CotationRepository'
 
 export class CotationService {
+
+    private cotationRepository: CotationRepository
+    
+    constructor() {
+        this.cotationRepository = new CotationRepository()
+    }
 
     public get = async (from: string, to: string): Promise<any> => {
         const api = new AwesomeApi()
@@ -18,16 +24,18 @@ export class CotationService {
         
     }
 
-    public create = async (cotation: Cotation): Promise<Cotation> => {
-        const cotationRepositoy = new CotationRepository()
-        const createdCotation = await cotationRepositoy.create(cotation)
-        return createdCotation
+    public create = async (cotation: Cotation): Promise<any> => {
+        cotation.createDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        cotation.timestamp = new Date().getTime().toString()
+        return await this.cotationRepository.create(cotation)
     }
 
-    public getDatabaseByCodeAndCodeIn = async (code: string, codeIn: string) : Promise<Cotation> => {
-        const cotationRepositoy = new CotationRepository();
-        const cotation = await cotationRepositoy.getByCodeAndCodeIn(code, codeIn)
-        return cotation
+    public getDatabaseByCodeAndCodeIn = async (code: string, codeIn: string) : Promise<any> => {
+        return await this.cotationRepository.getByCodeAndCodeIn(code, codeIn)
+    }
+
+    public delete = async (id: number) : Promise<any> => {
+        return await this.cotationRepository.deleteById(id)
     }
 
 }

@@ -11,11 +11,11 @@ export class Cotation {
     bid: string
     ask: string
     timestamp: string
-    createDate: Date
+    createDate: string
  
 
     constructor(id: number, code: string, codein: string, name: string, high: string, low: string, varBid: string, 
-        pctChange: string, bid: string, ask: string, timestamp: string, createDate: Date) {
+        pctChange: string, bid: string, ask: string, timestamp: string, createDate: string) {
 
             this.id = id
             this.code = code

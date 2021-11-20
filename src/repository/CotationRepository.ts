@@ -1,7 +1,6 @@
 import { connection } from "../connection";
 import { Cotation } from "../entity/Cotation";
 
-
 export class CotationRepository {
 
     create = async (cotation: Cotation): Promise<any> => {
@@ -24,4 +23,14 @@ export class CotationRepository {
 
         return result[0][0]
     }
+
+    deleteById = async (id: number) => {
+        
+        const result = await connection.raw(`
+            DELETE FROM hurb_cotation WHERE id = (${id})
+        `)
+
+        return result[0]
+    }
+
 }
