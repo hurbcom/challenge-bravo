@@ -29,9 +29,9 @@ class CotationRepository {
         `);
             return result[0][0];
         });
-        this.deleteById = (id) => __awaiter(this, void 0, void 0, function* () {
+        this.deleteByCodeAndCodein = (code, codein) => __awaiter(this, void 0, void 0, function* () {
             const result = yield connection_1.connection.raw(`
-            DELETE FROM hurb_cotation WHERE id = (${id})
+            DELETE FROM hurb_cotation WHERE code = '${code}' and codein = '${codein}'
         `);
             return result[0];
         });

@@ -51,8 +51,8 @@ class CotationService {
         this.getDatabaseByCodeAndCodeIn = (code, codeIn) => __awaiter(this, void 0, void 0, function* () {
             return yield this.cotationRepository.getByCodeAndCodeIn(code, codeIn);
         });
-        this.delete = (id) => __awaiter(this, void 0, void 0, function* () {
-            return yield this.cotationRepository.deleteById(id);
+        this.deleteByCodeAndCodein = (code, codein) => __awaiter(this, void 0, void 0, function* () {
+            return yield this.cotationRepository.deleteByCodeAndCodein(code, codein);
         });
         this.cotationRepository = new CotationRepository_1.CotationRepository();
         this.cacheService = new CacheService_1.CacheService();

@@ -16,7 +16,7 @@ export class CotationController implements Controller {
     constructor() {
         this.router.get(`${this.path}`, this.get)
         this.router.post(`${this.path}`, this.create)
-        this.router.delete(`${this.path}/:id`, this.delete)
+        this.router.delete(`${this.path}`, this.delete)
         this.cotationService = new CotationService()
     }
 
@@ -60,13 +60,13 @@ export class CotationController implements Controller {
         }
     }
 
-    public delete = async (req: Request, res: Response) => {
+    public delete = async (req: Request, res: Response) => {    
 
-        if(!ValidationUtil.validValue(req.params.id)) {
+        if(!ValidationUtil.validValue(req.query.code) || !ValidationUtil.validValue(req.query.codein)) {
             return res.status(400).send("Invalid parameters")
         }
 
-        await this.cotationService.delete(Number(req.params.id))
+        await this.cotationService.deleteByCodeAndCodein(req.query.code as string, req.query.codein as string)
         return res.status(200).send()
 
     }

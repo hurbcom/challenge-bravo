@@ -24,10 +24,10 @@ export class CotationRepository {
         return result[0][0]
     }
 
-    deleteById = async (id: number) => {
+    deleteByCodeAndCodein = async (code: string, codein: string) => {
         
         const result = await connection.raw(`
-            DELETE FROM hurb_cotation WHERE id = (${id})
+            DELETE FROM hurb_cotation WHERE code = '${code}' and codein = '${codein}'
         `)
 
         return result[0]

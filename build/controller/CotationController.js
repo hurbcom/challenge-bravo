@@ -54,15 +54,15 @@ class CotationController {
             }
         });
         this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            if (!ValidationUtil_1.ValidationUtil.validValue(req.params.id)) {
+            if (!ValidationUtil_1.ValidationUtil.validValue(req.query.code) || !ValidationUtil_1.ValidationUtil.validValue(req.query.codein)) {
                 return res.status(400).send("Invalid parameters");
             }
-            yield this.cotationService.delete(Number(req.params.id));
+            yield this.cotationService.deleteByCodeAndCodein(req.query.code, req.query.codein);
             return res.status(200).send();
         });
         this.router.get(`${this.path}`, this.get);
         this.router.post(`${this.path}`, this.create);
-        this.router.delete(`${this.path}/:id`, this.delete);
+        this.router.delete(`${this.path}`, this.delete);
         this.cotationService = new CotationService_1.CotationService();
     }
 }

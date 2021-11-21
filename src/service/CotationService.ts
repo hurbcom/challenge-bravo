@@ -62,8 +62,8 @@ export class CotationService {
         return await this.cotationRepository.getByCodeAndCodeIn(code, codeIn)
     }
 
-    public delete = async (id: number): Promise<any> => {
-        return await this.cotationRepository.deleteById(id)
+    public deleteByCodeAndCodein = async (code: string, codein: string): Promise<any> => {
+        return await this.cotationRepository.deleteByCodeAndCodein(code, codein)
     }
 
 }
