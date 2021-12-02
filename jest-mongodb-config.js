@@ -1,3 +1,12 @@
-const config = require('./jest.config')
-config.testMatch = ['**/*.test.ts']
-module.exports = config
+module.exports = {
+    mongodbMemoryServerOptions: {
+      instance: {
+        dbName: 'jest'
+      },
+      binary: {
+        version: '5.0.3',
+        skipMD5: true
+      },
+      autoStart: false
+    }
+  }
