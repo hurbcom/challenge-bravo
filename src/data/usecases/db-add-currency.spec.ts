@@ -42,4 +42,10 @@ describe('db add currency usecase', () => {
     const response = await sut.add(makeFakeCurrency())
     expect(response).toBe(false)
   })
+  test('should throw if repository throws', async () => {
+    const { sut, repository } = makeSut()
+    jest.spyOn(repository, 'add').mockRejectedValueOnce(new Error('any_error'))
+    const promise = sut.add(makeFakeCurrency())
+    await expect(promise).rejects.toThrowError('any_error')
+  })
 })
