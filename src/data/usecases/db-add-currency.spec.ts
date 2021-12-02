@@ -31,4 +31,9 @@ describe('db add currency usecase', () => {
     await sut.add(makeFakeCurrency())
     expect(addSpy).toHaveBeenCalledWith(makeFakeCurrency())
   })
+  test('should return true if repository returns true', async () => {
+    const { sut } = makeSut()
+    const response = await sut.add(makeFakeCurrency())
+    expect(response).toBe(true)
+  })
 })
