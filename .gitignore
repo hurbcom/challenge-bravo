@@ -1,0 +1,8 @@
+node_modules
+.env
+yarn.log
+globalConfig.json
+coverage
+dist
+data
+!src/data
