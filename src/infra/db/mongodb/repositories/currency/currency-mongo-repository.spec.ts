@@ -37,4 +37,31 @@ describe('account mongo repository', () => {
       expect(dbCurrency.shortName).toEqual('ANY')
     })
   })
+
+  describe('upsert', () => {
+    test('should return true on update account', async () => {
+      const sut = makeSut()
+      await sut.add(makeFakeCurrency())
+      const newValue = { ...makeFakeCurrency(), USDvalue: 100 }
+      const updated = await sut.upsert(newValue)
+      expect(updated).toBe(true)
+
+      const dbCurrency = await currencyCollection.findOne({ shortName: makeFakeCurrency().shortName })
+      expect(dbCurrency._id).toBeTruthy()
+      expect(dbCurrency.name).toEqual('any currency')
+      expect(dbCurrency.shortName).toEqual('ANY')
+      expect(dbCurrency.USDvalue).toEqual(100)
+    })
+    test('should return true on upsert account that doesnt exists', async () => {
+      const sut = makeSut()
+      const updated = await sut.upsert(makeFakeCurrency())
+      expect(updated).toBe(true)
+
+      const dbCurrency = await currencyCollection.findOne({ shortName: makeFakeCurrency().shortName })
+      expect(dbCurrency._id).toBeTruthy()
+      expect(dbCurrency.name).toEqual('any currency')
+      expect(dbCurrency.shortName).toEqual('ANY')
+      expect(dbCurrency.USDvalue).toEqual(1)
+    })
+  })
 })
