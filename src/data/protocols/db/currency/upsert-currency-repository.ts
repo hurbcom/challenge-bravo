@@ -1,5 +1,5 @@
 import { CurrencyModel } from '../../../../domain/models/currency'
 
-export interface UpsertCurrency{
+export interface UpsertCurrencyRepository{
     upsert (currency: CurrencyModel): Promise<boolean>
   }

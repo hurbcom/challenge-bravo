@@ -1,9 +1,9 @@
 import { AddCurrencyRepository } from '../../../../../data/protocols/db/currency/add-currency-repository'
-import { UpsertCurrency } from '../../../../../data/protocols/db/currency/upsert-currency-repository'
+import { UpsertCurrencyRepository } from '../../../../../data/protocols/db/currency/upsert-currency-repository'
 import { CurrencyModel } from '../../../../../domain/models/currency'
 import { MongoHelper } from '../../helpers/mongo-helper'
 
-export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCurrency {
+export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCurrencyRepository {
     public static readonly currencyCollection = 'curencies'
 
     async add (currency: CurrencyModel): Promise<boolean> {
