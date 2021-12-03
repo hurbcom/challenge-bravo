@@ -100,4 +100,15 @@ describe('currency mongo repository', () => {
       expect(dbCurrency).toBeFalsy()
     })
   })
+
+  describe('getByShortName', () => {
+    test('should return the currency on getByShortName success', async () => {
+      const sut = makeSut()
+      await sut.add(makeFakeCurrency())
+      const currency = await sut.getByShortName('ANY')
+      expect(currency.id).toBeTruthy()
+      expect(currency.name).toEqual('any currency')
+      expect(currency.shortName).toEqual('ANY')
+    })
+  })
 })
