@@ -116,4 +116,18 @@ describe('currency mongo repository', () => {
       expect(currency).toBeNull()
     })
   })
+
+  describe('listAll', () => {
+    test('should return the currency list on success', async () => {
+      const sut = makeSut()
+      await sut.add(makeFakeCurrency())
+      const currencies = await sut.listAll()
+      expect(currencies.length).not.toBe(0)
+    })
+    test('should return empty on empty database', async () => {
+      const sut = makeSut()
+      const currencies = await sut.listAll()
+      expect(currencies).toEqual([])
+    })
+  })
 })
