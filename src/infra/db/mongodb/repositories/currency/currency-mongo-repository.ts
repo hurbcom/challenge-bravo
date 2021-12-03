@@ -1,12 +1,13 @@
 import { AddCurrencyRepository } from '../../../../../data/protocols/db/currency/add-currency-repository'
 import { DeleteCurrencyRepository } from '../../../../../data/protocols/db/currency/delete-currency-repository'
 import { GetCurrencyRepository } from '../../../../../data/protocols/db/currency/get-currency-repository'
+import { ListCurrencyRepository } from '../../../../../data/protocols/db/currency/list-currency-repository'
 import { UpdateCurrencyRepository } from '../../../../../data/protocols/db/currency/update-currency-repository'
 import { UpsertCurrencyRepository } from '../../../../../data/protocols/db/currency/upsert-currency-repository'
 import { CurrencyDocument, CurrencyModel } from '../../../../../domain/models/currency'
 import { MongoHelper } from '../../helpers/mongo-helper'
 
-export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCurrencyRepository, UpdateCurrencyRepository, DeleteCurrencyRepository, GetCurrencyRepository {
+export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCurrencyRepository, UpdateCurrencyRepository, DeleteCurrencyRepository, GetCurrencyRepository, ListCurrencyRepository {
     public static readonly currencyCollection = 'curencies'
 
     constructor () {
@@ -43,5 +44,15 @@ export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCur
       const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
       const result = await collection.findOne({ shortName })
       return result ? MongoHelper.map(result) : null
+    }
+
+    async listAll (): Promise<CurrencyModel[]> {
+      const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
+      const result = await collection.find().toArray()
+      const parsedResult = []
+      result.forEach((doc) => {
+        parsedResult.push(MongoHelper.map(doc))
+      })
+      return parsedResult
     }
 }
