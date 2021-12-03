@@ -110,5 +110,10 @@ describe('currency mongo repository', () => {
       expect(currency.name).toEqual('any currency')
       expect(currency.shortName).toEqual('ANY')
     })
+    test('should return null if currency not found', async () => {
+      const sut = makeSut()
+      const currency = await sut.getByShortName('ANY')
+      expect(currency).toBeNull()
+    })
   })
 })
