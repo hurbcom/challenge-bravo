@@ -26,7 +26,7 @@ describe('account mongo repository', () => {
     USDvalue: 1
   })
   describe('add', () => {
-    test('should return true on add account', async () => {
+    test('should return true on add currency', async () => {
       const sut = makeSut()
       const result = await sut.add(makeFakeCurrency())
       expect(result).toBe(true)
@@ -35,6 +35,13 @@ describe('account mongo repository', () => {
       expect(dbCurrency._id).toBeTruthy()
       expect(dbCurrency.name).toEqual('any currency')
       expect(dbCurrency.shortName).toEqual('ANY')
+    })
+
+    test('should throw on add duplicated currency', async () => {
+      const sut = makeSut()
+      await sut.add(makeFakeCurrency())
+      const promise = sut.add(makeFakeCurrency())
+      await expect(promise).rejects.toThrowError(/E11000 duplicate key error collection/)
     })
   })
 
