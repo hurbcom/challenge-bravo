@@ -5,7 +5,7 @@ import { CurrencyMongoRepository } from './currency-mongo-repository'
 
 let currencyCollection: Collection
 
-describe('account mongo repository', () => {
+describe('currency mongo repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
   })
@@ -46,7 +46,7 @@ describe('account mongo repository', () => {
   })
 
   describe('upsert', () => {
-    test('should return true on update account', async () => {
+    test('should return true on update currency', async () => {
       const sut = makeSut()
       await sut.add(makeFakeCurrency())
       const newValue = { ...makeFakeCurrency(), USDvalue: 100 }
@@ -59,7 +59,7 @@ describe('account mongo repository', () => {
       expect(dbCurrency.shortName).toEqual('ANY')
       expect(dbCurrency.USDvalue).toEqual(100)
     })
-    test('should return true on upsert account that doesnt exists', async () => {
+    test('should return true on upsert currency that doesnt exists', async () => {
       const sut = makeSut()
       const updated = await sut.upsert(makeFakeCurrency())
       expect(updated).toBe(true)
@@ -73,7 +73,7 @@ describe('account mongo repository', () => {
   })
 
   describe('updateByShortName', () => {
-    test('should return true on update account by shortName', async () => {
+    test('should return true on update currency by shortName', async () => {
       const sut = makeSut()
       await sut.add(makeFakeCurrency())
       const newValue = { ...makeFakeCurrency(), USDvalue: 100 }
