@@ -3,3 +3,6 @@ export interface CurrencyModel {
     shortName:string,
     USDvalue:number
 }
+export interface CurrencyDocument extends CurrencyModel{
+    id:string
+}

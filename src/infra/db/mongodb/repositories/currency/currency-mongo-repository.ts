@@ -1,11 +1,12 @@
 import { AddCurrencyRepository } from '../../../../../data/protocols/db/currency/add-currency-repository'
 import { DeleteCurrencyRepository } from '../../../../../data/protocols/db/currency/delete-currency-repository'
+import { GetCurrencyRepository } from '../../../../../data/protocols/db/currency/get-currency-repository'
 import { UpdateCurrencyRepository } from '../../../../../data/protocols/db/currency/update-currency-repository'
 import { UpsertCurrencyRepository } from '../../../../../data/protocols/db/currency/upsert-currency-repository'
-import { CurrencyModel } from '../../../../../domain/models/currency'
+import { CurrencyDocument, CurrencyModel } from '../../../../../domain/models/currency'
 import { MongoHelper } from '../../helpers/mongo-helper'
 
-export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCurrencyRepository, UpdateCurrencyRepository, DeleteCurrencyRepository {
+export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCurrencyRepository, UpdateCurrencyRepository, DeleteCurrencyRepository, GetCurrencyRepository {
     public static readonly currencyCollection = 'curencies'
 
     constructor () {
@@ -36,5 +37,11 @@ export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCur
       const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
       const result = await collection.findOneAndDelete({ shortName })
       return result.ok === 1
+    }
+
+    async getByShortName (shortName: string): Promise<CurrencyDocument> {
+      const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
+      const result = await collection.findOne({ shortName })
+      return MongoHelper.map(result)
     }
 }
