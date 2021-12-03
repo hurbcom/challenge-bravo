@@ -88,4 +88,16 @@ describe('currency mongo repository', () => {
       await expect(promise).rejects.toThrowError(/E11000 duplicate key error collection/)
     })
   })
+
+  describe('deleteByShortName', () => {
+    test('should return true on delete currency by shortName', async () => {
+      const sut = makeSut()
+      await sut.add(makeFakeCurrency())
+      const deleted = await sut.deleteByShortName('ANY')
+      expect(deleted).toBe(true)
+
+      const dbCurrency = await currencyCollection.findOne({ shortName: makeFakeCurrency().shortName })
+      expect(dbCurrency).toBeFalsy()
+    })
+  })
 })
