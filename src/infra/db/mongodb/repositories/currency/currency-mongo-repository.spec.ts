@@ -64,4 +64,21 @@ describe('account mongo repository', () => {
       expect(dbCurrency.USDvalue).toEqual(1)
     })
   })
+
+  describe('updateByShortName', () => {
+    test('should return true on update account by shortName', async () => {
+      const sut = makeSut()
+      await sut.add(makeFakeCurrency())
+      const newValue = { ...makeFakeCurrency(), USDvalue: 100 }
+      const updated = await sut.updateByShortName('ANY', newValue)
+      expect(updated).toBe(true)
+    })
+    test('should return throw on update a shortName to an existent shortName', async () => {
+      const sut = makeSut()
+      await sut.add(makeFakeCurrency())
+      await sut.add({ ...makeFakeCurrency(), shortName: 'ANY2' })
+      const promise = sut.updateByShortName('ANY2', makeFakeCurrency())
+      await expect(promise).rejects.toThrowError(/E11000 duplicate key error collection/)
+    })
+  })
 })
