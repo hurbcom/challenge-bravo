@@ -42,6 +42,6 @@ export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCur
     async getByShortName (shortName: string): Promise<CurrencyDocument> {
       const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
       const result = await collection.findOne({ shortName })
-      return MongoHelper.map(result)
+      return result ? MongoHelper.map(result) : null
     }
 }
