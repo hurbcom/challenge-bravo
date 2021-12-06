@@ -23,4 +23,12 @@ describe('currency routes', () => {
       expect(response.statusCode).toBe(201)
     })
   })
+
+  describe('PATCH /currency/:shortName', () => {
+    test('should create currency', async () => {
+      await request(app).post('/currency').send({ name: 'american dollar', shortName: 'usd', USDvalue: 1 })
+      const response = await request(app).patch('/currency/USD').send({ name: 'dollar' })
+      expect(response.statusCode).toBe(200)
+    })
+  })
 })
