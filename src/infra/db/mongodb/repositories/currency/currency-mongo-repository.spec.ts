@@ -36,13 +36,6 @@ describe('currency mongo repository', () => {
       expect(dbCurrency.name).toEqual('any currency')
       expect(dbCurrency.shortName).toEqual('ANY')
     })
-
-    test('should throw on add duplicated currency', async () => {
-      const sut = makeSut()
-      await sut.add(makeFakeCurrency())
-      const promise = sut.add(makeFakeCurrency())
-      await expect(promise).rejects.toThrowError(/Business Rule Error!/)
-    })
   })
 
   describe('upsert', () => {
@@ -79,13 +72,6 @@ describe('currency mongo repository', () => {
       const newValue = { ...makeFakeCurrency(), USDvalue: 100 }
       const updated = await sut.updateByShortName('ANY', newValue)
       expect(updated).toBe(true)
-    })
-    test('should return throw on update a shortName to an existent shortName', async () => {
-      const sut = makeSut()
-      await sut.add(makeFakeCurrency())
-      await sut.add({ ...makeFakeCurrency(), shortName: 'ANY2' })
-      const promise = sut.updateByShortName('ANY2', makeFakeCurrency())
-      await expect(promise).rejects.toThrowError(/Business Rule Error!/)
     })
   })
 

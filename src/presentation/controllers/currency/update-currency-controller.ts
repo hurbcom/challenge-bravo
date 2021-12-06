@@ -1,5 +1,4 @@
 import { UpdateCurrency } from '../../../domain/usecases/update-currency'
-import { BusinessRuleError } from '../../errors/business-rule-error'
 import { accepted, badRequest, ok, serverError } from '../../helpers/http'
 import { HttpRequest, HttpResponse } from '../../protocols/http'
 import { Controller } from '../protocols/controller'
@@ -27,7 +26,6 @@ export class UpdateCurrencyController implements Controller {
       const added = await this.updateCurrency.update(key, updateObj)
       if (added) return ok({})
     } catch (e) {
-      if (e instanceof BusinessRuleError) return badRequest(e)
       return serverError(e)
     }
 

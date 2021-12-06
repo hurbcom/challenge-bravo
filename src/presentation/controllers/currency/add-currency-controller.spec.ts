@@ -1,6 +1,5 @@
 import { CurrencyModel } from '../../../domain/models/currency'
 import { AddCurrency } from '../../../domain/usecases/add-currency'
-import { BusinessRuleError } from '../../errors/business-rule-error'
 import { HttpRequest } from '../../protocols/http'
 import { Validation } from '../protocols/validation'
 import { AddCurrencyController } from './add-currency-controller'
@@ -64,14 +63,6 @@ describe('add currency controller', () => {
 
     const response = await sut.handle(makeFakeRequest())
     expect(response.statusCode).toEqual(202)
-  })
-
-  test('should return 400 on addCurrency throw business error', async () => {
-    const { sut, addCurrency } = makeSut()
-    jest.spyOn(addCurrency, 'add').mockRejectedValueOnce(new BusinessRuleError('any'))
-
-    const response = await sut.handle(makeFakeRequest())
-    expect(response.statusCode).toEqual(400)
   })
 
   test('should return 500 on any other error', async () => {

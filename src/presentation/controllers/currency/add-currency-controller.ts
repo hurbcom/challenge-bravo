@@ -1,5 +1,4 @@
 import { AddCurrency } from '../../../domain/usecases/add-currency'
-import { BusinessRuleError } from '../../errors/business-rule-error'
 import { accepted, badRequest, created, serverError } from '../../helpers/http'
 import { HttpRequest, HttpResponse } from '../../protocols/http'
 import { Controller } from '../protocols/controller'
@@ -24,7 +23,6 @@ export class AddCurrencyController implements Controller {
       const added = await this.addCurrency.add({ name, shortName: (shortName as string).toUpperCase(), USDvalue })
       if (added) return created({})
     } catch (e) {
-      if (e instanceof BusinessRuleError) return badRequest(e)
       return serverError(e)
     }
 
