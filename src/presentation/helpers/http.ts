@@ -4,6 +4,10 @@ export const created = (data:any): HttpResponse => ({
   statusCode: 201,
   body: data
 })
+export const accepted = (data:any): HttpResponse => ({
+  statusCode: 202,
+  body: data
+})
 
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,
