@@ -7,7 +7,7 @@ export class UniqueCurrencyShortNameValidation implements Validation {
 
   async validate (input: any): Promise<Error> {
     if (input[this.fieldName]) {
-      const exists = await this.repository.getByShortName(input[this.fieldName])
+      const exists = await this.repository.getByShortName((input[this.fieldName]as string).toUpperCase())
       if (exists) {
         return new UniqueParamError(this.fieldName)
       }
