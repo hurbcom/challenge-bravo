@@ -1,3 +1,4 @@
+import { MongoServerError } from 'mongodb'
 import { AddCurrencyRepository } from '../../../../../data/protocols/db/currency/add-currency-repository'
 import { DeleteCurrencyRepository } from '../../../../../data/protocols/db/currency/delete-currency-repository'
 import { GetCurrencyRepository } from '../../../../../data/protocols/db/currency/get-currency-repository'
@@ -5,6 +6,7 @@ import { ListCurrencyRepository } from '../../../../../data/protocols/db/currenc
 import { UpdateCurrencyRepository } from '../../../../../data/protocols/db/currency/update-currency-repository'
 import { UpsertCurrencyRepository } from '../../../../../data/protocols/db/currency/upsert-currency-repository'
 import { CurrencyDocument, CurrencyModel } from '../../../../../domain/models/currency'
+import { BusinessRuleError } from '../../../../../presentation/errors/business-rule-error'
 import { MongoHelper } from '../../helpers/mongo-helper'
 
 export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCurrencyRepository, UpdateCurrencyRepository, DeleteCurrencyRepository, GetCurrencyRepository, ListCurrencyRepository {
@@ -17,9 +19,18 @@ export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCur
     }
 
     async add (currency: CurrencyModel): Promise<boolean> {
-      const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
-      const result = await collection.insertOne(currency)
-      return result.acknowledged
+      try {
+        const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
+        const result = await collection.insertOne(currency)
+        return result.acknowledged
+      } catch (e) {
+        if (e instanceof MongoServerError) {
+          if (e.code === 11000) {
+            throw new BusinessRuleError('Duplicated key: shortName.')
+          }
+        }
+        throw e
+      }
     }
 
     async upsert (currency: CurrencyModel): Promise<boolean> {
@@ -29,9 +40,18 @@ export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCur
     }
 
     async updateByShortName (shortName: string, update: CurrencyModel): Promise<boolean> {
-      const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
-      const result = await collection.findOneAndUpdate({ shortName }, { $set: { ...update } })
-      return result.ok === 1
+      try {
+        const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
+        const result = await collection.findOneAndUpdate({ shortName }, { $set: { ...update } })
+        return result.ok === 1
+      } catch (e) {
+        if (e instanceof MongoServerError) {
+          if (e.code === 11000) {
+            throw new BusinessRuleError('Duplicated key: shortName.')
+          }
+        }
+        throw e
+      }
     }
 
     async deleteByShortName (shortName: string): Promise<boolean> {
