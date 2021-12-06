@@ -21,7 +21,7 @@ export class UpdateCurrencyController implements Controller {
 
       const { name, shortName, USDvalue } = httpRequest.body
       const key = httpRequest.params.shortName
-      const updateObj = { name, shortName: (shortName as string).toUpperCase(), USDvalue }
+      const updateObj = { name, shortName: shortName ? (shortName as string).toUpperCase() : undefined, USDvalue }
       Object.keys(updateObj).forEach(key => (updateObj[key] === undefined || updateObj[key] === null) && delete updateObj[key])
 
       const added = await this.updateCurrency.update(key, updateObj)
