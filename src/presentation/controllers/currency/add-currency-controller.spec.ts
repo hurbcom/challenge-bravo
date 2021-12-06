@@ -73,4 +73,12 @@ describe('add currency controller', () => {
     const response = await sut.handle(makeFakeRequest())
     expect(response.statusCode).toEqual(400)
   })
+
+  test('should return 500 on any other error', async () => {
+    const { sut, addCurrency } = makeSut()
+    jest.spyOn(addCurrency, 'add').mockRejectedValueOnce(new Error('any'))
+
+    const response = await sut.handle(makeFakeRequest())
+    expect(response.statusCode).toEqual(500)
+  })
 })
