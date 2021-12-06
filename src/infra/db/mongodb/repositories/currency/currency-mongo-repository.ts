@@ -12,15 +12,10 @@ import { MongoHelper } from '../../helpers/mongo-helper'
 export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCurrencyRepository, UpdateCurrencyRepository, DeleteCurrencyRepository, GetCurrencyRepository, ListCurrencyRepository {
     public static readonly currencyCollection = 'curencies'
 
-    constructor () {
-      MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection).then((collection) => {
-        collection.createIndex({ shortName: 1 }, { unique: true }).then(() => {})
-      })
-    }
-
     async add (currency: CurrencyModel): Promise<boolean> {
       try {
         const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
+        await collection.createIndex({ shortName: 1 }, { unique: true })
         const result = await collection.insertOne(currency)
         return result.acknowledged
       } catch (e) {
