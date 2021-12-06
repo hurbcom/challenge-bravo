@@ -13,6 +13,7 @@ export class CurrencyMongoRepository implements AddCurrencyRepository, UpsertCur
     public static readonly currencyCollection = 'curencies'
 
     async add (currency: CurrencyModel): Promise<boolean> {
+      // TODO - instead create index perform a validation
       try {
         const collection = await MongoHelper.getCollection(CurrencyMongoRepository.currencyCollection)
         await collection.createIndex({ shortName: 1 }, { unique: true })
