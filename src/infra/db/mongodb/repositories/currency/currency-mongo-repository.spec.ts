@@ -41,7 +41,7 @@ describe('currency mongo repository', () => {
       const sut = makeSut()
       await sut.add(makeFakeCurrency())
       const promise = sut.add(makeFakeCurrency())
-      await expect(promise).rejects.toThrowError(/E11000 duplicate key error collection/)
+      await expect(promise).rejects.toThrowError(/Business Rule Error!/)
     })
   })
 
@@ -85,7 +85,7 @@ describe('currency mongo repository', () => {
       await sut.add(makeFakeCurrency())
       await sut.add({ ...makeFakeCurrency(), shortName: 'ANY2' })
       const promise = sut.updateByShortName('ANY2', makeFakeCurrency())
-      await expect(promise).rejects.toThrowError(/E11000 duplicate key error collection/)
+      await expect(promise).rejects.toThrowError(/Business Rule Error!/)
     })
   })
 
