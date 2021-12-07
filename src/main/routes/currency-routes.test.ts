@@ -48,4 +48,12 @@ describe('currency routes', () => {
       expect(response.body[0].name).toEqual('american dollar')
     })
   })
+  describe('DELETE /currency/:shortName', () => {
+    test('should delete currency', async () => {
+      await request(app).post('/currency').send({ name: 'american dollar', shortName: 'usd', USDvalue: 1 })
+      const response = await request(app).delete('/currency/USD')
+      expect(response.statusCode).toBe(200)
+      expect(response.body.deleted).toBe(true)
+    })
+  })
 })
