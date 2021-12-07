@@ -56,4 +56,14 @@ describe('currency routes', () => {
       expect(response.body.deleted).toBe(true)
     })
   })
+
+  describe('GET /currency/convert?', () => {
+    test('should return the rigth value', async () => {
+      await request(app).post('/currency').send({ name: 'brazilian real', shortName: 'brl', USDvalue: 5.62 })
+      await request(app).post('/currency').send({ name: 'american dollar', shortName: 'usd', USDvalue: 1 })
+      const response = await request(app).get('/currency/convert?from=USD&to=BRL&amount=2')
+      expect(response.statusCode).toBe(200)
+      expect(response.body.result).toBe(11.24)
+    })
+  })
 })
