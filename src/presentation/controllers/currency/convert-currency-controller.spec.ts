@@ -62,7 +62,7 @@ describe('convert currency controller', () => {
       }
     })
     expect(response.statusCode).toBe(200)
-    expect(response.body.result).toEqual(2492.95)
+    expect(response.body.result).toEqual(2492.95444)
   })
   test('should return 500 on error', async () => {
     const { sut, getCurrency } = makeSut()
