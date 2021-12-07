@@ -23,7 +23,7 @@ export class ConvertCurrencyController implements Controller {
       const first = await this.getCurrency.getByShortName(from)
       const valueAsUSD = amount / first.USDvalue
       const second = await this.getCurrency.getByShortName(to)
-      const result = Number.parseFloat((valueAsUSD * second.USDvalue).toFixed(5))
+      const result = valueAsUSD * second.USDvalue
       return ok({ result })
     } catch (e) {
       return serverError(e)
