@@ -14,11 +14,6 @@ const makeSut = () => {
   return { sut, deleteCurrency }
 }
 describe('delete currency controller', () => {
-  test('should return 400 on try to delete usd', async () => {
-    const { sut } = makeSut()
-    const response = await sut.handle({ params: { shortName: 'USD' } })
-    expect(response.statusCode).toBe(400)
-  })
   test('should return 200 on delete currency', async () => {
     const { sut } = makeSut()
     const response = await sut.handle({ params: { shortName: 'USDT' } })
