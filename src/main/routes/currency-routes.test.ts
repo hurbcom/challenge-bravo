@@ -25,10 +25,27 @@ describe('currency routes', () => {
   })
 
   describe('PATCH /currency/:shortName', () => {
-    test('should create currency', async () => {
+    test('should update currency', async () => {
       await request(app).post('/currency').send({ name: 'american dollar', shortName: 'usd', USDvalue: 1 })
       const response = await request(app).patch('/currency/USD').send({ name: 'dollar' })
       expect(response.statusCode).toBe(200)
+    })
+  })
+
+  describe('GET /currency/:shortName', () => {
+    test('should show currency', async () => {
+      await request(app).post('/currency').send({ name: 'american dollar', shortName: 'usd', USDvalue: 1 })
+      const response = await request(app).get('/currency/USD')
+      expect(response.statusCode).toBe(200)
+      expect(response.body.name).toEqual('american dollar')
+    })
+  })
+  describe('GET /currency/', () => {
+    test('should show currency', async () => {
+      await request(app).post('/currency').send({ name: 'american dollar', shortName: 'usd', USDvalue: 1 })
+      const response = await request(app).get('/currency')
+      expect(response.statusCode).toBe(200)
+      expect(response.body[0].name).toEqual('american dollar')
     })
   })
 })
