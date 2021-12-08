@@ -15,6 +15,7 @@ export class CurrencySeeder implements Job {
       const list = await this.listLocalCurrencies.list()
       if (list.length === 0) {
         const currencies = await this.listExternalCurrencies.list()
+        await this.addCurrency.add({ shortName: 'USD', USDvalue: 1 })
         currencies.forEach((currency) => {
           this.addCurrency.add(currency).catch(e => {})
         })
