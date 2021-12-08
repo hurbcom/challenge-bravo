@@ -1,0 +1,23 @@
+version: "3"
+services: 
+  mongo:
+    container_name: hurb-mongo 
+    image: mongo:5.0.3
+    volumes:
+      - ./data:/data/db
+    ports: 
+      - "27019:27017"
+  api:
+    container_name: hurb-project
+    image: node:16.13
+    working_dir: /var/www/hurb
+    command: bash -c "npm install --only=production --force && npm run debug"
+    volumes: 
+      - ./dist/:/var/www/hurb/dist/
+      - ./package.json:/var/www/hurb/package.json
+
+    ports: 
+      - "3000:3000"
+      - "9222:9222"
+    links:
+      - mongo

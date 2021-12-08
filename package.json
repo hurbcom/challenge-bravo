@@ -6,8 +6,10 @@
   "license": "MIT",
   "scripts": {
     "start": "node  dist/main/server.js",
-    "dev": "nodemon src/main/server.ts",
+    "dev": "npm run build && docker-compose up -d",
+    "watch": "nodemon src/main/server.ts",
     "build": "tsc",
+    "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:unit": "yarn test --watch -c jest-unit-config.js",
     "test:integration": "yarn test  --watch -c jest-integration-config.js",
@@ -20,7 +22,8 @@
     "express": "^4.17.1",
     "mongodb": "^4.2.1",
     "node-schedule": "^2.1.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "typescript": "^4.5.2"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^2.1.0",
@@ -43,7 +46,6 @@
     "lint-staged": "^12.1.2",
     "supertest": "^6.1.6",
     "ts-jest": "^27.0.7",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.2"
+    "ts-node": "^10.4.0"
   }
 }
