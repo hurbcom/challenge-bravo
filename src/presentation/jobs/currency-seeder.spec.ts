@@ -78,6 +78,13 @@ describe('update currencies using external service job', () => {
     const promise = sut.handle()
     await expect(promise).resolves
   })
+  test('should not throw if addCurrency throws on loop', async () => {
+    const { sut, addCurrency } = makeSut()
+    jest.spyOn(addCurrency, 'add').mockResolvedValueOnce(true)
+    jest.spyOn(addCurrency, 'add').mockRejectedValueOnce(new Error(''))
+    const promise = sut.handle()
+    await expect(promise).resolves
+  })
 
   test('should return the job name', async () => {
     const { sut } = makeSut()
