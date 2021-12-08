@@ -2,81 +2,142 @@
 
 [[English](README.md) | [Português](README.pt.md)]
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+## Documentação
 
-A API precisa converter entre as seguintes moedas:
+para a documentação completa da API [clique aqui](https://studio-ws.apicur.io/sharing/704c636f-f851-4e1b-b00b-ae33b8edde20)
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## Comandos
 
-Outras moedas podem ser adicionadas conforme o uso.
+Eu utilizei o Yarn como gerenciador de pacotes então algum desses comandos funcionarão apenas com o yarn (os comandos de teste)
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+uso: `yarn`  ou `npm run`  **comando**
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+`start` - inicia o projeto buildado (JS) 
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+`dev` - builda o projeto e inicia o container da aplicação (requer docker-compose)
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+`watch`  - executa o projeto sem buildar(TS) em modo de observação
 
-A API deve suportar conversão entre moedas fiduciárias, crypto e fictícias. Exemplo: BRL->HURB, HURB->ETH
+`build` - builda o projeto
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+`debug` - inicia o modo de debug na porta 9222
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de Dungeons & Dragons sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+`test` -  comando base para testes
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+`test:unit` - comando para testes unitários
 
-Ref:
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+`test:integration` -  comando para testes de integração
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+`test:staged` -  comando para os testes em staged (roda os testes relacionados no commit)
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+`test:ci` - teste de integração contínua
+
+## Sobre minhas escolhas
+
+### Clean Architecture
+
+Eu escolhi seguir o padrão de Clean Architecture que pode ser bem difícil de entender em um primeiro momento, mas após alguns minutos olhando para o projeto você pode facilmente entender o motivo de ter tantos arquivos e o porquê de as coisas estarem em pastas estranhas. Eu tentei dividir as camadas da aplicação em pastas como: data, domain, infra, presentation e main.
+
+
+
+- A pasta Domain contém interfaces para os nossos casos de uso, nossos modelos e outras coisas que pertencem  ao nosso domínio de negócio;
+
+- A pasta Data contém os protocolos para implementar os casos de uso utilizando o banco de dados;
+
+- A pasta Infra contém nossas implementações de repositórios para banco de dados ou serviços externos, nossas funções, bibliotecas e helpers que gerenciam criptografia ou outros tratamentos de dado;
+
+- A pasta Presentation contém nossos controllers, erros customizados, helpers, interfaces internas e outros;
+
+- A pasta Main Contém nossa configuração de projeto, adapters para utilizar bibliotecas externas sem ter um alto nivel de acoplamento delas no projeto, factories, configurações de rotas e middlewares, e outras funcionalidades que fazem o projeto funcionar mas não pertencem às regras de negócio.
+
+  
+
+### Conventional Commits
+
+Todos os commits foram feitos seguindo o  [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) e o  **husky**+**git-commit-msg-linter** garantiram isso!
+
+### TDD
+
+O Projeto inteiro foi desenvolvido usando TDD mesmo que os testes tenham sido commitados após os arquivos de produção eles foram criados antes. mas para facilitar git revert e outras ações de git os arquivos de produção foram commitados primeiro sempre(se uma feature foi revertida os testes dela não deveriam existir)
+
+**Cem por cento de cobertura de testes**
+
+| File                                        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s |
+| ------------------------------------------- | ------- | -------- | ------- | ------- | ----------------- |
+| All files                                   | 100     | 100      | 100     | 100     |                   |
+| data/usecases                               | 100     | 100      | 100     | 100     |                   |
+| db-add-currency.ts                          | 100     | 100      | 100     | 100     |                   |
+| db-delete-currency.ts                       | 100     | 100      | 100     | 100     |                   |
+| db-get-currency.ts                          | 100     | 100      | 100     | 100     |                   |
+| db-list-currencies.ts                       | 100     | 100      | 100     | 100     |                   |
+| db-update-currency.ts                       | 100     | 100      | 100     | 100     |                   |
+| db-upsert-currency.ts                       | 100     | 100      | 100     | 100     |                   |
+| infra/db/mongodb/helpers                    | 100     | 100      | 100     | 100     |                   |
+| mongo-helper.ts                             | 100     | 100      | 100     | 100     |                   |
+| infra/db/mongodb/repositories/currency      | 100     | 100      | 100     | 100     |                   |
+| currency-mongo-repository.ts                | 100     | 100      | 100     | 100     |                   |
+| infra/services                              | 100     | 100      | 100     | 100     |                   |
+| free-currency-api-service.ts                | 100     | 100      | 100     | 100     |                   |
+| presentation/controllers/currency           | 100     | 100      | 100     | 100     |                   |
+| add-currency-controller.ts                  | 100     | 100      | 100     | 100     |                   |
+| convert-currency-controller.ts              | 100     | 100      | 100     | 100     |                   |
+| delete-currency-controller.ts               | 100     | 100      | 100     | 100     |                   |
+| get-currency-controller.ts                  | 100     | 100      | 100     | 100     |                   |
+| update-currency-controller.ts               | 100     | 100      | 100     | 100     |                   |
+| presentation/errors                         | 100     | 100      | 100     | 100     |                   |
+| business-rule-error.ts                      | 100     | 100      | 100     | 100     |                   |
+| invalid-param-error.ts                      | 100     | 100      | 100     | 100     |                   |
+| missing-param-error.ts                      | 100     | 100      | 100     | 100     |                   |
+| server-error.ts                             | 100     | 100      | 100     | 100     |                   |
+| unique-param-error.ts                       | 100     | 100      | 100     | 100     |                   |
+| presentation/helpers                        | 100     | 100      | 100     | 100     |                   |
+| cron-helper.ts                              | 100     | 100      | 100     | 100     |                   |
+| http.ts                                     | 100     | 100      | 100     | 100     |                   |
+| presentation/jobs                           | 100     | 100      | 100     | 100     |                   |
+| currency-seeder.ts                          | 100     | 100      | 100     | 100     |                   |
+| update-currencies-using-external-service.ts | 100     | 100      | 100     | 100     |                   |
+| validation/validators                       | 100     | 100      | 100     | 100     |                   |
+| numeric-field-validation.ts                 | 100     | 100      | 100     | 100     |                   |
+| optional-field-validation-composite.ts      | 100     | 100      | 100     | 100     |                   |
+| required-field-validation.ts                | 100     | 100      | 100     | 100     |                   |
+| string-without-space-validation.ts          | 100     | 100      | 100     | 100     |                   |
+| validiation-composite.ts                    | 100     | 100      | 100     | 100     |                   |
+| validation/validators/business-rules        | 100     | 100      | 100     | 100     |                   |
+| currency-shortName-validation.ts            | 100     | 100      | 100     | 100     |                   |
+| unique-currency-shortName-validation.ts     | 100     | 100      | 100     | 100     |                   |
+### Dependencias
+
+O projeto foi escrito em **Typescript** usando **express** 
+
+O banco de dados utilizado foi o  **MongoDb** mas isso pode ser mudado criando novas implementações para as interfaces dos repositórios e substituindo nas instancias.
+
+Os testes automatizados foram feitos utilizando**Jest** com outros plugins como **ts-jest** e **jest-mongodb**
+
+Para tarefas e outros processos em segundo plano eu escolhi utilizar o **node-schedule** que é uma poderosa biblioteca de agendamento de tarefas.
+
+
 
 ## Requisitos
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **main** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+- [x] O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
 
-## Critério de avaliação
+     ***Eu criei um arquivo docker-compose para executar a aplicação em um container***
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+- [x] Para executar seu código, deve ser preciso apenas rodar os seguintes comandoss: 
 
-## Dúvidas
+  ​		git clone \$your-fork  &&  cd \$your-fork &&  command to install dependencies &&  command to run the application
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+  **O comando para iniciar a aplicação em um container é ** `npm run dev` or `yarn dev`
 
-Boa sorte e boa viagem! ;)
+- [x] A API pode ser escrita com ou sem a ajuda de *frameworks*
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+  **Eu utilizei Express mas 'adaptei'  ele dessa forma o framework é utilizado apenas para iniciar a aplicação e gerenciar as rotas**
+
+- [x] A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+
+  **Testado com o  Jmeter**
+
+- [x] A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+
+  **As cotações são atualizadas duas vezes por minuto usando a ** [FreeCurrencyAPI](https://freecurrencyapi.net)
+
