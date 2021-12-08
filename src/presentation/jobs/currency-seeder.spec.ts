@@ -44,14 +44,14 @@ describe('update currencies using external service job', () => {
     const { sut, addCurrency } = makeSut()
     const addSpy = jest.spyOn(addCurrency, 'add')
     await sut.handle()
-    expect(addSpy).toHaveBeenCalledTimes(2)
+    expect(addSpy).toHaveBeenCalledTimes(3)
   })
   test('should not call addCurrency if localCurrencies return empty and externalCurrencies return empty', async () => {
     const { sut, addCurrency, externalCurrencies } = makeSut()
     jest.spyOn(externalCurrencies, 'list').mockResolvedValueOnce([])
     const addSpy = jest.spyOn(addCurrency, 'add')
     await sut.handle()
-    expect(addSpy).not.toHaveBeenCalled()
+    expect(addSpy).toHaveBeenCalledTimes(1)
   })
   test('should not call externalCurrencies if localCurrencies return something', async () => {
     const { sut, externalCurrencies, localCurrencies } = makeSut()
