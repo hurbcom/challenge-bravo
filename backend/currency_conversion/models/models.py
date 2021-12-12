@@ -24,15 +24,7 @@ class Currencys(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     currency = Column(String, unique=True, nullable=False)
-    for_buy = Column(Float, nullable=False)
-    for_send = Column(Float, nullable=False)
-    last_update = Column(Date, default=datetime.now())
-
-class fiatCurrency(Base):
-    __tablename__ = "fiatcurency"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    currency = Column(String, unique=True, nullable=False)
+    name = Column(String, nullable=False)
     for_buy = Column(Float, nullable=False)
     for_send = Column(Float, nullable=False)
     last_update = Column(Date, default=datetime.now())

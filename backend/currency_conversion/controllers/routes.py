@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from middlewares import jwt
 from integrations import api_conversion
 import database
+from views.views import interfaceConversions, interfaceCurrencys, checkCurrencysAvailable
 
 routers = APIRouter()
 
@@ -39,10 +40,11 @@ def login(login: schema.Login, Authorize: AuthJWT = Depends(),
     return {"access_token": access_token}
 
 
-@routers.get('/currency/default_conversions')
-def currencys():
+@routers.get('/currency/available')
+def currencys(db: Session = Depends(database.get_db)):
         
-    return api_conversion.defaultCurrencys()
+    return checkCurrencysAvailable(db)
+
 
 @routers.put("/currencys/create")
 def createCurrencys(currencys: schema.Currencys, 
@@ -62,10 +64,6 @@ async def deleteCurrencys(currency: str,
                    Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     
-    c = api_conversion.defaultCurrencys()
-    if [True for i in c['Currency Available'] if i['symbol'] == currency]:
-        raise HTTPException(status_code=400, detail=f"You can not delete a default currency ({currency})")
-    
     db_currencys = dbCurrencys(db)
     db_currencys.deleteCurrencys(currency)
     
@@ -76,6 +74,6 @@ async def deleteCurrencys(currency: str,
 async def currencyConversion(From: str, To:str, Amount:float, Authorize: AuthJWT = Depends(), db: Session = Depends(database.get_db)):
     Authorize.jwt_required()
     
-    response = api_conversion.execute(db,currencyfrom=From, currencyto=To, valueAmount=Amount)
+    response = interfaceConversions(db,currencyfrom=From, currencyto=To, valueAmount=Amount)
 
     return response

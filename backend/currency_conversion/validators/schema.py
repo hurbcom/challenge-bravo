@@ -15,6 +15,7 @@ class User(BaseModel):
         
 class Currencys(BaseModel):
     currency: str
+    name: str
     for_buy: float
     for_send: float
     

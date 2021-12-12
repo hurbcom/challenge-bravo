@@ -30,9 +30,9 @@ class dbCurrencys():
 
     def createCurrencys(self):
         if not self.getCurrencys(self.currencys.currency):
-            print('entrou aqui')
             try:
-                db_currencys = models.Currencys(currency=self.currencys.currency, 
+                db_currencys = models.Currencys(currency=self.currencys.currency,
+                                                name=self.currencys.name, 
                                                 for_buy=self.currencys.for_buy, 
                                                 for_send=self.currencys.for_send)
                 self.db.add(db_currencys)
@@ -45,6 +45,9 @@ class dbCurrencys():
     
     def getCurrencys(self, currency: str):
         return self.db.query(models.Currencys).filter(models.Currencys.currency == currency).first()
+    
+    def getallCurrencys(self):
+        return self.db.query(models.Currencys).filter()
 
     def deleteCurrencys(self, currency: str):
         db_currencys = self.getCurrencys(currency)
