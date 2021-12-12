@@ -86,7 +86,7 @@ Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lis
 Abaixo uma descrição detalhada de como instalar e subir a aplicação. Não utilizei Docker, pois entendo que a complexidade de instalação é baixa.
 
 
-### Pré-Requisitos:
+### Prerequisites:
 
 O único requisito para rodar o projeto é ter o Python instalado e as bibliotecas descrita no arquivo de requiremnts.txt. Nesse projeto foi utilizado o FastApi como framework.
 
