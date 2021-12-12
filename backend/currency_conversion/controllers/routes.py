@@ -5,9 +5,8 @@ from datetime import  timedelta
 from models.operations import dbUsers, dbCurrencys
 from sqlalchemy.orm import Session
 from middlewares import jwt
-from integrations import api_conversion
 import database
-from views.views import interfaceConversions, interfaceCurrencys, checkCurrencysAvailable
+from views.views import interfaceConversions, checkCurrencysAvailable
 
 routers = APIRouter()
 

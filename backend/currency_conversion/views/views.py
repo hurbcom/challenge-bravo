@@ -1,4 +1,4 @@
-from integrations.api_conversion import apiIntergration, dbIntegrations,apiCurrencyConversion, dbCurrencyConversion, currencyConversions
+from integrations.api_conversion import apiIntergration, dbIntegrations,apiCurrencyConversion, dbCurrencyConversion
 from integrations import settings
 
 def interfaceConversions(db, currencyfrom, currencyto, valueAmount):

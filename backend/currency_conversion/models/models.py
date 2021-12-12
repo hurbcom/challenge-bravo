@@ -4,7 +4,6 @@ from sqlalchemy import (Boolean,
                         Integer,
                         String 
                         )
-from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import Date, Float  
 from database import Base
 

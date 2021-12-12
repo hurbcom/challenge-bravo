@@ -2,7 +2,6 @@ from logging import ERROR
 from sqlalchemy.orm import Session
 from . import models
 from validators import schema
-from database import SessionLocal
 from fastapi import HTTPException
 
 class dbUsers():
