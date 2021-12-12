@@ -27,3 +27,4 @@ class Currencys(Base):
     for_buy = Column(Float, nullable=False)
     for_send = Column(Float, nullable=False)
     last_update = Column(Date, default=datetime.now())
+    currency_type = Column(String, default=None)

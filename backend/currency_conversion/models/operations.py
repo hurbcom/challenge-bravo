@@ -32,7 +32,8 @@ class dbCurrencys():
                 db_currencys = models.Currencys(currency=self.currencys.currency,
                                                 name=self.currencys.name, 
                                                 for_buy=self.currencys.for_buy, 
-                                                for_send=self.currencys.for_send)
+                                                for_send=self.currencys.for_send,
+                                                currency_type=self.currencys.currency_type)
                 self.db.add(db_currencys)
                 self.db.commit()
                 self.db.refresh(db_currencys)
@@ -55,7 +56,3 @@ class dbCurrencys():
             return True
         
         raise HTTPException(status_code=401,detail="currency not exist")
-
-
-class ficCurrencys():
-    pass

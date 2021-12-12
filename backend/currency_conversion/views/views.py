@@ -38,8 +38,10 @@ def checkCurrencysAvailable(db):
     dbcheck = dbIntegrations(db).dbCurrencyAvailable()
     apicheck = apiIntergration().checkApiCurrencys()
     response = {
-        "apiUse": apicheck,
-        "dbUse": dbcheck
+        "default_currency_conversions": apicheck,
+        "fictitious_currencys_conversions": dbcheck["fictitious"],
+        "fiat_currencys_conversions": dbcheck["fiat"],
+        "others": dbcheck["others"]
     }
     
     return response

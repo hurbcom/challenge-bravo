@@ -53,11 +53,20 @@ class dbIntegrations():
     def dbCurrencyAvailable(self):
         try:
             db_currency = dbCurrencys(self.db)
-            data = db_currency.getallCurrencys()[0]
-            if data:
-                return{
-                    f"{data.currency}":f"{data.name}"
-                }
+            currencys = db_currency.getallCurrencys()
+            data = {"fictitious":{},
+                    "fiat":{},
+                    "others":{}}
+            
+            if currencys:
+                for d in currencys:
+                    if d.currency_type == 'fictitious':
+                        data["fictitious"][f"{d.currency}"] = f"{d.name}"
+                    elif d.currency_type == 'fiat':
+                        data["fiat"][f"{d.currency}"] = f"{d.name}"
+                    else:
+                        data["others"][f"{d.currency}"] = f"{d.name}"
+                return data
         except:
             return {}
             
