@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_jwt_auth import AuthJWT
-from validators import schema
+from models import schema
 from datetime import  timedelta
 from models.operations import dbUsers, dbCurrencys
 from sqlalchemy.orm import Session

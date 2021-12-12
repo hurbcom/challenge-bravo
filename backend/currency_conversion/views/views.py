@@ -34,9 +34,6 @@ def interfaceConversions(db, currencyfrom, currencyto, valueAmount):
         
         return settings.CONVERSION
 
-def interfaceCurrencys():
-    return settings.DEFAULT_CURRENCYS
-
 def checkCurrencysAvailable(db):
     dbcheck = dbIntegrations(db).dbCurrencyAvailable()
     apicheck = apiIntergration().checkApiCurrencys()
