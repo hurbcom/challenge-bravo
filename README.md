@@ -99,7 +99,7 @@ Python 3.8
 Após a instalação do, basta executar o comando abaixo dentro diretório do arquivo mencionado.
 
 ```
-pip insall -r requirements.txt
+pip install -r requirements.txt 
 ```
 
 Pronto. Tudo o que você precisa para rodar o projeto está instalado.
