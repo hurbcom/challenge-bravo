@@ -10,8 +10,8 @@ from views.views import interfaceConversions, checkCurrencysAvailable
 
 routers = APIRouter()
 
-@routers.put("/user/create_user", response_model=schema.User)
-def create_user(user: schema.User, 
+@routers.put("/user/signup", response_model=schema.User)
+def signup(user: schema.User, 
                 db: Session = Depends(database.get_db)):
     
     db_user = dbUsers(db, user)
