@@ -2,7 +2,7 @@
   "name": "challenge-bravo",
   "version": "1.0.0",
   "description": "Hurb challenge bravo",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/nadoneves/challenge-bravo/issues"
   },
-  "homepage": "https://github.com/nadoneves/challenge-bravo#readme"
+  "homepage": "https://github.com/nadoneves/challenge-bravo#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
 }
