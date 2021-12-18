@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
 
-app.get('/', function (req, res) {
-  res.json({ msg: "Hello World" });
-});
+const accessProtectionMiddleware = async (req, res, next) => {
+	next();
+};
+
+require('./src/routes/main')(app, accessProtectionMiddleware);
 
 app.listen(3000);
