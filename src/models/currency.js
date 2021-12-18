@@ -18,10 +18,20 @@ const Currency = mongoose.model('Currency', CurrencySchema, 'currencies');
 
 module.exports = {
     getAll: async () => {
-        return await Currency.find();
+        return await Currency.find({}, {
+            _id: 0,
+            code: 1,
+            bid: 1,
+            updatedAt: 1
+        });
     },
     getByCode: async code => {
-        return await Currency.findOne({ code });
+        return await Currency.findOne({ code }, {
+            _id: 0,
+            code: 1,
+            bid: 1,
+            updatedAt: 1
+        });
     },
     newCurrency: async (code, bid) => {
         return await Currency.updateOne(

@@ -9,7 +9,7 @@ mongoose.connect(process.env.MONGO_STRING, {
     useUnifiedTopology: true,
 });
 
-const prepareDatabase = async () => {
+const prepareDatabase = async (BRL = null) => {
     console.log(`UPDATING DATABASE ${(new Date()).toISOString()}`)
 
     const awesomeapi = require('./src/services/awesomeapi');
@@ -17,15 +17,23 @@ const prepareDatabase = async () => {
 
     const currencies = await awesomeapi.all();
     const codes = Object.keys(currencies);
-    if(codes && codes.length > 0) {
+    if (codes && codes.length > 0) {
         for (let i = 0; i < codes.length; i++) {
             const { code, bid } = currencies[codes[i]];
             try {
                 console.log(`> CREATE/UPDATE REGISTER ${code} ${bid}`);
                 await CurrencyModel.newCurrency(code, bid);
             } catch (error) {
-                console.log(`🚀 ~ file: server.js ~ line 23 ~ prepareDatabase ~ error`, error);
+                console.log(`🚀 ~ file: server.js ~ line 26 ~ prepareDatabase ~ error`, error);
             }
+        }
+    }
+    if (BRL) {
+        try {
+            console.log(`> CREATE/UPDATE REGISTER BRL 1`);
+            await CurrencyModel.newCurrency('BRL', 1);
+        } catch (error) {
+            console.log(`🚀 ~ file: server.js ~ line 36 ~ prepareDatabase ~ error`, error);
         }
     }
 
@@ -33,12 +41,10 @@ const prepareDatabase = async () => {
         prepareDatabase();
     }, 1000 * 60 * 60);
 }
-
-prepareDatabase();
-
+prepareDatabase(true);
 
 const accessProtectionMiddleware = async (req, res, next) => {
-	next();
+    next();
 };
 
 require('./src/routes/main')(app, accessProtectionMiddleware);
