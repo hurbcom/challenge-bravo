@@ -1,0 +1,29 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Hurb challenge bravo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nadoneves/challenge-bravo.git"
+  },
+  "keywords": [
+    "hubr",
+    "challenge",
+    "bravo",
+    "backend",
+    "api",
+    "conversion",
+    "monetary",
+    "currency"
+  ],
+  "author": "Leonardo Neves <leo.mvhost@hotmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nadoneves/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/nadoneves/challenge-bravo#readme"
+}
