@@ -4,6 +4,7 @@ module.exports = (app, accessProtectionMiddleware) => {
     const router = express.Router();
 
     const Currency = require('../controllers/currency');
+    const { isNullOrEmpty } = require('../utils');
 
     router.get('/', accessProtectionMiddleware, async (req, res) => {
         res.json({
@@ -14,15 +15,31 @@ module.exports = (app, accessProtectionMiddleware) => {
     });
 
     router.get('/currencies', accessProtectionMiddleware, async (req, res) => {
-        res.json(await Currency.getAll());
+        const result = await Currency.getAll();
+        res.status(result.status).json(result.data);
     });
 
     router.get('/currencies/convert', accessProtectionMiddleware, async (req, res) => {
-        res.json(await Currency.conversion(req.query));
+        const result = await Currency.conversion(req.query);
+        res.status(result.status).json(result.data);
     });
 
     router.get('/currencies/:code', accessProtectionMiddleware, async (req, res) => {
-        res.json(await Currency.getByCode(req.params.code.toUpperCase()));
+        const result = await Currency.getByCode(req.params.code.toUpperCase())
+        res.status(result.status).json(result.data);
+    });
+
+    router.post('/currencies', accessProtectionMiddleware, async (req, res) => {
+        if(
+            isNullOrEmpty(req.body) ||
+            isNullOrEmpty(req.body.code) ||
+            isNullOrEmpty(req.body.bid)
+        ) {
+            return res.send(400).end();
+        }
+
+        const result = await Currency.newCurrency(req.body.code.toUpperCase(), req.body.bid);
+        res.status(result.status).end();
     });
 
     app.use('/', router);
