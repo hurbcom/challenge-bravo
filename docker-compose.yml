@@ -13,9 +13,7 @@ services:
       - "3000:3000"
     command: "npm run server"
     environment:
-      MONGO_PORT: 27017
-      MONGO_USER: mongouser
-      MONGO_PASSWORD: mongopassword
+      MONGO_STRING: mongodb://mongouser:mongopassword@mongo:27017/challenge-bravo?authSource=admin&&socketTimeoutMS=300000
     links:
       - mongo
 
