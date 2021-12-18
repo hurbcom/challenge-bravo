@@ -6,10 +6,6 @@ const CurrencySchema = new Schema({
         type: String,
         required: true
     },
-    name: {
-        type: String,
-        required: true
-    },
     bid: {
         type: Number,
         required: true
@@ -27,4 +23,11 @@ module.exports = {
     getByCode: async code => {
         return await Currency.findOne({ code });
     },
+    newCurrency: async (code, bid) => {
+        return await Currency.updateOne(
+            {code},
+            {code,bid},
+            {upsert:true}
+        );
+    }
 }
