@@ -1,9 +1,11 @@
+const CurrencyModel = require('../models/currency')
+
 const getAll = async () => {
-    return true;
+    return await CurrencyModel.getAll();
 };
 
 const getByCode = async code => {
-    return code;
+    return await CurrencyModel.getByCode(code);
 };
 
 const conversion = async (from, to, amount) => {

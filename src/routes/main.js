@@ -3,14 +3,18 @@ module.exports = (app, accessProtectionMiddleware) => {
     const express = require('express');
     const router = express.Router();
 
-    const awesomeapi = require('../services/awesomeapi');
+    const Currency = require('../controllers/currency');
 
     router.get('/', accessProtectionMiddleware, async (req, res) => {
-        res.json(await awesomeapi.all());
+        res.json(await Currency.getAll());
+    });
+
+    router.get('/:code', accessProtectionMiddleware, async (req, res) => {
+        res.json(await Currency.getByCode(req.params.code.toUpperCase()));
     });
 
     router.get('/convert', accessProtectionMiddleware, async (req, res) => {
-        const coins = await awesomeapi.all();
+        const coins = await Currency.getAll()
 
         coins.HURB = {
             bid: 33
@@ -29,6 +33,10 @@ module.exports = (app, accessProtectionMiddleware) => {
         const calc = ( ( (1/toBID) / (1/fromBID) ) * amount );
 
         res.json({ from, to, amount, calc });
+    });
+
+    router.get('/all', accessProtectionMiddleware, async (req, res) => {
+        res.json(await Currency.getAll());
     });
 
 
