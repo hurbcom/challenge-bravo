@@ -4,7 +4,9 @@ module.exports = {
     setCache: async (key, value, duration = 3600) => {
         const valueStr = JSON.stringify(value);
         const redisClient = await redis.createClient(
-            process.env.REDIS_HOST
+           {
+               url: process.env.REDIS_HOST
+           }
         );
 
         await redisClient.connect();
@@ -18,8 +20,10 @@ module.exports = {
 
     getCache: async (key) => {
         const redisClient = await redis.createClient(
-            process.env.REDIS_HOST
-        );
+            {
+                url: process.env.REDIS_HOST
+            }
+         );
 
         await redisClient.connect();
 
