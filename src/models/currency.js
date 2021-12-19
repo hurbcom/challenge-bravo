@@ -39,5 +39,8 @@ module.exports = {
             {code,bid},
             {upsert:true}
         );
+    },
+    removeCurrency: async code => {
+        return await Currency.findOneAndDelete({ code })
     }
 }

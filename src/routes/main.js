@@ -42,5 +42,10 @@ module.exports = (app, accessProtectionMiddleware) => {
         res.status(result.status).end();
     });
 
+    router.delete('/currencies/:code', accessProtectionMiddleware, async (req, res) => {
+        const result = await Currency.removeCurrency(req.params.code.toUpperCase())
+        res.status(result.status).json(result.data);
+    });
+
     app.use('/', router);
 };
