@@ -1,4 +1,24 @@
 data
+
+# Ignore nodejs things
 nodejs/node_modules
 nodejs/packahe-lock.json
 nodejs/yarn.lock
+
+# Ignore php-laravel things
+php-laravel/node_modules
+php-laravel/public/hot
+php-laravel/public/storage
+php-laravel/storage/*.key
+php-laravel/vendor
+php-laravel/.env
+php-laravel/.env.backup
+php-laravel/.phpunit.result.cache
+php-laravel/docker-compose.override.yml
+php-laravel/Homestead.json
+php-laravel/Homestead.yaml
+php-laravel/npm-debug.log
+php-laravel/yarn-error.log
+php-laravel/.idea
+php-laravel/.vscode
+
