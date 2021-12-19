@@ -41,10 +41,11 @@ var StatusHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request
 
 // Endpoint to get converted exchange rates
 func getExchangeRates(w http.ResponseWriter, r *http.Request) {
-	// Get query string
+	// Set default API result
 	var response ApiResponse
 	httpStatus := http.StatusInternalServerError
 	response.Success = false
+	// Get query string
 	query := r.URL.Query()
 	from := query.Get("from")
 	to := query.Get("to")
@@ -72,6 +73,7 @@ func getExchangeRates(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("%s to currency code %s\n", err, from)
 		} else {
+			// Set data to API result
 			err = json.Unmarshal(jsonExc, &response.Data)
 			if err != nil {
 				log.Printf("%s to currency code %s\n", err, from)
@@ -95,6 +97,7 @@ func getExchangeRates(w http.ResponseWriter, r *http.Request) {
 // Endpoint to save/update currency code and exchange rates
 func saveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 	var currencyCode models.CurrencyCode
+	// Set default API result
 	var response ApiResponse
 	httpStatus := http.StatusInternalServerError
 	reqBody, _ := ioutil.ReadAll(r.Body)
@@ -106,6 +109,7 @@ func saveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("%s to create currency code\n", err)
 		} else {
+			// Save exchange rates if exists
 			if len(currencyCode.Rates) > 0 {
 				err = models.SaveExchangeHistoricalRates(MySql, currencyCode)
 				if err != nil {
@@ -119,6 +123,7 @@ func saveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Printf("%s to create currency code\n", err)
 			} else {
+				// Set data to API result
 				err = json.Unmarshal(jsonCur, &response.Data)
 				if err != nil {
 					log.Printf("%s to create currency code\n", err)
@@ -142,6 +147,7 @@ func saveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 
 // Endpoint to delete currency code and exchange rates
 func deleteCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
+	// Set default API result
 	var response ApiResponse
 	httpStatus := http.StatusInternalServerError
 	params := mux.Vars(r)
