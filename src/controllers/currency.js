@@ -49,7 +49,13 @@ const newCurrency = async (code, bid) => {
 };
 
 const removeCurrency = async code => {
-    return code;
+    try {
+        await CurrencyModel.removeCurrency(code);
+        return { status: 200 };
+    } catch (error) {
+        console.log(`🚀 ~ file: currency.js ~ removeCurrency ~ error`, error);
+        return { status: 500 };
+    }
 }
 
 module.exports = {
