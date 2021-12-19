@@ -87,6 +87,7 @@ const conversion = async query => {
 const newCurrency = async (code, bid) => {
     try {
         await CurrencyModel.newCurrency(code, bid);
+        await updateCache();
         return { status: 201 };
     } catch (error) {
         console.log(`🚀 ~ file: currency.js ~ newCurrency ~ error`, error);
@@ -97,17 +98,28 @@ const newCurrency = async (code, bid) => {
 const removeCurrency = async code => {
     try {
         await CurrencyModel.removeCurrency(code);
+        await updateCache(code);
         return { status: 200 };
     } catch (error) {
         console.log(`🚀 ~ file: currency.js ~ removeCurrency ~ error`, error);
         return { status: 500 };
     }
-}
+};
+
+const updateCache = async (removeCode = null) => {
+    const results = await CurrencyModel.getAll();
+    await setCache('ALL_CURRENCIES', results);
+
+    if(removeCode) {
+        await setCache(`${removeCode}_CURRENCY`, null);
+    }
+};
 
 module.exports = {
     getAll,
     getByCode,
     conversion,
     newCurrency,
-    removeCurrency
+    removeCurrency,
+    updateCache
 }
