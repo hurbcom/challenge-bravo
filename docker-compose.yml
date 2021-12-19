@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+
+  redis:
+    image: redis
+    container_name: challenge-bravo-cache
+    command: redis-server --requirepass redispassword
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    # networks:
+    #   - redis
+  node:
+    image: "node:latest"
+    user: "node"
+    container_name: challenge-bravo
+    working_dir: /app
+    restart: always
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    command: "npm run server"
+    environment:
+      MONGO_STRING: mongodb://mongouser:mongopassword@mongo:27017/challenge-bravo?authSource=admin&&socketTimeoutMS=300000
+      REDIS_HOST: redis://redis
+      REDIS_PASSWORD: redispassword
+    links:
+      - mongo
+      - redis
+    # depends_on:
+    #   - redis
+    # networks:
+    #   - redis
+    #   - mongo
+  mongo:
+    image: mongo
+    container_name: challenge-bravo-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongouser
+      MONGO_INITDB_ROOT_PASSWORD: mongopassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongo:/data/db
+    expose:
+      - "27017"
+    # networks:
+    #   - mongo
+
+# networks:
+#   redis:
+#     driver: bridge
+#   mongo:
+#     driver: bridge

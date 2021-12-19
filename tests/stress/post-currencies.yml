@@ -1,0 +1,12 @@
+config:
+  target: http://localhost:3000
+  phases:
+    - duration: 1
+      arrivalRate: 1000
+scenarios:
+  - flow:
+      - post:
+          url: "/currencies"
+          json:
+            code: "GTA"
+            bid: 0.0000668
