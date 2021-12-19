@@ -26,8 +26,8 @@ const conversion = async query => {
         const { from, to, amount } = query;
 
         const currencies = await CurrencyModel.getAll()
-        const fromCurrency = currencies.filter(c => c.code == from)[0];
-        const toCurrency = currencies.filter(c => c.code == to)[0];
+        const fromCurrency = currencies.filter(c => c.code == from.toUpperCase())[0];
+        const toCurrency = currencies.filter(c => c.code == to.toUpperCase())[0];
 
         if(isNullOrEmpty(fromCurrency)) {
             return {
@@ -50,9 +50,9 @@ const conversion = async query => {
         const fromBID = fromCurrency.bid;
         const toBID = toCurrency.bid;
 
-        const calc = (((1 / toBID) / (1 / fromBID)) * amount);
+        const bid = (((1 / toBID) / (1 / fromBID)) * amount).toFixed(2);
 
-        return { status: 200, data: { from, to, amount, calc } };
+        return { status: 200, data: { from, to, amount, bid } };
     } catch (error) {
         console.log(`🚀 ~ file: currency.js ~ conversion ~ error`, error);
         return { status: 500 };
