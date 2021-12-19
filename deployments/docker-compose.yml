@@ -1,0 +1,49 @@
+services:
+
+    db:
+        build:
+            context: .
+            dockerfile: ./postgres-pt_BR/Dockerfile
+        container_name: postgresdb
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            TZ: America/Sao_Paulo
+            POSTGRES_USER: agcommerce
+            POSTGRES_PASSWORD: queijo
+            POSTGRES_DB: agcommerce
+        volumes:
+            - postgres_db:/var/lib/postgresql/data
+
+    redis:
+        container_name: redis
+        image: redis
+        restart: always
+        environment:
+            TZ: America/Sao_Paulo
+        ports:
+            - 6379:6379
+        volumes:
+            - redis:/data
+
+    pgadmin:
+        container_name: pgadmin4
+        image: dpage/pgadmin4
+        restart: always
+        ports:
+            - 5050:80
+        environment:
+            TZ: America/Sao_Paulo
+            PGADMIN_DEFAULT_EMAIL: andre.andrade@agvalue.com.br
+            PGADMIN_DEFAULT_PASSWORD: queijo
+        volumes:
+            - pgadmin4:/var/lib/pgadmin
+            - pgadmin4:/pgadmin4/servers.json
+        depends_on:
+            - db
+
+volumes:
+    postgres_db:
+    pgadmin4:
+    redis:
