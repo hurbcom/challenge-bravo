@@ -25,7 +25,6 @@ const getByCode = async code => {
         const cacheKey = `${code}_CURRENCY`;
         const dataCache = await getCache(cacheKey);
         if (dataCache) {
-            console.log('obtendo lista do cache')
             data = dataCache;
         } else {
             data = await CurrencyModel.getByCode(code);
