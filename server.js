@@ -2,8 +2,10 @@ require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -52,5 +54,6 @@ const accessProtectionMiddleware = async (req, res, next) => {
 };
 
 require('./src/routes/main')(app, accessProtectionMiddleware);
+require('./src/routes/swagger')(app, accessProtectionMiddleware);
 
 app.listen(3000);
