@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -62,6 +63,10 @@ func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
 		var code string
 		if exchangerate.Rate.IsZero() {
 			exchangerate.Rate = decimal.NewFromFloat(1.00000)
+		}
+
+		if exchangerates.Code == "" {
+			return fmt.Errorf("%s", "Currency code is empty ")
 		}
 
 		if strings.Contains(exchangerate.Code, "-") {
