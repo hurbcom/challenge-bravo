@@ -20,7 +20,7 @@ services:
     working_dir: /app
     restart: always
     volumes:
-      - ./:/app
+      - ./nodejs:/app
     ports:
       - "3000:3000"
     command: "npm run server"
