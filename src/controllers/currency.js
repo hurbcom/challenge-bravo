@@ -1,4 +1,5 @@
 const CurrencyModel = require('../models/currency')
+const { isNullOrEmpty } = require('../utils');
 
 const getAll = async () => {
     try {
@@ -25,8 +26,29 @@ const conversion = async query => {
         const { from, to, amount } = query;
 
         const currencies = await CurrencyModel.getAll()
-        const fromBID = currencies.filter(c => c.code == from)[0].bid;
-        const toBID = currencies.filter(c => c.code == to)[0].bid;
+        const fromCurrency = currencies.filter(c => c.code == from)[0];
+        const toCurrency = currencies.filter(c => c.code == to)[0];
+
+        if(isNullOrEmpty(fromCurrency)) {
+            return {
+                status: 200, data: {
+                    status: 'error',
+                    message: `${from} not found`
+                }
+            };
+        }
+
+        if(isNullOrEmpty(toCurrency)) {
+            return {
+                status: 200, data: {
+                    status: 'error',
+                    message: `${to} not found`
+                }
+            };
+        }
+
+        const fromBID = fromCurrency.bid;
+        const toBID = toCurrency.bid;
 
         const calc = (((1 / toBID) / (1 / fromBID)) * amount);
 
