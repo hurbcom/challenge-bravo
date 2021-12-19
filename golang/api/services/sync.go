@@ -64,6 +64,7 @@ func syncExternalApi(db *sql.DB, rdb *redis.Client) error {
 // Sync currency codes and create exchange rates
 func SyncCurrencyCode(db *sql.DB, rdb *redis.Client, from, to string) error {
 	rates := models.ExternalApiRates{}
+	var exchangeRates []models.ExchangeRate
 	// URL to access external API
 	apiUrl := "https://freecurrencyapi.net/api/v2/latest?apikey=1b50e330-58e1-11ec-87d5-5bf2584da504&base_currency=" + from
 	// Get real data values from external API
@@ -80,7 +81,6 @@ func SyncCurrencyCode(db *sql.DB, rdb *redis.Client, from, to string) error {
 					if from == "BTC" {
 						val = val.Mul(decimal.NewFromInt(1000))
 					}
-					var exchangeRates []models.ExchangeRate
 					exchangeRate := append(exchangeRates, models.ExchangeRate{Code: from + "-" + to, Historical: time.Unix(rates.Query.Timestamp, 0).Format("2006-01-02 15:04:05"), Rate: val})
 					curencyCode := models.CurrencyCode{Code: from, Rates: exchangeRate}
 					// Insert new values in database
@@ -91,6 +91,15 @@ func SyncCurrencyCode(db *sql.DB, rdb *redis.Client, from, to string) error {
 							log.Println(cacheErr)
 						}
 					}
+				}
+			}
+		} else {
+			// Get exchange historical date to fictitious currency code
+			_, err := models.GetExchangeHistoricalRates(db, from, to)
+			if err == nil {
+				cacheErr := cacheExchangeHistoricalRate(db, rdb, from, to)
+				if cacheErr != nil {
+					log.Println(cacheErr)
 				}
 			}
 		}
