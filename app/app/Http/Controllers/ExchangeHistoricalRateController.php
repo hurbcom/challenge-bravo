@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\ExchangeRateHistorical;
+use App\Models\ExchangeHistoricalRate;
 use App\Models\CurrencyCodes;
 use App\DataObjects\CurrencyLocale;
 
@@ -66,7 +66,7 @@ class ExchangeRateController extends Controller
             // All available exchange rates from-to currency codes database
             if ( $sTo === 'ALL' )
             {
-                $aCurrencyCodes = ExchangeRateHistorical::where( 'code', "LIKE", "$sFrom-%" )->get();
+                $aCurrencyCodes = ExchangeHistoricalRate::where( 'code', "LIKE", "$sFrom-%" )->get();
                 if ( !$aCurrencyCodes->isEmpty() )
                 {
                     foreach( $aCurrencyCodes as $iKey => $aCurrencyCode )
@@ -110,7 +110,7 @@ class ExchangeRateController extends Controller
             }
             else
             {
-                $aHistorical = ExchangeRateHistorical::where( 'code', "$sFrom-$sTo" )->first();
+                $aHistorical = ExchangeHistoricalRate::where( 'code', "$sFrom-$sTo" )->first();
                 if ( !empty( $aHistorical ) )
                 {
                     // Get amount according historical rate
@@ -174,14 +174,14 @@ class ExchangeRateController extends Controller
             $sFrom = strtoupper( $sFrom );
             $sTo = strtoupper( $sTo );
             // Check historical data exists in database
-            $aHistorical = ExchangeRateHistorical::where( 'code', "$sFrom-$sTo" )->first();
+            $aHistorical = ExchangeHistoricalRate::where( 'code', "$sFrom-$sTo" )->first();
             if ( !empty( $aHistorical ) )
             {
-                ExchangeRateHistorical::where( 'code', "$sFrom-$sTo" )->update( [ 'rate' => $sExchangeRate, 'historical' => $sHistoricalDate ] );
+                ExchangeHistoricalRate::where( 'code', "$sFrom-$sTo" )->update( [ 'rate' => $sExchangeRate, 'historical' => $sHistoricalDate ] );
             }
             else
             {
-                ExchangeRateHistorical::create( [ 'code' => "$sFrom-$sTo", 'rate' => $sExchangeRate, 'historical' => $sHistoricalDate ] );
+                ExchangeHistoricalRate::create( [ 'code' => "$sFrom-$sTo", 'rate' => $sExchangeRate, 'historical' => $sHistoricalDate ] );
             }
             // Return converted exchange rate
             $sRate = sprintf( "%.6f", $sExchangeRate );
@@ -297,7 +297,7 @@ class ExchangeRateController extends Controller
                 {
                     foreach( $aCurrencyCodes as $iKey => $aCurrencyCode )
                     {
-                        $aHistorical = ExchangeRateHistorical::where( 'code', "$sCurrencyCode-$aCurrencyCode->code" )->first();
+                        $aHistorical = ExchangeHistoricalRate::where( 'code', "$sCurrencyCode-$aCurrencyCode->code" )->first();
                         if ( !empty( $aHistorical ) )
                         {
                             $sRate = sprintf( "%.6f", $aHistorical->rate );
