@@ -20,6 +20,7 @@ const prepareDatabase = async (BRL = null) => {
 
     const awesomeapi = require('./src/services/awesomeapi');
     const CurrencyModel = require('./src/models/currency');
+    const { setCache } = require('./src/services/redis');
 
     const currencies = await awesomeapi.all();
     const codes = Object.keys(currencies);
@@ -42,6 +43,9 @@ const prepareDatabase = async (BRL = null) => {
             console.log(`🚀 ~ file: server.js ~ line 36 ~ prepareDatabase ~ error`, error);
         }
     }
+
+    const results = await CurrencyModel.getAll();
+    await setCache('ALL_CURRENCIES', results);
 
     setInterval(() => {
         prepareDatabase();

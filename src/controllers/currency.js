@@ -1,9 +1,17 @@
 const CurrencyModel = require('../models/currency')
 const { isNullOrEmpty } = require('../utils');
+const { setCache, getCache } = require('../services/redis');
 
 const getAll = async () => {
     try {
-        const data = await CurrencyModel.getAll();
+        let data = [];
+        const dataCache = await getCache('ALL_CURRENCIES');
+        if (dataCache) {
+            data = dataCache;
+        } else {
+            data = await CurrencyModel.getAll();
+        }
+
         return { status: 200, data };
     } catch (error) {
         console.log(`🚀 ~ file: currency.js ~ getAll ~ error`, error);
@@ -13,7 +21,17 @@ const getAll = async () => {
 
 const getByCode = async code => {
     try {
-        const data = await CurrencyModel.getByCode(code);
+        let data = [];
+        const cacheKey = `${code}_CURRENCY`;
+        const dataCache = await getCache(cacheKey);
+        if (dataCache) {
+            console.log('obtendo lista do cache')
+            data = dataCache;
+        } else {
+            data = await CurrencyModel.getByCode(code);
+            await setCache(cacheKey, data);
+        }
+
         return { status: 200, data };
     } catch (error) {
         console.log(`🚀 ~ file: currency.js ~ getByCode ~ error`, error);
@@ -25,7 +43,14 @@ const conversion = async query => {
     try {
         const { from, to, amount } = query;
 
-        const currencies = await CurrencyModel.getAll()
+        let currencies = null;
+        const dataCache = await getCache('ALL_CURRENCIES');
+        if (dataCache) {
+            currencies = dataCache;
+        } else {
+            currencies = await CurrencyModel.getAll();
+        }
+
         const fromCurrency = currencies.filter(c => c.code == from.toUpperCase())[0];
         const toCurrency = currencies.filter(c => c.code == to.toUpperCase())[0];
 
