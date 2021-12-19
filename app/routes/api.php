@@ -2,7 +2,7 @@
 
 //use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ExchangeRateController;
+use App\Http\Controllers\ExchangeHistoricalRateController;
 use App\Http\Controllers\CurrencyCodeController;
 
 /*
@@ -20,6 +20,6 @@ use App\Http\Controllers\CurrencyCodeController;
     return $request->user();
 });*/
 
-Route::middleware( 'return-json:api' )->get( '/exchange-rates', [ExchangeRateController::class, 'exchangeRateValues']);
+Route::middleware( 'return-json:api' )->get( '/exchange-rates', [ExchangeHistoricalRateController::class, 'exchangeRateValues']);
 Route::middleware( 'return-json:api' )->get( '/check-currency-code', [CurrencyCodeController::class, 'checkRealCurrencyCode']);
 Route::middleware( 'return-json:api' )->delete( '/delete-currency-code/{code}', [CurrencyCodeController::class, 'deleteCurrencyCode']);

@@ -1,9 +1,10 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class HistoryExchangeRate extends Migration
+class ExchangeHistoricalRates extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +13,9 @@ class HistoryExchangeRate extends Migration
      */
     public function up()
     {
-        // Create table to store historical exchange rate information
-        Schema::create( 'exchange_rate_historicals', function (Blueprint $table) {
-            $table->string( 'code', 7 );
-            $table->decimal( 'rate', 8, 2 );
+        Schema::create( 'exchange_historical_rates', function (Blueprint $table) {
+            $table->string( 'code', 15 );
+            $table->decimal( 'rate', 16, 6 );
             $table->date( 'historical' );
             $table->timestamps();
         } );
@@ -28,8 +28,6 @@ class HistoryExchangeRate extends Migration
      */
     public function down()
     {
-        // Drop table if exists
-        Schema::dropIfExists( 'exchange_rate_historicals' );
+        Schema::dropIfExists( 'exchange_historical_rates' );
     }
-
 }

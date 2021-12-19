@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CurrencyCodes;
-use App\DataObjects\CurrencyLocale;
 use Illuminate\Support\Facades\Http;
 
 use Throwable;

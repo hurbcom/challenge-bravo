@@ -128,7 +128,7 @@ func saveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 				if err != nil {
 					log.Printf("%s to create currency code\n", err)
 				} else {
-					httpStatus = http.StatusOK
+					httpStatus = http.StatusCreated
 					response.Success = true
 				}
 			}

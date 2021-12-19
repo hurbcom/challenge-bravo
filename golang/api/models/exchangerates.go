@@ -33,7 +33,7 @@ func GetExchangeHistoricalRates(db *sql.DB, from, to string) ([]ExchangeRate, er
 	to = strings.ToUpper(to)
 	// Get all historical exchange rate data
 	if to == "ALL" {
-		rows, err := db.Query("SELECT code, rate, DATE_FORMAT( historical, '%d/%m/%Y' ) FROM exchange_rate_historicals WHERE code LIKE ?;", from+"-%")
+		rows, err := db.Query("SELECT code, rate, DATE_FORMAT( historical, '%d/%m/%Y' ) FROM exchange_historical_rates WHERE code LIKE ?;", from+"-%")
 		if err != nil {
 			return exchangerate, err
 		}
@@ -46,7 +46,7 @@ func GetExchangeHistoricalRates(db *sql.DB, from, to string) ([]ExchangeRate, er
 		}
 	} else {
 		// Get specific historical exchange rate data
-		err := db.QueryRow("SELECT rate, DATE_FORMAT( historical, '%d/%m/%Y' ) FROM exchange_rate_historicals WHERE code = ?;", from+"-"+to).Scan(&rate, &historical)
+		err := db.QueryRow("SELECT rate, DATE_FORMAT( historical, '%d/%m/%Y' ) FROM exchange_historical_rates WHERE code = ?;", from+"-"+to).Scan(&rate, &historical)
 		if err != nil {
 			return exchangerate, err
 		}
@@ -75,10 +75,10 @@ func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
 			code = strings.ToUpper(exchangerates.Code + "-" + exchangerate.Code)
 		}
 
-		err := db.QueryRow("SELECT COUNT(*) FROM exchange_rate_historicals WHERE code = ?", code).Scan(&exists)
+		err := db.QueryRow("SELECT COUNT(*) FROM exchange_historical_rates WHERE code = ?", code).Scan(&exists)
 		if err == nil {
 			if exists == 1 {
-				query := "UPDATE exchange_rate_historicals SET rate = ?, historical = NOW(), updated_at = NOW() WHERE code = ?;"
+				query := "UPDATE exchange_historical_rates SET rate = ?, historical = NOW(), updated_at = NOW() WHERE code = ?;"
 				ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
 				defer cancelfunc()
 
@@ -90,7 +90,7 @@ func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
 				defer stmt.Close()
 				res, err := stmt.ExecContext(ctx, exchangerate.Rate, code)
 				if err != nil {
-					log.Printf("Error %s when update row into exchange_rate_historicals table", err)
+					log.Printf("Error %s when update row into exchange_historical_rates table", err)
 					return err
 				}
 				rows, err := res.RowsAffected()
@@ -98,9 +98,9 @@ func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
 					log.Printf("Error %s when finding rows affected", err)
 					return err
 				}
-				log.Printf("%d exchange_rate_historicals created ", rows)
+				log.Printf("%d exchange_historical_rates created ", rows)
 			} else {
-				query := "INSERT INTO exchange_rate_historicals( code, rate, historical, created_at ) VALUES( ?, ?, NOW(), NOW() );"
+				query := "INSERT INTO exchange_historical_rates( code, rate, historical, created_at ) VALUES( ?, ?, NOW(), NOW() );"
 				ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
 				defer cancelfunc()
 
@@ -112,7 +112,7 @@ func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
 				defer stmt.Close()
 				res, err := stmt.ExecContext(ctx, code, exchangerate.Rate)
 				if err != nil {
-					log.Printf("Error %s when inserting row into exchange_rate_historicals table", err)
+					log.Printf("Error %s when inserting row into exchange_historical_rates table", err)
 					return err
 				}
 				rows, err := res.RowsAffected()
@@ -120,7 +120,7 @@ func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
 					log.Printf("Error %s when finding rows affected", err)
 					return err
 				}
-				log.Printf("%d exchange_rate_historicals created to %s", rows, exchangerate.Code)
+				log.Printf("%d exchange_historical_rates created to %s", rows, exchangerate.Code)
 			}
 		} else {
 			log.Printf("%s\n", err)
@@ -133,7 +133,7 @@ func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
 // Delete exchange historical rates from database
 func DeleteExchangeHistoricalRates(db *sql.DB, currencyCode string) error {
 	currencyCode = strings.ToUpper(currencyCode)
-	query := "DELETE FROM exchange_rate_historicals WHERE code LIKE ? OR code LIKE ?;"
+	query := "DELETE FROM exchange_historical_rates WHERE code LIKE ? OR code LIKE ?;"
 	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelfunc()
 
@@ -145,7 +145,7 @@ func DeleteExchangeHistoricalRates(db *sql.DB, currencyCode string) error {
 	defer stmt.Close()
 	res, err := stmt.ExecContext(ctx, currencyCode+"-%", "%-"+currencyCode)
 	if err != nil {
-		log.Printf("Error %s when delete row into exchange_rate_historicals table", err)
+		log.Printf("Error %s when delete row into exchange_historical_rates table", err)
 		return err
 	}
 	rows, err := res.RowsAffected()
@@ -153,7 +153,7 @@ func DeleteExchangeHistoricalRates(db *sql.DB, currencyCode string) error {
 		log.Printf("Error %s when finding rows affected", err)
 		return err
 	}
-	log.Printf("%d exchange_rate_historicals deleted to %s", rows, currencyCode)
+	log.Printf("%d exchange_historical_rates deleted to %s", rows, currencyCode)
 
 	return err
 }

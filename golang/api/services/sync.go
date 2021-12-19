@@ -113,7 +113,6 @@ func cacheExchangeHistoricalRate(db *sql.DB, rdb *redis.Client, from, to string)
 	// Get historical exchange rates
 	var exchangerates []models.ExchangeRate
 	code := from + "-" + to
-	//err := db.QueryRow("SELECT rate, DATE_FORMAT( historical, '%d/%m/%Y' ) FROM exchange_rate_historicals WHERE code = ?;", code).Scan(&rate, &historical)
 	exchangerates, err := models.GetExchangeHistoricalRates(db, from, to)
 	if err == nil {
 		// Check cache

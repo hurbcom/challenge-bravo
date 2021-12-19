@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ExchangeRateController;
+use App\Http\Controllers\ExchangeHistoricalRateController;
 use App\Http\Controllers\CurrencyCodeController;
 
 /*
@@ -14,8 +14,8 @@ use App\Http\Controllers\CurrencyCodeController;
   |
  */
 
-Route::get( '/', [ExchangeRateController::class, 'index'] );
-Route::post( '/get-currency-code-rates', [ExchangeRateController::class, 'getExchangeRatesByCurrencyCode'] );
+Route::get( '/', [ExchangeHistoricalRateController::class, 'index'] );
+Route::post( '/get-currency-code-rates', [ExchangeHistoricalRateController::class, 'getExchangeRatesByCurrencyCode'] );
 Route::get( '/currency-code-list', [CurrencyCodeController::class, 'getListCurrencyCodes'] );
 Route::get( '/currency-codes', [CurrencyCodeController::class, 'getCurrencyCodes'] );
 Route::get( '/manage-currency-codes', [CurrencyCodeController::class, 'manageCurrencyCodes'] );

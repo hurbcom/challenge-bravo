@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `exchange_rate` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `exchange_rate`;
 -- MySQL dump 10.13  Distrib 8.0.27, for Linux (x86_64)
 --
 -- Host: localhost    Database: exchange_rate
@@ -45,13 +43,13 @@ INSERT INTO `currency_codes` VALUES (1,'BRL',1,'2021-12-05 23:11:13',NULL),(2,'U
 UNLOCK TABLES;
 
 --
--- Table structure for table `exchange_rate_historicals`
+-- Table structure for table `exchange_historical_rates`
 --
 
-DROP TABLE IF EXISTS `exchange_rate_historicals`;
+DROP TABLE IF EXISTS `exchange_historical_rates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `exchange_rate_historicals` (
+CREATE TABLE `exchange_historical_rates` (
   `code` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `rate` decimal(16,6) NOT NULL,
   `historical` date NOT NULL,
@@ -61,12 +59,12 @@ CREATE TABLE `exchange_rate_historicals` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `exchange_rate_historicals`
+-- Dumping data for table `exchange_historical_rates`
 --
 
-LOCK TABLES `exchange_rate_historicals` WRITE;
-/*!40000 ALTER TABLE `exchange_rate_historicals` DISABLE KEYS */;
-/*!40000 ALTER TABLE `exchange_rate_historicals` ENABLE KEYS */;
+LOCK TABLES `exchange_historical_rates` WRITE;
+/*!40000 ALTER TABLE `exchange_historical_rates` DISABLE KEYS */;
+/*!40000 ALTER TABLE `exchange_historical_rates` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -78,4 +76,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-15 23:28:30
+-- Dump completed on 2021-12-19 14:57:09

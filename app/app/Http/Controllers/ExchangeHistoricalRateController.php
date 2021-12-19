@@ -7,7 +7,7 @@ use App\DataObjects\CurrencyLocale;
 
 use Throwable;
 
-class ExchangeRateController extends Controller
+class ExchangeHistoricalRateController extends Controller
 {
     /**
      * Available queries in request

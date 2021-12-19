@@ -11,9 +11,10 @@ class CurrencyCodes extends Model
     /**
      * The primary key associated with the table.
      *
-     * @var string
+     * @var (string)
+     * @access protected
      */
-    protected $primaryKey = 'idrate';
+    protected $primaryKey = 'idcode';
 
     /**
      * The attributes that are mass assignable.
