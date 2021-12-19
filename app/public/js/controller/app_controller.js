@@ -184,7 +184,7 @@ appExchangeRate.controller( 'exchangeRateCtrl', ['$scope', '$http', function( $s
     };
 
     // Clear check currency code if currency code change
-    $scope.clearCheckCurrncyCode = function ()
+    $scope.clearCheckCurrencyCode = function ()
     {
         $scope.realCurrencyCode = false;
         $scope.ExchangeRates.Rates = [];
@@ -349,13 +349,14 @@ appExchangeRate.controller( 'exchangeRateCtrl', ['$scope', '$http', function( $s
         $('.form-title').text( 'Enter New Currency Code' );
     };
 
+    // Button confirm delete currency code and exchange rates
     $('#removeConfirm').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var currency = button.data('currency');
         var modal = $(this)
         modal.find('.modal-title').text('Remove currency code ' + currency);
         modal.find('.modal-body input').val(currency)
-      });
+    });
 
     // Initialize manage currency code table
     $scope.getCurrencyCodes();

@@ -58,7 +58,7 @@
           </div>
           <div ng-show="displayLoadingModal === false" class="pl-2 pr-2">
             <form name="formCurrencyCode">
-              <meta name="csrf-token" content="{{ csrf_token() }}">
+              <input type="hidden" name="csrf-token" value="{{ csrf_token() }}">
               <div class="form-group" ng-if="ChangeCurrencyCode == true && ExchangeRates.Code !== ''">
                 <input type="hidden" class="form-control" ng-model="ExchangeRates.Code">
               </div>
@@ -66,7 +66,7 @@
                 If currency code is fictitious is necessary register exchange rates. After click check button inform exchange rate values or leave to register default value 1.000000.
               </div>
               <div class="input-group mb-3" ng-if="ChangeCurrencyCode == false">
-                <input type="text" class="form-control text-uppercase" placeholder="Currency Code" ng-model="ExchangeRates.Code" ng-change="clearCheckCurrncyCode();">
+                <input type="text" class="form-control text-uppercase" placeholder="Currency Code" ng-model="ExchangeRates.Code" ng-change="clearCheckCurrencyCode();">
                 <div class="input-group-append">
                   <button type="button" ng-click="checkCurrencyCodeExists();" class="btn btn-outline-primary">Check Currency Code</button>
                 </div>
@@ -77,7 +77,7 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <input type="text" class="form-control" placeholder="1.000000" ng-model="ExchangeRate.rate" mask-currency="''" config="{group:'.',decimal:'.',indentation:' ', decimalSize:6}">
+                    <input type="text" maxlength="16" class="form-control" placeholder="1.000000" ng-model="ExchangeRate.rate" mask-currency="''" config="{group:'.',decimal:'.',indentation:' ', decimalSize:6}">
                   </div>
                 </div>
               </div>

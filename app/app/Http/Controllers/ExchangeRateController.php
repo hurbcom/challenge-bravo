@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Models\ExchangeRateHistorical;
 use App\Models\CurrencyCodes;
 use App\DataObjects\CurrencyLocale;
@@ -290,29 +289,22 @@ class ExchangeRateController extends Controller
         {
             if ( $oRequest->has( 'currencyCode' ) )
             {
-                // Get historical relationship rates with currency code
                 $aRates = [];
                 $sCurrencyCode = strtoupper( $oRequest->input( 'currencyCode' ) );
-                $aCurrencyRates = ExchangeRateHistorical::where( 'code', "LIKE", "$sCurrencyCode-%" )->get();
-                if ( !$aCurrencyRates->isEmpty() )
+                // Get all codes except selected
+                $aCurrencyCodes = CurrencyCodes::where( 'code', "<>", "$sCurrencyCode" )->get();
+                if ( !$aCurrencyCodes->isEmpty() )
                 {
-                    foreach( $aCurrencyRates as $iKey => $aCurrencyRate )
+                    foreach( $aCurrencyCodes as $iKey => $aCurrencyCode )
                     {
-                        $sRate = sprintf( "%.6f", $aCurrencyRate->rate );
-                        $sCode = str_replace( "$sCurrencyCode-", "", $aCurrencyRate->code );
-                        $aRates[] = [ 'code' => $sCode, 'rate' => $sRate ];
-                    }
-                }
-                else
-                {
-                    // Get all codes except selected
-                    $aCurrencyRates = CurrencyCodes::where( 'code', "<>", "$sCurrencyCode" )->get();
-                    if ( !$aCurrencyRates->isEmpty() )
-                    {
-                        foreach( $aCurrencyRates as $iKey => $aCurrencyRate )
+                        $aHistorical = ExchangeRateHistorical::where( 'code', "$sCurrencyCode-$aCurrencyCode->code" )->first();
+                        if ( !empty( $aHistorical ) )
                         {
-                            $aRates[] = [ 'code' => $aCurrencyRate->code, 'rate' => "" ];
+                            $sRate = sprintf( "%.6f", $aHistorical->rate );
+                            $aRates[] = [ 'code' => $aCurrencyCode->code, 'rate' => $sRate, 'created' => $aHistorical->created_at ];
+                            continue;
                         }
+                        $aRates[] = [ 'code' => $aCurrencyCode->code, 'rate' => "", 'created' => $aCurrencyCode->created_at ];
                     }
                 }
 
