@@ -21,4 +21,4 @@ php-laravel/npm-debug.log
 php-laravel/yarn-error.log
 php-laravel/.idea
 php-laravel/.vscode
-
+php-laravel/composer.lock
