@@ -63,7 +63,7 @@
                 <input type="hidden" class="form-control" ng-model="ExchangeRates.Code">
               </div>
               <div class="alert alert-info" role="alert" ng-if="ChangeCurrencyCode == false">
-                If currency code is fictitious is necessary register exchange rates. After click check button inform exchange rate values or leave to register default value 1.000000.
+                If currency code is fictitious is necessary register exchange rates. After click check button, inform exchange rate values or leave to register default value 1.000000 to exchange rate.
               </div>
               <div class="input-group mb-3" ng-if="ChangeCurrencyCode == false">
                 <input type="text" class="form-control text-uppercase" placeholder="Currency Code" ng-model="ExchangeRates.Code" ng-change="clearCheckCurrencyCode();">

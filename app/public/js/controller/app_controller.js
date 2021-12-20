@@ -242,7 +242,7 @@ appExchangeRate.controller( 'exchangeRateCtrl', ['$scope', '$http', function( $s
 
         $scope.displayLoadingModal = true;
         $http( {
-            url: '/save-currency-code',
+            url: '/api/save-currency-code',
             method: 'POST',
             data: JSON.stringify({ currencyCode: $scope.ExchangeRates })
         } ).then( function success( result )
@@ -254,9 +254,11 @@ appExchangeRate.controller( 'exchangeRateCtrl', ['$scope', '$http', function( $s
                 {
                     $scope.ModalMessage = 'Currency code ' + $scope.ExchangeRates.Code + ' save';
                     $scope.ModalMessageColor = 'success';
+                    $scope.cancelSaveCurrencyCode();
                     setTimeout(function(){
-                        $scope.cancelSaveCurrencyCode();
-                        window.location.reload();
+                        $scope.getCurrencyCodes();
+                        $scope.ModalMessage = '';
+                        $scope.ModalMessageColor = '';
                     }, 2000);
                 }
                 else
@@ -299,7 +301,7 @@ appExchangeRate.controller( 'exchangeRateCtrl', ['$scope', '$http', function( $s
                     $scope.cancelSaveCurrencyCode();
                     $('#removeConfirm').modal('hide');
                     setTimeout(function(){
-                        window.location.reload();
+                        $scope.getCurrencyCodes();
                     }, 2000);
                 }
                 else
