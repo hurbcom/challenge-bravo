@@ -35,6 +35,10 @@ Criando o .env:
 ```sh
 cp .env.example .env
 ```
+Instalar as dependências:
+```sh
+composer install
+```
 Iniciar o serviço:
 ```sh
 php artisan serve --port=3001
