@@ -11,22 +11,22 @@ import (
 )
 
 // Server configuration parameters
-var config server.Config
+var webConfig server.Config
 
-// Database connection string
-var dbConnString = ""
-
-// Cache connection string
-var cacheConnString = ""
+// Database, cache and quotation services parameters
+var modelConfig model.Config
 
 // Constants
 const (
-	EnvPortKey     = "BRAVO_PORT"      // EnvPortKey Server port number environment variable name
-	EnvHostKey     = "BRAVO_HOST"      // EnvHostKey Server host name environment variable name
-	EnvCertFileKey = "BRAVO_CERT_FILE" // EnvCertFileKey Server certificate file path environment variable name
-	EnvKeyFileKey  = "BRAVO_KEY_FILE"  // EnvKeyFileKey Server certificate key file path environment variable name
-	EnvDBKey       = "BRAVO_DB"        // EnvDBKey Database connection string (postgres) environment variable name
-	EnvCacheKey    = "BRAVO_CACHE"     // EnvCacheKey Cache connection string (redis) environment variable name
+	EnvPortKey          = "BRAVO_PORT"               // EnvPortKey Server port number environment variable name
+	EnvHostKey          = "BRAVO_HOST"               // EnvHostKey Server host name environment variable name
+	EnvCertFileKey      = "BRAVO_CERT_FILE"          // EnvCertFileKey Server certificate file path environment variable name
+	EnvKeyFileKey       = "BRAVO_KEY_FILE"           // EnvKeyFileKey Server certificate key file path environment variable name
+	EnvDBKey            = "BRAVO_DB"                 // EnvDBKey Database connection string (postgres) environment variable name
+	EnvCacheKey         = "BRAVO_CACHE"              // EnvCacheKey Cache connection string (redis) environment variable name
+	EnvFixerKey         = "BRAVO_FIXER_KEY"          // EnvFixerKey Fixer currency quote API key environment variable name
+	EnvCoinLayerKey     = "BRAVO_COIN_LAYER_KEY"     // EnvCoinLayerKey Coin layer crypto currency quote API key environment variable name
+	EnvCurrencyLayerKey = "BRAVO_CURRENCY_LAYER_KEY" // EnvCurrencyLayerKey Currency layer currency quote API key environment variable name
 
 	defaultPort = 8080        // defaultPort Default server port
 	defaultHost = "localhost" // defaultHost Default server host
@@ -40,12 +40,12 @@ func main() {
 	readConfig()
 
 	// Initalize data layer
-	if err := model.Init(dbConnString, cacheConnString); err != nil {
+	if err := model.Init(modelConfig); err != nil {
 		os.Exit(1)
 	}
 
 	// start http server
-	server.Start(config)
+	server.Start(webConfig)
 
 	// Gracefully terminate data layer
 	model.Terminate()
@@ -57,37 +57,49 @@ func main() {
 func init() {
 
 	// Read parameters from environment variables
-	config.Port = defaultPort
+	webConfig.Port = defaultPort
 	if strPort, ok := os.LookupEnv(EnvPortKey); ok {
 		if port, err := strconv.Atoi(strPort); err == nil && port >= 0 && port <= 0xffff {
-			config.Port = port
+			webConfig.Port = port
 		}
 	}
 
 	if host, ok := os.LookupEnv(EnvHostKey); ok {
-		config.Host = host
+		webConfig.Host = host
 	} else {
-		config.Host = defaultHost
+		webConfig.Host = defaultHost
 	}
 
 	if certFile, ok := os.LookupEnv(EnvCertFileKey); ok {
-		config.CertFile = certFile
+		webConfig.CertFile = certFile
 	} else {
-		config.Host = ""
+		webConfig.Host = ""
 	}
 
 	if keyFile, ok := os.LookupEnv(EnvKeyFileKey); ok {
-		config.KeyFile = keyFile
+		webConfig.KeyFile = keyFile
 	} else {
-		config.KeyFile = ""
+		webConfig.KeyFile = ""
 	}
 
 	if db, ok := os.LookupEnv(EnvDBKey); ok {
-		dbConnString = db
+		modelConfig.DBConnectionString = db
 	}
 
 	if cache, ok := os.LookupEnv(EnvCacheKey); ok {
-		cacheConnString = cache
+		modelConfig.CacheConnectionString = cache
+	}
+
+	if fixer, ok := os.LookupEnv(EnvFixerKey); ok {
+		modelConfig.FixerKey = fixer
+	}
+
+	if currLayerKey, ok := os.LookupEnv(EnvCurrencyLayerKey); ok {
+		modelConfig.CurrencyLayerKey = currLayerKey
+	}
+
+	if coinLayerKey, ok := os.LookupEnv(EnvCoinLayerKey); ok {
+		modelConfig.CoinLayerKey = coinLayerKey
 	}
 }
 
@@ -98,12 +110,15 @@ func readConfig() {
 	fmt.Printf("Bravo Currency Converter Server v%s\n\n", version)
 
 	// Parse command line parameters or use system environment values read in init function
-	flag.IntVar(&config.Port, "port", config.Port, fmt.Sprintf("port number to bind the server, can be provided also by the environmental variable %s (0-65535)", EnvPortKey))
-	flag.StringVar(&config.Host, "host", config.Host, fmt.Sprintf("host name to bind the server, can be provided also by the environmental variable %s (localhost)", EnvHostKey))
-	flag.StringVar(&config.CertFile, "cert", config.CertFile, fmt.Sprintf("path to TLS certificate file, can be provided also by the environmental variable %s (.pem)", EnvCertFileKey))
-	flag.StringVar(&config.KeyFile, "key", config.KeyFile, fmt.Sprintf("path to TLS certificate key file, can be provided also by the environmental variable %s (.key)", EnvKeyFileKey))
-	flag.StringVar(&dbConnString, "db", dbConnString, fmt.Sprintf("Database connection string (Postgres),can be provided also by the environmental variable %s", EnvDBKey))
-	flag.StringVar(&cacheConnString, "cache", cacheConnString, fmt.Sprintf("Cache connection string (Redis),can be provided also by the environmental variable %s", EnvCacheKey))
+	flag.IntVar(&webConfig.Port, "port", webConfig.Port, fmt.Sprintf("port number to bind the server, can be provided also by the environmental variable %s (0-65535)", EnvPortKey))
+	flag.StringVar(&webConfig.Host, "host", webConfig.Host, fmt.Sprintf("host name to bind the server, can be provided also by the environmental variable %s (localhost)", EnvHostKey))
+	flag.StringVar(&webConfig.CertFile, "cert", webConfig.CertFile, fmt.Sprintf("path to TLS certificate file, can be provided also by the environmental variable %s (.pem)", EnvCertFileKey))
+	flag.StringVar(&webConfig.KeyFile, "key", webConfig.KeyFile, fmt.Sprintf("path to TLS certificate key file, can be provided also by the environmental variable %s (.key)", EnvKeyFileKey))
+	flag.StringVar(&modelConfig.DBConnectionString, "db", modelConfig.DBConnectionString, fmt.Sprintf("Database connection string (Postgres),can be provided also by the environmental variable %s", EnvDBKey))
+	flag.StringVar(&modelConfig.CacheConnectionString, "cache", modelConfig.CacheConnectionString, fmt.Sprintf("Cache connection string (Redis),can be provided also by the environmental variable %s", EnvCacheKey))
+	flag.StringVar(&modelConfig.FixerKey, "fixer", modelConfig.FixerKey, fmt.Sprintf("Fixer currency quote API key,can be provided also by the environmental variable %s", EnvFixerKey))
+	flag.StringVar(&modelConfig.CurrencyLayerKey, "currency-layer", modelConfig.CurrencyLayerKey, fmt.Sprintf("Currency layer currency quote API key, can be provided also by the environmental variable %s", EnvCurrencyLayerKey))
+	flag.StringVar(&modelConfig.CoinLayerKey, "coin-layer", modelConfig.CoinLayerKey, fmt.Sprintf("Coin layer crypto currency quote API key,can be provided also by the environmental variable %s", EnvCoinLayerKey))
 	help := flag.Bool("help", false, "print this help message")
 	flag.Usage = func() {
 		execName := strings.Split(os.Args[0], string(os.PathSeparator))
@@ -113,26 +128,37 @@ func readConfig() {
 	flag.Parse()
 
 	// Validate the value of the arguments and print a help message
-	if (*help) || config.Port < 0 || config.Port > 0xffff || len(config.Host) == 0 ||
-		len(dbConnString) == 0 || len(cacheConnString) == 0 {
+	if (*help) || webConfig.Port < 0 || webConfig.Port > 0xffff || len(webConfig.Host) == 0 ||
+		len(modelConfig.DBConnectionString) == 0 || len(modelConfig.CacheConnectionString) == 0 ||
+		len(modelConfig.CoinLayerKey) == 0 ||
+		(len(modelConfig.FixerKey) == 0 && len(modelConfig.CurrencyLayerKey) == 0) {
 		exitCode := 0
 
-		if config.Port < 0 || config.Port > 0xffff {
-			fmt.Printf("Invalid port number: %d. The port number must be between 0 and 65535.\n", config.Port)
+		if webConfig.Port < 0 || webConfig.Port > 0xffff {
+			fmt.Printf("Invalid port number: %d. The port number must be between 0 and 65535.\n", webConfig.Port)
 			exitCode = 1
 		}
-		if len(config.Host) == 0 {
+		if len(webConfig.Host) == 0 {
 			fmt.Println("Missing hostname")
 			exitCode = 1
 		}
-		if len(dbConnString) == 0 {
+		if len(modelConfig.DBConnectionString) == 0 {
 			fmt.Println("Missing database connection string")
 			exitCode = 1
 		}
-		if len(cacheConnString) == 0 {
+		if len(modelConfig.CacheConnectionString) == 0 {
 			fmt.Println("Missing cache connection string")
 			exitCode = 1
 		}
+		if len(modelConfig.CoinLayerKey) == 0 {
+			fmt.Println("Missing Coin Layer API Key")
+			exitCode = 1
+		}
+		if len(modelConfig.FixerKey) == 0 && len(modelConfig.CurrencyLayerKey) == 0 {
+			fmt.Println("Missing Fixer or Currency Layer API Key")
+			exitCode = 1
+		}
+
 		flag.Usage()
 		os.Exit(exitCode)
 	}

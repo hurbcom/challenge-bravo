@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-redis/cache/v8"
 	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -11,19 +12,54 @@ import (
 var db *pgxpool.Pool
 var _cache *cache.Cache
 var redisClient *redis.Client
+var fixer Fixer
+var currencyLayer CurrencyLayer
+var coinLayer CoinLayer
+
+type Config struct {
+	DBConnectionString    string
+	CacheConnectionString string
+	FixerKey              string
+	CurrencyLayerKey      string
+	CoinLayerKey          string
+}
 
 // Init Initializes data layer, where dbDSN is the postgres connection string and
 // cacheDSN is the redis connection string
-func Init(dbDSN, cacheDSN string) error {
+func Init(config Config) error {
 
 	var err error
-	if db, err = initDB(dbDSN); err != nil {
+	if len(config.CurrencyLayerKey) == 0 && len(config.CoinLayerKey) == 0 {
+		err = fmt.Errorf("missing fixer or currency layer api key")
+		log.Println(err)
 		return err
 	}
 
-	if _cache, redisClient, err = initCache(cacheDSN); err != nil {
+	if db, err = initDB(config.DBConnectionString); err != nil {
+		return err
+	}
+
+	if _cache, redisClient, err = initCache(config.CacheConnectionString); err != nil {
 		terminateDB(db)
 		return err
+	}
+
+	if err = fixer.Initialize(config.FixerKey); err != nil {
+		Terminate()
+		return err
+	}
+
+	if len(config.CurrencyLayerKey) > 0 {
+		if err = currencyLayer.Initialize(config.CurrencyLayerKey); err != nil {
+			Terminate()
+			return err
+		}
+	}
+	if len(config.CoinLayerKey) > 0 {
+		if err = coinLayer.Initialize(config.CoinLayerKey); err != nil {
+			Terminate()
+			return err
+		}
 	}
 
 	return nil
