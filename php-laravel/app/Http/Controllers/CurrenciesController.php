@@ -4,36 +4,100 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
-use SebastianBergmann\Environment\Console;
 
 use App\Models\Currency;
 
 class CurrenciesController extends Controller
 {
-    function listAll() {
-        $cache = Redis::get('ALL_CURRENCIES');
-        error_log($cache);
-        return $cache;
-        $res = Currency::get();
-        return $res;
+    function listAll()
+    {
+        try {
+            $cache = Redis::get('ALL_CURRENCIES');
+
+            $data = null;
+            if (isset($cache)) {
+                $data = $cache;
+            } else {
+                $data = Currency::get();
+            }
+
+            return response()->json(json_decode($data), 200);
+        } catch (\Throwable $th) {
+            error_log($th);
+            return response()->json(null, 500);
+        }
     }
 
-    function newCurrency() {
+    function newCurrency()
+    {
         return true;
     }
 
-    function getByCode($code) {
-        $res = Currency::where('code', '=', strtoupper($code))
-            ->get();
-        if(count($res) <= 0) return null;
-        else return $res[0];
+    function getByCode($code)
+    {
+        $code = strtoupper($code);
+
+        try {
+            $cacheKey = $code.'_CURRENCY';
+            $cache = Redis::get($cacheKey);
+
+            $data = null;
+            if (isset($cache) && $cache != 'null') {
+                $data = $cache;
+            } else {
+                $data = Currency::where('code', $code)->get();
+                $data = $data[0];
+                Redis::set($cacheKey, json_encode($data));
+            }
+
+            return response()->json(json_decode($data), 200);
+        } catch (\Throwable $th) {
+            error_log($th);
+            return response()->json(null, 500);
+        }
     }
 
-    function remove($code) {
-        return true;
+    function remove($code)
+    {
+        return '';
     }
 
-    function convert() {
-        return true;
+    function convertCurrency(Request $req)
+    {
+        try {
+            $cache = Redis::get('ALL_CURRENCIES');
+
+            $currencies = null;
+            if (isset($cache)) {
+                $currencies = json_decode($cache);
+            } else {
+                $currencies = Currency::get();
+            }
+
+            $cc = array_filter($currencies, function($c) use ($req) {
+                return $c->code == strtoupper($req->from) ||
+                        $c->code == strtoupper($req->to);
+            });
+
+            $cc = array_values($cc);
+
+            $fromCurrency = $cc[0];
+            $toCurrency = $cc[1];
+
+            $fromBID = $fromCurrency->bid;
+            $toBID = $toCurrency->bid;
+
+            $bid = (((1 / $toBID) / (1 / $fromBID)) * $req->amount);
+
+            return response()->json([
+                'from' => $req->from,
+                'to' => $req->to,
+                'amount' => $req->amount,
+                'bid' => number_format($bid, 2),
+            ], 200);
+        } catch (\Throwable $th) {
+            error_log($th);
+            return response()->json(null, 500);
+        }
     }
 }
