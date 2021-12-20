@@ -37,6 +37,12 @@ class CurrenciesController extends Controller
             return response(null, 400);
         }
 
+        if(!$this->validateFormat($req->amount)) {
+            return response()->json([
+                "message"=> "Invalid format number. Use USD format. Eg. 1,500.00"
+            ], 400);
+        }
+
         try {
             $currency = new Currency();
             $currency->code = strtoupper($req->code);

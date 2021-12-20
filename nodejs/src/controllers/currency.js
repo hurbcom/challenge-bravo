@@ -94,6 +94,15 @@ const conversion = async query => {
 };
 
 const newCurrency = async (code, bid) => {
+    if(formatCurrency(amount) == 'NaN') {
+        return {
+            status: 400,
+            data: {
+                message: "Invalid format number. Use USD format. Eg. 1,500.00"
+            }
+        }
+    }
+
     try {
         await CurrencyModel.newCurrency(code, bid);
         await updateCache();
