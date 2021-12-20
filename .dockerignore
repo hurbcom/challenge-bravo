@@ -12,3 +12,6 @@ LICENSE
 nodejs/package-lock.json
 nodejs/yarn.lock
 pull-request.txt
+
+php-laravel/composer.lock
+php-laravel/.env
