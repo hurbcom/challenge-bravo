@@ -1,5 +1,5 @@
 const CurrencyModel = require('../models/currency')
-const { isNullOrEmpty } = require('../utils');
+const { isNullOrEmpty, formatCurrency } = require('../utils');
 const { setCache, getCache } = require('../services/redis');
 
 const getAll = async () => {
@@ -41,6 +41,15 @@ const getByCode = async code => {
 const conversion = async query => {
     try {
         const { from, to, amount } = query;
+
+        if(formatCurrency(amount) == 'NaN') {
+            return {
+                status: 400,
+                data: {
+                    message: "Invalid format number. Use USD format. Eg. 1,500.00"
+                }
+            }
+        }
 
         let currencies = null;
         const dataCache = await getCache('ALL_CURRENCIES');
