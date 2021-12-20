@@ -19,7 +19,6 @@ Route::post( '/get-currency-code-rates', [ExchangeHistoricalRateController::clas
 Route::get( '/currency-code-list', [CurrencyCodeController::class, 'getListCurrencyCodes'] );
 Route::get( '/currency-codes', [CurrencyCodeController::class, 'getCurrencyCodes'] );
 Route::get( '/manage-currency-codes', [CurrencyCodeController::class, 'manageCurrencyCodes'] );
-Route::post( '/save-currency-code', [CurrencyCodeController::class, 'saveCurrencyCode'] );
 
 
 //Auth::routes();

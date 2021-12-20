@@ -13,10 +13,11 @@ class CurrencyCodes extends Migration
      */
     public function up()
     {
-        Schema::create( 'currency_codes', function( Blueprint $table ) {
-            $table->primary('idcode');
+        Schema::create( 'currency_codes', function( Blueprint $table )
+        {
+            $table->increments( 'idcode' );
             $table->string( 'code', 45 );
-            $table->tinyInteger( 'default', 1 );
+            $table->tinyInteger( 'default', false )->default( 0 );
             $table->timestamps();
         });
     }

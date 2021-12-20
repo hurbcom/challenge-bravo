@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     mlocate \
     vim \
+    sqlite3 \
     zlib1g-dev libicu-dev g++
 
 # Clear cache

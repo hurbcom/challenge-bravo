@@ -22,9 +22,10 @@ class CurrencyCodesFactory extends Factory
      */
     public function definition()
     {
+        $rand = mt_rand(0, 1);
         return [
             'code' => $this->faker->currencyCode(),
-            'default' => $this->faker->rand( 0, 1 ),
+            'default' => $rand,
             'created_at' => now()
         ];
     }

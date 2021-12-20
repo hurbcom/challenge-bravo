@@ -53,54 +53,90 @@ class ExchangeHistoricalRateController extends Controller
      * @param (string) sFrom - Currency code base
      * @param (string) sTo - Specific currency code to verify
      * @param (string) sAmount - Amount consulted
-     * @param (object) oFmt - Monetary object formatter
-     * @param (array) mDiff (optional) - Currency codes to verify if have all selected
      *
      * @return (array)
      */
     public function find( $sFrom, $sTo, $sAmount )
     {
         $aResponse = [];
-        try
+        if ( $sAmount > 0 )
         {
-            // All available exchange rates from-to currency codes database
-            if ( $sTo === 'ALL' )
+            try
             {
-                $aCurrencyCodes = ExchangeHistoricalRate::where( 'code', "LIKE", "$sFrom-%" )->get();
-                if ( !$aCurrencyCodes->isEmpty() )
+                // All available exchange rates from-to currency codes database
+                if ( $sTo === 'ALL' )
                 {
-                    foreach( $aCurrencyCodes as $iKey => $aCurrencyCode )
+                    $aCurrencyCodes = ExchangeHistoricalRate::where( 'code', "LIKE", "$sFrom-%" )->get();
+                    if ( !$aCurrencyCodes->isEmpty() )
                     {
-                        // Get amount according historical rate
-                        $sValue = ( $aCurrencyCode->rate * $sAmount );
-                        $sTo = str_replace( "$sFrom-", "", $aCurrencyCode->code );
-                        $oFmt = $this->getMonetaryFormat( $sTo );
-                        $sRate = sprintf( "%.6f", $aCurrencyCode->rate );
-                        $aResponse[] = [ 'code' => $aCurrencyCode->code, 'historical' => date( "d/m/Y", strtotime( $aCurrencyCode->historical ) ), 'amount' => numfmt_format_currency( $oFmt, $sValue, $sTo ), 'rate' => $sRate ];
+                        foreach( $aCurrencyCodes as $iKey => $aCurrencyCode )
+                        {
+                            // Get amount according historical rate
+                            $sValue = ( $aCurrencyCode->rate * $sAmount );
+                            $sTo = str_replace( "$sFrom-", "", $aCurrencyCode->code );
+                            $oFmt = $this->getMonetaryFormat( $sTo );
+                            $sRate = sprintf( "%.6f", $aCurrencyCode->rate );
+                            $aResponse[] = [ 'code' => $aCurrencyCode->code, 'historical' => date( "d/m/Y", strtotime( $aCurrencyCode->historical ) ), 'amount' => numfmt_format_currency( $oFmt, $sValue, $sTo ), 'rate' => $sRate ];
+                        }
+                    }
+                    else
+                    {
+                        // Get exchange rates from external real API
+                        $mExternalApiExchangeRates = file_get_contents( $this->sRealExternalApiUrl . $sFrom );
+                        if ( $mExternalApiExchangeRates !== false )
+                        {
+                            $aData = json_decode( $mExternalApiExchangeRates, true );
+                            if ( !empty( $aData['data'] ) )
+                            {
+                                // Get all currency codes except from
+                                $aCurrencyCodes = CurrencyCodes::where( 'code', '<>', $sFrom )->get();
+                                if ( !$aCurrencyCodes->isEmpty() )
+                                {
+                                    $sHistoricalDate = date( "Y-m-d H:i:s", $aData['query']['timestamp'] );
+                                    foreach( $aCurrencyCodes as $aCurrencyCode )
+                                    {
+                                        // Check currency code to exists in database
+                                        if ( array_key_exists( $aCurrencyCode->code, $aData['data'] ) )
+                                        {
+                                            $oFmt = $this->getMonetaryFormat( $aData['data'][$aCurrencyCode->code] );
+                                            // Save historical exchange rates
+                                            $aResponse[] = $this->store( $sFrom, $aCurrencyCode->code, $sAmount, $oFmt, $aData['data'][$aCurrencyCode->code], $sHistoricalDate );
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    // Get exchange rates from external real API
-                    $mExternalApiExchangeRates = file_get_contents( $this->sRealExternalApiUrl . $sFrom );
-                    if ( $mExternalApiExchangeRates !== false )
+                    if ( $sFrom != $sTo )
                     {
-                        $aData = json_decode( $mExternalApiExchangeRates, true );
-                        if ( !empty( $aData['data'] ) )
+                        $aHistorical = ExchangeHistoricalRate::where( 'code', "$sFrom-$sTo" )->first();
+                        if ( !empty( $aHistorical ) )
                         {
-                            // Get all currency codes except from
-                            $aCurrencyCodes = CurrencyCodes::where( 'code', '<>', $sFrom )->get();
-                            if ( !$aCurrencyCodes->isEmpty() )
+                            // Get amount according historical rate
+                            $sValue = ( $aHistorical['rate'] * $sAmount );
+                            $sRate = sprintf( "%.6f", $aHistorical['rate'] );
+                            $oFmt = $this->getMonetaryFormat( $sTo  );
+                            $aResponse[] = [ 'code' => "$sFrom-$sTo", 'historical' => date( "d/m/Y", strtotime( $aHistorical['historical'] ) ), 'amount' => numfmt_format_currency( $oFmt, $sValue, $sTo ), 'rate' => $sRate ];
+                        }
+                        else
+                        {
+                            // Get exchange rates from external real API
+                            $mExternalApiExchangeRates = file_get_contents( $this->sRealExternalApiUrl . $sFrom );
+                            if ( $mExternalApiExchangeRates !== false )
                             {
-                                $sHistoricalDate = date( "Y-m-d H:i:s", $aData['query']['timestamp'] );
-                                foreach( $aCurrencyCodes as $aCurrencyCode )
+                                $aData = json_decode( $mExternalApiExchangeRates, true );
+                                if ( !empty( $aData['data'] ) )
                                 {
+                                    $sHistoricalDate = date( "Y-m-d H:i:s", $aData['query']['timestamp'] );
                                     // Check currency code to exists in database
-                                    if ( array_key_exists( $aCurrencyCode->code, $aData['data'] ) )
+                                    if ( array_key_exists( $sTo, $aData['data'] ) )
                                     {
-                                        $oFmt = $this->getMonetaryFormat( $aData['data'][$aCurrencyCode->code] );
+                                        $oFmt = $this->getMonetaryFormat( $sTo );
                                         // Save historical exchange rates
-                                        $aResponse[] = $this->store( $sFrom, $aCurrencyCode->code, $sAmount, $oFmt, $aData['data'][$aCurrencyCode->code], $sHistoricalDate );
+                                        $aResponse[] = $this->store( $sFrom, $sTo, $sAmount, $oFmt, $aData['data'][$sTo], $sHistoricalDate );
                                     }
                                 }
                             }
@@ -108,47 +144,15 @@ class ExchangeHistoricalRateController extends Controller
                     }
                 }
             }
-            else
+            catch ( Throwable $e )
             {
-                $aHistorical = ExchangeHistoricalRate::where( 'code', "$sFrom-$sTo" )->first();
-                if ( !empty( $aHistorical ) )
-                {
-                    // Get amount according historical rate
-                    $sValue = ( $aHistorical['rate'] * $sAmount );
-                    $sRate = sprintf( "%.6f", $aHistorical['rate'] );
-                    $oFmt = $this->getMonetaryFormat( $sTo  );
-                    $aResponse[] = [ 'code' => "$sFrom-$sTo", 'historical' => date( "d/m/Y", strtotime( $aHistorical['historical'] ) ), 'amount' => numfmt_format_currency( $oFmt, $sValue, $sTo ), 'rate' => $sRate ];
-                }
-                else
-                {
-                    // Get exchange rates from external real API
-                    $mExternalApiExchangeRates = file_get_contents( $this->sRealExternalApiUrl . $sFrom );
-                    if ( $mExternalApiExchangeRates !== false )
-                    {
-                        $aData = json_decode( $mExternalApiExchangeRates, true );
-                        if ( !empty( $aData['data'] ) )
-                        {
-                            $sHistoricalDate = date( "Y-m-d H:i:s", $aData['query']['timestamp'] );
-                            // Check currency code to exists in database
-                            if ( array_key_exists( $sTo, $aData['data'] ) )
-                            {
-                                $oFmt = $this->getMonetaryFormat( $sTo );
-                                // Save historical exchange rates
-                                $aResponse[] = $this->store( $sFrom, $sTo, $sAmount, $oFmt, $aData['data'][$sTo], $sHistoricalDate );
-                            }
-                        }
-                    }
-                }
+                report( $e );
+                /*
+                 * TO DO
+                 *
+                 * In case of exception save logs in database if you wish
+                 */
             }
-        }
-        catch ( Throwable $e )
-        {
-            report( $e );
-            /*
-             * TO DO
-             *
-             * In case of exception save logs in database if you wish
-             */
         }
 
         return $aResponse;

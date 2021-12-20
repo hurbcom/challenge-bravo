@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Database\Factories\CurrencyCodesFactory;
 
 class CurrencyCodes extends Model
 {
@@ -23,4 +24,14 @@ class CurrencyCodes extends Model
      * @access protected
      */
     protected $fillable = ['code', 'default'];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return CurrencyCodesFactory::new();
+    }
 }

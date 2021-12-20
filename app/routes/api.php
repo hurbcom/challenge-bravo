@@ -23,3 +23,4 @@ use App\Http\Controllers\CurrencyCodeController;
 Route::middleware( 'return-json:api' )->get( '/exchange-rates', [ExchangeHistoricalRateController::class, 'exchangeRateValues']);
 Route::middleware( 'return-json:api' )->get( '/check-currency-code', [CurrencyCodeController::class, 'checkRealCurrencyCode']);
 Route::middleware( 'return-json:api' )->delete( '/delete-currency-code/{code}', [CurrencyCodeController::class, 'deleteCurrencyCode']);
+Route::middleware( 'return-json:api' )->post( '/save-currency-code', [CurrencyCodeController::class, 'saveCurrencyCode'] );
