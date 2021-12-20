@@ -37,6 +37,12 @@ class CurrenciesController extends Controller
             return response(null, 400);
         }
 
+        if(!$this->validateFormat($req->amount)) {
+            return response()->json([
+                "message"=> "Invalid format number. Use USD format. Eg. 1,500.00"
+            ], 400);
+        }
+
         try {
             $currency = new Currency();
             $currency->code = strtoupper($req->code);
@@ -93,9 +99,25 @@ class CurrenciesController extends Controller
         }
     }
 
+    private function validateFormat($amount) {
+        try {
+            $a = number_format($amount, 7, '.', ',');
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
     function convertCurrency(Request $req)
     {
         try {
+
+            if(!$this->validateFormat($req->amount)) {
+                return response()->json([
+                    "message"=> "Invalid format number. Use USD format. Eg. 1,500.00"
+                ], 400);
+            }
+
             $cache = Redis::get('ALL_CURRENCIES');
 
             $currencies = null;
