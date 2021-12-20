@@ -16,7 +16,7 @@ Route::get('/', function () {
 Route::prefix('currencies')->group(function() {
     Route::get('/', [CurrenciesController::class, 'listAll'])->name('currencies.all');
     Route::post('/', [CurrenciesController::class, 'newCurrency'])->name('currencies.all');
+    Route::get('/convert', [CurrenciesController::class, 'convertCurrency'])->name('currencies.convert');
     Route::get('/{code}', [CurrenciesController::class, 'getByCode'])->name('currencies.getByCode');
     Route::delete('/{code}', [CurrenciesController::class, 'remove'])->name('currencies.remove');
-    Route::get('/convert', [CurrenciesController::class, 'convert'])->name('currencies.convert');
 });
