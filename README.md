@@ -21,7 +21,7 @@ Encontra-se na raiz do projeto o arquivo insomnia_request.json já configurado c
 docker compose up
 ```
 
-## Rodando o projeto com php http://localhost:3001
+## Rodando o projeto com php http://localhost:3001/api
 
 Inicializar mongodb e redis:
 ```sh
