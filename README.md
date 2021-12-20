@@ -16,18 +16,26 @@ Rotas contidas no projeto:
 Encontra-se na raiz do projeto o arquivo insomnia_request.json já configurado com as requests e os envs para nodejs e php.
 <img src="insomnia.png">
 
-## Rodando o projeto com nodejs http://localhost:3000
+## Projetos:
+NodeJS - principal
+
+PHP - Extra
+
+----------
+
+
+### Rodando o projeto com nodejs http://localhost:3000
 ```sh
 docker compose up
 ```
-
-## Rodando o projeto com php http://localhost:3001/api
+----------
+### Rodando o projeto com php http://localhost:3001/api
 
 Inicializar mongodb e redis:
 ```sh
 docker compose up
 ```
-Enter folder php projects:
+Acesse a pasta com o projeto em php:
 ```sh
 cd php-laravel
 ```
