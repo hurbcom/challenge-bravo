@@ -1,5 +1,5 @@
-node_modules
-npm-debug.log
+nodejs/node_modules
+nodejs/npm-debug.log
 Dockerfile*
 docker-compose*
 .dockerignore
@@ -9,6 +9,9 @@ README.md
 LICENSE
 .vscode
 .editorconfig
-package-lock.json
-yarn.lock
+nodejs/package-lock.json
+nodejs/yarn.lock
 pull-request.txt
+
+php-laravel/composer.lock
+php-laravel/.env

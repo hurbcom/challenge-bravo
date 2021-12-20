@@ -1,0 +1,284 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Hurb Challenge Bravo",
+    "description": "API to currencies conversion",
+    "contact": {
+      "name": "Leonardo Neves",
+      "email": "leo.mvhost@hotmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/api"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "About api.",
+        "tags": [
+          "Currencies"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": {
+                      "type": "string",
+                      "example": "1.0.0"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Api to currencies conversion"
+                    },
+                    "author": {
+                      "type": "string",
+                      "example": "Leonardo Neves <leo.mvhost@hotmail.com>"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/currencies": {
+      "get": {
+        "summary": "Get all currencies.",
+        "tags": [
+          "Currencies"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAll"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new currency.",
+        "tags": [
+          "Currencies"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CurrencyPostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/currencies/{code}": {
+      "get": {
+        "summary": "Get specific currency.",
+        "tags": [
+          "Currencies"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Currency in uppercase"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseOne"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Convert curreny.",
+        "tags": [
+          "Currencies"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Currency in uppercase"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/currencies/convert": {
+      "get": {
+        "summary": "Convert curreny.",
+        "tags": [
+          "Currencies"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Currency in uppercase"
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Currency in uppercase"
+          },
+          {
+            "in": "query",
+            "name": "amount",
+            "schema": {
+              "type": "number"
+            },
+            "required": true,
+            "description": "Ammount to convert"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseConvert"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CurrencyPostBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Currency code in uppercase",
+            "example": "USD"
+          },
+          "bid": {
+            "type": "number",
+            "description": "Currency bid value",
+            "example": 5.66
+          }
+        }
+      },
+      "ResponseOne": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Currency code in uppercase",
+            "example": "USD"
+          },
+          "bid": {
+            "type": "number",
+            "description": "Currency bid value",
+            "example": 5.66
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Updated date",
+            "example": "2021-12-19T01:15:57.353Z"
+          }
+        }
+      },
+      "ResponseAll": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ResponseOne"
+        }
+      },
+      "ResponseConvert": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Currency code in uppercase",
+            "example": "USD"
+          },
+          "to": {
+            "type": "string",
+            "description": "Currency code in uppercase",
+            "example": "USD"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount to convert",
+            "example": 1
+          },
+          "bid": {
+            "type": "number",
+            "description": "Value converted.",
+            "example": 1
+          }
+        }
+      }
+    }
+  }
+}
