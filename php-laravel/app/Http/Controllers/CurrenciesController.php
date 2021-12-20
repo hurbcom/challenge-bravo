@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Currency;
+use Illuminate\Support\Facades\Redis;
 use SebastianBergmann\Environment\Console;
+
+use App\Models\Currency;
 
 class CurrenciesController extends Controller
 {
     function listAll() {
+        $cache = Redis::get('ALL_CURRENCIES');
+        error_log($cache);
+        return $cache;
         $res = Currency::get();
         return $res;
     }
