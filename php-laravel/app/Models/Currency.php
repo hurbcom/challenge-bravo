@@ -21,4 +21,9 @@ class Currency extends Model
     ];
 
     protected $dates = ['updatedAt', 'createdAt'];
+
+
+    const CREATED_AT = 'updatedAt';
+
+    const UPDATED_AT = 'createdAt';
 }
