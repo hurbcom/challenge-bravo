@@ -3,17 +3,20 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+use App\Http\Controllers\CurrenciesController;
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/', function () {
+    return [
+        "version" => "1.0.0",
+        "description" => "Api to currencies conversion.",
+        "author" => "Leonardo Neves <leo.mvhost@hotmail.com>"
+    ];
+})->name('main');
+
+Route::prefix('currencies')->group(function() {
+    Route::get('/', [CurrenciesController::class, 'listAll'])->name('currencies.all');
+    Route::post('/', [CurrenciesController::class, 'newCurrency'])->name('currencies.all');
+    Route::get('/{code}', [CurrenciesController::class, 'getByCode'])->name('currencies.getByCode');
+    Route::delete('/{code}', [CurrenciesController::class, 'remove'])->name('currencies.remove');
+    Route::get('/convert', [CurrenciesController::class, 'convert'])->name('currencies.convert');
 });
