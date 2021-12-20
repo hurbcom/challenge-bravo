@@ -23,14 +23,30 @@ PHP - Extra
 
 ----------
 
-
-### Rodando o projeto com nodejs http://localhost:3000
+## Incializando os projetos
 ```sh
 docker compose up
 ```
+
+### Rodando o projeto manulamente com nodejs http://localhost:3000
+Inicializar mongodb e redis:
+```sh
+docker compose up
+```
+Acesse a pasta com o projeto em node:
+```sh
+cd nodejs
+```
+Instalar as dependências:
+```sh
+npm i
+```
+Iniciar o serviço:
+```sh
+npm run start
+```
 ----------
 ### Rodando o projeto com php http://localhost:3001/api
-
 Inicializar mongodb e redis:
 ```sh
 docker compose up
@@ -50,4 +66,14 @@ composer install
 Iniciar o serviço:
 ```sh
 php artisan serve --port=3001
+```
+----------
+#### Caso necessite buildar as imagens separadamente
+NodeJS
+```sh
+docker build . -t php -f Dockerfile
+```
+PHP
+```sh
+docker build . -t php -f php.Dockerfile
 ```
