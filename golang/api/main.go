@@ -18,11 +18,11 @@ const port = 9092
 
 var (
 	mysqlconnectimeout = 10 * time.Second
-	syncinterval       = 1 * time.Minute
-	startsync          = false
+	syncinterval       = 2 * time.Minute
+	startsync          = true
 )
 
-/* Start databases, handlers and sync service */
+// Start databases, handlers and sync service
 func main() {
 	// Try connect MySQL database in interval
 	database, err := connections.OpenMysqlDB("mysql", "usr_database:123Mudar!@tcp(mysql:3306)/exchange_rate?collation=utf8_general_ci&parseTime=true", mysqlconnectimeout)
@@ -33,7 +33,7 @@ func main() {
 	defer database.Close()
 
 	router.MySql = database
-	/* Connect redis database */
+	// Connect redis database
 	router.Redis = connections.OpenRedis()
 
 	// Sync service execute in interval if enable

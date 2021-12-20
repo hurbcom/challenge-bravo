@@ -3,15 +3,15 @@ package models
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"log"
+	"regexp"
 	"strings"
 	"time"
 
 	"github.com/shopspring/decimal"
 )
 
-/* Historical exchange rate */
+// Historical exchange rate
 type ExchangeRate struct {
 	Code       string          `json:"code"`
 	Historical string          `json:"historical"`
@@ -19,7 +19,7 @@ type ExchangeRate struct {
 	Amount     string          `json:"amount,omitempty"`
 }
 
-/* Endpoint result */
+// Endpoint result
 type ExchangeRates struct {
 	Data []ExchangeRate `json:"data"`
 }
@@ -58,21 +58,30 @@ func GetExchangeHistoricalRates(db *sql.DB, from, to string) ([]ExchangeRate, er
 
 // Create or update exchange historical rates in database
 func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
+	regex, _ := regexp.Compile("^[A-Z]{3,}[-][A-Z]{3,}$")
 	for _, exchangerate := range exchangerates.Rates {
 		var exists int
 		var code string
-		if exchangerate.Rate.IsZero() {
+		// Set exchange rate default if is zero or negative
+		if exchangerate.Rate.IsZero() || exchangerate.Rate.IsNegative() {
 			exchangerate.Rate = decimal.NewFromFloat(1.00000)
 		}
 
-		if exchangerates.Code == "" {
-			return fmt.Errorf("%s", "Currency code is empty ")
+		// Currency code or exchange rate code is empty
+		if exchangerates.Code == "" || exchangerate.Code == "" {
+			log.Printf("It's not possible save exchange historical rate code %s", exchangerate.Code)
+			continue
 		}
 
-		if strings.Contains(exchangerate.Code, "-") {
+		// Check format invalid to exchange rate code
+		match := regex.MatchString(exchangerate.Code)
+		if match {
 			code = strings.ToUpper(exchangerate.Code)
-		} else {
+		} else if !strings.Contains(exchangerate.Code, "-") {
 			code = strings.ToUpper(exchangerates.Code + "-" + exchangerate.Code)
+		} else {
+			log.Printf("Exchange historical rate is invalid %s", exchangerate.Code)
+			continue
 		}
 
 		err := db.QueryRow("SELECT COUNT(*) FROM exchange_historical_rates WHERE code = ?", code).Scan(&exists)

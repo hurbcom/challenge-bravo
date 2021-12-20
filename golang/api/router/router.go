@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/* Create all endpoints available in routes */
+// Create all endpoints available in routes
 func Serve() http.Handler {
 	// Here we are instantiating the gorilla/mux router
 	Router = mux.NewRouter()

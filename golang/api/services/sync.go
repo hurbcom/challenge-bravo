@@ -126,8 +126,8 @@ func cacheExchangeHistoricalRate(db *sql.DB, rdb *redis.Client, from, to string)
 		for _, exchangerate := range exchangerates {
 			jsonExcR, err := json.Marshal(&exchangerate)
 			if err == nil {
-				// Save cache to expire in 1 minutes
-				err = rdb.Set(Ctx, code, jsonExcR, 1*time.Minute).Err()
+				// Save cache to expire in 3 minutes
+				err = rdb.Set(Ctx, code, jsonExcR, 3*time.Minute).Err()
 				if err != nil {
 					log.Println(err)
 				}

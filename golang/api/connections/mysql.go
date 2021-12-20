@@ -10,9 +10,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-/* Open MySQL database connection */
+// Open MySQL database connection
 func OpenMysqlDB(driver string, dsn string, timeout time.Duration) (*sql.DB, error) {
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(timeout)
 	defer ticker.Stop()
 
 	timeoutExceeded := time.After(timeout)

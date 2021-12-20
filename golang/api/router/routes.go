@@ -14,7 +14,7 @@ type Route struct {
 
 type Routes []Route
 
-/* Available endpoints */
+// Available endpoints
 var routes = Routes{
 	Route{
 		"Index",
@@ -32,18 +32,18 @@ var routes = Routes{
 		"Get Exchange Rates",
 		"GET",
 		"/exchange-rate",
-		getExchangeRates,
+		GetExchangeRates,
 	},
 	Route{
 		"Save Currency Code",
 		"POST",
 		"/currency-codes",
-		saveCurrencyCodeAndExchangeRate,
+		SaveCurrencyCodeAndExchangeRate,
 	},
 	Route{
 		"Delete Currency Code",
 		"DELETE",
-		"/currency-codes/{code}",
-		deleteCurrencyCodeAndExchangeRate,
+		"/currency-codes/{code:[A-Z]{3,}}",
+		DeleteCurrencyCodeAndExchangeRate,
 	},
 }

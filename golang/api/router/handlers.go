@@ -6,6 +6,7 @@ import (
 	"api/models"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -25,6 +26,7 @@ var (
 type ApiResponse struct {
 	Data    []map[string]interface{} `json:"data"`
 	Success bool                     `json:"success"`
+	Message string                   `json:"message,omitempty"`
 }
 
 // Here we are implementing the NotImplemented handler. Whenever an API endpoint is hit
@@ -40,7 +42,7 @@ var StatusHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request
 })
 
 // Endpoint to get converted exchange rates
-func getExchangeRates(w http.ResponseWriter, r *http.Request) {
+func GetExchangeRates(w http.ResponseWriter, r *http.Request) {
 	// Set default API result
 	var response ApiResponse
 	httpStatus := http.StatusInternalServerError
@@ -52,6 +54,7 @@ func getExchangeRates(w http.ResponseWriter, r *http.Request) {
 	// From and To are mandatory
 	if len(from) == 0 || len(to) == 0 {
 		log.Println("Mandatory data(from or to) not present in request")
+		response.Message = "Mandatory data(from or to) not present in request"
 		jsonR, _ := json.Marshal(response)
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(jsonR)
@@ -67,16 +70,16 @@ func getExchangeRates(w http.ResponseWriter, r *http.Request) {
 	// Try get converted amount with exchange rate
 	exchangerate, err := controllers.GetExchangeRatesConverter(MySql, Redis, from, to, amount)
 	if err != nil {
-		log.Printf("%s to currency code %s\n", err, from)
+		log.Printf("%s to get amount converted from %s\n", err, from)
 	} else {
 		jsonExc, err := json.Marshal(exchangerate.Data)
 		if err != nil {
-			log.Printf("%s to currency code %s\n", err, from)
+			log.Printf("%s to marshal exchange rate data from %s\n", err, from)
 		} else {
 			// Set data to API result
 			err = json.Unmarshal(jsonExc, &response.Data)
 			if err != nil {
-				log.Printf("%s to currency code %s\n", err, from)
+				log.Printf("%s to unmarshal response data from currency code %s\n", err, from)
 			} else {
 				httpStatus = http.StatusOK
 				response.Success = true
@@ -86,7 +89,7 @@ func getExchangeRates(w http.ResponseWriter, r *http.Request) {
 
 	jsonR, _ := json.Marshal(response)
 	if err != nil {
-		log.Printf("%s to get exchange rates from %s\n", err, from)
+		log.Printf("%s to marshal response data exchange rates from %s\n", err, from)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -95,49 +98,56 @@ func getExchangeRates(w http.ResponseWriter, r *http.Request) {
 }
 
 // Endpoint to save/update currency code and exchange rates
-func saveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
+func SaveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 	var currencyCode models.CurrencyCode
 	// Set default API result
 	var response ApiResponse
 	httpStatus := http.StatusInternalServerError
-	reqBody, _ := ioutil.ReadAll(r.Body)
-	err := json.Unmarshal(reqBody, &currencyCode)
-	if err != nil {
-		log.Printf("%s to create currency code\n", err)
-	} else {
-		err := models.SaveCurrencyCode(MySql, currencyCode.Code)
+	if r.Body != nil {
+		reqBody, _ := ioutil.ReadAll(r.Body)
+		err := json.Unmarshal(reqBody, &currencyCode)
 		if err != nil {
-			log.Printf("%s to create currency code\n", err)
+			log.Printf("%s to unmarshal currency code to save\n", err)
+			httpStatus = http.StatusBadRequest
 		} else {
-			// Save exchange rates if exists
-			if len(currencyCode.Rates) > 0 {
-				err = models.SaveExchangeHistoricalRates(MySql, currencyCode)
-				if err != nil {
-					log.Printf("%s to create currency code\n", err)
-				}
-			}
-			var currencyCodes []models.CurrencyCode
-			currencyCodes = append(currencyCodes, currencyCode)
-			currenciesCode := models.CurrenciesCode{Data: currencyCodes}
-			jsonCur, err := json.Marshal(currenciesCode.Data)
+			err := models.SaveCurrencyCode(MySql, currencyCode.Code)
 			if err != nil {
-				log.Printf("%s to create currency code\n", err)
+				log.Printf("%s to save currency code in database\n", err)
 			} else {
-				// Set data to API result
-				err = json.Unmarshal(jsonCur, &response.Data)
+				// Save exchange rates if exists
+				if len(currencyCode.Rates) > 0 {
+					err = models.SaveExchangeHistoricalRates(MySql, currencyCode)
+					if err != nil {
+						log.Printf("%s to save exchange rates in database\n", err)
+						response.Message = fmt.Sprintf("Currency code %s saved, but exchange rates not", currencyCode.Code)
+					}
+				}
+				var currencyCodes []models.CurrencyCode
+				currencyCodes = append(currencyCodes, currencyCode)
+				currenciesCode := models.CurrenciesCode{Data: currencyCodes}
+				jsonCur, err := json.Marshal(currenciesCode.Data)
 				if err != nil {
-					log.Printf("%s to create currency code\n", err)
+					log.Printf("%s to marshal data to currency code\n", err)
 				} else {
-					httpStatus = http.StatusCreated
-					response.Success = true
+					// Set data to API result
+					err = json.Unmarshal(jsonCur, &response.Data)
+					if err != nil {
+						log.Printf("%s to unmarshal response data to currency code\n", err)
+					} else {
+						httpStatus = http.StatusCreated
+						response.Success = true
+						response.Message = "Currency code successfull saved"
+					}
 				}
 			}
 		}
+	} else {
+		httpStatus = http.StatusBadRequest
 	}
 
 	jsonR, err := json.Marshal(response)
 	if err != nil {
-		log.Printf("%s to create currency code\n", err)
+		log.Printf("%s to marshal response data to save currency code\n", err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -146,29 +156,34 @@ func saveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 }
 
 // Endpoint to delete currency code and exchange rates
-func deleteCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
+func DeleteCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 	// Set default API result
 	var response ApiResponse
 	httpStatus := http.StatusInternalServerError
 	params := mux.Vars(r)
+	log.Printf("%v", mux.Vars(r))
 	if currencyCode, ok := params["code"]; ok {
 		err := models.DeleteExchangeHistoricalRates(MySql, currencyCode)
 		if err != nil {
-			log.Printf("%s to delete exchange rates\n", err)
+			log.Printf("%s to delete exchange rates in database\n", err)
 		} else {
 			err = models.DeleteCurrencyCode(MySql, currencyCode)
 			if err != nil {
-				log.Printf("%s to delete currency code\n", err)
+				log.Printf("%s to delete currency code in database\n", err)
+				response.Message = fmt.Sprintf("Exchange rates removed, but currency code %s not", currencyCode)
 			} else {
 				httpStatus = http.StatusOK
 				response.Success = true
+				response.Message = "Currency code successfull deleted"
 			}
 		}
+	} else {
+		httpStatus = http.StatusBadRequest
 	}
 
 	jsonR, err := json.Marshal(response)
 	if err != nil {
-		log.Printf("%s to delete currency code\n", err)
+		log.Printf("%s to marshal response data to delete currency code\n", err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
