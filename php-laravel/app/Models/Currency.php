@@ -20,5 +20,5 @@ class Currency extends Model
         '__v',
     ];
 
-    protected $dates = ['updatedAt'];
+    protected $dates = ['updatedAt', 'createdAt'];
 }

@@ -28,9 +28,22 @@ class CurrenciesController extends Controller
         }
     }
 
-    function newCurrency()
+    function newCurrency(Request $req)
     {
-        return true;
+        try {
+            $currency = new Currency();
+            $currency->code = strtoupper($req->code);
+            $currency->bid = $req->bid;
+            $currency->save();
+
+            $allData = Currency::get();
+            Redis::set('ALL_CURRENCIES', json_encode($allData));
+
+            return response(null, 201);
+        } catch (\Throwable $th) {
+            error_log($th);
+            return response($th, 500);
+        }
     }
 
     function getByCode($code)
@@ -42,7 +55,7 @@ class CurrenciesController extends Controller
             $cache = Redis::get($cacheKey);
 
             $data = null;
-            if (isset($cache) && $cache != 'null') {
+            if (isset($cache) && ($cache != 'null' && $cache)) {
                 $data = $cache;
             } else {
                 $data = Currency::where('code', $code)->first();
@@ -59,7 +72,6 @@ class CurrenciesController extends Controller
     function remove($code)
     {
         try {
-
             $currency = Currency::where('code', strtoupper($code));
             $currency->delete();
             Redis::set(strtoupper($code).'_CURRENCY', null);
