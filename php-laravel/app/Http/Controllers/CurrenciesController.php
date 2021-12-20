@@ -30,6 +30,13 @@ class CurrenciesController extends Controller
 
     function newCurrency(Request $req)
     {
+        if(
+            !isset($req->code) || empty($req->code) ||
+            !isset($req->bid) || empty($req->bid)
+        ) {
+            return response(null, 400);
+        }
+
         try {
             $currency = new Currency();
             $currency->code = strtoupper($req->code);
@@ -42,7 +49,7 @@ class CurrenciesController extends Controller
             return response(null, 201);
         } catch (\Throwable $th) {
             error_log($th);
-            return response($th, 500);
+            return response(null, 500);
         }
     }
 
