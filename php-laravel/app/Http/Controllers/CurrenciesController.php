@@ -9,7 +9,7 @@ use SebastianBergmann\Environment\Console;
 class CurrenciesController extends Controller
 {
     function listAll() {
-        $res = Currency::get(['code', 'bid', 'updatedAt']);
+        $res = Currency::get();
         return $res;
     }
 
@@ -19,7 +19,7 @@ class CurrenciesController extends Controller
 
     function getByCode($code) {
         $res = Currency::where('code', '=', strtoupper($code))
-            ->get(['code', 'bid', 'updatedAt']);
+            ->get();
         if(count($res) <= 0) return null;
         else return $res[0];
     }
