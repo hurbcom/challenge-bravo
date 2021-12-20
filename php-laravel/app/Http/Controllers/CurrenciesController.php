@@ -24,7 +24,7 @@ class CurrenciesController extends Controller
             return response()->json(json_decode($data), 200);
         } catch (\Throwable $th) {
             error_log($th);
-            return response()->json(null, 500);
+            return response(null, 500);
         }
     }
 
@@ -45,21 +45,33 @@ class CurrenciesController extends Controller
             if (isset($cache) && $cache != 'null') {
                 $data = $cache;
             } else {
-                $data = Currency::where('code', $code)->get();
-                $data = $data[0];
+                $data = Currency::where('code', $code)->first();
                 Redis::set($cacheKey, json_encode($data));
             }
 
             return response()->json(json_decode($data), 200);
         } catch (\Throwable $th) {
             error_log($th);
-            return response()->json(null, 500);
+            return response(null, 500);
         }
     }
 
     function remove($code)
     {
-        return '';
+        try {
+
+            $currency = Currency::where('code', strtoupper($code));
+            $currency->delete();
+            Redis::set(strtoupper($code).'_CURRENCY', null);
+
+            $allData = Currency::get();
+            Redis::set('ALL_CURRENCIES', json_encode($allData));
+
+            return response(null, 200);
+        } catch (\Throwable $th) {
+            error_log($th);
+            return response($th, 500);
+        }
     }
 
     function convertCurrency(Request $req)
@@ -97,7 +109,7 @@ class CurrenciesController extends Controller
             ], 200);
         } catch (\Throwable $th) {
             error_log($th);
-            return response()->json(null, 500);
+            return response(null, 500);
         }
     }
 }
