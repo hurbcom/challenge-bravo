@@ -2,7 +2,7 @@ data
 
 # Ignore nodejs things
 nodejs/node_modules
-nodejs/packahe-lock.json
+nodejs/package-lock.json
 nodejs/yarn.lock
 
 # Ignore php-laravel things
@@ -22,3 +22,6 @@ php-laravel/yarn-error.log
 php-laravel/.idea
 php-laravel/.vscode
 php-laravel/composer.lock
+
+aws-lambda-nodejs/node_modules
+aws-lambda-nodejs/package-lock.json
