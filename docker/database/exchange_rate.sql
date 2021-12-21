@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `currency_codes`;
 CREATE TABLE `currency_codes` (
   `idcode` int unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `default` tinyint(1) NOT NULL DEFAULT '0',
+  `mandatory` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`idcode`)
@@ -76,4 +76,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-19 14:57:09
+-- Dump completed on 2021-12-21 20:04:44
