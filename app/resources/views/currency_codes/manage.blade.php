@@ -38,7 +38,7 @@
                                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       Actions
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
                                       <a class="dropdown-item" data-currency="@{{Code['code']}}" data-toggle="modal" data-target="#removeConfirm" ng-show="Code['default'] !== 1">Delete</a>
                                       <a class="dropdown-item" data-currency="@{{Code['code']}}" ng-click="mountFormCurrencyRates();">Update</a>
                                     </div>
