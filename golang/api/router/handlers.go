@@ -188,18 +188,17 @@ func DeleteCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if currencyCode != "" {
-		err := models.DeleteExchangeHistoricalRates(MySql, currencyCode)
+		err := models.DeleteCurrencyCode(MySql, currencyCode)
 		if err != nil {
-			log.Printf("%s to delete exchange rates in database\n", err)
+			log.Printf("%s to delete currency code in database\n", err)
 		} else {
-			err = models.DeleteCurrencyCode(MySql, currencyCode)
+			httpStatus = http.StatusOK
+			response.Success = true
+			response.Message = "Currency code successfull deleted"
+			err = models.DeleteExchangeHistoricalRates(MySql, currencyCode)
 			if err != nil {
-				log.Printf("%s to delete currency code in database\n", err)
-				response.Message = fmt.Sprintf("Exchange rates removed, but currency code %s not", currencyCode)
-			} else {
-				httpStatus = http.StatusOK
-				response.Success = true
-				response.Message = "Currency code successfull deleted"
+				log.Printf("%s to delete exchange rates in database\n", err)
+				response.Message = fmt.Sprintf("Currency code %s removed, but exchange rates not", currencyCode)
 			}
 		}
 	} else {

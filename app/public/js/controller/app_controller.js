@@ -270,6 +270,10 @@ appExchangeRate.controller( 'exchangeRateCtrl', ['$scope', '$http', function( $s
             else
             {
                 $scope.ModalMessage = 'Sorry, an error occurred during your request. Please, try again later. If this error persists contact our technical support.';
+                if ( typeof result.data.message !== 'undefined' && result.data.message != "" )
+                {
+                    $scope.ModalMessage = result.data.message;
+                }
                 $scope.ModalMessageColor = 'danger';
             }
         }, function error( error )
@@ -297,6 +301,10 @@ appExchangeRate.controller( 'exchangeRateCtrl', ['$scope', '$http', function( $s
                 if ( typeof result.data.success !== 'undefined' && result.data.success === true )
                 {
                     $scope.Message = 'Currency code and historical exchange rate deleted';
+                    if ( typeof result.data.message !== 'undefined' && result.data.message != "" )
+                    {
+                        $scope.Message = result.data.message;
+                    }
                     $scope.Color = 'success';
                     $scope.cancelSaveCurrencyCode();
                     $('#removeConfirm').modal('hide');
@@ -307,6 +315,10 @@ appExchangeRate.controller( 'exchangeRateCtrl', ['$scope', '$http', function( $s
                 else
                 {
                     $scope.Message = 'Sorry, an error occurred during your request. Please, try again later. If this error persists contact our technical support.';
+                    if ( typeof result.data.message !== 'undefined' && result.data.message != "" )
+                    {
+                        $scope.Message = result.data.message;
+                    }
                     $scope.Color = 'danger';
                 }
             }, function error( error )

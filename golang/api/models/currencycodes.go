@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"log"
 	"strings"
 	"time"
@@ -74,42 +75,46 @@ func SaveCurrencyCode(db *sql.DB, currencyCode string) error {
 		log.Printf("Error %s when check currency code exists", err)
 	}
 
-	return nil
+	return err
 }
 
 // Delete currency code from database
 func DeleteCurrencyCode(db *sql.DB, currencyCode string) error {
 	var idcode int
 	currencyCode = strings.ToUpper(currencyCode)
-	err := db.QueryRow("SELECT idcode FROM currency_codes WHERE code = ?;", currencyCode).Scan(&idcode)
+	err := db.QueryRow("SELECT idcode FROM currency_codes WHERE code = ? AND mandatory <> 1;", currencyCode).Scan(&idcode)
 	if err != nil {
 		log.Printf("currency code %s not exists", currencyCode)
 	} else {
-		query := "DELETE FROM currency_codes WHERE idcode = ?;"
-		ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancelfunc()
+		if idcode > 0 {
+			query := "DELETE FROM currency_codes WHERE idcode = ?;"
+			ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancelfunc()
 
-		stmt, err := db.PrepareContext(ctx, query)
-		if err != nil {
-			log.Printf("Error %s when preparing SQL statement", err)
-			return err
-		}
-		defer stmt.Close()
+			stmt, err := db.PrepareContext(ctx, query)
+			if err != nil {
+				log.Printf("Error %s when preparing SQL statement", err)
+				return err
+			}
+			defer stmt.Close()
 
-		res, err := stmt.ExecContext(ctx, idcode)
-		if err != nil {
-			log.Printf("Error %s when delete row into currency_codes table %s", err, currencyCode)
-			return err
+			res, err := stmt.ExecContext(ctx, idcode)
+			if err != nil {
+				log.Printf("Error %s when delete row into currency_codes table %s", err, currencyCode)
+				return err
+			}
+			rows, err := res.RowsAffected()
+			if err != nil {
+				log.Printf("Error %s when finding rows affected", err)
+				return err
+			}
+			log.Printf("%d currency_codes deleted to %s", rows, currencyCode)
+		} else {
+			err = errors.New("It is not allowed to remove mandatory currency code " + currencyCode)
 		}
-		rows, err := res.RowsAffected()
-		if err != nil {
-			log.Printf("Error %s when finding rows affected", err)
-			return err
-		}
-		log.Printf("%d currency_codes deleted to %s", rows, currencyCode)
 	}
 
-	return nil
+	return err
 }
 
 // Get currency codes all or except
