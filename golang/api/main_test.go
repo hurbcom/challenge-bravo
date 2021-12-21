@@ -9,13 +9,15 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func Connect() {
+// Execute before and after tests
+func TestMain(m *testing.M) {
 	// Try connect MySQL database in interval
 	database, err := connections.OpenMysqlDB("mysql", "usr_database:123Mudar!@tcp(mysql:3306)/exchange_rate?collation=utf8_general_ci&parseTime=true", 1*time.Second)
 	if err != nil {
@@ -25,15 +27,22 @@ func Connect() {
 	router.MySql = database
 	// Connect redis database
 	router.Redis = connections.OpenRedis()
+
+	exit := m.Run()
+
+	database.Close()
+
+	os.Exit(exit)
 }
 
+// Test Api status
 func TestStatusHandler(t *testing.T) {
 	assert.HTTPStatusCode(t, router.StatusHandler, "GET", "/status", nil, 200)
 	assert.HTTPBodyContains(t, router.StatusHandler, "GET", "/status", nil, "API is up and running")
 }
 
+// Test get converted amount
 func TestGetExchangeRates(t *testing.T) {
-	Connect()
 	assert.NotEmpty(t, router.MySql)
 	assert.NotEmpty(t, router.Redis)
 	query := url.Values{}
@@ -41,12 +50,14 @@ func TestGetExchangeRates(t *testing.T) {
 	query.Add("to", "USD")
 	query.Add("amount", "1.00")
 
+	// Try send normal request
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest(http.MethodGet, "/exchange-rate?"+query.Encode(), nil)
 	router.GetExchangeRates(w, r)
 	assert.Equal(t, 200, w.Code, "Error http status request")
 	assert.Contains(t, w.Body.String(), "BRL-USD", "Error get data contain")
 
+	// Try get without mandatory params
 	query.Del("from")
 	w = httptest.NewRecorder()
 	r, _ = http.NewRequest(http.MethodGet, "/exchange-rate?"+query.Encode(), nil)
@@ -54,14 +65,16 @@ func TestGetExchangeRates(t *testing.T) {
 	assert.Equal(t, 400, w.Code, "Error http status request")
 	assert.Contains(t, w.Body.String(), "not present", "Error send empty param")
 
+	// Try get fictitious currency code
 	query.Set("from", "HURB")
 	query.Set("to", "WWW")
 	w = httptest.NewRecorder()
 	r, _ = http.NewRequest(http.MethodGet, "/exchange-rate?"+query.Encode(), nil)
 	router.GetExchangeRates(w, r)
-	assert.Equal(t, 500, w.Code, "Error http status request")
-	assert.Contains(t, w.Body.String(), "false", "Error fictitious currency code")
+	assert.Equal(t, 200, w.Code, "Error http status request")
+	assert.Contains(t, w.Body.String(), "null", "Error fictitious currency code")
 
+	// Try get from new currency code
 	query.Set("from", "GBP")
 	query.Set("to", "AFN")
 	w = httptest.NewRecorder()
@@ -70,6 +83,7 @@ func TestGetExchangeRates(t *testing.T) {
 	assert.Equal(t, 200, w.Code, "Error http status request")
 	assert.Contains(t, w.Body.String(), "GBP-AFN", "Error save real currency code")
 
+	// Try get all converted data from new currency code
 	query.Set("from", "GBP")
 	query.Set("to", "ALL")
 	w = httptest.NewRecorder()
@@ -79,11 +93,13 @@ func TestGetExchangeRates(t *testing.T) {
 	assert.Contains(t, w.Body.String(), "GBP-", "Error get all exchange rates from currency code")
 }
 
+// Test delete currency code and exchange rates
 func TestDeleteCurrencyCodeAndExchangeRate(t *testing.T) {
-	Connect()
+	// Test database connection
 	assert.NotEmpty(t, router.MySql)
 	assert.NotEmpty(t, router.Redis)
 
+	// Test delete from empty param in request
 	query := url.Values{"Code": []string{}}
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest(http.MethodDelete, "/currency-codes/"+query.Encode(), nil)
@@ -91,33 +107,37 @@ func TestDeleteCurrencyCodeAndExchangeRate(t *testing.T) {
 	assert.Equal(t, 400, w.Code, "Error http status request delete")
 	assert.Contains(t, w.Body.String(), "false", "Error delete empty currency code")
 
-	query = url.Values{"Code": []string{"GBP"}}
+	// Test delete from invalid param format
 	w = httptest.NewRecorder()
-	r, _ = http.NewRequest(http.MethodDelete, "/currency-codes/"+query.Encode(), nil)
-	router.DeleteCurrencyCodeAndExchangeRate(w, r)
-	assert.Equal(t, 400, w.Code, "Error http status request delete")
-	assert.Contains(t, w.Body.String(), "false", "Error incorrect data send")
-
-	/*w = httptest.NewRecorder()
 	r, _ = http.NewRequest(http.MethodDelete, "/currency-codes/GBP", nil)
-	r.Header.Add("Content-Type", "application/json")
-	log.Printf("%v", r)
 	router.DeleteCurrencyCodeAndExchangeRate(w, r)
-	assert.Equal(t, 200, w.Code, "Error deleted data")*/
+	assert.Equal(t, 400, w.Code, "Error deleted data")
+
+	// Test deleted successfull
+	query = url.Values{}
+	query.Set("code", "GBP")
+	w = httptest.NewRecorder()
+	r, _ = http.NewRequest(http.MethodDelete, "/currency-codes?"+query.Encode(), nil)
+	router.DeleteCurrencyCodeAndExchangeRate(w, r)
+	assert.Equal(t, 200, w.Code, "Error http status request delete")
+	assert.Contains(t, w.Body.String(), "Currency code successfull deleted", "Error incorrect data send")
 }
 
+// Test save currency code and exchange rates
 func TestSaveCurrencyCodeAndExchangeRate(t *testing.T) {
-	Connect()
+	// Test database connection
 	assert.NotEmpty(t, router.MySql)
 	assert.NotEmpty(t, router.Redis)
-	assert.HTTPStatusCode(t, router.SaveCurrencyCodeAndExchangeRate, "POST", "/currency-codes", url.Values{}, 400)
+	// Test save withou params
+	assert.HTTPStatusCode(t, router.SaveCurrencyCodeAndExchangeRate, http.MethodPost, "/currency-codes", url.Values{}, 400)
 
+	// Test save with currency code only
 	postBody, _ := json.Marshal(map[string]string{
 		"Code": "BRL",
 	})
-	responseBody := bytes.NewBuffer(postBody)
+	sendBody := bytes.NewBuffer(postBody)
 	w := httptest.NewRecorder()
-	r, _ := http.NewRequest("POST", "/currency-codes", responseBody)
+	r, _ := http.NewRequest(http.MethodPost, "/currency-codes", sendBody)
 	r.Header.Add("Content-Type", "application/json")
 	router.SaveCurrencyCodeAndExchangeRate(w, r)
 	assert.Equal(t, 201, w.Code, "Error http status request post")

@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/leekchan/accounting"
+	"github.com/shopspring/decimal"
 )
 
 // Get data from external API
@@ -47,4 +50,24 @@ func GetRealRate(method string, url string) (models.ExternalApiRates, error) {
 	}
 
 	return externalApiRates, nil
+}
+
+func ConvertAmountToDecimal(amount string, exchangeRate *models.ExchangeRate) error {
+	amountconv, err := decimal.NewFromString(amount)
+	ac := accounting.Accounting{
+		Symbol:         "",
+		Precision:      2,
+		Thousand:       ".",
+		Decimal:        ",",
+		Format:         "",
+		FormatNegative: "",
+		FormatZero:     "",
+	}
+
+	if err == nil {
+		percentage := decimal.NewFromInt(100)
+		exchangeRate.Amount = ac.FormatMoney(amountconv.Mul(exchangeRate.Rate).Mul(percentage).Div(percentage))
+	}
+
+	return err
 }

@@ -18,31 +18,31 @@ type Routes []Route
 var routes = Routes{
 	Route{
 		"Index",
-		"GET",
+		http.MethodGet,
 		"/",
 		NotImplemented,
 	},
 	Route{
 		"StatusHandler",
-		"GET",
+		http.MethodGet,
 		"/status",
 		StatusHandler,
 	},
 	Route{
 		"Get Exchange Rates",
-		"GET",
+		http.MethodGet,
 		"/exchange-rate",
 		GetExchangeRates,
 	},
 	Route{
 		"Save Currency Code",
-		"POST",
+		http.MethodPost,
 		"/currency-codes",
 		SaveCurrencyCodeAndExchangeRate,
 	},
 	Route{
 		"Delete Currency Code",
-		"DELETE",
+		http.MethodDelete,
 		"/currency-codes/{code:[A-Z]{3,}}",
 		DeleteCurrencyCodeAndExchangeRate,
 	},

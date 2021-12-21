@@ -32,13 +32,29 @@ type ApiResponse struct {
 // Here we are implementing the NotImplemented handler. Whenever an API endpoint is hit
 // we will simply return the message "Not Implemented"
 var NotImplemented = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Not Implemented"))
+	response := ApiResponse{Data: nil, Success: true, Message: "Not Implemented"}
+
+	jsonR, err := json.Marshal(response)
+	if err != nil {
+		log.Printf("%s to marshal response data\n", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonR)
 })
 
 // The status handler will be invoked when the user calls the /status route
 // It will simply return a string with the message "API is up and running"
 var StatusHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("API is up and running"))
+	response := ApiResponse{Data: nil, Success: true, Message: "API is up and running"}
+
+	jsonR, err := json.Marshal(response)
+	if err != nil {
+		log.Printf("%s to marshal response data status\n", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonR)
 })
 
 // Endpoint to get converted exchange rates
@@ -87,9 +103,10 @@ func GetExchangeRates(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	jsonR, _ := json.Marshal(response)
+	jsonR, err := json.Marshal(response)
 	if err != nil {
 		log.Printf("%s to marshal response data exchange rates from %s\n", err, from)
+		httpStatus = http.StatusInternalServerError
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -148,6 +165,7 @@ func SaveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 	jsonR, err := json.Marshal(response)
 	if err != nil {
 		log.Printf("%s to marshal response data to save currency code\n", err)
+		httpStatus = http.StatusInternalServerError
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -157,12 +175,19 @@ func SaveCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 
 // Endpoint to delete currency code and exchange rates
 func DeleteCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
+	var currencyCode string
 	// Set default API result
 	var response ApiResponse
 	httpStatus := http.StatusInternalServerError
 	params := mux.Vars(r)
-	log.Printf("%v", mux.Vars(r))
-	if currencyCode, ok := params["code"]; ok {
+	if code, ok := params["code"]; ok {
+		currencyCode = code
+	} else {
+		query := r.URL.Query()
+		currencyCode = query.Get("code")
+	}
+
+	if currencyCode != "" {
 		err := models.DeleteExchangeHistoricalRates(MySql, currencyCode)
 		if err != nil {
 			log.Printf("%s to delete exchange rates in database\n", err)
@@ -184,6 +209,7 @@ func DeleteCurrencyCodeAndExchangeRate(w http.ResponseWriter, r *http.Request) {
 	jsonR, err := json.Marshal(response)
 	if err != nil {
 		log.Printf("%s to marshal response data to delete currency code\n", err)
+		httpStatus = http.StatusInternalServerError
 	}
 
 	w.Header().Set("Content-Type", "application/json")

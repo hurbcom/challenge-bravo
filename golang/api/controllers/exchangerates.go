@@ -3,6 +3,7 @@ package controllers
 import (
 	"api/models"
 	"api/services"
+	"api/utils"
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -10,8 +11,6 @@ import (
 	"strings"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/leekchan/accounting"
-	"github.com/shopspring/decimal"
 )
 
 var Ctx = context.Background()
@@ -20,18 +19,11 @@ var Ctx = context.Background()
 func GetExchangeRatesConverter(db *sql.DB, rdb *redis.Client, from, to, amount string) (models.ExchangeRates, error) {
 	// Default values method return
 	var exchangerates []models.ExchangeRate
-	exchangerate := models.ExchangeRates{Data: exchangerates}
+	var exchangerateconvert models.ExchangeRate
+	var exchangerate models.ExchangeRates
+	var err error
 	from = strings.ToUpper(from)
 	to = strings.ToUpper(to)
-	ac := accounting.Accounting{
-		Symbol:         "",
-		Precision:      2,
-		Thousand:       ".",
-		Decimal:        ",",
-		Format:         "",
-		FormatNegative: "",
-		FormatZero:     "",
-	}
 
 	// Get all exchage rates from currency code
 	if to == "ALL" {
@@ -49,32 +41,24 @@ func GetExchangeRatesConverter(db *sql.DB, rdb *redis.Client, from, to, amount s
 						services.SyncCurrencyCode(db, rdb, from, to)
 						historical, _ := rdb.Get(Ctx, from+"-"+to).Result()
 						// Use saved data cache
-						var exchangerateconvert models.ExchangeRate
 						err = json.Unmarshal([]byte(historical), &exchangerateconvert)
 						if err != nil {
-							// Try next result
-							continue
+							log.Printf("unmarshal historical data error %s", err)
 						} else {
 							// Create object to endpoint result
-							amountconv, err := decimal.NewFromString(amount)
+							err := utils.ConvertAmountToDecimal(amount, &exchangerateconvert)
 							if err == nil {
-								percentage := decimal.NewFromInt(100)
-								exchangerateconvert.Amount = ac.FormatMoney(amountconv.Mul(exchangerateconvert.Rate).Mul(percentage).Div(percentage))
 								exchangerates = append(exchangerates, exchangerateconvert)
 							}
 						}
 					} else {
-						// Use saved data cache
-						var exchangerateconvert models.ExchangeRate
 						err = json.Unmarshal([]byte(historical), &exchangerateconvert)
 						if err != nil {
-							continue
+							log.Printf("unmarshal historical data error %s", err)
 						} else {
 							// Create object to endpoint result
-							amountconv, err := decimal.NewFromString(amount)
+							err := utils.ConvertAmountToDecimal(amount, &exchangerateconvert)
 							if err == nil {
-								percentage := decimal.NewFromInt(100)
-								exchangerateconvert.Amount = ac.FormatMoney(amountconv.Mul(exchangerateconvert.Rate).Mul(percentage).Div(percentage))
 								exchangerates = append(exchangerates, exchangerateconvert)
 							}
 						}
@@ -82,9 +66,6 @@ func GetExchangeRatesConverter(db *sql.DB, rdb *redis.Client, from, to, amount s
 				}
 			}
 		}
-
-		// Create object to endpoint result
-		exchangerate = models.ExchangeRates{Data: exchangerates}
 	} else {
 		// Check key exists in cache
 		historical, err := rdb.Get(Ctx, from+"-"+to).Result()
@@ -92,42 +73,32 @@ func GetExchangeRatesConverter(db *sql.DB, rdb *redis.Client, from, to, amount s
 		if err == redis.Nil || err != nil {
 			err = services.SyncCurrencyCode(db, rdb, from, to)
 			if err != nil {
-				log.Printf("sync error %s", err)
+				log.Printf("cache not found, sync error %s", err)
 			}
 			historical, _ := rdb.Get(Ctx, from+"-"+to).Result()
 			// Use saved data cache
-			var exchangerateconvert models.ExchangeRate
 			err := json.Unmarshal([]byte(historical), &exchangerateconvert)
-			if err != nil {
-				return exchangerate, err
-			} else {
+			if err == nil {
 				// Create object to endpoint result
-				amountconv, err := decimal.NewFromString(amount)
+				err := utils.ConvertAmountToDecimal(amount, &exchangerateconvert)
 				if err == nil {
-					percentage := decimal.NewFromInt(100)
-					exchangerateconvert.Amount = ac.FormatMoney(amountconv.Mul(exchangerateconvert.Rate).Mul(percentage).Div(percentage))
 					exchangerates = append(exchangerates, exchangerateconvert)
-					exchangerate = models.ExchangeRates{Data: exchangerates}
 				}
 			}
 		} else {
 			// Use saved data cache
-			var exchangerateconvert models.ExchangeRate
 			err := json.Unmarshal([]byte(historical), &exchangerateconvert)
-			if err != nil {
-				return exchangerate, err
-			} else {
+			if err == nil {
 				// Create object to endpoint result
-				amountconv, err := decimal.NewFromString(amount)
+				err := utils.ConvertAmountToDecimal(amount, &exchangerateconvert)
 				if err == nil {
-					percentage := decimal.NewFromInt(100)
-					exchangerateconvert.Amount = ac.FormatMoney(amountconv.Mul(exchangerateconvert.Rate).Mul(percentage).Div(percentage))
 					exchangerates = append(exchangerates, exchangerateconvert)
-					exchangerate = models.ExchangeRates{Data: exchangerates}
 				}
 			}
 		}
 	}
 
-	return exchangerate, nil
+	exchangerate = models.ExchangeRates{Data: exchangerates}
+
+	return exchangerate, err
 }

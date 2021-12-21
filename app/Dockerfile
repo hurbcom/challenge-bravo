@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 # Set working directory
 WORKDIR /var/www/html
@@ -10,25 +10,18 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
-    locales \
-    zip libzip-dev \
+    locales mlocate \
+    zip libzip-dev unzip libonig-dev \
     jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
-    git \
-    curl \
-    mlocate \
-    vim \
-    sqlite3 \
+    vim git curl sqlite3 \
     zlib1g-dev libicu-dev g++
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
-RUN docker-php-ext-install mbstring zip exif pcntl mysqli pdo pdo_mysql intl
-RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
-RUN docker-php-ext-install gd
+RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
+RUN docker-php-ext-install gd mbstring zip exif pcntl mysqli pdo pdo_mysql intl
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
