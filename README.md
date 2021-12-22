@@ -11,7 +11,7 @@ Criação de API e dashboard para conversão de diferentes tipos de moedas.
 - Suportar conversão entre moedas fiduciárias, crypto e fictícias
 - Suportar um volume de 1000 requisições por segundo
 
-Para maiores informações acesse a [descrição completa](projectdoc/README.pt.md)]
+Para maiores informações acesse a [descrição completa](projectdoc/README.pt.md)
 
 O sistema utiliza uma API real com dados de taxas de câmbio para sincronização e o cálculo da conversão, para saber mais acesse [Free Currency API](https://freecurrencyapi.net/)
 
@@ -51,7 +51,7 @@ $ cd challenge-bravo/
 $ ./permissions_paths.sh
 ```
 
-Execute o comando para inicar os serviços por meio do docker e aguarde alguns minutos. Se não quiser observar os logs das operações que estão sendo realizadas, no uso da aplicação, adicione ao final do comando a opção -d.
+Execute o comando para inicar os serviços por meio do docker e aguarde alguns minutos. Se não quiser observar os logs das operações que estão sendo realizadas no uso do sistema, adicione ao final do comando a opção -d.
 ```bash
 $ docker-compose up
 ```
@@ -88,13 +88,13 @@ Para incluir uma nova moeda basta inserir no campo de texto o código da nova mo
   <img src="screenshots/formulario-cadastro-moeda.png" alt="Formulário"/>
 </p>
 
-Se as taxas de câmbio da nova moeda, estiverem disponíveis na API externa utilizada pelo sistema, não será preciso cadastrar as taxas de câmbio pois o sistema irá armazená-las durante a sincronização de dados ou após uma consulta.
+Se as taxas de câmbio da nova moeda estiverem disponíveis na API externa utilizada pelo sistema, não será preciso cadastrar as taxas de câmbio pois o sistema irá armazená-las durante a sincronização de dados ou após uma consulta.
 
 <p align="center">
   <img src="screenshots/cadastro-moeda-real.png" alt="Moeda real"/>
 </p>
 
-Caso a moeda seja fictícia ou não sejam encontradas taxas de câmbio disponíveis na API externa serão exibidos campos para cadastro das taxas de câmbio para cada código de moeda existente no sistema. Se não forem informados valores para as taxas de câmbio o valor padrão utilizado será 1.000000.
+Caso a moeda seja fictícia, ou não sejam encontradas taxas de câmbio disponíveis na API externa, serão exibidos campos para cadastro das taxas de câmbio para cada código de moeda existente no sistema. Se não forem informados valores para as taxas de câmbio o valor padrão utilizado será 1.000000.
 
 <p align="center">
   <img src="screenshots/cadastro-moeda-ficticia.png" alt="Moeda fictícia"/>
