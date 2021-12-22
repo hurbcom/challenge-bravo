@@ -31,10 +31,15 @@ Para maiores informações sobre o escopo do projeto, acesse a [descrição comp
 
 
 O conjunto de recursos PHP, Laravel, AngularJS e Bootstrap formam o App, ou dashboard criado para o projeto.
+
 O NGINX é o provedor do serviço HTTP para o interpretador PHP que roda o App.
+
 O Golang está sendo utilizado para criar a API interna consumida pelo App.
+
 O Redis está sendo utilizado para o armazenamento de cache das requisições.
+
 O Sqlite está sendo utilizado para mock da base para realização de testes do App.
+
 O banco relacional MariaDB está sendo utilizado para armazenar os códigos de moedas e as taxas históricas de conversão entre moedas.
 
 ## Configuração do ambiente
