@@ -124,4 +124,6 @@ $ php artisan test
   <img src="screenshots/artisan-teste.png" alt="Testes Laravel"/>
 </p>
 
-O sistema utiliza a API interna desenvolvida em Go para o gerenciamento de moedas e a realização de consultas, veja aqui a documentação da [API interna](golang/)
+O sistema utiliza a API interna desenvolvida em Go para o gerenciamento de moedas e a realização de consultas, veja aqui a documentação da [API interna](golang/).
+
+Caso a API interna esteja indisponível o sistema não irá deixar de funcionar, porém o cadastro, edição e exclusão de moedas não irá funcionar pois esses recursos são providos pela API interna. Consultas as moedas cadastradas no sistema irão funcionar normalmente mas com um delay um pouco mais elevado.
