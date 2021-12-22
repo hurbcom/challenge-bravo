@@ -36,9 +36,9 @@ O NGINX é o provedor do serviço HTTP para o interpretador PHP que roda o App.
 
 O Golang está sendo utilizado para criar a API interna consumida pelo App.
 
-O Redis está sendo utilizado para o armazenamento de cache das requisições.
+O Redis está sendo utilizado para o armazenamento de cache dos dados históricos para as requisições.
 
-O Sqlite está sendo utilizado para mock da base para realização de testes do App.
+O Sqlite está sendo utilizado para mock da base e realização de testes do App.
 
 O banco relacional MariaDB está sendo utilizado para armazenar os códigos de moedas e as taxas históricas de conversão entre moedas.
 
