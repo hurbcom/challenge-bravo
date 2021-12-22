@@ -127,3 +127,7 @@ $ php artisan test
 O sistema utiliza a API interna desenvolvida em Go para o gerenciamento de moedas e a realização de consultas, veja aqui a documentação da [API interna](golang/).
 
 Caso a API interna esteja indisponível o sistema não irá deixar de funcionar, porém o cadastro, edição e exclusão de moedas não irá funcionar pois esses recursos são providos pela API interna. Consultas as moedas cadastradas no sistema irão funcionar normalmente mas com um delay um pouco mais elevado.
+
+O Laravel também possui um endpoint que pode ser utilizado para conversão de moedas, os parâmetros utilizados na requisição são os mesmo definidos nos requisitos do projeto. Abaixo um exemplo de como efetuar uma requisição a esse endpoint.
+
+http://localhost:8080/api/exchange-rates?from=USD&to=BRL&amount=2.00
