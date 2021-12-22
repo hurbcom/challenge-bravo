@@ -2,6 +2,8 @@
 
 Criação de API e dashboard para conversão de diferentes tipos de moedas.
 
+O sistema utiliza uma API real com dados de taxas de câmbio para sincronização e o cálculo da conversão, para saber mais acesse [Free Currency API](https://freecurrencyapi.net/)
+O sistema utiliza também uma API desenvolvida em Go, para saber mais [Clique Aqui](golang/)
 ## Requisitos
 
 - Utilizar cotações de verdade e atuais
@@ -11,9 +13,7 @@ Criação de API e dashboard para conversão de diferentes tipos de moedas.
 - Suportar conversão entre moedas fiduciárias, crypto e fictícias
 - Suportar um volume de 1000 requisições por segundo
 
-Para maiores informações acesse a [descrição completa](projectdoc/README.pt.md)
-
-O sistema utiliza uma API real com dados de taxas de câmbio para sincronização e o cálculo da conversão, para saber mais acesse [Free Currency API](https://freecurrencyapi.net/)
+Para maiores informações sobre o escopo do projeto, acesse a [descrição completa](projectdoc/README.pt.md)
 
 ## Recursos utilizados
 
