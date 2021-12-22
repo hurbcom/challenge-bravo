@@ -54,7 +54,7 @@ class CurrencyCodeController extends Controller
         // Get all currency codes to mount manage page
         foreach ( CurrencyCodes::all() as $aCodes )
         {
-            $aCurrencyCodes[] = ['id' => $aCodes->idrate, 'code' => $aCodes->code, 'created' => date( "d/m/Y H:i:s", strtotime( $aCodes->created_at ) ), 'updated' => ( !empty( $aCodes->updated_at ) ) ? date( "d/m/Y H:i:s", strtotime( $aCodes->updated_at ) ) : '-', 'default' => $aCodes->default];
+            $aCurrencyCodes[] = ['id' => $aCodes->idrate, 'code' => $aCodes->code, 'created' => date( "d/m/Y H:i:s", strtotime( $aCodes->created_at ) ), 'updated' => ( !empty( $aCodes->updated_at ) ) ? date( "d/m/Y H:i:s", strtotime( $aCodes->updated_at ) ) : '-', 'default' => $aCodes->mandatory];
         }
         sort( $aCurrencyCodes );
 
