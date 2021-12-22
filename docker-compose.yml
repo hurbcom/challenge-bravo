@@ -1,9 +1,9 @@
 version: '3'
 services:
     web:
-        image: nginx:latest
+        image: nginx:stable-alpine
         ports:
-          - "80:80"
+          - "${NGINX_PORT}:${NGINX_PORT}"
         volumes:
           - ./app/:/var/www/html
           - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
@@ -30,7 +30,7 @@ services:
     mysql:
         image: mariadb
         environment:
-          MYSQL_ROOT_PASSWORD: 123Mudar!!
+          MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
           MYSQL_DATABASE: ${DB_DATABASE}
           MYSQL_USER: ${DB_USERNAME}
           MYSQL_PASSWORD: ${DB_PASSWORD}
@@ -44,7 +44,7 @@ services:
         image: redis
         command: redis-server --requirepass ${REDIS_PASSWORD}
         ports:
-          - "6379:6379"
+          - "${REDIS_PORT}:${REDIS_PORT}"
         volumes:
           - ./docker/redis/data/:/var/lib/redis
           - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
