@@ -2,7 +2,7 @@
 
 Criação de API e dashboard para conversão de diferentes tipos de moedas.
 
-O sistema utiliza uma API real com dados de taxas de câmbio para sincronização e o cálculo da conversão, para saber mais acesse [Free Currency API](https://freecurrencyapi.net/)
+O sistema utiliza uma API externa com dados de taxas de câmbio para sincronização e o cálculo da conversão, para saber mais acesse [Free Currency API](https://freecurrencyapi.net/)
 
 O sistema utiliza também uma API desenvolvida em Go, para saber mais [Clique Aqui](golang/)
 ## Requisitos
@@ -24,10 +24,18 @@ Para maiores informações sobre o escopo do projeto, acesse a [descrição comp
 - [NGINX](https://www.nginx.com/)
 - [AngularJS](https://angularjs.org/)
 - [Redis](https://redis.io/)
-- [Sqlite](https://www.sqlite.org/index.html) - Utilizado no conjunto de testes do Laravel
+- [Sqlite](https://www.sqlite.org/index.html) - Utilizado no conjunto de testes do App
 - [MariaDB](https://mariadb.org/)
 - [Docker](https://www.docker.com/)
 - [Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/)
+
+
+O conjunto de recursos PHP, Laravel, AngularJS e Bootstrap formam o App, ou dashboard criado para o projeto.
+O NGINX é o provedor do serviço HTTP para o interpretador PHP que roda o App.
+O Golang está sendo utilizado para criar a API interna consumida pelo App.
+O Redis está sendo utilizado para o armazenamento de cache das requisições.
+O Sqlite está sendo utilizado para mock da base para realização de testes do App.
+O banco relacional MariaDB está sendo utilizado para armazenar os códigos de moedas e as taxas históricas de conversão entre moedas.
 
 ## Configuração do ambiente
 
@@ -113,7 +121,7 @@ Caso a moeda seja fictícia, ou não sejam encontradas taxas de câmbio disponí
 
 ### Testes
 
-Para executar os testes criados para o sistema é necessário acessar o contâiner que roda o Laravel e executar o comando para iniciar os testes.
+Para executar os testes criados para o sistema é necessário acessar o contâiner que roda o App e executar o comando para iniciar os testes.
 
 ```bash
 $ docker exec -it challenge-bravo_app_1 bash
@@ -121,13 +129,16 @@ $ php artisan test
 ```
 
 <p align="center">
-  <img src="screenshots/artisan-teste.png" alt="Testes Laravel"/>
+  <img src="screenshots/artisan-teste.png" alt="Testes App"/>
 </p>
 
 O sistema utiliza a API interna desenvolvida em Go para o gerenciamento de moedas e a realização de consultas, veja aqui a documentação da [API interna](golang/).
 
 Caso a API interna esteja indisponível o sistema não irá deixar de funcionar, porém o cadastro, edição e exclusão de moedas não irá funcionar pois esses recursos são providos pela API interna. Consultas as moedas cadastradas no sistema irão funcionar normalmente mas com um delay um pouco mais elevado.
 
-O Laravel também possui um endpoint que pode ser utilizado para conversão de moedas, os parâmetros utilizados na requisição são os mesmo definidos nos requisitos do projeto. Abaixo um exemplo de como efetuar uma requisição a esse endpoint.
+O App também possui um endpoint que pode ser utilizado para conversão de moedas, os parâmetros utilizados na requisição são os mesmo definidos nos requisitos do projeto. Abaixo um exemplo de como efetuar uma requisição a esse endpoint.
 
 http://localhost:8080/api/exchange-rates?from=USD&to=BRL&amount=2.00
+
+Resposta:
+`{"data":[{"code":"USD-BRL","historical":"22\/12\/2021","amount":"R$\u00a011,49","rate":"5.745200"}],"success":true}`

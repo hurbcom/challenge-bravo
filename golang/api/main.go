@@ -18,8 +18,10 @@ const port = 9092
 
 var (
 	mysqlconnectimeout = 10 * time.Second
-	syncinterval       = 2 * time.Minute
-	startsync          = false
+	// Sync time
+	syncinterval = 2 * time.Minute
+	// Enable/disable sync
+	startsync = true
 )
 
 // Start databases, handlers and sync service
