@@ -1,4 +1,4 @@
-package model
+package services
 
 import (
 	"encoding/json"
@@ -7,11 +7,22 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"sync"
+	"time"
 )
 
 type Quote interface {
-	Initialize(key string) error
+	Initialize(key string, refreshTimeout time.Duration) error
 	Quote(symbol string) (float64, error)
+	Terminate()
+}
+
+type baseQuote struct {
+	key            string
+	refreshTicker  *time.Ticker
+	refreshQuit    chan bool
+	refreshMutex   sync.Mutex
+	refreshTimeout time.Duration
 }
 
 type quoteResponse struct {
@@ -32,7 +43,32 @@ type quoteResponse struct {
 	} `json:"error,omitempty"`
 }
 
-func request(endPoint string, params map[string]string, response interface{}) error {
+func (baseQuote *baseQuote) Initialize(key string, refreshTimeout time.Duration) error {
+
+	// Check for empty key
+	if len(key) == 0 {
+		err := fmt.Errorf("empty key")
+		log.Println(err)
+		return err
+	}
+
+	// Save API key
+	baseQuote.key = key
+	baseQuote.refreshTimeout = refreshTimeout
+
+	return nil
+}
+
+func (baseQuote *baseQuote) Quote(string) (float64, error) {
+	return 0, fmt.Errorf("unimplement method. Please use the child classes")
+}
+
+func (baseQuote *baseQuote) getServiceRefresh() time.Duration {
+	log.Println(fmt.Errorf("unimplement method. Please use the child classes"))
+	return time.Hour
+}
+
+func (baseQuote *baseQuote) request(endPoint string, params map[string]string, response interface{}) error {
 
 	// Parse url
 	qURL, err := url.Parse(endPoint)
@@ -78,4 +114,29 @@ func request(endPoint string, params map[string]string, response interface{}) er
 	}
 
 	return nil
+}
+
+func (baseQuote *baseQuote) createTicker(symbol string, quoteFunc func(symbol string) (float64, error)) {
+
+	baseQuote.refreshTicker = time.NewTicker(baseQuote.refreshTimeout)
+	baseQuote.refreshQuit = make(chan bool)
+
+	go func() {
+		for {
+			select {
+			case <-baseQuote.refreshTicker.C:
+				if _, err := quoteFunc(symbol); err != nil {
+					log.Println(err)
+					baseQuote.refreshQuit <- true
+				}
+			case <-baseQuote.refreshQuit:
+				baseQuote.refreshTicker.Stop()
+				return
+			}
+		}
+	}()
+}
+
+func (baseQuote *baseQuote) Terminate() {
+	baseQuote.refreshQuit <- true
 }
