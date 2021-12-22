@@ -70,6 +70,7 @@ func SaveCurrencyCode(db *sql.DB, currencyCode string) error {
 				return err
 			}
 			log.Printf("%d currency_codes created to %s", rows, currencyCode)
+			return nil
 		}
 	} else {
 		log.Printf("Error %s when check currency code exists", err)
@@ -109,6 +110,7 @@ func DeleteCurrencyCode(db *sql.DB, currencyCode string) error {
 				return err
 			}
 			log.Printf("%d currency_codes deleted to %s", rows, currencyCode)
+			return nil
 		} else {
 			err = errors.New("It is not allowed to remove mandatory currency code " + currencyCode)
 		}

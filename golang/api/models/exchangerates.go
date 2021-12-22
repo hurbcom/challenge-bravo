@@ -59,6 +59,7 @@ func GetExchangeHistoricalRates(db *sql.DB, from, to string) ([]ExchangeRate, er
 // Create or update exchange historical rates in database
 func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
 	regex, _ := regexp.Compile("^[A-Z]{3,}[-][A-Z]{3,}$")
+	var err error
 	for _, exchangerate := range exchangerates.Rates {
 		var exists int
 		var code string
@@ -136,7 +137,7 @@ func SaveExchangeHistoricalRates(db *sql.DB, exchangerates CurrencyCode) error {
 		}
 	}
 
-	return nil
+	return err
 }
 
 // Delete exchange historical rates from database
