@@ -18,6 +18,7 @@ O sistema utiliza uma API externa com dados de taxas de câmbio para sincroniza�
 As requisições efetuadas retornam sempre como resposta uma string no formato JSON. Está configurado um Rate Limit para a quantidade de requisições efetuada no tempo de 1 minuto de acordo com o IP do usuário, caso o número de requisições exceda o permitido demais requisições serão bloqueadas.
 
 Exemplo de requisição: http://localhost:9092/status
+
 Padrão de resposta:
 
 `{"data":null,"success":true,"message":"API is up and running"}`
@@ -35,19 +36,32 @@ O cadastro de novos códigos de moeda pode ser efetuado de duas maneiras distint
 - Code - O novo código de moeda que deve ser criado no sistema
 - Rates - Um array com as taxas de câmbio relativas as moedas existentes no sistema e o valor inicial determinado
 
+Exemplo de parâmetros para a requisição:
+
 `Ex Json: {Code: ING, Rates: [{USD: 0.10000}, {BRL: 0.983746}]}`
+
+Exemplo de resposta:
+
+`{"data":[{"code":"HURB","rates":[{"code":"BRL","historical":"","rate":"0"},{"code":"USD","historical":"","rate":"0"},{"code":"EUR","historical":"","rate":"0"},{"code":"BTC","historical":"","rate":"0"},{"code":"ETH","historical":"","rate":"0"}]}],"success":true,"message":"Currency code successfull saved"}`
 
 2 - Uma requisição ao endpoint de conversão de valores com uma moeda fiduciária utilizada no from que possua taxa de conversão disponível na API externa utilizada pelo sistema.
 
 ### Exclusão de códigos de moeda
 
-A exclusão do código de moedas só está disponível para moedas que não foram determinadas como padrão no escopo inicial do projeto, a exclusão do código de uma moeda exclui também todas as taxas de câmbia históricas armazenadas para a mesma. O verbo **HTTP DELETE** deve ser utilizado, a URL para exclusão é http://localhost:9092/currency-codes/ING ou http://localhost:9092/currency-codes?code=ING
+A exclusão do código de moedas só está disponível para moedas que não foram determinadas como padrão no escopo inicial do projeto, a exclusão do código de uma moeda exclui também todas as taxas de câmbia históricas armazenadas para a mesma. O verbo **HTTP DELETE** deve ser utilizado. 
+
+Exemplo de requisição: http://localhost:9092/currency-codes/ING ou http://localhost:9092/currency-codes?code=ING
+
+Exemplo de resposta:
+
+`{"data":null,"success":true,"message":"Currency code successfull deleted"}`
 
 ### Conversão de moedas
 
 A conversão de moedas será efetuada para qualquer moeda cadastrada no sistema que possua taxa de câmbio disponível e também para novas moedas fiduciárias que possuam taxa de câmbio presente na API externa. O verbo HTTP GET deve ser utilizado nas requisições e também é necessário o envio de parâmetros na URL para requisição.
 
 Exemplo de requisição: http://localhost:9092/exchange-rate?from=USD&to=BRL&amount=2.00
+
 Exemplo de resposta:
 
 `{"data":[{"amount":"11,49","code":"USD-BRL","historical":"22/12/2021","rate":"5.74527"}],"success":true}`
