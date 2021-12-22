@@ -26,10 +26,17 @@
         <div>
             <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
                 <div class="container-fluid">
-                    <a class="navbar-brand text-uppercase" href="{{ url('/') }}">
-                        <img src="images/pngegg.png" width="30" height="30" class="d-inline-block align-top" alt="Exchange Rate Tools">
-                        Exchange Rate Tools
-                    </a>
+                    <div class="d-none d-md-block">
+                        <a class="navbar-brand text-uppercase" href="{{ url('/') }}">
+                            <img src="images/pngegg.png" width="30" height="30" class="d-inline-block align-top" alt="Exchange Rate Tools">
+                            Exchange Rate Tools
+                        </a>
+                    </div>
+                    <div class="d-block d-sm-none">
+                        <a class="navbar-brand" href="{{ url('/') }}">
+                            <img src="images/pngegg.png" width="30" height="30" class="d-inline-block align-top" alt="Exchange Rate Tools">
+                        </a>
+                    </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>

@@ -7,7 +7,7 @@
         Manage Currency Codes
       </h5>
       <div class="row">
-        <div class="col-7 col-xs-12">
+        <div class="col-md-7 col-sm-12">
           <div class="card-body">
             <div class="row mt-4">
                 <div class="col-12" ng-show="Message !== ''">
@@ -51,7 +51,7 @@
             </div>
           </div>
         </div>
-        <div class="col-5 col-xs-12 mt-4 mb-4">
+        <div class="col-md-5 col-sm-12 mt-4 mb-4">
           <h5 class="form-title pl-2">Enter New Currency Code</h5>
           <div class="text-center" ng-show="displayLoadingModal === true">
               <img src="images/Loader.gif" width="60px">
