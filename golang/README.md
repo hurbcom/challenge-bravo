@@ -17,6 +17,7 @@ O sistema utiliza uma API externa com dados de taxas de câmbio para sincroniza�
 
 As requisições efetuadas retornam sempre como resposta uma string no formato JSON. Está configurado um Rate Limit para a quantidade de requisições efetuada no tempo de 1 minuto de acordo com o IP do usuário, caso o número de requisições exceda o permitido demais requisições serão bloqueadas.
 
+Exemplo de requisição: http://localhost:9092/status
 Padrão de resposta:
 
 `{"data":null,"success":true,"message":"API is up and running"}`
@@ -44,9 +45,10 @@ A exclusão do código de moedas só está disponível para moedas que não fora
 
 ### Conversão de moedas
 
-A conversão de moedas será efetuada para qualquer moeda cadastrada no sistema que possua taxa de câmbio disponível e também para novas moedas fiduciárias que possuam taxa de câmbio presente na API externa. O verbo HTTP GET deve ser utilizado nas requisições e também é necessário o envio de parâmetros na URL para requisição. Exemplo: http://localhost:9092/exchange-rate?from=USD&to=BRL&amount=2.00
+A conversão de moedas será efetuada para qualquer moeda cadastrada no sistema que possua taxa de câmbio disponível e também para novas moedas fiduciárias que possuam taxa de câmbio presente na API externa. O verbo HTTP GET deve ser utilizado nas requisições e também é necessário o envio de parâmetros na URL para requisição.
 
-Exemplo de retorno:
+Exemplo de requisição: http://localhost:9092/exchange-rate?from=USD&to=BRL&amount=2.00
+Exemplo de resposta:
 
 `{"data":[{"amount":"11,49","code":"USD-BRL","historical":"22/12/2021","rate":"5.74527"}],"success":true}`
 
@@ -166,3 +168,4 @@ ok  	api	4.614s
 /go/src/app # 
 ```
 
+Um grande abraço, aproveitem... :)

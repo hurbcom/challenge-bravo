@@ -142,3 +142,6 @@ http://localhost:8080/api/exchange-rates?from=USD&to=BRL&amount=2.00
 
 Resposta:
 `{"data":[{"code":"USD-BRL","historical":"22\/12\/2021","amount":"R$\u00a011,49","rate":"5.745200"}],"success":true}`
+
+
+Um grande abraço, aproveitem... :)
