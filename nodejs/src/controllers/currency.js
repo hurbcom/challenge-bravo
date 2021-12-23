@@ -94,7 +94,7 @@ const conversion = async query => {
 };
 
 const newCurrency = async (code, bid) => {
-    if(formatCurrency(amount) == 'NaN') {
+    if(formatCurrency(bid) == 'NaN') {
         return {
             status: 400,
             data: {
