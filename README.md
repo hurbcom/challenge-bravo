@@ -23,7 +23,7 @@ PHP - Extra
 
 ----------
 
-## Incializando os projetos
+## Incializando o mongo e redis
 ```sh
 docker compose up
 ```
