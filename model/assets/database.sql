@@ -94,7 +94,8 @@ $$
             rate       rate,
             created_at row_timestamp,
             updated_at row_timestamp,
-            CONSTRAINT currency_pkey PRIMARY KEY (code)
+            CONSTRAINT currency_pkey PRIMARY KEY (code),
+            CONSTRAINT currency_type_rate_check CHECK ((type = 'U' AND rate > 0) OR (type <> 'U' AND rate = 0))
         );
 
         COMMENT ON COLUMN currency.code IS 'Currency code';
@@ -103,6 +104,7 @@ $$
         COMMENT ON COLUMN currency.rate IS 'Custom currency USD rate';
         COMMENT ON COLUMN currency.created_at IS 'Creation timestamp';
         COMMENT ON COLUMN currency.updated_at IS 'Update timestamp';
+        COMMENT ON CONSTRAINT currency_type_rate_check ON currency IS 'Validates currency type vs USD rate consistency';
 
         CREATE TRIGGER currency_trigger
             BEFORE UPDATE

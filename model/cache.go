@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+const defaultCacheTime = time.Hour
+
 // Cache variables
 type Cache struct {
 	cache  *rcache.Cache
