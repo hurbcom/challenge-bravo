@@ -1,4 +1,4 @@
-package model
+package dao
 
 import (
 	"context"
@@ -9,16 +9,33 @@ import (
 	"reflect"
 )
 
-type XDAO interface {
+// CRUD Interface for model objects
+type CRUD interface {
+
+	// New Creates a new entity without updating
+	New() error
+
+	// Save Creates or update a new entity
 	Save() error
+
+	// List all database entities
 	List(values interface{}) error
+
+	// Validate Entity business rules
+	Validate() error
+
+	// String Print a JSON string entity string representation
 	String() string
 }
 
-type daoHelper struct {
+// Helper CRUD methods for common functions
+type Helper struct {
 }
 
-func (helper *daoHelper) list(builder *squirrel.SelectBuilder, values interface{}, cacheKey func(interface{}) string) error {
+// List entities from database and refreshes the cache. Where builder is the select query builder to be executed,
+// values is the vector point where the results will be returned and cacheKey is the function that generates cache keys
+// it will receive as parameter the current entity and should return it cache key
+func (helper *Helper) List(builder *squirrel.SelectBuilder, values interface{}, cacheKey func(interface{}) string) error {
 
 	// Create query
 	query, args, err := builder.ToSql()
@@ -38,7 +55,7 @@ func (helper *daoHelper) list(builder *squirrel.SelectBuilder, values interface{
 	if slice.Kind() == reflect.Slice {
 		for i := 0; i < slice.Len(); i++ {
 			entity := slice.Index(i).Interface()
-			if err = BCache.Set(cacheKey(entity), entity, defaultCacheTime); err != nil {
+			if err = Cache.Set(cacheKey(entity), entity, defaultCacheTime); err != nil {
 				log.Println(err)
 				return err
 			}
@@ -48,7 +65,9 @@ func (helper *daoHelper) list(builder *squirrel.SelectBuilder, values interface{
 	return nil
 }
 
-func (helper *daoHelper) save(builder *squirrel.InsertBuilder, cacheKey string, cacheValue interface{}) error {
+// Save an entity to database and cache. Where builder is the insert query builder to be executed, cacheKey is the
+// entity cache key and cacheValue is the entity pointer to be stored on the cache
+func (helper *Helper) Save(builder *squirrel.InsertBuilder, cacheKey string, cacheValue interface{}) error {
 
 	// Create the query
 	query, args, err := builder.ToSql()
@@ -75,7 +94,7 @@ func (helper *daoHelper) save(builder *squirrel.InsertBuilder, cacheKey string, 
 
 	// Update cache value if a key was provided
 	if len(cacheKey) > 0 {
-		if err = BCache.Set(cacheKey, cacheValue, defaultCacheTime); err != nil {
+		if err = Cache.Set(cacheKey, cacheValue, defaultCacheTime); err != nil {
 			log.Println(err)
 			if errTx := tx.Rollback(context.Background()); errTx != nil {
 				log.Println(errTx)
@@ -93,7 +112,8 @@ func (helper *daoHelper) save(builder *squirrel.InsertBuilder, cacheKey string, 
 	return nil
 }
 
-func (helper *daoHelper) string(value interface{}) string {
+// String Generates an entity JSON string representation
+func (helper *Helper) String(value interface{}) string {
 	out, err := json.Marshal(value)
 	if err != nil {
 		log.Println(err)

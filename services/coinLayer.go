@@ -1,7 +1,7 @@
 package services
 
 import (
-	"challenge-bravo/model"
+	"challenge-bravo/model/dao"
 	"fmt"
 	"log"
 	"time"
@@ -20,7 +20,7 @@ func (coinLayer *coinLayer) Initialize(key string, refreshTimeout time.Duration)
 	// Common initialization procedures
 	_ = coinLayer.baseQuote.Initialize(key, refreshTimeout)
 
-	// Cache warn up
+	// CacheContainer warn up
 	if value, err := coinLayer.Quote("BTC"); err != nil || value <= 0 {
 		if err != nil {
 			err = fmt.Errorf("invalid quote for BTC rate %.4f", value)
@@ -41,7 +41,7 @@ func (coinLayer *coinLayer) Quote(symbol string) (float64, error) {
 
 	// Quote the currency from cache or service
 	var quote float64
-	if err := model.BCache.Once("Y."+symbol, &quote, coinLayer.refreshTimeout, func() (interface{}, error) {
+	if err := dao.Cache.Once("Y."+symbol, &quote, coinLayer.refreshTimeout, func() (interface{}, error) {
 
 		// Retrieve most recent quotes from service
 		var latest quoteResponse
@@ -57,7 +57,7 @@ func (coinLayer *coinLayer) Quote(symbol string) (float64, error) {
 		// Save all other values on the cache
 		for k, v := range latest.Rates {
 			if k != symbol {
-				if err := model.BCache.Set("Y."+k, v, coinLayer.refreshTimeout); err != nil {
+				if err := dao.Cache.Set("Y."+k, v, coinLayer.refreshTimeout); err != nil {
 					return 0, err
 				}
 			}
