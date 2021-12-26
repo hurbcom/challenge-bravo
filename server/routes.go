@@ -19,12 +19,12 @@ func createRoutes(app *fiber.App) {
 func createCurrencyRoutes(currency fiber.Router) {
 
 	currency.Options("/", HelpCurrency)
+
+	// New currency
 	currency.Post("/", NewCurrency)
 
-	// TODO:  read
-	currency.Get("/:symbol?", func(c *fiber.Ctx) error {
-		return c.SendString("Hello")
-	})
+	// Read a currency or list all currencies if no symbol was provided
+	currency.Get("/:symbol?", GetCurrency)
 
 	// TODO:  update
 	currency.Put("/:symbol", func(c *fiber.Ctx) error {

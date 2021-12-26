@@ -67,3 +67,8 @@ func (cache *CacheContainer) Set(key string, value interface{}, timeOut time.Dur
 		TTL:   timeOut,
 	})
 }
+
+// Del Deletes a key from the cache
+func (cache *CacheContainer) Del(key string) error {
+	return cache.cache.Delete(context.Background(), key)
+}

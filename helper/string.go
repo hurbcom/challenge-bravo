@@ -2,10 +2,10 @@ package helper
 
 import "unicode"
 
-// IsUpper Checks the string if all characters are uppercase or numbers
-func IsUpper(str string) bool {
+// IsValidCryptoCode Checks the string if all characters are uppercase or numbers
+func IsValidCryptoCode(str string) bool {
 	for _, r := range str {
-		if !unicode.IsUpper(r) && (unicode.IsLetter(r) || unicode.IsNumber(r)) {
+		if !(unicode.IsNumber(r) || (unicode.IsUpper(r) && unicode.IsLetter(r)) || r == '*') {
 			return false
 		}
 	}

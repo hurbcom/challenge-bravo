@@ -19,7 +19,10 @@ type CRUD interface {
 	Save() *Error
 
 	// List all database entities
-	List(values interface{}) error
+	List(values interface{}) *Error
+
+	// Load entity using its primary key value
+	Load() *Error
 
 	// Validate Entity business rules
 	Validate() *Error
@@ -35,34 +38,54 @@ type Helper struct {
 // List entities from database and refreshes the cache. Where builder is the select query builder to be executed,
 // values is the vector point where the results will be returned and cacheKey is the function that generates cache keys
 // it will receive as parameter the current entity and should return it cache key
-func (helper *Helper) List(builder *squirrel.SelectBuilder, values interface{}, cacheKey func(interface{}) string) error {
+func (helper *Helper) List(builder *squirrel.SelectBuilder, values interface{}, listCacheKey string, itemCacheKey func(interface{}) string) error {
+	return Cache.Once(listCacheKey, values, DefaultCacheTime, func() (interface{}, error) {
+		// Create query
+		query, args, err := builder.ToSql()
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
 
-	// Create query
-	query, args, err := builder.ToSql()
-	if err != nil {
-		log.Println(err)
-		return err
-	}
+		// Execute query
+		if err = pgxscan.Select(context.Background(), db.poll, values, query, args...); err != nil {
+			log.Println(err)
+			return nil, err
+		}
 
-	// Execute query
-	if err = pgxscan.Select(context.Background(), db.poll, values, query, args...); err != nil {
-		log.Println(err)
-		return err
-	}
-
-	// Refreshes the cache
-	slice := reflect.Indirect(reflect.ValueOf(values))
-	if slice.Kind() == reflect.Slice {
-		for i := 0; i < slice.Len(); i++ {
-			entity := slice.Index(i).Interface()
-			if err = Cache.Set(cacheKey(entity), entity, DefaultCacheTime); err != nil {
-				log.Println(err)
-				return err
+		// Refreshes the cache individual itens
+		slice := reflect.Indirect(reflect.ValueOf(values))
+		if slice.Kind() == reflect.Slice {
+			for i := 0; i < slice.Len(); i++ {
+				entity := slice.Index(i).Interface()
+				if err = Cache.Set(itemCacheKey(entity), entity, DefaultCacheTime); err != nil {
+					log.Println(err)
+					return nil, err
+				}
 			}
 		}
-	}
+		return values, nil
+	})
+}
 
-	return nil
+func (helper *Helper) Get(builder *squirrel.SelectBuilder, returnValue interface{}, cacheKey string) error {
+
+	return Cache.Once(cacheKey, returnValue, DefaultCacheTime, func() (interface{}, error) {
+
+		// Create query
+		query, args, err := builder.ToSql()
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+
+		// Execute query
+		if err = pgxscan.Get(context.Background(), db.poll, returnValue, query, args...); err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		return returnValue, nil
+	})
 }
 
 // Save an entity to database and cache. Where builder is the insert query builder to be executed, cacheKey is the

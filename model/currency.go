@@ -21,10 +21,10 @@ const (
 
 // Currency Represents a currency, could be a real currency, a crypt currency or a custom currency, created by a user
 type Currency struct {
-	Code       string          `json:"code"`           // Code Currency ISO code
-	Name       string          `json:"name"`           // Name Currency name
-	Type       CurrencyType    `json:"type,omitempty"` // Type Currency type
-	Rate       dao.NullFloat64 `json:"rate"`           // Rate Currency USD rate, required for custom type only
+	Code       string       `json:"code"`           // Code Currency ISO code
+	Name       string       `json:"name"`           // Name Currency name
+	Type       CurrencyType `json:"type,omitempty"` // Type Currency type
+	Rate       *float64     `json:"rate,omitempty"` // Rate Currency USD rate, required for custom type only
 	dao.Helper `json:"-" redis:"-"`
 }
 
@@ -43,8 +43,12 @@ func (curr *Currency) New() *dao.Error {
 
 	// Persist to database and cache
 	if err := curr.Helper.Save(&builder, "CUR."+curr.Code, curr); err != nil {
-		return currencyPersistError(err)
+		return prepareCurrencyErrors(err)
 	}
+
+	// Invalidate currency list cache
+	_ = dao.Cache.Del("CUR.=LIST=")
+
 	return nil
 }
 
@@ -64,21 +68,28 @@ func (curr *Currency) Save() *dao.Error {
 
 	// Persist to database and cache
 	if err := curr.Helper.Save(&builder, "CUR."+curr.Code, curr); err != nil {
-		return currencyPersistError(err)
+		return prepareCurrencyErrors(err)
 	}
+
+	// Invalidate currency list cache
+	_ = dao.Cache.Del("CUR.=LIST=")
+
 	return nil
 }
 
-func (curr *Currency) List(values interface{}) error {
+func (curr *Currency) List(values interface{}) *dao.Error {
 
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
 		Select("code", "type", "name", "rate").
 		From("currency").
 		OrderBy("code")
 
-	return curr.Helper.List(&builder, values, func(entity interface{}) string {
+	if err := curr.Helper.List(&builder, values, "CUR.=LIST=", func(entity interface{}) string {
 		return "CUR." + entity.(*Currency).Code
-	})
+	}); err != nil {
+		return prepareCurrencyErrors(err)
+	}
+	return nil
 }
 
 func (curr *Currency) Validate() *dao.Error {
@@ -94,7 +105,7 @@ func (curr *Currency) Validate() *dao.Error {
 	}
 
 	// Check if the code is uppercase
-	if !helper.IsUpper(curr.Code) {
+	if !helper.IsValidCryptoCode(curr.Code) {
 		err.Append(fmt.Sprintf("code: currency code must be upper case: %s", curr.Code))
 	}
 
@@ -120,8 +131,8 @@ func (curr *Currency) Validate() *dao.Error {
 		}
 
 		// Check rate
-		if curr.Rate.Valid && curr.Rate.Float64 > 0 {
-			err.Append(fmt.Sprintf("rate: USD conversion rate should be null for real currencies: %.2f", curr.Rate.Float64))
+		if curr.Rate != nil {
+			err.Append(fmt.Sprintf("rate: USD conversion rate should be null for real currencies: %.2f", *curr.Rate))
 		}
 
 	case CustomCurrency:
@@ -132,11 +143,11 @@ func (curr *Currency) Validate() *dao.Error {
 		}
 
 		// Check rate
-		if !curr.Rate.Valid || curr.Rate.Float64 <= 0 {
-			if curr.Rate.Valid {
-				err.Append(fmt.Sprintf("rate: USD conversion rate should be valid and greather than zero for custom currencies: %.2f", curr.Rate.Float64))
-			} else {
-				err.Append(fmt.Sprintf("rate: USD conversion rate should be valid and greather than zero for custom currencies"))
+		if curr.Rate == nil {
+			err.Append(fmt.Sprintf("rate: USD conversion rate should be valid and greather than zero for custom currencies"))
+		} else {
+			if *curr.Rate <= 0 {
+				err.Append(fmt.Sprintf("rate: USD conversion rate should be valid and greather than zero for custom currencies: %.2f", *curr.Rate))
 			}
 		}
 
@@ -147,8 +158,8 @@ func (curr *Currency) Validate() *dao.Error {
 		}
 
 		// Check rate
-		if curr.Rate.Valid && curr.Rate.Float64 > 0 {
-			err.Append(fmt.Sprintf("rate: USD conversion rate should be null for crypto currencies: %.2f", curr.Rate.Float64))
+		if curr.Rate != nil {
+			err.Append(fmt.Sprintf("rate: USD conversion rate should be null for real currencies: %.2f", *curr.Rate))
 		}
 
 	default:
@@ -170,6 +181,20 @@ func (curr *Currency) String() string {
 	return curr.Helper.String(curr)
 }
 
+func (curr *Currency) Load() *dao.Error {
+
+	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
+		Select("code", "type", "name", "rate").
+		From("currency").
+		Where(sq.Eq{"code": curr.Code})
+
+	if err := curr.Helper.Get(&builder, curr, "CUR."+curr.Code); err != nil {
+		return prepareCurrencyErrors(err)
+	}
+
+	return nil
+}
+
 // SaveCurrencies Save a vector of currencies to the database and cache
 func SaveCurrencies(currencies []Currency) *dao.Error {
 
@@ -186,7 +211,7 @@ func SaveCurrencies(currencies []Currency) *dao.Error {
 			builder = builder.Values(cur.Code, cur.Type, cur.Name)
 
 			// Save currency to cache
-			if cErr := dao.Cache.Set(string(cur.Type)+"."+cur.Code, cur, dao.DefaultCacheTime); cErr != nil {
+			if cErr := dao.Cache.Set("CUR."+cur.Code, cur, dao.DefaultCacheTime); cErr != nil {
 				log.Println(cErr)
 			}
 		} else {
@@ -197,23 +222,37 @@ func SaveCurrencies(currencies []Currency) *dao.Error {
 
 	// Execute the query
 	if err := dao.Save(&builder); err != nil {
-		return currencyPersistError(err)
+		return prepareCurrencyErrors(err)
 	}
 	return nil
 }
 
-// currencyPersistError Generates error objects for currency persist operations
-func currencyPersistError(err error) *dao.Error {
-	if pgErr, ok := err.(*pgconn.PgError); ok {
-		if pgErr.Code == pgerrcode.UniqueViolation {
+// prepareCurrencyErrors Generates error objects for currency persist operations
+func prepareCurrencyErrors(err error) *dao.Error {
+
+	switch t := err.(type) {
+	case *pgconn.PgError:
+		if t.Code == pgerrcode.UniqueViolation {
 			return &dao.Error{
 				Message:    "currency code already exist",
 				StatusCode: http.StatusConflict,
 			}
 		}
-	}
-	return &dao.Error{
-		Message:    http.StatusText(http.StatusInternalServerError),
-		StatusCode: http.StatusInternalServerError,
+		return &dao.Error{
+			Message:    http.StatusText(http.StatusInternalServerError),
+			StatusCode: http.StatusInternalServerError,
+		}
+	default:
+		msg := t.Error()
+		if msg == "no rows in result set" {
+			return &dao.Error{
+				Message:    fmt.Sprintf("currency not fount"),
+				StatusCode: http.StatusNotFound,
+			}
+		}
+		return &dao.Error{
+			Message:    http.StatusText(http.StatusInternalServerError),
+			StatusCode: http.StatusInternalServerError,
+		}
 	}
 }
