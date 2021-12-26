@@ -44,6 +44,7 @@ func (currencyLayer *currencyLayer) Initialize(key string, refreshTimeout time.D
 		if err != nil {
 			err = fmt.Errorf("invalid quote for USD rate %.4f", value)
 		}
+		log.Println(err)
 		return err
 	}
 

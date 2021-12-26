@@ -18,10 +18,8 @@ func createRoutes(app *fiber.App) {
 // createCurrencyRoutes create routes for currency CRUD
 func createCurrencyRoutes(currency fiber.Router) {
 
-	// TODO:  create
-	currency.Post("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello")
-	})
+	currency.Options("/", HelpCurrency)
+	currency.Post("/", NewCurrency)
 
 	// TODO:  read
 	currency.Get("/:symbol?", func(c *fiber.Ctx) error {

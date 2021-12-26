@@ -28,12 +28,6 @@ func Init(dbConnectionString, cacheConnectionString string) error {
 		return err
 	}
 
-	// Initialize business logic validator
-	if err := initValidator(); err != nil {
-		Terminate()
-		return err
-	}
-
 	return nil
 }
 

@@ -1,9 +1,14 @@
 package model
 
 import (
+	"challenge-bravo/helper"
 	"challenge-bravo/model/dao"
+	"fmt"
 	sq "github.com/Masterminds/squirrel"
+	"github.com/jackc/pgconn"
+	"github.com/jackc/pgerrcode"
 	"log"
+	"net/http"
 )
 
 type CurrencyType string
@@ -16,14 +21,14 @@ const (
 
 // Currency Represents a currency, could be a real currency, a crypt currency or a custom currency, created by a user
 type Currency struct {
-	Code       string          `json:"code" validate:"required,max=10,uppercase"` // Code Currency ISO code
-	Name       string          `json:"name" validate:"required,max=100"`          // Name Currency name
-	Type       CurrencyType    `json:"type,omitempty" validate:"oneof=C Y U"`     // Type Currency type
-	Rate       dao.NullFloat64 `json:"rate" validate:"required_if=Type U,gt=0"`   // Rate Currency USD rate, required for custom type only
-	dao.Helper `json:"-" redis:"-" validate:"-"`
+	Code       string          `json:"code"`           // Code Currency ISO code
+	Name       string          `json:"name"`           // Name Currency name
+	Type       CurrencyType    `json:"type,omitempty"` // Type Currency type
+	Rate       dao.NullFloat64 `json:"rate"`           // Rate Currency USD rate, required for custom type only
+	dao.Helper `json:"-" redis:"-"`
 }
 
-func (curr *Currency) New() error {
+func (curr *Currency) New() *dao.Error {
 
 	// Entity validation
 	if err := curr.Validate(); err != nil {
@@ -37,10 +42,13 @@ func (curr *Currency) New() error {
 		Values(curr.Code, curr.Type, curr.Name, curr.Rate)
 
 	// Persist to database and cache
-	return curr.Helper.Save(&builder, "CUR."+curr.Code, curr)
+	if err := curr.Helper.Save(&builder, "CUR."+curr.Code, curr); err != nil {
+		return currencyPersistError(err)
+	}
+	return nil
 }
 
-func (curr *Currency) Save() error {
+func (curr *Currency) Save() *dao.Error {
 
 	// Entity validation
 	if err := curr.Validate(); err != nil {
@@ -55,7 +63,10 @@ func (curr *Currency) Save() error {
 		Suffix("ON CONFLICT ON CONSTRAINT currency_pkey DO UPDATE SET type=$2,name=$3,rate=$4;")
 
 	// Persist to database and cache
-	return curr.Helper.Save(&builder, "CUR."+curr.Code, curr)
+	if err := curr.Helper.Save(&builder, "CUR."+curr.Code, curr); err != nil {
+		return currencyPersistError(err)
+	}
+	return nil
 }
 
 func (curr *Currency) List(values interface{}) error {
@@ -70,8 +81,89 @@ func (curr *Currency) List(values interface{}) error {
 	})
 }
 
-func (curr *Currency) Validate() error {
-	return dao.Validator.Struct(curr)
+func (curr *Currency) Validate() *dao.Error {
+
+	err := dao.Error{
+		Message:    "Invalid currency object",
+		StatusCode: http.StatusBadRequest,
+	}
+
+	// Check if the code exists
+	if len(curr.Code) == 0 {
+		err.Append(fmt.Sprintf("code: code is a required field, for crypto currencies and custom currencies must have from one to ten characters long and for real currencies three characters long"))
+	}
+
+	// Check if the code is uppercase
+	if !helper.IsUpper(curr.Code) {
+		err.Append(fmt.Sprintf("code: currency code must be upper case: %s", curr.Code))
+	}
+
+	// Check currency name
+	if len(curr.Name) == 0 {
+		err.Append(fmt.Sprintf("name: currency name is a required field, must have from one to one hundred characters long"))
+	}
+	if len(curr.Name) > 100 {
+		err.Append(fmt.Sprintf("name: currency name must have from one to one hundred characters long, was provided a string with %d characters", len(curr.Name)))
+	}
+
+	switch curr.Type {
+	case RealCurrency:
+
+		// Check code length
+		if len(curr.Code) != 3 {
+			err.Append(fmt.Sprintf("code: currency code for real currencies must be three characters long, was provideda a string with %d characters: %s", len(curr.Code), curr.Code))
+		}
+
+		// Check if the code contains only letters
+		if !helper.IsLetter(curr.Code) {
+			err.Append(fmt.Sprintf("code: currency code for real currencies must contain only letters: %s", curr.Code))
+		}
+
+		// Check rate
+		if curr.Rate.Valid && curr.Rate.Float64 > 0 {
+			err.Append(fmt.Sprintf("rate: USD conversion rate should be null for real currencies: %.2f", curr.Rate.Float64))
+		}
+
+	case CustomCurrency:
+
+		// Check code length
+		if len(curr.Code) > 10 {
+			err.Append(fmt.Sprintf("code: currency code for custom currencies must have from one to ten characters long, was provideda a string with %d characters: %s", len(curr.Code), curr.Code))
+		}
+
+		// Check rate
+		if !curr.Rate.Valid || curr.Rate.Float64 <= 0 {
+			if curr.Rate.Valid {
+				err.Append(fmt.Sprintf("rate: USD conversion rate should be valid and greather than zero for custom currencies: %.2f", curr.Rate.Float64))
+			} else {
+				err.Append(fmt.Sprintf("rate: USD conversion rate should be valid and greather than zero for custom currencies"))
+			}
+		}
+
+	case CryptoCurrency:
+		// Check code length
+		if len(curr.Code) > 10 {
+			err.Append(fmt.Sprintf("code: currency code for crypto currencies must have from one to ten characters long, was provideda a string with %d characters: %s", len(curr.Code), curr.Code))
+		}
+
+		// Check rate
+		if curr.Rate.Valid && curr.Rate.Float64 > 0 {
+			err.Append(fmt.Sprintf("rate: USD conversion rate should be null for crypto currencies: %.2f", curr.Rate.Float64))
+		}
+
+	default:
+		err.Append(fmt.Sprintf("type: currency type must be one of the following values: %s - real currence; %s - crypto currency; %s - custom currency", RealCurrency, CryptoCurrency, CustomCurrency))
+
+		// Check code length
+		if len(curr.Code) > 10 {
+			err.Append(fmt.Sprintf("code: currency code for custom or crypto currencies must have from one to ten characters long and for real currencies three chracters long, was provideda a string with %d characters: %s", len(curr.Code), curr.Code))
+		}
+	}
+	if len(err.Errors) == 0 {
+		return nil
+	} else {
+		return &err
+	}
 }
 
 func (curr *Currency) String() string {
@@ -79,7 +171,7 @@ func (curr *Currency) String() string {
 }
 
 // SaveCurrencies Save a vector of currencies to the database and cache
-func SaveCurrencies(currencies []Currency) error {
+func SaveCurrencies(currencies []Currency) *dao.Error {
 
 	// Prepare the query
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
@@ -94,10 +186,9 @@ func SaveCurrencies(currencies []Currency) error {
 			builder = builder.Values(cur.Code, cur.Type, cur.Name)
 
 			// Save currency to cache
-			if err = dao.Cache.Set(string(cur.Type)+"."+cur.Code, cur, dao.DefaultCacheTime); err != nil {
-				log.Println(err)
+			if cErr := dao.Cache.Set(string(cur.Type)+"."+cur.Code, cur, dao.DefaultCacheTime); cErr != nil {
+				log.Println(cErr)
 			}
-
 		} else {
 			log.Println(err)
 		}
@@ -105,5 +196,24 @@ func SaveCurrencies(currencies []Currency) error {
 	builder = builder.Suffix("ON CONFLICT ON CONSTRAINT currency_pkey DO NOTHING;")
 
 	// Execute the query
-	return dao.Save(&builder)
+	if err := dao.Save(&builder); err != nil {
+		return currencyPersistError(err)
+	}
+	return nil
+}
+
+// currencyPersistError Generates error objects for currency persist operations
+func currencyPersistError(err error) *dao.Error {
+	if pgErr, ok := err.(*pgconn.PgError); ok {
+		if pgErr.Code == pgerrcode.UniqueViolation {
+			return &dao.Error{
+				Message:    "currency code already exist",
+				StatusCode: http.StatusConflict,
+			}
+		}
+	}
+	return &dao.Error{
+		Message:    http.StatusText(http.StatusInternalServerError),
+		StatusCode: http.StatusInternalServerError,
+	}
 }

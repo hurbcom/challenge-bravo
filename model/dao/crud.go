@@ -13,16 +13,16 @@ import (
 type CRUD interface {
 
 	// New Creates a new entity without updating
-	New() error
+	New() *Error
 
 	// Save Creates or update a new entity
-	Save() error
+	Save() *Error
 
 	// List all database entities
 	List(values interface{}) error
 
 	// Validate Entity business rules
-	Validate() error
+	Validate() *Error
 
 	// String Print a JSON string entity string representation
 	String() string

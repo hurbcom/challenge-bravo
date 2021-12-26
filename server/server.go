@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"log"
 	"os"
 	"os/signal"
@@ -22,8 +23,11 @@ func Start(config Config) {
 
 	// Create the server
 	app := fiber.New(fiber.Config{
-		Prefork: true,
+		//Prefork: true,
 	})
+
+	// Middleware used to recover from a panic event
+	app.Use(recover.New())
 
 	// Create server routes
 	createRoutes(app)

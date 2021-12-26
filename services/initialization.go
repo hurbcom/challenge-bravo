@@ -3,7 +3,6 @@ package services
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"time"
 )
 
@@ -33,19 +32,19 @@ func Init(config Config) error {
 
 	// Start the quote services using a random noise interval to avoid all services updates at the same time
 	if len(config.FixerKey) > 0 {
-		if err := qServices.fixer.Initialize(config.FixerKey, time.Hour*8-(time.Second*time.Duration(rand.Intn(600)))); err != nil {
+		if err := qServices.fixer.Initialize(config.FixerKey, time.Hour*8); err != nil {
 			return err
 		}
 	}
 
 	if len(config.CurrencyLayerKey) > 0 {
-		if err := qServices.currLayer.Initialize(config.CurrencyLayerKey, (time.Hour*8)-(time.Second*time.Duration(rand.Intn(600)))); err != nil {
+		if err := qServices.currLayer.Initialize(config.CurrencyLayerKey, time.Hour*8); err != nil {
 			return err
 		}
 	}
 
 	if len(config.CoinLayerKey) > 0 {
-		if err := qServices.cLayer.Initialize(config.CoinLayerKey, (time.Hour*8)-(time.Second*time.Duration(rand.Intn(600)))); err != nil {
+		if err := qServices.cLayer.Initialize(config.CoinLayerKey, time.Hour*8); err != nil {
 			return err
 		}
 	}
