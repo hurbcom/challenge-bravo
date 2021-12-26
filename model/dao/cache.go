@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const defaultCacheTime = time.Hour
+const DefaultCacheTime = time.Hour
 
 // CacheContainer variables
 type CacheContainer struct {

@@ -55,7 +55,7 @@ func (helper *Helper) List(builder *squirrel.SelectBuilder, values interface{}, 
 	if slice.Kind() == reflect.Slice {
 		for i := 0; i < slice.Len(); i++ {
 			entity := slice.Index(i).Interface()
-			if err = Cache.Set(cacheKey(entity), entity, defaultCacheTime); err != nil {
+			if err = Cache.Set(cacheKey(entity), entity, DefaultCacheTime); err != nil {
 				log.Println(err)
 				return err
 			}
@@ -94,7 +94,7 @@ func (helper *Helper) Save(builder *squirrel.InsertBuilder, cacheKey string, cac
 
 	// Update cache value if a key was provided
 	if len(cacheKey) > 0 {
-		if err = Cache.Set(cacheKey, cacheValue, defaultCacheTime); err != nil {
+		if err = Cache.Set(cacheKey, cacheValue, DefaultCacheTime); err != nil {
 			log.Println(err)
 			if errTx := tx.Rollback(context.Background()); errTx != nil {
 				log.Println(errTx)
@@ -120,4 +120,23 @@ func (helper *Helper) String(value interface{}) string {
 		return ""
 	}
 	return string(out)
+}
+
+// Save an entity to database. Where builder is the insert query builder to be executed
+func Save(builder *squirrel.InsertBuilder) error {
+
+	// Create the query
+	query, args, err := builder.ToSql()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	// Execute the query
+	if _, err = db.poll.Exec(context.Background(), query, args...); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
 }

@@ -3,6 +3,7 @@ package model
 import (
 	"challenge-bravo/model/dao"
 	sq "github.com/Masterminds/squirrel"
+	"log"
 )
 
 type CurrencyType string
@@ -15,10 +16,10 @@ const (
 
 // Currency Represents a currency, could be a real currency, a crypt currency or a custom currency, created by a user
 type Currency struct {
-	Code       string          `json:"code" validate:"required,max=3,uppercase"` // Code Currency ISO code
-	Name       string          `json:"name" validate:"required,max=100"`         // Name Currency name
-	Type       CurrencyType    `json:"type,omitempty" validate:"oneof=C Y U"`    // Type Currency type
-	Rate       dao.NullFloat64 `json:"rate" validate:"required_if=Type U,gt=0"`  // Rate Currency USD rate, required for custom type only
+	Code       string          `json:"code" validate:"required,max=10,uppercase"` // Code Currency ISO code
+	Name       string          `json:"name" validate:"required,max=100"`          // Name Currency name
+	Type       CurrencyType    `json:"type,omitempty" validate:"oneof=C Y U"`     // Type Currency type
+	Rate       dao.NullFloat64 `json:"rate" validate:"required_if=Type U,gt=0"`   // Rate Currency USD rate, required for custom type only
 	dao.Helper `json:"-" redis:"-" validate:"-"`
 }
 
@@ -29,7 +30,7 @@ func (curr *Currency) New() error {
 		return err
 	}
 
-	// Query prepare
+	// Prepare the query
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
 		Insert("currency").
 		Columns("code", "type", "name", "rate").
@@ -46,7 +47,7 @@ func (curr *Currency) Save() error {
 		return err
 	}
 
-	// Query prepare
+	// Prepare the query
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
 		Insert("currency").
 		Columns("code", "type", "name", "rate").
@@ -75,4 +76,34 @@ func (curr *Currency) Validate() error {
 
 func (curr *Currency) String() string {
 	return curr.Helper.String(curr)
+}
+
+// SaveCurrencies Save a vector of currencies to the database and cache
+func SaveCurrencies(currencies []Currency) error {
+
+	// Prepare the query
+	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
+		Insert("currency").
+		Columns("code", "type", "name")
+	for _, cur := range currencies {
+
+		// Validates the actual currency and if it's ok put at the insert statement
+		if err := cur.Validate(); err == nil {
+
+			// Append to the query
+			builder = builder.Values(cur.Code, cur.Type, cur.Name)
+
+			// Save currency to cache
+			if err = dao.Cache.Set(string(cur.Type)+"."+cur.Code, cur, dao.DefaultCacheTime); err != nil {
+				log.Println(err)
+			}
+
+		} else {
+			log.Println(err)
+		}
+	}
+	builder = builder.Suffix("ON CONFLICT ON CONSTRAINT currency_pkey DO NOTHING;")
+
+	// Execute the query
+	return dao.Save(&builder)
 }

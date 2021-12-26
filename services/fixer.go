@@ -1,6 +1,7 @@
 package services
 
 import (
+	"challenge-bravo/model"
 	"challenge-bravo/model/dao"
 	"fmt"
 	"log"
@@ -8,10 +9,11 @@ import (
 )
 
 const (
-	fixerEndPoint = "http://data.fixer.io/api/latest"
+	fixerEndPoint = "http://data.fixer.io/api/"
 )
 
 type fixer struct {
+	requestParams map[string]string
 	baseQuote
 }
 
@@ -19,6 +21,23 @@ func (fixer *fixer) Initialize(key string, refreshTimeout time.Duration) error {
 
 	// Common initialization procedures
 	_ = fixer.baseQuote.Initialize(key, refreshTimeout)
+
+	// Get a list of available coins and currencies
+	var currencyList listResponse
+	fixer.requestParams = make(map[string]string)
+	fixer.requestParams["access_key"] = fixer.key
+	if err := fixer.request(fixerEndPoint+"symbols", fixer.requestParams, &currencyList); err != nil || !currencyList.Success {
+		if !currencyList.Success {
+			err = fmt.Errorf(currencyList.Error.Type)
+			log.Println(err)
+		}
+		return err
+	}
+
+	// Save the list to the database and cache
+	if err := model.SaveCurrencies(currencyList.getCurrencies()); err != nil {
+		return err
+	}
 
 	// CacheContainer warn up
 	if value, err := fixer.Quote("USD"); err != nil || value != 1 {
@@ -45,9 +64,7 @@ func (fixer *fixer) Quote(symbol string) (float64, error) {
 
 		// Retrieve most recent quotes from service
 		var latest quoteResponse
-		params := make(map[string]string)
-		params["access_key"] = fixer.key
-		if err := fixer.request(fixerEndPoint, params, &latest); err != nil || !latest.Success {
+		if err := fixer.request(fixerEndPoint+"latest", fixer.requestParams, &latest); err != nil || !latest.Success {
 			if !latest.Success {
 				err = fmt.Errorf(latest.Error.Type)
 			}

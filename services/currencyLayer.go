@@ -1,6 +1,7 @@
 package services
 
 import (
+	"challenge-bravo/model"
 	"challenge-bravo/model/dao"
 	"fmt"
 	"log"
@@ -8,10 +9,11 @@ import (
 )
 
 const (
-	currencyLayerEndPoint = "http://api.currencylayer.com/live"
+	currencyLayerEndPoint = "http://api.currencylayer.com/"
 )
 
 type currencyLayer struct {
+	requestParams map[string]string
 	baseQuote
 }
 
@@ -19,6 +21,23 @@ func (currencyLayer *currencyLayer) Initialize(key string, refreshTimeout time.D
 
 	// Common initialization procedures
 	_ = currencyLayer.baseQuote.Initialize(key, refreshTimeout)
+
+	// Get a list of available coins and currencies
+	var currencyList listResponse
+	currencyLayer.requestParams = make(map[string]string)
+	currencyLayer.requestParams["access_key"] = currencyLayer.key
+	if err := currencyLayer.request(currencyLayerEndPoint+"list", currencyLayer.requestParams, &currencyList); err != nil || !currencyList.Success {
+		if !currencyList.Success {
+			err = fmt.Errorf(currencyList.Error.Type)
+			log.Println(err)
+		}
+		return err
+	}
+
+	// Save the list to the database and cache
+	if err := model.SaveCurrencies(currencyList.getCurrencies()); err != nil {
+		return err
+	}
 
 	// CacheContainer warn up
 	if value, err := currencyLayer.Quote("USD"); err != nil || value != 1 {
@@ -45,9 +64,7 @@ func (currencyLayer *currencyLayer) Quote(symbol string) (float64, error) {
 
 		// Retrieve most recent quotes from service
 		var latest quoteResponse
-		params := make(map[string]string)
-		params["access_key"] = currencyLayer.key
-		if err := currencyLayer.request(currencyLayerEndPoint, params, &latest); err != nil || !latest.Success {
+		if err := currencyLayer.request(currencyLayerEndPoint+"live", currencyLayer.requestParams, &latest); err != nil || !latest.Success {
 			if !latest.Success {
 				err = fmt.Errorf(latest.Error.Type)
 			}

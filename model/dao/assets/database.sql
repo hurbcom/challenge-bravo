@@ -25,14 +25,6 @@ $$
         COMMENT ON COLLATION ignore_case_accents
             IS 'Case insensitive and accents ignored collation';
 
-        -- Create currency code data type
-        IF NOT EXISTS(SELECT FROM pg_type WHERE typname = 'currency_code') THEN
-            CREATE DOMAIN currency_code
-                AS character varying(3)
-                COLLATE ignore_case_accents
-                NOT NULL;
-        END IF;
-
         -- Create currency type data type
         IF NOT EXISTS(SELECT FROM pg_type WHERE typname = 'currency_type') THEN
             CREATE TYPE currency_type AS ENUM ('C', 'Y', 'U');
@@ -42,30 +34,6 @@ $$
                     - C : Currency
                     - Y : Crypto
                     - U : Custom currency';
-        END IF;
-
-        -- Create names data type
-        IF NOT EXISTS(SELECT FROM pg_type WHERE typname = 'name') THEN
-            CREATE DOMAIN name
-                AS character varying(100)
-                NOT NULL;
-        END IF;
-
-        -- Create rates type data type
-        IF NOT EXISTS(SELECT FROM pg_type WHERE typname = 'rate') THEN
-            CREATE DOMAIN rate
-                AS numeric(12, 4);
-
-            ALTER DOMAIN rate
-                ADD CONSTRAINT greater_zero CHECK (VALUE > 0);
-        END IF;
-
-        -- Create timestamp data type
-        IF NOT EXISTS(SELECT FROM pg_type WHERE typname = 'row_timestamp') THEN
-            CREATE DOMAIN row_timestamp
-                AS timestamp with time zone
-                DEFAULT now()
-                NOT NULL;
         END IF;
 
         -- create trigger function to set update_at row
@@ -88,14 +56,13 @@ $$
         -- Create currency table
         CREATE TABLE IF NOT EXISTS currency
         (
-            code       currency_code NOT NULL,
-            type       currency_type NOT NULL,
-            name       name,
-            rate       rate,
-            created_at row_timestamp,
-            updated_at row_timestamp,
-            CONSTRAINT currency_pkey PRIMARY KEY (code),
-            CONSTRAINT currency_type_rate_check CHECK ((type = 'U' AND rate > 0) OR (type <> 'U' AND rate = 0))
+            code       character varying(10) COLLATE ignore_case_accents NOT NULL,
+            type       currency_type                                     NOT NULL,
+            name       character varying(100)                            NOT NULL,
+            rate       numeric(12, 4),
+            created_at timestamp with time zone                          NOT NULL DEFAULT now(),
+            updated_at timestamp with time zone                          NOT NULL DEFAULT now(),
+            CONSTRAINT currency_pkey PRIMARY KEY (code)
         );
 
         COMMENT ON COLUMN currency.code IS 'Currency code';
@@ -104,7 +71,6 @@ $$
         COMMENT ON COLUMN currency.rate IS 'Custom currency USD rate';
         COMMENT ON COLUMN currency.created_at IS 'Creation timestamp';
         COMMENT ON COLUMN currency.updated_at IS 'Update timestamp';
-        COMMENT ON CONSTRAINT currency_type_rate_check ON currency IS 'Validates currency type vs USD rate consistency';
 
         CREATE TRIGGER currency_trigger
             BEFORE UPDATE
@@ -119,8 +85,8 @@ $$
         (
             key        character varying(50) COLLATE public.ignore_case_accents NOT NULL,
             value      character varying(50)                                    NOT NULL,
-            created_at row_timestamp,
-            updated_at row_timestamp,
+            created_at timestamp with time zone                                 NOT NULL DEFAULT now(),
+            updated_at timestamp with time zone                                 NOT NULL DEFAULT now(),
             CONSTRAINT config_pkey PRIMARY KEY (key)
         );
 
@@ -130,6 +96,6 @@ $$
             FOR EACH ROW
         EXECUTE FUNCTION trigger_set_timestamp();
 
-        INSERT INTO config(key,value) VALUES ('version','{{.Version}}');
+        INSERT INTO config(key, value) VALUES ('version', '{{.Version}}');
     END
 $$;

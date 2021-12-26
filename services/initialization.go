@@ -24,14 +24,18 @@ type services struct {
 // Init Initialize quote service clients and warms cache
 func Init(config Config) error {
 
+	// At least on currency service is required
 	if len(config.CurrencyLayerKey) == 0 && len(config.CoinLayerKey) == 0 {
 		err := fmt.Errorf("missing _fixer or currency layer api key")
 		log.Println(err)
 		return err
 	}
 
-	if err := qServices.fixer.Initialize(config.FixerKey, time.Hour*8-(time.Second*time.Duration(rand.Intn(600)))); err != nil {
-		return err
+	// Start the quote services using a random noise interval to avoid all services updates at the same time
+	if len(config.FixerKey) > 0 {
+		if err := qServices.fixer.Initialize(config.FixerKey, time.Hour*8-(time.Second*time.Duration(rand.Intn(600)))); err != nil {
+			return err
+		}
 	}
 
 	if len(config.CurrencyLayerKey) > 0 {
