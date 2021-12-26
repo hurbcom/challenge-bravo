@@ -20,26 +20,18 @@ func createCurrencyRoutes(currency fiber.Router) {
 
 	currency.Options("/", HelpCurrency)
 
-	// New currency
+	// New custom currency
 	currency.Post("/", NewCurrency)
 
-	// Read a currency or list all currencies if no symbol was provided
+	// Reads a single currency or list of all currencies
 	currency.Get("/:symbol?", GetCurrency)
 
-	// TODO:  update
-	currency.Put("/:symbol", func(c *fiber.Ctx) error {
-		return c.SendString("Hello")
-	})
+	// Update a custom currency
+	currency.Put("/:symbol", UpdateCurrency)
+	currency.Patch("/:symbol", UpdateCurrency)
 
-	// TODO:  update (partial)
-	currency.Patch("/:symbol", func(c *fiber.Ctx) error {
-		return c.SendString("Hello")
-	})
-
-	// TODO: delete
-	currency.Delete("/:symbol", func(c *fiber.Ctx) error {
-		return c.SendString("Hello")
-	})
+	// Delete a custom currency
+	currency.Delete("/:symbol", DeleteCurrency)
 
 }
 

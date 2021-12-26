@@ -24,6 +24,9 @@ type CRUD interface {
 	// Load entity using its primary key value
 	Load() *Error
 
+	// Delete entity using its primary key value
+	Delete() *Error
+
 	// Validate Entity business rules
 	Validate() *Error
 
@@ -36,10 +39,11 @@ type Helper struct {
 }
 
 // List entities from database and refreshes the cache. Where builder is the select query builder to be executed,
-// values is the vector point where the results will be returned and cacheKey is the function that generates cache keys
+// values is the vector pointer where the results will be returned and cacheKey is the function that generates cache keys
 // it will receive as parameter the current entity and should return it cache key
 func (helper *Helper) List(builder *squirrel.SelectBuilder, values interface{}, listCacheKey string, itemCacheKey func(interface{}) string) error {
 	return Cache.Once(listCacheKey, values, DefaultCacheTime, func() (interface{}, error) {
+
 		// Create query
 		query, args, err := builder.ToSql()
 		if err != nil {
@@ -68,8 +72,10 @@ func (helper *Helper) List(builder *squirrel.SelectBuilder, values interface{}, 
 	})
 }
 
+// Get a single entity from database/cache. Where builder is the select query builder to be executed, returnValue
+// is the entity pointer where the result will be returned and cacheKey is the key where the entity will be stored at
+// the cache
 func (helper *Helper) Get(builder *squirrel.SelectBuilder, returnValue interface{}, cacheKey string) error {
-
 	return Cache.Once(cacheKey, returnValue, DefaultCacheTime, func() (interface{}, error) {
 
 		// Create query
@@ -118,6 +124,53 @@ func (helper *Helper) Save(builder *squirrel.InsertBuilder, cacheKey string, cac
 	// Update cache value if a key was provided
 	if len(cacheKey) > 0 {
 		if err = Cache.Set(cacheKey, cacheValue, DefaultCacheTime); err != nil {
+			log.Println(err)
+			if errTx := tx.Rollback(context.Background()); errTx != nil {
+				log.Println(errTx)
+			}
+			return err
+		}
+	}
+
+	// Commit transaction
+	if err = tx.Commit(context.Background()); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+// Delete an entity from cache/database. Where builder is the delete query builder to be executed, cacheKey is the
+// entity cache key to be deleted from the cache
+func (helper *Helper) Delete(builder *squirrel.DeleteBuilder, cacheKey string) error {
+
+	// Create the query
+	query, args, err := builder.ToSql()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	// Transaction start
+	tx, err := db.poll.Begin(context.Background())
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	// Execute the query
+	if _, err = tx.Exec(context.Background(), query, args...); err != nil {
+		log.Println(err)
+		if errTx := tx.Rollback(context.Background()); errTx != nil {
+			log.Println(errTx)
+		}
+		return err
+	}
+
+	// Update cache value if a key was provided
+	if len(cacheKey) > 0 {
+		if err = Cache.Del(cacheKey); err != nil {
 			log.Println(err)
 			if errTx := tx.Rollback(context.Background()); errTx != nil {
 				log.Println(errTx)

@@ -1,7 +1,6 @@
 package model
 
 import (
-	"challenge-bravo/helper"
 	"challenge-bravo/model/dao"
 	"fmt"
 	sq "github.com/Masterminds/squirrel"
@@ -19,7 +18,8 @@ const (
 	CustomCurrency CurrencyType = "U"
 )
 
-// Currency Represents a currency, could be a real currency, a crypt currency or a custom currency, created by a user
+// Currency Represents a currency, could be a real currency, a crypt currency
+// or a custom currency, created by a user
 type Currency struct {
 	Code       string       `json:"code"`           // Code Currency ISO code
 	Name       string       `json:"name"`           // Name Currency name
@@ -105,7 +105,7 @@ func (curr *Currency) Validate() *dao.Error {
 	}
 
 	// Check if the code is uppercase
-	if !helper.IsValidCryptoCode(curr.Code) {
+	if !dao.IsValidCryptoCode(curr.Code) {
 		err.Append(fmt.Sprintf("code: currency code must be upper case: %s", curr.Code))
 	}
 
@@ -126,7 +126,7 @@ func (curr *Currency) Validate() *dao.Error {
 		}
 
 		// Check if the code contains only letters
-		if !helper.IsLetter(curr.Code) {
+		if !dao.IsLetter(curr.Code) {
 			err.Append(fmt.Sprintf("code: currency code for real currencies must contain only letters: %s", curr.Code))
 		}
 
@@ -191,6 +191,22 @@ func (curr *Currency) Load() *dao.Error {
 	if err := curr.Helper.Get(&builder, curr, "CUR."+curr.Code); err != nil {
 		return prepareCurrencyErrors(err)
 	}
+
+	return nil
+}
+
+func (curr *Currency) Delete() *dao.Error {
+
+	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
+		Delete("currency").Where(sq.Eq{"code": curr.Code})
+
+	// Delete from database/cache
+	if err := curr.Helper.Delete(&builder, "CUR."+curr.Code); err != nil {
+		return prepareCurrencyErrors(err)
+	}
+
+	// Invalidate currency list cache
+	_ = dao.Cache.Del("CUR.=LIST=")
 
 	return nil
 }
