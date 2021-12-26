@@ -18,8 +18,6 @@ func createRoutes(app *fiber.App) {
 // createCurrencyRoutes create routes for currency CRUD
 func createCurrencyRoutes(currency fiber.Router) {
 
-	currency.Options("/", HelpCurrency)
-
 	// New custom currency
 	currency.Post("/", NewCurrency)
 
@@ -37,8 +35,7 @@ func createCurrencyRoutes(currency fiber.Router) {
 
 // createQuoteRoutes create routes for currency quotation
 func createQuoteRoutes(quote fiber.Router) {
-	// TODO: quote
-	quote.Get("/:symbol?", func(c *fiber.Ctx) error {
-		return c.SendString("Hello")
-	})
+
+	// Make a currency conversion
+	quote.Get("/", Quote)
 }

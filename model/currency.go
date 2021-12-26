@@ -1,7 +1,8 @@
 package model
 
 import (
-	"challenge-bravo/model/dao"
+	dao2 "challenge-bravo/dao"
+	"challenge-bravo/helper"
 	"fmt"
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgconn"
@@ -21,14 +22,14 @@ const (
 // Currency Represents a currency, could be a real currency, a crypt currency
 // or a custom currency, created by a user
 type Currency struct {
-	Code       string       `json:"code"`           // Code Currency ISO code
-	Name       string       `json:"name"`           // Name Currency name
-	Type       CurrencyType `json:"type,omitempty"` // Type Currency type
-	Rate       *float64     `json:"rate,omitempty"` // Rate Currency USD rate, required for custom type only
-	dao.Helper `json:"-" redis:"-"`
+	Code        string       `json:"code"`           // Code Currency ISO code
+	Name        string       `json:"name"`           // Name Currency name
+	Type        CurrencyType `json:"type,omitempty"` // Type Currency type
+	Rate        *float64     `json:"rate,omitempty"` // Rate Currency USD rate, required for custom type only
+	dao2.Helper `json:"-" redis:"-"`
 }
 
-func (curr *Currency) New() *dao.Error {
+func (curr *Currency) New() *Error {
 
 	// Entity validation
 	if err := curr.Validate(); err != nil {
@@ -47,12 +48,12 @@ func (curr *Currency) New() *dao.Error {
 	}
 
 	// Invalidate currency list cache
-	_ = dao.Cache.Del("CUR.=LIST=")
+	_ = dao2.Cache.Del("CUR.=LIST=")
 
 	return nil
 }
 
-func (curr *Currency) Save() *dao.Error {
+func (curr *Currency) Save() *Error {
 
 	// Entity validation
 	if err := curr.Validate(); err != nil {
@@ -72,12 +73,12 @@ func (curr *Currency) Save() *dao.Error {
 	}
 
 	// Invalidate currency list cache
-	_ = dao.Cache.Del("CUR.=LIST=")
+	_ = dao2.Cache.Del("CUR.=LIST=")
 
 	return nil
 }
 
-func (curr *Currency) List(values interface{}) *dao.Error {
+func (curr *Currency) List(values interface{}) *Error {
 
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
 		Select("code", "type", "name", "rate").
@@ -92,9 +93,9 @@ func (curr *Currency) List(values interface{}) *dao.Error {
 	return nil
 }
 
-func (curr *Currency) Validate() *dao.Error {
+func (curr *Currency) Validate() *Error {
 
-	err := dao.Error{
+	err := Error{
 		Message:    "Invalid currency object",
 		StatusCode: http.StatusBadRequest,
 	}
@@ -105,7 +106,7 @@ func (curr *Currency) Validate() *dao.Error {
 	}
 
 	// Check if the code is uppercase
-	if !dao.IsValidCryptoCode(curr.Code) {
+	if !helper.IsValidCryptoCode(curr.Code) {
 		err.Append(fmt.Sprintf("code: currency code must be upper case: %s", curr.Code))
 	}
 
@@ -126,7 +127,7 @@ func (curr *Currency) Validate() *dao.Error {
 		}
 
 		// Check if the code contains only letters
-		if !dao.IsLetter(curr.Code) {
+		if !helper.IsLetter(curr.Code) {
 			err.Append(fmt.Sprintf("code: currency code for real currencies must contain only letters: %s", curr.Code))
 		}
 
@@ -181,7 +182,7 @@ func (curr *Currency) String() string {
 	return curr.Helper.String(curr)
 }
 
-func (curr *Currency) Load() *dao.Error {
+func (curr *Currency) Load() *Error {
 
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
 		Select("code", "type", "name", "rate").
@@ -195,7 +196,7 @@ func (curr *Currency) Load() *dao.Error {
 	return nil
 }
 
-func (curr *Currency) Delete() *dao.Error {
+func (curr *Currency) Delete() *Error {
 
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
 		Delete("currency").Where(sq.Eq{"code": curr.Code})
@@ -206,13 +207,13 @@ func (curr *Currency) Delete() *dao.Error {
 	}
 
 	// Invalidate currency list cache
-	_ = dao.Cache.Del("CUR.=LIST=")
+	_ = dao2.Cache.Del("CUR.=LIST=")
 
 	return nil
 }
 
 // SaveCurrencies Save a vector of currencies to the database and cache
-func SaveCurrencies(currencies []Currency) *dao.Error {
+func SaveCurrencies(currencies []Currency) *Error {
 
 	// Prepare the query
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
@@ -227,7 +228,7 @@ func SaveCurrencies(currencies []Currency) *dao.Error {
 			builder = builder.Values(cur.Code, cur.Type, cur.Name)
 
 			// Save currency to cache
-			if cErr := dao.Cache.Set("CUR."+cur.Code, cur, dao.DefaultCacheTime); cErr != nil {
+			if cErr := dao2.Cache.Set("CUR."+cur.Code, cur, dao2.DefaultCacheTime); cErr != nil {
 				log.Println(cErr)
 			}
 		} else {
@@ -237,36 +238,36 @@ func SaveCurrencies(currencies []Currency) *dao.Error {
 	builder = builder.Suffix("ON CONFLICT ON CONSTRAINT currency_pkey DO NOTHING;")
 
 	// Execute the query
-	if err := dao.Save(&builder); err != nil {
+	if err := dao2.Save(&builder); err != nil {
 		return prepareCurrencyErrors(err)
 	}
 	return nil
 }
 
 // prepareCurrencyErrors Generates error objects for currency persist operations
-func prepareCurrencyErrors(err error) *dao.Error {
+func prepareCurrencyErrors(err error) *Error {
 
 	switch t := err.(type) {
 	case *pgconn.PgError:
 		if t.Code == pgerrcode.UniqueViolation {
-			return &dao.Error{
+			return &Error{
 				Message:    "currency code already exist",
 				StatusCode: http.StatusConflict,
 			}
 		}
-		return &dao.Error{
+		return &Error{
 			Message:    http.StatusText(http.StatusInternalServerError),
 			StatusCode: http.StatusInternalServerError,
 		}
 	default:
 		msg := t.Error()
 		if msg == "no rows in result set" {
-			return &dao.Error{
+			return &Error{
 				Message:    fmt.Sprintf("currency not fount"),
 				StatusCode: http.StatusNotFound,
 			}
 		}
-		return &dao.Error{
+		return &Error{
 			Message:    http.StatusText(http.StatusInternalServerError),
 			StatusCode: http.StatusInternalServerError,
 		}

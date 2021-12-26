@@ -1,8 +1,8 @@
 package services
 
 import (
+	"challenge-bravo/dao"
 	"challenge-bravo/model"
-	"challenge-bravo/model/dao"
 	"fmt"
 	"log"
 	"time"
@@ -39,7 +39,7 @@ func (coinLayer *coinLayer) Initialize(key string, refreshTimeout time.Duration)
 		return err
 	}
 
-	// CacheContainer warn up
+	// CacheContainer warm up
 	if value, err := coinLayer.Quote("BTC"); err != nil || value <= 0 {
 		if err != nil {
 			err = fmt.Errorf("invalid quote for BTC rate %.4f", value)

@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"challenge-bravo/model"
 	"context"
 	"encoding/json"
 	"github.com/Masterminds/squirrel"
@@ -13,22 +14,22 @@ import (
 type CRUD interface {
 
 	// New Creates a new entity without updating
-	New() *Error
+	New() *model.Error
 
 	// Save Creates or update a new entity
-	Save() *Error
+	Save() *model.Error
 
 	// List all database entities
-	List(values interface{}) *Error
+	List(values interface{}) *model.Error
 
 	// Load entity using its primary key value
-	Load() *Error
+	Load() *model.Error
 
 	// Delete entity using its primary key value
-	Delete() *Error
+	Delete() *model.Error
 
 	// Validate Entity business rules
-	Validate() *Error
+	Validate() *model.Error
 
 	// String Print a JSON string entity string representation
 	String() string
@@ -87,7 +88,7 @@ func (helper *Helper) Get(builder *squirrel.SelectBuilder, returnValue interface
 
 		// Execute query
 		if err = pgxscan.Get(context.Background(), db.poll, returnValue, query, args...); err != nil {
-			log.Println(err)
+			//log.Println(err)
 			return nil, err
 		}
 		return returnValue, nil

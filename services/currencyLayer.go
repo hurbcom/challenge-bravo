@@ -1,8 +1,8 @@
 package services
 
 import (
+	"challenge-bravo/dao"
 	"challenge-bravo/model"
-	"challenge-bravo/model/dao"
 	"fmt"
 	"log"
 	"time"
@@ -39,7 +39,7 @@ func (currencyLayer *currencyLayer) Initialize(key string, refreshTimeout time.D
 		return err
 	}
 
-	// CacheContainer warn up
+	// CacheContainer warm up
 	if value, err := currencyLayer.Quote("USD"); err != nil || value != 1 {
 		if err != nil {
 			err = fmt.Errorf("invalid quote for USD rate %.4f", value)

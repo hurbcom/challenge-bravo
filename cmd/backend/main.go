@@ -1,7 +1,7 @@
 package main
 
 import (
-	"challenge-bravo/model/dao"
+	"challenge-bravo/dao"
 	"challenge-bravo/server"
 	"challenge-bravo/services"
 	"flag"

@@ -1,8 +1,8 @@
 package services
 
 import (
+	"challenge-bravo/dao"
 	"challenge-bravo/model"
-	"challenge-bravo/model/dao"
 	"fmt"
 	"log"
 	"time"
@@ -39,7 +39,7 @@ func (fixer *fixer) Initialize(key string, refreshTimeout time.Duration) error {
 		return err
 	}
 
-	// CacheContainer warn up
+	// CacheContainer warm up
 	if value, err := fixer.Quote("USD"); err != nil || value != 1 {
 		if err != nil {
 			err = fmt.Errorf("invalid quote for USD rate %.4f", value)
