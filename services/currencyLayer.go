@@ -3,8 +3,10 @@ package services
 import (
 	"challenge-bravo/dao"
 	"challenge-bravo/model"
+	"errors"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -28,7 +30,7 @@ func (currencyLayer *currencyLayer) Initialize(key string, refreshTimeout time.D
 	currencyLayer.requestParams["access_key"] = currencyLayer.key
 	if err := currencyLayer.request(currencyLayerEndPoint+"list", currencyLayer.requestParams, &currencyList); err != nil || !currencyList.Success {
 		if !currencyList.Success {
-			err = fmt.Errorf(currencyList.Error.Type)
+			err = errors.New(strings.TrimSpace(currencyList.Error.Type + " " + currencyList.Error.Info))
 			log.Println(err)
 		}
 		return err
@@ -67,7 +69,7 @@ func (currencyLayer *currencyLayer) Quote(symbol string) (float64, error) {
 		var latest quoteResponse
 		if err := currencyLayer.request(currencyLayerEndPoint+"live", currencyLayer.requestParams, &latest); err != nil || !latest.Success {
 			if !latest.Success {
-				err = fmt.Errorf(latest.Error.Type)
+				err = errors.New(strings.TrimSpace(latest.Error.Type + " " + latest.Error.Info))
 			}
 			return 0, err
 		}
@@ -76,7 +78,7 @@ func (currencyLayer *currencyLayer) Quote(symbol string) (float64, error) {
 		for k, v := range latest.Quotes {
 			key := k[3:]
 			if key != symbol {
-				if err := dao.Cache.Set("C."+k, v, currencyLayer.refreshTimeout); err != nil {
+				if err := dao.Cache.Set("C."+key, v, currencyLayer.refreshTimeout); err != nil {
 					return 0, err
 				}
 			}

@@ -116,6 +116,7 @@ func (baseQuote *baseQuote) request(endPoint string, params map[string]string, r
 	}
 
 	// Execute the request
+	time.Sleep(time.Second * 2) // Sleeps a short time due free plan limitation
 	resp, err := http.Get(qURL.String())
 	if err != nil {
 		log.Println(err)

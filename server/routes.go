@@ -37,5 +37,5 @@ func createCurrencyRoutes(currency fiber.Router) {
 func createQuoteRoutes(quote fiber.Router) {
 
 	// Make a currency conversion
-	quote.Get("/", Quote)
+	quote.Get("/", Convert)
 }

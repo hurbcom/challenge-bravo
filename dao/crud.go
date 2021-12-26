@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"challenge-bravo/model"
 	"context"
 	"encoding/json"
 	"github.com/Masterminds/squirrel"
@@ -14,22 +13,22 @@ import (
 type CRUD interface {
 
 	// New Creates a new entity without updating
-	New() *model.Error
+	New() *Error
 
 	// Save Creates or update a new entity
-	Save() *model.Error
+	Save() *Error
 
 	// List all database entities
-	List(values interface{}) *model.Error
+	List(values interface{}) *Error
 
 	// Load entity using its primary key value
-	Load() *model.Error
+	Load() *Error
 
 	// Delete entity using its primary key value
-	Delete() *model.Error
+	Delete() *Error
 
 	// Validate Entity business rules
-	Validate() *model.Error
+	Validate() *Error
 
 	// String Print a JSON string entity string representation
 	String() string

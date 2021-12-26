@@ -72,3 +72,8 @@ func (cache *CacheContainer) Set(key string, value interface{}, timeOut time.Dur
 func (cache *CacheContainer) Del(key string) error {
 	return cache.cache.Delete(context.Background(), key)
 }
+
+// Get retrieves a key from the cache
+func (cache *CacheContainer) Get(key string, value interface{}) error {
+	return cache.cache.Get(context.Background(), key, value)
+}

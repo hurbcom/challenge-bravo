@@ -3,8 +3,10 @@ package services
 import (
 	"challenge-bravo/dao"
 	"challenge-bravo/model"
+	"errors"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -28,7 +30,7 @@ func (fixer *fixer) Initialize(key string, refreshTimeout time.Duration) error {
 	fixer.requestParams["access_key"] = fixer.key
 	if err := fixer.request(fixerEndPoint+"symbols", fixer.requestParams, &currencyList); err != nil || !currencyList.Success {
 		if !currencyList.Success {
-			err = fmt.Errorf(currencyList.Error.Type)
+			err = errors.New(strings.TrimSpace(currencyList.Error.Type + " " + currencyList.Error.Info))
 			log.Println(err)
 		}
 		return err
@@ -66,7 +68,7 @@ func (fixer *fixer) Quote(symbol string) (float64, error) {
 		var latest quoteResponse
 		if err := fixer.request(fixerEndPoint+"latest", fixer.requestParams, &latest); err != nil || !latest.Success {
 			if !latest.Success {
-				err = fmt.Errorf(latest.Error.Type)
+				err = errors.New(strings.TrimSpace(latest.Error.Type + " " + latest.Error.Info))
 			}
 			return 0, err
 		}
@@ -74,7 +76,7 @@ func (fixer *fixer) Quote(symbol string) (float64, error) {
 		// Obtain USD quote to rebase the quote (workaround for free plan)
 		usd, exist := latest.Rates["USD"]
 		if !exist {
-			return 0, fmt.Errorf("USD quote not found")
+			return 0, errors.New("USD quote not found")
 		}
 
 		// Save all other values on the cache

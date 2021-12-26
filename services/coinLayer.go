@@ -3,8 +3,10 @@ package services
 import (
 	"challenge-bravo/dao"
 	"challenge-bravo/model"
+	"errors"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -28,7 +30,7 @@ func (coinLayer *coinLayer) Initialize(key string, refreshTimeout time.Duration)
 	coinLayer.requestParams["access_key"] = coinLayer.key
 	if err := coinLayer.request(coinLayerEndPoint+"list", coinLayer.requestParams, &currencyList); err != nil || !currencyList.Success {
 		if !currencyList.Success {
-			err = fmt.Errorf(currencyList.Error.Type)
+			err = errors.New(strings.TrimSpace(currencyList.Error.Type + " " + currencyList.Error.Info))
 			log.Println(err)
 		}
 		return err
@@ -66,7 +68,7 @@ func (coinLayer *coinLayer) Quote(symbol string) (float64, error) {
 		var latest quoteResponse
 		if err := coinLayer.request(coinLayerEndPoint+"live", coinLayer.requestParams, &latest); err != nil || !latest.Success {
 			if !latest.Success {
-				err = fmt.Errorf(latest.Error.Type)
+				err = errors.New(strings.TrimSpace(latest.Error.Type + " " + latest.Error.Info))
 			}
 			return 0, err
 		}

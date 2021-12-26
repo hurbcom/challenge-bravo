@@ -1,6 +1,7 @@
 package server
 
 import (
+	"challenge-bravo/dao"
 	"challenge-bravo/model"
 	"github.com/gofiber/fiber/v2"
 	"strings"
@@ -12,7 +13,7 @@ func NewCurrency(c *fiber.Ctx) error {
 	// Marshal json body to struct
 	var currency model.Currency
 	if err := c.BodyParser(&currency); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(model.NewMultipleErrors(
+		return c.Status(fiber.StatusBadRequest).JSON(dao.NewMultipleErrors(
 			"request body should be a JSON object", err))
 	}
 
@@ -33,13 +34,13 @@ func UpdateCurrency(c *fiber.Ctx) error {
 	// Marshal json body to struct
 	var currency model.Currency
 	if err := c.BodyParser(&currency); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(model.NewMultipleErrors(
+		return c.Status(fiber.StatusBadRequest).JSON(dao.NewMultipleErrors(
 			"request body should be a JSON object", err))
 	}
 
 	// Get currency code from URL
 	if currency.Code != strings.ToUpper(strings.TrimSpace(c.Params("symbol", ""))) {
-		return c.Status(fiber.StatusForbidden).JSON(model.Error{Message: "currency code cannot be modified, please delete and create a new one"})
+		return c.Status(fiber.StatusForbidden).JSON(dao.Error{Message: "currency code cannot be modified, please delete and create a new one"})
 	}
 
 	// Load currency from database/cache
@@ -50,7 +51,7 @@ func UpdateCurrency(c *fiber.Ctx) error {
 
 	// Check if the currency is a custom currency
 	if dbCurrency.Type != model.CustomCurrency {
-		return c.Status(fiber.StatusForbidden).JSON(model.Error{Message: "only custom currencies can be modified"})
+		return c.Status(fiber.StatusForbidden).JSON(dao.Error{Message: "only custom currencies can be modified"})
 	}
 
 	// Force to be a custom currency
@@ -78,7 +79,7 @@ func DeleteCurrency(c *fiber.Ctx) error {
 
 	// Only allow delete custom currencies
 	if currency.Type != model.CustomCurrency {
-		return c.Status(fiber.StatusForbidden).JSON(model.Error{Message: "only custom currencies can be deleted"})
+		return c.Status(fiber.StatusForbidden).JSON(dao.Error{Message: "only custom currencies can be deleted"})
 	}
 
 	// Delete currency entity
@@ -99,7 +100,7 @@ func GetCurrency(c *fiber.Ctx) error {
 	}
 
 	// If is an empty currency code list all entities else get the supplied currency
-	var err *model.Error
+	var err *dao.Error
 	if currency.Code != "" {
 		err = currency.Load()
 		if err == nil {
