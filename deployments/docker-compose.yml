@@ -10,9 +10,9 @@ services:
             - 5432:5432
         environment:
             TZ: America/Sao_Paulo
-            POSTGRES_USER: agcommerce
-            POSTGRES_PASSWORD: queijo
-            POSTGRES_DB: agcommerce
+            POSTGRES_USER: bravo
+            POSTGRES_PASSWORD: bravo
+            POSTGRES_DB: bravo
         volumes:
             - postgres_db:/var/lib/postgresql/data
 
@@ -27,6 +27,28 @@ services:
         volumes:
             - redis:/data
 
+    golang:
+        build:
+            context: ../
+            dockerfile: deployments/golang/Dockerfile
+        container_name: golang
+        restart: always
+        ports:
+            - 8080:8080
+        environment:
+            TZ: America/Sao_Paulo
+            BRAVO_PORT: 8080
+            BRAVO_HOST: localhost
+            BRAVO_DB: postgres://bravo:bravo@localhost:5432/bravo
+            BRAVO_CACHE: redis://localhost:6379/0
+            BRAVO_COIN_LAYER_KEY: ae4a9c12c9a2bf3b1f5cbbffb1adadfb
+            BRAVO_CURRENCY_LAYER_KEY: 8fc96429493d88318aff2b66efacf8cf
+        volumes:
+            - golang:/app
+        depends_on:
+            - db
+            - redis
+
     pgadmin:
         container_name: pgadmin4
         image: dpage/pgadmin4
@@ -36,7 +58,7 @@ services:
         environment:
             TZ: America/Sao_Paulo
             PGADMIN_DEFAULT_EMAIL: andre.andrade@agvalue.com.br
-            PGADMIN_DEFAULT_PASSWORD: queijo
+            PGADMIN_DEFAULT_PASSWORD: bravo
         volumes:
             - pgadmin4:/var/lib/pgadmin
             - pgadmin4:/pgadmin4/servers.json
@@ -47,3 +69,4 @@ volumes:
     postgres_db:
     pgadmin4:
     redis:
+    golang:

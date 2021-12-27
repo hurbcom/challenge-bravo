@@ -71,7 +71,7 @@ func init() {
 	if certFile, ok := os.LookupEnv(model.EnvCertFileKey); ok {
 		webConfig.CertFile = certFile
 	} else {
-		webConfig.Host = ""
+		webConfig.CertFile = ""
 	}
 
 	if keyFile, ok := os.LookupEnv(model.EnvKeyFileKey); ok {
