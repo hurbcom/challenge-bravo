@@ -10,8 +10,8 @@ import (
 	"strings"
 )
 
-// QuoteResponse Response with currency conversion
-type QuoteResponse struct {
+// ConvertResponse Response with currency conversion
+type ConvertResponse struct {
 	From   *model.Currency `json:"from,omitempty"` // From currency, visible only at verbose mode
 	To     *model.Currency `json:"to,omitempty"`   // To currency, visible only at verbose mode
 	Amount float64         `json:"amount"`         //  Amount converted
@@ -80,7 +80,7 @@ func Convert(c *fiber.Ctx) error {
 	}
 
 	// Response preparation
-	response := QuoteResponse{
+	response := ConvertResponse{
 		Amount: amount,
 		Quote:  finalQuote,
 		From:   nil,

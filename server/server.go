@@ -22,9 +22,7 @@ type Config struct {
 func Start(config Config) {
 
 	// Create the server
-	app := fiber.New(fiber.Config{
-		//Prefork: true,
-	})
+	app := fiber.New()
 
 	// Middleware used to recover from a panic event
 	app.Use(recover.New())

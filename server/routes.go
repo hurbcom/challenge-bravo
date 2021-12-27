@@ -1,6 +1,8 @@
 package server
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+)
 
 // createRoutes for the application
 func createRoutes(app *fiber.App) {
@@ -11,7 +13,7 @@ func createRoutes(app *fiber.App) {
 	currency := v1.Group("/currency") // /api/v1/currency
 	createCurrencyRoutes(currency)
 
-	quote := v1.Group("/quote") // /api/v1/quote
+	quote := v1.Group("/convert") // /api/v1/convert
 	createQuoteRoutes(quote)
 }
 
