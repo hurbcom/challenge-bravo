@@ -3,7 +3,7 @@
 [[English](README.md) | [Português](README.pt.md)]
 
 Foi construída uma API que realiza a conversão entre moedas reais, criptomoedas e moedas customizadas criadas pelos
-usuários, todos lastreados no dólar americano. Para tal o servidor utiliza como fonte dados os seviços
+usuários, todos lastreados no dólar americano. Para tal o servidor utiliza como fonte dados os serviços
 [CoinLayer](https://coinlayer.com), [CurrencyLayer](https://currencylayer.com) e [Fixer](https://fixer.io), os quais
 oferecem uma cota gratuita de uso que gira em torno de 1.000 requisições/mês para o CoinLayer e CurrencyLayer e 100
 requisições/mês para o Fixer mediante o uso de uma chave de acesso, porém é importante ressaltar que em todos os
@@ -31,7 +31,7 @@ disponíveis:
 - **-port** ou **BRAVO_PORT** (opcional, padrão 8080) - Número da porta do servidor web
 - **-cert** ou **BRAVO_CERT_FILE** (opcional) - Caminho do arquivo .pem para conexões https
 - **-key** ou **BRAVO_KEY_FILE** (opcional) - Caminho do arquivo .key para conexões https
-- **-db** ou **BRAVO_DB** - String de conexão com o servidor Posgres ex: postgres://usuario:senha@url:5432/banco
+- **-db** ou **BRAVO_DB** - String de conexão com o servidor Postgres ex: postgres://usuario:senha@url:5432/banco
 - **-cache** ou **BRAVO_CACHE** - String de conexão com o servidor Redis ex: redis://url:6379/0
 - **-coin-layer** ou **BRAVO_COIN_LAYER_KEY** - Chave do serviço CoinLayer
 - **-currency-layer** ou **BRAVO_CURRENCY_LAYER_KEY** - Chave do serviço CurrencyLayer
@@ -51,6 +51,13 @@ Para executar a aplicação execute os seguintes comandos:
 
 Para executar os testes de aplicação execute os seguintes comandos após os comandos anteriores:
 - ``docker exec bravo go test -v challenge-bravo/server``
+
+### Resolução de problemas
+
+Caso o serviço ``bravo`` entre em um ciclo de reinicialização devido à falta de conectividade com o banco de dados em
+função de falha na autenticação. O problema possivelmente está sendo causado devido a uma imagem antiga do servidor de
+banco de dados. Para solucionar o problema você deve remover suas imagens e volumes relacionados ao Postgres e reiniciar
+os serviços, porém não se esqueça de realizar o backup, pois os eventuais dados contidos nesses volumes serão perdidos.
 
 ## Utilização da API
 
@@ -73,10 +80,23 @@ A representação de uma moeda nos serviços possui os seguintes atributos e con
 #### /currency - Gerenciamento de moedas
 
 - **GET ``/currency``** - Obtém uma lista de todas as moedas disponíveis para conversão.
+
+
 - **POST ``/currency``** - Cria uma moeda customizada, o corpo da requisição deve conter a representação da moeda. Caso
 o atributo ``type`` esteja presente ele será ignorado.
+    - **Exemplo:**<code>curl --location --request POST 'localhost:8080/api/v1/currency' --header 'Content-Type: application/json' --data-raw '{
+      "code": "HURB",
+      "name": "Hurb Coin",
+      "rate": 2.5
+      }'</code>
+
+
 - **GET ``/currency/{code}``** - Obtém uma moeda qualquer.
+
+
 - **DEL ``/currency/{code}``** - Apaga uma moeda customizada.
+
+
 - **PUT``/currency/{code}``** - Atualiza uma moeda customizada, o corpo da requisição deve conter a representação da
 moeda. Caso o atributo ``type`` esteja presente ele será ignorado. Também não é possível atualizar o atributo ``code``.
 
@@ -86,7 +106,7 @@ moeda. Caso o atributo ``type`` esteja presente ele será ignorado. Também não
 querystring e são os seguintes ``amount`` montante a ser convertido ``from`` código da moeda de origem ``to`` código da
 moeda de destino ``verbose`` parâmetro opcional, que se passado como ``true`` retornará informações adicionais para
 depuração.
-
+    - **Exemplo:**<code>curl --location --request GET 'localhost:8080/api/v1/convert?amount=10.5&from=HURB&to=ARS&verbose=true'</code>
 
 ## Dúvidas
 

@@ -1,82 +1,111 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+[[English](README.md) | [Português](README.pt.md)]
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+A conversion API was developed to execute conversions between real currencies, cryptocurrencies, and user-created
+currencies, all of which are pegged to the US dollar. The server makes use of the [CoinLayer](https://coinlayer.com),
+[CurrencyLayer](https://currencylayer.com), and [Fixer](https://fixer.io) data providers, each of which has a free use
+tier of around 1,000 requests per month for CoinLayer and CurrencyLayer, respectively, and 100 requests per month for
+Fixer. Quotations for all services are delayed by at least one hour.
 
-The API must convert between the following currencies:
+When the **bravo-server** is started, it downloads a list of all available currencies from quotation services and saves
+it to the database and cache. Then, a job is started that runs immediately and then every eight hours to perform
+currency quote cache updates.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+[PostgreSQL](https://www.postgresql.org) is used as the database server, and [Redis](https://redis.io) is used as the
+caching server. Go version 1.17 was used as the programming language, with the following libraries providing support:
+- [Apitest](https://github.com/steinfletcher/apitest) - API testing library
+- [Fiber](https://gofiber.io) - Framework for high-performance web request routing
+- [Go-redis](https://github.com/go-redis/redis) - Client for the Redis server for Go
+- [Scany](https://github.com/georgysavva/scany) - Converts the results of SQL queries to structs
+- [Squirrel](https://github.com/Masterminds/squirrel) - Query Generator for SQL
+- [Testify](https://github.com/stretchr/testify) - Test case tool
 
-Other coins could be added as usage.
+## Server startup
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+**bravo-server** can be configured using environment variables or the command line, with the command line values taking
+precedence. The following lines summarizes the command line and environment parameters that are available:
+- **-host** or **BRAVO_HOST** (optional) - Web server hostname, default is to listen all hosts
+- **-port** or **BRAVO_PORT** (optional, default 8080) - Web server port number
+- **-cert** or **BRAVO_CERT_FILE** (optional) - Certificate .pem file path for https connections
+- **-key** or **BRAVO_KEY_FILE** (optional) - Certificate key .key file path for https connections
+- **-db** or **BRAVO_DB** - Postgres connection string ex: postgres://user:password@url:5432/database
+- **-cache** or **BRAVO_CACHE** - Redis server connection string ex: redis://url:6379/0
+- **-coin-layer** or **BRAVO_COIN_LAYER_KEY** - CoinLayer service key
+- **-currency-layer** or **BRAVO_CURRENCY_LAYER_KEY** - CurrencyLayer service key
+- **-fixer** or **BRAVO_FIXER_KEY** - Fixer service key
+- **-help** - Print help
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+The ``deployments`` folder contains configuration files for the application, its unit tests, database and cache servers,
+as well as PostgreSQL administration all in Docker containers. If you need to make any configuration changes, such as
+changing the service keys, you must update the ``docker-composer.yml`` file, which contains the environment variables.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Execute the following commands to start the application:
+- ``git clone https://github.com/aandrade1234/challenge-bravo.git``
+- ``cd challenge-bravo``
+- ``chmod +x server.sh``
+- ``.\server.sh``
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Run the following commands after the previous ones to run the application tests:
+- ``docker exec bravo go test -v challenge-bravo/server``
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+###Troubleshooting
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+If the ``bravo`` service enters a restart cycle as a result of a database connection failure caused by an authentication
+failure. The issue could be caused by an out-of-date database server image. To resolve the issue, you must delete all
+Postgres related images and volumes and restart the services; however, do not forget to perform a backup of any data
+included in these volumes.
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+## API usage
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+Utilization of APIs
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+The default **bravo-server** endpoint is http://127.0.0.1:8080/api/v1. It provides two services: ``/currency`` for
+currency management and ``/convert`` for currency conversion. All requests conform to the REST protocol, and the data
+is presented in the JSON format.
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+The following attributes and rules apply to a currency representation in the API:
+- ``code``: Currency code, always in capital letters and consisting of three digits for real currencies and one to ten
+for cryptocurrencies and custom currencies. It may have simply letters in the case of real currencies, or it may
+comprise letters, numbers, and * in the case of all other types of currencies. It is not permitted to change a currency
+code.
+- ``name``: Currency name: up to 100 characters of any type may be included in the currency name.
+- ``type``: Currency type, where ``C`` denotes real currency, ``Y`` denotes cryptocurrency, and ``U`` denotes custom
+currency. This is a query-only attribute and is not required when creating or updating a currency.
+- ``rate``: currency exchange rate with relation to the US dollar. This property is available only for custom currencies.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+### Services
 
-## Requirements
+#### /currency - Currency management
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+- **GET ``/currency``** - Returns a list of all available currencies for conversion.
 
-## Evaluation criteria
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+- **POST ``/currency``** - Create a custom currency, the requisition body must contain a currency representation. If
+``type`` attribute is present it will be ignored.
+    - **Example:**<code>curl --location --request POST 'localhost:8080/api/v1/currency' --header 'Content-Type: application/json' --data-raw '{
+      "code": "HURB",
+      "name": "Hurb Coin",
+      "rate": 2.5
+      }'</code>
+
+- **GET ``/currency/{code}``** - Return a currency.
+
+
+- **DEL ``/currency/{code}``** - Delete a custom currency.
+
+
+- **PUT``/currency/{code}``** - Update a custom currency, the request body must include a currency representation. The
+``type`` attribute will be ignored if it is present. Also, it is not allowed to edit the code attribute.
+
+#### /convert - Currency conversion
+
+- **GET ``/convert``** - Converts two currencies; the parameters for this request must be passed as a querystring and
+include the following: ``amount`` the amount to be converted ``from`` the source currency code ``to`` the destination
+currency code ``verbose`` an optional parameter that, when set to true, returns additional debugging information.
+    - **Example:**<code>curl --location --request GET 'localhost:8080/api/v1/convert?amount=10.5&from=HURB&to=ARS&verbose=true'</code>
 
 ## Doubts
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
-
-Godspeed! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+If you have any doubts or encounter any problems, please consult or submit them in the
+[project issues](https://github.com/aandrade1234/challenge-bravo/issues).
