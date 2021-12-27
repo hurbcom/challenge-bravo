@@ -29,23 +29,22 @@ services:
         volumes:
             - redis:/data
 
-    golang:
+    bravo:
         build:
             context: ../
             dockerfile: deployments/golang/Dockerfile
-        container_name: golang
+        container_name: bravo
         restart: always
         ports:
             - 8080:8080
         environment:
             TZ: America/Sao_Paulo
-            BRAVO_PORT: 8080
             BRAVO_DB: postgres://bravo:bravo@host.docker.internal:5432/bravo
             BRAVO_CACHE: redis://host.docker.internal:6379/0
             BRAVO_COIN_LAYER_KEY: ae4a9c12c9a2bf3b1f5cbbffb1adadfb
             BRAVO_CURRENCY_LAYER_KEY: 8fc96429493d88318aff2b66efacf8cf
         volumes:
-            - golang:/app
+            - bravo:/app
         depends_on:
             - db
             - redis
@@ -70,4 +69,4 @@ volumes:
     postgres_db:
     pgadmin4:
     redis:
-    golang:
+    bravo:

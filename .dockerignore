@@ -1,0 +1,8 @@
+.dockerignore
+.editorconfig
+.gitignore
+.idea
+README.md
+README.pt.md
+ca.jpg
+pull-request.txt

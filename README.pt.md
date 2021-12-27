@@ -2,81 +2,93 @@
 
 [[English](README.md) | [Português](README.pt.md)]
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+Foi construída uma API que realiza a conversão entre moedas reais, criptomoedas e moedas customizadas criadas pelos
+usuários, todos lastreados no dólar americano. Para tal o servidor utiliza como fonte dados os seviços
+[CoinLayer](https://coinlayer.com), [CurrencyLayer](https://currencylayer.com) e [Fixer](https://fixer.io), os quais
+oferecem uma cota gratuita de uso que gira em torno de 1.000 requisições/mês para o CoinLayer e CurrencyLayer e 100
+requisições/mês para o Fixer mediante o uso de uma chave de acesso, porém é importante ressaltar que em todos os
+serviços existe um atraso de pelo menos 1 hora nas cotações.
 
-A API precisa converter entre as seguintes moedas:
+Ao iniciar o **bravo-server** o servidor realiza a transferência da lista moedas disponíveis nos serviços e as
+armazena em banco de dados e em cache, em seguida é iniciado um serviço o qual é executado imediatamente e depois a cada
+8 horas, o qual realiza a atualização das cotações das moedas e as armazena exclusivamente cache.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Aplicação utiliza como banco de dados o servidor [PostgreSQL](https://www.postgresql.org) e como cache o servidor
+[Redis](https://redis.io). A linguagem de programação utilizada foi Go versão 1.17 com apoio das seguintes bibliotecas:
+- [Apitest](https://github.com/steinfletcher/apitest) - Biblioteca para testes de API
+- [Fiber](https://gofiber.io) - Framework de alta performance para roteamento de requisições web
+- [Go-redis](https://github.com/go-redis/redis) - Cliente para Go para servidor Redis
+- [Scany](https://github.com/georgysavva/scany) - Converte resultados de consultas SQL em structs
+- [Squirrel](https://github.com/Masterminds/squirrel) - Gerador de consultas SQL
+- [Testify](https://github.com/stretchr/testify) - Ferramenta para casos de teste
 
-Outras moedas podem ser adicionadas conforme o uso.
+## Inicialização do servidor
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+O **bravo-server** pode obter suas configurações das variáveis do ambiente ou da linha de comando, sendo que os valores
+fornecidos pela linha de comando possuem prioridade. Abaixo segue a relação dos parâmetros de linha de comando e ambiente
+disponíveis:
+- **-host** ou **BRAVO_HOST** (opcional) - Nome do host do servidor web, o padrão é todos
+- **-port** ou **BRAVO_PORT** (opcional, padrão 8080) - Número da porta do servidor web
+- **-cert** ou **BRAVO_CERT_FILE** (opcional) - Caminho do arquivo .pem para conexões https
+- **-key** ou **BRAVO_KEY_FILE** (opcional) - Caminho do arquivo .key para conexões https
+- **-db** ou **BRAVO_DB** - String de conexão com o servidor Posgres ex: postgres://usuario:senha@url:5432/banco
+- **-cache** ou **BRAVO_CACHE** - String de conexão com o servidor Redis ex: redis://url:6379/0
+- **-coin-layer** ou **BRAVO_COIN_LAYER_KEY** - Chave do serviço CoinLayer
+- **-currency-layer** ou **BRAVO_CURRENCY_LAYER_KEY** - Chave do serviço CurrencyLayer
+- **-fixer** ou **BRAVO_FIXER_KEY** - Chave do serviço Fixer
+- **-help** - Imprime a ajuda
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Na pasta ``deployments`` existe uma configuração para a execução da aplicação, de seus testes unitários e dos servidores
+de banco de dados, cache e administração do Postgres em containers Docker. Caso seja necessário alterar alguma
+configuração como, por exemplo, alguma chave de serviço deve-se editar o arquivo ``docker-composer.yml`` onde
+encontram-se as variáveis de ambiente.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Para executar a aplicação execute os seguintes comandos:
+- ``git clone https://github.com/aandrade1234/challenge-bravo.git``
+- ``cd challenge-bravo``
+- ``chmod +x server.sh``
+- ``.\server.sh``
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+Para executar os testes de aplicação execute os seguintes comandos após os comandos anteriores:
+- ``docker exec bravo go test -v challenge-bravo/server``
 
-A API deve suportar conversão entre moedas fiduciárias, crypto e fictícias. Exemplo: BRL->HURB, HURB->ETH
+## Utilização da API
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+O endpoint padrão do **bravo-server** é http://127.0.0.1:8080/api/v1 e possui dois serviços, um para o gerenciamento
+de moedas ``/currency`` e outro para a realização de conversões ``/convert``. Todas as requisições utilizam a convenção
+REST e os dados seguem o formato JSON.
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de Dungeons & Dragons sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+A representação de uma moeda nos serviços possui os seguintes atributos e convenções:
+- ``code``: Código da moeda, sempre em caracteres maiúsculos e com 3 dígitos para moedas reais e de 1 até 10 dígitos
+  para cripto moedas e moedas customizadas. Para moedas reais poderá conter somente letras e para os demais tipos de
+  moedas poderá conter letras, números e *. Não é possível a alteração do código de uma moeda.
+- ``name``: Nome da moeda, pode conter até 100 caracteres de qualquer tipo.
+- ``type``: Tipo da moeda, onde ``C`` é para moedas reais, ``Y`` para cripto moedas e ``U`` para moedas customizadas.
+  Este atributo é somente de consulta, e não é necessário para a criação e alteração de uma moeda.
+- ``rate``: Cotação da moeda em relação ao dólar americano. Este atributo está disponível somente para as moedas
+  customizadas.
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+### Serviços
 
-Ref:
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+#### /currency - Gerenciamento de moedas
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+- **GET ``/currency``** - Obtém uma lista de todas as moedas disponíveis para conversão.
+- **POST ``/currency``** - Cria uma moeda customizada, o corpo da requisição deve conter a representação da moeda. Caso
+o atributo ``type`` esteja presente ele será ignorado.
+- **GET ``/currency/{code}``** - Obtém uma moeda qualquer.
+- **DEL ``/currency/{code}``** - Apaga uma moeda customizada.
+- **PUT``/currency/{code}``** - Atualiza uma moeda customizada, o corpo da requisição deve conter a representação da
+moeda. Caso o atributo ``type`` esteja presente ele será ignorado. Também não é possível atualizar o atributo ``code``.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+#### /convert - Converção de moedas
 
-## Requisitos
+- **GET ``/convert``** - Realiza a conversão de duas moedas, os parâmetros para esta requisição devem ser passados como
+querystring e são os seguintes ``amount`` montante a ser convertido ``from`` código da moeda de origem ``to`` código da
+moeda de destino ``verbose`` parâmetro opcional, que se passado como ``true`` retornará informações adicionais para
+depuração.
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **main** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
-
-## Critério de avaliação
-
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
 
 ## Dúvidas
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Quaisquer dúvidas que você venha a ter ou problema que encontrar por favor consulte ou poste nas
+[issues do projeto](https://github.com/aandrade1234/challenge-bravo/issues).
