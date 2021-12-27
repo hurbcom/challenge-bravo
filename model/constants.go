@@ -12,6 +12,6 @@ const (
 	EnvCoinLayerKey     = "BRAVO_COIN_LAYER_KEY"     // EnvCoinLayerKey Coin layer crypto currency quote API key environment variable name
 	EnvCurrencyLayerKey = "BRAVO_CURRENCY_LAYER_KEY" // EnvCurrencyLayerKey Currency layer currency quote API key environment variable name
 
-	DefaultPort = 8080        // defaultPort Default server port
-	DefaultHost = "localhost" // defaultHost Default server host
+	DefaultPort = 8080       // DefaultPort Default server port
+	DefaultHost = "===xx===" // DefaultHost Default server host, will be replaced by "" on server startup
 )

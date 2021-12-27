@@ -8,6 +8,8 @@ services:
         restart: always
         ports:
             - 5432:5432
+        extra_hosts:
+            - "host.docker.internal:172.17.0.1"
         environment:
             TZ: America/Sao_Paulo
             POSTGRES_USER: bravo
@@ -38,9 +40,8 @@ services:
         environment:
             TZ: America/Sao_Paulo
             BRAVO_PORT: 8080
-            BRAVO_HOST: localhost
-            BRAVO_DB: postgres://bravo:bravo@localhost:5432/bravo
-            BRAVO_CACHE: redis://localhost:6379/0
+            BRAVO_DB: postgres://bravo:bravo@host.docker.internal:5432/bravo
+            BRAVO_CACHE: redis://host.docker.internal:6379/0
             BRAVO_COIN_LAYER_KEY: ae4a9c12c9a2bf3b1f5cbbffb1adadfb
             BRAVO_CURRENCY_LAYER_KEY: 8fc96429493d88318aff2b66efacf8cf
         volumes:
@@ -57,7 +58,7 @@ services:
             - 5050:80
         environment:
             TZ: America/Sao_Paulo
-            PGADMIN_DEFAULT_EMAIL: andre.andrade@agvalue.com.br
+            PGADMIN_DEFAULT_EMAIL: aandrade1234@gmail.com
             PGADMIN_DEFAULT_PASSWORD: bravo
         volumes:
             - pgadmin4:/var/lib/pgadmin

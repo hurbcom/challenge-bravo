@@ -75,7 +75,8 @@ func Convert(c *fiber.Ctx) error {
 		finalQuote = (toQuote / fromQuote) * amount
 	case (from.Type == model.CryptoCurrency && to.Type == model.CryptoCurrency) ||
 		(from.Type == model.CustomCurrency && to.Type == model.CustomCurrency) ||
-		(from.Type == model.CustomCurrency && to.Type == model.CryptoCurrency):
+		(from.Type == model.CustomCurrency && to.Type == model.CryptoCurrency) ||
+		(from.Type == model.CryptoCurrency && to.Type == model.CustomCurrency):
 		finalQuote = (fromQuote / toQuote) * amount
 	}
 

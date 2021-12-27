@@ -160,4 +160,9 @@ func readConfig() {
 		flag.Usage()
 		os.Exit(exitCode)
 	}
+
+	// Replace DefaultHost to "" to bind to all addresses
+	if webConfig.Host == model.DefaultHost {
+		webConfig.Host = ""
+	}
 }
