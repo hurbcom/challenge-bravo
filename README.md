@@ -105,6 +105,29 @@ include the following: ``amount`` the amount to be converted ``from`` the source
 currency code ``verbose`` an optional parameter that, when set to true, returns additional debugging information.
     - **Example:**<code>curl --location --request GET 'localhost:8080/api/v1/convert?amount=10.5&from=HURB&to=ARS&verbose=true'</code>
 
+## Stress test
+
+[Φορτίο](https://github.com/fortio/fortio) was introduced to perform stress tests on **bravo-server**. Execute the
+following command to run the test:
+- <code>docker exec -it fortio fortio load -qps 1500 -c 8 -t 20s "http://host.docker.internal:8080/api/v1/convert?amount=10.5&from=USD&to=BRL" </code>
+
+The test above have the following parameters:
+- Desired transactions per second = 1,500
+- Number of processes = 8
+- Duration of the test = 20s
+
+The following results were obtained on a notebook with an Intel Core I7 10510U processor and 16GB of RAM memory:
+- Total requests: 22,251
+- Average request time: 7.174 milliseconds
+- Requests per second: 1,112.3
+
+Additionally, the program includes a graphical interface that may be accessible via the browser at
+http://localhost:8088/fortio/, from which it is possible to generate graphical reports such as the one shown below.
+
+<p>
+  <img src="histogram.png" alt="Histrograma" style="background-color: white" />
+</p>
+
 ## Doubts
 
 If you have any doubts or encounter any problems, please consult or submit them in the

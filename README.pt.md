@@ -108,6 +108,29 @@ moeda de destino ``verbose`` parâmetro opcional, que se passado como ``true`` r
 depuração.
     - **Exemplo:**<code>curl --location --request GET 'localhost:8080/api/v1/convert?amount=10.5&from=HURB&to=ARS&verbose=true'</code>
 
+## Teste de Estresse
+
+Foi adicionada ferramenta [Φορτίο](https://github.com/fortio/fortio) para a execução do teste de estresse do
+**bravo-server**. Para a execução dos testes execute o seguinte comando:
+- <code>docker exec -it fortio fortio load -qps 1500 -c 8 -t 20s "http://host.docker.internal:8080/api/v1/convert?amount=10.5&from=USD&to=BRL" </code>
+
+Os parâmetros dos testes acima são os seguintes:
+- Transações por segundo desejadas = 1500
+- Processos = 8
+- Duração do teste = 20s
+
+Os resultados obtidos em um notebook com processador Intel Core I7 10510U e 16GB de memória RAM foram os seguintes:
+- Total de requisições: 22.251
+- Tempo médio por requisição: 7,174 ms
+- Requisições por segundo: 1.112,3
+
+A ferramenta ainda oferece uma interface gráfica a qual pode ser acessada pelo navegador através da URL
+http://localhost:8088/fortio/ onde é possível a geração relatórios gráficos como o observado abaixo.
+
+<p>
+  <img src="histogram.png" alt="Histrograma" style="background-color: white" />
+</p>
+
 ## Dúvidas
 
 Quaisquer dúvidas que você venha a ter ou problema que encontrar por favor consulte ou poste nas

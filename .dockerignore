@@ -1,8 +1,11 @@
 .dockerignore
 .editorconfig
+.git
 .gitignore
 .idea
 README.md
 README.pt.md
 ca.jpg
+histogram.png
 pull-request.txt
+server.sh
