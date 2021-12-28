@@ -49,7 +49,7 @@ Execute the following commands to start the application:
 Run the following commands after the previous ones to run the application tests:
 - ``docker exec bravo go test -v challenge-bravo/server``
 
-###Troubleshooting
+### Troubleshooting
 
 If the ``bravo`` service enters a restart cycle as a result of a database connection failure caused by an authentication
 failure. The issue could be caused by an out-of-date database server image. To resolve the issue, you must delete all
