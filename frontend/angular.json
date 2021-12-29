@@ -10,7 +10,8 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
-          "strict": true
+          "strict": true,
+          "style": "scss"
         }
       },
       "root": "",
@@ -30,9 +31,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/primeflex/primeflex.css",
-              "node_modules/primeicons/primeicons.css"
+              "src/styles.scss",
+              "node_modules/primeflex/primeflex.scss",
+              "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeng/resources/themes/saga-blue/theme.css"
             ],
@@ -101,11 +102,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/primeflex/primeflex.css",
-              "node_modules/primeicons/primeicons.css"
+              "src/styles.scss",
+              "node_modules/primeflex/primeflex.scss",
+              "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/primeng/resources/themes/saga-blue/theme.css",
+              "node_modules/primeng/resources/themes/saga-blue/theme.css"
             ],
             "scripts": []
           }

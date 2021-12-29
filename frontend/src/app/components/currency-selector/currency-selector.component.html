@@ -1,0 +1,13 @@
+<p-dropdown [options]="currencies" [(ngModel)]="selectedCurrency" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Please Select a Currency">
+  <ng-template pTemplate="selectedItem">
+    <div *ngIf="selectedCurrency">
+      <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCurrency.code.toLowerCase()"/>
+    </div>
+  </ng-template>
+  <ng-template let-currency pTemplate="item">
+    <div>
+      <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + currency.code.toLowerCase()"/>
+      <div>{{currency.name}}</div>
+    </div>
+  </ng-template>
+</p-dropdown>

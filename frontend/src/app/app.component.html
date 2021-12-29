@@ -1,1 +1,14 @@
-
+<div class="quote-container shadow-8 bg-white grid">
+  <div class="field col-4">
+    <label for="amount">Amount</label>
+    <p-inputNumber id="amount" class="w-full" [(ngModel)]="amount" [min]="0" [showButtons]="true" mode="currency" currency="USD"></p-inputNumber>
+  </div>
+  <div class="field col-4">
+    <label for="from">From</label>
+    <app-currency-selector id="from" class="w-full inline-flex"></app-currency-selector>
+  </div>
+  <div class="field col-4">
+    <label for="to">To</label>
+    <app-currency-selector id="to" class="w-full inline-flex"></app-currency-selector>
+  </div>
+</div>
