@@ -9,6 +9,8 @@ import {InputNumberModule} from 'primeng/inputnumber';
 import {AppComponent} from './app.component';
 import {CurrencySelectorComponent} from "./components/currency-selector/currency-selector.component";
 import {HttpClientModule} from "@angular/common/http";
+import {ButtonModule} from "primeng/button";
+import {RippleModule} from "primeng/ripple";
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import {HttpClientModule} from "@angular/common/http";
     FormsModule,
     HttpClientModule,
     InputNumberModule,
+    ButtonModule,
+    RippleModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

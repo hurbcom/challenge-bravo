@@ -4,6 +4,34 @@
   width: 80%;
   transform: translateY(-50%) translateX(-50%);
   position: absolute;
+
+  .panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding-top: 0.5rem;
+
+    .field {
+      width: 100%;
+      padding: 0.5rem 1rem 0;
+
+      .amount {
+        .p-inputtext.p-component.p-element.p-inputnumber-input.p-filled {
+          text-align: right;
+        }
+      }
+    }
+
+    .arrow {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+
+  }
+
 }
 
 .title {

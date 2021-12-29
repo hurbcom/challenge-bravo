@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewEncapsulation} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from "@angular/core";
 import {Currency} from "../../model/currency";
 import {DataService} from "../../service/data.service";
 
@@ -18,7 +18,8 @@ export class CurrencySelectorComponent implements OnInit {
   currencies: Currency[] = [];
 
   /** Selected currency */
-  selectedCurrency: any;
+  @Input('selectedCurrency')
+  selectedCurrency?: Currency;
 
   /**
    * Class constructor
