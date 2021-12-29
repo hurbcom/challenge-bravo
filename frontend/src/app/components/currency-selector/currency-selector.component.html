@@ -5,6 +5,8 @@
       <img *ngIf="selectedCurrency.type == 'Y'" src="https://assets.coinlayer.com/icons/{{selectedCurrency.code}}.png" alt="{{selectedCurrency.name}}" class="currency-image"/>
       <img *ngIf="selectedCurrency.type == 'C'" src="https://wise.com/public-resources/assets/flags/rectangle/{{selectedCurrency.code | lowercase}}.png" alt="{{selectedCurrency.name}}" class="currency-image"/>
       <i *ngIf="selectedCurrency.type == 'U'" class="pi pi-cog currency-image" ></i>
+      <i *ngIf="selectedCurrency.type == 'C'" class="pi pi-globe currency-image" ></i>
+      <i *ngIf="selectedCurrency.type == 'Y'" class="pi pi-desktop currency-image" ></i>
       <div>{{selectedCurrency.name}} ({{selectedCurrency.code}})</div>
     </div>
   </ng-template>
@@ -13,6 +15,8 @@
       <img *ngIf="currency.type == 'Y'" src="https://assets.coinlayer.com/icons/{{currency.code}}.png" alt="{{currency.name}}" class="currency-image"/>
       <img *ngIf="currency.type == 'C'" src="https://wise.com/public-resources/assets/flags/rectangle/{{currency.code | lowercase}}.png" alt="{{currency.name}}" class="currency-image"/>
       <i *ngIf="currency.type == 'U'" class="pi pi-cog currency-image" ></i>
+      <i *ngIf="currency.type == 'C'" class="pi pi-globe currency-image" ></i>
+      <i *ngIf="currency.type == 'Y'" class="pi pi-desktop currency-image" ></i>
       <div>{{currency.name}} ({{currency.code}})</div>
     </div>
   </ng-template>

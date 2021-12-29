@@ -5,6 +5,7 @@
     <div class="field">
       <p-inputNumber #eamount id="amount" class="amount w-full" [(ngModel)]="amount" [min]="0" [showButtons]="true" mode="decimal" locale="en-US" [minFractionDigits]="2" [maxFractionDigits]="5" (onKeyDown)="onChange($event)" (onBlur)="onChange($event)" (onInput)="onChange($event)"></p-inputNumber>
     </div>
+    <i class="times pi pi-times"></i>
     <div class="field">
       <app-currency-selector id="from" class="w-full inline-flex" [(ngModel)]="from" (onChange)="onChange($event)"></app-currency-selector>
     </div>
@@ -12,10 +13,14 @@
     <div class="field">
       <app-currency-selector id="to" class="w-full inline-flex" [(ngModel)]="to" (onChange)="onChange($event)"></app-currency-selector>
     </div>
+    <i class="arrow pi pi-arrow-right"></i>
     <div class="field">
-      <button pButton pRipple type="button" label="Warning" class="p-button-raised p-button-danger w-full"></button>
+      <button pButton pRipple type="button" [label]="resultLabel" class="p-button-raised p-button-danger w-full text-shadow"></button>
     </div>
   </div>
   <h2 class="subtitle my-6">Calculate currency, crypto currency and custom currencies exchange rates</h2>
+  <div class="w-full text-center">
+    <button pButton pRipple type="button" label="Manage Custom Currencies" class="p-button-raised p-button-success text-white"></button>
+  </div>
   <h3 class="subtitle">Convert all major world currencies with our currency converter</h3>
 </div>

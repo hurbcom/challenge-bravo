@@ -3,6 +3,7 @@ import {PrimeNGConfig} from "primeng/api";
 import {Currency} from "./model/currency";
 import {DataService} from "./service/data.service";
 import {InputNumber} from "primeng/inputnumber";
+import {formatNumber} from "@angular/common";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -13,11 +14,12 @@ import {InputNumber} from "primeng/inputnumber";
 export class AppComponent implements OnInit, AfterViewInit {
 
   @ViewChild('eamount')
-  public amountInput!: InputNumber
+  public amountInput!: InputNumber;
 
   amount = 10;
   from?: Currency;
   to?: Currency;
+  resultLabel: string = "---"
 
   constructor(private primengConfig: PrimeNGConfig, private readonly dataService: DataService) {
   }
@@ -29,8 +31,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // Put the initial form values
     this.dataService.getCurrencies().subscribe(currencies => {
-      this.from = currencies.find(curr => curr.code == 'BRL')
-      this.to = currencies.find(curr => curr.code == 'USD')
+      this.from = currencies.find(curr => curr.code == 'BRL');
+      this.to = currencies.find(curr => curr.code == 'USD');
+      this.onChange({});
     });
 
   }
@@ -41,12 +44,15 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   onChange(event: any): void {
-    console.log(this.amount);
-    console.log(this.from);
-    console.log(this.to);
-    if ('value' in event) {
-      console.log(event);
+    let amount = 'value' in event ? parseFloat(event.value) : this.amount;
+    if (this.to === null || this.from === null) {
+      return;
     }
+
+    // @ts-ignore
+    this.dataService.convert(amount, this.from, this.to).subscribe(response => {
+      this.resultLabel = `${formatNumber(response.quote, "en-US", "1.2-5")} ${this.to?.code}`;
+    });
   }
 
 }

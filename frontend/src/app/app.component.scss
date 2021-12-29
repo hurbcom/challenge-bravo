@@ -1,9 +1,11 @@
+@mixin text-shadow {
+  text-shadow: 1px 1px 2px #000000, 1px 1px 2px #000000, 1px 1px 2px #000000;
+}
+
 .quote-container {
-  top: 40%;
-  left: 50%;
-  width: 80%;
-  transform: translateY(-50%) translateX(-50%);
-  position: absolute;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 
   .panel {
     display: flex;
@@ -23,13 +25,12 @@
       }
     }
 
-    .arrow {
+    .arrow, .times {
       font-size: 1.2rem;
       font-weight: 700;
-      margin-left: 1rem;
-      margin-right: 1rem;
+      margin-left: .25rem;
+      margin-right: .25rem;
     }
-
   }
 
 }
@@ -37,7 +38,7 @@
 .title {
   color: #fff;
   font-weight: 600;
-  text-shadow: 1px 1px 2px #000000, 1px 1px 2px #000000, 1px 1px 2px #000000;
+  @include text-shadow;
 
   &.main {
     text-shadow: 0 1px 0 #999, 0 2px 0 #888, 0 3px 0 #777, 0 4px 0 #666, 0 5px 0 #555, 0 6px 0 #444, 0 7px 0 #333, 0 8px 7px #001135;
@@ -50,5 +51,10 @@
   color: #fff;
   font-weight: 400;
   text-align: center;
-  text-shadow: 1px 1px 2px #000000, 1px 1px 2px #000000, 1px 1px 2px #000000;
+  @include text-shadow
 }
+
+.text-shadow {
+  @include text-shadow
+}
+
