@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"log"
 	"os"
@@ -26,6 +27,9 @@ func Start(config Config) {
 
 	// Middleware used to recover from a panic event
 	app.Use(recover.New())
+
+	// Enable CORS Middleware to accept any origin
+	app.Use(cors.New())
 
 	// Create server routes
 	createRoutes(app)
