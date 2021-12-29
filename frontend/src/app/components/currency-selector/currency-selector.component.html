@@ -1,13 +1,19 @@
-<p-dropdown [options]="currencies" [(ngModel)]="selectedCurrency" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Please Select a Currency">
+<p-dropdown [options]="currencies" [(ngModel)]="selectedCurrency" optionLabel="name" [filter]="true"
+            filterBy="name,code" [showClear]="true" placeholder="Please Select a Currency" (onChange)="onCurrencySelect()">
   <ng-template pTemplate="selectedItem">
-    <div *ngIf="selectedCurrency">
-      <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCurrency.code.toLowerCase()"/>
+    <div *ngIf="selectedCurrency" class="currency-container">
+      <img *ngIf="selectedCurrency.type == 'Y'" src="https://assets.coinlayer.com/icons/{{selectedCurrency.code}}.png" alt="{{selectedCurrency.name}}" class="currency-image"/>
+      <img *ngIf="selectedCurrency.type == 'C'" src="https://wise.com/public-resources/assets/flags/rectangle/{{selectedCurrency.code | lowercase}}.png" alt="{{selectedCurrency.name}}" class="currency-image"/>
+      <i *ngIf="selectedCurrency.type == 'U'" class="pi pi-cog currency-image" ></i>
+      <div>{{selectedCurrency.name}} ({{selectedCurrency.code}})</div>
     </div>
   </ng-template>
   <ng-template let-currency pTemplate="item">
-    <div>
-      <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + currency.code.toLowerCase()"/>
-      <div>{{currency.name}}</div>
+    <div class="currency-container">
+      <img *ngIf="currency.type == 'Y'" src="https://assets.coinlayer.com/icons/{{currency.code}}.png" alt="{{currency.name}}" class="currency-image"/>
+      <img *ngIf="currency.type == 'C'" src="https://wise.com/public-resources/assets/flags/rectangle/{{currency.code | lowercase}}.png" alt="{{currency.name}}" class="currency-image"/>
+      <i *ngIf="currency.type == 'U'" class="pi pi-cog currency-image" ></i>
+      <div>{{currency.name}} ({{currency.code}})</div>
     </div>
   </ng-template>
 </p-dropdown>

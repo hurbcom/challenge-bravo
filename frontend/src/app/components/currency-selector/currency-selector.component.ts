@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, EventEmitter, OnInit, Output} from "@angular/core";
 import {Currency} from "../../model/currency";
 import {DataService} from "../../service/data.service";
 
@@ -9,15 +9,30 @@ import {DataService} from "../../service/data.service";
 })
 export class CurrencySelectorComponent implements OnInit {
 
+  /** Event emitted when a currency is selected */
+  @Output()
+  onSelect = new EventEmitter<Currency>();
+
+  /** Available currency list */
   currencies: Currency[] = [];
 
+  /** Selected currency */
   selectedCurrency: any;
 
+  /**
+   * Class constructor
+   * @param {DataService} dataService - Service that obtain data from bravo server
+   * */
   constructor(private readonly dataService: DataService) {
   }
 
   ngOnInit(): void {
-    this.dataService.getCurrencies().subscribe(value => this.currencies =  value);
+    // Obtain currency list at component start up
+    this.dataService.getCurrencies().subscribe(value => this.currencies = value);
   }
 
+  onCurrencySelect(): void {
+    // Emit an event when a currency is selected
+    this.onSelect.emit(this.selectedCurrency);
+  }
 }
