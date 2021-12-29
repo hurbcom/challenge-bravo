@@ -1,14 +1,27 @@
-<div class="quote-container shadow-8 bg-white grid">
-  <div class="field col-4">
-    <label for="amount">Amount</label>
-    <p-inputNumber id="amount" class="w-full" [(ngModel)]="amount" [min]="0" [showButtons]="true" mode="currency" currency="USD"></p-inputNumber>
+<h1 class="title">Bravo Currency Converter</h1>
+<div class="quote-container ">
+  <h1 class="main title">Use Bravo Currency Converter To Find the Latest Exchange Rates</h1>
+  <div class="shadow-8 border-solid border-1 bg-white grid">
+    <div class="field col-3 pl-5">
+      <label for="amount">Amount</label>
+      <p-inputNumber id="amount" class="w-full" [(ngModel)]="amount" [min]="0" [showButtons]="true" mode="currency" currency="USD"></p-inputNumber>
+    </div>
+    <div class="field col-3">
+      <label for="from">From</label>
+      <app-currency-selector id="from" class="w-full inline-flex"></app-currency-selector>
+    </div>
+    <div class="field col-1">
+      <i class="pi pi-arrow-right"></i>
+    </div>
+    <div class="field col-3">
+      <label for="to">To</label>
+      <app-currency-selector id="to" class="w-full inline-flex"></app-currency-selector>
+    </div>
+    <div class="field col-2">
+      Value
+    </div>
   </div>
-  <div class="field col-4">
-    <label for="from">From</label>
-    <app-currency-selector id="from" class="w-full inline-flex"></app-currency-selector>
-  </div>
-  <div class="field col-4">
-    <label for="to">To</label>
-    <app-currency-selector id="to" class="w-full inline-flex"></app-currency-selector>
-  </div>
+  <h2 class="subtitle my-6">Calculate currency, crypto currency and custom currencies exchange rates</h2>
+  <h3 class="subtitle">Convert all major world currencies with our currency converter</h3>
 </div>
+

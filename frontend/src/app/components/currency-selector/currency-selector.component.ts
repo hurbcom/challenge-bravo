@@ -1,8 +1,9 @@
-import {Component, EventEmitter, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, OnInit, Output, ViewEncapsulation} from "@angular/core";
 import {Currency} from "../../model/currency";
 import {DataService} from "../../service/data.service";
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'app-currency-selector',
   styleUrls: ['./currency-selector.component.scss'],
   templateUrl: './currency-selector.component.html'
