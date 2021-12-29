@@ -1,7 +1,8 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {PrimeNGConfig} from "primeng/api";
 import {Currency} from "./model/currency";
 import {DataService} from "./service/data.service";
+import {InputNumber} from "primeng/inputnumber";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -9,7 +10,10 @@ import {DataService} from "./service/data.service";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('eamount')
+  public amountInput!: InputNumber
 
   amount = 10;
   from?: Currency;
@@ -28,5 +32,21 @@ export class AppComponent implements OnInit {
       this.from = currencies.find(curr => curr.code == 'BRL')
       this.to = currencies.find(curr => curr.code == 'USD')
     });
+
   }
+
+  public ngAfterViewInit(): void {
+    // Adds type tel to input element to show numeric keyboard on mobile devices
+    (this.amountInput.input.nativeElement as HTMLElement).setAttribute("type", "tel");
+  }
+
+  onChange(event: any): void {
+    console.log(this.amount);
+    console.log(this.from);
+    console.log(this.to);
+    if ('value' in event) {
+      console.log(event);
+    }
+  }
+
 }

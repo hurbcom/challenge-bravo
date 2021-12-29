@@ -1,5 +1,5 @@
 <p-dropdown [options]="currencies" [(ngModel)]="selectedCurrency" optionLabel="name" [filter]="true" class="w-full"
-            filterBy="name,code" [showClear]="true" placeholder="Please Select a Currency" (onChange)="onCurrencySelect()">
+            filterBy="name,code" [showClear]="true" placeholder="Please Select a Currency" (onChange)="onChange()">
   <ng-template pTemplate="selectedItem">
     <div *ngIf="selectedCurrency" class="currency-container">
       <img *ngIf="selectedCurrency.type == 'Y'" src="https://assets.coinlayer.com/icons/{{selectedCurrency.code}}.png" alt="{{selectedCurrency.name}}" class="currency-image"/>
