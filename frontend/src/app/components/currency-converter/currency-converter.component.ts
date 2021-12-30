@@ -31,7 +31,12 @@ export class CurrencyConverterComponent implements OnInit, AfterViewInit {
    * Class initialization
    */
   ngOnInit(): void {
-    // Prepare initial form values
+
+    // Clear caches at component start up
+    this.dataService.clearCurrenciesCache();
+    this.dataService.clearConversionCache();
+
+    // Load component with default values
     this.dataService.getCurrencies().subscribe(currencies => {
       this.from = currencies.find(curr => curr.code == 'BRL');
       this.to = currencies.find(curr => curr.code == 'USD');

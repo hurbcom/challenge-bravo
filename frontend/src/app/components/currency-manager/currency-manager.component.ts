@@ -182,8 +182,8 @@ export class CurrencyManagerComponent implements OnInit {
   private handleObservable(obs: Observable<any>, successMessage: string, errorMessage: string, reloadCurrencies: boolean = false): void {
     obs.pipe(
       retry(1), // Retry once
-      tap(err => console.error('Error:', JSON.stringify(err))), // Log error to console
       catchError((err: HttpErrorResponse) => {
+        console.error('Error:', JSON.stringify(err));
         this.messageService.add({severity: 'error', summary: 'Error', detail: errorMessage, life: 3000});
         return throwError(() => err);
       }),
