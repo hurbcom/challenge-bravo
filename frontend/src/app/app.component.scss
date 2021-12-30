@@ -1,3 +1,6 @@
+@import "node_modules/primeflex/src/variables";
+$md: 850px;
+
 @mixin text-shadow {
   text-shadow: 1px 1px 2px #000000, 1px 1px 2px #000000, 1px 1px 2px #000000;
 }
@@ -15,13 +18,18 @@
     padding-top: 0.5rem;
 
     .field {
-      width: 100%;
       padding: 0.5rem 1rem 0;
 
       .amount {
+        min-width: 6rem;
+
         .p-inputtext.p-component.p-element.p-inputnumber-input.p-filled {
           text-align: right;
         }
+      }
+
+      .result {
+        overflow: hidden;
       }
     }
 
@@ -58,3 +66,45 @@
   @include text-shadow
 }
 
+@media (min-width: $md) and (max-width: $xl) {
+  .quote-container {
+    max-width: 95%;
+
+    .amount {
+      width: 6rem !important;
+    }
+
+    .field {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+
+    .arrow, .times {
+      font-size: 1rem !important;
+      margin: 0 !important;
+    }
+  }
+}
+
+@media (min-width: $md) and (max-width: $lg) {
+  .quote-container {
+    .result, .currency-container, .amount > span > input {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+@media (max-width: $md) {
+  .quote-container {
+    max-width: 98%;
+
+    .panel {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .arrow, .times {
+      display: none;
+    }
+  }
+}

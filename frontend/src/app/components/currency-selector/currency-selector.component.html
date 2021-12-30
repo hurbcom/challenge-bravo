@@ -1,4 +1,4 @@
-<p-dropdown [options]="currencies" [(ngModel)]="selectedCurrency" optionLabel="name" [filter]="true" class="w-full"
+<p-dropdown [options]="currencies" [(ngModel)]="selectedCurrency" optionLabel="name" [filter]="true" [style]="{'width':'auto'}"
             filterBy="name,code" [showClear]="true" placeholder="Please Select a Currency" (onChange)="onChange()">
   <ng-template pTemplate="selectedItem">
     <div *ngIf="selectedCurrency" class="currency-container">
