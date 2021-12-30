@@ -1,2 +1,6 @@
 <h1 class="title">Bravo Currency Converter</h1>
 <router-outlet></router-outlet>
+<h2 class="footer my-6">Calculate currency, crypto currency and custom currencies exchange rates</h2>
+<button pButton pRipple routerLinkActive="" #rla="routerLinkActive" [ngClass]="rla.isActive ? 'hidden' : 'block'" [routerLink]="'manage'"
+        class="navigate-custom-button p-button-raised p-button-success text-white" type="button" label="Manage Custom Currencies"></button>
+<h3 class="footer">Convert all major world currencies with our currency converter</h3>

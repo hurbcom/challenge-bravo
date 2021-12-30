@@ -1,12 +1,10 @@
 @import "node_modules/primeflex/src/variables";
+@import "src/app/app.component";
 $md: 850px;
-
-@mixin text-shadow {
-  text-shadow: 1px 1px 2px #000000, 1px 1px 2px #000000, 1px 1px 2px #000000;
-}
 
 .quote-container {
   max-width: 80%;
+  margin-top: 5rem;
   margin-left: auto;
   margin-right: auto;
 
@@ -40,30 +38,6 @@ $md: 850px;
       margin-right: .25rem;
     }
   }
-
-}
-
-.title {
-  color: #fff;
-  font-weight: 600;
-  @include text-shadow;
-
-  &.main {
-    text-shadow: 0 1px 0 #999, 0 2px 0 #888, 0 3px 0 #777, 0 4px 0 #666, 0 5px 0 #555, 0 6px 0 #444, 0 7px 0 #333, 0 8px 7px #001135;
-    margin-bottom: 5rem;
-    text-align: center;
-  }
-}
-
-.subtitle {
-  color: #fff;
-  font-weight: 400;
-  text-align: center;
-  @include text-shadow
-}
-
-.text-shadow {
-  @include text-shadow
 }
 
 @media (min-width: $md) and (max-width: $xl) {

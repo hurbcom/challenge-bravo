@@ -1,1 +1,49 @@
-xxx
+<h1 class="main title">Use Custom Currency Manager To Manage Your Currencies</h1>
+<button pButton pRipple type="button" icon="pi pi-arrow-left" label="Return to Currency Converter" [routerLink]="''" class="back-button p-button-raised p-button-success text-white"></button>
+<div class="manager-container">
+
+  <p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-primary mr-2"></button>
+      <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" [disabled]="!selectedCurrencies || !selectedCurrencies.length"></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table [value]="currencies" responsiveLayout="scroll" styleClass="p-datatable-striped" [rowHover]="true"
+           [paginator]="currencies.length>10" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+           [(selection)]="selectedCurrencies" dataKey="code"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="code">Code
+          <p-sortIcon field="code"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">Name
+          <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="rate">USD exchange rate
+          <p-sortIcon field="rate"></p-sortIcon>
+        </th>
+        <th>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-currency>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="currency"></p-tableCheckbox>
+        </td>
+        <td>{{currency.code}}</td>
+        <td>{{currency.name}}</td>
+        <td class="text-right">{{currency.rate | number:'1.2-5':'en-US'}}</td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

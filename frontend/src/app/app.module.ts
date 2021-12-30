@@ -8,12 +8,14 @@ import {ButtonModule} from "primeng/button";
 import {DropdownModule} from "primeng/dropdown";
 import {InputNumberModule} from 'primeng/inputnumber';
 import {RippleModule} from "primeng/ripple";
+import {TableModule} from "primeng/table";
 
 import {AppComponent} from './app.component';
 import {CurrencyConverterComponent} from "./components/currency-converter/currency-converter.component";
 import {CurrencyManagerComponent} from "./components/currency-manager/currency-manager.component";
 import {CurrencySelectorComponent} from "./components/currency-selector/currency-selector.component";
 import {AppRoutingModule} from "./app-routing.module";
+import {ToolbarModule} from "primeng/toolbar";
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import {AppRoutingModule} from "./app-routing.module";
     HttpClientModule,
     InputNumberModule,
     RippleModule,
+    TableModule,
+    ToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
