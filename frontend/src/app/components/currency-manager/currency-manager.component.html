@@ -1,18 +1,15 @@
+<p-toast></p-toast>
 <h1 class="main title">Use Custom Currency Manager To Manage Your Currencies</h1>
 <button pButton pRipple type="button" icon="pi pi-arrow-left" label="Return to Currency Converter" [routerLink]="''" class="back-button p-button-raised p-button-success text-white"></button>
 <div class="manager-container">
-
   <p-toolbar styleClass="mb-4">
     <ng-template pTemplate="left">
-      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-primary mr-2"></button>
-      <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" [disabled]="!selectedCurrencies || !selectedCurrencies.length"></button>
+      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-primary mr-2" (click)="newCurrency()"></button>
     </ng-template>
   </p-toolbar>
-
   <p-table [value]="currencies" responsiveLayout="scroll" styleClass="p-datatable-striped" [rowHover]="true"
            [paginator]="currencies.length>10" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
-           [(selection)]="selectedCurrencies" dataKey="code"
-  >
+           [(selection)]="selectedCurrencies" dataKey="code">
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 3rem">
@@ -40,10 +37,58 @@
         <td>{{currency.name}}</td>
         <td class="text-right">{{currency.rate | number:'1.2-5':'en-US'}}</td>
         <td>
-          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></button>
-          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"></button>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCurrency(currency)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteCurrency(currency)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">
+          No currencies found
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+<p-dialog [(visible)]="currencyDialogVisible" [style]="{width: '450px'}" [header]="newCurrencyDialog?'New Currency':'Edit Currency'" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <form [formGroup]="currencyForm">
+      <div class="p-field">
+        <label for="code">Code</label>
+        <input type="text" id="code" oninput="this.value = this.value.toUpperCase().trim()" [maxLength]="10" [readOnly]="!newCurrencyDialog" [autofocus]="newCurrencyDialog" formControlName="code" pInputText required/>
+        <div class="error-wrapper">
+          <ng-container *ngIf="code.invalid && (code.dirty || code.touched)">
+            <small class="p-error" *ngIf="code.errors?.['required']">Code is required.</small>
+            <small class="p-error" *ngIf="code.errors?.['pattern']">Code can contains only letters, numbers and *.</small>
+          </ng-container>
+        </div>
+      </div>
+      <div class="p-field">
+        <label for="name">Name</label>
+        <input type="text" id="name" formControlName="name" [maxLength]="100" required pInputText [autofocus]="!newCurrencyDialog"/>
+        <div class="error-wrapper">
+          <ng-container *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+            <small class="p-error" *ngIf="name.errors?.['required']">Name is required.</small>
+          </ng-container>
+        </div>
+      </div>
+      <div class="p-field p-col">
+        <label for="rate">Currency USD Exchange Rate</label>
+        <p-inputNumber id="rate" mode="decimal" locale="en-US" [showButtons]="true" [maxFractionDigits]="5" [minFractionDigits]="2" [min]="0.00001" formControlName="rate"></p-inputNumber>
+        <div class="error-wrapper">
+          <ng-container *ngIf="rate.invalid && (rate.dirty || rate.touched)" class="alert alert-danger">
+            <small class="p-error" *ngIf="rate.errors?.['required']">Currency USD exchange rate is required.</small>
+            <small class="p-error" *ngIf="rate.errors?.['min']">Currency USD exchange minimum value is 0.00001.</small>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideCurrencyDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [disabled]="currencyForm.invalid" (click)="saveCurrency(newCurrencyDialog)"></button>
+  </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
