@@ -15,6 +15,9 @@ func createRoutes(app *fiber.App) {
 
 	quote := v1.Group("/convert") // /api/v1/convert
 	createQuoteRoutes(quote)
+
+	// Serve static files (frontend)
+	app.Static("/", "./static", fiber.Static{Compress: true})
 }
 
 // createCurrencyRoutes create routes for currency CRUD
