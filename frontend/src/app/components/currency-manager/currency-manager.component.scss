@@ -1,3 +1,4 @@
+@import "node_modules/primeflex/src/variables";
 @import "src/app/app.component";
 
 .back-button {
@@ -19,4 +20,29 @@
   font-size: 14px;
   text-align: right;
   height: 16px;
+}
+
+@media (max-width: $md) {
+  .currency-table {
+    font-size: 0.8rem;
+
+    .p-sortable-column-icon {
+      width: 100%;
+      margin-top: 0.3rem;
+    }
+
+    .p-button-rounded {
+      &.edit, &.delete {
+        margin-top: 0.4rem;
+        height: 1.5rem !important;
+        width: 1.5rem;
+
+        & > span {
+          font-size: 0.6rem;
+        }
+      }
+    }
+
+  }
+
 }

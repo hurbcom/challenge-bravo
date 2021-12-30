@@ -7,21 +7,21 @@
       <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-primary mr-2" (click)="newCurrency()"></button>
     </ng-template>
   </p-toolbar>
-  <p-table [value]="currencies" responsiveLayout="scroll" styleClass="p-datatable-striped" [rowHover]="true"
+  <p-table [value]="currencies" responsiveLayout="scroll" styleClass="currency-table p-datatable-striped" [rowHover]="true"
            [paginator]="currencies.length>10" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
            [(selection)]="selectedCurrencies" dataKey="code">
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 3rem">
+        <th>
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
-        <th pSortableColumn="code">Code
+        <th pSortableColumn="code" class="text-center">Code
           <p-sortIcon field="code"></p-sortIcon>
         </th>
-        <th pSortableColumn="name">Name
+        <th pSortableColumn="name" class="text-center">Name
           <p-sortIcon field="name"></p-sortIcon>
         </th>
-        <th pSortableColumn="rate">USD exchange rate
+        <th pSortableColumn="rate" class="text-center">USD exchange rate
           <p-sortIcon field="rate"></p-sortIcon>
         </th>
         <th>
@@ -37,8 +37,8 @@
         <td>{{currency.name}}</td>
         <td class="text-right">{{currency.rate | number:'1.2-5':'en-US'}}</td>
         <td>
-          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCurrency(currency)"></button>
-          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteCurrency(currency)"></button>
+          <button pButton pRipple icon="pi pi-pencil" class="edit p-button-rounded p-button-success mr-2" (click)="editCurrency(currency)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="delete p-button-rounded p-button-danger" (click)="deleteCurrency(currency)"></button>
         </td>
       </tr>
     </ng-template>
