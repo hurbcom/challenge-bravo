@@ -1,0 +1,110 @@
+@import "node_modules/primeflex/src/variables";
+$md: 850px;
+
+@mixin text-shadow {
+  text-shadow: 1px 1px 2px #000000, 1px 1px 2px #000000, 1px 1px 2px #000000;
+}
+
+.quote-container {
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+
+  .panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding-top: 0.5rem;
+
+    .field {
+      padding: 0.5rem 1rem 0;
+
+      .amount {
+        min-width: 6rem;
+
+        .p-inputtext.p-component.p-element.p-inputnumber-input.p-filled {
+          text-align: right;
+        }
+      }
+
+      .result {
+        overflow: hidden;
+      }
+    }
+
+    .arrow, .times {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-left: .25rem;
+      margin-right: .25rem;
+    }
+  }
+
+}
+
+.title {
+  color: #fff;
+  font-weight: 600;
+  @include text-shadow;
+
+  &.main {
+    text-shadow: 0 1px 0 #999, 0 2px 0 #888, 0 3px 0 #777, 0 4px 0 #666, 0 5px 0 #555, 0 6px 0 #444, 0 7px 0 #333, 0 8px 7px #001135;
+    margin-bottom: 5rem;
+    text-align: center;
+  }
+}
+
+.subtitle {
+  color: #fff;
+  font-weight: 400;
+  text-align: center;
+  @include text-shadow
+}
+
+.text-shadow {
+  @include text-shadow
+}
+
+@media (min-width: $md) and (max-width: $xl) {
+  .quote-container {
+    max-width: 95%;
+
+    .amount {
+      width: 6rem !important;
+    }
+
+    .field {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+
+    .arrow, .times {
+      font-size: 1rem !important;
+      margin: 0 !important;
+    }
+  }
+}
+
+@media (min-width: $md) and (max-width: $lg) {
+  .quote-container {
+    .result, .currency-container, .amount > span > input {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+@media (max-width: $md) {
+  .quote-container {
+    max-width: 98%;
+
+    .panel {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .arrow, .times {
+      display: none;
+    }
+  }
+}
