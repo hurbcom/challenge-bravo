@@ -9,18 +9,25 @@ oferecem uma cota gratuita de uso que gira em torno de 1.000 requisições/mês 
 requisições/mês para o Fixer mediante o uso de uma chave de acesso, porém é importante ressaltar que em todos os
 serviços existe um atraso de pelo menos 1 hora nas cotações.
 
+Também foi desenvolvida uma interface gráfica utilizando Angular 13 a qual tem por intuito demostrar as funcionalidades
+da API em um caso real de uso.
+
 Ao iniciar o **bravo-server** o servidor realiza a transferência da lista moedas disponíveis nos serviços e as
 armazena em banco de dados e em cache, em seguida é iniciado um serviço o qual é executado imediatamente e depois a cada
 8 horas, o qual realiza a atualização das cotações das moedas e as armazena exclusivamente cache.
 
 Aplicação utiliza como banco de dados o servidor [PostgreSQL](https://www.postgresql.org) e como cache o servidor
-[Redis](https://redis.io). A linguagem de programação utilizada foi Go versão 1.17 com apoio das seguintes bibliotecas:
+[Redis](https://redis.io). A linguagem de programação utilizada no servidor foi Go versão 1.17 com apoio das seguintes
+bibliotecas:
 - [Apitest](https://github.com/steinfletcher/apitest) - Biblioteca para testes de API
 - [Fiber](https://gofiber.io) - Framework de alta performance para roteamento de requisições web
 - [Go-redis](https://github.com/go-redis/redis) - Cliente para Go para servidor Redis
 - [Scany](https://github.com/georgysavva/scany) - Converte resultados de consultas SQL em structs
 - [Squirrel](https://github.com/Masterminds/squirrel) - Gerador de consultas SQL
 - [Testify](https://github.com/stretchr/testify) - Ferramenta para casos de teste
+
+Enquanto na aplicação de front end foi utilizado o framework Angular 13 com o apoio da biblioteca de componentes
+[PimeNG](https://www.primefaces.org/primeng).
 
 ## Inicialização do servidor
 
@@ -52,12 +59,17 @@ Para executar a aplicação execute os seguintes comandos:
 Para executar os testes de aplicação execute os seguintes comandos após os comandos anteriores:
 - ``docker exec bravo go test -v challenge-bravo/server``
 
+Para compilar e acessar a aplicação frontend, basta executar container do **bravo-server**, pois ao preparar sua imagem
+aplicação também é compilada e empacotada com o servidor. O acesso à aplicação se dá pela url raiz, enquanto os arquivos
+estáticos estão armazenados na pasta ``/app/static``.
+
 ### Resolução de problemas
 
 Caso o serviço ``bravo`` entre em um ciclo de reinicialização devido à falta de conectividade com o banco de dados em
 função de falha na autenticação. O problema possivelmente está sendo causado devido a uma imagem antiga do servidor de
 banco de dados. Para solucionar o problema você deve remover suas imagens e volumes relacionados ao Postgres e reiniciar
 os serviços, porém não se esqueça de realizar o backup, pois os eventuais dados contidos nesses volumes serão perdidos.
+- ``docker system prune -a``
 
 ## Utilização da API
 

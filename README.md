@@ -8,18 +8,25 @@ currencies, all of which are pegged to the US dollar. The server makes use of th
 tier of around 1,000 requests per month for CoinLayer and CurrencyLayer, respectively, and 100 requests per month for
 Fixer. Quotations for all services are delayed by at least one hour.
 
+Additionally, a graphical user interface was made using Angular 13 to demonstrate the API's functionalities in a real
+use case.
+
 When the **bravo-server** is started, it downloads a list of all available currencies from quotation services and saves
 it to the database and cache. Then, a job is started that runs immediately and then every eight hours to perform
 currency quote cache updates.
 
 [PostgreSQL](https://www.postgresql.org) is used as the database server, and [Redis](https://redis.io) is used as the
-caching server. Go version 1.17 was used as the programming language, with the following libraries providing support:
+caching server. Go version 1.17 was used as the programming language at the server, with the following libraries
+providing support:
 - [Apitest](https://github.com/steinfletcher/apitest) - API testing library
 - [Fiber](https://gofiber.io) - Framework for high-performance web request routing
 - [Go-redis](https://github.com/go-redis/redis) - Client for the Redis server for Go
 - [Scany](https://github.com/georgysavva/scany) - Converts the results of SQL queries to structs
 - [Squirrel](https://github.com/Masterminds/squirrel) - Query Generator for SQL
 - [Testify](https://github.com/stretchr/testify) - Test case tool
+
+The front-end application was built using the Angular 13 framework and the [PimeNG](https://www.primefaces.org/primeng)
+component library.
 
 ## Server startup
 
@@ -49,12 +56,17 @@ Execute the following commands to start the application:
 Run the following commands after the previous ones to run the application tests:
 - ``docker exec bravo go test -v challenge-bravo/server``
 
+Simply start the **bravo-server** container to compile and access the frontend application. The **bravo-server**
+application image is also compiled and packaged with the frontend application during the preparation process. The
+frontend is accessed via the root URL, while the static files are located in the ``/app/static`` directory.
+
 ### Troubleshooting
 
 If the ``bravo`` service enters a restart cycle as a result of a database connection failure caused by an authentication
 failure. The issue could be caused by an out-of-date database server image. To resolve the issue, you must delete all
 Postgres related images and volumes and restart the services; however, do not forget to perform a backup of any data
 included in these volumes.
+- ``docker system prune -a``
 
 ## API usage
 
