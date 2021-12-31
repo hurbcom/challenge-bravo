@@ -54,7 +54,7 @@ Para executar a aplicação execute os seguintes comandos:
 - ``git clone https://github.com/aandrade1234/challenge-bravo.git``
 - ``cd challenge-bravo``
 - ``chmod +x server.sh``
-- ``.\server.sh``
+- ``./server.sh``
 
 Para executar os testes de aplicação execute os seguintes comandos após os comandos anteriores:
 - ``docker exec bravo go test -v challenge-bravo/server``
@@ -86,6 +86,11 @@ A representação de uma moeda nos serviços possui os seguintes atributos e con
   Este atributo é somente de consulta, e não é necessário para a criação e alteração de uma moeda.
 - ``rate``: Cotação da moeda em relação ao dólar americano. Este atributo está disponível somente para as moedas
   customizadas.
+
+### Documentação Swagger
+
+Quando o servidor está em execução a documentação também é disponibilizada no format [Swagger](https://swagger.io/)
+através do endpoint ``/swagger``.
 
 ### Serviços
 

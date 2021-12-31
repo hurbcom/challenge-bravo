@@ -51,7 +51,7 @@ Execute the following commands to start the application:
 - ``git clone https://github.com/aandrade1234/challenge-bravo.git``
 - ``cd challenge-bravo``
 - ``chmod +x server.sh``
-- ``.\server.sh``
+- ``./server.sh``
 
 Run the following commands after the previous ones to run the application tests:
 - ``docker exec bravo go test -v challenge-bravo/server``
@@ -85,6 +85,11 @@ code.
 - ``type``: Currency type, where ``C`` denotes real currency, ``Y`` denotes cryptocurrency, and ``U`` denotes custom
 currency. This is a query-only attribute and is not required when creating or updating a currency.
 - ``rate``: currency exchange rate with relation to the US dollar. This property is available only for custom currencies.
+
+### Swagger Documentation
+
+When the **bravo-server** is running, documentation in [Swagger](https://swagger.io) format is also available via the
+``/swagger`` endpoint.
 
 ### Services
 

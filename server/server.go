@@ -20,6 +20,16 @@ type Config struct {
 }
 
 // Start the server
+// @title           Challenge Bravo - Bravo-Server API
+// @version         1.0
+// @description     This is the challenge bravo sample server
+// @contact.name    André Gustavo de Andrade
+// @contact.url     https://github.com/aandrade1234/challenge-bravo
+// @contact.email   aandrade1234@gmail.com
+// @license.name    Apache 2.0
+// @license.url     https://www.apache.org/licenses/LICENSE-2.0.html
+// @host            localhost:8080
+// @BasePath        /api/v1
 func Start(config Config) {
 
 	// Create the server

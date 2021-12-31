@@ -13,11 +13,23 @@ import (
 type ConvertResponse struct {
 	From   *model.Currency `json:"from,omitempty"` // From currency, visible only at verbose mode
 	To     *model.Currency `json:"to,omitempty"`   // To currency, visible only at verbose mode
-	Amount float64         `json:"amount"`         //  Amount converted
+	Amount float64         `json:"amount"`         // Amount converted
 	Quote  float64         `json:"quote"`          // Quote value converted
 }
 
 // Convert Execute currency conversion
+// @Summary      Execute currency conversion
+// @Description  Execute currency exchange conversion between two amount from two currencies
+// @Tags         conversion
+// @Produce      json
+// @Param        from       path      string  true  "Origin currency code"
+// @Param        to         path      string  true  "Destination currency code"
+// @Param        amount     path      number  true  "Amount to be converted"
+// @Param        verbose    path      boolean false "Show debug information"
+// @Success      200  {object}  server.ConvertResponse "Conversion result"
+// @Failure      400  {object}  dao.Error              "Errors messages"
+// @Failure      500  {object}  dao.Error              "Internal server error"
+// @Router       /convert [get]
 func Convert(c *fiber.Ctx) error {
 
 	// Parse query parameters

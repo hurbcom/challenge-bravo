@@ -1,6 +1,8 @@
 package server
 
 import (
+	_ "challenge-bravo/swagger"
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -16,8 +18,12 @@ func createRoutes(app *fiber.App) {
 	convert := v1.Group("/convert") // /api/v1/convert
 	createConvertRoutes(convert)
 
-	// Serve static files (frontend)
+	// Serve static files: frontend and swagger documentation
 	app.Static("/", "./static", fiber.Static{Compress: true})
+
+	app.Get("/swagger/*", swagger.New(swagger.Config{
+		DeepLinking: false,
+	}))
 }
 
 // createCurrencyRoutes create routes for currency CRUD
@@ -26,8 +32,11 @@ func createCurrencyRoutes(currency fiber.Router) {
 	// New custom currency
 	currency.Post("/", NewCurrency)
 
-	// Reads a single currency or list of all currencies
-	currency.Get("/:symbol?", GetCurrency)
+	// Reads a list of all currencies
+	currency.Get("/", GetCurrencyList)
+
+	// Reads a single currency
+	currency.Get("/:symbol", GetCurrency)
 
 	// Update a custom currency
 	currency.Put("/:symbol", UpdateCurrency)
