@@ -13,8 +13,8 @@ func createRoutes(app *fiber.App) {
 	currency := v1.Group("/currency") // /api/v1/currency
 	createCurrencyRoutes(currency)
 
-	quote := v1.Group("/convert") // /api/v1/convert
-	createQuoteRoutes(quote)
+	convert := v1.Group("/convert") // /api/v1/convert
+	createConvertRoutes(convert)
 
 	// Serve static files (frontend)
 	app.Static("/", "./static", fiber.Static{Compress: true})
@@ -38,9 +38,9 @@ func createCurrencyRoutes(currency fiber.Router) {
 
 }
 
-// createQuoteRoutes create routes for currency quotation
-func createQuoteRoutes(quote fiber.Router) {
+// createConvertRoutes create routes for currency conversion
+func createConvertRoutes(convert fiber.Router) {
 
 	// Make a currency conversion
-	quote.Get("/", Convert)
+	convert.Get("/", Convert)
 }

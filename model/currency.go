@@ -9,7 +9,6 @@ import (
 	"github.com/jackc/pgerrcode"
 	"log"
 	"net/http"
-	"time"
 )
 
 type CurrencyType string
@@ -202,7 +201,7 @@ func (curr *Currency) Delete() *dao.Error {
 }
 
 // SaveCurrencies Save a vector of currencies to the database and cache
-func SaveCurrencies(currencies []Currency, cacheTimeout time.Duration, update bool, saveInCache bool) *dao.Error {
+func SaveCurrencies(currencies []Currency, update bool, saveInCache bool) *dao.Error {
 
 	// Prepare the query
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
@@ -217,7 +216,7 @@ func SaveCurrencies(currencies []Currency, cacheTimeout time.Duration, update bo
 			builder = builder.Values(cur.Code, cur.Type, cur.Name, cur.Rate)
 
 			if saveInCache {
-				if cErr := dao.Cache.Set("CUR."+cur.Code, cur, cacheTimeout); cErr != nil {
+				if cErr := dao.Cache.Set("CUR."+cur.Code, cur); cErr != nil {
 					log.Println(cErr)
 				}
 			}

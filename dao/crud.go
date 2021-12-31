@@ -42,7 +42,7 @@ type Helper struct {
 // values is the vector pointer where the results will be returned and cacheKey is the function that generates cache keys
 // it will receive as parameter the current entity and should return it cache key
 func (helper *Helper) List(builder *squirrel.SelectBuilder, values interface{}, listCacheKey string, itemCacheKey func(interface{}) string) error {
-	return Cache.Once(listCacheKey, values, DefaultCacheTime, func() (interface{}, error) {
+	return Cache.Once(listCacheKey, values, func() (interface{}, error) {
 
 		// Create query
 		query, args, err := builder.ToSql()
@@ -62,7 +62,7 @@ func (helper *Helper) List(builder *squirrel.SelectBuilder, values interface{}, 
 		if slice.Kind() == reflect.Slice {
 			for i := 0; i < slice.Len(); i++ {
 				entity := slice.Index(i).Interface()
-				if err = Cache.Set(itemCacheKey(entity), entity, DefaultCacheTime); err != nil {
+				if err = Cache.Set(itemCacheKey(entity), entity); err != nil {
 					log.Println(err)
 					return nil, err
 				}
@@ -76,7 +76,7 @@ func (helper *Helper) List(builder *squirrel.SelectBuilder, values interface{}, 
 // is the entity pointer where the result will be returned and cacheKey is the key where the entity will be stored at
 // the cache
 func (helper *Helper) Get(builder *squirrel.SelectBuilder, returnValue interface{}, cacheKey string) error {
-	return Cache.Once(cacheKey, returnValue, DefaultCacheTime, func() (interface{}, error) {
+	return Cache.Once(cacheKey, returnValue, func() (interface{}, error) {
 
 		// Create query
 		query, args, err := builder.ToSql()
@@ -123,7 +123,7 @@ func (helper *Helper) Save(builder *squirrel.InsertBuilder, cacheKey string, cac
 
 	// Update cache value if a key was provided
 	if len(cacheKey) > 0 {
-		if err = Cache.Set(cacheKey, cacheValue, DefaultCacheTime); err != nil {
+		if err = Cache.Set(cacheKey, cacheValue); err != nil {
 			log.Println(err)
 			if errTx := tx.Rollback(context.Background()); errTx != nil {
 				log.Println(errTx)

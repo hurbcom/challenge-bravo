@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const DefaultCacheTime = time.Hour
+const DefaultCacheTime = 8 * time.Hour
 
 // CacheContainer variables
 type CacheContainer struct {
@@ -48,11 +48,11 @@ func (cache *CacheContainer) Terminate() {
 
 // Once gets an item from cache. If the key wasn't found at cache it executes Do function storing its
 // result at cache and returning it to value parameter
-func (cache *CacheContainer) Once(key string, value interface{}, timeOut time.Duration, Do func() (interface{}, error)) error {
+func (cache *CacheContainer) Once(key string, value interface{}, Do func() (interface{}, error)) error {
 	return cache.cache.Once(&rcache.Item{
 		Key:   key,
 		Value: value,
-		TTL:   timeOut,
+		TTL:   DefaultCacheTime,
 		Do: func(item *rcache.Item) (interface{}, error) {
 			return Do()
 		},
@@ -60,11 +60,11 @@ func (cache *CacheContainer) Once(key string, value interface{}, timeOut time.Du
 }
 
 // Set puts an item on cache by a given duration. If the key already exists it will be replaced
-func (cache *CacheContainer) Set(key string, value interface{}, timeOut time.Duration) error {
+func (cache *CacheContainer) Set(key string, value interface{}) error {
 	return cache.cache.Set(&rcache.Item{
 		Key:   key,
 		Value: value,
-		TTL:   timeOut,
+		TTL:   DefaultCacheTime,
 	})
 }
 
