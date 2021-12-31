@@ -45,7 +45,6 @@ services:
             BRAVO_CURRENCY_LAYER_KEY: 8fc96429493d88318aff2b66efacf8cf
         volumes:
             - bravo:/app
-            - bravo:/go
         depends_on:
             - db
             - redis

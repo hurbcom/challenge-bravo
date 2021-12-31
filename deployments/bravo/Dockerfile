@@ -1,15 +1,16 @@
 FROM node:latest AS node
-RUN mkdir /app
-WORKDIR /app
+RUN mkdir /node_app
+WORKDIR /node_app
 COPY . .
-WORKDIR /app/frontend
+WORKDIR /node_app/frontend
 RUN npm install
 RUN npm install -g @angular/cli
 RUN ng build
-RUN mv dist/frontend /app/static
+WORKDIR /node_app
+RUN mv frontend/dist/frontend static
 
 FROM golang:latest
-COPY --from=node /app /app
+COPY --from=node /node_app /app
 WORKDIR /app
 RUN go mod download
 RUN go build -o bravo-server ./cmd/backend/
