@@ -7,6 +7,7 @@ import (
 	"challenge-bravo/services"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -53,6 +54,7 @@ func main() {
 // - Read parameters from environment variables, and set as default values (will be overridden by command line parameters)
 // - Initalize data layer (database and cache)
 func init() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 	// Read parameters from environment variables
 	webConfig.Port = model.DefaultPort

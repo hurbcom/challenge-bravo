@@ -19,8 +19,8 @@ type Quote interface {
 	// where the quotes will be updates by a job
 	Initialize(key string, refreshTimeout time.Duration) error
 
-	// Quote a symbol from the service/cache
-	Quote(symbol string) (float64, error)
+	// RefreshQuotes Refresh service quotes at cache and database
+	RefreshQuotes() error
 
 	// Terminate the service refresh job
 	Terminate()
@@ -92,7 +92,7 @@ func (baseQuote *baseQuote) Initialize(key string, refreshTimeout time.Duration)
 	return nil
 }
 
-func (baseQuote *baseQuote) Quote(string) (float64, error) {
+func (baseQuote *baseQuote) RefreshQuotes(string) (float64, error) {
 	return 0, fmt.Errorf("unimplement method. Please use the child classes")
 }
 
@@ -148,7 +148,7 @@ func (baseQuote *baseQuote) request(endPoint string, params map[string]string, r
 }
 
 // createTicker Create a job to refresh the currency quotes
-func (baseQuote *baseQuote) createTicker(symbol string, quoteFunc func(symbol string) (float64, error)) {
+func (baseQuote *baseQuote) createTicker(refreshFunc func() error) {
 
 	baseQuote.refreshTicker = time.NewTicker(baseQuote.refreshTimeout)
 	baseQuote.refreshQuit = make(chan bool)
@@ -157,10 +157,11 @@ func (baseQuote *baseQuote) createTicker(symbol string, quoteFunc func(symbol st
 		for {
 			select {
 			case <-baseQuote.refreshTicker.C:
-				if _, err := quoteFunc(symbol); err != nil {
+				if err := refreshFunc(); err != nil {
 					log.Println(err)
 					baseQuote.refreshQuit <- true
 				}
+				log.Println("cache refresh executed")
 			case <-baseQuote.refreshQuit:
 				baseQuote.refreshTicker.Stop()
 				return
@@ -185,6 +186,10 @@ func (lr *listResponse) getCurrencies() []model.Currency {
 		})
 	}
 	for k, v := range lr.Currencies {
+		// Fix wrong value provided by currency layer
+		if k == "BTC" {
+			continue
+		}
 		currencies = append(currencies, model.Currency{
 			Code: k,
 			Name: v,
@@ -192,6 +197,10 @@ func (lr *listResponse) getCurrencies() []model.Currency {
 		})
 	}
 	for k, v := range lr.Fiat {
+		// Fix wrong value provided by currency layer
+		if k == "BTC" {
+			continue
+		}
 		currencies = append(currencies, model.Currency{
 			Code: k,
 			Name: v,
@@ -199,6 +208,10 @@ func (lr *listResponse) getCurrencies() []model.Currency {
 		})
 	}
 	for k, v := range lr.Symbols {
+		// Fix wrong value provided by currency layer
+		if k == "BTC" {
+			continue
+		}
 		currencies = append(currencies, model.Currency{
 			Code: k,
 			Name: v,

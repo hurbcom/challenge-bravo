@@ -129,7 +129,7 @@ func TestConvertRoute(t *testing.T) {
 			asserts: func(t assert.TestingT, response interface{}) {
 				resp := response.(*ConvertResponse)
 				assert.Greaterf(t, resp.Quote, 0.001, "10 x EUR should be greater than", 0.001, "ETH = ", resp.Quote)
-				assert.Lessf(t, resp.Quote, 0.003, "10 x EUR should be less than than", 0.003, "ETH = ", resp.Quote)
+				assert.Lessf(t, resp.Quote, 0.03, "10 x EUR should be less than than", 0.03, "ETH = ", resp.Quote)
 			},
 		}, {
 			description: "Test convert route: EUR->CONVCUR (real -> custom)",

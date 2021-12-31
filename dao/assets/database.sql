@@ -59,7 +59,7 @@ $$
             code       character varying(10) COLLATE ignore_case_accents NOT NULL,
             type       currency_type                                     NOT NULL,
             name       character varying(100)                            NOT NULL,
-            rate       numeric(12, 4),
+            rate       double precision,
             created_at timestamp with time zone                          NOT NULL DEFAULT now(),
             updated_at timestamp with time zone                          NOT NULL DEFAULT now(),
             CONSTRAINT currency_pkey PRIMARY KEY (code)

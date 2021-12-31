@@ -121,17 +121,17 @@ currency code ``verbose`` an optional parameter that, when set to true, returns 
 
 [Φορτίο](https://github.com/fortio/fortio) was introduced to perform stress tests on **bravo-server**. Execute the
 following command to run the test:
-- <code>docker exec -it fortio fortio load -qps 1500 -c 8 -t 20s "http://host.docker.internal:8080/api/v1/convert?amount=10.5&from=USD&to=BRL" </code>
+- <code>docker exec -it fortio fortio load -qps 5000 -c 8 -t 20s "http://host.docker.internal:8080/api/v1/convert?amount=10.5&from=USD&to=BRL" </code>
 
 The test above have the following parameters:
-- Desired transactions per second = 1,500
+- Desired transactions per second = 5,000
 - Number of processes = 8
 - Duration of the test = 20s
 
 The following results were obtained on a notebook with an Intel Core I7 10510U processor and 16GB of RAM memory:
-- Total requests: 22,251
-- Average request time: 7.174 milliseconds
-- Requests per second: 1,112.3
+- Total requests: 20,570
+- Average request time: 1.933 milliseconds
+- Requests per second: 4,113.5
 
 Additionally, the program includes a graphical interface that may be accessible via the browser at
 http://localhost:8088/fortio/, from which it is possible to generate graphical reports such as the one shown below.

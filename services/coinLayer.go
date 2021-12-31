@@ -1,10 +1,8 @@
 package services
 
 import (
-	"challenge-bravo/dao"
 	"challenge-bravo/model"
 	"errors"
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -37,61 +35,59 @@ func (coinLayer *coinLayer) Initialize(key string, refreshTimeout time.Duration)
 	}
 
 	// Save the list to the database and cache
-	if err := model.SaveCurrencies(currencyList.getCurrencies()); err != nil {
+	if err := model.SaveCurrencies(currencyList.getCurrencies(), coinLayer.refreshTimeout, false, false); err != nil {
 		return err
 	}
 
 	// CacheContainer warm up
-	if value, err := coinLayer.Quote("BTC"); err != nil || value <= 0 {
-		if err != nil {
-			err = fmt.Errorf("invalid quote for BTC rate %.4f", value)
-		}
+	if err := coinLayer.RefreshQuotes(); err != nil {
 		return err
 	}
 
 	// Create refresh service
-	coinLayer.baseQuote.createTicker("BTC", coinLayer.Quote)
+	coinLayer.baseQuote.createTicker(coinLayer.RefreshQuotes)
 	return nil
 }
 
-func (coinLayer *coinLayer) Quote(symbol string) (float64, error) {
+func (coinLayer *coinLayer) RefreshQuotes() error {
 
 	// Avoid concurrent calls
 	coinLayer.refreshMutex.Lock()
 	defer coinLayer.refreshMutex.Unlock()
 
-	// Quote the currency from cache or service
-	var quote float64
-	if err := dao.Cache.Once("Y."+symbol, &quote, coinLayer.refreshTimeout, func() (interface{}, error) {
-
-		// Retrieve most recent quotes from service
-		var latest quoteResponse
-		if err := coinLayer.request(coinLayerEndPoint+"live", coinLayer.requestParams, &latest); err != nil || !latest.Success {
-			if !latest.Success {
-				err = errors.New(strings.TrimSpace(latest.Error.Type + " " + latest.Error.Info))
-			}
-			return 0, err
+	// Retrieve most recent quotes from service
+	var latest quoteResponse
+	if err := coinLayer.request(coinLayerEndPoint+"live", coinLayer.requestParams, &latest); err != nil || !latest.Success {
+		if !latest.Success {
+			err = errors.New(strings.TrimSpace(latest.Error.Type + " " + latest.Error.Info))
 		}
-
-		// Save all other values on the cache
-		for k, v := range latest.Rates {
-			if k != symbol {
-				if err := dao.Cache.Set("Y."+k, v, coinLayer.refreshTimeout); err != nil {
-					return 0, err
-				}
-			}
-		}
-
-		// Obtain currency quote
-		qt, exist := latest.Rates[symbol]
-		if !exist {
-			return 0, fmt.Errorf("symbol not found: %s", symbol)
-		}
-
-		return qt, nil
-	}); err != nil {
-		log.Println(err)
-		return 0, err
+		return err
 	}
-	return quote, nil
+
+	// Retrieve the currency list from database
+	var currencies []*model.Currency
+	currency := model.Currency{}
+	if err := currency.List(&currencies); err != nil {
+		return err
+	}
+
+	// Save values to database and cache
+	var currenciesUpdate []model.Currency
+	for k, v := range latest.Rates {
+		value := v
+		for _, c := range currencies {
+			if k == c.Code {
+				c.Rate = &value
+				currenciesUpdate = append(currenciesUpdate, *c)
+				break
+			}
+		}
+	}
+
+	// Save the list to the database and cache
+	if err := model.SaveCurrencies(currenciesUpdate, coinLayer.refreshTimeout, true, true); err != nil {
+		return err
+	}
+
+	return nil
 }

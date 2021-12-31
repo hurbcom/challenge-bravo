@@ -9,6 +9,7 @@ import (
 	"github.com/jackc/pgerrcode"
 	"log"
 	"net/http"
+	"time"
 )
 
 type CurrencyType string
@@ -65,7 +66,7 @@ func (curr *Currency) Save() *dao.Error {
 		Insert("currency").
 		Columns("code", "type", "name", "rate").
 		Values(curr.Code, curr.Type, curr.Name, curr.Rate).
-		Suffix("ON CONFLICT ON CONSTRAINT currency_pkey DO UPDATE SET type=$2,name=$3,rate=$4;")
+		Suffix("ON CONFLICT ON CONSTRAINT currency_pkey DO UPDATE SET code=excluded.code,name=excluded.name,rate=excluded.rate;")
 
 	// Persist to database and cache
 	if err := curr.Helper.Save(&builder, "CUR."+curr.Code, curr); err != nil {
@@ -100,7 +101,7 @@ func (curr *Currency) Validate() *dao.Error {
 		StatusCode: http.StatusBadRequest,
 	}
 
-	// Check if the code exists
+	// Check if the code if filled
 	if len(curr.Code) == 0 {
 		err.Append(fmt.Sprintf("code: code is a required field, for crypto currencies and custom currencies must have from one to ten characters long and for real currencies three characters long"))
 	}
@@ -118,6 +119,13 @@ func (curr *Currency) Validate() *dao.Error {
 		err.Append(fmt.Sprintf("name: currency name must have from one to one hundred characters long, was provided a string with %d characters", len(curr.Name)))
 	}
 
+	// Check rate
+	if curr.Rate != nil {
+		if *curr.Rate < 0 {
+			err.Append(fmt.Sprintf("rate: USD conversion rate should be valid and greather than zero: %.2f", *curr.Rate))
+		}
+	}
+
 	switch curr.Type {
 	case RealCurrency:
 
@@ -131,11 +139,6 @@ func (curr *Currency) Validate() *dao.Error {
 			err.Append(fmt.Sprintf("code: currency code for real currencies must contain only letters: %s", curr.Code))
 		}
 
-		// Check rate
-		if curr.Rate != nil {
-			err.Append(fmt.Sprintf("rate: USD conversion rate should be null for real currencies: %.2f", *curr.Rate))
-		}
-
 	case CustomCurrency:
 
 		// Check code length
@@ -143,24 +146,10 @@ func (curr *Currency) Validate() *dao.Error {
 			err.Append(fmt.Sprintf("code: currency code for custom currencies must have from one to ten characters long, was provideda a string with %d characters: %s", len(curr.Code), curr.Code))
 		}
 
-		// Check rate
-		if curr.Rate == nil {
-			err.Append(fmt.Sprintf("rate: USD conversion rate should be valid and greather than zero for custom currencies"))
-		} else {
-			if *curr.Rate <= 0 {
-				err.Append(fmt.Sprintf("rate: USD conversion rate should be valid and greather than zero for custom currencies: %.2f", *curr.Rate))
-			}
-		}
-
 	case CryptoCurrency:
 		// Check code length
 		if len(curr.Code) > 10 {
 			err.Append(fmt.Sprintf("code: currency code for crypto currencies must have from one to ten characters long, was provideda a string with %d characters: %s", len(curr.Code), curr.Code))
-		}
-
-		// Check rate
-		if curr.Rate != nil {
-			err.Append(fmt.Sprintf("rate: USD conversion rate should be null for real currencies: %.2f", *curr.Rate))
 		}
 
 	default:
@@ -213,34 +202,45 @@ func (curr *Currency) Delete() *dao.Error {
 }
 
 // SaveCurrencies Save a vector of currencies to the database and cache
-func SaveCurrencies(currencies []Currency) *dao.Error {
+func SaveCurrencies(currencies []Currency, cacheTimeout time.Duration, update bool, saveInCache bool) *dao.Error {
 
 	// Prepare the query
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
 		Insert("currency").
-		Columns("code", "type", "name")
+		Columns("code", "type", "name", "rate")
 	for _, cur := range currencies {
 
 		// Validates the actual currency and if it's ok put at the insert statement
 		if err := cur.Validate(); err == nil {
 
 			// Append to the query
-			builder = builder.Values(cur.Code, cur.Type, cur.Name)
+			builder = builder.Values(cur.Code, cur.Type, cur.Name, cur.Rate)
 
-			// Save currency to cache
-			if cErr := dao.Cache.Set("CUR."+cur.Code, cur, dao.DefaultCacheTime); cErr != nil {
-				log.Println(cErr)
+			if saveInCache {
+				if cErr := dao.Cache.Set("CUR."+cur.Code, cur, cacheTimeout); cErr != nil {
+					log.Println(cErr)
+				}
 			}
+
 		} else {
+			log.Println(cur.String())
 			log.Println(err)
 		}
 	}
-	builder = builder.Suffix("ON CONFLICT ON CONSTRAINT currency_pkey DO NOTHING;")
+	if update {
+		builder = builder.Suffix("ON CONFLICT ON CONSTRAINT currency_pkey DO UPDATE SET code = excluded.code,type = excluded.type,name = excluded.name,rate = excluded.rate;")
+	} else {
+		builder = builder.Suffix("ON CONFLICT ON CONSTRAINT currency_pkey DO NOTHING;")
+	}
 
 	// Execute the query
 	if err := dao.Save(&builder); err != nil {
 		return prepareCurrencyErrors(err)
 	}
+
+	// Invalidate currency list cache
+	_ = dao.Cache.Del("CUR.=LIST=")
+
 	return nil
 }
 

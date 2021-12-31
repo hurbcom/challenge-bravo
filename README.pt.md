@@ -124,17 +124,17 @@ depuração.
 
 Foi adicionada ferramenta [Φορτίο](https://github.com/fortio/fortio) para a execução do teste de estresse do
 **bravo-server**. Para a execução dos testes execute o seguinte comando:
-- <code>docker exec -it fortio fortio load -qps 1500 -c 8 -t 20s "http://host.docker.internal:8080/api/v1/convert?amount=10.5&from=USD&to=BRL" </code>
+- <code>docker exec -it fortio fortio load -qps 5000 -c 8 -t 20s "http://host.docker.internal:8080/api/v1/convert?amount=10.5&from=USD&to=BRL" </code>
 
 Os parâmetros dos testes acima são os seguintes:
-- Transações por segundo desejadas = 1500
+- Transações por segundo desejadas = 5.000
 - Processos = 8
 - Duração do teste = 20s
 
 Os resultados obtidos em um notebook com processador Intel Core I7 10510U e 16GB de memória RAM foram os seguintes:
-- Total de requisições: 22.251
-- Tempo médio por requisição: 7,174 ms
-- Requisições por segundo: 1.112,3
+- Total de requisições: 20.570
+- Tempo médio por requisição: 1,933 ms
+- Requisições por segundo: 4.113,5
 
 A ferramenta ainda oferece uma interface gráfica a qual pode ser acessada pelo navegador através da URL
 http://localhost:8088/fortio/ onde é possível a geração relatórios gráficos como o observado abaixo.

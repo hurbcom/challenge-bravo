@@ -1,10 +1,8 @@
 package services
 
 import (
-	"challenge-bravo/dao"
 	"challenge-bravo/model"
 	"errors"
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -37,64 +35,59 @@ func (currencyLayer *currencyLayer) Initialize(key string, refreshTimeout time.D
 	}
 
 	// Save the list to the database and cache
-	if err := model.SaveCurrencies(currencyList.getCurrencies()); err != nil {
+	if err := model.SaveCurrencies(currencyList.getCurrencies(), currencyLayer.refreshTimeout, false, false); err != nil {
 		return err
 	}
 
 	// CacheContainer warm up
-	if value, err := currencyLayer.Quote("USD"); err != nil || value != 1 {
-		if err != nil {
-			err = fmt.Errorf("invalid quote for USD rate %.4f", value)
-		}
-		log.Println(err)
+	if err := currencyLayer.RefreshQuotes(); err != nil {
 		return err
 	}
 
 	// Create refresh service
-	currencyLayer.baseQuote.createTicker("USD", currencyLayer.Quote)
+	currencyLayer.baseQuote.createTicker(currencyLayer.RefreshQuotes)
 	return nil
 }
 
-func (currencyLayer *currencyLayer) Quote(symbol string) (float64, error) {
+func (currencyLayer *currencyLayer) RefreshQuotes() error {
 
 	// Avoid concurrent calls
 	currencyLayer.refreshMutex.Lock()
 	defer currencyLayer.refreshMutex.Unlock()
 
-	// Quote the currency from cache or service
-	var quote float64
-	if err := dao.Cache.Once("C."+symbol, &quote, currencyLayer.refreshTimeout, func() (interface{}, error) {
-
-		// Retrieve most recent quotes from service
-		var latest quoteResponse
-		if err := currencyLayer.request(currencyLayerEndPoint+"live", currencyLayer.requestParams, &latest); err != nil || !latest.Success {
-			if !latest.Success {
-				err = errors.New(strings.TrimSpace(latest.Error.Type + " " + latest.Error.Info))
-			}
-			return 0, err
+	// Retrieve most recent quotes from service
+	var latest quoteResponse
+	if err := currencyLayer.request(currencyLayerEndPoint+"live", currencyLayer.requestParams, &latest); err != nil || !latest.Success {
+		if !latest.Success {
+			err = errors.New(strings.TrimSpace(latest.Error.Type + " " + latest.Error.Info))
 		}
-
-		// Save all other values on the cache
-		for k, v := range latest.Quotes {
-			key := k[3:]
-			if key != symbol {
-				if err := dao.Cache.Set("C."+key, v, currencyLayer.refreshTimeout); err != nil {
-					return 0, err
-				}
-			}
-		}
-
-		// Obtain currency quote
-		qt, exist := latest.Quotes["USD"+symbol]
-		if !exist {
-			return 0, fmt.Errorf("symbol not found: %s", symbol)
-		}
-
-		return qt, nil
-
-	}); err != nil {
-		log.Println(err)
-		return 0, err
+		return err
 	}
-	return quote, nil
+
+	// Retrieve the currency list from database
+	var currencies []*model.Currency
+	currency := model.Currency{}
+	if err := currency.List(&currencies); err != nil {
+		return err
+	}
+
+	// Save values to database and cache
+	var currenciesUpdate []model.Currency
+	for k, v := range latest.Quotes {
+		value := v
+		key := k[3:]
+		for _, c := range currencies {
+			if key == c.Code {
+				c.Rate = &value
+				currenciesUpdate = append(currenciesUpdate, *c)
+				break
+			}
+		}
+	}
+	// Save the list to the database and cache
+	if err := model.SaveCurrencies(currenciesUpdate, currencyLayer.refreshTimeout, true, true); err != nil {
+		return err
+	}
+
+	return nil
 }

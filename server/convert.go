@@ -5,7 +5,6 @@ import (
 	"challenge-bravo/model"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"log"
 	"strconv"
 	"strings"
 )
@@ -47,37 +46,24 @@ func Convert(c *fiber.Ctx) error {
 	}
 
 	// Obtain currencies quotes
-	var fromQuote, toQuote, finalQuote float64
-	if from.Type == model.CustomCurrency {
-		fromQuote = *from.Rate
-	} else {
-		if err = dao.Cache.Get(string(from.Type)+"."+from.Code, &fromQuote); err != nil {
-			log.Println(err)
-		}
-	}
-
-	if to.Type == model.CustomCurrency {
-		toQuote = *to.Rate
-	} else {
-		if err = dao.Cache.Get(string(to.Type)+"."+to.Code, &toQuote); err != nil {
-			log.Println(err)
-		}
-	}
+	fromRate := *from.Rate
+	toRate := *to.Rate
+	var finalQuote float64
 
 	switch {
 	case (from.Type == model.CryptoCurrency && to.Type == model.RealCurrency) ||
 		(from.Type == model.CustomCurrency && to.Type == model.RealCurrency):
-		finalQuote = fromQuote * toQuote * amount
+		finalQuote = fromRate * toRate * amount
 	case (from.Type == model.RealCurrency && to.Type == model.CryptoCurrency) ||
 		(from.Type == model.RealCurrency && to.Type == model.CustomCurrency):
-		finalQuote = amount / (fromQuote * toQuote)
+		finalQuote = amount / (fromRate * toRate)
 	case from.Type == model.RealCurrency && to.Type == model.RealCurrency:
-		finalQuote = (toQuote / fromQuote) * amount
+		finalQuote = (toRate / fromRate) * amount
 	case (from.Type == model.CryptoCurrency && to.Type == model.CryptoCurrency) ||
 		(from.Type == model.CustomCurrency && to.Type == model.CustomCurrency) ||
 		(from.Type == model.CustomCurrency && to.Type == model.CryptoCurrency) ||
 		(from.Type == model.CryptoCurrency && to.Type == model.CustomCurrency):
-		finalQuote = (fromQuote / toQuote) * amount
+		finalQuote = (fromRate / toRate) * amount
 	}
 
 	// Response preparation
@@ -90,8 +76,6 @@ func Convert(c *fiber.Ctx) error {
 	if verbose {
 		response.From = &from
 		response.To = &to
-		response.From.Rate = &fromQuote
-		response.To.Rate = &toQuote
 	}
 	return c.Status(fiber.StatusOK).JSON(response)
 }
