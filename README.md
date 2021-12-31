@@ -66,7 +66,7 @@ If the ``bravo`` service enters a restart cycle as a result of a database connec
 failure. The issue could be caused by an out-of-date database server image. To resolve the issue, you must delete all
 Postgres related images and volumes and restart the services; however, do not forget to perform a backup of any data
 included in these volumes.
-- ``docker system prune -a``
+- ``docker system prune -a --volumes -f``
 
 ## API usage
 

@@ -69,7 +69,7 @@ Caso o serviço ``bravo`` entre em um ciclo de reinicialização devido à falta
 função de falha na autenticação. O problema possivelmente está sendo causado devido a uma imagem antiga do servidor de
 banco de dados. Para solucionar o problema você deve remover suas imagens e volumes relacionados ao Postgres e reiniciar
 os serviços, porém não se esqueça de realizar o backup, pois os eventuais dados contidos nesses volumes serão perdidos.
-- ``docker system prune -a``
+- ``docker system prune -a --volumes -f``
 
 ## Utilização da API
 

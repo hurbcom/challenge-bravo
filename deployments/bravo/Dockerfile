@@ -13,7 +13,7 @@ FROM golang:latest
 COPY --from=node /node_app /app
 WORKDIR /app
 RUN go install github.com/swaggo/swag/cmd/swag@latest
-RUN swag init -o swagger -g server.go -d .\server\,.\model\,.\dao\
+RUN swag init -o swagger -g server.go -d ./server/,./model/,./dao/
 RUN go mod download
 RUN go build -o bravo-server ./cmd/backend/
 RUN chmod +x bravo-server
