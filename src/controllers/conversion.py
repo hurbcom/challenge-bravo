@@ -2,8 +2,8 @@ from flask import Flask, request
 from flask_restx import Api, Resource
 
 from controllers.validator.requestvalidator import RequestValidator
-from dao.conversiondao import ConversionDao
 from server.server import ServerInitializer
+from services.conversionservice import ConversionService
 
 from models.responsemodel import *
 from exceptions.apiexceptions import *
@@ -13,7 +13,7 @@ class ConversionController(Resource):
     def get(self, ):
         try:
             request_model = RequestValidator.validateConvertRequestArgs(request.args)
-            exchanged_value = ConversionDao.getCurrecyValueFrom(request_model.to_currency,request_model.from_currency)
+            exchanged_value = ConversionService.getCurrecyValueFromTo(request_model.to_currency,request_model.from_currency,request_model.amount)
 
         except InvalidParametersException as e:
             return ErrorResponse.create(str(e),e.statusCode)
