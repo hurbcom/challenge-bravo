@@ -3,6 +3,9 @@ from flask_restx import Api, Resource
 
 from server.server import ServerInitializer
 from controllers.validator.requestvalidator import RequestValidator
+from models.responsemodel import *
+from exceptions.apiexceptions import *
+
 
 
 mocked_coins = { 'USD' : { 'BTC' : 5, 'BRL' : 6, 'EUR' : 4, 'ETH' : 0.4, 'USD' : 1},
@@ -15,8 +18,8 @@ mocked_coins = { 'USD' : { 'BTC' : 5, 'BRL' : 6, 'EUR' : 4, 'ETH' : 0.4, 'USD' :
 class ConversionController(Resource):
     def get(self, ):
         try:
-            RequestValidator.validateConvertRequestArgs(request.args)
-        except Exception as e:
-            return { 'success' : False, 'message' : str(e) }
+            requestModel = RequestValidator.validateConvertRequestArgs(request.args)
+        except InvalidParametersException as e:
+            return ErrorResponse.create(str(e),e.statusCode)
 
-        return mocked_coins
+        return SuccessResponse.create(requestModel.to_currency, { 'value' : 1 })
