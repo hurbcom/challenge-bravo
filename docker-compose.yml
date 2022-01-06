@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+    currency_api:
+        build: .
+        command: yarn dev
+        volumes:
+            - .:/usr/app/
+            - /usr/app/node_modules
+        environment:
+            NODE_ENV: "development"
+            DB_MONGODB_NAME_TEST: "currency_api_test"
+            DB_MONGODB_NAME: "currency_api"
+            DB_MONGODB_DOMAIN: "mongodb://database_mongo"
+            PORT: 8888
+            LOGGER_LEVEL: debug
+            ECONOMY_API: "https://economia.awesomeapi.com.br/last"
+        ports:
+            - "8888:8888"
+        depends_on:
+            - database_mongo
+
+    database_mongo:
+        container_name: mongodb-currency-api
+        image: "mongo"
+        volumes:
+            - ./data:/data/db
+        ports:
+            - "27017:27017"
