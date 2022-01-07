@@ -1,10 +1,8 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
-
-The API must convert between the following currencies:
+A API precisa converter entre as seguintes moedas:
 
 -   USD
 -   BRL
@@ -12,29 +10,29 @@ The API must convert between the following currencies:
 -   BTC
 -   ETH
 
-Other coins could be added as usage.
+Outras moedas podem ser adicionadas conforme o uso.
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+A API deve suportar conversão entre moedas fiduciárias, crypto e fictícias. Exemplo: BRL->HURB, HURB->ETH
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de Dungeons & Dragons sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
 
 Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
+Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
 
 -   JavaScript (NodeJS)
 -   Python
@@ -43,40 +41,201 @@ You can use any programming language for the challenge. Below is the list of lan
 -   C++
 -   PHP
 
-## Requirements
+# Solução -> API REST em Node.JS
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+Para tal, foi desenvolvido uma API REST em Node.JS onde foi usado o Express como web framework, MongoDB como banco de dados NoSQL e Jest para os testes unitários e integrados. O motivo da utilização dessas tecnologias foram pela familiaridade do desenvolvedor com elas, pela vasta comunidade e pelo potencial que possuem para suportar 1000 requisições por segundo.
 
-## Evaluation criteria
+Então, a API recebe os dados fornecidos por um client, trata-os e fornece um JSON como resposta. O valor da moeda tida como base, o dólar, é atualizada a cada 3 minutos, mediante a requisição do usuário. E após esse tempo, o valor é atualizado no banco de dados caso a moeda não seja fiduciária ou fictícia.
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+Tecnologias utilizadas:
 
-## Doubts
+- **Node.Js** com ECMAScript modules;
+- **Express** como framework web;
+- **Mongoose** para **MongoDB**;
+- **Eslint** e **Prettier** (JavaScript Standard como Style guide);
+- **Jest** para os testes unitários e integrados;
+- **Winston** para os logs;
+- **Yup** para as validações dos dados de entrada do client;
+- **Axios** para fazer requisições a API de Cotações de Moedas ([AwesomeAPI](https://docs.awesomeapi.com.br/api-de-moedas));
+- **Babel** para auxiliar o Jest na hora de executar os testes por conta da utilização do ECMAScript modules.
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+## Modelo de Endidade
 
-Godspeed! ;)
+### Currency
+```
+code: <string>
+name: <string>
+inDollar: <float>
+isFiatOrFictitious: <boolean>
+```
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## Funcionalidades da API
+
+- Criação de moeda;
+- Listagem de todas as moedas;
+- Conversão de moeda desejada;
+- Deleção de moeda.
+
+### Rotas
+
+#### Criação de moeda
+
+```
+Endpoint: /currency
+
+Method: POST
+
+Headers: {
+    "Content-Type": "application/json"
+}
+
+Query: {}
+
+Params: {}
+
+Body: {
+    "code": "USD",
+	"name": "Dólar Americano",
+	"inDollar": 1,
+	"isFiatOrFictitious": false
+}
+}
+
+Response: {
+    status: 200,
+    body: {
+        "code": "USD",
+        "name": "Dólar Americano",
+        "inDollar": 1,
+        "isFiatOrFictitious": false,
+        "_id": <id_mongo>,
+        "createdAt": <data_criação>,
+        "updatedAt": <data_última_atualização>
+    }
+}
+```
+#### Listagem de todas as moedas
+
+```
+Endpoint: /currency
+
+Method: GET
+
+Headers: {}
+
+Query: {}
+
+Params: {}
+
+Body: {}
+
+Response: {
+    status: 200,
+    body: [
+        {
+            "code": "USD",
+            "name": "Dólar Americano",
+            "inDollar": 1,
+            "isFiatOrFictitious": false,
+            "_id": <id_mongo>,
+            "createdAt": <data_criação>,
+            "updatedAt": <data_última_atualização>
+        }
+    ]
+}
+```
+#### Conversão de moeda desejada
+
+```
+Endpoint: /currency/conversion
+
+Method: GET
+
+Headers: {}
+
+Query: {
+    "from": "USD"
+    "to": "BRL",
+    "amount": 1
+}
+
+Params: {}
+
+Body: {}
+
+Response: {
+    status: 200,
+    body: [
+        {
+            "from": "USD"
+            "to": "BRL",
+            "convertedAmount": 5,60
+        }
+    ]
+}
+```
+#### Deleção de moeda
+
+```
+Endpoint: /currency/:currencyCode
+
+Method: DELETE
+
+Headers: {}
+
+Query: {}
+
+Params: {
+    "currencyCode": "USD"
+}
+
+Body: {}
+
+Response: {
+    status: 200,
+    body: [
+        {
+            "deletedCount": 1
+        }
+    ]
+}
+```
+
+
+
+## Vulnerabilidade
+
+Como a API é pública, o usuário consegue realizar todas as funções sem a necessidade de um token de acesso.
+
+## Execução do projeto
+
+Para a execução do projeto é necessário ter instalado na máquina o `Docker e docker-compose`.
+
+### Comandos
+
+#### Executar localmente
+
+- `git clone <url_repositorio>` : clonar o repositório;
+- `docker-compose up`: rodar a aplicação.
+
+Para acessar a API diretamente é preciso acessar http://localhost:8888 + o endpoint.
+
+Ex: http://localhost:8888/heath
+
+#### Para executar os testes
+
+Para rodar os testes unitários e integrados é preciso seguir os seguintes comandos abaixo:
+
+- Alterar a variável de ambiente chamado `NODE_ENV` dentro do arquivo [docker-compose.yml](docker-compose.yml) de development para `test`;
+- `docker-compose up` para rodar a aplicação;
+- Abra uma nova aba no terminal e execute `docker ps` para obter `id` do container da API REST;
+- `docker exec -it <container_id> bash` para executar o bash e "entrar" no container da aplicação principal;
+- `yarn test` para executar os testes.
+
+## Performance
+
+Como um dos requisitos foi que a API suportasse 1000 requisições por segundo, foi utilizado uma ferramente chamado [Jmeter](https://jmeter.apache.org/) para a realização dos testes localmente.
+
+Conforme a imagem abaixo, a API suportou as 1000 requisições com sucesso, sem nenhum erro.
+
+![StressTest](./docs/StressTest.png)
