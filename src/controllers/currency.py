@@ -18,3 +18,14 @@ class CurrencyController(Resource):
 
         return SuccessResponse.create(request_model.name,
                                       currency_json)
+
+    def put(self,):
+        try:
+            request_model = RequestValidator.validateCurrencyPutRequestArgs(request.args)
+            currency_json = CurrencyService.saveCurrency(request_model.name,request.value)
+        except (InvalidParametersException, DatabaseException) as e:
+            return ErrorResponse.create(e.message,e.statusCode)
+
+        return SuccessResponse.create(request_model.name,
+                                      currency_json)
+

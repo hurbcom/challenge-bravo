@@ -17,3 +17,11 @@ class RequestValidator():
         if(model.isDataNull()):
             raise InvalidParametersException()
         return model
+
+    def validateCurrencyPutRequestArgs(args):
+        name = args.get('name',type=str)
+        value = args.get('value',type=int)
+        model = CurrencyPutRequestModel(name,value)
+        if(model.isDataNull()):
+            raise InvalidParametersException()
+        return model

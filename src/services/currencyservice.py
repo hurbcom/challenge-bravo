@@ -9,3 +9,9 @@ class CurrencyService():
             return currency_schema.dump(currency)
         except:
             raise InvalidCurrenciesException()
+
+    def saveCurrency(name,value):
+        try:
+            currency = CurrencyDao.saveOrUpdateCurrency(name,value)
+        except:
+            raise DatabaseException()

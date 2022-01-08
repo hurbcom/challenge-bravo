@@ -16,4 +16,12 @@ class CurrencyGetRequestModel():
     def isDataNull(self):
         return (self.name == None)
 
+class CurrencyPutRequestModel():
+    def __init(self,name,value):
+        self.name = name
+        self.value = value
+
+    def isDataNull(self):
+        return (self.name == None or
+                self.value == None)
 
