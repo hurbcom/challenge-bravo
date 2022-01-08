@@ -9,3 +9,11 @@ class ConvertRequestModel():
                 self.from_currency == None or
                 self.amount == None)
 
+class CurrencyGetRequestModel():
+    def __init__(self,name):
+        self.name = name
+
+    def isDataNull(self):
+        return (self.name == None)
+
+

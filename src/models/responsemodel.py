@@ -12,4 +12,3 @@ class ErrorResponse():
         response = error_format
         response['message'] = message
         response['status'] = status_code
-        return response

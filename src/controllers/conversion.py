@@ -15,7 +15,7 @@ class ConversionController(Resource):
             request_model = RequestValidator.validateConvertRequestArgs(request.args)
             exchanged_value = ConversionService.getCurrecyValueFromTo(request_model.to_currency,request_model.from_currency,request_model.amount)
 
-        except Exception as e:
+        except (InvalidParametersException, InvalidCurrenciesException) as e:
             return ErrorResponse.create(e.message,e.statusCode)
 
         return SuccessResponse.create(request_model.to_currency,

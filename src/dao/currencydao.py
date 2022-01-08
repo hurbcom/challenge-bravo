@@ -6,6 +6,9 @@ class CurrencyDao():
     def getExchangeValueMocked(to_currency,from_currency):
         return mocked_coins[to_currency][from_currency]
 
+    def getCurrency(name):
+        return Currency.get(name)
+
     def getExchangeValue(to_currency,from_currency):
         to_currency_model = Currency.get(to_currency)
         from_currency_model = Currency.get(from_currency)
