@@ -15,16 +15,20 @@ class Currency(db.Model):
     def __repr__(self):
         return 'Moeda: %s - Valor: %s - Ultima Atualizacao: %s' % self.name, self.value, self.last_update
 
+    def get(name):
+        return Currency.query.get(name)
+
+    def exists(name):
+        currency = Currency.get(name)
+        return currency != None
+
     def save(self):
         db.session.add(self)
         db.session.commit()
 
     def update(name,value):
-        currency = Currency.query.get(name)
+        currency = Currency.get(name)
         currency.value = value
         currency.access_count += 1
         currency.save()
 
-    def exists(name):
-        currency = Currency.query.get(name)
-        return currency != None
