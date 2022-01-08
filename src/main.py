@@ -1,6 +1,5 @@
-from server.server import ServerInitializer
-
+from server.server import *
 from controllers.conversion import *
 
-server = ServerInitializer()
 server.run()
+

@@ -11,4 +11,5 @@ class ErrorResponse():
     def create(message,status_code):
         response = error_format
         response['message'] = message
-        response['status'] = status
+        response['status'] = status_code
+        return response

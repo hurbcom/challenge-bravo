@@ -2,13 +2,13 @@ from flask import Flask, request
 from flask_restx import Api, Resource
 
 from controllers.validator.requestvalidator import RequestValidator
-from server.server import ServerInitializer
+from server.server import *
 from services.conversionservice import ConversionService
 
 from models.responsemodel import *
 from exceptions.apiexceptions import *
 
-@ServerInitializer.api.route('/convert')
+@server.api.route('/convert')
 class ConversionController(Resource):
     def get(self, ):
         try:
