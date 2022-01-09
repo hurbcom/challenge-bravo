@@ -16,22 +16,36 @@ class Currency(db.Model):
         return 'Moeda: %s - Valor: %s - Ultima Atualizacao: %s' % self.name, self.value, self.last_update
 
     def get(name):
-        return Currency.query.get(name)
+        with server.app_context():
+            currency = Currency.query.get(name)
+            currency.access_count += 1
+            db.session.refresh(currency)
+            return currency
 
     def exists(name):
-        currency = Currency.get(name)
-        return currency != None
+        with server.app_context():
+            currency = Currency.query.get(name)
+            return currency != None
 
     def save(self):
-        db.session.add(self)
-        db.session.commit()
+        with server.app_context():
+            db.session.add(self)
+            db.session.commit()
 
     def update(name,value):
-        currency = Currency.get(name)
-        currency.value = value
-        currency.access_count += 1
-        currency.save()
+        with server.app_context():
+            currency = Currency.query.get(name)
+            currency.value = value
+            currency.access_count += 1
+            currency.save()
+
+    def updateIntern(name,value):
+        with server.app_context():
+            currency = Currency.query.get(name)
+            currency.value = value
+            currency.save()
 
     def remove(self):
-        db.session.delete(self)
-        db.session.commit()
+        with server.app_context():
+            db.session.delete(self)
+            db.session.commit()

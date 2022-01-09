@@ -22,6 +22,13 @@ class CurrencyDao():
             currency = Currency(name,value)
             currency.save()
 
+    def saveOrUpdateCurrencyIntern(name,value):
+        if Currency.exists(name):
+            Currency.updateIntern(name,value)
+        else:
+            currency = Currency(name,value)
+            currency.save()
+
     def removeCurrency(name):
         if Currency.exists(name):
             currency = Currency.get(name)

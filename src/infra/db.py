@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from flask_migrate import Migrate
 from sqlalchemy_utils import database_exists, create_database
 
 from integration.currencyintegration import CurrencyIntegration
@@ -8,7 +7,6 @@ from integration.currencyintegration import CurrencyIntegration
 class Database():
     db = SQLAlchemy()
     ma = Marshmallow()
-    migrate = Migrate()
 
     def __init__(self,config):
         self.config = config
@@ -19,7 +17,6 @@ class Database():
         #'sqlite:///currencies.sqlite3'
         self.db.init_app(app)
         self.ma.init_app(app)
-        self.migrate.init_app(app,self.db)
         self.createDb(app)
 
     def createDb(self,app):
@@ -35,9 +32,11 @@ class Database():
         return self.db
 
     def seedDb(self):
+        self.updateCurrencies()
 
+    def updateCurrencies(self):
         from dao.currencydao import CurrencyDao
 
         for coin in self.config.INITIAL_COINS:
             value = CurrencyIntegration.getCurrencyInMainCurrency(coin)
-            CurrencyDao.saveOrUpdateCurrency(coin,value)
+            CurrencyDao.saveOrUpdateCurrencyIntern(coin,value)
