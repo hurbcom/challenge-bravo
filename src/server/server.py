@@ -7,6 +7,10 @@ from server.config import Config
 from task.currenciesupdater import CurrenciesUpdaterTask
 from task.cachelistupdater import CacheListUpdater
 
+class ServerSharedObject(object):
+    def __init__(self, server):
+        self.server = server
+
 class Server(Flask):
     cache = []
 
@@ -26,22 +30,21 @@ class Server(Flask):
         print("Iniciei base")
 
     def runServerTasks(self):
-        def currencies():
-            currency_database_obj = Database(Config)
-            currency_database_obj.initDb(self)
-            currencies_updater_task = CurrenciesUpdaterTask(currency_database_obj)
-            currencies_updater_task.updateCurrencies()
+        # setup currency updater task
+        currency_database_obj = Database(Config)
+        currency_database_obj.initDb(self)
+        currencies_updater_task = CurrenciesUpdaterTask(shared=sharedServer)
+        currencies_updater_task.prepare(currency_database_obj)
 
-        def cache():
-            cache_database_obj = Database(Config)
-            cache_database_obj.initDb(self)
-            cache_updater_task = CacheListUpdater(cache_database_obj)
-            cache_updater_task.updateCacheList(self)
+        # setup cache updater task
+        cache_database_obj = Database(Config)
+        cache_database_obj.initDb(self)
+        cache_updater_task = CacheListUpdater(shared=sharedServer)
+        cache_updater_task.prepare(cache_database_obj)
 
-        thread_currencies_updater = threading.Thread(target=currencies)
-        thread_cache_updater = threading.Thread(target=cache)
-        thread_currencies_updater.start()
-        thread_cache_updater.start()
+        #running tasks
+        cache_updater_task.start()
+        currencies_updater_task.start()
 
     def start(self):
         self.runServerTasks()
@@ -49,4 +52,5 @@ class Server(Flask):
 
 server = Server(__name__)
 server.setUp(Config)
+sharedServer = ServerSharedObject(server)
 

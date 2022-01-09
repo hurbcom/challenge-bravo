@@ -8,7 +8,7 @@ from services.conversionservice import ConversionService
 from models.responsemodel import *
 from exceptions.apiexceptions import *
 
-@server.route('/convert')
+@sharedServer.server.route('/convert')
 def get():
     try:
         request_model = RequestValidator.validateConvertRequestArgs(request.args)

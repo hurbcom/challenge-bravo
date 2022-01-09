@@ -7,8 +7,7 @@ from services.currencyservice import CurrencyService
 from exceptions.apiexceptions import DatabaseException, InvalidParametersException, InvalidCurrenciesException
 from models.responsemodel import *
 
-
-@server.route('/currency', methods=['GET'])
+@sharedServer.server.route('/currency', methods=['GET'])
 def getCurrency():
     try:
         request_model = RequestValidator.validateCurrencyGetRequestArgs(request.args)
@@ -19,7 +18,7 @@ def getCurrency():
     return SuccessResponse.create(request_model.name,
                                     currency_json)
 
-@server.route('/currency', methods=['PUT'])
+@sharedServer.server.route('/currency', methods=['PUT'])
 def putCurrency():
     try:
         request_model = RequestValidator.validateCurrencyPutRequestArgs(request.args)
@@ -29,7 +28,7 @@ def putCurrency():
 
     return SuccessResponse.create(request_model.name,{})
 
-@server.route('/currency', methods=['DELETE'])
+@sharedServer.server.route('/currency', methods=['DELETE'])
 def deleteCurrency():
     try:
         request_model = RequestValidator.validateCurrencyDeleteRequestArgs(request.args)

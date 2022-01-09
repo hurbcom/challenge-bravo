@@ -5,8 +5,13 @@ from exceptions.apiexceptions import InvalidCurrenciesException, DatabaseExcepti
 class CurrencyService():
     def getCurrency(name):
         try:
-            currency = CurrencyDao.getCurrency(name)
-            return currency_schema.dump(currency)
+            if name not in sharedServer.server.cache:
+                currency = CurrencyDao.getCurrency(name)
+                currency_json = currency_schema.dump(currency)
+                currency_response = currency_json['value']
+            else:
+                currency_response = sharedServer.server.cache[name]
+            return currency_response
         except:
             raise InvalidCurrenciesException()
 

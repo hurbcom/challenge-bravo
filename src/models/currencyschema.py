@@ -6,12 +6,15 @@ class CurrencySchema(server.database.ma.Schema):
         fields = Currency.visible_fields
         model = Currency
 
-    def currenciesSchemaNameList(currencies):
-        name_list = []
+    def currenciesSchemaCacheDict(currencies):
+        cache_dict = {}
         for currency in currencies:
-            name_list.append(currency['name'])
+            cache_dict[currency['name']] = currency['value']
 
-        return name_list
+        return cache_dict
+
+    def getCurrencyResponseFromJson(json):
+        return {json['name'] : json['value'] }
 
 currency_schema = CurrencySchema()
 currencies_schema = CurrencySchema(many=True)
