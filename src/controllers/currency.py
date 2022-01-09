@@ -9,7 +9,7 @@ from models.responsemodel import *
 
 
 @server.route('/currency', methods=['GET'])
-def getCurrency(self):
+def getCurrency():
     try:
         request_model = RequestValidator.validateCurrencyGetRequestArgs(request.args)
         currency_json = CurrencyService.getCurrency(request_model.name)
@@ -20,7 +20,7 @@ def getCurrency(self):
                                     currency_json)
 
 @server.route('/currency', methods=['PUT'])
-def putCurrency(self):
+def putCurrency():
     try:
         request_model = RequestValidator.validateCurrencyPutRequestArgs(request.args)
         CurrencyService.saveCurrency(request_model.name,request_model.value)
@@ -30,7 +30,7 @@ def putCurrency(self):
     return SuccessResponse.create(request_model.name,{})
 
 @server.route('/currency', methods=['DELETE'])
-def deleteCurrency(self):
+def deleteCurrency():
     try:
         request_model = RequestValidator.validateCurrencyDeleteRequestArgs(request.args)
         CurrencyService.removeCurrency(request_model.name)

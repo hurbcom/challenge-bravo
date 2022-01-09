@@ -15,6 +15,9 @@ class CurrencyDao():
         exchange_value = from_currency_model.value/to_currency_model.value
         return exchange_value
 
+    def getPopularCoins(num_coins):
+        return Currency.getPopularCoins(num_coins)
+
     def saveOrUpdateCurrency(name,value):
         if Currency.exists(name):
             Currency.update(name,value)

@@ -5,8 +5,11 @@ import time, threading
 from infra.db import *
 from server.config import Config
 from task.currenciesupdater import CurrenciesUpdaterTask
+from task.cachelistupdater import CacheListUpdater
 
 class Server(Flask):
+    cache = []
+
     def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
         if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
             with self.app_context():
@@ -23,24 +26,26 @@ class Server(Flask):
         print("Iniciei base")
 
     def runServerTasks(self):
-        def run_job():
-            CurrenciesUpdaterTask.updateCurrencies(self)
-        thread = threading.Thread(target=run_job)
-        thread.start()
+        def currencies():
+            currency_database_obj = Database(Config)
+            currency_database_obj.initDb(self)
+            currencies_updater_task = CurrenciesUpdaterTask(currency_database_obj)
+            currencies_updater_task.updateCurrencies()
 
-    def start(self,):
+        def cache():
+            cache_database_obj = Database(Config)
+            cache_database_obj.initDb(self)
+            cache_updater_task = CacheListUpdater(cache_database_obj)
+            cache_updater_task.updateCacheList(self)
 
+        thread_currencies_updater = threading.Thread(target=currencies)
+        thread_cache_updater = threading.Thread(target=cache)
+        thread_currencies_updater.start()
+        thread_cache_updater.start()
+
+    def start(self):
         self.runServerTasks()
         print("Iniciei tasks")
-        #pid = os.fork()
-        #if pid > 0:
-            #print("task")
-            #time.sleep(10)
-            #updateCurrenciesTask(server)
-
-        #else:
-            #print("server")
-            #self.app.run(debug=True)
 
 server = Server(__name__)
 server.setUp(Config)

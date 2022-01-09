@@ -4,6 +4,7 @@ from sqlalchemy_utils import database_exists, create_database
 
 from integration.currencyintegration import CurrencyIntegration
 
+
 class Database():
     db = SQLAlchemy()
     ma = Marshmallow()
@@ -40,3 +41,8 @@ class Database():
         for coin in self.config.INITIAL_COINS:
             value = CurrencyIntegration.getCurrencyInMainCurrency(coin)
             CurrencyDao.saveOrUpdateCurrencyIntern(coin,value)
+
+    def getPopularCoins(self):
+        from dao.currencydao import CurrencyDao
+
+        return CurrencyDao.getPopularCoins(self.config.CACHE_SIZE)

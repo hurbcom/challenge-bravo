@@ -3,6 +3,7 @@ from server.server import *
 db = server.database.getDb()
 
 class Currency(db.Model):
+    fields = ("name","value","last_update","access_count")
     name = db.Column(db.String,primary_key=True)
     value = db.Column(db.Float)
     last_update = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
@@ -19,6 +20,7 @@ class Currency(db.Model):
         with server.app_context():
             currency = Currency.query.get(name)
             currency.access_count += 1
+            currency.save()
             db.session.refresh(currency)
             return currency
 
@@ -44,6 +46,11 @@ class Currency(db.Model):
             currency = Currency.query.get(name)
             currency.value = value
             currency.save()
+
+    def getPopularCoins(num_coins):
+        with server.app_context():
+            currencies = db.session.query(Currency).order_by(Currency.access_count.desc()).limit(num_coins)
+            return currencies
 
     def remove(self):
         with server.app_context():
