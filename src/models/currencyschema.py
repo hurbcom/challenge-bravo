@@ -3,7 +3,7 @@ from models.currencymodel import Currency
 
 class CurrencySchema(server.database.ma.Schema):
     class Meta:
-        fields = Currency.fields
+        fields = Currency.visible_fields
         model = Currency
 
     def currenciesSchemaNameList(currencies):

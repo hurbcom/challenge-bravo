@@ -3,7 +3,7 @@ from server.server import *
 db = server.database.getDb()
 
 class Currency(db.Model):
-    fields = ("name","value","last_update","access_count")
+    visible_fields = ("name","value","last_update")
     name = db.Column(db.String,primary_key=True)
     value = db.Column(db.Float)
     last_update = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
@@ -21,7 +21,7 @@ class Currency(db.Model):
             currency = Currency.query.get(name)
             currency.access_count += 1
             currency.save()
-            db.session.refresh(currency)
+            currency = Currency.query.get(name)
             return currency
 
     def exists(name):
