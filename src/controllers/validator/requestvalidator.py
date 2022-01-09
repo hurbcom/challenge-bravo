@@ -1,5 +1,6 @@
-from models.requestmodel import *
-from exceptions.apiexceptions import InvalidParametersException,DatabaseException
+from models.requestmodel import ConvertRequestModel, CurrencyGetRequestModel, CurrencyPutRequestModel, CurrencyDeleteRequestModel
+
+from exceptions.apiexceptions import InvalidParametersException
 
 class RequestValidator():
     def validateConvertRequestArgs(args):
@@ -20,8 +21,15 @@ class RequestValidator():
 
     def validateCurrencyPutRequestArgs(args):
         name = args.get('name',type=str)
-        value = args.get('value',type=str)
+        value = args.get('value',type=int)
         model = CurrencyPutRequestModel(name,value)
+        if(model.isDataNull()):
+            raise InvalidParametersException()
+        return model
+
+    def validateCurrencyDeleteRequestArgs(args):
+        name = args.get('name',type=str)
+        model = CurrencyDeleteRequestModel(name)
         if(model.isDataNull()):
             raise InvalidParametersException()
         return model

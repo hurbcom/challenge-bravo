@@ -25,3 +25,10 @@ class CurrencyPutRequestModel():
         return (self.name == None or
                 self.value == None)
 
+class CurrencyDeleteRequestModel():
+    def __init__(self,name):
+        self.name = name
+
+    def isDataNull(self):
+        return (self.name == None)
+

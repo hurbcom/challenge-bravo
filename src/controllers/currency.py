@@ -22,9 +22,18 @@ class CurrencyController(Resource):
     def put(self,):
         try:
             request_model = RequestValidator.validateCurrencyPutRequestArgs(request.args)
-            currency_json = CurrencyService.saveCurrency(request_model.name,request_model.value)
+            CurrencyService.saveCurrency(request_model.name,request_model.value)
         except (InvalidParametersException, DatabaseException) as e:
             return ErrorResponse.create(e.message,e.statusCode)
 
-        return SuccessResponse.create(request_model.name,
-                                      currency_json)
+        return SuccessResponse.create(request_model.name,{})
+
+    def delete(self,):
+        try:
+            request_model = RequestValidator.validateCurrencyDeleteRequestArgs(request.args)
+            CurrencyService.removeCurrency(request_model.name)
+        except (InvalidParametersException, DatabaseException) as e:
+            return ErrorResponse.create(e.message,e.statusCode)
+
+        return SuccessResponse.create(request_model.name,{})
+

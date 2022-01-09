@@ -32,3 +32,6 @@ class Currency(db.Model):
         currency.access_count += 1
         currency.save()
 
+    def remove(self):
+        db.session.delete(self)
+        db.session.commit()

@@ -1,6 +1,6 @@
 from dao.currencydao import CurrencyDao
 from models.currencyschema import *
-from exceptions.apiexceptions import InvalidCurrenciesException
+from exceptions.apiexceptions import InvalidCurrenciesException, DatabaseException
 
 class CurrencyService():
     def getCurrency(name):
@@ -12,6 +12,12 @@ class CurrencyService():
 
     def saveCurrency(name,value):
         try:
-            currency = CurrencyDao.saveOrUpdateCurrency(name,value)
+            CurrencyDao.saveOrUpdateCurrency(name,value)
+        except:
+            raise DatabaseException()
+
+    def removeCurrency(name):
+        try:
+            CurrencyDao.removeCurrency(name)
         except:
             raise DatabaseException()

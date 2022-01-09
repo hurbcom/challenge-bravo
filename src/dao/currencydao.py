@@ -21,3 +21,8 @@ class CurrencyDao():
         else:
             currency = Currency(name,value)
             currency.save()
+
+    def removeCurrency(name):
+        if Currency.exists(name):
+            currency = Currency.get(name)
+            currency.remove()
