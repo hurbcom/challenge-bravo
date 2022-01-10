@@ -1,14 +1,15 @@
 import unittest
 from unittest.mock import Mock
 
-from models.currencymodel import *
-from services.conversionservice import *
+from services.conversionservice import ConversionService
 from exceptions.apiexceptions import *
+from models.currencymodel import Currency
+from dao.currencydao import CurrencyDao
 from server.server import server
 
 class TestConversionServiceGetCurrency(unittest.TestCase):
     def setUp(self):
-        self.client = sharedServer.server.test_client()
+        self.client = server.test_client()
 
     def test_when_currency_doesnt_exists(self):
         #arrange
@@ -35,7 +36,6 @@ class TestConversionServiceGetCurrency(unittest.TestCase):
         ConversionService.currenciesExists = Mock(return_value=True)
         cache = {from_currency:from_currency_value,to_currency:to_currency_value}
         ConversionService.getCache = Mock(return_value=cache)
-        CurrencyDao.getCurrency = Mock(return_value=Currency(from_currency,from_currency_value))
         #act
         result = ConversionService.getCurrencyValueFromTo(to_currency,from_currency,amount)
         #assert
@@ -56,6 +56,8 @@ class TestConversionServiceGetCurrency(unittest.TestCase):
         result = ConversionService.getCurrencyValueFromTo(to_currency,from_currency,amount)
         #assert
         assert result == expected_result
+
+        #unmocl
 
 if __name__ == '__main__':
     unittest.main()

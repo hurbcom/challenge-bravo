@@ -16,6 +16,13 @@ class CurrenciesUpdaterTask(threading.Thread):
 
     def updateCurrencies(self):
         while True:
+            CurrenciesUpdaterTask.updateCurrenciesInDatabase()
             time.sleep(Config.UPDATE_TASK_TIMER)
-            self.database.updateCurrencies()
+
+    def updateCurrenciesInDatabase():
+        from dao.currencydao import CurrencyDao
+
+        for coin in Config.INITIAL_COINS:
+            value = CurrencyIntegration.getCurrencyInMainCurrency(coin)
+            CurrencyDao.saveOrUpdateCurrencyIntern(coin,value)
 

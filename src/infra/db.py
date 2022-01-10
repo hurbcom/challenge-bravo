@@ -24,7 +24,6 @@ class Database():
         if not database_exists(self.config.DATABASE_PATH):
             with app.app_context():
                 self.db.create_all()
-                self.seedDb()
 
     def dropDb(self):
         drop_databse(self.config.DATABASE_PATH)
@@ -32,17 +31,3 @@ class Database():
     def getDb(self):
         return self.db
 
-    def seedDb(self):
-        self.updateCurrencies()
-
-    def updateCurrencies(self):
-        from dao.currencydao import CurrencyDao
-
-        for coin in self.config.INITIAL_COINS:
-            value = CurrencyIntegration.getCurrencyInMainCurrency(coin)
-            CurrencyDao.saveOrUpdateCurrencyIntern(coin,value)
-
-    def getPopularCoins(self):
-        from dao.currencydao import CurrencyDao
-
-        return CurrencyDao.getPopularCoins(self.config.CACHE_SIZE)

@@ -19,3 +19,4 @@ def get():
 
     return SuccessResponse.create(request_model.to_currency,
                                     exchanged_value)
+

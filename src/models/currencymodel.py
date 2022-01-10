@@ -1,4 +1,4 @@
-from server.server import *
+from server.server import server
 
 db = server.database.getDb()
 

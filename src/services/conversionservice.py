@@ -12,8 +12,7 @@ class ConversionService():
     def getCurrencyValueFromTo(to_currency,from_currency,amount):
         try:
             if (not ConversionService.currenciesExists(to_currency,from_currency)):
-                raise Exception
-
+                raise InvalidCurrenciesException
             if(from_currency in ConversionService.getCache()):
                 value_from = ConversionService.getCache()[from_currency]
             else:
@@ -29,5 +28,5 @@ class ConversionService():
             exchange_value = value_from/value_to
 
             return amount*exchange_value
-        except Exception as e:
+        except InvalidCurrenciesException as e:
             raise InvalidCurrenciesException()

@@ -20,7 +20,7 @@ class CacheListUpdater(threading.Thread):
 
         while True:
             time.sleep(Config.CACHE_TASK_TIMER)
-            currencies_json = currencies_schema.dump(self.database.getPopularCoins())
+            currencies_json = currencies_schema.dump(CacheListUpdater.getPopularCoins())
             new_cache_dict = CurrencySchema.currenciesSchemaCacheDict(currencies_json)
             for currency in new_cache_dict:
                 if currency not in self.server.cache:
@@ -28,3 +28,7 @@ class CacheListUpdater(threading.Thread):
                     print("Cache atualizado: ",new_cache_dict)
                     break
 
+    def getPopularCoins():
+        from dao.currencydao import CurrencyDao
+
+        return CurrencyDao.getPopularCoins(Config.CACHE_SIZE)

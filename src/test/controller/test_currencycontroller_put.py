@@ -56,6 +56,3 @@ class TestCurrencyControllerPutEndpoint(unittest.TestCase):
         assert result_data[moeda] == expected_message
         assert result_data['status'] == expected_code
         assert result_data['success'] == expected_sucess
-
-if __name__ == '__main__':
-    unittest.main()
