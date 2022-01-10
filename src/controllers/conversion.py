@@ -12,7 +12,7 @@ from exceptions.apiexceptions import *
 def get():
     try:
         request_model = RequestValidator.validateConvertRequestArgs(request.args)
-        exchanged_value =  ConversionService.getCurrecyValueFromTo(request_model.to_currency,request_model.from_currency,request_model.amount)
+        exchanged_value =  ConversionService.getCurrencyValueFromTo(request_model.to_currency,request_model.from_currency,request_model.amount)
 
     except (InvalidParametersException, InvalidCurrenciesException) as e:
         return ErrorResponse.create(e.message,e.statusCode)

@@ -5,5 +5,4 @@ import os, time
 
 
 server.run(debug=True)
-print("Iniciei servidor")
 

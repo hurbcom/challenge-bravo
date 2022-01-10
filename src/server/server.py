@@ -12,7 +12,7 @@ class ServerSharedObject(object):
         self.server = server
 
 class Server(Flask):
-    cache = []
+    cache = {}
 
     def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
         if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
@@ -27,7 +27,6 @@ class Server(Flask):
                         description='simple currency consultor api')
         self.database = Database(config)
         self.database.initDb(self)
-        print("Iniciei base")
 
     def runServerTasks(self):
         # setup currency updater task
@@ -48,7 +47,6 @@ class Server(Flask):
 
     def start(self):
         self.runServerTasks()
-        print("Iniciei tasks")
 
 server = Server(__name__)
 server.setUp(Config)

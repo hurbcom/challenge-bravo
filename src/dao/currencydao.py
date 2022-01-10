@@ -36,3 +36,7 @@ class CurrencyDao():
         if Currency.exists(name):
             currency = Currency.get(name)
             currency.remove()
+
+    def exists(name):
+        return Currency.exists(name)
+
