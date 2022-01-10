@@ -25,7 +25,6 @@ class CacheListUpdater(threading.Thread):
             for currency in new_cache_dict:
                 if currency not in self.server.cache:
                     self.server.cache = new_cache_dict
-                    print("Cache atualizado: ",new_cache_dict)
                     break
 
     def getPopularCoins():
