@@ -7,21 +7,21 @@ class ConversionService():
     def getCache():
         return sharedServer.server.cache
     def currenciesExists(to_currency,from_currency):
-        return (not CurrencyDao.exists(to_currency) or
-                not CurrencyDao.exists(from_currency))
+        return (CurrencyDao.exists(to_currency) or
+                CurrencyDao.exists(from_currency))
     def getCurrencyValueFromTo(to_currency,from_currency,amount):
         try:
             if (not ConversionService.currenciesExists(to_currency,from_currency)):
                 raise Exception
 
-            if(from_currency in getCache()):
-                value_from = getCache()[from_currency]
+            if(from_currency in ConversionService.getCache()):
+                value_from = ConversionService.getCache()[from_currency]
             else:
                 currency = CurrencyDao.getCurrency(from_currency)
                 value_from = currency.value
 
-            if(to_currency in getCache()):
-                value_to = getCache()[to_currency ]
+            if(to_currency in ConversionService.getCache()):
+                value_to = ConversionService.getCache()[to_currency ]
             else:
                 currency = CurrencyDao.getCurrency(to_currency)
                 value_to = currency.value
