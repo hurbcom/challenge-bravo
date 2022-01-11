@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restx import Api
-import time, threading
+import time, threading, os
 
 from infra.db import *
 from server.config import Config

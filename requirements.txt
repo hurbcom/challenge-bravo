@@ -1,0 +1,7 @@
+flask==2.0.2
+flask_restx==0.5.1
+flask_marshmallow==0.14.0
+flask_sqlalchemy==2.5.1
+cryptocompare==0.7.5
+sqlalchemy_utils==0.38.2
+marshmallow-sqlalchemy==0.27.0

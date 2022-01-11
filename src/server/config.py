@@ -1,5 +1,5 @@
 class Config():
-    DATABASE_PATH = "sqlite:///../infra/currencies.db?check_same_thread=False"
+    DATABASE_PATH = "sqlite:///../infra/currencies.db?check_same_thread=False&wait_timeout=10"
 
     #CURRENCY SERVER PARAMETERS
     INITIAL_COINS = ["USD","BRL","EUR","BTC","ETH"]
