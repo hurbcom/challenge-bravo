@@ -35,6 +35,10 @@ namespace api_challenge_bravo.Controllers
         [HttpPost]
         public ActionResult<Currency> Post([FromBody]Currency currency)
         {
+            var existingCurrency = Currency.Get(currency.Symbol);
+            if (existingCurrency != null)
+                return Conflict(existingCurrency);
+
             new Currency(currency.Symbol, currency.Name, currency.ExchangeRateInUSD, currency.AutoUpdateExchangeRate);
 
             return CreatedAtAction(nameof(Get), new { symbol = currency.Symbol }, currency);
