@@ -7,14 +7,14 @@ using Newtonsoft.Json.Linq;
 
 namespace api_challenge_bravo.Services
 {
-    public class ExchangeRateUpdateService
+    public static class ExchangeRateUpdateService
     {
         private const int TIME_TO_LIVE_EXCHANGE_RATE_SECONDS = 30;
         private static async Task Update(Currency currency)
         {
             decimal newExchangeRat;
             DateTime dateTimeUpdate;
-            // Need to add some lock, only one thread should update ExchangeRate from each symbol
+
             try
             {
                 (newExchangeRat, dateTimeUpdate) = await CallExternalAwesomeApi(currency.Symbol);

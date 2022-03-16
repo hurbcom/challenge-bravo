@@ -4,7 +4,7 @@ using api_challenge_bravo.Model;
 
 namespace api_challenge_bravo.Services
 {
-    public class CurrencyConvertService
+    public static class CurrencyConvertService
     {
         public static async Task<decimal> Convert(string fromSymbol, string toSymbol, decimal amount)
         {
