@@ -14,30 +14,44 @@ namespace api_challenge_bravo.Controllers
     {
         // GET: api/Currencies
         [HttpGet]
-        public IEnumerable<Currency> Get()
+        public ActionResult<IEnumerable<Currency>> Get()
         {
             return Currency.GetAll();
         }
 
         // GET: api/Currencies/BRL
         [HttpGet("{symbol}")]
-        public Currency Get(string symbol)
+        public ActionResult<Currency> Get(string symbol)
         {
-            return Currency.Get(symbol);
+            var currency = Currency.Get(symbol);
+
+            if(currency == null)
+                return NotFound();
+
+            return currency;
         }
 
         // POST: api/Currencies
         [HttpPost]
-        public void Post([FromBody]Currency currency)
+        public ActionResult<Currency> Post([FromBody]Currency currency)
         {
             new Currency(currency.Symbol, currency.Name, currency.ExchangeRateInUSD, currency.AutoUpdateExchangeRate);
+
+            return CreatedAtAction(nameof(Get), new { symbol = currency.Symbol }, currency);
         }
 
         // DELETE: api/Currencies/BRL
         [HttpDelete("{symbol}")]
-        public void Delete(string symbol)
+        public ActionResult<Currency> Delete(string symbol)
         {
+            var currency = Currency.Get(symbol);
+
+            if(currency == null)
+                return NotFound();
+
             Currency.Delete(symbol);
+
+            return Ok();
         }
     }
 }
