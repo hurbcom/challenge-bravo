@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace api_challenge_bravo.Model
@@ -8,12 +8,12 @@ namespace api_challenge_bravo.Model
         // Using for Mock testing, remove after DB configuration
         public static List<Currency> Currencies = new List<Currency>();
 
-        public int Id { get; set; }
+        internal int Id { get; set; }
         public string Symbol { get; set; }
         public string Name { get; set; }
         public decimal ExchangeRateInUSD { get; set; }
         public bool AutoUpdateExchangeRate { get; set; }
-        public DateTime? LastTimeUpdatedExchangeRate { get; set; }
+        internal DateTime? LastTimeUpdatedExchangeRate { get; set; }
 
         public Currency()
         {
