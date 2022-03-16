@@ -7,10 +7,13 @@ namespace api_challenge_bravo.Services
     {
         public static decimal Convert(string fromSymbol, string toSymbol, decimal amount)
         {
-            var fromCurrencyExchangeRate = Currency.Get(fromSymbol).ExchangeRateInUSD;
-            var toCurrencyExchangeRate = Currency.Get(toSymbol).ExchangeRateInUSD;
+            var fromCurrency = Currency.Get(fromSymbol);
+            var toCurrency = Currency.Get(toSymbol);
 
-            var ExchangeRate = fromCurrencyExchangeRate / toCurrencyExchangeRate;
+            ExchangeRateUpdateService.CheckTTLForNewUpdate(fromCurrency);
+            ExchangeRateUpdateService.CheckTTLForNewUpdate(toCurrency);
+
+            var ExchangeRate = fromCurrency.ExchangeRateInUSD / toCurrency.ExchangeRateInUSD;
 
             return amount * ExchangeRate;
         }

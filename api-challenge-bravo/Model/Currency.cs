@@ -26,22 +26,35 @@ namespace api_challenge_bravo.Model
             this.ExchangeRateInUSD = exchangeRateInUSD;
             this.AutoUpdateExchangeRate = autoUpdateExchangeRate;
 
+            // Using for Mock testing, remove after DB configuration
             Currencies.Add(this);
         }
-
         public static List<Currency> GetAll()
         {
+            // Using for Mock testing, remove after DB configuration
             return Currencies;
         }
-
         public static Currency Get(string symbol)
         {
+            // Using for Mock testing, remove after DB configuration
             return Currencies.Find(x => x.Symbol == symbol);
         }
-
         public static bool Delete(string symbol)
         {
+            // Using for Mock testing, remove after DB configuration
             return Currencies.Remove(Get(symbol));
+        }
+
+        public void UpdateExchangeRate(decimal newExchangeRat, DateTime dateTimeUpdate)
+        {
+            this.ExchangeRateInUSD = newExchangeRat;
+            this.LastTimeUpdatedExchangeRate = dateTimeUpdate;
+
+            // Using for Mock testing, remove after DB configuration
+            var thisCurrency = Get(this.Symbol);
+            thisCurrency = this;
+
+            // Save ORM
         }
     }
 }
