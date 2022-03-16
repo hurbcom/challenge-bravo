@@ -15,14 +15,14 @@ namespace api_challenge_bravo.Controllers
     {
         // GET: api/CurrenciesConvert?from=BTC&to=EUR&amount=123.45
         [HttpGet]
-        public ActionResult<decimal> Get([FromQuery] string from,[FromQuery] string to,[FromQuery] decimal amount)
+        public async Task<ActionResult<decimal>> Get([FromQuery] string from,[FromQuery] string to,[FromQuery] decimal amount)
         {
             if (Currency.Get(from) == null)
                 return NotFound(from);
             if (Currency.Get(to) == null)
                 return NotFound(to);
 
-            return CurrencyConvertService.Convert(from, to, amount);
+            return await CurrencyConvertService.Convert(from, to, amount);
         }
     }
 }
