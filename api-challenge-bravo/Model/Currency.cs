@@ -11,7 +11,7 @@ namespace api_challenge_bravo.Model
         public int Id { get; set; }
         public string Symbol { get; set; }
         public string Name { get; set; }
-        public float ExchangeRateInUSD { get; set; }
+        public decimal ExchangeRateInUSD { get; set; }
         public bool AutoUpdateExchangeRate { get; set; }
         public DateTime? LastTimeUpdatedExchangeRate { get; set; }
 
@@ -19,7 +19,7 @@ namespace api_challenge_bravo.Model
         {
 
         }
-        public Currency(string symbol, string name, float exchangeRateInUSD, bool autoUpdateExchangeRate)
+        public Currency(string symbol, string name, decimal exchangeRateInUSD, bool autoUpdateExchangeRate)
         {
             this.Symbol = symbol;
             this.Name = name;
