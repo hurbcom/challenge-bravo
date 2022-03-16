@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api_challenge_bravo.Model;
 using api_challenge_bravo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,16 @@ namespace api_challenge_bravo.Controllers
     [ApiController]
     public class CurrenciesConvertController : ControllerBase
     {
-        // GET: api/CurrenciesConvert
+        // GET: api/CurrenciesConvert?from=BTC&to=EUR&amount=123.45
         [HttpGet]
-        public ActionResult<decimal> Get([FromQuery] string fromSymbol,[FromQuery] string toSymbol,[FromQuery] decimal amount)
+        public ActionResult<decimal> Get([FromQuery] string from,[FromQuery] string to,[FromQuery] decimal amount)
         {
-            return CurrencyConvertService.Convert(fromSymbol, toSymbol, amount);
+            if (Currency.Get(from) == null)
+                return NotFound(from);
+            if (Currency.Get(to) == null)
+                return NotFound(to);
+
+            return CurrencyConvertService.Convert(from, to, amount);
         }
     }
 }
