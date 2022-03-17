@@ -12,7 +12,7 @@ namespace api_challenge_bravo.Services
     {
         static int countExternalCalls = 1;
         private const int TIME_TO_LIVE_EXCHANGE_RATE_SECONDS = 30;
-        static SemaphoreSlim mutex = new SemaphoreSlim(1,1);
+        static SemaphoreSlim semaphore = new SemaphoreSlim(1,2);
 
         private static async Task Update(Currency currency)
         {
@@ -37,7 +37,7 @@ namespace api_challenge_bravo.Services
                 return;
 
             // Only one thread by time can check if the currency need an update, making this a thread-safe logic
-            await mutex.WaitAsync();
+            await semaphore.WaitAsync();
             try
             {
                 if (currency.LastTimeUpdatedExchangeRate == null
@@ -45,14 +45,9 @@ namespace api_challenge_bravo.Services
                     DateTime.Now.AddSeconds(-TIME_TO_LIVE_EXCHANGE_RATE_SECONDS))
                     await Update(currency);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
             finally
             {
-                mutex.Release();
+                semaphore.Release();
             }
 
         }
