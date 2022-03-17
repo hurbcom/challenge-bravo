@@ -6,11 +6,11 @@ using Xunit.Sdk;
 
 namespace tests_challenge_bravo.UnitTests.ModelsTests
 {
-    public class CurrencyTests
+    public class CurrencyFacts
     {
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public CurrencyTests(ITestOutputHelper testOutputHelper)
+        public CurrencyFacts(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
             new Currency("BRL", "Real Brasileiro", 0.1948M, true);
