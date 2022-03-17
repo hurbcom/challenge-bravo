@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
+// Allowing UnitTests to acess Internal Props
+[assembly: InternalsVisibleTo("tests-challenge-bravo")]
 
 namespace api_challenge_bravo.Model
 {
