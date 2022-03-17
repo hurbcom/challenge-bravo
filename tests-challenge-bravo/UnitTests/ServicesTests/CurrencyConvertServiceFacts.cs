@@ -8,14 +8,14 @@ namespace tests_challenge_bravo.UnitTests.ServicesTests
     {
         public CurrencyConvertServiceFacts()
         {
-            new Currency("TEST1", "Testing Currency 1", 0.1948M, false);
-            new Currency("TEST2", "Testing Currency 2", 1.0996M, false);
+            new Currency("TSTCS1", "Testing Convert Service 1", 0.1948M, false);
+            new Currency("TSTCS2", "Testing Convert Service 2", 1.0996M, false);
         }
 
         [Fact]
         public void ConvertingCorrectValue()
         {
-            var result = CurrencyConvertService.Convert("TEST1","TEST2",10.42M);
+            var result = CurrencyConvertService.Convert("TSTCS1","TSTCS2",10.42M);
 
             Assert.Equal(1.8459585303746817024372499086M,result.Result);
         }

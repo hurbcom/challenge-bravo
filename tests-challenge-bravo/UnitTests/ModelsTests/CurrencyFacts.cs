@@ -1,20 +1,15 @@
 ﻿using System;
 using api_challenge_bravo.Model;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace tests_challenge_bravo.UnitTests.ModelsTests
 {
     public class CurrencyFacts
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public CurrencyFacts(ITestOutputHelper testOutputHelper)
+        public CurrencyFacts()
         {
-            _testOutputHelper = testOutputHelper;
-            new Currency("BRL", "Real Brasileiro", 0.1948M, true);
-            new Currency("EUR", "Euro", 1.0996M, true);
+            new Currency("TSTM1", "Test Model 1", 0.1948M, true);
+            new Currency("TSTM2", "Test Model 2", 1.0996M, true);
         }
 
         [Fact]
@@ -29,22 +24,22 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
         [Fact]
         public void GetReturnCorrectValues()
         {
-            var result = Currency.Get("BRL");
+            var result = Currency.Get("TSTM1");
 
             Assert.True(result != null);
-            Assert.True(result.Symbol == "BRL");
-            Assert.True(result.Name == "Real Brasileiro");
+            Assert.True(result.Symbol == "TSTM1");
+            Assert.True(result.Name == "Test Model 1");
         }
 
         [Fact]
         public void DeleteItemFromDB()
         {
-            new Currency("RUB", "Rublo Russo", 0.0996M, true);
-            var currency = Currency.Get("RUB");
-            Assert.True(currency?.Symbol == "RUB");
+            new Currency("TSTM3", "Test Model 3", 0.0996M, false);
+            var currency = Currency.Get("TSTM3");
+            Assert.True(currency?.Symbol == "TSTM3");
 
-            Currency.Delete("RUB");
-            var result = Currency.Get("RUB");
+            Currency.Delete("TSTM3");
+            var result = Currency.Get("TSTM3");
             var resultList = Currency.GetAll();
 
             Assert.True(result == null);
@@ -54,7 +49,7 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
         [Fact]
         public void UpdateExchangeRateCorrectValue()
         {
-            var currency = Currency.Get("BRL");
+            var currency = Currency.Get("TSTM1");
             var sampleDate = new DateTime(2022, 1, 1, 12, 0, 0);
 
             currency.UpdateExchangeRate(0.42M,sampleDate);
