@@ -77,6 +77,11 @@ Any questions you may have, check the [_issues_](https://github.com/HurbCom/chal
 
 Godspeed! ;)
 
+## Execute
+
+`Docker build -f .\api-challenge-bravo\Dockerfile --force-rm -t img/app-challenge-bravo .`
+`Docker run -d -p 8080:80 --name app-challenge-bravo img/app-challenge-bravo`
+
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
 </p>
