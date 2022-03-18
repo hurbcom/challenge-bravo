@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api_challenge_bravo.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_challenge_bravo.Controllers
 {
@@ -25,7 +26,7 @@ namespace api_challenge_bravo.Controllers
         {
             var currency = Currency.Get(symbol);
 
-            if(currency == null)
+            if (currency == null)
                 return NotFound();
 
             return currency;
@@ -39,9 +40,11 @@ namespace api_challenge_bravo.Controllers
             if (existingCurrency != null)
                 return Conflict(existingCurrency);
 
-            new Currency(currency.Symbol, currency.Name, currency.ExchangeRateInUSD, currency.AutoUpdateExchangeRate);
+            new Currency(currency.Symbol, currency.Name, currency.ExchangeRateInUSD,
+                currency.AutoUpdateExchangeRate);
 
-            return CreatedAtAction(nameof(Get), new { symbol = currency.Symbol }, currency);
+            return CreatedAtAction(nameof(Get), new {symbol = currency.Symbol}, currency);
+
         }
 
         // DELETE: api/Currencies/BRL
@@ -50,7 +53,7 @@ namespace api_challenge_bravo.Controllers
         {
             var currency = Currency.Get(symbol);
 
-            if(currency == null)
+            if (currency == null)
                 return NotFound();
 
             Currency.Delete(symbol);

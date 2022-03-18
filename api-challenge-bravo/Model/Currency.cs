@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Common;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 
-// Allowing UnitTests to acess Internal Props
+// Allowing UnitTests to access Internal Props
 [assembly: InternalsVisibleTo("tests-challenge-bravo")]
 
 namespace api_challenge_bravo.Model
 {
     public class Currency
     {
-        // Using for Mock testing, remove after DB configuration
-        public static List<Currency> Currencies = new List<Currency>();
         [Key]
         public string Symbol { get; set; }
         public string Name { get; set; }
         public decimal ExchangeRateInUSD { get; set; }
         public bool AutoUpdateExchangeRate { get; set; }
-        internal DateTime? LastTimeUpdatedExchangeRate { get; set; }
+        public DateTime? LastTimeUpdatedExchangeRate { get; set; }
 
         public Currency()
         {
@@ -30,35 +31,38 @@ namespace api_challenge_bravo.Model
             this.ExchangeRateInUSD = exchangeRateInUSD;
             this.AutoUpdateExchangeRate = autoUpdateExchangeRate;
 
-            // Using for Mock testing, remove after DB configuration
-            Currencies.Add(this);
+            using (var DBcon = new AppDbContext())
+            {
+                DBcon.Currencies.Add(this);
+                DBcon.SaveChanges();
+            }
         }
         public static List<Currency> GetAll()
         {
-            // Using for Mock testing, remove after DB configuration
-            return Currencies;
+            return new AppDbContext().Currencies.ToList();
         }
         public static Currency Get(string symbol)
         {
-            // Using for Mock testing, remove after DB configuration
-            return Currencies.Find(x => x.Symbol == symbol);
+            return new AppDbContext().Currencies.FirstOrDefault(x => x.Symbol == symbol);
         }
-        public static bool Delete(string symbol)
+        public static void Delete(string symbol)
         {
-            // Using for Mock testing, remove after DB configuration
-            return Currencies.Remove(Get(symbol));
+            using (var DBcon = new AppDbContext())
+            {
+                DBcon.Currencies.Remove(Get(symbol));
+                DBcon.SaveChanges();
+            }
         }
-
         public void UpdateExchangeRate(decimal newExchangeRat, DateTime dateTimeUpdate)
         {
-            this.ExchangeRateInUSD = newExchangeRat;
-            this.LastTimeUpdatedExchangeRate = dateTimeUpdate;
+            using (var DBcon = new AppDbContext())
+            {
+                this.ExchangeRateInUSD = newExchangeRat;
+                this.LastTimeUpdatedExchangeRate = dateTimeUpdate;
 
-            // Using for Mock testing, remove after DB configuration
-            var thisCurrency = Get(this.Symbol);
-            thisCurrency = this;
-
-            // Save ORM
+                DBcon.Currencies.Update(this);
+                DBcon.SaveChanges();
+            }
         }
     }
 }
