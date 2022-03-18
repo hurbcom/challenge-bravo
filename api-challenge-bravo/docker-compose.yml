@@ -1,0 +1,24 @@
+﻿version: '3.7'
+
+services:
+    db:
+        image: mysql
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: dbdevpassword
+        volumes:
+            - /var/lib/mysql:/var/lib/mysql
+        networks:
+            - default
+
+    api-challenge-bravo:
+        image: img/app-challenge-bravo
+        build:
+            context: ..
+            dockerfile: Dockerfile
+        links:
+            - db:db
+        ports:
+            - 8080:80
+        restart: always

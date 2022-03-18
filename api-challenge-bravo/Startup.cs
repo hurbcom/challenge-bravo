@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api_challenge_bravo.Model;
+using api_challenge_bravo.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +28,14 @@ namespace api_challenge_bravo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var host = Configuration["DBHOST"] ?? "localhost";
+            var port = Configuration["DBPORT"] ?? "3306";
+            var password = Configuration["DBPASSWORD"] ?? "dbdevpassword";
+
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseMySql($"server={host};userid=root;pwd={password};"
+                                 + $"port={port};database=currencydb"));
+
             services.AddControllers();
             services.AddSwaggerGen();
         }
@@ -36,6 +47,8 @@ namespace api_challenge_bravo
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            InitDB.InsertDataDB(app);
 
             app.UseSwagger();
             app.UseSwaggerUI(options => {

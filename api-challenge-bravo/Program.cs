@@ -16,9 +16,6 @@ namespace api_challenge_bravo
     {
         public static void Main(string[] args)
         {
-            // Mock for testing propose, remove after DB config
-            new Currency("BRL", "Real Brasileiro", 0.1948M, true);
-            new Currency("EUR", "Euro", 1.0996M, true);
             CreateHostBuilder(args).Build().Run();
         }
 

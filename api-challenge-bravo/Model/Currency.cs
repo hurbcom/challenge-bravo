@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 // Allowing UnitTests to acess Internal Props
@@ -11,8 +12,7 @@ namespace api_challenge_bravo.Model
     {
         // Using for Mock testing, remove after DB configuration
         public static List<Currency> Currencies = new List<Currency>();
-
-        internal int Id { get; set; }
+        [Key]
         public string Symbol { get; set; }
         public string Name { get; set; }
         public decimal ExchangeRateInUSD { get; set; }
