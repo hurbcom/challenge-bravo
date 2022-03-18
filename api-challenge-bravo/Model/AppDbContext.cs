@@ -8,8 +8,9 @@ namespace api_challenge_bravo.Model
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            var host = System.Diagnostics.Debugger.IsAttached ? "localhost" : "bd_MySQL";
             optionsBuilder
-                .UseMySql(@"Server=localhost;Database=currencydb;Uid=root;Pwd=dbdevpassword;");
+                .UseMySql(@$"Server={host};Database=currencydb;Uid=root;Pwd=dbdevpassword;");
         }
         public DbSet<Currency> Currencies { get; set; }
 
