@@ -353,5 +353,4 @@ MigrationBackup/
 .idea/
 
 # Docker Volumes
-temp/DockerVolumes/
-
+*/temp/DockerVolumes/mysql/
