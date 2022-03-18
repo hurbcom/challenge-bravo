@@ -35,13 +35,13 @@ namespace api_challenge_bravo.Services
         {
             // Only one thread by time can check if the currency need an update, making this a thread-safe logic
             await semaphore.WaitAsync();
-
-            var currency = Currency.Get(symbol);
-
-            if (!currency.AutoUpdateExchangeRate)
-                return;
             try
             {
+                var currency = Currency.Get(symbol);
+
+                if (!currency.AutoUpdateExchangeRate)
+                    return;
+
                 if (currency.LastTimeUpdatedExchangeRate == null
                     || currency.LastTimeUpdatedExchangeRate <=
                     DateTime.Now.AddSeconds(-TIME_TO_LIVE_EXCHANGE_RATE_SECONDS))
