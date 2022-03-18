@@ -18,7 +18,7 @@ namespace api_challenge_bravo.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Currency>> Get()
         {
-            return Currency.GetAll();
+            return DBCache.GetAllCurrency();
         }
 
         // GET: api/Currencies/BRL
@@ -37,6 +37,9 @@ namespace api_challenge_bravo.Controllers
         [HttpPost]
         public ActionResult<Currency> Post([FromBody]Currency currency)
         {
+            if (currency.LastTimeUpdatedExchangeRate > DateTime.Now)
+                return BadRequest(currency.LastTimeUpdatedExchangeRate);
+
             var existingCurrency = Currency.Get(currency.Symbol);
             if (existingCurrency != null)
                 return Conflict(existingCurrency);
