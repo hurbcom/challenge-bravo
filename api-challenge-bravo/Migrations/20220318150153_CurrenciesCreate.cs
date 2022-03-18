@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace api_challenge_bravo.Migrations
 {
@@ -13,7 +14,8 @@ namespace api_challenge_bravo.Migrations
                     Symbol = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     ExchangeRateInUSD = table.Column<decimal>(nullable: false),
-                    AutoUpdateExchangeRate = table.Column<bool>(nullable: false)
+                    AutoUpdateExchangeRate = table.Column<bool>(nullable: false),
+                    LastTimeUpdatedExchangeRate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -11,8 +11,8 @@ namespace api_challenge_bravo.Services
             var fromCurrency = Currency.Get(fromSymbol);
             var toCurrency = Currency.Get(toSymbol);
 
-            await ExchangeRateUpdateService.CheckTTLForNewUpdate(fromCurrency);
-            await ExchangeRateUpdateService.CheckTTLForNewUpdate(toCurrency);
+            await ExchangeRateUpdateService.CheckTTLForNewUpdate(fromCurrency.Symbol);
+            await ExchangeRateUpdateService.CheckTTLForNewUpdate(toCurrency.Symbol);
 
             var ExchangeRate = fromCurrency.ExchangeRateInUSD / toCurrency.ExchangeRateInUSD;
 

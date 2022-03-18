@@ -1,13 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Threading;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_challenge_bravo.Model
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
+            optionsBuilder
+                .UseMySql(@"Server=localhost;Database=currencydb;Uid=root;Pwd=dbdevpassword;");
         }
         public DbSet<Currency> Currencies { get; set; }
+
     }
 }

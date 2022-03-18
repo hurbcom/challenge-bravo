@@ -31,13 +31,15 @@ namespace api_challenge_bravo.Services
             currency.UpdateExchangeRate(newExchangeRat, dateTimeUpdate);
         }
 
-        public static async Task CheckTTLForNewUpdate(Currency currency)
+        public static async Task CheckTTLForNewUpdate(string symbol)
         {
-            if (!currency.AutoUpdateExchangeRate)
-                return;
-
             // Only one thread by time can check if the currency need an update, making this a thread-safe logic
             await semaphore.WaitAsync();
+
+            var currency = Currency.Get(symbol);
+
+            if (!currency.AutoUpdateExchangeRate)
+                return;
             try
             {
                 if (currency.LastTimeUpdatedExchangeRate == null
