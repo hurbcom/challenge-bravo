@@ -4,6 +4,7 @@ using api_challenge_bravo.Model;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using api_challenge_bravo.Util;
 using Newtonsoft.Json.Linq;
 
 namespace api_challenge_bravo.Services
@@ -29,15 +30,17 @@ namespace api_challenge_bravo.Services
             }
 
             currency.UpdateExchangeRate(newExchangeRat, dateTimeUpdate);
+            DBCache.CleanCache();
         }
 
         public static async Task CheckTTLForNewUpdate(string symbol)
         {
-            // Only one thread by time can check if the currency need an update, making this a thread-safe logic
+            // Only two threads by time can check if the currency need an update, making this a thread-safe logic:
+            // avoiding flooding the external API when we got a lot of simultaneous requests
             await semaphore.WaitAsync();
             try
             {
-                var currency = Currency.Get(symbol);
+                var currency = DBCache.GetCurrency(symbol);
 
                 if (!currency.AutoUpdateExchangeRate)
                     return;

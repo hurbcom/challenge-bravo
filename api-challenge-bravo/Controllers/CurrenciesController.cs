@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api_challenge_bravo.Model;
+using api_challenge_bravo.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace api_challenge_bravo.Controllers
         [HttpGet("{symbol}")]
         public ActionResult<Currency> Get(string symbol)
         {
-            var currency = Currency.Get(symbol);
+            var currency = DBCache.GetCurrency(symbol);
 
             if (currency == null)
                 return NotFound();

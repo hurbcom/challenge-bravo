@@ -13,6 +13,8 @@ namespace api_challenge_bravo.Model
 {
     public class Currency
     {
+        static int countDBCalls = 1;
+
         [Key]
         public string Symbol { get; set; }
         public string Name { get; set; }
@@ -43,6 +45,7 @@ namespace api_challenge_bravo.Model
         }
         public static Currency Get(string symbol)
         {
+            Console.WriteLine("Calling DB: #" + countDBCalls++);
             return new AppDbContext().Currencies.FirstOrDefault(x => x.Symbol == symbol);
         }
         public static void Delete(string symbol)
