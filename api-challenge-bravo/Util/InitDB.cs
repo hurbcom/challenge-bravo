@@ -28,7 +28,6 @@ namespace api_challenge_bravo.Util
                     new Currency("BTC", "Bitcoin", 40822.9M, true),
                     new Currency("ETH", "Ethereum", 2817.54M, true)
                 );
-                context.SaveChanges();
             } else {
                 System.Console.WriteLine("Data already exists.");
             }
