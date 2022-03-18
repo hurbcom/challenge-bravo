@@ -28,13 +28,8 @@ namespace api_challenge_bravo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var host = Configuration["DBHOST"] ?? "localhost";
-            var port = Configuration["DBPORT"] ?? "3306";
-            var password = Configuration["DBPASSWORD"] ?? "dbdevpassword";
-
             services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql($"server={host};userid=root;pwd={password};"
-                                 + $"port={port};database=currencydb"));
+                options.UseMySql($"Server=bd_MySQL;Database=currencydb;Uid=root;Pwd=dbdevpassword;"));
 
             services.AddControllers();
             services.AddSwaggerGen();
