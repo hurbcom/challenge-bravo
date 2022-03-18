@@ -10,8 +10,11 @@ namespace api_challenge_bravo.Util
     {
         public static void InsertDataDB(IApplicationBuilder app)
         {
-            InsertDataDB(
-                app.ApplicationServices.GetRequiredService<AppDbContext>());
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                InsertDataDB(
+                    serviceScope.ServiceProvider.GetRequiredService<AppDbContext>());
+            }
         }
         public static void InsertDataDB(AppDbContext context)
         {
