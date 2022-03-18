@@ -352,3 +352,6 @@ MigrationBackup/
 # Rider
 .idea/
 
+# Docker Volumes
+temp/DockerVolumes/
+
