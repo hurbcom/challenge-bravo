@@ -4,6 +4,16 @@
   <img src="app-architecture.jpg" alt="arquitetura" />
 </p>
 
+- Armazenamento da taxa de cámbio e da data de sua atualização;
+
+- Cada moeda possui um flag que indica se aquela moeda deve ou não ter sua taxa de cámbio atualizada automaticamente via API externa;
+
+- Utilização de um TTL(Time to Live) de 30 segundos após cada atualização da taxa de cámbio de uma moeda;
+
+- Toda requisição de conversão checa se a última atualização foi em menos de 30 segundos, caso negativo busca a taxa de cámbio atualizada;
+
+- Utilização de caching do BD de 1 segundo, evitando o gargalo no banco de dados em situações de muitas requisições simultâneas
+
 ## Endpoints
 
 Retornar todas as Moedas:
@@ -45,11 +55,11 @@ Converter valor entre Moedas:
 </code></pre>
 
 ## Libs e Ferramentas
-- Pomelo.EntityFrameworkCore.MySql
-- xunit
-- CacheManager.Core
-- Swashbuckle.AspNetCore
-- JMeter
+- [Pomelo.EntityFrameworkCore.MySql](https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql)
+- [xUnit](https://xunit.net/)
+- [CacheManager.Core](https://cachemanager.michaco.net/)
+- [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+- [JMeter](https://jmeter.apache.org/)
 
 ## Testes
 
