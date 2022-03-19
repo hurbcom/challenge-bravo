@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using api_challenge_bravo.Model.Util;
+using api_challenge_bravo.Services.Util;
 
 // Allowing UnitTests to access Internal Props
 [assembly: InternalsVisibleTo("tests-challenge-bravo")]
@@ -27,10 +28,22 @@ namespace api_challenge_bravo.Model
         }
         public Currency(string symbol, string name, decimal exchangeRateInUSD, bool autoUpdateExchangeRate, DateTime lastTimeUpdatedExchangeRate)
         {
+            var isAutoUpdatable = false;
+            if (autoUpdateExchangeRate)
+            {
+                try
+                {
+                    isAutoUpdatable = ExternalAPI.CheckAvailabilityOfAutoUpdater(symbol);
+                }
+                catch (Exception)
+                {
+                    isAutoUpdatable = false;
+                }
+            }
             this.Symbol = symbol.ToUpper();
             this.Name = name;
             this.ExchangeRateInUSD = exchangeRateInUSD;
-            this.AutoUpdateExchangeRate = autoUpdateExchangeRate;
+            this.AutoUpdateExchangeRate = isAutoUpdatable;
             this.LastTimeUpdatedExchangeRate = lastTimeUpdatedExchangeRate;
 
             using (var DBcon = new AppDbContext())

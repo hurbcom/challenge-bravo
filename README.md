@@ -4,8 +4,11 @@
   <img src="app-architecture.jpg" alt="arquitetura" />
 </p>
 
+### Funcionalidades
+
 - Armazenamento em banco de dados da taxa de cámbio e da data de sua atualização;
 - Cada moeda possui um flag que indica se aquela moeda deve ou não ter sua taxa de cámbio atualizada automaticamente via API externa;
+- No momento de inclusão de nova moeda, caso seja marcado o flag de auto-atualização, a API externa é consultada para confirmar se se trata de uma moeda disponivel para auto-atualização, caso contrario o flag é marcado como falso;
 - Utilização de um TTL(Time to Live) de 30 segundos após cada atualização da taxa de cámbio de uma moeda;
 - Toda requisição de conversão checa se a última atualização das moedas envolvidas foi em menos de 30 segundos, caso negativo busca as taxas de cámbio atualizadas;
 - Utilização de caching do BD de 1 segundo, evitando o gargalo no banco de dados em situações de muitas requisições simultâneas

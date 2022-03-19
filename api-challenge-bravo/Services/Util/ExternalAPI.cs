@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace api_challenge_bravo.Services.Util
@@ -24,6 +26,18 @@ namespace api_challenge_bravo.Services.Util
 
             Console.WriteLine("Calling external API: #" + countExternalCalls++);
             return Tuple.Create(newExchangeRate,dateTimeUpdate);
+        }
+
+        internal static bool CheckAvailabilityOfAutoUpdater(string symbol)
+        {
+            string baseURL = "https://economia.awesomeapi.com.br/";
+            string path = "xml/available";
+
+            var availabilityListXML = XDocument.Load(baseURL+path);
+            var availabilitySymbol =
+                (from element in availabilityListXML.Descendants($"{symbol}-USD") select element.Name).FirstOrDefault();
+
+            return availabilitySymbol != null;
         }
     }
 }
