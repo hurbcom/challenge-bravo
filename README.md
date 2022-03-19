@@ -1,17 +1,13 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
-## Arquitetura
+## Arquitetura do código
 <p align="center">
   <img src="app-architecture.jpg" alt="arquitetura" />
 </p>
 
-- Armazenamento da taxa de cámbio e da data de sua atualização;
-
+- Armazenamento em banco de dados da taxa de cámbio e da data de sua atualização;
 - Cada moeda possui um flag que indica se aquela moeda deve ou não ter sua taxa de cámbio atualizada automaticamente via API externa;
-
 - Utilização de um TTL(Time to Live) de 30 segundos após cada atualização da taxa de cámbio de uma moeda;
-
-- Toda requisição de conversão checa se a última atualização foi em menos de 30 segundos, caso negativo busca a taxa de cámbio atualizada;
-
+- Toda requisição de conversão checa se a última atualização das moedas envolvidas foi em menos de 30 segundos, caso negativo busca as taxas de cámbio atualizadas;
 - Utilização de caching do BD de 1 segundo, evitando o gargalo no banco de dados em situações de muitas requisições simultâneas
 
 ## Endpoints
@@ -60,6 +56,7 @@ Converter valor entre Moedas:
 - [CacheManager.Core](https://cachemanager.michaco.net/)
 - [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
 - [JMeter](https://jmeter.apache.org/)
+- [AwesomeAPI](https://docs.awesomeapi.com.br/api-de-moedas)
 
 ## Testes
 
@@ -71,11 +68,12 @@ Converter valor entre Moedas:
 
 - `$ docker-compose up -d`
 - Aguardar os containers subirem completamente, o BD leva mais tempo e o App só ficara disponível após o BD subir completamente.
-- Acessar: http://localhost:8080/index.html
+- Acessar Swagger: http://localhost:8080/index.html
 
 ## Limitações e Possíveis Melhorias
 
 - Delay da cotação
+- Dependência de apenas uma API
 - Autenticação
 - Checar moedas disponíveis para auto update
 
