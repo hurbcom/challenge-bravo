@@ -1,5 +1,6 @@
 ﻿using System;
 using api_challenge_bravo.Model;
+using api_challenge_bravo.Model.Util;
 using Xunit;
 
 namespace tests_challenge_bravo.UnitTests.ModelsTests
@@ -8,6 +9,7 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
     {
         public CurrencyFacts()
         {
+            AppDbContext.SetTestingEnvironment();
             new Currency("TSTM1", "Test Model 1", 0.1948M, true, DateTime.Now);
             new Currency("TSTM2", "Test Model 2", 1.0996M, true, DateTime.Now);
         }
@@ -55,7 +57,7 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
             currency.UpdateExchangeRate(0.42M,sampleDate);
 
             Assert.True(currency?.ExchangeRateInUSD == 0.42M);
-            Assert.True(currency?.LastTimeUpdatedExchangeRate == sampleDate);
+            Assert.True(currency?.LastTimeUpdatedExchangeRateUTC == sampleDate);
         }
 
         public void Dispose()

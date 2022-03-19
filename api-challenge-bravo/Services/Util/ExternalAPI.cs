@@ -10,7 +10,7 @@ namespace api_challenge_bravo.Services.Util
 {
     public static class ExternalAPI
     {
-        private static int countExternalCalls = 1;
+        private static int _countExternalCalls = 1;
 
         internal static async Task<Tuple<decimal,DateTime>> CallAwesomeApi(string symbol)
         {
@@ -24,7 +24,7 @@ namespace api_challenge_bravo.Services.Util
             var newExchangeRate = Decimal.Parse(response[$"{symbol}USD"]["bid"].ToString(),CultureInfo.InvariantCulture);
             var dateTimeUpdate = DateTime.Parse(content.Headers.Date.ToString());
 
-            Console.WriteLine("Calling external API: #" + countExternalCalls++);
+            Console.WriteLine("LOG: Calling external API: #" + _countExternalCalls++);
             return Tuple.Create(newExchangeRate,dateTimeUpdate);
         }
 
