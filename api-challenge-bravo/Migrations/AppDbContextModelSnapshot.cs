@@ -28,7 +28,7 @@ namespace api_challenge_bravo.Migrations
                     b.Property<decimal>("ExchangeRateInUSD")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<DateTime>("LastTimeUpdatedExchangeRate")
+                    b.Property<DateTime>("LastTimeUpdatedExchangeRateUTC")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")

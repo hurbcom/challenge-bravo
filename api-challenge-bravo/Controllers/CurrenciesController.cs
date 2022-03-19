@@ -32,16 +32,16 @@ namespace api_challenge_bravo.Controllers
         [HttpPost]
         public ActionResult<Currency> Post([FromBody]Currency currency)
         {
-            currency.LastTimeUpdatedExchangeRate = currency.LastTimeUpdatedExchangeRate.ToLocalTime();
-            if (currency.LastTimeUpdatedExchangeRate > DateTime.Now || currency.LastTimeUpdatedExchangeRate == DateTime.MinValue)
-                return BadRequest(currency.LastTimeUpdatedExchangeRate);
+            currency.LastTimeUpdatedExchangeRateUTC = currency.LastTimeUpdatedExchangeRateUTC.ToUniversalTime();
+            if (currency.LastTimeUpdatedExchangeRateUTC > DateTime.UtcNow || currency.LastTimeUpdatedExchangeRateUTC == DateTime.MinValue)
+                return BadRequest(currency.LastTimeUpdatedExchangeRateUTC);
 
             var existingCurrency = Currency.Get(currency.Symbol);
             if (existingCurrency != null)
                 return Conflict(existingCurrency);
 
             var currencyCreated = new Currency(currency.Symbol, currency.Name, currency.ExchangeRateInUSD,
-                currency.AutoUpdateExchangeRate, currency.LastTimeUpdatedExchangeRate);
+                currency.AutoUpdateExchangeRate, currency.LastTimeUpdatedExchangeRateUTC);
 
             return CreatedAtAction(nameof(Get), new {symbol = currency.Symbol}, currencyCreated);
 

@@ -28,7 +28,7 @@ namespace api_challenge_bravo.Controllers
             decimal resulAmount;
             DateTime resultLastUpdate;
 
-            (resulAmount,resultLastUpdate) = await CurrencyConvertService.Convert(fromCurrency, toCurrency, amount);
+            (resulAmount,resultLastUpdate) = await CurrencyConvertService.Convert(fromCurrency.Symbol, toCurrency.Symbol, amount);
             var jsonReturn = new
             {
                 currency = fromCurrency.Symbol,

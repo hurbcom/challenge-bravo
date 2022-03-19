@@ -41,8 +41,8 @@ namespace api_challenge_bravo.Services
                 if (!currency.AutoUpdateExchangeRate)
                     return;
 
-                if (currency.LastTimeUpdatedExchangeRate == null
-                    || currency.LastTimeUpdatedExchangeRate <=
+                if (currency.LastTimeUpdatedExchangeRateUTC == null
+                    || currency.LastTimeUpdatedExchangeRateUTC <=
                     DateTime.Now.AddSeconds(-TIME_TO_LIVE_EXCHANGE_RATE_SECONDS))
                     await UpdateExchangeRate(currency);
             }

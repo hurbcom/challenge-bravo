@@ -20,7 +20,7 @@ namespace api_challenge_bravo.Model
         public string Name { get; set; }
         public decimal ExchangeRateInUSD { get; set; }
         public bool AutoUpdateExchangeRate { get; set; }
-        public DateTime LastTimeUpdatedExchangeRate { get; set; }
+        public DateTime LastTimeUpdatedExchangeRateUTC { get; set; }
 
         public Currency()
         {
@@ -44,7 +44,7 @@ namespace api_challenge_bravo.Model
             this.Name = name;
             this.ExchangeRateInUSD = exchangeRateInUSD;
             this.AutoUpdateExchangeRate = isAutoUpdatable;
-            this.LastTimeUpdatedExchangeRate = lastTimeUpdatedExchangeRate;
+            this.LastTimeUpdatedExchangeRateUTC = lastTimeUpdatedExchangeRate.ToUniversalTime();
 
             using (var DBcon = new AppDbContext())
             {
@@ -74,7 +74,7 @@ namespace api_challenge_bravo.Model
             using (var DBcon = new AppDbContext())
             {
                 this.ExchangeRateInUSD = newExchangeRat;
-                this.LastTimeUpdatedExchangeRate = dateTimeUpdate;
+                this.LastTimeUpdatedExchangeRateUTC = dateTimeUpdate.ToUniversalTime() ;
 
                 DBcon.Currencies.Update(this);
                 DBcon.SaveChanges();
