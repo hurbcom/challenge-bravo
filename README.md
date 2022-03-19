@@ -78,7 +78,6 @@ Converter valor entre Moedas:
 - Delay da cotação
 - Dependência de apenas uma API
 - Autenticação
-- Checar moedas disponíveis para auto update
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />

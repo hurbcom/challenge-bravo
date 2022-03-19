@@ -4,7 +4,7 @@ using Xunit;
 
 namespace tests_challenge_bravo.UnitTests.ModelsTests
 {
-    public class CurrencyFacts
+    public class CurrencyFacts : IDisposable
     {
         public CurrencyFacts()
         {
@@ -56,6 +56,12 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
 
             Assert.True(currency?.ExchangeRateInUSD == 0.42M);
             Assert.True(currency?.LastTimeUpdatedExchangeRate == sampleDate);
+        }
+
+        public void Dispose()
+        {
+            Currency.Delete("TSTM1");
+            Currency.Delete("TSTM2");
         }
     }
 }
