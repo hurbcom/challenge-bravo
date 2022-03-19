@@ -32,7 +32,7 @@ namespace api_challenge_bravo.Controllers
             var jsonReturn = new
             {
                 currency = fromCurrency.Symbol,
-                amount = Math.Round(resulAmount, 4),
+                amount = resulAmount,
                 last_update = resultLastUpdate
             };
 
