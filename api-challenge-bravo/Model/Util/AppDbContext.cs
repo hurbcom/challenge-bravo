@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace api_challenge_bravo.Model
+namespace api_challenge_bravo.Model.Util
 {
     public class AppDbContext : DbContext
     {

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using api_challenge_bravo.Model;
 using CacheManager.Core;
 
-namespace api_challenge_bravo.Util
+namespace api_challenge_bravo.Model.Util
 {
     public static class DBCache
     {

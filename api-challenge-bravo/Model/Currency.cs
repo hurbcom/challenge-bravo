@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using api_challenge_bravo.Util;
+using api_challenge_bravo.Model.Util;
 
 // Allowing UnitTests to access Internal Props
 [assembly: InternalsVisibleTo("tests-challenge-bravo")]
@@ -64,6 +64,7 @@ namespace api_challenge_bravo.Model
 
                 DBcon.Currencies.Update(this);
                 DBcon.SaveChanges();
+                DBCache.CleanCache();
             }
         }
 

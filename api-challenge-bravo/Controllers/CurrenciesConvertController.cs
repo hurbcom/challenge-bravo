@@ -13,12 +13,15 @@ namespace api_challenge_bravo.Controllers
         [HttpGet]
         public async Task<ActionResult<decimal>> Get([FromQuery] string from,[FromQuery] string to,[FromQuery] decimal amount)
         {
-            if (Currency.GetCached(from) == null)
+            var fromCurrency = Currency.GetCached(from);
+            var toCurrency = Currency.GetCached(to);
+
+            if (fromCurrency == null)
                 return NotFound(from);
-            if (Currency.GetCached(to) == null)
+            if (toCurrency == null)
                 return NotFound(to);
 
-            return await CurrencyConvertService.Convert(from, to, amount);
+            return await CurrencyConvertService.Convert(fromCurrency, toCurrency, amount);
         }
     }
 }

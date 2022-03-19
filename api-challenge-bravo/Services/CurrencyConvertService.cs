@@ -5,11 +5,8 @@ namespace api_challenge_bravo.Services
 {
     public static class CurrencyConvertService
     {
-        public static async Task<decimal> Convert(string fromSymbol, string toSymbol, decimal amount)
+        public static async Task<decimal> Convert(Currency fromCurrency, Currency toCurrency, decimal amount)
         {
-            var fromCurrency = Currency.GetCached(fromSymbol);
-            var toCurrency = Currency.GetCached(toSymbol);
-
             await ExchangeRateUpdateService.CheckTTLForNewUpdate(fromCurrency.Symbol);
             await ExchangeRateUpdateService.CheckTTLForNewUpdate(toCurrency.Symbol);
 

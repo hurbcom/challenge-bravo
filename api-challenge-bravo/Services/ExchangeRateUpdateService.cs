@@ -1,36 +1,32 @@
 using System;
-using System.Globalization;
 using api_challenge_bravo.Model;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using api_challenge_bravo.Util;
-using Newtonsoft.Json.Linq;
+using api_challenge_bravo.Services.Util;
 
 namespace api_challenge_bravo.Services
 {
     public static class ExchangeRateUpdateService
     {
-        static int countExternalCalls = 1;
         private const int TIME_TO_LIVE_EXCHANGE_RATE_SECONDS = 30;
-        static SemaphoreSlim semaphore = new SemaphoreSlim(1,2);
 
-        private static async Task Update(Currency currency)
+        private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1,2);
+
+        private static async Task UpdateExchangeRate(Currency currency)
         {
-            decimal newExchangeRat;
+            decimal newExchangeRate;
             DateTime dateTimeUpdate;
 
             try
             {
-                (newExchangeRat, dateTimeUpdate) = await CallExternalAwesomeApi(currency.Symbol);
+                (newExchangeRate, dateTimeUpdate) = await ExternalAPI.CallAwesomeApi(currency.Symbol);
             }
             catch (Exception exception)
             {
-                throw new Exception("External API error:",exception);
+                throw new Exception("External API error:", exception);
             }
 
-            currency.UpdateExchangeRate(newExchangeRat, dateTimeUpdate);
-            DBCache.CleanCache();
+            currency.UpdateExchangeRate(newExchangeRate, dateTimeUpdate);
         }
 
         public static async Task CheckTTLForNewUpdate(string symbol)
@@ -48,29 +44,12 @@ namespace api_challenge_bravo.Services
                 if (currency.LastTimeUpdatedExchangeRate == null
                     || currency.LastTimeUpdatedExchangeRate <=
                     DateTime.Now.AddSeconds(-TIME_TO_LIVE_EXCHANGE_RATE_SECONDS))
-                    await Update(currency);
+                    await UpdateExchangeRate(currency);
             }
             finally
             {
                 semaphore.Release();
             }
-
-        }
-
-        private static async Task<Tuple<decimal,DateTime>> CallExternalAwesomeApi(string symbol)
-        {
-            string baseURL = "https://economia.awesomeapi.com.br/";
-            string path = $"last/{symbol.ToUpper()}-USD";
-
-            HttpClient req = new HttpClient();
-            var content = await req.GetAsync(baseURL + path);
-            var response = JObject.Parse(await content.Content.ReadAsStringAsync());
-
-            var newExchangeRat = Decimal.Parse(response[$"{symbol}USD"]["bid"].ToString(),CultureInfo.InvariantCulture);
-            var dateTimeUpdate = DateTime.Parse(content.Headers.Date.ToString());
-
-            Console.WriteLine("Calling external API: #" + countExternalCalls++);
-            return Tuple.Create(newExchangeRat,dateTimeUpdate);
         }
     }
 }

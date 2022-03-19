@@ -1,5 +1,5 @@
 using api_challenge_bravo.Model;
-using api_challenge_bravo.Util;
+using api_challenge_bravo.Model.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

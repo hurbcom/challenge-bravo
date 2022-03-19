@@ -1,10 +1,9 @@
-﻿using api_challenge_bravo.Model;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace api_challenge_bravo.Util
+namespace api_challenge_bravo.Model.Util
 {
     public class InitDB
     {

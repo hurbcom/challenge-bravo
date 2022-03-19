@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api_challenge_bravo.Model;
+using api_challenge_bravo.Model.Util;
 
 namespace api_challenge_bravo.Migrations
 {
