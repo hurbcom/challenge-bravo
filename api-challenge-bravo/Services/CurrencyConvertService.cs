@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using api_challenge_bravo.Model;
-using api_challenge_bravo.Util;
 
 namespace api_challenge_bravo.Services
 {
@@ -9,8 +7,8 @@ namespace api_challenge_bravo.Services
     {
         public static async Task<decimal> Convert(string fromSymbol, string toSymbol, decimal amount)
         {
-            var fromCurrency = DBCache.GetCurrency(fromSymbol);
-            var toCurrency = DBCache.GetCurrency(toSymbol);
+            var fromCurrency = Currency.GetCached(fromSymbol);
+            var toCurrency = Currency.GetCached(toSymbol);
 
             await ExchangeRateUpdateService.CheckTTLForNewUpdate(fromCurrency.Symbol);
             await ExchangeRateUpdateService.CheckTTLForNewUpdate(toCurrency.Symbol);

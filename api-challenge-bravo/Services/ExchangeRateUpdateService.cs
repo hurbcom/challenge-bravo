@@ -40,7 +40,7 @@ namespace api_challenge_bravo.Services
             await semaphore.WaitAsync();
             try
             {
-                var currency = DBCache.GetCurrency(symbol);
+                var currency = Currency.GetCached(symbol);
 
                 if (!currency.AutoUpdateExchangeRate)
                     return;

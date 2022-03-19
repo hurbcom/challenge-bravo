@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using api_challenge_bravo.Model;
-using api_challenge_bravo.Util;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace api_challenge_bravo.Controllers
 {
@@ -18,14 +13,14 @@ namespace api_challenge_bravo.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Currency>> Get()
         {
-            return DBCache.GetAllCurrency();
+            return Currency.GetAllCached();
         }
 
         // GET: api/Currencies/BRL
         [HttpGet("{symbol}")]
         public ActionResult<Currency> Get(string symbol)
         {
-            var currency = DBCache.GetCurrency(symbol);
+            var currency = Currency.GetCached(symbol);
 
             if (currency == null)
                 return NotFound();

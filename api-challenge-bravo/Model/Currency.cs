@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Common;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore;
+using api_challenge_bravo.Util;
 
 // Allowing UnitTests to access Internal Props
 [assembly: InternalsVisibleTo("tests-challenge-bravo")]
@@ -67,5 +66,9 @@ namespace api_challenge_bravo.Model
                 DBcon.SaveChanges();
             }
         }
+
+        public static List<Currency> GetAllCached() => DBCache.GetAllCurrency();
+
+        public static Currency GetCached(string symbol) => DBCache.GetCurrency(symbol);
     }
 }

@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using api_challenge_bravo.Model;
 using api_challenge_bravo.Services;
-using api_challenge_bravo.Util;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api_challenge_bravo.Controllers
@@ -18,9 +13,9 @@ namespace api_challenge_bravo.Controllers
         [HttpGet]
         public async Task<ActionResult<decimal>> Get([FromQuery] string from,[FromQuery] string to,[FromQuery] decimal amount)
         {
-            if (DBCache.GetCurrency(from) == null)
+            if (Currency.GetCached(from) == null)
                 return NotFound(from);
-            if (DBCache.GetCurrency(to) == null)
+            if (Currency.GetCached(to) == null)
                 return NotFound(to);
 
             return await CurrencyConvertService.Convert(from, to, amount);

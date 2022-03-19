@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using api_challenge_bravo.Model;
 using CacheManager.Core;
-using Newtonsoft.Json.Linq;
 
 namespace api_challenge_bravo.Util
 {
