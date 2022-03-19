@@ -2,7 +2,7 @@
 
 services:
     db:
-        container_name: bd_MySQL
+        container_name: db_MySQL
         image: mysql
         ports:
             - "3306:3306"
