@@ -71,7 +71,7 @@ Converter valor entre Moedas:
 
 ## Execução
 
-- `$ docker-compose up -d`
+- `$ docker-compose -p "challenge-bravo" up -d`
 - Aguardar os containers subirem completamente, o BD leva mais tempo e o App só ficara disponível após o BD subir completamente.
 - Acessar Swagger: http://localhost:8080/index.html
 
