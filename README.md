@@ -65,6 +65,20 @@ Converter valor entre Moedas:
 
 ### Teste de Carga
 
+- Arquivo de Jmeter em: `challenge-bravo/src/tests-challenge-bravo/LoadTests/challenge_bravo_convert_resquest.jmx`
+- Na pasta LoadTests, executar novo teste com o comando: `<PATH_JMETER>/bin/jmeter -n -t challenge_bravo_convert_resquest.jmx -l LoadTestResult.jtl -e -o .`
+
+### Execução prévia:
+<p align="center">
+  <img src="./src/tests-challenge-bravo/LoadTests/LoadTestResult.png" alt="loadtest" />
+</p>
+
+- Threads/Users: 1000
+- Counts per User: 5
+- Ramo-up: 1s
+
+
+
 ### Testes unitários
 
 - Os testes unitários são executados no build do Dockerfile, em caso de falha o build é interrompido.
