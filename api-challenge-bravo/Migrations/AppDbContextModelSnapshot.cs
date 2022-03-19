@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using api_challenge_bravo.Model;
 using api_challenge_bravo.Model.Util;
 
 namespace api_challenge_bravo.Migrations
@@ -29,7 +28,7 @@ namespace api_challenge_bravo.Migrations
                     b.Property<decimal>("ExchangeRateInUSD")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<DateTime?>("LastTimeUpdatedExchangeRate")
+                    b.Property<DateTime>("LastTimeUpdatedExchangeRate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")

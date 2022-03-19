@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Globalization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,12 +22,13 @@ namespace api_challenge_bravo.Model.Util
             context.Database.Migrate();
             if (!context.Currencies.Any())
             {
+                CultureInfo usCulture = new CultureInfo("en-US", false);
                 context.Currencies.AddRange(
-                    new Currency("BRL", "Real Brasileiro", 0.1984M, true),
-                    new Currency("EUR", "Euro", 1.1086M, true),
-                    new Currency("USD", "Dólar Americano", 1.0M, false),
-                    new Currency("BTC", "Bitcoin", 40822.9M, true),
-                    new Currency("ETH", "Ethereum", 2817.54M, true)
+                    new Currency("BRL", "Real Brasileiro", 0.199M, true,DateTime.Parse("2022-03-18 17:59:56",usCulture)),
+                    new Currency("EUR", "Euro", 1.1049M, true,DateTime.Parse("2022-03-18 17:59:53",usCulture)),
+                    new Currency("USD", "Dólar Americano", 1.0M, false,DateTime.Parse("2022-03-18 17:59:56",usCulture)),
+                    new Currency("BTC", "Bitcoin", 41801.9M, true,DateTime.Parse("2022-03-19 10:07:34",usCulture)),
+                    new Currency("ETH", "Ethereum", 2966.86M, true,DateTime.Parse("2022-03-19 10:07:0",usCulture))
                 );
             } else {
                 System.Console.WriteLine("Data already exists.");

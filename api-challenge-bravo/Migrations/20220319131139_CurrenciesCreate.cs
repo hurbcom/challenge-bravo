@@ -15,7 +15,7 @@ namespace api_challenge_bravo.Migrations
                     Name = table.Column<string>(nullable: true),
                     ExchangeRateInUSD = table.Column<decimal>(nullable: false),
                     AutoUpdateExchangeRate = table.Column<bool>(nullable: false),
-                    LastTimeUpdatedExchangeRate = table.Column<DateTime>(nullable: true)
+                    LastTimeUpdatedExchangeRate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

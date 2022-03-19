@@ -8,8 +8,8 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
     {
         public CurrencyFacts()
         {
-            new Currency("TSTM1", "Test Model 1", 0.1948M, true);
-            new Currency("TSTM2", "Test Model 2", 1.0996M, true);
+            new Currency("TSTM1", "Test Model 1", 0.1948M, true, DateTime.Now);
+            new Currency("TSTM2", "Test Model 2", 1.0996M, true, DateTime.Now);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
         [Fact]
         public void DeleteItemFromDB()
         {
-            new Currency("TSTM3", "Test Model 3", 0.0996M, false);
+            new Currency("TSTM3", "Test Model 3", 0.0996M, false, DateTime.Now);
             var currency = Currency.Get("TSTM3");
             Assert.True(currency?.Symbol == "TSTM3");
 

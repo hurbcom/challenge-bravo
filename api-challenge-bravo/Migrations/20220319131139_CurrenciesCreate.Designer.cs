@@ -4,13 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using api_challenge_bravo.Model;
 using api_challenge_bravo.Model.Util;
 
 namespace api_challenge_bravo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220318150153_CurrenciesCreate")]
+    [Migration("20220319131139_CurrenciesCreate")]
     partial class CurrenciesCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +30,7 @@ namespace api_challenge_bravo.Migrations
                     b.Property<decimal>("ExchangeRateInUSD")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<DateTime?>("LastTimeUpdatedExchangeRate")
+                    b.Property<DateTime>("LastTimeUpdatedExchangeRate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")

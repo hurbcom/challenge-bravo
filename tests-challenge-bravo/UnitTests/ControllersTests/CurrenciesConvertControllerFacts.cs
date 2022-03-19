@@ -1,4 +1,5 @@
-﻿using api_challenge_bravo.Controllers;
+﻿using System;
+using api_challenge_bravo.Controllers;
 using api_challenge_bravo.Model;
 using Xunit;
 
@@ -8,7 +9,7 @@ namespace tests_challenge_bravo.UnitTests.ControllersTests
     {
         public CurrenciesConvertControllerFacts()
         {
-            new Currency("TSTCC1", "Testing Convert Controller 1", 0.1948M, false);
+            new Currency("TSTCC1", "Testing Convert Controller 1", 0.1948M, false, DateTime.Now);
         }
 
         [Fact]

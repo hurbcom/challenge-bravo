@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using api_challenge_bravo.Model;
 using api_challenge_bravo.Services;
@@ -11,7 +12,7 @@ namespace api_challenge_bravo.Controllers
     {
         // GET: api/CurrenciesConvert?from=BTC&to=EUR&amount=123.45
         [HttpGet]
-        public async Task<ActionResult<decimal>> Get([FromQuery] string from,[FromQuery] string to,[FromQuery] decimal amount)
+        public async Task<ActionResult> Get([FromQuery] string from,[FromQuery] string to,[FromQuery] decimal amount)
         {
             var fromCurrency = Currency.GetCached(from);
             var toCurrency = Currency.GetCached(to);
@@ -22,9 +23,32 @@ namespace api_challenge_bravo.Controllers
                 return NotFound(to);
 
             if (toCurrency.ExchangeRateInUSD == 0)
-                return 0;
+                return DivideByZeroReturn(fromCurrency.Symbol);
 
-            return await CurrencyConvertService.Convert(fromCurrency, toCurrency, amount);
+            decimal resulAmount;
+            DateTime resultLastUpdate;
+
+            (resulAmount,resultLastUpdate) = await CurrencyConvertService.Convert(fromCurrency, toCurrency, amount);
+            var jsonReturn = new
+            {
+                currency = fromCurrency.Symbol,
+                amount = resulAmount,
+                last_update = resultLastUpdate
+            };
+
+            return new JsonResult(jsonReturn);
+        }
+
+        private JsonResult DivideByZeroReturn(string fromSymbol)
+        {
+            var jsonReturn = new
+            {
+                currency = fromSymbol,
+                amount = 0,
+                last_update = DateTime.Now
+            };
+
+            return new JsonResult(jsonReturn);
         }
     }
 }

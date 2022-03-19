@@ -19,18 +19,19 @@ namespace api_challenge_bravo.Model
         public string Name { get; set; }
         public decimal ExchangeRateInUSD { get; set; }
         public bool AutoUpdateExchangeRate { get; set; }
-        public DateTime? LastTimeUpdatedExchangeRate { get; set; }
+        public DateTime LastTimeUpdatedExchangeRate { get; set; }
 
         public Currency()
         {
 
         }
-        public Currency(string symbol, string name, decimal exchangeRateInUSD, bool autoUpdateExchangeRate)
+        public Currency(string symbol, string name, decimal exchangeRateInUSD, bool autoUpdateExchangeRate, DateTime lastTimeUpdatedExchangeRate)
         {
-            this.Symbol = symbol;
+            this.Symbol = symbol.ToUpper();
             this.Name = name;
             this.ExchangeRateInUSD = exchangeRateInUSD;
             this.AutoUpdateExchangeRate = autoUpdateExchangeRate;
+            this.LastTimeUpdatedExchangeRate = lastTimeUpdatedExchangeRate;
 
             using (var DBcon = new AppDbContext())
             {
