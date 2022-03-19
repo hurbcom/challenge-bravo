@@ -21,6 +21,9 @@ namespace api_challenge_bravo.Controllers
             if (toCurrency == null)
                 return NotFound(to);
 
+            if (toCurrency.ExchangeRateInUSD == 0)
+                return 0;
+
             return await CurrencyConvertService.Convert(fromCurrency, toCurrency, amount);
         }
     }
