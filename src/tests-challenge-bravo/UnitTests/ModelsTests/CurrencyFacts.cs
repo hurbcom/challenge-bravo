@@ -52,7 +52,7 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
         public void UpdateExchangeRateCorrectValue()
         {
             var currency = Currency.Get("TSTM1");
-            var sampleDate = new DateTime(2022, 1, 1, 12, 0, 0);
+            var sampleDate = new DateTime(2022, 1, 1, 12, 0, 0).ToUniversalTime();
 
             currency.UpdateExchangeRate(0.42M,sampleDate);
 

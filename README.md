@@ -67,6 +67,8 @@ Converter valor entre Moedas:
 
 ### Testes unitários
 
+- Os testes unitários são executados no build do Dockerfile, em caso de falha o build é interrompido.
+
 ## Execução
 
 - `$ docker-compose up -d`
