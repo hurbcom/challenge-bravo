@@ -1,7 +1,7 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 ## Arquitetura do código
 <p align="center">
-  <img src="app-architecture.jpg" alt="arquitetura" />
+  <img src="README_assets/app-architecture.jpg" alt="arquitetura" />
 </p>
 
 ### Funcionalidades
@@ -99,18 +99,24 @@ Hardware de teste:
 - RAM: 8,00 GB
 
 ### Testes unitários
+- Os testes unitários são executados no build do Dockerfile, em caso de falha o build é interrompido.
 
 Estrutura de testes
 <p align="left">
-  <img src="testingTree.png" alt="Testing tree" />
+  <img src="README_assets/testingTree.png" alt="Testing tree" />
 </p>
 
 Cobertura de testes
 <p align="left">
-  <img src="testingCoverageTree.png" alt="Testing tree" />
+  <img src="README_assets/testingCoverageTree.png" alt="Testing tree" />
 </p>
 
-- Os testes unitários são executados no build do Dockerfile, em caso de falha o build é interrompido.
+Arquivos e pastas ignorados para calculo de cobertura de testes:
+- Migrations/
+- InitDB.cs
+- AwesomeAPI.cs
+- Program.cs
+- Startup.cs
 
 ## Execução
 
@@ -125,5 +131,5 @@ Cobertura de testes
 - Autenticação: Em uma futura versão a implementação de autenticação de usuários seria uma melhoria interessante.
 
 <p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
+  <img src="README_assets/ca.jpg" alt="Challange accepted" />
 </p>
