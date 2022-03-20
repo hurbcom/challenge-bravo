@@ -2,7 +2,7 @@ using System;
 using api_challenge_bravo.Model;
 using System.Threading;
 using System.Threading.Tasks;
-using api_challenge_bravo.Services.Util;
+using api_challenge_bravo.Services.Util.ExternalCurrencyAPI;
 
 namespace api_challenge_bravo.Services
 {
@@ -19,7 +19,7 @@ namespace api_challenge_bravo.Services
 
             try
             {
-                (newExchangeRate, dateTimeUpdate) = await ExternalAPI.CallAwesomeApi(currency.Symbol);
+                (newExchangeRate, dateTimeUpdate) = await ExternalCurrencyAPI.GetExchangeRate(currency.Symbol);
             }
             catch (Exception exception)
             {
@@ -43,7 +43,7 @@ namespace api_challenge_bravo.Services
 
                 if (currency.LastTimeUpdatedExchangeRateUTC == null
                     || currency.LastTimeUpdatedExchangeRateUTC <=
-                    DateTime.Now.ToUniversalTime().AddSeconds(-TIME_TO_LIVE_EXCHANGE_RATE_SECONDS))
+                    DateTime.UtcNow.AddSeconds(-TIME_TO_LIVE_EXCHANGE_RATE_SECONDS))
                     await UpdateExchangeRate(currency);
             }
             finally

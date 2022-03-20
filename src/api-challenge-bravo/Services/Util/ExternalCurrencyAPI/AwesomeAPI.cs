@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 
-namespace api_challenge_bravo.Services.Util
+namespace api_challenge_bravo.Services.Util.ExternalCurrencyAPI
 {
-    public static class ExternalAPI
+    public class AwesomeAPI : IExternalCurrencyAPI
     {
         private static int _countExternalCalls = 1;
 
-        internal static async Task<Tuple<decimal,DateTime>> CallAwesomeApi(string symbol)
+        public async Task<Tuple<decimal,DateTime>> GetExchangeRate(string symbol)
         {
             string baseURL = "https://economia.awesomeapi.com.br/";
             string path = $"last/{symbol.ToUpper()}-USD";
@@ -28,7 +28,7 @@ namespace api_challenge_bravo.Services.Util
             return Tuple.Create(newExchangeRate,dateTimeUpdate);
         }
 
-        internal static bool CheckAvailabilityOfAutoUpdater(string symbol)
+        public bool CheckAvailabilityOfAutoUpdater(string symbol)
         {
             string baseURL = "https://economia.awesomeapi.com.br/";
             string path = "xml/available";

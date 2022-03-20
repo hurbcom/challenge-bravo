@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using api_challenge_bravo.Model.Util;
 using api_challenge_bravo.Services.Util;
+using api_challenge_bravo.Services.Util.ExternalCurrencyAPI;
 
 // Allowing UnitTests to access Internal Props
 [assembly: InternalsVisibleTo("tests-challenge-bravo")]
@@ -31,7 +33,7 @@ namespace api_challenge_bravo.Model
             {
                 try
                 {
-                    isAutoUpdatable = ExternalAPI.CheckAvailabilityOfAutoUpdater(symbol);
+                    isAutoUpdatable = ExternalCurrencyAPI.CheckAvailabilityOfAutoUpdater(symbol);
                 }
                 catch (Exception)
                 {

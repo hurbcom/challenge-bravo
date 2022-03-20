@@ -10,8 +10,8 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
         public CurrencyFacts()
         {
             AppDbContext.SetTestingEnvironment();
-            new Currency("TSTM1", "Test Model 1", 0.1948M, true, DateTime.Now);
-            new Currency("TSTM2", "Test Model 2", 1.0996M, false, DateTime.Now);
+            new Currency("TSTM1", "Test Model 1", 0.1948M, true, DateTime.UtcNow);
+            new Currency("TSTM2", "Test Model 2", 1.0996M, false, DateTime.UtcNow);
         }
 
         [Fact]
@@ -34,17 +34,9 @@ namespace tests_challenge_bravo.UnitTests.ModelsTests
         }
 
         [Fact]
-        public void AddNotRealCoinSetFlagAutoUpdate()
-        {
-            var result = Currency.Get("TSTM1");
-
-            Assert.False(result.AutoUpdateExchangeRate);
-        }
-
-        [Fact]
         public void DeleteItemFromDB()
         {
-            new Currency("TSTM3", "Test Model 3", 0.0996M, false, DateTime.Now);
+            new Currency("TSTM3", "Test Model 3", 0.0996M, false, DateTime.UtcNow);
             var currency = Currency.Get("TSTM3");
             Assert.True(currency?.Symbol == "TSTM3");
 

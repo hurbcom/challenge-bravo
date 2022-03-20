@@ -2,6 +2,7 @@
 using api_challenge_bravo.Model;
 using api_challenge_bravo.Model.Util;
 using api_challenge_bravo.Services;
+using api_challenge_bravo.Services.Util.ExternalCurrencyAPI;
 using Xunit;
 
 namespace tests_challenge_bravo.UnitTests.ServicesTests
@@ -10,14 +11,15 @@ namespace tests_challenge_bravo.UnitTests.ServicesTests
     {
         public CurrencyConvertServiceFacts()
         {
+            // Mock DataBase inMemory
             AppDbContext.SetTestingEnvironment();
         }
 
         [Fact]
         public void ConvertingCorrectValue()
         {
-            new Currency("TSTS1", "Testing Service 1", 0.1948M, false, DateTime.Now);
-            new Currency("TSTS2", "Testing Service 2", 1.0996M, false, DateTime.Now);
+            new Currency("TSTS1", "Testing Service 1", 0.1948M, false, DateTime.UtcNow);
+            new Currency("TSTS2", "Testing Service 2", 1.0996M, false, DateTime.UtcNow);
 
             decimal rate;
             DateTime date;

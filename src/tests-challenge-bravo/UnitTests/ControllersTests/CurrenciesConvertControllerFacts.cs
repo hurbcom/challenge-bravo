@@ -23,5 +23,17 @@ namespace tests_challenge_bravo.UnitTests.ControllersTests
             Assert.True("NotFoundObjectResult" == resultAwait.GetType().Name);
         }
 
+        [Fact]
+        public void DivideByZeroNotAnException()
+        {
+            new Currency("TSTDVD0", "Test Divide by zero", 0.0M, false, DateTime.UtcNow);
+
+            var result = new CurrenciesConvertController().Get("TSTDVD0","TSTDVD0",10);
+
+            var resultAwait = result.Result;
+
+            Assert.True(true);
+        }
+
     }
 }
