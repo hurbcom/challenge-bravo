@@ -100,6 +100,11 @@ Hardware de teste:
 
 ### Testes unitários
 
+Estrutura de testes
+<p align="center">
+  <img src="testingTree.png" alt="Testing tree" />
+</p>
+
 - Os testes unitários são executados no build do Dockerfile, em caso de falha o build é interrompido.
 
 ## Execução
