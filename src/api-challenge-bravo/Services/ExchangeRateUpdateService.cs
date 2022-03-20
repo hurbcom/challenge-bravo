@@ -43,7 +43,7 @@ namespace api_challenge_bravo.Services
 
                 if (currency.LastTimeUpdatedExchangeRateUTC == null
                     || currency.LastTimeUpdatedExchangeRateUTC <=
-                    DateTime.Now.AddSeconds(-TIME_TO_LIVE_EXCHANGE_RATE_SECONDS))
+                    DateTime.Now.ToUniversalTime().AddSeconds(-TIME_TO_LIVE_EXCHANGE_RATE_SECONDS))
                     await UpdateExchangeRate(currency);
             }
             finally

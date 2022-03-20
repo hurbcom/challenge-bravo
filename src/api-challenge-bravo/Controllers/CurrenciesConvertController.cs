@@ -33,7 +33,7 @@ namespace api_challenge_bravo.Controllers
             {
                 currency = fromCurrency.Symbol,
                 amount = resulAmount,
-                last_update = resultLastUpdate
+                last_update_UTC = resultLastUpdate
             };
 
             return new JsonResult(jsonReturn);
@@ -45,7 +45,7 @@ namespace api_challenge_bravo.Controllers
             {
                 currency = fromSymbol,
                 amount = 0,
-                last_update = DateTime.Now
+                last_update_UTC = DateTime.Now.ToUniversalTime()
             };
 
             return new JsonResult(jsonReturn);

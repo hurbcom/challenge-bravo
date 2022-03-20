@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using CacheManager.Core;
 
@@ -23,10 +23,18 @@ namespace api_challenge_bravo.Model.Util
 
         public static Currency GetCurrency(string symbol)
         {
-            if (CurrencyCache.Get(symbol) == null)
-                CurrencyCache.Add(symbol,Currency.Get(symbol));
+            try
+            {
+                if (CurrencyCache.Get(symbol) == null)
+                    CurrencyCache.Add(symbol,Currency.Get(symbol));
 
-            return CurrencyCache.Get(symbol);
+                return CurrencyCache.Get(symbol);
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static List<Currency> GetAllCurrency()

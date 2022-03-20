@@ -6,25 +6,22 @@ using Xunit;
 
 namespace tests_challenge_bravo.UnitTests.ControllersTests
 {
-    public class CurrenciesConvertControllerFacts : IDisposable
+    public class CurrenciesConvertControllerFacts
     {
         public CurrenciesConvertControllerFacts()
         {
             AppDbContext.SetTestingEnvironment();
-            new Currency("TSTC1", "Testing Controller 1", 0.1948M, false, DateTime.Now);
         }
 
         [Fact]
-        public void GetAllReturnItens()
+        public void NotFoundCurrency()
         {
-            var result = new CurrenciesController().Get("TSTC1");
+            var result = new CurrenciesConvertController().Get("NOTACURRENCY","NOTACURRENCY2",10);
 
-            Assert.True(result.Value.Name == "Testing Controller 1");
+            var resultAwait = result.Result;
+
+            Assert.True("NotFoundObjectResult" == resultAwait.GetType().Name);
         }
 
-        public void Dispose()
-        {
-            Currency.Delete("TSTC1");
-        }
     }
 }
