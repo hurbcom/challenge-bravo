@@ -1,15 +1,13 @@
 ﻿using System;
 using api_challenge_bravo.Model;
-using api_challenge_bravo.Model.Util;
 using Xunit;
 
 namespace tests_challenge_bravo.UnitTests.ModelsTests
 {
-    public class CurrencyFacts : IDisposable
+    public class CurrencyFacts : UnitTestBase, IDisposable
     {
         public CurrencyFacts()
         {
-            AppDbContext.SetTestingEnvironment();
             new Currency("TSTM1", "Test Model 1", 0.1948M, true, DateTime.UtcNow);
             new Currency("TSTM2", "Test Model 2", 1.0996M, false, DateTime.UtcNow);
         }

@@ -1,20 +1,12 @@
 ﻿using System;
 using api_challenge_bravo.Model;
-using api_challenge_bravo.Model.Util;
 using api_challenge_bravo.Services;
-using api_challenge_bravo.Services.Util.ExternalCurrencyAPI;
 using Xunit;
 
 namespace tests_challenge_bravo.UnitTests.ServicesTests
 {
-    public class CurrencyConvertServiceFacts
+    public class CurrencyConvertServiceFacts : UnitTestBase
     {
-        public CurrencyConvertServiceFacts()
-        {
-            // Mock DataBase inMemory
-            AppDbContext.SetTestingEnvironment();
-        }
-
         [Fact]
         public void ConvertingCorrectValue()
         {
