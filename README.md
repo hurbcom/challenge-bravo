@@ -70,13 +70,13 @@ Converter valor entre Moedas:
 - Na pasta LoadTests, executar novo teste com o comando: `<PATH_JMETER>/bin/jmeter -n -t challenge_bravo_convert_resquest.jmx -l LoadTestResult.jtl`
 
 #### Execução prévia:
-<p align="center">
+<p align="left">
   <img src="./src/tests-challenge-bravo/LoadTests/JMeterSetup.png" alt="JMeter Setup" />
 </p>
-<p align="center">
+<p align="left">
   <img src="./src/tests-challenge-bravo/LoadTests/JmeterRequest.png" alt="Jmeter Request" />
 </p>
-<p align="center">
+<p align="left">
   <img src="./src/tests-challenge-bravo/LoadTests/LoadTestResult.png" alt="load test" />
 </p>
 
@@ -101,7 +101,7 @@ Hardware de teste:
 ### Testes unitários
 
 Estrutura de testes
-<p align="center">
+<p align="left">
   <img src="testingTree.png" alt="Testing tree" />
 </p>
 
