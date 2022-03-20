@@ -15,7 +15,6 @@ namespace api_challenge_bravo.Controllers
         {
             return Currency.GetAllCached();
         }
-
         // GET: api/Currencies/BRL
         [HttpGet("{symbol}")]
         public ActionResult<Currency> Get(string symbol)
@@ -27,13 +26,16 @@ namespace api_challenge_bravo.Controllers
 
             return currency;
         }
-
         // POST: api/Currencies
         [HttpPost]
         public ActionResult<Currency> Post([FromBody]Currency currency)
         {
             currency.LastTimeUpdatedExchangeRateUTC = currency.LastTimeUpdatedExchangeRateUTC.ToUniversalTime();
-            if (currency.LastTimeUpdatedExchangeRateUTC > DateTime.UtcNow || currency.LastTimeUpdatedExchangeRateUTC == DateTime.MinValue.ToUniversalTime())
+
+            var isLastUpdatedBiggerThanNow = currency.LastTimeUpdatedExchangeRateUTC > DateTime.UtcNow;
+            var isLastUpdatedMinDate = currency.LastTimeUpdatedExchangeRateUTC == DateTime.MinValue.ToUniversalTime();
+            
+            if (isLastUpdatedBiggerThanNow || isLastUpdatedMinDate)
                 return BadRequest(currency.LastTimeUpdatedExchangeRateUTC);
 
             var existingCurrency = Currency.Get(currency.Symbol);
@@ -46,7 +48,6 @@ namespace api_challenge_bravo.Controllers
             return CreatedAtAction(nameof(Get), new {symbol = currency.Symbol}, currencyCreated);
 
         }
-
         // DELETE: api/Currencies/BRL
         [HttpDelete("{symbol}")]
         public ActionResult<Currency> Delete(string symbol)

@@ -13,6 +13,10 @@ namespace api_challenge_bravo.Services
 
             var fromCurrencyUpdated = Currency.GetCached(fromSymbol);
             var toCurrencyUpdated = Currency.GetCached(toSymbol);
+            
+            // Protects from divide by zero exceptions
+            if (toCurrencyUpdated.ExchangeRateInUSD == 0M)
+                return new Tuple<decimal, DateTime>(0M, DateTime.UtcNow);
 
             var ExchangeRate = fromCurrencyUpdated.ExchangeRateInUSD / toCurrencyUpdated.ExchangeRateInUSD;
 
@@ -21,7 +25,6 @@ namespace api_challenge_bravo.Services
 
             return new Tuple<decimal, DateTime>(resultAmount, resultLastUpdate);
         }
-
         private static DateTime getConvertUpdateTime(Currency fromCurrency, Currency toCurrency)
         {
             // In case only fromCurrency is not an AutoUpdateble return LastUpdate from toCurrency
@@ -31,7 +34,7 @@ namespace api_challenge_bravo.Services
             if (fromCurrency.AutoUpdateExchangeRate && !toCurrency.AutoUpdateExchangeRate)
                 return fromCurrency.LastTimeUpdatedExchangeRateUTC;
 
-            // In all other cases return the min value os LastUpdate
+            // In all other cases return the min value of LastUpdate
             var minDateTime = fromCurrency.LastTimeUpdatedExchangeRateUTC <=
                               toCurrency.LastTimeUpdatedExchangeRateUTC
             ? fromCurrency.LastTimeUpdatedExchangeRateUTC

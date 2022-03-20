@@ -19,7 +19,8 @@ namespace api_challenge_bravo.Model
         public decimal ExchangeRateInUSD { get; set; }
         public bool AutoUpdateExchangeRate { get; set; }
         public DateTime LastTimeUpdatedExchangeRateUTC { get; set; }
-
+        
+        // Kept due to serialization
         public Currency()
         {
 
@@ -80,7 +81,6 @@ namespace api_challenge_bravo.Model
         }
 
         public static List<Currency> GetAllCached() => DBCache.GetAllCurrency();
-
         public static Currency GetCached(string symbol) => DBCache.GetCurrency(symbol);
     }
 }

@@ -9,18 +9,20 @@ namespace api_challenge_bravo.Model.Util
         private static readonly ICacheManager<Currency> CurrencyCache;
         private static readonly ICacheManager<List<Currency>> AllCurrenciesCache;
 
+        private const int CACHE_TTL_SECONDS = 1;
+
         static DBCache()
         {
             var cfg = ConfigurationBuilder.BuildConfiguration(settings =>
             {
+                // Set expiration of the DBCache
                 settings.WithSystemRuntimeCacheHandle()
-                    .WithExpiration(ExpirationMode.Absolute, TimeSpan.FromSeconds(1));
+                    .WithExpiration(ExpirationMode.Absolute, TimeSpan.FromSeconds(CACHE_TTL_SECONDS));
             });
 
             CurrencyCache = CacheFactory.FromConfiguration<Currency>(cfg);
             AllCurrenciesCache = CacheFactory.FromConfiguration<List<Currency>>(cfg);
         }
-
         public static Currency GetCurrency(string symbol)
         {
             try
@@ -36,7 +38,6 @@ namespace api_challenge_bravo.Model.Util
                 return null;
             }
         }
-
         public static List<Currency> GetAllCurrency()
         {
             if (AllCurrenciesCache.Get("all") == null)
@@ -44,12 +45,10 @@ namespace api_challenge_bravo.Model.Util
 
             return AllCurrenciesCache.Get("all");
         }
-
         public static void CleanCache()
         {
             CurrencyCache.Clear();
             AllCurrenciesCache.Clear();
         }
-
     }
 }

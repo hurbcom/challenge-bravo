@@ -11,10 +11,10 @@ namespace api_challenge_bravo.Services.Util.ExternalCurrencyAPI
     public class AwesomeAPI : IExternalCurrencyAPI
     {
         private static int _countExternalCalls = 1;
+        private string baseURL = "https://economia.awesomeapi.com.br/";
 
         public async Task<Tuple<decimal,DateTime>> GetExchangeRate(string symbol)
         {
-            string baseURL = "https://economia.awesomeapi.com.br/";
             string path = $"last/{symbol.ToUpper()}-USD";
 
             HttpClient req = new HttpClient();
@@ -27,10 +27,8 @@ namespace api_challenge_bravo.Services.Util.ExternalCurrencyAPI
             Console.WriteLine("LOG: Calling external API: #" + _countExternalCalls++);
             return Tuple.Create(newExchangeRate,dateTimeUpdate);
         }
-
         public bool CheckAvailabilityOfAutoUpdater(string symbol)
         {
-            string baseURL = "https://economia.awesomeapi.com.br/";
             string path = "xml/available";
 
             var availabilityListXML = XDocument.Load(baseURL+path);

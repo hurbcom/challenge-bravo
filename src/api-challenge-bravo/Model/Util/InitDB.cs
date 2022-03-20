@@ -34,6 +34,5 @@ namespace api_challenge_bravo.Model.Util
                 System.Console.WriteLine("Data already exists.");
             }
         }
-
     }
 }

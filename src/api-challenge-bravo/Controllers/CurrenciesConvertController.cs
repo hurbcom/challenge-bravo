@@ -22,9 +22,6 @@ namespace api_challenge_bravo.Controllers
             if (toCurrency == null)
                 return NotFound(to);
 
-            if (toCurrency.ExchangeRateInUSD == 0)
-                return DivideByZeroReturn(fromCurrency.Symbol);
-
             decimal resulAmount;
             DateTime resultLastUpdate;
 
@@ -34,18 +31,6 @@ namespace api_challenge_bravo.Controllers
                 currency = fromCurrency.Symbol,
                 amount = resulAmount,
                 last_update_UTC = resultLastUpdate
-            };
-
-            return new JsonResult(jsonReturn);
-        }
-
-        private JsonResult DivideByZeroReturn(string fromSymbol)
-        {
-            var jsonReturn = new
-            {
-                currency = fromSymbol,
-                amount = 0,
-                last_update_UTC = DateTime.UtcNow
             };
 
             return new JsonResult(jsonReturn);

@@ -10,7 +10,10 @@ namespace api_challenge_bravo.Model.Util
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             Console.WriteLine("LOG: Calling DB: #" + _countDBCalls++);
+            
+            // Used for local debugging with docker database
             var host = System.Diagnostics.Debugger.IsAttached ? "localhost" : "db_MySQL";
+            
             if (_isTestingInMemory)
                 optionsBuilder
                     .UseInMemoryDatabase(@$"db_testing");
@@ -19,7 +22,7 @@ namespace api_challenge_bravo.Model.Util
                     .UseMySql(@$"Server={host};Database=currencydb;Uid=root;Pwd=dbdevpassword;");
         }
         public DbSet<Currency> Currencies { get; set; }
-
+        
         public static void SetTestingEnvironment()
         {
             _isTestingInMemory = true;

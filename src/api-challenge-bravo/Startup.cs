@@ -32,9 +32,11 @@ namespace api_challenge_bravo
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
+            // Insert initial data on DB
             InitDB.InsertDataDB(app);
 
+            // Init and config Swagger
             app.UseSwagger();
             app.UseSwaggerUI(options => {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");

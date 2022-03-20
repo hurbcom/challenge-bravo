@@ -12,7 +12,6 @@ namespace api_challenge_bravo.Services.Util.ExternalCurrencyAPI
 
             return Tuple.Create(mockExchangeRate,mockUpdateDateTime);
         }
-
         public bool CheckAvailabilityOfAutoUpdater(string symbol)
         {
             return true;
