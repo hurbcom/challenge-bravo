@@ -69,7 +69,7 @@ Converter valor entre Moedas:
 - Arquivo Jmeter em: `challenge-bravo/src/tests-challenge-bravo/LoadTests/challenge_bravo_convert_resquest.jmx`
 - Na pasta LoadTests, executar novo teste com o comando: `<PATH_JMETER>/bin/jmeter -n -t challenge_bravo_convert_resquest.jmx -l LoadTestResult.jtl`
 
-### Execução prévia:
+#### Execução prévia:
 <p align="center">
   <img src="./src/tests-challenge-bravo/LoadTests/JMeterSetup.png" alt="JMeter Setup" />
 </p>
