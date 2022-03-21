@@ -123,7 +123,9 @@ Linux ou macOS
 - `$ cd src`
 - `$ docker build -f ./api-challenge-bravo/Dockerfile --pull --target test -t challenge-bravo-test .` 
 - `$ docker run --rm -v ${pwd}/tmp/TestResults:/source/tests-challenge-bravo/TestResults challenge-bravo-test`
+- A depender da configuração do docker na máquina, pode ser necessário executar o comando build com `sudo`
 
+ 
 Windows
 - `cd src`
 - `docker build -f .\api-challenge-bravo\Dockerfile --pull --target test -t challenge-bravo-test .`
@@ -134,6 +136,7 @@ Windows
 
 - `$ cd src`
 - `$ docker-compose -p "challenge-bravo" up --build -d`
+- A depender da configuração do docker na máquina, pode ser necessário executar o comando com `sudo`
 - Aguardar os containers subirem completamente, o BD leva mais tempo e o App só ficara disponível após o BD subir completamente.
 - Acessar Swagger: http://localhost:8080/index.html
 
