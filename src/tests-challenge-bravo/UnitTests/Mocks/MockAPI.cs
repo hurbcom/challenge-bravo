@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using api_challenge_bravo.Services.Util.ExternalCurrencyAPI;
 
-namespace api_challenge_bravo.Services.Util.ExternalCurrencyAPI
+namespace tests_challenge_bravo.UnitTests.Mocks
 {
     public class MockAPI : IExternalCurrencyAPI
     {
