@@ -69,7 +69,7 @@ Converter valor entre Moedas:
 - Arquivo Jmeter em: `challenge-bravo/src/tests-challenge-bravo/LoadTests/challenge_bravo_convert_resquest.jmx`
 - Na pasta LoadTests, executar novo teste com o comando: `<PATH_JMETER>/bin/jmeter -n -t challenge_bravo_convert_resquest.jmx -l LoadTestResult.jtl`
 
-#### Execução prévia:
+#### Execução prévia
 <p align="left">
   <img src="./src/tests-challenge-bravo/LoadTests/JMeterSetup.png" alt="JMeter Setup" />
 </p>
@@ -99,7 +99,6 @@ Hardware de teste:
 - RAM: 8,00 GB
 
 ### Testes unitários
-- Os testes unitários são executados no build do Dockerfile, em caso de falha o build é interrompido.
 
 Estrutura de testes
 <p align="left">
@@ -118,8 +117,22 @@ Arquivos e pastas ignorados para calculo de cobertura de testes:
 - Program.cs
 - Startup.cs
 
+#### Execução dos testes unitários
+
+Linux ou macOS
+- `$ cd src`
+- `$ docker build -f ./api-challenge-bravo/Dockerfile --pull --target test -t challenge-bravo-test .` 
+- `$ docker run --rm -v ${pwd}/TestResults:/source/tests-challenge-bravo/TestResults challenge-bravo-test`
+
+Windows
+- `$ cd src`
+- `$ docker build -f .\api-challenge-bravo\Dockerfile --pull --target test -t challenge-bravo-test .`
+- `$ docker run --rm -v ${pwd}\TestResults:/source/tests-challenge-bravo/TestResults challenge-bravo-test`
+
+
 ## Execução
 
+- `$ cd src`
 - `$ docker-compose -p "challenge-bravo" up -d`
 - Aguardar os containers subirem completamente, o BD leva mais tempo e o App só ficara disponível após o BD subir completamente.
 - Acessar Swagger: http://localhost:8080/index.html

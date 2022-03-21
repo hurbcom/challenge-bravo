@@ -9,9 +9,13 @@ COPY ["api-challenge-bravo/api-challenge-bravo.csproj", "api-challenge-bravo/"]
 COPY ["tests-challenge-bravo/tests-challenge-bravo.csproj", "tests-challenge-bravo/"]
 RUN dotnet restore "api-challenge-bravo/api-challenge-bravo.csproj"
 COPY . .
-RUN dotnet test
 WORKDIR "/src/api-challenge-bravo"
 RUN dotnet build "api-challenge-bravo.csproj" -c Release -o /app/build
+
+FROM build as test
+RUN dotnet test
+WORKDIR /src/tests-challenge-bravo/
+ENTRYPOINT ["dotnet", "test", "--logger:trx"]
 
 FROM build AS publish
 RUN dotnet publish "api-challenge-bravo.csproj" -c Release -o /app/publish
