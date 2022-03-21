@@ -354,6 +354,7 @@ MigrationBackup/
 
 # Docker Volumes
 */temp/DockerVolumes/mysql/*
+*/tmp/
 
 # Mac Finder
 .DS_Store

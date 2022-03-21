@@ -122,18 +122,18 @@ Arquivos e pastas ignorados para calculo de cobertura de testes:
 Linux ou macOS
 - `$ cd src`
 - `$ docker build -f ./api-challenge-bravo/Dockerfile --pull --target test -t challenge-bravo-test .` 
-- `$ docker run --rm -v ${pwd}/TestResults:/source/tests-challenge-bravo/TestResults challenge-bravo-test`
+- `$ docker run --rm -v ${pwd}/tmp/TestResults:/source/tests-challenge-bravo/TestResults challenge-bravo-test`
 
 Windows
 - `cd src`
 - `docker build -f .\api-challenge-bravo\Dockerfile --pull --target test -t challenge-bravo-test .`
-- `docker run --rm -v ${pwd}\TestResults:/source/tests-challenge-bravo/TestResults challenge-bravo-test`
+- `docker run --rm -v ${pwd}\tmp\TestResults:/source/tests-challenge-bravo/TestResults challenge-bravo-test`
 
 
 ## Execução
 
 - `$ cd src`
-- `$ docker-compose -p "challenge-bravo" up --build`
+- `$ docker-compose -p "challenge-bravo" up --build -d`
 - Aguardar os containers subirem completamente, o BD leva mais tempo e o App só ficara disponível após o BD subir completamente.
 - Acessar Swagger: http://localhost:8080/index.html
 

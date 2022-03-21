@@ -9,7 +9,7 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: dbdevpassword
         volumes:
-            - ./temp/DockerVolumes/mysql:/var/lib/mysql
+            - ./tmp/DockerVolumes/mysql:/var/lib/mysql
         networks:
             - default
 
