@@ -6,11 +6,8 @@ namespace api_challenge_bravo.Model.Util
     public class AppDbContext : DbContext
     {
         private static bool _isTestingInMemory = false;
-        private static int _countDBCalls = 1;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            Console.WriteLine("LOG: Calling DB: #" + _countDBCalls++);
-            
             // Used for local debugging with docker database
             var host = System.Diagnostics.Debugger.IsAttached ? "localhost" : "db_MySQL";
             
