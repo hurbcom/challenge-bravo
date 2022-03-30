@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
-
 return [
 
     /*
@@ -15,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => 'sqlite',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,12 +32,23 @@ return [
     */
 
     'connections' => [
-
         'sqlite' => [
             'driver' => 'sqlite',
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => database_path('database.sqlite'),
             'prefix' => env('DB_PREFIX', ''),
         ],
-
     ],
+
+   /*
+   |--------------------------------------------------------------------------
+   | Migration Repository Table
+   |--------------------------------------------------------------------------
+   |
+   | This table keeps track of all the migrations that have already run for
+   | your application. Using this information, we can determine which of
+   | the migrations on disk haven't actually been run in the database.
+   |
+   */
+
+    'migrations' => 'migrations',
 ];

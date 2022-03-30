@@ -12,7 +12,8 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-use Illuminate\Support\Facades\Redis;
+
+use App\Models\Currency;
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
