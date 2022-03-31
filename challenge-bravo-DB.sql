@@ -11,7 +11,7 @@ create table Currency (
   id int primary key auto_increment,
   code varchar(4) unique not null,
   name varchar (128) unique not null,
-  rate decimal(65,30) not null default 0,
+  rate decimal(65,30) not null,
   src enum('external', 'internal') not null,
   lastUpdate int not null default 0
 );
