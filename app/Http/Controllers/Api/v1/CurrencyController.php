@@ -164,8 +164,12 @@ class CurrencyController extends ApiController
     {
         try {
             $currency = (new CurrencyService())->getCurrencyIfExists($id);
-            $currency->delete();
 
+            if($currency->code == CurrencyEnum::BACKING_CURRENCY){
+                throw new Exception('Backing Currency cannot be deleted.', 400);
+            }
+
+            $currency->delete();
             $return = response()->json([], 204);
         } catch (Exception $exception) {
             $return = response()->json([

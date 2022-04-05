@@ -23,51 +23,20 @@ class CurrencyService
         $exchangedScope = $this->buildExchangedScope($to, $from, $amount);
 
         if($to != $from){
-            $currencyTo = (new AwesomeApi())->getLastExchange($to);
-            $currencyFrom = (new AwesomeApi())->getLastExchange($from);
+            $currencyTo = $this->getCurrencyByCode($to);
+            $currencyFrom = $this->getCurrencyByCode($from);
 
             if($to == CurrencyEnum::BACKING_CURRENCY){
-
-                if(empty($currencyFrom['code'])){
-                    $currencyFrom = $this->getCurrencyByCodeIfExists($from);
-
-                    if(empty($currencyFrom['code'])){
-                        throw new Exception('Conversion currency not found.', 404);
-                    }
-                }
-
                 $currencyTo['price'] = CurrencyEnum::BACKING_CURRENCY_PRICE;
                 $currencyTo['created_at'] = $currencyFrom['created_at'];
                 $exchangeRate = $this->tranformInCurrencyBacking($currencyFrom['price']);
             }
             elseif($from == CurrencyEnum::BACKING_CURRENCY){
-
-                if(empty($currencyTo['code'])){
-                    $currencyTo = $this->getCurrencyByCodeIfExists($to);
-
-                    if(empty($currencyTo['code'])){
-                        throw new Exception('Origin currency not found.', 404);
-                    }
-                }
-
                 $currencyFrom['price'] = CurrencyEnum::BACKING_CURRENCY_PRICE;
                 $currencyFrom['created_at'] = $currencyTo['created_at'];
                 $exchangeRate = $currencyTo['price'];
             }
             else{
-
-                if(empty($currencyFrom['code'])){
-                    $currencyFrom = $this->getCurrencyByCodeIfExists($from);
-                }
-
-                if(empty($currencyTo['code'])){
-                    $currencyTo = $this->getCurrencyByCodeIfExists($to);
-                }
-
-                if(empty($currencyTo['code']) || empty($currencyFrom['code'])){
-                    throw new Exception('Currencies not found.', 404);
-                }
-
                 $exchangeRate = $this->tranformInExchangeRate($currencyTo, $currencyFrom);
             }
 
@@ -76,6 +45,7 @@ class CurrencyService
 
         return $exchangedScope;
     }
+
 
     /**
      * Get currency if exists.
@@ -96,14 +66,23 @@ class CurrencyService
     }
 
     /**
-     * Get currency if exists.
+     * Get currency if exists: API Or Database.
      * @param String $code
+     *
+     * @return array
+     * @throws Exception
      */
-    public function getCurrencyByCodeIfExists(String $code)
+    public function getCurrencyByCode(String $code): array
     {
-        $currency = (new Currency())->findByCode($code);
+        $currency = (new AwesomeApi())->getLastExchange($code);
 
-        if(!is_null($currency)){
+        if(empty($currency['code'])){
+            $currency = (new Currency())->findByCode($code);
+
+            if(is_null($currency)){
+                throw new Exception('Currency('.$code.') not found.', 404);
+            }
+
             $currency = $currency->toArray();
         }
 
