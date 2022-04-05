@@ -95,13 +95,14 @@ class CurrencyControllerTest extends TestCase
     public function testUserCanUpdatePrice(): void
     {
         $currency = Currency::factory()->create();
-        $price = 321.11;
+        $price = $currency->price + 7.13;
 
         $result = $this->patch('/api/v1/currency/' . $currency->id, [
             'price' => $price
         ]);
 
         $result->assertResponseStatus(200);
+        $result->assertNotEquals($price, $currency->price);
         $result->seeInDatabase('currency', [
             'id' => $currency->id,
             'price' => $price,
@@ -165,5 +166,33 @@ class CurrencyControllerTest extends TestCase
         $result = $this->get("api/v1/convert-currency/?to=BTC&from=EUR&amount=123.45");
         $result->assertResponseOk();
         $result->seeJsonStructure(['convertedAmount']);
+    }
+
+    /**
+     * User Can Converts Currency.
+     *
+     * @return void
+     */
+    public function testUserCanConvertsUsingBackingCurrency(): void
+    {
+        $result = $this->get("api/v1/convert-currency/?to=USD&from=EUR&amount=123.45");
+        $result->assertResponseOk();
+        $result->seeJsonStructure(['convertedAmount']);
+
+        $result = $this->get("api/v1/convert-currency/?to=BRL&from=USD&amount=123.45");
+        $result->assertResponseOk();
+        $result->seeJsonStructure(['convertedAmount']);
+    }
+
+    /**
+     * User Should Receive 404 When Converts Currency Not Found.
+     *
+     * @return void
+     */
+    public function testUserShouldReceive404WhenConvertsCurrencyNotFound(): void
+    {
+        $result = $this->get("api/v1/convert-currency/?to=xxx&from=EUR&amount=123.45");
+        $result->assertResponseStatus(404);
+        $result->seeJsonStructure(['error']);
     }
 }

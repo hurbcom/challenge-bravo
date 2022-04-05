@@ -9,3 +9,5 @@ storage/framework/cache/*
 storage/framework/views/*
 storage/logs/*
 database/database.sqlite
+tests/build/*
+tests/coverage-html/*
