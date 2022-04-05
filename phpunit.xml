@@ -9,6 +9,18 @@
             <directory suffix="Test.php">./tests/Features</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">app/</directory>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="tap" target="tests/build/report.tap"/>
+        <log type="junit" target="tests/build/report.junit.xml"/>
+        <log type="coverage-html" target="tests/build/coverage" charset="UTF-8" yui="true" highlight="true"/>
+        <log type="coverage-text" target="tests/build/coverage.txt"/>
+        <log type="coverage-clover" target="tests/build/logs/clover.xml"/>
+    </logging>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
