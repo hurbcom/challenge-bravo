@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Enums\CurrencyEnum;
+use App\Helpers\CacheHelper;
 use App\Models\Currency;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -46,6 +47,18 @@ class CurrencyService
         return $exchangedScope;
     }
 
+    public function getAvailableCurrencies()
+    {
+        $keyCached = 'available-currencies';
+        $availableCurrencies = json_decode(CacheHelper::get($keyCached), true);
+
+        if(is_null($availableCurrencies)){
+            $availableCurrencies = (new AwesomeApi())->availableCurrencies();
+            CacheHelper::set($keyCached, json_encode($availableCurrencies), 86400);
+        }
+
+        return $availableCurrencies;
+    }
 
     /**
      * Get currency if exists.
@@ -74,7 +87,12 @@ class CurrencyService
      */
     public function getCurrencyByCode(String $code): array
     {
-        $currency = (new AwesomeApi())->getLastExchange($code);
+        $currency = json_decode(CacheHelper::get($code), true);
+
+        if(is_null($currency)){
+            $currency = (new AwesomeApi())->getLastExchange($code);
+            CacheHelper::set($code, json_encode($currency), 600);
+        }
 
         if(empty($currency['code'])){
             $currency = (new Currency())->findByCode($code);

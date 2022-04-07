@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 use App\Enums\CurrencyEnum;
+use App\Helpers\CacheHelper;
 use App\Models\Currency;
 use Exception;
 use Illuminate\Http\Client\Response;

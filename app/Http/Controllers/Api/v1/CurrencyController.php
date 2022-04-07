@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ApiController;
 
 use App\Http\Services\CurrencyService;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Currency;
 use Illuminate\Http\JsonResponse;
@@ -41,6 +42,35 @@ class CurrencyController extends ApiController
 
         return $return;
     }
+
+    /**
+     * Converts Currency Random.
+     *
+     * @throws Exception
+     */
+    public function convertCurrencyRand()
+    {
+        try {
+            $availableCurrencies = (new CurrencyService())->getAvailableCurrencies();
+
+            $randMax = count($availableCurrencies)-1;
+            $to = $availableCurrencies[rand(0,$randMax)] ?? 0;
+            $from = CurrencyEnum::BACKING_CURRENCY;
+
+            return redirect()->route('convert-currency', [
+                'to' => $to,
+                'from' => $from,
+                'amount' => rand(0,9999)
+            ]);
+        } catch (Exception $exception) {
+            return response()->json([
+                'error' => ExceptionHelper::catchExceptionMessage($exception)
+            ], ExceptionHelper::catchExceptionCode($exception));
+        }
+    }
+
+
+
 
     /**
      * Get All Currencies.
