@@ -35,7 +35,7 @@
 
   }
 
-  if(isset($_GET['rate']) && !empty($_GET['rate'])){
+  if(isset($_GET['rate']) && is_numeric($_GET['rate'])){
 
     $rate = SecurityManager::clearInput($_GET['rate']);
 

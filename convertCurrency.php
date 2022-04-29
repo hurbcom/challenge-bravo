@@ -31,7 +31,7 @@
   }else{
 
     $response['error'] = true;
-    $response['msg'] = "Parâmetro FROM não informado";
+    $response['msg'] = "Parâmetro FROM incorreto ou não informado";
 
     die(json_encode($response, JSON_UNESCAPED_UNICODE));
 
@@ -44,20 +44,20 @@
   }else{
 
     $response['error'] = true;
-    $response['msg'] = "Parâmetro TO não informado";
+    $response['msg'] = "Parâmetro TO incorreto ou não informado";
 
     die(json_encode($response, JSON_UNESCAPED_UNICODE));
 
   }
 
-  if(isset($_GET['amount']) && !empty($_GET['amount'])){
+  if(isset($_GET['amount']) && is_numeric($_GET['amount'])){
 
     $amount = SecurityManager::clearInput($_GET['amount']);
 
   }else{
 
     $response['error'] = true;
-    $response['msg'] = "Parâmetro FROM não informado";
+    $response['msg'] = gettype($float). " Parâmetro AMOUNT incorreto ou não informado";
 
     die(json_encode($response, JSON_UNESCAPED_UNICODE));
 

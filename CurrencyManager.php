@@ -257,15 +257,7 @@
         "msg"=>''
       );
 
-      if($rate <= 0){
-        $response['error'] = true;
-        $response['msg'] = "A cotação deve ser um número maior que zero";
-
-        return $response;
-      }
-
       $dao = new CurrencyDAO();
-
       $curr = $dao->selectByCode($code);
 
       if(empty($curr)){
@@ -275,44 +267,47 @@
 
         return $response;
 
-      }else{
+      }
 
-        if($curr->getSrc() == 'external'){
+      if($curr->getSrc() == 'external'){
           $response['error'] = true;
           $response['msg'] = "Somente é possível alterar cotações de moedas criadas a partir desta API";
 
           return $response;
 
-        }else{
+      }
 
-          $curr->setRate($rate);
+      if($rate <= 0){
+        $response['error'] = true;
+        $response['msg'] = "A cotação deve ser um número maior que zero";
 
-          $dbMsg = $dao->update($curr);
+        return $response;
 
-          if(empty($dbMsg)){
+      }
 
-            $response['error'] = false;
-            $response['msg'] = "Cotação da moeda ". $curr->getName() ." alterada com sucesso";
+      $curr->setRate($rate);
+      $dbMsg = $dao->update($curr);
 
-            return $response;
+      if(empty($dbMsg)){
 
-          }else{
+        $response['error'] = false;
+        $response['msg'] = "Cotação da moeda ". $curr->getName() ." alterada com sucesso";
 
-            // cria um registro do ocorrido
-            $myfile = fopen("falhaAtualizacaoMoeda.txt", "a");
-            $txt = date("d-m-Y G:i:s")." ".$dbMsg."\n";
-            fwrite($myfile, $txt);
-            fclose($myfile);
+        return $response;
 
-            $response['error'] = true;
-            $response['msg'] = "Ocorreu um problema, tente novamente mais tarde.";
+      }else{
 
-            return $response;
+        // cria um registro do ocorrido
+        $myfile = fopen("falhaAtualizacaoMoeda.txt", "a");
+        $txt = date("d-m-Y G:i:s")." ".$dbMsg."\n";
+        fwrite($myfile, $txt);
+        fclose($myfile);
 
-          }
+        $response['error'] = true;
+        $response['msg'] = "Ocorreu um problema, tente novamente mais tarde.";
 
+        return $response;
 
-        }
       }
 
     }
