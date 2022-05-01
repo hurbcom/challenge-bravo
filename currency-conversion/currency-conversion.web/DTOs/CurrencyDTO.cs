@@ -6,7 +6,7 @@ namespace currency_conversion.web.DTOs
     {
         [Required]
         //[StringLength(3, MinimumLength = 3, ErrorMessage = "Field must be 3 characters")]
-        [RegularExpression("^[a-zA-Z]{3}$", ErrorMessage = "Field must contain only a-z A-Z characters")]
+        [RegularExpression("^[a-zA-Z]$", ErrorMessage = "Field must contain only a-z A-Z characters")]
         public string? Code { get; set; }
         [Required]
         public string? Name { get; set; }
