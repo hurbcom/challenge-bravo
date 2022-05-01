@@ -3,6 +3,9 @@ const { generateCurrency } = require('../../factories/currencies.factories');
 
 describe('Exchanges Service', () => {
     describe('convert method', () => {
+        it('should contain convert function', () => {
+            expect(typeof exchangesService.convert).toBe('function');
+        });
         it('should convert amount', () => {
             const fromCurrency = generateCurrency('FROM', 1.4);
             const toCurrency = generateCurrency('TO', 4.90);
