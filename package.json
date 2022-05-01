@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon -L app.js",
-    "test": "jest --coverage",
+    "test": "jest --coverage --runInBand --detectOpenHandles",
+    "test:unit": "jest --coverage --runInBand --detectOpenHandles ./test/unit",
     "lint": "npx eslint --fix --ext .js .",
     "swagger-autogen": "node swagger/index.js",
     "md-docs": "swagger-markdown -i swagger/swagger_output.json -o ApiDocumentation.md",
@@ -41,6 +42,7 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jest": "^26.1.5",
     "jest": "^28.0.3",
+    "mongodb-memory-server": "^8.5.2",
     "node-mocks-http": "^1.11.0",
     "nodemon": "^2.0.16",
     "swagger-markdown": "^1.3.0"
