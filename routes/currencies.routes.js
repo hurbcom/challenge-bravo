@@ -9,4 +9,6 @@ router.get('/', currenciesController.listCurrencies);
 
 router.get('/:code', currenciesController.retrieveCurrency);
 
+router.delete('/:code', currenciesController.deleteCurrency);
+
 module.exports = router;

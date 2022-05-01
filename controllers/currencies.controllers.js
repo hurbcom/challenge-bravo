@@ -51,3 +51,18 @@ exports.retrieveCurrency = async (req, res) => {
         res.status(500).send({ message: 'Failed to list currencies.' });
     }
 };
+
+exports.deleteCurrency = async (req, res) => {
+    try {
+        const { code } = req.params;
+        const currency = (await currenciesRepository.retrieveCurrencyByCode(code))[0];
+        if (currency) {
+            await currenciesRepository.deleteCurrency(code);
+            res.status(200).send({ message: 'Successfully deleted currency!' });
+        } else {
+            res.status(404).send({ message: `No currency found for code '${code}'.` });
+        }
+    } catch (error) {
+        res.status(500).send({ message: 'Failed to list currencies.' });
+    }
+};

@@ -14,3 +14,5 @@ exports.validateCurrency = (data) => {
 exports.listCurrencies = async () => Currencies.find({}, '-_id -__v');
 
 exports.retrieveCurrencyByCode = async (code) => Currencies.find({ code }, '-_id -__v');
+
+exports.deleteCurrency = async (code) => Currencies.deleteOne({ code });
