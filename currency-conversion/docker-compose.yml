@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  currency-conversion.web:
+    image: ${DOCKER_REGISTRY-}currencyconversionweb
+    build:
+      context: .
+      dockerfile: currency-conversion.web/Dockerfile
