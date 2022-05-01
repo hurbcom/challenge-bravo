@@ -3,7 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
-const currencyRoutes = require('./routes/currencies.routes');
+const currenciesRoutes = require('./routes/currencies.routes');
+const exchangesRoutes = require('./routes/exchanges.routes');
 const swaggerFile = require('./swagger/swagger_output.json');
 
 const app = express();
@@ -18,7 +19,8 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000;
 
-app.use('/currency', currencyRoutes);
+app.use('/currencies', currenciesRoutes);
+app.use('/exchanges', exchangesRoutes);
 
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 

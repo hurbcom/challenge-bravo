@@ -16,6 +16,10 @@ const doc = {
             name: 'Currencies',
             description: 'Endpoints',
         },
+        {
+            name: 'Exchanges',
+            description: 'Endpoints',
+        },
     ],
 
 };
