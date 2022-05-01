@@ -8,6 +8,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["currency-conversion.web/currency-conversion.web.csproj", "currency-conversion.web/"]
+COPY ["currency-conversion.Core/currency-conversion.core.csproj", "currency-conversion.Core/"]
+COPY ["currency-conversion.infrastructure/currency-conversion.infrastructure.csproj", "currency-conversion.infrastructure/"]
 RUN dotnet restore "currency-conversion.web/currency-conversion.web.csproj"
 COPY . .
 WORKDIR "/src/currency-conversion.web"
