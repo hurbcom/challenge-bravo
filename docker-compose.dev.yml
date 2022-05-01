@@ -20,3 +20,11 @@ services:
         image: mongo:5.0.8
         ports:
             - ${MONGODB_PORT}:${MONGODB_PORT}
+    mongo-seed:
+        build:
+            context: ./mongo_seed
+            dockerfile: Dockerfile
+            args:
+                - MONGODB_URL=$MONGODB_URL
+        depends_on:
+            - mongo

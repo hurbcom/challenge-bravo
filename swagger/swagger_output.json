@@ -11,6 +11,10 @@
     {
       "name": "Currencies",
       "description": "Endpoints"
+    },
+    {
+      "name": "Exchanges",
+      "description": "Endpoints"
     }
   ],
   "schemes": [
@@ -23,7 +27,7 @@
     "application/json"
   ],
   "paths": {
-    "/currency/": {
+    "/currencies/": {
       "post": {
         "description": "",
         "parameters": [
@@ -71,7 +75,7 @@
         }
       }
     },
-    "/currency/{code}": {
+    "/currencies/{code}": {
       "get": {
         "description": "",
         "parameters": [
@@ -101,6 +105,39 @@
             "name": "code",
             "in": "path",
             "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/exchanges/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "amount",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "to",
+            "in": "query",
             "type": "string"
           }
         ],
