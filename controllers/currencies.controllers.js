@@ -63,6 +63,6 @@ exports.deleteCurrency = async (req, res) => {
             res.status(404).send({ message: `No currency found for code '${code}'.` });
         }
     } catch (error) {
-        res.status(500).send({ message: 'Failed to list currencies.' });
+        res.status(500).send({ message: 'Failed to delete currency.' });
     }
 };

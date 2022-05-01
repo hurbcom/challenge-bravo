@@ -163,4 +163,59 @@ describe('Currencies Controller', () => {
             expect(res._getData()).toStrictEqual(expect.objectContaining(currency));
         });
     });
+    describe('deleteCurrency method', () => {
+        it('should contain deleteCurrency function', () => {
+            expect(typeof currenciesController.deleteCurrency).toBe('function');
+        });
+        it('should send status 500 error when fails to retrieve currency', async () => {
+            currenciesRepository.retrieveCurrencyByCode = jest.fn().mockRejectedValue(new Error('Unknown error'));
+
+            await currenciesController.deleteCurrency(req, res);
+
+            expect(res.statusCode).toBe(500);
+            expect(res._isEndCalled()).toBeTruthy();
+            expect(res._getData()).toStrictEqual({ message: 'Failed to delete currency.' });
+        });
+        it('should send status 404 error when currency was not found', async () => {
+            req.params = {
+                code: 'TEST',
+            };
+            currenciesRepository.retrieveCurrencyByCode = jest.fn().mockResolvedValue();
+
+            await currenciesController.deleteCurrency(req, res);
+
+            expect(res.statusCode).toBe(404);
+            expect(res._isEndCalled()).toBeTruthy();
+            expect(res._getData()).toStrictEqual({ message: 'No currency found for code \'TEST\'.' });
+        });
+        it('should send status 500 error when fails to delete currency', async () => {
+            const currency = generateCurrency('TEST', 1);
+            currenciesRepository.retrieveCurrencyByCode = jest.fn().mockResolvedValue(currency);
+            currenciesRepository.deleteCurrency = jest.fn().mockRejectedValue(new Error('Unkown error'));
+
+            await currenciesController.deleteCurrency(req, res);
+
+            expect(res.statusCode).toBe(500);
+            expect(res._isEndCalled()).toBeTruthy();
+            expect(res._getData()).toStrictEqual({ message: 'Failed to delete currency.' });
+        });
+
+        it('should send status 200 when successfully deleted currency', async () => {
+            req.params = {
+                code: 'TEST',
+            };
+            const currency = generateCurrency('TEST', 1);
+            currenciesRepository.retrieveCurrencyByCode = jest.fn().mockResolvedValue(currency);
+            currenciesRepository.deleteCurrency = jest.fn().mockResolvedValue();
+
+            await currenciesController.deleteCurrency(req, res);
+
+            expect(currenciesRepository.retrieveCurrencyByCode).toBeCalledWith('TEST');
+            expect(currenciesRepository.deleteCurrency).toBeCalledWith('TEST');
+
+            expect(res.statusCode).toBe(200);
+            expect(res._isEndCalled()).toBeTruthy();
+            expect(res._getData()).toStrictEqual({ message: 'Successfully deleted currency!' });
+        });
+    });
 });
