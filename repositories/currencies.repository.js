@@ -11,8 +11,10 @@ exports.validateCurrency = (data) => {
     if (validation) throw validation;
 };
 
-exports.listCurrencies = async () => Currencies.find({}, '-_id -__v');
+exports.listCurrencies = async (includeId = false) => Currencies.find({}, includeId ? undefined : '-_id -__v');
 
 exports.retrieveCurrencyByCode = async (code) => (await Currencies.find({ code }, '-_id -__v'))[0];
 
 exports.deleteCurrency = async (code) => Currencies.deleteOne({ code });
+
+exports.bulkCurrencies = async (currencyList) => Currencies.bulkSave(currencyList);

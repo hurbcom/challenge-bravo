@@ -5,11 +5,11 @@ const instance = axios.create({
     params: { api_key: process.env.API_KEY },
 });
 
-exports.getExchangeRate = async (code) => {
+exports.getExchangeRates = async () => {
     const result = await instance.get('/live', {
         params: { base: 'USD' },
     });
-    const rates = result.data.exchange_rates;
+    const rates = { USD: 1, ...result.data.exchange_rates };
 
-    return rates[code];
+    return rates;
 };
