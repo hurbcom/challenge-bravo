@@ -1,0 +1,43 @@
+version: '3.3'
+
+secrets:
+  api-key:
+    file: ./apiKey.txt
+
+services:
+  web-server:
+    secrets:
+      - api-key
+    image: php:7.2-apache
+    ports:
+    - "8088:80"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+    - "./api-bravo:/var/www/html"
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7
+    volumes:
+    - challenge-bravo:/var/lib/mysql
+    - ./challenge-bravo-DB.sql:/docker-entrypoint-initdb.d/challenge-bravo-DB.sql
+    environment:
+      TZ: "America/Sao_Paulo"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "s3nh@r00t"
+      MYSQL_DATABASE: 'challenge-bravo'
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "s3nh@adm1n"
+    ports:
+      - "3307:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+    - 'mysql:db'
+    ports:
+    - "8081:80"
+
+volumes:
+  challenge-bravo:
