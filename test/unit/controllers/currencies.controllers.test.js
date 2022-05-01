@@ -3,7 +3,7 @@ const httpMocks = require('node-mocks-http');
 const currenciesController = require('../../../controllers/currencies.controllers');
 const currenciesRepository = require('../../../repositories/currencies.repository');
 const currenciesService = require('../../../services/currencies.services');
-const { generateCurrency } = require('../../factories/currencies.factories');
+const { generateCurrency, generateCurrencyList } = require('../../factories/currencies.factories');
 
 let req;
 let res;
@@ -93,6 +93,74 @@ describe('Currencies Controller', () => {
             expect(res.statusCode).toBe(201);
             expect(res._isEndCalled()).toBeTruthy();
             expect(res._getData()).toStrictEqual({ message: 'Successfully registered currency!' });
+        });
+    });
+
+    describe('listCurrencies method', () => {
+        it('should contain listCurrencies function', () => {
+            expect(typeof currenciesController.listCurrencies).toBe('function');
+        });
+        it('should send status 500 error when fails to retrieve currencies', async () => {
+            currenciesRepository.listCurrencies = jest.fn().mockRejectedValue(new Error('Unknown error'));
+
+            await currenciesController.listCurrencies(req, res);
+
+            expect(res.statusCode).toBe(500);
+            expect(res._isEndCalled()).toBeTruthy();
+            expect(res._getData()).toStrictEqual({ message: 'Failed to list currencies.' });
+        });
+        it('should send status 200 when successfully retrieved currencies', async () => {
+            const list = generateCurrencyList();
+            currenciesRepository.listCurrencies = jest.fn()
+                .mockResolvedValue(list);
+
+            await currenciesController.listCurrencies(req, res);
+
+            expect(res.statusCode).toBe(200);
+            expect(res._isEndCalled()).toBeTruthy();
+            expect(res._getData()).toStrictEqual(expect.arrayContaining(list));
+        });
+    });
+
+    describe('retrieveCurrency method', () => {
+        it('should contain retrieveCurrency function', () => {
+            expect(typeof currenciesController.retrieveCurrency).toBe('function');
+        });
+        it('should send status 500 error when fails to retrieve currency', async () => {
+            currenciesRepository.retrieveCurrencyByCode = jest.fn().mockRejectedValue(new Error('Unknown error'));
+
+            await currenciesController.retrieveCurrency(req, res);
+
+            expect(res.statusCode).toBe(500);
+            expect(res._isEndCalled()).toBeTruthy();
+            expect(res._getData()).toStrictEqual({ message: 'Failed to retrieve currency.' });
+        });
+        it('should send status 404 error when currency was not found', async () => {
+            req.params = {
+                code: 'TEST',
+            };
+            currenciesRepository.retrieveCurrencyByCode = jest.fn().mockResolvedValue();
+
+            await currenciesController.retrieveCurrency(req, res);
+
+            expect(res.statusCode).toBe(404);
+            expect(res._isEndCalled()).toBeTruthy();
+            expect(res._getData()).toStrictEqual({ message: 'No currency found for code \'TEST\'.' });
+        });
+        it('should send status 200 when successfully retrieved currency', async () => {
+            req.params = {
+                code: 'TEST',
+            };
+            const currency = generateCurrency('TEST', 1);
+            currenciesRepository.retrieveCurrencyByCode = jest.fn().mockResolvedValue(currency);
+
+            await currenciesController.retrieveCurrency(req, res);
+
+            expect(currenciesRepository.retrieveCurrencyByCode).toBeCalledWith('TEST');
+
+            expect(res.statusCode).toBe(200);
+            expect(res._isEndCalled()).toBeTruthy();
+            expect(res._getData()).toStrictEqual(expect.objectContaining(currency));
         });
     });
 });
