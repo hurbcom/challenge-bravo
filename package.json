@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon -L app.js",
-    "test": "jest --coverage --runInBand --detectOpenHandles",
+    "test": "npm run test:unit",
     "test:unit": "jest --coverage --runInBand --detectOpenHandles ./test/unit",
     "lint": "npx eslint --fix --ext .js .",
     "swagger-autogen": "node swagger/index.js",
