@@ -9,7 +9,7 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "Test",
+      "name": "Currencies",
       "description": "Endpoints"
     }
   ],
@@ -23,13 +23,38 @@
     "application/json"
   ],
   "paths": {
-    "/test": {
-      "get": {
+    "/currency/": {
+      "post": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "example": "any"
+                },
+                "fictitious": {
+                  "example": "any"
+                },
+                "rate": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

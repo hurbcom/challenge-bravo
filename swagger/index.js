@@ -13,7 +13,7 @@ const doc = {
     produces: ['application/json'],
     tags: [
         {
-            name: 'Test',
+            name: 'Currencies',
             description: 'Endpoints',
         },
     ],
