@@ -126,11 +126,6 @@
         "description": "",
         "parameters": [
           {
-            "name": "amount",
-            "in": "query",
-            "type": "string"
-          },
-          {
             "name": "from",
             "in": "query",
             "type": "string"
@@ -139,11 +134,19 @@
             "name": "to",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "404": {
             "description": "Not Found"

@@ -3,9 +3,7 @@ const exchangesService = require('../services/exchanges.services');
 
 exports.convert = async (req, res) => {
     try {
-        const { from, to } = req.query;
-
-        const amount = Number.parseFloat(req.query.amount);
+        const { from, to, amount } = req.query;
 
         const fromCurrency = await currenciesRepository.retrieveCurrencyByCode(from);
 
