@@ -7,4 +7,6 @@ router.post('/', currenciesController.createCurrency);
 
 router.get('/', currenciesController.listCurrencies);
 
+router.get('/:code', currenciesController.retrieveCurrency);
+
 module.exports = router;
