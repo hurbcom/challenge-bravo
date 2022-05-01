@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon -L app.js",
-    "test": "jest"
+    "test": "jest",
+    "swagger-autogen": "node swagger/index.js",
+    "md-docs": "swagger-markdown -i swagger/swagger_output.json -o ApiDocumentation.md",
+    "docs": "npm run swagger-autogen && npm run md-docs"
   },
   "repository": {
     "type": "git",
@@ -23,11 +26,16 @@
     "dotenv": "^16.0.0",
     "express": "^4.18.1",
     "mongoose": "^6.3.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "swagger-autogen": "^2.21.1",
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
-    "eslint": "^8.14.0",
+    "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
-    "nodemon": "^2.0.16"
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^2.0.16",
+    "swagger-markdown": "^1.4.6"
   }
 }

@@ -7,7 +7,7 @@ services:
         restart: always
         build:
             context: .
-            dockerfile: Dockerfile.local
+            dockerfile: Dockerfile.dev
         ports:
             - ${PORT}:${PORT}
         volumes:
