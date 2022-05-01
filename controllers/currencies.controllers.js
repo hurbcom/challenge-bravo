@@ -28,3 +28,12 @@ exports.createCurrency = async (req, res) => {
         }
     }
 };
+
+exports.listCurrencies = async (req, res) => {
+    try {
+        const data = await currenciesRepository.listCurrencies();
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(500).send({ message: 'Failed to list currencies.' });
+    }
+};

@@ -10,3 +10,5 @@ exports.validateCurrency = (data) => {
     const validation = currency.validateSync();
     if (validation) throw validation;
 };
+
+exports.listCurrencies = async () => Currencies.find({}, '-_id -__v');
