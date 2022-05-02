@@ -184,7 +184,7 @@
 
   Após isso, é esperado que o sistema retorne a mensagem "API carregada com sucesso!".
 
-  OBS: Os exemplos de uso podem ser seguidos de acordo com o tópico [## Exemplos de Uso ##] alterando {LOCAL_DA_API} por localhost:8088.
+  OBS: Os exemplos de uso podem ser seguidos de acordo com o tópico [Exemplos de Uso] alterando {LOCAL_DA_API} por localhost:8088.
 
 # Adicionando Teste de Desempenho #
 
@@ -200,14 +200,14 @@
 
 ## Arquivos de Teste ##
 
-  * [Conversão de moedas] (testes/Docker - Teste Conversão.jmx)
-  * [Inclusão de moedas] (testes/Docker - Teste Inclusão.jmx)
-  * [Atualização de moedas] (testes/Docker - Teste Atualização.jmx)
-  * [Remoção de moedas] (testes/Docker - Teste Remoção.jmx)
+  * [Conversão de moedas](testes/Docker - Teste Conversão.jmx)
+  * [Inclusão de moedas](testes/Docker - Teste Inclusão.jmx)
+  * [Atualização de moedas](testes/Docker - Teste Atualização.jmx)
+  * [Remoção de moedas](testes/Docker - Teste Remoção.jmx)
 
 ## Resultados dos Testes ##
 
-  * [Conversão de moedas] (testes/Docker - Teste Conversão - Resultado.csv)
-  * [Inclusão de moedas] (testes/Docker - Teste Inclusão - Resultado.csv)
-  * [Atualização de moedas] (testes/Docker - Teste Atualização - Resultado.csv)
-  * [Remoção de moedas] (testes/Docker - Teste Remoção - Resultado.csv)
+  * [Conversão de moedas](testes/Docker - Teste Conversão - Resultado.csv)
+  * [Inclusão de moedas](testes/Docker - Teste Inclusão - Resultado.csv)
+  * [Atualização de moedas](testes/Docker - Teste Atualização - Resultado.csv)
+  * [Remoção de moedas](testes/Docker - Teste Remoção - Resultado.csv)
