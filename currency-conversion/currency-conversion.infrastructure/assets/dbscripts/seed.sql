@@ -1,13 +1,13 @@
 
 CREATE COLLATION case_insensitive (provider = icu, locale = 'und-u-ks-level2', deterministic = false);
 
-CREATE TABLE IF NOT EXISTS Currency
+CREATE TABLE IF NOT EXISTS currency
 (
-	Code       	VARCHAR (10) COLLATE case_insensitive NOT NULL,
-	Name       	VARCHAR(100)                          NOT NULL,
-	Rate       	DOUBLE PRECISION,
-	CreatedAt 	TIMESTAMP with TIME zone              NOT NULL DEFAULT NOW(),
-	UpdatedAt 	TIMESTAMP with TIME zone 			  NOT NULL DEFAULT NOW(),
+	code       	VARCHAR (10) COLLATE case_insensitive NOT NULL,
+	name       	VARCHAR(100)                          NOT NULL,
+	rate       	DOUBLE PRECISION                      NOT NULL,
+	created_at 	TIMESTAMP with TIME zone              DEFAULT NOW(),
+	updated_at 	TIMESTAMP with TIME zone              DEFAULT NOW(),
 	CONSTRAINT currency_pkey 						  PRIMARY KEY (code)
 );
 

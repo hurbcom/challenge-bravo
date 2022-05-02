@@ -29,6 +29,8 @@ namespace currency_conversion.infrastructure.Data.Repositories
         public EntityEntry<Currency> Update(Currency currency)
         {
             var currencyUpdated = _dbContext.Currency.Update(currency);
+            currencyUpdated.Property(column => column.CreatedAt).IsModified = false;
+            currencyUpdated.Property(column => column.UpdatedAt).IsModified = false;
             _dbContext.SaveChanges();
             return currencyUpdated;
         }
