@@ -1,4 +1,4 @@
-const exchangesService = require('../../../services/exchanges.services');
+const exchangesService = require('../../../src/services/exchanges.services');
 const { generateCurrency } = require('../../factories/currencies.factories');
 
 describe('Exchanges Service', () => {

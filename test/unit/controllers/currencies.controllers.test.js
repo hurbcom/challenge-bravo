@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 const httpMocks = require('node-mocks-http');
-const currenciesController = require('../../../controllers/currencies.controllers');
-const currenciesRepository = require('../../../repositories/currencies.repository');
-const currenciesService = require('../../../services/currencies.services');
+const currenciesController = require('../../../src/controllers/currencies.controllers');
+const currenciesRepository = require('../../../src/repositories/currencies.repository');
+const currenciesService = require('../../../src/services/currencies.services');
 const { generateCurrency, generateCurrencyList } = require('../../factories/currencies.factories');
 
 let req;

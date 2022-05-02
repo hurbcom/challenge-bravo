@@ -2,10 +2,10 @@
   "name": "challenge-bravo",
   "version": "1.0.0",
   "description": "[[English](README.md) | [Portuguese](README.pt.md)]",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon -L app.js",
+    "start": "node src/app.js",
+    "dev": "nodemon -L src/app.js",
     "test": "npm run test:unit",
     "test:unit": "jest --coverage --runInBand --detectOpenHandles ./test/unit",
     "lint": "npx eslint --fix --ext .js .",

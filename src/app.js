@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const currenciesRoutes = require('./routes/currencies.routes');
 const exchangesRoutes = require('./routes/exchanges.routes');
-const swaggerFile = require('./swagger/swagger_output.json');
+const swaggerFile = require('../swagger/swagger_output.json');
 const currenciesJobs = require('./jobs/currencies.jobs');
 
 const app = express();

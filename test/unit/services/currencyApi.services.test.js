@@ -1,5 +1,5 @@
 const axios = require('axios');
-const currencyApiService = require('../../../services/currencyApi.services');
+const currencyApiService = require('../../../src/services/currencyApi.services');
 const { generateApiResponse } = require('../../factories/currencyApi.factories');
 
 describe('Currency API Service', () => {

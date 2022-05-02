@@ -1,8 +1,8 @@
-const currenciesService = require('../../../services/currencies.services');
-const currencyApiServices = require('../../../services/currencyApi.services');
+const currenciesService = require('../../../src/services/currencies.services');
+const currencyApiServices = require('../../../src/services/currencyApi.services');
 const { generateCurrency, generateCurrencyList } = require('../../factories/currencies.factories');
 const { generateRates } = require('../../factories/currencyApi.factories');
-const currenciesRepository = require('../../../repositories/currencies.repository');
+const currenciesRepository = require('../../../src/repositories/currencies.repository');
 
 describe('Currencies Service', () => {
     describe('getCurrencyRate method', () => {

@@ -1,4 +1,4 @@
-const mongoose = require('../database/index');
+const mongoose = require('../src/database/index');
 
 afterAll(async () => {
     await mongoose.disconnect();
