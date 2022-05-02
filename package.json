@@ -8,7 +8,7 @@
     "dev": "nodemon -L index.js",
     "test": "run-s test:**",
     "test:unit": "jest --coverage --runInBand --detectOpenHandles ./test/unit",
-    "test:integration": "jest --coverage --runInBand --detectOpenHandles ./test/integration",
+    "test:integration": "jest --runInBand --detectOpenHandles ./test/integration",
     "lint": "npx eslint --fix --ext .js .",
     "swagger-autogen": "node swagger/index.js",
     "md-docs": "swagger-markdown -i swagger/swagger_output.json -o ApiDocumentation.md",

@@ -45,4 +45,36 @@ describe('Currencies API', () => {
             expect(response.body).toStrictEqual({ message: 'Failed to register currency: Duplicate code.' });
         });
     });
+    describe('GET /currencies/', () => {
+        it('should return 200 when retrieving currencies', async () => {
+            const response = await request(app)
+                .get('/currencies')
+                .set('Accept', 'application/json');
+            expect(response.headers['content-type']).toMatch(/json/);
+            expect(response.status).toEqual(200);
+            expect(response.body).toStrictEqual(expect.arrayContaining([
+                { code: 'HURB', rate: 1.7 },
+                expect.objectContaining({ code: 'BRL' }),
+            ]));
+            expect(response.body[1].rate).not.toBeNaN();
+        });
+    });
+    describe('GET /currencies/:code/', () => {
+        it('should return 200 when retrieving existing currency', async () => {
+            const response = await request(app)
+                .get('/currencies/HURB')
+                .set('Accept', 'application/json');
+            expect(response.headers['content-type']).toMatch(/json/);
+            expect(response.status).toEqual(200);
+            expect(response.body).toStrictEqual({ code: 'HURB', rate: 1.7 });
+        });
+        it('should return 404 when retrieving non-existing currency', async () => {
+            const response = await request(app)
+                .get('/currencies/TEST')
+                .set('Accept', 'application/json');
+            expect(response.headers['content-type']).toMatch(/json/);
+            expect(response.status).toEqual(404);
+            expect(response.body).toStrictEqual({ message: 'No currency found for code \'TEST\'.' });
+        });
+    });
 });
