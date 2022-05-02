@@ -1,4 +1,4 @@
-exports.generateCurrency = (code = 'CODE', rate = 1) => ({
+exports.generateCurrency = (code = 'CODE', rate = null) => ({
     code, rate,
 });
 
