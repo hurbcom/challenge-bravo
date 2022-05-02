@@ -1,0 +1,60 @@
+H/W path           Device       Class          Description
+==========================================================
+                                system         Inspiron N5010 (To be filled by O.E.M.)
+/0                              bus            08R0GW
+/0/4                            processor      Intel(R) Core(TM) i5 CPU       M 460  @ 2.53GHz
+/0/4/5                          memory         64KiB L1 cache
+/0/4/6                          memory         512KiB L2 cache
+/0/4/7                          memory         3MiB L3 cache
+/0/1d                           memory         6GiB System Memory
+/0/1d/0                         memory         4GiB DIMM DDR3 Synchronous 1333 MHz (0,8 ns)
+/0/1d/1                         memory         2GiB DIMM DDR3 Synchronous 1333 MHz (0,8 ns)
+/0/0                            memory         64KiB BIOS
+/0/100                          bridge         Core Processor DRAM Controller
+/0/100/2                        display        Core Processor Integrated Graphics Controller
+/0/100/16                       communication  5 Series/3400 Series Chipset HECI Controller
+/0/100/1a                       bus            5 Series/3400 Series Chipset USB2 Enhanced Host Controller
+/0/100/1a/1        usb1         bus            EHCI Host Controller
+/0/100/1a/1/1                   bus            Integrated Rate Matching Hub
+/0/100/1a/1/1/1                 input          USB Receiver
+/0/100/1a/1/1/6                 multimedia     Laptop_Integrated_Webcam_1.3M
+/0/100/1b                       multimedia     5 Series/3400 Series Chipset High Definition Audio
+/0/100/1c                       bridge         5 Series/3400 Series Chipset PCI Express Root Port 1
+/0/100/1c.1                     bridge         5 Series/3400 Series Chipset PCI Express Root Port 2
+/0/100/1c.1/0      wlp18s0      network        BCM43228 802.11a/b/g/n
+/0/100/1c.2                     bridge         5 Series/3400 Series Chipset PCI Express Root Port 3
+/0/100/1c.2/0      enp19s0      network        RTL810xE PCI Express Fast Ethernet controller
+/0/100/1c.4                     bridge         5 Series/3400 Series Chipset PCI Express Root Port 5
+/0/100/1d                       bus            5 Series/3400 Series Chipset USB2 Enhanced Host Controller
+/0/100/1d/1        usb2         bus            EHCI Host Controller
+/0/100/1d/1/1                   bus            Integrated Rate Matching Hub
+/0/100/1d/1/1/6                 bus            BCM2046B1
+/0/100/1d/1/1/6/1               input          Integrated Keyboard
+/0/100/1d/1/1/6/2               input          Integrated Touchpad [Synaptics]
+/0/100/1d/1/1/6/3               communication  Dell Wireless 365 Bluetooth Module
+/0/100/1e                       bridge         82801 Mobile PCI Bridge
+/0/100/1f                       bridge         HM57 Chipset LPC Interface Controller
+/0/100/1f.2                     storage        5 Series/3400 Series Chipset 6 port SATA AHCI Controller
+/0/100/1f.3                     bus            5 Series/3400 Series Chipset SMBus Controller
+/0/100/1f.6                     generic        5 Series/3400 Series Chipset Thermal Subsystem
+/0/101                          bridge         Core Processor QuickPath Architecture Generic Non-core Registers
+/0/102                          bridge         Core Processor QuickPath Architecture System Address Decoder
+/0/103                          bridge         Core Processor QPI Link 0
+/0/104                          bridge         1st Generation Core i3/5/7 Processor QPI Physical 0
+/0/105                          bridge         1st Generation Core i3/5/7 Processor Reserved
+/0/106                          bridge         1st Generation Core i3/5/7 Processor Reserved
+/0/1               scsi0        storage        
+/0/1/0.0.0         /dev/sda     disk           480GB KINGSTON SA400S3
+/0/1/0.0.0/1       /dev/sda1    volume         579MiB Windows NTFS volume
+/0/1/0.0.0/2       /dev/sda2    volume         146GiB Windows NTFS volume
+/0/1/0.0.0/3       /dev/sda3    volume         616MiB Windows NTFS volume
+/0/1/0.0.0/4       /dev/sda4    volume         299GiB Extended partition
+/0/1/0.0.0/4/5     /dev/sda5    volume         140GiB EXT4 volume
+/0/1/0.0.0/4/6     /dev/sda6    volume         10GiB Linux swap volume
+/0/1/0.0.0/4/7     /dev/sda7    volume         149GiB Windows FAT volume
+/0/2               scsi1        storage        
+/0/2/0.0.0         /dev/cdrom   disk           DVD+-RW GT32N
+/1                              power          DELL W7H3N04
+/2                 veth35108d6  network        Ethernet interface
+/3                 veth8583448  network        Ethernet interface
+/4                 vetha6bf407  network        Ethernet interface
