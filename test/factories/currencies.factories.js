@@ -11,4 +11,8 @@ exports.generateCurrencyList = () => [
         code: 'BRL',
         rate: 4.50,
     },
+    {
+        code: 'EUR',
+        rate: 6.20,
+    },
 ];
