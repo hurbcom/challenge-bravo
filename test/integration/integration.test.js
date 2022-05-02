@@ -1,0 +1,2 @@
+require('./currencies');
+require('./exchanges');
