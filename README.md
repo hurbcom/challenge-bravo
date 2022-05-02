@@ -174,9 +174,9 @@
   2) Clonar este repositório (git clone https://github.com/alexandre-abdalla/challenge-bravo.git)
   3) Obter uma chave de autenticação para uso não comercial da API externa em [CurrencyAPI.net](https://currencyapi.net/register?plan=0) e inserí-la no arquivo [apiKey.txt](apiKey.txt), em branco, encontrado na raiz do repositório;
   4) Navegar até o diretório clone deste repositório e executar o comando docker-compose up -d --build
-  5) Inicializar a API de uma das seguintes maneiras:
-    5.1) Via browser:
-    Acessar a URL: http://localhost:8088/inicializarAPI.php
+  5) Inicializar a API de uma das seguintes maneiras:  
+    5.1) Via browser:  
+    Acessar a URL: http://localhost:8088/inicializarAPI.php  
     5.2) Via CLI:  
       5.2.1) curl http://localhost:8088/inicializarAPI.php  
       5.2.2) docker-compose run web-server php /var/www/html/inicializarAPI.php [^3]  
