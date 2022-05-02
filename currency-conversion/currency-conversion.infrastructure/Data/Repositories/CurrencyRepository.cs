@@ -33,11 +33,14 @@ namespace currency_conversion.infrastructure.Data.Repositories
             return currencyUpdated;
         }
 
-        public void Delete(Currency currency)
+        public void Delete(string code)
         {
-            _dbContext.Currency.Remove(currency);
-            _dbContext.SaveChanges();
+            var currency = _dbContext.Currency.Find(code);
+            if(currency != null)
+            {
+                _dbContext.Currency.Remove(currency);
+                _dbContext.SaveChanges();
+            }
         }
-
     }
 }

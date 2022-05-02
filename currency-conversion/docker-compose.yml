@@ -1,8 +1,29 @@
 version: '3.4'
 
+volumes:
+  db_volume:
+
 services:
   currency-conversion.web:
     image: ${DOCKER_REGISTRY-}currencyconversionweb
     build:
       context: .
       dockerfile: currency-conversion.web/Dockerfile
+
+  postgres_image:
+    image: postgres
+    restart: always
+    ports:
+      - "5432"
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+      - ./currency-conversion.infrastructure/assets/dbscripts/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "currencyDB"
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

@@ -3,6 +3,7 @@ version: '3.4'
 services:
   currency-conversion.web:
     environment:
+      - DB_CONNECTION_STRING=host=postgres_image;port=5432;database=currencyDB;username=admin;password=admin
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
     ports:
