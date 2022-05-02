@@ -26,7 +26,7 @@
       $rate = $_POST['rate'] ?? '';
 
       curl_setopt($curl, CURLOPT_URL,
-        'http://localhost/challenge-bravo/addCurrency.php?code='.$code.'&name='.$name.'&rate='.$rate);
+        'http://localhost:8088/addCurrency.php?code='.$code.'&name='.$name.'&rate='.$rate);
 
       $response = curl_exec($curl);
       curl_close($curl);
@@ -44,7 +44,7 @@
       $rate = $_PUT['rate'] ?? '';
 
       curl_setopt($curl, CURLOPT_URL,
-        'http://localhost/challenge-bravo/updateCurrency.php?code='.$code.'&rate='.$rate);
+        'http://localhost:8088/updateCurrency.php?code='.$code.'&rate='.$rate);
 
       $response = curl_exec($curl);
       curl_close($curl);
@@ -60,7 +60,7 @@
       $code = $_DELETE['code'] ?? '';
 
       curl_setopt($curl, CURLOPT_URL,
-        'http://localhost/challenge-bravo/removeCurrency.php?code='.$code);
+        'http://localhost:8088/removeCurrency.php?code='.$code);
 
       $response = curl_exec($curl);
       curl_close($curl);
