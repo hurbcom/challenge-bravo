@@ -77,4 +77,22 @@ describe('Currencies API', () => {
             expect(response.body).toStrictEqual({ message: 'No currency found for code \'TEST\'.' });
         });
     });
+    describe('DELETE /currencies/:code/', () => {
+        it('should return 200 when deleting existing currency', async () => {
+            const response = await request(app)
+                .delete('/currencies/HURB')
+                .set('Accept', 'application/json');
+            expect(response.headers['content-type']).toMatch(/json/);
+            expect(response.status).toEqual(200);
+            expect(response.body).toStrictEqual({ message: 'Successfully deleted currency!' });
+        });
+        it('should return 404 when deleting non-existing currency', async () => {
+            const response = await request(app)
+                .delete('/currencies/TEST')
+                .set('Accept', 'application/json');
+            expect(response.headers['content-type']).toMatch(/json/);
+            expect(response.status).toEqual(404);
+            expect(response.body).toStrictEqual({ message: 'No currency found for code \'TEST\'.' });
+        });
+    });
 });
