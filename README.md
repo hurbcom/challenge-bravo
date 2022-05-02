@@ -27,9 +27,9 @@
   * Os endpoints [convertCurrency](api-bravo/convertCurrency.php), [addCurrency](api-bravo/addCurrency.php), [updateCurrency](api-bravo/updateCurrency.php) e [removeCurrency](api-bravo/removeCurrency.php), para responder às requisições HTTP do tipo GET;
   * O endpoint [currencies](api-bravo/currencies.php) para tratar os verbos HTTP, funcionando como uma espécie de Adaptador, chamando o respectivo endpoint para os métodos POST, PUT, DELETE do protocolo HTTP.
 
-## Exemplos de Uso ##
+# Exemplos de Uso #
 
-### Conversão de Moedas ###
+## Conversão de Moedas ##
 
   Método HTTP: GET  
   Parâmetros obrigatórios: from, to, amount    
@@ -51,7 +51,7 @@
      }
 ```
 
-### Adição de Moedas ###
+## Adição de Moedas ##
 
   1) Via Browser URL:
 
@@ -78,7 +78,7 @@
      }
 ```
 
-### Atualização de Moedas ###
+## Atualização de Moedas ##
 
   1) Via Browser URL:
 
@@ -108,7 +108,7 @@
      }
 ```
 
-### Remoção de Moedas ###
+## Remoção de Moedas ##
 
   1) Via Browser URL:
 
@@ -137,7 +137,7 @@
      }
 ```
 
-## Considerações ##
+# Considerações #
 
  Durante a implementação foram identificadas e tratadas as seguintes restrições de integridade:
 
@@ -170,7 +170,7 @@
 
 ## Configuração Ambiente ##
 
-  1) Instalar o Docker e o Docker Compose (preferencialmente nas versões informadas no tópico anterior)
+  1) Instalar o Docker e o Docker Compose (preferencialmente nas versões informadas na subseção anterior)
   2) Clonar este repositório (git clone https://github.com/alexandre-abdalla/challenge-bravo.git)
   3) Obter uma chave de autenticação para uso não comercial da API externa em [CurrencyAPI.net](https://currencyapi.net/register?plan=0) e inserí-la no arquivo [apiKey.txt](apiKey.txt), em branco, encontrado na raiz do repositório;
   4) Navegar até o diretório clone deste repositório e executar o comando docker-compose up -d --build
@@ -183,7 +183,7 @@
 
   Após isso, é esperado que o sistema retorne a mensagem "API carregada com sucesso!".
 
-  OBS: Os exemplos de uso podem ser seguidos de acordo com a seção [Exemplos de Uso](https://github.com/alexandre-abdalla/challenge-bravo/blob/main/README.md#exemplos-de-uso), alterando {LOCAL_DA_API} por localhost:8088.
+  OBS: Os exemplos de uso podem ser seguidos, de acordo com a seção [Exemplos de Uso](https://github.com/alexandre-abdalla/challenge-bravo/blob/main/README.md#exemplos-de-uso), alterando {LOCAL_DA_API} por localhost:8088.
 
 # Adicionando Teste de Desempenho #
 
