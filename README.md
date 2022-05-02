@@ -200,14 +200,14 @@
 
 ## Arquivos de Teste ##
 
-  * [Conversão de moedas](testes/Docker - Teste Conversão.jmx)
-  * [Inclusão de moedas](testes/Docker - Teste Inclusão.jmx)
-  * [Atualização de moedas](testes/Docker - Teste Atualização.jmx)
-  * [Remoção de moedas](testes/Docker - Teste Remoção.jmx)
+  * [Conversão de moedas](testes/Docker%20-%20Teste%20Conversão.jmx)
+  * [Inclusão de moedas](testes/Docker%20-%20Teste%20Inclusão.jmx)
+  * [Atualização de moedas](testes/Docker%20-%20Teste%20Atualização.jmx)
+  * [Remoção de moedas](testes/Docker%20-%20Teste%20Remoção.jmx)
 
 ## Resultados dos Testes ##
 
-  * [Conversão de moedas](testes/Docker - Teste Conversão - Resultado.csv)
-  * [Inclusão de moedas](testes/Docker - Teste Inclusão - Resultado.csv)
-  * [Atualização de moedas](testes/Docker - Teste Atualização - Resultado.csv)
-  * [Remoção de moedas](testes/Docker - Teste Remoção - Resultado.csv)
+  * [Conversão de moedas](testes/Docker%20-%20Teste%20Conversão%20-%20Resultado.csv)
+  * [Inclusão de moedas](testes/Docker%20-%20Teste%20Inclusão%20-%20Resultado.csv)
+  * [Atualização de moedas](testes/Docker%20-%20Teste%20Atualização%20-%20Resultado.csv)
+  * [Remoção de moedas](testes/Docker%20-%20Teste%20Remoção%20-%20Resultado.csv)
