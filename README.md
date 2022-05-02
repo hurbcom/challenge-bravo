@@ -183,7 +183,7 @@
 
   Após isso, é esperado que o sistema retorne a mensagem "API carregada com sucesso!".
 
-  OBS: Os exemplos de uso podem ser seguidos de acordo com o tópico [Exemplos de Uso] alterando {LOCAL_DA_API} por localhost:8088.
+  OBS: Os exemplos de uso podem ser seguidos de acordo com o tópico [#exemplos-de-uso] alterando {LOCAL_DA_API} por localhost:8088.
 
 # Adicionando Teste de Desempenho #
 
