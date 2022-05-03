@@ -1,4 +1,6 @@
 using currency_conversion.Core.Interfaces.Repositories;
+using currency_conversion.Core.Interfaces.Services;
+using currency_conversion.Core.Services;
 using currency_conversion.infrastructure.Data;
 using currency_conversion.infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString ?? ""));
 
 builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddTransient<IConvertService, ConvertService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

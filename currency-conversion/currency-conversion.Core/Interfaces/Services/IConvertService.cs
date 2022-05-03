@@ -1,6 +1,7 @@
 namespace currency_conversion.Core.Interfaces.Services
 {
-    internal interface IConvertService
+    public interface IConvertService
     {
+        public double Convert(string from, string to, double amount);
     }
 }
