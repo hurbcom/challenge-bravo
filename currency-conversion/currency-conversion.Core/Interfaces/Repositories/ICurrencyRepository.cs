@@ -5,12 +5,12 @@ namespace currency_conversion.Core.Interfaces.Repositories
 {
     public interface ICurrencyRepository
     {
-        public EntityEntry<Currency> Create(Currency currency);
+        public bool Create(Currency currency);
 
         public Currency? Read(string code);
 
-        public EntityEntry<Currency> Update(Currency currency);
+        public bool Update(Currency currency);
 
-        public void Delete(string code);
+        public bool Delete(string code);
     }
 }

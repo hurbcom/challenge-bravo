@@ -11,14 +11,23 @@ namespace currency_conversion.web.Controllers
     public class CurrencyController : ControllerBase
     {
         private readonly ILogger<CurrencyController> _logger;
-        private readonly ICurrencyRepository _currencyRepository;
         private readonly IMapper _mapper;
+        private readonly ICurrencyRepository _currencyRepository;     
 
         public CurrencyController(ILogger<CurrencyController> logger, IMapper mapper, ICurrencyRepository currencyRepository)
         {
             _logger = logger;
             _mapper = mapper;
             _currencyRepository = currencyRepository;
+        }
+
+        [HttpGet(Name = "get")]
+        public IActionResult Get(string code)
+        {
+            var currency = _currencyRepository.Read(code);
+            if (currency == null) return NotFound("Currency not found: " + code);
+            var _mappedOutputCurrency = _mapper.Map<CurrencyDTO>(currency);
+            return Ok(_mappedOutputCurrency);
         }
 
         [HttpPost(Name = "insert")]
@@ -29,15 +38,9 @@ namespace currency_conversion.web.Controllers
                 return BadRequest(ModelState);
             }
             var _mappedInputCurrency = _mapper.Map<Currency>(currencyDTO);
-            _ = _currencyRepository.Create(_mappedInputCurrency);
+            var created = _currencyRepository.Create(_mappedInputCurrency);
+            if (!created) return BadRequest("Currency could not be saved: Code already exists");
             return Ok();
-        }
-
-        [HttpGet(Name = "get")]
-        public IActionResult Get(string code)
-        {
-            var _mappedOutputCurrency = _mapper.Map<CurrencyDTO>(_currencyRepository.Read(code));
-            return Ok(_mappedOutputCurrency);
         }
 
         [HttpPut(Name = "update")]
@@ -48,14 +51,16 @@ namespace currency_conversion.web.Controllers
                 return BadRequest(ModelState);
             }
             var _mappedInputCurrency = _mapper.Map<Currency>(currencyDTO);
-            _ = _currencyRepository.Update(_mappedInputCurrency);
+            var updated = _currencyRepository.Update(_mappedInputCurrency);
+            if (!updated) return BadRequest("Currency not found: " + currencyDTO.Code);
             return Ok();
         }
 
         [HttpDelete(Name = "delete")]
         public IActionResult Delete(string code)
         {
-            _currencyRepository.Delete(code);
+            var deleted = _currencyRepository.Delete(code);
+            if (!deleted) return BadRequest("Currency not found: " + code);
             return Ok();
         }
     }
