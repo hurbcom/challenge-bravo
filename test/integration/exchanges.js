@@ -7,7 +7,7 @@ const app = createServer();
 describe('Exchanges API', () => {
     beforeAll(async () => {
         // load currencies
-        seedDatabase();
+        await seedDatabase();
     });
     describe('GET /exchanges/', () => {
         it('should return 200 when converting from FIAT to FIAT', async () => {
