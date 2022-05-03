@@ -15,7 +15,7 @@ router.get(
      * #swagger.parameters['amount'] = { required: true, type: 'string' }
      * #swagger.responses[200] = {
             description: 'Exchange successfully calculated.',
-            schema: { $ref: '#/definitions/Exchanges' }
+            schema: { $ref: '#/definitions/ExchangesModel' }
         }
      * #swagger.responses[400] = {
             description: 'Query parameter validation failed.',

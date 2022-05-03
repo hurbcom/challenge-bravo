@@ -14,7 +14,7 @@ router.post(
             in: 'body',
             description: 'Add a currency',
             required: 'true',
-            schema: { $ref: '#/definitions/Currencies' }
+            schema: { $ref: '#/definitions/CurrenciesModel' }
         }
      * #swagger.responses[201] = {
             description: 'Successfully registered currency.',
@@ -44,7 +44,7 @@ router.get(
      * #swagger.description = 'You can list all registered currencies.'
      * #swagger.responses[200] = {
             description: 'Successfully obtained all currencies.',
-            schema: [{ $ref: '#/definitions/Currencies' }]
+            schema: [{ $ref: '#/definitions/CurrenciesModel' }]
         }
      * #swagger.responses[500] = {
             description: 'Internal Server Error',
@@ -62,7 +62,7 @@ router.get(
      * #swagger.description = 'You can retrieve a registered currency by its code.'
      * #swagger.responses[200] = {
             description: 'Successfully obtained currency.',
-            schema: { $ref: '#/definitions/Currencies' }
+            schema: { $ref: '#/definitions/CurrenciesModel' }
         }
      * #swagger.responses[404] = {
             description: 'Currency not found.',

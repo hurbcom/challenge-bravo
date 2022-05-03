@@ -18,7 +18,7 @@ You can register a currency.  <br>If currency is fictitious, `rate` is required.
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| body | body | Add a currency | Yes | [Currencies](#currencies) |
+| body | body | Add a currency | Yes | [CurrenciesModel](#currenciesmodel) |
 
 ##### Responses
 
@@ -47,7 +47,7 @@ You can list all registered currencies.
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | Successfully obtained all currencies. | [ [Currencies](#currencies) ] |
+| 200 | Successfully obtained all currencies. | [ [CurrenciesModel](#currenciesmodel) ] |
 | 500 | Internal Server Error | object |
 
 ### /currencies/{code}
@@ -71,7 +71,7 @@ You can retrieve a registered currency by its code.
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | Successfully obtained currency. | [Currencies](#currencies) |
+| 200 | Successfully obtained currency. | [CurrenciesModel](#currenciesmodel) |
 | 404 | Currency not found. | object |
 | 500 | Internal Server Error | object |
 
@@ -121,7 +121,7 @@ You can exchange an amount between registered currencies.
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | Exchange successfully calculated. | [Exchanges](#exchanges) |
+| 200 | Exchange successfully calculated. | [ExchangesModel](#exchangesmodel) |
 | 400 | Query parameter validation failed. | object |
 | 404 | Currency not found. | object |
 | 500 | Internal Server Error | object |
@@ -129,14 +129,14 @@ You can exchange an amount between registered currencies.
 ### Models
 
 
-#### Exchanges
+#### ExchangesModel
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | from | object |  | No |
 | to | object |  | No |
 
-#### Currencies
+#### CurrenciesModel
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |

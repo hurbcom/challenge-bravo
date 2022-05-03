@@ -22,7 +22,7 @@ const doc = {
         },
     ],
     definitions: {
-        Exchanges: {
+        ExchangesModel: {
             from: {
                 code: 'USD',
                 amount: '15.00',
@@ -32,7 +32,7 @@ const doc = {
                 amount: '76.29',
             },
         },
-        Currencies: {
+        CurrenciesModel: {
             $code: 'TEST',
             rate: 1.5,
         },

@@ -41,7 +41,7 @@
             "description": "Add a currency",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Currencies"
+              "$ref": "#/definitions/CurrenciesModel"
             }
           }
         ],
@@ -121,7 +121,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Currencies"
+                "$ref": "#/definitions/CurrenciesModel"
               },
               "xml": {
                 "name": "main"
@@ -165,7 +165,7 @@
           "200": {
             "description": "Successfully obtained currency.",
             "schema": {
-              "$ref": "#/definitions/Currencies"
+              "$ref": "#/definitions/CurrenciesModel"
             }
           },
           "404": {
@@ -294,7 +294,7 @@
           "200": {
             "description": "Exchange successfully calculated.",
             "schema": {
-              "$ref": "#/definitions/Exchanges"
+              "$ref": "#/definitions/ExchangesModel"
             }
           },
           "400": {
@@ -347,7 +347,7 @@
     }
   },
   "definitions": {
-    "Exchanges": {
+    "ExchangesModel": {
       "type": "object",
       "properties": {
         "from": {
@@ -378,7 +378,7 @@
         }
       }
     },
-    "Currencies": {
+    "CurrenciesModel": {
       "type": "object",
       "properties": {
         "code": {
