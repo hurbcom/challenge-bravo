@@ -9,6 +9,7 @@
     "test": "run-s test:**",
     "test:unit": "jest --coverage --runInBand --detectOpenHandles ./test/unit",
     "test:integration": "jest --runInBand --detectOpenHandles ./test/integration",
+    "test:load": "docker-compose up -d --build && artillery run ./test/load/config.yml && docker-compose down",
     "lint": "npx eslint --fix --ext .js .",
     "swagger-autogen": "node swagger/index.js",
     "md-docs": "swagger-markdown -i swagger/swagger_output.json -o ApiDocumentation.md",
@@ -36,7 +37,9 @@
     "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^6.3.1",
     "@types/jest": "^27.4.1",
+    "artillery": "^2.0.0-15",
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",

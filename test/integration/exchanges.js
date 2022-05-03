@@ -1,36 +1,13 @@
 const request = require('supertest');
 const createServer = require('../../src/app');
-const { generateCurrency } = require('../factories/currencies.factories');
+const { seedDatabase } = require('./dbSeed');
 
 const app = createServer();
 
 describe('Exchanges API', () => {
     beforeAll(async () => {
         // load currencies
-        await request(app)
-            .post('/currencies')
-            .send(generateCurrency('USD'))
-            .set('Accept', 'application/json');
-        await request(app)
-            .post('/currencies')
-            .send(generateCurrency('BRL'))
-            .set('Accept', 'application/json');
-        await request(app)
-            .post('/currencies')
-            .send(generateCurrency('BTC'))
-            .set('Accept', 'application/json');
-        await request(app)
-            .post('/currencies')
-            .send(generateCurrency('ETH'))
-            .set('Accept', 'application/json');
-        await request(app)
-            .post('/currencies')
-            .send(generateCurrency('HURB', 1.7))
-            .set('Accept', 'application/json');
-        await request(app)
-            .post('/currencies')
-            .send(generateCurrency('FAKE', 2.55))
-            .set('Accept', 'application/json');
+        seedDatabase();
     });
     describe('GET /exchanges/', () => {
         it('should return 200 when converting from FIAT to FIAT', async () => {
