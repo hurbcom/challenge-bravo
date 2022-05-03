@@ -92,7 +92,7 @@ Supertest was used for integration testing. All routes fully tested (use cases).
 
  ### Stress tests
 
- Artillery was used for stress testing. With 5000 requests per seconde, 4688 requests were successfully completed.
+ Artillery was used for stress testing. With 5000 requests per second, 4490 requests were successfully completed.
 
 ![Stress tests](./imgs/stress-tests.PNG?raw=true "Stress tests")
 
