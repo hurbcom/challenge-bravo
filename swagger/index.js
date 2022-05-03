@@ -13,15 +13,30 @@ const doc = {
     produces: ['application/json'],
     tags: [
         {
-            name: 'Currencies',
-            description: 'Endpoints',
+            name: 'Exchanges',
+            description: 'API to calculate exchanges',
         },
         {
-            name: 'Exchanges',
-            description: 'Endpoints',
+            name: 'Currencies',
+            description: 'API to manage currencies',
         },
     ],
-
+    definitions: {
+        Exchanges: {
+            from: {
+                code: 'USD',
+                amount: '15.00',
+            },
+            to: {
+                code: 'BRL',
+                amount: '76.29',
+            },
+        },
+        Currencies: {
+            $code: 'TEST',
+            rate: 1.5,
+        },
+    },
 };
 
 swaggerAutogen()(outputFile, endpointsFiles, doc);

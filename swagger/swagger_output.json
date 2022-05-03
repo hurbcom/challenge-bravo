@@ -9,12 +9,12 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "Currencies",
-      "description": "Endpoints"
+      "name": "Exchanges",
+      "description": "API to calculate exchanges"
     },
     {
-      "name": "Exchanges",
-      "description": "Endpoints"
+      "name": "Currencies",
+      "description": "API to manage currencies"
     }
   ],
   "schemes": [
@@ -29,55 +29,130 @@
   "paths": {
     "/currencies/": {
       "post": {
-        "description": "",
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Register currency.",
+        "description": "You can register a currency.  <br>If currency is fictitious, `rate` is required.",
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "description": "Add a currency",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "example": "any"
-                },
-                "rate": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/Currencies"
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Successfully registered currency.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Successfully registered currency!"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Payload validation failed.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Currencies validation failed."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "409": {
-            "description": "Conflict"
+            "description": "Duplicated currency code.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Failed to register currency: Duplicate code."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Failed to register currency."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
       "get": {
-        "description": "",
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "List all currencies.",
+        "description": "You can list all registered currencies.",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully obtained all currencies.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Currencies"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Failed to list currencies."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/currencies/{code}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Retrieve a currency.",
+        "description": "You can retrieve a registered currency by its code.",
         "parameters": [
           {
             "name": "code",
@@ -88,18 +163,49 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully obtained currency.",
+            "schema": {
+              "$ref": "#/definitions/Currencies"
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Currency not found.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No currency found for code 'TEST'."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Failed to retrieve currency."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Delete a currency.",
+        "description": "You can delete a registered currency by its code.",
         "parameters": [
           {
             "name": "code",
@@ -110,52 +216,183 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully deleted currency.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Successfully deleted currency!"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Currency not found.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No currency found for code 'TEST'."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Failed to delete currency."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/exchanges/": {
       "get": {
-        "description": "",
+        "tags": [
+          "Exchanges"
+        ],
+        "summary": "Get currency exchange.",
+        "description": "You can exchange an amount between registered currencies.",
         "parameters": [
           {
             "name": "from",
+            "required": true,
             "in": "query",
             "type": "string"
           },
           {
             "name": "to",
+            "required": true,
             "in": "query",
             "type": "string"
           },
           {
             "name": "amount",
-            "in": "query",
-            "type": "string"
+            "required": true,
+            "type": "string",
+            "in": "query"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Exchange successfully calculated.",
+            "schema": {
+              "$ref": "#/definitions/Exchanges"
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Query parameter validation failed.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Query parameters validation failed."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Currency not found.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No currency found for code 'FAKE'."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Failed to calculate exchange."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
+    }
+  },
+  "definitions": {
+    "Exchanges": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "example": "USD"
+            },
+            "amount": {
+              "type": "string",
+              "example": "15.00"
+            }
+          }
+        },
+        "to": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "example": "BRL"
+            },
+            "amount": {
+              "type": "string",
+              "example": "76.29"
+            }
+          }
+        }
+      }
+    },
+    "Currencies": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "TEST"
+        },
+        "rate": {
+          "type": "number",
+          "example": 1.5
+        }
+      },
+      "required": [
+        "code"
+      ]
     }
   }
 }
