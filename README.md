@@ -18,9 +18,9 @@ A Rest API for Currency Conversion.
  - [Installation](#installation)
  - [Usage](#usage)
  - [Testing](#testing)
-   - [Unit tests results](#unit-tests)
-   - [Integration tests results](#integration-tests)
-   - [Stress tests results](#stress-tests)
+   - [Unit tests](#unit-tests)
+   - [Integration tests](#integration-tests)
+   - [Stress tests](#stress-tests)
  - [API Documentation](#api-documentation)
 
 ## Description
@@ -74,31 +74,32 @@ To run the automated tests (unit, integration and stress), run
 
     npm test
 
-All services and controllers should be fully tested.
-
-Jest was used for unit testing, Supertest was used for integration testing and Artillery was used for stress testing.
-
 :robot: This project also uses Github Actions to test it everytime a commit is pushed. The report html file for the stress test can be found in the actions artifacts.
 
 Here is a snapshot of the results:
 
- ### Unit tests results
+ ### Unit tests
+
+Jest was used for unit testing. All services and controllers were fully tested.
 
 ![Unit tests](./imgs/unit-tests.PNG?raw=true "Unit tests")
 
- ### Integration tests results
+ ### Integration tests
+
+Supertest was used for integration testing. All routes fully tested (use cases).
 
 ![Integration tests](./imgs/integration-tests.PNG?raw=true "Integration tests")
 
- ### Stress tests results
+ ### Stress tests
+
+ Artillery was used for stress testing. With 5000 requests per seconde, 4688 requests were successfully completed.
 
 ![Stress tests](./imgs/stress-tests.PNG?raw=true "Stress tests")
-
 
 ## API Documentation
 
 :rocket: Please refer to [API Documentation](./ApiDocumentation.md).
 
-To auto-generate the API documentation (that is used by Swagger), run
+To update the auto-generated API documentation (that is used by Swagger), run
 
     npm run docs
