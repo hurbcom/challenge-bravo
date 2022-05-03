@@ -1,0 +1,30 @@
+version: '2'
+services:
+    app:
+        depends_on:
+            - mongo
+        container_name: node-app
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        ports:
+            - ${PORT}:${PORT}
+        volumes:
+            - ./:/usr/src/app
+            - /usr/src/app/node_modules
+        links:
+            - mongo
+    mongo:
+        container_name: mongo-db
+        image: mongo:5.0.8
+        ports:
+            - ${MONGODB_PORT}:${MONGODB_PORT}
+    mongo-seed:
+        build:
+            context: ./mongo_seed
+            dockerfile: Dockerfile
+            args:
+                - MONGODB_URL=$MONGODB_URL
+        depends_on:
+            - mongo
