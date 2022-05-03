@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS currency
 	code       	VARCHAR (10) COLLATE case_insensitive NOT NULL,
 	name       	VARCHAR(100)                          NOT NULL,
 	rate       	DOUBLE PRECISION                      NOT NULL,
-	created_at 	TIMESTAMP with TIME zone              DEFAULT NOW(),
-	updated_at 	TIMESTAMP with TIME zone              DEFAULT NOW(),
+	created_at 	TIMESTAMP with TIME zone              NOT NULL DEFAULT NOW(),
+	updated_at 	TIMESTAMP with TIME zone              NOT NULL DEFAULT NOW(),
 	CONSTRAINT currency_pkey 						  PRIMARY KEY (code)
 );
 
