@@ -2,9 +2,9 @@ config:
   target: "http://localhost:3000"
   phases:
     - duration: 1
-      arrivalRate: 1000
+      arrivalRate: 5000
   ensure:
-    p99: 150
+    p99: 1000
     maxErrorRate: 0
 
 scenarios:
