@@ -22,8 +22,9 @@ namespace currency_conversion.web.Controllers
         }
 
         [HttpGet(Name = "get")]
-        public IActionResult Get(string code)
+        public IActionResult Get(string? code)
         {
+            if (code == null) return Ok(_currencyRepository.ReadAll());
             var currency = _currencyRepository.Read(code);
             if (currency == null) return NotFound("Currency not found: " + code);
             var _mappedOutputCurrency = _mapper.Map<CurrencyDTO>(currency);

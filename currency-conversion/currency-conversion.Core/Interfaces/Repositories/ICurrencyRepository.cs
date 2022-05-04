@@ -7,9 +7,15 @@ namespace currency_conversion.Core.Interfaces.Repositories
     {
         public bool Create(Currency currency);
 
+        public void CreateMany(IEnumerable<Currency> currencies);
+
         public Currency? Read(string code);
 
+        public List<Currency> ReadAll();
+
         public bool Update(Currency currency);
+
+        public void UpdateMany(IEnumerable<Currency> currencies);
 
         public bool Delete(string code);
     }

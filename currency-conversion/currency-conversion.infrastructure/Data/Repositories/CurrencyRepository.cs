@@ -2,7 +2,6 @@ using currency_conversion.Core.Interfaces.Repositories;
 using currency_conversion.Core.Models;
 using EntityFramework.Exceptions.Common;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace currency_conversion.infrastructure.Data.Repositories
 {
@@ -16,7 +15,7 @@ namespace currency_conversion.infrastructure.Data.Repositories
 
         public bool Create(Currency currency)
         {
-            currency.Code = currency.Code?.ToUpper();
+            currency.Code = currency.Code.ToUpper();
             _dbContext.Currency.Add(currency);
             try
             {
@@ -29,9 +28,21 @@ namespace currency_conversion.infrastructure.Data.Repositories
             }
         }
 
+        public void CreateMany(IEnumerable<Currency> currencies)
+        {
+            _dbContext.Currency.AddRange(currencies);
+            _dbContext.SaveChanges();
+        }
+
         public Currency? Read(string code)
         {
             var currencyRead = _dbContext.Currency.Find(code);
+            return currencyRead;
+        }
+
+        public List<Currency> ReadAll()
+        {
+            var currencyRead = _dbContext.Currency.ToList();
             return currencyRead;
         }
 
@@ -45,8 +56,14 @@ namespace currency_conversion.infrastructure.Data.Repositories
                 currencyUpdated.Property(column => column.UpdatedAt).IsModified = false;
                 _dbContext.SaveChanges();
                 return true;
-        }
+            }
             return false;
+        }
+
+        public void UpdateMany(IEnumerable<Currency> currencies)
+        {
+            _dbContext.UpdateRange(currencies);
+            _dbContext.SaveChanges();
         }
 
         public bool Delete(string code)
