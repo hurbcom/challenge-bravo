@@ -12,9 +12,11 @@ namespace currency_conversion.Core.Services
         }
         public double Convert(string from, string to, double amount)
         {
-            var fromRate = _currencyRepository.Read(from).Rate;
-            var toRate = _currencyRepository.Read(to).Rate;
-            return amount * (fromRate / toRate);
+            var fromCurrency = _currencyRepository.Read(from);
+            if (fromCurrency == null) throw new KeyNotFoundException("Currency not found: " + from);
+            var toRateCurrency = _currencyRepository.Read(to);
+            if (toRateCurrency == null) throw new KeyNotFoundException("Currency not found: " + to);
+            return amount * (fromCurrency.Rate / toRateCurrency.Rate);
         }
     }
 }
