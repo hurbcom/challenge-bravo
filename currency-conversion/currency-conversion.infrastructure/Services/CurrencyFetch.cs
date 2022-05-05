@@ -1,11 +1,5 @@
-using currency_conversion.Core.Interfaces.Repositories;
-using currency_conversion.Core.Interfaces.Services;
-using currency_conversion.Core.Models;
-using Microsoft.Extensions.Options;
+
 using currency_conversion.infrastructure.Configurations;
-using Microsoft.Extensions.Logging;
-using System.Text.Json;
-using System.Collections.Generic;
 using currency_conversion.infrastructure.DTOs;
 
 namespace currency_conversion.infrastructure
@@ -26,28 +20,31 @@ namespace currency_conversion.infrastructure
             _apiUrl = coinbaseConfiguration.Value.ApiUrl;
         }
 
-        public void UpdateCurrencies()
+        public async Task UpdateCurrenciesAsync()
         {
-            List<Currency> aa = new List<Currency>();
+            IEnumerable<Currency>? apiCurrencies = await FetchCurrenciesAsync();
+            if (apiCurrencies == null) return;
 
-            var db = _currencyRepository.ReadAll().ToDictionary(c => c.Code);
+            var currenciesToUpdate = _currencyRepository.ReadAll().ToDictionary(c => c.Code);
+            var currenciesToInsert = new List<Currency>();
 
-            foreach (var a in aa)
+            foreach (var apiCurrency in apiCurrencies)
             {
                 Currency c;
-                if (db.TryGetValue(a.Code, out c))
+                if (currenciesToUpdate.TryGetValue(apiCurrency.Code, out c))
                 {
-                    c.Rate = a.Rate;
+                    c.Rate = apiCurrency.Rate;
                 }
                 else
                 {
-
+                    currenciesToInsert.Add(apiCurrency);
                 }
             }
-            _currencyRepository.UpdateMany(db.Values.ToList());
+            _currencyRepository.UpdateMany(currenciesToUpdate.Values.ToList());
+            _currencyRepository.CreateMany(currenciesToInsert);
         }
 
-        public async Task FetchCurrenciesAsync()
+        private async Task<IEnumerable<Currency>?> FetchCurrenciesAsync()
         {
             _logger.LogInformation("Fetching currencies at " + _apiUrl);
             var httpRequestMessage = new HttpRequestMessage(
@@ -60,13 +57,16 @@ namespace currency_conversion.infrastructure
                     await httpResponseMessage.Content.ReadAsStreamAsync();
                 if (contentStream != null)
                 {
-                    _logger.LogInformation(contentStream.ToString());
-                    CoinBaseResponseDTO currencies = await JsonSerializer.DeserializeAsync
+                    CoinBaseResponseDTO? currencies = await JsonSerializer.DeserializeAsync
                     <CoinBaseResponseDTO>(contentStream);
-                    _logger.LogInformation(currencies.ToString());
+                    return currencies?.Data?.Rates?.Select(c => new Currency
+                    {
+                        Code = c.Key,
+                        Rate = double.Parse(c.Value)
+                    });
                 }
-                
             }
+            return null;
         }
 
     }

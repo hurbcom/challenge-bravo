@@ -19,8 +19,8 @@ namespace currency_conversion.worker
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await _currencyFetch.FetchCurrenciesAsync();
-                await Task.Delay(100000, stoppingToken);
+                await _currencyFetch.UpdateCurrenciesAsync();
+                await Task.Delay(300000, stoppingToken);
             }
         }
     }
