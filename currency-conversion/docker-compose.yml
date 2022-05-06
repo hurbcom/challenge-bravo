@@ -29,9 +29,8 @@ services:
       - 8080:8080
   currency-conversion.worker:
     image: ${DOCKER_REGISTRY-}currencyconversionworker
-    environment:
-      - API_FETCH_INTERVAL_MS = 300000
     build:
       context: .
       dockerfile: currency-conversion.worker/Dockerfile
-
+    depends_on:
+      - postgres_image

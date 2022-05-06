@@ -12,7 +12,14 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext,services) =>
     {
         IConfiguration configuration = hostContext.Configuration;
-        services.Configure<CoinBaseConfiguration>(configuration.GetSection(nameof(CoinBaseConfiguration)));
+        //services.Configure<CoinBaseConfiguration>(configuration.GetSection(nameof(CoinBaseConfiguration)));
+        //var coinBaseApiUrl = Environment.GetEnvironmentVariable("COINBASEAPI_URL");
+        //var coinBaseApiFetchIntervalMs = Environment.GetEnvironmentVariable("COINBASEAPI_FETCH_INTERVAL_MS");
+        //var coinBaseConfiguration = new CoinBaseConfiguration
+        //{
+        //    ApiUrl = coinBaseApiUrl,
+        //    FetchIntervalMs = int.Parse(coinBaseApiFetchIntervalMs)
+        //};
         services.AddHostedService<Worker>();
         services.AddHttpClient();
         var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
