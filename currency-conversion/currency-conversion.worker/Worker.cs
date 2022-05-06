@@ -19,7 +19,14 @@ namespace currency_conversion.worker
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await _currencyFetch.UpdateCurrenciesAsync();
+                try
+                {
+                    await _currencyFetch.UpdateCurrenciesAsync();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("Exception raise running updating currencies: " + e.Message + "\nStacktrace:\n" + e.StackTrace);
+                }
                 await Task.Delay(300000, stoppingToken);
             }
         }
