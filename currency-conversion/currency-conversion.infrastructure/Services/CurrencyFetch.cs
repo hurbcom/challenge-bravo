@@ -1,6 +1,12 @@
 
+using currency_conversion.Core.Interfaces.Repositories;
+using currency_conversion.Core.Interfaces.Services;
+using currency_conversion.Core.Models;
 using currency_conversion.infrastructure.Configurations;
 using currency_conversion.infrastructure.DTOs;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace currency_conversion.infrastructure
 {
@@ -12,12 +18,12 @@ namespace currency_conversion.infrastructure
         private readonly string _apiUrl;
 
         public CurrencyFetch(ILogger<CurrencyFetch> logger, IHttpClientFactory httpClientFactory,
-            ICurrencyRepository currencyRepository, IOptions<CoinBaseConfiguration> coinbaseConfiguration)
+            ICurrencyRepository currencyRepository)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
             _currencyRepository = currencyRepository;
-            _apiUrl = coinbaseConfiguration.Value.ApiUrl;
+            _apiUrl = Environment.GetEnvironmentVariable("COINBASEAPI_URL") ?? "";
         }
 
         public async Task UpdateCurrenciesAsync()
@@ -68,6 +74,5 @@ namespace currency_conversion.infrastructure
             }
             return null;
         }
-
     }
 }

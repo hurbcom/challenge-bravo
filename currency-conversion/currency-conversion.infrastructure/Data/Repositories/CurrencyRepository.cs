@@ -68,11 +68,10 @@ namespace currency_conversion.infrastructure.Data.Repositories
 
         public bool Delete(string code)
         {
-            //if (currency == null) throw new KeyNotFoundException("Currency not found: " + code);
             var currency = _dbContext.Currency.Find(code);
             if (currency != null)
             {
-                var currencyEntity = _dbContext.Currency.Remove(currency);
+                _dbContext.Currency.Remove(currency);
                 _dbContext.SaveChanges();
                 return true;
             }
