@@ -24,7 +24,10 @@ namespace currency_conversion.web.Controllers
         [HttpGet(Name = "get")]
         public IActionResult Get(string? code)
         {
-            if (code == null) return Ok(_currencyRepository.ReadAll());
+            if (code == null)
+            {
+                return Ok(_mapper.Map<IEnumerable<CurrencyDTO>>(_currencyRepository.ReadAll()));
+            }
             var currency = _currencyRepository.Read(code);
             if (currency == null) return NotFound("Currency not found: " + code);
             var _mappedOutputCurrency = _mapper.Map<CurrencyDTO>(currency);
@@ -41,7 +44,7 @@ namespace currency_conversion.web.Controllers
             var _mappedInputCurrency = _mapper.Map<Currency>(currencyDTO);
             var created = _currencyRepository.Create(_mappedInputCurrency);
             if (!created) return BadRequest("Currency could not be saved: Code already exists");
-            return Ok();
+            return Ok("Currency added");
         }
 
         [HttpPut(Name = "update")]
@@ -54,7 +57,7 @@ namespace currency_conversion.web.Controllers
             var _mappedInputCurrency = _mapper.Map<Currency>(currencyDTO);
             var updated = _currencyRepository.Update(_mappedInputCurrency);
             if (!updated) return BadRequest("Currency not found: " + currencyDTO.Code);
-            return Ok();
+            return Ok("Currency updated");
         }
 
         [HttpDelete(Name = "delete")]
@@ -62,7 +65,7 @@ namespace currency_conversion.web.Controllers
         {
             var deleted = _currencyRepository.Delete(code);
             if (!deleted) return BadRequest("Currency not found: " + code);
-            return Ok();
+            return Ok("Currency deleted");
         }
     }
 }
