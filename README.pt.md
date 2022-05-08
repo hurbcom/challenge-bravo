@@ -7,13 +7,13 @@ Construa uma API, que responda JSON, para conversão monetária. Ela deve ter um
 
 ## Currency-Conversion
 Foi desenvolvido uma aplicação para conversão monetária de moedas reais (incluindo criptomoedas) e fictícias, de acordo com os requisitos do desafio. A aplicação consiste de:
-  - API Web
-    - Expões rotas para conversão e operações de CRUD de moedas.
-  - Base de dados
-    - Persistência das informações de moedas.
-  - Tarefa de segundo plano
-    - Progama em execução permanente, com uma rotina intermitente de alimentação de cotações reais na base de dados.
-  
+  - API Web - Feito em [ASP.NET Core 6.0](https://dotnet.microsoft.com/en-us/apps/aspnet), expões rotas para conversão e operações de CRUD de moedas.
+  - Base de dados - Foi utilizado o sistema de banco de dados [PostgreSQL](https://www.postgresql.org/) para persistência das informações de moedas.
+  - Tarefa de segundo plano - Feito em [.NET 6.0](https://docs.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6). Progama em execução permanente, com uma rotina intermitente de alimentação de cotações reais na base de dados.
+
+
+# aAs
+asdas
   
 Foi utilizado uma API do [CoinBase](https://developers.coinbase.com/api/v2#exchange-rates) para alimentação de cotações reais. 
 
