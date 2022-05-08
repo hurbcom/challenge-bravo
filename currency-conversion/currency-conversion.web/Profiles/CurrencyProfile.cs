@@ -16,7 +16,16 @@ namespace currency_conversion.web.Profiles
                 .ForMember(
                     dest => dest.Rate,
                     opt => opt.MapFrom(src => $"{src.Rate}")
-                ).ReverseMap();
+                )
+                .ForMember(
+                    dest => dest.CreatedAt,
+                    opt => opt.Ignore()
+                )
+                .ForMember(
+                    dest => dest.UpdatedAt,
+                    opt => opt.Ignore()
+                )
+                .ReverseMap();
         }
     }
 }
