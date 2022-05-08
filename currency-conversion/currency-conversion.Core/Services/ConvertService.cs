@@ -16,7 +16,7 @@ namespace currency_conversion.Core.Services
             if (fromCurrency == null) throw new KeyNotFoundException("Currency not found: " + from);
             var toRateCurrency = _currencyRepository.Read(to);
             if (toRateCurrency == null) throw new KeyNotFoundException("Currency not found: " + to);
-            return amount * (fromCurrency.Rate / toRateCurrency.Rate);
+            return amount * (toRateCurrency.Rate / fromCurrency.Rate);
         }
     }
 }
