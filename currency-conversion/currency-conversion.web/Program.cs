@@ -13,9 +13,12 @@ builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); ;
 
 //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+var dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString ?? ""));
+    options.UseNpgsql(dbConnectionString ?? ""));
+
+var redisConnectionString = Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING");
+builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = redisConnectionString;});
 
 builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddTransient<IConvertService, ConvertService>();

@@ -22,11 +22,13 @@ services:
       POSTGRES_USER: "admin"
       POSTGRES_PASSWORD: "admin"
       POSTGRES_DB: "currencyDB"
+
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+
   currency-conversion.worker:
     image: ${DOCKER_REGISTRY-}currencyconversionworker
     build:
@@ -34,3 +36,10 @@ services:
       dockerfile: currency-conversion.worker/Dockerfile
     depends_on:
       - postgres_image
+
+  redis:
+    image: 'bitnami/redis:latest'
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
