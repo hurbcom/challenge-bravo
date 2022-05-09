@@ -8,10 +8,15 @@ namespace currency_conversion.worker
 
         private readonly ICurrencyFetch _currencyFetch;
 
+        private int _interval;
+
         public Worker(ILogger<Worker> logger, ICurrencyFetch currencyFetch)
         {
             _logger = logger;
             _currencyFetch = currencyFetch;
+            int interval;
+            var validInterval = int.TryParse(Environment.GetEnvironmentVariable("COINBASEAPI_FETCH_INTERVAL_MS"), out interval);
+            _interval = validInterval ? interval : 300000;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -27,7 +32,7 @@ namespace currency_conversion.worker
                 {
                     _logger.LogError("Exception raise running updating currencies: " + e.Message + "\nStacktrace:\n" + e.StackTrace);
                 }
-                await Task.Delay(300000, stoppingToken);
+                await Task.Delay(_interval, stoppingToken);
             }
         }
     }

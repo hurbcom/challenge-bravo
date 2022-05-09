@@ -6,7 +6,7 @@ services:
       - DB_CONNECTION_STRING=host=postgres_image;port=5432;database=currencyDB;username=admin;password=admin
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+
-      - REDIS_CONNECTION_STRING=localhost:6379
+      - COINBASEAPI_URL=https://api.coinbase.com/v2/exchange-rates?currency=USD
     ports:
       - "5000:80"
     volumes:
