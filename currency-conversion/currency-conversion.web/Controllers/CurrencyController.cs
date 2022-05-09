@@ -51,7 +51,7 @@ namespace currency_conversion.web.Controllers
             return Ok("Currency added");
         }
 
-        [HttpPost(Name = "insert")]
+        [HttpPost("{code}")]
         public async Task<IActionResult> InsertAsync([RegularExpression("^[0-9a-zA-Z]{3,10}$", ErrorMessage = "Field must contain only 0-9 a-z A-Z characters, 3 to 10 characters")] string code)
         {
             var currencyToAdd = await _currencyFetch.FetchCurrencyAsync(code);
