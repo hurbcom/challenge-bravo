@@ -168,7 +168,7 @@ Foi utilizado a ferramenta [Fortio](https://github.com/fortio/fortio) para teste
 - Tempo de resposta médio: 6,837 ms
 - Nenhum erro
 
-[Gráfico](currency-conversion/fortio_graph.png)
+![Gráfico](currency-conversion/fortio_graph.png)
 
 [Resultado completo](currency-conversion/fortio_results.pdf)
 
