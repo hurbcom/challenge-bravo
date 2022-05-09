@@ -50,44 +50,50 @@ A API possui os seguintes recursos: `/Currency` para operações de CRUD de moed
   - Exemplo: `curl -X 'GET' \
   'http://localhost:5000/Currency' \
   -H 'accept: */*'`
-    - Resposta: Código 200, Corpo da resposta: `[
-  {
-    "code": "BRL",
-    "rate": 5.078452
-  },
-  {
-    "code": "BTC",
-    "rate": 0.0000298664551325
-  },
-  {
-    "code": "ETH",
-    "rate": 0.0004095079557158
-  },
-  {
-    "code": "EUR",
-    "rate": 0.9512213682368161
-  },
-  {
-    "code": "JPY",
-    "rate": 131.17299999999935
-  },
-  {
-    "code": "USD",
-    "rate": 1
-  },
-  {
-    "code": "HURB",
-    "rate": 3
-  }
-]`
+    - Resposta: Código 200, Corpo da resposta: 
+```
+  [
+     {
+        "code": "BRL",
+        "rate": 5.078452
+      },
+      {
+        "code": "BTC",
+        "rate": 0.0000298664551325
+      },
+      {
+        "code": "ETH",
+        "rate": 0.0004095079557158
+      },
+      {
+        "code": "EUR",
+        "rate": 0.9512213682368161
+      },
+      {
+        "code": "JPY",
+        "rate": 131.17299999999935
+      },
+      {
+        "code": "USD",
+        "rate": 1
+      },
+      {
+        "code": "HURB",
+        "rate": 3
+      }
+]
+```
 - GET `/currency?code={code}` Retorna uma moeda com o código especificado no parâmetro de url
   - Exemplo: `curl -X 'GET' \
   'http://localhost:5000/Currency?code=HURB' \
   -H 'accept: */*'`
-    - Resposta: Código 200, Corpo da resposta: `{
-  "code": "HURB",
-  "rate": 2
-}`
+    - Resposta: Código 200, Corpo da resposta: 
+ ```
+{
+    "code": "HURB",
+    "rate": 2
+}
+```
 
 - POST `/currency/{code}` Adiciona uma moeda real com o código especificado. A cotação será definida pela aplicação, que por sua vez, busca na API externa de cotações. Só é permitido adição de moedas suportadas pelo CoinBase.
   - Exemplo: `curl -X 'POST' \
@@ -125,12 +131,12 @@ A API possui os seguintes recursos: `/Currency` para operações de CRUD de moed
     - Resposta: Código 200, Descrição: Currency deleted
 
 DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
-`
+```
 {
     code: string
     rate: number($double)
 }
-`
+```
 
 ## /Convert
 
@@ -139,7 +145,7 @@ DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
     Requisição: `curl -X 'GET' \ 'localhost:5000/convert?from=brl&to=usd&amount=500' \ -H 'accept: */*'`
     Resposta: Código 200, Corpo da resposta: 98.4445757038787
 
-## Resposta de erro:
+## Respostas de erro:
 
 - Http 400: Caso o código de uma nova moeda já exista na base.
 - Http 404: Quando a requisição tenta acessar uma moeda cujo código não existe na base
