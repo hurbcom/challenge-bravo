@@ -24,7 +24,7 @@ A aplicação como um todo foi desenvolvida para implantação em um container d
 
 Ao iniciar a aplicação:
 - A base de dados ficará disponível. Na primeira execução do container, o [script](currency-conversion/currency-conversion.infrastructure/assets/dbscripts/seed.sql) será executado, criando a estrutura da base. 
-- A tarefa em segundo plano será iniciada, já iniciando a primeira iteração de busca e atualização de moedas. Na primeira execução do container, essa rotina irá inserir todas as moedas obtidas pela API externa. O intervalo de tempo entre cada iteração é definido por variável de ambiente, por padrão: 5min.
+- A tarefa em segundo plano será iniciada, já iniciando a primeira iteração de busca e atualização de moedas. O intervalo de tempo entre cada iteração é definido por variável de ambiente, por padrão: 5min.
 - A API web ficará disponível para requisições na porta 5000.
 - Um gerenciador de conteúdo em base de dados [Adminer](https://www.adminer.org/) ficará disponível na porta 8080.
   - Para acessar é necessário realizar o login da base: `System: PostgreSQL; Server: postgres_image; Username: admin; Password: admin; Database: currencyDB.`
@@ -140,7 +140,7 @@ DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
 
 ## /Convert
 
-- GET `/convert?from={code}&to={code}&amount={value}`
+- GET `/convert?from={code}&to={code}&amount={value}` Realiza a conversão entre duas moedas, com o valor especificado.
   - Exemplo: 
     Requisição: `curl -X 'GET' \ 'localhost:5000/convert?from=brl&to=usd&amount=500' \ -H 'accept: */*'`
     Resposta: Código 200, Corpo da resposta: 98.4445757038787
@@ -152,7 +152,7 @@ DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
 - Http 500: Para erros internos não mapeados.
 
 
-Para mais detalhes, como parâmetros obrigatórios e validações, a documentação completa se encontra em [swagger.json](currency-conversion/currency-conversion.web/swagger.json).
+**Para mais detalhes, como parâmetros obrigatórios e validações, a documentação completa se encontra em [swagger.json](currency-conversion/currency-conversion.web/swagger.json).**
 
 # Teste de carga
 
@@ -168,7 +168,7 @@ Durante o período em que o número de usuário chegou ao máximo, o número de 
 
 # TODO
 - Melhorar sincronia de inicialização dos serviços no docker-compose. O recurso depends_on não é suficiente, pois a base de dados pode estar disponibilizada, mas ainda em processo de inicialização, o que levanta erros de conexão da api e do worker com a base de dados.
-- Criar projeto de testes com testes unitários e de integração.
-- Adicionar à aplicação um servidor de cache como [Redis](https://redis.io/) ou [Memcached](https://memcached.org/).
+- Criar projeto de testes com testes unitários e de integração para aumentar confiança no código e garantir qualidade do software.
+- Adicionar à aplicação um servidor de cache como [Redis](https://redis.io/) ou [Memcached](https://memcached.org/), para melhorar os tempos de resposta da API.
 - Aumentar diversidade de respostas de erros possiveis, para facilitar a tratativa dos usuários.
 - Implementar rota de HealthCheck para monitoramento do status da aplicação.
