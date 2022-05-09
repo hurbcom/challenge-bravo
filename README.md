@@ -1,82 +1,125 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+[[English](README.md) | [Português](README.pt.md)] 
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**. Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP. A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas. Mais detalhes em [challenge-bravo](https://github.com/hurbcom/challenge-bravo)
 
-The API must convert between the following currencies:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+# Currency-Conversion
+Foi desenvolvido uma aplicação para conversão monetária de moedas reais (incluindo criptomoedas) e fictícias, de acordo com os requisitos do desafio. A aplicação consiste de:
+  - API Web - Feito em [ASP.NET Core 6.0](https://dotnet.microsoft.com/en-us/apps/aspnet), expões rotas para conversão e operações de CRUD de moedas.
+  - Base de dados - Foi utilizado o sistema de banco de dados [PostgreSQL](https://www.postgresql.org/) para persistência das informações de moedas.
+  - Tarefa de segundo plano - Feito em [.NET 6.0](https://docs.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6). Progama em execução permanente, com uma rotina intermitente de alimentação de cotações reais na base de dados. O provedor desses dados foi uma API do [CoinBase](https://developers.coinbase.com/api/v2#exchange-rates).
 
-Other coins could be added as usage.
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+# Execução
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+**Requisitos**:
+- Docker
+  
+A aplicação como um todo foi desenvolvida para implantação em um container docker. Todos os serviços do container estão definidos no arquivo [docker-compose.yml](currency-conversion/docker-compose.yml).
+1. Para build da imagem, execute `docker-compose build`. 
+2. Para iniciar aplicação, execute `docker-compose up`
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Ao iniciar a aplicação:
+- A base de dados ficará disponível. Na primeira execução do container, o [script](currency-conversion/currency-conversion.infrastructure/assets/dbscripts/seed.sql) será executado, criando a estrutura da base. 
+- A tarefa em segundo plano será iniciada, já iniciando a primeira iteração de busca e atualização de moedas. Na primeira execução do container, essa rotina irá inserir todas as moedas obtidas pela API externa.
+- A API web ficará disponível para requisições na porta 5000.
+- Um gerenciador de conteúdo em base de dados [Adminer](https://www.adminer.org/) ficará disponível na porta 8080.
+  - Para acessar é necessário realizar o login da base: System: PostgreSQL; Server: postgres_image; Username: admin; Password: admin; Database: currencyDB.
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+## Variáveis de ambiente
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+As seguintes variáveis de ambiente são utilizadas pelos serviços do container:
+- **DB_CONNECTION_STRING** : Connection string da base de dados
+- **POSTGRES_USER** : Usuário para acesso à base de dados.
+- **POSTGRES_PASSWORD** : Senha para acesso à base de dados.
+- **POSTGRES_DB** : Nome da base de dados
+- **COINBASEAPI_URL** : Url da API de cotações do CoinBase.
+- **COINBASEAPI_FETCH_INTERVAL_MS** : Intervalo de tempo (em ms) para busca e atualização de moedas.
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+# Utilização da API
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+A API possui os seguintes recursos: `/Currency` para operações de CRUD de moeda e `/Convert` para conversão de moedas. Todas as rotas seguem a convenção REST e os retornos são em JSON. A API Web também disponibiliza o recurso `/Swagger` para documentação da API de acordo com a especificação [OpenAPI](https://www.openapis.org/) gerado pelo [Swagger](https://swagger.io/)
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+## /Currency
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+- GET `/currency` Retorna todas as moedas disponíveis.
+  - Exemplo: `curl -X 'GET' \
+  'http://localhost:5000/Currency' \
+  -H 'accept: */*'`
+    - Resposta: Código 200, Corpo da resposta: `[
+  {
+    "code": "FORTH",
+    "rate": 0.2247191011235955
+  },
+  {
+    "code": "FOX",
+    "rate": 4.4732721986132855
+  },
+  {
+    "code": "FX",
+    "rate": 2.7037988373665
+  },
+  {
+    "code": "GAL",
+    "rate": 0.1007658202337767
+  },...`
+- GET `/currency?code={code}` Retorna uma moeda com o código especificado no parâmetro de url
+  - Exemplo: `curl -X 'GET' \
+  'http://localhost:5000/Currency?code=HURB' \
+  -H 'accept: */*'`
+    - Resposta: Código 200, Corpo da resposta: `{
+  "code": "HURB",
+  "rate": 2
+}`
+- POST `/currency` Registra uma nova moeda a partir do código e cotação no corpo da requisição
+  - Exemplo: `curl -X 'POST' \
+  'http://localhost:5000/Currency' \
+  -H 'accept: /' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "code": "HURB",
+  "rate": 2
+}'`
+    - Resposta: Código 200, Descrição: Currency added
+- PUT `/currency` Atualiza o cotação de uma moeda a partir do código e cotação no corpo da requisição
+  - Exemplo: `curl -X 'PUT' \
+  'http://localhost:5000/Currency' \
+  -H 'accept: /' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "code": "HURB",
+  "rate": 4.5
+}'`
+      - Resposta: Código 200, Descrição: Currency updated
+- DELETE `/currency?code={code}` Remove uma moeda a partir do código especificado no parâmetro de url
+  - Exemplo: `curl -X 'DELETE' \
+  'http://localhost:5000/Currency?code=HURB' \
+  -H 'accept: */*'`
+    - Resposta: Código 200, Descrição: Currency deleted
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
+`
+{
+    code: string
+    rate: number($double)
+}
+`
 
-## Requirements
+## /Convert
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+- GET `/convert?from={code}&to={code}&amount={value}`
+  - Exemplo: 
+    Requisição: `curl -X 'GET' \ 'localhost:5000/convert?from=brl&to=usd&amount=500' \ -H 'accept: */*'`
+    Resposta: Código 200, Corpo da resposta: 2539.2
 
-## Evaluation criteria
+## Resposta de erro:
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+- Http 400: Caso o código de uma nova moeda já exista na base.
+- Http 404: Quando a requisição tenta acessar uma moeda cujo código não existe na base
+- Http 500: Para erros internos não mapeados.
 
-## Doubts
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
-
-Godspeed! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Para mais detalhes, como parâmetros obrigatórios e validações, a documentação completa se encontra em [swagger.json](currency-conversion/currency-conversion.web/swagger.json).
