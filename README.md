@@ -167,5 +167,8 @@ Durante o período em que o número de usuário chegou ao máximo, o número de 
 
 
 # TODO
-- Adicionar à aplicação um servidor de cache como [Redis](https://redis.io/) ou [Memcached](https://memcached.org/)
-- 
+- Melhorar sincronia de inicialização dos serviços no docker-compose. O recurso depends_on não é suficiente, pois a base de dados pode estar disponibilizada, mas ainda em processo de inicialização, o que levanta erros de conexão da api e do worker com a base de dados.
+- Criar projeto de testes com testes unitários e de integração.
+- Adicionar à aplicação um servidor de cache como [Redis](https://redis.io/) ou [Memcached](https://memcached.org/).
+- Aumentar diversidade de respostas de erros possiveis, para facilitar a tratativa dos usuários.
+- Implementar rota de HealthCheck para monitoramento do status da aplicação.
