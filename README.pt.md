@@ -25,7 +25,8 @@ Ao iniciar a aplicação:
 - A base de dados ficará disponível. Na primeira execução do container, o [script](currency-conversion/currency-conversion.infrastructure/assets/dbscripts/seed.sql) será executado, criando a estrutura da base. 
 - A tarefa em segundo plano será iniciada, já iniciando a primeira iteração de busca e atualização de moedas. Na primeira execução do container, essa rotina irá inserir todas as moedas obtidas pela API externa.
 - A API web ficará disponível para requisições na porta 5000.
-- Um gerenciador de conteúdo em base de dados [Adminer](https://www.adminer.org/) ficará disponível na porta 8080
+- Um gerenciador de conteúdo em base de dados [Adminer](https://www.adminer.org/) ficará disponível na porta 8080.
+  - Para acessar é necessário realizar o login da base: System: PostgreSQL; Server: postgres_image; Username: admin; Password: admin; Database: currencyDB.
 
 
 ## Variáveis de ambiente
@@ -45,10 +46,59 @@ A API possui os seguintes recursos: `/Currency` para operações de CRUD de moed
 ## /Currency
 
 - GET `/currency` Retorna todas as moedas disponíveis.
+  - Exemplo: `curl -X 'GET' \
+  'http://localhost:5000/Currency' \
+  -H 'accept: */*'`
+    - Resposta: Código 200, Corpo da resposta: `[
+  {
+    "code": "FORTH",
+    "rate": 0.2247191011235955
+  },
+  {
+    "code": "FOX",
+    "rate": 4.4732721986132855
+  },
+  {
+    "code": "FX",
+    "rate": 2.7037988373665
+  },
+  {
+    "code": "GAL",
+    "rate": 0.1007658202337767
+  },...`
 - GET `/currency?code={code}` Retorna uma moeda com o código especificado no parâmetro de url
+  - Exemplo: `curl -X 'GET' \
+  'http://localhost:5000/Currency?code=HURB' \
+  -H 'accept: */*'`
+    - Resposta: Código 200, Corpo da resposta: `{
+  "code": "HURB",
+  "rate": 2
+}`
 - POST `/currency` Registra uma nova moeda a partir do código e cotação no corpo da requisição
+  - Exemplo: `curl -X 'POST' \
+  'http://localhost:5000/Currency' \
+  -H 'accept: /' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "code": "HURB",
+  "rate": 2
+}'`
+    - Resposta: Código 200, Descrição: Currency added
 - PUT `/currency` Atualiza o cotação de uma moeda a partir do código e cotação no corpo da requisição
+  - Exemplo: `curl -X 'PUT' \
+  'http://localhost:5000/Currency' \
+  -H 'accept: /' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "code": "HURB",
+  "rate": 4.5
+}'`
+      - Resposta: Código 200, Descrição: Currency updated
 - DELETE `/currency?code={code}` Remove uma moeda a partir do código especificado no parâmetro de url
+  - Exemplo: `curl -X 'DELETE' \
+  'http://localhost:5000/Currency?code=HURB' \
+  -H 'accept: */*'`
+    - Resposta: Código 200, Descrição: Currency deleted
 
 DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
 `
@@ -57,3 +107,19 @@ DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
     rate: number($double)
 }
 `
+
+## /Convert
+
+- GET `/convert?from={code}&to={code}&amount={value}`
+  - Exemplo: 
+    Requisição: `curl -X 'GET' \ 'localhost:5000/convert?from=brl&to=usd&amount=500' \ -H 'accept: */*'`
+    Resposta: Código 200, Corpo da resposta: 2539.2
+
+## Resposta de erro:
+
+- Http 400: Caso o código de uma nova moeda já exista na base.
+- Http 404: Quando a requisição tenta acessar uma moeda cujo código não existe na base
+- Http 500: Para erros internos não mapeados.
+
+
+Para mais detalhes, como parâmetros obrigatórios e validações, a documentação completa se encontra em [swagger.json](currency-conversion/currency-conversion.web/swagger.json).
