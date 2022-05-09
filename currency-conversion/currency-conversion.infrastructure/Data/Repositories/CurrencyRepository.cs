@@ -54,7 +54,7 @@ namespace currency_conversion.infrastructure.Data.Repositories
 
         public bool Update(Currency currency)
         {
-            var currencyFound = _dbContext.Currency.AsNoTracking().SingleOrDefault(c => c.Code == currency.Code);
+            var currencyFound = _dbContext.Currency.AsNoTracking().SingleOrDefault(c => c.Code == currency.Code && c.Custom == true);
             if (currencyFound != null)
             {
                 var currencyUpdated = _dbContext.Currency.Update(currency);
