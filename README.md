@@ -138,7 +138,7 @@ DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
 - GET `/convert?from={code}&to={code}&amount={value}`
   - Exemplo: 
     Requisição: `curl -X 'GET' \ 'localhost:5000/convert?from=brl&to=usd&amount=500' \ -H 'accept: */*'`
-    Resposta: Código 200, Corpo da resposta: 2539.2
+    Resposta: Código 200, Corpo da resposta: 98.4445757038787
 
 ## Resposta de erro:
 
