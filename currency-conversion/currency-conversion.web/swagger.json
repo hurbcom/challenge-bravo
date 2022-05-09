@@ -73,7 +73,7 @@
         "tags": [
           "Currency"
         ],
-        "operationId": "insert",
+        "operationId": "insert_custom",
         "requestBody": {
           "content": {
             "application/json": {
@@ -103,7 +103,7 @@
         "tags": [
           "Currency"
         ],
-        "operationId": "update",
+        "operationId": "update_custom",
         "requestBody": {
           "content": {
             "application/json": {
@@ -139,6 +139,30 @@
             "name": "code",
             "in": "query",
             "schema": {
+              "pattern": "^[0-9a-zA-Z]{3,10}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Currency/{code}": {
+      "post": {
+        "tags": [
+          "Currency"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^[0-9a-zA-Z]{3,10}$",
               "type": "string"
             }
           }
