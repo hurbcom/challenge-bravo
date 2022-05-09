@@ -156,14 +156,21 @@ DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
 
 # Teste de carga
 
-Foi utilizado a ferramenta [Locust](https://locust.io/) para teste de carga na aplicação. Utilizei o [script](currency-conversion/locustfile.py) para a execução do teste, com uma simulação de 10000 usuários simultâneos.
+Foi utilizado a ferramenta [Fortio](https://github.com/fortio/fortio) para teste de carga na aplicação. Utilizei a requisição `http://127.0.0.1:5000/Currency?code=BTC` para a execução do teste, com as seguintes configurações:
+- Transações por segundo desejadas: 3000
+- Número de threads: 8
+- Duração do teste: 20s
 
 ### Resultado
 
-Número de requisições por segundo pelo tempo:
-![total_requests_per_second_1652095293](https://user-images.githubusercontent.com/83890396/167405670-b7229487-0e99-44e0-9680-114925cee935.png)
+- Quantidade de requisições feitas: 23300
+- **Requisições por segundo**: 1163
+- Tempo de resposta médio: 6,837 ms
+- Nenhum erro
 
-Durante o período em que o número de usuário chegou ao máximo, o número de requisições por segundo oscilou por volta de 500 RPS, com um pico de 628.7 RPS. Não houve falha em nenhuma requisição. Outras informações sobre o teste se encontram [aqui](currency-conversion/locust-results)
+[Gráfico](currency-conversion/fortio_graph.png)
+
+[Resultado completo](currency-conversion/fortio_results.pdf)
 
 
 # TODO
