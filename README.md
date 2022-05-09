@@ -26,7 +26,7 @@ Ao iniciar a aplicação:
 - A tarefa em segundo plano será iniciada, já iniciando a primeira iteração de busca e atualização de moedas. Na primeira execução do container, essa rotina irá inserir todas as moedas obtidas pela API externa.
 - A API web ficará disponível para requisições na porta 5000.
 - Um gerenciador de conteúdo em base de dados [Adminer](https://www.adminer.org/) ficará disponível na porta 8080.
-  - Para acessar é necessário realizar o login da base: System: PostgreSQL; Server: postgres_image; Username: admin; Password: admin; Database: currencyDB.
+  - Para acessar é necessário realizar o login da base: `System: PostgreSQL; Server: postgres_image; Username: admin; Password: admin; Database: currencyDB.`
 
 
 ## Variáveis de ambiente
