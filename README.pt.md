@@ -5,7 +5,7 @@
 Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**. Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP. A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas. Mais detalhes em [challenge-bravo](https://github.com/hurbcom/challenge-bravo)
 
 
-## Currency-Conversion
+# Currency-Conversion
 Foi desenvolvido uma aplicação para conversão monetária de moedas reais (incluindo criptomoedas) e fictícias, de acordo com os requisitos do desafio. A aplicação consiste de:
   - API Web - Feito em [ASP.NET Core 6.0](https://dotnet.microsoft.com/en-us/apps/aspnet), expões rotas para conversão e operações de CRUD de moedas.
   - Base de dados - Foi utilizado o sistema de banco de dados [PostgreSQL](https://www.postgresql.org/) para persistência das informações de moedas.
@@ -21,3 +21,39 @@ A aplicação como um todo foi desenvolvida para implantação em um container d
 1. Para build da imagem, execute `docker-compose build`. 
 2. Para iniciar aplicação, execute `docker-compose up`
 
+Ao iniciar a aplicação:
+- A base de dados ficará disponível. Na primeira execução do container, o [script](currency-conversion/currency-conversion.infrastructure/assets/dbscripts/seed.sql) será executado, criando a estrutura da base. 
+- A tarefa em segundo plano será iniciada, já iniciando a primeira iteração de busca e atualização de moedas. Na primeira execução do container, essa rotina irá inserir todas as moedas obtidas pela API externa.
+- A API web ficará disponível para requisições na porta 5000.
+- Um gerenciador de conteúdo em base de dados [Adminer](https://www.adminer.org/) ficará disponível na porta 8080
+
+
+## Variáveis de ambiente
+
+As seguintes variáveis de ambiente são utilizadas pelos serviços do container:
+- **DB_CONNECTION_STRING** : Connection string da base de dados
+- **POSTGRES_USER** : Usuário para acesso à base de dados.
+- **POSTGRES_PASSWORD** : Senha para acesso à base de dados.
+- **POSTGRES_DB** : Nome da base de dados
+- **COINBASEAPI_URL** : Url da API de cotações do CoinBase.
+- **COINBASEAPI_FETCH_INTERVAL_MS** : Intervalo de tempo (em ms) para busca e atualização de moedas.
+
+# Utilização da API
+
+A API possui os seguintes recursos: `/Currency` para operações de CRUD de moeda e `/Convert` para conversão de moedas. Todas as rotas seguem a convenção REST e os retornos são em JSON. A API Web também disponibiliza o recurso `/Swagger` para documentação da API de acordo com a especificação [OpenAPI](https://www.openapis.org/) gerado pelo [Swagger](https://swagger.io/)
+
+## /Currency
+
+- GET `/currency` Retorna todas as moedas disponíveis.
+- GET `/currency?code={code}` Retorna uma moeda com o código especificado no parâmetro de url
+- POST `/currency` Registra uma nova moeda a partir do código e cotação no corpo da requisição
+- PUT `/currency` Atualiza o cotação de uma moeda a partir do código e cotação no corpo da requisição
+- DELETE `/currency?code={code}` Remove uma moeda a partir do código especificado no parâmetro de url
+
+DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
+`
+{
+    code: string
+    rate: number($double)
+}
+`
