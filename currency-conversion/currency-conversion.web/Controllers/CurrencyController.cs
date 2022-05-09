@@ -1,5 +1,6 @@
 using AutoMapper;
 using currency_conversion.Core.Interfaces.Repositories;
+using currency_conversion.Core.Interfaces.Services;
 using currency_conversion.Core.Models;
 using currency_conversion.web.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +14,15 @@ namespace currency_conversion.web.Controllers
     {
         private readonly ILogger<CurrencyController> _logger;
         private readonly IMapper _mapper;
-        private readonly ICurrencyRepository _currencyRepository;     
+        private readonly ICurrencyRepository _currencyRepository;
+        private readonly ICurrencyFetch _currencyFetch;
 
-        public CurrencyController(ILogger<CurrencyController> logger, IMapper mapper, ICurrencyRepository currencyRepository)
+        public CurrencyController(ILogger<CurrencyController> logger, IMapper mapper, ICurrencyRepository currencyRepository, ICurrencyFetch currencyFetch)
         {
             _logger = logger;
             _mapper = mapper;
             _currencyRepository = currencyRepository;
+            _currencyFetch = currencyFetch;
         }
 
         [HttpGet(Name = "get")]
@@ -35,8 +38,8 @@ namespace currency_conversion.web.Controllers
             return Ok(_mappedOutputCurrency);
         }
 
-        [HttpPost(Name = "insert")]
-        public IActionResult Insert([FromBody] CurrencyDTO currencyDTO)
+        [HttpPost(Name = "insert_custom")]
+        public IActionResult InsertCustom([FromBody] CurrencyDTO currencyDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -48,8 +51,18 @@ namespace currency_conversion.web.Controllers
             return Ok("Currency added");
         }
 
-        [HttpPut(Name = "update")]
-        public IActionResult Update([FromBody]CurrencyDTO currencyDTO)
+        [HttpPost(Name = "insert")]
+        public async Task<IActionResult> InsertAsync([RegularExpression("^[0-9a-zA-Z]{3,10}$", ErrorMessage = "Field must contain only 0-9 a-z A-Z characters, 3 to 10 characters")] string code)
+        {
+            var currencyToAdd = await _currencyFetch.FetchCurrencyAsync(code);
+            if (currencyToAdd == null) return BadRequest("Currency not supported");
+            var created = _currencyRepository.Create(currencyToAdd);
+            if (!created) return BadRequest("Currency could not be added: Code already exists");
+            return Ok("Currency added");
+        }
+
+        [HttpPut(Name = "update_custom")]
+        public IActionResult UpdateCustom([FromBody]CurrencyDTO currencyDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -61,8 +74,8 @@ namespace currency_conversion.web.Controllers
             return Ok("Currency updated");
         }
 
-        [HttpDelete(Name = "delete")]
-        public IActionResult Delete([RegularExpression("^[0-9a-zA-Z]{3,10}$", ErrorMessage = "Field must contain only 0-9 a-z A-Z characters, 3 to 10 characters")]string code)
+        [HttpDelete(Name = "delete_custom")]
+        public IActionResult DeleteCustom([RegularExpression("^[0-9a-zA-Z]{3,10}$", ErrorMessage = "Field must contain only 0-9 a-z A-Z characters, 3 to 10 characters")]string code)
         {
             var deleted = _currencyRepository.Delete(code);
             if (!deleted) return NotFound("Currency not found: " + code);

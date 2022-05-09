@@ -46,6 +46,12 @@ namespace currency_conversion.infrastructure
             _currencyRepository.UpdateMany(currenciesToUpdate);
         }
 
+        public async Task<Currency?> FetchCurrencyAsync(string code)
+        {
+            var currencies = await FetchCurrenciesAsync();
+            return currencies?.SingleOrDefault(c => c.Code == code);
+        }
+
         private async Task<IEnumerable<Currency>?> FetchCurrenciesAsync()
         {
             _logger.LogInformation("Fetching currencies at " + _apiUrl);
@@ -64,7 +70,8 @@ namespace currency_conversion.infrastructure
                     return currencies?.Data?.Rates?.Select(c => new Currency
                     {
                         Code = c.Key,
-                        Rate = double.Parse(c.Value)
+                        Rate = double.Parse(c.Value),
+                        Custom = false
                     });
                 }
             }

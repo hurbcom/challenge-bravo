@@ -1,6 +1,7 @@
 using currency_conversion.Core.Interfaces.Repositories;
 using currency_conversion.Core.Interfaces.Services;
 using currency_conversion.Core.Services;
+using currency_conversion.infrastructure;
 using currency_conversion.infrastructure.Data;
 using currency_conversion.infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ builder.Services.AddStackExchangeRedisCache(options => { options.Configuration =
 
 builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddTransient<IConvertService, ConvertService>();
+builder.Services.AddTransient<ICurrencyFetch, CurrencyFetch>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
