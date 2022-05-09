@@ -96,7 +96,8 @@ A API possui os seguintes recursos: `/Currency` para operações de CRUD de moed
   -d ''` 
     - Resposta: Código 200, Descrição: Currency added
 - POST `/currency` Adiciona uma nova moeda fictícia a partir do código e cotação no corpo da requisição. É possível utilizar o código de uma moeda real, mas ela será tratada como uma moeda fictícia, não recebendo atualizações de cotação.
-  - Exemplo: `curl -X 'POST' \
+  - Exemplo: 
+  `curl -X 'POST' \
   'http://localhost:5000/Currency' \
   -H 'accept: /' \
   -H 'Content-Type: application/json' \
@@ -146,3 +147,19 @@ DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
 
 
 Para mais detalhes, como parâmetros obrigatórios e validações, a documentação completa se encontra em [swagger.json](currency-conversion/currency-conversion.web/swagger.json).
+
+# Teste de carga
+
+Foi utilizado a ferramenta [Locust](https://locust.io/) para teste de carga na aplicação. Utilizei o [script](currency-conversion/locustfile.py) para a execução do teste, com uma simulação de 10000 usuários simultâneos.
+
+### Resultado
+
+Número de requisições por segundo pelo tempo:
+![total_requests_per_second_1652095293](https://user-images.githubusercontent.com/83890396/167405670-b7229487-0e99-44e0-9680-114925cee935.png)
+
+Durante o período em que o número de usuário chegou ao máximo, o número de requisições por segundo oscilou por volta de 500 RPS, com um pico de 628.7 RPS. Não houve falha em nenhuma requisição. Outras informações sobre o teste se encontram [aqui](currency-conversion/locust-results)
+
+
+# TODO
+- Adicionar à aplicação um servidor de cache como [Redis](https://redis.io/) ou [Memcached](https://memcached.org/)
+- 
