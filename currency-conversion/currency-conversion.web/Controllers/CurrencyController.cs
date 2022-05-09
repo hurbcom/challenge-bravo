@@ -3,6 +3,7 @@ using currency_conversion.Core.Interfaces.Repositories;
 using currency_conversion.Core.Models;
 using currency_conversion.web.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace currency_conversion.web.Controllers
 {
@@ -61,7 +62,7 @@ namespace currency_conversion.web.Controllers
         }
 
         [HttpDelete(Name = "delete")]
-        public IActionResult Delete(string code)
+        public IActionResult Delete([RegularExpression("^[0-9a-zA-Z]{3,10}$", ErrorMessage = "Field must contain only 0-9 a-z A-Z characters, 3 to 10 characters")]string code)
         {
             var deleted = _currencyRepository.Delete(code);
             if (!deleted) return NotFound("Currency not found: " + code);

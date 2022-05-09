@@ -19,7 +19,7 @@ namespace currency_conversion.web.Profiles
                 )
                 .ForMember(
                     dest => dest.Custom,
-                    opt => opt.Ignore()
+                    opt => opt.MapFrom(src => true)
                 )
                 .ForMember(
                     dest => dest.CreatedAt,
