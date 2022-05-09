@@ -35,7 +35,7 @@ namespace currency_conversion.web.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            return Ok();
+            return Ok(value);
         }
     }
 }
