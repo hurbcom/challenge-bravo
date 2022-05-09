@@ -24,11 +24,13 @@ A aplicação como um todo foi desenvolvida para implantação em um container d
 
 Ao iniciar a aplicação:
 - A base de dados ficará disponível. Na primeira execução do container, o [script](currency-conversion/currency-conversion.infrastructure/assets/dbscripts/seed.sql) será executado, criando a estrutura da base. 
-- A tarefa em segundo plano será iniciada, já iniciando a primeira iteração de busca e atualização de moedas. O intervalo de tempo entre cada iteração é definido por variável de ambiente, por padrão: 5min.
+- A tarefa em segundo plano será iniciada, e após um delay de 30s, será feito a primeira iteração de busca e atualização de moedas. O intervalo de tempo entre cada iteração é definido por variável de ambiente, por padrão: 5min.
 - A API web ficará disponível para requisições na porta 5000.
 - Um gerenciador de conteúdo em base de dados [Adminer](https://www.adminer.org/) ficará disponível na porta 8080.
   - Para acessar é necessário realizar o login da base: `System: PostgreSQL; Server: postgres_image; Username: admin; Password: admin; Database: currencyDB.`
 
+### Resolução de problemas
+Os serviços da API e do Worker podem levantar problemas durante a inicialização caso a base de dados não esteja pronta. Para esse caso, suspenda a execução do container e tente executar o comando `docker-compose up` novamente.
 
 ## Variáveis de ambiente
 
