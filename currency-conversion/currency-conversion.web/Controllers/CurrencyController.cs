@@ -4,6 +4,7 @@ using currency_conversion.Core.Interfaces.Services;
 using currency_conversion.Core.Models;
 using currency_conversion.web.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System.ComponentModel.DataAnnotations;
 
 namespace currency_conversion.web.Controllers
@@ -16,13 +17,15 @@ namespace currency_conversion.web.Controllers
         private readonly IMapper _mapper;
         private readonly ICurrencyRepository _currencyRepository;
         private readonly ICurrencyFetch _currencyFetch;
+        private readonly IMemoryCache _memoryCache;
 
-        public CurrencyController(ILogger<CurrencyController> logger, IMapper mapper, ICurrencyRepository currencyRepository, ICurrencyFetch currencyFetch)
+        public CurrencyController(ILogger<CurrencyController> logger, IMapper mapper, ICurrencyRepository currencyRepository, ICurrencyFetch currencyFetch, IMemoryCache memoryCache)
         {
             _logger = logger;
             _mapper = mapper;
             _currencyRepository = currencyRepository;
             _currencyFetch = currencyFetch;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet(Name = "get")]
@@ -32,9 +35,16 @@ namespace currency_conversion.web.Controllers
             {
                 return Ok(_mapper.Map<IEnumerable<CurrencyDTO>>(_currencyRepository.ReadAll()));
             }
-            var currency = _currencyRepository.Read(code);
-            if (currency == null) return NotFound("Currency not found: " + code);
-            var _mappedOutputCurrency = _mapper.Map<CurrencyDTO>(currency);
+            Currency cachedCurrency;
+            if (!_memoryCache.TryGetValue<Currency>(code, out cachedCurrency))
+            {
+                var currency = _currencyRepository.Read(code);
+                if (currency == null) return NotFound("Currency not found: " + code);
+                var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(3));
+                _memoryCache.Set<Currency>(code, currency,cacheEntryOptions);
+                cachedCurrency = currency;
+            }
+            var _mappedOutputCurrency = _mapper.Map<CurrencyDTO>(cachedCurrency);
             return Ok(_mappedOutputCurrency);
         }
 
