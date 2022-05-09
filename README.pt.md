@@ -11,6 +11,9 @@ Foi desenvolvido uma aplicação para conversão monetária de moedas reais (inc
   - Base de dados - Foi utilizado o sistema de banco de dados [PostgreSQL](https://www.postgresql.org/) para persistência das informações de moedas.
   - Tarefa de segundo plano - Feito em [.NET 6.0](https://docs.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6). Progama em execução permanente, com uma rotina intermitente de alimentação de cotações reais na base de dados. O provedor desses dados foi uma API do [CoinBase](https://developers.coinbase.com/api/v2#exchange-rates).
 
+## Especificações
+Inicialmente, a aplicação suporta a conversão das seguintes moedas: **USD**;**BRL**;**EUR**;**BTC** e **ETH**. Moedas fictícias podem ser criadas e editadas com cotações arbitrárias. Moedas reais são adicionadas e removidas apenas pelo código: a aplicação busca a cotação atualizada da mesma. Ambos os tipos de moedas podem ser removidas.
+
 
 # Execução
 
@@ -23,7 +26,7 @@ A aplicação como um todo foi desenvolvida para implantação em um container d
 
 Ao iniciar a aplicação:
 - A base de dados ficará disponível. Na primeira execução do container, o [script](currency-conversion/currency-conversion.infrastructure/assets/dbscripts/seed.sql) será executado, criando a estrutura da base. 
-- A tarefa em segundo plano será iniciada, já iniciando a primeira iteração de busca e atualização de moedas. Na primeira execução do container, essa rotina irá inserir todas as moedas obtidas pela API externa.
+- A tarefa em segundo plano será iniciada, já iniciando a primeira iteração de busca e atualização de moedas. Na primeira execução do container, essa rotina irá inserir todas as moedas obtidas pela API externa. O intervalo de tempo entre cada iteração é definido por variável de ambiente, por padrão: 5min.
 - A API web ficará disponível para requisições na porta 5000.
 - Um gerenciador de conteúdo em base de dados [Adminer](https://www.adminer.org/) ficará disponível na porta 8080.
   - Para acessar é necessário realizar o login da base: `System: PostgreSQL; Server: postgres_image; Username: admin; Password: admin; Database: currencyDB.`
@@ -51,21 +54,34 @@ A API possui os seguintes recursos: `/Currency` para operações de CRUD de moed
   -H 'accept: */*'`
     - Resposta: Código 200, Corpo da resposta: `[
   {
-    "code": "FORTH",
-    "rate": 0.2247191011235955
+    "code": "BRL",
+    "rate": 5.078452
   },
   {
-    "code": "FOX",
-    "rate": 4.4732721986132855
+    "code": "BTC",
+    "rate": 0.0000298664551325
   },
   {
-    "code": "FX",
-    "rate": 2.7037988373665
+    "code": "ETH",
+    "rate": 0.0004095079557158
   },
   {
-    "code": "GAL",
-    "rate": 0.1007658202337767
-  },...`
+    "code": "EUR",
+    "rate": 0.9512213682368161
+  },
+  {
+    "code": "JPY",
+    "rate": 131.17299999999935
+  },
+  {
+    "code": "USD",
+    "rate": 1
+  },
+  {
+    "code": "HURB",
+    "rate": 3
+  }
+]`
 - GET `/currency?code={code}` Retorna uma moeda com o código especificado no parâmetro de url
   - Exemplo: `curl -X 'GET' \
   'http://localhost:5000/Currency?code=HURB' \
@@ -74,7 +90,14 @@ A API possui os seguintes recursos: `/Currency` para operações de CRUD de moed
   "code": "HURB",
   "rate": 2
 }`
-- POST `/currency` Registra uma nova moeda a partir do código e cotação no corpo da requisição
+
+- POST `/currency/{code}` Adiciona uma moeda real com o código especificado. A cotação será definida pela aplicação, que por sua vez, busca na API externa de cotações. Só é permitido adição de moedas suportadas pelo CoinBase.
+  - Exemplo: `curl -X 'POST' \
+  'http://localhost:5000/Currency/JPY' \
+  -H 'accept: */*' \
+  -d ''` 
+    - Resposta: Código 200, Descrição: Currency added
+- POST `/currency` Adiciona uma nova moeda fictícia a partir do código e cotação no corpo da requisição. É possível utilizar o código de uma moeda real, mas ela será tratada como uma moeda fictícia, não recebendo atualizações de cotação.
   - Exemplo: `curl -X 'POST' \
   'http://localhost:5000/Currency' \
   -H 'accept: /' \
@@ -84,7 +107,8 @@ A API possui os seguintes recursos: `/Currency` para operações de CRUD de moed
   "rate": 2
 }'`
     - Resposta: Código 200, Descrição: Currency added
-- PUT `/currency` Atualiza o cotação de uma moeda a partir do código e cotação no corpo da requisição
+    
+- PUT `/currency` Atualiza a cotação de uma moeda fictícia a partir do código e cotação no corpo da requisição.
   - Exemplo: `curl -X 'PUT' \
   'http://localhost:5000/Currency' \
   -H 'accept: /' \
@@ -94,6 +118,7 @@ A API possui os seguintes recursos: `/Currency` para operações de CRUD de moed
   "rate": 4.5
 }'`
       - Resposta: Código 200, Descrição: Currency updated
+      
 - DELETE `/currency?code={code}` Remove uma moeda a partir do código especificado no parâmetro de url
   - Exemplo: `curl -X 'DELETE' \
   'http://localhost:5000/Currency?code=HURB' \
@@ -113,7 +138,7 @@ DTO utilizado no corpo da requisição para as rotas de métodos POST e PUT
 - GET `/convert?from={code}&to={code}&amount={value}`
   - Exemplo: 
     Requisição: `curl -X 'GET' \ 'localhost:5000/convert?from=brl&to=usd&amount=500' \ -H 'accept: */*'`
-    Resposta: Código 200, Corpo da resposta: 2539.2
+    Resposta: Código 200, Corpo da resposta: 98.4445757038787
 
 ## Resposta de erro:
 
