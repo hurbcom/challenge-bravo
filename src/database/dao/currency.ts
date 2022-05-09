@@ -10,4 +10,9 @@ export class CurrencyDao {
     const newCurrency = new Currency(currency);
     await newCurrency.save();
   }
+
+  public async update(filter: any, update: any) {
+    const updatedCurrency = await Currency.updateOne(filter, { $set: update });
+    return updatedCurrency;
+  }
 }
