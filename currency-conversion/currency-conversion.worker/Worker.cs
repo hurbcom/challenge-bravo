@@ -24,6 +24,7 @@ namespace currency_conversion.worker
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                await Task.Delay(30000, stoppingToken);
                 try
                 {
                     await _currencyFetch.UpdateCurrenciesAsync();
