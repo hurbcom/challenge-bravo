@@ -10,7 +10,9 @@ namespace currency_conversion.Core.Models
         [Column("code")]
         public string Code { get; set; }
         [Column("rate")]
-        public double Rate { get; set; }
+        public double? Rate { get; set; }
+        [Column("custom")]
+        public bool Custom { get; set; }
 
     }
 }

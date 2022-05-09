@@ -56,7 +56,7 @@ namespace currency_conversion.web.Controllers
             }
             var _mappedInputCurrency = _mapper.Map<Currency>(currencyDTO);
             var updated = _currencyRepository.Update(_mappedInputCurrency);
-            if (!updated) return BadRequest("Currency not found: " + currencyDTO.Code);
+            if (!updated) return NotFound("Currency not found: " + currencyDTO.Code);
             return Ok("Currency updated");
         }
 
@@ -64,7 +64,7 @@ namespace currency_conversion.web.Controllers
         public IActionResult Delete(string code)
         {
             var deleted = _currencyRepository.Delete(code);
-            if (!deleted) return BadRequest("Currency not found: " + code);
+            if (!deleted) return NotFound("Currency not found: " + code);
             return Ok("Currency deleted");
         }
     }

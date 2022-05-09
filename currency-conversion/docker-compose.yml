@@ -9,6 +9,8 @@ services:
     build:
       context: .
       dockerfile: currency-conversion.web/Dockerfile
+    depends_on:
+      - postgres_image
 
   postgres_image:
     image: postgres

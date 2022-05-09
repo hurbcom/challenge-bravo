@@ -31,23 +31,19 @@ namespace currency_conversion.infrastructure
             IEnumerable<Currency>? apiCurrencies = await FetchCurrenciesAsync();
             if (apiCurrencies == null) return;
 
-            var currenciesToUpdate = _currencyRepository.ReadAll().ToDictionary(c => c.Code);
-            var currenciesToInsert = new List<Currency>();
+            var apiCurrenciesDict = apiCurrencies.ToDictionary(c => c.Code);
 
-            foreach (var apiCurrency in apiCurrencies)
+            var currenciesToUpdate = _currencyRepository.ReadAllNotCustom();
+
+            foreach (var currencyToUpdate in currenciesToUpdate)
             {
-                Currency c;
-                if (currenciesToUpdate.TryGetValue(apiCurrency.Code, out c))
+                Currency? c;
+                if (apiCurrenciesDict.TryGetValue(currencyToUpdate.Code, out c))
                 {
-                    c.Rate = apiCurrency.Rate;
-                }
-                else
-                {
-                    currenciesToInsert.Add(apiCurrency);
+                    currencyToUpdate.Rate = c.Rate;
                 }
             }
-            _currencyRepository.UpdateMany(currenciesToUpdate.Values.ToList());
-            _currencyRepository.CreateMany(currenciesToInsert);
+            _currencyRepository.UpdateMany(currenciesToUpdate);
         }
 
         private async Task<IEnumerable<Currency>?> FetchCurrenciesAsync()

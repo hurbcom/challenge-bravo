@@ -14,9 +14,11 @@ namespace currency_conversion.Core.Services
         {
             var fromCurrency = _currencyRepository.Read(from);
             if (fromCurrency == null) throw new KeyNotFoundException("Currency not found: " + from);
-            var toRateCurrency = _currencyRepository.Read(to);
-            if (toRateCurrency == null) throw new KeyNotFoundException("Currency not found: " + to);
-            return amount * (toRateCurrency.Rate / fromCurrency.Rate);
+            if (!fromCurrency.Rate.HasValue) throw new ApplicationException("Rate not found for currency: " + from);
+            var toCurrency = _currencyRepository.Read(to);
+            if (toCurrency == null) throw new KeyNotFoundException("Currency not found: " + to);
+            if (!toCurrency.Rate.HasValue) throw new ApplicationException("Rate not found for currency: " + to);
+            return amount * (toCurrency.Rate.Value / fromCurrency.Rate.Value);
         }
     }
 }

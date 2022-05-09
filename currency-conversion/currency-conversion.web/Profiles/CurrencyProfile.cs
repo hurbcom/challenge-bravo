@@ -18,6 +18,10 @@ namespace currency_conversion.web.Profiles
                     opt => opt.MapFrom(src => $"{src.Rate}")
                 )
                 .ForMember(
+                    dest => dest.Custom,
+                    opt => opt.Ignore()
+                )
+                .ForMember(
                     dest => dest.CreatedAt,
                     opt => opt.Ignore()
                 )

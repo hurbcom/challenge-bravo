@@ -13,6 +13,8 @@ namespace currency_conversion.Core.Interfaces.Repositories
 
         public List<Currency> ReadAll();
 
+        public List<Currency> ReadAllNotCustom();
+
         public bool Update(Currency currency);
 
         public void UpdateMany(IEnumerable<Currency> currencies);

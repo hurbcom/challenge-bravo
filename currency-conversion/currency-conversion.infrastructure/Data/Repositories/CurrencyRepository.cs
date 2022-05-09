@@ -46,6 +46,12 @@ namespace currency_conversion.infrastructure.Data.Repositories
             return currencyRead;
         }
 
+        public List<Currency> ReadAllNotCustom()
+        {
+            var currencyRead = _dbContext.Currency.Where(c => c.Custom == false).ToList();
+            return currencyRead;
+        }
+
         public bool Update(Currency currency)
         {
             var currencyFound = _dbContext.Currency.AsNoTracking().SingleOrDefault(c => c.Code == currency.Code);
