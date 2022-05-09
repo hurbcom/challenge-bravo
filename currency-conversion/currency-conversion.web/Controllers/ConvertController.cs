@@ -23,7 +23,19 @@ namespace currency_conversion.web.Controllers
         [HttpGet(Name = "convert")]
         public IActionResult Convert([FromQuery]ConvertDTO convertDTO)
         {
-            return Ok(_convertService.Convert(convertDTO.From, convertDTO.To, convertDTO.Amount));
+            try
+            {
+                var value = _convertService.Convert(convertDTO.From, convertDTO.To, convertDTO.Amount);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ApplicationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok();
         }
     }
 }
