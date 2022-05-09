@@ -18,6 +18,8 @@ var dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRIN
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(dbConnectionString ?? ""));
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddTransient<IConvertService, ConvertService>();
 builder.Services.AddTransient<ICurrencyFetch, CurrencyFetch>();
