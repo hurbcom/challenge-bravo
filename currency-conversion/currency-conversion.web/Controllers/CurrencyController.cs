@@ -43,7 +43,7 @@ namespace currency_conversion.web.Controllers
             }
             var _mappedInputCurrency = _mapper.Map<Currency>(currencyDTO);
             var created = _currencyRepository.Create(_mappedInputCurrency);
-            if (!created) return BadRequest("Currency could not be saved: Code already exists");
+            if (!created) return BadRequest("Currency could not be added: Code already exists");
             return Ok("Currency added");
         }
 
