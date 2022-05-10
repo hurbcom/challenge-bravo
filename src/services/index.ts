@@ -4,6 +4,6 @@ import { CurrencyService } from './currency.service';
 import { currencyDao } from '../database/dao';
 
 const coinbaseIntegrationService = new CoinbaseIntegrationService(httpClient);
-const currencyService = new CurrencyService(coinbaseIntegrationService, currencyDao);
+const currencyService = new CurrencyService(currencyDao, coinbaseIntegrationService);
 
 export { coinbaseIntegrationService, currencyService };
