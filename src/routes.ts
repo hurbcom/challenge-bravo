@@ -7,9 +7,7 @@ router.post('/currencies/real', (req, res) => currencyController.addRealCurrency
 router.post('/currencies/fictitious', (req, res) =>
   currencyController.addFictitiousCurrency(req, res),
 );
-router.delete('/currencies', (req, res) => {
-  res.status(200).json('TODO');
-});
+router.delete('/currencies', (req, res) => currencyController.deleteCurrency(req, res));
 router.get('/convert', (req, res) => {
   res.status(200).json('TODO');
 });

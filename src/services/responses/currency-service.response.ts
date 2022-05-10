@@ -49,3 +49,19 @@ export class FictitiousCurrencyAlreadyRegistered extends ServiceResponse {
     );
   }
 }
+
+export class CurrencyDeleted extends ServiceResponse {
+  constructor(currency: any) {
+    super(
+      currency,
+      'CurrencyDeleted',
+      `The currency ${currency.code} was deleted from the database.`,
+    );
+  }
+}
+
+export class CurrencyNotFound extends ServiceResponse {
+  constructor(currencyCode: string) {
+    super(null, 'CurrencyNotFound', `The currency ${currencyCode} was not found in the database.`);
+  }
+}

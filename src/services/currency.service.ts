@@ -7,6 +7,8 @@ import {
   CurrencyAdded,
   RealCurrencyAlreadyRegistered,
   RealCurrencyNotSupported,
+  CurrencyDeleted,
+  CurrencyNotFound,
 } from './responses/currency-service.response';
 
 export class CurrencyService {
@@ -56,5 +58,14 @@ export class CurrencyService {
     const fictitiousCurrencyAdded = await this.currencyDao.save(currency);
 
     return new CurrencyAdded(fictitiousCurrencyAdded);
+  }
+
+  public async deleteCurrency(currencyCode: any) {
+    const deletedCurrency = await this.currencyDao.delete(currencyCode);
+    if (!deletedCurrency) {
+      return new CurrencyNotFound(currencyCode);
+    }
+
+    return new CurrencyDeleted(deletedCurrency);
   }
 }

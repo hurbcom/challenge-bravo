@@ -21,4 +21,9 @@ export class CurrencyDao {
     const updatedCurrency = await Currency.updateOne(filter, { $set: update });
     return updatedCurrency;
   }
+
+  public async delete(currencyCode: string) {
+    const deletedCurrency = await Currency.findOneAndDelete({ code: currencyCode });
+    return deletedCurrency;
+  }
 }
