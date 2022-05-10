@@ -1,8 +1,8 @@
 import cron from 'node-cron';
 import { Database } from '../database/database';
-import { CurrencyDao } from '../database/dao/currency.dao';
 import { CoinbaseIntegrationService } from '../services/coinbase-integration.service';
 import { HttpClient } from '../web/http-client';
+import { currencyDao as CurrencyDao } from '../database/dao';
 
 export class UpdateCurrencyExchangeRatesJob {
   static async run(): Promise<void> {
@@ -14,7 +14,7 @@ export class UpdateCurrencyExchangeRatesJob {
         await Database.connect();
 
         let count = 0;
-        const currencyDao = new CurrencyDao();
+        const currencyDao = CurrencyDao;
         const coinbaseIntegrationService = new CoinbaseIntegrationService(new HttpClient());
 
         const { rates } = await coinbaseIntegrationService.getExchangeRates();

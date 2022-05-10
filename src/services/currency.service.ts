@@ -1,5 +1,5 @@
-import { CurrencyDao } from '../database/dao/currency.dao';
-import Currency from '../model/currency';
+import { ICurrencyDao } from '../interfaces/currency-dao';
+import { Currency } from '../model/currency';
 import { CoinbaseIntegrationService } from './coinbase-integration.service';
 import {
   FictitiousCurrencyAlreadyRegistered,
@@ -19,7 +19,7 @@ export type ExchangeResult = {
 
 export class CurrencyService {
   constructor(
-    private readonly currencyDao: CurrencyDao,
+    private readonly currencyDao: ICurrencyDao,
     private readonly coinbaseIntegrationService: CoinbaseIntegrationService,
   ) {}
 

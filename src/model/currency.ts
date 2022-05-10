@@ -1,4 +1,10 @@
 import mongoose from 'mongoose';
+
+export type CurrencyDto = {
+  code: string;
+  rate: string;
+};
+
 const { Schema } = mongoose;
 
 const currencySchema = new Schema(
@@ -16,6 +22,4 @@ const currencySchema = new Schema(
   { timestamps: true },
 );
 
-const Currency = mongoose.model('Currency', currencySchema);
-
-export default Currency;
+export const Currency = mongoose.model('Currency', currencySchema);
