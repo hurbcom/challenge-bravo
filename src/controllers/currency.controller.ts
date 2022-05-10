@@ -3,17 +3,20 @@ import Joi from 'joi';
 import { CurrencyService } from '../services/currency.service';
 import { HttpStatus } from '../web/http-status';
 
-const inputSchema = Joi.string().length(3).uppercase().required();
+const inputRealCurrencySchema = Joi.string().length(3).uppercase().required();
+const inputFictitiousCurrencySchema = Joi.object({
+  currency: Joi.string().min(3).max(5).uppercase().required(),
+  exchangeRate: Joi.string().regex(new RegExp('^(?=.+)(?:[1-9]\\d*|0)?(?:\\.\\d+)?$')).required(),
+});
 
 export class CurrencyController {
   constructor(private readonly currencyService: CurrencyService) {}
 
   public async addRealCurrency(req: Request, res: Response) {
-    // add validations
     const { currency } = req.query;
 
     try {
-      await inputSchema.validateAsync(currency);
+      await inputRealCurrencySchema.validateAsync(currency);
     } catch (e) {
       res.status(HttpStatus.BAD_REQUEST).json(e.message);
       return;
@@ -21,6 +24,27 @@ export class CurrencyController {
 
     try {
       const result = await this.currencyService.addRealCurrency(currency);
+      res.status(HttpStatus.CREATED).json(result);
+    } catch (e) {
+      console.log(e);
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .send('Internal error occourred while adding real currency.');
+    }
+  }
+
+  public async addFictitiousCurrency(req: Request, res: Response) {
+    const currencyInput = req.query;
+
+    try {
+      await inputFictitiousCurrencySchema.validateAsync(currencyInput);
+    } catch (e) {
+      res.status(HttpStatus.BAD_REQUEST).json(e.message);
+      return;
+    }
+
+    try {
+      const result = await this.currencyService.addFictitiousCurrency(currencyInput);
       res.status(HttpStatus.CREATED).json(result);
     } catch (e) {
       console.log(e);

@@ -20,12 +20,32 @@ export class RealCurrencyAlreadyRegistered extends ServiceResponse {
   }
 }
 
-export class RealCurrencyAdded extends ServiceResponse {
+export class CurrencyAdded extends ServiceResponse {
   constructor(currency: any) {
     super(
       currency,
-      'RealCurrencyAdded',
+      'CurrencyAdded',
       `The currency ${currency.code} was registered in the database.`,
+    );
+  }
+}
+
+export class InvalidFictitiousCurrencyCode extends ServiceResponse {
+  constructor(currencyCode: string) {
+    super(
+      null,
+      'InvalidFictitiousCurrencyCode',
+      `The currency ${currencyCode} is not a fictitious currency. It is already registered in the Coinbase.`,
+    );
+  }
+}
+
+export class FictitiousCurrencyAlreadyRegistered extends ServiceResponse {
+  constructor(currencyCode: string) {
+    super(
+      null,
+      'FictitiousCurrencyAlreadyRegistered',
+      `The currency ${currencyCode} is already registered in the database.`,
     );
   }
 }

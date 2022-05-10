@@ -3,7 +3,10 @@ import { currencyController } from './controllers';
 
 const router = express.Router();
 
-router.post('/currencies', (req, res) => currencyController.addRealCurrency(req, res));
+router.post('/currencies/real', (req, res) => currencyController.addRealCurrency(req, res));
+router.post('/currencies/fictitious', (req, res) =>
+  currencyController.addFictitiousCurrency(req, res),
+);
 router.delete('/currencies', (req, res) => {
   res.status(200).json('TODO');
 });

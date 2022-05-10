@@ -2,7 +2,9 @@ import { CurrencyDao } from '../database/dao/currency.dao';
 import Currency from '../model/currency';
 import { CoinbaseIntegrationService } from './coinbase-integration.service';
 import {
-  RealCurrencyAdded,
+  FictitiousCurrencyAlreadyRegistered,
+  InvalidFictitiousCurrencyCode,
+  CurrencyAdded,
   RealCurrencyAlreadyRegistered,
   RealCurrencyNotSupported,
 } from './responses/currency-service.response';
@@ -30,8 +32,29 @@ export class CurrencyService {
 
     const currency = new Currency({ code: currencyCode, rate: rates[currencyCode] });
     const currencyAdded = await this.currencyDao.save(currency);
-    console.log('currencyAdded', currencyAdded);
 
-    return new RealCurrencyAdded(currencyAdded);
+    return new CurrencyAdded(currencyAdded);
+  }
+
+  public async addFictitiousCurrency(currencyInput: any) {
+    const { data: apiCurrencies } = await this.coinbaseIntegrationService.getCurrencies();
+
+    const isIncluded = apiCurrencies.some((currency) => currency.id === currencyInput.currency);
+    if (isIncluded) {
+      return new InvalidFictitiousCurrencyCode(currencyInput.currency);
+    }
+
+    const dbCurrency = await this.currencyDao.getByCode(currencyInput.currency);
+    if (dbCurrency) {
+      return new FictitiousCurrencyAlreadyRegistered(currencyInput.currency);
+    }
+
+    const currency = new Currency({
+      code: currencyInput.currency,
+      rate: currencyInput.exchangeRate,
+    });
+    const fictitiousCurrencyAdded = await this.currencyDao.save(currency);
+
+    return new CurrencyAdded(fictitiousCurrencyAdded);
   }
 }
