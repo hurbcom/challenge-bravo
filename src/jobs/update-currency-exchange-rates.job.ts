@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import { Database } from '../database/database';
-import { CurrencyDao } from '../database/dao/currency';
+import { CurrencyDao } from '../database/dao/currency.dao';
 import { CoinbaseIntegrationService } from '../services/coinbase-integration.service';
 import { HttpClient } from '../web/http-client';
 
