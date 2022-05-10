@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-import { databaseSeeder } from './database/dao/index';
+import { databaseSeeder } from './database';
 import { Database } from './database/database';
 import router from './routes';
 
