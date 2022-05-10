@@ -1,7 +1,17 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
 import { CurrencyService } from '../services/currency.service';
+import {
+  CurrencyAdded,
+  CurrencyDeleted,
+  CurrencyNotFound,
+  FictitiousCurrencyAlreadyRegistered,
+  InvalidFictitiousCurrencyCode,
+  RealCurrencyAlreadyRegistered,
+  RealCurrencyNotSupported,
+} from '../services/responses/currency-service.response';
 import { HttpStatus } from '../web/http-status';
+import { BaseController } from './base.controller';
 
 const inputRealCurrencySchema = Joi.string().length(3).uppercase().required();
 const inputFictitiousCurrencySchema = Joi.object({
@@ -10,8 +20,21 @@ const inputFictitiousCurrencySchema = Joi.object({
 });
 const inputDeleteCurrencySchema = Joi.string().min(3).max(5).uppercase().required();
 
-export class CurrencyController {
-  constructor(private readonly currencyService: CurrencyService) {}
+export class CurrencyController extends BaseController {
+  protected serviceResponseMap: Map<string, HttpStatus>;
+
+  constructor(private readonly currencyService: CurrencyService) {
+    super();
+    this.serviceResponseMap = new Map<string, HttpStatus>([
+      [RealCurrencyNotSupported.name, HttpStatus.BAD_REQUEST],
+      [RealCurrencyAlreadyRegistered.name, HttpStatus.BAD_REQUEST],
+      [CurrencyAdded.name, HttpStatus.CREATED],
+      [InvalidFictitiousCurrencyCode.name, HttpStatus.BAD_REQUEST],
+      [FictitiousCurrencyAlreadyRegistered.name, HttpStatus.BAD_REQUEST],
+      [CurrencyDeleted.name, HttpStatus.OK],
+      [CurrencyNotFound.name, HttpStatus.BAD_REQUEST],
+    ]);
+  }
 
   public async addRealCurrency(req: Request, res: Response) {
     const { currency } = req.query;
@@ -25,7 +48,8 @@ export class CurrencyController {
 
     try {
       const result = await this.currencyService.addRealCurrency(currency);
-      res.status(HttpStatus.CREATED).json(result);
+      const httpStatus = this.getHttpStatus(result);
+      res.status(httpStatus).json(result);
     } catch (e) {
       console.log(e);
       res
@@ -46,7 +70,8 @@ export class CurrencyController {
 
     try {
       const result = await this.currencyService.addFictitiousCurrency(currencyInput);
-      res.status(HttpStatus.CREATED).json(result);
+      const httpStatus = this.getHttpStatus(result);
+      res.status(httpStatus).json(result);
     } catch (e) {
       console.log(e);
       res
@@ -67,7 +92,8 @@ export class CurrencyController {
 
     try {
       const result = await this.currencyService.deleteCurrency(currency);
-      res.status(HttpStatus.OK).json(result);
+      const httpStatus = this.getHttpStatus(result);
+      res.status(httpStatus).json(result);
     } catch (e) {
       console.log(e);
       res
