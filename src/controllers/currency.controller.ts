@@ -51,7 +51,7 @@ export class CurrencyController {
       console.log(e);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal error occourred while adding real currency.');
+        .send('Internal error occourred while adding fictitious currency.');
     }
   }
 
@@ -72,7 +72,7 @@ export class CurrencyController {
       console.log(e);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal error occourred while adding real currency.');
+        .send('Internal error occourred while deleting currency.');
     }
   }
 }
