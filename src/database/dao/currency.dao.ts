@@ -6,9 +6,15 @@ export class CurrencyDao {
     return currencyList;
   }
 
+  public async getByCode(currencyCode: string) {
+    const currency = await Currency.findOne({ code: currencyCode });
+    return currency;
+  }
+
   public async save(currency: any) {
     const newCurrency = new Currency(currency);
-    await newCurrency.save();
+    const currencyAdded = await newCurrency.save();
+    return currencyAdded;
   }
 
   public async update(filter: any, update: any) {
