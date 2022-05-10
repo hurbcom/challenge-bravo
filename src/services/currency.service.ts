@@ -1,6 +1,6 @@
+import { ICoinbaseIntegrationService } from '../interfaces/coinbase-integration-service';
 import { ICurrencyDao } from '../interfaces/currency-dao';
 import { Currency } from '../model/currency';
-import { CoinbaseIntegrationService } from './coinbase-integration.service';
 import {
   FictitiousCurrencyAlreadyRegistered,
   InvalidFictitiousCurrencyCode,
@@ -20,7 +20,7 @@ export type ExchangeResult = {
 export class CurrencyService {
   constructor(
     private readonly currencyDao: ICurrencyDao,
-    private readonly coinbaseIntegrationService: CoinbaseIntegrationService,
+    private readonly coinbaseIntegrationService: ICoinbaseIntegrationService,
   ) {}
 
   public async addRealCurrency(currencyCode: any) {

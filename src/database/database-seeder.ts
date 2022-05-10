@@ -1,13 +1,13 @@
+import { ICoinbaseIntegrationService } from '../interfaces/coinbase-integration-service';
 import { ICurrencyDao } from '../interfaces/currency-dao';
 import { Currency } from '../model/currency';
-import { CoinbaseIntegrationService } from '../services/coinbase-integration.service';
 
 export class DatabaseSeeder {
   private readonly BASE_CURRENCIES = ['USD', 'BRL', 'EUR', 'BTC', 'ETH'];
 
   constructor(
     private readonly currencyDao: ICurrencyDao,
-    private readonly coinbaseIntegrationService: CoinbaseIntegrationService,
+    private readonly coinbaseIntegrationService: ICoinbaseIntegrationService,
   ) {}
 
   public async run() {

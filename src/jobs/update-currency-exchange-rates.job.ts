@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import { Database } from '../database/database';
-import { CoinbaseIntegrationService } from '../services/coinbase-integration.service';
 import { HttpClient } from '../web/http-client';
+import { coinbaseIntegrationService as CoinbaseIntegrationService } from '../services/';
 import { currencyDao as CurrencyDao } from '../database/dao';
 
 export class UpdateCurrencyExchangeRatesJob {
@@ -15,7 +15,7 @@ export class UpdateCurrencyExchangeRatesJob {
 
         let count = 0;
         const currencyDao = CurrencyDao;
-        const coinbaseIntegrationService = new CoinbaseIntegrationService(new HttpClient());
+        const coinbaseIntegrationService = CoinbaseIntegrationService;
 
         const { rates } = await coinbaseIntegrationService.getExchangeRates();
         const currencies = await currencyDao.getAllCurrencies();
