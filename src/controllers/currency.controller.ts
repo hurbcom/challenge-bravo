@@ -3,6 +3,7 @@ import Joi from 'joi';
 import { CurrencyService } from '../services/currency.service';
 import {
   CurrencyAdded,
+  CurrencyExchanged,
   CurrencyDeleted,
   CurrencyNotFound,
   FictitiousCurrencyAlreadyRegistered,
@@ -14,11 +15,18 @@ import { HttpStatus } from '../web/http-status';
 import { BaseController } from './base.controller';
 
 const inputRealCurrencySchema = Joi.string().length(3).uppercase().required();
+
 const inputFictitiousCurrencySchema = Joi.object({
   currency: Joi.string().min(3).max(5).uppercase().required(),
   exchangeRate: Joi.string().regex(new RegExp('^(?=.+)(?:[1-9]\\d*|0)?(?:\\.\\d+)?$')).required(),
 });
 const inputDeleteCurrencySchema = Joi.string().min(3).max(5).uppercase().required();
+
+const inputExchangeCurrencySchema = Joi.object({
+  from: Joi.string().min(3).max(5).uppercase().required(),
+  to: Joi.string().min(3).max(5).uppercase().required(),
+  amount: Joi.string().regex(new RegExp('^(?=.+)(?:[1-9]\\d*|0)?(?:\\.\\d+)?$')).required(),
+});
 
 export class CurrencyController extends BaseController {
   protected serviceResponseMap: Map<string, HttpStatus>;
@@ -33,6 +41,7 @@ export class CurrencyController extends BaseController {
       [FictitiousCurrencyAlreadyRegistered.name, HttpStatus.BAD_REQUEST],
       [CurrencyDeleted.name, HttpStatus.OK],
       [CurrencyNotFound.name, HttpStatus.BAD_REQUEST],
+      [CurrencyExchanged.name, HttpStatus.OK],
     ]);
   }
 
@@ -99,6 +108,31 @@ export class CurrencyController extends BaseController {
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .send('Internal error occourred while deleting currency.');
+    }
+  }
+
+  public async exchangeCurrency(req: Request, res: Response) {
+    const exchangeInput = req.query;
+
+    try {
+      await inputExchangeCurrencySchema.validateAsync(exchangeInput);
+    } catch (e) {
+      res.status(HttpStatus.BAD_REQUEST).json(e.message);
+      return;
+    }
+
+    try {
+      const from = exchangeInput.from as string;
+      const to = exchangeInput.to as string;
+      const amount = exchangeInput.amount as string;
+      const result = await this.currencyService.exchangeCurrencies(from, to, amount);
+      const httpStatus = this.getHttpStatus(result);
+      res.status(httpStatus).json(result);
+    } catch (e) {
+      console.log(e);
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .send('Internal error occourred while exchanging currencies.');
     }
   }
 }

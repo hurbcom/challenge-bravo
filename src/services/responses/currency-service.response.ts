@@ -65,3 +65,9 @@ export class CurrencyNotFound extends ServiceResponse {
     super(null, 'CurrencyNotFound', `The currency ${currencyCode} was not found in the database.`);
   }
 }
+
+export class CurrencyExchanged extends ServiceResponse {
+  constructor(exchangeResult: any) {
+    super(exchangeResult, 'CurrencyExchanged', `The currencies were exchanged successfully.`);
+  }
+}

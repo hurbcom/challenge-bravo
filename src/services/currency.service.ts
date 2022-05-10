@@ -9,7 +9,13 @@ import {
   RealCurrencyNotSupported,
   CurrencyDeleted,
   CurrencyNotFound,
+  CurrencyExchanged,
 } from './responses/currency-service.response';
+
+export type ExchangeResult = {
+  to: string;
+  amount: string;
+};
 
 export class CurrencyService {
   constructor(
@@ -67,5 +73,30 @@ export class CurrencyService {
     }
 
     return new CurrencyDeleted(deletedCurrency);
+  }
+
+  public async exchangeCurrencies(from: string, to: string, amount: string) {
+    const fromCurrency = await this.currencyDao.getByCode(from);
+    if (!fromCurrency) {
+      return new CurrencyNotFound(from);
+    }
+
+    const toCurrency = from === to ? fromCurrency : await this.currencyDao.getByCode(to);
+    if (!toCurrency) {
+      return new CurrencyNotFound(to);
+    }
+
+    const result = this.exchange(fromCurrency, toCurrency, amount);
+
+    return new CurrencyExchanged(result);
+  }
+
+  private exchange(fromCurrency: any, toCurrency: any, amount: string) {
+    const amountNumber = parseFloat(amount);
+    const baseAmount = amountNumber / fromCurrency.rate;
+    const finalAmount = (baseAmount * toCurrency.rate).toFixed(2);
+
+    const result: ExchangeResult = { to: toCurrency.code, amount: finalAmount };
+    return result;
   }
 }
