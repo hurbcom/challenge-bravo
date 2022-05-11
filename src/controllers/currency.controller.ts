@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
-import { CurrencyService } from '../services/currency.service';
+import { ICurrencyService } from '../interfaces/currency-service';
 import {
   CurrencyAdded,
   CurrencyExchanged,
@@ -31,7 +31,7 @@ const inputExchangeCurrencySchema = Joi.object({
 export class CurrencyController extends BaseController {
   protected serviceResponseMap: Map<string, HttpStatus>;
 
-  constructor(private readonly currencyService: CurrencyService) {
+  constructor(private readonly currencyService: ICurrencyService) {
     super();
     this.serviceResponseMap = new Map<string, HttpStatus>([
       [RealCurrencyNotSupported.name, HttpStatus.BAD_REQUEST],
@@ -46,7 +46,7 @@ export class CurrencyController extends BaseController {
   }
 
   public async addRealCurrency(req: Request, res: Response) {
-    const { currency } = req.query;
+    const currency = req.query.currency as string;
 
     try {
       await inputRealCurrencySchema.validateAsync(currency);
