@@ -21,7 +21,7 @@ export type Method =
 
 export class HttpClient {
   public async makeRequest(httpOptions: RequestHttpOptions) {
-    const response = await axios(httpOptions);
+    const response = await axios.request(httpOptions);
     return response;
   }
 }
