@@ -9,6 +9,7 @@
         "esModuleInterop": true,
         "target": "ES2019",
         "moduleResolution": "Node",
+        "resolveJsonModule": true,
     },
     "include": ["src/**/*"]
 }
