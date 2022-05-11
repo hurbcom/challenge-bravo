@@ -18,7 +18,7 @@ describe('CoinbaseIntegrationService', () => {
       const spy = jest.spyOn(axios, 'request').mockResolvedValue(currenciesResponse);
 
       const response = await coinbaseIntegrationService.getCurrencies();
-      console.log(response);
+
       expect(spy).toHaveBeenCalled();
       expect(response).toBeDefined();
     });

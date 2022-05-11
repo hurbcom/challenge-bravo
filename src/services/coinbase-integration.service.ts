@@ -27,6 +27,7 @@ export class CoinbaseIntegrationService implements ICoinbaseIntegrationService {
       method: 'GET',
       url: `${COINBASE_API_URL}/currencies`,
     });
+
     return response.data as CurrenciesResponse;
   }
 
@@ -36,7 +37,6 @@ export class CoinbaseIntegrationService implements ICoinbaseIntegrationService {
       method: 'GET',
       url: `${COINBASE_API_URL}/exchange-rates`,
     });
-
     return response.data?.data as ExchangeRatesResponse;
   }
 }
