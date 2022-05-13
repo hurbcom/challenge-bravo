@@ -55,12 +55,11 @@ export class CurrencyController {
 
     try {
       const result = await this.currencyService.deleteCurrency(currency);
-      res.status(HttpStatus.OK).json(result);
-    } catch (e) {
-      console.log(e);
-      res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal error occourred while deleting currency.');
+      res.status(HttpStatus.OK).json({ data: result, error: null });
+    } catch (error) {
+      console.log(error);
+      const httpStatus = error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+      res.status(httpStatus).send({ data: null, error: error.message });
     }
   }
 
@@ -79,12 +78,11 @@ export class CurrencyController {
       const to = exchangeInput.to as string;
       const amount = exchangeInput.amount as string;
       const result = await this.currencyService.exchangeCurrencies(from, to, amount);
-      res.status(HttpStatus.OK).json(result);
-    } catch (e) {
-      console.log(e);
-      res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal error occourred while exchanging currencies.');
+      res.status(HttpStatus.OK).json({ data: result, error: null });
+    } catch (error) {
+      console.log(error);
+      const httpStatus = error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+      res.status(httpStatus).send({ data: null, error: error.message });
     }
   }
 }

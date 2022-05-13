@@ -72,7 +72,7 @@ export class CurrencyService implements ICurrencyService {
 
     const toCurrency = from === to ? fromCurrency : await this.currencyDao.getByCode(to);
     if (!toCurrency) {
-      return new CurrencyNotFound(to);
+      throw new CurrencyNotFound(to);
     }
 
     const result = this.exchange(fromCurrency, toCurrency, amount);
@@ -82,8 +82,8 @@ export class CurrencyService implements ICurrencyService {
 
   private exchange(fromCurrency: any, toCurrency: any, amount: string) {
     const amountNumber = parseFloat(amount);
-    const baseAmount = amountNumber / fromCurrency.rate;
-    const finalAmount = (baseAmount * toCurrency.rate).toFixed(2);
+    const baseAmount = amountNumber / fromCurrency.exchangeRate;
+    const finalAmount = (baseAmount * toCurrency.exchangeRate).toFixed(2);
 
     const result: ExchangeResult = { to: toCurrency.code, amount: finalAmount };
     return result;
