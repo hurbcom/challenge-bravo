@@ -2,11 +2,12 @@
   "name": "challenge-bravo",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:lcarvalho94/challenge-bravo.git",
-  "author": "Lucas Carvalho <lcarvalho94@hotmail.com>",
+  "author": "Lucas Carvalho de Vasconcellos",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon -r dotenv/config ./src/app.ts",
+    "start": "node ./build/app.js",
+    "build": "tsc",
     "dev-job": "nodemon -r dotenv/config ./src/jobs/update-currency-exchange-rates.job.ts",
     "test": "jest --coverage"
   },

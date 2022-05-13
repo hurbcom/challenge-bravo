@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  mongo_db:
+    container_name: challenge-bravo-db
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_db:/data/db
+
+  api:
+    container_name: challenge-bravo-api
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+      MONGODB_PORT: 27017
+      MONGODB_HOST: mongo_db
+      MONGODB_COLLECTION: currencies
+      COINBASE_API_URL: https://api.coinbase.com/v2
+    depends_on:
+      - mongo_db
+volumes:
+  mongo_db: {}
