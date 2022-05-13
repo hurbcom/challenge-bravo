@@ -100,9 +100,11 @@ Existe a possibilidade de filtramos a lista de moedas pelo tipo:
 Para isso, basta adicionarmos o parâmetro `type` na URL
 
 Exemplo de requisição para moedas do tipo REAL:
+
 `/currencies?type=REAL`
 
 Exemplo de requisição para moedas do tipo FICTITIOUS:
+
 `/currencies?type=FICTITIOUS`
 
 ### Deletar uma moeda
