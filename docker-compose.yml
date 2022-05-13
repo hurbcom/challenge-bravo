@@ -12,7 +12,9 @@ services:
 
   api:
     container_name: challenge-bravo-api
-    build: .
+    build:
+      context: .
+      target: server
     ports:
       - 3000:3000
     environment:
@@ -23,5 +25,20 @@ services:
       COINBASE_API_URL: https://api.coinbase.com/v2
     depends_on:
       - mongo_db
+  
+  update_job:
+    container_name: update_exchange_rates_job
+    build:
+      context: .
+      target: job
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_HOST: mongo_db
+      MONGODB_COLLECTION: currencies
+      COINBASE_API_URL: https://api.coinbase.com/v2
+      UPDATE_EXCHANGE_RATES_TIME: "*/3 * * * *"
+    depends_on:
+      - mongo_db
+
 volumes:
   mongo_db: {}

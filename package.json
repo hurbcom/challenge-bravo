@@ -6,9 +6,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon -r dotenv/config ./src/app.ts",
-    "start": "node ./build/app.js",
-    "build": "tsc",
     "dev-job": "nodemon -r dotenv/config ./src/jobs/update-currency-exchange-rates.job.ts",
+    "start": "node ./build/app.js",
+    "start-job": "node ./build/jobs/update-currency-exchange-rates.job.js",
+    "build": "tsc",
     "test": "jest --coverage"
   },
   "dependencies": {
