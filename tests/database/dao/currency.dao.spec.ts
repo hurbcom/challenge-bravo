@@ -1,6 +1,7 @@
 import { ICurrencyDao } from '../../../src/interfaces/currency-dao';
 import { currencyDao as CurrencyDao } from '../../../src/database/dao';
 import { DatabaseMemoryServer } from '../../database-memory-server';
+import { CurrencyType } from '../../../src/model/currency';
 
 describe('CurrencyDao', () => {
   let currencyDao: ICurrencyDao;
@@ -22,7 +23,7 @@ describe('CurrencyDao', () => {
 
   describe('when the method "save" is called', () => {
     it('should add a new currency in the database and return it', async () => {
-      const currencyDto = { code: 'BRL', rate: '5.13' };
+      const currencyDto = { code: 'BRL', exchangeRate: '5.13', type: CurrencyType.REAL };
 
       const response = await currencyDao.save(currencyDto);
 
@@ -31,13 +32,13 @@ describe('CurrencyDao', () => {
     });
 
     it('should throw an error because code is null', async () => {
-      const currencyDto = { code: null, rate: '5.13' };
+      const currencyDto = { code: null, exchangeRate: '5.13', type: CurrencyType.REAL };
 
       await expect(currencyDao.save(currencyDto)).rejects.toThrow();
     });
 
-    it('should throw an error because rate is null', async () => {
-      const currencyDto = { code: 'BRL', rate: null };
+    it('should throw an error because exchangeRate is null', async () => {
+      const currencyDto = { code: 'BRL', exchangeRate: null, type: CurrencyType.REAL };
 
       await expect(currencyDao.save(currencyDto)).rejects.toThrow();
     });
@@ -45,7 +46,7 @@ describe('CurrencyDao', () => {
 
   describe('when the method "getAllCurrencies" is called', () => {
     it('should return all currencies in an array', async () => {
-      const currencyDto = { code: 'BRL', rate: '5.13' };
+      const currencyDto = { code: 'BRL', exchangeRate: '5.13', type: CurrencyType.REAL };
       await currencyDao.save(currencyDto);
 
       const currenciesList = await currencyDao.getAllCurrencies();
@@ -58,7 +59,7 @@ describe('CurrencyDao', () => {
   describe('when the method "getByCode" is called', () => {
     it('should return a currency', async () => {
       const currencyCode = 'BRL';
-      const currencyDto = { code: currencyCode, rate: '5.13' };
+      const currencyDto = { code: currencyCode, exchangeRate: '5.13', type: CurrencyType.REAL };
       await currencyDao.save(currencyDto);
 
       const result = await currencyDao.getByCode(currencyCode);
@@ -72,7 +73,7 @@ describe('CurrencyDao', () => {
     it('should return the currency updated', async () => {
       const currencyRate = '5.0';
       const currencyRateUpdated = '5.13';
-      const currencyDto = { code: 'BRL', rate: currencyRate };
+      const currencyDto = { code: 'BRL', exchangeRate: '5.13', type: CurrencyType.REAL };
       await currencyDao.save(currencyDto);
 
       const result = await currencyDao.update({ code: 'BRL' }, { rate: currencyRateUpdated });
@@ -85,12 +86,11 @@ describe('CurrencyDao', () => {
   describe('when the method "delete" is called', () => {
     it('should return the deleted currency', async () => {
       const currencyCode = 'BRL';
-      const currencyDto = { code: currencyCode, rate: '5.13' };
+      const currencyDto = { code: currencyCode, exchangeRate: '5.13', type: CurrencyType.REAL };
       await currencyDao.save(currencyDto);
 
       const deletedCurrency = await currencyDao.delete(currencyCode);
       const dbCurrency = await currencyDao.getByCode(currencyCode);
-      console.log('dbCurrency', dbCurrency);
 
       expect(deletedCurrency).toBeDefined();
       expect(deletedCurrency.code).toEqual(currencyCode);

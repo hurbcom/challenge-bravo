@@ -8,7 +8,6 @@ import {
   CurrencyAlreadyRegistered,
   CurrencyNotFound,
 } from './responses/currency-service.errors';
-import { ServiceResponse } from './responses/service.response';
 
 export type ExchangeResult = {
   to: string;
@@ -61,7 +60,7 @@ export class CurrencyService implements ICurrencyService {
     if (!deletedCurrency) {
       throw new CurrencyNotFound(currencyCode);
     }
-    console.log('AQUI AQUI AQUI', deletedCurrency);
+
     return deletedCurrency;
   }
 

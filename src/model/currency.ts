@@ -8,7 +8,7 @@ export enum CurrencyType {
 export type CurrencyDto = {
   code: string;
   exchangeRate: string;
-  type: CurrencyType;
+  type?: CurrencyType;
 };
 
 const { Schema } = mongoose;

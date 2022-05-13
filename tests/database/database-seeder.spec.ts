@@ -8,6 +8,7 @@ import { coinbaseIntegrationService } from '../../src/services';
 import { DatabaseSeeder } from '../../src/database/database-seeder';
 import { databaseSeeder } from '../../src/database';
 import { data as exchangeRates } from '../exchangeRatesResponse.json';
+import { CurrencyType } from '../../src/model/currency';
 
 describe('DatabaseSeeder', () => {
   let dao: ICurrencyDao;
@@ -25,7 +26,7 @@ describe('DatabaseSeeder', () => {
     it('should skeep the seed because the database has already been initialized previously', async () => {
       const currencyDaoSpy = jest
         .spyOn(CurrencyDao.prototype, 'getAllCurrencies')
-        .mockResolvedValueOnce([{ code: 'BRL', rate: '5.13' }]);
+        .mockResolvedValueOnce([{ code: 'BRL', exchangeRate: '5.13', type: CurrencyType.REAL }]);
 
       const coinbaseServiceSpy = jest.spyOn(
         CoinbaseIntegrationService.prototype,
