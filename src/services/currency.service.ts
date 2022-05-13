@@ -1,17 +1,13 @@
 import { ICoinbaseIntegrationService } from '../interfaces/coinbase-integration-service';
 import { ICurrencyDao } from '../interfaces/currency-dao';
 import { ICurrencyService } from '../interfaces/currency-service';
-import { Currency } from '../model/currency';
+import { Currency, CurrencyDto, CurrencyType } from '../model/currency';
 import {
-  FictitiousCurrencyAlreadyRegistered,
-  InvalidFictitiousCurrencyCode,
-  CurrencyAdded,
-  RealCurrencyAlreadyRegistered,
-  RealCurrencyNotSupported,
-  CurrencyDeleted,
+  ExchangeRateForRealCurrencyNotAllowed,
+  ExchangeRateNotInformedForFictitiousCurrency,
+  CurrencyAlreadyRegistered,
   CurrencyNotFound,
-  CurrencyExchanged,
-} from './responses/currency-service.response';
+} from './responses/currency-service.errors';
 import { ServiceResponse } from './responses/service.response';
 
 export type ExchangeResult = {
@@ -25,67 +21,51 @@ export class CurrencyService implements ICurrencyService {
     private readonly coinbaseIntegrationService: ICoinbaseIntegrationService,
   ) {}
 
-  public async addRealCurrency(
-    currencyCode: string,
-  ): Promise<ServiceResponse<CurrencyAdded | void>> {
+  public async addCurrency(currencyDto: CurrencyDto): Promise<CurrencyDto> {
+    const { code, exchangeRate } = currencyDto;
     const { data: apiCurrencies } = await this.coinbaseIntegrationService.getCurrencies();
 
-    const isIncluded = apiCurrencies.some((currency) => currency.id === currencyCode);
-    if (!isIncluded) {
-      return new RealCurrencyNotSupported(currencyCode);
+    const isIncluded = apiCurrencies.some((currency) => currency.id === code);
+
+    if (isIncluded && exchangeRate) {
+      throw new ExchangeRateForRealCurrencyNotAllowed(code);
     }
 
-    const dbCurrency = await this.currencyDao.getByCode(currencyCode);
+    if (!isIncluded && !exchangeRate) {
+      throw new ExchangeRateNotInformedForFictitiousCurrency(code);
+    }
+
+    const dbCurrency = await this.currencyDao.getByCode(code);
+
     if (dbCurrency) {
-      return new RealCurrencyAlreadyRegistered(currencyCode);
+      throw new CurrencyAlreadyRegistered(code);
     }
 
-    const { rates } = await this.coinbaseIntegrationService.getExchangeRates();
-
-    const currency = new Currency({ code: currencyCode, rate: rates[currencyCode] });
-    const currencyAdded = await this.currencyDao.save(currency);
-
-    return new CurrencyAdded(currencyAdded);
-  }
-
-  public async addFictitiousCurrency(
-    currencyInput: any,
-  ): Promise<ServiceResponse<CurrencyAdded | void>> {
-    const { data: apiCurrencies } = await this.coinbaseIntegrationService.getCurrencies();
-
-    const isIncluded = apiCurrencies.some((currency) => currency.id === currencyInput.currency);
     if (isIncluded) {
-      return new InvalidFictitiousCurrencyCode(currencyInput.currency);
+      const { rates } = await this.coinbaseIntegrationService.getExchangeRates();
+
+      const currency = new Currency({ code, exchangeRate: rates[code], type: CurrencyType.REAL });
+      const realCurrencyAdded = await this.currencyDao.save(currency);
+
+      return realCurrencyAdded;
     }
 
-    const dbCurrency = await this.currencyDao.getByCode(currencyInput.currency);
-    if (dbCurrency) {
-      return new FictitiousCurrencyAlreadyRegistered(currencyInput.currency);
-    }
-
-    const currency = new Currency({
-      code: currencyInput.currency,
-      rate: currencyInput.exchangeRate,
-    });
+    const currency = new Currency({ code, exchangeRate, type: CurrencyType.FICTITIOUS });
     const fictitiousCurrencyAdded = await this.currencyDao.save(currency);
 
-    return new CurrencyAdded(fictitiousCurrencyAdded);
+    return fictitiousCurrencyAdded;
   }
 
-  public async deleteCurrency(currencyCode: any): Promise<ServiceResponse<CurrencyDeleted | void>> {
+  public async deleteCurrency(currencyCode: any): Promise<CurrencyDto> {
     const deletedCurrency = await this.currencyDao.delete(currencyCode);
     if (!deletedCurrency) {
-      return new CurrencyNotFound(currencyCode);
+      throw new CurrencyNotFound(currencyCode);
     }
-
-    return new CurrencyDeleted(deletedCurrency);
+    console.log('AQUI AQUI AQUI', deletedCurrency);
+    return deletedCurrency;
   }
 
-  public async exchangeCurrencies(
-    from: string,
-    to: string,
-    amount: string,
-  ): Promise<ServiceResponse<CurrencyExchanged | void>> {
+  public async exchangeCurrencies(from: string, to: string, amount: string): Promise<any> {
     const fromCurrency = await this.currencyDao.getByCode(from);
     if (!fromCurrency) {
       return new CurrencyNotFound(from);
@@ -98,7 +78,7 @@ export class CurrencyService implements ICurrencyService {
 
     const result = this.exchange(fromCurrency, toCurrency, amount);
 
-    return new CurrencyExchanged(result);
+    return result;
   }
 
   private exchange(fromCurrency: any, toCurrency: any, amount: string) {

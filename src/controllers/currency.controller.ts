@@ -1,25 +1,15 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
 import { ICurrencyService } from '../interfaces/currency-service';
-import {
-  CurrencyAdded,
-  CurrencyExchanged,
-  CurrencyDeleted,
-  CurrencyNotFound,
-  FictitiousCurrencyAlreadyRegistered,
-  InvalidFictitiousCurrencyCode,
-  RealCurrencyAlreadyRegistered,
-  RealCurrencyNotSupported,
-} from '../services/responses/currency-service.response';
 import { HttpStatus } from '../web/http-status';
-import { BaseController } from './base.controller';
 
-const inputRealCurrencySchema = Joi.string().length(3).uppercase().required();
-
-const inputFictitiousCurrencySchema = Joi.object({
-  currency: Joi.string().min(3).max(5).uppercase().required(),
-  exchangeRate: Joi.string().regex(new RegExp('^(?=.+)(?:[1-9]\\d*|0)?(?:\\.\\d+)?$')).required(),
+const inputAddCurrencySchema = Joi.object({
+  code: Joi.string().min(3).max(5).uppercase().required(),
+  exchangeRate: Joi.string()
+    .regex(new RegExp('^(?=.+)(?:[1-9]\\d*|0)?(?:\\.\\d+)?$'))
+    .error(new Error("You must use '.' as delimiter and the number must be positive.")),
 });
+
 const inputDeleteCurrencySchema = Joi.string().min(3).max(5).uppercase().required();
 
 const inputExchangeCurrencySchema = Joi.object({
@@ -28,64 +18,28 @@ const inputExchangeCurrencySchema = Joi.object({
   amount: Joi.string().regex(new RegExp('^(?=.+)(?:[1-9]\\d*|0)?(?:\\.\\d+)?$')).required(),
 });
 
-export class CurrencyController extends BaseController {
+export class CurrencyController {
   protected serviceResponseMap: Map<string, HttpStatus>;
 
-  constructor(private readonly currencyService: ICurrencyService) {
-    super();
-    this.serviceResponseMap = new Map<string, HttpStatus>([
-      [RealCurrencyNotSupported.name, HttpStatus.BAD_REQUEST],
-      [RealCurrencyAlreadyRegistered.name, HttpStatus.BAD_REQUEST],
-      [CurrencyAdded.name, HttpStatus.CREATED],
-      [InvalidFictitiousCurrencyCode.name, HttpStatus.BAD_REQUEST],
-      [FictitiousCurrencyAlreadyRegistered.name, HttpStatus.BAD_REQUEST],
-      [CurrencyDeleted.name, HttpStatus.OK],
-      [CurrencyNotFound.name, HttpStatus.BAD_REQUEST],
-      [CurrencyExchanged.name, HttpStatus.OK],
-    ]);
-  }
+  constructor(private readonly currencyService: ICurrencyService) {}
 
-  public async addRealCurrency(req: Request, res: Response) {
-    const currency = req.query.currency as string;
+  public async addCurrency(req: Request, res: Response) {
+    const { body } = req;
 
     try {
-      await inputRealCurrencySchema.validateAsync(currency);
+      await inputAddCurrencySchema.validateAsync(body);
     } catch (e) {
       res.status(HttpStatus.BAD_REQUEST).json(e.message);
       return;
     }
 
     try {
-      const result = await this.currencyService.addRealCurrency(currency);
-      const httpStatus = this.getHttpStatus(result);
-      res.status(httpStatus).json(result);
-    } catch (e) {
-      console.log(e);
-      res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal error occourred while adding real currency.');
-    }
-  }
-
-  public async addFictitiousCurrency(req: Request, res: Response) {
-    const currencyInput = req.query;
-
-    try {
-      await inputFictitiousCurrencySchema.validateAsync(currencyInput);
-    } catch (e) {
-      res.status(HttpStatus.BAD_REQUEST).json(e.message);
-      return;
-    }
-
-    try {
-      const result = await this.currencyService.addFictitiousCurrency(currencyInput);
-      const httpStatus = this.getHttpStatus(result);
-      res.status(httpStatus).json(result);
-    } catch (e) {
-      console.log(e);
-      res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal error occourred while adding fictitious currency.');
+      const result = await this.currencyService.addCurrency(body);
+      res.status(HttpStatus.OK).json({ data: result, error: null });
+    } catch (error) {
+      console.log(error);
+      const httpStatus = error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+      res.status(httpStatus).send({ data: null, error: error.message });
     }
   }
 
@@ -101,8 +55,7 @@ export class CurrencyController extends BaseController {
 
     try {
       const result = await this.currencyService.deleteCurrency(currency);
-      const httpStatus = this.getHttpStatus(result);
-      res.status(httpStatus).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (e) {
       console.log(e);
       res
@@ -126,8 +79,7 @@ export class CurrencyController extends BaseController {
       const to = exchangeInput.to as string;
       const amount = exchangeInput.amount as string;
       const result = await this.currencyService.exchangeCurrencies(from, to, amount);
-      const httpStatus = this.getHttpStatus(result);
-      res.status(httpStatus).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (e) {
       console.log(e);
       res
