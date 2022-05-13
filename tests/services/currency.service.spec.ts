@@ -146,16 +146,52 @@ describe('CurrencyService', () => {
     });
   });
 
+  describe('when the method "getCurrencies" is called', () => {
+    it('should return all currencies', async () => {
+      const mockedList = [
+        { code: 'BRL', exchangeRate: '5.13', type: CurrencyType.REAL },
+        { code: 'USD', exchangeRate: '1', type: CurrencyType.REAL },
+      ];
+
+      const currencyDaospy = jest
+        .spyOn(CurrencyDao.prototype, 'getAllCurrencies')
+        .mockResolvedValue(mockedList);
+
+      const currencyList = await currencyService.getCurrencies(null);
+
+      expect(currencyList).toBeDefined();
+      expect(currencyDaospy).toHaveBeenCalled();
+      expect(currencyList).toEqual(mockedList);
+    });
+
+    it('should return currencies of a specific type', async () => {
+      const mockedList = [
+        { code: 'BRL', exchangeRate: '5.13', type: CurrencyType.REAL },
+        { code: 'USD', exchangeRate: '1', type: CurrencyType.REAL },
+      ];
+
+      const currencyDaospy = jest
+        .spyOn(CurrencyDao.prototype, 'getCurrenciesByType')
+        .mockResolvedValue(mockedList);
+
+      const currencyList = await currencyService.getCurrencies(CurrencyType.REAL);
+
+      expect(currencyList).toBeDefined();
+      expect(currencyDaospy).toHaveBeenCalled();
+      expect(currencyList).toEqual(mockedList);
+    });
+  });
+
   describe('when the method "exchangeCurrencies" is called', () => {
     it('should return CurrencyNotFound from fromCurrency', async () => {
       const daoGetByCodeSpy = jest
         .spyOn(CurrencyDao.prototype, 'getByCode')
         .mockResolvedValue(null);
 
-      const response = await currencyService.exchangeCurrencies('USD', 'BRL', '10');
-
+      await expect(currencyService.exchangeCurrencies('USD', 'BRL', '10')).rejects.toThrow(
+        'The currency USD was not found in the database.',
+      );
       expect(daoGetByCodeSpy).toHaveBeenCalled();
-      expect(response).toBeInstanceOf(CurrencyNotFound);
     });
 
     it('should return CurrencyNotFound from toCurrency', async () => {
@@ -164,10 +200,10 @@ describe('CurrencyService', () => {
         .mockResolvedValueOnce({ code: 'USD', exchangeRate: '1', type: CurrencyType.REAL })
         .mockResolvedValueOnce(null);
 
-      const response = await currencyService.exchangeCurrencies('USD', 'BRL', '10');
-
+      await expect(currencyService.exchangeCurrencies('USD', 'BRL', '10')).rejects.toThrow(
+        'The currency BRL was not found in the database.',
+      );
       expect(daoGetByCodeSpy).toHaveBeenCalledTimes(2);
-      expect(response).toBeInstanceOf(CurrencyNotFound);
     });
 
     it('should return CurrencyDeleted using different currencies', async () => {

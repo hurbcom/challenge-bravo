@@ -3,13 +3,24 @@ import { Currency, CurrencyDto } from '../../model/currency';
 
 export class CurrencyDao implements ICurrencyDao {
   public async getAllCurrencies(): Promise<CurrencyDto[]> {
-    const currencyList = await Currency.find({});
+    const currencyList = await Currency.find({}, { code: 1, exchangeRate: 1, type: 1, _id: 0 });
     return currencyList;
   }
 
   public async getByCode(currencyCode: string): Promise<CurrencyDto> {
-    const currency = await Currency.findOne({ code: currencyCode });
+    const currency = await Currency.findOne(
+      { code: currencyCode },
+      { code: 1, exchangeRate: 1, type: 1, _id: 0 },
+    );
     return currency;
+  }
+
+  public async getCurrenciesByType(currencyType: string): Promise<CurrencyDto[]> {
+    const currencyList = await Currency.find(
+      { type: currencyType },
+      { code: 1, exchangeRate: 1, type: 1, _id: 0 },
+    );
+    return currencyList;
   }
 
   public async save(currency: CurrencyDto): Promise<CurrencyDto> {

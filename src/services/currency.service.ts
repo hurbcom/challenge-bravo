@@ -64,10 +64,22 @@ export class CurrencyService implements ICurrencyService {
     return deletedCurrency;
   }
 
+  public async getCurrencies(type: string): Promise<CurrencyDto[]> {
+    let currencyList: CurrencyDto[];
+    if (!type) {
+      currencyList = await this.currencyDao.getAllCurrencies();
+      return currencyList;
+    }
+
+    currencyList = await this.currencyDao.getCurrenciesByType(type.toUpperCase());
+
+    return currencyList;
+  }
+
   public async exchangeCurrencies(from: string, to: string, amount: string): Promise<any> {
     const fromCurrency = await this.currencyDao.getByCode(from);
     if (!fromCurrency) {
-      return new CurrencyNotFound(from);
+      throw new CurrencyNotFound(from);
     }
 
     const toCurrency = from === to ? fromCurrency : await this.currencyDao.getByCode(to);

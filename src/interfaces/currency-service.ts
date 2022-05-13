@@ -4,5 +4,6 @@ import { ServiceResponse } from '../services/responses/service.response';
 export interface ICurrencyService {
   addCurrency(currencyDto: CurrencyDto): Promise<CurrencyDto>;
   deleteCurrency(currencyCode: any): Promise<CurrencyDto>;
+  getCurrencies(type: string): Promise<CurrencyDto[]>;
   exchangeCurrencies(from: string, to: string, amount: string): Promise<any>;
 }

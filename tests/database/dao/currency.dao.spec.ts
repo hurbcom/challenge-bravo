@@ -97,4 +97,30 @@ describe('CurrencyDao', () => {
       expect(dbCurrency).toEqual(null);
     });
   });
+
+  describe('when the method "getCurrenciesByType" is called', () => {
+    it('should return all currencies of a specific type', async () => {
+      const realCurrencyCode = 'BRL';
+      const fictitiousCurrencyCode = 'HURB';
+
+      const realCurrencyDto = {
+        code: realCurrencyCode,
+        exchangeRate: '5.13',
+        type: CurrencyType.REAL,
+      };
+      const fictitiousCurrencyDto = {
+        code: fictitiousCurrencyCode,
+        exchangeRate: '5.13',
+        type: CurrencyType.FICTITIOUS,
+      };
+
+      await currencyDao.save(realCurrencyDto);
+      await currencyDao.save(fictitiousCurrencyDto);
+
+      const currencyDtoList = await currencyDao.getCurrenciesByType(CurrencyType.REAL);
+
+      expect(currencyDtoList).toBeDefined();
+      expect(currencyDtoList[0].type).toEqual(CurrencyType.REAL);
+    });
+  });
 });

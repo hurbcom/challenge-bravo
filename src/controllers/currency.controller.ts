@@ -12,6 +12,8 @@ const inputAddCurrencySchema = Joi.object({
 
 const inputDeleteCurrencySchema = Joi.string().min(3).max(5).uppercase().required();
 
+const inputGetCurrenciesSchema = Joi.string().valid('real', 'fictitious', 'REAL', 'FICTITIOUS');
+
 const inputExchangeCurrencySchema = Joi.object({
   from: Joi.string().min(3).max(5).uppercase().required(),
   to: Joi.string().min(3).max(5).uppercase().required(),
@@ -28,8 +30,8 @@ export class CurrencyController {
 
     try {
       await inputAddCurrencySchema.validateAsync(body);
-    } catch (e) {
-      res.status(HttpStatus.BAD_REQUEST).json(e.message);
+    } catch (error) {
+      res.status(HttpStatus.BAD_REQUEST).json({ data: null, error: error.message });
       return;
     }
 
@@ -48,8 +50,8 @@ export class CurrencyController {
 
     try {
       await inputDeleteCurrencySchema.validateAsync(currency);
-    } catch (e) {
-      res.status(HttpStatus.BAD_REQUEST).json(e.message);
+    } catch (error) {
+      res.status(HttpStatus.BAD_REQUEST).json({ data: null, error: error.message });
       return;
     }
 
@@ -63,13 +65,33 @@ export class CurrencyController {
     }
   }
 
+  public async getCurrencies(req: Request, res: Response) {
+    const type = req.query.type as string;
+
+    try {
+      await inputGetCurrenciesSchema.validateAsync(type);
+    } catch (error) {
+      res.status(HttpStatus.BAD_REQUEST).json({ data: null, error: error.message });
+      return;
+    }
+
+    try {
+      const result = await this.currencyService.getCurrencies(type);
+      res.status(HttpStatus.OK).json({ data: result, error: null });
+    } catch (error) {
+      console.log(error);
+      const httpStatus = error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+      res.status(httpStatus).send({ data: null, error: error.message });
+    }
+  }
+
   public async exchangeCurrency(req: Request, res: Response) {
     const exchangeInput = req.query;
 
     try {
       await inputExchangeCurrencySchema.validateAsync(exchangeInput);
-    } catch (e) {
-      res.status(HttpStatus.BAD_REQUEST).json(e.message);
+    } catch (error) {
+      res.status(HttpStatus.BAD_REQUEST).json({ data: null, error: error.message });
       return;
     }
 
