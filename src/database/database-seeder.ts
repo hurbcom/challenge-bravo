@@ -1,6 +1,6 @@
 import { ICoinbaseIntegrationService } from '../interfaces/coinbase-integration-service';
 import { ICurrencyDao } from '../interfaces/currency-dao';
-import { Currency } from '../model/currency';
+import { Currency, CurrencyType } from '../model/currency';
 
 export class DatabaseSeeder {
   private readonly BASE_CURRENCIES = ['USD', 'BRL', 'EUR', 'BTC', 'ETH'];
@@ -22,7 +22,11 @@ export class DatabaseSeeder {
     const { rates } = await this.coinbaseIntegrationService.getExchangeRates();
 
     for (const baseCurrency of this.BASE_CURRENCIES) {
-      const currency = new Currency({ code: baseCurrency, rate: rates[baseCurrency] });
+      const currency = new Currency({
+        code: baseCurrency,
+        exchangeRate: rates[baseCurrency],
+        type: CurrencyType.REAL,
+      });
       await this.currencyDao.save(currency);
     }
   }

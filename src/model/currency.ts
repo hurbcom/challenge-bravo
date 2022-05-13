@@ -1,8 +1,14 @@
 import mongoose from 'mongoose';
 
+export enum CurrencyType {
+  REAL = 'REAL',
+  FICTITIOUS = 'FICTITIOUS',
+}
+
 export type CurrencyDto = {
   code: string;
-  rate: string;
+  exchangeRate: string;
+  type: CurrencyType;
 };
 
 const { Schema } = mongoose;
@@ -14,8 +20,12 @@ const currencySchema = new Schema(
       unique: true,
       required: true,
     },
-    rate: {
+    exchangeRate: {
       type: Number,
+      required: true,
+    },
+    type: {
+      type: String,
       required: true,
     },
   },
