@@ -165,6 +165,23 @@ Exemplo de retorno:
 }
 ```
 
+## Jobs
+
+### Update Currency Exchange Rates
+
+Job responsável por atualizar a taxa de câmbio das moedas que estão cadastradas no banco.
+
+## Testes
+
+Para a execução dos testes basta executar o comando abaixo:
+
+`yarn test`
+
+## TODO
+
+- Criar rota de HealthCheck para monitorar o status da aplicação
+- Adicionar Redis (cache) à aplicação para melhorar a performance da aplicação
+
 <!-- <figure align="center">
   <img src="./docs/diagrama-classes-api.png"/>
   <figcaption>Diagrama de classes da API</figcaption>
