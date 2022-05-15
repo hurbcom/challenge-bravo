@@ -48,7 +48,9 @@ export class CurrencyDao implements ICurrencyDao {
 
   public async delete(currencyCode: string): Promise<CurrencyDto> {
     const deletedCurrency = await Currency.findOneAndDelete({ code: currencyCode });
-    const currencyDto = this.currencyMapper.toDto(deletedCurrency);
+    const currencyDto = deletedCurrency
+      ? this.currencyMapper.toDto(deletedCurrency)
+      : deletedCurrency;
     return currencyDto;
   }
 }
