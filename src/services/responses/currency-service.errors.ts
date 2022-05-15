@@ -1,5 +1,4 @@
 import { HttpStatus } from '../../web/http-status';
-import { ServiceResponse } from './service.response';
 
 export class ExchangeRateForRealCurrencyNotAllowed extends Error {
   private readonly status: HttpStatus;

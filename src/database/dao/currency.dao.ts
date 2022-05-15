@@ -1,5 +1,14 @@
-import { ICurrencyDao } from '../../interfaces/currency-dao';
+import { ICurrencyMapper } from '../../mappers/currency.mapper';
 import { Currency, CurrencyDto } from '../../model/currency';
+
+export interface ICurrencyDao {
+  getAllCurrencies(): Promise<CurrencyDto[]>;
+  getCurrenciesByType(currencyType: string): Promise<CurrencyDto[]>;
+  getByCode(currencyCode: string): Promise<CurrencyDto>;
+  save(currency: CurrencyDto): Promise<CurrencyDto>;
+  update(filter: any, update: any): Promise<any>;
+  delete(currencyCode: string): Promise<CurrencyDto>;
+}
 
 export class CurrencyDao implements ICurrencyDao {
   public async getAllCurrencies(): Promise<CurrencyDto[]> {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
-import { ICurrencyService } from '../interfaces/currency-service';
+import { ICurrencyService } from '../services/currency.service';
 import { HttpStatus } from '../web/http-status';
 
 const inputAddCurrencySchema = Joi.object({

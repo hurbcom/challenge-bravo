@@ -1,6 +1,6 @@
-import { ICoinbaseIntegrationService } from '../interfaces/coinbase-integration-service';
-import { ICurrencyDao } from '../interfaces/currency-dao';
 import { Currency, CurrencyType } from '../model/currency';
+import { ICoinbaseIntegrationService } from '../services/coinbase-integration.service';
+import { ICurrencyDao } from './dao/currency.dao';
 
 export class DatabaseSeeder {
   private readonly BASE_CURRENCIES = ['USD', 'BRL', 'EUR', 'BTC', 'ETH'];

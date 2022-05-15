@@ -1,7 +1,6 @@
-import { ICoinbaseIntegrationService } from '../interfaces/coinbase-integration-service';
-import { ICurrencyDao } from '../interfaces/currency-dao';
-import { ICurrencyService } from '../interfaces/currency-service';
+import { ICurrencyDao } from '../database/dao/currency.dao';
 import { Currency, CurrencyDto, CurrencyType } from '../model/currency';
+import { ICoinbaseIntegrationService } from './coinbase-integration.service';
 import {
   ExchangeRateForRealCurrencyNotAllowed,
   ExchangeRateNotInformedForFictitiousCurrency,
@@ -13,6 +12,13 @@ export type ExchangeResult = {
   to: string;
   amount: string;
 };
+
+export interface ICurrencyService {
+  addCurrency(currencyDto: CurrencyDto): Promise<CurrencyDto>;
+  deleteCurrency(currencyCode: any): Promise<CurrencyDto>;
+  getCurrencies(type: string): Promise<CurrencyDto[]>;
+  exchangeCurrencies(from: string, to: string, amount: string): Promise<any>;
+}
 
 export class CurrencyService implements ICurrencyService {
   constructor(

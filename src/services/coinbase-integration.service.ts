@@ -1,4 +1,3 @@
-import { ICoinbaseIntegrationService } from '../interfaces/coinbase-integration-service';
 import { HttpClient } from '../web/http-client';
 
 export type CurrenciesResponse = {
@@ -17,6 +16,11 @@ export type ExchangeRatesResponse = {
     [currency: string]: string;
   };
 };
+
+export interface ICoinbaseIntegrationService {
+  getCurrencies(): Promise<CurrenciesResponse>;
+  getExchangeRates(): Promise<ExchangeRatesResponse>;
+}
 
 export class CoinbaseIntegrationService implements ICoinbaseIntegrationService {
   constructor(private readonly httpClient: HttpClient) {}
