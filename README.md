@@ -188,7 +188,6 @@ Abaixo o diagrama de classes referente a API construída descrevendo sua estrutu
 
 <figure align="center">
   <img src="./docs/diagrama-classes-api.png"/>
-  <figcaption>Diagrama de classes da API</figcaption>
 </figure>
 
 ## TODO
