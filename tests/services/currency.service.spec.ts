@@ -1,7 +1,6 @@
 import { currencyService as CurrencyService } from '../../src/services';
-import { ICurrencyService } from '../../src/interfaces/currency-service';
+import { ICurrencyService } from '../../src/services/currency.service';
 import { CoinbaseIntegrationService } from '../../src/services/coinbase-integration.service';
-import { CurrencyNotFound } from '../../src/services/responses/currency-service.errors';
 import { CurrencyDao } from '../../src/database/dao/currency.dao';
 import { CurrencyType } from '../../src/model/currency';
 

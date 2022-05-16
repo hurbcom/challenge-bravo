@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { coinbaseIntegrationService as CoinbaseIntegrationService } from '../../src/services';
-import { ICoinbaseIntegrationService } from '../../src/interfaces/coinbase-integration-service';
+import { ICoinbaseIntegrationService } from '../../src/services/coinbase-integration.service';
 import currenciesResponse from '../currenciesResponse.json';
 import exchangeRatesResponse from '../exchangeRatesResponse.json';
 

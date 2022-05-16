@@ -1,5 +1,5 @@
-import { ICurrencyDao } from '../../src/interfaces/currency-dao';
-import { ICoinbaseIntegrationService } from '../../src/interfaces/coinbase-integration-service';
+import { ICurrencyDao } from '../../src/database/dao/currency.dao';
+import { ICoinbaseIntegrationService } from '../../src/services/coinbase-integration.service';
 import { CoinbaseIntegrationService } from '../../src/services/coinbase-integration.service';
 import { CurrencyDao } from '../../src/database/dao/currency.dao';
 import { currencyDao } from '../../src/database/dao';

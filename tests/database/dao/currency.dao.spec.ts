@@ -1,4 +1,4 @@
-import { ICurrencyDao } from '../../../src/interfaces/currency-dao';
+import { ICurrencyDao } from '../../../src/database/dao/currency.dao';
 import { currencyDao as CurrencyDao } from '../../../src/database/dao';
 import { DatabaseMemoryServer } from '../../database-memory-server';
 import { CurrencyType } from '../../../src/model/currency';
@@ -71,15 +71,11 @@ describe('CurrencyDao', () => {
 
   describe('when the method "update" is called', () => {
     it('should return the currency updated', async () => {
-      const currencyRate = '5.0';
       const currencyRateUpdated = '5.13';
       const currencyDto = { code: 'BRL', exchangeRate: '5.13', type: CurrencyType.REAL };
       await currencyDao.save(currencyDto);
 
-      const result = await currencyDao.update({ code: 'BRL' }, { rate: currencyRateUpdated });
-
-      expect(result).toBeDefined();
-      expect(result.modifiedCount).toEqual(1);
+      await currencyDao.update({ code: 'BRL' }, { rate: currencyRateUpdated });
     });
   });
 
@@ -95,6 +91,16 @@ describe('CurrencyDao', () => {
       expect(deletedCurrency).toBeDefined();
       expect(deletedCurrency.code).toEqual(currencyCode);
       expect(dbCurrency).toEqual(null);
+    });
+  });
+
+  describe('when the method "delete" is called', () => {
+    it('should return null because the currency is not registered', async () => {
+      const currencyCode = 'BRL';
+
+      const deletedCurrency = await currencyDao.delete(currencyCode);
+
+      expect(deletedCurrency).toBeNull();
     });
   });
 
