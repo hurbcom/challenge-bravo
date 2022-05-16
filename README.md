@@ -40,6 +40,19 @@ Exemplo de corpo da requisição para adição de uma moeda real:
 }
 ```
 
+Exemplo de retorno:
+
+```
+{
+	"data": {
+		"code": "AUD",
+		"exchangeRate": 1.443918216472219,
+		"type": "REAL"
+	},
+	"error": null
+}
+```
+
 Exemplo de corpo da requisição para adição de uma moeda fictícia:
 
 ```
@@ -56,11 +69,7 @@ Exemplo de retorno:
 	"data": {
 		"code": "HURB",
 		"exchangeRate": 1.78,
-		"type": "FICTITIOUS",
-		"_id": "627ee445c8ef98758671d672",
-		"createdAt": "2022-05-13T23:05:41.126Z",
-		"updatedAt": "2022-05-13T23:05:41.126Z",
-		"__v": 0
+		"type": "FICTITIOUS"
 	},
 	"error": null
 }
@@ -126,13 +135,9 @@ Exemplo de retorno:
 ```
 {
 	"data": {
-		"_id": "627ee445c8ef98758671d672",
 		"code": "HURB",
 		"exchangeRate": 1.78,
-		"type": "FICTITIOUS",
-		"createdAt": "2022-05-13T23:05:41.126Z",
-		"updatedAt": "2022-05-13T23:24:01.037Z",
-		"__v": 0
+		"type": "FICTITIOUS"
 	},
 	"error": null
 }
@@ -177,12 +182,16 @@ Para a execução dos testes basta executar o comando abaixo:
 
 `yarn test`
 
+## Diagrama de Classes
+
+Abaixo o diagrama de classes referente a API construída descrevendo sua estrutura e relacionamentos
+
+<figure align="center">
+  <img src="./docs/diagrama-classes-api.png"/>
+  <figcaption>Diagrama de classes da API</figcaption>
+</figure>
+
 ## TODO
 
 - Criar rota de HealthCheck para monitorar o status da aplicação
 - Adicionar Redis (cache) à aplicação para melhorar a performance da aplicação
-
-<!-- <figure align="center">
-  <img src="./docs/diagrama-classes-api.png"/>
-  <figcaption>Diagrama de classes da API</figcaption>
-</figure> -->
