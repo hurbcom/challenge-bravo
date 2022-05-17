@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import { Database } from '../database/database';
 import { coinbaseIntegrationService as CoinbaseIntegrationService } from '../services/';
 import { currencyDao as CurrencyDao } from '../database/dao';
+import { CurrencyType } from '../model/currency';
 
 export class UpdateCurrencyExchangeRatesJob {
   static async run(): Promise<void> {
@@ -20,8 +21,13 @@ export class UpdateCurrencyExchangeRatesJob {
         const currencies = await currencyDao.getAllCurrencies();
 
         for (const currency of currencies) {
-          await currencyDao.update({ code: currency.code }, { exchangeRate: rates[currency.code] });
-          count++;
+          if (currency.type === CurrencyType.REAL) {
+            await currencyDao.update(
+              { code: currency.code },
+              { exchangeRate: rates[currency.code] },
+            );
+            count++;
+          }
         }
 
         console.log(`Total updated: ${count}.`);
