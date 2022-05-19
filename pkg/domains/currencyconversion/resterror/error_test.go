@@ -43,10 +43,9 @@ func Test_restError_ErrorProcess(t *testing.T) {
 			wantCode: http.StatusNotFound,
 		},
 		{
-			name: "fail, error isn't mapped and cannot be found",
-			re:   restError{},
-			args: args{err: sql.ErrNoRows},
-			// we don't use const here to force checking in case of change
+			name:     "fail, error isn't mapped and cannot be found",
+			re:       restError{},
+			args:     args{err: sql.ErrNoRows},
 			want:     "Sorry, something went wrong",
 			wantCode: http.StatusInternalServerError,
 		},

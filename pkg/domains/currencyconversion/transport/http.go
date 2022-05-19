@@ -12,6 +12,7 @@ import (
 
 	chi "github.com/go-chi/chi/v5"
 	"github.com/go-kit/kit/transport/http"
+	"github.com/pkg/errors"
 )
 
 func NewHTTPHandler(svc service.ServiceI) stdHTTP.Handler {
@@ -43,7 +44,7 @@ func NewHTTPHandler(svc service.ServiceI) stdHTTP.Handler {
 	upsert := http.NewServer(
 		service.Upsert(svc),
 		decodeUpsertRequest,
-		codeHTTP{201}.encodeResponse,
+		codeHTTP{200}.encodeResponse,
 		options...,
 	)
 
@@ -69,7 +70,7 @@ func NewHTTPHandler(svc service.ServiceI) stdHTTP.Handler {
 func decodeConvertRequest(_ context.Context, r *stdHTTP.Request) (interface{}, error) {
 	amount, err := strconv.ParseFloat(r.FormValue("amount"), 64)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(resterror.ErrConvertAmount, err.Error())
 	}
 	return model.ConvertRequest{
 		From:   r.FormValue("from"),
@@ -85,9 +86,7 @@ func decodeFindRequest(_ context.Context, r *stdHTTP.Request) (interface{}, erro
 }
 
 func decodeListRequest(_ context.Context, r *stdHTTP.Request) (interface{}, error) {
-	return model.FindByIDRequest{
-		ID: chi.URLParam(r, "id"),
-	}, nil
+	return nil, nil
 }
 
 func decodeUpsertRequest(_ context.Context, r *stdHTTP.Request) (interface{}, error) {

@@ -45,14 +45,12 @@ func New(ctx context.Context) (context.Context, *Dependency, error) {
 		repository.NewRepository(cmp.Log, cmp.DB),
 		cmp.Log,
 	)
-
 	if err != nil {
 		return nil, nil, err
 	}
 
 	srv := Services{
 		currencyConversionService,
-		// include services initialized above here
 	}
 
 	dep := Dependency{

@@ -74,6 +74,10 @@ func (r *RepositoryMemory) FindByID(ctx context.Context, id string) (model.Curre
 
 func (r *RepositoryMemory) ListCurrencies(ctx context.Context) ([]model.CurrencyConversion, error) {
 	var currencies []model.CurrencyConversion
+	err := r.createTable()
+	if err != nil {
+		return currencies, err
+	}
 	rows, err := r.db.Query("SELECT id, usd_value FROM currencies")
 	if err != nil {
 		return currencies, err
@@ -92,6 +96,10 @@ func (r *RepositoryMemory) ListCurrencies(ctx context.Context) ([]model.Currency
 }
 
 func (r *RepositoryMemory) Upsert(ctx context.Context, q *model.CurrencyConversion) error {
+	err := r.createTable()
+	if err != nil {
+		return err
+	}
 	update, err := r.db.Prepare("UPDATE currencies SET usd_value = $1 WHERE id = $2")
 	if err != nil {
 		return err
@@ -122,6 +130,10 @@ func (r *RepositoryMemory) Upsert(ctx context.Context, q *model.CurrencyConversi
 }
 
 func (r *RepositoryMemory) Delete(ctx context.Context, id string) error {
+	err := r.createTable()
+	if err != nil {
+		return err
+	}
 	delete, err := r.db.Prepare("DELETE FROM currencies WHERE id = $1")
 	if err != nil {
 		return err
@@ -150,7 +162,11 @@ func (r *RepositoryMemory) IsCustom(ctx context.Context, id string) bool {
 
 func (r *RepositoryMemory) findByID(ctx context.Context, id string) (model.CurrencyConversion, error) {
 	var currencyConversion model.CurrencyConversion
-	err := r.db.QueryRow("SELECT id, usd_value FROM currencies WHERE id = $1", id).Scan(&currencyConversion.ID, &currencyConversion.USDValue)
+	err := r.createTable()
+	if err != nil {
+		return currencyConversion, err
+	}
+	err = r.db.QueryRow("SELECT id, usd_value FROM currencies WHERE id = $1", id).Scan(&currencyConversion.ID, &currencyConversion.USDValue)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			currencyResponse, err := fetchOne(ctx, id)
@@ -192,4 +208,17 @@ func fetchOne(ctx context.Context, id string) (model.CurrencyResponse, error) {
 		return currencyResponse, err
 	}
 	return currencyResponse, nil
+}
+
+func (r *RepositoryMemory) createTable() error {
+	create, err := r.db.Prepare("CREATE TABLE IF NOT EXISTS currencies(id VARCHAR(50) NOT NULL PRIMARY KEY, usd_value FLOAT)")
+	if err != nil {
+		return err
+	}
+
+	_, err = create.Exec()
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -1,20 +1,5 @@
 version: '3'
 services:
-  # api:
-  #   container_name: full_api
-  #   build: .
-  #   env_file:
-  #     - env/application.env
-  #   ports: 
-  #     - 8080:8080 
-  #   restart: on-failure
-  #   volumes:
-  #     - api:/usr/src/api/
-  #   depends_on:
-  #     - fullstack-postgres          
-  #   networks:
-  #     - fullstack
-
   fullstack-postgres:
     image: postgres:latest
     container_name: full_db_postgres
@@ -33,7 +18,6 @@ services:
       - fullstack
 
 volumes:
-  api:
   database_postgres:                  
 
 networks:

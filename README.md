@@ -1,82 +1,132 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# Challenge Bravo
+## _Code Challenge: API de Conversão de Moeda_
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+Challenge Bravo, é um "code challenge" oferecido pela Hurb como step de um processo seletivo de Engenharia de Software.
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+A aplicação API tem como responsabilidade fornecer uma calculadora de conversão de moedas.
 
-The API must convert between the following currencies:
+## Stack
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Challenge Bravo usa como tech stack:
+- Golang
+- Docker
+- Docker Compose
+- Make (opcional)
 
-Other coins could be added as usage.
+## Tech Decisions
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+As decisões técnicas utilizadas para o desenvolvimento da aplicação foram de criar uma aplicação que fosse facilmente compreendida, para isso utilizei uma linguagem altamente utilizada na atualidade (golang) e de fácil entendimento.
+Além disso, utilizei algumas das boas práticas de clean code e as premissas do [Uber - Go Style Guide](https://github.com/uber-go/guide/blob/master/style.md).
+Utilizei um "scaffold" baseado em DDD para que o projeto possa evoluir futuramente, porém de forma bem "lite" pois trata-se de uma aplicação simples.
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+## Installation
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+A aplicação necessite de um ambiente com [Golang](https://go.dev/doc/install) 1.17+ para rodar.
+Necessita também do [Docker](https://docs.docker.com/engine/install/ubuntu/) e do [Docker Compose](https://docs.docker.com/compose/install/)
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Instale as dependências e para rodar a aplicação use o passo-a-passo abaixo:
+(caso tenha o [Make](https://linuxhint.com/install-make-ubuntu/) instalado em sua máquina, pule para o exemplo com o Makefile)
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+### Passo 1:
+Crie suas variáveis de ambiente de acordo com o que está no arquivo: `env/application.env`
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+### Passo 2:
+Rode o comando:
+```sh
+docker-compose up
+```
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+### Passo 3:
+Em um novo terminal, rode o comando 
+```sh
+go run cmd/api/main.go
+```
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+Agora basta seguir o tutorial de uso da API.
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+## Makefile
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+Uma alternativa para rodar, é usando o Makefile que encontra-se na raiz do projeto.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Em um terminal rode o comando:
+```sh
+make docker
+```
 
-## Requirements
+Em um novo terminal, rode o comando:
+```sh
+make api
+```
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+Agora basta seguir o tutorial de uso da API.
 
-## Evaluation criteria
+## Uso da API
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+# Métodos
+Requisições para a API devem seguir os padrões:
+| Método | Descrição |
+|---|---|
+| `GET` | Retorna informações de uma ou mais moedas, e também usado para conversão. |
+| `POST` | Utilizado para criar ou atualizar uma moeda. |
+| `DELETE` | Remove uma moeda customizada. |
 
-## Doubts
+## Respostas
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+| Código | Descrição |
+|---|---|
+| `200` | Requisição executada com sucesso (success).|
+| `400` | Dados enviados inválidos.|
 
-Godspeed! ;)
+## Conversão de Moedas
+A ação de `converter` necessita do envio dos parâmetros:
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+| Parâmetro | Descrição |
+|---|---|
+| `from` | Moeda a ser utilizada como base de conversão. Ex.: USD |
+| `to` | Moeda a ser utilizada para resultado de conversão. Ex.: BRL |
+| `amount` | Valor total a ser convertido. Ex.: 100.50 |
+
+| Método | Endpoint |
+|---|---|
+| `GET` | /currency/convert |
+
+## Buscar uma Moeda customizada
+A ação de `buscar` necessita do envio do parâmetro:
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `GET` | /currency/{id} | No `{id}` deve-se substituir pelo ID/nome da moeda customizada. Ex.: ABC |
+
+## Listar as Moedas customizadas
+A ação de `listar` não precisa enviar nenhum parâmetro, basta chamar o endpoint:
+
+| Método | Endpoint |
+|---|---|
+| `GET` | /currency/custom |
+
+## Criar Moeda customizada
+A ação de `criar` necessita do envio dos parâmetros como `json` no `body` da request:
+
+| Parâmetro | Descrição |
+|---|---|
+| `id` | Nome/ID da moeda a ser inserida/atualizada. Ex.: ABC |
+| `usd_value` | Valor em dólar americana da moeda a ser inserida/atualizada. Ex.: 0.95 |
+
+| Método | Endpoint |
+|---|---|
+| `POST` | /currency/ |
+
+## Deletar Moeda customizada
+A ação de `deletar` necessita do envio do parâmetro:
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `DELETE` | /currency/{id} | No `{id}` deve-se substituir pelo ID/nome da moeda customizada. Ex.: ABC |
+
+## Notes
+
+Por se tratar de uma linguagem em que não há uma "regra" de arquitetura, utilizei algumas premissas da comunidade e aderente à algumas boas práticas de mercado, nas quais venho aprimorando desde 2018 quando tive o primeiro contato com a linguagem em um monolito.
+
+## License
+
+MIT

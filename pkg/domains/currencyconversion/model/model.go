@@ -2,6 +2,7 @@ package model
 
 import (
 	"challenge-bravo/pkg/domains/currencyconversion/resterror"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -19,13 +20,13 @@ type CurrencyConversion struct {
 }
 
 type ConvertRequest struct {
-	From   string
-	To     string
-	Amount float64
+	From   string  `json:"from"`
+	To     string  `json:"to"`
+	Amount float64 `json:"amount"`
 }
 
 type FindByIDRequest struct {
-	ID string
+	ID string `json:"id"`
 }
 
 type UpsertRequest struct {
@@ -34,14 +35,14 @@ type UpsertRequest struct {
 }
 
 type DeleteRequest struct {
-	ID string
+	ID string `json:"id"`
 }
 
 type JSONResponse struct {
-	Converted      bool
-	Value          float64
-	Error          string `json:"error,omitempty"`
-	ConvertRequest ConvertRequest
+	Converted      bool           `json:"converted"`
+	Value          float64        `json:"value"`
+	Error          string         `json:"error,omitempty"`
+	ConvertRequest ConvertRequest `json:"convert_request"`
 }
 
 type CurrencyResponse struct {
@@ -213,12 +214,12 @@ func NewCurrencyConversion(id string, usdValue float64) (CurrencyConversion, err
 		return CurrencyConversion{}, errors.Wrap(resterror.ErrNew, "empty id")
 	}
 
-	if len(id) != 3 {
-		return CurrencyConversion{}, errors.Wrap(resterror.ErrNew, "invalid ID, use 3 characters")
+	if len(id) < 3 {
+		return CurrencyConversion{}, errors.Wrap(resterror.ErrNew, "invalid ID, use >= 3 characters")
 	}
 
 	return CurrencyConversion{
-		ID:       id,
+		ID:       strings.ToUpper(id),
 		USDValue: usdValue,
 	}, nil
 }
