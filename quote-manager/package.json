@@ -45,5 +45,11 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.3.4",
     "redis": "^4.1.0"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0",
+    "mockingoose": "^2.15.2",
+    "nock": "^13.2.4",
+    "supertest": "^6.2.3"
   }
 }

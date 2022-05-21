@@ -1,5 +1,6 @@
 const app = require('../src/app')
 const CONST = require('../src/properties')
+global.HandleError = require('../src/util/HandleError')
 
 app.start(CONST.PORT, CONST.ENV)
     .then(() => {
