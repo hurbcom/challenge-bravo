@@ -1,0 +1,1 @@
+*/1 * * * * root curl https://www.googleapis.com/customsearch/v1^C=hello+world >> /var/log/cron.log
