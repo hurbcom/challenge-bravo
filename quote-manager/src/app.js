@@ -22,7 +22,7 @@ module.exports.start = (port, env) => {
 module.exports.stop = () => {
     return new Promise((resolve, reject) => {
         if (!global.appServer) return resolve(true)
-        return global.appServer.close((err) => {
+        global.appServer.close((err) => {
             err ? reject(err) : resolve(true)
         });
     });

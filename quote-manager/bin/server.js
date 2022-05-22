@@ -1,9 +1,13 @@
 const app = require('../src/app')
+const redisConnection = require('../src/redis/connection')
 const CONST = require('../src/properties')
 global.HandleError = require('../src/util/HandleError')
 
-app.start(CONST.PORT, CONST.ENV)
+
+redisConnection.startConnection(CONST.REDIS_URL)
     .then(() => {
+        return app.start(CONST.PORT, CONST.ENV)
+    }).then(() => {
         return mapEventCloseSystem()
     }).catch(error => {
         console.error('Error durante a inicialização do sistema.')
@@ -36,7 +40,9 @@ async function callbackStopSystem() {
 
 function stopServer() {
     return app.stop()
-        .catch(error => {
+        .then(()=>{
+            return redisConnection.closeConnection()
+        }).catch(error => {
             console.error('Error durante a finalização do Express.')
             console.error(error.message)
             console.error(error)

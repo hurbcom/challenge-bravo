@@ -1,0 +1,26 @@
+version: '3.9'
+networks:
+  backend:
+    driver: bridge
+services:
+  redis:
+    build: 
+      context: ./redis/
+      dockerfile: Dockerfile
+    ports:
+      - 6379:6379
+    networks:
+      - backend
+  quote:
+    build: 
+      context: ./quote-manager/
+      dockerfile: Dockerfile
+    environment:
+      - ENV=DEV
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - 3001:3001
+    depends_on:
+      - redis
+    networks:
+      - backend
