@@ -1,7 +1,7 @@
 const { createClient } = require('redis')
 const CONST = require('../properties')
 
-//fonte de consulta para essa função https://www.tutorialspoint.com/node-js-retry-strategy-property-in-redis
+//fonte de consulta para a função retryStrategy https://www.tutorialspoint.com/node-js-retry-strategy-property-in-redis
 function retryStrategy(options) {
     if (options.error && options.error.code === "ECONNREFUSED") {
         // If redis refuses the connection or is not able to connect
@@ -22,7 +22,8 @@ function retryStrategy(options) {
 exports.startConnection = (url) => {
     global.client = createClient({
         url: url,
-        retry_strategy: retryStrategy
+        retry_strategy: retryStrategy,
+        expire: CONST.REDIS_CACHE_EXPIRE
     })
 
     return client.connect().then(() => {

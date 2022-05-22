@@ -18,6 +18,7 @@ services:
     environment:
       - ENV=DEV
       - REDIS_URL=redis://redis:6379
+      - REDIS_REDIS_CACHE_EXPIRE=60
     ports:
       - 3001:3001
     depends_on:
