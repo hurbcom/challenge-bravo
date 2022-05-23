@@ -1,0 +1,1 @@
+exports.quote = require('./quotation')
