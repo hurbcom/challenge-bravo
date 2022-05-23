@@ -1,11 +1,11 @@
-const repositoryQuote = require('../repository/quote')
+const repositoryCoin = require('../repository/coin')
 const redis = require('../redis/quoteCache')
 const apiQuote = require('../api/quote')
 const CONST = require('../properties')
 
 
 exports.byAPI = () => {
-    return repositoryQuote.getCoinsApiUpdate()
+    return repositoryCoin.getAllCoin('API')
         .then((coins) => {
             coins = coins.map((el) => `${el.coinCode}-${CONST.BASE_COIN}`)
             return apiQuote.getQuoteUpdated(coins)
@@ -13,7 +13,7 @@ exports.byAPI = () => {
         .then((apiReturn) => {
             return Promise.all(
                 apiReturn.map((quote) => {
-                    return repositoryQuote.updateQuoteValue(quote)
+                    return repositoryCoin.updateQuoteValue(quote)
                 })
             ).then(() => {
                 return Promise.all(apiReturn.map((el) => {
@@ -26,9 +26,9 @@ exports.byAPI = () => {
 }
 
 exports.manual = (quote) => {
-    return repositoryQuote.updateQuoteValue(quote)
+    return repositoryCoin.updateQuoteValue(quote)
         .then(() => {
-            return redis.register(quote.coin, { 
+            return redis.register(quote.coinCode, { 
                 buy: quote.buy, sale: quote.sale 
             })
         })
