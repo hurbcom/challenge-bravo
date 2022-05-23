@@ -11,7 +11,7 @@ router.put('/quote', (req,res)=>{
 router.put('/quote/manual', (req,res)=>{
     try {
         const {coin, buy, sale} = req.body
-        const quote = {coin, buy, sale}
+        const quote = {coinCode: coin, buy, sale}
         updateQuotation.manual(quote)
         res.status(200).send()
     } catch (error) {
