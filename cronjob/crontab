@@ -1,0 +1,2 @@
+# https://www.hostinger.com.br/tutoriais/cron-job-guia?ppc_campaign=google_performance_max&gclid=Cj0KCQjw-JyUBhCuARIsANUqQ_JNdTkDht1o7wZDu-DBjHu4FoaI1ZOOvn2TgpPCtyutWm-RDhPUvjoaAppkEALw_wcB
+*/1 * * * * root curl https://www.googleapis.com/customsearch/v1^C=hello+world >> /var/log/cron.log

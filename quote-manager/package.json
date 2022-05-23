@@ -1,0 +1,55 @@
+{
+  "name": "quote-manager",
+  "version": "1.0.0",
+  "description": "Service responsible for managing and updating the quote on redis.",
+  "main": "bin/server.js",
+  "scripts": {
+    "dev": "node_modules/.bin/nodemon bin/server.js --ignore __test__/*",
+    "start": "node bin/server",
+    "coverage": "npm test --coverage",
+    "tdd": "jest --watch",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FellipeMaia/challenge-bravo.git"
+  },
+  "keywords": [
+    "quote",
+    "redis",
+    "mongodb"
+  ],
+  "author": "Fellipe Maia",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/FellipeMaia/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/FellipeMaia/challenge-bravo#readme",
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "coveragePathIgnorePatterns": [
+      "__test__/"
+    ],
+    "setupFiles": [
+      "<rootDir>/__test__/.jest/jest.config.js"
+    ]
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "express": "^4.18.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.3.4",
+    "redis": "^4.1.0"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0",
+    "mockingoose": "^2.15.2",
+    "nock": "^13.2.4",
+    "supertest": "^6.2.3"
+  }
+}

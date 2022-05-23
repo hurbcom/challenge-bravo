@@ -1,0 +1,37 @@
+version: '3.9'
+networks:
+  backend:
+    driver: bridge
+services:
+  redis:
+    build: 
+      context: ./redis/
+      dockerfile: Dockerfile
+    ports:
+      - 6379:6379
+    networks:
+      - backend
+  mongo:
+    build:
+      context: ./mongodb/
+      dockerfile: Dockerfile
+    ports:
+      - 27017:27017
+    networks:
+      - backend
+  quote:
+    build: 
+      context: ./quote-manager/
+      dockerfile: Dockerfile
+    environment:
+      - ENV=DEV
+      - REDIS_URL=redis://redis:6379
+      - REDIS_REDIS_CACHE_EXPIRE=60
+      - MONGODB_URL=mongodb://quote:gS3CJAP2R8YsksvcdjkehejHc@mongo:27017/quote-manager
+    ports:
+      - 3001:3001
+    depends_on:
+      - redis
+      - mongo
+    networks:
+      - backend
