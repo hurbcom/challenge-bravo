@@ -19,7 +19,7 @@ function retryStrategy(options) {
     return Math.min(options.attempt * 100, 3000);
 }
 
-exports.startConnection = (url) => {
+exports.start = (url) => {
     global.client = createClient({
         url: url,
         retry_strategy: retryStrategy,
@@ -34,7 +34,7 @@ exports.startConnection = (url) => {
     })
 }
 
-exports.closeConnection = () => {
+exports.stop = () => {
     if (client == null) {
         console.log('Conexão Inesistente com redis')
         return Promise.resolve(true)

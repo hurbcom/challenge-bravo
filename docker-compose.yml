@@ -11,6 +11,14 @@ services:
       - 6379:6379
     networks:
       - backend
+  mongo:
+    build:
+      context: ./mongodb/
+      dockerfile: Dockerfile
+    ports:
+      - 27017:27017
+    networks:
+      - backend
   quote:
     build: 
       context: ./quote-manager/
@@ -19,9 +27,11 @@ services:
       - ENV=DEV
       - REDIS_URL=redis://redis:6379
       - REDIS_REDIS_CACHE_EXPIRE=60
+      - MONGODB_URL=mongodb://quote:gS3CJAP2R8YsksvcdjkehejHc@mongo:27017/quote-manager
     ports:
       - 3001:3001
     depends_on:
       - redis
+      - mongo
     networks:
       - backend

@@ -1,10 +1,13 @@
 const app = require('../src/app')
 const redisConnection = require('../src/redis/connection')
+const mongoConnection = require('../src/repository/connection')
 const CONST = require('../src/properties')
 global.HandleError = require('../src/util/HandleError')
 
-
-redisConnection.startConnection(CONST.REDIS_URL)
+Promise.all([
+    mongoConnection.start(CONST.MONGODB_URL),
+    redisConnection.start(CONST.REDIS_URL)
+])
     .then(() => {
         return app.start(CONST.PORT, CONST.ENV)
     }).then(() => {
@@ -40,8 +43,11 @@ async function callbackStopSystem() {
 
 function stopServer() {
     return app.stop()
-        .then(()=>{
-            return redisConnection.closeConnection()
+        .then(() => {
+            return Promise.all([
+                redisConnection.stop(),
+                mongoConnection.stop()
+            ])
         }).catch(error => {
             console.error('Error durante a finalização do Express.')
             console.error(error.message)
