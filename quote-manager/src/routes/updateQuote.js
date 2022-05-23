@@ -8,11 +8,11 @@ router.put('/quote', (req,res)=>{
     updateQuotation.byAPI()
 })
 
-router.put('/quote/fixe', (req,res)=>{
+router.put('/quote/manual', (req,res)=>{
     try {
         const {coin, buy, sale} = req.body
         const quote = {coin, buy, sale}
-        updateQuotation.fixe(quote)
+        updateQuotation.manual(quote)
         res.status(200).send()
     } catch (error) {
         const response = utils.responseError(error)

@@ -10,9 +10,9 @@ exports.getQuoteUpdated = (coins) =>{
         const quotes = coins.map((coin)=> {
             coin = coin.replace('-','')
             return {
-                code: data[coin].code,
-                bid: data[coin].bid,
-                ask: data[coin].ask,
+                coinCode: data[coin].code,
+                buy: data[coin].bid,
+                sale: data[coin].ask,
             }
         })
         return quotes
