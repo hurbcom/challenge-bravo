@@ -1,6 +1,11 @@
-const CONST = require('../properties')
+const { toType } = require('../util')
 
 
-exports.registerQuotation = (coinName, quotations) => {
-    return global.client.set(coinName, JSON.stringify(quotations))
+exports.register = (key, value) => {
+    switch (toType(value)) {
+        case 'string':
+            return global.client.set(key, value)
+        default:
+            return global.client.set(key, JSON.stringify(value))
+    }
 }
