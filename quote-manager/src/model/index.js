@@ -1,1 +1,1 @@
-exports.quote = require('./quotation')
+exports.quote = require('./coin')

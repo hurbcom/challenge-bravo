@@ -9,6 +9,6 @@ const quoteSchema = new Mongoose.Schema({
         sale: { type: SchemaTypes.String },
         buy: { type: SchemaTypes.String }
     }
-}, { collection: 'quote' })
+}, { collection: 'coin' })
 
-module.exports = Mongoose.model('QuoteModel', quoteSchema)
+module.exports = Mongoose.model('CoinModel', quoteSchema)
