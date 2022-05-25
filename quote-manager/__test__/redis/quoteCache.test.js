@@ -15,6 +15,7 @@ beforeAll(()=>{
 })
 
 beforeEach(()=>{
+    global.HandleError.mockClear()
     mock.set.mockClear()
 })
 
