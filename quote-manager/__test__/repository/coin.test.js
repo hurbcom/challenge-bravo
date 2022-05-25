@@ -163,11 +163,13 @@ describe('It should tests function getAllCoin', () => {
         const query = { type: 'FIXE' }
         const project = { _id: 0, __v: 0 }
 
-        const received = await repositoryCoin.getAllCoin('FIXE')
+        const received = repositoryCoin.getAllCoin('FIXE')
 
-        expect(received).toEqual([])
+        await expect(received).rejects.toEqual(new Error('Moeda não encontrada'))
         expect(spy).toHaveBeenCalledTimes(1)
         expect(spy).toHaveBeenCalledWith(query, project)
+        expect(HandleError).toHaveBeenCalledTimes(1)
+        expect(HandleError).toHaveBeenCalledWith('Moeda não encontrada', 404, {"type": "FIXE"})
     })
 
 
