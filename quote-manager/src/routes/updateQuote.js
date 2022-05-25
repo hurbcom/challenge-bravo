@@ -18,9 +18,9 @@ router.put('/quote/manual', async (req,res)=>{
         res.status(result.status).json(result)
 
     } catch (error) {
-
         const response = utils.responseError(error)
         res.status(response.status).json(response)
+        console.error(error)
     }
 
 })

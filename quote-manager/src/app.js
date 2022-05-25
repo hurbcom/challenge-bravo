@@ -6,6 +6,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/api', routes.updateQuote)
+app.use('/api', routes.coin)
 
 exports.app = app
 
