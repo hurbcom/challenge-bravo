@@ -5,6 +5,10 @@ const CONST = require('../../src/properties')
 const nock = require('nock')
 
 beforeAll(() => {
+    nock.disableNetConnect()
+})
+
+afterAll(()=>{
     if (!nock.isActive()) {
         nock.activate()
     }
@@ -12,6 +16,7 @@ beforeAll(() => {
 
 beforeEach(() => {
     nock.cleanAll()
+    global.HandleError.mockClear()
 })
 
 test('It should request with success multiple quotation.', async () => {
@@ -50,7 +55,7 @@ test('It should request with success multiple quotation.', async () => {
         .get(CONST.API_QUOTE_LAST_PATH + mock_coins.join(','))
         .reply(200, mock_response)
 
-    const EXPECTED = [{ "ask": "29.242", "bid": "29.241", "code": "BTC" }, { "ask": "1.0564", "bid": "1.056", "code": "EUR" }]
+    const EXPECTED = [{ "sale": "29.242", "buy": "29.241", "coinCode": "BTC" }, { "sale": "1.0564", "buy": "1.056", "coinCode": "EUR" }]
     const received = await apiQuote.getQuoteUpdated(mock_coins)
 
     expect(received).toEqual(EXPECTED)

@@ -7,6 +7,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/api', routes.updateQuote)
 
+exports.app = app
 
 module.exports.start = (port, env) => {
     return new Promise((resolve, reject) => {

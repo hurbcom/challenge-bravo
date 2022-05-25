@@ -1,13 +1,14 @@
 const Mongoose = require('mongoose')
 const { models } = Mongoose
 
-exports.add = (coin) => {
-    const coinModel = new models.CoinModel(coin)
-    return coinModel.save()
-        .catch((error) => {
-            error.message = 'Erro ao tentar salvar a moeda: ' + error.message
-            throw new HandleError(error)
-        })
+exports.add = async (coin) => {
+    try {
+        const coinModel = new models.CoinModel(coin)
+        return Promise.resolve(await coinModel.save())
+    } catch (error) {
+        error.message = 'Erro ao tentar salvar a moeda: ' + error.message
+        return Promise.reject(new HandleError(error))
+    }
 }
 
 exports.update = (coinCode, coin) => {
@@ -19,9 +20,8 @@ exports.update = (coinCode, coin) => {
 }
 
 exports.updateQuoteValue = (quote) => {
-    console.log(quote);
     const coinCode = quote.coinCode
-    const coin = {quote: { 'sale': quote.sale, 'buy': quote.buy }}
+    const coin = { quote: { 'sale': quote.sale, 'buy': quote.buy } }
     return this.update(coinCode, coin)
 }
 

@@ -2,6 +2,7 @@ const repositoryCoin = require('../repository/coin')
 const redis = require('../redis/quoteCache')
 const apiQuote = require('../api/quote')
 const CONST = require('../properties')
+const utils = require('../util')
 
 
 exports.byAPI = () => {
@@ -19,9 +20,12 @@ exports.byAPI = () => {
                 return Promise.all(apiReturn.map((el) => {
                     return redis.register(el.coinCode, { buy: el.buy, sale: el.sale })
                 }))
+            }).then((response) => {
+                console.log('Cotação atualizada no redis')
+                return response
             })
         }).catch((error) => {
-            console.log(error);
+            console.error(error);
         })
 }
 
@@ -31,5 +35,9 @@ exports.manual = (quote) => {
             return redis.register(quote.coinCode, { 
                 buy: quote.buy, sale: quote.sale 
             })
+        }).then(() => {
+            console.log('Cotação atualizada manualmente')
+            const response = utils.response('Cotação atualizada manualmente', 200)
+            return response
         })
 }
