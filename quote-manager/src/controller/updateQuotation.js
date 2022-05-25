@@ -20,12 +20,11 @@ exports.byAPI = () => {
                 return Promise.all(apiReturn.map((el) => {
                     return redis.register(el.coinCode, { buy: el.buy, sale: el.sale })
                 }))
-            }).then((response) => {
+            }).then(() => {
                 console.log('Cotação atualizada no redis')
+                const response = utils.response('Cotação atualizada', 200)
                 return response
             })
-        }).catch((error) => {
-            console.error(error);
         })
 }
 

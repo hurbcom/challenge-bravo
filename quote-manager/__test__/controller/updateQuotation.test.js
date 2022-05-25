@@ -7,15 +7,6 @@ const redis = require('../../src/redis/quoteCache')
 const apiQuote = require('../../src/api/quote')
 const controllerUpdateQuote = require('../../src/controller/updateQuotation')
 
-const consoleError = console.error
-
-beforeAll(() => {
-    console.error = jest.fn()
-    console.error.mockImplementation((...args) => {
-        consoleError(...args)
-    })
-})
-
 beforeEach(() => {
     global.HandleError.mockClear()
     repositoryCoin.getAllCoin.mockReset()
@@ -90,6 +81,8 @@ describe('It should test function byAPI', () => {
         const mock_redis_brl = Object.assign({}, mock_api_brl)
         delete mock_redis_brl.coinCode
 
+        const expected = {"data": undefined, "date": new Date().toISOString(), "error": false, "message": "Cotação atualizada", "status": 200}
+        
         repositoryCoin.getAllCoin.mockResolvedValueOnce(mock_getAll)
         apiQuote.getQuoteUpdated.mockResolvedValueOnce([mock_api_btc, mock_api_brl])
         repositoryCoin.updateQuoteValue.mockResolvedValueOnce(mock.MOCK_RETURN_UPDATE())
@@ -104,7 +97,7 @@ describe('It should test function byAPI', () => {
 
         const received = controllerUpdateQuote.byAPI()
 
-        await expect(received).resolves.toEqual(["OK", "OK"])
+        await expect(received).resolves.toEqual(expected)
         expect(spyRepGet).toHaveBeenCalledTimes(1)
         expect(spyRepGet).toHaveBeenNthCalledWith(1, 'API')
         expect(spyApi).toHaveBeenCalledTimes(1)
@@ -142,13 +135,6 @@ describe('It should test function byAPI', () => {
             }
         ]
 
-        console.error.mockImplementationOnce((error) => {
-            const errorHandle = mock.MOCK_HANDLE_ERROR()
-            expect(error.message).toEqual(errorHandle.message)
-            expect(error.status).toEqual(errorHandle.status)
-            expect(error.data).toEqual(errorHandle.data)
-        })
-
         repositoryCoin.getAllCoin.mockResolvedValueOnce(mock_getAll)
         apiQuote.getQuoteUpdated.mockRejectedValueOnce(mock.MOCK_HANDLE_ERROR())
         repositoryCoin.updateQuoteValue.mockResolvedValueOnce(mock.MOCK_RETURN_UPDATE())
@@ -158,19 +144,15 @@ describe('It should test function byAPI', () => {
         const spyApi = jest.spyOn(apiQuote, 'getQuoteUpdated')
         const spyRepUpd = jest.spyOn(repositoryCoin, 'updateQuoteValue')
         const spyRedis = jest.spyOn(redis, 'register')
-        const spyError = jest.spyOn(console, 'error')
-
 
         const received = controllerUpdateQuote.byAPI()
 
-        await expect(received).resolves.toEqual()
+        await expect(received).rejects.toEqual(new Error('Moeda não encontrada'))
         expect(spyRepGet).toHaveBeenCalledTimes(1)
         expect(spyRepGet).toHaveBeenNthCalledWith(1, 'API')
         expect(spyApi).toHaveBeenCalledTimes(1)
         expect(spyApi).toHaveBeenNthCalledWith(1, ["BTC-USD", "BRL-USD"])
         expect(spyRepUpd).toHaveBeenCalledTimes(0)
         expect(spyRedis).toHaveBeenCalledTimes(0)
-        expect(spyError).toHaveBeenCalledTimes(1)
-        expect(spyError).toHaveBeenNthCalledWith(1, mock.MOCK_HANDLE_ERROR())
     })
 })

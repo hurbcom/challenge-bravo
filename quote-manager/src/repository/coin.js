@@ -50,4 +50,10 @@ exports.getAllCoin = (type) => {
     const query = type ? { type: type } : {}
     const project = { _id: 0, __v: 0 }
     return models.CoinModel.find(query, project)
+        .then((coins) => {
+            if (!coins || coins?.length <= 0) {
+                throw new HandleError('Moeda não encontrada', 404, query)
+            }
+            return coins
+        })
 }
