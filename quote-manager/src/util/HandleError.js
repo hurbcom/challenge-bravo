@@ -3,7 +3,7 @@ const { isNil } = require('lodash')
 
 
 class HandleError extends Error {
-
+    
     constructor(message, status = 500, data = null) {
         super(message)
         this.status = status
