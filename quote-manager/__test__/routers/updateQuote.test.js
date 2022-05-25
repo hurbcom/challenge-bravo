@@ -15,7 +15,7 @@ beforeEach(() => {
     controllerUpdateQuote.manual.mockClear()
 })
 
-test('It should test request from router responsibility start update Quote from api', async () => {
+test('It should test request from router responsibility start update Quote from api.', async () => {
 
     controllerUpdateQuote.byAPI.mockResolvedValueOnce(["OK", "OK"])
 
@@ -23,6 +23,22 @@ test('It should test request from router responsibility start update Quote from 
         .put('/api/quote')
         .expect(200).then(response => {
             expect(response.body).toEqual('Requisição recebida')
+        })
+})
+
+test('It should test request from router responsibility start update Quote from api but return error.', async () => {
+
+    const mockError = new Error("Error internal")
+
+    const mockResponse = { "data": undefined, "date": new Date().toISOString(), "error": true, "message": "Error internal", "status": 500 }
+
+    controllerUpdateQuote.byAPI.mockRejectedValueOnce(mockError)
+
+    await request(app)
+        .put('/api/quote')
+        .expect(500)
+        .then(response => {
+            expect(response.body).toEqual(mockResponse)
         })
 })
 
