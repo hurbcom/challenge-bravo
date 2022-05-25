@@ -434,7 +434,7 @@ describe('It should test update quote.', () => {
 
         test('It should test request from router responsibility update Quote API but not find coins.', async () => {
 
-            const expected = {"data": {"type": "API"}, "date": new Date().toISOString(), "error": true, "message": "Moeda não encontrada", "status": 404}
+            const expected = {"data": undefined, "date": new Date().toISOString(), "error": true, "message": "Moeda não encontrada", "status": 404}
 
             models.CoinModel.find.mockResolvedValueOnce([])
 

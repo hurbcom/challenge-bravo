@@ -1,6 +1,7 @@
 const app = require('../src/app')
 const redisConnection = require('../src/redis/connection')
 const mongoConnection = require('../src/repository/connection')
+const { initialLoadInRedis } = require('../src/controller/updateQuotation')
 const CONST = require('../src/properties')
 global.HandleError = require('../src/util/HandleError')
 
@@ -8,6 +9,9 @@ Promise.all([
     mongoConnection.start(CONST.MONGODB_URL),
     redisConnection.start(CONST.REDIS_URL)
 ])
+    .then(() => {
+        return initialLoadInRedis()
+    })
     .then(() => {
         return app.start(CONST.PORT, CONST.ENV)
     }).then(() => {
