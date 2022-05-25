@@ -10,7 +10,7 @@ router.get('/coin/list', async (req, res) => {
         const response = await controllerCoin.getAll(type)
         res.status(response.status).json(response)
 
-        console.log("Busca efetuada com sucesso" + type ? " - type: " + type : '')
+        console.log("Busca efetuada com sucesso" + (!!type ? " - type: " + type : ''))
     } catch (error) {
         const response = utils.responseError(error)
         res.status(response.status).json(response)

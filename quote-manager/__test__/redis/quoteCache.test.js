@@ -36,10 +36,11 @@ test('It should register quotations in redis with success.', ()=>{
 test('It should register string in redis with success.', ()=>{
     const key = 'BTC'
     const value = "Teste valor alguma coisa"
+    const valueStringfy = "\"Teste valor alguma coisa\""
 
     const result = quoteCache.register(key, value)
     
     expect(result).resolves.toEqual('OK')
     expect(mock.set).toHaveBeenCalledTimes(1)
-    expect(mock.set).toHaveBeenCalledWith(key,value)
+    expect(mock.set).toHaveBeenCalledWith(key,valueStringfy)
 })
