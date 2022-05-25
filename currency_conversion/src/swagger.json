@@ -1,0 +1,114 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bravo Challenge",
+    "description": "This is an API Bravo Challenge",
+    "version": "1.0",
+    "contact": {
+      "email": "well.silvaa97@gmail.com"
+    }
+  },
+  "paths": {
+    "/currencies": {
+      "post": {
+        "tags": [
+          "Currency"
+        ],
+        "summary": "Create a currency",
+        "description": "Create a new currency",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "BRL"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Currency already exists"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Currency"
+        ],
+        "summary": "Delete a currency",
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Currency"],
+        "summary": "perform currency conversion",
+        "parameters": [
+          {
+            "name": "to",
+            "in": "query",
+            "description": "source currency",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "destination currency",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "amount of currency",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful conversion"
+          },
+          "schema": {
+            "type": "string"
+          }
+        },
+        "400": {
+          "description": "invalid currency"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  database_challenge_brave:
+    image: postgres
+    container_name: database_challenge_brave
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=111
+      - POSTGRES_DB=currency_conversion
+    volumes:
+      - pgdata:/data/postgres
+
+  app:
+    build: .
+    container_name: currency_conversion
+    ports:
+      - 3333:3333
+    volumes:
+      - .:/usr/app
+    links:
+      - database_challenge_brave
+    depends_on:
+      - database_challenge_brave
+
+volumes:
+  pgdata:
+    driver: local
