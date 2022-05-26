@@ -1,7 +1,11 @@
 version: '3.9'
 networks:
-  backend:
+  appNetwork:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.24.2.0/16"
 services:
   redis:
     build: 
@@ -10,15 +14,25 @@ services:
     ports:
       - 6379:6379
     networks:
-      - backend
+      appNetwork:
+        ipv4_address: 172.24.2.10
   mongo:
     build:
       context: ./mongodb/
       dockerfile: Dockerfile
+    command: mongod --bind_ip mongo
+    environment:
+      DB_NAME: quote_manager
+      DB_USER: quote_manager
+      DB_PASSWORD: gS3CJAP2R8YsksvcdjkehejHc
     ports:
       - 27017:27017
+      - 28017:28017
+    volumes:
+      - ./mongodb/initdb.d:/docker-entrypoint-initdb.d/
     networks:
-      - backend
+      appNetwork:
+        ipv4_address: 172.24.2.20
   quote:
     build: 
       context: ./quote-manager/
@@ -27,11 +41,34 @@ services:
       - ENV=DEV
       - REDIS_URL=redis://redis:6379
       - REDIS_REDIS_CACHE_EXPIRE=60
-      - MONGODB_URL=mongodb://quote:gS3CJAP2R8YsksvcdjkehejHc@mongo:27017/quote-manager
+      - MONGODB_URL=mongodb://quote_manager:gS3CJAP2R8YsksvcdjkehejHc@mongo:27017/quote_manager
     ports:
       - 3001:3001
     depends_on:
       - redis
       - mongo
     networks:
-      - backend
+      appNetwork:
+        ipv4_address: 172.24.2.30
+  convert:
+    build: 
+      context: ./coin-converter/
+      dockerfile: Dockerfile
+    environment:
+      - ENV=DEV
+      - PORT=3002
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - 3002:3002
+    depends_on:
+      - redis
+    networks:
+      appNetwork:
+        ipv4_address: 172.24.2.40
+  cronjob:
+    build: 
+      context: ./cronjob/
+      dockerfile: Dockerfile
+    networks:
+      appNetwork:
+        ipv4_address: 172.24.2.50
