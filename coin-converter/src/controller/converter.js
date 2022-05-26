@@ -25,6 +25,6 @@ exports.calculate = (requestValue) => {
             const quoteTo = quotations[1]
             const valueCalculate = factoryCalculate.conversion(quoteFrom, value, quoteTo)
             const data = { quoteFrom, quoteTo, valueCalculate, type }
-            return utils.response(requestValue.from, 200, data)
+            return utils.response("Calculado com sucesso", 200, data)
         })
 }
