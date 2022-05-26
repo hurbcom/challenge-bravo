@@ -53,33 +53,6 @@ test('It should request list coins with success.', async () => {
         })
 })
 
-// test('It should request list coins with success.', async () => {
-
-//     const expected = {
-//         "error": true,
-//         "status": 404,
-//         "date": new Date().toISOString(),
-//         "message": "Moeda não disponivel para conversão",
-//         "data": {"coinCode": "EURA"}
-//     }
-
-//     const requestValue = { from: "EURA", to: "BRL", value: "100.00", type: "buy" }
-
-//     controllerConverter.calculate.mockRejectedValueOnce(new HandleError("Moeda não disponivel para conversão" ,404, {coinCode: "EURA"}))
-
-//     const spy = jest.spyOn(controllerConverter, 'calculate')
-
-//     await request(app)
-//         .get('/api/converter')
-//         .query('from=EURA&to=BRL&value=100.00&type=buy')
-//         .expect(404)
-//         .then(response => {
-//             expect(response.body).toEqual(expected)
-//             expect(spy).toHaveBeenCalledTimes(1)
-//             expect(spy).toHaveBeenCalledWith(requestValue)
-//         })
-// })
-
 test('It should request list coins with success.', async () => {
 
     const expected = {
