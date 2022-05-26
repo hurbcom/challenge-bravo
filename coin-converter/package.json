@@ -1,0 +1,48 @@
+{
+  "name": "coin-converter",
+  "version": "1.0.0",
+  "description": "Reponsavel por converter as moedas",
+  "main": "bin/server.js",
+  "scripts": {
+    "dev": "node_modules/.bin/nodemon bin/server.js --ignore __test__/*",
+    "start": "node bin/server",
+    "coverage": "npm test --coverage",
+    "tdd": "jest --watch",
+    "test": "jest"
+  },
+  "keywords": [
+    "coin",
+    "currency",
+    "converter"
+  ],
+  "author": "Fellipe Maia",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/FellipeMaia/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/FellipeMaia/challenge-bravo#readme",
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "coveragePathIgnorePatterns": [
+      "__test__/"
+    ],
+    "setupFiles": [
+      "<rootDir>/__test__/.jest/jest.config.js"
+    ]
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "lodash": "^4.17.21",
+    "nodemon": "^2.0.16",
+    "redis": "^4.1.0"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0",
+    "supertest": "^6.2.3"
+  }
+}
