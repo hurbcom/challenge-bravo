@@ -1,3 +1,5 @@
 SECRET_KEY='Chave'
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1, localhost
+
+DATABASE_URL=postgres://hurb:hurb@localhost:5432/postgres
