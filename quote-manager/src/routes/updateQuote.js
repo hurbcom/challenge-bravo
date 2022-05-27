@@ -5,8 +5,8 @@ const router = Router()
 
 router.put('/quote', async (req, res) => {
     try {
-        await updateQuotation.byAPI()
-        res.status(200).json("Requisição recebida")
+        const response = await updateQuotation.byAPI()
+        res.status(response.status).json(response)
     } catch (error) {
         const response = utils.responseError(error)
         res.status(response.status).json(response)
@@ -14,10 +14,11 @@ router.put('/quote', async (req, res) => {
     }
 })
 
-router.put('/quote/manual', async (req, res) => {
+router.put('/quote/:code', async (req, res) => {
     try {
-        const { coin, buy, sale } = req.body
-        const quote = { coinCode: coin, buy, sale }
+        const { code } = req.params
+        const { buy, sale } = req.body
+        const quote = { coinCode: code, buy, sale }
 
         const result = await updateQuotation.manual(quote)
 

@@ -29,6 +29,7 @@ services:
       - 27017:27017
       - 28017:28017
     volumes:
+      - ./mongodb/db:/data/db
       - ./mongodb/initdb.d:/docker-entrypoint-initdb.d/
     networks:
       appNetwork:
