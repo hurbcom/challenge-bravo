@@ -1,9 +1,19 @@
 const express = require('express')
 const routes = require('./routes')
+const swaggerUi = require('swagger-ui-express')
+
+const swaggerDoc = require('../swagger.json')
+
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use(
+    '/api-docs',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDoc)
+  )
 
 app.use('/api', routes.converter)
 
