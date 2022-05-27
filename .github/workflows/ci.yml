@@ -1,0 +1,44 @@
+name: CI
+
+on:
+    pull_request:
+        branches:
+            - main
+    push:
+        branches:
+            - main
+
+jobs:
+    build:
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:12
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: postgres
+                ports: [ '5432:5432' ]
+
+        steps:
+            -   uses: actions/checkout@v3
+            -   name: Setup Python
+                uses: actions/setup-python@v1
+                with:
+                    python-version: 3.9
+                    architecture: x64
+                    cache: 'pip'
+            -   name: Copiar Configurações .env
+                run: |
+                    cp contrib/env-sample .env
+            -   name: Instalar dependências
+                run: |
+                    pip install -r requirements-dev.txt
+            -   name: Rodar flake8
+                uses: py-actions/flake8@v1
+                with:
+                    checkName: 'flake8_py3'
