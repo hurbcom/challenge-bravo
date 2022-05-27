@@ -21,7 +21,7 @@ export class ExchangeController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.exchangeService.findOne(+id);
+    return this.exchangeService.findOne(id);
   }
 
   @Patch(':id')
