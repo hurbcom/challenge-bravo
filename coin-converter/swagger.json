@@ -1,0 +1,181 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Serviço responsavel calcular a conversão da moeda.",
+    "version": "1.0.0",
+    "title": "Swagger Conversor de Moeda",
+    "contact": {
+      "email": "fellipe.maia@gmail.com"
+    }
+  },
+  "host": "http://localhost:3001",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Conversor"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/converter": {
+      "get": {
+        "tags": ["Conversor"],
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Codigo da moeda de origem.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Codigo da moeda de destino.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "description": "Valor que deseja ser convertido.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Qual é o tipo da trasação.",
+            "required": true,
+            "type": "string",
+            "example": "sale || buy"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "status":{
+                  "type": "integer",
+                  "example":  200
+                },
+                "date":{
+                  "type": "Date:iso",
+                  "example": "2022-05-26T17:51:04.696Z"
+                },
+                "message":{
+                  "type": "string",
+                  "example": "Calculado com sucesso"
+                },
+                "data":{
+                  "$ref": "#/definitions/conversion"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/definitions/response/404"
+          },
+          "500": {
+            "$ref": "#/definitions/response/500"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "conversion": {
+      "type": "object",
+      "properties": {
+        "quoteFrom": {
+          "type": "integer",
+          "example": 1.93676
+        } ,
+        "quoteTo": {
+          "type": "integer",
+          "example": 29.698
+        },
+        "valueCalculate":{
+          "type": "integer",
+          "example": 6.521516600444475
+        },
+        "type": {
+          "type": "string",
+          "example": "sale"
+        }
+      }
+    },
+    "response": {
+      "404": {
+        "description": "Not found",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "boolean",
+              "example": true
+            },
+            "status":{
+              "type": "integer",
+              "example":  404
+            },
+            "date":{
+              "type": "Date:iso",
+              "example": "2022-05-26T17:51:04.696Z"
+            },
+            "message":{
+              "type": "string",
+              "example": "Moeda não disponivel para conversão"
+            },
+            "data":{
+              "type": "object",
+              "properties": {
+                "coinCode": {
+                  "type": "string",
+                  "example": "BTC"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Error",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "boolean",
+              "example": true
+            },
+            "status":{
+              "type": "integer",
+              "example":  500
+            },
+            "date":{
+              "type": "Date:iso",
+              "example": "2022-05-26T17:51:04.696Z"
+            },
+            "message":{
+              "type": "string",
+              "example": "Internal Error"
+            }
+          }
+        }
+      }
+    }
+  } 
+}
