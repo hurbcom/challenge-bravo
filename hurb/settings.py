@@ -33,6 +33,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='127.0.0.1,localhost
 # Application definition
 
 INSTALLED_APPS = [
+    'hurb.base',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,6 +71,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'hurb.wsgi.application'
+
+AUTH_USER_MODEL = 'base.User'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
