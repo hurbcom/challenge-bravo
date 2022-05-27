@@ -1,0 +1,483 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Serviço responsavel por gerenciar as cotações da moedas cadastradas e atutaliza-los no cache de cotação.",
+    "version": "1.0.0",
+    "title": "Swagger Manager Quote",
+    "contact": {
+      "email": "fellipe.maia@gmail.com"
+    }
+  },
+  "host": "http://localhost:3001",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Coin",
+      "description": "Cadastro e atualização das moedas."
+     },{
+      "name": "Quote Update",
+      "description": "Atualizar cotação no banco de cache."
+     }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/coin/list": {
+      "get": {
+        "tags": ["Coin"],
+        "summary": "Listar as moedas disponiveis para consultas",
+        "description": "Listar as moedas disponiveis para consultas",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "status":{
+                  "type": "integer",
+                  "example":  200
+                },
+                "date":{
+                  "type": "Date:iso",
+                  "example": "2022-05-26T17:51:04.696Z"
+                },
+                "message":{
+                  "type": "string",
+                  "example": "Lista de moedas"
+                },
+                "data":{
+                  "type": "array",
+                  "example": [ "BTC", "CNY", "USD" ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/definitions/response/500"
+          }
+        }
+      }
+    },
+    "/coin/:code": {
+      "get": {
+        "tags": ["Coin"],
+        "summary": "Buscar os dados da moeda refente O codigo informado",
+        "description": "Buscar os dados da moeda refente O codigo informado",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Codigo de uma moeda",
+            "required": true,
+            "type": "string",
+            "example": "EUR | USD | BRL | BTC | ..."
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "status":{
+                  "type": "integer",
+                  "example":  200
+                },
+                "date":{
+                  "type": "Date:iso",
+                  "example": "2022-05-26T17:51:04.696Z"
+                },
+                "message":{
+                  "type": "string",
+                  "example": "Lista de moedas"
+                },
+                "data":{
+                  "$ref": "#/definitions/coin"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/definitions/response/404"
+          },
+          "500": {
+            "$ref": "#/definitions/response/500"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Coin"],
+        "summary": "Atualizar os dados da moeda refente O codigo informado",
+        "description": "Atualizar os dados da moeda refente O codigo informado",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Codigo de uma moeda",
+            "required": true,
+            "type": "string",
+            "example": "EUR | USD | BRL | BTC | ..."
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados de uma nova moeda",
+            "schema": {
+              "$ref": "#/definitions/coin"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "status":{
+                  "type": "integer",
+                  "example":  200
+                },
+                "date":{
+                  "type": "Date:iso",
+                  "example": "2022-05-26T17:51:04.696Z"
+                },
+                "message":{
+                  "type": "string",
+                  "example": "Moeda Atualizada com sucesso"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/definitions/response/404"
+          },
+          "500": {
+            "$ref": "#/definitions/response/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Coin"],
+        "summary": "Remover os dados da moeda refente O codigo informado",
+        "description": "Remover os dados da moeda refente O codigo informado",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Codigo de uma moeda",
+            "required": true,
+            "type": "string",
+            "example": "EUR | USD | BRL | BTC | ..."
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "status":{
+                  "type": "integer",
+                  "example":  200
+                },
+                "date":{
+                  "type": "Date:iso",
+                  "example": "2022-05-26T17:51:04.696Z"
+                },
+                "message":{
+                  "type": "string",
+                  "example": "Moeda Removida com sucesso"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/definitions/response/404"
+          },
+          "500": {
+            "$ref": "#/definitions/response/500"
+          }
+        }
+      }
+    },
+    "/coin/": {
+      "post": {
+        "tags": ["Coin"],
+        "summary": "Salvar uma nova moeda.",
+        "description": "Salvar uma nova moeda.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados de uma nova moeda",
+            "schema": {
+              "$ref": "#/definitions/coin"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "status":{
+                  "type": "integer",
+                  "example":  200
+                },
+                "date":{
+                  "type": "Date:iso",
+                  "example": "2022-05-26T17:51:04.696Z"
+                },
+                "message":{
+                  "type": "string",
+                  "example": "Moeda Salvo com sucesso"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/definitions/response/500"
+          }
+        }
+      }
+    },
+    "/quote": {
+      "put": {
+        "tags": ["Quote Update"],
+        "summary": "Inicia os eventos para atualizar a cotação por API",
+        "description": "Inicia os eventos para atualizar a cotação por API",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "status":{
+                  "type": "integer",
+                  "example":  200
+                },
+                "date":{
+                  "type": "Date:iso",
+                  "example": "2022-05-26T17:51:04.696Z"
+                },
+                "message":{
+                  "type": "string",
+                  "example": "Cotação atualizada"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/definitions/response/500"
+          }
+        }
+      }
+    },
+    "/quote/:code": {
+      "put": {
+        "tags": ["Quote Update"],
+        "summary": "Atualiza a cotação manualmente da moeda",
+        "description": "Atualiza a cotação manualmente da moeda",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Codigo de uma moeda",
+            "required": true,
+            "type": "string",
+            "example": "EUR | USD | BRL | BTC | ..."
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados de uma nova moeda",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sale": {
+                  "type": "string",
+                  "example": "29.643"
+                },
+                "buy": {
+                  "type": "string",
+                  "example": "29.642"
+                }
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "status":{
+                  "type": "integer",
+                  "example":  200
+                },
+                "date":{
+                  "type": "Date:iso",
+                  "example": "2022-05-26T17:51:04.696Z"
+                },
+                "message":{
+                  "type": "string",
+                  "example": "Cotação atualizada manualmente"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/definitions/response/404"
+          },
+          "500": {
+            "$ref": "#/definitions/response/500"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "coin": {
+      "type": "object",
+      "properties": {
+        "quote": {
+          "type": "object",
+          "properties": {
+            "sale": {
+              "type": "string",
+              "example": "29.643"
+            },
+            "buy": {
+              "type": "string",
+              "example": "29.642"
+            }
+          }
+        },
+        "coinName": {
+          "type": "string",
+          "example": "BitCoin"
+        } ,
+        "coinCode": {
+          "type": "string",
+          "example": "BTC"
+        },
+        "type":{
+          "type": "string",
+          "example": "API OU FIXE",
+          "enum": ["API","FIXE"]
+        }
+      }
+    },
+    "response": {
+      "404": {
+        "description": "Not found",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "boolean",
+              "example": true
+            },
+            "status":{
+              "type": "integer",
+              "example":  404
+            },
+            "date":{
+              "type": "Date:iso",
+              "example": "2022-05-26T17:51:04.696Z"
+            },
+            "message":{
+              "type": "string",
+              "example": "Moeda não encontrada"
+            },
+            "data":{
+              "type": "object",
+              "properties": {
+                "coinCode": {
+                  "type": "string",
+                  "example": "BTC"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Error",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "boolean",
+              "example": true
+            },
+            "status":{
+              "type": "integer",
+              "example":  500
+            },
+            "date":{
+              "type": "Date:iso",
+              "example": "2022-05-26T17:51:04.696Z"
+            },
+            "message":{
+              "type": "string",
+              "example": "Internal Error"
+            }
+          }
+        }
+      }
+    }
+  } 
+}
