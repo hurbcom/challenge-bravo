@@ -1,0 +1,3 @@
+pip-tools
+django
+python-decouple
