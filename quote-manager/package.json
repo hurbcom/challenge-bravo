@@ -44,12 +44,14 @@
     "express": "^4.18.1",
     "lodash": "^4.17.21",
     "mongoose": "^6.3.4",
-    "redis": "^4.1.0"
+    "redis": "^4.1.0",
+    "swagger-ui-express": "^4.4.0"
   },
   "devDependencies": {
     "jest": "^28.1.0",
     "mockingoose": "^2.15.2",
     "nock": "^13.2.4",
+    "nodemon": "^2.0.16",
     "supertest": "^6.2.3"
   }
 }
