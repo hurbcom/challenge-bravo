@@ -2,6 +2,13 @@ const utils = require('../util')
 const redis = require('../redis/quoteCache')
 const factoryCalculate = require('../factory/calculate')
 
+
+/**
+ * Calcular a conversão de a cordo com os parâmetros enviados
+ * @param {Object} requestValue Valores da requisição para calcular a conversão
+ * @author Fellipe Maia
+ * @returns O response contendo no payload os valores calculados
+ */
 exports.calculate = (requestValue) => {
 
     const { from, to, value, type } = requestValue

@@ -1,23 +1,34 @@
 const { createClient } = require('redis')
 
-//fonte de consulta para a função retryStrategy https://www.tutorialspoint.com/node-js-retry-strategy-property-in-redis
+/**
+ * Estrategia de reconexão do redis
+ * @param {Object} options Parâmetros recebidos do redis
+ * @author https://www.tutorialspoint.com/node-js-retry-strategy-property-in-redis
+ * @returns 
+ *    Sucesso: retorna o tempo para tentar a reconexão
+ *    Sucesso: retorna undefined caso exceda quantidades de reconexão 
+ *    Error: Caso ocorra um erro as tenta de reconexão e interrompidas
+ */
 function retryStrategy(options) {
     if (options.error && options.error.code === "ECONNREFUSED") {
-        // If redis refuses the connection or is not able to connect
         return new Error("The server refused the connection");
     }
     if (options.total_retry_time > 1000 * 60 * 60) {
-        // End reconnection after the specified time limit
         return new Error("Retry time exhausted");
     }
     if (options.attempt > 10) {
-        // End reconnecting with built in error
         return undefined;
     }
-    // reconnect after
     return Math.min(options.attempt * 100, 3000);
 }
 
+/**
+ * Estabelecer a conexão com redis
+ * @param {URL<String>} url String de conexão com o redis
+ * @author Fellipe Maia
+ * @returns Promise da conexão 
+ *  caso a Estrategia de reconexão falhe o error é redisparado 
+ */
 exports.start = (url) => {
     global.client = createClient({
         url: url,
@@ -32,6 +43,12 @@ exports.start = (url) => {
     })
 }
 
+/**
+ * Interromper a conexão de forma segura
+ * @author Fellipe Maia
+ * @returns Promise de Desconexão
+ * Caso a desconexão falhe retorna error 
+ */
 exports.stop = () => {
     if (client == null) {
         console.log('Conexão Inesistente com redis')
