@@ -20,8 +20,17 @@ export class CurrencyService {
       throw new BadRequestException('Currency not found, please enter the exchange rate');
   }
 
-  findAll() {
-    return `This action returns all currency`;
+  async findAll(limit: number, page: number) {
+    const response = await this.currencyDbService.findAllCurrencies(limit, limit * page - limit);
+    let currencies = []
+    const apiCurrencies = await this.exchangeHttpService.get(`/latest?base=USD`);
+    for (const r of response.rows) {
+      currencies.push({
+        currency: r.currency,
+        rate: _.get(apiCurrencies.data.rates, r.currency) ? _.get(apiCurrencies.data.rates, r.currency) : r.rate
+      });
+    }
+    return { currencies: currencies, total: response.count, totalPages: Math.ceil(response.count / limit) }
   }
 
   async findOne(id: string) {

@@ -22,14 +22,14 @@ export class ExchangeService {
   }
 
   async getRate(currency: string): Promise<number> {
-    let response = await this.exchangeHttpService.get(`/latest?base=USD&symbols=${currency}`);
-    if (_.get(response.data.rates, currency))
-      return _.get(response.data.rates, currency)
-    else {
-      const currencyObj = await this.currencyDbService.findCurrency(currency)
-
-      if (currencyObj) return currencyObj.rate
-      else throw new NotFoundException(`Currncy ${currency} not found.`);
+    const currencyObj = await this.currencyDbService.findCurrency(currency);
+    if (currencyObj) {
+      const response = await this.exchangeHttpService.get(`/latest?base=USD&symbols=${currency}`);
+      if (_.get(response.data.rates, currency)) return _.get(response.data.rates, currency)
+      else
+        return currencyObj.rate
     }
+    else
+      throw new NotFoundException(`Currncy ${currency} not found.`);
   }
 }

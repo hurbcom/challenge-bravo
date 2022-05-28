@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CurrencyDto } from 'src/core/database/currencyDb/currency.dto';
 
 @ApiTags('Currencies')
 @Controller('currency')
@@ -11,13 +10,15 @@ export class CurrencyController {
   @Post()
   @ApiQuery({ name: 'currency', required: true })
   @ApiQuery({ name: 'rate', required: false })
-  create(@Query('currency') currency: string, @Query('rate') rate: number = null) {
+  create(@Query('currency') currency: string, @Query('rate', ParseIntPipe) rate: number = null) {
     return this.currencyService.create({ currency: currency.toUpperCase(), rate: rate });
   }
 
   @Get()
-  findAll() {
-    return this.currencyService.findAll();
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'page', required: false })
+  findAll(@Query('limit', ParseIntPipe) limit: number = 10, @Query('page', ParseIntPipe) page: number = 1) {
+    return this.currencyService.findAll(limit, page);
   }
 
   @Get(':id')
@@ -25,9 +26,8 @@ export class CurrencyController {
     return this.currencyService.findOne(id.toUpperCase());
   }
 
-  @Delete()
-  @ApiQuery({ name: 'currency', required: true })
-  remove(@Query('currency') currency: string) {
+  @Delete(':id')
+  remove(@Param('id') currency: string) {
     return this.currencyService.remove(currency.toUpperCase());
   }
 }

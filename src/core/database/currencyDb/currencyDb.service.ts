@@ -31,6 +31,15 @@ export class CurrencyDbService {
         }
     }
 
+    async findAllCurrencies(limit: number, skip: number): Promise<{ rows: Currency[], count: number }> {
+        try {
+            return await this.currencyRepository.findAndCountAll({ limit: limit, offset: skip });
+        } catch (error) {
+            console.log(error.message ? error.message : error)
+            throw error.message ? error.message : error;
+        }
+    }
+
     async removeCurrency(currency: string) {
         try {
             const currencyObj = await this.findCurrency(currency);

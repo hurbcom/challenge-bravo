@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Query, ParseIntPipe } from '@nestjs/common';
 import { ExchangeService } from './exchange.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
@@ -13,7 +13,7 @@ export class ExchangeController {
   @ApiQuery({ name: 'from' })
   @ApiQuery({ name: 'to' })
   @ApiQuery({ name: 'amount' })
-  convert(@Query('from') from: string, @Query('to') to: string, @Query('amount') amount: number) {
+  convert(@Query('from') from: string, @Query('to') to: string, @Query('amount', ParseIntPipe) amount: number) {
     return this.exchangeService.convert(from.toUpperCase(), to.toUpperCase(), amount);
   }
 }
