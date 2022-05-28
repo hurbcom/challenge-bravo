@@ -32,7 +32,7 @@ export class CurrencyService {
     return `This action updates a #${id} currency`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} currency`;
+  async remove(currency: string) {
+    return await this.currencyDbService.removeCurrency(currency);
   }
 }

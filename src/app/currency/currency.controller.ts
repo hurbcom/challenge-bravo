@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpCode } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CurrencyDto } from 'src/core/database/currencyDb/currency.dto';
@@ -30,8 +30,9 @@ export class CurrencyController {
     return this.currencyService.update(+id, updateExchangeDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.currencyService.remove(+id);
+  @Delete()
+  @ApiQuery({ name: 'currency', required: true })
+  remove(@Query('currency') currency: string) {
+    return this.currencyService.remove(currency);
   }
 }
