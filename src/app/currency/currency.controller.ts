@@ -12,7 +12,7 @@ export class CurrencyController {
   @ApiQuery({ name: 'currency', required: true })
   @ApiQuery({ name: 'rate', required: false })
   create(@Query('currency') currency: string, @Query('rate') rate: number = null) {
-    return this.currencyService.create({ currency: currency, rate: rate });
+    return this.currencyService.create({ currency: currency.toUpperCase(), rate: rate });
   }
 
   @Get()
@@ -22,17 +22,12 @@ export class CurrencyController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.currencyService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExchangeDto: any) {
-    return this.currencyService.update(+id, updateExchangeDto);
+    return this.currencyService.findOne(id.toUpperCase());
   }
 
   @Delete()
   @ApiQuery({ name: 'currency', required: true })
   remove(@Query('currency') currency: string) {
-    return this.currencyService.remove(currency);
+    return this.currencyService.remove(currency.toUpperCase());
   }
 }

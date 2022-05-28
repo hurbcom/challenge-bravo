@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import * as _ from 'lodash';
 import { CurrencyDbService } from 'src/core/database/currencyDb/currencyDB.service';
 import { CurrencyDto } from 'src/core/database/currencyDb/currency.dto';
@@ -25,11 +25,21 @@ export class CurrencyService {
   }
 
   async findOne(id: string) {
-    return `This action returns a #${id} currency`;
-  }
-
-  update(id: number, updateExchangeDto: any) {
-    return `This action updates a #${id} currency`;
+    const currencyObj = await this.currencyDbService.findCurrency(id);
+    if (currencyObj) {
+      const response = await this.exchangeHttpService.get(`/latest?base=USD&symbols=${id}`);
+      if (_.get(response.data.rates, id)) return {
+        currency: currencyObj.currency,
+        rate: _.get(response.data.rates, id)
+      };
+      else
+        return {
+          currency: currencyObj.currency,
+          rate: currencyObj.rate
+        };
+    }
+    else
+      throw new NotFoundException(`Currncy ${id} not found.`);
   }
 
   async remove(currency: string) {
