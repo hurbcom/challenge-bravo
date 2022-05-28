@@ -11,7 +11,7 @@ export class CurrencyController {
   @Post()
   @ApiQuery({ name: 'currency', required: true })
   @ApiQuery({ name: 'rate', required: false })
-  create(@Query('currency') currency: string, @Query('rate') rate: number) {
+  create(@Query('currency') currency: string, @Query('rate') rate: number = null) {
     return this.currencyService.create({ currency: currency, rate: rate });
   }
 

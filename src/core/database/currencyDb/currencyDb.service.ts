@@ -10,10 +10,10 @@ export class CurrencyDbService {
 
     async upsertCurrency(request: CurrencyDto): Promise<boolean | Currency> {
         try {
-            const currencyId = await this.findCurrency(request.currency);
-            if (currencyId)
-                request.id = currencyId;
-
+            const currencyObj = await this.findCurrency(request.currency);
+            if (currencyObj)
+                request.id = currencyObj.id;
+            console.log(request)
             const dbResponse = await this.currencyRepository.upsert(request);
             return _.first(dbResponse)
         } catch (error) {
@@ -22,10 +22,9 @@ export class CurrencyDbService {
         }
     }
 
-    async findCurrency(currency: string): Promise<string> {
+    async findCurrency(currency: string): Promise<Currency> {
         try {
-            const dbResponse = await this.currencyRepository.findOne({ where: { currency: currency } });
-            return _.get(dbResponse, 'id');
+            return await this.currencyRepository.findOne({ where: { currency: currency } });
         } catch (error) {
             console.log(error.message ? error.message : error)
             throw error.message ? error.message : error;
@@ -34,8 +33,8 @@ export class CurrencyDbService {
 
     async removeCurrency(currency: string) {
         try {
-            const currencyId = await this.findCurrency(currency);
-            if (currencyId) {
+            const currencyObj = await this.findCurrency(currency);
+            if (currencyObj) {
                 const dbResponse = await this.currencyRepository.destroy({ where: { currency: currency } });
                 if (dbResponse > 0) return { statusCode: 200, message: `${currency} deleted.` }
             }

@@ -1,13 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ExchangeService } from './exchange.service';
 import { CreateExchangeDto } from './dto/create-exchange.dto';
 import { UpdateExchangeDto } from './dto/update-exchange.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Exchanges')
 @Controller('exchange')
 export class ExchangeController {
-  constructor(private readonly exchangeService: ExchangeService) {}
+  constructor(private readonly exchangeService: ExchangeService) { }
 
   @Post()
   create(@Body() createExchangeDto: CreateExchangeDto) {
@@ -15,13 +15,11 @@ export class ExchangeController {
   }
 
   @Get()
-  findAll() {
-    return this.exchangeService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.exchangeService.findOne(id);
+  @ApiQuery({ name: 'from' })
+  @ApiQuery({ name: 'to' })
+  @ApiQuery({ name: 'amount' })
+  convert(@Query('from') from: string, @Query('to') to: string, @Query('amount') amount: number) {
+    return this.exchangeService.convert(from, to, amount);
   }
 
   @Patch(':id')
