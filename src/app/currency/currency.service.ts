@@ -1,18 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import * as _ from 'lodash';
 import { CurrencyDbService } from 'src/core/database/currencyDb/currencyDB.service';
 import { CurrencyDto } from 'src/core/database/currencyDb/currency.dto';
+import { ExchangeHttpService } from 'src/core/exchange-http/exchange-http.service';
 
 @Injectable()
 export class CurrencyService {
 
   constructor(
-    private readonly currencyDbService: CurrencyDbService
+    private readonly currencyDbService: CurrencyDbService,
+    private readonly exchangeHttpService: ExchangeHttpService
   ) { }
 
   async create(request: CurrencyDto) {
-    await this.currencyDbService.upsertCurrency(request)
-    return 'This action adds a new currency';
+    let response = await this.exchangeHttpService.get(`/latest?base=USD&symbols=${request.currency}`);
+    if (_.get(response.data.rates, request.currency) || (request.rate && request.rate != null && request.rate > 0))
+      return await this.currencyDbService.upsertCurrency(request)
+    else
+      throw new BadRequestException('Currency not found, please enter the exchange rate');
   }
 
   findAll() {

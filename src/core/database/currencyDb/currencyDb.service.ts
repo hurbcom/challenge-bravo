@@ -8,31 +8,24 @@ export class CurrencyDbService {
 
     constructor(@Inject('CURRENCY_REPOSITORY') private readonly currencyRepository: typeof Currency) { }
 
-    async upsertCurrency(request: CurrencyDto) {
+    async upsertCurrency(request: CurrencyDto): Promise<boolean | Currency> {
         try {
-            const searchUser = await this.findCurrencies(request);
-            let returnMsg = 'Usuário criado.';
-            if (searchUser !== false) {
-                request.id = searchUser;
-                returnMsg = 'Usuário atualizado.';
-            }
-            const registeredUser = await this.currencyRepository.upsert(request);
-            if (registeredUser) {
-                return registeredUser;
-            }
+            const currencyId = await this.findCurrency(request);
+            if (currencyId)
+                request.id = currencyId;
+
+            const dbResponse = await this.currencyRepository.upsert(request);
+            return _.first(dbResponse)
         } catch (error) {
             console.log(error.message ? error.message : error)
             throw error.message ? error.message : error;
         }
     }
 
-    async findCurrencies(request: CurrencyDto) {
+    async findCurrency(request: CurrencyDto): Promise<string> {
         try {
             const databaseResponse = await this.currencyRepository.findOne({ where: { currency: request.currency } });
-            if (databaseResponse) {
-                return _.get(databaseResponse, 'id');
-            }
-            return false;
+            return _.get(databaseResponse, 'id');
         } catch (error) {
             console.log(error.message ? error.message : error)
             throw error.message ? error.message : error;
