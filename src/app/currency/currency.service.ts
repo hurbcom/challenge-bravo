@@ -1,10 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCurrencyDto } from './dto/create-currency.dto';
-import { UpdateCurrencyDto } from './dto/update-currency.dto';
+import * as _ from 'lodash';
+import { CurrencyDbService } from 'src/core/database/currencyDb/currencyDB.service';
+import { CurrencyDto } from 'src/core/database/currencyDb/currency.dto';
 
 @Injectable()
 export class CurrencyService {
-  create(createCurrencyDto: CreateCurrencyDto) {
+
+  constructor(
+    private readonly currencyDbService: CurrencyDbService
+  ) { }
+
+  async create(request: CurrencyDto) {
+    await this.currencyDbService.upsertCurrency(request)
     return 'This action adds a new currency';
   }
 
@@ -12,11 +19,11 @@ export class CurrencyService {
     return `This action returns all currency`;
   }
 
-  findOne(id: number) {
+  async findOne(id: string) {
     return `This action returns a #${id} currency`;
   }
 
-  update(id: number, updateCurrencyDto: UpdateCurrencyDto) {
+  update(id: number, updateExchangeDto: any) {
     return `This action updates a #${id} currency`;
   }
 

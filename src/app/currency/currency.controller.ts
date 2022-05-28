@@ -1,17 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
-import { CreateCurrencyDto } from './dto/create-currency.dto';
-import { UpdateCurrencyDto } from './dto/update-currency.dto';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { CurrencyDto } from 'src/core/database/currencyDb/currency.dto';
 
 @ApiTags('Currencies')
 @Controller('currency')
 export class CurrencyController {
-  constructor(private readonly currencyService: CurrencyService) {}
+  constructor(private readonly currencyService: CurrencyService) { }
 
   @Post()
-  create(@Body() createCurrencyDto: CreateCurrencyDto) {
-    return this.currencyService.create(createCurrencyDto);
+  @ApiQuery({ name: 'currency', required: true })
+  @ApiQuery({ name: 'rate', required: false })
+  create(@Query('currency') currency: string, @Query('rate') rate: number) {
+    return this.currencyService.create({ currency: currency, rate: rate });
   }
 
   @Get()
@@ -21,12 +22,12 @@ export class CurrencyController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.currencyService.findOne(+id);
+    return this.currencyService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCurrencyDto: UpdateCurrencyDto) {
-    return this.currencyService.update(+id, updateCurrencyDto);
+  update(@Param('id') id: string, @Body() updateExchangeDto: any) {
+    return this.currencyService.update(+id, updateExchangeDto);
   }
 
   @Delete(':id')
