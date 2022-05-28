@@ -42,3 +42,6 @@ jobs:
                 uses: py-actions/flake8@v1
                 with:
                     checkName: 'flake8_py3'
+            -   name: Rodar testes automáticos
+                run: |
+                    pytest
