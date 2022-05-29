@@ -272,6 +272,7 @@ describe('It should test CRUD coin.', () => {
 
             const mockResponse = { "data": undefined, "date": new Date().toISOString(), "error": false, "message": "Moeda Removida com sucesso", "status": 200 }
 
+            mock_redis.set.mockResolvedValueOnce('OK')
             models.CoinModel.findOne.mockResolvedValueOnce(mock.MOCK_COIN_MODEL())
             models.CoinModel.updateOne.mockResolvedValueOnce(mock.MOCK_RETURN_DELETE())
 
@@ -289,6 +290,7 @@ describe('It should test CRUD coin.', () => {
 
             const mockResponse = { "data": { "coinCode": coinCode }, "date": new Date().toISOString(), "error": true, "message": "Moeda não encontrada", "status": 404 }
 
+            mock_redis.set.mockResolvedValueOnce('OK')
             models.CoinModel.findOne.mockResolvedValueOnce(null)
             models.CoinModel.updateOne.mockResolvedValueOnce('não deveria rodar')
 
@@ -318,7 +320,7 @@ describe('It should test update quote.', () => {
             const body = { coin: 'BTC', buy: "20.92", sale: "20.67" }
 
             await request(app)
-                .put('/api/quote/manual')
+                .put('/api/quote/BTC')
                 .send(body)
                 .expect(200)
                 .then(response => {
@@ -337,7 +339,7 @@ describe('It should test update quote.', () => {
             const body = { coin: 'BTCA', buy: "20.92", sale: "20.67" }
 
             await request(app)
-                .put('/api/quote/manual')
+                .put('/api/quote/BTCA')
                 .send(body)
                 .expect(404)
                 .then(response => {
@@ -427,7 +429,7 @@ describe('It should test update quote.', () => {
                 .put('/api/quote')
                 .expect(200)
                 .then(response => {
-                    expect(response.body).toEqual('Requisição recebida')
+                    expect(response.body).toEqual({"date": new Date().toISOString(), "error": false, "message": "Cotação atualizada", "status": 200})
                 })
         })
 
