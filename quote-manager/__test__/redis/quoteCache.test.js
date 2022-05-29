@@ -30,7 +30,7 @@ test('It should register quotations in redis with success.', ()=>{
     
     expect(result).resolves.toEqual('OK')
     expect(mock.set).toHaveBeenCalledTimes(1)
-    expect(mock.set).toHaveBeenCalledWith(key,expected)
+    expect(mock.set).toHaveBeenCalledWith(key,expected, {"EX": 0})
 })
 
 test('It should register string in redis with success.', ()=>{
@@ -42,5 +42,5 @@ test('It should register string in redis with success.', ()=>{
     
     expect(result).resolves.toEqual('OK')
     expect(mock.set).toHaveBeenCalledTimes(1)
-    expect(mock.set).toHaveBeenCalledWith(key,valueStringfy)
+    expect(mock.set).toHaveBeenCalledWith(key,valueStringfy, {"EX": 0})
 })

@@ -4,7 +4,7 @@
   "description": "Service responsible for managing and updating the quote on redis.",
   "main": "bin/server.js",
   "scripts": {
-    "dev": "node_modules/.bin/nodemon bin/server.js --ignore __test__/*",
+    "dev": "REDIS_CACHE_EXPIRE=30 node_modules/.bin/nodemon bin/server.js --ignore __test__/*",
     "start": "node bin/server",
     "coverage": "npm test --coverage",
     "tdd": "jest --watch",

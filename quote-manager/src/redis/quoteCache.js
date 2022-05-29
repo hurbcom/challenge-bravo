@@ -1,3 +1,4 @@
+const CONST = require('../properties')
 
 /**
  * Gravar no redis
@@ -8,6 +9,6 @@
  */
 exports.register = (key, value) => {
 
-    return global.client.set(key, JSON.stringify(value))
+    return global.client.set(key, JSON.stringify(value), { EX: CONST.REDIS_CACHE_EXPIRE})
 
 }

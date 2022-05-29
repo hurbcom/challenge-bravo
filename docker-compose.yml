@@ -20,7 +20,7 @@ services:
     build:
       context: ./mongodb/
       dockerfile: Dockerfile
-    command: mongod --bind_ip mongo
+    command: mongod --bind_ip_all
     environment:
       DB_NAME: quote_manager
       DB_USER: quote_manager
