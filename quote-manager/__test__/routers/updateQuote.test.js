@@ -17,12 +17,14 @@ beforeEach(() => {
 
 test('It should test request from router responsibility start update Quote from api.', async () => {
 
-    controllerUpdateQuote.byAPI.mockResolvedValueOnce(["OK", "OK"])
+    const mock_response = { "data": undefined, "date": new Date().toISOString(), "error": false, "message": "Cotação atualizada", "status": 200 }
+
+    controllerUpdateQuote.byAPI.mockResolvedValueOnce(mock_response)
 
     await request(app)
         .put('/api/quote')
         .expect(200).then(response => {
-            expect(response.body).toEqual('Requisição recebida')
+            expect(response.body).toEqual(mock_response)
         })
 })
 
@@ -50,17 +52,18 @@ test('It should test request from router responsibility update Quote manually', 
 
     const spy = jest.spyOn(controllerUpdateQuote, 'manual')
 
-    const quote = { coinCode: 'BTC', buy: "20.92", sale: "20.67" }
-    const { coinCode: coin, buy, sale } = quote
-    const body = { coin, buy, sale }
+    const coinCode = 'BTC'
+    const quote = { buy: "20.92", sale: "20.67" }
+    const { buy, sale } = quote
+    const body = { buy, sale }
 
     await request(app)
-        .put('/api/quote/manual')
+        .put('/api/quote/'+coinCode)
         .send(body)
         .expect(200).then(response => {
             expect(response.body).toEqual(mock_response)
             expect(spy).toHaveBeenCalledTimes(1)
-            expect(spy).toHaveBeenCalledWith(quote)
+            expect(spy).toHaveBeenCalledWith({coinCode, ...quote})
         })
 })
 
@@ -80,7 +83,7 @@ test('It should test request from router responsibility update Quote manually no
     const body = { coin, buy, sale }
 
     await request(app)
-        .put('/api/quote/manual')
+        .put('/api/quote/BTC')
         .send(body)
         .expect(404).then(response => {
             expect(response.body).toEqual(mock_response)

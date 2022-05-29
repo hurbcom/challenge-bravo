@@ -4,7 +4,13 @@ const apiQuote = require('../api/quote')
 const CONST = require('../properties')
 const utils = require('../util')
 
-
+/**
+ * Inicia a atualização quando recebido um evento do cronjob
+ * @author Fellipe Maia
+ * @returns Objeto response estruturado 
+ * || Error retornado de moeda não encontrada
+ * || Error retornado do mongodb, api ou redis
+ */
 exports.byAPI = () => {
     return __byAPI().then((result) => {
         if (!result || result?.length <= 0) {
@@ -17,6 +23,13 @@ exports.byAPI = () => {
     })
 }
 
+
+/**
+ * Responsável por buscar as moedas do tipo API e busca na api e grava no banco de cache
+ * @author Fellipe Maia 
+ * @returns Quando sucesso retorna uma lista de 'OK' 
+ * || Error retornado pelo mongo, api e cache 
+ */
 function __byAPI() {
     return repositoryCoin.getAllCoin('API')
         .then((coins) => {
@@ -38,39 +51,55 @@ function __byAPI() {
         })
 }
 
+
+/**
+ * Atualiza a cotação na inicialização so servidor  
+ * @author Fellipe Maia
+ * @returns Quando sucesso retorna uma mensagem de texto.
+ */
 exports.initialLoadInRedis = () => {
 
-    const quoteAPI = __byAPI()
-        .then(() => {
-            console.log("Carga inicial das moedas com valor Atulizado via API")
-            return "Carga inicial das moedas com valor Atulizado via API"
+    function response(promise, type){
+        return promise.then((result) => {
+            let message = `Carga inicial das moedas do typo ${type} no banco de cache`
+
+            if (!result || result?.length <= 0) {
+                message = `Não há moeda do tipo ${type} para carregar no banco de cache`
+            }
+
+            console.log(message)
+            return message
+            
         }).catch((error) => {
-            error.message = 'Não foi possivel da carga inicial das cotações via API: ' + error.message
+            error.message = `Error ao da carga inicial das cotações do tipo ${type}: ${error.message}`
             throw error
         })
+    }
 
+    const quoteAPI = __byAPI()
+        
     const quoteFixe = repositoryCoin.getAllCoin('FIXE')
         .then((coins) => {
             return Promise.all(coins.map((el) => {
-                return redis.register(el.coinCode, { buy: el.buy, sale: el.sale })
+                return redis.register(el.coinCode, { buy: el.quote?.buy, sale: el.quote?.sale })
             }))
-        }).then(() => {
-            console.log("Carga inicial das moedas com valor fixo")
-            return "Carga inicial das moedas com valor fixo"
-        }).catch((error) => {
-            if (error.status == 404) return console.log("Não h com valor fixo")
-
-            error.message = 'Não foi possivel da carga inicial das moedas com valor fixo: ' + error.message
-            throw error
-
         })
 
-    return Promise.all([
-        quoteAPI,
-        quoteFixe
+    return Promise.allSettled([
+        response( quoteAPI, 'api'),
+        response( quoteFixe, 'fixe'),
     ])
 }
 
+
+/**
+ * Atualiza a cotação de forma manual 
+ * @param {Object} quote Objeto contendo API
+ * @author Fellipe Maia
+ * @returns  Quando sucesso retorna uma lista de 'OK' 
+ * || Error retornado de moeda não encontrada
+ * || Error retornado do mongodb ou redis
+ */
 exports.manual = (quote) => {
     return repositoryCoin.updateQuoteValue(quote)
         .then(() => {

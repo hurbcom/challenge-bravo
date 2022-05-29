@@ -1,6 +1,8 @@
 jest.mock('../../src/repository/coin.js')
+jest.mock('../../src/redis/quoteCache.js')
 const mock = require('../mock/repository/coin.mock')
 const repositoryCoin = require('../../src/repository/coin')
+const redis = require('../../src/redis/quoteCache.js')
 const controllerCoin = require('../../src/controller/coin')
 
 beforeAll(() => {
@@ -11,6 +13,7 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
+    redis.register.mockReset()
     repositoryCoin.add.mockReset()
     repositoryCoin.update.mockReset()
     repositoryCoin.delete.mockReset()
@@ -122,8 +125,10 @@ test('It should delete coin with success', async () => {
 
     const coinCode = mock.MOCK_COIN().coinCode
 
+    redis.register.mockResolvedValueOnce('OK')
     repositoryCoin.delete.mockResolvedValueOnce(mock.MOCK_RETURN_DELETE())
 
+    const spyRedis = jest.spyOn(redis, 'register')
     const spy = jest.spyOn(repositoryCoin, 'delete')
 
     const received = controllerCoin.delete(coinCode)
@@ -131,4 +136,6 @@ test('It should delete coin with success', async () => {
     await expect(received).resolves.toEqual(mockResponse)
     expect(spy).toHaveBeenCalledTimes(1)
     expect(spy).toHaveBeenCalledWith(coinCode)
+    expect(spyRedis).toHaveBeenCalledTimes(1)
+    expect(spyRedis).toHaveBeenCalledWith('HURB',undefined)
 })
