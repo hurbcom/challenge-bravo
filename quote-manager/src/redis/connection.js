@@ -34,7 +34,6 @@ exports.start = (url) => {
     global.client = createClient({
         url: url,
         retry_strategy: retryStrategy,
-        // expire: CONST.REDIS_CACHE_EXPIRE
     })
 
     return client.connect().then(() => {

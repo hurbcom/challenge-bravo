@@ -4,7 +4,7 @@
   "description": "Reponsavel por converter as moedas",
   "main": "bin/server.js",
   "scripts": {
-    "dev": "node_modules/.bin/nodemon bin/server.js --ignore __test__/*",
+    "dev": "PORT=3002 node_modules/.bin/nodemon bin/server.js --ignore __test__/*",
     "start": "node bin/server",
     "coverage": "npm test --coverage",
     "tdd": "jest --watch",
