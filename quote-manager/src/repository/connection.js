@@ -1,6 +1,13 @@
 const Mongoose = require('mongoose');
 const model = require('../model')
 
+
+/**
+ * Estabelecer a conexão com mongo
+ * @param {URL<String>} url String de conexão com o mongo
+ * @author Fellipe Maia
+ * @returns Promise da conexão || caso falhe o error é redisparado 
+ */
 module.exports.start = (url) => {
     return Mongoose.connect(url)
         .then(mongo => {
@@ -12,6 +19,13 @@ module.exports.start = (url) => {
         })
 }
 
+
+/**
+ * Interromper a conexão de forma segura
+ * @param {URL<String>} url String de conexão com o mongo
+ * @author Fellipe Maia
+ * @returns Promise da conexão || caso falhe o error é redisparado 
+ */
 module.exports.stop = ()=>{
     return Mongoose.disconnect()
         .then(()=>{

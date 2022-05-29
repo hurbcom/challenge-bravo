@@ -1,3 +1,11 @@
+
+/**
+ * Converter o texto em numero
+ * @param {String} value Valor a ser convertido em numero
+ * @param {*} defaultValue Valor que dever ser retornado caso não seja possível converter
+ * @author Fellipe Maia
+ * @returns Valor convertido || o valor definido || null 
+ */
 function convertNumber(value, defaultValue = null) {
     if (!value) return defaultValue
     const num = Number(value)

@@ -2,8 +2,20 @@ const { toType } = require('.')
 const { isNil } = require('lodash')
 
 
+/**
+ * Classe que estende a classe de Error
+ * Para transitar mais informações pelo throw    
+ * @author Fellipe Maia
+ */
 class HandleError extends Error {
     
+    /**
+     * 
+     * @param {*} message Mensagem de error || Error<Object> 
+     * @param {Number} status Status code a ser transmitido default 500
+     * @param {*} data Campo para adicionar o payload
+     * @author Fellipe Maia
+     */
     constructor(message, status = 500, data = null) {
         super(message)
         this.status = status
@@ -21,7 +33,12 @@ class HandleError extends Error {
         }
     }
 
-
+    /**
+     * Tem o objetivo de mesclar os stackTraces para que não haja perda de informação
+     * @param {String} stack stacktrace do error recebido no construtor
+     * @author Fellipe Maia
+     * @returns stacktrace mesclado
+     */
     #margeStack = (stack) => {
         return `${stack}\n\n\t...\n\n${this.stack}`
     }
