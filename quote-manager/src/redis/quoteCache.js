@@ -12,3 +12,15 @@ exports.register = (key, value) => {
     return global.client.set(key, JSON.stringify(value), { EX: CONST.REDIS_CACHE_EXPIRE})
 
 }
+
+/**
+ * Remove do redis
+ * @param {String} key Chave utilizada para gravar o valor no redis
+ * @author Fellipe Maia
+ * @returns secesso retorna 'OK' em caso de falha retorna Error
+ */
+ exports.remove = (key) => {
+
+    return global.client.del(key)
+
+}
