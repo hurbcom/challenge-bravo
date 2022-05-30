@@ -1,81 +1,70 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+Foi construído um serviço para conversão de moedas em microsserviço em docker, separados nos seguintes aplicações.
+-   Quote-Manager: Responsável por gerenciar a moedas(CRUD), buscar as cotações atualizadas e salvar no redis, podendo ter ou não tempo de expiração(variável de ambiente).
+-   coin-converter: Responsável por receber as requisições e calcular as conversões, buscando a cotação no redis. Sua estrutura permite ser escalada horizontalmente. (Esse serviço pode ser substituído por uma lambda e apiGateway da AWS.)
+-   Mongodb: Responsável por armazenar as informações da moeda que tem o interesse de converter.
+-   redis: Responsável por manter as contações atualizadas, o serviço coin-converter consulta em todas as requisições com o objetivo de reduzir o tempo de resposta.
+-   Cronjob: Responsável por disparar os eventos que irá fazer o quote-manager buscar as cotações na api de cotação e atualizar no redis.  
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+<p align="center">
+  <img src="Arquitetura-diagrama.svg" alt="Diagrama da Arquitetura" />
+</p>
 
-The API must convert between the following currencies:
+## Melhorias
+-   Criar login para controlar quem pode e quem faz as alterações no registro da moeda ou alterou as cotações.
+-   Implementar login no redis e proxy para limitar os IPs que podem acessá-lo.
+-   Utilizar certificado digital para requests em https.
+-   Aplicar proxy no servidor coin-converter bloqueando qualquer acesso externo que seja diferente da porta 80 ou utilizar apiGateway e bloquear qualquer acesso externo ao servidor.
+-   Caso o serviço de cadastro seja publico, deve ser bloqueado qualquer acesso externo que seja diferente da porta 80 ou utilizar apiGateway e bloquear qualquer acesso externo ao servidor. Nos dois casos deve-se limitar qual request ficará disponível.
+-   Utilizar um orquestrador tipo Kubernetes, Swarm ou Elasticbeanstalk.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## Pré Requisitos
 
-Other coins could be added as usage.
+Aplicação foi desenvolvida em node 16.15.0, utilizando docker e docker compose.
+Para rodar em ambiente docker será necessário a instalação do docker com o compose.
+-   docker 20.10.16
+-   docker compose 2.5.0
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+Desta forma, só precisa instalar o docker e executar.
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+Para rodar fora do docker será necessário ter os seguintes serviços disponíveis
+-   Mongodb: A URL de conexão tem que estar em uma variável de ambiente 
+    -   MONGODB_URL 
+-   Redis: A URL de conexão e alterar o tempo de expiração de um registro, tem que estar em uma variável de ambiente
+    -   REDIS_URL
+    -   REDIS_CACHE_EXPIRE: Deve ser atribuído o tempo em segundos o valor zero desativa a função
+-   Cronjob: Esse serviço pode ser substituído por outro scheduling, desde que consiga enviar um request
+    -   curl --request PUT --url http://localhost:3001/api/quote
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+## Executando o serviço
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Para executar o serviços em docker será necessário usar os seguintes comandos:
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+Construir as images de cada componente
+```bash
+$ docker compose build
+```
+Executar o ambiente em primeiro plano mostrando os logs
+```bash
+$ docker compose up
+```
+Executar o ambiente em segundo plano
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+```bash
+$ docker compose up -d
+```
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+Para visualizar os logs dos serviços em execução
+```bash
+$ docker ps
+$ docker logs -f <nome-container>
+```
+## Documentação
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+Foi criado documentação da API utilizando swagger 
+http://localhost:3001/api-docs/
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
-
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
-
-## Requirements
-
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
-
-## Evaluation criteria
-
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
-
-## Doubts
-
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
-
-Godspeed! ;)
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
