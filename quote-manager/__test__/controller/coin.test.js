@@ -14,6 +14,7 @@ beforeAll(() => {
 
 beforeEach(() => {
     redis.register.mockReset()
+    redis.remove.mockReset()
     repositoryCoin.add.mockReset()
     repositoryCoin.update.mockReset()
     repositoryCoin.delete.mockReset()
@@ -125,10 +126,10 @@ test('It should delete coin with success', async () => {
 
     const coinCode = mock.MOCK_COIN().coinCode
 
-    redis.register.mockResolvedValueOnce('OK')
+    redis.remove.mockResolvedValueOnce('OK')
     repositoryCoin.delete.mockResolvedValueOnce(mock.MOCK_RETURN_DELETE())
 
-    const spyRedis = jest.spyOn(redis, 'register')
+    const spyRedis = jest.spyOn(redis, 'remove')
     const spy = jest.spyOn(repositoryCoin, 'delete')
 
     const received = controllerCoin.delete(coinCode)

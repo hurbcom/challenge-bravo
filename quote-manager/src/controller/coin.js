@@ -90,7 +90,7 @@ exports.update = (coinCode, coin) => {
  * || Error retornado do mongodb na tentativa de remove a moeda
  */
 exports.delete = (coinCode) => {
-    return redis.register(coinCode, undefined)
+    return redis.remove(coinCode, undefined)
         .then(() => {
             return repositoryCoin.delete(coinCode)
         }).then(() => {

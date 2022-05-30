@@ -12,7 +12,8 @@ const { app } = require('../src/app')
 const request = require('supertest')
 
 const mock_redis = {
-    set: jest.fn().mockResolvedValue('OK')
+    set: jest.fn().mockResolvedValue('OK'),
+    del: jest.fn().mockResolvedValue('OK')
 }
 
 beforeAll(() => {
@@ -30,6 +31,7 @@ beforeAll(() => {
 beforeEach(() => {
     nock.cleanAll()
     mock_redis.set.mockReset()
+    mock_redis.del.mockReset()
     global.HandleError.mockClear()
     jest.clearAllMocks();
     models.CoinModel.prototype.save.mockReset()
@@ -272,7 +274,7 @@ describe('It should test CRUD coin.', () => {
 
             const mockResponse = { "data": undefined, "date": new Date().toISOString(), "error": false, "message": "Moeda Removida com sucesso", "status": 200 }
 
-            mock_redis.set.mockResolvedValueOnce('OK')
+            mock_redis.del.mockResolvedValueOnce('OK')
             models.CoinModel.findOne.mockResolvedValueOnce(mock.MOCK_COIN_MODEL())
             models.CoinModel.updateOne.mockResolvedValueOnce(mock.MOCK_RETURN_DELETE())
 
@@ -290,7 +292,7 @@ describe('It should test CRUD coin.', () => {
 
             const mockResponse = { "data": { "coinCode": coinCode }, "date": new Date().toISOString(), "error": true, "message": "Moeda não encontrada", "status": 404 }
 
-            mock_redis.set.mockResolvedValueOnce('OK')
+            mock_redis.del.mockResolvedValueOnce('OK')
             models.CoinModel.findOne.mockResolvedValueOnce(null)
             models.CoinModel.updateOne.mockResolvedValueOnce('não deveria rodar')
 
