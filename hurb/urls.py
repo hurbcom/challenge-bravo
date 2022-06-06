@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('hurb.base.urls')),
+    path('v1/', include('hurb.currency.urls')),
 ]

@@ -3,3 +3,7 @@ django
 python-decouple
 dj-database-url
 psycopg2-binary
+djangorestframework
+markdown
+requests
+django-boost
