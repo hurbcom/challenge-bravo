@@ -29,6 +29,7 @@ django==4.0.4
     #   -r requirements.txt
     #   django-boost
     #   djangorestframework
+    #   model-bakery
 django-boost==2.0
     # via -r requirements.txt
 djangorestframework==3.13.1
@@ -49,6 +50,8 @@ markdown==3.3.7
     # via -r requirements.txt
 mccabe==0.6.1
     # via flake8
+model-bakery==1.5.0
+    # via -r requirements-dev.in
 packaging==21.3
     # via pytest
 pep517==0.12.0
@@ -106,6 +109,8 @@ wheel==0.37.1
     # via
     #   -r requirements.txt
     #   pip-tools
+xmltodict==0.13.0
+    # via -r requirements.txt
 zipp==3.8.0
     # via
     #   -r requirements.txt

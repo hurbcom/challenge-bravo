@@ -53,6 +53,8 @@ user-agents==2.2.0
     # via django-boost
 wheel==0.37.1
     # via pip-tools
+xmltodict==0.13.0
+    # via -r requirements.in
 zipp==3.8.0
     # via importlib-metadata
 
