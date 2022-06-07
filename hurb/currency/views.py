@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 from xmltodict import parse as xml_to_dict
 
 from hurb.currency.models import Currency
-from hurb.currency.serializers import CurrencySerializer
 
 
 class ConvertApiView(APIView):
