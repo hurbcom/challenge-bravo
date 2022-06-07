@@ -10,6 +10,15 @@ asgiref==3.5.2
     #   django
 attrs==21.4.0
     # via pytest
+boto3==1.24.3
+    # via
+    #   -r requirements.txt
+    #   django-s3-folder-storage
+botocore==1.27.3
+    # via
+    #   -r requirements.txt
+    #   boto3
+    #   s3transfer
 certifi==2022.5.18.1
     # via
     #   -r requirements.txt
@@ -28,14 +37,23 @@ django==4.0.4
     # via
     #   -r requirements.txt
     #   django-boost
+    #   django-storages
     #   djangorestframework
     #   model-bakery
 django-boost==2.0
     # via -r requirements.txt
+django-s3-folder-storage==0.5
+    # via -r requirements.txt
+django-storages==1.12.3
+    # via
+    #   -r requirements.txt
+    #   django-s3-folder-storage
 djangorestframework==3.13.1
     # via -r requirements.txt
 flake8==4.0.1
     # via -r requirements-dev.in
+gunicorn==20.1.0
+    # via -r requirements.txt
 idna==3.3
     # via
     #   -r requirements.txt
@@ -46,6 +64,11 @@ importlib-metadata==4.11.4
     #   markdown
 iniconfig==1.1.1
     # via pytest
+jmespath==1.0.0
+    # via
+    #   -r requirements.txt
+    #   boto3
+    #   botocore
 markdown==3.3.7
     # via -r requirements.txt
 mccabe==0.6.1
@@ -76,6 +99,10 @@ pytest==7.1.2
     # via pytest-django
 pytest-django==4.5.2
     # via -r requirements-dev.in
+python-dateutil==2.8.2
+    # via
+    #   -r requirements.txt
+    #   botocore
 python-decouple==3.6
     # via -r requirements.txt
 pytz==2022.1
@@ -84,6 +111,14 @@ pytz==2022.1
     #   djangorestframework
 requests==2.27.1
     # via -r requirements.txt
+s3transfer==0.6.0
+    # via
+    #   -r requirements.txt
+    #   boto3
+six==1.16.0
+    # via
+    #   -r requirements.txt
+    #   python-dateutil
 sqlparse==0.4.2
     # via
     #   -r requirements.txt
@@ -100,6 +135,7 @@ ua-parser==0.10.0
 urllib3==1.26.9
     # via
     #   -r requirements.txt
+    #   botocore
     #   requests
 user-agents==2.2.0
     # via

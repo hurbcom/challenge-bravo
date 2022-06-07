@@ -1,7 +1,7 @@
 name: CI
 
 on:
-    pull_request:
+    push:
         branches:
             - main
 
@@ -43,3 +43,26 @@ jobs:
             -   name: Rodar testes automáticos
                 run: |
                     pytest
+
+    deploy:
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        runs-on: ubuntu-latest
+        needs: build
+
+        steps:
+            -   uses: actions/checkout@v3
+            -   name: Setup Python
+                uses: actions/setup-python@v1
+                with:
+                    python-version: 3.9
+                    architecture: x64
+                    cache: 'pip'
+            -   name: Deploy to Heroku
+                uses: AkhileshNS/heroku-deploy@v3.12.12
+                with:
+                    heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                    heroku_app_name: "challenge-bravo"
+                    heroku_email: "victor.augusto.soliveira@gmail.com"
+                    remote_branch: "main"

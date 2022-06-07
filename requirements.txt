@@ -6,6 +6,12 @@
 #
 asgiref==3.5.2
     # via django
+boto3==1.24.3
+    # via django-s3-folder-storage
+botocore==1.27.3
+    # via
+    #   boto3
+    #   s3transfer
 certifi==2022.5.18.1
     # via requests
 charset-normalizer==2.0.12
@@ -18,15 +24,26 @@ django==4.0.4
     # via
     #   -r requirements.in
     #   django-boost
+    #   django-storages
     #   djangorestframework
 django-boost==2.0
     # via -r requirements.in
+django-s3-folder-storage==0.5
+    # via -r requirements.in
+django-storages==1.12.3
+    # via django-s3-folder-storage
 djangorestframework==3.13.1
+    # via -r requirements.in
+gunicorn==20.1.0
     # via -r requirements.in
 idna==3.3
     # via requests
 importlib-metadata==4.11.4
     # via markdown
+jmespath==1.0.0
+    # via
+    #   boto3
+    #   botocore
 markdown==3.3.7
     # via -r requirements.in
 pep517==0.12.0
@@ -35,12 +52,18 @@ pip-tools==6.6.2
     # via -r requirements.in
 psycopg2-binary==2.9.3
     # via -r requirements.in
+python-dateutil==2.8.2
+    # via botocore
 python-decouple==3.6
     # via -r requirements.in
 pytz==2022.1
     # via djangorestframework
 requests==2.27.1
     # via -r requirements.in
+s3transfer==0.6.0
+    # via boto3
+six==1.16.0
+    # via python-dateutil
 sqlparse==0.4.2
     # via django
 tomli==2.0.1
@@ -48,7 +71,9 @@ tomli==2.0.1
 ua-parser==0.10.0
     # via user-agents
 urllib3==1.26.9
-    # via requests
+    # via
+    #   botocore
+    #   requests
 user-agents==2.2.0
     # via django-boost
 wheel==0.37.1

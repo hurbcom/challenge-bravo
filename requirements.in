@@ -8,3 +8,5 @@ markdown
 requests
 django-boost
 xmltodict
+django-s3-folder-storage
+gunicorn
