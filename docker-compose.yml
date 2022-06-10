@@ -1,0 +1,54 @@
+version: '3'
+services:
+    mongodb:
+        image: mongo:4.2
+        container_name: mongodb
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: admin
+            MONGO_INITDB_DATABASE: default_db
+        volumes:
+            - "mongo-data:/data"
+            - "./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro"
+        ports:
+            - "27017:27017"
+        networks:
+            - app
+    redis:
+        image: redis:6.2-alpine
+        restart: always
+        ports:
+            - '6379:6379'
+        command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+        volumes:
+            - cache:/data
+        networks:
+            - app
+    api:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            REDIS_ADDR: "localhost:6379"
+            REDIS_PASSWORD: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+            MONGO_URI: "mongodb://admin:admin@localhost:27017"
+            MONGO_DB: "default_db"
+        depends_on:
+            -  mongodb
+            -  cache
+        networks:
+            - app
+        ports:
+            - '8080:8080'
+
+volumes:
+    mongo-data:
+        driver: local
+    cache:
+        driver: local
+
+networks:
+    app:
+        driver: bridge
