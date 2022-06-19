@@ -20,7 +20,9 @@ func NewEngine(ctx context.Context) *Engine {
 	if err != nil {
 		panic(err)
 	}
-	return &Engine{client: client, database: client.Database(os.Getenv("MONGO_DB"))}
+	var engine = &Engine{client: client, database: client.Database(os.Getenv("MONGO_DB"))}
+	engine.SetCollection("currency")
+	return engine
 }
 
 // SetCollection sets the collection to be used
