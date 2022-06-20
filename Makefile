@@ -16,10 +16,24 @@ run_api:
 	docker-compose up --build api
 	@echo "Running api done"
 
+# Run the Redis Commander
+run_commander:
+	@echo "Running commander"
+	docker-compose up --build -d redis-commander
+	@echo "Running commander done"
+
+# Run tests
+tests:
+	@echo "Running tests"
+	 go test ./...
+	@echo "Running tests done"
+
+# Insert the USD on database to be used by the API
 insert_migration:
 	@echo "Inserting default migration"
 	docker-compose up --build -d mongo-seed
 	@echo "Inserting default migration done"
+
 # Run all the services
 run:
 	@make run_database
