@@ -5,6 +5,7 @@ import (
 	"github.com/joaohgf/challenge-bravo/internal/repository/models"
 )
 
+// Domain is the domain for currency
 type Domain struct {
 	repository *repository.Engine
 	Models     *models.Currency

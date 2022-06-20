@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Currency represents a currency on repository
 type Currency struct {
 	Name      string     `json:"name,omitempty" bson:"name,omitempty"`
 	Code      string     `json:"code,omitempty" bson:"code,omitempty"`
@@ -15,6 +16,7 @@ type Currency struct {
 	UpdatedAt *time.Time `json:"updated_at,omitempty" bson:"updatedAt,omitempty"`
 }
 
+// NewCurrency creates a new currency
 func NewCurrency(name string, code string, price *float64, updatedAt *time.Time) *Currency {
 	if updatedAt == nil {
 		now := time.Now().UTC()
@@ -23,10 +25,12 @@ func NewCurrency(name string, code string, price *float64, updatedAt *time.Time)
 	return &Currency{Name: name, Code: code, Price: price, UpdatedAt: updatedAt}
 }
 
+// GetPriceString returns the price as a string
 func (c *Currency) GetPriceString() string {
 	return fmt.Sprintf("%f", *c.Price)
 }
 
+// ParseToMap converts the currency to a map
 func (c *Currency) ParseToMap() (map[string]interface{}, error) {
 	var dBytes, err = bson.Marshal(*c)
 	if err != nil {
@@ -40,6 +44,7 @@ func (c *Currency) ParseToMap() (map[string]interface{}, error) {
 	return resp, nil
 }
 
+// Validate validates the currency
 func (c *Currency) Validate() map[string]string {
 	var errors = make(map[string]string, 0)
 	if c.Name == "" {
@@ -59,6 +64,7 @@ func (c *Currency) Validate() map[string]string {
 	return nil
 }
 
+// ValidateCode validates the code of the currency
 func (c *Currency) ValidateCode() map[string]string {
 	var err map[string]string
 	if c.Code == "" {

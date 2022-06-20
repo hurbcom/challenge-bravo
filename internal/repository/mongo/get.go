@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// Get returns the documents that match the filter
 func (e *Engine) Get(ctx context.Context, filter interface{}) (interface{}, error) {
 	var cur, err = e.collection.Find(ctx, filter)
 	if err != nil {
@@ -33,6 +34,7 @@ func (e *Engine) Get(ctx context.Context, filter interface{}) (interface{}, erro
 	return result, nil
 }
 
+// GetOne returns the document that matches the filter
 func (e *Engine) GetOne(ctx context.Context, filter interface{}) (map[string]interface{}, error) {
 	var result = e.collection.FindOne(ctx, filter)
 	var err = result.Err()

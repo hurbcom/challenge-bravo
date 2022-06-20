@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+// GetPrice returns the latest price of the currency on repositories
 func (e *Engine) GetPrice(ctx context.Context, code string) (*float64, error) {
 	latestPrice, err := e.Redis.GetPrice(code)
 	if err != nil {

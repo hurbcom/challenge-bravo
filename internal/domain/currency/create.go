@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Create is the domain for currency
 func (d *Domain) Create(ctx context.Context) (interface{}, error) {
 	var now = time.Now()
 	d.Models.CreatedAt = &now
