@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"github.com/joaohgf/challenge-bravo/internal/repository/mongo"
 	"github.com/joaohgf/challenge-bravo/internal/repository/redis"
 	"sync"
@@ -12,29 +13,22 @@ type Engine struct {
 	Redis *redis.Engine
 }
 
-// ModelBuilder interface to all domain could use the same code to
-// interact with the repositories
-type ModelBuilder interface {
-	GetCode() string
-	GetPrice() float64
-	GetPriceString() string
-	GetName() string
-	ParseToMap() (map[string]interface{}, error)
-	Validate() map[string]string
-}
-
 // NewEngine creates a new engine witch has all repositories
 func NewEngine(ctx context.Context) *Engine {
 	var (
 		wg          = new(sync.WaitGroup)
 		mongoEngine = new(mongo.Engine)
 		redisEngine = new(redis.Engine)
+		err         error
 	)
 	wg.Add(2)
 
 	// create a go routine to connect to mongo
 	go func() {
-		mongoEngine = mongo.NewEngine(ctx)
+		mongoEngine, err = mongo.NewEngine(ctx)
+		if err != nil {
+			panic(fmt.Errorf("error creating mongo engine: %v", err))
+		}
 		wg.Done()
 		return
 	}()
@@ -46,11 +40,10 @@ func NewEngine(ctx context.Context) *Engine {
 		return
 	}()
 	wg.Wait()
-	engine := &Engine{
+	return &Engine{
 		Mongo: mongoEngine,
 		Redis: redisEngine,
 	}
-	return engine
 }
 
 // Close closes all repositories connections
