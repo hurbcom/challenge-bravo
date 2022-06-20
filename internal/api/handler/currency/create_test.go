@@ -45,14 +45,14 @@ func TestHandler_Create(t *testing.T) {
 		{
 			name:     "create currency",
 			status:   http.StatusCreated,
-			body:     map[string]interface{}{"code": "USD", "name": "Dollar", "price": 2},
+			body:     map[string]interface{}{"code": fmt.Sprintf("USD %s", time.Now()), "name": "Dollar", "price": 2},
 			respBody: []byte(fmt.Sprintf(`{"code":"USD","name":"Dollar","price":"1", created_at: %s}`, time.Now())),
 			wantErr:  false,
 		},
 		{
 			name:     "create currency with invalid json",
 			status:   http.StatusBadRequest,
-			body:     map[string]interface{}{"code": "BRL", "name": "Brazilian Real", "pice": 1},
+			body:     map[string]interface{}{"code": "BRL", "name": "Brazilian Real"},
 			respBody: []byte(`{"data":{"price":"price is required"}}`),
 			wantErr:  true,
 		},
