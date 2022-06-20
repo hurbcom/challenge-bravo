@@ -1,0 +1,13 @@
+package redis
+
+import "fmt"
+
+func (e *Engine) Delete(key string) error {
+	var err = e.client.Del(key).Err()
+
+	if err != nil {
+		return fmt.Errorf("error deleting currency from redis: %s", err.Error())
+	}
+
+	return nil
+}
