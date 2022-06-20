@@ -33,6 +33,7 @@ func (u *Update) Act(ctx context.Context) {
 	var currencies, err = externalCurrency.GetAllCurrency()
 	if err != nil {
 		u.errors.err["external_api"] = err
+		return
 	}
 	var wg = new(sync.WaitGroup)
 	for _, cr := range currencies {
@@ -48,14 +49,14 @@ func (u *Update) Act(ctx context.Context) {
 			// parse the time to be used by the repository
 			updatedParsed, err := time.Parse(time.RFC3339, c.UpdatedAt)
 			if err != nil {
-				u.errors.err["parse_time"] = err
+				u.errors.err["parse_time"] = err.Error()
 				wg.Done()
 				return
 			}
 			// parse the price to be used by the repository
 			price, err := strconv.ParseFloat(c.Price, 64)
 			if err != nil {
-				u.errors.err["parse_price"] = err
+				u.errors.err["parse_price"] = err.Error()
 				wg.Done()
 				return
 			}
@@ -64,7 +65,7 @@ func (u *Update) Act(ctx context.Context) {
 			// create or update the currency to be used by the repository
 			_, err = u.repository.Update(ctx, c.Code, currency)
 			if err != nil {
-				u.errors.err["repository"] = err
+				u.errors.err["repository"] = err.Error()
 				wg.Done()
 				return
 			}
@@ -75,5 +76,7 @@ func (u *Update) Act(ctx context.Context) {
 	wg.Wait()
 	if len(u.errors.err) > 0 {
 		u.errors.Save(ctx)
+		return
 	}
+	return
 }
