@@ -36,7 +36,7 @@ func (e *Engine) Get(ctx context.Context, filter interface{}) (interface{}, erro
 func (e *Engine) GetOne(ctx context.Context, filter interface{}) (map[string]interface{}, error) {
 	var result = e.collection.FindOne(ctx, filter)
 	var err = result.Err()
-	if err == mongo.ErrNilDocument {
+	if err == mongo.ErrNilDocument || err == mongo.ErrNoDocuments {
 		return nil, nil
 	}
 	if err != nil {
