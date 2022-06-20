@@ -72,10 +72,10 @@
 
 
 #### http://localhost:8080/api/v1/currency/
->Methods:
+> ### Methods:
 >> GET, POST
 >
-> Description:
+> ### Description:
 >> Used to get all the currencies or create a new one.
 To create a new one you need to send a JSON with the following fields:
 > ```json
@@ -88,10 +88,9 @@ To create a new one you need to send a JSON with the following fields:
 
 
 #### http://localhost:8080/api/v1/currency/:id/
->Methods:
+> ### Methods:
 >> GET, PATCH, DELETE
-
-> Description:
+> ### Description:
 >> Used to get currency by code, update or delete it.
 >
 > To update, you need to send a JSON with the following fields:
@@ -106,9 +105,12 @@ To create a new one you need to send a JSON with the following fields:
 > - http://localhost:8080/api/v1/currency/BTC/
 
 
->### http://localhost:8080/api/v1/conversion/
->Used to get the conversion of a currency.
-> params:
+> ### http://localhost:8080/api/v1/conversion/
+> ### Methods:
+>> GET
+> ### Description:
+>> Used to get the conversion of a currency.
+> ### Params:
 >>- <i><b>from</b></i>: The currency code to convert from.
 >>- <i><b>to</b></i>: The currency code to convert to.
 >>- <i><b>amount</b></i>: The value to convert.
