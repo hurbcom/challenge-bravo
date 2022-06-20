@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 )
@@ -16,7 +17,6 @@ func (e *Engine) get(url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("X-CoinAPI-Key", e.token)
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -24,7 +24,12 @@ func (e *Engine) get(url string) ([]byte, error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("status code error: %d %s", resp.StatusCode, resp.Status)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		err = resp.Body.Close()
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}()
 	//We Read the response body on the line below.
 	return ioutil.ReadAll(resp.Body)
 }
