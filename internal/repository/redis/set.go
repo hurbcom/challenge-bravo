@@ -1,13 +1,15 @@
 package redis
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
-func (e *Engine) Set(key string, value string) error {
-	// todo set expiration date
-	var err = e.client.Set(key, value, 3*time.Hour).Err()
+// SetPrice currently price of currency on Redis
+func (e *Engine) SetPrice(key string, value string) error {
+	var err = e.client.Set(key, value, time.Hour*24).Err()
 	if err != nil {
-		return err
+		return fmt.Errorf("error set price on redis: %w", err)
 	}
 	return nil
-
 }
