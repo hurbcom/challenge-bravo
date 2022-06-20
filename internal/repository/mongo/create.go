@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// Create creates a document on the database
 func (e *Engine) Create(ctx context.Context, data interface{}) (interface{}, error) {
 	switch data.(type) {
 	case []interface{}:
@@ -29,6 +30,7 @@ func (e *Engine) Create(ctx context.Context, data interface{}) (interface{}, err
 	}
 }
 
+// CreateIfNotExist creates a document on the database if it doesn't exist
 func (e *Engine) CreateIfNotExist(ctx context.Context, filter bson.M, data interface{}) (interface{}, error) {
 	var result = e.collection.FindOneAndUpdate(
 		ctx,
