@@ -1,7 +1,7 @@
-version: '3'
+version: '3.5'
 services:
     mongodb:
-        image: mongo:4.2
+        image: mongo:latest
         container_name: mongodb
         restart: always
         environment:
@@ -15,6 +15,12 @@ services:
             - "27017:27017"
         networks:
             - app
+    mongo-seed:
+        build: ./mongo_seed
+        depends_on:
+            - mongodb
+        networks:
+            - app
     redis:
         image: redis:6.2-alpine
         restart: always
@@ -22,7 +28,18 @@ services:
             - '6379:6379'
         command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
         volumes:
-            - cache:/data
+            - redis:/data
+        networks:
+            - app
+    redis-commander:
+        container_name: redis-commander
+        hostname: redis-commander
+        image: ghcr.io/joeferner/redis-commander:latest
+        restart: always
+        environment:
+            - REDIS_HOSTS=local:redis:6379:0:eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81;local:redis:6379:1:eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+        ports:
+            - "8081:8081"
         networks:
             - app
     api:
@@ -31,13 +48,15 @@ services:
             context: .
             dockerfile: Dockerfile
         environment:
-            REDIS_ADDR: "localhost:6379"
+            REDIS_ADDR: "redis:6379"
             REDIS_PASSWORD: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
-            MONGO_URI: "mongodb://admin:admin@localhost:27017"
+            REDIS_DB: 0
+            MONGO_URI: "mongodb://admin:admin@mongodb:27017"
             MONGO_DB: "default_db"
+            COIN_API_URL: https://economia.awesomeapi.com.br
         depends_on:
             -  mongodb
-            -  cache
+            -  redis
         networks:
             - app
         ports:
@@ -46,7 +65,7 @@ services:
 volumes:
     mongo-data:
         driver: local
-    cache:
+    redis:
         driver: local
 
 networks:
