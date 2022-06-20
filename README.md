@@ -1,20 +1,22 @@
 ## Challenge-Bravo
 
-> It's a solution to the challenge-bravo is API where you could add new currencies,
-> delete, get and update them. It's been used the ***USD*** as base currency
-> and the data about the currency is stored based on ***USD*** price.
+> The solution to the challenge-bravo is an API where you could add, deletes, gets and updates the currencies.
+> It's been used the ***USD*** as base currency
+> and the data about the currency is stored based on the price of ***USD*** .
 >
 > An external API is used to obtain the coins and store them, the scheduled job runs every
-> 30 minutes in Redis and is saved in MongoDB.
+> 30 minutes  and persists the on Redis and MongoDB.
 >
 > The data on redis will be used to convertions and store just the currency code
 > and the value. The expiration time is set to 30 minutes.
 >
 > The data on MongoDB will be used to response the requests to get the complete data or
 > to update/create the data.
-
+>
 ## Run
-> To run the application, just execute the make file the following command:
+> It's necessary has already installed Docker and Docker-compose.
+>
+> If already installed, just run the command:
 > - `make run` execute all the instances needed to the API runs
 >
 >>- `make test` executel all tests
@@ -114,5 +116,5 @@ To create a new one you need to send a JSON with the following fields:
 >>- <i><b>from</b></i>: The currency code to convert from.
 >>- <i><b>to</b></i>: The currency code to convert to.
 >>- <i><b>amount</b></i>: The value to convert.
-> Exemple:
+    > Exemple:
 >- http://localhost:8080/api/v1/conversion/?from=BTC&to=EUR&amount=123.45
