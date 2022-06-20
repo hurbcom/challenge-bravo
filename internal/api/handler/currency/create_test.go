@@ -38,27 +38,23 @@ func TestHandler_Create(t *testing.T) {
 		name     string
 		status   int
 		body     map[string]interface{}
-		respBody string
+		respBody []byte
 		wantErr  bool
 	}
 	tests := []args{
 		{
-			name:   "create currency",
-			status: http.StatusCreated,
-			body: map[string]interface{}{
-				"code": "USD", "name": "Dollar", "price": 1,
-			},
-			respBody: fmt.Sprintf(`{"code":"USD","name":"Dollar","price":"1", created_at: %s}`, time.Now()),
+			name:     "create currency",
+			status:   http.StatusCreated,
+			body:     map[string]interface{}{"code": "USD", "name": "Dollar", "price": 2},
+			respBody: []byte(fmt.Sprintf(`{"code":"USD","name":"Dollar","price":"1", created_at: %s}`, time.Now())),
 			wantErr:  false,
 		},
 		{
-			name:   "create currency with invalid json",
-			status: http.StatusBadRequest,
-			body: map[string]interface{}{
-				"code": "USD", "name": "Dollar",
-			},
-			respBody: `{"data":{"price":"price is required"}}`,
-			wantErr:  false,
+			name:     "create currency with invalid json",
+			status:   http.StatusBadRequest,
+			body:     map[string]interface{}{"code": "BRL", "name": "Brazilian Real", "pice": 1},
+			respBody: []byte(`{"data":{"price":"price is required"}}`),
+			wantErr:  true,
 		},
 	}
 	for _, tt := range tests {
