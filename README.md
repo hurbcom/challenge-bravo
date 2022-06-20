@@ -105,7 +105,7 @@ To create a new one you need to send a JSON with the following fields:
 > - http://localhost:8080/api/v1/currency/BTC/
 
 
-> ### http://localhost:8080/api/v1/conversion/
+### http://localhost:8080/api/v1/conversion/
 > ### Methods:
 >> GET
 > ### Description:
