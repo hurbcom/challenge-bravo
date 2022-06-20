@@ -50,8 +50,8 @@ func (h *Handler) GeneratePayload(total *float64) map[string]interface{} {
 
 func (h *Handler) MakePayload(model *models.Currency) map[string]interface{} {
 	return map[string]interface{}{
-		"code":      model.GetCode(),
-		"updatedAt": model.UpdatedAt,
-		"price":     model.GetPrice(),
+		"code":      model.Code,
+		"price":     model.Price,
+		"update_at": model.UpdatedAt,
 	}
 }
