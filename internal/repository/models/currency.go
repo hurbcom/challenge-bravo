@@ -12,27 +12,19 @@ type Currency struct {
 	Code      string     `json:"code,omitempty" bson:"code,omitempty"`
 	Price     *float64   `json:"price,omitempty" bson:"price,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty" bson:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"time,omitempty" bson:"updatedAt,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty" bson:"updatedAt,omitempty"`
 }
 
-func (c *Currency) GetCode() string {
-	return strings.ToUpper(c.Code)
-}
-
-func (c *Currency) SetCode(code string) {
-	c.Code = strings.ToUpper(code)
-}
-
-func (c *Currency) GetPrice() float64 {
-	return *c.Price
+func NewCurrency(name string, code string, price *float64, updatedAt *time.Time) *Currency {
+	if updatedAt == nil {
+		now := time.Now().UTC()
+		updatedAt = &now
+	}
+	return &Currency{Name: name, Code: code, Price: price, UpdatedAt: updatedAt}
 }
 
 func (c *Currency) GetPriceString() string {
-	return fmt.Sprintf("%f", c.GetPrice())
-}
-
-func (c *Currency) GetName() string {
-	return c.Name
+	return fmt.Sprintf("%f", *c.Price)
 }
 
 func (c *Currency) ParseToMap() (map[string]interface{}, error) {
