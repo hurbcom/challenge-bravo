@@ -15,14 +15,16 @@ type Engine struct {
 }
 
 // NewEngine creates a new engine to connect to mongo
-func NewEngine(ctx context.Context) *Engine {
-	var client, err = connect(ctx)
+func NewEngine(ctx context.Context) (*Engine, error) {
+	var client, err = connect(ctx, os.Getenv("MONGO_URI"))
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
+	// get the database and set the default one
 	var engine = &Engine{client: client, database: client.Database(os.Getenv("MONGO_DB"))}
+	// set default collection
 	engine.SetCollection("currency")
-	return engine
+	return engine, nil
 }
 
 // SetCollection sets the collection to be used
