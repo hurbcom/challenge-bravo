@@ -15,7 +15,8 @@ func (h *Handler) Update(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, handler.MakeResponse(err.Error()))
 		return
 	}
-	result, err := h.domain.UpdateCode(c, c.Param("code"), currency)
+	h.domain.Models = &currency
+	result, err := h.domain.UpdateCode(c, c.Param("code"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, handler.MakeResponse(err.Error()))
 		return
