@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// Update is the handler to update a currency
 func (h *Handler) Update(c *gin.Context) {
 	var currency models.Currency
 	var err = c.ShouldBindJSON(&currency)
