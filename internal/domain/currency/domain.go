@@ -12,5 +12,5 @@ type Domain struct {
 
 // NewDomain creates a new domain with repository engine
 func NewDomain(repository *repository.Engine) *Domain {
-	return &Domain{repository: repository, Models: new(models.Currency)}
+	return &Domain{repository: repository}
 }
