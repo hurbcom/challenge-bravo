@@ -37,7 +37,7 @@ services:
         image: ghcr.io/joeferner/redis-commander:latest
         restart: always
         environment:
-            - REDIS_HOSTS=local:redis:6379:0:eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81;local:redis:6379:1:eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+            - REDIS_HOSTS=local:redis:6379:0:eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
         ports:
             - "8081:8081"
         networks:
