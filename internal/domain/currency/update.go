@@ -6,7 +6,6 @@ import (
 )
 
 func (d *Domain) UpdateCode(ctx context.Context, code string, data models.Currency) (interface{}, error) {
-
 	result, err := d.repository.Update(ctx, code, &data)
 	if err != nil {
 		return nil, err

@@ -20,8 +20,8 @@ func NewJob(repository *repository.Engine) *Job {
 // Run runs the jobs
 func (j *Job) Run(ctx context.Context) {
 	var c = cron.New(cron.WithChain())
-	var _, err = c.AddFunc("@every 10s", func() {
-		// job to update the currency
+	var _, err = c.AddFunc("@every 30m", func() {
+		// job to update or create the currency
 		go j.Action.Act(ctx)
 	})
 	if err != nil {

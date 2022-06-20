@@ -40,18 +40,19 @@ func (h *Handler) Handle(c *gin.Context) {
 	return
 }
 
+// GeneratePayload generates a payload for a conversion to response
 func (h *Handler) GeneratePayload(total *float64) map[string]interface{} {
 	var result = make(map[string]interface{}, 0)
-	result["result"] = total
 	result["from"] = h.MakePayload(h.domain.Models.From)
 	result["to"] = h.MakePayload(h.domain.Models.To)
+	result["result"] = total
 	return result
 }
 
+// MakePayload generates a payload for conversion
 func (h *Handler) MakePayload(model *models.Currency) map[string]interface{} {
 	return map[string]interface{}{
-		"code":      model.Code,
-		"price":     model.Price,
-		"update_at": model.UpdatedAt,
+		"code":  model.Code,
+		"price": model.Price,
 	}
 }

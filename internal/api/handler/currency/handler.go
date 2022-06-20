@@ -5,6 +5,7 @@ import (
 	"github.com/joaohgf/challenge-bravo/internal/repository"
 )
 
+// Handler struct for currency domain
 type Handler struct {
 	domain *currency.Domain
 }

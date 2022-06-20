@@ -30,6 +30,5 @@ func (e *Engine) get(url string) ([]byte, error) {
 			log.Fatalln(err)
 		}
 	}()
-	//We Read the response body on the line below.
 	return ioutil.ReadAll(resp.Body)
 }
