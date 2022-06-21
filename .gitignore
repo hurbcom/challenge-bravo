@@ -1,0 +1,16 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Unit test / coverage reports
+.pytest_cache/
+**/**/*.sqlite3
+
+# Coverage
+.coverage
+htmlcov/
+
+# Flask stuff
+
+# Environments
+.env
+venv
