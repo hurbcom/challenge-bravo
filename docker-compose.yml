@@ -1,0 +1,16 @@
+version: '3.9'
+services:
+  redis:
+    image: 'redis:alpine'
+  api:
+    depends_on:
+      - redis
+    build:
+      context: ./api
+    ports:
+      - 3000:3000
+    volumes:
+      - ./api:/app
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379

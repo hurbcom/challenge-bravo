@@ -1,0 +1,22 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:rodrigovcortezi/challenge-bravo.git",
+  "author": "Rodrigo V. Cortezi <rodrigovcortezi@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@koa/router": "^10.1.1",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0",
+    "redis": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.18",
+    "prettier": "2.7.1"
+  }
+}
