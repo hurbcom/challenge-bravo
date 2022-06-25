@@ -19,7 +19,7 @@ class Currency(db.Model):
 
     __tablename__ = "currencies"
 
-    id = Column(String, primary_key=True, default=str(uuid4()))
+    id = Column(String, primary_key=True, default=lambda: str(uuid4()))
     code = Column(String(50), unique=True, nullable=False)
     label = Column(String(100), unique=True, nullable=False)
     backing_currency = Column(Boolean, default=False)
