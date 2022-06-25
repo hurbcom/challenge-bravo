@@ -12,6 +12,4 @@ def init_app(app: AppWithDb) -> None:
     app.db = db
 
     # Model imports
-    # from app.models import (
-
-    # )
+    from app.models import Currency
