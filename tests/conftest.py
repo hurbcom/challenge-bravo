@@ -1,3 +1,5 @@
+import sys
+
 from environs import Env
 
 Env().read_env()
@@ -5,13 +7,20 @@ Env().read_env()
 import os
 from typing import Callable
 
+import flask_migrate as fm
 from colorama import Fore
 from faker import Faker
-from flask_migrate import upgrade
 from pytest import fixture
 
 from app import create_app
 from app.classes.app_with_db import AppWithDb
+
+
+def remove_dir(path):
+    if os.path.exists(os.path.abspath(path)):
+        from shutil import rmtree
+
+        rmtree(os.path.abspath(path))
 
 
 @fixture
@@ -25,7 +34,13 @@ def app():
     db_path = os.getenv("DB_TEST_PATH", "db_test.sqlite3")
 
     with app.app_context():
-        upgrade()
+        mg_path = "tests/migrations"
+
+        remove_dir(mg_path)
+
+        fm.init(mg_path)
+        fm.migrate(mg_path)
+        fm.upgrade(mg_path)
 
     yield app
 
