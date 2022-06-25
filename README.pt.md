@@ -78,8 +78,11 @@ Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.
 Boa sorte e boa viagem! ;)
 
 <p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
+  <img src="./docs/ca.jpg" alt="Challange accepted" />
 </p>
+
+<br>
+<br>
 
 # Bravo Challenge - HURB - Patrick Navega
 
@@ -89,6 +92,12 @@ Boa sorte e boa viagem! ;)
 ## BREVE RESUMO 
 
 <p> O projeto foi arquitetado da maneira simples tendo como principais pilares a organização de idéias, clareza de código e desempenho do serviço. Para alcançar o objetivo, o código possui somente 3 métodos de requisição do protocolo HTTP - GET, POST e DELETE -, e validações de dados rigorosas, com o auxílio de libs e também feitas manualmente, que visam otimizar a sua perfomance.<p>
+<br>
+
+## Fluxo da requisição e envio de resposta
+
+<img src="./docs/fluxo_api.png" width="600" height="400"> 
+
 <br>
 
 ## TECNOLOGIAS
@@ -108,15 +117,16 @@ Boa sorte e boa viagem! ;)
  
 
 <br>
-<br>
 
 ## API externa
 - https://economia.awesomeapi.com.br/json/last/
 <br>
 <br>
+<br>
 
 # Fragilidade do serviço
 - Por se tratar de um serviço público permitindo a manipulação total dos dados sem a validação de um token, os dados encontram-se expostos.
+<br>
 <br>
 <br>
 
