@@ -1,11 +1,8 @@
-import sys
-
 from environs import Env
 
 Env().read_env()
 
 import os
-from typing import Callable
 
 import flask_migrate as fm
 from colorama import Fore
@@ -37,14 +34,14 @@ def app():
         mg_path = "tests/migrations"
 
         remove_dir(mg_path)
+        if os.path.exists(f"app/{db_path}"):
+            os.remove(f"app/{db_path}")
 
         fm.init(mg_path)
         fm.migrate(mg_path)
         fm.upgrade(mg_path)
 
     yield app
-
-    os.remove(f"app/{db_path}")
 
 
 @fixture
@@ -92,3 +89,21 @@ def fake() -> Faker:
 
             assert resp.status_code == 201, err_msg"""
     return Faker()
+
+
+@fixture
+def get_currency_data(fake):
+
+    return lambda: {
+        "code": fake.currency_code(),
+        "label": fake.currency_name(),
+    }
+
+
+@fixture
+def get_cotation_data(fake):
+
+    return lambda curr1, curr2: {
+        "code": f"{curr1.code}-{curr2.code}",
+        "rate": float(f"{fake.random.randint(0,99)}.{fake.random.randint(11,99)}"),
+    }
