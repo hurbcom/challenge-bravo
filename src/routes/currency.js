@@ -1,5 +1,5 @@
 import express from "express";
-import CurrencyController from "../controllers/currencyController.js";
+import CurrencyController from "../controllers/currencyController.js"
 
 const route = express.Router();
 
