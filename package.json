@@ -1,0 +1,38 @@
+{
+    "dependencies": {
+      "@babel/preset-env": "^7.18.2",
+      "axios": "^0.27.2",
+      "body-parser": "^1.20.0",
+      "dotenv": "^16.0.1",
+      "express": "^4.18.1",
+      "mongoose": "^6.4.0",
+      "winston": "^3.8.0",
+      "yup": "^0.32.11"
+      
+    },
+    "name": "src",
+    "version": "1.0.0",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+      "start": "node ./src/app.js",
+      "dev": "nodemon ./src/app.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "<p align=\"left\">O objetivo desse projeto foi criar um serviço que realizasse a conversão entre moedas - sejam elas fictícias ou legítimas. Para tal, foi utilizado NODE JS como back-end devido à familiaridade do desenvolvedor com a ferramenta. Em relação ao armazenamento, visando a otimização de perfomance para o proposto teste de stress, foi utilizado o MongoDB como banco de dados.</p> <br>",
+    "devDependencies": {
+      "@babel/core": "^7.18.5",
+      "babel": "^6.23.0",
+      "babel-jest": "^28.1.1",
+      "eslint": "^8.18.0",
+      "jest": "^28.1.1",
+      "nodemon": "^2.0.16",
+      "babel-preset-jest": "^28.1.1"
+    },
+    "directories": {
+      "test": "test"
+    }
+  }
+  
