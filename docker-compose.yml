@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    volumes:
+      - data:/data/db
+    ports:
+      - 27017:27017
+  
+  api_currency:
+    build: .
+    container_name: currency_api
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 4040:4040
+    environment:
+      MONGO_DB: mongodb://mongodb
+      DB_NAME: db_currency_api
+      PORT: 4040
+      EXTERNAL_API: "https://economia.awesomeapi.com.br/last"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+
+volumes:
+  data: {}
