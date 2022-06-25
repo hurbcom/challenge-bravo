@@ -1,0 +1,9 @@
+## Dependecies
+node_modules
+
+## Logs
+logs
+
+## Environment
+.env
+.env.test
