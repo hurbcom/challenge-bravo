@@ -1,5 +1,5 @@
-import CurrencyModel from '../models/model_currency.js'
-import logger from '../config/logger.config.js';;
+import CurrencyModel from '../models/model_currency.js';
+import logger from '../config/logger.config.js';
 
 class CurrencyRepository {
     static async getCurrencies() {
