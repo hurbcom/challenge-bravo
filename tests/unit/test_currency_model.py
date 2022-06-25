@@ -1,4 +1,6 @@
+import re
 from datetime import datetime
+from uuid import uuid4
 
 from app.classes.app_with_db import AppWithDb
 from app.models.currencies_model import Currency
@@ -12,7 +14,7 @@ def test_currency_model_fields(colorized):
     """
 
     data = {
-        "id": 1,
+        "id": uuid4(),
         "code": "BRL",
         "label": "Real Brasileiro",
         "backing_currency": False,
@@ -55,7 +57,7 @@ def test_currency_default_fields(app: AppWithDb, colorized):
     }
 
     default_fields = (
-        ("id", int),
+        ("id", str),
         ("backing_currency", bool),
         ("created_at", datetime),
         ("updated_at", datetime),
@@ -75,3 +77,8 @@ def test_currency_default_fields(app: AppWithDb, colorized):
             assert type(value) == value_type, colorized(
                 f"{attr} type is not the expected {value_type} in Currency instance"
             )
+
+        pattern = (
+            r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        )
+        assert re.match(pattern, currency.id)
