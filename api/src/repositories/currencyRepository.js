@@ -6,6 +6,13 @@ const client = createClient({ socket: { host, port } })
 
 client.connect()
 
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'NotFoundError'
+  }
+}
+
 function createCurrencyRepository() {
   const prefix = 'currency'
   return {
@@ -47,6 +54,10 @@ function createCurrencyRepository() {
     async update(data) {
       const { code } = data
       const oldCurrency = await this.get(code)
+      if (!oldCurrency) {
+        throw new NotFoundError('No currency found.')
+      }
+
       const currency = await this.add({ ...oldCurrency, ...data })
 
       return currency
@@ -58,4 +69,4 @@ function createCurrencyRepository() {
   }
 }
 
-module.exports = { createCurrencyRepository }
+module.exports = { createCurrencyRepository, NotFoundError }

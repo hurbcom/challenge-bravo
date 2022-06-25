@@ -1,42 +1,84 @@
 const {
-  createCurrencyRepository,
-} = require('../repositories/currencyRepository')
+  createCurrencyService,
+  CurrencyAlreadyExistsError,
+  CurrencyNotFoundError,
+} = require('../services/currencyService')
 
 function createCurrencyController() {
-  const currencyRepository = createCurrencyRepository()
+  const currencyService = createCurrencyService()
   return {
     async find(ctx) {
-      const currencies = await currencyRepository.getAll()
+      const currencies = await currencyService.find()
       ctx.body = { data: currencies }
       ctx.status = 200
     },
 
     async findOne(ctx) {
-      const { code } = ctx.params
-      const currency = await currencyRepository.get(code)
-      ctx.body = { data: currency }
-      ctx.status = 200
+      try {
+        const { code } = ctx.params
+        const currency = await currencyService.findOne(code)
+        ctx.body = { data: currency }
+        ctx.status = 200
+      } catch (err) {
+        if (err instanceof CurrencyNotFoundError) {
+          ctx.body = {
+            data: null,
+            error: err.message,
+          }
+          ctx.status = 404
+        }
+      }
     },
 
     async create(ctx) {
-      const data = ctx.request.body
-      const currency = await currencyRepository.add(data)
-      ctx.body = { data: currency }
-      ctx.status = 201
+      try {
+        const data = ctx.request.body
+        const currency = await currencyService.create(data)
+        ctx.body = { data: currency }
+        ctx.status = 201
+      } catch (err) {
+        if (err instanceof CurrencyAlreadyExistsError) {
+          ctx.body = {
+            data: null,
+            error: err.message,
+          }
+          ctx.status = 422
+        }
+      }
     },
 
     async update(ctx) {
-      const { code } = ctx.params
-      const data = ctx.request.body
-      const currency = await currencyRepository.update(data)
-      ctx.body = { data: currency }
-      ctx.status = 200
+      try {
+        const { code } = ctx.params
+        const data = ctx.request.body
+        const currency = await currencyService.update(data, code)
+        ctx.body = { data: currency }
+        ctx.status = 200
+      } catch (err) {
+        if (err instanceof CurrencyNotFoundError) {
+          ctx.body = {
+            data: null,
+            error: err.message,
+          }
+          ctx.status = 404
+        }
+      }
     },
 
     async delete(ctx) {
-      const { code } = ctx.params
-      await currencyRepository.delete(code)
-      ctx.status = 200
+      try {
+        const { code } = ctx.params
+        await currencyService.delete(code)
+        ctx.status = 200
+      } catch (err) {
+        if (err instanceof CurrencyNotFoundError) {
+          ctx.body = {
+            data: null,
+            error: err.message,
+          }
+          ctx.status = 404
+        }
+      }
     },
   }
 }
