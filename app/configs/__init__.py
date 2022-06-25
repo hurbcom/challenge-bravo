@@ -8,11 +8,20 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.getenv("DB_URI")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DB_URI_DEV")
 
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv("DB_URI")
 
 
-config_selector = {"development": DevelopmentConfig, "production": ProductionConfig}
+class TestConfig(Config):
+    db_path = os.getenv("DB_TEST_PATH", "db_test.sqlite3")
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path}"
+
+
+config_selector = {
+    "test": TestConfig,
+    "development": DevelopmentConfig,
+    "production": ProductionConfig,
+}
