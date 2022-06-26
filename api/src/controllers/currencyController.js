@@ -2,6 +2,7 @@ const {
   createCurrencyService,
   CurrencyAlreadyExistsError,
   CurrencyNotFoundError,
+  CurrencyInvalidDataError,
 } = require('../services/currencyService')
 
 function createCurrencyController() {
@@ -37,12 +38,17 @@ function createCurrencyController() {
         ctx.body = { data: currency }
         ctx.status = 201
       } catch (err) {
-        if (err instanceof CurrencyAlreadyExistsError) {
+        if (
+          err instanceof CurrencyAlreadyExistsError ||
+          err instanceof CurrencyInvalidDataError
+        ) {
           ctx.body = {
             data: null,
             error: err.message,
           }
           ctx.status = 422
+        } else {
+          throw err
         }
       }
     },
@@ -61,6 +67,14 @@ function createCurrencyController() {
             error: err.message,
           }
           ctx.status = 404
+        } else if (err instanceof CurrencyInvalidDataError) {
+          ctx.body = {
+            data: null,
+            error: err.message,
+          }
+          ctx.status = 422
+        } else {
+          throw err
         }
       }
     },
@@ -77,6 +91,8 @@ function createCurrencyController() {
             error: err.message,
           }
           ctx.status = 404
+        } else {
+          throw err
         }
       }
     },
