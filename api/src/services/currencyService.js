@@ -16,7 +16,7 @@ class CurrencyAlreadyExistsError extends Error {
 class CurrencyInvalidDataError extends Error {
   constructor(message) {
     super(message)
-    this.name = 'InvalidCurrencyDataError'
+    this.name = 'CurrencyInvalidDataError'
   }
 }
 
