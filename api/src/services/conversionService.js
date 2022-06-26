@@ -40,14 +40,14 @@ function createConversionService() {
 
       const fromCurrency = await currencyRepository.get(from)
       if (!fromCurrency) {
-        throw new ConversionCurrencyNotFound(
+        throw new ConversionCurrencyNotFoundError(
           `${fromCurrency} currency not found.`
         )
       }
 
       const toCurrency = await currencyRepository.get(to)
       if (!toCurrency) {
-        throw new ConversionCurrencyNotFound(
+        throw new ConversionCurrencyNotFoundError(
           `${toCurrency} currency not found.`
         )
       }
