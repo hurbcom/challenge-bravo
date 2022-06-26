@@ -26,6 +26,7 @@ function createCurrencyValidator() {
     validateCurrencyUpdate(data) {
       const currencyUpdateSchema = object({
         name: string().required(),
+        code: string().required().uppercase(),
         rate: number().required().positive(),
       }).noUnknown()
 
