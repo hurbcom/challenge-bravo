@@ -1,6 +1,5 @@
 const {
   createCurrencyRepository,
-  NotFoundError,
 } = require('../repositories/currencyRepository')
 const {
   createCurrencyValidator,
@@ -85,17 +84,16 @@ function createCurrencyService() {
         }
       }
 
-      try {
-        const currency = await currencyRepository.update({
-          ...currencyData,
-          code,
-        })
-        return currency
-      } catch (err) {
-        if (err instanceof NotFoundError) {
-          throw new CurrencyNotFoundError(err.message)
-        }
+      const currency = await currencyRepository.get(code)
+      if (!currency) {
+        throw new CurrencyNotFoundError('Currency not found.')
       }
+
+      const updatedCurrency = await currencyRepository.update({
+        ...currencyData,
+        code,
+      })
+      return updatedCurrency
     },
 
     async delete(code) {
