@@ -12,7 +12,10 @@ function createCurrencyValidator() {
         }),
         code: string()
           .required()
-          .matches(/^[a-z]$/i, 'code should contain alphabetic characters only')
+          .matches(
+            /^[a-z]+$/i,
+            'code should contain alphabetic characters only'
+          )
           .uppercase(),
         rate: number()
           .positive()
@@ -31,7 +34,10 @@ function createCurrencyValidator() {
         name: string().required(),
         code: string()
           .required()
-          .matches(/^[a-z]$/i, 'code should contain alphabetic characters only')
+          .matches(
+            /^[a-z]+$/i,
+            'code should contain alphabetic characters only'
+          )
           .uppercase(),
         rate: number().required().positive(),
       }).noUnknown()
