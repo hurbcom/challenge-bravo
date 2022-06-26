@@ -10,7 +10,10 @@ function createCurrencyValidator() {
           then: (schema) => schema.required(),
           otherwise: (schema) => schema.notRequired(),
         }),
-        code: string().required().uppercase(),
+        code: string()
+          .required()
+          .matches(/^[a-z]$/i, 'code should contain alphabetic characters only')
+          .uppercase(),
         rate: number()
           .positive()
           .when('type', {
@@ -26,7 +29,10 @@ function createCurrencyValidator() {
     validateCurrencyUpdate(data) {
       const currencyUpdateSchema = object({
         name: string().required(),
-        code: string().required().uppercase(),
+        code: string()
+          .required()
+          .matches(/^[a-z]$/i, 'code should contain alphabetic characters only')
+          .uppercase(),
         rate: number().required().positive(),
       }).noUnknown()
 
