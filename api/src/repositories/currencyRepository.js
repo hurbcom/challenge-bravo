@@ -38,6 +38,9 @@ function createCurrencyRepository() {
       }
 
       const keys = await getAllCurrenciesKeys()
+      if (keys.length === 0) {
+        return []
+      }
       const data = await client.sendCommand(['MGET', ...keys])
       const currencies = data.map((d) => JSON.parse(d))
 
