@@ -33,6 +33,9 @@ const updateCurrenciesJob = {
 
     const currencies = await currencyRepository.getAll()
     const realCurrencies = currencies.filter((c) => c.type === 'real')
+    if (realCurrencies.length === 0) {
+      return
+    }
     const codes = realCurrencies.map((c) => c.code)
 
     let rates
