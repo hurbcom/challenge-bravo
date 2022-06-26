@@ -102,7 +102,7 @@ function createCurrencyService() {
         )
       }
 
-      const updatedCurrency = await currencyRepository.update({ currencyData })
+      const updatedCurrency = await currencyRepository.update(currencyData)
       return updatedCurrency
     },
 
