@@ -5,11 +5,7 @@ function createCurrencyValidator() {
     validateCurrencyCreation(data) {
       const currencyCreationSchema = object({
         type: mixed().required().oneOf(['real', 'fictitious']),
-        name: string().when('type', {
-          is: (val) => val && val === 'fictitious',
-          then: (schema) => schema.required(),
-          otherwise: (schema) => schema.notRequired(),
-        }),
+        name: string(),
         code: string()
           .required()
           .matches(
@@ -31,7 +27,7 @@ function createCurrencyValidator() {
 
     validateCurrencyUpdate(data) {
       const currencyUpdateSchema = object({
-        name: string().required(),
+        name: string(),
         code: string()
           .required()
           .matches(
