@@ -39,10 +39,13 @@ function createCurrencyController() {
         ctx.body = { data: currency }
         ctx.status = 201
       } catch (err) {
-        if (
-          err instanceof CurrencyAlreadyExistsError ||
-          err instanceof CurrencyInvalidDataError
-        ) {
+        if (err instanceof CurrencyInvalidDataError) {
+          ctx.body = {
+            data: null,
+            error: err.message,
+          }
+          ctx.status = 400
+        } else if (err instanceof CurrencyAlreadyExistsError) {
           ctx.body = {
             data: null,
             error: err.message,
@@ -68,10 +71,13 @@ function createCurrencyController() {
             error: err.message,
           }
           ctx.status = 404
-        } else if (
-          err instanceof CurrencyInvalidDataError ||
-          err instanceof CurrencyUpdateError
-        ) {
+        } else if (err instanceof CurrencyInvalidDataError) {
+          ctx.body = {
+            data: null,
+            error: err.message,
+          }
+          ctx.status = 400
+        } else if (err instanceof CurrencyUpdateError) {
           ctx.body = {
             data: null,
             error: err.message,

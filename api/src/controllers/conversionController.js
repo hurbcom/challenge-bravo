@@ -14,10 +14,13 @@ function createConversionController() {
         ctx.body = { data: conversion }
         ctx.status = 200
       } catch (err) {
-        if (
-          err instanceof ConversionInvalidDataError ||
-          err instanceof ConversionCurrencyNotFoundError
-        ) {
+        if (err instanceof ConversionInvalidDataError) {
+          ctx.body = {
+            data: null,
+            error: err.message,
+          }
+          ctx.status = 400
+        } else if (err instanceof ConversionCurrencyNotFoundError) {
           ctx.body = {
             data: null,
             error: err.message,
