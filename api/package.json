@@ -7,13 +7,16 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "worker": "node src/worker.js"
   },
   "dependencies": {
     "@koa/cors": "^3.3.0",
     "@koa/router": "^10.1.1",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
+    "node-cron": "3.0.0",
+    "node-fetch": "2",
     "redis": "^4.1.0",
     "yup": "^0.32.11"
   },

@@ -14,3 +14,16 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
+    command: yarn dev
+  worker:
+    depends_on:
+      - redis
+    build:
+      context: ./api
+    volumes:
+      - ./api:/app
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      API_KEY: c88f2c32cebe81c5dbbd8ea7e14c872354d03e8e1ee55f7184b9d5a0f83aa3a8
+    command: yarn worker
