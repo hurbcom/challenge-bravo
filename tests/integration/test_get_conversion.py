@@ -39,7 +39,7 @@ def test_get_conversion_200(client: FlaskClient, currencies):
 
             assert response.status_code == HTTPStatus.OK
 
-            json = response.data
+            json: dict = response.json
             expected = expected_keys(from_currency, to_currency)
             assert set(json) == set(expected)
 
