@@ -40,16 +40,12 @@ function createConversionService() {
 
       const fromCurrency = await currencyRepository.get(from)
       if (!fromCurrency) {
-        throw new ConversionCurrencyNotFoundError(
-          `${fromCurrency} currency not found.`
-        )
+        throw new ConversionCurrencyNotFoundError(`${from} currency not found.`)
       }
 
       const toCurrency = await currencyRepository.get(to)
       if (!toCurrency) {
-        throw new ConversionCurrencyNotFoundError(
-          `${toCurrency} currency not found.`
-        )
+        throw new ConversionCurrencyNotFoundError(`${to} currency not found.`)
       }
 
       conversion.result = (amount / fromCurrency.rate) * toCurrency.rate
