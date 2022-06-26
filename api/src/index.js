@@ -1,7 +1,7 @@
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 
-const { currencyRouter } = require('./routes')
+const { currencyRouter } = require('./routes/currencyRoutes')
 
 const app = new Koa()
 app.use(bodyParser())

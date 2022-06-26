@@ -12,4 +12,4 @@ router.post('/currencies', currencyController.create)
 router.put('/currencies/:code', currencyController.update)
 router.del('/currencies/:code', currencyController.delete)
 
-module.exports = router
+module.exports = { currencyRouter: router }
