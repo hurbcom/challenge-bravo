@@ -4,8 +4,8 @@ function createConversionValidator() {
   return {
     validateConversion(data) {
       const conversionSchema = object({
-        from: string().required(),
-        to: string().required(),
+        from: string().required().uppercase(),
+        to: string().required().uppercase(),
         amount: number().required().positive(),
       }).noUnknown()
 

@@ -17,7 +17,7 @@ function createCurrencyController() {
 
     async findOne(ctx) {
       try {
-        const { code } = ctx.params
+        const code = ctx.params.code.toUpperCase()
         const currency = await currencyService.findOne(code)
         ctx.body = { data: currency }
         ctx.status = 200
@@ -59,7 +59,7 @@ function createCurrencyController() {
 
     async update(ctx) {
       try {
-        const { code } = ctx.params
+        const code = ctx.params.code.toUpperCase()
         const data = ctx.request.body
         const currency = await currencyService.update(data, code)
         ctx.body = { data: currency }
@@ -91,7 +91,7 @@ function createCurrencyController() {
 
     async delete(ctx) {
       try {
-        const { code } = ctx.params
+        const code = ctx.params.code.toUpperCase()
         await currencyService.delete(code)
         ctx.status = 200
       } catch (err) {
