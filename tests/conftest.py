@@ -3,6 +3,7 @@ from environs import Env
 Env().read_env()
 
 import os
+from typing import Callable
 
 import flask_migrate as fm
 from colorama import Fore
@@ -107,3 +108,14 @@ def get_cotation_data(fake):
         "code": f"{curr1.code}-{curr2.code}",
         "rate": float(f"{fake.random.randint(0,99)}.{fake.random.randint(11,99)}"),
     }
+
+
+@fixture
+def currencies():
+    return (
+        "USD",
+        "BRL",
+        "EUR",
+        "BTC",
+        "ETH",
+    )
