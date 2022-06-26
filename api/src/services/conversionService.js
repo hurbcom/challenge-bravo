@@ -36,7 +36,6 @@ function createConversionService() {
         }
       }
 
-      console.log(conversion)
       const { from, to, amount } = conversion
 
       const fromCurrency = await currencyRepository.get(from)
