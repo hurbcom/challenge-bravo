@@ -27,6 +27,13 @@ class CurrencyNotFoundError extends Error {
   }
 }
 
+class CurrencyUpdateError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'CurrencyUpdateError'
+  }
+}
+
 function createCurrencyService() {
   const currencyRepository = createCurrencyRepository()
   const currencyValidator = createCurrencyValidator()
@@ -89,6 +96,12 @@ function createCurrencyService() {
         throw new CurrencyNotFoundError('Currency not found.')
       }
 
+      if (currency.type === 'real') {
+        throw new CurrencyUpdateError(
+          'Only fictitious currencies can be updated.'
+        )
+      }
+
       const updatedCurrency = await currencyRepository.update({
         ...currencyData,
         code,
@@ -110,4 +123,5 @@ module.exports = {
   CurrencyAlreadyExistsError,
   CurrencyNotFoundError,
   CurrencyInvalidDataError,
+  CurrencyUpdateError,
 }

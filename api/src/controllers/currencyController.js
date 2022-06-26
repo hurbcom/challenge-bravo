@@ -3,6 +3,7 @@ const {
   CurrencyAlreadyExistsError,
   CurrencyNotFoundError,
   CurrencyInvalidDataError,
+  CurrencyUpdateError,
 } = require('../services/currencyService')
 
 function createCurrencyController() {
@@ -67,7 +68,10 @@ function createCurrencyController() {
             error: err.message,
           }
           ctx.status = 404
-        } else if (err instanceof CurrencyInvalidDataError) {
+        } else if (
+          err instanceof CurrencyInvalidDataError ||
+          err instanceof CurrencyUpdateError
+        ) {
           ctx.body = {
             data: null,
             error: err.message,
