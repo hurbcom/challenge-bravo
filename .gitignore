@@ -4,6 +4,7 @@ __pycache__/
 # Unit test / coverage reports
 .pytest_cache/
 **/*.sqlite3
+tests/migrations/
 
 # Coverage
 .coverage
