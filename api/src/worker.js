@@ -15,5 +15,4 @@ const logErrors = (fn) => {
 }
 
 // Run update job every 10 minutes
-// cron.schedule('*/10 * * * *', logErrors(updateCurrenciesJob.execute))
-cron.schedule('*/10 * * * * *', logErrors(updateCurrenciesJob.execute))
+cron.schedule('*/10 * * * *', logErrors(updateCurrenciesJob.execute))
