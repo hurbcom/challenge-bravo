@@ -29,6 +29,8 @@ function createCurrencyController() {
             error: err.message,
           }
           ctx.status = 404
+        } else {
+          throw err
         }
       }
     },
