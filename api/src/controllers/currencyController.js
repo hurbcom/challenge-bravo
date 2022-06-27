@@ -4,6 +4,7 @@ const {
   CurrencyNotFoundError,
   CurrencyInvalidDataError,
   CurrencyUpdateError,
+  CurrencyCantBeTrackedError,
 } = require('../services/currencyService')
 
 function createCurrencyController() {
@@ -45,7 +46,10 @@ function createCurrencyController() {
             error: err.message,
           }
           ctx.status = 400
-        } else if (err instanceof CurrencyAlreadyExistsError) {
+        } else if (
+          err instanceof CurrencyAlreadyExistsError ||
+          err instanceof CurrencyCantBeTrackedError
+        ) {
           ctx.body = {
             data: null,
             error: err.message,

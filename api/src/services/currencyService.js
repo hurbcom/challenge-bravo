@@ -5,6 +5,7 @@ const {
   createCurrencyValidator,
   ValidationError,
 } = require('../validators/currencyValidator')
+const { createCurrencyTracker } = require('../lib/currencyTracker')
 
 class CurrencyAlreadyExistsError extends Error {
   constructor(message) {
@@ -34,9 +35,17 @@ class CurrencyUpdateError extends Error {
   }
 }
 
+class CurrencyCantBeTrackedError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'CurrencyCantBeTrackedError'
+  }
+}
+
 function createCurrencyService() {
   const currencyRepository = createCurrencyRepository()
   const currencyValidator = createCurrencyValidator()
+  const currencyTracker = createCurrencyTracker()
 
   return {
     async find() {
@@ -65,15 +74,24 @@ function createCurrencyService() {
         }
       }
 
-      const currencyAlreadyExists = await currencyRepository.get(
-        currencyData.code
-      )
+      const { code } = currencyData
+      const currencyAlreadyExists = await currencyRepository.get(code)
       if (currencyAlreadyExists) {
         throw new CurrencyAlreadyExistsError(
           'A currency with this code has already been created.'
         )
       }
 
+      if (currencyData.type === 'real') {
+        const currentRate = await currencyTracker.getLastPrice(code)
+        if (currentRate) {
+          currencyData.rate = currentRate
+        } else {
+          throw new CurrencyCantBeTrackedError(
+            'This currency cannot be tracked.'
+          )
+        }
+      }
       const currency = await currencyRepository.add(currencyData)
 
       return currency
@@ -121,4 +139,5 @@ module.exports = {
   CurrencyNotFoundError,
   CurrencyInvalidDataError,
   CurrencyUpdateError,
+  CurrencyCantBeTrackedError,
 }

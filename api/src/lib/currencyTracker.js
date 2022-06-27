@@ -7,11 +7,20 @@ function createCurrencyTracker() {
 
   return {
     async getLastPrices(codes) {
-      const url = `${baseUrl}/?fsym=USD&tsyms=${codes.join(',')}`
+      const url = `${baseUrl}?fsym=USD&tsyms=${codes.join(',')}`
       const response = await client.fetch(url)
-      const rates = await response.json()
+      const data = await response.json()
+      if (data.Response === 'Error' && data.Type === 1) {
+        // None of the currency codes passed to the API is a supported currency
+        return {}
+      }
 
-      return rates
+      return data
+    },
+
+    async getLastPrice(code) {
+      const rate = await this.getLastPrices([code])
+      return rate[code]
     },
   }
 }
