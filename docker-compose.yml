@@ -14,7 +14,7 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      # Of cource, the API Key should be stored in a safe place instead of
+      # Of course, the API Key should be stored in a safe place instead of
       # beeing exposed like this. But for the sake of the review process, I just
       # placed it here.
       API_KEY: c88f2c32cebe81c5dbbd8ea7e14c872354d03e8e1ee55f7184b9d5a0f83aa3a8
@@ -30,7 +30,7 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      # Of cource, the API Key should be stored in a safe place instead of
+      # Of course, the API Key should be stored in a safe place instead of
       # beeing exposed like this. But for the sake of the review process, I just
       # placed it here.
       API_KEY: c88f2c32cebe81c5dbbd8ea7e14c872354d03e8e1ee55f7184b9d5a0f83aa3a8
