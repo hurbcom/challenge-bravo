@@ -99,6 +99,12 @@ docker-compose up
 
 Pronto, agora você pode usar a API acessando as endpoints no host e porta padrões: http://localhost:3000 🚀
 
+Se quiser rodar o projeto em modo de desenvolvimento:
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+```
+
 ## Endpoints
 
 As endpoints da API estão documentadas [aqui](./Endpoints.md).
