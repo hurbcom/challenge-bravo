@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  redis:
+    image: 'redis:alpine'
+  api:
+    depends_on:
+      - redis
+    build:
+      context: ./api
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: production
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      # Of course, the API Key should be stored in a safe place instead of
+      # beeing exposed like this. But for the sake of the review process, I just
+      # placed it here.
+      API_KEY: c88f2c32cebe81c5dbbd8ea7e14c872354d03e8e1ee55f7184b9d5a0f83aa3a8
+      SETUP:
+    command: yarn start
+  worker:
+    depends_on:
+      - redis
+    build:
+      context: ./api
+    environment:
+      NODE_ENV: production
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      # Of course, the API Key should be stored in a safe place instead of
+      # beeing exposed like this. But for the sake of the review process, I just
+      # placed it here.
+      API_KEY: c88f2c32cebe81c5dbbd8ea7e14c872354d03e8e1ee55f7184b9d5a0f83aa3a8
+    command: yarn worker

@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  api:
+    volumes:
+      - ./api:/app
+    environment:
+      NODE_ENV: development
+    command: yarn dev
+  worker:
+    volumes:
+      - ./api:/app
+    environment:
+      NODE_ENV: development
