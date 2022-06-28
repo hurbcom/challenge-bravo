@@ -14,13 +14,6 @@ from app import create_app
 from app.classes.app_with_db import AppWithDb
 
 
-def remove_dir(path):
-    if os.path.exists(os.path.abspath(path)):
-        from shutil import rmtree
-
-        rmtree(os.path.abspath(path))
-
-
 @fixture
 def app():
     """Cria e configura uma nova aplicação para cada teste usando um banco de
@@ -32,15 +25,9 @@ def app():
     db_path = os.getenv("DB_TEST_PATH", "db_test.sqlite3")
 
     with app.app_context():
-        mg_path = "tests/migrations"
-
-        remove_dir(mg_path)
         if os.path.exists(f"app/{db_path}"):
             os.remove(f"app/{db_path}")
-
-        fm.init(mg_path)
-        fm.migrate(mg_path)
-        fm.upgrade(mg_path)
+        fm.upgrade()
 
     yield app
 

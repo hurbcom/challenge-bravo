@@ -5,12 +5,12 @@ from random import randint
 from flask.testing import FlaskClient
 
 
-def test_get_conversion_200(client: FlaskClient, currencies):
+def test_get_conversion_200(client: FlaskClient, currencies, colorized):
     """
     GIVEN the rout '/api?from={cur1}&to={cur2}&amount={float}'
     WHEN I fetch a requisition
-    THEN I get the correct payload response
     THEN I get the status code 200
+    THEN I get the correct payload response
     """
 
     path = "/api?from={_from}&to={to}&amount={amount}"
@@ -29,7 +29,7 @@ def test_get_conversion_200(client: FlaskClient, currencies):
     }
 
     for from_currency in currencies:
-        for to_currency in set(currencies).difference((from_currency)):
+        for to_currency in set(currencies).difference({from_currency, "BTC", "ETH"}):
             path = path.format(
                 _from=from_currency,
                 to=to_currency,
@@ -37,7 +37,9 @@ def test_get_conversion_200(client: FlaskClient, currencies):
             )
             response = client.get(path)
 
-            assert response.status_code == HTTPStatus.OK
+            assert response.status_code == HTTPStatus.OK, colorized(
+                f"Not able to convert {from_currency} to {to_currency}"
+            )
 
             json: dict = response.json
             expected = expected_keys(from_currency, to_currency)
@@ -45,8 +47,8 @@ def test_get_conversion_200(client: FlaskClient, currencies):
 
             response_types = expected_types(from_currency, to_currency)
 
-            assert type(json[from_currency]) == type(response_types[from_currency])
-            assert type(json[to_currency]) == type(response_types[to_currency])
+            assert type(json[from_currency]) == response_types[from_currency]
+            assert type(json[to_currency]) == response_types[to_currency]
             assert datetime.strptime(json["quote_date"], "%Y-%m-%d %I:%M:%S")
 
 

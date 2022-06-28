@@ -52,8 +52,8 @@ def test_currency_default_fields(app: AppWithDb, colorized):
     """
 
     data = {
-        "code": "BRL",
-        "label": "Real Brasileiro",
+        "code": "BRLT",
+        "label": "Real Brasileiro Turismo",
     }
 
     default_fields = (
