@@ -135,6 +135,12 @@ O tempo de resposta do sistema apresentou números muito melhores no primeiro te
 
 Foram feitos testes de integração no nível de serviço para garantir a corretude do sistema.
 
+Para rodar os testes, basta executar o seguinte comando:
+
+```
+docker-compose run --rm api yarn test
+```
+
 <img src="https://i.imgur.com/5Hutvit.png" width="500" title="source: imgur.com" />
 
 ## Melhorias futuras
