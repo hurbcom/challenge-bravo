@@ -41,7 +41,7 @@ Outras moedas podem ser adicionadas com uso. Além de moedas reais (FIAT e crypt
   <img src="https://i.imgur.com/ghLYms1.png" width="800" title="source: imgur.com" />
 </p>
 
-A arquitetura da solução desenvolvida conta com 4 partes principais, sendo eles:
+A arquitetura da solução desenvolvida conta com 4 partes principais, sendo elas:
 
 1. [REST API](#rest-api)
 2. [Redis](#redis)
@@ -63,13 +63,13 @@ Foram dois os motivos que levaram a decisão de usar o Redis como banco de dados
 
 ### Currency Tracker
 
-O Currency Tracker é responsável por fazer a comunição com 'o mundo lá fora' e obter as cotações reais das moedas registradas no sitema. Este é o único ponto de acesso com a API Externa.
+O Currency Tracker é responsável por fazer a comunição com 'o mundo lá fora' e obter as cotações reais das moedas. Este é o único ponto de acesso com a API Externa.
 
 A API utilizada foi a [CryptoCompare](https://min-api.cryptocompare.com/documentation) 🌎
 
 ### Worker
 
-O Worker é responsável por obter as cotações mais recentes e atualizar as moedas registradas no sistema. Isso é feito através de um cron job que roda periodicamente (de 10 em 10 minutos).
+O Worker é responsável por obter as cotações mais recentes (utilizando o Currency Tracker) e atualizar as moedas registradas no sistema. Isso é feito através de um cron job que roda periodicamente (de 10 em 10 minutos).
 
 ## Regras de negócio
 
