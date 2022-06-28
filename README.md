@@ -16,6 +16,8 @@ API para conversão monetária.
 - [Como usar](#como-usar)
 - [Endpoints](#endpoints)
 - [Testes](#testes)
+  - [Testes de carga](#testes-de-carga)
+  - [Testes automatizados](#testes-automatizados)
 - [Melhorias futuras](#melhorias-futuras)
 
 ## Resumo
@@ -102,6 +104,34 @@ Pronto, agora você pode usar a API acessando as endpoints no host e porta padr�
 As endpoints da API estão documentadas [aqui](./Endpoints.md).
 
 ## Testes
+
+### Testes de carga
+
+O teste de carga é essencial para quantificar a performance do sistema e assegurar que o requisito não funcional especificado no desafio foi cumprido (atender pelo menos 1000 requisições por segundo). Para isso, foram feitos dois testes de carga simples utilizando a ferramenta [Artillery](https://www.artillery.io/).
+
+**1. Utilizando 10 usuários virtuais onde cada um deles faz 1000 requisições.**
+
+<img src="https://i.imgur.com/F8nYF2M.png" width="500" title="source: imgur.com" />
+
+- Todas as 10000 requisições foram atendidas com sucesso. ✅
+- Tivemos um _throughput_ de 1148 requisições por segundo. ✅
+- A mediana do tempo de resposta foi de 3 ms. ✅
+- Não é tão realista pensar em um número tão baixo de usuários fazendo esse alto volume de requisições. 👎
+
+**2. Utilizando 1000 usuários virtuais onde cada um deles faz 10 requisições por segundo.**
+
+<img src="https://i.imgur.com/ri5vpUs.png" width="500" title="source: imgur.com" />
+
+- Todas as 10000 requisições foram atendidas com sucesso. ✅
+- Tivemos um _throughput_ de 1070 requisições por segundo. ✅
+- A mediana de tempo de resposta foi de 392 ms. 👎
+- É mais realista pensar em um volume alto de usuários fazendo poucas requisições. ✅
+
+**Considerações**
+
+O tempo de resposta do sistema apresentou números muito melhores no primeiro teste. A principal razão para isso, é que no primeiro teste, a maioria das conexões TCP são reutilizadas, e no segundo teste, o sistema precisou abrir e fechar conexões com muito mais frequência. Isso mostra como a abertura de novas conexões TCP pode ser muito custoso.
+
+### Testes automatizados
 
 WIP 🚧
 
