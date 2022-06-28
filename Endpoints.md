@@ -133,7 +133,7 @@ Respostas
 
 | Código | Descrição                                 |
 | ------ | ----------------------------------------- |
-| 200    | Moeda registrada com sucesso.             |
+| 201    | Moeda registrada com sucesso.             |
 | 400    | Dados inválidos.                          |
 | 422    | Já existe uma moeda com o código enviado. |
 | 422    | O código enviado não é de uma moeda real. |

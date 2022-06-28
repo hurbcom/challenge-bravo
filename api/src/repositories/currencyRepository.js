@@ -1,9 +1,15 @@
 const { createClient } = require('redis')
 
+const env = process.env.NODE_ENV || 'development'
 const host = process.env.REDIS_HOST
 const port = process.env.REDIS_PORT
-const client = createClient({ socket: { host, port } })
-
+const databaseNumber = {
+  development: 0,
+  production: 1,
+  test: 2,
+}
+const database = databaseNumber[env]
+const client = createClient({ socket: { host, port }, database })
 client.connect()
 
 function createCurrencyRepository() {
@@ -57,6 +63,15 @@ function createCurrencyRepository() {
 
     async remove(code) {
       return client.del(`${prefix}:${code}`)
+    },
+
+    async removeAll() {
+      const allCurrencies = await this.getAll()
+      const removals = allCurrencies.map((currency) =>
+        this.remove(currency.code)
+      )
+
+      return Promise.all(removals)
     },
   }
 }

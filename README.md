@@ -133,11 +133,13 @@ O tempo de resposta do sistema apresentou números muito melhores no primeiro te
 
 ### Testes automatizados
 
-WIP 🚧
+Foram feitos testes de integração no nível de serviço para garantir a corretude do sistema.
+
+<img src="https://i.imgur.com/5Hutvit.png" width="500" title="source: imgur.com" />
 
 ## Melhorias futuras
 
 1. Separar os errors por campo na resposta dada ao usuário. Isso facilita demais a invalidação de campos de formulários em uma possível aplicação front-end que use a API.
 2. Fazer um melhor uso do redis. A forma que as moedas estão sendo persistidas funciona perfeitamente para requisições de conversão. Porém, na atualização das cotações, o worker precisa obter todas as moedas reais, e essa filtragem está sendo feita carregando todas as moedas em memória e depois fazendo um **_filter_**. Com certeza, há maneiras melhores de usar o redis para este caso.
-3. A unica interação do usuário com a API que faz contato com a API externa é a de criação de moeda real. Isso porque o sistema precisa verificar se a existe e obter o valor mais atualizado. Isso resulta em um tempo de resposta maior que 1000 ms, o que não é muito ideal. Por outro lado, o sistema garante ao usuário que toda moeda real criada sempre terá cotações atualizadas.
-4. Desenvolvimento de testes unitários e de integração para garantir que a corretude do sistema.
+3. A unica interação do usuário com a API que faz contato com a API externa é a de criação de moeda real. Isso porque o sistema precisa verificar se a existência da moeda e obter o valor mais atualizado. Isso resulta em um tempo de resposta maior que 1000 ms, o que não é muito ideal. Por outro lado, o sistema garante ao usuário que toda moeda real criada sempre terá cotações atualizadas.
+4. Melhorar os testes automatizados. Foram feitos testes de integração no nível de serviço, mas ficou faltando fazer testes unitários para garantir a corretude dos componentes do sistema de forma isolada.
