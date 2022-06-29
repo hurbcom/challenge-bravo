@@ -14,6 +14,7 @@ class Currency(db.Model):
     code: str
     label: str
     backing_currency: bool
+    is_crypto: bool
     created_at: datetime
     updated_at: datetime
 
@@ -23,5 +24,6 @@ class Currency(db.Model):
     code = Column(String(50), unique=True, nullable=False)
     label = Column(String(100), unique=True, nullable=False)
     backing_currency = Column(Boolean, default=False)
+    is_crypto = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
