@@ -3,9 +3,18 @@ from http import HTTPStatus
 from random import randint
 
 from flask.testing import FlaskClient
+from pytest import mark
 
 
-def test_get_conversion_200(client: FlaskClient, currencies, colorized):
+@mark.parametrize("from_currency", ["USD", "BRL", "EUR", "BTC", "ETH"])
+@mark.parametrize("to_currency", ["USD", "BRL", "EUR"])
+def test_get_conversion_200(
+    client: FlaskClient,
+    currencies,
+    colorized,
+    from_currency,
+    to_currency,
+):
     """
     GIVEN the rout '/api?from={cur1}&to={cur2}&amount={float}'
     WHEN I fetch a requisition
@@ -28,28 +37,30 @@ def test_get_conversion_200(client: FlaskClient, currencies, colorized):
         "quote_date": str,
     }
 
-    for from_currency in currencies:
-        for to_currency in set(currencies).difference({from_currency, "BTC", "ETH"}):
-            path = path.format(
-                _from=from_currency,
-                to=to_currency,
-                amount=randint(1, 10),
-            )
-            response = client.get(path)
+    # for from_currency in currencies:
+    #     for to_currency in set(*currencies).difference({from_currency, "BTC", "ETH"}):
+    path = path.format(
+        _from=from_currency,
+        to=to_currency,
+        amount=randint(1, 10),
+    )
+    response = client.get(path)
 
-            assert response.status_code == HTTPStatus.OK, colorized(
-                f"Not able to convert {from_currency} to {to_currency}"
-            )
+    assert response.status_code == HTTPStatus.OK, colorized(
+        f"Not able to convert {from_currency} to {to_currency}"
+    )
 
-            json: dict = response.json
-            expected = expected_keys(from_currency, to_currency)
-            assert set(json) == set(expected)
+    json: dict = response.json
+    expected = expected_keys(from_currency, to_currency)
+    assert set(json) == set(expected), colorized(
+        f"{from_currency} - {to_currency} - {path}"
+    )
 
-            response_types = expected_types(from_currency, to_currency)
+    response_types = expected_types(from_currency, to_currency)
 
-            assert type(json[from_currency]) == response_types[from_currency]
-            assert type(json[to_currency]) == response_types[to_currency]
-            assert datetime.strptime(json["quote_date"], "%Y-%m-%d %I:%M:%S")
+    assert type(json[from_currency]) == response_types[from_currency]
+    assert type(json[to_currency]) == response_types[to_currency]
+    assert datetime.strptime(json["quote_date"], "%Y-%m-%d %H:%M:%S")
 
 
 def test_get_conversion_unregistered_currency_404(client: FlaskClient, currencies):
@@ -71,6 +82,6 @@ def test_get_conversion_unregistered_currency_404(client: FlaskClient, currencie
 
     response = client.get(path)
 
-    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert response.status_code == HTTPStatus.NOT_FOUND
 
     assert set(response.data).issuperset(expected)
