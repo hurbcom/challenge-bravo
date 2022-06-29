@@ -1,0 +1,24 @@
+{
+    "name": "challenge-bravo",
+    "version": "1.0.0",
+    "description": "[[English](README.md) | [Portuguese](README.pt.md)]",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dan-mcarvalho/challenge-bravo.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/dan-mcarvalho/challenge-bravo/issues"
+    },
+    "homepage": "https://github.com/dan-mcarvalho/challenge-bravo#readme",
+    "dependencies": {
+        "express": "^4.18.1"
+    }
+}
