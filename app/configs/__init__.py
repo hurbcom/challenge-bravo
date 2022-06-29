@@ -1,5 +1,6 @@
 import os
-from datetime import timedelta
+
+from .populate_tables import populate_currencies_table
 
 
 class Config:
