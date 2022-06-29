@@ -3,13 +3,13 @@ const db = require("../config/config");
 const Currency = {};
 
 // CREATE AN NEW CURRENCY
-// Currency.create = (name, code, exchange_rate) => {
-//     return db.none(
-//         `INSERT into currencies(name,code,exchange_rate)` +
-//             `VALUES($1, $2, $3)`,
-//         [name, code, exchange_rate]
-//     );
-// };
+Currency.create = (name, code, exchange_rate) => {
+    return db.none(
+        `INSERT into currencies(name,code,exchange_rate)` +
+            `VALUES($1, $2, $3)`,
+        [name, code, exchange_rate]
+    );
+};
 
 // GET ALL CURRENCIES TO TEST
 Currency.get = () => {
@@ -17,8 +17,8 @@ Currency.get = () => {
 };
 
 // DELETE A CURRENCY
-// Currency.delete = (id) => {
-//     return db.none(`DELETE from currencies WHERE id = $1`, id);
-// };
+Currency.delete = (id) => {
+    return db.none(`DELETE from currencies WHERE id = $1`, id);
+};
 
 module.exports = Currency;
