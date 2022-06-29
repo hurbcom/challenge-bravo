@@ -10,10 +10,9 @@ from pytest import mark
 @mark.parametrize("to_currency", ["USD", "BRL", "EUR"])
 def test_get_conversion_200(
     client: FlaskClient,
-    currencies,
-    colorized,
     from_currency,
     to_currency,
+    colorized,
 ):
     """
     GIVEN the rout '/api?from={cur1}&to={cur2}&amount={float}'
@@ -26,9 +25,9 @@ def test_get_conversion_200(
 
     # response format
     # {
-    # <from_currency>: <amount>,
-    # <to_currency>: float,
-    # "quote_date": "YYYY-MM-DD hh:mm:ss"
+    #   <from_currency>: <amount>,
+    #   <to_currency>: float,
+    #   "quote_date": "YYYY-MM-DD hh:mm:ss"
     # }
     expected_keys = lambda _from, to: (_from, to, "quote_date")
     expected_types = lambda _from, to: {
@@ -37,8 +36,6 @@ def test_get_conversion_200(
         "quote_date": str,
     }
 
-    # for from_currency in currencies:
-    #     for to_currency in set(*currencies).difference({from_currency, "BTC", "ETH"}):
     path = path.format(
         _from=from_currency,
         to=to_currency,
@@ -63,7 +60,9 @@ def test_get_conversion_200(
     assert datetime.strptime(json["quote_date"], "%Y-%m-%d %H:%M:%S")
 
 
-def test_get_conversion_unregistered_currency_404(client: FlaskClient, currencies):
+def test_get_conversion_unregistered_currency_404(
+    client: FlaskClient, currencies, colorized
+):
     """
     GIVEN the conversion route
     WHEN I inform non-registered currency
@@ -84,4 +83,4 @@ def test_get_conversion_unregistered_currency_404(client: FlaskClient, currencie
 
     assert response.status_code == HTTPStatus.NOT_FOUND
 
-    assert set(response.data).issuperset(expected)
+    assert set(response.json).issuperset(expected), colorized(response)
