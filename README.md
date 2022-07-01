@@ -1,8 +1,18 @@
 # 💰 Bravo Challenge
 
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![MongoDB](https://img.shields.io/badge/mongodb-003731?style=for-the-badge&logo=mongodb&logoColor=white)
+
+[Documentation](docs.md)
+
 This app was created as a NodeJS coding challenge.  
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with real and live values.
+Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with real and live values.  
+
+[ [English](README.en.md) | [Português](README.pt.md) ]
+
 
 ## :floppy_disk: Cloning and Installing
 ```
@@ -21,7 +31,7 @@ Copy the key avaliable at [this docs]() to the file created at the project root.
 ## :cd: Starting
 To run the NodeJS application, run this in the terminal:
 ```
-node src/index.js
+node src/server.js
 ```
 
 But, reloading the terminal every time you make an update can be tiring so we can use nodemon to automatically restart the app. Install it globally:
@@ -34,41 +44,41 @@ and run this command to start the server
 nodemon
 ```
 
+# :whale2: Docker
+## Build Image
+```
+docker build -t hurb-app .
+```
 
-## :running: Running Tests
+Your image will now be listed by Docker:
+
+```bash
+docker images
+```
+Start the container and expose port 8000 to port 8000 on the host.
+
+
+```bash
+docker run --publish 8000:8000 hurb-app
+```
+
+# :running: Running Tests
 
 To run tests, run the following command
 
 ```bash
-  npm run test
+npm run test
 ```
 
 ## :mailbox_closed: Postman
-[Postman Documentation](https://documenter.getpostman.com/view/9857618/Uz5MDtMV)  
+[Postman Documentation]()  
 
 ### Importing
 
-At the [drive folder](https://drive.google.com/drive/folders/12IlhZd4GfqhpBQvVRDcJNa9aKa01U8mA?usp=sharing), download the JSON file and import it using the Postman app.
+At the [drive folder](), download the JSON file and import it using the Postman app.
 
 
 # Requirements
-
-
-## Evaluation criteria
-
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
-
-
-
-
 Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
 
 The API must convert between the following currencies:
@@ -126,37 +136,4 @@ You can use any programming language for the challenge. Below is the list of lan
 -   The API needs to support a volume of 1000 requests per second in a stress test.
 -   The API needs to include real and current quotes through integration with public currency quote APIs
 
-
-
-
-## Authors
-
-- [@debora-rebelatto](https://www.github.com/debora-rebelatto)
-
-
-## API Reference
-
-#### Get all items
-
-```http
-  GET /api/items
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-
-#### Get item
-
-```http
-  GET /api/items/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
-
-#### add(num1, num2)
-
-Takes two numbers and returns the sum.
-
+<p style="text-align:center"> Made with 🐝 </p>

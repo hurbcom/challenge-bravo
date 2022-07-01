@@ -4,7 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 require('dotenv').config();
 app.use(morgan('dev'));
@@ -12,8 +12,8 @@ app.use(cors());
 app.use(express.json());
 app.use(helmet());
 
-require('./app/routes/testRoutes')(app);
+require('./app/routes/conversionRoutes')(app);
 
 app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
+  console.log(`Server started on http://localhost:${port}`);
 });
