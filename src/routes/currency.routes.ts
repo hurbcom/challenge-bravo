@@ -1,5 +1,5 @@
 import { Router } from "express";
-import currecyListController from "../controllers/currency/currencyList.controller";
+import currecyListController from "../controllers/currency/currencyConversion.controller";
 
 const routes = Router();
 

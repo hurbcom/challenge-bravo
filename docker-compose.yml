@@ -9,17 +9,17 @@ services:
     env_file:
       - ./.env
 
-  # backend:
-  #   container_name: bravo_api_postgres
-  #   build: ./
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - 3000:3000
-  #   env_file:
-  #     - ./.env
-  #   volumes:
-  #     - ./:/app/:rw
-  #   environment:
-  #     - IS_COMPOSE=true
-  #     - PORT=3000
+  backend:
+    container_name: bravo_api_postgres
+    build: ./
+    depends_on:
+      - postgres
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env
+    volumes:
+      - ./:/app/:rw
+    environment:
+      - IS_COMPOSE=true
+      - PORT=3000
