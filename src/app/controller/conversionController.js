@@ -1,21 +1,11 @@
 const express = require("express");
+const ConversionService = require("../services/conversionService");
 
 exports.getAll = function(req, res) {
-  res.send('getAll');
-}
-
-exports.getById = function(req, res) {
-  res.send('getById');
-}
-
-exports.create = function(req, res) {
-  res.send('create');
-}
-
-exports.update = function(req, res) {
-  res.send('update');
-}
-
-exports.delete = function(req, res) {
-  res.send('delete');
+  try {
+    var data = ConversionService.getAll();
+    return res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }

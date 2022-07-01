@@ -1,19 +1,7 @@
-exports.getAll = function() {
-  res.send('getAll');
-}
-
-exports.getById = function() {
-  res.send('getById');
-}
-
-exports.create = function() {
-  res.send('create');
-}
-
-exports.update = function() {
-  res.send('update');
-}
-
-exports.delete = function() {
-  res.send('delete');
+exports.convert = function() {
+  try {
+    return 'ok';
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }

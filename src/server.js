@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(helmet());
 
+require('./app/routes/currencyRoutes')(app);
 require('./app/routes/conversionRoutes')(app);
 
 app.listen(port, () => {

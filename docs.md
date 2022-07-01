@@ -1,25 +1,53 @@
 # API Reference
 
-## Get all items
+## Conversion
+### Convert
 
 ```http
-  GET /api/items
+  GET /convert
 ```
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-
-## Get item
+## Currency
+### Get all the currencies
 
 ```http
-  GET /api/items/${id}
+GET /currency
 ```
+Returns all of the currencies avaliable.
 
+### Get currency by id
+```http
+GET /currency/:id
+```
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Required**. Id of item to fetch |
 
-#### add(num1, num2)
+Returns currency with given id.
 
-Takes two numbers and returns the sum.
+### Post new currency
+```http
+POST /currency
+```
+Posts new currency with given body.
+
+### Update currency
+```http
+PUT /currency/:id
+```
+| Parameter | Type     | Description                        |
+| :-------- | :------- | :--------------------------------- |
+| `id`      | `string` | **Required**. Id of item to update |
+
+Updates the currency with the given id.
+
+### Delete currency
+```http
+DELETE /currency/:id
+```
+
+| Parameter | Type     | Description                        |
+| :-------- | :------- | :--------------------------------- |
+| `id`      | `string` | **Required**. Id of item to delete |
+
+Deletes the currency with given id.
