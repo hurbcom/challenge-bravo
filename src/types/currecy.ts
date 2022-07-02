@@ -3,3 +3,10 @@ export interface IcurrecyRequest {
   to: string;
   amount: string;
 }
+
+export interface IcurrecyCreate {
+  symbol: string;
+  name: string;
+  amount: number;
+  price: number;
+}

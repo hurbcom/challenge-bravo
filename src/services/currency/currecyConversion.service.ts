@@ -1,24 +1,59 @@
 import { IcurrecyRequest } from "../../types/currecy";
-import { CoinMarket } from "kencrypto-coin-maker";
+import { CoinMarket, Quote } from "./../../../../kencrypto-coin-maker/src/index";
 import { AppError } from "../../errors/appError";
+import { AppDataSource } from "../../data-source";
+import { Currency } from "../../entities/currency.entity";
 require('dotenv').config();
 
+
+/* Service irá tentar realizar a conversão de duas moedas reais, caso uma das duas não seja real, tentaremos ver se existe em nosso banco de dados, onde se     encontram moedas ficticias.
+  Pegamos a propriedade e valor do symbol e vemos se existe em nosso DB, caso não exista, é retornado um erro Not Found (404).
+  Se existir, então é feito a conversão.
+*/
 const currecyConversionService =async ({from, to, amount}: IcurrecyRequest) =>  {
   const key = process.env.KEY_COIN_MARKET;
 
   if (!key) {
-    throw new AppError(401, "Key coin market cannot be null")
+    throw new AppError(401, "Key coin market cannot be null");
   }
 
   const coin = new CoinMarket(key);
-  
-  const result = await coin.conversion(from, Number(amount), [to]);
+
+  let result = await coin.conversion(from, Number(amount), [to]);
+
 
   if (result.status.error_message) {
-    throw new AppError(result.status.error_code, result.status.error_message);
-  }
+    const symbolProperty = result.status.error_message.split('"')[1];
+    const symbolValeu = result.status.error_message?.split('"')[3];
 
-  return result;
+    const currency = await AppDataSource
+      .getRepository(Currency)
+      .createQueryBuilder("currency")
+      .where("currency.symbol = :symbol", { symbol: symbolValeu })
+      .getOne()
+
+    if (!currency) {
+      throw new AppError(404, `Currency ${symbolValeu} not found!`);
+    }
+
+    if (symbolProperty === "symbol") {
+      result = await coin.conversion("USD", Number(amount), [to]);
+      result.data.name = currency.name;
+      result.data.symbol = currency.symbol;
+      result.data.last_updated = currency.last_updated;
+      result.data.id = currency.id;
+      result.data.quote[to].price *= currency.price;
+
+    } else {
+      result = await coin.conversion(from, Number(amount), ["USD"]);
+      const obj: Quote = {};
+      obj[to] = {"price": (result.data.quote["USD"].price) / currency.price, "last_updated": currency.last_updated};
+      result.data.quote = obj;
+
+    }
+
+  }
+  return result["data"];
 }
 
 export default currecyConversionService;
