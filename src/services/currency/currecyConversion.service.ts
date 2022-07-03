@@ -5,11 +5,6 @@ import { AppDataSource } from "../../data-source";
 import { Currency } from "../../entities/currency.entity";
 require('dotenv').config();
 
-
-/* Service irá tentar realizar a conversão de duas moedas reais, caso uma das duas não seja real, tentaremos ver se existe em nosso banco de dados, onde se     encontram moedas ficticias.
-  Pegamos a propriedade e valor do symbol e vemos se existe em nosso DB, caso não exista, é retornado um erro Not Found (404).
-  Se existir, então é feito a conversão.
-*/
 const currecyConversionService =async ({from, to, amount}: IcurrecyRequest) =>  {
   from = from.toUpperCase();
   to = to.toUpperCase();
