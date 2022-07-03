@@ -55,6 +55,11 @@ Em seguida, execute o projeto com:
 ```bash
 docker compose up
 ```
+Você pode alternativamente rodar docker-compose up usando o binário docker-compose
+```bash
+docker-compose up
+```
+
 
 # Moeda [/currency]
 
