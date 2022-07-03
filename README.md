@@ -1,82 +1,181 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# Bravo
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+### API para conversão de moedas reais, também com implementação para moedas fictícias.
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+#### Projeto concluído ✔️
 
-The API must convert between the following currencies:
+[Sobre](#sobre) • [Tecnologias](#tecnologias) • [Instalação](#instalação)
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## Sobre
 
-Other coins could be added as usage.
+Projeto criado para realizar conversões em tempo real de moedas, também pode criar moeda fictícia e realizar conversões entre mais de 100+ moedas. Foi criado uma [biblioteca](https://www.npmjs.com/package/kencrypto-coin-maker) somente para manter o controle das requisições da api externa [CoinMarketCap](https://coinmarketcap.com/api/documentation/v1/).
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+## Comentários, UX, Escolhas técnicas, Assertividade e Segurança
+Segurança: o projeto usa uma key da api externa que só é possível realizar 333 requisições ao dia, incapaz de realizar o teste de estresse onde seriam feitas 1000 requisições. A key será enviado diretamente no .env para quem for avaliar não precisar se cadastrar no site e criar uma chave.
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+Assertividade: api realiza todas conversações de moedas reais ou não, porém a conversão entre duas moedas fictícias não é possível ainda, pois as conversões em moedas fictícias são mandadas em USD para a api externa e depois é calculado para obter o valor correto.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+UX: api de fácil uso, é descrito abaixo como usar.
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Escolhas técnicas: usei as tecnologias por familiaridade e organização do código. Mesmo somente com uma tabela, achei interessante deixar a estrutura mais organizada, caso um dia seja necessário acrescentar novas features. 
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+## Tecnologias
+As seguintes ferramentas foram utilizadas na construção do projeto:
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+- [TypeScript](https://www.typescriptlang.org/)
+- [Node.js](https://nodejs.org/en/about/)
+- [Express](https://expressjs.com/)
+- [Postgresql](https://www.postgresql.org/)
+- [Jest](https://jestjs.io/)
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+## Instalação
+É preciso que o Node.js esteja instalado na sua máquina, assim como docker compose. Também é necessário um gerenciador de pacotes como npm ou yarn.
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+Comece realizando o git clone em sua maquina:
+```bash
+git clone git@github.com:CalebeNavarro/challenge-bravo.git
+```
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+Em seguinta entre no repositório:
+```bash
+cd challenge-bravo
+```
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Instale as dependências com o comando:
+```bash
+npm install
 
-## Requirements
+#ou
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+yarn
+```
 
-## Evaluation criteria
+Em seguida, execute o projeto com:
+```bash
+docker compose up
+```
+Você pode alternativamente rodar docker-compose up usando o binário docker-compose
+```bash
+docker-compose up
+```
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
 
-## Doubts
+Para rodar os testes automatizados, rode:
+```bash
+yarn test
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+#ou
 
-Godspeed! ;)
+npm test
+```
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+# Moeda [/currency]
+
+Trabalhando com moedas.
+A conversão monetária para criação de uma moeda fictícia acontecem somente para dolar (USD). No exemplo abaixo, 1.250.000,00 moedas GTA equivalem a 85 USD
+
+### Novo moeda (Create) [POST /currency]
+
++ Request (application/json)
+
+    + Body
+
+          {
+            "symbol": "GTA",
+            "name": "Test currency efective",
+            "amount": 1250000.00,
+            "price": 85
+          }
+
++ Response 201 (application/json)
+
+    + Body
+
+          {
+            "id": "a74ab22e-d32b-4e59-ac71-fd53d3432dfa",
+            "last_updated": "2022-07-03T19:44:40.219Z",
+            "date_added": "2022-07-03T19:44:40.219Z",
+            "symbol": "GTA",
+            "name": "Test currency efective",
+            "price": 0.000068
+          }
+
+### Listar moedas (List) [GET /currency]
+
++ Response 200 (application/json)
+
+      [
+        {
+          "id": "a74ab22e-d32b-4e59-ac71-fd53d3432dfa",
+          "last_updated": "2022-07-03",
+          "date_added": "2022-07-03",
+          "symbol": "GTA",
+          "name": "Test currency efective",
+          "price": 0.000068
+        }
+      ]
+      
+### Atualizar moeda (Updated) [PATCH /currency/:currency_id]
+
++ Request (application/json)
+
+    + URL
+
+      /currency/a74ab22e-d32b-4e59-ac71-fd53d3432dfa
+
+    + Body
+
+          {
+            "name": "Grand Theft Auto V",
+            "amount": 125,
+            "price": 10
+          }
+
+    + Response 200 (application/json)
+
+          {
+            "id": "a74ab22e-d32b-4e59-ac71-fd53d3432dfa",
+            "last_updated": "2022-07-03",
+            "date_added": "2022-07-03",
+            "symbol": "GTA",
+            "name": "Grand Theft Auto V",
+            "price": 0.08
+          }
+
+### Deletar moeda (Delete) [DELETE /currency/:currency_id]
+
++ Request (aplication/json)
+
+  + URL
+
+    /currency/a74ab22e-d32b-4e59-ac71-fd53d3432dfa
+
++ Response 204 (application/json)
+
+    No body returned for response
+
+
+### Conversão das moedas (Listar) [GET /currency?from=:symbol&to=:symbol&amount=:amount]
+
++ Request (aplication/json)
+
+  + URL
+
+    /currency?from=GTA&to=EUR&amount=123.45
+
+  + Response 204 (application/json)
+
+        {
+          "id": "a74ab22e-d32b-4e59-ac71-fd53d3432dfa",
+          "symbol": "GTA",
+          "name": "Grand Theft Auto V",
+          "amount": 123.45,
+          "last_updated": "2022-07-03",
+          "quote": {
+            "EUR": {
+              "price": 9.472022220000007,
+              "last_updated": "2022-07-03T20:03:23.000Z"
+            }
+          }
+        }
