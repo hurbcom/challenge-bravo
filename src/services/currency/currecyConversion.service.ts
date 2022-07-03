@@ -1,5 +1,5 @@
 import { IcurrecyRequest } from "../../types/currecy";
-import { CoinMarket, Quote } from "./../../../../kencrypto-coin-maker/src/index";
+import { Quote, CoinMarket} from "kencrypto-coin-maker";
 import { AppError } from "../../errors/appError";
 import { AppDataSource } from "../../data-source";
 import { Currency } from "../../entities/currency.entity";
@@ -11,6 +11,9 @@ require('dotenv').config();
   Se existir, então é feito a conversão.
 */
 const currecyConversionService =async ({from, to, amount}: IcurrecyRequest) =>  {
+  from = from.toUpperCase();
+  to = to.toUpperCase();
+
   const key = process.env.KEY_COIN_MARKET;
 
   if (!key) {
@@ -35,7 +38,6 @@ const currecyConversionService =async ({from, to, amount}: IcurrecyRequest) =>  
     if (!currency) {
       throw new AppError(404, `Currency ${symbolValeu} not found!`);
     }
-
     if (symbolProperty === "symbol") {
       result = await coin.conversion("USD", Number(amount), [to]);
       result.data.name = currency.name;

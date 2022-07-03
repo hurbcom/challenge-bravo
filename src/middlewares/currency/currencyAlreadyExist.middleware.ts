@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express' 
-import { CoinMarket } from '../../../../kencrypto-coin-maker/src';
+import { CoinMarket } from 'kencrypto-coin-maker';
 import { AppError } from '../../errors/appError';
 require('dotenv').config();
 

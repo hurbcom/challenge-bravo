@@ -2483,10 +2483,10 @@ json5@^2.2.1:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
   integrity sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==
 
-kencrypto-coin-maker@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/kencrypto-coin-maker/-/kencrypto-coin-maker-1.0.3.tgz#4443b69f367a3a36b97ecf0100d7e0c4d196b666"
-  integrity sha512-m5MvIqObpEVEppQn8mkE4Ll1u4q+k4ryvL8uVTbfT2kSGlHpT3ISZHuajQyzDMbVxDGsJRF210Vozf9xIkQllQ==
+kencrypto-coin-maker@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/kencrypto-coin-maker/-/kencrypto-coin-maker-1.0.5.tgz#65dacef1982fa0bfb31f5d981deda9df2d2b45fb"
+  integrity sha512-hn2ZL2LZTluXspqpZPRu0RJZd5MdqX247Q+WFAVHDobshXLgUyCwYkfCpS9595WN4TJmj3Zrd85B7TovRf6Qrw==
   dependencies:
     axios "^0.24.0"
 
