@@ -23,6 +23,7 @@ export interface Icurrency {
 export interface IcurrencyUpdate {
   name?: string;
   price?: number;
+  last_updated?: Date; 
 }
 
 export interface IcurrencyUpdateSchema {

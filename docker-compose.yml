@@ -1,25 +1,23 @@
-version: '3.9'
+version: "3.9"
 
 services:
   postgres:
-    container_name: bravo_db_postgres
+    container_name: currency_postgres
     image: postgres:14.2-alpine
+    env_file:
+      - .env
     ports:
       - 5433:5432
-    env_file:
-      - ./.env
 
-  # backend:
-  #   container_name: bravo_api_postgres
-  #   build: ./
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - 3000:3000
-  #   env_file:
-  #     - ./.env
-  #   volumes:
-  #     - ./:/app/:rw
-  #   environment:
-  #     - IS_COMPOSE=true
-  #     - PORT=3000
+  application:
+    container_name: currency_application
+    build: ./
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    environment:
+      - PORT=3000
+      - NODE_ENV=dockerdev
+    volumes:
+      - ./:/app/:ro

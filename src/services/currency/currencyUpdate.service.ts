@@ -6,6 +6,8 @@ import { IcurrencyUpdate, Icurrency} from "../../types/currecy";
 
 const currencyUpdateService =async (body:IcurrencyUpdate, currency_id: string): Promise<Icurrency> => {
 
+  body["last_updated"] = new Date();
+  
   await AppDataSource
     .createQueryBuilder()
     .update(Currency)

@@ -1,17 +1,16 @@
 FROM node:16-alpine
 
-RUN apk update
+WORKDIR /app
 
-ENV PORT=3000
+#Este comando atualiza todos os pacotes do alpine
+RUN apk upgrade
 
 EXPOSE 3000
 
-WORKDIR /app
-
-COPY ./package.json ./yarn.lock /app/
-
-RUN yarn
+ENV PORT 3000
 
 COPY . .
+
+RUN yarn
 
 CMD ["yarn", "dev"]
