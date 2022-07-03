@@ -7,7 +7,7 @@ const currecyCreateController =async (req: Request, res: Response) => {
   
   const result = await currecyCreateService({symbol, name, amount, price});
 
-  return res.status(200).send(result);
+  return res.status(201).send(result);
 }
 
 export default currecyCreateController;

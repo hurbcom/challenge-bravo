@@ -16,10 +16,10 @@ export class Currency {
   @Column({type: "float"})
   price: number;
 
-  @Column("timestamp")
+  @Column("date")
   last_updated: Date;
 
-  @Column("timestamp")
+  @Column("date")
   date_added: Date;
   
   constructor() {

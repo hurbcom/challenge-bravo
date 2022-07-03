@@ -24,3 +24,4 @@ export const AppDataSource =
         entities: ["src/entities/**/*.ts"],
         migrations: ["src/migrations/**/*.ts"],
       });
+
