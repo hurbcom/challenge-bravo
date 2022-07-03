@@ -61,6 +61,15 @@ docker-compose up
 ```
 
 
+Para rodar os testes automatizados, rode:
+```bash
+yarn test
+
+#ou
+
+npm test
+```
+
 # Moeda [/currency]
 
 Trabalhando com moedas.
