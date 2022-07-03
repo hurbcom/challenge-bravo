@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction} from 'express';
-import { IcurrecyCreate } from '../types/currecy';
 
 import * as yup from "yup";
 import { SchemaOf } from 'yup';
+import { IcurrecyCreate } from '../../types/currecy';
 
 export const validateCurrecyCreateSchema: SchemaOf<IcurrecyCreate> = yup.object().shape({
   symbol: yup.string().required().max(9).matches(
     /^[aA-zZ]+$/,
     "Must contain only characters A to Z"
-  ).transform((value, originalValue) => originalValue.toUpperCase()),
+  ).transform((_, originalValue) => originalValue.toUpperCase()),
   name: yup.string().required().max(255),
   amount: yup.number().required(),
   price: yup.number().required()
@@ -21,7 +21,6 @@ export const validateCurrencyCreate = (schema: SchemaOf<IcurrecyCreate>) => {
     next: NextFunction) => {
       try {
           const data = req.body;
-          console.log(data)
 
           try {
             const validatedData = await schema.validate(

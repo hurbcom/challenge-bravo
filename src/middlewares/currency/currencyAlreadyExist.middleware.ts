@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express' 
-import { AppError } from '../errors/appError';
-import { CoinMarket } from "./../../../kencrypto-coin-maker/src/index";
+import { CoinMarket } from '../../../../kencrypto-coin-maker/src';
+import { AppError } from '../../errors/appError';
 require('dotenv').config();
 
 export const currencyAlreadyExist = async(req: Request, res: Response, next: NextFunction) => {
