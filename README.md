@@ -30,16 +30,30 @@ As seguintes ferramentas foram utilizadas na construção do projeto:
 - [Jest](https://jestjs.io/)
 
 ## Instalação
+É preciso que o Node.js esteja instalado na sua máquina, assim como docker compose. Também é necessário um gerenciador de pacotes como npm ou yarn.
 
-Após clonar este repositório, para rodar o projeto é preciso que o Node.js esteja instalado na sua máquina, assim como docker compose. Também é necessário um gerenciador de pacotes como npm ou yarn.
+Comece realizando o git clone em sua maquina:
+```bash
+git clone git@github.com:CalebeNavarro/challenge-bravo.git
+```
 
-Entre na pasta do projeto e instale as dependências com o comando:
+Em seguinta entre no repositório:
+```bash
+cd challenge-bravo
+```
+
+Instale as dependências com o comando:
 ```bash
 npm install
 
 #ou
 
 yarn
+```
+
+Em seguida, execute o projeto com:
+```bash
+docker compose up
 ```
 
 # Moeda [/currency]
