@@ -1,4 +1,9 @@
-exports.convert = function() {
+
+module.exports = {
+  convert
+}
+
+async function convert () {
   try {
     return 'ok';
   } catch (error) {
