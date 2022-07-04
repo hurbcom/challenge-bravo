@@ -11,7 +11,6 @@ module.exports = {
     },
 
     async createCurrency(req, res, next) {
-        // USE BODY PARSER TO EXTRACT DATA FROM CLIENT
         const { name, code, exchange_rate } = req.body;
 
         Currency.create(name, code, exchange_rate)
@@ -42,18 +41,48 @@ module.exports = {
     async exchangeCurrencies(req, res, next) {
         const { from, to, amount } = req.query;
 
-        await Exchange.get(from, to, amount).then((data) => {
-            const { result } = data;
-            const { rate } = data.info;
+        const fromCode = from.toUpperCase();
+        const toCode = to.toUpperCase();
 
-            const exchangeObject = {
-                from: from,
-                to: to,
-                amount: amount,
-                exchange_rate: rate,
-                result: result,
-            };
-            res.json({ exchangeObject });
-        });
+        if (fromCode === "ETH" || toCode === "ETH") {
+            try {
+                await Exchange.getCrypto(fromCode, toCode, amount).then(
+                    (data) => {
+                        const rate = data;
+
+                        const result = amount * rate;
+
+                        const exchangeObject = {
+                            from: fromCode,
+                            to: toCode,
+                            amount: amount,
+                            exchange_rate: rate,
+                            result: result,
+                        };
+                        res.json({ exchangeObject });
+                    }
+                );
+            } catch (error) {
+                res.json({ error });
+            }
+        } else {
+            try {
+                await Exchange.get(fromCode, toCode, amount).then((data) => {
+                    const { result } = data;
+                    const { rate } = data.info;
+
+                    const exchangeObject = {
+                        from: fromCode,
+                        to: toCode,
+                        amount: amount,
+                        exchange_rate: rate,
+                        result: result,
+                    };
+                    res.json({ exchangeObject });
+                });
+            } catch (error) {
+                res.json({ error });
+            }
+        }
     },
 };

@@ -7,7 +7,7 @@ Currency.create = (name, code, exchange_rate) => {
     return db.none(
         `INSERT into currencies(name,code,exchange_rate)` +
             `VALUES($1, $2, $3)`,
-        [name, code, exchange_rate]
+        [name, code.toUpperCase(), exchange_rate]
     );
 };
 

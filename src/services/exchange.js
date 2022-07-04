@@ -15,4 +15,17 @@ Exchange.get = (from, to, amount) => {
     );
 };
 
+Exchange.getCrypto = (from, to, amount) => {
+    const baseUrl = `https://api.coingate.com/v2/rates/merchant/${from}/${to}`;
+
+    return axios.get(baseUrl).then(
+        (response) => {
+            return response.data;
+        },
+        (error) => {
+            return error;
+        }
+    );
+};
+
 module.exports = Exchange;
