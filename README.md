@@ -3,7 +3,6 @@
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![MongoDB](https://img.shields.io/badge/mongodb-003731?style=for-the-badge&logo=mongodb&logoColor=white)
 
 [Documentation](docs.md)
 
@@ -12,7 +11,6 @@ This app was created as a NodeJS coding challenge.
 Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with real and live values.  
 
 [ [English](README.en.md) | [Português](README.pt.md) ]
-
 
 ## :floppy_disk: Cloning and Installing
 ```
@@ -30,6 +28,7 @@ Copy the key avaliable at [this docs]() to the file created at the project root.
 
 ## :cd: Starting
 To run the NodeJS application, run this in the terminal:
+
 ```
 node src/server.js
 ```
@@ -63,11 +62,22 @@ docker run --publish 8000:8000 hurb-app
 ```
 
 # :running: Running Tests
-
+## Unit Testing
 To run tests, run the following command
 
 ```bash
 npm run test
+```
+
+## Stress Tests
+First, install the artillery package globally:
+```bash
+npm i -g artillery
+```
+
+Then run this at the command line:
+```bash
+artillery run load-test.yml
 ```
 
 ## :mailbox_closed: Postman
@@ -76,7 +86,6 @@ npm run test
 ### Importing
 
 At the [drive folder](), download the JSON file and import it using the Postman app.
-
 
 # Requirements
 Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
@@ -111,29 +120,6 @@ Ref:
 Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
 Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
-
-## Requirements
-
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
 
 <p style="text-align:center"> Made with 🐝 </p>

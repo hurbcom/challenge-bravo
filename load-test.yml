@@ -1,0 +1,11 @@
+config:
+  target: "http://localhost:8000"
+  phases:
+    - duration: 1
+      arrivalRate: 1000
+
+scenarios:
+  - name: "Retrieve data"
+    flow:
+      - get:
+          url: "/example"
