@@ -10,7 +10,7 @@ This app was created as a NodeJS coding challenge.
 
 Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with real and live values.  
 
-[ [English](README.en.md) | [Português](README.pt.md) ]
+[ [English](docs/README.en.md) | [Português](docs/README.pt.md) ]
 
 ## :floppy_disk: Cloning and Installing
 ```
