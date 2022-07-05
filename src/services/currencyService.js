@@ -1,27 +1,61 @@
+const Currency = require('../models/currency');
+
 module.exports = {
   getAll,
   getById,
   create,
-  update,
+  updateById,
   deleteById
 }
 
-async function getAll (){
-  res.send('getAll');
+async function getAll() {
+  try {
+    const currencies = await Currency.find();
+    return currencies;
+  } catch (error) {
+    return error;
+  }
 }
 
-async function getById (){
-  res.send('getById');
+async function getById(id){
+  try {
+    const currency = await Currency.findById(id);
+    return currency;
+  } catch (error) {
+    return error;
+  }
 }
 
-async function create (){
-  res.send('create');
+async function create(name, value){
+  try {
+    const currency = new Currency({
+      name,
+      value
+    });
+    await currency.save();
+    return currency;
+  } catch (error) {
+    return error;
+  }
 }
 
-async function update (){
-  res.send('update');
+async function updateById(id, name, value){
+  try {
+    const currency = await Currency.findByIdAndUpdate(id, {
+      name,
+      value
+    });
+    return currency;
+  } catch (error) {
+    return error;
+  }
 }
 
-async function deleteById (){
-  res.send('delete');
+async function deleteById(id){
+  try {
+    const currency = await Currency.findByIdAndDelete(id);
+    return currency;
+  } catch (error) {
+    return error;
+  }
 }

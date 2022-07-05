@@ -10,8 +10,8 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 
-require('./app/routes/conversionRoutes')(app);
-require('./app/routes/currencyRoutes')(app);
+require('./routes/conversionRoutes')(app);
+require('./routes/currencyRoutes')(app);
 
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);

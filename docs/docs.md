@@ -1,5 +1,8 @@
 # API Reference
 
+- [Conversion](#conversion)
+- [Currency](#currency)
+
 ## Conversion
 ### Convert
 

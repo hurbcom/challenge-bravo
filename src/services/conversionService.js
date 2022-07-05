@@ -1,9 +1,6 @@
+module.exports = { convert }
 
-module.exports = {
-  convert
-}
-
-async function convert () {
+async function convert(from, to, amount) {
   try {
     return 'ok';
   } catch (error) {

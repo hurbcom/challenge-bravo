@@ -1,14 +1,14 @@
-const express = require("express");
 const ConversionService = require("../services/conversionService");
 
-module.exports ={
-  getAll
+module.exports = {
+  convert
 }
 
-async function getAll(req, res) {
+async function convert(req, res) {
   try {
-    // var data = ConversionService.getAll();
-    return res.status(200).send(data);
+    var { from, to, amount } = req.query;
+    var data = await ConversionService.convert(from, to, amount);
+    return res.status(200).json({ "ok": data });
   } catch (error) {
     res.status(500).send(error);
   }

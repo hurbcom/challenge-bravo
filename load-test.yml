@@ -5,7 +5,7 @@ config:
       arrivalRate: 1000
 
 scenarios:
-  - name: "Retrieve data"
+  - name: "Convert"
     flow:
       - get:
-          url: "/example"
+          url: "/convert?from=USD&to=BRL&amount=2"
