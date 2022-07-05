@@ -6,9 +6,17 @@ const CurrencySchema = mongoose.Schema({
     required: true,
     unique: true
   },
-  value: {
+  exchange_rate: {
     type: Number,
     required: true
+  },
+  isFictional: {
+    type: Boolean,
+    required: true
+  },
+  updated_at: {
+    type: Date,
+    default: Date.now
   }
 })
 
