@@ -1,12 +1,15 @@
 const pgp = require("pg-promise")();
 const config = {
     user: "postgres",
-    password: "admin",
-    host: "localhost",
+    password: "postgres",
+    host: "db",
     port: 5432,
-    database: "hurb_currency_db",
+    database: "postgres",
 };
 
+
+
 const db = pgp(config);
+
 
 module.exports = db;

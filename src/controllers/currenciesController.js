@@ -14,10 +14,10 @@ module.exports = {
         const { name, code, exchange_rate } = req.body;
 
         Currency.create(name, code, exchange_rate)
-            .then((data) =>
+            .then(() =>
                 res
                     .status(201)
-                    .json({ success: true, data, msg: "New currency created" })
+                    .json({ success: true, msg: "New currency created" })
             )
             .catch((err) => res.status(400).json({ err }));
     },
@@ -31,7 +31,6 @@ module.exports = {
             .then((data) =>
                 res.status(200).json({
                     success: true,
-                    data,
                     msg: `Currency #${id} deleted`,
                 })
             )
