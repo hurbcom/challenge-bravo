@@ -1,4 +1,4 @@
-const Currency = require('../models/currency');
+const CurrencyRepository = require('../repositories/currencyRepository');
 
 module.exports = {
   getAll,
@@ -10,7 +10,7 @@ module.exports = {
 
 async function getAll() {
   try {
-    const currencies = await Currency.find();
+    const currencies = await CurrencyRepository.getAll();
     return currencies;
   } catch (error) {
     return error;
@@ -19,18 +19,18 @@ async function getAll() {
 
 async function getById(id){
   try {
-    const currency = await Currency.findById(id);
+    const currency = await CurrencyRepository.getById(id);
     return currency;
   } catch (error) {
     return error;
   }
 }
 
-async function create(name, value){
+async function create(name, exchange_rate){
   try {
     const currency = new Currency({
       name,
-      value
+      exchange_rate
     });
     await currency.save();
     return currency;
@@ -43,7 +43,7 @@ async function updateById(id, name, value){
   try {
     const currency = await Currency.findByIdAndUpdate(id, {
       name,
-      value
+      exchange_rate
     });
     return currency;
   } catch (error) {
