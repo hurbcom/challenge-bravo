@@ -1,6 +1,7 @@
+using DesafioBravo.BO;
+using DesafioBravo.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,6 @@ namespace DesafioBravo
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
@@ -26,9 +26,17 @@ namespace DesafioBravo
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddDbContext<AppDbContext>();
+
+            services.AddScoped<IAcessoBO, AcessoBO>();
+            services.AddScoped<ICotacaoBO, CotacaoBO>();
+            services.AddScoped<IMoedaBO, MoedaBO>();
+            services.AddScoped<IMoedaDAO, MoedaDAO>();
+
+            //new MoedaBO().DadosIniciais();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -68,6 +76,11 @@ namespace DesafioBravo
                 if (env.IsDevelopment())
                 {
                     spa.UseAngularCliServer(npmScript: "start");
+                }
+
+                using (var context = new AppDbContext())
+                {
+                    new MoedaBO(context).DadosIniciais();
                 }
             });
         }

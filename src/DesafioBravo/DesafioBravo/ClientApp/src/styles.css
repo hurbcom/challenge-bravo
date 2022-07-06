@@ -1,16 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+a { cursor: pointer }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+.app-container {
+    min-height: 320px;
+    overflow: hidden;
 }
 
-code {
-  color: #e01a76;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.btn-delete-user {
+    width: 40px;
+    text-align: center;
+    box-sizing: content-box;
 }
