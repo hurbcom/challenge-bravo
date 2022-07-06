@@ -41,7 +41,7 @@ Run this command on the terminal to create the .env file.
 ```
 touch .env
 ```
-Copy the key avaliable at [this docs]() to the file created at the project root.
+Copy the keys avaliable at [this docs](https://docs.google.com/document/d/1Ah5wYJXp0VzSFCz_ec_M_RbxVmq04Dup14sZGwNXJok/edit) to the file created at the project root.
 
 ## :cd: Starting
 To run the NodeJS application, run this in the terminal:
