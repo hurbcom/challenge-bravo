@@ -26,25 +26,18 @@ async function getById(id){
   }
 }
 
-async function create(name, exchange_rate){
+async function create(name, exchange_rates, isFictional){
   try {
-    const currency = new Currency({
-      name,
-      exchange_rate
-    });
-    await currency.save();
+    const currency = await CurrencyRepository.create(name, exchange_rates, isFictional);
     return currency;
   } catch (error) {
     return error;
   }
 }
 
-async function updateById(id, name, value){
+async function updateById(id, name, exchange_rates){
   try {
-    const currency = await Currency.findByIdAndUpdate(id, {
-      name,
-      exchange_rate
-    });
+    const currency = await CurrencyRepository.updateById(id, name, exchange_rates);
     return currency;
   } catch (error) {
     return error;
@@ -53,7 +46,7 @@ async function updateById(id, name, value){
 
 async function deleteById(id){
   try {
-    const currency = await Currency.findByIdAndDelete(id);
+    const currency = await CurrencyRepository.deleteById(id);
     return currency;
   } catch (error) {
     return error;
