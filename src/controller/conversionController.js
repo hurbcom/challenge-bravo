@@ -13,7 +13,7 @@ async function convert(req, res) {
       amount
     );
     return res.status(200).json({ convertedValue });
-  } catch (error) {
-    return res.status(500).send(error);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
   }
 }

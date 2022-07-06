@@ -21,47 +21,63 @@ async function convert(from, to, amount) {
     }
 
     return converted_amount;
-  } catch (error) {
-    return error;
+  } catch (err) {
+    throw new Error(err);
   }
 }
 
 async function checkIfCurrencyExistsAndUpdate(from) {
-  var currency = await checkIfCurrencyExists(from);
+  try {
+    var currency = await checkIfCurrencyExists(from);
 
-  if(!currency) {
-    currency = await ConversionRepository.getCurrency(from);
-    return await createCurrency(
-      currency.base_code,
-      currency.conversion_rates
-    )
-  }
+    if(!currency) {
+      currency = await ConversionRepository.getCurrency(from);
+      return await createCurrency(
+        currency.base_code,
+        currency.conversion_rates
+      )
+    }
 
   if(currency.isFictional) {
+      return currency;
+    }
+
+    // updates currency if it has not been updated in a day
+    if(currency.last_updated < new Date(Date.now() - 86400000)) {
+      updatedCurrency = await ConversionRepository.getCurrency(from);
+      return await updateExchangeRate(currency.id, updatedCurrency.conversion_rates);
+    }
+
+    if(!currency && !updateCurrency) {
+      return new Error("Currency doesnt exist yet and we dont have data to create it");
+    }
+
     return currency;
+  } catch (error) {
+    throw new Error(error);
   }
-
-  // updates currency if it has not been updated in a day
-  if(currency.last_updated < new Date(Date.now() - 86400000)) {
-    updatedCurrency = await ConversionRepository.getCurrency(from);
-    return await updateExchangeRate(currency.id, updatedCurrency.conversion_rates);
-  }
-
-  if(!currency && !updateCurrency) {
-    return new Error("Currency doesnt exist yet and we dont have data to create it");
-  }
-
-  return currency;
 }
 
 async function checkIfCurrencyExists(currency) {
-  return await CurrencyRepository.getByName(currency);
+  try {
+    return await CurrencyRepository.getByName(currency);
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 async function updateExchangeRate(id, exchange_rates) {
-  return await CurrencyRepository.updateById(id, exchange_rates);
+  try {
+    return await CurrencyRepository.updateById(id, exchange_rates);
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 async function createCurrency(name, exchange_rates) {
-  return await CurrencyRepository.create(name, exchange_rates, false);
+  try {
+    return await CurrencyRepository.create(name, exchange_rates);
+  } catch (error) {
+    throw new Error(error);
+  }
 }
