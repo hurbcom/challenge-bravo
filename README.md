@@ -27,7 +27,7 @@ Build an API, which responds to JSON, for currency conversion. It must have a ba
 
 ## Requirements
 Convert between currencies with live and real values. It also allows fictionary currencies to be created.
-The [Exchange Rate API](https://docs.awesomeapi.com.br/api-de-moedasd) was used for current currencies.
+The [Exchange Rate API](https://app.exchangerate-api.com/dashboard) was used for current currencies.
 
 ## :floppy_disk: Cloning and Installing
 ```
@@ -96,8 +96,13 @@ Then run this at the command line:
 artillery run load-test.yml
 ```
 
-## :mailbox_closed: Postman
-Using Postman, create a new collection and import the `hurb-bravo.json` file avaliable at the `docs` folder to import the requests used during development.
+The Exchange Rate External API only disposes of 1500 requests per month, so the Artillery 1000 requests in 1s were not possible.
 
+<p align="center">
+  <img src="docs/load-test.png" alt="load test" />
+</p>
+
+## :mailbox_closed: Postman
+Using Postman, create a new collection and import the `Bravo.postman_collection.json` file avaliable at the `docs` folder to import the requests used during development.
 
 <p align="center"> Made with 🐝 </p>

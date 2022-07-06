@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "7c038512-5d28-4f0b-9dab-eb461fdf74b6",
+		"name": "Bravo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9857618"
+	},
+	"item": [
+		{
+			"name": "Conversion",
+			"item": [
+				{
+					"name": "Convert",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/convert?from=ang&to=USD&amount=3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"convert"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "ang"
+								},
+								{
+									"key": "to",
+									"value": "USD"
+								},
+								{
+									"key": "amount",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Currency",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"HUB\",\n    \"exchange_rates\": [{\n        \"BRL\": 2.00\n    }],\n    \"isFictional\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/currency",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/currency",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/currency",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/currency/62c46bdebf57be946001d224",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"currency",
+								"62c46bdebf57be946001d224"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

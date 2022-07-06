@@ -28,12 +28,12 @@ async function convert(from, to, amount) {
 
 async function checkIfCurrencyExistsAndUpdate(from) {
   var currency = await checkIfCurrencyExists(from);
-  var updateCurrency = await ConversionRepository.getCurrency(from);
 
   if(!currency) {
-    currency = await createCurrency(
-      updateCurrency.base_code,
-      updateCurrency.conversion_rates
+    currency = await ConversionRepository.getCurrency(from);
+    return await createCurrency(
+      currency.base_code,
+      currency.conversion_rates
     )
   }
 
@@ -41,8 +41,10 @@ async function checkIfCurrencyExistsAndUpdate(from) {
     return currency;
   }
 
-  if(currency && updateCurrency) {
-    currency = await updateExchangeRate(currency.id, updateCurrency.conversion_rates);
+  // updates currency if it has not been updated in a day
+  if(currency.last_updated < new Date(Date.now() - 86400000)) {
+    updatedCurrency = await ConversionRepository.getCurrency(from);
+    return await updateExchangeRate(currency.id, updatedCurrency.conversion_rates);
   }
 
   if(!currency && !updateCurrency) {
