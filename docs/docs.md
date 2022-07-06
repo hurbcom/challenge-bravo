@@ -5,10 +5,16 @@
 
 ## Conversion
 ### Convert
-
 ```http
-  GET /convert
+GET /convert
 ```
+Converts the given amount.
+| Parameter   | Type      | Description                                 |
+| :---------- | :-------- | :------------------------------------------ |
+| `from`      | `string`  | **Required**. Currency name to convert from |
+| `to`        | `string`  | **Required**. Currency name to convert to   |
+| `amount`    | `string`  | **Required**. Amount to be converted        |
+
 
 ## Currency
 ### Get all the currencies
@@ -22,6 +28,7 @@ Returns all of the currencies avaliable.
 ```http
 GET /currency/:id
 ```
+Returns all of the currencies by id.
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Required**. Id of item to fetch |
@@ -38,19 +45,20 @@ Posts new currency with given body.
 ```http
 PUT /currency/:id
 ```
+Updates the currency with the given id.
+
 | Parameter | Type     | Description                        |
 | :-------- | :------- | :--------------------------------- |
 | `id`      | `string` | **Required**. Id of item to update |
 
-Updates the currency with the given id.
 
 ### Delete currency
 ```http
 DELETE /currency/:id
 ```
+Deletes the currency with given id.
 
 | Parameter | Type     | Description                        |
 | :-------- | :------- | :--------------------------------- |
 | `id`      | `string` | **Required**. Id of item to delete |
 
-Deletes the currency with given id.

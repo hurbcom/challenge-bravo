@@ -3,9 +3,9 @@
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-38598f?style=for-the-badge&logo=postgresql&logoColor=white)
+![MongoDB](https://img.shields.io/badge/mongodb-003731?style=for-the-badge&logo=mongodb&logoColor=white)
 
-[Documentation](docs.md)
+[Documentation](docs/docs.md)
 
 [ [English](docs/README.en.md) | [Português](docs/README.pt.md) ]
 
@@ -27,6 +27,7 @@ Build an API, which responds to JSON, for currency conversion. It must have a ba
 
 ## Requirements
 Convert between currencies with live and real values. It also allows fictionary currencies to be created.
+The [Exchange Rate API](https://app.exchangerate-api.com/dashboard) was used for current currencies.
 
 ## :floppy_disk: Cloning and Installing
 ```
@@ -36,6 +37,11 @@ npm install
 ```
 
 ## :electric_plug: Connecting to Database
+Run this command on the terminal to create the .env file.
+```
+touch .env
+```
+Copy the key avaliable at [this docs]() to the file created at the project root.
 
 ## :cd: Starting
 To run the NodeJS application, run this in the terminal:

@@ -13,7 +13,7 @@ async function getAll (req, res) {
     var data = await CurrencyService.getAll();
     return res.status(200).send(data);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 }
 
@@ -22,7 +22,7 @@ async function getById (req, res) {
     var data = CurrencyService.getById(req.params.id);
     return res.status(200).send(data);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 }
 
@@ -39,11 +39,11 @@ async function create(req, res) {
 
 async function updateById(req, res) {
   try {
-    var { name, value } = req.body;
+    var { value } = req.body;
     var data = CurrencyService.update(req.params.id, name, value);
     return res.status(200).send(data);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 }
 
