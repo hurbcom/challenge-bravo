@@ -2,7 +2,6 @@ using DesafioBravo.Data;
 using DesafioBravo.DTO;
 using DesafioBravo.Models;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -26,8 +25,8 @@ namespace DesafioBravo.BO
             if (moedaOrigem == null || moedaOrigem?.ValorEmDolar == 0 || moedaDestino == null || moedaDestino?.ValorEmDolar == 0)
             {
                 MoedaBO moedaBO = new MoedaBO(context);
-                moedaBO.Adicionar(moedaOrigem);
-                moedaBO.Adicionar(moedaDestino);
+                moedaBO.Adicionar(from, 0);
+                moedaBO.Adicionar(to, 0);
             }
 
             CotacaoDTO dto = CalcularCotacao(moedaOrigem, moedaDestino, amount);

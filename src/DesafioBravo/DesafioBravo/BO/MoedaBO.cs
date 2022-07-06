@@ -54,14 +54,13 @@ namespace DesafioBravo.BO
             return moedaDTO;
         }
 
-        public void Adicionar(Moeda moeda)
+        public MoedaDTO Adicionar(string codigo, decimal valorEmDolar)
         {
-            moeda = Adicionar(new MoedaViewModel()
+            return Adicionar(new MoedaViewModel()
             {
-                Codigo = moeda.Codigo,
-                ValorEmDolar = moeda.ValorEmDolar
-            })
-            .moeda;
+                Codigo = codigo,
+                ValorEmDolar = valorEmDolar                
+            });
         }
 
         public MoedaDTO Adicionar(MoedaViewModel model)
@@ -153,15 +152,7 @@ namespace DesafioBravo.BO
 
                     if (moedasDesafio.Contains(codigoMoeda.Trim()))
                     {
-                        Adicionar
-                            (
-                                new Moeda()
-                                {
-                                    Codigo = codigoMoeda,
-                                    ValorEmDolar = Convert.ToDecimal(((JProperty)item).Value),
-                                    Data = DateTime.Now
-                                }
-                            );
+                        Adicionar(codigoMoeda, Convert.ToDecimal(((JProperty)item).Value));
                     }
                 }
             }

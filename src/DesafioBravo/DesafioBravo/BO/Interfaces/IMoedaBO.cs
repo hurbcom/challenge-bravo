@@ -1,11 +1,10 @@
 using DesafioBravo.DTO;
-using DesafioBravo.Models;
 
 namespace DesafioBravo.BO
 {
     public interface IMoedaBO
     {
-        void Adicionar(Moeda moeda);
+        MoedaDTO Adicionar(string codigo, decimal valorEmDolar);
         MoedasDTO Buscar();
         MoedaDTO Buscar(string codigo);
         MoedaDTO Remover(string codigo);
