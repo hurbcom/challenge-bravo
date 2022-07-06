@@ -69,7 +69,7 @@ namespace DesafioBravo.BO
             {
 
                 decimal valorParaConversao = decimal.Parse(sValorParaConversao, System.Globalization.CultureInfo.InvariantCulture);
-                decimal valorCovertido = Math.Round((moedaDestino.ValorEmDolar / moedaOrigem.ValorEmDolar) * valorParaConversao, 2);
+                decimal valorCovertido = (moedaDestino.ValorEmDolar / moedaOrigem.ValorEmDolar) * valorParaConversao;
 
                 if (valorCovertido <= 0)
                 {
