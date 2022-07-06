@@ -7,9 +7,13 @@ module.exports = {
 async function convert(req, res) {
   try {
     var { from, to, amount } = req.query;
-    var data = await ConversionService.convert(from, to, amount);
-    return res.status(200).json({ data });
+    var convertedValue = await ConversionService.convert(
+      from.toUpperCase(),
+      to.toUpperCase(),
+      amount
+    );
+    return res.status(200).json({ convertedValue });
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 }

@@ -32,7 +32,6 @@ async function create(req, res) {
     var data = await CurrencyService.create(name, exchange_rates, isFictional);
     return res.status(200).send(data);
   } catch (error) {
-    console.log(error)
     return res.status(500).send(error);
   }
 }

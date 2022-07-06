@@ -9,6 +9,8 @@
 GET /convert
 ```
 Converts the given amount.
+When making the request, it updates the `exchange_rates` of the `from` String. If currency doesn't exists, but it is found in the external API, it creates the currency.
+
 | Parameter   | Type      | Description                                 |
 | :---------- | :-------- | :------------------------------------------ |
 | `from`      | `string`  | **Required**. Currency name to convert from |
@@ -40,17 +42,15 @@ Returns currency with given id.
 POST /currency
 ```
 Posts new currency with given body.
-
-### Update currency
-```http
-PUT /currency/:id
+```json
+{
+  "name": "HUB",
+  "exchange_rates": [{
+    "BRL": 2.00
+  }],
+  "isFictional": true
+}
 ```
-Updates the currency with the given id.
-
-| Parameter | Type     | Description                        |
-| :-------- | :------- | :--------------------------------- |
-| `id`      | `string` | **Required**. Id of item to update |
-
 
 ### Delete currency
 ```http

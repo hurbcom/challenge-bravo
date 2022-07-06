@@ -27,7 +27,7 @@ Build an API, which responds to JSON, for currency conversion. It must have a ba
 
 ## Requirements
 Convert between currencies with live and real values. It also allows fictionary currencies to be created.
-The [Exchange Rate API](https://app.exchangerate-api.com/dashboard) was used for current currencies.
+The [Exchange Rate API](https://docs.awesomeapi.com.br/api-de-moedasd) was used for current currencies.
 
 ## :floppy_disk: Cloning and Installing
 ```

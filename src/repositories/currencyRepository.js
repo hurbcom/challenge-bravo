@@ -46,8 +46,6 @@ async function create(name, exchange_rates, isFictional){
     });
     return currency;
   } catch (error) {
-
-    console.log(error);
     return error;
   }
 }
