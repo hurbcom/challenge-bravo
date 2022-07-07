@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using ConversaoMonetaria.Dominio.Core.Exceptions;
 using ConversaoMonetaria.Dominio.Core.Retornos;
 using FluentValidation;

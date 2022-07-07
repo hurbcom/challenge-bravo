@@ -1,5 +1,4 @@
-﻿using System;
-using ConversaoMonetaria.Dominio.Core.Entidades;
+﻿using ConversaoMonetaria.Dominio.Core.Entidades;
 using ConversaoMonetaria.Dominio.Enums;
 using FluentValidation.Results;
 
@@ -55,7 +54,7 @@ public class Moeda : Entidade
     {
         var retornoValidacao = new MoedaValidadorExclusao().Validate(this);
 
-        if(retornoValidacao.IsValid)
+        if (retornoValidacao.IsValid)
             Status = EStatusMoeda.Inativada;
 
         return retornoValidacao;

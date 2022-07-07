@@ -8,9 +8,9 @@ using ConversaoMonetaria.Dominio.Core.Exceptions;
 using ConversaoMonetaria.Dominio.Core.Retornos;
 using ConversaoMonetaria.Dominio.Core.Utils;
 using ConversaoMonetaria.Dominio.Entidades.Autenticacao;
-using ConversaoMonetaria.Dominio.Interfaces.Repository;
+using ConversaoMonetaria.Dominio.Interfaces.Repositorio;
 
-namespace ConversaoMonetaria.Aplicacao.Servicos;
+namespace ConversaoMonetaria.Aplicacao.AppServices;
 
 public class AutenticacaoAppService : IAutenticacaoAppService
 {

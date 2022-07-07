@@ -11,6 +11,8 @@ using ConversaoMonetaria.CrossCutting.IoC;
 using ConversaoMonetaria.Dominio.Autenticacao;
 using ConversaoMonetaria.Dominio.Core.Constantes;
 using ConversaoMonetaria.Dominio.Exceptions.Base;
+using ConversaoMonetaria.Dominio.Interfaces.Servicos;
+using ConversaoMonetaria.Dominio.Servicos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,6 +66,8 @@ public class Startup
 
         var tempoExpiracaoAutenticacaoMinutos =
             Configuration.GetSection("ExpiracaoAutenticacao").Get<ExpiracaoAutenticacao>();
+
+        var conversaoMonetariaService = new ConversaoMonetariaService();
 
         var ambiente = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -141,7 +145,10 @@ public class Startup
 
         services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddSingleton(tempoExpiracaoAutenticacaoMinutos);
+
         services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
+
+        services.AddSingleton(conversaoMonetariaService);
 
         DependencyInjector.RegisterServices(services);
 

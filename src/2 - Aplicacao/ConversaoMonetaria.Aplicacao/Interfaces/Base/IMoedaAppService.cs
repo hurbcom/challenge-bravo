@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ConversaoMonetaria.Aplicacao.ViewModels.Base;
 using ConversaoMonetaria.Dominio.Core.Exceptions;
 using ConversaoMonetaria.Dominio.Core.Retornos;

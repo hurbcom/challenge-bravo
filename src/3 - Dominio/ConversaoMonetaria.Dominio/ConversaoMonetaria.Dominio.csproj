@@ -17,8 +17,4 @@
         <ProjectReference Include="..\ConversaoMonetaria.Core\ConversaoMonetaria.Dominio.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Servicos" />
-    </ItemGroup>
-
 </Project>

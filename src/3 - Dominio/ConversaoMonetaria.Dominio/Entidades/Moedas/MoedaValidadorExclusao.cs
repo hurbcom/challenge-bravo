@@ -15,6 +15,3 @@ public class MoedaValidadorExclusao : AbstractValidator<Moeda>
             .WithErrorCode(Mensagens.Mensagens.DiferenteDe().CodigoMensagem.ToString());
     }
 }
-
-
-

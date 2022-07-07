@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ConversaoMonetaria.Aplicacao.ViewModels.Base;
 using ConversaoMonetaria.Dominio.Core.Retornos.RetornosPadrao;
 using ConversaoMonetaria.Dominio.Enums;

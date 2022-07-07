@@ -1,6 +1,5 @@
 using ConversaoMonetaria.Dominio.Core.Constantes;
 using ConversaoMonetaria.Dominio.Core.Utils;
-using ConversaoMonetaria.Dominio.Enums;
 using FluentValidation;
 
 namespace ConversaoMonetaria.Dominio.Entidades.Moedas;
@@ -28,9 +27,5 @@ public class MoedaValidador : AbstractValidator<Moeda>
             .NotEmpty()
             .WithMessage(Mensagens.Mensagens.Obrigatorio().Mensagem.FormatEx(ConstantesString.PropertyNameValidated))
             .WithErrorCode(Mensagens.Mensagens.Obrigatorio().CodigoMensagem.ToString());
-
     }
-
 }
-
-

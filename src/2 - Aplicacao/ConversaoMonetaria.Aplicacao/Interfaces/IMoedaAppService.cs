@@ -3,6 +3,7 @@ using ConversaoMonetaria.Aplicacao.ViewModels.Moeda;
 
 namespace ConversaoMonetaria.Aplicacao.Interfaces;
 
-public interface IMoedaAppService : IBaseAppService<MoedaRequisicaoViewModel, MoedaRespostaViewModel, MoedaListarRespostaViewModel>
+public interface IMoedaAppService : IBaseAppService<MoedaRequisicaoViewModel, MoedaRespostaViewModel,
+    MoedaListarRespostaViewModel>
 {
 }

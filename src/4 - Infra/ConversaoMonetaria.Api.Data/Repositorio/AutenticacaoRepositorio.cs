@@ -4,7 +4,7 @@ using ConversaoMonetaria.Dominio.Core.Retornos;
 using ConversaoMonetaria.Dominio.Core.Utils;
 using ConversaoMonetaria.Dominio.Entidades.Autenticacao;
 using ConversaoMonetaria.Dominio.Exceptions.Base;
-using ConversaoMonetaria.Dominio.Interfaces.Repository;
+using ConversaoMonetaria.Dominio.Interfaces.Repositorio;
 
 namespace ConversaoMonetaria.Data.Repositorio;
 

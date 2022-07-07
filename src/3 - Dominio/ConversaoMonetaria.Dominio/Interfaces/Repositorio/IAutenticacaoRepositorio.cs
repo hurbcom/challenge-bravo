@@ -1,7 +1,7 @@
 ﻿using ConversaoMonetaria.Dominio.Core.Exceptions;
 using ConversaoMonetaria.Dominio.Core.Retornos;
 
-namespace ConversaoMonetaria.Dominio.Interfaces.Repository;
+namespace ConversaoMonetaria.Dominio.Interfaces.Repositorio;
 
 public interface IAutenticacaoRepositorio
 {

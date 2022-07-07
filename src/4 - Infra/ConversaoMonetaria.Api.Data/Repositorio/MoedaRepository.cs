@@ -3,7 +3,7 @@ using ConversaoMonetaria.Data.Context;
 using ConversaoMonetaria.Data.Repositorio.Base;
 using ConversaoMonetaria.Dominio.Core.Data;
 using ConversaoMonetaria.Dominio.Entidades.Moedas;
-using ConversaoMonetaria.Dominio.Interfaces.Repository;
+using ConversaoMonetaria.Dominio.Interfaces.Repositorio;
 
 namespace ConversaoMonetaria.Data.Repositorio;
 

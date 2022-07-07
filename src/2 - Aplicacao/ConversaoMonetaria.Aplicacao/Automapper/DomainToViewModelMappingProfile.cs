@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using ConversaoMonetaria.Aplicacao.ViewModels.Autenticacao;
 using ConversaoMonetaria.Aplicacao.ViewModels.Moeda;
-using ConversaoMonetaria.Dominio.Core.Retornos.RetornosPadrao;
 using ConversaoMonetaria.Dominio.Entidades.Autenticacao;
 using ConversaoMonetaria.Dominio.Entidades.Moedas;
 
@@ -30,6 +28,5 @@ public class DomainToViewModelMappingProfile : Profile
         CreateMap<Moeda, MoedasRespostaViewModel>();
         CreateMap<IEnumerable<Moeda>, MoedaListarRespostaViewModel>()
             .ForMember(o => o.Moedas, options => options.MapFrom(o => o));
-
     }
 }

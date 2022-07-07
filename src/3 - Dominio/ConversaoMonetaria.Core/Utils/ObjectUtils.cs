@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace ConversaoMonetaria.Dominio.Core.Utils;
+﻿namespace ConversaoMonetaria.Dominio.Core.Utils;
 
 public static class ObjectUtils
 {
-    public static void CopiarTodasAsPropriedadesPara<T,TR>(this T source, TR target)
+    public static void CopiarTodasAsPropriedadesPara<T, TR>(this T source, TR target)
     {
         var typeSource = typeof(T);
         var typeTarget = typeof(TR);
@@ -18,6 +16,7 @@ public static class ObjectUtils
             if (targetProperty != null)
                 targetProperty.SetValue(target, sourceProperty.GetValue(source, null), null);
         }
+
         foreach (var sourceField in typeSource.GetFields())
         {
             if (sourceField.Name.Equals("Id"))

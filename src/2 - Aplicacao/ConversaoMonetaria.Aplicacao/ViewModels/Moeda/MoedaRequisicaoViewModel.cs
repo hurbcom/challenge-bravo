@@ -1,5 +1,4 @@
 ﻿using ConversaoMonetaria.Aplicacao.ViewModels.Base;
-using ConversaoMonetaria.Dominio.Enums;
 using FluentValidation;
 using FluentValidation.Results;
 

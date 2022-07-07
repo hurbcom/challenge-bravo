@@ -1,8 +1,8 @@
-﻿using ConversaoMonetaria.Aplicacao.Interfaces;
-using ConversaoMonetaria.Aplicacao.Servicos;
+﻿using ConversaoMonetaria.Aplicacao.AppServices;
+using ConversaoMonetaria.Aplicacao.Interfaces;
 using ConversaoMonetaria.Data.Context;
 using ConversaoMonetaria.Data.Repositorio;
-using ConversaoMonetaria.Dominio.Interfaces.Repository;
+using ConversaoMonetaria.Dominio.Interfaces.Repositorio;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SQLitePCL;

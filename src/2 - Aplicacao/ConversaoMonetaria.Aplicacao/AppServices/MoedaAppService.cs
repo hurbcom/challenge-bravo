@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ConversaoMonetaria.Aplicacao.Interfaces;
 using ConversaoMonetaria.Aplicacao.ViewModels.Moeda;
 using ConversaoMonetaria.Dominio.Core.Exceptions;
-using ConversaoMonetaria.Dominio.Core.Http;
 using ConversaoMonetaria.Dominio.Core.Retornos;
 using ConversaoMonetaria.Dominio.Core.Utils;
 using ConversaoMonetaria.Dominio.Entidades.Moedas;
 using ConversaoMonetaria.Dominio.Exceptions.Base;
-using ConversaoMonetaria.Dominio.Interfaces.Repository;
+using ConversaoMonetaria.Dominio.Interfaces.Repositorio;
 
-namespace ConversaoMonetaria.Aplicacao.Servicos;
+namespace ConversaoMonetaria.Aplicacao.AppServices;
 
 public class MoedaAppService : IMoedaAppService
 {
@@ -26,21 +24,21 @@ public class MoedaAppService : IMoedaAppService
         _MoedaRepositorio = MoedaService;
     }
 
-    public async Task<Retorno<BussinessException, MoedaListarRespostaViewModel>> Listar()
+    public Task<Retorno<BussinessException, MoedaListarRespostaViewModel>> Listar()
     {
         var Moeda = _MoedaRepositorio.Listar().ToList().Where(p => p.EhAtiva());
 
-        return _mapper.Map<IEnumerable<Moeda>, MoedaListarRespostaViewModel>(Moeda);
+        return Task.FromResult<Retorno<BussinessException, MoedaListarRespostaViewModel>>(_mapper.Map<IEnumerable<Moeda>, MoedaListarRespostaViewModel>(Moeda));
     }
 
-    public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Obter(long id)
+    public Task<Retorno<BussinessException, MoedaRespostaViewModel>> Obter(long id)
     {
         var moeda = _MoedaRepositorio.Obter(id).FirstOrDefault();
 
         if (moeda is null || !moeda.EhAtiva())
-            return new NaoEncontradoException();
+            return Task.FromResult<Retorno<BussinessException, MoedaRespostaViewModel>>(new NaoEncontradoException());
 
-        return _mapper.Map<MoedaRespostaViewModel>(moeda);
+        return Task.FromResult<Retorno<BussinessException, MoedaRespostaViewModel>>(_mapper.Map<MoedaRespostaViewModel>(moeda));
     }
 
     public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Salvar(MoedaRequisicaoViewModel entity)
@@ -56,14 +54,16 @@ public class MoedaAppService : IMoedaAppService
         var resultadovalidacao = moeda.Validar();
 
         if (!resultadovalidacao.IsValid)
-            return new FormatoInvalidoException(resultadovalidacao.Errors.FirstOrDefault()?.ErrorCode.ToInt(), resultadovalidacao.Errors.FirstOrDefault()?.ErrorMessage);
+            return new FormatoInvalidoException(resultadovalidacao.Errors.FirstOrDefault()?.ErrorCode.ToInt(),
+                resultadovalidacao.Errors.FirstOrDefault()?.ErrorMessage);
 
         await _MoedaRepositorio.Salvar(moeda);
 
         return _mapper.Map<MoedaRespostaViewModel>(moeda);
     }
 
-    public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Atualizar(long id, MoedaRequisicaoViewModel entity)
+    public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Atualizar(long id,
+        MoedaRequisicaoViewModel entity)
     {
         var validacaoRequisicao = entity.ValidarRequisicao();
 
@@ -81,7 +81,8 @@ public class MoedaAppService : IMoedaAppService
         var resultadoValidacao = moeda.Validar();
 
         if (!resultadoValidacao.IsValid)
-            return new FormatoInvalidoException(resultadoValidacao.Errors.FirstOrDefault()?.ErrorCode.ToInt(), resultadoValidacao.Errors.FirstOrDefault()?.ErrorMessage);
+            return new FormatoInvalidoException(resultadoValidacao.Errors.FirstOrDefault()?.ErrorCode.ToInt(),
+                resultadoValidacao.Errors.FirstOrDefault()?.ErrorMessage);
 
         await _MoedaRepositorio.Atualizar(moeda);
 
@@ -98,7 +99,8 @@ public class MoedaAppService : IMoedaAppService
         var resultadovalidacaoExclusao = moeda.Excluir();
 
         if (!resultadovalidacaoExclusao.IsValid)
-            return new FormatoInvalidoException(resultadovalidacaoExclusao.Errors.FirstOrDefault()?.ErrorCode.ToInt(), resultadovalidacaoExclusao.Errors.FirstOrDefault()?.ErrorMessage);
+            return new FormatoInvalidoException(resultadovalidacaoExclusao.Errors.FirstOrDefault()?.ErrorCode.ToInt(),
+                resultadovalidacaoExclusao.Errors.FirstOrDefault()?.ErrorMessage);
 
         await _MoedaRepositorio.Atualizar(moeda);
 
