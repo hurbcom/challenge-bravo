@@ -38,18 +38,13 @@ async function checkIfCurrencyExistsAndUpdate(from) {
       )
     }
 
-  if(currency.isFictional) {
+    if(currency.isFictional) {
       return currency;
     }
 
-    // updates currency if it has not been updated in a day
-    if(currency.last_updated < new Date(Date.now() - 86400000)) {
+    if(currency.last_updated < Date.now() - 1000 * 60 * 60) {
       updatedCurrency = await ConversionRepository.getCurrency(from);
       return await updateExchangeRate(currency.id, updatedCurrency.conversion_rates);
-    }
-
-    if(!currency && !updateCurrency) {
-      return new Error("Currency doesnt exist yet and we dont have data to create it");
     }
 
     return currency;
@@ -76,7 +71,7 @@ async function updateExchangeRate(id, exchange_rates) {
 
 async function createCurrency(name, exchange_rates) {
   try {
-    return await CurrencyRepository.create(name, exchange_rates);
+    return await CurrencyRepository.create(name, exchange_rates, false);
   } catch (error) {
     throw new Error(error);
   }

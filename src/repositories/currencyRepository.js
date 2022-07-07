@@ -38,7 +38,6 @@ async function getByName(name){
 
 async function create(name, exchange_rates, isFictional){
   try {
-
     const currency = await Currency.create({
       name,
       exchange_rates,
