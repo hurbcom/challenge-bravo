@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <UserSecretsId>155cf755-6788-4978-815b-fb0a37823ce1</UserSecretsId>
+        <LangVersion>latest</LangVersion>
+        <PackageId>ConversaoMonetaria.Api</PackageId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DocumentationFile></DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DocumentationFile></DocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="11.0.1"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.6"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.6"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0"/>
+        <PackageReference Include="Serilog" Version="2.11.0"/>
+        <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="App_Data\ConversaoMonetaria.Api.xml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\2 - Aplicacao\ConversaoMonetaria.Aplicacao\ConversaoMonetaria.Aplicacao.csproj"/>
+        <ProjectReference Include="..\..\3 - Dominio\ConversaoMonetaria.Dominio\ConversaoMonetaria.Dominio.csproj"/>
+        <ProjectReference Include="..\..\4 - Infra\ConversaoMonetaria.CrossCutting.IoC\ConversaoMonetaria.CrossCutting.IoC.csproj"/>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <PackageId>ConversaoMonetaria.Dominio.Core</PackageId>
+        <Version>1.0.0-beta-1</Version>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>ConversaoMonetaria.Api.Core</Title>
+        <Description>Core para API</Description>
+        <PackageVersion>1.0.0</PackageVersion>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="11.0.1"/>
+        <PackageReference Include="FluentValidation" Version="11.1.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5"/>
+    </ItemGroup>
+
+</Project>

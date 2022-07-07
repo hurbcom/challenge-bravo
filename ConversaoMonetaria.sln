@@ -1,0 +1,101 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Apresentacao", "1 - Apresentacao", "{2C76DA63-42BE-4493-9FB8-1669443589F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Aplicacao", "2 - Aplicacao", "{EF51B5C6-6004-4351-8EE2-826C487CBEAA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Dominio", "3 - Dominio", "{AF88963A-7238-4DAD-959B-C9F6380BAAD4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infra", "4 - Infra", "{02B7B0B7-3B19-4D33-9358-C90A540A5D3B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Testes", "5 - Testes", "{2EB2DD87-51D3-493C-AE41-77E6FDA95E32}"
+	ProjectSection(SolutionItems) = preProject
+		src\5 - Testes\README.md = src\5 - Testes\README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Api", "src\1 - Apresentacao\ConversaoMonetaria.Api\ConversaoMonetaria.Api.csproj", "{BD907BA1-A0D9-4334-8E6E-2DA2A60E6201}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Aplicacao", "src\2 - Aplicacao\ConversaoMonetaria.Aplicacao\ConversaoMonetaria.Aplicacao.csproj", "{1B49B2BF-EFA4-47DF-B8F9-D941F40CCE81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Dominio", "src\3 - Dominio\ConversaoMonetaria.Dominio\ConversaoMonetaria.Dominio.csproj", "{B83A6624-F9BF-4264-8039-0A19FCCA1E22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Dominio.Core", "src\3 - Dominio\ConversaoMonetaria.Core\ConversaoMonetaria.Dominio.Core.csproj", "{910250CF-96C1-4C8B-AC10-49F18B13DD74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Data", "src\4 - Infra\ConversaoMonetaria.Api.Data\ConversaoMonetaria.Data.csproj", "{04A3CD3B-9BA8-4B62-B56C-195097BFDCC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.CrossCutting.IoC", "src\4 - Infra\ConversaoMonetaria.CrossCutting.IoC\ConversaoMonetaria.CrossCutting.IoC.csproj", "{FBDB086D-768E-4467-8559-D9390802A8BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Api.Tests", "src\5 - Testes\ConversaoMonetaria.Api.Tests\ConversaoMonetaria.Api.Tests.csproj", "{26021373-3A6A-4325-A1BD-536AA45EFEEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Aplicacao.Tests", "src\5 - Testes\ConversaoMonetaria.Aplicacao.Tests\ConversaoMonetaria.Aplicacao.Tests.csproj", "{774F26C8-95AF-4BF6-9C6A-8688D7757777}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Base.Tests", "src\5 - Testes\ConversaoMonetaria.Base.Tests\ConversaoMonetaria.Base.Tests.csproj", "{2F5B3D9C-98ED-475A-8F44-D114AE1C79A6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.2 - Testes de Integracao", "5.2 - Testes de Integracao", "{E68E4793-D8CA-4FEC-AD08-113750780017}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.1 - Testes de Unidade", "5.1 - Testes de Unidade", "{7E5625ED-BD6F-4FA0-8D41-224D6ECC6600}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Dominio.Tests", "src\5 - Testes\ConversaoMonetaria.Dominio.Tests\ConversaoMonetaria.Dominio.Tests.csproj", "{9F550686-23C6-4E8B-8AE6-0EFC6225A70E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BD907BA1-A0D9-4334-8E6E-2DA2A60E6201} = {2C76DA63-42BE-4493-9FB8-1669443589F2}
+		{1B49B2BF-EFA4-47DF-B8F9-D941F40CCE81} = {EF51B5C6-6004-4351-8EE2-826C487CBEAA}
+		{B83A6624-F9BF-4264-8039-0A19FCCA1E22} = {AF88963A-7238-4DAD-959B-C9F6380BAAD4}
+		{910250CF-96C1-4C8B-AC10-49F18B13DD74} = {AF88963A-7238-4DAD-959B-C9F6380BAAD4}
+		{04A3CD3B-9BA8-4B62-B56C-195097BFDCC9} = {02B7B0B7-3B19-4D33-9358-C90A540A5D3B}
+		{FBDB086D-768E-4467-8559-D9390802A8BC} = {02B7B0B7-3B19-4D33-9358-C90A540A5D3B}
+		{E68E4793-D8CA-4FEC-AD08-113750780017} = {2EB2DD87-51D3-493C-AE41-77E6FDA95E32}
+		{7E5625ED-BD6F-4FA0-8D41-224D6ECC6600} = {2EB2DD87-51D3-493C-AE41-77E6FDA95E32}
+		{26021373-3A6A-4325-A1BD-536AA45EFEEB} = {7E5625ED-BD6F-4FA0-8D41-224D6ECC6600}
+		{774F26C8-95AF-4BF6-9C6A-8688D7757777} = {7E5625ED-BD6F-4FA0-8D41-224D6ECC6600}
+		{2F5B3D9C-98ED-475A-8F44-D114AE1C79A6} = {E68E4793-D8CA-4FEC-AD08-113750780017}
+		{9F550686-23C6-4E8B-8AE6-0EFC6225A70E} = {7E5625ED-BD6F-4FA0-8D41-224D6ECC6600}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD907BA1-A0D9-4334-8E6E-2DA2A60E6201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD907BA1-A0D9-4334-8E6E-2DA2A60E6201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD907BA1-A0D9-4334-8E6E-2DA2A60E6201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD907BA1-A0D9-4334-8E6E-2DA2A60E6201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B49B2BF-EFA4-47DF-B8F9-D941F40CCE81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B49B2BF-EFA4-47DF-B8F9-D941F40CCE81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B49B2BF-EFA4-47DF-B8F9-D941F40CCE81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B49B2BF-EFA4-47DF-B8F9-D941F40CCE81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B83A6624-F9BF-4264-8039-0A19FCCA1E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B83A6624-F9BF-4264-8039-0A19FCCA1E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B83A6624-F9BF-4264-8039-0A19FCCA1E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B83A6624-F9BF-4264-8039-0A19FCCA1E22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{910250CF-96C1-4C8B-AC10-49F18B13DD74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910250CF-96C1-4C8B-AC10-49F18B13DD74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910250CF-96C1-4C8B-AC10-49F18B13DD74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910250CF-96C1-4C8B-AC10-49F18B13DD74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04A3CD3B-9BA8-4B62-B56C-195097BFDCC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04A3CD3B-9BA8-4B62-B56C-195097BFDCC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04A3CD3B-9BA8-4B62-B56C-195097BFDCC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04A3CD3B-9BA8-4B62-B56C-195097BFDCC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBDB086D-768E-4467-8559-D9390802A8BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBDB086D-768E-4467-8559-D9390802A8BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBDB086D-768E-4467-8559-D9390802A8BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBDB086D-768E-4467-8559-D9390802A8BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26021373-3A6A-4325-A1BD-536AA45EFEEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26021373-3A6A-4325-A1BD-536AA45EFEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26021373-3A6A-4325-A1BD-536AA45EFEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26021373-3A6A-4325-A1BD-536AA45EFEEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{774F26C8-95AF-4BF6-9C6A-8688D7757777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{774F26C8-95AF-4BF6-9C6A-8688D7757777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{774F26C8-95AF-4BF6-9C6A-8688D7757777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{774F26C8-95AF-4BF6-9C6A-8688D7757777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F5B3D9C-98ED-475A-8F44-D114AE1C79A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F5B3D9C-98ED-475A-8F44-D114AE1C79A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F5B3D9C-98ED-475A-8F44-D114AE1C79A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F5B3D9C-98ED-475A-8F44-D114AE1C79A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F550686-23C6-4E8B-8AE6-0EFC6225A70E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F550686-23C6-4E8B-8AE6-0EFC6225A70E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F550686-23C6-4E8B-8AE6-0EFC6225A70E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F550686-23C6-4E8B-8AE6-0EFC6225A70E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

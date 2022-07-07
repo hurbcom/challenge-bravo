@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="11.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.6"/>
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.21.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\3 - Dominio\ConversaoMonetaria.Dominio\ConversaoMonetaria.Dominio.csproj"/>
+        <ProjectReference Include="..\..\4 - Infra\ConversaoMonetaria.Api.Data\ConversaoMonetaria.Data.csproj"/>
+    </ItemGroup>
+
+</Project>

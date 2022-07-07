@@ -1,0 +1,40 @@
+{
+    "iisSettings": {
+        "windowsAuthentication": false,
+        "anonymousAuthentication": true,
+        "iisExpress": {
+            "applicationUrl": "http://localhost:63531/",
+            "sslPort": 44317
+        }
+    },
+    "profiles": {
+        "IIS Express": {
+            "commandName": "IISExpress",
+            "launchBrowser": true,
+            "launchUrl": "swagger",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        "Dev": {
+            "commandName": "Project",
+            "launchUrl": "swagger",
+            "environmentVariables": {
+                "ConnectionStrings:SQLite": "Data Source=ConversaoMonetariaDB.db;",
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "dotnetRunMessages": "true",
+            "applicationUrl": "https://localhost:5001;http://localhost:5000"
+        },
+        "Prd": {
+            "commandName": "Project",
+            "launchUrl": "swagger",
+            "environmentVariables": {
+                "ConnectionStrings:SQLite": "Data Source=ConversaoMonetariaDB.db;",
+                "ASPNETCORE_ENVIRONMENT": "Prd"
+            },
+            "dotnetRunMessages": "true",
+            "applicationUrl": "https://localhost:5001;http://localhost:5000"
+        }
+    }
+}
