@@ -6,6 +6,7 @@ using AutoMapper;
 using ConversaoMonetaria.Aplicacao.Interfaces;
 using ConversaoMonetaria.Aplicacao.ViewModels.Moeda;
 using ConversaoMonetaria.Dominio.Core.Exceptions;
+using ConversaoMonetaria.Dominio.Core.Http;
 using ConversaoMonetaria.Dominio.Core.Retornos;
 using ConversaoMonetaria.Dominio.Core.Utils;
 using ConversaoMonetaria.Dominio.Entidades.Moedas;
@@ -25,19 +26,21 @@ public class MoedaAppService : IMoedaAppService
         _MoedaRepositorio = MoedaService;
     }
 
-    public async Task<Retorno<BussinessException, List<MoedaRespostaViewModel>>> Listar()
+    public async Task<Retorno<BussinessException, MoedaListarRespostaViewModel>> Listar()
     {
-        throw new NotImplementedException();
+        var Moeda = _MoedaRepositorio.Listar().ToList().Where(p => p.EhAtiva());
+
+        return _mapper.Map<IEnumerable<Moeda>, MoedaListarRespostaViewModel>(Moeda);
     }
 
     public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Obter(long id)
     {
-        var Moeda = _MoedaRepositorio.Obter(id).FirstOrDefault();
+        var moeda = _MoedaRepositorio.Obter(id).FirstOrDefault();
 
-        if (Moeda is null)
+        if (moeda is null || !moeda.EhAtiva())
             return new NaoEncontradoException();
 
-        return _mapper.Map<MoedaRespostaViewModel>(Moeda);
+        return _mapper.Map<MoedaRespostaViewModel>(moeda);
     }
 
     public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Salvar(MoedaRequisicaoViewModel entity)
@@ -60,13 +63,45 @@ public class MoedaAppService : IMoedaAppService
         return _mapper.Map<MoedaRespostaViewModel>(moeda);
     }
 
-    public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Atualizar(MoedaRequisicaoViewModel entity)
+    public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Atualizar(long id, MoedaRequisicaoViewModel entity)
     {
-        throw new NotImplementedException();
+        var validacaoRequisicao = entity.ValidarRequisicao();
+
+        if (!validacaoRequisicao.IsValid)
+            return new FormatoInvalidoException(validacaoRequisicao.Errors.FirstOrDefault()?.ErrorCode.ToInt(),
+                validacaoRequisicao.Errors.FirstOrDefault()?.ErrorMessage);
+
+        //var moedaNova = _mapper.Map<Moeda>(entity);
+        var moeda = _MoedaRepositorio.Obter(id).FirstOrDefault();
+
+        if (moeda is null || !moeda.EhAtiva())
+            return new NaoEncontradoException();
+
+        entity.CopiarTodasAsPropriedadesPara(moeda);
+        var resultadoValidacao = moeda.Validar();
+
+        if (!resultadoValidacao.IsValid)
+            return new FormatoInvalidoException(resultadoValidacao.Errors.FirstOrDefault()?.ErrorCode.ToInt(), resultadoValidacao.Errors.FirstOrDefault()?.ErrorMessage);
+
+        await _MoedaRepositorio.Atualizar(moeda);
+
+        return _mapper.Map<MoedaRespostaViewModel>(moeda);
     }
 
-    public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Deletar(long id)
+    public async Task<Retorno<BussinessException, bool>> Deletar(long id)
     {
-        throw new NotImplementedException();
+        var moeda = _MoedaRepositorio.Obter(id).FirstOrDefault();
+
+        if (moeda is null || !moeda.EhAtiva())
+            return new NaoEncontradoException();
+
+        var resultadovalidacaoExclusao = moeda.Excluir();
+
+        if (!resultadovalidacaoExclusao.IsValid)
+            return new FormatoInvalidoException(resultadovalidacaoExclusao.Errors.FirstOrDefault()?.ErrorCode.ToInt(), resultadovalidacaoExclusao.Errors.FirstOrDefault()?.ErrorMessage);
+
+        await _MoedaRepositorio.Atualizar(moeda);
+
+        return true;
     }
 }

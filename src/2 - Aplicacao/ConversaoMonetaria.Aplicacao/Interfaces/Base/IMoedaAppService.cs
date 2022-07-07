@@ -6,15 +6,18 @@ using ConversaoMonetaria.Dominio.Core.Retornos;
 
 namespace ConversaoMonetaria.Aplicacao.Interfaces.Base;
 
-public interface IBaseAppService<in T, TR> where T : IViewModel where TR : IViewModel
+public interface IBaseAppService<in TVmAdicao, VMRetorno, VMLista>
+    where TVmAdicao : IViewModel
+    where VMRetorno : IViewModel
+    where VMLista : IViewModel
 {
-    Task<Retorno<BussinessException, List<TR>>> Listar();
+    Task<Retorno<BussinessException, VMLista>> Listar();
 
-    Task<Retorno<BussinessException, TR>> Obter(long id);
+    Task<Retorno<BussinessException, VMRetorno>> Obter(long id);
 
-    Task<Retorno<BussinessException, TR>> Salvar(T entity);
+    Task<Retorno<BussinessException, VMRetorno>> Salvar(TVmAdicao entity);
 
-    Task<Retorno<BussinessException, TR>> Atualizar(T entity);
+    Task<Retorno<BussinessException, VMRetorno>> Atualizar(long id, TVmAdicao entity);
 
-    Task<Retorno<BussinessException, TR>> Deletar(long id);
+    Task<Retorno<BussinessException, bool>> Deletar(long id);
 }

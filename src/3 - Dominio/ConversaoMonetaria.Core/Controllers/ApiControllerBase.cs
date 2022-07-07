@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ConversaoMonetaria.Dominio.Core.Exceptions;
 using ConversaoMonetaria.Dominio.Core.Retornos;
 using FluentValidation;
@@ -31,7 +34,7 @@ public class ApiControllerBase : ControllerBase
     public IActionResult HandleCommand<TFalha, TSucesso>(Retorno<TFalha, TSucesso> Retorno)
         where TFalha : Exception
     {
-        return Retorno.EhFalha ? HandleFailure(Retorno.Failure) : Ok(Retorno.Result);
+        return Retorno.EhFalha ? HandleFalha(Retorno.Failure) : Ok(Retorno.Result);
     }
 
     /// <summary>
@@ -44,7 +47,7 @@ public class ApiControllerBase : ControllerBase
     public IActionResult HandleCommandCreated<TFalha, TSucesso>(Retorno<TFalha, TSucesso> Retorno)
         where TFalha : Exception
     {
-        return Retorno.EhFalha ? HandleFailure(Retorno.Failure) : Created(string.Empty, Retorno.Result);
+        return Retorno.EhFalha ? HandleFalha(Retorno.Failure) : Created(string.Empty, Retorno.Result);
     }
 
     /// <summary>
@@ -57,7 +60,7 @@ public class ApiControllerBase : ControllerBase
     public IActionResult HandleCommandNoContent<TFalha, TSucesso>(Retorno<TFalha, TSucesso> Retorno)
         where TFalha : Exception
     {
-        return Retorno.EhFalha ? HandleFailure(Retorno.Failure) : NoContent();
+        return Retorno.EhFalha ? HandleFalha(Retorno.Failure) : NoContent();
     }
 
     /// <summary>
@@ -65,7 +68,7 @@ public class ApiControllerBase : ControllerBase
     /// </summary>
     /// <typeparam name="T">Qualquer classe que herde de Exception</typeparam>
     /// <param name="exceptionToHandle">obj de exceção</param>
-    public IActionResult HandleFailure<T>(T exceptionToHandle) where T : Exception
+    public IActionResult HandleFalha<T>(T exceptionToHandle) where T : Exception
     {
         if (exceptionToHandle is ValidationException)
             return StatusCode(HttpStatusCode.BadRequest.GetHashCode(),

@@ -19,7 +19,7 @@ namespace ConversaoMonetaria.Data.Migrations
 
             modelBuilder.Entity("ConversaoMonetaria.Dominio.Entidades.Moedas.Moeda", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -50,21 +50,21 @@ namespace ConversaoMonetaria.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 1L,
                             Codigo = "BRL",
                             Cotacao = 5.4125m,
-                            DataAtualizacao = new DateTime(2022, 7, 7, 9, 42, 26, 750, DateTimeKind.Local).AddTicks(2618),
-                            DataCadastro = new DateTime(2022, 7, 7, 9, 42, 26, 750, DateTimeKind.Local).AddTicks(2626),
+                            DataAtualizacao = new DateTime(2022, 7, 7, 11, 23, 46, 315, DateTimeKind.Local).AddTicks(2759),
+                            DataCadastro = new DateTime(2022, 7, 7, 11, 23, 46, 315, DateTimeKind.Local).AddTicks(2772),
                             Nome = "Real Brasileiro",
                             Status = 0
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 2L,
                             Codigo = "USD",
                             Cotacao = 1m,
-                            DataAtualizacao = new DateTime(2022, 7, 7, 9, 42, 26, 750, DateTimeKind.Local).AddTicks(2631),
-                            DataCadastro = new DateTime(2022, 7, 7, 9, 42, 26, 750, DateTimeKind.Local).AddTicks(2631),
+                            DataAtualizacao = new DateTime(2022, 7, 7, 11, 23, 46, 315, DateTimeKind.Local).AddTicks(2776),
+                            DataCadastro = new DateTime(2022, 7, 7, 11, 23, 46, 315, DateTimeKind.Local).AddTicks(2776),
                             Nome = "Dólar Americano",
                             Status = 0
                         });

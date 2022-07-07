@@ -27,10 +27,9 @@ public class MoedaController : ApiControllerBase
     /// <returns>Lista de modelos com os dados da moeda</returns>
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(typeof(MoedaRespostaViewModel), 200)]
+    [ProducesResponseType(typeof(MoedaListarRespostaViewModel), 200)]
     [ProducesResponseType(typeof(PayloadException), 400)]
     [ProducesResponseType(typeof(UnauthorizedException), 401)]
-    [ProducesResponseType(typeof(NotFoundException), 404)]
     [Route("Moedas")]
     public async Task<IActionResult> Listar()
     {
@@ -49,7 +48,7 @@ public class MoedaController : ApiControllerBase
     [ProducesResponseType(typeof(UnauthorizedException), 401)]
     [ProducesResponseType(typeof(NotFoundException), 404)]
     [Route("Moedas/{idMoeda}")]
-    public async Task<IActionResult> Consultar([FromRoute] long idMoeda)
+    public async Task<IActionResult> Buscar([FromRoute] long idMoeda)
     {
         return HandleCommand(await _MoedaAppService.Obter(idMoeda));
     }
@@ -69,7 +68,7 @@ public class MoedaController : ApiControllerBase
     public async Task<IActionResult> Atualizar([FromRoute] long idMoeda,
         [FromBody] MoedaRequisicaoViewModel moedaRequisicao)
     {
-        return HandleCommandNoContent(await _MoedaAppService.Atualizar(moedaRequisicao));
+        return HandleCommandNoContent(await _MoedaAppService.Atualizar(idMoeda, moedaRequisicao));
     }
 
     /// <summary>
@@ -78,7 +77,7 @@ public class MoedaController : ApiControllerBase
     /// <param name="idMoeda">Id da moeda no qual deseja obter</param>
     [HttpDelete]
     [Authorize]
-    [ProducesResponseType(typeof(MoedaRespostaViewModel), 200)]
+    [ProducesResponseType(typeof(NoContentResult), 204)]
     [ProducesResponseType(typeof(PayloadException), 400)]
     [ProducesResponseType(typeof(UnauthorizedException), 401)]
     [ProducesResponseType(typeof(NotFoundException), 404)]
@@ -102,6 +101,6 @@ public class MoedaController : ApiControllerBase
     [Route("Moedas")]
     public async Task<IActionResult> Salvar([FromBody] MoedaRequisicaoViewModel moedaRequisicao)
     {
-        return HandleCommand(await _MoedaAppService.Salvar(moedaRequisicao));
+        return HandleCommandCreated(await _MoedaAppService.Salvar(moedaRequisicao));
     }
 }

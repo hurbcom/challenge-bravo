@@ -1,13 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using ConversaoMonetaria.Aplicacao.ViewModels.Base;
 using ConversaoMonetaria.Dominio.Core.Retornos.RetornosPadrao;
 using ConversaoMonetaria.Dominio.Enums;
 
 namespace ConversaoMonetaria.Aplicacao.ViewModels.Moeda;
 
-public class MoedaRespostaViewModel : IViewModel
+public class MoedaListarRespostaViewModel : IViewModel
 {
     public ResultadoSucessoPadraoViewModel Resultado { get; set; } = new();
+
+    public List<MoedasRespostaViewModel> Moedas { get; set; }
+}
+
+public class MoedaRespostaViewModel : MoedasRespostaViewModel, IViewModel
+{
+    public ResultadoSucessoPadraoViewModel Resultado { get; set; } = new();
+}
+
+public class MoedasRespostaViewModel
+{
+    /// <summary>
+    ///     Id da moeda
+    /// </summary>
+    public long Id { get; set; }
 
     /// <summary>
     ///     Nome da moeda

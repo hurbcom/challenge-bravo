@@ -41,8 +41,23 @@ public class Moeda : Entidade
     /// </summary>
     public EStatusMoeda Status { get; set; }
 
+    public virtual bool EhAtiva()
+    {
+        return Status == EStatusMoeda.Ativa;
+    }
+
     public ValidationResult Validar()
     {
         return new MoedaValidador().Validate(this);
+    }
+
+    public ValidationResult Excluir()
+    {
+        var retornoValidacao = new MoedaValidadorExclusao().Validate(this);
+
+        if(retornoValidacao.IsValid)
+            Status = EStatusMoeda.Inativada;
+
+        return retornoValidacao;
     }
 }
