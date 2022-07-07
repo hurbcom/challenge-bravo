@@ -12,7 +12,7 @@ Currency.create = (name, code, exchange_rate) => {
 };
 
 // GET ALL CURRENCIES TO TEST
-Currency.get = () => {
+Currency.getAll = () => {
     return db.any("SELECT * FROM currencies");
 };
 

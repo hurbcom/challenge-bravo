@@ -2,6 +2,61 @@
 
 [[English](README.md) | [Portuguese](README.pt.md)]
 
+## How to use?
+
+    - Requirements:
+        docker installed
+
+    - Expected Operational System
+        - Linux ubuntu
+
+    1) git clone this repository
+    2) npm i
+    3) run the following codes:
+        - docker build -t hurb-api .
+        - docker compose build
+        - docker compose up
+
+        obs: be sure that there isn't anything running in your port 5432, if you have this problem you can run the following code for linux:
+            - sudo lsof -i :5432  ** get the pid number
+            - sudo kill -9 <pid>
+
+    ----- At this moment the server and the database must have already running inside a docker container -----
+
+    Routes:
+        - POST:  /currency
+            required body parameters: *name , *code, *exchange_rate
+            It creates a new currency on database;
+
+        - DELETE: /currency/:id
+            It deletes currency from the database wich has the given ID;
+
+        - GET: /currency/exchange?from=:currencyCode&to=:currencyCode&amount=:amount_value
+            It makes the conversions between the given currencies;
+
+        - GET: /currencies
+            It get all currencies from the database;
+
+## Creator Comments
+
+    This api uses two external API's to do the exchange between currencies(COINGATE and EXCHANGE RATE), because the first API's that I've chosen didn't work to exchange Ethereum, and for this reason I took another API to solve this problem, although, that
+    another API didn't have a good precision to exchange the other currencies, due to this I've decided to use both.
+
+    I've chosen some libs to use in this project, among them we can find:
+
+    - JEST
+    - AXIOS
+    - DOTENV
+    - BODYPARSER
+    - EXPRESS
+    - PG-PROMISE
+
+    I've chosen the POSTGRESQL to be the database and the MVC pattern to structure the project.
+
+    I hope you enjoy!!
+
+    ----------------------------------------------------------------------------------------------------------------------------------
+
 Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
 
 The API must convert between the following currencies:

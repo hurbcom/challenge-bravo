@@ -3,14 +3,14 @@ const Exchange = require("../services/exchange");
 
 module.exports = {
     getCurrencies(req, res, next) {
-        Currency.get()
+        Currency.getAll()
             .then((data) =>
                 res.status(200).json({ success: true, currency: data })
             )
             .catch((err) => res.status(400).json({ err }));
     },
 
-    async createCurrency(req, res, next) {
+    createCurrency(req, res, next) {
         const { name, code, exchange_rate } = req.body;
 
         Currency.create(name, code, exchange_rate)
@@ -24,8 +24,6 @@ module.exports = {
 
     deleteCurrency(req, res, next) {
         let id = req.params.id;
-
-        console.log(id);
 
         Currency.delete(id)
             .then((data) =>
@@ -51,14 +49,14 @@ module.exports = {
 
                         const result = amount * rate;
 
-                        const exchangeObject = {
+                        const exchange = {
                             from: fromCode,
                             to: toCode,
                             amount: amount,
                             exchange_rate: rate,
                             result: result,
                         };
-                        res.json({ exchangeObject });
+                        res.json({ exchange });
                     }
                 );
             } catch (error) {
@@ -70,14 +68,14 @@ module.exports = {
                     const { result } = data;
                     const { rate } = data.info;
 
-                    const exchangeObject = {
+                    const exchange = {
                         from: fromCode,
                         to: toCode,
                         amount: amount,
                         exchange_rate: rate,
                         result: result,
                     };
-                    res.json({ exchangeObject });
+                    res.json({ exchange });
                 });
             } catch (error) {
                 res.json({ error });
