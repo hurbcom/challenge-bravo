@@ -379,3 +379,4 @@ e2e/*.map
 .DS_Store/
 
 # End of https://www.gitignore.io/api/angular
+src/1 - Apresentacao/logs/

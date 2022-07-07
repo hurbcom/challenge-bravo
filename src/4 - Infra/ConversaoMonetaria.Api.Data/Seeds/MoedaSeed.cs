@@ -20,8 +20,7 @@ public static class MoedaSeed
                 Cotacao = 5.4125m,
                 Status = EStatusMoeda.Ativa,
                 DataAtualizacao = DateTime.Now,
-                DataCadastro = DateTime.Now,
-                TempoParaAtualizacao = TimeSpan.FromSeconds(120)
+                DataCadastro = DateTime.Now
             },
 
             new()
@@ -31,8 +30,7 @@ public static class MoedaSeed
                 Nome = "Dólar Americano", Cotacao = 1,
                 Status = EStatusMoeda.Ativa,
                 DataAtualizacao = DateTime.Now,
-                DataCadastro = DateTime.Now,
-                TempoParaAtualizacao = TimeSpan.FromSeconds(30)
+                DataCadastro = DateTime.Now
             }
         };
 

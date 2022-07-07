@@ -30,9 +30,4 @@ public class MoedaRespostaViewModel : IViewModel
     ///     2 - Inativada
     /// </summary>
     public EStatusMoeda Status { get; set; }
-
-    /// <summary>
-    ///     Tempo no qual a cotação é valida sem atualização da mesma
-    /// </summary>
-    public TimeSpan TempoParaAtualizacao { get; set; }
 }

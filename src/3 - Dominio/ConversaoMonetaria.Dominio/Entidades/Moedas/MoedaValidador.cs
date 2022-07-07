@@ -28,14 +28,5 @@ public class MoedaValidador : AbstractValidator<Moeda>
             .WithMessage(Mensagens.Mensagens.Obrigatorio().Mensagem.FormatEx(ConstantesString.PropertyNameValidated))
             .WithErrorCode(Mensagens.Mensagens.Obrigatorio().CodigoMensagem.ToString());
 
-        RuleFor(p => p.Status)
-            .NotEmpty()
-            .WithMessage(Mensagens.Mensagens.Obrigatorio().Mensagem.FormatEx(ConstantesString.PropertyNameValidated))
-            .WithErrorCode(Mensagens.Mensagens.Obrigatorio().CodigoMensagem.ToString());
-
-        RuleFor(p => p.TempoParaAtualizacao)
-            .NotEmpty()
-            .WithMessage(Mensagens.Mensagens.Obrigatorio().Mensagem.FormatEx(ConstantesString.PropertyNameValidated))
-            .WithErrorCode(Mensagens.Mensagens.Obrigatorio().CodigoMensagem.ToString());
     }
 }

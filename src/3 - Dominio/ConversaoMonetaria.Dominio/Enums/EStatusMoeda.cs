@@ -4,7 +4,7 @@ namespace ConversaoMonetaria.Dominio.Enums;
 
 public enum EStatusMoeda
 {
-    [Description("Ativa")] Ativa = 1,
+    [Description("Ativa")] Ativa = 0,
 
-    [Description("Inativada")] Inativada = 2
+    [Description("Inativada")] Inativada = 1
 }

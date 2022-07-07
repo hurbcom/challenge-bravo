@@ -24,7 +24,6 @@ public class DependencyInjector
 
     private static void AddRepositories(IServiceCollection services)
     {
-        services.AddTransient<IParametroRepositorio, ParametroRepositorio>();
         services.AddTransient<IMoedaRepositorio, MoedaRepositorio>();
         services.AddTransient<IAutenticacaoRepositorio, AutenticacaoRepositorio>();
     }
@@ -33,7 +32,6 @@ public class DependencyInjector
     {
         services.AddTransient<IAutenticacaoAppService, AutenticacaoAppService>();
         services.AddTransient<IMoedaAppService, MoedaAppService>();
-        services.AddTransient<IParametroAppService, ParametroAppService>();
     }
 
     private static void AddContext(IServiceCollection services, string connectionString)

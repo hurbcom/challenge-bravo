@@ -48,14 +48,16 @@ public class MoedaAppService : IMoedaAppService
             return new FormatoInvalidoException(validacaoRequisicao.Errors.FirstOrDefault()?.ErrorCode.ToInt(),
                 validacaoRequisicao.Errors.FirstOrDefault()?.ErrorMessage);
 
-        var valePedagio = _mapper.Map<Moeda>(entity);
+        var moeda = _mapper.Map<Moeda>(entity);
 
-        var solicitacao = await _MoedaRepositorio.Salvar(valePedagio);
+        var resultadovalidacao = moeda.Validar();
 
-        if (solicitacao.IsFailure)
-            return solicitacao.Failure;
+        if (!resultadovalidacao.IsValid)
+            return new FormatoInvalidoException(resultadovalidacao.Errors.FirstOrDefault()?.ErrorCode.ToInt(), resultadovalidacao.Errors.FirstOrDefault()?.ErrorMessage);
 
-        return _mapper.Map<MoedaRespostaViewModel>(solicitacao.Result);
+        await _MoedaRepositorio.Salvar(moeda);
+
+        return _mapper.Map<MoedaRespostaViewModel>(moeda);
     }
 
     public async Task<Retorno<BussinessException, MoedaRespostaViewModel>> Atualizar(MoedaRequisicaoViewModel entity)

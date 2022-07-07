@@ -12,12 +12,11 @@ public class Moeda : Entidade
     {
     }
 
-    protected Moeda(string nome, string codigo, decimal cotacao, TimeSpan tempoParaAtualizacao)
+    protected Moeda(string nome, string codigo, decimal cotacao)
     {
         Nome = nome;
         Codigo = codigo;
         Cotacao = cotacao;
-        TempoParaAtualizacao = tempoParaAtualizacao;
     }
 
     /// <summary>
@@ -41,11 +40,6 @@ public class Moeda : Entidade
     ///     2 - Inativada
     /// </summary>
     public EStatusMoeda Status { get; set; }
-
-    /// <summary>
-    ///     Tempo no qual a cotação é valida sem atualização da mesma
-    /// </summary>
-    public TimeSpan TempoParaAtualizacao { get; set; }
 
     public ValidationResult Validar()
     {

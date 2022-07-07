@@ -91,7 +91,7 @@ public class Startup
                 Assembly.GetExecutingAssembly().GetName().Name + ".xml");
             c.IncludeXmlComments(lXmlPath);
 
-            // To Enable authorization using Swagger (JWT)    
+            // To Enable authorization using Swagger (JWT)
             c.AddSecurityDefinition(SwaggerDoc.SecurityDefinitionName, new OpenApiSecurityScheme
             {
                 Name = SwaggerDoc.OpenApiSecuritySchemeName,
@@ -147,7 +147,7 @@ public class Startup
 
         // SQLite
         var conectionString = Configuration.GetConnectionString(ConstantesString.SQLiteliasConnection);
-        conectionString ??= Configuration.GetConnectionString("'");
+        conectionString ??= Configuration.GetConnectionString("DefaultConnection");
 
         DependencyInjector.RegisterContext(services, conectionString);
     }

@@ -18,6 +18,5 @@ public class MoedaConfiguration : IEntityTypeConfiguration<Moeda>
         builder.Property(p => p.Cotacao).IsRequired();
         builder.Property(p => p.Nome).IsRequired();
         builder.Property(p => p.Status).IsRequired();
-        builder.Property(p => p.TempoParaAtualizacao).IsRequired();
     }
 }
