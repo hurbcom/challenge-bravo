@@ -61,7 +61,7 @@ public class ApiControllerBase : ControllerBase
     }
 
     /// <summary>
-    ///     Verifica a exceção passada por parametro para passar o StatusCode correto para o frontend.
+    ///     Verifica a exceção passada por parametro para passar o StatusCode correto.
     /// </summary>
     /// <typeparam name="T">Qualquer classe que herde de Exception</typeparam>
     /// <param name="exceptionToHandle">obj de exceção</param>

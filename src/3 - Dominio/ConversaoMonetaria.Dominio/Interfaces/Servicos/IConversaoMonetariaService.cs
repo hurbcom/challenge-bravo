@@ -1,5 +1,4 @@
-﻿using System;
-using ConversaoMonetaria.Dominio.Core.Exceptions;
+﻿using ConversaoMonetaria.Dominio.Core.Exceptions;
 using ConversaoMonetaria.Dominio.Core.Retornos;
 
 namespace ConversaoMonetaria.Dominio.Interfaces.Servicos;

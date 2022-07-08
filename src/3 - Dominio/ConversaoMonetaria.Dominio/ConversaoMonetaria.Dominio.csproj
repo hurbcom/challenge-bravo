@@ -6,15 +6,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="11.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.6" />
-        <PackageReference Include="Moq.AutoMock" Version="3.4.0" />
-        <PackageReference Include="Serilog" Version="2.11.0" />
+        <PackageReference Include="FluentValidation" Version="11.1.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.6"/>
+        <PackageReference Include="Moq.AutoMock" Version="3.4.0"/>
+        <PackageReference Include="Serilog" Version="2.11.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ConversaoMonetaria.Core\ConversaoMonetaria.Dominio.Core.csproj" />
+        <ProjectReference Include="..\ConversaoMonetaria.Core\ConversaoMonetaria.Dominio.Core.csproj"/>
     </ItemGroup>
 
 </Project>

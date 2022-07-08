@@ -6,14 +6,23 @@ using ConversaoMonetaria.Dominio.Interfaces.Servicos;
 
 namespace ConversaoMonetaria.Dominio.Servicos;
 
+public sealed class ConversaoMonetariaSingleton
+{
+    private ConversaoMonetariaSingleton()
+    {
+    }
+
+    public static ConversaoMonetariaService Instance { get; } = new();
+}
+
 public class ConversaoMonetariaService : IConversaoMonetariaService
 {
-    private Hashtable _cotatacoesAtuais { get; set; }
-
     public ConversaoMonetariaService()
     {
         _cotatacoesAtuais = new Hashtable();
     }
+
+    private Hashtable _cotatacoesAtuais { get; }
 
     public void AdicionarCotacao(string codigoMoeda, decimal cotacao)
     {
@@ -28,9 +37,8 @@ public class ConversaoMonetariaService : IConversaoMonetariaService
         if (moedaDe is null || moedaPara is null)
             return new NaoEncontradoException();
 
-        // Valore recido é dividido pela cotação da moeda origem convertendo assim para Dollar a moeda base,
-        // após é dividida pela cotação a moeda destino baseada em dolar.
-        return valor/(decimal) moedaDe/(decimal) moedaPara;
+        // Valore recido é dividido pela cotação da moeda origem convertendo assim para Real a moeda base,
+        // após é dividida pela cotação a moeda destino baseada em Real.
+        return valor * (decimal) moedaDe / (decimal) moedaPara;
     }
-
 }

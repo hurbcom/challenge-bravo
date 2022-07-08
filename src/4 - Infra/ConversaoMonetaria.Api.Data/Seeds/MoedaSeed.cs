@@ -17,9 +17,9 @@ public static class MoedaSeed
                 Id = 1,
                 Codigo = "BRL",
                 Nome = "Real Brasileiro",
-                Cotacao = 5.4125m,
+                Cotacao = 1m,
                 Status = EStatusMoeda.Ativa,
-                DataAtualizacao = DateTime.Now,
+                DataAtualizacao = null,
                 DataCadastro = DateTime.Now
             },
 
@@ -27,9 +27,65 @@ public static class MoedaSeed
             {
                 Id = 2,
                 Codigo = "USD",
-                Nome = "Dólar Americano", Cotacao = 1,
+                Nome = "Dólar Americano",
+                Cotacao = 5.3407m,
                 Status = EStatusMoeda.Ativa,
-                DataAtualizacao = DateTime.Now,
+                DataAtualizacao = null,
+                DataCadastro = DateTime.Now
+            },
+
+            new()
+            {
+                Id = 3,
+                Codigo = "CAD",
+                Nome = "Dólar Canadense",
+                Cotacao = 4.1108m,
+                Status = EStatusMoeda.Ativa,
+                DataAtualizacao = null,
+                DataCadastro = DateTime.Now
+            },
+
+            new()
+            {
+                Id = 4,
+                Codigo = "GBP",
+                Nome = "Libra Esterlina",
+                Cotacao = 6.4083m,
+                Status = EStatusMoeda.Ativa,
+                DataAtualizacao = null,
+                DataCadastro = DateTime.Now
+            },
+
+            new()
+            {
+                Id = 5,
+                Codigo = "ARS",
+                Nome = "Peso Argentino",
+                Cotacao = 0.0422m,
+                Status = EStatusMoeda.Ativa,
+                DataAtualizacao = null,
+                DataCadastro = DateTime.Now
+            },
+
+            new()
+            {
+                Id = 6,
+                Codigo = "BTC",
+                Nome = "Bitcoin",
+                Cotacao = 115.668m,
+                Status = EStatusMoeda.Ativa,
+                DataAtualizacao = null,
+                DataCadastro = DateTime.Now
+            },
+
+            new()
+            {
+                Id = 7,
+                Codigo = "EUR",
+                Nome = "Euro",
+                Cotacao = 5.4235m,
+                Status = EStatusMoeda.Ativa,
+                DataAtualizacao = null,
                 DataCadastro = DateTime.Now
             }
         };

@@ -8,15 +8,16 @@ using ConversaoMonetaria.Api.App_Data;
 using ConversaoMonetaria.Aplicacao.Automapper;
 using ConversaoMonetaria.Aplicacao.JwtSecurity;
 using ConversaoMonetaria.CrossCutting.IoC;
+using ConversaoMonetaria.Data.Context;
 using ConversaoMonetaria.Dominio.Autenticacao;
 using ConversaoMonetaria.Dominio.Core.Constantes;
 using ConversaoMonetaria.Dominio.Exceptions.Base;
-using ConversaoMonetaria.Dominio.Interfaces.Servicos;
 using ConversaoMonetaria.Dominio.Servicos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -67,7 +68,7 @@ public class Startup
         var tempoExpiracaoAutenticacaoMinutos =
             Configuration.GetSection("ExpiracaoAutenticacao").Get<ExpiracaoAutenticacao>();
 
-        var conversaoMonetariaService = new ConversaoMonetariaService();
+        var conversaoMonetariaService = ConversaoMonetariaSingleton.Instance;
 
         var ambiente = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -166,8 +167,14 @@ public class Startup
     /// <param name="env"></param>
     public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        /*if (env.IsDevelopment())
-            app.UseDeveloperExceptionPage();*/
+        using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope())
+        {
+            if (serviceScope != null)
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<ConversaoMonetariaContext>();
+                context.Database.Migrate();
+            }
+        }
 
         // Para conseguir ler o corpo da requisi��o no nos Filters deve ser habilitado aqui
         // o armazenamento em buffer antes da invoca��o do MVC

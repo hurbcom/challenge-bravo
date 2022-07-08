@@ -10,15 +10,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace ConversaoMonetaria.Api.Controllers;
 
 /// <inheritdoc />
-public class MoedaController : ApiControllerBase
+public class MoedasController : ApiControllerBase
 {
-    private readonly IMoedaAppService _MoedaAppService;
+    private readonly IMoedaAppService _moedaAppService;
 
     /// <inheritdoc />
-    public MoedaController(IMoedaAppService MoedaAppService, IMapper mapper)
+    public MoedasController(IMoedaAppService MoedaAppService, IMapper mapper)
         : base(mapper)
     {
-        _MoedaAppService = MoedaAppService;
+        _moedaAppService = MoedaAppService;
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ public class MoedaController : ApiControllerBase
     [Route("Moedas")]
     public async Task<IActionResult> Listar()
     {
-        return HandleCommand(await _MoedaAppService.Listar());
+        return HandleCommand(await _moedaAppService.Listar());
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class MoedaController : ApiControllerBase
     [Route("Moedas/{idMoeda}")]
     public async Task<IActionResult> Buscar([FromRoute] long idMoeda)
     {
-        return HandleCommand(await _MoedaAppService.Obter(idMoeda));
+        return HandleCommand(await _moedaAppService.Obter(idMoeda));
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public class MoedaController : ApiControllerBase
     public async Task<IActionResult> Atualizar([FromRoute] long idMoeda,
         [FromBody] MoedaRequisicaoViewModel moedaRequisicao)
     {
-        return HandleCommandNoContent(await _MoedaAppService.Atualizar(idMoeda, moedaRequisicao));
+        return HandleCommandNoContent(await _moedaAppService.Atualizar(idMoeda, moedaRequisicao));
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public class MoedaController : ApiControllerBase
     [Route("Moedas/{idMoeda}")]
     public async Task<IActionResult> Deletar([FromRoute] long idMoeda)
     {
-        return HandleCommandNoContent(await _MoedaAppService.Deletar(idMoeda));
+        return HandleCommandNoContent(await _moedaAppService.Deletar(idMoeda));
     }
 
     /// <summary>
@@ -101,6 +101,6 @@ public class MoedaController : ApiControllerBase
     [Route("Moedas")]
     public async Task<IActionResult> Salvar([FromBody] MoedaRequisicaoViewModel moedaRequisicao)
     {
-        return HandleCommandCreated(await _MoedaAppService.Salvar(moedaRequisicao));
+        return HandleCommandCreated(await _moedaAppService.Salvar(moedaRequisicao));
     }
 }

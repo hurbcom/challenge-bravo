@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\2 - Aplicacao\ConversaoMonetaria.Aplicacao\ConversaoMonetaria.Aplicacao.csproj"/>
+        <ProjectReference Include="..\ConversaoMoneraria.AntiCorruption\ConversaoMoneraria.AntiCorruption.csproj"/>
         <ProjectReference Include="..\ConversaoMonetaria.Api.Data\ConversaoMonetaria.Data.csproj"/>
     </ItemGroup>
 

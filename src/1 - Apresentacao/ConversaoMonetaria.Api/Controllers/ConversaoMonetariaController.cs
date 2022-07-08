@@ -1,13 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using ConversaoMonetaria.Dominio.Core.Controllers;
 using ConversaoMonetaria.Dominio.Core.Exceptions;
-using ConversaoMonetaria.Dominio.Core.Retornos;
-using ConversaoMonetaria.Dominio.Entidades.Moedas;
-using ConversaoMonetaria.Dominio.Interfaces.Servicos;
 using ConversaoMonetaria.Dominio.Servicos;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConversaoMonetaria.Api.Controllers;
@@ -36,10 +30,6 @@ public class ConversaoMonetariaController : ApiControllerBase
     [Route("Converter")]
     public IActionResult Converter(string codigoMoedaDe, string codigoMoedaPara, decimal valor)
     {
-        _conversaoMonetariaService.AdicionarCotacao("BR", 5.34m);
-        _conversaoMonetariaService.AdicionarCotacao("DL", 1m);
-        _conversaoMonetariaService.AdicionarCotacao("LB", 1.20m);
         return HandleCommand(_conversaoMonetariaService.Converter(codigoMoedaDe, codigoMoedaPara, valor));
     }
-
 }

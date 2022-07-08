@@ -29,7 +29,7 @@ public class Moeda : Entidade
     public string Codigo { get; set; }
 
     /// <summary>
-    ///     Cotacao da moeda em Dolar
+    ///     Cotacao da moeda em Real
     /// </summary>
     public decimal Cotacao { get; set; }
 

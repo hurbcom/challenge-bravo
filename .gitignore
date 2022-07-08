@@ -380,3 +380,9 @@ e2e/*.map
 
 # End of https://www.gitignore.io/api/angular
 src/1 - Apresentacao/logs/
+
+src/1 - Apresentacao/ConversaoMonetaria.Api/ConversaoMonetariaDB.db
+
+src/1 - Apresentacao/ConversaoMonetaria.Api/ConversaoMonetariaDB.db-shm
+
+src/1 - Apresentacao/ConversaoMonetaria.Api/ConversaoMonetariaDB.db-wal

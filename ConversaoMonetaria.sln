@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.1 - Testes de Unidade", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMonetaria.Dominio.Tests", "src\5 - Testes\ConversaoMonetaria.Dominio.Tests\ConversaoMonetaria.Dominio.Tests.csproj", "{9F550686-23C6-4E8B-8AE6-0EFC6225A70E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversaoMoneraria.AntiCorruption", "src\4 - Infra\ConversaoMoneraria.AntiCorruption\ConversaoMoneraria.AntiCorruption.csproj", "{BC0B2BE2-5635-4D16-AAAB-8B8C4A5B99D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,7 @@ Global
 		{774F26C8-95AF-4BF6-9C6A-8688D7757777} = {7E5625ED-BD6F-4FA0-8D41-224D6ECC6600}
 		{2F5B3D9C-98ED-475A-8F44-D114AE1C79A6} = {E68E4793-D8CA-4FEC-AD08-113750780017}
 		{9F550686-23C6-4E8B-8AE6-0EFC6225A70E} = {7E5625ED-BD6F-4FA0-8D41-224D6ECC6600}
+		{BC0B2BE2-5635-4D16-AAAB-8B8C4A5B99D3} = {02B7B0B7-3B19-4D33-9358-C90A540A5D3B}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BD907BA1-A0D9-4334-8E6E-2DA2A60E6201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -97,5 +100,9 @@ Global
 		{9F550686-23C6-4E8B-8AE6-0EFC6225A70E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F550686-23C6-4E8B-8AE6-0EFC6225A70E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F550686-23C6-4E8B-8AE6-0EFC6225A70E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC0B2BE2-5635-4D16-AAAB-8B8C4A5B99D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC0B2BE2-5635-4D16-AAAB-8B8C4A5B99D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC0B2BE2-5635-4D16-AAAB-8B8C4A5B99D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC0B2BE2-5635-4D16-AAAB-8B8C4A5B99D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
