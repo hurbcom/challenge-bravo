@@ -11,6 +11,6 @@ export class CotacaoRetorno {
   moedaOrigem: Moeda;
   moedaDestino: Moeda;
   valorParaConversao: number;
-  valorCovertido: number;
+  valorConvertido: number;
   constructor() { }
 }
