@@ -13,6 +13,10 @@ module.exports = {
     createCurrency(req, res, next) {
         const { name, code, exchange_rate } = req.body;
 
+        if (!name || !code || !exchange_rate) {
+            return res.status(400).json({ error: "Missing parameters" });
+        }
+
         Currency.create(name, code, exchange_rate)
             .then(() =>
                 res
@@ -36,7 +40,7 @@ module.exports = {
     },
 
     async exchangeCurrencies(req, res, next) {
-        const { from, to, amount } = req.query;
+        const { from = "USD", to = "BRL", amount = 1 } = req.query;
 
         const fromCode = from.toUpperCase();
         const toCode = to.toUpperCase();

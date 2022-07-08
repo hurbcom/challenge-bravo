@@ -42,6 +42,8 @@
     This api uses two external API's to do the exchange between currencies(COINGATE and EXCHANGE RATE), because the first API's that I've chosen didn't work to exchange Ethereum, and for this reason I took another API to solve this problem, although, that
     another API didn't have a good precision to exchange the other currencies, due to this I've decided to use both.
 
+    Unfortunately I couldn't finish the Integration tests implementation, cause I had some problems with the mock function from jest.
+
     I've chosen some libs to use in this project, among them we can find:
 
     - JEST
