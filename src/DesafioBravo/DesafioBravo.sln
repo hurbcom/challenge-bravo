@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesafioBravo", "DesafioBravo\DesafioBravo.csproj", "{285BCCB8-61B2-4FEF-9F1F-5539AD553BCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesafioBravo.BackEnd", "DesafioBravo.BackEnd\DesafioBravo.BackEnd.csproj", "{285BCCB8-61B2-4FEF-9F1F-5539AD553BCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestesUnitarios", "TestesUnitarios\TestesUnitarios.csproj", "{E580F7F5-246A-4546-B224-9A1D710E46AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesafioBravo.TestesUnitarios", "DesafioBravo.TestesUnitarios\DesafioBravo.TestesUnitarios.csproj", "{E580F7F5-246A-4546-B224-9A1D710E46AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
