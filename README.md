@@ -1,82 +1,67 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# Desafio Bravo
+## _API de conversão monetária_
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+Para a criação dessa solução, utilizei .NET Core e banco de dados SQLite em um docker. 
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+## Fluxo da solução
 
-The API must convert between the following currencies:
+- Consumo da API [OpenExchangeRates] para importação das cotações de moedas.
+- Inserção dos dados das moedas na base de dados.
+- Solicitações feitas via interface por usuários no endPoint Cotacao.
+- Retorto das solicitações baseado no cálculo dos valores de cotação das moedas armazenados na base.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## Tecnologias
+- [.NET Core] - Utilizei .NET Core pela familiaridade com a linguagem.
+- [Entity Framework] - Utilizei Entity Framework para mapear o banco de dados em objetos para .NET.
+- [SQLite] - Utlizei SQLite para persistir novas moedas a API para otimizar o desenvolvimento e ter uma maior disponibilidade se comparado ao serviço externo.
+- [Angular]	- Utilizei Angular no Front-end por ter um pouco de familiaridade.
+- [Docker] - Utilizei Docker para dar suporte à OS Linux.
+- [XUnit] - Utilizei o XUnit para realizar testes unitários de integração.
 
-Other coins could be added as usage.
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+## Instalação
+### Docker
+`Obs:` Necessário instalação do [Docker Desktop]
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+Criar a imagem docker da pasta DesafioBravo.BackEnd
+```
+docker build -t desafiobravo:v1 .
+```
+Iniciar a imagem Docker
+```
+docker run -it --rm -p 8080:80 desafiobravo:v1
+```
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+### FrontEnd
+`Obs:` para testar o backend via interfase, é necessáio instalar o [NodeJS]
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Ir para o diretório do projeto principal da solução:
+```
+$ cd challenge-bravo\src\DesafioBravo\DesafioBravo.FrontEnd
+```
+Instalar as depências do projeto:
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+```
+npm install
+```
+Rodar o projeto para testes
+```
+npm run start
+```
+Acessar o endereço do FrontEnd
+```sh
+http://localhost:4200/
+```
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+## Possíveis falhas
+Não utiliza um sistema de autenticação, logo é possível que qualquer pessoa adicione ou remova uma moeda.
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
-
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
-
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
-
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
-
-## Requirements
-
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
-
-## Evaluation criteria
-
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
-
-## Doubts
-
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
-
-Godspeed! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+[OpenExchangeRates]: <https://openexchangerates.org>
+[.NET Core]: <https://docs.microsoft.com/pt-br/dotnet/core/introduction>
+[SQLite]: <https://sqlite.org/index.html>
+[Angular]: <https://angular.io/>
+[Docker]: <https://www.docker.com/>
+[Docker Desktop]: <https://www.docker.com/products/docker-desktop/>
+[Entity Framework]: <https://docs.microsoft.com/pt-br/ef/>
+[XUnit]: <https://xunit.net/> 
+[NodeJS]: <https://nodejs.org/en/>
