@@ -6,7 +6,7 @@ namespace ConversaoMonetaria.Aplicacao.Tests.Automapper;
 
 public class ViewModelToDomainMappingProfileTests
 {
-    private const string CategoriaTrait = "Categoria Application";
+    private const string CategoriaTrait = "Categoria aplicacao";
     private const string NomeCategoriaTrait = "ViewModelToDomainMappingProfile Testes";
     private static IMapper _mapper;
 

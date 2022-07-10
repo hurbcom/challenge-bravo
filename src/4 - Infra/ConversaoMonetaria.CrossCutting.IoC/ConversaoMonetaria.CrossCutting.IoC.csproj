@@ -5,14 +5,18 @@
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DebugType>none</DebugType>
+    </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\2 - Aplicacao\ConversaoMonetaria.Aplicacao\ConversaoMonetaria.Aplicacao.csproj"/>
-        <ProjectReference Include="..\ConversaoMoneraria.AntiCorruption\ConversaoMoneraria.AntiCorruption.csproj"/>
-        <ProjectReference Include="..\ConversaoMonetaria.Api.Data\ConversaoMonetaria.Data.csproj"/>
+        <ProjectReference Include="..\..\2 - Aplicacao\ConversaoMonetaria.Aplicacao\ConversaoMonetaria.Aplicacao.csproj" />
+        <ProjectReference Include="..\ConversaoMoneraria.AntiCorruption\ConversaoMoneraria.AntiCorruption.csproj" />
+        <ProjectReference Include="..\ConversaoMonetaria.Api.Data\ConversaoMonetaria.Data.csproj" />
     </ItemGroup>
 
 </Project>

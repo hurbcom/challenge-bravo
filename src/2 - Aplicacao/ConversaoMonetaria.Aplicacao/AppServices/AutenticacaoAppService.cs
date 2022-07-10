@@ -32,7 +32,7 @@ public class AutenticacaoAppService : IAutenticacaoAppService
 
         var resultadoAutenticacao = _autenticacaoRepositorio.Autenticar(autenticacao);
 
-        if (resultadoAutenticacao.EhFalha)
+        if (resultadoAutenticacao.EhFalha())
             return resultadoAutenticacao.Failure;
 
         var autenticacaoRespostaViewModel = _mapper.Map<AutenticacaoRespostaViewModel>(resultadoAutenticacao.Result);

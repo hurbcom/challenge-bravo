@@ -20,7 +20,7 @@ public class AutenticacaoValidador : AbstractValidator<Autenticacao>
             .WithMessage(Mensagens.Mensagens.Obrigatorio().Mensagem.FormatEx(ConstantesString.PropertyNameValidated))
             .WithErrorCode(Mensagens.Mensagens.Obrigatorio().CodigoMensagem.ToString())
             .MaximumLength(100)
-            .WithMessage(Mensagens.Mensagens.Tamanho().Mensagem.FormatEx(ConstantesString.PropertyNameValidated, 100))
-            .WithErrorCode(Mensagens.Mensagens.Tamanho().CodigoMensagem.ToString());
+            .WithMessage(Mensagens.Mensagens.TamanhoMaximo().Mensagem.FormatEx(ConstantesString.PropertyNameValidated, 100))
+            .WithErrorCode(Mensagens.Mensagens.TamanhoMaximo().CodigoMensagem.ToString());
     }
 }

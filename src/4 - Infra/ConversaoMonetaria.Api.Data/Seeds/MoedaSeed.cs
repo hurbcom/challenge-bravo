@@ -87,6 +87,17 @@ public static class MoedaSeed
                 Status = EStatusMoeda.Ativa,
                 DataAtualizacao = null,
                 DataCadastro = DateTime.Now
+            },
+
+            new()
+            {
+                Id = 8,
+                Codigo = "ETH",
+                Nome = "Ethereum",
+                Cotacao = 6.25515m,
+                Status = EStatusMoeda.Ativa,
+                DataAtualizacao = null,
+                DataCadastro = DateTime.Now
             }
         };
 

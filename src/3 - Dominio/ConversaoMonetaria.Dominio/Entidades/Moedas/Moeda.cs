@@ -27,6 +27,7 @@ public class Moeda : Entidade
     ///     Codigo da moeda
     /// </summary>
     public string Codigo { get; set; }
+    public string CodigoAlias => "Código";
 
     /// <summary>
     ///     Cotacao da moeda em Real

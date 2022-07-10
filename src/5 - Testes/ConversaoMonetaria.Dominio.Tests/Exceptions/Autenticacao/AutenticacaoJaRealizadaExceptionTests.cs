@@ -6,7 +6,7 @@ namespace ConversaoMonetaria.Dominio.Tests.Exceptions.Autenticacao;
 
 public class AutenticacaoJaRealizadaExceptionTests
 {
-    private const string CategoriaTrait = "Categoria Domain";
+    private const string CategoriaTrait = "Categoria dominio";
     private const string NomeCategoriaTrait = "Exceptions Testes";
 
     [Fact]

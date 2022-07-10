@@ -31,7 +31,7 @@ public class ApiControllerBase : ControllerBase
     public IActionResult HandleCommand<TFalha, TSucesso>(Retorno<TFalha, TSucesso> Retorno)
         where TFalha : Exception
     {
-        return Retorno.EhFalha ? HandleFalha(Retorno.Failure) : Ok(Retorno.Result);
+        return Retorno.EhFalha() ? HandleFalha(Retorno.Failure) : Ok(Retorno.Result);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public class ApiControllerBase : ControllerBase
     public IActionResult HandleCommandCreated<TFalha, TSucesso>(Retorno<TFalha, TSucesso> Retorno)
         where TFalha : Exception
     {
-        return Retorno.EhFalha ? HandleFalha(Retorno.Failure) : Created(string.Empty, Retorno.Result);
+        return Retorno.EhFalha() ? HandleFalha(Retorno.Failure) : Created(string.Empty, Retorno.Result);
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public class ApiControllerBase : ControllerBase
     public IActionResult HandleCommandNoContent<TFalha, TSucesso>(Retorno<TFalha, TSucesso> Retorno)
         where TFalha : Exception
     {
-        return Retorno.EhFalha ? HandleFalha(Retorno.Failure) : NoContent();
+        return Retorno.EhFalha() ? HandleFalha(Retorno.Failure) : NoContent();
     }
 
     /// <summary>

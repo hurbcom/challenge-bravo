@@ -5,4 +5,5 @@ namespace ConversaoMonetaria.Dominio.Interfaces.Repositorio;
 
 public interface IMoedaRepositorio : IGravacao<Moeda>, ILeitura<Moeda>
 {
+    bool ExisteMoedaComCodigo(string codigo);
 }

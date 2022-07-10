@@ -9,7 +9,7 @@ namespace ConversaoMonetaria.Api.Tests.Controllers;
 
 public class AutenticacaoControllerTests
 {
-    private const string CategoriaTrait = "Categoria Distributed";
+    private const string CategoriaTrait = "Categoria Aperesentação";
     private const string NomeCategoriaTrait = "AutenticacaoController Api Testes";
 
     [Fact]

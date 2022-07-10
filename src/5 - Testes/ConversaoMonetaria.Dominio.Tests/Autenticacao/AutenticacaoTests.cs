@@ -5,7 +5,7 @@ namespace ConversaoMonetaria.Dominio.Tests.Autenticacao;
 
 public class AutenticacaoTests
 {
-    private const string CategoriaTrait = "Categoria Domain";
+    private const string CategoriaTrait = "Categoria dominio";
     private const string NomeCategoriaTrait = "Autenticacao Testes";
     private readonly AutenticacaoTestsFixture _autenticacaoTestsFixture;
 

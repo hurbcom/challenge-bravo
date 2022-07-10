@@ -1,4 +1,7 @@
 ﻿using ConversaoMonetaria.Aplicacao.ViewModels.Base;
+using ConversaoMonetaria.Dominio.Core.Constantes;
+using ConversaoMonetaria.Dominio.Core.Utils;
+using ConversaoMonetaria.Dominio.Mensagens;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -28,5 +31,25 @@ public class MoedaRequisicaoViewModel : IViewModel
 
     public class MoedaRequisicaoViewModelValidador : AbstractValidator<MoedaRequisicaoViewModel>
     {
+        public MoedaRequisicaoViewModelValidador()
+        {
+            RuleFor(p => p.Codigo)
+                .NotEmpty()
+                .WithMessage(
+                    Mensagens.Obrigatorio().Mensagem.FormatEx(ConstantesString.PropertyNameValidated))
+                .WithErrorCode(Mensagens.Obrigatorio().CodigoMensagem.ToString());
+
+
+        RuleFor(p => p.Nome)
+            .NotEmpty()
+            .WithMessage(Mensagens.Obrigatorio().Mensagem.FormatEx(ConstantesString.PropertyNameValidated))
+            .WithErrorCode(Mensagens.Obrigatorio().CodigoMensagem.ToString());
+
+        RuleFor(p => p.Cotacao)
+            .NotEmpty()
+            .WithMessage(Mensagens.Obrigatorio().Mensagem.FormatEx(ConstantesString.PropertyNameValidated))
+            .WithErrorCode(Mensagens.Obrigatorio().CodigoMensagem.ToString());
+
+        }
     }
 }

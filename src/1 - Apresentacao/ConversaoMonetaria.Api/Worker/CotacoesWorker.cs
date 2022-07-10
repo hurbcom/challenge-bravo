@@ -36,12 +36,12 @@ public class CotacoesWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
             try
             {
-                //Aguarda 30 segundos
-                await Task.Delay(30000, stoppingToken);
+                //Aguarda 10 segundos
+                await Task.Delay(10000, stoppingToken);
 
                 var retorno = await _awesomeApiAppService.AtualizarCotacoes();
 
-                if (retorno.EhFalha)
+                if (retorno.EhFalha())
                 {
                     var falhas = FalhaHandle.Handle(retorno.Failure);
                     falhas.Item2.ForEach(p => _logger.LogInformation("{FalhasItem2} - {Obj}", falhas.Item2, p));

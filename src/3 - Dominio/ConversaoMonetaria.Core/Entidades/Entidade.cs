@@ -12,11 +12,6 @@ public class Entidade
     public DateTime DataCadastro { get; set; }
     public DateTime? DataAtualizacao { get; set; }
 
-    public virtual bool EhValido()
-    {
-        throw new NotImplementedException();
-    }
-
     public override bool Equals(object obj)
     {
         var compareTo = obj as Entidade;

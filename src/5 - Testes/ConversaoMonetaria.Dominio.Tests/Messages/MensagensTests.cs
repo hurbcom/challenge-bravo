@@ -5,7 +5,7 @@ namespace ConversaoMonetaria.Dominio.Tests.Messages;
 
 public class MensagensTests
 {
-    private const string CategoriaTrait = "Categoria Domain";
+    private const string CategoriaTrait = "Categoria dominio";
     private const string NomeCategoriaTrait = "Mensagens Testes";
 
     [Fact]
@@ -17,6 +17,6 @@ public class MensagensTests
 
         // Assert
         resultado.Should().NotBeNull();
-        resultado.CodigoMensagem.Should().Be(304);
+        resultado.CodigoMensagem.Should().Be(112);
     }
 }

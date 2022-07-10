@@ -6,7 +6,7 @@ namespace ConversaoMonetaria.Dominio.Tests.Autenticacao;
 
 public class ExpiracaoAutenticacaoTests
 {
-    private const string CategoriaTrait = "Categoria Domain";
+    private const string CategoriaTrait = "Categoria Domnio";
     private const string NomeCategoriaTrait = "Autenticacao Testes";
 
     [Fact]

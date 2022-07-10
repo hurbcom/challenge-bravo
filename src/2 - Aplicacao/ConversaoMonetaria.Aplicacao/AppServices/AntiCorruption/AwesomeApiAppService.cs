@@ -34,7 +34,7 @@ public class AwesomeApiAppService : IAwesomeApiAppService
 
         var resultadoConsultaCotacoes = await _awesomeApiService.BuscarCotacoes();
 
-        if (resultadoConsultaCotacoes.EhFalha)
+        if (resultadoConsultaCotacoes.EhFalha())
         {
             foreach (var moeda in moedas)
                 await AtualizarCotacaoDeUmaMoeda(moeda);
@@ -51,8 +51,12 @@ public class AwesomeApiAppService : IAwesomeApiAppService
     private async Task AtualizarCotacaoDeUmaMoeda(Moeda moeda, Dictionary<string, AwesomeRetorno> cotacoes = null)
     {
         var cotacaoAtual = moeda.Cotacao;
+
+        // Adicionado o (* 1000) pois a API está retornando o valor do BTC errado.
         if (cotacoes is not null && cotacoes.ContainsKey(moeda.Codigo))
-            cotacaoAtual = Convert.ToDecimal(cotacoes[moeda.Codigo].Ask, new CultureInfo("en-US"));
+            cotacaoAtual = moeda.Codigo.Equals("BTC") || moeda.Codigo.Equals("ETH")
+                ? Convert.ToDecimal(cotacoes[moeda.Codigo].Ask, new CultureInfo("en-US")) * 1000
+                : Convert.ToDecimal(cotacoes[moeda.Codigo].Ask, new CultureInfo("en-US"));
 
         _conversaoMonetariaService.AdicionarCotacao(moeda.Codigo, cotacaoAtual);
 

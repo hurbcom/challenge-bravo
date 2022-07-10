@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ConversaoMonetaria.Aplicacao.Interfaces;
 using ConversaoMonetaria.Aplicacao.ViewModels.Moeda;
+using ConversaoMonetaria.Dominio.Core.Constantes;
 using ConversaoMonetaria.Dominio.Core.Exceptions;
 using ConversaoMonetaria.Dominio.Core.Retornos;
 using ConversaoMonetaria.Dominio.Core.Utils;
@@ -59,6 +60,10 @@ public class MoedaAppService : IMoedaAppService
             return new FormatoInvalidoException(resultadovalidacao.Errors.FirstOrDefault()?.ErrorCode.ToInt(),
                 resultadovalidacao.Errors.FirstOrDefault()?.ErrorMessage);
 
+        if (_moedaRepositorio.ExisteMoedaComCodigo(moeda.Codigo))
+            return new FormatoInvalidoException(Dominio.Mensagens.Mensagens.NaoDevExistir().CodigoMensagem,
+                Dominio.Mensagens.Mensagens.NaoDevExistir().Mensagem.FormatEx(moeda.CodigoAlias));
+
         await _moedaRepositorio.Salvar(moeda);
 
         return _mapper.Map<MoedaRespostaViewModel>(moeda);
@@ -73,7 +78,6 @@ public class MoedaAppService : IMoedaAppService
             return new FormatoInvalidoException(validacaoRequisicao.Errors.FirstOrDefault()?.ErrorCode.ToInt(),
                 validacaoRequisicao.Errors.FirstOrDefault()?.ErrorMessage);
 
-        //var moedaNova = _mapper.Map<Moeda>(entity);
         var moeda = _moedaRepositorio.Obter(id).FirstOrDefault();
 
         if (moeda is null || !moeda.EhAtiva())
@@ -85,6 +89,10 @@ public class MoedaAppService : IMoedaAppService
         if (!resultadoValidacao.IsValid)
             return new FormatoInvalidoException(resultadoValidacao.Errors.FirstOrDefault()?.ErrorCode.ToInt(),
                 resultadoValidacao.Errors.FirstOrDefault()?.ErrorMessage);
+
+        if (_moedaRepositorio.ExisteMoedaComCodigo(moeda.Codigo))
+            return new FormatoInvalidoException(Dominio.Mensagens.Mensagens.NaoDevExistir().CodigoMensagem,
+                Dominio.Mensagens.Mensagens.NaoDevExistir().Mensagem.FormatEx(ConstantesString.PropertyNameValidated));
 
         await _moedaRepositorio.Atualizar(moeda);
 
