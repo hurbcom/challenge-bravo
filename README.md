@@ -29,4 +29,10 @@ A API consiste em três seções:
 Toda documentação foi adicionada via [swagger] em `/swagger/index.html`,
 por padrão execuratá no link: `https://localhost:5001/swagger/index.html`
 
+## Melhorias Futuras
+- Adicioanar controle de usuários para geração de tokens para operações das moedas.
+- Alterar retorno padrão para retornar lista de criticas.
+- Aumentar a cobertura de testes, adicionando testes e integração e e2e também.
+- Adicionar tabela de historico de cotações para utilizar para análise de variações no furuto.
+
 ## Execução
