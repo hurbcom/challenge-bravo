@@ -5,7 +5,7 @@
     Foi utilizado o Real (BRL) como moeda de lastro pois a API pública consumida [AwesomeApi] também o utilizao.
 
 ## Aplicação inclui
-    - API REST - Feito em [.NET 6.0], contendo autenticação JWT Bearer, método para obtenção do token, conversão dos valores e operações CRUD de moedas.
+    - API REST - Feito em [.NET 6.0], contendo autenticação JWT Bearer, método para obtenção do token, conversão dos valores e operações CRUD de moedas, o endpoint para conversão de valores não necessita de autenticação (Bearer token).
     - Serviço em de segundo plano (Worker) - Feito em [.NET 6.0]. Com um ciclo de 10 segundos executa a rotina de alimentação de cotações reais na base de dados e alimentando Classe singleton responsavel para fazer a conversão em mémoria vizando a agilidade de resposta para o metodo de conversão de valores. A API do AwesomeApi (https://docs.awesomeapi.com.br/api-de-moedas) foi utilizada para consumir essa informação.
     - Base de dados - Foi utilizado o sistema de banco de dados [SQLite] junto ao [EF6.0] para persistência dos dados, primeiramenta estava sendo desenvolvida com banco [Postgre] mas pensando em simplificar a execução foi trocado para [SQLite].
     - Foram desenvolvidos testes unitários utilizando [Xnuit].
@@ -36,3 +36,13 @@ por padrão execuratá no link: `https://localhost:5001/swagger/index.html`
 - Adicionar tabela de historico de cotações para utilizar para análise de variações no furuto.
 
 ## Execução
+
+Para execução basta abrir o arquivo `ConversaoMonetaria.sln` com a IDE escolhida, utilizei o Rider, e executar. A criação do banco e execução do migration será feita automáticamente.
+Acesse o link `https://localhost:5001/swagger/index.html` para obter a documentação.
+
+## Testes
+Foram executados testes de cargas com `Jmeter`, obtendo resultados de certa de 17 mil requisições por segundo.
+
+<p align="center">
+  <img src="teste_carga.jpg" alt="testedecarga" />
+</p>
