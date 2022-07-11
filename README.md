@@ -44,5 +44,5 @@ Acesse o link `https://localhost:5001/swagger/index.html` para obter a documenta
 Foram executados testes de cargas com `Jmeter`, obtendo resultados de certa de 17 mil requisições por segundo.
 
 <p align="center">
-  <img src="teste_carga.jpg" alt="testedecarga" />
+  <img src="teste_carga.png" alt="testedecarga" />
 </p>
