@@ -30,7 +30,7 @@ public class MoedasController : ApiControllerBase
     [ProducesResponseType(typeof(MoedaListarRespostaViewModel), 200)]
     [ProducesResponseType(typeof(PayloadException), 400)]
     [ProducesResponseType(typeof(UnauthorizedException), 401)]
-    [Route("Moedas")]
+    [Route("moedas")]
     public async Task<IActionResult> Listar()
     {
         return HandleCommand(await _moedaAppService.Listar());
@@ -47,7 +47,7 @@ public class MoedasController : ApiControllerBase
     [ProducesResponseType(typeof(PayloadException), 400)]
     [ProducesResponseType(typeof(UnauthorizedException), 401)]
     [ProducesResponseType(typeof(NotFoundException), 404)]
-    [Route("Moedas/{idMoeda}")]
+    [Route("moedas/{idMoeda}")]
     public async Task<IActionResult> Buscar([FromRoute] long idMoeda)
     {
         return HandleCommand(await _moedaAppService.Obter(idMoeda));
@@ -64,7 +64,7 @@ public class MoedasController : ApiControllerBase
     [ProducesResponseType(typeof(PayloadException), 400)]
     [ProducesResponseType(typeof(UnauthorizedException), 401)]
     [ProducesResponseType(typeof(NotFoundException), 404)]
-    [Route("Moedas/{idMoeda}")]
+    [Route("moedas/{idMoeda}")]
     public async Task<IActionResult> Atualizar([FromRoute] long idMoeda,
         [FromBody] MoedaRequisicaoViewModel moedaRequisicao)
     {
@@ -81,7 +81,7 @@ public class MoedasController : ApiControllerBase
     [ProducesResponseType(typeof(PayloadException), 400)]
     [ProducesResponseType(typeof(UnauthorizedException), 401)]
     [ProducesResponseType(typeof(NotFoundException), 404)]
-    [Route("Moedas/{idMoeda}")]
+    [Route("moedas/{idMoeda}")]
     public async Task<IActionResult> Deletar([FromRoute] long idMoeda)
     {
         return HandleCommandNoContent(await _moedaAppService.Deletar(idMoeda));
@@ -98,7 +98,7 @@ public class MoedasController : ApiControllerBase
     [ProducesResponseType(typeof(PayloadException), 400)]
     [ProducesResponseType(typeof(UnauthorizedException), 401)]
     [ProducesResponseType(typeof(NotFoundException), 404)]
-    [Route("Moedas")]
+    [Route("moedas")]
     public async Task<IActionResult> Salvar([FromBody] MoedaRequisicaoViewModel moedaRequisicao)
     {
         return HandleCommandCreated(await _moedaAppService.Salvar(moedaRequisicao));

@@ -19,15 +19,17 @@ public class ConversaoMonetariaController : ApiControllerBase
     }
 
     /// <summary>
-    ///     Médoto responsável pela obter uma ConversaoMonetaria
+    ///     Médoto responsável por converter valores entre moedas
     /// </summary>
-    /// <param name="idConversaoMonetaria">Id da ConversaoMonetaria no qual deseja obter</param>
-    /// <returns>Modelo com os dados da ConversaoMonetaria</returns>
+    /// <param name="codigoMoedaDe">Codigo da moeda origem</param>
+    /// <param name="codigoMoedaPara">Codigo da moeda destino</param>
+    /// <param name="valor">Valor a ser converitdo</param>
+    /// <returns>Valor convertido para a moeda solicitada</returns>
     [HttpGet]
     [ProducesResponseType(typeof(PayloadException), 400)]
     [ProducesResponseType(typeof(UnauthorizedException), 401)]
     [ProducesResponseType(typeof(NotFoundException), 404)]
-    [Route("Converter")]
+    [Route("converter")]
     public IActionResult Converter(string codigoMoedaDe, string codigoMoedaPara, decimal valor)
     {
         return HandleCommand(_conversaoMonetariaService.Converter(codigoMoedaDe, codigoMoedaPara, valor));

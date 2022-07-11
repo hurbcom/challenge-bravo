@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <DocumentationFile></DocumentationFile>
+        <DocumentationFile>bin\Debug\ConversaoMonetaria.Api.xml</DocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
