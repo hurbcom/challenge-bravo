@@ -73,7 +73,7 @@ func TestCache(t *testing.T) {
 					i := a[2].(int)
 
 					if !ok {
-						return fmt.Errorf("keyy %d not found", i)
+						return fmt.Errorf("key %d not found", i)
 					}
 
 					if v != i {
