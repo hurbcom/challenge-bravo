@@ -1,0 +1,338 @@
+definitions:
+  Convertion:
+    properties:
+      amount:
+        type: string
+      from:
+        type: string
+      result:
+        type: string
+      to:
+        type: string
+    type: object
+  Error:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      raw_error:
+        type: string
+    type: object
+  Information:
+    properties:
+      api_version:
+        type: string
+    type: object
+  monetary.Currency:
+    properties:
+      code:
+        description: Code is an unique currency code. The code must consist of three
+          alphabetical (A-Z) characters only.
+        type: string
+      decimal_splitter:
+        description: |-
+          DecimalSplitter is the separator used to separate the decimal part from the integer part.
+          Usually a comma or a dot.
+        type: string
+      fixed_exchange_rate_decimal_part:
+        description: |-
+          FixedExchangeRateDecimalPart will only be present in FICTITIOUS currencies.
+          It is used to convert a FICTITIOUS currency into a FIAT or a CRYPTO currency.
+        type: integer
+      fixed_exchange_rate_int_part:
+        description: |-
+          FixedExchangeRateIntPart will only be present in FICTITIOUS currencies.
+          It is used to convert a FICTITIOUS currency into a FIAT or a CRYPTO currency.
+        type: integer
+      max_units:
+        description: MaxUnits is the maximum amount of decimal places this currency
+          can have.
+        type: integer
+      standard:
+        description: Standard represents the standard type of this currency.
+        type: string
+      thousands_splitter:
+        description: |-
+          ThousandsSplitter is the separator used to separate the thousands values.
+          Usually a comma or a dot.
+        type: string
+    type: object
+  "null":
+    type: object
+  swaggomodels.APIFailResponseMock:
+    properties:
+      error:
+        $ref: '#/definitions/Error'
+      information:
+        $ref: '#/definitions/Information'
+    type: object
+  swaggomodels.APIValidResponseMock:
+    properties:
+      information:
+        $ref: '#/definitions/Information'
+      response:
+        type: any
+    type: object
+info:
+  contact: {}
+  description: 'This is the documentation for Pedro Pessoa''s solution to HURB''s
+    challenge bravo.<br><br><br>Currency represents a monetary currency.<br>It can
+    be of 3 types (standards): **FIAT**, **CRYPTO** and **FICTITIOUS**.<br><br>*FICTITIOUS*
+    currencies will always be attached to USD. The reason is because their value can
+    not be measured.<br>To convert a *FICTITIOUS* currency value to any other currency,
+    it will first be converted to it''s value in USD, and then converted to the wanted
+    value.<br><br>For example: imagine a currency named HUB.<br>And say it''s *FixedExchangeRateIntPart*
+    would be *12* and the *FixedExchangeDecimalIntPart* would be *34*.<br>Is this
+    case, 1 USD would buy 12,34 HUBs.<br><br><br><br>**CURRENCY DATA**:<br><br>**Code**
+    is an unique currency code. The code must consist of three alphabetical (A-Z)
+    characters only.<br>**MaxUnits** is the maximum amount of decimal places this
+    currency can have.<br>**ThousandsSplitter** is the separator used to separate
+    the thousands values. Usually a comma or a dot.<br>**DecimalSplitter** is the
+    separator used to separate the decimal part from the integer part.  Usually a
+    comma or a dot.<br>**FixedExchangeRateIntPart** will only be present in FICTITIOUS
+    currencies.<br>**FixedExchangeRateDecimalPart** will only be present in FICTITIOUS
+    currencies.<br>**Standard** represents the standard type of this currency.'
+  title: Challenge Bravo
+  version: 0.0.1
+paths:
+  /api/v0/currencies:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new currency.
+      parameters:
+      - description: payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/monetary.Currency'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIValidResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/monetary.Currency'
+              type: object
+        "400":
+          description: bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+        "500":
+          description: internal server error
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+      summary: Create Currency
+  /api/v0/currencies/{currency_code}:
+    delete:
+      description: Deletes a currency
+      parameters:
+      - description: Currency Code
+        in: path
+        name: currency_code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIValidResponseMock'
+            - properties:
+                response:
+                  type: string
+              type: object
+        "400":
+          description: bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+        "500":
+          description: internal server error
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+      summary: Delete Currency
+    get:
+      description: |-
+        Reads a currency
+        This endpoint only returns currencies that are present in the database.
+        If you try to search for an existing currency (GBP, for example), but it is now in the database, this endpoint will return a 404.
+        In order to add a currency, please check out the POST method to the currencies endpoint.
+      parameters:
+      - description: Currency Code
+        in: path
+        name: currency_code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIValidResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/monetary.Currency'
+              type: object
+        "400":
+          description: bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+        "500":
+          description: internal server error
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+      summary: Read Currency
+    patch:
+      consumes:
+      - application/json
+      description: Updates a currency
+      parameters:
+      - description: payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/monetary.Currency'
+      - description: Currency Code
+        in: path
+        name: currency_code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIValidResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/monetary.Currency'
+              type: object
+        "400":
+          description: bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+        "500":
+          description: internal server error
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+      summary: Update Currency
+  /api/v0/currencies/convert:
+    get:
+      description: Converts between two currencies.
+      parameters:
+      - description: base currency to be converted from
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: target currency to be converted to
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: amount of money to convert
+        in: query
+        name: amount
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIValidResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/Convertion'
+              type: object
+        "400":
+          description: bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+        "500":
+          description: internal server error
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIFailResponseMock'
+            - properties:
+                response:
+                  $ref: '#/definitions/null'
+              type: object
+      summary: Convert
+  /api/v0/status:
+    get:
+      description: Will return with the API status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swaggomodels.APIValidResponseMock'
+            - properties:
+                response:
+                  type: string
+              type: object
+      summary: Status
+swagger: "2.0"

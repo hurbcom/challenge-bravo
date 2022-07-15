@@ -1,0 +1,536 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is the documentation for Pedro Pessoa's solution to HURB's challenge bravo.\u003cbr\u003e\u003cbr\u003e\u003cbr\u003eCurrency represents a monetary currency.\u003cbr\u003eIt can be of 3 types (standards): **FIAT**, **CRYPTO** and **FICTITIOUS**.\u003cbr\u003e\u003cbr\u003e*FICTITIOUS* currencies will always be attached to USD. The reason is because their value can not be measured.\u003cbr\u003eTo convert a *FICTITIOUS* currency value to any other currency, it will first be converted to it's value in USD, and then converted to the wanted value.\u003cbr\u003e\u003cbr\u003eFor example: imagine a currency named HUB.\u003cbr\u003eAnd say it's *FixedExchangeRateIntPart* would be *12* and the *FixedExchangeDecimalIntPart* would be *34*.\u003cbr\u003eIs this case, 1 USD would buy 12,34 HUBs.\u003cbr\u003e\u003cbr\u003e\u003cbr\u003e\u003cbr\u003e**CURRENCY DATA**:\u003cbr\u003e\u003cbr\u003e**Code** is an unique currency code. The code must consist of three alphabetical (A-Z) characters only.\u003cbr\u003e**MaxUnits** is the maximum amount of decimal places this currency can have.\u003cbr\u003e**ThousandsSplitter** is the separator used to separate the thousands values. Usually a comma or a dot.\u003cbr\u003e**DecimalSplitter** is the separator used to separate the decimal part from the integer part.  Usually a comma or a dot.\u003cbr\u003e**FixedExchangeRateIntPart** will only be present in FICTITIOUS currencies.\u003cbr\u003e**FixedExchangeRateDecimalPart** will only be present in FICTITIOUS currencies.\u003cbr\u003e**Standard** represents the standard type of this currency.",
+        "title": "Challenge Bravo",
+        "contact": {},
+        "version": "0.0.1"
+    },
+    "paths": {
+        "/api/v0/currencies": {
+            "post": {
+                "description": "Creates a new currency.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create Currency",
+                "parameters": [
+                    {
+                        "description": "payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/monetary.Currency"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIValidResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/monetary.Currency"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v0/currencies/convert": {
+            "get": {
+                "description": "Converts between two currencies.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Convert",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "base currency to be converted from",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "target currency to be converted to",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "amount of money to convert",
+                        "name": "amount",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIValidResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/Convertion"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v0/currencies/{currency_code}": {
+            "get": {
+                "description": "Reads a currency\nThis endpoint only returns currencies that are present in the database.\nIf you try to search for an existing currency (GBP, for example), but it is now in the database, this endpoint will return a 404.\nIn order to add a currency, please check out the POST method to the currencies endpoint.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Read Currency",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Currency Code",
+                        "name": "currency_code",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIValidResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/monetary.Currency"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a currency",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete Currency",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Currency Code",
+                        "name": "currency_code",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIValidResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Updates a currency",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update Currency",
+                "parameters": [
+                    {
+                        "description": "payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/monetary.Currency"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Currency Code",
+                        "name": "currency_code",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIValidResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/monetary.Currency"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIFailResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "$ref": "#/definitions/null"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v0/status": {
+            "get": {
+                "description": "Will return with the API status",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Status",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swaggomodels.APIValidResponseMock"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "response": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Convertion": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "result": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "raw_error": {
+                    "type": "string"
+                }
+            }
+        },
+        "Information": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                }
+            }
+        },
+        "monetary.Currency": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "Code is an unique currency code. The code must consist of three alphabetical (A-Z) characters only.",
+                    "type": "string"
+                },
+                "decimal_splitter": {
+                    "description": "DecimalSplitter is the separator used to separate the decimal part from the integer part.\nUsually a comma or a dot.",
+                    "type": "string"
+                },
+                "fixed_exchange_rate_decimal_part": {
+                    "description": "FixedExchangeRateDecimalPart will only be present in FICTITIOUS currencies.\nIt is used to convert a FICTITIOUS currency into a FIAT or a CRYPTO currency.",
+                    "type": "integer"
+                },
+                "fixed_exchange_rate_int_part": {
+                    "description": "FixedExchangeRateIntPart will only be present in FICTITIOUS currencies.\nIt is used to convert a FICTITIOUS currency into a FIAT or a CRYPTO currency.",
+                    "type": "integer"
+                },
+                "max_units": {
+                    "description": "MaxUnits is the maximum amount of decimal places this currency can have.",
+                    "type": "integer"
+                },
+                "standard": {
+                    "description": "Standard represents the standard type of this currency.",
+                    "type": "string"
+                },
+                "thousands_splitter": {
+                    "description": "ThousandsSplitter is the separator used to separate the thousands values.\nUsually a comma or a dot.",
+                    "type": "string"
+                }
+            }
+        },
+        "null": {
+            "type": "object"
+        },
+        "swaggomodels.APIFailResponseMock": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/Error"
+                },
+                "information": {
+                    "$ref": "#/definitions/Information"
+                }
+            }
+        },
+        "swaggomodels.APIValidResponseMock": {
+            "type": "object",
+            "properties": {
+                "information": {
+                    "$ref": "#/definitions/Information"
+                },
+                "response": {
+                    "type": "any"
+                }
+            }
+        }
+    }
+}
