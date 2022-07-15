@@ -19,9 +19,7 @@ import (
 
 // @title           Challenge Bravo
 // @version         0.0.1
-// @description     This is the documentation for Pedro Pessoa's solution to HURB's challenge bravo.
-
-// @host      localhost:8080
+// @Description     This is the documentation for Pedro Pessoa's solution to HURB's challenge bravo.<br><br><br>Currency represents a monetary currency.<br>It can be of 3 types (standards): **FIAT**, **CRYPTO** and **FICTITIOUS**.<br><br>*FICTITIOUS* currencies will always be attached to USD. The reason is because their value can not be measured.<br>To convert a *FICTITIOUS* currency value to any other currency, it will first be converted to it's value in USD, and then converted to the wanted value.<br><br>For example: imagine a currency named HUB.<br>And say it's *FixedExchangeRateIntPart* would be *12* and the *FixedExchangeDecimalIntPart* would be *34*.<br>Is this case, 1 USD would buy 12,34 HUBs.<br><br><br><br>**CURRENCY DATA**:<br><br>**Code** is an unique currency code. The code must consist of three alphabetical (A-Z) characters only.<br>**MaxUnits** is the maximum amount of decimal places this currency can have.<br>**ThousandsSplitter** is the separator used to separate the thousands values. Usually a comma or a dot.<br>**DecimalSplitter** is the separator used to separate the decimal part from the integer part.  Usually a comma or a dot.<br>**FixedExchangeRateIntPart** will only be present in FICTITIOUS currencies.<br>**FixedExchangeRateDecimalPart** will only be present in FICTITIOUS currencies.<br>**Standard** represents the standard type of this currency.
 
 func main() {
 	var (

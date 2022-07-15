@@ -1,12 +1,11 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is the documentation for Pedro Pessoa's solution to HURB's challenge bravo.",
+        "description": "This is the documentation for Pedro Pessoa's solution to HURB's challenge bravo.\u003cbr\u003e\u003cbr\u003e\u003cbr\u003eCurrency represents a monetary currency.\u003cbr\u003eIt can be of 3 types (standards): **FIAT**, **CRYPTO** and **FICTITIOUS**.\u003cbr\u003e\u003cbr\u003e*FICTITIOUS* currencies will always be attached to USD. The reason is because their value can not be measured.\u003cbr\u003eTo convert a *FICTITIOUS* currency value to any other currency, it will first be converted to it's value in USD, and then converted to the wanted value.\u003cbr\u003e\u003cbr\u003eFor example: imagine a currency named HUB.\u003cbr\u003eAnd say it's *FixedExchangeRateIntPart* would be *12* and the *FixedExchangeDecimalIntPart* would be *34*.\u003cbr\u003eIs this case, 1 USD would buy 12,34 HUBs.\u003cbr\u003e\u003cbr\u003e\u003cbr\u003e\u003cbr\u003e**CURRENCY DATA**:\u003cbr\u003e\u003cbr\u003e**Code** is an unique currency code. The code must consist of three alphabetical (A-Z) characters only.\u003cbr\u003e**MaxUnits** is the maximum amount of decimal places this currency can have.\u003cbr\u003e**ThousandsSplitter** is the separator used to separate the thousands values. Usually a comma or a dot.\u003cbr\u003e**DecimalSplitter** is the separator used to separate the decimal part from the integer part.  Usually a comma or a dot.\u003cbr\u003e**FixedExchangeRateIntPart** will only be present in FICTITIOUS currencies.\u003cbr\u003e**FixedExchangeRateDecimalPart** will only be present in FICTITIOUS currencies.\u003cbr\u003e**Standard** represents the standard type of this currency.",
         "title": "Challenge Bravo",
         "contact": {},
         "version": "0.0.1"
     },
-    "host": "localhost:8080",
     "paths": {
         "/api/v0/currencies": {
             "post": {
@@ -89,7 +88,7 @@
         },
         "/api/v0/currencies/convert": {
             "get": {
-                "description": "converts between two currencies",
+                "description": "Converts between two currencies.",
                 "produces": [
                     "application/json"
                 ],
@@ -177,7 +176,7 @@
         },
         "/api/v0/currencies/{currency_code}": {
             "get": {
-                "description": "Reads a currency",
+                "description": "Reads a currency\nThis endpoint only returns currencies that are present in the database.\nIf you try to search for an existing currency (GBP, for example), but it is now in the database, this endpoint will return a 404.\nIn order to add a currency, please check out the POST method to the currencies endpoint.",
                 "produces": [
                     "application/json"
                 ],
@@ -479,7 +478,7 @@
             "type": "object",
             "properties": {
                 "code": {
-                    "description": "Code is an unique currency code. It will always have 3 letters.",
+                    "description": "Code is an unique currency code. The code must consist of three alphabetical (A-Z) characters only.",
                     "type": "string"
                 },
                 "decimal_splitter": {
@@ -499,7 +498,7 @@
                     "type": "integer"
                 },
                 "standard": {
-                    "description": "Standard represents the standard type of this currency",
+                    "description": "Standard represents the standard type of this currency.",
                     "type": "string"
                 },
                 "thousands_splitter": {

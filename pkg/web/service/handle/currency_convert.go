@@ -18,7 +18,7 @@ import (
 
 // Convert returns a convertion between two currencies
 // @Summary      	Convert
-// @Description  	converts between two currencies
+// @Description  	Converts between two currencies.
 // @Produce      	json
 // @Param        	from   query  string  true  "base currency to be converted from"
 // @Param        	to   query  string  true  "target currency to be converted to"

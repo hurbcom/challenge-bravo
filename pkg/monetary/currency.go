@@ -10,7 +10,7 @@ import "unicode"
 // The reason is because their value can not be measured.
 // To convert a FICTITIOUS currency value to any other currency,
 // it will first be converted to it's value in USD,
-// and then convert to the wanted value.
+// and then converted to the wanted value.
 //
 // For example: imagine a currency named HUB.
 // And say it's FixedExchangeRateIntPart would be 12 and the FixedExchangeDecimalIntPart would be 34.
@@ -20,7 +20,7 @@ import "unicode"
 //
 //easyjson:json
 type Currency struct {
-	// Code is an unique currency code. It will always have 3 letters.
+	// Code is an unique currency code. The code must consist of three alphabetical (A-Z) characters only.
 	Code string `json:"code" db:"code"`
 
 	// MaxUnits is the maximum amount of decimal places this currency can have.
@@ -42,7 +42,7 @@ type Currency struct {
 	// It is used to convert a FICTITIOUS currency into a FIAT or a CRYPTO currency.
 	FixedExchangeRateDecimalPart *int64 `json:"fixed_exchange_rate_decimal_part" db:"fixed_exchange_rate_decimal_part"`
 
-	// Standard represents the standard type of this currency
+	// Standard represents the standard type of this currency.
 	Standard currencyStandard `json:"standard" db:"standard"`
 }
 

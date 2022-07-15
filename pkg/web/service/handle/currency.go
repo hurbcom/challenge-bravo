@@ -95,6 +95,9 @@ func CreateCurrency(db *sqlx.DB) func(http.ResponseWriter, *http.Request) {
 // ReadCurrency handles GET requests to the currency endpoint
 // @Summary      	Read Currency
 // @Description  	Reads a currency
+// @Description		This endpoint only returns currencies that are present in the database.
+// @Description		If you try to search for an existing currency (GBP, for example), but it is now in the database, this endpoint will return a 404.
+// @Description		In order to add a currency, please check out the POST method to the currencies endpoint.
 // @Produce      	json
 // @Param        	currency_code   path  string  true  "Currency Code"
 // @Success      	200  {object}  swaggomodels.APIValidResponseMock{response=monetary.Currency}

@@ -97,7 +97,7 @@ const docTemplate = `{
         },
         "/api/v0/currencies/convert": {
             "get": {
-                "description": "converts between two currencies",
+                "description": "Converts between two currencies.",
                 "produces": [
                     "application/json"
                 ],
@@ -185,7 +185,7 @@ const docTemplate = `{
         },
         "/api/v0/currencies/{currency_code}": {
             "get": {
-                "description": "Reads a currency",
+                "description": "Reads a currency\nThis endpoint only returns currencies that are present in the database.\nIf you try to search for an existing currency (GBP, for example), but it is now in the database, this endpoint will return a 404.\nIn order to add a currency, please check out the POST method to the currencies endpoint.",
                 "produces": [
                     "application/json"
                 ],
@@ -487,7 +487,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "description": "Code is an unique currency code. It will always have 3 letters.",
+                    "description": "Code is an unique currency code. The code must consist of three alphabetical (A-Z) characters only.",
                     "type": "string"
                 },
                 "decimal_splitter": {
@@ -507,7 +507,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "standard": {
-                    "description": "Standard represents the standard type of this currency",
+                    "description": "Standard represents the standard type of this currency.",
                     "type": "string"
                 },
                 "thousands_splitter": {
@@ -547,11 +547,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "0.0.1",
-	Host:             "localhost:8080",
+	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Challenge Bravo",
-	Description:      "This is the documentation for Pedro Pessoa's solution to HURB's challenge bravo.",
+	Description:      "This is the documentation for Pedro Pessoa's solution to HURB's challenge bravo.<br><br><br>Currency represents a monetary currency.<br>It can be of 3 types (standards): **FIAT**, **CRYPTO** and **FICTITIOUS**.<br><br>*FICTITIOUS* currencies will always be attached to USD. The reason is because their value can not be measured.<br>To convert a *FICTITIOUS* currency value to any other currency, it will first be converted to it's value in USD, and then converted to the wanted value.<br><br>For example: imagine a currency named HUB.<br>And say it's *FixedExchangeRateIntPart* would be *12* and the *FixedExchangeDecimalIntPart* would be *34*.<br>Is this case, 1 USD would buy 12,34 HUBs.<br><br><br><br>**CURRENCY DATA**:<br><br>**Code** is an unique currency code. The code must consist of three alphabetical (A-Z) characters only.<br>**MaxUnits** is the maximum amount of decimal places this currency can have.<br>**ThousandsSplitter** is the separator used to separate the thousands values. Usually a comma or a dot.<br>**DecimalSplitter** is the separator used to separate the decimal part from the integer part.  Usually a comma or a dot.<br>**FixedExchangeRateIntPart** will only be present in FICTITIOUS currencies.<br>**FixedExchangeRateDecimalPart** will only be present in FICTITIOUS currencies.<br>**Standard** represents the standard type of this currency.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
