@@ -1,82 +1,86 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
+# Challenge Bravo
 
-[[English](README.md) | [Português](README.pt.md)]
+Challenge Bravo é um code challenge da HURB. O objetivo é criar uma REST API capaz de converter moedas. A API deve utilizar valores reais nas conversões. Mas, ela também dever ser capaz de converter moedas fictícias.
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+## O que você precisa
+- Go 1.18+
+- PostgreSQL (ou docker + docker compose)
+- Uma [chave da abstract API](https://www.abstractapi.com/api/exchange-rate-api)
 
-A API precisa converter entre as seguintes moedas:
+## Informações adicionais
+Esse sistema tenta usar strings e ints para as moedas o máximo possível para não perder precisão, já que números de ponto flutuante não devem ser utilizados para operações aritméticas em dinheiro.<br>
+Com isso em mente, o endpoint `convert` retorna o resultado como uma string, ao invés de um número.<br>
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+Após o sistema estar rodando, você poderá visualizar a documentação para a API através de `http://localhost:PORT/docs`. (a porta padrão é 8080)<br>
 
-Outras moedas podem ser adicionadas conforme o uso.
+Como go não tem uma estrutura de projeto padrão, eu segui boas práticas da comunidade assim como as diretrizes do [effective go](https://go.dev/doc/effective_go), e também criei essa estrutura pensando em escalabilidade e manutenibilidade.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+## Endpoints:
+1. `/docs` - `GET` - documentação da API.
+2. `/api/v0/status` - `GET` - status da API.
+3. `/api/v0/currencies` - `POST` - Cria uma moeda.
+4. `/api/v0/currencies/{currency_code}` - `GET` - Retorna uma moeda.
+5. `/api/v0/currencies/{currency_code}` - `PATCH` - Atualiza uma moeda.
+6. `/api/v0/currencies/{currency_code}` - `DELETE` - Remove uma moeda.
+7. `/api/v0/currencies/convert` - `GET` - Converte um valor entre duas moedas.
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+## Como rodar
+### 1:
+Crie suas variáveis de ambiente. Ou, se preferir, adicione-as ao arquivo .env na pasta `./cmd/env`.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+### Com PostgreSQL puro
+### 2:
+Crie um novo banco usando os mesmos valores que você utilizou nas suas variáveis de ambiente e inicie o PostgreSQL.
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+### Com docker e docker compose
+Se você estiver usando docker, você deverá usar variáveis de ambiente, já que o docker compose não pegará as Informações do arquivo .env.
+### 2.1:
+Vá para a pasta `./docker` e rode o seguinte comando
+```sh
+docker-compose up
+```
 
-A API deve suportar conversão entre moedas fiduciárias, crypto e fictícias. Exemplo: BRL->HURB, HURB->ETH
+### 2.2:
+Depois rode
+```sh
+docker start postgresql_challenge_bravo
+```
+para iniciar o banco de dados.
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+### 3:
+Vá para a pasta `./cmd` e rode
+```sh
+go run . -envfile -execds
+```
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de Dungeons & Dragons sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+A flag `-envfile` é usada para iniciar o programa usando o arquivo .env. Omitindo-a, ao invés do arquivo, o sistema usará variáveis de ambiente.<br>
+A flag `-execds` irá executar o [schema padrão](https://github.com/Pedro-Pessoa/challenge-bravo/cmd/default_schema.go). É recomendável sempre passar essa flag, e é necessário passá-la a primeira vez que o sistema for iniciado, já que o banco será setado. As cinco moedas padrão (USD, BRL, EUR, BTC, ETH) também serão adicionadas ao banco.<br>
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+É isso. Agora você já pode usar a API. Para ver a documentação acesse: `http://localhost:PORT/docs`.
 
-Ref:
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+## Boilerplate
+Duas bibliotecas que geram boilerplate foram utilizadas: [easyjson](https://github.com/mailru/easyjson) e [swaggo](https://github.com/swaggo/swag).<br>
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+Easyjson está sendo usada para marshal e unmarshal a [struct currency](https://github.com/Pedro-Pessoa/challenge-bravo/pkg/monetary/currency.go). A razão por trás dessa decisão é para agilizar os HTTP requests, já que o pacote json da stdlib não é muito rápido. E essa API precisar ser capaz de aguentar 1000 requests por segundo. O único boilerplate criado por essa bibiloteca é o arquivo [monetary_easyjson.go](https://github.com/Pedro-Pessoa/challenge-bravo/pkg/monetary/monetary_easyjson.go).<br>
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Swaggo foi utilizado para criar a documentação da API. A razão por trás dessa decisão foi escalabilidade. Nós podemos adicionar quantos endpoints forem necessários e documentá-los facilmente apenas escrevendo comentários no código. Todo o boilerplate criado por essa biblioteca está na pasta [docs](https://github.com/Pedro-Pessoa/challenge-bravo/staticfiles/docs).
 
-## Requisitos
+## Contribuindo
+Para contribuir a esse projeto, você precisará instalar dois binários: [easyjson](https://github.com/mailru/easyjson) e [swaggo](https://github.com/swaggo/swag).<br>
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **main** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+Você irá encontrar instruções para instalá-los nos respectivos README's.<br>
 
-## Critério de avaliação
+OBS: esses passos não são necessários para rodar a API, apenas para desenvolve-lá.<br>
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Rode
+```sh
+easyjson .
+```
+na pasta `./pkg/monetary` se você fizer qualquer alteração na struct Currency.<br>
+Certifique-se de atualizar o schema do banco de dados também.<br><br>
 
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Para gerar a documentação, rode
+```sh
+swag init -o ../staticfiles/docs --parseDependency
+```
+dentro da pasta `./cmd`.
