@@ -24,17 +24,17 @@ func TestMakeRequest(t *testing.T) {
 		switch r.Header.Get("TestKind") {
 		case "reader-fail":
 			w.Header().Add("Content-Length", "1")
-			w.Write([]byte("larger than one"))
+			_, _ = w.Write([]byte("larger than one"))
 		case "not-ok":
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("not ok"))
+			_, _ = w.Write([]byte("not ok"))
 		case "wrong-body":
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte("wrong body"))
+			_, _ = w.Write([]byte("wrong body"))
 		case "valid":
 			w.WriteHeader(http.StatusOK)
 			byts, _ := json.Marshal(TestBody{Value: "valid"})
-			w.Write(byts)
+			_, _ = w.Write(byts)
 		}
 	})
 	s := httptest.NewServer(r)
