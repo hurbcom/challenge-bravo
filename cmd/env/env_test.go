@@ -2,9 +2,9 @@ package env
 
 import (
 	"embed"
-	"errors"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -23,53 +23,91 @@ func TestLoadForCoverage(t *testing.T) {
 
 func TestLoadFromFile(t *testing.T) {
 	assert := assert.New(t)
-	require := require.New(t)
 
 	for index, tc := range []struct {
-		fileName       string
-		expectedErrStr string
+		fileName    string
+		shouldError bool
 	}{
-		{"invalid @^~ file name", "open invalid @^~ file name: file does not exist"},
-		{"testdata/empty_env", "env file is empty"},
-		{"testdata/valid_env", ""},
+		{"invalid @^~ file name", true},
+		{"testdata/empty_env", true},
+		{"testdata/valid_env", false},
 	} {
 		_, err := loadFromFile(tc.fileName, TestData)
-		if tc.expectedErrStr != "" {
-			require.Error(err, fmt.Sprintf("failed at test index %d", err))
-
-			assert.Equal(err.Error(), tc.expectedErrStr, fmt.Sprintf("wrong error at test index %d\nwanted error: %s\nreceived error: %s", index, tc.expectedErrStr, err))
-			continue
+		if tc.shouldError {
+			assert.Error(err, fmt.Sprintf("error at index %d", index))
+		} else {
+			assert.NoError(err, fmt.Sprintf("error at index %d", index))
 		}
-
-		assert.NoError(err, fmt.Sprintf("didn't expect error at index %d", index))
-
 	}
 }
 
 func TestParseFile(t *testing.T) {
 	assert := assert.New(t)
-	require := require.New(t)
 
 	for index, tc := range []struct {
-		file          io.Reader
-		expectedData  Data
-		expectedError error
+		file        io.Reader
+		wantData    Data
+		shouldError bool
 	}{
-		{nil, Data{}, errors.New("passed file is nil")},
-		{strings.NewReader(""), Data{}, errors.New("env file is empty")},
-		{strings.NewReader("x=123"), Data{}, errors.New("unknown key (x) in env file")},
-		{strings.NewReader("postgres_host=      test\n\n\n\n"), Data{PQHost: "test"}, nil},
-		{strings.NewReader("//comment\npostgres_host=foo"), Data{PQHost: "foo"}, nil},
-		{strings.NewReader("test"), Data{}, errors.New("invalid line found in env file: test")},
-		{strings.NewReader("webserver_timeout=a"), Data{}, errors.New("it was not possible to parse the timeout duration, err: time: invalid duration \"a\"")},
-		{strings.NewReader("postgres_host=test\npostgres_user=user\npostgres_db=db\npostgres_password=123\n\nabstract_api_key=abc\nwebserver_timeout=30s\nwebserver_address=:80"), Data{PQHost: "test", PQUser: "user", PQDB: "db", PQPass: "123", AbstractAPIKey: "abc", WebserverTimeout: 30 * time.Second, WebserverAddress: ":80"}, nil},
+		{nil, Data{}, true},
+		{strings.NewReader(""), Data{}, true},
+		{strings.NewReader("x=123"), Data{}, true},
+		{strings.NewReader("postgres_host=      test\n\n\n\n"), Data{PQHost: "test"}, false},
+		{strings.NewReader("//comment\npostgres_host=foo"), Data{PQHost: "foo"}, false},
+		{strings.NewReader("test"), Data{}, true},
+		{strings.NewReader("webserver_timeout=a"), Data{}, true},
+		{strings.NewReader("postgres_host=test\npostgres_user=user\npostgres_db=db\npostgres_password=123\n\nabstract_api_key=abc\nwebserver_timeout=30s\nwebserver_address=:80"), Data{PQHost: "test", PQUser: "user", PQDB: "db", PQPass: "123", AbstractAPIKey: "abc", WebserverTimeout: 30 * time.Second, WebserverAddress: ":80"}, false},
 	} {
 		data, err := parseFile(tc.file)
-		if tc.expectedError != nil {
-			require.Error(err)
-			assert.EqualValues(tc.expectedError.Error(), err.Error(), fmt.Sprintf("error at index %d\nExpected error: %s\nReceived error:%s", index, tc.expectedError, err))
+		if tc.shouldError {
+			assert.Error(err, fmt.Sprintf("error at index %d", index))
+		} else {
+			assert.NoError(err, fmt.Sprintf("error at index %d", index))
 		}
 
-		assert.Equal(tc.expectedData, data, fmt.Sprintf("error at index %d\nExpected data: %#v\nReceived data:%#v", index, tc.expectedError, err))
+		assert.Equal(tc.wantData, data, fmt.Sprintf("error at index %d\nExpected data: %#v\nReceived data:%#v", index, tc.wantData, data))
+	}
+}
+
+func TestLoadFromEnvVars(t *testing.T) {
+	assert := assert.New(t)
+	require := require.New(t)
+
+	envVars := []string{"POSTGRES_HOST", "POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_DB",
+		"ABSTRACT_API_KEY",
+		"WEBSERVER_TIMEOUT", "WEBSERVER_ADDRESS"}
+
+	for index, tc := range []struct {
+		wantData    Data
+		shouldError bool
+		f           func() error
+	}{
+		{
+			Data{WebserverTimeout: 30 * time.Second}, false,
+			func() error {
+				return os.Setenv("WEBSERVER_TIMEOUT", "30s")
+			},
+		},
+		{
+			Data{}, true,
+			func() error {
+				return os.Setenv("WEBSERVER_TIMEOUT", "invalid duration")
+			},
+		},
+	} {
+		for _, env := range envVars {
+			require.Nil(os.Setenv(env, ""))
+		}
+
+		require.NoError(tc.f())
+
+		data, err := loadFromEnvVars()
+		if tc.shouldError {
+			assert.Error(err, fmt.Sprintf("error at index %d", index))
+		} else {
+			assert.NoError(err, fmt.Sprintf("error at index %d", index))
+		}
+
+		assert.Equal(tc.wantData, data, fmt.Sprintf("error at index %d\nExpected data: %#v\nReceived data:%#v", index, tc.wantData, data))
 	}
 }

@@ -39,7 +39,7 @@ func Load(envFile string) (Data, error) {
 		return loadFromFile(envFile, Env)
 	}
 
-	return loadFromEnvVars(), nil
+	return loadFromEnvVars()
 }
 
 func loadFromFile(envFileName string, fs embed.FS) (Data, error) {
@@ -115,13 +115,21 @@ func parseFile(file io.Reader) (Data, error) {
 	return data, nil
 }
 
-func loadFromEnvVars() Data {
+func loadFromEnvVars() (Data, error) {
+	dur, err := time.ParseDuration(os.Getenv("WEBSERVER_TIMEOUT"))
+	if err != nil {
+		return Data{}, err
+	}
+
 	return Data{
-		PQHost: os.Getenv("PQHost"),
-		PQUser: os.Getenv("PQUser"),
-		PQPass: os.Getenv("PQPass"),
-		PQDB:   os.Getenv("PQDB"),
+		PQHost: os.Getenv("POSTGRES_HOST"),
+		PQUser: os.Getenv("POSTGRES_USER"),
+		PQPass: os.Getenv("POSTGRES_PASSWORD"),
+		PQDB:   os.Getenv("POSTGRES_DB"),
 
 		AbstractAPIKey: os.Getenv("ABSTRACT_API_KEY"),
-	}
+
+		WebserverTimeout: dur,
+		WebserverAddress: os.Getenv("WEBSERVER_ADDRESS"),
+	}, nil
 }
