@@ -58,16 +58,16 @@ go run . -envfile -execds
 ```
 
 A flag `-envfile` é usada para iniciar o programa usando o arquivo .env. Omitindo-a, ao invés do arquivo, o sistema usará variáveis de ambiente.<br>
-A flag `-execds` irá executar o [schema padrão](https://github.com/Pedro-Pessoa/challenge-bravo/cmd/default_schema.go). É recomendável sempre passar essa flag, e é necessário passá-la a primeira vez que o sistema for iniciado, já que o banco será setado. As cinco moedas padrão (USD, BRL, EUR, BTC, ETH) também serão adicionadas ao banco.<br>
+A flag `-execds` irá executar o [schema padrão](https://github.com/Pedro-Pessoa/challenge-bravo/blob/main/cmd/default_schema.go). É recomendável sempre passar essa flag, e é necessário passá-la a primeira vez que o sistema for iniciado, já que o banco será setado. As cinco moedas padrão (USD, BRL, EUR, BTC, ETH) também serão adicionadas ao banco.<br>
 
 É isso. Agora você já pode usar a API. Para ver a documentação acesse: `http://localhost:PORT/docs`.
 
 ## Boilerplate
 Duas bibliotecas que geram boilerplate foram utilizadas: [easyjson](https://github.com/mailru/easyjson) e [swaggo](https://github.com/swaggo/swag).<br>
 
-Easyjson está sendo usada para marshal e unmarshal a [struct currency](https://github.com/Pedro-Pessoa/challenge-bravo/pkg/monetary/currency.go). A razão por trás dessa decisão é para agilizar os HTTP requests, já que o pacote json da stdlib não é muito rápido. E essa API precisar ser capaz de aguentar 1000 requests por segundo. O único boilerplate criado por essa bibiloteca é o arquivo [monetary_easyjson.go](https://github.com/Pedro-Pessoa/challenge-bravo/pkg/monetary/monetary_easyjson.go).<br>
+Easyjson está sendo usada para marshal e unmarshal a [struct currency](https://github.com/Pedro-Pessoa/challenge-bravo/blob/main/pkg/monetary/currency.go). A razão por trás dessa decisão é para agilizar os HTTP requests, já que o pacote json da stdlib não é muito rápido. E essa API precisar ser capaz de aguentar 1000 requests por segundo. O único boilerplate criado por essa bibiloteca é o arquivo [monetary_easyjson.go](https://github.com/Pedro-Pessoa/challenge-bravo/blob/main/pkg/monetary/monetary_easyjson.go).<br>
 
-Swaggo foi utilizado para criar a documentação da API. A razão por trás dessa decisão foi escalabilidade. Nós podemos adicionar quantos endpoints forem necessários e documentá-los facilmente apenas escrevendo comentários no código. Todo o boilerplate criado por essa biblioteca está na pasta [docs](https://github.com/Pedro-Pessoa/challenge-bravo/staticfiles/docs).
+Swaggo foi utilizado para criar a documentação da API. A razão por trás dessa decisão foi escalabilidade. Nós podemos adicionar quantos endpoints forem necessários e documentá-los facilmente apenas escrevendo comentários no código. Todo o boilerplate criado por essa biblioteca está na pasta [docs](https://github.com/Pedro-Pessoa/challenge-bravo/tree/main/staticfiles/docs).
 
 ## Contribuindo
 Para contribuir a esse projeto, você precisará instalar dois binários: [easyjson](https://github.com/mailru/easyjson) e [swaggo](https://github.com/swaggo/swag).<br>
