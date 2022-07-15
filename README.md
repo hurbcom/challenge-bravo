@@ -1,5 +1,7 @@
 # Challenge Bravo
 
+[[English](README.md) | [Portuguese](README.pt.md)]
+
 Challenge Bravo is a code challenge by HURB. The goal is to create a REST API capable of converting currencies. The API must use real values for the convertions. But, it must also handle fictitious currencies.
 
 ## What you need to run this API
