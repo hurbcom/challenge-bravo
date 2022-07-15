@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/jmoiron/sqlx v1.3.5
+	github.com/lib/pq v1.2.0
 	github.com/mailru/easyjson v0.7.7
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/http-swagger v1.3.0
