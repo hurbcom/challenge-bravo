@@ -1,5 +1,7 @@
 # Challenge Bravo
 
+<img alt="Hurb's logo" width=150 height=150 src="https://www.freelogovectors.net/wp-content/uploads/2022/01/hurb-logo-freelogovectors.net_.png">
+
 [[English](README.md) | [Portuguese](README.pt.md)]
 
 Challenge Bravo is a code challenge by HURB. The goal is to create a REST API capable of converting currencies. The API must use real values for the convertions. But, it must also handle fictitious currencies.
