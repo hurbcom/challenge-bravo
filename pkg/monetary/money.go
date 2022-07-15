@@ -16,8 +16,7 @@ func New(intPart int64, decimalPart int64, cur Currency) *Money {
 }
 
 // NewFromString creates a new Money using the passed information.
-// NewFromString will fail if the passed currency or the string
-// parts are not valid.
+// NewFromString will fail if the passed the string parts are not valid.
 // NewFromString does not validate the currency. That is up to the caller.
 func NewFromString(strIntPart, strDecimalPart string, cur Currency) (*Money, error) {
 	intPart, err := strconv.ParseInt(strIntPart, 10, 64)
