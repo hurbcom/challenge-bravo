@@ -23,6 +23,7 @@ type Store[K comparable, V any] struct {
 	cancels  map[K]chan struct{}
 }
 
+// Set sets a new value to the store cache.
 func (s *Store[K, V]) Set(k K, v V) {
 	s.locker.Lock()
 	defer s.locker.Unlock()
@@ -49,6 +50,8 @@ func (s *Store[K, V]) Set(k K, v V) {
 	}()
 }
 
+// Get returns the value in the store cache of
+// the passed key and if it was found or not.
 func (s *Store[K, V]) Get(k K) (V, bool) {
 	s.locker.RLock()
 	defer s.locker.RUnlock()
@@ -56,6 +59,7 @@ func (s *Store[K, V]) Get(k K) (V, bool) {
 	return v, ok
 }
 
+// Delete deletes an entry from the store cache.
 func (s *Store[K, V]) Delete(k K) {
 	s.locker.Lock()
 	defer s.locker.Unlock()

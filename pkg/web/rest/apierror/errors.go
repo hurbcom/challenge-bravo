@@ -31,7 +31,7 @@ var (
 		RawErr:  "the passed currency is not valid; make sure it follows the standards",
 	}
 
-	// ErrInvalidAmount will be sent in the case
+	// ErrInvalidAmount will be sent in case
 	// the requested amount for a convertion is not valid.
 	ErrInvalidAmount = E{
 		Code:    ErrCodeInvalidAmount,
@@ -53,7 +53,7 @@ var (
 		Code:    ErrCodeDatabaseFailed,
 	}
 
-	// ErrMonetaryFailed will be sent in the
+	// ErrMonetaryFailed will be sent in case
 	// the monetary package returned an error.
 	ErrMonetaryFailed = E{
 		Message: "unable to create the montary value",

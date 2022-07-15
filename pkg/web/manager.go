@@ -38,7 +38,7 @@ type Manager struct {
 	envData env.Data
 }
 
-// NewManager creates a a new service manager.
+// NewManager creates a new service manager.
 // If ctx gets done, the server will be shutdown.
 func NewManager(ctx context.Context, db *sqlx.DB, envData env.Data) (*Manager, error) {
 	addr := envData.WebserverAddress

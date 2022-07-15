@@ -64,12 +64,12 @@ const (
 //
 // MaxUnits can not be smaller than 0 nor greater than 19.
 //
-// ThousandsSplitter nor DecimalSplliter must not be empty.
+// ThousandsSplitter and DecimalSplliter must not be empty.
 //
-// If this currency standard is fictitious it must have both a
+// If this currency standard is FICTITIOUS it must have both a
 // FixedExchangeRateIntPart and a FixedExchangeRateDecimalPart.
 //
-// Only three standard are valid: FIAT, CRYPTO, FICTITIOUS.
+// Only three standards are valid: FIAT, CRYPTO, FICTITIOUS.
 func IsCurrencyValid(cur Currency) bool {
 	if !IsCodeValid(cur.Code) {
 		return false
@@ -100,7 +100,7 @@ func IsCurrencyValid(cur Currency) bool {
 // IsCodeValid reports whether the passed code is a valid
 // currency code.
 //
-// In other to be valid, the code must consist of 3
+// In order to be valid, the code must consist of 3
 // aplhabetical (A-Z) characters only.
 func IsCodeValid(code string) bool {
 	if len(code) != 3 {

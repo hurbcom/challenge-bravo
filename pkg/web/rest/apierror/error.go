@@ -18,7 +18,7 @@ func (e E) WithMessage(msg string) E {
 }
 
 // WithRawErr returna a new error that is a copy of the original
-// error but with the RawErr field modified to be err.E().
+// error but with the RawErr field modified to be err.Error().
 //
 // If err == nil, WithRawErr is a no-op.
 func (e E) WithRawErr(err error) E {

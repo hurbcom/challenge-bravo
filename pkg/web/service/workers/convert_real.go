@@ -6,7 +6,7 @@ import (
 	"github.com/Pedro-Pessoa/challenge-bravo/pkg/monetary"
 )
 
-// ConvertReal makes a convertion between two real currencies
+// ConvertReal makes a convertion between two real currencies.
 func ConvertReal(fromM *monetary.Money, toC monetary.Currency, s *cache.Store[string, *abstract.LiveResponse], apiKey string) (string, error) {
 	fromC := fromM.Currency()
 	fromToRates, _ := s.Get(fromC.Code)

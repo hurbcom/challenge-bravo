@@ -79,7 +79,7 @@ func (m *Money) rawStringAmount() string {
 
 // StringAmount parses the money amount to a string.
 //
-// splitThousands defines wether your want the string to be divided
+// splitThousands defines whether you want the string to be divided
 // by the m.currency.ThousandsSplitter.
 func (m *Money) StringAmount(splitThousands bool) string {
 	return m.stringAmount(splitThousands, false)
@@ -88,7 +88,7 @@ func (m *Money) StringAmount(splitThousands bool) string {
 // StringAmountDotDecimal parses the money amount to a string, forcing the
 // decimal splitter to be a dot.
 //
-// splitThousands defines wether your want the string to be divided
+// splitThousands defines whether you want the string to be divided
 // by the m.currency.ThousandsSplitter.
 func (m *Money) StringAmountDotDecimal(splitThousands bool) string {
 	return m.stringAmount(splitThousands, true)

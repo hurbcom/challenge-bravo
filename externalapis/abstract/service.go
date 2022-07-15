@@ -6,7 +6,7 @@ import (
 	"github.com/Pedro-Pessoa/challenge-bravo/externalapis"
 )
 
-// GetCurrencyConvertions makes a request to the abstract API and return all the
+// GetCurrencyConvertions makes a request to the abstract API and returns all the
 // converted values for the passed currency.
 func GetCurrencyConvertions(currencyCode, apiKey string) (LiveResponse, error) {
 	result, _, _, err := externalapis.MakeRequest[LiveResponse](
