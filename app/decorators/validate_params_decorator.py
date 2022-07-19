@@ -1,13 +1,11 @@
 from functools import wraps
-from http import HTTPStatus
 from typing import Callable
 
-from flask import jsonify, request
+from flask import request
 from flask.wrappers import Response
 
 from app.classes.app_with_db import current_app
 from app.schemas import ConversionSchema
-from app.services.verify_types_service import verify_types
 
 
 def valdiate_params(controller: Callable) -> Callable:
