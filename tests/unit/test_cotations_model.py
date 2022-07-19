@@ -162,6 +162,12 @@ def test_cotation_field_types(
         session = app.db.session
 
         from_currency = Currency(**get_currency_data())
+
+        to_currency_data = get_currency_data()
+
+        while to_currency_data["code"] == from_currency.code:
+            to_currency_data = get_currency_data()
+
         to_currency = Currency(**get_currency_data())
 
         data = {
