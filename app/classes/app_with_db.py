@@ -22,6 +22,10 @@ class AppWithDb(Flask):
     cotation: Union["Cotation", None]
     from_currency: "Currency"
     to_currency: "Currency"
+    from_param: str
+    to_param: str
+    amount_param: float
+    cotation_is_updated: bool
 
 
 """ Intellisense do current app"""

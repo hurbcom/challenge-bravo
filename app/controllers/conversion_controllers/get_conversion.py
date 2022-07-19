@@ -2,7 +2,7 @@ from datetime import datetime
 from http import HTTPStatus
 
 import requests
-from flask import jsonify, request
+from flask import current_app, jsonify, request
 
 from app.classes.app_with_db import current_app as curr_app
 from app.services import register_cotation
@@ -10,8 +10,8 @@ from app.services import register_cotation
 
 def get_conversion():
     query_params = request.args
-    _from = query_params.get("from")
-    to = query_params.get("to")
+    _from = curr_app.from_currency.code
+    to = curr_app.to_currency.code
     amount = query_params.get("amount", type=float)
     conversion = amount
     quote_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

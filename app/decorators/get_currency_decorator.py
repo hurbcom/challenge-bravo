@@ -11,18 +11,18 @@ from app.models.currencies_model import Currency
 from app.services import filter_by_or_404
 
 
-def verify_currency_decorator(controller: Callable) -> Callable:
+def verify_currency(controller: Callable) -> Callable:
     @wraps(controller)
     def wrapper(*args, **kwargs) -> tuple[Response, int]:
         """
         Verifies if given currencies are in database and returns error response
         if don't, else, do nothing.
-        Sets app.cotation, app.from_currency and app.to_currency
+        Sets `app.cotation`.
         """
         try:
             query_params = request.args
-            _from = query_params["from"]
-            to = query_params["to"]
+            _from = query_params["from"].upper()
+            to = query_params["to"].upper()
 
             session = current_app.db.session
             query = session.query(Currency)
