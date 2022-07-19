@@ -83,8 +83,8 @@ def fake() -> Faker:
 def get_currency_data(fake):
 
     return lambda: {
-        "code": fake.currency_code(),
-        "label": fake.currency_name(),
+        "code": fake.unique.currency_code(),
+        "label": fake.unique.currency_name(),
     }
 
 
