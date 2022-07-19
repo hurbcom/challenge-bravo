@@ -21,6 +21,9 @@ def test_get_conversion_200(
     THEN I get the correct payload response
     """
 
+    if from_currency == to_currency:
+        return
+
     path = "/api?from={_from}&to={to}&amount={amount}"
 
     # response format
@@ -60,6 +63,29 @@ def test_get_conversion_200(
     assert datetime.strptime(json["quote_date"], "%Y-%m-%d %H:%M:%S")
 
 
+@mark.parametrize("currency", ["USD", "BRL", "EUR", "BTC", "ETH"])
+def test_get_conversion_passing_same_from_and_to_param(
+    client: FlaskClient,
+    currency,
+    colorized,
+):
+    """
+    GIVEN the conversion route
+    WHEN I pass same currency to `from` and `to` param
+    THEN I receive the correct message
+    THEN I receive the status code 200
+    """
+
+    path = f"/api?from={currency}&to={currency}&amount=1"
+    response = client.get(path)
+    json: dict = response.json
+
+    expected = {"message": "Nothing to convert."}
+
+    assert json == expected
+    assert response.status_code == HTTPStatus.OK
+
+
 def test_get_conversion_unregistered_currency_404(
     client: FlaskClient, currencies, colorized
 ):
@@ -90,7 +116,7 @@ def test_get_conversion_unregistered_currency_404(
     ("params", "missing"),
     [
         ("from=USD&to=BRL", ["amount"]),
-        ("from=USD&amount=BRL", ["to"]),
+        ("from=USD&amount=1", ["to"]),
         ("to=BRL&amount=1", ["from"]),
         ("from=USD", ["to", "amount"]),
         ("to=BRL", ["from", "amount"]),
@@ -108,7 +134,9 @@ def test_missing_query_params(client: FlaskClient, params, missing, colorized):
 
     path = f"/api?{params}"
 
-    expected = {"error": "Missing params.", "missing": missing}
+    missing_fields = {field: ["Missing data for required field."] for field in missing}
+
+    expected = {"error": "Validation error.", **missing_fields}
 
     response = client.get(path)
 
@@ -132,8 +160,8 @@ def test_wrong_from_param_value_types(client, from_curr, colorized):
     path = f"/api?from={from_curr}&to=EUR&amount=1"
 
     expected = {
-        "error": "Invalid value types.",
-        "from": {"expected": "alphabetical", "received": f"{from_curr}"},
+        "error": "Validation error.",
+        "from": ["Value must be alphabetical."],
     }
 
     response = client.get(path)
@@ -154,8 +182,8 @@ def test_wrong_to_curr_param_value_types(client, to_curr, colorized):
     path = f"/api?from=EUR&to={to_curr}&amount=1"
 
     expected = {
-        "error": "Invalid value types.",
-        "to": {"expected": "alphabetical", "received": f"{to_curr}"},
+        "error": "Validation error.",
+        "to": ["Value must be alphabetical."],
     }
 
     response = client.get(path)
@@ -176,8 +204,8 @@ def test_wrong_amount_param_value_types(client, amount, colorized):
     path = f"/api?from=EUR&to=BRL&amount={amount}"
 
     expected = {
-        "error": "Invalid value types.",
-        "amount": {"expected": "floatable", "received": f"{amount}"},
+        "error": "Validation error.",
+        "amount": ["Not a valid number."],
     }
 
     response = client.get(path)
