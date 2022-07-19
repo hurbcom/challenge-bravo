@@ -6,6 +6,7 @@ from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from app.configs.database import db
+from app.models.currencies_model import Currency
 
 
 @dataclass
@@ -16,8 +17,8 @@ class Cotation(db.Model):
     rate: float
     created_at: datetime
     updated_at: datetime
-    from_currency: dict
-    to_currency: dict
+    from_currency: Currency
+    to_currency: Currency
 
     __tablename__ = "cotations"
 

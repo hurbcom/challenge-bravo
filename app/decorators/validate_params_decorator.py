@@ -6,6 +6,7 @@ from flask import jsonify, request
 from flask.wrappers import Response
 
 from app.classes.app_with_db import current_app
+from app.schemas import ConversionSchema
 from app.services.verify_types_service import verify_types
 
 
@@ -19,23 +20,15 @@ def valdiate_params(controller: Callable) -> Callable:
     def wrapper(*args, **kwargs) -> tuple[Response, int]:
         REQUIRED_PARAMS = {"from", "to", "amount"}
 
-        received_params = request.args.keys()
+        received_params = {
+            key: value for key, value in request.args.items() if key in REQUIRED_PARAMS
+        }
 
-        if not REQUIRED_PARAMS.issubset(received_params):
+        serialized = ConversionSchema(unknown="exclude").load(received_params)
 
-            missing = REQUIRED_PARAMS.difference(received_params)
-
-            msg = {"error": "Missing params.", "missing": list(missing)}
-
-            return jsonify(msg), HTTPStatus.BAD_REQUEST
-
-        params = {param: request.args[param] for param in REQUIRED_PARAMS}
-
-        verify_types(**params)
-
-        current_app.from_param = request.args["from"]
-        current_app.to_param = request.args["to"]
-        current_app.amount_param = float(request.args["amount"])
+        current_app.from_param = serialized["from"]
+        current_app.to_param = serialized["to"]
+        current_app.amount_param = float(serialized["amount"])
 
         return controller(*args, **kwargs)
 

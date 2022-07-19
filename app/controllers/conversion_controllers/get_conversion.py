@@ -2,18 +2,17 @@ from datetime import datetime
 from http import HTTPStatus
 
 import requests
-from flask import current_app, jsonify, request
+from flask import jsonify
 
 from app.classes.app_with_db import current_app as curr_app
 from app.services import register_cotation
 
 
 def get_conversion():
-    query_params = request.args
     _from = curr_app.from_currency.code
     to = curr_app.to_currency.code
-    amount = query_params.get("amount", type=float)
-    conversion = amount
+    amount = curr_app.amount_param
+    conversion = ...
     quote_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     if curr_app.cotation:
@@ -42,9 +41,14 @@ def get_conversion():
 
         register_cotation(rate, quote_date)
 
+        payload = {"amount": curr_app.amount_param, **conversion_data}
+    else:
+        msg = {"message": "Nothing to convert."}
+        return jsonify(msg), HTTPStatus.OK
+
     payload = {
-        _from: amount,
-        to: conversion,
+        _from: round(amount, 4),
+        to: round(conversion, 4),
         "quote_date": quote_date,
     }
 
