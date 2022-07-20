@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ConversaoMonetaria.Api</name>
+    </assembly>
+    <members>
+        <member name="T:ConversaoMonetaria.Api.App_Data.SwaggerDoc">
+            <summary>
+                Descrições para o Swagger
+            </summary>
+        </member>
+        <member name="F:ConversaoMonetaria.Api.App_Data.SwaggerDoc.Title">
+            <summary>
+                Título da plataforma
+            </summary>
+        </member>
+        <member name="F:ConversaoMonetaria.Api.App_Data.SwaggerDoc.Version1">
+            <summary>
+                Versão
+            </summary>
+        </member>
+        <member name="F:ConversaoMonetaria.Api.App_Data.SwaggerDoc.OpenApiContactName">
+            <summary>
+                Contato Nome
+            </summary>
+        </member>
+        <member name="F:ConversaoMonetaria.Api.App_Data.SwaggerDoc.OpenApiContactEmail">
+            <summary>
+                Contato E-mail
+            </summary>
+        </member>
+        <member name="F:ConversaoMonetaria.Api.App_Data.SwaggerDoc.Description">
+            <summary>
+                Descrição da API
+            </summary>
+        </member>
+        <member name="F:ConversaoMonetaria.Api.App_Data.SwaggerDoc.SecurityDefinitionName">
+            <summary>
+                Nome da definição de seguran;ca
+            </summary>
+        </member>
+        <member name="F:ConversaoMonetaria.Api.App_Data.SwaggerDoc.OpenApiSecuritySchemeName">
+            <summary>
+                Nome do schema Open Api Security
+            </summary>
+        </member>
+        <member name="F:ConversaoMonetaria.Api.App_Data.SwaggerDoc.OpenApiSecuritySchemeBearerFormat">
+            <summary>
+                Formato Bearer
+            </summary>
+        </member>
+        <member name="F:ConversaoMonetaria.Api.App_Data.SwaggerDoc.OpenApiSecuritySchemeDescription">
+            <summary>
+                Descrição
+            </summary>
+        </member>
+        <member name="T:ConversaoMonetaria.Api.Controllers.AutenticacaoController">
+            <inheritdoc />
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.AutenticacaoController.#ctor(ConversaoMonetaria.Aplicacao.Interfaces.IAutenticacaoAppService,AutoMapper.IMapper)">
+            <inheritdoc />
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.AutenticacaoController.Autenticar(ConversaoMonetaria.Aplicacao.ViewModels.Autenticacao.AutenticacaoViewModel)">
+            <summary>
+                Retorna a Autenticação Bearer
+            </summary>
+            <param name="model">
+                Dados da Requisição
+                <br />
+                <li><b>Usuario: </b> Usuário (usar admin)</li>
+                <li><b>Senha: </b> Senha (usar admin)</li>
+            </param>
+            <returns>Token de autenticação e data de expiração</returns>
+        </member>
+        <member name="T:ConversaoMonetaria.Api.Controllers.ConversaoMonetariaController">
+            <inheritdoc />
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.ConversaoMonetariaController.#ctor(AutoMapper.IMapper,ConversaoMonetaria.Dominio.Servicos.ConversaoMonetariaService)">
+            <inheritdoc />
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.ConversaoMonetariaController.Converter(System.String,System.String,System.Decimal)">
+            <summary>
+                Médoto responsável por converter valores entre moedas
+            </summary>
+            <param name="codigoMoedaDe">Codigo da moeda origem</param>
+            <param name="codigoMoedaPara">Codigo da moeda destino</param>
+            <param name="valor">Valor a ser converitdo</param>
+            <returns>Valor convertido para a moeda solicitada</returns>
+        </member>
+        <member name="T:ConversaoMonetaria.Api.Controllers.MoedasController">
+            <inheritdoc />
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.MoedasController.#ctor(ConversaoMonetaria.Aplicacao.Interfaces.IMoedaAppService,AutoMapper.IMapper)">
+            <inheritdoc />
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.MoedasController.Listar">
+            <summary>
+                Médoto responsável por listar todas as Moedas cadastrada
+            </summary>
+            <returns>Lista de modelos com os dados da moeda</returns>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.MoedasController.Buscar(System.Int64)">
+            <summary>
+                Médoto responsável pela obter uma Moeda
+            </summary>
+            <param name="idMoeda">Id da moeda no qual deseja obter</param>
+            <returns>Modelo com os dados da moeda</returns>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.MoedasController.Atualizar(System.Int64,ConversaoMonetaria.Aplicacao.ViewModels.Moeda.MoedaRequisicaoViewModel)">
+            <summary>
+                Médoto responsável por atualizar uma Moeda
+            </summary>
+            <param name="moedaRequisicao">dados da moeda a ser adicionada</param>
+            <param name="idMoeda">Id da moeda no qual deseja obter</param>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.MoedasController.Deletar(System.Int64)">
+            <summary>
+                Médoto responsável por Deletar uma Moeda
+            </summary>
+            <param name="idMoeda">Id da moeda no qual deseja obter</param>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Controllers.MoedasController.Salvar(ConversaoMonetaria.Aplicacao.ViewModels.Moeda.MoedaRequisicaoViewModel)">
+            <summary>
+                Médoto responsável adicionar uma Moeda
+            </summary>
+            <param name="moedaRequisicao">dados da moeda a ser adicionada</param>
+            <returns>Modelo com os dados da moeda adicionada</returns>
+        </member>
+        <member name="T:ConversaoMonetaria.Api.Program">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Program.Main(System.String[])">
+            <summary>
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ConversaoMonetaria.Api.Startup">
+            <summary>
+                Classe de start da aplica��o
+            </summary>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+                Construtor
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:ConversaoMonetaria.Api.Startup.Configuration">
+            <summary>
+                Configuration
+            </summary>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+                This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Startup.CustomLifetimeValidator(System.Nullable{System.DateTime},System.Nullable{System.DateTime},Microsoft.IdentityModel.Tokens.SecurityToken,Microsoft.IdentityModel.Tokens.TokenValidationParameters)">
+            <summary>
+                Tempo de vida do Jwt
+            </summary>
+            <param name="notBefore"></param>
+            <param name="expires"></param>
+            <param name="tokenToValidate"></param>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ConversaoMonetaria.Api.Worker.CotacoesWorker">
+            <summary>
+             Worker responsavel por atualizar cotações com AwesomeApi e gravar no banco.
+            </summary>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Worker.CotacoesWorker.#ctor(Microsoft.Extensions.Logging.ILogger{ConversaoMonetaria.Api.Worker.CotacoesWorker},ConversaoMonetaria.Aplicacao.Interfaces.AntiCorruption.IAwesomeApiAppService)">
+            <summary>
+            Construtor
+            </summary>
+            <param name="logger">Objeto para logar eventos no serilog</param>
+            <param name="awesomeApiAppService"> Service que consome a API de busca de cotações</param>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Worker.CotacoesWorker.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+             Executa quando o worker é iniciado
+            </summary>
+            <param name="cancellationToken"> solitacao de cancelamento</param>
+            <returns></returns>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Worker.CotacoesWorker.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Executa quando o worker é parado
+            </summary>
+            <param name="cancellationToken">solitacao de cancelamento</param>
+            <returns></returns>
+        </member>
+        <member name="M:ConversaoMonetaria.Api.Worker.CotacoesWorker.ExecuteAsync(System.Threading.CancellationToken)">
+            <summary>
+             Acionado sempre que o worker estiver em execução
+            </summary>
+            <param name="stoppingToken"></param>
+        </member>
+    </members>
+</doc>
