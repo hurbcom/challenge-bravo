@@ -134,7 +134,7 @@ def test_missing_query_params(client: FlaskClient, params, missing, colorized):
 
     path = f"/api?{params}"
 
-    missing_fields = {field: ["Missing data for required field."] for field in missing}
+    missing_fields = {field: ["Missing param."] for field in missing}
 
     expected = {"error": "Validation error.", **missing_fields}
 
@@ -145,50 +145,6 @@ def test_missing_query_params(client: FlaskClient, params, missing, colorized):
     for key, value in response.json.items():
         assert set(value).issuperset(expected[key]), colorized(response.json)
 
-    assert response.status_code == HTTPStatus.BAD_REQUEST
-
-
-@mark.parametrize("from_curr", [123, "COIN02", "0.23"])
-def test_wrong_from_param_value_types(client, from_curr, colorized):
-    """
-    GIVEN the conversion route
-    WHEN I pass wrong value types to `from` param
-    THEN I received correct error message
-    THEN I receive the status code 400
-    """
-
-    path = f"/api?from={from_curr}&to=EUR&amount=1"
-
-    expected = {
-        "error": "Validation error.",
-        "from": ["Value must be alphabetical."],
-    }
-
-    response = client.get(path)
-
-    assert response.json == expected, colorized(response.json)
-    assert response.status_code == HTTPStatus.BAD_REQUEST
-
-
-@mark.parametrize("to_curr", [123, "COIN02", "0.23"])
-def test_wrong_to_curr_param_value_types(client, to_curr, colorized):
-    """
-    GIVEN the conversion route
-    WHEN I pass wrong value types to `to` param
-    THEN I received correct error message
-    THEN I receive the status code 400
-    """
-
-    path = f"/api?from=EUR&to={to_curr}&amount=1"
-
-    expected = {
-        "error": "Validation error.",
-        "to": ["Value must be alphabetical."],
-    }
-
-    response = client.get(path)
-
-    assert response.json == expected, colorized(response.json)
     assert response.status_code == HTTPStatus.BAD_REQUEST
 
 
