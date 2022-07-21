@@ -17,7 +17,8 @@ from app.classes.app_with_db import AppWithDb
 @fixture
 def app():
     """Cria e configura uma nova aplicação para cada teste usando um banco de
-    teste temporário aplciando as migrações. Após cada teste, deleta o banco"""
+    teste temporário aplciando as migrações. Antes de cada teste, deleta o banco
+    existente"""
     os.environ["FLASK_ENV"] = "test"
 
     app = create_app()
@@ -106,3 +107,35 @@ def currencies():
         "BTC",
         "ETH",
     )
+
+
+@fixture
+def get_currency_payload(fake, currencies):
+    """
+    Gera informações aleatórias para a requisição de registro de moedas.
+    As moedas são diferentes das moedas padrão.
+    """
+
+    def gen_payload(fake, currencies):
+
+        code = ""
+        while True:
+            code = fake.unique.currency_code()
+            if code not in currencies:
+                break
+
+        return {
+            "code": code,
+            "label": fake.unique.currency_name(),
+            "is_crypto": False,
+            "conversion": {
+                "USD": float(
+                    f"{fake.random.randint(0,99)}.{fake.random.randint(11,99)}"
+                ),
+                "local": float(
+                    f"{fake.random.randint(0,99)}.{fake.random.randint(11,99)}"
+                ),
+            },
+        }
+
+    return lambda: gen_payload(fake, currencies)
