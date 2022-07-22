@@ -149,10 +149,10 @@ def test_missing_query_params(client: FlaskClient, params, missing, colorized):
 
 
 @mark.parametrize("amount", ["abc", "USD"])
-def test_wrong_amount_param_value_types(client, amount, colorized):
+def test_wrong_amount_param_value_type(client, amount, colorized):
     """
     GIVEN the conversion route
-    WHEN I pass wrong value types to `to` param
+    WHEN I pass wrong value types to `amount` param
     THEN I received correct error message
     THEN I receive the status code 400
     """
