@@ -1,18 +1,13 @@
 from http import HTTPStatus
-from pprint import pprint
 
-from colorama import Fore
-from flask import jsonify, request
+from flask import jsonify
 
 from app.classes.app_with_db import current_app
 from app.models import Cotation, Currency
-from app.schemas import CurrencySchema
 
 
 def register_currency():
-    data: dict = request.json
-
-    validated_data: dict = CurrencySchema().load(data)
+    validated_data: dict = current_app.validated_data
 
     session = current_app.db.session
     query = session.query(Currency)
@@ -24,11 +19,7 @@ def register_currency():
 
     USD_based = local_value > USD_value
 
-    rate = (
-        (local_value / USD_value)
-        if local_value > USD_value
-        else USD_value / local_value
-    )
+    rate = (local_value / USD_value) if USD_based else USD_value / local_value
 
     new_currency = Currency(
         code=validated_data["code"],
@@ -39,13 +30,11 @@ def register_currency():
     USD_currency = query.filter_by(code="USD").first()
 
     cotation_code = (
-        f'USD{validated_data["code"]}'
-        if local_value > USD_value
-        else f'{validated_data["code"]}USD'
+        f'USD{validated_data["code"]}' if USD_based else f'{validated_data["code"]}USD'
     )
 
-    from_currency = new_currency if local_value > USD_value else USD_currency
-    to_currency = USD_currency if local_value > USD_value else new_currency
+    from_currency = new_currency if USD_based else USD_currency
+    to_currency = USD_currency if USD_based else new_currency
 
     cotation = Cotation(
         code=cotation_code,

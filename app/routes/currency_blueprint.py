@@ -6,8 +6,10 @@ from app.decorators import (
     check_cotation,
     error_handler,
     valdiate_params,
+    validate_schema,
     verify_currency,
 )
+from app.schemas import CurrencySchema
 
 bp_currency = Blueprint("currency", __name__, url_prefix="")
 
@@ -23,5 +25,6 @@ def get_conversion_caller():
 
 @bp_currency.post("")
 @error_handler
+@validate_schema(CurrencySchema)
 def register_currency_caller():
     return register_currency()

@@ -26,6 +26,7 @@ class AppWithDb(Flask):
     to_param: str
     amount_param: float
     cotation_is_updated: bool
+    validated_data: dict
 
 
 """ Intellisense do current app"""
