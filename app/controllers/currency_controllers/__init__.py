@@ -1,0 +1,1 @@
+from .register_currency import register_currency
