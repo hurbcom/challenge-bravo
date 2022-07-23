@@ -5,6 +5,7 @@ from typing import Callable
 from flask import Response, jsonify
 from marshmallow.exceptions import ValidationError
 
+from app.errors import AlreadyRegisteredError
 from app.errors.invalid_value_types_error import InvalidValueTypesError
 
 
@@ -19,6 +20,8 @@ def error_handler(controller: Callable) -> Callable:
         try:
             return controller(*args, **kwargs)
         except InvalidValueTypesError as err:
+            return jsonify(err.description), err.code
+        except AlreadyRegisteredError as err:
             return jsonify(err.description), err.code
         except ValidationError as err:
             msg = {"error": "Validation error.", **err.messages}

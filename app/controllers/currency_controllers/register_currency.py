@@ -1,8 +1,11 @@
 from http import HTTPStatus
 
 from flask import jsonify
+from psycopg2.errors import UniqueViolation
+from sqlalchemy.exc import IntegrityError
 
 from app.classes.app_with_db import current_app
+from app.errors import AlreadyRegisteredError
 from app.models import Cotation, Currency
 
 
@@ -44,7 +47,22 @@ def register_currency():
     cotation.from_currency = from_currency
     cotation.to_currency = to_currency
 
-    session.add(cotation)
-    session.commit()
+    try:
+        session.add(cotation)
+        session.commit()
 
-    return jsonify(new_currency), HTTPStatus.CREATED
+        return jsonify(new_currency), HTTPStatus.CREATED
+    except IntegrityError as err:
+        is_unique_violation = isinstance(err.orig, UniqueViolation)
+
+        check_field_error = lambda field: f"Key ({field})" in f"{err.orig}"
+
+        error_in_code = check_field_error("code")
+        error_in_label = check_field_error("label")
+
+        if is_unique_violation and error_in_code:
+            raise AlreadyRegisteredError("code")
+        elif is_unique_violation and error_in_label:
+            raise AlreadyRegisteredError("label")
+
+        raise err
