@@ -25,15 +25,15 @@ def register_currency():
     rate = (local_value / USD_value) if USD_based else USD_value / local_value
 
     new_currency = Currency(
-        code=validated_data["code"],
-        label=validated_data["label"],
+        code=validated_data["code"].upper(),
+        label=validated_data["label"].title(),
         is_crypto=validated_data.get("is_crypto", False),
     )
 
     USD_currency = query.filter_by(code="USD").first()
 
     cotation_code = (
-        f'USD{validated_data["code"]}' if USD_based else f'{validated_data["code"]}USD'
+        f"USD{new_currency.code}" if USD_based else f"{new_currency.code}USD"
     )
 
     from_currency = new_currency if USD_based else USD_currency
