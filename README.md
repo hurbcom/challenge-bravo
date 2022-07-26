@@ -17,9 +17,11 @@ Por exemplo: Quanto seria 5 dólares em reais? ou Quanto está a cotação do Bi
 |  BTC  |     Bitcoin     |
 |  ETH  |    Ethereum     |
 
+---
+
 ## Rotas
 
-### `GET /api`
+### `GET /api` - Rota para conversão de moedas
 
 | Parâmetro |          Descrição          | Formato  |
 | :-------: | :-------------------------: | :------: |
@@ -91,6 +93,107 @@ Caso os parâmetros from e to sejam iguais:
 {
     "error": "Currency PKM not registered.",
     "currencies": ["USD", "BRL", "EUR", "BTC", "ETH"]
+}
+```
+
+---
+
+### `POST /api` - Rota para registro de moedas
+
+Todos os campos são obrigatórios. O campo de `conversion` servirá para que seja estabelecido uma relação entre a nova moeda criada e o dólar americano (USD)
+
+|   Campo    |              Descrição               |
+| :--------: | :----------------------------------: |
+|    code    |            Sigla da moeda            |
+|   label    |      Descrição do nome da moeda      |
+| is_crypto  |     Indica se é uma criptomoeda      |
+| conversion | Informações para a conversão inicial |
+
+-   Conversion
+
+    | Campo |                             descrição                             |
+    | :---: | :---------------------------------------------------------------: |
+    |  USD  |             Um número representando um valor em dólar             |
+    | local | Valor da moeda criada que corresponde ao valor informado em dólar |
+
+#### Exemplos:
+
+`POST /api`
+
+```json
+{
+    "code": "jpy",
+    "label": "Iene",
+    "is_crypto": false,
+    "conversion": {
+        "USD": 1,
+        "local": 136.62
+    }
+}
+```
+
+Resposta:
+
+`Status Code - 200`
+
+```json
+{
+    "id": "da8d8df8-ff6e-4640-b43b-693df8114cca",
+    "code": "JPY",
+    "label": "Iene",
+    "backing_currency": false,
+    "is_crypto": false,
+    "created_at": "Tue, 26 Jul 2022 14:31:34 GMT",
+    "updated_at": "Tue, 26 Jul 2022 14:31:34 GMT"
+}
+```
+
+O campo `backing_currency` é um campo de controle.
+
+#### Possíveis erros:
+
+---
+
+`400` - Campos obrigatórios não informados
+
+`GET /api`
+
+```json
+{
+    "error": "Validation error.",
+    "conversion": ["Missing data for required field."],
+    "label": ["Missing data for required field."],
+    "code": ["Missing data for required field."]
+}
+```
+
+---
+
+`400` - Campos aninhados obrigatórios não informados
+
+`GET /api`
+
+```json
+{
+    "error": "Validation error.",
+    "conversion": {
+        "local": ["Missing data for required field."],
+        "USD": ["Missing data for required field."]
+    }
+}
+```
+
+---
+
+`409` - Código jpa cadastrado
+
+`GET /api`
+
+```json
+{
+    "error": "Unique violation error.",
+    "code": ["This field is already registered."],
+    "label": ["This field is already registered."]
 }
 ```
 
