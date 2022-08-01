@@ -20,6 +20,15 @@ try
             .ReadFrom.Configuration(ctx.Configuration));
     #endregion
 
+    #region CORS - Pt1
+    builder.Services.AddCors(options => options.AddDefaultPolicy(b =>
+    {
+        b.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    }));
+    #endregion
+
     builder.Services.AddControllers();
 
     #region Versionamento de API
@@ -55,6 +64,10 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
+
+    #region CORS - pt2
+    app.UseCors();
+    #endregion
 
     #region Swagger - pt2
     app.UseSwagger();
