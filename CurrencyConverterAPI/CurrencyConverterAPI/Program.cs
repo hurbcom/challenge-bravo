@@ -1,21 +1,52 @@
-var builder = WebApplication.CreateBuilder(args);
+using Serilog;
 
-// Add services to the container.
+#region Serilog - Pt1
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-builder.Services.AddControllers();
-
-#region Versionamento de API
-builder.Services.AddApiVersioning();
+Log.Information("Starting up");
 #endregion
 
-var app = builder.Build();
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
-// Configure the HTTP request pipeline.
+    #region Serilog - Pt2
+    builder.Host.UseSerilog((ctx, lc) => lc
+            .WriteTo.Console()
+            .ReadFrom.Configuration(ctx.Configuration));
+    #endregion
 
-app.UseHttpsRedirection();
+    builder.Services.AddControllers();
 
-app.UseAuthorization();
+    #region Versionamento de API
+    builder.Services.AddApiVersioning();
+    #endregion
 
-app.MapControllers();
+    var app = builder.Build();
 
-app.Run();
+    #region Serilog - Pt3 (Registro do middleware de solicitação)
+    app.UseSerilogRequestLogging();
+    #endregion
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Unhandled exception");
+    throw;
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}
+
+
