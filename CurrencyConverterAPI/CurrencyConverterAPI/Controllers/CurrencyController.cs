@@ -1,4 +1,4 @@
-using CurrencyConverterAPI.Helper.Log;
+using CurrencyConverterAPI.Helpers.Log;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyConverterAPI.Controllers

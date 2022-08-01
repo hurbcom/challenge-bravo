@@ -1,4 +1,4 @@
-namespace CurrencyConverterAPI.Helper.Log
+namespace CurrencyConverterAPI.Helpers.Log
 {
     public static class MessageLog
     {
