@@ -17,19 +17,36 @@ namespace CurrencyConverterAPI.Controllers
 
 
         [HttpGet("converter/{from}/{to}/{value}")]
-        public IActionResult Converter(string from, string to, string value)
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(400)]
+        public IActionResult Converter(string from, string to, decimal value)
         {
-            #region Log
-            string[] param = { from, to, value };
+            try
+            {
+                #region Log Info
+                string[] param = { from, to, value.ToString() };
 
-            _logger.LogInformation(
-                MessageLog.InfoController(ControllerContext.RouteData.Values["controller"].ToString().ToUpper(),
-                                          ControllerContext.RouteData.Values["action"].ToString(),
-                                          param)
-                );
-            #endregion
+                _logger.LogInformation(
+                    MessageLog.InfoController(ControllerContext.RouteData.Values["controller"].ToString().ToUpper(),
+                                              ControllerContext.RouteData.Values["action"].ToString(),
+                                              param)
+                    );
+                #endregion
 
-            return Ok(String.Format("From:{0}, To:{1}, Value:{2}", from, to, value));
+                return Ok(String.Format("From:{0}, To:{1}, Value:{2}", from, to, value.ToString()));
+            }
+            catch (Exception ex)
+            {
+                #region Log Error
+                _logger.LogError(
+                    MessageLog.ErrorController(ControllerContext.RouteData.Values["controller"].ToString().ToUpper(),
+                                              ControllerContext.RouteData.Values["action"].ToString(),
+                                              ex.Message.ToString())
+                    );
+                #endregion
+                return new BadRequestObjectResult(ex);
+            }
+           
         }
 
     }
