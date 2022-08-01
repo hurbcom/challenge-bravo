@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyConverterAPI.Controllers
 {
+    [ApiVersion("1")]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]/v{version:apiVersion}")]
     public class CurrencyController : ControllerBase
     {
         [HttpGet("converter/{from}/{to}/{value}")]

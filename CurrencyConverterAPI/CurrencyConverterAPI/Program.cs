@@ -4,6 +4,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+#region Versionamento de API
+builder.Services.AddApiVersioning();
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
