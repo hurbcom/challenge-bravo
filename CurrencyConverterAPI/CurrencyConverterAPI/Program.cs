@@ -1,4 +1,11 @@
+using CurrencyConverterAPI.Application.AppServices;
+using CurrencyConverterAPI.Application.AppServices.Implementation;
+using CurrencyConverterAPI.Configuration;
+using CurrencyConverterAPI.Services;
+using CurrencyConverterAPI.Services.Implementation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -29,7 +36,28 @@ try
     }));
     #endregion
 
+    #region ApiConfiguration - ApiBaseUrl
+    builder.Services.Configure<ApiConfiguration>(builder.Configuration.GetSection(nameof(ApiConfiguration)));
+    builder.Services.AddSingleton<IApiConfiguration>(x => x.GetRequiredService<IOptions<ApiConfiguration>>().Value);
+    #endregion
+
+    #region ApiConfiguration - CurrencyBallast
+    builder.Services.Configure<ApiConfiguration>(b => b.CurrencyBallast = builder.Configuration["ApiConfiguration:CurrencyBallast"]);
+    #endregion
+
+    #region HttpClient
+    builder.Services.AddHttpClient<IExchangeService, ExchangeService>(b => b.BaseAddress = new Uri(builder.Configuration["ApiConfiguration:BaseUrl"]));
+    #endregion
+
+    #region Disable Automatic Model State Validation
+    builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+    #endregion
+
     builder.Services.AddControllers();
+
+    #region Injecao de dependencia
+    builder.Services.AddScoped<IExchangeAppService, ExchangeAppService>();
+    #endregion
 
     #region Versionamento de API
     builder.Services.AddApiVersioning();
