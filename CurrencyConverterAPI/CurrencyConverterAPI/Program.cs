@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Reflection;
 
 #region Serilog - Pt1
 Log.Logger = new LoggerConfiguration()
@@ -88,6 +89,9 @@ try
                     Url = new Uri("https://br.linkedin.com/in/elizcarvalho")
                 }
             });
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        options.IncludeXmlComments(xmlPath);
     });
     #endregion
 
@@ -112,6 +116,7 @@ try
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Currency Converter API");
+        options.RoutePrefix = string.Empty;
     });
 
     var option = new RewriteOptions();

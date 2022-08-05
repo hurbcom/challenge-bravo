@@ -26,11 +26,16 @@ namespace CurrencyConverterAPI.Controllers
         /// <summary>
         /// Convert between fiat, crypto and fictitious currencies
         /// </summary>
-        /// <param name="from">source currency</param>
+        /// <param name="from">Source currency</param>
         /// <param name="to">Final currency</param>
         /// <param name="amount">Value to be converted</param>
         /// <returns>Converted value</returns>
+        /// <response code="200">Returns the query parameters informed and the converted value</response>
+        /// <response code="400">Returns the status code and the request failed message (parameter validation).</response>
+        /// <response code="404">Returns the status code and message about currency not available for conversion.</response>
+        /// <response code="503">Returns the status code and message about the request processing failure.</response>
         [HttpGet("converter")]
+        [Produces("application/json")]
         [ProducesResponseType(200, Type = typeof(CurrencyConverted))]
         [ProducesResponseType(400, Type = typeof(Error))]
         [ProducesResponseType(404, Type = typeof(Error))]
