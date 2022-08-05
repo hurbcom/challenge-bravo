@@ -18,5 +18,9 @@ namespace CurrencyConverterAPI.CrossCutting.HandlerErrorMessage
         public static string BadRequestParamToIsRequired = "The 'to' attribute is mandatory.";
 
         public static string BadRequestParamAmountIsRequired = "The 'amount' attribute is mandatory.";
+
+        public static string ServiceUnavailableBrokenCircuit = "Sorry, we were unable to process your request. Please, try again in a few minutes.";
+
+        public static string ServiceUnavailableExceededRetry = "Sorry, we were unable to process your request. Please, wait a minute and try again.";
     }
 }

@@ -21,29 +21,28 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             _config = config;
         }
 
-        async Task<CurrencyConvertedResponse> IExchangeAppService.GetExchange(string from, string to, decimal amount)
+        async Task<dynamic> IExchangeAppService.GetExchange(string from, string to, decimal amount)
         {
             IDictionary<string, object> response = await _exchangeService.GetExchangeRates();
             JObject result = (JObject)response["rates"];
 
             if (!result.HasValues)
-                return new CurrencyConvertedResponse((int)HttpStatusCode.BadRequest, new Error(HandlerErrorResponseMessage.Exception));
+                return new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.Exception);
 
             if (response["status_code"] is not HttpStatusCode.OK)
-                return new CurrencyConvertedResponse((int)HttpStatusCode.BadRequest, new Error(HandlerErrorResponseMessage.Exception));
+                return new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.Exception);
             else
             {
                 if (!result.ContainsKey(from))
-                    return new CurrencyConvertedResponse((int)HttpStatusCode.NotFound, new Error(HandlerErrorResponseMessage.NotFoundCurrencyUnavailable(from)));
+                    return new Error((int)HttpStatusCode.NotFound, HandlerErrorResponseMessage.NotFoundCurrencyUnavailable(from));
                 if (!result.ContainsKey(to))
-                    return new CurrencyConvertedResponse((int)HttpStatusCode.NotFound, new Error(HandlerErrorResponseMessage.NotFoundCurrencyUnavailable(to)));
+                    return new Error((int)HttpStatusCode.NotFound, HandlerErrorResponseMessage.NotFoundCurrencyUnavailable(to));
 
                 decimal priceFrom = CalculatesValueCurrencyBallast(result[from].Value<decimal>());
                 decimal priceTo = result[to].Value<decimal>();
                 decimal amountConverted = CalculateConversion(priceFrom, priceTo, amount);
 
-                var currencyConverted = new CurrencyConverted(from, to, amount, amountConverted);
-                return new CurrencyConvertedResponse((int)HttpStatusCode.OK, null, currencyConverted);
+                return new CurrencyConverted(from, to, amount, amountConverted);
             }
         }
 
@@ -75,5 +74,9 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             }
         }
 
+        public Task GetTestPolly(int code)
+        {
+            return _exchangeService.GetTestPolly(code);
+        }
     }
 }

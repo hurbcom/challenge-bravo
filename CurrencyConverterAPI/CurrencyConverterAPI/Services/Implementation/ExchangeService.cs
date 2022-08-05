@@ -1,6 +1,7 @@
 using CurrencyConverterAPI.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Polly.CircuitBreaker;
 using System.Net.Http.Headers;
 
 namespace CurrencyConverterAPI.Services.Implementation
@@ -25,9 +26,17 @@ namespace CurrencyConverterAPI.Services.Implementation
         async Task<IDictionary<string, object>> IExchangeService.GetExchangeRates()
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"{_config.BaseUrl}/exchange-rates?currency={_config.CurrencyBallast}");
+            response.EnsureSuccessStatusCode();
             string result = response.Content.ReadAsStringAsync().Result;
             JObject rates = ParseResultResponseToJson(result);
             return CreateDictionaryToReturn(response, rates);
+        }
+        async Task IExchangeService.GetTestPolly(int code)
+        {
+            var response = await _httpClient.GetAsync($"http://httpbin.org/status/{code}");
+            _logger.LogInformation(response.IsSuccessStatusCode.ToString());
+            Console.WriteLine(response.IsSuccessStatusCode);
+            response.EnsureSuccessStatusCode();
         }
 
         private static Dictionary<string, object> CreateDictionaryToReturn(HttpResponseMessage response, JObject rates)

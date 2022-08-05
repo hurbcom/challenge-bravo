@@ -3,6 +3,7 @@ using CurrencyConverterAPI.Application.AppServices.Implementation;
 using CurrencyConverterAPI.Configuration;
 using CurrencyConverterAPI.Services;
 using CurrencyConverterAPI.Services.Implementation;
+using CurrencyConverterAPI.Services.Resilience;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Options;
@@ -45,8 +46,17 @@ try
     builder.Services.Configure<ApiConfiguration>(b => b.CurrencyBallast = builder.Configuration["ApiConfiguration:CurrencyBallast"]);
     #endregion
 
-    #region HttpClient
-    builder.Services.AddHttpClient<IExchangeService, ExchangeService>(b => b.BaseAddress = new Uri(builder.Configuration["ApiConfiguration:BaseUrl"]));
+    #region Inputs ResiliencePollicy
+    int retryCount = Int16.Parse(builder.Configuration["ResiliencePollicy:retryCount"]);
+    int exceptionsAllowedBeforeBreaking = Int16.Parse(builder.Configuration["ResiliencePollicy:exceptionsAllowedBeforeBreaking"]);
+    int durationOfBreakInSeconds = Int16.Parse(builder.Configuration["ResiliencePollicy:durationOfBreakInSeconds"]);
+    #endregion
+
+    #region HttpClient e ResiliencePollicy
+    builder.Services.AddHttpClient<IExchangeService, ExchangeService>(b => b.BaseAddress = new Uri(builder.Configuration["ApiConfiguration:BaseUrl"]))
+        .AddPolicyHandler(PolicyResilience.GetRetryPolicy(retryCount))
+        .AddPolicyHandler(PolicyResilience.GetCircuitBreakerPolicy(exceptionsAllowedBeforeBreaking, durationOfBreakInSeconds)
+    );
     #endregion
 
     #region Disable Automatic Model State Validation
@@ -77,7 +87,7 @@ try
                     Name = "Eliz Carvalho",
                     Url = new Uri("https://br.linkedin.com/in/elizcarvalho")
                 }
-            }); ;
+            });
     });
     #endregion
 
