@@ -14,7 +14,7 @@ using System.Reflection;
 #region Serilog - Pt1
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .CreateBootstrapLogger();
+    .CreateLogger();
 
 Log.Information("Starting up");
 #endregion
@@ -25,8 +25,8 @@ try
 
     #region Serilog - Pt2
     builder.Host.UseSerilog((ctx, lc) => lc
-            .WriteTo.Console()
-            .ReadFrom.Configuration(ctx.Configuration));
+            .ReadFrom.Configuration(ctx.Configuration)
+            .WriteTo.Console());
     #endregion
 
     #region CORS - Pt1
@@ -95,15 +95,19 @@ try
     });
     #endregion
 
+    #region Add HealthCheck
+    builder.Services.AddHealthChecks();
+    #endregion
+
     var app = builder.Build();
+
+    #region Route healthcheck
+    app.MapHealthChecks("/health");
+    #endregion
 
     #region Serilog - Pt3 (Registro do middleware de solicitação)
     app.UseSerilogRequestLogging();
     #endregion
-
-    app.UseHttpsRedirection();
-
-    app.UseAuthorization();
 
     app.MapControllers();
 

@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  currency_converter:
+    container_name: currencyconverter
+    image: ${DOCKER_REGISTRY-}currency_converter
+    build:
+      context: .
+      dockerfile: CurrencyConverterAPI/Dockerfile
+    environment:
+      - ApiConfiguration__CurrencyBallast=${CURRENCYBALLAST}
+      - ResiliencePollicy__retryCount=${RETRYCOUNT}
+      - ResiliencePollicy__exceptionsAllowedBeforeBreaking=${EXCEPTIONALLOWEDBEFOREBREAKING}
+      - ResiliencePollicy__durationOfBreakInSeconds=${DURATIONOFBREAKINSECONDS}
+      - Serilog__WriteTo__1__Args__apiKey=${SEQAPIKEY}
+    ports:
+      - "9000:5000"
+    networks:
+      - bravo-net
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: curl --fail http://localhost:5000/health || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+
+  seq:
+    container_name: seq
+    image: ecarvalh2020/bravo_seq:1.0
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINUSERNAME=${SEQADMINUSERNAME}
+      - SEQ_FIRSTRUN_ADMINPASSWORDHASH=${SEQADMINPASSWORDHASH}
+      - SEQ_FIRSTRUN_REQUIREAUTHTENTICATIONFORHTTPINGESTION=True
+    ports:
+      - "5341:80"
+    networks:
+      - bravo-net
+    volumes: 
+      - ./Seq/seq_data:/data
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: curl --fail http://localhost/health || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+
+networks:
+  bravo-net:
+    name: bravo-net
+    driver: bridge

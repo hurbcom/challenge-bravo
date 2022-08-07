@@ -74,7 +74,7 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             }
         }
 
-        public Task GetTestPolly(int code)
+        Task IExchangeAppService.GetTestPolly(int code)
         {
             return _exchangeService.GetTestPolly(code);
         }
