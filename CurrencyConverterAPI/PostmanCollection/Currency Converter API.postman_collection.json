@@ -1,0 +1,797 @@
+{
+	"info": {
+		"_postman_id": "54f5cc6b-9efb-431b-b1fe-22c323a65127",
+		"name": "Currency Converter API",
+		"description": "REST API developed as a requirement for the 'Bravo' technical challenge of 'Hurb'.\n\nContact Support:\n Name: Eliz Carvalho",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2911727"
+	},
+	"item": [
+		{
+			"name": "Converter",
+			"item": [
+				{
+					"name": "[200] OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName + \" - Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(pm.info.requestName + \" - Response Time OK\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRL&to=EUR&amount=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Currency",
+								"v{{version}}",
+								"converter"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BRL",
+									"description": "Source currency"
+								},
+								{
+									"key": "to",
+									"value": "EUR",
+									"description": "Final currency"
+								},
+								{
+									"key": "amount",
+									"value": "1",
+									"description": "Value to be converted"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlCurrencyConverterAPI}}/api/Currency/v{{versionCurrencyConverterAPI}}/converter?from=BRL&to=EUR&amount=1",
+									"host": [
+										"{{baseUrlCurrencyConverterAPI}}"
+									],
+									"path": [
+										"api",
+										"Currency",
+										"v{{versionCurrencyConverterAPI}}",
+										"converter"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "BRL",
+											"description": "Source currency"
+										},
+										{
+											"key": "to",
+											"value": "EUR",
+											"description": "Final currency"
+										},
+										{
+											"key": "amount",
+											"value": "1",
+											"description": "Value to be converted"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"from\": \"quis mollit voluptate\",\n  \"to\": \"magna laborum esse irure eiusmod\",\n  \"amount\": 23189930.685242817,\n  \"amount_converted\": 86299442.75136828\n}"
+						}
+					]
+				},
+				{
+					"name": "[400] BadRequest - Without 'From'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName + \" - Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(pm.info.requestName + \" - Response Time OK\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=&to=EUR&amount=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Currency",
+								"v{{version}}",
+								"converter"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "",
+									"description": "Source currency"
+								},
+								{
+									"key": "to",
+									"value": "EUR",
+									"description": "Final currency"
+								},
+								{
+									"key": "amount",
+									"value": "1",
+									"description": "Value to be converted"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "400BadRequest",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=&to=EUR&amount=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Currency",
+										"v{{version}}",
+										"converter"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "",
+											"description": "Source currency"
+										},
+										{
+											"key": "to",
+											"value": "EUR",
+											"description": "Final currency"
+										},
+										{
+											"key": "amount",
+											"value": "1",
+											"description": "Value to be converted"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status_code\": 55800603,\n  \"message\": \"velit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "[400] BadRequest - Without 'To'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName + \" - Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(pm.info.requestName + \" - Response Time OK\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRL&to=&amount=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Currency",
+								"v{{version}}",
+								"converter"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BRL",
+									"description": "Source currency"
+								},
+								{
+									"key": "to",
+									"value": "",
+									"description": "Final currency"
+								},
+								{
+									"key": "amount",
+									"value": "1",
+									"description": "Value to be converted"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "400BadRequest",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRL&to=&amount=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Currency",
+										"v{{version}}",
+										"converter"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "BRL",
+											"description": "Source currency"
+										},
+										{
+											"key": "to",
+											"value": "",
+											"description": "Final currency"
+										},
+										{
+											"key": "amount",
+											"value": "1",
+											"description": "Value to be converted"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status_code\": 55800603,\n  \"message\": \"velit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "[400] BadRequest - Without 'Amount'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName + \" - Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(pm.info.requestName + \" - Response Time OK\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRL&to=EUR&amount=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Currency",
+								"v{{version}}",
+								"converter"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BRL",
+									"description": "Source currency"
+								},
+								{
+									"key": "to",
+									"value": "EUR",
+									"description": "Final currency"
+								},
+								{
+									"key": "amount",
+									"value": "",
+									"description": "Value to be converted"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "400BadRequest",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRL&to=EUR&amount=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Currency",
+										"v{{version}}",
+										"converter"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "BRL",
+											"description": "Source currency"
+										},
+										{
+											"key": "to",
+											"value": "EUR",
+											"description": "Final currency"
+										},
+										{
+											"key": "amount",
+											"value": "",
+											"description": "Value to be converted"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status_code\": 55800603,\n  \"message\": \"velit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "[400] BadRequest - Incorret format parameter 'Amount'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName + \" - Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(pm.info.requestName + \" - Response Time OK\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRL&to=EUR&amount=ASDF",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Currency",
+								"v{{version}}",
+								"converter"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BRL",
+									"description": "Source currency"
+								},
+								{
+									"key": "to",
+									"value": "EUR",
+									"description": "Final currency"
+								},
+								{
+									"key": "amount",
+									"value": "ASDF",
+									"description": "Value to be converted"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "400BadRequest",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRL&to=EUR&amount=ASDF",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Currency",
+										"v{{version}}",
+										"converter"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "BRL",
+											"description": "Source currency"
+										},
+										{
+											"key": "to",
+											"value": "EUR",
+											"description": "Final currency"
+										},
+										{
+											"key": "amount",
+											"value": "ASDF",
+											"description": "Value to be converted"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status_code\": 55800603,\n  \"message\": \"velit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "[404] NotFound - Unavailable currency 'From'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName + \" - Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(pm.info.requestName + \" - Response Time OK\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRV&to=EUR&amount=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Currency",
+								"v{{version}}",
+								"converter"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BRV",
+									"description": "Source currency"
+								},
+								{
+									"key": "to",
+									"value": "EUR",
+									"description": "Final currency"
+								},
+								{
+									"key": "amount",
+									"value": "1",
+									"description": "Value to be converted"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "404NotFound",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRV&to=BRL&amount=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Currency",
+										"v{{version}}",
+										"converter"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "BRV",
+											"description": "Source currency"
+										},
+										{
+											"key": "to",
+											"value": "BRL",
+											"description": "Final currency"
+										},
+										{
+											"key": "amount",
+											"value": "1",
+											"description": "Value to be converted"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status_code\": 55800603,\n  \"message\": \"velit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "[404] NotFound - Unavailable currency 'To'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName + \" - Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(pm.info.requestName + \" - Response Time OK\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRL&to=BRV&amount=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Currency",
+								"v{{version}}",
+								"converter"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "BRL",
+									"description": "Source currency"
+								},
+								{
+									"key": "to",
+									"value": "BRV",
+									"description": "Final currency"
+								},
+								{
+									"key": "amount",
+									"value": "1",
+									"description": "Value to be converted"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "404NotFound",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/Currency/v{{version}}/converter?from=BRV&to=BRL&amount=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Currency",
+										"v{{version}}",
+										"converter"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "BRV",
+											"description": "Source currency"
+										},
+										{
+											"key": "to",
+											"value": "BRL",
+											"description": "Final currency"
+										},
+										{
+											"key": "amount",
+											"value": "1",
+											"description": "Value to be converted"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status_code\": 55800603,\n  \"message\": \"velit\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:9000",
+			"type": "string"
+		},
+		{
+			"key": "version",
+			"value": "1",
+			"type": "any"
+		}
+	]
+}
