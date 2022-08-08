@@ -1,14 +1,15 @@
 using CurrencyConverterAPI.Application.AppServices;
 using CurrencyConverterAPI.Application.AppServices.Implementation;
 using CurrencyConverterAPI.Configuration;
+using CurrencyConverterAPI.Configuration.Implementation;
 using CurrencyConverterAPI.Services;
 using CurrencyConverterAPI.Services.Implementation;
-using CurrencyConverterAPI.Services.Resilience;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using StackExchange.Redis;
 using System.Reflection;
 
 #region Serilog - Pt1
@@ -55,13 +56,29 @@ try
 
     #region HttpClient e ResiliencePollicy
     builder.Services.AddHttpClient<IExchangeService, ExchangeService>(b => b.BaseAddress = new Uri(builder.Configuration["ApiConfiguration:BaseUrl"]))
-        .AddPolicyHandler(PolicyResilience.GetRetryPolicy(retryCount))
-        .AddPolicyHandler(PolicyResilience.GetCircuitBreakerPolicy(exceptionsAllowedBeforeBreaking, durationOfBreakInSeconds)
+        .AddPolicyHandler(PolicyResilienceConfiguration.GetRetryPolicy(retryCount))
+        .AddPolicyHandler(PolicyResilienceConfiguration.GetCircuitBreakerPolicy(exceptionsAllowedBeforeBreaking, durationOfBreakInSeconds)
     );
     #endregion
 
     #region Disable Automatic Model State Validation
     builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+    #endregion
+
+
+    #region Redis
+    builder.Services.AddSingleton<IConnectionMultiplexer>(options =>
+        ConnectionMultiplexer.Connect(new ConfigurationOptions()
+        {
+            EndPoints = { { builder.Configuration["Redis:Host"], Int16.Parse(builder.Configuration["Redis:Port"]) } },
+            ConnectRetry = 2,
+            ReconnectRetryPolicy = new LinearRetry(10),
+            AbortOnConnectFail = false,
+            ConnectTimeout = 5000,
+            DefaultDatabase = 0,
+            Password = builder.Configuration["Redis:Password"]
+        })
+    );
     #endregion
 
     builder.Services.AddControllers();

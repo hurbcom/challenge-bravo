@@ -1,8 +1,10 @@
 using CurrencyConverterAPI.Configuration;
 using CurrencyConverterAPI.CrossCutting.HandlerErrorMessage;
+using CurrencyConverterAPI.CrossCutting.Log;
 using CurrencyConverterAPI.Domain.Models;
 using CurrencyConverterAPI.Services;
 using Newtonsoft.Json.Linq;
+using StackExchange.Redis;
 using System.Globalization;
 using System.Net;
 
@@ -13,39 +15,110 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
         private readonly IApiConfiguration _config;
         private readonly IExchangeService _exchangeService;
         private readonly ILogger<ExchangeAppService> _logger;
+        private readonly IConnectionMultiplexer _redis;
+        private static IDatabase _cache;
 
-        public ExchangeAppService(IApiConfiguration config, IExchangeService exchangeService, ILogger<ExchangeAppService> logger)
+        public ExchangeAppService(IApiConfiguration config,
+                                  IExchangeService exchangeService,
+                                  ILogger<ExchangeAppService> logger,
+                                  IConnectionMultiplexer redis)
         {
             _exchangeService = exchangeService;
             _logger = logger;
             _config = config;
+            _redis = redis;
+            _cache = _redis.GetDatabase();
+
         }
 
         async Task<dynamic> IExchangeAppService.GetExchange(string from, string to, decimal amount)
         {
-            IDictionary<string, object> response = await _exchangeService.GetExchangeRates();
-            JObject result = (JObject)response["rates"];
+            string[] keys = new string[2] { from, to };
+            decimal[] prices = new decimal[2];
 
-            if (!result.HasValues)
-                return new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.Exception);
-
-            if (response["status_code"] is not HttpStatusCode.OK)
-                return new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.Exception);
-            else
+            for (int i = 0; i < prices.Length; i++)
             {
-                if (!result.ContainsKey(from))
-                    return new Error((int)HttpStatusCode.NotFound, HandlerErrorResponseMessage.NotFoundCurrencyUnavailable(from));
-                if (!result.ContainsKey(to))
-                    return new Error((int)HttpStatusCode.NotFound, HandlerErrorResponseMessage.NotFoundCurrencyUnavailable(to));
+                if (IsHasKeyInCache(keys[i]))
+                {
+                    Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetExchange", "Key in the cache");
+                    prices[i] = GetValueInCache(keys[i]);
+                }
+                else
+                {
+                    Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetExchange", "Call API Coinbase.");
 
-                decimal priceFrom = CalculatesValueCurrencyBallast(result[from].Value<decimal>());
-                decimal priceTo = result[to].Value<decimal>();
-                decimal amountConverted = CalculateConversion(priceFrom, priceTo, amount);
+                    IDictionary<string, object> response = await GetExchangeRates();
 
-                return new CurrencyConverted(from, to, amount, amountConverted);
+                    if (IsApiReturnedIsNOK((HttpStatusCode)response["status_code"]))
+                        return new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.Exception);
+
+                    JObject result = (JObject)response["rates"];
+                    if (!result.HasValues)
+                        return new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.Exception);
+
+                    if (!IsHasKeyInApi(result, keys[i]))
+                        return new Error((int)HttpStatusCode.NotFound, HandlerErrorResponseMessage.NotFoundCurrencyUnavailable(keys[i]));
+
+                    SaveRatesApiInCache(result);
+
+                    prices[i] = GetValueInApi(result, keys[i]);
+                    _logger.LogInformation(String.Format("Valor {0} da posição {1}", prices[i], i));
+                }
             }
+
+            decimal priceFrom = CalculatesValueCurrencyBallast(prices[0]);
+            decimal priceTo = prices[1];
+            decimal amountConverted = CalculateConversion(priceFrom, priceTo, amount);
+
+            return new CurrencyConverted(from, to, amount, amountConverted);
         }
 
+        #region Private Methods for Cache
+        private static bool IsHasKeyInCache(string key)
+        {
+            return _cache.KeyExistsAsync(key).Result;
+        }
+
+        private static decimal GetValueInCache(string key)
+        {
+            return decimal.Parse(_cache.StringGetAsync(key).Result, CultureInfo.InvariantCulture);
+        }
+
+        private void SaveRatesApiInCache(JObject result)
+        {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "SaveRatesApiInCache", "Save rate in cache.");
+            foreach (JProperty property in result.Properties())
+            {
+                string key = property.Name;
+                string value = property.Value.ToString();
+                _cache.StringSet(key, value, TimeSpan.FromHours(1));
+            }
+        }
+        #endregion
+
+        #region Private Methods for API
+        private async Task<IDictionary<string, object>> GetExchangeRates()
+        {
+            return await _exchangeService.GetExchangeRates();
+        }
+
+        private static bool IsHasKeyInApi(JObject result, string key)
+        {
+            return result.ContainsKey(key);
+        }
+
+        private static bool IsApiReturnedIsNOK(HttpStatusCode statusCodeRsponse)
+        {
+            return statusCodeRsponse is not HttpStatusCode.OK;
+        }
+
+        private static decimal GetValueInApi(JObject result, string key)
+        {
+            return result[key].Value<decimal>();
+        }
+        #endregion
+
+        #region Private Methods Calculate
         /// <summary>
         /// Calculates the value of the Currency-Ballast pair
         /// Example: Ballast is USD
@@ -61,22 +134,15 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
 
         private static decimal CalculateConversion(decimal priceFrom, decimal priceTo, decimal amount)
         {
-            return Math.Round(priceFrom * priceTo * amount, 5);
+            return Math.Round(priceFrom * priceTo * amount, 4);
         }
+        #endregion
 
-        private static void SaveRatesInCache(JObject result)
-        {
-            foreach (JProperty property in result.Properties())
-            {
-                string key = property.Name;
-                decimal value = decimal.Parse(property.Value.ToString(), CultureInfo.InvariantCulture);
-                //TODO: Implementar logica de salvar no cache
-            }
-        }
-
+        #region Call for test Resilience
         Task IExchangeAppService.GetTestPolly(int code)
         {
             return _exchangeService.GetTestPolly(code);
         }
+        #endregion
     }
 }

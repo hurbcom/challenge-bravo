@@ -15,7 +15,8 @@ namespace CurrencyConverterAPI.CrossCutting.Log
             if (hasError)
                 logger.LogError(MessageLog.Error(nameClass, nameMethod, message, param));
             else
-                logger.LogInformation(MessageLog.Info(nameClass, nameMethod, param));
+                logger.LogInformation(MessageLog.Info(nameClass, nameMethod, param, message));
+
         }
     }
 }

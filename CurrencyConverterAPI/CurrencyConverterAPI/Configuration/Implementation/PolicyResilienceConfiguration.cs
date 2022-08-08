@@ -2,9 +2,9 @@ using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
 
-namespace CurrencyConverterAPI.Services.Resilience
+namespace CurrencyConverterAPI.Configuration.Implementation
 {
-    public static class PolicyResilience 
+    public static class PolicyResilienceConfiguration
     {
         public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(int retryCount)
         {
@@ -15,7 +15,7 @@ namespace CurrencyConverterAPI.Services.Resilience
                 .WaitAndRetryAsync(delay);
         }
 
-        public static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy(int exceptionsAllowedBeforeBreaking,int durationOfBreakInSeconds)
+        public static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy(int exceptionsAllowedBeforeBreaking, int durationOfBreakInSeconds)
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()

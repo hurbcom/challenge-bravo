@@ -1,5 +1,3 @@
-using CurrencyConverterAPI.Domain.Models;
-
 namespace CurrencyConverterAPI.Application.AppServices
 {
     public interface IExchangeAppService

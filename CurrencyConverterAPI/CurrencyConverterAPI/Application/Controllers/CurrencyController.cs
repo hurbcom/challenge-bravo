@@ -4,6 +4,7 @@ using CurrencyConverterAPI.CrossCutting.Log;
 using CurrencyConverterAPI.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Polly.CircuitBreaker;
+using StackExchange.Redis;
 using System.Globalization;
 using System.Net;
 
@@ -55,7 +56,7 @@ namespace CurrencyConverterAPI.Controllers
                 {
                     result = await _exchangeAppService.GetExchange(from.Trim().ToUpper(), to.Trim().ToUpper(), number);
 
-                    if(result.GetType().Name == typeof(CurrencyConverted).Name)
+                    if (result.GetType().Name == typeof(CurrencyConverted).Name)
                     {
                         hasError = false;
                         returnApi = Ok(result);
@@ -66,6 +67,9 @@ namespace CurrencyConverterAPI.Controllers
                         {
                             case (int)HttpStatusCode.NotFound:
                                 returnApi = NotFound(result);
+                                break;
+                            case (int)HttpStatusCode.BadRequest:
+                                returnApi = BadRequest(result);
                                 break;
                             default:
                                 break;
@@ -96,6 +100,16 @@ namespace CurrencyConverterAPI.Controllers
                 return objectResult;
                 throw;
             }
+            catch (RedisConnectionException ex)
+            {
+                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name + "=>" + ex.Message.ToString());
+                var objectResult = new ObjectResult(
+                    new Error((int)HttpStatusCode.ServiceUnavailable, "deu ruim no cache")
+                );
+                objectResult.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                return objectResult;
+                throw;
+            }
             catch (Exception ex)
             {
                 Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name + "=>" + ex.Message.ToString());
@@ -119,7 +133,7 @@ namespace CurrencyConverterAPI.Controllers
             }
             catch (HttpRequestException ex)
             {
-                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name+"=>"+ex.Message.ToString());
+                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name + "=>" + ex.Message.ToString());
                 var objectResult = new ObjectResult(
                     new Error((int)HttpStatusCode.ServiceUnavailable, HandlerErrorResponseMessage.ServiceUnavailableExceededRetry)
                 );
@@ -128,7 +142,7 @@ namespace CurrencyConverterAPI.Controllers
             }
             catch (BrokenCircuitException ex)
             {
-                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name+"=>"+ex.Message.ToString());
+                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name + "=>" + ex.Message.ToString());
                 var objectResult = new ObjectResult(
                     new Error((int)HttpStatusCode.ServiceUnavailable, HandlerErrorResponseMessage.ServiceUnavailableBrokenCircuit)
                 );
@@ -138,7 +152,7 @@ namespace CurrencyConverterAPI.Controllers
             }
             catch (Exception ex)
             {
-                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name+"=>"+ex.Message.ToString());
+                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name + "=>" + ex.Message.ToString());
                 var objectResult = new ObjectResult(
                     new Error((int)HttpStatusCode.ServiceUnavailable, HandlerErrorResponseMessage.Exception)
                 );

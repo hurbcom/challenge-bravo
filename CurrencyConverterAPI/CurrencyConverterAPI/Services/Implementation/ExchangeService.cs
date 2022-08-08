@@ -1,7 +1,6 @@
 using CurrencyConverterAPI.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Polly.CircuitBreaker;
 using System.Net.Http.Headers;
 
 namespace CurrencyConverterAPI.Services.Implementation
