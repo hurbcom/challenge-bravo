@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Prometheus;
 using Serilog;
 using StackExchange.Redis;
 using System.Reflection;
@@ -124,6 +125,11 @@ try
 
     #region Serilog - Pt3 (Registro do middleware de solicitação)
     app.UseSerilogRequestLogging();
+    #endregion
+
+    #region Metrics with Prometheus
+    app.UseMetricServer();
+    app.UseHttpMetrics();
     #endregion
 
     app.MapControllers();
