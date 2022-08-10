@@ -2,12 +2,15 @@ using CurrencyConverterAPI.Application.AppServices;
 using CurrencyConverterAPI.Application.AppServices.Implementation;
 using CurrencyConverterAPI.Configuration;
 using CurrencyConverterAPI.Configuration.Implementation;
+using CurrencyConverterAPI.Repositories;
+using CurrencyConverterAPI.Repositories.Implementation;
 using CurrencyConverterAPI.Services;
 using CurrencyConverterAPI.Services.Implementation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using Prometheus;
 using Serilog;
 using StackExchange.Redis;
@@ -49,6 +52,15 @@ try
     builder.Services.Configure<ApiConfiguration>(b => b.CurrencyBallast = builder.Configuration["ApiConfiguration:CurrencyBallast"]);
     #endregion
 
+    #region DatabaseConfiguration - Mongo
+    builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection(nameof(DatabaseConfiguration)));
+    builder.Services.AddSingleton<IMongoClient>(new MongoClient(builder.Configuration["DatabaseConfiguration:ConnectionString"]));
+    builder.Services.AddSingleton<IDatabaseConfiguration>(x => x.GetRequiredService<IOptions<DatabaseConfiguration>>().Value);
+    #region Hosted Services (BackgroundTask) - Indexes MongoDB
+    builder.Services.AddHostedService<DatabaseIndexesConfiguration>();
+    #endregion
+    #endregion
+
     #region Inputs ResiliencePollicy
     int retryCount = Int16.Parse(builder.Configuration["ResiliencePollicy:retryCount"]);
     int exceptionsAllowedBeforeBreaking = Int16.Parse(builder.Configuration["ResiliencePollicy:exceptionsAllowedBeforeBreaking"]);
@@ -65,7 +77,6 @@ try
     #region Disable Automatic Model State Validation
     builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
     #endregion
-
 
     #region Redis
     builder.Services.AddSingleton<IConnectionMultiplexer>(options =>
@@ -86,6 +97,8 @@ try
 
     #region Injecao de dependencia
     builder.Services.AddScoped<IExchangeAppService, ExchangeAppService>();
+    builder.Services.AddScoped<ICoinAppService, CoinAppService>();
+    builder.Services.AddScoped<ICoinRepository, CoinRepository>();
     #endregion
 
     #region Versionamento de API
@@ -115,6 +128,10 @@ try
 
     #region Add HealthCheck
     builder.Services.AddHealthChecks();
+    #endregion
+
+    #region AutoMapper
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     #endregion
 
     var app = builder.Build();

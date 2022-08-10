@@ -28,7 +28,6 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             _config = config;
             _redis = redis;
             _cache = _redis.GetDatabase();
-
         }
 
         async Task<dynamic> IExchangeAppService.GetExchange(string from, string to, decimal amount)
@@ -57,7 +56,7 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
                         return new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.Exception);
 
                     if (!IsHasKeyInApi(result, keys[i]))
-                        return new Error((int)HttpStatusCode.NotFound, HandlerErrorResponseMessage.NotFoundCurrencyUnavailable(keys[i]));
+                        return new Error((int)HttpStatusCode.NotFound, HandlerErrorResponseMessage.NotFoundCoinNotAvailable(keys[i]));
 
                     SaveRatesApiInCache(result);
 
@@ -70,7 +69,7 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             decimal priceTo = prices[1];
             decimal amountConverted = CalculateConversion(priceFrom, priceTo, amount);
 
-            return new CurrencyConverted(from, to, amount, amountConverted);
+            return new CoinConverted(from, to, amount, amountConverted);
         }
 
         #region Private Methods for Cache

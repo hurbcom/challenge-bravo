@@ -18,10 +18,14 @@ services:
       - Redis__Port=${REDISPORT}
       - Redis__Password=${REDISPASS}
       - Redis__Database=${REDISDATABASE}
+      - DatabaseConfiguration__ConnectionString=mongodb://${MONGOUSERNAME}:${MONGOPASS}@mongo/
+      - DatabaseConfiguration__DatabaseName=${MONGODATABASENAME}
+      - DatabaseConfiguration__CoinsCollectionName=${MONGOCOINSCOLLECTION}
     ports:
       - "9000:5000"
     depends_on:
       - redis
+      - mongo
     networks:
       - bravo-net
     restart: on-failure
@@ -48,7 +52,7 @@ services:
     networks:
       - bravo-net
     volumes: 
-      - ./Seq/seq_data:/data
+      - seq_data:/data
     restart: on-failure
     deploy:
       restart_policy:
@@ -69,7 +73,7 @@ services:
     networks:
       - bravo-net
     volumes: 
-      - ./Redis/data:/data
+      - redis_data:/data
     restart: on-failure
     deploy:
       restart_policy:
@@ -79,7 +83,7 @@ services:
   
   prometheus:
     container_name: prometheus
-    image: prom/prometheus
+    image: ecarvalh2020/bravo_prometheus:1.0
     ports:
       - "9090:9090"
     command: 
@@ -88,8 +92,24 @@ services:
     networks:
       - bravo-net
     volumes: 
-      - ./Prometheus/conf:/etc/prometheus
-      - ./Prometheus/data:/prometheus
+      - prometheus_data:/prometheus
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGOUSERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGOPASS}
+    networks:
+      - bravo-net
+    volumes: 
+      - mongo_data:/data/db
     restart: on-failure
     deploy:
       restart_policy:
@@ -99,3 +119,9 @@ networks:
   bravo-net:
     name: bravo-net
     driver: bridge
+
+volumes:
+  seq_data:
+  redis_data:
+  prometheus_data:
+  mongo_data:

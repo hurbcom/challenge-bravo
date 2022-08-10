@@ -1,4 +1,5 @@
 using CurrencyConverterAPI.Configuration;
+using CurrencyConverterAPI.CrossCutting.Log;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
@@ -24,6 +25,7 @@ namespace CurrencyConverterAPI.Services.Implementation
 
         async Task<IDictionary<string, object>> IExchangeService.GetExchangeRates()
         {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetExchangeRates", string.Empty);
             HttpResponseMessage response = await _httpClient.GetAsync($"{_config.BaseUrl}/exchange-rates?currency={_config.CurrencyBallast}");
             response.EnsureSuccessStatusCode();
             string result = response.Content.ReadAsStringAsync().Result;
@@ -32,6 +34,7 @@ namespace CurrencyConverterAPI.Services.Implementation
         }
         async Task IExchangeService.GetTestPolly(int code)
         {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetTestPolly", string.Empty);
             var response = await _httpClient.GetAsync($"http://httpbin.org/status/{code}");
             _logger.LogInformation(response.IsSuccessStatusCode.ToString());
             Console.WriteLine(response.IsSuccessStatusCode);
