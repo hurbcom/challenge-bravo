@@ -32,12 +32,11 @@ namespace CurrencyConverterAPI.Services.Implementation
             JObject rates = ParseResultResponseToJson(result);
             return CreateDictionaryToReturn(response, rates);
         }
-        async Task IExchangeService.GetTestPolly(int code)
+        public async Task GetTestPolly(int code)
         {
             Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetTestPolly", string.Empty);
             var response = await _httpClient.GetAsync($"http://httpbin.org/status/{code}");
             _logger.LogInformation(response.IsSuccessStatusCode.ToString());
-            Console.WriteLine(response.IsSuccessStatusCode);
             response.EnsureSuccessStatusCode();
         }
 

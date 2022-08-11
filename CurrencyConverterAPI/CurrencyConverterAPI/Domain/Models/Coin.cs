@@ -24,8 +24,8 @@ namespace CurrencyConverterAPI.Domain.Models
 
         public void FillData(string name, string acronym, decimal price)
         {
-            this.Name = name.ToUpper();
-            this.Acronym = acronym.ToUpper();
+            this.Name = name.Trim().ToUpper();
+            this.Acronym = acronym.Trim().ToUpper();
             this.Price = price;
         }
 

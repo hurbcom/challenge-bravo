@@ -20,7 +20,7 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
         private readonly ILogger<ExchangeAppService> _logger;
         private readonly IConnectionMultiplexer _redis;
         private static IDatabase _cache;
-        private readonly TimeSpan _timeoutCache = TimeSpan.FromMinutes(5);
+        private readonly TimeSpan _timeoutCache = TimeSpan.FromHours(1);
 
         public ExchangeAppService(IApiConfiguration config,
                                   IExchangeService exchangeService,
@@ -157,11 +157,6 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             return result.ContainsKey(key);
         }
 
-        private static bool IsApiReturnedIsNOK(HttpStatusCode statusCodeRsponse)
-        {
-            return statusCodeRsponse is not HttpStatusCode.OK;
-        }
-
         private static decimal GetValueInApi(JObject result, string key)
         {
             return result[key].Value<decimal>();
@@ -177,12 +172,12 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
         /// </summary>
         /// <param name="priceFrom">'from' is price of the pair Ballast-Currency. Example: USD 1  = R$5.3890, where from is 5.3890</param>
         /// <returns>Price for pair Currency-Ballast</returns>
-        private static decimal CalculatesValueCurrencyBallast(decimal priceFrom)
+        public static decimal CalculatesValueCurrencyBallast(decimal priceFrom)
         {
             return 1 / priceFrom;
         }
 
-        private static decimal CalculateConversion(decimal priceFrom, decimal priceTo, decimal amount)
+        public static decimal CalculateConversion(decimal priceFrom, decimal priceTo, decimal amount)
         {
             return Math.Round(priceFrom * priceTo * amount, 4);
         }

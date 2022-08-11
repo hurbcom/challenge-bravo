@@ -44,7 +44,6 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "UpdateCoin", string.Empty);
             var coinDb = _repository.GetCoin(id).Result;
             coinDb.FillData(coinInput.Name, coinInput.Acronym, coinInput.Price);
-            coinDb.NormalizeStrings();
             return _repository.UpdateCoin(coinDb);
         }
 

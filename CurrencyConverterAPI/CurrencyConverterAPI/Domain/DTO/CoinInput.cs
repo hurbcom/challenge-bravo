@@ -32,7 +32,7 @@ namespace CurrencyConverterAPI.Domain.DTO
             if (string.IsNullOrWhiteSpace(this.Acronym))
                 return HandlerErrorResponseMessage.BadRequestAcronymCoinInputRequiredField;
 
-            if (this.Name.Length < 3 || this.Name.Length > 5)
+            if (this.Acronym.Length < 3 || this.Acronym.Length > 5)
                 return HandlerErrorResponseMessage.BadRequestAcronymCoinInputLenghtField;
 
             if (this.Price <= 0)
