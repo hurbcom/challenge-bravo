@@ -66,6 +66,10 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             return _repository.IsExistCoinByAcronym(acronym);
         }
 
-
+        Task<IEnumerable<string>> ICoinAppService.GetAcronymCoins()
+        {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetAcronymCoins", string.Empty);
+            return _repository.GetAcronymCoins();
+        }
     }
 }

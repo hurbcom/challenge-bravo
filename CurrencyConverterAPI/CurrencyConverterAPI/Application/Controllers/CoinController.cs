@@ -52,6 +52,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 var coins = await _coinAppService.GetCoins();
                 return Ok(coins);
             }
+            #region Catch
             catch (MongoException ex)
             {
                 Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "GetCoins", ex.GetType().Name + "=>" + ex.Message.ToString());
@@ -72,6 +73,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 return objectResult;
                 throw;
             }
+            #endregion
         }
 
         /// <summary>
@@ -101,6 +103,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                     return NotFound(new Error((int)HttpStatusCode.NotFound, HandlerErrorResponseMessage.NotFoundCoin));
                 return Ok(coin);
             }
+            #region Catch
             catch (MongoException ex)
             {
                 Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "GetCoins", ex.GetType().Name + "=>" + ex.Message.ToString());
@@ -121,7 +124,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 return objectResult;
                 throw;
             }
-
+            #endregion
         }
 
         /// <summary>
@@ -138,7 +141,7 @@ namespace CurrencyConverterAPI.Application.Controllers
         ///     }
         ///
         /// </remarks>
-        /// <param name="coin">New coin to be registered</param>
+        /// <param name="coin">New coin to be registered, with price in USD.</param>
         /// <returns>The new coin.</returns>
         /// <response code="201">Return a new coin created.</response>
         /// <response code="400">Returns the status code and the request failed message (parameter validation).</response>
@@ -158,13 +161,22 @@ namespace CurrencyConverterAPI.Application.Controllers
                 if (!string.IsNullOrEmpty(coinIsValid))
                     return BadRequest(new Error((int)HttpStatusCode.BadRequest, coinIsValid));
 
-                var coinIsExistInDb = _coinAppService.IsExistCoinByAcronym(coin.Acronym).Result;
+                var coinIsExistInDb = await _coinAppService.IsExistCoinByAcronym(coin.Acronym);
                 if (coinIsExistInDb)
                     return BadRequest(new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.BadRequestCoinExistInDB));
+
+                var coinIsExistInCache = await _exchangeAppService.IsExistAcronymInCache(coin.Acronym);
+                if (coinIsExistInCache)
+                    return BadRequest(new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.BadRequestCoinExistInCacheOrApi));
+
+                var coinIsExistInAPI = await _exchangeAppService.AcronymIsExistInAPI(coin.Acronym);
+                if (coinIsExistInAPI)
+                    return BadRequest(new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.BadRequestCoinExistInCacheOrApi));
 
                 var coindDb = await _coinAppService.CreateCoin(coin);
                 return CreatedAtRoute("GetCoin", new { id = coindDb.Id }, coindDb);
             }
+            #region Catch
             catch (MongoException ex)
             {
                 Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "CreateCoin", ex.GetType().Name + "=>" + ex.Message.ToString());
@@ -185,7 +197,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 return objectResult;
                 throw;
             }
-
+            #endregion
         }
 
         /// <summary>
@@ -203,7 +215,7 @@ namespace CurrencyConverterAPI.Application.Controllers
         ///
         /// </remarks>
         /// <param name="id">Id of the coin to be updated</param>
-        /// <param name="coin">Coin with the information to be updated.</param>
+        /// <param name="coin">Coin with the information to be updated, with price in USD.</param>
         /// <returns>No Content</returns>
         /// <response code="204">No content.</response>
         /// <response code="404">Returns the status code and message about coin not found.</response>
@@ -232,6 +244,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 await _coinAppService.UpdateCoin(id, coin);
                 return NoContent();
             }
+            #region Catch
             catch (MongoException ex)
             {
                 Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "CreateCoin", ex.GetType().Name + "=>" + ex.Message.ToString());
@@ -252,6 +265,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 return objectResult;
                 throw;
             }
+            #endregion
         }
 
         /// <summary>
@@ -283,6 +297,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 await _coinAppService.DeleteCoin(id);
                 return NoContent();
             }
+            #region Catch
             catch (MongoException ex)
             {
                 Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "CreateCoin", ex.GetType().Name + "=>" + ex.Message.ToString());
@@ -303,6 +318,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 return objectResult;
                 throw;
             }
+            #endregion
         }
 
         /// <summary>
@@ -360,6 +376,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError, "Converter", (hasError ? result.Message : ""), new string[3] { from, to, amount });
                 return returnApi;
             }
+            #region Catch
             catch (HttpRequestException ex)
             {
                 Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name + "=>" + ex.Message.ToString());
@@ -384,7 +401,7 @@ namespace CurrencyConverterAPI.Application.Controllers
             {
                 Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "Converter", ex.GetType().Name + "=>" + ex.Message.ToString());
                 var objectResult = new ObjectResult(
-                    new Error((int)HttpStatusCode.ServiceUnavailable, "deu ruim no cache")
+                    new Error((int)HttpStatusCode.ServiceUnavailable, "Redis crashed.")
                 );
                 objectResult.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
                 return objectResult;
@@ -400,6 +417,80 @@ namespace CurrencyConverterAPI.Application.Controllers
                 return objectResult;
                 throw;
             }
+            #endregion
+        }
+
+        /// <summary>
+        /// Display listing of available coins for conversion
+        /// </summary>
+        /// <returns>List of available coins for conversion</returns>
+        /// <response code="200">Returns the query parameters informed and the converted value</response>
+        /// <response code="503">Returns the status code and message about the request processing failure.</response>
+        [HttpGet("converter/availables")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcronymCoins))]
+        [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(Error))]
+        public async Task<ActionResult> GetCoinsAvailablesForExchange()
+        {
+            try
+            {
+                var acronyms = new AcronymCoins();
+
+                //PEGA DO BANCO 
+                var acronymInDb = await _coinAppService.GetAcronymCoins();
+                if (acronymInDb != null && acronymInDb.Any())
+                    acronyms.coins.AddRange(acronymInDb);
+
+                // PEGA DA API
+                var acronymInApi = await _exchangeAppService.GetAcronymCoins();
+                if (acronymInApi != null && acronymInApi.Any())
+                    acronyms.coins.AddRange(acronymInApi);
+
+                acronyms.coins.Sort();
+
+                return Ok(acronyms);
+            }
+            #region Catch
+            catch (HttpRequestException ex)
+            {
+                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "GetCoinsAvailablesForExchange", ex.GetType().Name + "=>" + ex.Message.ToString());
+                var objectResult = new ObjectResult(
+                    new Error((int)HttpStatusCode.ServiceUnavailable, HandlerErrorResponseMessage.ServiceUnavailableExceededRetry)
+                );
+                objectResult.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                return objectResult;
+                throw;
+            }
+            catch (BrokenCircuitException ex)
+            {
+                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "GetCoinsAvailablesForExchange", ex.GetType().Name + "=>" + ex.Message.ToString());
+                var objectResult = new ObjectResult(
+                    new Error((int)HttpStatusCode.ServiceUnavailable, HandlerErrorResponseMessage.ServiceUnavailableBrokenCircuit)
+                );
+                objectResult.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                return objectResult;
+                throw;
+            }
+            catch (RedisConnectionException ex)
+            {
+                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "GetCoinsAvailablesForExchange", ex.GetType().Name + "=>" + ex.Message.ToString());
+                var objectResult = new ObjectResult(
+                    new Error((int)HttpStatusCode.ServiceUnavailable, "Redis crashed.")
+                );
+                objectResult.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                return objectResult;
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError: true, "GetCoinsAvailablesForExchange", ex.GetType().Name + "=>" + ex.Message.ToString());
+                var objectResult = new ObjectResult(
+                    new Error((int)HttpStatusCode.ServiceUnavailable, HandlerErrorResponseMessage.Exception)
+                );
+                objectResult.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                return objectResult;
+                throw;
+            }
+            #endregion
         }
 
         private void ValidadeInputParams(string from, string to, string amount, ref decimal number, ref bool hasError, ref ActionResult returnApi, ref dynamic response)

@@ -23,11 +23,26 @@ namespace CurrencyConverterAPI.Repositories.Implementation
             return await _coins.Find(coin => true).ToListAsync();
         }
 
+        async Task<IEnumerable<string>> ICoinRepository.GetAcronymCoins()
+        {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetAcronymCoins", string.Empty);
+            var list = await _coins.Find(coin => true).ToListAsync();
+            return list.Select(coin => coin.Acronym);
+        }
+
         async Task<Coin> ICoinRepository.GetCoin(long id)
         {
             Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetCoin", string.Empty);
             FilterDefinition<Coin> filter = Builders<Coin>.Filter.Eq(coin => coin.Id, id);
             return await _coins.Find(filter).FirstOrDefaultAsync();
+        }
+
+        async Task<decimal> ICoinRepository.GetPriceCoinByAcronym(string acronym)
+        {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetCoinByAcronym", string.Empty);
+            FilterDefinition<Coin> filter = Builders<Coin>.Filter.Eq(coin => coin.Acronym, acronym);
+            var coin = await _coins.Find(filter).FirstOrDefaultAsync();
+            return coin.Price;
         }
 
         async Task<Coin> ICoinRepository.CreateCoin(Coin coin)
@@ -72,5 +87,6 @@ namespace CurrencyConverterAPI.Repositories.Implementation
             var lastCoin = await _coins.Find(coin => true).SortByDescending(coin => coin.Id).FirstOrDefaultAsync();
             return lastCoin is null ? 1 : lastCoin.Id + 1;
         }
+
     }
 }

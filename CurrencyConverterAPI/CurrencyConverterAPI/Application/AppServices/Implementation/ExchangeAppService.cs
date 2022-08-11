@@ -2,11 +2,13 @@ using CurrencyConverterAPI.Configuration;
 using CurrencyConverterAPI.CrossCutting.HandlerErrorMessage;
 using CurrencyConverterAPI.CrossCutting.Log;
 using CurrencyConverterAPI.Domain.Models;
+using CurrencyConverterAPI.Repositories;
 using CurrencyConverterAPI.Services;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System.Globalization;
 using System.Net;
+using System.Text.Json;
 
 namespace CurrencyConverterAPI.Application.AppServices.Implementation
 {
@@ -14,16 +16,20 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
     {
         private readonly IApiConfiguration _config;
         private readonly IExchangeService _exchangeService;
+        private readonly ICoinRepository _coinRepository;
         private readonly ILogger<ExchangeAppService> _logger;
         private readonly IConnectionMultiplexer _redis;
         private static IDatabase _cache;
+        private readonly TimeSpan _timeoutCache = TimeSpan.FromMinutes(5);
 
         public ExchangeAppService(IApiConfiguration config,
                                   IExchangeService exchangeService,
+                                  ICoinRepository coinRepository,
                                   ILogger<ExchangeAppService> logger,
                                   IConnectionMultiplexer redis)
         {
             _exchangeService = exchangeService;
+            _coinRepository = coinRepository;
             _logger = logger;
             _config = config;
             _redis = redis;
@@ -39,29 +45,28 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             {
                 if (IsHasKeyInCache(keys[i]))
                 {
-                    Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetExchange", "Key in the cache");
-                    prices[i] = GetValueInCache(keys[i]);
+                    Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetExchange", "Key in the cache.");
+                    prices[i] = GetPriceInCache(keys[i]);
+                }
+                else if (_coinRepository.IsExistCoinByAcronym(keys[i]).Result)
+                {
+                    Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetExchange", "Key in the database.");
+                    prices[i] = _coinRepository.GetPriceCoinByAcronym(keys[i]).Result;
                 }
                 else
                 {
                     Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetExchange", "Call API Coinbase.");
 
                     IDictionary<string, object> response = await GetExchangeRates();
-
-                    if (IsApiReturnedIsNOK((HttpStatusCode)response["status_code"]))
-                        return new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.Exception);
-
                     JObject result = (JObject)response["rates"];
-                    if (!result.HasValues)
-                        return new Error((int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.Exception);
 
                     if (!IsHasKeyInApi(result, keys[i]))
                         return new Error((int)HttpStatusCode.NotFound, HandlerErrorResponseMessage.NotFoundCoinNotAvailable(keys[i]));
 
                     SaveRatesApiInCache(result);
+                    SaveAcronymApiInCache(result.Properties().Select(x => x.Name).ToList());
 
                     prices[i] = GetValueInApi(result, keys[i]);
-                    _logger.LogInformation(String.Format("Valor {0} da posição {1}", prices[i], i));
                 }
             }
 
@@ -72,13 +77,46 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             return new CoinConverted(from, to, amount, amountConverted);
         }
 
+        async Task<IEnumerable<string>> IExchangeAppService.GetAcronymCoins()
+        {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetAcronymCoins", "Key in the cache.");
+
+            if (IsHasKeyInCache("acronymCoins"))
+                return GetListAcronymsInCache("acronymCoins");
+
+            var response = await GetExchangeRates();
+            JObject result = (JObject)response["rates"];
+            SaveAcronymApiInCache(result.Properties().Select(x => x.Name).ToList());
+            SaveRatesApiInCache(result);
+
+            var listAcronyms = result.Properties().Select(x => x.Name).ToList();
+
+            return listAcronyms;
+        }
+
+        async Task<bool> IExchangeAppService.IsExistAcronymInCache(string acronym)
+        {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "IsExistAcronymInCache");
+            return IsHasKeyInCache(acronym);
+        }
+
+        async Task<bool> IExchangeAppService.AcronymIsExistInAPI(string acronym)
+        {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "AcronymIsExistInAPI");
+            var response = await GetExchangeRates();
+            JObject result = (JObject)response["rates"];
+            SaveAcronymApiInCache(result.Properties().Select(x => x.Name).ToList());
+            SaveRatesApiInCache(result);
+            return IsHasKeyInApi(result, acronym);
+        }
+
         #region Private Methods for Cache
         private static bool IsHasKeyInCache(string key)
         {
             return _cache.KeyExistsAsync(key).Result;
         }
 
-        private static decimal GetValueInCache(string key)
+        private static decimal GetPriceInCache(string key)
         {
             return decimal.Parse(_cache.StringGetAsync(key).Result, CultureInfo.InvariantCulture);
         }
@@ -90,8 +128,21 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             {
                 string key = property.Name;
                 string value = property.Value.ToString();
-                _cache.StringSet(key, value, TimeSpan.FromHours(1));
+                _cache.StringSet(key, value, _timeoutCache);
             }
+        }
+
+        private IEnumerable<string> GetListAcronymsInCache(string key)
+        {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "GetListAcronymsInCache", "Save acronyms in cache.");
+            var list = _cache.StringGetAsync(key).Result;
+            return JsonSerializer.Deserialize<IEnumerable<string>>(list);
+        }
+
+        private void SaveAcronymApiInCache(List<string> acronymCoins)
+        {
+            Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), false, "SaveAcronymApiInCache", "Save rate in cache.");
+            _cache.StringSet("acronymCoins", JsonSerializer.Serialize(acronymCoins), _timeoutCache);
         }
         #endregion
 
@@ -101,7 +152,7 @@ namespace CurrencyConverterAPI.Application.AppServices.Implementation
             return await _exchangeService.GetExchangeRates();
         }
 
-        private static bool IsHasKeyInApi(JObject result, string key)
+        private bool IsHasKeyInApi(JObject result, string key)
         {
             return result.ContainsKey(key);
         }

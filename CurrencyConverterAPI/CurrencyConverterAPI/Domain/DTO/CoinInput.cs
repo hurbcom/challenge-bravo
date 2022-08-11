@@ -13,7 +13,7 @@ namespace CurrencyConverterAPI.Domain.DTO
         public string Name { get; set; }
 
         [JsonPropertyName("acronym")]
-        [StringLength(3, MinimumLength = 3)]
+        [StringLength(5, MinimumLength = 3)]
         public string Acronym { get; set; }
 
         [Range(0.01, 9999999999999.99)]
@@ -32,7 +32,7 @@ namespace CurrencyConverterAPI.Domain.DTO
             if (string.IsNullOrWhiteSpace(this.Acronym))
                 return HandlerErrorResponseMessage.BadRequestAcronymCoinInputRequiredField;
 
-            if (this.Acronym.Length != 3)
+            if (this.Name.Length < 3 || this.Name.Length > 5)
                 return HandlerErrorResponseMessage.BadRequestAcronymCoinInputLenghtField;
 
             if (this.Price <= 0)

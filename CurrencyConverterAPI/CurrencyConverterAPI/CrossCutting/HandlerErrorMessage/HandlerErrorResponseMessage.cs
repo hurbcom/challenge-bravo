@@ -33,10 +33,12 @@ namespace CurrencyConverterAPI.CrossCutting.HandlerErrorMessage
 
         public static string BadRequestNameCoinInputRangeLenghtField = "The size of the 'name' field is invalid. Must contain between 4 and 64 characters.";
 
-        public static string BadRequestAcronymCoinInputLenghtField = "The size of the 'initials' field is invalid. Must contain 3 characters.";
+        public static string BadRequestAcronymCoinInputLenghtField = "The size of the 'acronym' field is invalid. Must contain between 3 and 5 characters.";
 
         public static string BadRequestPriceCoinInputLenghtField = "The 'price' field is mandatory and must have a value greater than zero.";
 
-        public static string BadRequestCoinExistInDB = "A coin with the same acronym already exists at the base. Please, check it out.";
+        public static string BadRequestCoinExistInDB = "A coin with the same acronym already exists at the database. Please, check it in GET /api/coin/v{version}";
+
+        public static string BadRequestCoinExistInCacheOrApi = "A coin with the same acronym already exists at the partner provider. Please, check it in GET /api/coin/v{version}/converter/availables";
     }
 }

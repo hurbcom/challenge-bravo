@@ -6,6 +6,7 @@ namespace CurrencyConverterAPI.Application.AppServices
     public interface ICoinAppService
     {
         Task<IEnumerable<Coin>> GetCoins();
+        Task<IEnumerable<string>> GetAcronymCoins();
         Task<Coin> GetCoin(long id);
         Task<Coin> CreateCoin(CoinInput coin);
         Task<bool> UpdateCoin(long id, CoinInput coinInput);
