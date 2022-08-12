@@ -73,7 +73,7 @@ You can use any programming language for the challenge. Below is the list of lan
 
 ## Doubts
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+Any questions you may have, check the [_issues_](https://github.com/HurbCom/Web-Api/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
 
 Godspeed! ;)
 

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web-Api", "Web-Api\Web-Api.csproj", "{86EA89B4-9692-478D-855E-C4E9DE78F86E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "Benchmark\Benchmark.csproj", "{4F64C985-EEEC-44EC-B1BC-8EDDD64C6DFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{86EA89B4-9692-478D-855E-C4E9DE78F86E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86EA89B4-9692-478D-855E-C4E9DE78F86E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86EA89B4-9692-478D-855E-C4E9DE78F86E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86EA89B4-9692-478D-855E-C4E9DE78F86E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F64C985-EEEC-44EC-B1BC-8EDDD64C6DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F64C985-EEEC-44EC-B1BC-8EDDD64C6DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F64C985-EEEC-44EC-B1BC-8EDDD64C6DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F64C985-EEEC-44EC-B1BC-8EDDD64C6DFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
