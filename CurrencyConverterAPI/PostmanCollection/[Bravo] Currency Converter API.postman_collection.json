@@ -99,50 +99,6 @@
 									"body": "{\n  \"from\": \"string\",\n  \"to\": \"string\",\n  \"amount\": 0,\n  \"amount_converted\": 0\n}"
 								},
 								{
-									"name": "400",
-									"originalRequest": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/api/coin/v{{version}}/converter?from=string&to=string&amount=0",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"coin",
-												"v{{version}}",
-												"converter"
-											],
-											"query": [
-												{
-													"key": "from",
-													"value": "string"
-												},
-												{
-													"key": "to",
-													"value": "string"
-												},
-												{
-													"key": "amount",
-													"value": "0"
-												}
-											]
-										}
-									},
-									"status": "Bad Request",
-									"code": 400,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Content-Type",
-											"value": "application/json"
-										}
-									],
-									"cookie": [],
-									"body": "{\n  \"status_code\": 0,\n  \"message\": \"string\"\n}"
-								},
-								{
 									"name": "404",
 									"originalRequest": {
 										"method": "GET",

@@ -334,7 +334,6 @@ namespace CurrencyConverterAPI.Application.Controllers
         /// <response code="503">Returns the status code and message about the request processing failure.</response>
         [HttpGet("converter")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CoinConverted))]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Error))]
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(Error))]
         [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(Error))]
         public async Task<ActionResult> Converter([FromQuery] string from, [FromQuery] string to, [FromQuery] string amount)
@@ -346,7 +345,7 @@ namespace CurrencyConverterAPI.Application.Controllers
                 ActionResult returnApi = null;
                 dynamic result = null;
 
-                ValidadeInputParams(from, to, amount, ref number, ref hasError, ref returnApi, ref result);
+                ValidateInputParams(from, to, amount, ref number, ref returnApi, ref result);
 
                 if (returnApi is null)
                 {
@@ -358,22 +357,11 @@ namespace CurrencyConverterAPI.Application.Controllers
                         returnApi = Ok(result);
                     }
                     else
-                    {
-                        switch (result.StatusCode)
-                        {
-                            case (int)HttpStatusCode.NotFound:
-                                returnApi = NotFound(result);
-                                break;
-                            case (int)HttpStatusCode.BadRequest:
-                                returnApi = BadRequest(result);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                        returnApi = NotFound(result);
+
                 }
 
-                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError, "Converter", (hasError ? result.Message : ""), new string[3] { from, to, amount });
+                Logger.LoggerClass(_logger, this.GetType().Name.ToUpper(), hasError, "Converter", (hasError ? (returnApi is null ? result.Message : result) : ""), new string[3] { from, to, amount });
                 return returnApi;
             }
             #region Catch
@@ -493,39 +481,55 @@ namespace CurrencyConverterAPI.Application.Controllers
             #endregion
         }
 
-        private void ValidadeInputParams(string from, string to, string amount, ref decimal number, ref bool hasError, ref ActionResult returnApi, ref dynamic response)
+        private void ValidateInputParams(string from, string to, string amount, ref decimal number, ref ActionResult returnApi, ref dynamic response)
         {
-            if (String.IsNullOrWhiteSpace(from))
+            var error = new Error((int)HttpStatusCode.BadRequest, string.Empty);
+
+            error.Message = IsEmptyInputParams(from, to, amount);
+
+            if (!error.Message.Contains("amount"))
             {
-                returnApi = BadRequest(response = new Error(
-                        (int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.BadRequestParamFromIsRequired)
-                    );
-                return;
-            }
-            else if (String.IsNullOrWhiteSpace(to))
-            {
-                returnApi = BadRequest(response = new Error(
-                        (int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.BadRequestParamToIsRequired)
-                    );
-                return;
+                var result = IsDecimalAmountInputParams(amount);
+                if (result is String)
+                    error.Message = error.Message + result;
+                else
+                    number = result;
             }
 
+            if (!string.IsNullOrEmpty(error.Message))
+            {
+                returnApi = BadRequest(error);
+                response = error.Message;
+            }
+
+            return;
+        }
+
+        public static string IsEmptyInputParams(string from, string to, string amount)
+        {
+            var message = string.Empty;
+
+            if (String.IsNullOrWhiteSpace(from))
+                message = message + HandlerErrorResponseMessage.BadRequestParamFromIsRequired + "|";
+
+            if (String.IsNullOrWhiteSpace(to))
+                message = message + HandlerErrorResponseMessage.BadRequestParamToIsRequired + "|";
+
             if (String.IsNullOrWhiteSpace(amount))
-            {
-                returnApi = BadRequest(response = new Error(
-                        (int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.BadRequestParamAmountIsRequired)
-                    );
-                return;
-            }
-            else if (!Decimal.TryParse(amount.Trim(), NumberStyles.Number, CultureInfo.InvariantCulture, out number))
-            {
-                returnApi = BadRequest(
-                    response = new Error(
-                        (int)HttpStatusCode.BadRequest, HandlerErrorResponseMessage.BadRequestAmountInvalid(amount)
-                    )
-                );
-                return;
-            }
+                message = message + HandlerErrorResponseMessage.BadRequestParamAmountIsRequired + "|";
+
+            return message;
+        }
+
+        public static dynamic IsDecimalAmountInputParams(string amount)
+        {
+
+            decimal amountDecimal;
+            bool valueIsDecimal = Decimal.TryParse(amount.Trim(), NumberStyles.Number, CultureInfo.InvariantCulture, out amountDecimal);
+            if (!valueIsDecimal)
+                return HandlerErrorResponseMessage.BadRequestAmountInvalid(amount);
+
+            return amountDecimal;
         }
     }
 }
