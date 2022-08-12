@@ -189,7 +189,7 @@
 							]
 						},
 						{
-							"name": "List available coins",
+							"name": "List available coins for convertion",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -280,7 +280,7 @@
 					]
 				},
 				{
-					"name": "Get all coins",
+					"name": "Get coins in database",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -390,7 +390,7 @@
 					]
 				},
 				{
-					"name": "Get coin",
+					"name": "Get coin in database",
 					"event": [
 						{
 							"listen": "test",
@@ -555,7 +555,7 @@
 					]
 				},
 				{
-					"name": "Create coin",
+					"name": "Create coin in database",
 					"event": [
 						{
 							"listen": "test",
@@ -736,7 +736,7 @@
 					]
 				},
 				{
-					"name": "Update coin",
+					"name": "Update coin in database",
 					"event": [
 						{
 							"listen": "test",
@@ -999,7 +999,7 @@
 					]
 				},
 				{
-					"name": "Delete coin",
+					"name": "Delete coin in database",
 					"event": [
 						{
 							"listen": "test",

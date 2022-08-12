@@ -1,200 +1,98 @@
 {
-	"id": "67160b49-dea6-423c-9cde-b884b47a5acb",
+	"id": "31f7b0d4-7ce1-45d0-a7f6-346a6d3a4b24",
 	"name": "[Bravo] Currency Converter API",
-	"timestamp": "2022-08-11T22:15:17.845Z",
+	"timestamp": "2022-08-12T15:12:26.459Z",
 	"collection_id": "2911727-2a871102-d3b9-4e5c-8b3b-1b1421fd3bfc",
 	"folder_id": 0,
 	"environment_id": "0",
-	"totalPass": 10,
+	"totalPass": 14,
 	"totalFail": 0,
 	"results": [
 		{
 			"id": "278d0a2f-e5fb-463d-945d-cbadd12bdf26",
 			"name": "Convert between fiat, crypto and fictitious currencies",
 			"url": "http://localhost:9000/api/coin/v1/converter?from=brl&to=eur&amount=1",
-			"time": 10,
+			"time": 16,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
 			},
-			"tests": {},
-			"testPassFailCounts": {},
+			"tests": {
+				"Convert between fiat, crypto and fictitious currencies - Status code is 200": true,
+				"Convert between fiat, crypto and fictitious currencies - Response Time OK": true
+			},
+			"testPassFailCounts": {
+				"Convert between fiat, crypto and fictitious currencies - Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Convert between fiat, crypto and fictitious currencies - Response Time OK": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
 			"times": [
-				10
+				16
 			],
 			"allTests": [
-				{}
+				{
+					"Convert between fiat, crypto and fictitious currencies - Status code is 200": true,
+					"Convert between fiat, crypto and fictitious currencies - Response Time OK": true
+				}
 			]
 		},
 		{
 			"id": "0c37f20e-73d9-4dfd-b7fe-e86c2464a988",
-			"name": "List available coins",
+			"name": "List available coins for convertion",
 			"url": "http://localhost:9000/api/coin/v1/converter/availables",
 			"time": 12,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
 			},
-			"tests": {},
-			"testPassFailCounts": {},
+			"tests": {
+				"List available coins for convertion - Status code is 200": true,
+				"List available coins for convertion - Response Time OK": true
+			},
+			"testPassFailCounts": {
+				"List available coins for convertion - Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"List available coins for convertion - Response Time OK": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
 			"times": [
 				12
 			],
 			"allTests": [
-				{}
+				{
+					"List available coins for convertion - Status code is 200": true,
+					"List available coins for convertion - Response Time OK": true
+				}
 			]
 		},
 		{
 			"id": "42891be3-dba4-44a3-8252-c2ed81c2d5db",
-			"name": "Get all coins",
+			"name": "Get coins in database",
 			"url": "http://localhost:9000/api/coin/v1",
-			"time": 9,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Get all coins - Status code is 200": true,
-				"Get all coins - Response Time OK": true
-			},
-			"testPassFailCounts": {
-				"Get all coins - Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Get all coins - Response Time OK": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				9
-			],
-			"allTests": [
-				{
-					"Get all coins - Status code is 200": true,
-					"Get all coins - Response Time OK": true
-				}
-			]
-		},
-		{
-			"id": "56c4c9b8-0365-449c-b479-fc24748fec23",
-			"name": "Get coin",
-			"url": "http://localhost:9000/api/coin/v1/1",
-			"time": 7,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Get coin - Status code is 200": true,
-				"Get coin - Response Time OK": true
-			},
-			"testPassFailCounts": {
-				"Get coin - Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Get coin - Response Time OK": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				7
-			],
-			"allTests": [
-				{
-					"Get coin - Status code is 200": true,
-					"Get coin - Response Time OK": true
-				}
-			]
-		},
-		{
-			"id": "39125720-96a6-4b16-82c1-ff672e401fe7",
-			"name": "Create coin",
-			"url": "http://localhost:9000/api/coin/v1",
-			"time": 269,
-			"responseCode": {
-				"code": 201,
-				"name": "Created"
-			},
-			"tests": {
-				"Create coin - Status code is 201": true,
-				"Create coin - Response Time OK": true
-			},
-			"testPassFailCounts": {
-				"Create coin - Status code is 201": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Create coin - Response Time OK": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				269
-			],
-			"allTests": [
-				{
-					"Create coin - Status code is 201": true,
-					"Create coin - Response Time OK": true
-				}
-			]
-		},
-		{
-			"id": "72709b91-832f-46d3-937f-763b9ceef92d",
-			"name": "Update coin",
-			"url": "http://localhost:9000/api/coin/v1/1",
-			"time": 13,
-			"responseCode": {
-				"code": 204,
-				"name": "No Content"
-			},
-			"tests": {
-				"Update coin - Status code is 204": true,
-				"Update coin - Response Time OK": true
-			},
-			"testPassFailCounts": {
-				"Update coin - Status code is 204": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Update coin - Response Time OK": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				13
-			],
-			"allTests": [
-				{
-					"Update coin - Status code is 204": true,
-					"Update coin - Response Time OK": true
-				}
-			]
-		},
-		{
-			"id": "18d9d1cf-a22c-49d9-89d2-48875e01c692",
-			"name": "Delete coin",
-			"url": "http://localhost:9000/api/coin/v1/9",
 			"time": 8,
 			"responseCode": {
-				"code": 204,
-				"name": "No Content"
+				"code": 200,
+				"name": "OK"
 			},
 			"tests": {
-				"Delete coin - Status code is 204": true,
-				"Delete coin - Response Time OK": true
+				"Get coins in database - Status code is 200": true,
+				"Get coins in database - Response Time OK": true
 			},
 			"testPassFailCounts": {
-				"Delete coin - Status code is 204": {
+				"Get coins in database - Status code is 200": {
 					"pass": 1,
 					"fail": 0
 				},
-				"Delete coin - Response Time OK": {
+				"Get coins in database - Response Time OK": {
 					"pass": 1,
 					"fail": 0
 				}
@@ -204,14 +102,146 @@
 			],
 			"allTests": [
 				{
-					"Delete coin - Status code is 204": true,
-					"Delete coin - Response Time OK": true
+					"Get coins in database - Status code is 200": true,
+					"Get coins in database - Response Time OK": true
+				}
+			]
+		},
+		{
+			"id": "56c4c9b8-0365-449c-b479-fc24748fec23",
+			"name": "Get coin in database",
+			"url": "http://localhost:9000/api/coin/v1/1",
+			"time": 6,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Get coin in database - Status code is 200": true,
+				"Get coin in database - Response Time OK": true
+			},
+			"testPassFailCounts": {
+				"Get coin in database - Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Get coin in database - Response Time OK": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				6
+			],
+			"allTests": [
+				{
+					"Get coin in database - Status code is 200": true,
+					"Get coin in database - Response Time OK": true
+				}
+			]
+		},
+		{
+			"id": "39125720-96a6-4b16-82c1-ff672e401fe7",
+			"name": "Create coin in database",
+			"url": "http://localhost:9000/api/coin/v1",
+			"time": 308,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Create coin in database - Status code is 201": true,
+				"Create coin in database - Response Time OK": true
+			},
+			"testPassFailCounts": {
+				"Create coin in database - Status code is 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Create coin in database - Response Time OK": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				308
+			],
+			"allTests": [
+				{
+					"Create coin in database - Status code is 201": true,
+					"Create coin in database - Response Time OK": true
+				}
+			]
+		},
+		{
+			"id": "72709b91-832f-46d3-937f-763b9ceef92d",
+			"name": "Update coin in database",
+			"url": "http://localhost:9000/api/coin/v1/1",
+			"time": 13,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Update coin in database - Status code is 204": true,
+				"Update coin in database - Response Time OK": true
+			},
+			"testPassFailCounts": {
+				"Update coin in database - Status code is 204": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Update coin in database - Response Time OK": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Update coin in database - Status code is 204": true,
+					"Update coin in database - Response Time OK": true
+				}
+			]
+		},
+		{
+			"id": "18d9d1cf-a22c-49d9-89d2-48875e01c692",
+			"name": "Delete coin in database",
+			"url": "http://localhost:9000/api/coin/v1/2",
+			"time": 19,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Delete coin in database - Status code is 204": true,
+				"Delete coin in database - Response Time OK": true
+			},
+			"testPassFailCounts": {
+				"Delete coin in database - Status code is 204": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Delete coin in database - Response Time OK": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Delete coin in database - Status code is 204": true,
+					"Delete coin in database - Response Time OK": true
 				}
 			]
 		}
 	],
 	"count": 1,
-	"totalTime": 328,
+	"totalTime": 382,
 	"collection": {
 		"requests": [
 			{
