@@ -1,82 +1,88 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
+<div align="center">
+    <img src="https://github.com/ElizCarvalho/challenge-bravo/blob/develop/logo-currency_converter-v2.gif" alt="Currency Converter API" width="400" /> 
+</div>
 
 [[English](README.md) | [Português](README.pt.md)]
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+## Sobre o projeto
+Currency Converter API é resultado do desafio "Challenge-Bravo", seu objetivo é realizar conversão, com cotação atual, entre diferentes moedas utilizando dólar americano (USD) como moeda lastro, tais como: moedas mundiais (BRL, EUR, LBS, etc), criptomoedas (BTC, ETH) e moedas ficticias que podem ser cadastradas utilzando a API.
 
-A API precisa converter entre as seguintes moedas:
+Como parceiro de integração (API parceira) para coleta das cotações das principais moedas/critomoedas foi escolhida a api disponibilizada pela [Coinbase](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-exchange-rates). A escolha foi decorrente foi decorrente das seguintes motivações:
+- Entregar, no mínimo, as cotações necessárias para cobrir o requisito funcional "Necessário realizar conversãot entre as moedas BRL, USD, EUR, BTC, ETH."; 
+- Permitir, na chamada do seu endpoint, que seja informada a moeda lastro para que as cotações seja em função desta;
+- Possuir um [rate limit](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/rate-limiting) de 10 mil requisições por hora.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+A aplicação conta com políticas de retentativa e circuit breaker para oferecer resiliência, com o uso da biblioteca Polly.
 
-Outras moedas podem ser adicionadas conforme o uso.
+Para o requisito funcional "Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.", foi escolhido o uso de banco não relacional MongoDB devido a estrutura flexivel do dado e rápido processamento. Foram acrescentadas dois índices para melhorar o desempenho nas consultas à base.
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+Como decisão técnológica foi escolhido o uso do cache utilizando Redis, a fim de dminiuir o tempo de acesso aos dados e por conseguência o número de resições a API parceira, uma vez que os acrônimos e a lista de cotações ficarão armazenadas em cache durante o período de **uma hora**. 
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+Foi decidido não armazenar em cache as cotações das moedas cadastradas na base, a fim de manter a conformidade dos valores mesmas na base e reduzir o tráfego de rede necessário para garantir a integridade (em ações de inserção, atualização e deleção) e tendo em vista que a velocidade de acesso a estes está assegurada com a combinação MongoDB e íncides de busca.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+**Arquitetura** foi **desenvolvida em camadas** e foram utilizadas alguns padrões de projeto como:
+- **Repository**: isolar a camada de dados, das camadas de negócio e aplicação;
+- **Circuit Breaker**: tolerância a falha de indisponibilidade;
+- **Value Object**: enviar para camada de apresentação sem expor às entidades utilizadas na persistência em base de dados;
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+## Mecanismos Arquiteturais
+| Análise | Implementação |
+| --- | --- |
+| API | Web API Restful (Nível 2 na [escala de maturidade "Richardson"](https://boaglio.com/index.php/2016/11/03/modelo-de-maturidade-de-richardson-os-passos-para-a-gloria-do-rest/)) |
+| Backend | .NET 6 |
+| Integração Web | [HttpClientFactory](https://docs.microsoft.com/pt-br/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests) |
+| Cache | [Redis](https://redis.io/docs/) |
+| Persistência | [MongoDB](https://www.mongodb.com/docs/) |
+| Resiliência (Await & Retry, Circuit Breaker) | [Polly](https://docs.microsoft.com/pt-br/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly) |
+| Log da aplicação | [Serilog](https://serilog.net/) |
+| Visualização de logs | [SEQ](https://docs.datalust.co/docs) |
+| Teste unitário | [xUnit](https://docs.microsoft.com/pt-br/dotnet/core/testing/unit-testing-with-dotnet-test) |
+| Teste de integração | [PostmanCollection](https://learning.postman.com/docs/publishing-your-api/documenting-your-api/) |
+| Containerização | [Docker](https://docs.docker.com/) |
+| Orquestração | [docker-compose](https://docs.docker.com/compose/) |
+| Métricas da aplicação | [Prometheus](https://prometheus.io/docs/instrumenting/clientlibs/) |
+| Documemtação da aplicação | [Swagger](https://swagger.io/docs/) |
+| DTO | [AutoMapper](https://docs.automapper.org/en/stable/) |
+| Integridade | Healtchcheck (incluído no .NET) |
+| Versionamento de API | ApiVersioning (incluído no .NET) |
 
-A API deve suportar conversão entre moedas fiduciárias, crypto e fictícias. Exemplo: BRL->HURB, HURB->ETH
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+## Iniciando
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de Dungeons & Dragons sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+### >Pré requisito
+Faz-se necessário ter o [Docker](https://docs.docker.com/get-docker/) instalado e funcionando corretamente.
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+### >Executando o projeto
+1. Clone o repositório
+   ```sh
+   git clone https://github.com/ElizCarvalho/challenge-bravo.git
+   ```
+2. Acesse o diretório da aplicação, por exemplo:
+   ```sh
+   cd .\challenge-bravo\CurrencyConverterAPI
+   ```
+3. Suba os containers
+    ```sh
+    docker-compose up -d --build
+    ````
+4. Acesse a documentação da API através da url `http://localhost:9000`
 
-Ref:
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+5. Acesse a coleção do Postman como apoio e teste de integração, disponível em: `challenge-bravo\CurrencyConverterAPI\PostmanCollection`
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+### >Containers de apoio
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Para este projeto foram orquestrados junto à API, os containers:
+- **Mongo**: base de dados não relacional MongoDB;
+- **Redis**: cache;
+- **SEQ**: visualização dos logs gerados pela aplicação através da biblioteca 'Serilog';
+  - `http://localhost:5341`, clique [aqui](http://localhost:5341) para acessar
+  - Utilize os dados de acesso: `Username: admin` e `Password: bravo@123`.
+- **Prometheus**: visualização das métricas disponibilizadas pela aplicação através da biblioteca 'Prometheus'; 
+  - `http://localhost:9090`, clique [aqui](http://localhost:9090/graph) para acessar
+  - No campo `Expression` utilize o filtro `http_requests_received_total` e clique no botão `Execute`. É possível, com isso, verificar a quantidade de requisições realizadas até o momento para cada endpoint da API.
 
-## Requisitos
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **main** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
-
-## Critério de avaliação
-
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
-
-## Dúvidas
-
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
-
-Boa sorte e boa viagem! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## Futuras Melhorias
+- Utilizar *secrets* para passwords/hashs;
+- Testes de integração com base de dados;
+- HATEOS
