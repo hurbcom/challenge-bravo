@@ -27,6 +27,10 @@ Foi decidido não armazenar em cache as cotações das moedas cadastradas na bas
 
 Para execução, construção e publicação da API em container foi utilizado um *Dockerfile* com [multiplos estágios](https://docs.microsoft.com/pt-br/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-6.0), resultando ao fim em uma imagem com tamanho em disco em torno de 250MB.
 
+### Observação: 
+- A etapa de criação de um projeto em .NET (API e Tests), cria por padrão algumas estruturas mínima de diretórios e arquivos (properties/launchSettings.json, appsettings.json, Program). 
+- Não foi incluído no momento da criação da solução/projeto suporte à docker e openAPI, sendo estes configurados manualmente posteriormente.
+
 ## Mecanismos Arquiteturais
 | Análise | Implementação |
 | --- | --- |
