@@ -7,7 +7,7 @@
 ## Sobre o projeto
 Currency Converter API é resultado do desafio "Challenge-Bravo", seu objetivo é realizar conversão, com cotação atual, entre diferentes moedas utilizando dólar americano (USD) como moeda lastro, tais como: moedas mundiais (BRL, EUR, LBS, etc), criptomoedas (BTC, ETH) e moedas fictícias que podem ser cadastradas utilizando a API.
 
-Como parceiro de integração (API parceira) para coleta das cotações das principais moedas/criptomoedas foi escolhida a API disponibilizada pela [Coinbase](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-exchange-rates). A escolha foi decorrente foi decorrente das seguintes motivações:
+Como parceiro de integração (API parceira) para coleta das cotações das principais moedas/criptomoedas foi escolhida a API disponibilizada pela [Coinbase](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-exchange-rates). A escolha foi decorrente das seguintes motivações:
 - Entregar, no mínimo, as cotações necessárias para cobrir o requisito funcional "Necessário realizar conversão entre as moedas BRL, USD, EUR, BTC, ETH."; 
 - Permitir, na chamada do seu endpoint, que seja informada a moeda lastro para que as cotações sejam em função desta;
 - Possuir um [rate limit](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/rate-limiting) de 10 mil requisições por hora.
