@@ -27,6 +27,10 @@ It was decided not to cache the quotes of the currencies registered in the base,
 
 To execute, build and publish the API in a container, a *Dockerfile* com [multiplos estágios](https://docs.microsoft.com/pt-br/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-6.0), resulting in an image with a disk size of about 250MB.
 
+### Note:
+- The step of creating a project in .NET (API and Tests), creates by default some minimal directory and file structures (properties/launchSettings.json, appsettings.json, Program).
+- Support for docker and openAPI was not included when creating the solution/project, these were configured manually later.
+
 ## Architectural Mechanisms
 | Analysis | Implementation |
 | --- | --- |
@@ -88,6 +92,3 @@ For this project the containers were orchestrated with the API:
 - Use *secrets* for passwords/hashes;
 - Database integration tests;
 - HATEOS
-
-
-
