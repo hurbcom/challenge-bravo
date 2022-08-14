@@ -2,12 +2,12 @@
     <img src="https://github.com/ElizCarvalho/challenge-bravo/blob/develop/logo-currency_converter-v2.gif" alt="Currency Converter API" width="400" /> 
 </div>
 
-[Português](README.md)] | [[English](README.en.md)
+[Português](README.md) | [English](README.en.md)
 
 ## About the project
 Currency Converter API is a result of the "Challenge-Bravo" challenge, its goal is to convert, with current exchange rates, between different currencies using the American dollar (USD) as the base currency, such as: world currencies (BRL, EUR, LBS, etc), cryptocurrencies (BTC, ETH) and fictitious currencies that can be registered using the API.
 
-As integration partner (API partner) for collecting the quotes of the main currencies/critocurrencies, the api provided by [Coinbase](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-exchange-rates). The choice was due to the following motivations:
+As integration partner (API partner) for collecting the quotes of the main currencies/criptocurrencies, the API provided by [Coinbase](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-exchange-rates). The choice was due to the following motivations:
 - Deliver, at a minimum, the quotes required to cover the functional requirement "Required to perform conversion between the currencies BRL, USD, EUR, BTC, ETH.";
 - Allow, when calling your endpoint, to inform the ballast currency so that the quotations can be based on it;
 - Have a [rate limit](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/rate-limiting) of 10,000 requests per hour.
@@ -49,8 +49,8 @@ To execute unit tests, build and publish the API in a container, a *Dockerfile* 
 | Application Metrics | [Prometheus](https://prometheus.io/docs/instrumenting/clientlibs/) |
 | Application documentation | [Swagger](https://swagger.io/docs/) |
 | DTO | [AutoMapper](https://docs.automapper.org/en/stable/) |
-| Integrity | Healtchcheck (incluído no .NET) |
-| API Versioning | ApiVersioning (incluído no .NET) |
+| Integrity | Healtchcheck (included in .NET) |
+| API Versioning | ApiVersioning (included in .NET) |
 
 ## Starting
 
@@ -92,4 +92,4 @@ For this project the containers were orchestrated with the API:
 - Add endpoint to update only the value of the currency registered in the base (PATCH);
 - Use *secrets* for passwords/hashes;
 - Database integration tests;
-- HATEOS
+- HATEOS;
