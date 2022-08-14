@@ -2,93 +2,94 @@
     <img src="https://github.com/ElizCarvalho/challenge-bravo/blob/develop/logo-currency_converter-v2.gif" alt="Currency Converter API" width="400" /> 
 </div>
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+[Português](README.md)] | [[English](README.en.md)
 
-## About the project
-Currency Converter API is a result of the "Challenge-Bravo" challenge, its goal is to convert, with current exchange rates, between different currencies using the American dollar (USD) as the base currency, such as: world currencies (BRL, EUR, LBS, etc), cryptocurrencies (BTC, ETH) and fictitious currencies that can be registered using the API.
+## Sobre o projeto
+Currency Converter API é resultado do desafio "Challenge-Bravo", seu objetivo é realizar conversão, com cotação atual, entre diferentes moedas utilizando dólar americano (USD) como moeda lastro, tais como: moedas mundiais (BRL, EUR, LBS, etc), criptomoedas (BTC, ETH) e moedas fictícias que podem ser cadastradas utilizando a API.
 
-As integration partner (API partner) for collecting the quotes of the main currencies/critocurrencies, the api provided by [Coinbase](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-exchange-rates). The choice was due to the following motivations:
-- Deliver, at a minimum, the quotes required to cover the functional requirement "Required to perform conversion between the currencies BRL, USD, EUR, BTC, ETH.";
-- Allow, when calling your endpoint, to inform the ballast currency so that the quotations can be based on it;
-- Have a [rate limit](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/rate-limiting) of 10,000 requests per hour.
+Como parceiro de integração (API parceira) para coleta das cotações das principais moedas/criptomoedas foi escolhida a API disponibilizada pela [Coinbase](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-exchange-rates). A escolha foi decorrente das seguintes motivações:
+- Entregar, no mínimo, as cotações necessárias para cobrir o requisito funcional "Necessário realizar conversão entre as moedas BRL, USD, EUR, BTC, ETH."; 
+- Permitir, na chamada do seu endpoint, que seja informada a moeda lastro para que as cotações sejam em função desta;
+- Possuir um [rate limit](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/rate-limiting) de 10 mil requisições por hora.
 
-The application relies on retentive and circuit breaker policies to provide resiliency, using the Polly library.
+A aplicação conta com políticas de retentativa e circuit breaker para oferecer resiliência, com o uso da biblioteca Polly.
 
-For the functional requirement "Also build an endpoint to add and remove API-supported currencies using HTTP verbs", the use of the non-relational database MongoDB was chosen due to the flexible data structure and fast processing. Two indexes were added to improve performance in queries to the database.
+Para o requisito funcional "Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.", foi escolhido o uso de banco não relacional MongoDB devido a estrutura flexível do dado e rápido processamento. Foram acrescentados dois índices para melhorar o desempenho nas consultas à base.
 
-Caching using Redis was chosen as the technological decision, in order to decrease the data access time and consequently the number of requests to the partner API, since the list of acronyms and quotations will be cached for a period of **one hour**. 
+Como decisão tecnológica foi escolhido o uso do cache utilizando Redis, a fim de diminuir o tempo de acesso aos dados e por consequência o número de requisições à API parceira, uma vez que a listagem de acrônimos e de cotações ficarão armazenadas em cache durante o período de **uma hora**. 
 
-It was decided not to cache the quotes of the currencies registered in the base, in order to maintain the conformity of the values in the base and reduce the network traffic needed to ensure integrity (in insert, update and delete actions) and given that the speed of access to these is assured with the combination of MongoDB and search indexes.
+Foi decidido não armazenar em cache as cotações das moedas cadastradas na base, a fim de manter a conformidade dos valores mesmas na base e reduzir o tráfego de rede necessário para garantir a integridade (em ações de inserção, atualização e deleção) e tendo em vista que a velocidade de acesso a estes está assegurada com a combinação MongoDB e índices de busca.
 
-**Architecture** was **developed in layers** and some design patterns were used such as:
-- **Repository**: isolating the data layer from the business and application layers;
-- **Circuit Breaker**: tolerance to unavailability failure;
-- **Value Object**: send data to the presentation layer without exposing the entities used in database persistence;
+**Arquitetura** foi **desenvolvida em camadas** e foram utilizados alguns padrões de projeto como:
+- **Repository**: isolar a camada de dados, das camadas de negócio e aplicação;
+- **Circuit Breaker**: tolerância a falha de indisponibilidade;
+- **Value Object**: enviar dados para camada de apresentação sem expor às entidades utilizadas na persistência em base de dados;
 
-To execute, build and publish the API in a container, a *Dockerfile* com [multiplos estágios](https://docs.microsoft.com/pt-br/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-6.0), resulting in an image with a disk size of about 250MB.
+Para execução dos testes unitários, construção e publicação da API em container foi utilizado um *Dockerfile* com [multiplos estágios](https://docs.microsoft.com/pt-br/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-6.0), resultando ao fim em uma imagem com tamanho em disco em torno de 250MB.
 
-### Note:
-- The step of creating a project in .NET (API and Tests), creates by default some minimal directory and file structures (properties/launchSettings.json, appsettings.json, Program).
-- Support for docker and openAPI was not included when creating the solution/project, these were configured manually later.
+### Observação: 
+- A etapa de criação de um projeto em .NET (API e Tests), cria por padrão algumas estruturas mínima de diretórios e arquivos (properties/launchSettings.json, appsettings.json, Program). 
+- Não foi incluído no momento da criação da solução/projeto suporte à docker e openAPI, sendo estes configurados manualmente posteriormente.
 
-## Architectural Mechanisms
-| Analysis | Implementation |
+## Mecanismos Arquiteturais
+| Análise | Implementação |
 | --- | --- |
-| API | Restful Web API (Level 2 on the [Richardson maturity scale](https://boaglio.com/index.php/2016/11/03/modelo-de-maturidade-de-richardson-os-passos-para-a-gloria-do-rest/)) |
+| API | Web API Restful (Nível 2 na [escala de maturidade "Richardson"](https://boaglio.com/index.php/2016/11/03/modelo-de-maturidade-de-richardson-os-passos-para-a-gloria-do-rest/)) |
 | Backend | .NET 6 |
-| Web Integration | [HttpClientFactory](https://docs.microsoft.com/pt-br/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests) |
+| Integração Web | [HttpClientFactory](https://docs.microsoft.com/pt-br/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests) |
 | Cache | [Redis](https://redis.io/docs/) |
-| Persistence | [MongoDB](https://www.mongodb.com/docs/) |
-| Resilience (Await & Retry, Circuit Breaker) | [Polly](https://docs.microsoft.com/pt-br/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly) |
-| Application Log | [Serilog](https://serilog.net/) |
-| Log Viewing | [SEQ](https://docs.datalust.co/docs) |
-| Unit Test | [xUnit](https://docs.microsoft.com/pt-br/dotnet/core/testing/unit-testing-with-dotnet-test) |
-| Integration Test | [PostmanCollection](https://learning.postman.com/docs/publishing-your-api/documenting-your-api/) |
-| Containerization | [Docker](https://docs.docker.com/) |
-| Orchestration | [docker-compose](https://docs.docker.com/compose/) |
-| Application Metrics | [Prometheus](https://prometheus.io/docs/instrumenting/clientlibs/) |
-| Application documentation | [Swagger](https://swagger.io/docs/) |
+| Persistência | [MongoDB](https://www.mongodb.com/docs/) |
+| Resiliência (Await & Retry, Circuit Breaker) | [Polly](https://docs.microsoft.com/pt-br/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly) |
+| Log da aplicação | [Serilog](https://serilog.net/) |
+| Visualização de logs | [SEQ](https://docs.datalust.co/docs) |
+| Teste unitário | [xUnit](https://docs.microsoft.com/pt-br/dotnet/core/testing/unit-testing-with-dotnet-test) |
+| Teste de integração | [PostmanCollection](https://learning.postman.com/docs/publishing-your-api/documenting-your-api/) |
+| Conteinerização | [Docker](https://docs.docker.com/) |
+| Orquestração | [docker-compose](https://docs.docker.com/compose/) |
+| Métricas da aplicação | [Prometheus](https://prometheus.io/docs/instrumenting/clientlibs/) |
+| Documentação da aplicação | [Swagger](https://swagger.io/docs/) |
 | DTO | [AutoMapper](https://docs.automapper.org/en/stable/) |
-| Integrity | Healtchcheck (incluído no .NET) |
-| API Versioning | ApiVersioning (incluído no .NET) |
+| Integridade | Healtchcheck (incluído no .NET) |
+| Versionamento de API | ApiVersioning (incluído no .NET) |
 
-## Starting
 
-### >Requirement
-It is necessary to have [Docker](https://docs.docker.com/get-docker/) installed and running correctly.
+## Iniciando
 
-### >Running the project
-1. Clone the repository
+### >Pré-requisito
+Faz-se necessário ter o [Docker](https://docs.docker.com/get-docker/) instalado e funcionando corretamente.
+
+### >Executando o projeto
+1. Clone o repositório
    ```sh
    git clone https://github.com/ElizCarvalho/challenge-bravo.git
    ```
-2. Change to the application directory, for example:
+2. Acesse o diretório da aplicação, por exemplo:
    ```sh
    cd .\challenge-bravo\CurrencyConverterAPI
    ```
-3. Upload the containers
+3. Suba os containers
     ```sh
     docker-compose up -d --build
     ````
-4. Access the API documentation via the url `http://localhost:9000`.
+4. Acesse a documentação da API através da url `http://localhost:9000`
 
-5. Access the Postman collection for support and integration testing, available at: `challenge-bravo` `CurrencyConverterAPIPostmanCollection`.
+5. Acesse a coleção do Postman como apoio e teste de integração, disponível em: `challenge-bravo\CurrencyConverterAPI\PostmanCollection`
 
-### >Support Containers
+### >Containers de apoio
 
-For this project the containers were orchestrated with the API:
-
-- **Mongo**: non-relational database MongoDB;
+Para este projeto foram orquestrados junto à API, os containers:
+- **Mongo**: base de dados não relacional MongoDB;
 - **Redis**: cache;
-- **SEQ**: view the logs generated by the application via the 'Serilog' library;
-  - http://localhost:5341`, click [here](http://localhost:5341) to access
-  - Use the login credentials: `Username: admin` and `Password: bravo@123`.
-- **Prometheus**: view the metrics made available by the application through the `Prometheus` library; 
-  - http://localhost:9090`, click [here](http://localhost:9090/graph) to access
-  - In the `Expression` field, use the `http_requests_received_total` filter and click the `Execute` button. This allows you to see how many requests have been received so far for each API endpoint.
+- **SEQ**: visualização dos logs gerados pela aplicação através da biblioteca 'Serilog';
+  - `http://localhost:5341`, clique [aqui](http://localhost:5341) para acessar
+  - Utilize os dados de acesso: `Username: admin` e `Password: bravo@123`.
+- **Prometheus**: visualização das métricas disponibilizadas pela aplicação através da biblioteca 'Prometheus'; 
+  - `http://localhost:9090`, clique [aqui](http://localhost:9090/graph) para acessar
+  - No campo `Expression` utilize o filtro `http_requests_received_total` e clique no botão `Execute`. É possível, com isso, verificar a quantidade de requisições realizadas até o momento para cada endpoint da API.
 
 
-## Future enhancements
-- Use *secrets* for passwords/hashes;
-- Database integration tests;
+## Futuras Melhorias
+- Adicionar endpoint para atualizar somente o valor da moeda registrada na base (PATCH);
+- Utilizar *secrets* para passwords/hashs;
+- Testes de integração com base de dados;
 - HATEOS
