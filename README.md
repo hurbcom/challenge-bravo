@@ -2,7 +2,7 @@
     <img src="https://github.com/ElizCarvalho/challenge-bravo/blob/develop/logo-currency_converter-v2.gif" alt="Currency Converter API" width="400" /> 
 </div>
 
-[Português](README.md)] | [[English](README.en.md)
+[Português](README.md) | [English](README.en.md)
 
 ## Sobre o projeto
 Currency Converter API é resultado do desafio "Challenge-Bravo", seu objetivo é realizar conversão, com cotação atual, entre diferentes moedas utilizando dólar americano (USD) como moeda lastro, tais como: moedas mundiais (BRL, EUR, LBS, etc), criptomoedas (BTC, ETH) e moedas fictícias que podem ser cadastradas utilizando a API.
