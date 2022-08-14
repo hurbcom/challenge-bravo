@@ -20,17 +20,47 @@ public class CurrencyConvertionController : ControllerBase
         };
     }
 
+    [HttpPost]
+    public ConvertionFactorDto addConvertion([FromBody] ConvertionFactorDto factor)
+    {
+        var _i = this.Factors.FindIndex(f => f.IsCurrencyPair(factor.Currency1, factor.Currency2));
+        if( _i < 0) {
+            this.Factors.Add(new ConvertionFactor(factor.Currency1, factor.Currency2, factor.Factor));
+        }
+        else {
+
+            Factors[_i].Factor = Factors[_i].IsReversed(factor.Currency1, factor.Currency2) ? 1/factor.Factor : factor.Factor;
+        }
+            
+        return factor;
+    }
+
     [HttpGet]
     [Route("convert")]
     public IConvertionDto GetConvertion([FromQuery] ConvertionQueryDto dto)
     {
-        var f = this.Factors.Find(cf => _IsCurrencyPair(
+        if(dto.from == dto.to )
+        {
+            throw new Exception("From and To cannot be the same.");
+        }
+        else if (dto.amount < 0)
+        {
+            throw new Exception("Amount must not be negative.");
+        }
+
+        var f = this.Factors.Find(cf => cf.IsCurrencyPair(
             new BaseCurrency {Coin=dto.from},
-            new BaseCurrency {Coin=dto.to},
-            cf.Currency1,
-            cf.Currency2
+            new BaseCurrency {Coin=dto.to}
         ));
-        var result = f?.Currency1.Coin == dto.from ? f.Direct(dto.amount) : f?.Reverse(dto.amount);
+
+        if(f == null)
+        {
+            throw new Exception("Convertion not found.");
+        }
+
+        f = f.IsReversed(dto.from, dto.to) ? f.Reverse() : f;
+
+        var result = f?.Calculate(dto.amount);
 
         return new ConvertionDto() {
             From= dto.from,
@@ -38,14 +68,5 @@ public class CurrencyConvertionController : ControllerBase
             Factor= f != null ? f.Factor : 0,
             Result= result != null ? result.Value : 0
         };
-    }
-
-    private bool _IsCurrencyPair(ICurrency curr1, ICurrency curr2, ICurrency other1, ICurrency other2)
-    {
-        return 
-            (curr1.Coin != curr2.Coin)  && 
-            (other1.Coin != other2.Coin)  && 
-            (curr1.Coin == other1.Coin || curr1.Coin == other2.Coin) &&
-            (curr2.Coin == other1.Coin || curr2.Coin == other2.Coin);
     }
 }

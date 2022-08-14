@@ -1,4 +1,4 @@
-namespace Web_Api.Models.Currency;
+namespace Data.Models.Currency;
 
 public class BaseCurrency : ICurrency
 {

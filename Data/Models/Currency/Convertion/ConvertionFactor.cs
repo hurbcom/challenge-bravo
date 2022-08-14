@@ -1,6 +1,6 @@
-namespace Web_Api.Models.Currency.Convertion;
+namespace Data.Models.Currency.Convertion;
 
-using Web_Api.Models.Currency;
+using Data.Models.Currency;
 
 public class ConvertionFactor
 {
