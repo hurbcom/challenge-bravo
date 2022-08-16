@@ -1,11 +1,12 @@
 namespace Data.Models.Currency.Convertion;
 
 using Data.Models.Currency;
+using System.Text.Json.Serialization;
 
 public class ConvertionFactor
 {
-    public ICurrency Currency1 { get; set; }
-    public ICurrency Currency2 { get; set;}
+    public BaseCurrency Currency1 { get; set; }
+    public BaseCurrency Currency2 { get; set;}
     public double Factor { get; set; }
 
     /// <summary>
@@ -15,11 +16,11 @@ public class ConvertionFactor
     /// <param name="currency1"></param>
     /// <param name="currency2"></param>
     /// <param name="factor"></param>
-    public ConvertionFactor(ICurrency currency1, ICurrency currency2, double factor)
+    public ConvertionFactor(ICurrency Currency1, ICurrency Currency2, double Factor)
     {
-        Currency1 = currency1;
-        Currency2 = currency2;
-        Factor = Math.Abs(factor);
+        this.Currency1 = (BaseCurrency) Currency1;
+        this.Currency2 = (BaseCurrency) Currency2;
+        this.Factor = Math.Abs(Factor);
     }
 
     public ConvertionFactor(string currency1, string currency2, double factor)
@@ -73,7 +74,7 @@ public class ConvertionFactor
 
     public override bool Equals(object? obj)
     {
-        if(obj == null || obj.GetType() != typeof(ConvertionFactor))
+        if(obj == null || obj.GetType() is ConvertionFactor)
         {
             return false;
         }

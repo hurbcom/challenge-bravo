@@ -1,3 +1,5 @@
+CREATE DATABASE [challenge-bravo];
+
 CREATE TABLE [challenge-bravo].dbo.Currency (
 	Coin varchar(25) NOT NULL,
 	Label varchar(10) NULL,

@@ -1,4 +1,7 @@
+using Data.Models.Currency;
+using Data.Models.Currency.Convertion;
 using Microsoft.AspNetCore.Mvc;
+using Web_Api._Mock;
 using Web_Api.Models.Api;
 using Web_Api.Models.Currency;
 using Web_Api.Models.Currency.Convertion;
@@ -11,13 +14,10 @@ public class CurrencyConvertionController : ControllerBase
 {
     private List<ConvertionFactor> Factors;
 
-    public CurrencyConvertionController()
+
+    public CurrencyConvertionController(IConfiguration? configuration, IConvertionFactorsMock _mock)
     {
-        Factors = new List<ConvertionFactor> {
-            new ConvertionFactor (new BaseCurrency{Coin= "USD"}, new BaseCurrency {Coin= "EUR"}, 1/1.5),
-            new ConvertionFactor (new BaseCurrency{Coin= "USD"}, new BaseCurrency {Coin= "BRL"}, 1/5.0),
-            new ConvertionFactor (new BaseCurrency{Coin= "EUR"}, new BaseCurrency {Coin= "BRL"}, 1/6.0),
-        };
+        Factors = new List<ConvertionFactor>(_mock);
     }
 
     [HttpPost]

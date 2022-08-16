@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "Benchmark\Benc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{FD4059F6-E426-4D89-93D3-E7FBF607306F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAcess", "DataAcess\DataAcess.csproj", "{73E2C27A-03DC-43BD-A9D9-957F1FEDD7CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{FD4059F6-E426-4D89-93D3-E7FBF607306F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD4059F6-E426-4D89-93D3-E7FBF607306F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD4059F6-E426-4D89-93D3-E7FBF607306F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73E2C27A-03DC-43BD-A9D9-957F1FEDD7CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73E2C27A-03DC-43BD-A9D9-957F1FEDD7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73E2C27A-03DC-43BD-A9D9-957F1FEDD7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73E2C27A-03DC-43BD-A9D9-957F1FEDD7CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
