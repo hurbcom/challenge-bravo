@@ -1,3 +1,4 @@
+using DataAccess.Repository;
 using Web_Api._Mock;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IConvertionFactorsMock>(provider => new ConvertionFactorsMock());
+builder.Services.AddSingleton<IConvertionFactorRepository>(provider => new JSONConvertionFactorRepository(@"C:\Projetos\challenge-bravo\DB\db.json"));
 
 var app = builder.Build();
 

@@ -1,5 +1,6 @@
 using Data.Models.Currency;
 using Data.Models.Currency.Convertion;
+using DataAccess.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Web_Api._Mock;
 using Web_Api.Models.Api;
@@ -12,24 +13,25 @@ namespace Web_Api.Controllers;
 [ApiController]
 public class CurrencyConvertionController : ControllerBase
 {
-    private List<ConvertionFactor> Factors;
+    private JSONConvertionFactorRepository CfRepository;
 
 
-    public CurrencyConvertionController(IConfiguration? configuration, IConvertionFactorsMock _mock)
+    public CurrencyConvertionController(IConfiguration? configuration, IConvertionFactorRepository cfRepository)
     {
-        Factors = new List<ConvertionFactor>(_mock);
+        CfRepository = (JSONConvertionFactorRepository) cfRepository;
     }
 
     [HttpPost]
     public ConvertionFactorDto addConvertion([FromBody] ConvertionFactorDto factor)
     {
-        var _i = this.Factors.FindIndex(f => f.IsCurrencyPair(factor.Currency1, factor.Currency2));
+        var _l = this.CfRepository?.Find();
+        var _i = _l.FindIndex(f => f.IsCurrencyPair(factor.Currency1, factor.Currency2));
         if( _i < 0) {
-            this.Factors.Add(new ConvertionFactor(factor.Currency1, factor.Currency2, factor.Factor));
+            CfRepository?.Save(SerializableConvertionFactor.toSerializable(new ConvertionFactor(factor.Currency1, factor.Currency2, factor.Factor)));
         }
         else {
 
-            Factors[_i].Factor = Factors[_i].IsReversed(factor.Currency1, factor.Currency2) ? 1/factor.Factor : factor.Factor;
+            _l[_i].Factor = _l[_i].IsReversed(factor.Currency1, factor.Currency2) ? 1/factor.Factor : factor.Factor;
         }
             
         return factor;
@@ -48,17 +50,17 @@ public class CurrencyConvertionController : ControllerBase
             throw new Exception("Amount must not be negative.");
         }
 
-        var f = this.Factors.Find(cf => cf.IsCurrencyPair(
+        SerializableConvertionFactor? f = CfRepository?.Find(cf => cf.IsCurrencyPair(
             new BaseCurrency {Coin=dto.from},
             new BaseCurrency {Coin=dto.to}
-        ));
+        ))?[0];
 
         if(f == null)
         {
             throw new Exception("Convertion not found.");
         }
 
-        f = f.IsReversed(dto.from, dto.to) ? f.Reverse() : f;
+        f = SerializableConvertionFactor.toSerializable(f.IsReversed(dto.from, dto.to) ? f.Reverse() : f);
 
         var result = f?.Calculate(dto.amount);
 
