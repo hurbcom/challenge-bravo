@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="db.json" />
+    <None Remove="config.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="db.json">
+    <Content Include="config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

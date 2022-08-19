@@ -1,11 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using Data.Models.Currency;
-using Data.Models.Currency.Convertion;
-using DataAccess;
-using DataAccess.Repository;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using BenchmarkDotNet.Running;
 
-Console.WriteLine("Hello, World!");
+using Benchmark.Controllers;
+using BenchmarkDotNet.Configs;
 
-// var summary = BenchmarkRunner.Run<Sleeps>(null, args);
+while (!System.Diagnostics.Debugger.IsAttached)
+    Thread.Sleep(TimeSpan.FromMilliseconds(100));
+
+var summary = BenchmarkRunner.Run<CurrencyConvertionControllerBenchmark>(new DebugInProcessConfig(), args);
