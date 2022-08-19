@@ -8,11 +8,27 @@ export default async function seed() {
 
 	if (!exchangeRates) {
 		const rates = await axios.get(`${BASE_URL}`).then((res) => [
-			{ name: 'USD', rate: 1 },
-			{ name: 'EUR', rate: (1 / res.data.exchange_rates.EUR).toFixed(4) },
-			{ name: 'BRL', rate: (1 / res.data.exchange_rates.BRL).toFixed(4) },
-			{ name: 'BTC', rate: (1 / res.data.exchange_rates.BTC).toFixed(4) },
-			{ name: 'ETH', rate: (1 / res.data.exchange_rates.ETH).toFixed(4) }
+			{ name: 'American Dollar', code: 'USD', rate: 1 },
+			{
+				name: 'Euro',
+				code: 'EUR',
+				rate: (1 / res.data.exchange_rates.EUR).toFixed(4)
+			},
+			{
+				name: 'Brazilian Real',
+				code: 'BRL',
+				rate: (1 / res.data.exchange_rates.BRL).toFixed(4)
+			},
+			{
+				name: 'Bitcoin',
+				code: 'BTC',
+				rate: (1 / res.data.exchange_rates.BTC).toFixed(4)
+			},
+			{
+				name: 'Ethereum',
+				code: 'ETH',
+				rate: (1 / res.data.exchange_rates.ETH).toFixed(4)
+			}
 		])
 
 		await redis.set('rates', JSON.stringify(rates), { EX: 60 * 60 })
