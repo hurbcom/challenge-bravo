@@ -1,6 +1,6 @@
 {
   "web-api": {
-    "url": "http://localhost:5126",
+    "url": "http://localhost:5100",
     "path": "/currency/convert"
   },
   "load": {

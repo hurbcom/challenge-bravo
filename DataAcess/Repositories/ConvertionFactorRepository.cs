@@ -49,7 +49,7 @@ public class JSONConvertionFactorRepository : IConvertionFactorRepository
         {
             var cf = db[idx];
             db.RemoveAt(idx);
-            File.WriteAllText(_path, JsonSerializer.Serialize(db));
+            File.WriteAllText(_path, JsonSerializer.Serialize(db, new JsonSerializerOptions { WriteIndented = true }));
             return cf;
         }
         return null;

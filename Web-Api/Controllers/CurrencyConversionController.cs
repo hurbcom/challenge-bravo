@@ -2,7 +2,7 @@ using Data.Models.Currency;
 using Data.Models.Currency.Convertion;
 using DataAccess.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Web_Api._Mock;
+using Web_Api.Service;
 using Web_Api.Models.Api;
 using Web_Api.Models.Currency;
 using Web_Api.Models.Currency.Convertion;
@@ -13,62 +13,61 @@ namespace Web_Api.Controllers;
 [ApiController]
 public class CurrencyConvertionController : ControllerBase
 {
-    private JSONConvertionFactorRepository CfRepository;
+    private CurrencyConvertionService CfService;
 
 
-    public CurrencyConvertionController(IConfiguration? configuration, IConvertionFactorRepository cfRepository)
+    public CurrencyConvertionController(IConfiguration? configuration, ICurrencyConvertionService cfService)
     {
-        CfRepository = (JSONConvertionFactorRepository) cfRepository;
+        CfService = (CurrencyConvertionService) cfService;
     }
 
     [HttpPost]
-    public ConvertionFactorDto addConvertion([FromBody] ConvertionFactorDto factor)
+    [Route("convert")]
+    public ConvertionFactorDto AddConvertion([FromBody] ConvertionFactorDto factor)
     {
-        var _l = this.CfRepository?.Find();
-        var _i = _l.FindIndex(f => f.IsCurrencyPair(factor.Currency1, factor.Currency2));
-        if( _i < 0) {
-            CfRepository?.Save(SerializableConvertionFactor.toSerializable(new ConvertionFactor(factor.Currency1, factor.Currency2, factor.Factor)));
+        try
+        {
+            factor = CfService.AddConvertion(factor);
         }
-        else {
-
-            _l[_i].Factor = _l[_i].IsReversed(factor.Currency1, factor.Currency2) ? 1/factor.Factor : factor.Factor;
+        catch (Exception e)
+        {
+            throw;
         }
             
         return factor;
+    }
+
+    [HttpDelete]
+    [Route("convert")]
+    public ConvertionFactorDto DeleteConvertion([FromQuery] ConvertionQueryDto dto)
+    {
+        var factor = new ConvertionFactorDto()
+        {
+            Currency1 = new BaseCurrency() { Coin = dto.from },
+            Currency2 = new BaseCurrency() { Coin = dto.to }
+        };
+        try
+        {
+            return CfService.DeleteConvertion(factor);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
     }
 
     [HttpGet]
     [Route("convert")]
     public IConvertionDto GetConvertion([FromQuery] ConvertionQueryDto dto)
     {
-        if(dto.from == dto.to )
+        try
         {
-            throw new Exception("From and To cannot be the same.");
+            return CfService.GetConvertion(dto);
         }
-        else if (dto.amount < 0)
+        catch (Exception)
         {
-            throw new Exception("Amount must not be negative.");
+            throw;
         }
-
-        SerializableConvertionFactor? f = CfRepository?.Find(cf => cf.IsCurrencyPair(
-            new BaseCurrency {Coin=dto.from},
-            new BaseCurrency {Coin=dto.to}
-        ))?[0];
-
-        if(f == null)
-        {
-            throw new Exception("Convertion not found.");
-        }
-
-        f = SerializableConvertionFactor.toSerializable(f.IsReversed(dto.from, dto.to) ? f.Reverse() : f);
-
-        var result = f?.Calculate(dto.amount);
-
-        return new ConvertionDto() {
-            From= dto.from,
-            To= dto.to,
-            Factor= f != null ? f.Factor : 0,
-            Result= result != null ? result.Value : 0
-        };
     }
 }

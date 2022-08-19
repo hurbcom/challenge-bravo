@@ -88,5 +88,5 @@ public class ConvertionFactorDto
 {
     public BaseCurrency Currency1 { get; set; }
     public BaseCurrency Currency2 { get; set;}
-    public double Factor { get; set; }
+    public double? Factor { get; set; }
 }

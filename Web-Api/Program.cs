@@ -1,6 +1,6 @@
 using DataAccess.Repository;
 using Microsoft.AspNetCore.Cors.Infrastructure;
-using Web_Api._Mock;
+using Web_Api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +25,10 @@ builder.Services.AddCors(options =>
 });
 
 // Inejctions
-builder.Services.AddSingleton<IConvertionFactorRepository>(provider => new JSONConvertionFactorRepository(@"C:\Projetos\challenge-bravo\DB\db.json"));
+builder.Services.AddSingleton<IConvertionFactorRepository>(
+    provider => new JSONConvertionFactorRepository(builder.Configuration.GetValue<string>("DB_LOCATION"))
+);
+builder.Services.AddSingleton<ICurrencyConvertionService, CurrencyConvertionService>();
 
 var app = builder.Build();
 

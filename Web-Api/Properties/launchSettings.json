@@ -14,10 +14,11 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7227;http://localhost:5126",
+      "applicationUrl": "https://localhost:7100;http://localhost:5100",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "SERVER_ID": "0"
+        "SERVER_ID": "0",
+        "DB_LOCATION": "C:\\Projetos\\challenge-bravo\\DB\\db.json"
       }
     },
     "IIS Express": {
