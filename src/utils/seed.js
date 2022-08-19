@@ -15,10 +15,10 @@ export default async function seed() {
 			{ name: 'ETH', rate: (1 / res.data.exchange_rates.ETH).toFixed(4) }
 		])
 
-		await redis.set('rates', JSON.stringify(rates), { EX: 60 * 24 * 24 })
+		await redis.set('rates', JSON.stringify(rates), { EX: 60 * 60 })
 
 		return rates
 	}
 
-	return JSON.parse(exchangeRates)   
+	return JSON.parse(exchangeRates)
 }
