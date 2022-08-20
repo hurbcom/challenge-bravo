@@ -1,4 +1,4 @@
-import { exchangeService } from '../services/exchangeService.js'
+import { exchangeService } from '../services/exchangesService.js'
 
 async function makeExchange(req, res) {
 	const { from, to, amount } = req.query

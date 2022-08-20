@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { exchangeController } from '../controllers/exchangeController.js'
+import { exchangeController } from '../controllers/exchangesController.js'
 
 const exchangeRouter = Router()
 

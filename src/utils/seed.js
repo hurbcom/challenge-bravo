@@ -12,22 +12,22 @@ export default async function seed() {
 			{
 				name: 'Euro',
 				code: 'EUR',
-				rate: (1 / res.data.exchange_rates.EUR).toFixed(4)
+				rate: +(1 / res.data.exchange_rates.EUR).toFixed(4)
 			},
 			{
 				name: 'Brazilian Real',
 				code: 'BRL',
-				rate: (1 / res.data.exchange_rates.BRL).toFixed(4)
+				rate: +(1 / res.data.exchange_rates.BRL).toFixed(4)
 			},
 			{
 				name: 'Bitcoin',
 				code: 'BTC',
-				rate: (1 / res.data.exchange_rates.BTC).toFixed(4)
+				rate: +(1 / res.data.exchange_rates.BTC).toFixed(4)
 			},
 			{
 				name: 'Ethereum',
 				code: 'ETH',
-				rate: (1 / res.data.exchange_rates.ETH).toFixed(4)
+				rate: +(1 / res.data.exchange_rates.ETH).toFixed(4)
 			}
 		])
 
