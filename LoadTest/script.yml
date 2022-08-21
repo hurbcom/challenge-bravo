@@ -1,0 +1,29 @@
+config:
+  target: "http://localhost:5100"
+  phases:
+    - duration: 30
+      arrivalRate: 10000
+  processor: "app.js"
+  payload:
+        path: "convertions.csv"
+        fields:
+          - "from"
+          - "to"
+          - "amount"
+        loadAll: true
+        name: convert # refer to the data as "convert"
+
+scenarios:
+  - flow:
+    - loop:
+      - get:
+          url: "/currency/convert"
+          # beforeRequest: "setJSONBody"
+          # afterResponse: "logHeaders"
+          qs:
+            from: "{{ $loopElement.from }}"
+            to: "{{ $loopElement.to }}"
+            amount: "{{ $loopElement.amount }}"
+      over: convert
+
+          

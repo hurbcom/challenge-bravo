@@ -47,6 +47,49 @@ O Projeto conta com uma aplicação Web API para servir a conversão de moedas d
 
 O projeto inicialmente contaria com um containere de uma instância de banco MS SQL Server, porém para fins de simplicidade os dados persistentes foram salvos em arquivo, o projeto DataAccess acessa esses dados, porém sua implentação para o SQL server está em construção. O Projeto de Benchmark testa a performance da API, assim como o projeto de Testes lida com testes Unitários utilizando XUnit. O projeto de Dados implementa os modelos de dados utilizados nos projetos.
 
+## Benchmark
+
+Foram testadas a aplicação a nível de Thread e Thread e processo. Para testar a nível de thread foi utilizado a biblioteca [BenchmarkDotnet](https://benchmarkdotnet.org/index.html) e para Thread e processos [Artillery.](https://www.artillery.io/).
+
+A biblioteca BenchmarkDotNet é uma biblioteca .NET leve, de código aberto e poderosa que pode transformar seus métodos em benchmarks, rastrear esses métodos e, em seguida, fornecer insights sobre os dados de desempenho capturados. Usando esta biblioteca fica mais fácil escrever benchmarks e os resultados do processo de benchmarking também são fáceis de usar. Assim você pode usar essa biblioteca para realizar testes de avaliação de desempenho de novas funcionalidades ou de novas implementações comparando-as com as anteriores.
+
+O Teste foi feito com 100 iterações com 1000 requisições abertas simultaneamente, os resultados podem ser reproduziods e encotrados [nessa pasta](./Benchmark/bin/Release/net6.0/BenchmarkDotNet.Artifacts).
+
+````bash
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19044.1889 (21H2)
+Intel Core i7-8565U CPU 1.80GHz (Whiskey Lake), 1 CPU, 8 logical and 4 physical cores
+.NET SDK=6.0.400
+  [Host] : .NET 6.0.8 (6.0.822.36306), X64 RyuJIT  [AttachedDebugger]
+  Dry    : .NET 6.0.8 (6.0.822.36306), X64 RyuJIT
+
+
+|     Mean |   StdErr |   StdDev |      Min |       Q1 |   Median |       Q3 |        Max |  Op/s |
+|---------:|---------:|---------:|---------:|---------:|---------:|---------:|-----------:|------:|
+| 498.1 ms | 15.37 ms | 153.7 ms | 403.9 ms | 445.3 ms | 465.6 ms | 500.3 ms | 1,855.9 ms | 2.008 |
+````
+
+Para o teste completo com Artilley, foram criados 1000+ usuários enviando 1000+/sec requisições simultanemante durante 30 segundos. Os resultados podem ser reproduzidos no projeto [Load Test](./LoadTest/).
+
+````bash
+
+errors.ECONNREFUSED: ........................................................... 10034
+errors.ETIMEDOUT: .............................................................. 284259
+http.codes.200: ................................................................ 10481
+http.request_rate: ............................................................. 497/sec
+http.requests: ................................................................. 304545
+http.response_time:
+  min: ......................................................................... 47
+  max: ......................................................................... 9779
+  median: ...................................................................... 1587.9
+  p95: ......................................................................... 7117
+  p99: ......................................................................... 8868.4
+http.responses: ................................................................ 10481
+vusers.completed: .............................................................. 248
+vusers.created: ................................................................ 294313
+vusers.created_by_name.0: ...................................................... 294313
+vusers.failed: ................................................................. 294293
+````
+
 ## Requisitos Cumpridos
 
 -   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
