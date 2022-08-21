@@ -5,12 +5,12 @@
 
 Este repositório implementa o desafio Bravo proposto em [[English](README.en.md) | [Portuguese](README.pt.md)]. O Objetivo central é implementar a API de conversão de moedas capaz de realizar o desempenho de 10000 requisições por segundo.
 
-Para tal, a Arquitetura do projeto se faz em uma aplicação Web no padrão MVC, e para atinigir o nível de performance desejado, foram utilzido o conceito de **paralelismo** de processamento. O paralelismo pode ser feito em camadas, nesse projeto duas dessas foram exploradas, a camada de **threads** e de **processos**. Portanto, a arquitetura foi implementada de forma a ser capaz de realizar tarefas multi-thread e multi-processo, conforme descrito:
+Para tal, a Arquitetura do projeto se faz em uma aplicação Web no padrão MVC e para atingir o nível de performance desejado, foram utilzido o conceito de **paralelismo** de processamento. O paralelismo pode ser feito em camadas e, nesse projeto, foram exploradas a camada de **threads** e de **processos**. Portanto, a arquitetura foi implementada de forma a ser capaz de realizar tarefas multi-thread e multi-processo, sendo assim:
 
 1. Para realizar processamento multi-thread, fui utilizado o padrão de design [https://en.wikipedia.org/wiki/Thread_pool](*Thread Pool*), distribuindo as requisições como tarefas a ser executadas entre as threads alocadas;
-2. Para o Multi-Processo, foram abertos cópias do processo da aplição e as requisições são distribuidas por uma aplicação chamada **Load Balancer** que faz os balanceamento da carga das aplicações entre os processos.
+2. Para o Multi-Processo, foram abertos cópias do processo da aplição e as requisições são distribuidas por uma aplicação chamada [**Load Balancer**](https://www.nginx.com/resources/glossary/load-balancing/) que faz os balanceamento da carga das aplicações entre os processos.
 
- A figura abaixo mostra a arquitetura do projeto. Para implementar 1. foi escolhido usar a linguagem **C#** com o framework **ASP.NET Core 6.0** para implementar uma aplicação Web API. Devido a praticidade e a possibilidade de otimização de performance. O ASP.NET é netarualmente construido com base em uma estrutura de Thread Pool, direcionando as requisções no padrão MVC entre threads alocadas. A premissa 2. foi alcançada utilizando duas tecnologias: O **Docker**, no qual nos permite subir containeres de aplicações e o **Nginx**, capaz de gerenciar servidores web. Através do Docker pode-se subir containeres do Nginx e das cópias da aplicação da API, o Nginx foi utilizado como proxy reverso e balanceador de carga entre as aplicações.
+ A figura abaixo mostra a arquitetura do projeto. Para implementar 1. foi escolhido usar a linguagem **C#** com o framework **ASP.NET Core 6.0** implementardo uma aplicação Web API. Devido a praticidade e a possibilidade de otimização de performance, O ASP.NET é [naturalmente](https://docs.microsoft.com/en-us/dotnet/standard/threading/the-managed-thread-pool) construido com base em uma estrutura de Thread Pool, direcionando as requisções no padrão MVC entre threads alocadas. A premissa 2. foi alcançada utilizando duas tecnologias: O [**Docker**](https://docs.docker.com/), no qual nos permite subir containeres de aplicações e o [**Nginx**](https://www.nginx.com/resources), capaz de gerenciar servidores web. Através do Docker pode-se subir containeres do Nginx e das cópias da aplicação da API, o Nginx foi utilizado como proxy reverso e balanceador de carga entre as aplicações.
 
 ![./docs/challenge-bravo.drawio-arch.png](docs/challenge-bravo.drawio-arch.png)
 
@@ -45,8 +45,10 @@ O Projeto conta com uma aplicação Web API para servir a conversão de moedas d
 - Data (Implementado)
 - Benchmark (Implementado)
 - Test (Parcialmente)
+- LoadBalancer (Implementado)
+- LoadTest (Implementado)
 
-O projeto inicialmente contaria com um containere de uma instância de banco MS SQL Server, porém para fins de simplicidade os dados persistentes foram salvos em arquivo, o projeto DataAccess acessa esses dados, porém sua implentação para o SQL server está em construção. O Projeto de Benchmark testa a performance da API, assim como o projeto de Testes lida com testes Unitários utilizando XUnit. O projeto de Dados implementa os modelos de dados utilizados nos projetos.
+O projeto inicialmente contaria com um containere de uma instância de banco MS SQL Server, porém para fins de simplicidade os dados persistentes foram salvos em arquivo, o projeto DataAccess acessa esses dados, porém sua implentação para o SQL server está em construção. O Projeto de Benchmark testa a performance da API, assim como o projeto de Testes lida com testes Unitários utilizando XUnit. O projeto de Dados implementa os modelos de dados utilizados nos projetos. LoadBalancer e LoadTest implementam e testam o balanceamento de carga da aplicação pro inteira.
 
 ## Benchmark
 
@@ -93,12 +95,12 @@ vusers.failed: .................................................................
 
 ## Requisitos Cumpridos
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar o código, deve ser preciso apenas rodar os seguintes comandos:
+-  :white_check_mark:	 Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
+-  :white_check_mark:	 O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
+- :white_check_mark:	  Para executar o código, deve ser preciso apenas rodar os seguintes comandos:
     -   git clone https://github.com/fol21/challenge-bravo
     -   cd \challenge-bravo
     -   docker-compose up -d --build
--   A API foi escrita com ou sem a ajuda de _frameworks_
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
+-  :white_check_mark:	 A API foi escrita com ou sem a ajuda de _frameworks_
+- :white_check_mark:	  A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 
