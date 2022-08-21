@@ -4,6 +4,6 @@
     "path": "/currency/convert"
   },
   "load": {
-    "requests": 10000
+    "requests": 1000
   }
 }

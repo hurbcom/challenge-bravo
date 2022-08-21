@@ -26,7 +26,7 @@ namespace Benchmark.Controllers
                     Job.Dry
                         .WithWarmupCount(0)
                         .WithLaunchCount(1)
-                        .WithIterationCount(10)
+                        .WithIterationCount(100)
                 );
                 AddLogger(ConsoleLogger.Default);
                 AddColumn( StatisticColumn.AllStatistics);
@@ -52,17 +52,16 @@ namespace Benchmark.Controllers
             {
                 string query = String.Format("from={0}&to={1}&amount={2}", "USD", "BRL", Random.Shared.NextDouble().ToString().Replace(',', '.'));
                 string _url = String.Format("{0}{1}?{2}", _config.WebApi.Url, _config.WebApi.Path, query);
-                Console.WriteLine(_url);
 
                 loads[i] = _http.GetStringAsync(_url);
             }
             var results = await Task.WhenAll(loads);
 
-            foreach (var res in results)
-            {
-                Console.WriteLine(res);
+            //foreach (var res in results)
+            //{
+            //    Console.WriteLine(res);
 
-            }
+            //}
         }
     }
 }

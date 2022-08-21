@@ -1,4 +1,5 @@
 ﻿using Benchmark;
+using BenchmarkDotNet.Configs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,24 +15,10 @@ namespace Test.Benchmark
         [Fact]
         public async void LoadDropTest()
         {
-            Config? _config = Config.AddConfigFromText(
-            @"
-                {
-                    ""web-api"": {
-                        ""url"": ""http://localhost:5126"",
-                        ""path"": ""/currency/convert""
-                    },
-                    ""load"": {
-                        ""requests"": 10
-                    }
-                }
-            ");
             HttpClient _http = new HttpClient();
+            var _config = _createConfig(50);
+            var loads = _createLoads(_config);
 
-            List<string> responses = new List<string>();
-            File.WriteAllText(@"C:\Projetos\challenge-bravo\res.txt", "Results:");
-
-            Task<string>[] loads = new Task<string>[_config.Load.Requests];
             for (int i = 0; i < loads.Length; i++)
             {
                 string query = String.Format("from={0}&to={1}&amount={2}", "USD", "BRL", Random.Shared.NextDouble().ToString().Replace(',', '.'));
@@ -47,6 +34,54 @@ namespace Test.Benchmark
                 Console.WriteLine(res);
 
             }
+        }
+
+        [Fact]
+        public void LoadDropThreadPoolTest()
+        {
+            HttpClient _http = new HttpClient();
+            Config _config = _createConfig(10);
+            var loads = _createLoads(_config);
+            for (int i = 0; i < loads.Length; i++)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback((object obj) =>
+                {
+                    Thread thread = Thread.CurrentThread;
+                    string message = $"Background: {thread.IsBackground}, Thread Pool: {thread.IsThreadPoolThread}, Thread ID: {thread.ManagedThreadId}";
+                    Console.WriteLine(message);
+
+                    string query = String.Format("from={0}&to={1}&amount={2}", "USD", "BRL", Random.Shared.NextDouble().ToString().Replace(',', '.'));
+                    string _url = String.Format("{0}{1}?{2}", _config.WebApi.Url, _config.WebApi.Path, query);
+                    Console.WriteLine(_url);
+
+                    //loads[i] = _http.GetStringAsync(_url);
+                }));
+            }
+            Console.Read();
+        }
+
+        private Config? _createConfig(int numRequests)
+        {
+            var c = Config.AddConfigFromText(
+            @"
+                {
+                    ""web-api"": {
+                        ""url"": ""http://localhost:5100"",
+                        ""path"": ""/currency/convert""
+                    },
+                    ""load"": {
+                        ""requests"": 10
+                    }
+                }
+            ");
+            c.Load.Requests = numRequests;
+            return c;
+        }
+
+
+        private Task<string>[] _createLoads(Config config)
+        {
+            return  new Task<string>[config.Load.Requests];
         }
     }
 }
