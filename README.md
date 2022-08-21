@@ -3,7 +3,7 @@
 
 ## Objetivo e Estratégia
 
-Este repositório implementa o desafio Bravo proposto em [[English](README.md) | [Portuguese](README.pt.md)]. O Objetivo central é implementar a API de conversão de moedas capaz de realizar o desempenho de 10000 requisições por segundo.
+Este repositório implementa o desafio Bravo proposto em [[English](README.en.md) | [Portuguese](README.pt.md)]. O Objetivo central é implementar a API de conversão de moedas capaz de realizar o desempenho de 10000 requisições por segundo.
 
 Para tal, a Arquitetura do projeto se faz em uma aplicação Web no padrão MVC, e para atinigir o nível de performance desejado, foram utilzido o conceito de **paralelismo** de processamento. O paralelismo pode ser feito em camadas, nesse projeto duas dessas foram exploradas, a camada de **threads** e de **processos**. Portanto, a arquitetura foi implementada de forma a ser capaz de realizar tarefas multi-thread e multi-processo, conforme descrito:
 
