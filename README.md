@@ -10,8 +10,9 @@ Para tal, a Arquitetura do projeto se faz em uma aplicação Web no padrão MVC,
 1. Para realizar processamento multi-thread, fui utilizado o padrão de design [https://en.wikipedia.org/wiki/Thread_pool](*Thread Pool*), distribuindo as requisições como tarefas a ser executadas entre as threads alocadas;
 2. Para o Multi-Processo, foram abertos cópias do processo da aplição e as requisições são distribuidas por uma aplicação chamada **Load Balancer** que faz os balanceamento da carga das aplicações entre os processos.
 
-Para implementar 1. foi escolhido usar a linguagem **C#** com o framework **ASP.NET Core 6.0** para implementar uma aplicação Web API. Devido a praticidade e a possibilidade de otimização de performance. O ASP.NET é netarualmente construido com base em uma estrutura de Thread Pool, direcionando as requisções no padrão MVC entre threads alocadas. A premissa 2. foi alcançada utilizando duas tecnologias: O **Docker**, no qual nos permite subir containeres de aplicações e o **Nginx**, capaz de gerenciar servidores web. Através do Docker pode-se subir containeres do Nginx e das cópias da aplicação da API, o Nginx foi utilizado como proxy reverso e balanceador de carga entre as aplicações.
+ A figura abaixo mostra a arquitetura do projeto. Para implementar 1. foi escolhido usar a linguagem **C#** com o framework **ASP.NET Core 6.0** para implementar uma aplicação Web API. Devido a praticidade e a possibilidade de otimização de performance. O ASP.NET é netarualmente construido com base em uma estrutura de Thread Pool, direcionando as requisções no padrão MVC entre threads alocadas. A premissa 2. foi alcançada utilizando duas tecnologias: O **Docker**, no qual nos permite subir containeres de aplicações e o **Nginx**, capaz de gerenciar servidores web. Através do Docker pode-se subir containeres do Nginx e das cópias da aplicação da API, o Nginx foi utilizado como proxy reverso e balanceador de carga entre as aplicações.
 
+![./docs/challenge-bravo.drawio-arch.png](docs/challenge-bravo.drawio-arch.png)
 
 ## Rodando o Projeto
 
@@ -100,5 +101,4 @@ vusers.failed: .................................................................
     -   docker-compose up -d --build
 -   A API foi escrita com ou sem a ajuda de _frameworks_
 -   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
 
