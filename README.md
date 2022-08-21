@@ -36,6 +36,18 @@ A API se encotra documentada em uma página swagger basta acessar o link:
     http://localhost:5100/swagger/index.html
 ````
 
+Para testar unicamente uma isntância da Web APi basta realizar o comandos na pasta raiz:
+
+````
+    docker build -f .\Web-Api-Dockerfile -t challenge-bravo-api .
+    docker run challenge-bravo-api
+````
+Ou, se tiver o SDK .NET 6.0:
+
+```
+dotnet run --project .\Web-Api\
+```
+
 ## Estrutura do Projeto
 
 O Projeto conta com uma aplicação Web API para servir a conversão de moedas descrita no desafio, camada de dados e acesso, além de testes de unidade e performance, conforme descrito:
