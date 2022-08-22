@@ -15,6 +15,18 @@ public class CurrencyConvertionController : ControllerBase
 {
     private CurrencyConvertionService CfService;
 
+    [HttpGet]
+    public ConvertionFactorDto[]? GetConvertionfactorList()
+    {
+        try
+        {
+            return CfService.GetConvertionFactorList();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
 
     public CurrencyConvertionController(IConfiguration? configuration, ICurrencyConvertionService cfService)
     {

@@ -64,7 +64,7 @@ public class CurrencyConvertionService : ICurrencyConvertionService
         return factor;
     }
 
-    public IConvertionDto GetConvertion([FromQuery] ConvertionQueryDto dto)
+    public IConvertionDto GetConvertion(ConvertionQueryDto dto)
     {
         if (dto.from == dto.to)
         {
@@ -96,5 +96,20 @@ public class CurrencyConvertionService : ICurrencyConvertionService
             Factor = f != null ? f.Factor : 0,
             Result = result != null ? result.Value : 0
         };
+    }
+
+    public ConvertionFactorDto[]? GetConvertionFactorList()
+    {
+        return CfRepository?
+            .Find()
+            ?.Select(cf => {
+                return new ConvertionFactorDto()
+                {
+                    Currency1 = cf.Currency1,
+                    Currency2 = cf.Currency2,
+                    Factor = cf.Factor
+                };
+            })
+            .ToArray();
     }
 }
