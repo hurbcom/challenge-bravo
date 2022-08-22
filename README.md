@@ -116,3 +116,11 @@ vusers.failed: .................................................................
 -  :white_check_mark:	 A API foi escrita com ou sem a ajuda de _frameworks_
 - :white_check_mark:	  A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
 
+## Futuro
+
+Para os próximos passos o projeto pode implemetar as seguintes funcionalidades:
+
+- Base de dados contando Auditoria, Histórico de Transações e teste de performance;
+- Parametrização do paralelismo. A nível de softaware é possível registrar quantas threads ou processos forem desejados, porém a paralelização dos processos é definida e limitada pelo hardware. O C# possui nativamente funções para extrair informações de números de núcleos e CPUs da máquina de hospedagem, no qual podem ser usados para definir como teto os parâmetros de paralelização;
+- Integrar Orquestardor (como Kubernetes) para controlar a escalabilidade de subidas de instâncias da API, baseadas na quantidade de fluxo dinâmicamente;
+- Pagar dívidas técnicas do código =);
