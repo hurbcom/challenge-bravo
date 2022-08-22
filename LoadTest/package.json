@@ -7,7 +7,7 @@
     "name": ""
   },
   "scripts": {
-    "start": "artillery run script.yml"
+    "start": "artillery run script.yml --output results/results.json"
   },
   "dependencies": {
     "artillery": "^2.0.0-23"
