@@ -1,0 +1,9 @@
+{
+  "web-api": {
+    "url": "http://localhost:5100",
+    "path": "/currency/convert"
+  },
+  "load": {
+    "requests": 1000
+  }
+}

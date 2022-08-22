@@ -1,0 +1,35 @@
+[
+  {
+    "Currency1": {
+      "Coin": "USD",
+      "Label": null
+    },
+    "Currency2": {
+      "Coin": "BRL",
+      "Label": null
+    },
+    "Factor": 0.2
+  },
+  {
+    "Currency1": {
+      "Coin": "USD",
+      "Label": null
+    },
+    "Currency2": {
+      "Coin": "EUR",
+      "Label": null
+    },
+    "Factor": 0.6666666666666666
+  },
+  {
+    "Currency1": {
+      "Coin": "EUR",
+      "Label": null
+    },
+    "Currency2": {
+      "Coin": "BRL",
+      "Label": null
+    },
+    "Factor": 0.16666666666666666
+  }
+]
