@@ -6,6 +6,14 @@ async function getAllCurrencies() {
 	return JSON.parse(currencies)
 }
 
+async function getOneCurrency(code) {
+	const currencies = await redis.get('rates')
+
+	const currency = JSON.parse(currencies).find(c => c.code === code)
+
+	return currency
+}
+
 async function getRatesPair(from, to) {
 	const cachedRates = await redis.get('rates')
 	const fromRate = JSON.parse(cachedRates).find((r) => r.code === from)
@@ -32,5 +40,6 @@ async function createCurrency(newCurrency) {
 export const exchangeRatesRepository = {
 	getRatesPair,
 	getAllCurrencies,
+	getOneCurrency,
 	createCurrency
 }
