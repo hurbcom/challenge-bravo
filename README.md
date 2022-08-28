@@ -1,82 +1,125 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> **Desafio Bravo**
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+O projeto foi todo desenvolvido com o Framework Laravel na versão 8.X. 
+O template, utilizei o Material Dashboard Laravel - Predefinição Frontend Gratuita para Laravel.
+Algumas funcionalidades mais básicas como login no frontend já vieram prontas para agilizar o processo de desenvolvimento. 
+Com exceção do login do frontend e do template, todo o projeto backend,  frontend, API e configurações do docker foram feitos por mim. 
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+<img src="dashboard-hurb.png" alt="Hurb" width="800" />
 
-The API must convert between the following currencies:
+## **Desenvolvimento por mim**
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+	 1. Todo o conteúdo da pasta **Collection**
+	 2. Em APP/HTTP/Controllers todo conteúdo da pasta Awesame (API de cotação)
+	 3. Ainda em APP/HTTP/Controllers os controllers (AuthController.php e UserController.php )
+	 4. Na pasta APP/models apenas User.php e HistoricoCotacao.php
+	 5. Na pasta database/migrations todo as migrations
+	 6. Ainda na pasta database/seeders só o UsersSeeder.php
+	 7. Em resources/views o conteúdo da pasta cotacao/index.blade.php e a dashboard.blade.php
 
-Other coins could be added as usage.
+## **Como rodar o projeto?**
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+- Baixe ou clone o projeto no Linux, macOS ou Windows;
+- Se optar por usar Windows (10 ou superior), pode usar Docker Desktop ou WSL (Ubuntu).
+- No WSL devemos usar o seguinte comando para executar Docker -> sudo service docker start.
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+**Obs.:** Fiz o todo o projeto no Windows com WSL e Docker Nativo.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+## Como configurar e rodar o projeto
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+- **Crie o Arquivo .env como comando abaixo**
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+	    `cp .env.example .env`
+    
+- **Atualize as variáveis de ambiente do arquivo .env**
+	 `
+	    
+	    APP_NAME="Desafio Bravo - Cotação"
+	    APP_URL=http://localhost:8181
+	    DB_CONNECTION=mysql
+	    DB_HOST=mysql
+	    DB_PORT=3306
+	    DB_DATABASE=cotacao
+	    DB_USERNAME=root
+	    DB_PASSWORD=root
+	    
+	    CACHE_DRIVER=redis
+	    QUEUE_CONNECTION=redis
+	    SESSION_DRIVER=redis
+	    
+	    REDIS_HOST=redis
+	    REDIS_PASSWORD=null
+	    REDIS_PORT=6379`
+  
+    
+- **Suba os containers do projeto**
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+	     docker-compose up -d
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+- **Acessar o container**
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+		docker-compose exec laravel_8 bash
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+- **Instalar as dependências do projeto**
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+		composer install
 
-## Requirements
+- **Gerar a key do projeto Laravel**
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+		php artisan key:generate
+    
+- **Criar banco e usuário admin**
 
-## Evaluation criteria
+	    php artisan migrate:fresh --seed
+    
+- **Para criar usuários fakes**
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+	     php artisan db:seed --class=UsersSeeder
 
-## Doubts
+**Acesse o projeto:** http://localhost:8181
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+## **API para Integrações**
 
-Godspeed! ;)
+Pensando em possível integrações desenvolvi endpoints para consumir a API do sistema, todas as collection encontram-se na pasta Collection.
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Dentro da pasta estou envio:
+    
+    - Auth:
+        - Login - Gera Token de acesso;
+        - Logout - Desloga usuário;
+    
+    - Users (CRUD):
+        - GET - Para lista todos os usuários (limitado por pagination = 10);
+        - GET/id - Para exibir apenas um usuário conforme id passado por parâmetro;
+        - POST - Para cadastrar novos usuários;
+        - PUT/id - Edita usuário existente passando id como parâmetro e dados no body (como json);
+        - DELETE/id - Deleta usuário conforma id passado por parâmetro;
+    
+    - Cotação
+        - Last - Exibi a cotação existe nos últimos 30 segundos, conforme parâmetros (from e to). 
+                    Ex: {{BASE_URL}}api/cotacao/last/?from=BTC&to=BRL;
+        - Daily - Exibi uma ou mais cotação do dia conforme paramentros passados. 
+                    Ex: {{BASE_URL}}api/cotacao/daily/?from=USD&to=BRL&num=3
+       
+## **Configurar Postman**
+
+No Environment -> Global atribua a variável TOKEN a key gerada pelo login e crie na BASE_URL o link conforme exemplo abaixo:
+
+TOKEN -> 1|ipRV4U0DybvdtFFrUAY2lJHLRvIyKfTtPLTzfYUW (exemplo)
+BASE_URL -> http://localhost:8181/ 
+
+
+## **Docker**
+
+Estou usando a versão 3.7, rodando as imagens:
+
+	 - Laravel_8 com todas as configurações necessárias para o funcionamento do projeto;
+	 - Nginx rodando na porta 8181;
+     - PHP 7.4;
+	 - MySql versão 5.7.22 pega as configurações de .env para criação do banco 
+	 - queue para gerênciar filas
+	 - redis banco de dados em memória para informações mais rápidas
+
+**Template:**
+https://github.com/laravel-frontend-presets/material-dashboard
