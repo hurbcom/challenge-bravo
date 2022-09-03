@@ -156,3 +156,28 @@ class CurrencyOperator(BaseModel):
 
         updated_currency = self._find_currency_in_db(db=db)
         return CurrencyDatabase.from_orm(updated_currency)
+
+
+    def delete(self, db: Session):
+        """ Delete currency from `fantasy_coins` if found in database """
+
+        currency = self._find_currency_in_db(db=db)
+
+        # Raises an HTTP exception if currency is not found
+        if not currency:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Currency code {self.currency_code} not found"
+            )
+
+        # Raises an HTTP exception if currency is an oficial currency
+        if currency.currency_type == "oficial":
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Currency code {self.currency_code} is an oficial currency and cannot be deleted"
+            )
+
+        currency_query = db.query(FantasyCoin).filter(FantasyCoin.currency_code == self.currency_code)
+        currency_query.delete()
+        db.commit()
+        return

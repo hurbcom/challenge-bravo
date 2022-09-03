@@ -53,6 +53,8 @@ def update_quote(currency_code: str, currency_data: CurrencyInput, db: Session =
 
 
 @router.delete("/{currency_code}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_quote(currency_code: str):
-    """ Deletes existing quote in `fantasy_coins` table """
-    pass
+def delete_quote(currency_code: str, db: Session = Depends(get_db)):
+    """ Deletes existing quote from `fantasy_coins` table """
+
+    currency = CurrencyOperator(currency_code=currency_code)
+    return currency.delete(db=db)
