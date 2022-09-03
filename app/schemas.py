@@ -56,3 +56,18 @@ class CurrencyDatabase(BaseModel):
     backed_by: str
     updated_at: datetime
     currency_type: str
+
+    class Config:
+        orm_mode = True
+
+
+class CurrencyOut(BaseModel):
+    currency_code: str
+    rate: float
+    backed_by: str
+    updated_at: datetime
+    currency_type: str
+
+
+class CurrencyResponse(BaseModel):
+    data: CurrencyOut
