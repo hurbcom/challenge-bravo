@@ -16,21 +16,34 @@ def test_read_all_quotes(client: TestClient, index, expected_currency_code, expe
     Try to read all currencies in database
     """
     res = client.get("/quote")
-    assert res.status_code == 200
-    assert res.json()["quote"][index]["currency_code"] == expected_currency_code
-    assert res.json()["quote"][index]["rate"] == expected_rate
-    assert res.json()["quote"][index]["backed_by"] == expected_backed_by
-    assert res.json()["quote"][index]["currency_type"] == expected_currency_type
+    res_data = res.json()["data"][index]
 
-def test_found_in_db(client: TestClient):
+    assert res.status_code == 200
+    assert res_data["currency_code"] == expected_currency_code
+    assert res_data["rate"] == expected_rate
+    assert res_data["backed_by"] == expected_backed_by
+    assert res_data["currency_type"] == expected_currency_type
+
+
+@pytest.mark.parametrize("currency_code, expected_rate, expected_backed_by, expected_currency_type", [
+    ("BRL", 5.12, "USD", "oficial"),
+    ("BTC", 0.00005, "USD", "oficial"),
+    ("ETH", 0.0006, "USD", "oficial"),
+    ("EUR", 1.01, "USD", "oficial"),
+    ("USD", 1.0, "USD", "oficial"),
+])
+def test_found_in_db(client: TestClient, currency_code, expected_rate, expected_backed_by, expected_currency_type):
     """
     Try to read one an existing specific currency in database
     """
-    res = client.get("/quote/brl/")
+    res = client.get(f"/quote/{currency_code}/")
+    res_data = res.json()["data"]
+
     assert res.status_code == 200
-    assert res.json()["currency_code"] == "BRL"
-    assert res.json()["backed_by"] == "USD"
-    assert res.json()["rate"] == 5.12
+    assert res_data["currency_code"] == currency_code
+    assert res_data["backed_by"] == expected_backed_by
+    assert res_data["rate"] == expected_rate
+    assert res_data["currency_type"] == expected_currency_type
 
 def test_not_found_in_db(client: TestClient):
     """
@@ -47,5 +60,6 @@ def test_fantasy_found_in_db(client: TestClient, create_hurb_quote: dict):
     """
     currency = Currency(**create_hurb_quote)
     res = client.get(f"/quote/{currency.currency_code}/")
+    res_data = res.json()["data"]
     assert res.status_code == 200
-    assert res.json()["currency_code"] == currency.currency_code
+    assert res_data["currency_code"] == currency.currency_code
