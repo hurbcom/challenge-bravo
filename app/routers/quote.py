@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.operators.currency import CurrencyOperator
-from app.schemas import CurrencyOut, CurrencyResponse, MultipleCurrencyResponse
+from app.schemas import CurrencyInput, CurrencyOut, CurrencyResponse, MultipleCurrencyResponse
 
 
 
@@ -33,9 +33,13 @@ def read_quote(currency_code: str, db: Session = Depends(get_db)):
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create_quote():
+def create_quote(currency_data: CurrencyInput, db: Session = Depends(get_db)):
     """ Create new quote in `fantasy_coins` table """
-    pass
+
+    currency = CurrencyOperator(**currency_data.dict(exclude_none=True))
+    currency_db = currency.create(db=db)
+    currency_output = CurrencyOut(**currency_db.dict())
+    return CurrencyResponse(data=currency_output)
 
 
 @router.put("/{currency_code}", status_code=status.HTTP_200_OK)

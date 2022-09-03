@@ -36,6 +36,14 @@ class CurrencyOperator(BaseModel):
         return currency_db
 
 
+    def _find_backed_currency_in_db(self, db: Session) -> Union[CurrencyDatabase, None]:
+        """ If backed currency exists in `oficial_coins` returns it else returns `None` """
+
+        oficial_table_query = db.query(OficialCoin).filter(OficialCoin.currency_code == self.backed_by)
+        currency_db = oficial_table_query.first()
+        return currency_db
+
+
     def read_all(self, db: Session) -> List:
         """ Returns a list of quotes from `oficial_coins` and `fantasy_coins` tables """
 
@@ -76,4 +84,28 @@ class CurrencyOperator(BaseModel):
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Currency code {self.currency_code} not found"
             )
+        return CurrencyDatabase.from_orm(currency)
+
+
+    def create(self, db: Session) -> CurrencyDatabase:
+        """ Creates a new currency in `fantasy_coins` if not found in database """
+
+        # Raises an HTTP exception if currency already exists
+        if self._find_currency_in_db(db=db):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Currency code {self.currency_code} already exists"
+            )
+
+        # Raises an HTTP exception if backed currency is not found
+        if not self._find_backed_currency_in_db(db=db):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Backed currency code {self.backed_by} is not valid"
+            )
+
+        currency = FantasyCoin(**self.dict())
+        db.add(currency)
+        db.commit()
+        db.refresh(currency)
         return CurrencyDatabase.from_orm(currency)
