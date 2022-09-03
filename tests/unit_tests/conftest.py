@@ -6,7 +6,7 @@ import pytest
 from app.main import app
 from app.config import settings
 from app.database import Base, get_db
-from app.models import OficialCoin
+from app.models import OficialCoin, FantasyCoin
 from app.schemas import Currency
 
 
@@ -74,3 +74,49 @@ def client(session: Session, insert_test_data):
     # Change get_db dependency to override_get_db in order to manipulate test database
     app.dependency_overrides[get_db] = override_get_db
     yield TestClient(app)
+
+@pytest.fixture
+def oficial_dummy_data() -> dict:
+    data = {
+        "currency_code":"BRL"
+    }
+    return data
+
+@pytest.fixture
+def fantasy_dummy_data() -> dict:
+    data = {
+        "currency_code":"HURB"
+    }
+    return data
+
+@pytest.fixture
+def fantasy_currency_data_hurb() -> dict:
+    payload = {
+        "currency_code": "HURB",
+        "rate": 4.0,
+        "backed_by": "BRL"
+    }
+    return payload
+
+@pytest.fixture
+def fantasy_currency_data_test():
+    payload = {
+        "currency_code": "TEST",
+        "rate": 0.4,
+        "backed_by": "BRL"
+    }
+    return payload
+
+@pytest.fixture
+def create_hurb_quote(client: TestClient, session: Session, fantasy_currency_data_hurb: dict) -> dict:
+    currency_db = FantasyCoin(**fantasy_currency_data_hurb)
+    session.add(currency_db)
+    session.commit()
+    return fantasy_currency_data_hurb
+
+@pytest.fixture
+def create_test_quote(client: TestClient, session: Session, fantasy_currency_data_test: dict) -> dict:
+    currency_db = FantasyCoin(**fantasy_currency_data_test)
+    session.add(currency_db)
+    session.commit()
+    return fantasy_currency_data_test
