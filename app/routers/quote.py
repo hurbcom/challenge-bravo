@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.operators.currency import CurrencyOperator
-from app.schemas import CurrencyInput, CurrencyOut, CurrencyResponse, MultipleCurrencyResponse
+from app.schemas import CurrencyDatabase, CurrencyInput, CurrencyOut, CurrencyResponse, MultipleCurrencyResponse
 
 
 
@@ -32,7 +32,7 @@ def read_quote(currency_code: str, db: Session = Depends(get_db)):
     return CurrencyResponse(data=currency_output)
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=CurrencyResponse)
 def create_quote(currency_data: CurrencyInput, db: Session = Depends(get_db)):
     """ Create new quote in `fantasy_coins` table """
 
@@ -42,10 +42,14 @@ def create_quote(currency_data: CurrencyInput, db: Session = Depends(get_db)):
     return CurrencyResponse(data=currency_output)
 
 
-@router.put("/{currency_code}", status_code=status.HTTP_200_OK)
-def update_quote(currency_code: str):
+@router.put("/{currency_code}", status_code=status.HTTP_200_OK, response_model=CurrencyResponse)
+def update_quote(currency_code: str, currency_data: CurrencyInput, db: Session = Depends(get_db)):
     """ Updates existing quote in `fantasy_coins` """
-    pass
+
+    currency = CurrencyOperator(**currency_data.dict(exclude_none=True))
+    currency_db = currency.update(db=db, original_currency_code=currency_code)
+    currency_output = CurrencyOut(**currency_db.dict())
+    return CurrencyResponse(data=currency_output)
 
 
 @router.delete("/{currency_code}", status_code=status.HTTP_204_NO_CONTENT)

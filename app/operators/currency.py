@@ -109,3 +109,50 @@ class CurrencyOperator(BaseModel):
         db.commit()
         db.refresh(currency)
         return CurrencyDatabase.from_orm(currency)
+
+
+    def update(self, db: Session, original_currency_code: str) -> CurrencyDatabase:
+        """ Updated currency in `fantasy_coins` if found in database """
+
+        original_currency_code = original_currency_code.upper()
+        # In case of currency code change
+        if original_currency_code != self.currency_code:
+            original_currency_code_in_db = db.query(FantasyCoin).filter(FantasyCoin.currency_code == original_currency_code).first()
+            # Raises an HTTP exception if original currency code is not found
+            if not original_currency_code_in_db:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Original currency code {original_currency_code} not found"
+                )
+            # Raises an HTTP exception if new currency code is not found
+            if self._find_currency_in_db(db=db):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=f"New currency code {self.currency_code} already exists"
+                )
+        else:
+        # Raises an HTTP exception if new currency code is not found
+            if not self._find_currency_in_db(db=db):
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Currency code {self.currency_code} not found"
+                )
+
+        # Raises an HTTP exception if backed currency is not found
+        if not self._find_backed_currency_in_db(db=db):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Backed currency code {self.backed_by} not found"
+            )
+
+        if original_currency_code != self.currency_code:
+            currency_code_db = original_currency_code
+        else:
+            currency_code_db = self.currency_code
+
+        currency_db = db.query(FantasyCoin).filter(FantasyCoin.currency_code == currency_code_db)
+        currency_db.update(self.dict())
+        db.commit()
+
+        updated_currency = self._find_currency_in_db(db=db)
+        return CurrencyDatabase.from_orm(updated_currency)
