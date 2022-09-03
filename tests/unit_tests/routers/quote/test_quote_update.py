@@ -22,13 +22,14 @@ def test_found_in_db(client: TestClient, session: Session, create_hurb_quote, fa
     payload["rate"] = NEW_RATE
 
     res = client.put(f"/quote/{original_currency.currency_code}", json=payload)
+    res_data = res.json()["data"]
 
     # validades response
     updated_currency = CurrencyInput(**payload)
     assert res.status_code == 200
-    assert res.json()["currency_code"] == updated_currency.currency_code
-    assert res.json()["rate"] == updated_currency.rate
-    assert res.json()["backed_by"] == updated_currency.backed_by
+    assert res_data["currency_code"] == updated_currency.currency_code
+    assert res_data["rate"] == updated_currency.rate
+    assert res_data["backed_by"] == updated_currency.backed_by
 
     # validates database changes
     currency_db: FantasyCoin = session.query(FantasyCoin).filter(FantasyCoin.id == currency_id_db).first()
@@ -74,13 +75,14 @@ def test_found_in_db_alternative_input(client: TestClient, session: Session, cre
     payload["backed_currency_amount"] = NEW_BACKED_CURRENCY_AMOUNT
 
     res = client.put(f"/quote/{original_currency.currency_code}", json=payload)
+    res_data = res.json()["data"]
 
     # validades response
     updated_currency = CurrencyInput(**payload)
     assert res.status_code == 200
-    assert res.json()["currency_code"] == updated_currency.currency_code
-    assert res.json()["rate"] == updated_currency.rate
-    assert res.json()["backed_by"] == updated_currency.backed_by
+    assert res_data["currency_code"] == updated_currency.currency_code
+    assert res_data["rate"] == updated_currency.rate
+    assert res_data["backed_by"] == updated_currency.backed_by
 
     # validates database changes
     currency_db: FantasyCoin = session.query(FantasyCoin).filter(FantasyCoin.id == currency_id_db).first()
