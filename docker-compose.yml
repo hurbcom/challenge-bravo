@@ -25,7 +25,10 @@ services:
         ports:
             - 5432:5432
         volumes:
+            - ./tests/unit_tests/pg-init-script:/docker-entrypoint-initdb.d
             - postgres-db:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_MULTIPLE_DATABASES=currency_converter_test
 
     pgadmin:
         depends_on:
