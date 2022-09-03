@@ -13,6 +13,7 @@ class OficialCoin(Base):
     rate = Column(Float, nullable=False)
     backed_by = Column(String, nullable=False, server_default="USD")
     updated_at = Column(DateTime(timezone=True), nullable=False, server_default=text("now()"), onupdate=datetime.utcnow)
+    currency_type = Column(String, nullable=False, index=True, server_default="oficial")
 
 
 class FantasyCoin(Base):
@@ -23,3 +24,4 @@ class FantasyCoin(Base):
     rate = Column(Float, nullable=False)
     backed_by = Column(String, nullable=False, server_default="USD")
     updated_at = Column(DateTime(timezone=True), nullable=False, server_default=text("now()"), onupdate=datetime.utcnow)
+    currency_type = Column(String, nullable=False, index=True, server_default="fantasy")
