@@ -1,5 +1,5 @@
 from pydantic import BaseModel, validator, root_validator, Field
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 
@@ -71,3 +71,7 @@ class CurrencyOut(BaseModel):
 
 class CurrencyResponse(BaseModel):
     data: CurrencyOut
+
+
+class MultipleCurrencyResponse(BaseModel):
+    data: List[CurrencyOut]
