@@ -47,3 +47,12 @@ class CurrencyInput(Currency):
         values['amount'] = None
         values['backed_currency_amount'] = None
         return values
+
+
+class CurrencyDatabase(BaseModel):
+    id: int
+    currency_code: str
+    rate: float
+    backed_by: str
+    updated_at: datetime
+    currency_type: str
