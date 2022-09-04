@@ -4,8 +4,9 @@ from sqlalchemy.orm import Session, Query
 from typing import List, Union, Optional
 from datetime import datetime
 
-from app.models import OficialCoin, FantasyCoin
+from app.models import FavoriteCoin, OficialCoin, FantasyCoin
 from app.schemas.currency import CurrencyDatabase
+from app.schemas.favorite import FavoriteDatabase
 
 
 
@@ -36,6 +37,20 @@ class CurrencyOperator(BaseModel):
         return currency_db
 
 
+    def _query_currency_in_favorites(self, db: Session) -> Query:
+        """ Returns Query statement """
+
+        favorite_table_query = db.query(FavoriteCoin).filter(FavoriteCoin.currency_code == self.currency_code)
+        return favorite_table_query
+
+
+    def _find_currency_in_favorites(self, db: Session) -> Union[FavoriteDatabase, None]:
+        """ If currency exists in `favorite_coins` returns it else return `None`"""
+
+        currency_db = self._query_currency_in_favorites(db=db).first()
+        return currency_db
+
+
     def _find_backed_currency_in_db(self, db: Session) -> Union[CurrencyDatabase, None]:
         """ If backed currency exists in `oficial_coins` returns it else returns `None` """
 
@@ -63,11 +78,33 @@ class CurrencyOperator(BaseModel):
 
         currency_list = oficial_table_query.union(fantasy_table_query).order_by("currency_code").all()
 
+        return currency_list
+
+
+    def read_all_favorites(self, db: Session) -> List:
+        """ Returns a list of quotes from `oficial_coins` and `fantasy_coins` that are found in `favorite_coins` table """
+
+        oficial_table_query = db.query(
+            OficialCoin.currency_code.label("currency_code"),
+            OficialCoin.rate,
+            OficialCoin.backed_by,
+            OficialCoin.updated_at,
+            OficialCoin.currency_type).filter(OficialCoin.currency_code == FavoriteCoin.currency_code)
+
+        fantasy_table_query = db.query(
+            FantasyCoin.currency_code.label("currency_code"),
+            FantasyCoin.rate,
+            FantasyCoin.backed_by,
+            FantasyCoin.updated_at,
+            FantasyCoin.currency_type).filter(FantasyCoin.currency_code == FavoriteCoin.currency_code)
+
+        currency_list = oficial_table_query.union(fantasy_table_query).order_by("currency_code").all()
+
         # Raises an HTTP exception if currency is not found
         if not currency_list:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Currency code {self.currency_code} not found"
+                detail=f"No currencies marked as favorite"
             )
 
         return currency_list
@@ -85,6 +122,21 @@ class CurrencyOperator(BaseModel):
                 detail=f"Currency code {self.currency_code} not found"
             )
         return CurrencyDatabase.from_orm(currency)
+
+
+    def read_favorite(self, db: Session) -> CurrencyDatabase:
+        """ If currency is found in `favorite_coins` table returns it else return `None` """
+
+        currency = self._find_currency_in_favorites(db=db)
+        # Raises an HTTP exception if currency is not found
+        if not currency:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Currency code {self.currency_code} not found in favorites"
+            )
+
+        currency_db = self._find_currency_in_db(db=db)
+        return CurrencyDatabase.from_orm(currency_db)
 
 
     def create(self, db: Session) -> CurrencyDatabase:

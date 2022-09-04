@@ -33,7 +33,7 @@ def test_oficial_found_in_db(client: TestClient, create_favorite_oficial: Favori
     res = client.get(f"/favorite/{create_favorite_oficial.currency_code}")
     assert res.status_code == 200
 
-    favorite_output = Favorite(**res.json())
+    favorite_output = Favorite(**res.json()["data"])
     assert favorite_output.currency_code == create_favorite_oficial.currency_code
     assert favorite_output.currency_type == create_favorite_oficial.currency_type
 
@@ -54,7 +54,7 @@ def test_fantasy_found_in_db(client: TestClient, create_favorite_fantasy: Favori
     res = client.get(f"/favorite/{create_favorite_fantasy.currency_code}")
     assert res.status_code == 200
 
-    favorite_output = Favorite(**res.json())
+    favorite_output = Favorite(**res.json()["data"])
     assert favorite_output.currency_code == create_favorite_fantasy.currency_code
     assert favorite_output.currency_type == create_favorite_fantasy.currency_type
 
