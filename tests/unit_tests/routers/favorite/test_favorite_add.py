@@ -25,7 +25,7 @@ def test_found_in_db(client: TestClient, session: Session, create_hurb_quote: di
     favorite_db: FavoriteCoin = session.query(FavoriteCoin).filter(FavoriteCoin.currency_code == currency.currency_code).first()
     assert favorite_db != None
     assert favorite_db.currency_code == currency.currency_code
-    assert favorite_db.currency_type == currency.currency_type
+    assert favorite_db.currency_type == 'fantasy'
 
 
 def test_not_found_in_db(client: TestClient):

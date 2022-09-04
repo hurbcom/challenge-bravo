@@ -6,7 +6,7 @@ from datetime import datetime
 
 from app.models import FavoriteCoin, OficialCoin, FantasyCoin
 from app.schemas.currency import CurrencyDatabase
-from app.schemas.favorite import FavoriteDatabase
+from app.schemas.favorite import FavoriteDatabase, Favorite
 
 
 
@@ -233,3 +233,29 @@ class CurrencyOperator(BaseModel):
         currency_query.delete()
         db.commit()
         return
+
+
+    def favorite(self, db: Session) -> Favorite:
+        """ Mark currency as favorite and insert into `favorite_coins` if found in `oficial_coins` or `fantasy_coins` """
+
+        currency = self._find_currency_in_db(db=db)
+
+        # Raises an HTTP exception if currency is not found
+        if not currency:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Currency code {self.currency_code} not found"
+            )
+
+        if self._find_currency_in_favorites(db=db):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Currency code {self.currency_code} already added to favorites"
+            )
+
+        currency_favorite = Favorite(currency_code=currency.currency_code, currency_type=currency.currency_type)
+        currency_db = FavoriteCoin(**currency_favorite.dict())
+        db.add(currency_db)
+        db.commit()
+        db.refresh(currency_db)
+        return currency_favorite

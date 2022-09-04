@@ -14,3 +14,7 @@ class FavoriteDatabase(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class FavoriteResposne(BaseModel):
+    data: Favorite
