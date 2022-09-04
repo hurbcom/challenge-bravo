@@ -13,6 +13,16 @@ def real_currency_data_brl() -> dict:
 
 
 @pytest.fixture
+def fantasy_currency_data_test() -> dict:
+    payload = {
+        "currency_code": "TEST",
+        "backed_by": "USD",
+        "rate": 5.59
+    }
+    return payload
+
+
+@pytest.fixture
 def fantasy_currency_data_hurb_alternative_input() -> dict:
     payload = {
         "currency_code": "HURB",
