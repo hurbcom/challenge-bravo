@@ -25,3 +25,11 @@ class FantasyCoin(Base):
     backed_by = Column(String, nullable=False, server_default="USD")
     updated_at = Column(DateTime(timezone=True), nullable=False, server_default=text("now()"), onupdate=datetime.utcnow)
     currency_type = Column(String, nullable=False, index=True, server_default="fantasy")
+
+
+class FavoriteCoin(Base):
+    __tablename__ = 'favorite_coins'
+
+    id = Column(Integer, primary_key=True)
+    currency_code = Column(String, nullable=False, index=True, unique=True)
+    currency_type = Column(String, nullable=False)
