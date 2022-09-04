@@ -7,7 +7,7 @@ from app.main import app
 from app.config import settings
 from app.database import Base, get_db
 from app.models import OficialCoin, FantasyCoin
-from app.schemas import Currency
+from app.schemas.currency import Currency
 
 
 

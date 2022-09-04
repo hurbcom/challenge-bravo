@@ -5,7 +5,7 @@ from typing import List, Union, Optional
 from datetime import datetime
 
 from app.models import OficialCoin, FantasyCoin
-from app.schemas import CurrencyDatabase
+from app.schemas.currency import CurrencyDatabase
 
 
 

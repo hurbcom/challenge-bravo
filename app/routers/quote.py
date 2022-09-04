@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.operators.currency import CurrencyOperator
-from app.schemas import CurrencyDatabase, CurrencyInput, CurrencyOut, CurrencyResponse, MultipleCurrencyResponse
+from app.schemas.currency import CurrencyDatabase, CurrencyInput, CurrencyOut, CurrencyResponse, MultipleCurrencyResponse
 
 
 

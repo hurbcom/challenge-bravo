@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.models import FantasyCoin, OficialCoin
-from app.schemas import CurrencyInput
+from app.schemas.currency import CurrencyInput
 
 
 
