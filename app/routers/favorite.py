@@ -35,12 +35,16 @@ def read_favorite(currency_code: str, db: Session = Depends(get_db)):
 @router.post("/{currency_code}", status_code=status.HTTP_201_CREATED, response_model=FavoriteResposne)
 def add_favorite(currency_code: str, db: Session = Depends(get_db)):
     """ Add currency from `favorite_coins` table if found in `oficial_coins` or `fantasy_coins` tables """
+
     currency = CurrencyOperator(currency_code=currency_code)
     currency_db = currency.favorite(db=db)
     return FavoriteResposne(data=currency_db)
 
 
 @router.delete("/{currency_code}", status_code=status.HTTP_204_NO_CONTENT)
-def remove_favorite():
+def remove_favorite(currency_code: str, db: Session = Depends(get_db)):
     """ Remove currency from `favorite_coins` table """
-    pass
+
+    currency = CurrencyOperator(currency_code=currency_code)
+    currency.unfavorite(db=db)
+    return

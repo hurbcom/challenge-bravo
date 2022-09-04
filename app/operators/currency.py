@@ -229,6 +229,10 @@ class CurrencyOperator(BaseModel):
                 detail=f"Currency code {self.currency_code} is an oficial currency and cannot be deleted"
             )
 
+        # If currency is in favorite_coins table, remove it too
+        if self._find_currency_in_favorites(db=db):
+            self.unfavorite(db=db)
+
         currency_query = db.query(FantasyCoin).filter(FantasyCoin.currency_code == self.currency_code)
         currency_query.delete()
         db.commit()
@@ -259,3 +263,20 @@ class CurrencyOperator(BaseModel):
         db.commit()
         db.refresh(currency_db)
         return currency_favorite
+
+
+    def unfavorite(self, db: Session) -> None:
+        """ Remove currency from `favorite_coins` table """
+
+        currency_query = self._query_currency_in_favorites(db=db)
+
+        # Raises an HTTP exception if currency is not found in favorites
+        if not currency_query.first():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Currency code {self.currency_code} not found in favorites"
+            )
+
+        currency_query.delete()
+        db.commit()
+        return
