@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 import pytest
 
-from app.schemas import Currency
+from app.schemas.currency import Currency
 
 
 @pytest.mark.parametrize("index, expected_currency_code, expected_rate, expected_backed_by, expected_currency_type", [

@@ -1,8 +1,9 @@
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from app.models import FantasyCoin
-from app.schemas import CurrencyInput
+from app.models import FantasyCoin, FavoriteCoin
+from app.schemas.currency import CurrencyInput
+from app.schemas.favorite import Favorite
 
 
 
@@ -114,10 +115,33 @@ def test_found_in_db_missing_field(client: TestClient, session: Session, create_
     assert currency_db.backed_by == original_currency.backed_by
 
 
-def test_found_in_db_providing_all_fields_in_body(client: TestClient, create_hurb_quote, fantasy_currency_data_hurb_all_fields_input: dict):
+def test_found_in_db_providing_all_fields_in_body(client: TestClient, create_hurb_quote: dict, fantasy_currency_data_hurb_all_fields_input: dict):
     """
     Try to update fantasy currency using invalid body with all possible fields provided and asserts an error
     """
-    res = client.post("/quote/", json=fantasy_currency_data_hurb_all_fields_input)
+    res = client.put(f"/quote/{create_hurb_quote['currency_code']}", json=fantasy_currency_data_hurb_all_fields_input)
     assert res.status_code == 422
     assert res.json()["detail"][0]["msg"] == "You should provide only a rate field or an amount and backed_currency_amount fields"
+
+
+def test_found_in_db_change_currency_code_favorite(client: TestClient, session: Session, create_favorite_fantasy: Favorite, fantasy_currency_data_test: dict):
+    """
+    Try to update fantasy currency marked as favorite changing `currency_code` and asserts code is changed in `favorite_coins` table as well
+    """
+    currency_db_id: FavoriteCoin = session.query(FavoriteCoin.id).filter(FavoriteCoin.currency_code == create_favorite_fantasy.currency_code).scalar()
+
+    res = client.put(f"/quote/{create_favorite_fantasy.currency_code}", json=fantasy_currency_data_test)
+    assert res.status_code == 200
+
+    currency_db: FavoriteCoin = session.query(FavoriteCoin).filter(FavoriteCoin.id == currency_db_id).first()
+    assert currency_db.currency_code == fantasy_currency_data_test['currency_code']
+    assert currency_db.currency_type == "fantasy"
+
+
+def test_found_in_db_original(client: TestClient, real_currency_data_brl, fantasy_currency_data_test: dict):
+    """
+    Try to update original currency and asserts an error
+    """
+    res = client.put(f"/quote/{real_currency_data_brl['currency_code']}", json=fantasy_currency_data_test)
+    assert res.status_code == 409
+    assert res.json()["detail"] == f"Currency code {real_currency_data_brl['currency_code']} is an oficial currency and cannot be changed"

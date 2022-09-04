@@ -6,9 +6,9 @@ import pytest
 from app.main import app
 from app.config import settings
 from app.database import Base, get_db
-from app.models import OficialCoin, FantasyCoin
-from app.schemas import Currency
-
+from app.models import OficialCoin, FantasyCoin, FavoriteCoin
+from app.schemas.currency import Currency
+from app.schemas.favorite import Favorite
 
 
 client = TestClient(app)
@@ -120,3 +120,26 @@ def create_test_quote(client: TestClient, session: Session, fantasy_currency_dat
     session.add(currency_db)
     session.commit()
     return fantasy_currency_data_test
+
+@pytest.fixture
+def create_favorite_oficial(session: Session) -> Favorite:
+    currency = Favorite(
+        currency_code="BRL",
+        currency_type="oficial")
+
+    currency_db = FavoriteCoin(**currency.dict())
+    session.add(currency_db)
+    session.commit()
+    return currency
+
+
+@pytest.fixture
+def create_favorite_fantasy(session: Session, create_hurb_quote) -> Favorite:
+    currency = Favorite(
+        currency_code="HURB",
+        currency_type="fantasy")
+
+    currency_db = FavoriteCoin(**currency.dict())
+    session.add(currency_db)
+    session.commit()
+    return currency
