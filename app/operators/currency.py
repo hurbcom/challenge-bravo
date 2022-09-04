@@ -37,8 +37,12 @@ class CurrencyOperator(BaseModel):
         return currency_db
 
 
-    def _query_currency_in_favorites(self, db: Session) -> Query:
+    def _query_currency_in_favorites(self, db: Session, currency_code: str = None) -> Query:
         """ Returns Query statement """
+
+        if currency_code:
+            favorite_table_query = db.query(FavoriteCoin).filter(FavoriteCoin.currency_code == currency_code)
+            return favorite_table_query
 
         favorite_table_query = db.query(FavoriteCoin).filter(FavoriteCoin.currency_code == self.currency_code)
         return favorite_table_query
@@ -163,10 +167,31 @@ class CurrencyOperator(BaseModel):
         return CurrencyDatabase.from_orm(currency)
 
 
+    def _update_favorite(self, db: Session, original_currency_code: str) -> None:
+
+        currency_db = db.query(FavoriteCoin).filter(FavoriteCoin.currency_code == original_currency_code)
+        updated_currency = {
+            "currency_code": self.currency_code,
+            "currency_type": "fantasy"
+            }
+        currency_db.update(updated_currency)
+        db.commit()
+        return
+
+
     def update(self, db: Session, original_currency_code: str) -> CurrencyDatabase:
         """ Updated currency in `fantasy_coins` if found in database """
 
         original_currency_code = original_currency_code.upper()
+        original_currency_db_oficial = db.query(OficialCoin).filter(OficialCoin.currency_code == original_currency_code).first()
+
+        # Raises an HTTP exception if currency is an oficial one
+        if original_currency_db_oficial:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Currency code {original_currency_code} is an oficial currency and cannot be changed"
+            )
+
         # In case of currency code change
         if original_currency_code != self.currency_code:
             original_currency_code_in_db = db.query(FantasyCoin).filter(FantasyCoin.currency_code == original_currency_code).first()
@@ -202,9 +227,13 @@ class CurrencyOperator(BaseModel):
         else:
             currency_code_db = self.currency_code
 
+        if self._query_currency_in_favorites(db=db, currency_code=original_currency_code).first():
+            self._update_favorite(db=db, original_currency_code=original_currency_code)
+
         currency_db = db.query(FantasyCoin).filter(FantasyCoin.currency_code == currency_code_db)
         currency_db.update(self.dict())
         db.commit()
+
 
         updated_currency = self._find_currency_in_db(db=db)
         return CurrencyDatabase.from_orm(updated_currency)
