@@ -1,0 +1,1798 @@
+{
+	"info": {
+		"_postman_id": "0bc0c3ab-7654-4bb4-97f0-caffdd7b3734",
+		"name": "currency-converter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22033786"
+	},
+	"item": [
+		{
+			"name": "Quote",
+			"item": [
+				{
+					"name": "Read All Quotes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/quote/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read USD Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/quote/usd",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"usd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read BRL Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/quote/brl",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"brl"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read EUR Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/quote/eur",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"eur"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read BTC Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/quote/btc",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"btc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read ETH Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/quote/eth",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"eth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TEST Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"TEST\",\r\n    \"rate\": 4,\r\n    \"backed_by\": \"BRL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TEST2 Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"TEST2\",\r\n    \"amount\": 100,\r\n    \"backed_by\": \"BRL\",\r\n    \"backed_currency_amount\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create BRL Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"BRL\",\r\n    \"amount\": 100,\r\n    \"backed_by\": \"BRL\",\r\n    \"backed_currency_amount\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create GTA Quote (challenge example)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"GTA\",\r\n    \"amount\": 1250000.00,\r\n    \"backed_by\": \"BRL\",\r\n    \"backed_currency_amount\": 83.50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete GTA Quote (challenge example)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/gta",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"gta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update TEST Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"TEST\",\r\n    \"rate\": 0.1,\r\n    \"backed_by\": \"BRL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/TEST",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"TEST"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update TEST2 Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"TEST2\",\r\n    \"amount\": 1,\r\n    \"backed_by\": \"USD\",\r\n    \"backed_currency_amount\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/TEST2",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"TEST2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete TEST Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/test",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete TEST2 Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/test2",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"test2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete BRL Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 409\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/BRL",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"BRL"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favorite",
+			"item": [
+				{
+					"name": "Add BRL to Favorite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/favorite/BRL",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"favorite",
+								"BRL"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add USD to Favorite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/favorite/USD",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"favorite",
+								"USD"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TEST Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"TEST\",\r\n    \"rate\": 4,\r\n    \"backed_by\": \"BRL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add TEST to Favorite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/favorite/TEST",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"favorite",
+								"TEST"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read All Favorites",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/favorite/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"favorite",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read One Favorite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/favorite/BRL",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"favorite",
+								"BRL"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete TEST Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/test",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read TEST Quote (FAIL)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/favorite/TEST",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"favorite",
+								"TEST"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TEST Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"TEST\",\r\n    \"rate\": 4,\r\n    \"backed_by\": \"BRL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add TEST to Favorite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/favorite/TEST",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"favorite",
+								"TEST"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update TEST Quote (Change Code to NEWNAME)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"NEWNAME\",\r\n    \"rate\": 0.1,\r\n    \"backed_by\": \"BRL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/TEST",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"TEST"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete NEWNAME Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/NEWNAME",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"NEWNAME"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove BRL from Favorite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/favorite/BRL",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"favorite",
+								"BRL"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove USD from Favorite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/favorite/USD",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"favorite",
+								"USD"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Convert",
+			"item": [
+				{
+					"name": "Convert BRL to USD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{URL}}/convert/?source=BRL&target=USD&amount=1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"convert",
+								""
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "BRL"
+								},
+								{
+									"key": "target",
+									"value": "USD"
+								},
+								{
+									"key": "amount",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Convert USD to BRL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{URL}}/convert/?source=USD&target=BRL&amount=1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"convert",
+								""
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "USD"
+								},
+								{
+									"key": "target",
+									"value": "BRL"
+								},
+								{
+									"key": "amount",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Convert BRL to EUR",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{URL}}/convert/?source=BRL&target=EUR&amount=1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"convert",
+								""
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "BRL"
+								},
+								{
+									"key": "target",
+									"value": "EUR"
+								},
+								{
+									"key": "amount",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Convert EUR to BRL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{URL}}/convert/?source=EUR&target=BRL&amount=1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"convert",
+								""
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "EUR"
+								},
+								{
+									"key": "target",
+									"value": "BRL"
+								},
+								{
+									"key": "amount",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create HURB Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"HURB\",\r\n    \"rate\": 4,\r\n    \"backed_by\": \"BRL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TEST Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currency_code\": \"TEST\",\r\n    \"rate\": 0.4,\r\n    \"backed_by\": \"BRL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Convert HURB to BRL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{URL}}/convert/?source=HURB&target=BRL&amount=1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"convert",
+								""
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "HURB"
+								},
+								{
+									"key": "target",
+									"value": "BRL"
+								},
+								{
+									"key": "amount",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Convert BRL to HURB",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{URL}}/convert/?source=BRL&target=HURB&amount=1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"convert",
+								""
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "BRL"
+								},
+								{
+									"key": "target",
+									"value": "HURB"
+								},
+								{
+									"key": "amount",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Convert HURB to TEST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{URL}}/convert/?source=HURB&target=TEST&amount=1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"convert",
+								""
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "HURB"
+								},
+								{
+									"key": "target",
+									"value": "TEST"
+								},
+								{
+									"key": "amount",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Convert HURB to USD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{URL}}/convert/?source=HURB&target=USD&amount=1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"convert",
+								""
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "HURB"
+								},
+								{
+									"key": "target",
+									"value": "USD"
+								},
+								{
+									"key": "amount",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete HURB Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/HURB",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"HURB"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete TEST Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/quote/TEST",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"quote",
+								"TEST"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Home",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Coinbase Public API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.coinbase.com/v2/exchange-rates?currency=USD",
+					"protocol": "https",
+					"host": [
+						"api",
+						"coinbase",
+						"com"
+					],
+					"path": [
+						"v2",
+						"exchange-rates"
+					],
+					"query": [
+						{
+							"key": "currency",
+							"value": "USD"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
