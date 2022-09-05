@@ -18,5 +18,4 @@ def convert(params: ConversionInput = Depends(), db: Session = Depends(get_db)):
 
     converter = ConvertOperator(**params.dict(), db=db)
     converter_result = converter.convert()
-    # converter_output =
     return ConversionResponse(data=converter_result)
