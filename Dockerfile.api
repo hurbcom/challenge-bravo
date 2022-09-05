@@ -1,0 +1,21 @@
+FROM python:3.9.7
+
+WORKDIR usr/src/app
+
+# Fix psycopg2 issue
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
+    && apt-get install -y libpq-dev \
+    && apt-get install -y build-essential \
+    && apt-get install -y python-dev \
+    && pip install --upgrade pip \
+    && pip install psycopg2 \
+    && pip install psycopg2-binary
+
+COPY requirements.txt ./
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

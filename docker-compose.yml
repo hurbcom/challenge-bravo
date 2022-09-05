@@ -3,7 +3,9 @@ version: "3"
 services:
 
     api:
-        build: .
+        build:
+            context: .
+            dockerfile: Dockerfile.api
         restart: always
         container_name: api
         depends_on:
@@ -19,16 +21,17 @@ services:
     postgres:
         image: postgres
         restart: always
+        command: postgres -c 'max_connections=2500'
         container_name: db
         env_file:
             - ./.env
+        environment:
+            - POSTGRES_MULTIPLE_DATABASES=currency_converter_test
         ports:
             - 5432:5432
         volumes:
-            - ./tests/unit_tests/pg-init-script:/docker-entrypoint-initdb.d
+            - ./tests/unit_tests/pg-init-script/:/docker-entrypoint-initdb.d/
             - postgres-db:/var/lib/postgresql/data
-        environment:
-            - POSTGRES_MULTIPLE_DATABASES=currency_converter_test
 
     pgadmin:
         depends_on:
@@ -41,6 +44,19 @@ services:
             - 5050:80
         volumes:
             - pgadmin-data:/var/lib/pgadmin
+
+    updater:
+        build:
+            context: ./updater
+            dockerfile: ./Dockerfile.updater
+        depends_on:
+            - postgres
+        restart: always
+        container_name: updater
+        env_file:
+            - ./.env
+        volumes:
+            - ./updater:/updater
 
 volumes:
     postgres-db:
