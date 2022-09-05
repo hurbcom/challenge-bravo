@@ -11,7 +11,7 @@ from schemas import Currency
 
 
 
-def main():
+def update():
     SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}"
 
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
@@ -30,8 +30,8 @@ def main():
         db.add(currency_db)
     db.commit()
     db.close()
-    print(f"Database updated at: {datetime.utcnow()} UTC")
 
 if __name__ == "__main__":
+    update()
+    print(f"Database updated at: {datetime.utcnow()} UTC")
     sleep(60)
-    main()

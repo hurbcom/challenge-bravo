@@ -50,7 +50,7 @@ services:
             context: ./updater
             dockerfile: ./Dockerfile.updater
         depends_on:
-            - api
+            - postgres
         restart: always
         container_name: updater
         env_file:
