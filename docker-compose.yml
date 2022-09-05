@@ -55,6 +55,13 @@ services:
         volumes:
             - ./updater:/updater
 
+    k6:
+        depends_on:
+            - api
+        image: loadimpact/k6
+        volumes:
+            - ./tests/load_tests:/load_tests
+
 volumes:
     postgres-db:
     pgadmin-data:
