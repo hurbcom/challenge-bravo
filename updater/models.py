@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-class OficialCoins(Base):
+class OficialCoin(Base):
     __tablename__ = 'oficial_coins'
 
     id = Column(Integer, primary_key=True)
