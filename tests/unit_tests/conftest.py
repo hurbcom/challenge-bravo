@@ -1,11 +1,9 @@
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 import pytest
 
 from app.main import app
-from app.config import settings
-from app.database import Base, get_db
+from app.database import Base, get_db, SessionLocal, engine
 from app.models import OficialCoin, FantasyCoin, FavoriteCoin
 from app.schemas.currency import Currency
 from app.schemas.favorite import Favorite
@@ -13,14 +11,6 @@ from app.schemas.favorite import Favorite
 
 client = TestClient(app)
 
-settings.database_name = settings.database_name + "_test"
-
-# Set up test database
-SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}"
-
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-
-SessionTest = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Dummy data for testing purposes
 test_data = {
@@ -44,7 +34,7 @@ def session():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
-    db = SessionTest()
+    db = SessionLocal()
     try:
         yield db
     finally:
@@ -53,7 +43,7 @@ def session():
 @pytest.fixture
 def insert_test_data(session: Session):
     """ Updates `OficialCoins` table with test data rates"""
-    db = SessionTest()
+    db = SessionLocal()
 
     res = test_data
     currencies = res['data']['rates']

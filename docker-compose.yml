@@ -25,12 +25,9 @@ services:
         container_name: db
         env_file:
             - ./.env
-        environment:
-            - POSTGRES_MULTIPLE_DATABASES=currency_converter_test
         ports:
             - 5432:5432
         volumes:
-            - ./tests/unit_tests/pg-init-script/:/docker-entrypoint-initdb.d/
             - postgres-db:/var/lib/postgresql/data
 
     pgadmin:
