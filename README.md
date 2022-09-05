@@ -1,6 +1,7 @@
 
 # Bravo challenge
 
+* [Descrição](#about)
 * [Estrutura do projeto](#estrutura)
 * [Tecnologias utilizadas](#tecnologias)
 * [Como executar a API](#como-executar)
@@ -22,12 +23,18 @@
     * [Testes unitários](#unit-tests)
     * [Testes de carga](#load-tests)
 
+
+<a id="about"></a>
+## Descrição
+
+O projeto tem como objetivo entregar uma API que realiza conversão de moedas (USD, BRL, EUR, ETH, BTC), além de criação e exclusão de moedas fictícias.
+
 <a id="estrutura"></a>
 ## Estrutura do projeto
 ```bash
 currency-converter
-├── alembic/
-├── app
+├── alembic/                # database migration
+├── app                     # API
 │   ├── operators/          # operation handlers
 │   │   ├── convert.py
 │   │   ├── currency.py
@@ -101,8 +108,8 @@ No desenvolvimento dessa API foram utilizados:
 <a id="comandos"></a>
 ### Comandos
 
-1.  `git clone $fork-name`
-2.  `cd $fork-name`
+1.  `git clone https://github.com/gabrielrnascimento/challenge-bravo.git`
+2.  `cd challenge-bravo`
 4.  `docker-compose up -d --build`
 
 
