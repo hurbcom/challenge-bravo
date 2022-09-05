@@ -16,5 +16,5 @@ class FavoriteDatabase(BaseModel):
         orm_mode = True
 
 
-class FavoriteResposne(BaseModel):
+class FavoriteResponse(BaseModel):
     data: Favorite

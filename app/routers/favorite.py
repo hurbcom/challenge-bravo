@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.operators.currency import CurrencyOperator
 from app.schemas.currency import CurrencyOut, CurrencyResponse, MultipleCurrencyResponse
-from app.schemas.favorite import FavoriteResposne
+from app.schemas.favorite import FavoriteResponse
 
 
 
@@ -32,13 +32,13 @@ def read_favorite(currency_code: str, db: Session = Depends(get_db)):
     return CurrencyResponse(data=currency_output)
 
 
-@router.post("/{currency_code}", status_code=status.HTTP_201_CREATED, response_model=FavoriteResposne)
+@router.post("/{currency_code}", status_code=status.HTTP_201_CREATED, response_model=FavoriteResponse)
 def add_favorite(currency_code: str, db: Session = Depends(get_db)):
     """ Add currency from `favorite_coins` table if found in `oficial_coins` or `fantasy_coins` tables """
 
     currency = CurrencyOperator(currency_code=currency_code)
     currency_db = currency.favorite(db=db)
-    return FavoriteResposne(data=currency_db)
+    return FavoriteResponse(data=currency_db)
 
 
 @router.delete("/{currency_code}", status_code=status.HTTP_204_NO_CONTENT)
