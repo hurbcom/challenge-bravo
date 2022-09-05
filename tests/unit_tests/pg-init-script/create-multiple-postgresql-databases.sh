@@ -12,6 +12,11 @@ function create_user_and_database() {
 	    GRANT ALL PRIVILEGES ON DATABASE $database TO $database;
 EOSQL
 }
-    create_user_and_database currency_converter_test
-	echo "Test database created"
+
+if [ -n "$POSTGRES_MULTIPLE_DATABASES" ]; then
+	echo "Multiple database creation requested: $POSTGRES_MULTIPLE_DATABASES"
+	for db in $(echo $POSTGRES_MULTIPLE_DATABASES | tr ',' ' '); do
+		create_user_and_database $db
+	done
+	echo "Multiple databases created"
 fi
