@@ -28,10 +28,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/quote/",
+							"raw": "http://localhost:8000/quote/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								""
@@ -59,10 +61,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/quote/usd",
+							"raw": "http://localhost:8000/quote/usd",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"usd"
@@ -90,10 +94,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/quote/brl",
+							"raw": "http://localhost:8000/quote/brl",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"brl"
@@ -121,10 +127,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/quote/eur",
+							"raw": "http://localhost:8000/quote/eur",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"eur"
@@ -152,10 +160,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/quote/btc",
+							"raw": "http://localhost:8000/quote/btc",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"btc"
@@ -183,10 +193,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/quote/eth",
+							"raw": "http://localhost:8000/quote/eth",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"eth"
@@ -223,10 +235,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/",
+							"raw": "http://localhost:8000/quote/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								""
@@ -263,10 +277,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/",
+							"raw": "http://localhost:8000/quote/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								""
@@ -303,10 +319,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/",
+							"raw": "http://localhost:8000/quote/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								""
@@ -343,10 +361,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/",
+							"raw": "http://localhost:8000/quote/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								""
@@ -383,10 +403,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/gta",
+							"raw": "http://localhost:8000/quote/gta",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"gta"
@@ -423,10 +445,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/TEST",
+							"raw": "http://localhost:8000/quote/TEST",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"TEST"
@@ -463,10 +487,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/TEST2",
+							"raw": "http://localhost:8000/quote/TEST2",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"TEST2"
@@ -503,10 +529,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/test",
+							"raw": "http://localhost:8000/quote/test",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"test"
@@ -543,10 +571,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/test2",
+							"raw": "http://localhost:8000/quote/test2",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"test2"
@@ -583,10 +613,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/BRL",
+							"raw": "http://localhost:8000/quote/BRL",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"BRL"
@@ -628,10 +660,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/favorite/BRL",
+							"raw": "http://localhost:8000/favorite/BRL",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"favorite",
 								"BRL"
@@ -668,10 +702,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/favorite/USD",
+							"raw": "http://localhost:8000/favorite/USD",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"favorite",
 								"USD"
@@ -708,10 +744,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/",
+							"raw": "http://localhost:8000/quote/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								""
@@ -748,10 +786,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/favorite/TEST",
+							"raw": "http://localhost:8000/favorite/TEST",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"favorite",
 								"TEST"
@@ -779,10 +819,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/favorite/",
+							"raw": "http://localhost:8000/favorite/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"favorite",
 								""
@@ -810,10 +852,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/favorite/BRL",
+							"raw": "http://localhost:8000/favorite/BRL",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"favorite",
 								"BRL"
@@ -850,10 +894,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/test",
+							"raw": "http://localhost:8000/quote/test",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"test"
@@ -881,10 +927,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/favorite/TEST",
+							"raw": "http://localhost:8000/favorite/TEST",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"favorite",
 								"TEST"
@@ -921,10 +969,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/",
+							"raw": "http://localhost:8000/quote/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								""
@@ -961,10 +1011,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/favorite/TEST",
+							"raw": "http://localhost:8000/favorite/TEST",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"favorite",
 								"TEST"
@@ -1001,10 +1053,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/TEST",
+							"raw": "http://localhost:8000/quote/TEST",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"TEST"
@@ -1041,10 +1095,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/NEWNAME",
+							"raw": "http://localhost:8000/quote/NEWNAME",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"NEWNAME"
@@ -1081,10 +1137,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/favorite/BRL",
+							"raw": "http://localhost:8000/favorite/BRL",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"favorite",
 								"BRL"
@@ -1121,10 +1179,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/favorite/USD",
+							"raw": "http://localhost:8000/favorite/USD",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"favorite",
 								"USD"
@@ -1165,10 +1225,12 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{URL}}/convert/?source=BRL&target=USD&amount=1",
+							"raw": "http://localhost:8000/convert/?source=BRL&target=USD&amount=1",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"convert",
 								""
@@ -1218,10 +1280,12 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{URL}}/convert/?source=USD&target=BRL&amount=1",
+							"raw": "http://localhost:8000/convert/?source=USD&target=BRL&amount=1",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"convert",
 								""
@@ -1271,10 +1335,12 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{URL}}/convert/?source=BRL&target=EUR&amount=1",
+							"raw": "http://localhost:8000/convert/?source=BRL&target=EUR&amount=1",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"convert",
 								""
@@ -1324,10 +1390,12 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{URL}}/convert/?source=EUR&target=BRL&amount=1",
+							"raw": "http://localhost:8000/convert/?source=EUR&target=BRL&amount=1",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"convert",
 								""
@@ -1378,10 +1446,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/",
+							"raw": "http://localhost:8000/quote/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								""
@@ -1418,10 +1488,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/",
+							"raw": "http://localhost:8000/quote/",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								""
@@ -1457,10 +1529,12 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{URL}}/convert/?source=HURB&target=BRL&amount=1",
+							"raw": "http://localhost:8000/convert/?source=HURB&target=BRL&amount=1",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"convert",
 								""
@@ -1510,10 +1584,12 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{URL}}/convert/?source=BRL&target=HURB&amount=1",
+							"raw": "http://localhost:8000/convert/?source=BRL&target=HURB&amount=1",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"convert",
 								""
@@ -1563,10 +1639,12 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{URL}}/convert/?source=HURB&target=TEST&amount=1",
+							"raw": "http://localhost:8000/convert/?source=HURB&target=TEST&amount=1",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"convert",
 								""
@@ -1616,10 +1694,12 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{URL}}/convert/?source=HURB&target=USD&amount=1",
+							"raw": "http://localhost:8000/convert/?source=HURB&target=USD&amount=1",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"convert",
 								""
@@ -1670,10 +1750,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/HURB",
+							"raw": "http://localhost:8000/quote/HURB",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"HURB"
@@ -1710,10 +1792,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/quote/TEST",
+							"raw": "http://localhost:8000/quote/TEST",
+							"protocol": "http",
 							"host": [
-								"{{URL}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"quote",
 								"TEST"
@@ -1743,10 +1827,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{URL}}/",
+					"raw": "http://localhost:8000/",
+					"protocol": "http",
 					"host": [
-						"{{URL}}"
+						"localhost"
 					],
+					"port": "8000",
 					"path": [
 						""
 					]
