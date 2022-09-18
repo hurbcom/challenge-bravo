@@ -1,0 +1,24 @@
+FROM php:8.1.10-fpm-alpine3.16
+
+RUN apk add --no-cache openssl bash vim
+
+RUN docker-php-source extract \
+	pdo pdo_mysql mbstring exif pcntl bcmath gd \
+	&& docker-php-source delete
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY . /var/www/
+
+RUN apk add --update sudo
+
+RUN adduser -D www \
+        && echo "www ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/www \
+        && chmod 0440 /etc/sudoers.d/www
+
+RUN sudo chown -R www:www /var/www/storage
+
+USER www
+WORKDIR /var/www/
+
+EXPOSE 9000
+ENTRYPOINT ["php-fpm"]

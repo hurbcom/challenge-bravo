@@ -1,0 +1,8 @@
+FROM alpine:3.16
+
+RUN apk update && apk upgrade
+
+RUN apk --update-cache add sqlite
+
+CMD [ "sqlite3", "dbdata/database.db"]
+
