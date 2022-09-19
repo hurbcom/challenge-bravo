@@ -9,13 +9,11 @@ RUN docker-php-source extract \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . /var/www/
 
-RUN apk add --update sudo
+# RUN apk add --update sudo
 
-RUN adduser -D www \
-        && echo "www ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/www \
-        && chmod 0440 /etc/sudoers.d/www
+RUN adduser -D www 
 
-RUN sudo chown -R www:www /var/www/storage
+# RUN sudo chown -R www:www /var/www/storage
 
 USER www
 WORKDIR /var/www/
