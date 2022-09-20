@@ -7,15 +7,23 @@ class CurrencyEntity
     protected $indentificationName;
     protected $amount;
 
-    public function isValidAmount($amount)
+    public function __construct($indentificationName, $amount)
     {
-        if ($amount < 1) {
+        $this->indentificationName = $indentificationName;
+        $this->amount = $amount;
+    }
+
+    public function isValidAmount()
+    {
+        if ($this->amount < 1) {
             return false;
         }
 
         return true;
     }
 
-    # Possile implentations:
-    # - Now its only aceppted amounts less than 3000, because higher than that our partner dont accept.
+    public function getIndentificationName()
+    {
+        return $this->indentificationName;
+    }
 }
