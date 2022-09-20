@@ -18,15 +18,12 @@ class ConverterEntity
     public function isSameCurrecies()
     {
         if (
-            $this->currencyFrom->indentificationName ===
-            $this->currencyTo->indentificationName
+            $this->currencyFrom->getIndentificationName() ===
+            $this->currencyTo->getIndentificationName()
         ) {
             return true;
         }
 
         return false;
     }
-
-    # Possile implentations:
-    # - Now its only aceppted amounts less than 3000, because higher than that our partner dont accept.
 }

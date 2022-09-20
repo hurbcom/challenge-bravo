@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class ConverterTest extends TestCase
 {
-    #  public function testShouldReturnErrorInValueCurrencyUsingAnyCurrency()
     public function testShouldNotAcceptSameToSameCurrencyConversion()
     {
         $currenyFrom = new CurrencyEntity('BRL', 1);
