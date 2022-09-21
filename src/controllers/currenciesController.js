@@ -22,8 +22,17 @@ async function createCurrency(req, res) {
 	res.sendStatus(201)
 }
 
+async function deleteCurrency(req, res) {
+	const { code } = req.params
+
+	await currenciesService.deleteCurrency(code.toUpperCase())
+
+	res.status(200).send("Currency deleted!")
+}
+
 export const currenciesController = {
 	getCurrencies,
 	getCurrency,
-	createCurrency
+	createCurrency,
+	deleteCurrency
 }

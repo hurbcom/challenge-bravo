@@ -2,10 +2,10 @@ import { createClient } from 'redis'
 import seed from './utils/seed.js'
 
 export const redis = createClient({
-    url: process.env.REDIS_URI
+	url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
 })
 
 export default async function initRedis() {
-    await redis.connect()
-    seed()
+	await redis.connect()
+	seed()
 }

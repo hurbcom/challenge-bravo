@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  db:
+    container_name: ${REDIS_HOST}
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    command: redis-server
+    volumes:
+      - challenge-bravo-redis:/data
+
+  api:
+    container_name: node_app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+    depends_on:
+      - db 
+    command: npm run start
+
+volumes:
+  challenge-bravo-redis:

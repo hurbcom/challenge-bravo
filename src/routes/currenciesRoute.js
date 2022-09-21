@@ -8,5 +8,6 @@ const currencyRouter = Router()
 currencyRouter.get('/currencies', currenciesController.getCurrencies)
 currencyRouter.get('/currencies/:code', currenciesController.getCurrency)
 currencyRouter.post('/currencies', validateSchema(newCurrencySchema), currenciesController.createCurrency)
+currencyRouter.delete('/currencies/:code', currenciesController.deleteCurrency)
 
 export default currencyRouter

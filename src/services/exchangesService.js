@@ -1,4 +1,4 @@
-import { exchangeRatesRepository } from '../repositories/exchangeRatesRepository.js'
+import { currenciesRepository } from '../repositories/currenciesRepository.js'
 
 async function convert(from, to, amount) {
 	if (!amount || !from || !to)
@@ -7,7 +7,7 @@ async function convert(from, to, amount) {
 			message: 'Missing info to convert, check your parameters'
 		}
 
-	const exchange = await exchangeRatesRepository.getRatesPair(from, to)
+	const exchange = await currenciesRepository.getRatesPair(from, to)
 
 	if (exchange.from === undefined || exchange.to === undefined)
 		throw {
@@ -16,7 +16,12 @@ async function convert(from, to, amount) {
 		}
 
 	const conversion = (exchange.from.rate * amount) / exchange.to.rate
-	return `${amount} ${from} worth ${conversion} ${to}`
+	
+	return {
+		conversion,
+		from,
+		to
+	}
 }
 
 export const exchangeService = {
