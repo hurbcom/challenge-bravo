@@ -4,7 +4,7 @@ async function getCurrencies() {
 	const currencies = await currenciesRepository.getAllCurrencies()
 
 	if (!currencies)
-		throw { type: 'bad_request', message: 'No currencies found' }
+		throw { type: 'not_found', message: 'No currencies found' }
 
 	return currencies
 }
@@ -12,12 +12,12 @@ async function getCurrencies() {
 async function getCurrency(code) {
 	const currency = await currenciesRepository.getOneCurrency(code)
 
-	if (!currency) throw { type: 'bad_request', message: 'Currency not found' }
+	if (!currency) throw { type: 'not_found', message: 'Currency not found' }
 
 	return currency
 }
 
-async function create(name, code, rate) {
+async function create(name, code, rate, type) {
 	const currency = await currenciesRepository.getOneCurrency(code)
 
 	if (currency) throw { type: 'conflict', message: 'This code already exists' }
@@ -25,7 +25,8 @@ async function create(name, code, rate) {
 	const newCurrency = {
 		name,
 		code,
-		rate
+		rate,
+		type
 	}
 
 	await currenciesRepository.createCurrency(newCurrency)
@@ -34,7 +35,7 @@ async function create(name, code, rate) {
 async function deleteCurrency(code) {
 	const currency = await currenciesRepository.getOneCurrency(code)
 
-	if (!currency) throw { type: 'bad_request', message: 'Currency not found' }
+	if (!currency) throw { type: 'not_found', message: 'Currency not found' }
 
 	if (currency.type === 'base')
 		throw {

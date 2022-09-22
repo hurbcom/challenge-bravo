@@ -18,9 +18,10 @@ async function convert(from, to, amount) {
 	const conversion = (exchange.from.rate * amount) / exchange.to.rate
 	
 	return {
-		conversion,
 		from,
-		to
+		to,
+		amount,
+		conversion,
 	}
 }
 

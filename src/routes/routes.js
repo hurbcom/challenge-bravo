@@ -4,7 +4,7 @@ import currenciesRouter from './currenciesRoute.js'
 
 const router = Router()
 
-router.use(exchangeRouter)
-router.use(currenciesRouter)
+router.use('/exchange', exchangeRouter)
+router.use('/currencies', currenciesRouter)
 
 export default router

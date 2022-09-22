@@ -3,6 +3,6 @@ import { exchangeController } from '../controllers/exchangesController.js'
 
 const exchangeRouter = Router()
 
-exchangeRouter.post('/exchange', exchangeController.makeExchange)
+exchangeRouter.post('/', exchangeController.makeExchange)
 
 export default exchangeRouter
