@@ -1,24 +1,32 @@
 version: "3.9"
 services:
   db:
-    container_name: ${REDIS_HOST}
+    container_name: redis
     image: redis:6.2-alpine
     restart: always
+    environment:
+      - PORT=5000
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
+      - REDIS_KEY=currencies
+      - API_KEY=bc48f82c06ff4196b304e5a0f8a8ee7d
     ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
+      - 6739:6739
     command: redis-server
     volumes:
       - challenge-bravo-redis:/data
 
   api:
     container_name: node_app
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    build: .
+    environment:
+      - PORT=5000
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
+      - REDIS_KEY=currencies
+      - API_KEY=bc48f82c06ff4196b304e5a0f8a8ee7d
     ports:
-      - ${PORT}:${PORT}
-    env_file:
-      - .env
+      - 5000:5000
     depends_on:
       - db 
     command: npm run start
