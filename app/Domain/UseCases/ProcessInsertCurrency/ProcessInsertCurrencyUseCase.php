@@ -6,6 +6,7 @@ use App\Domain\Entity\Currency\CurrencyInsertRepository;
 use App\Domain\Entity\Currency\CurrencygetAllRepository;
 use App\Domain\Entity\Currency\CurrencyEntity;
 use App\Domain\UseCases\ProcessInsertCurrency\Dto\AddCurrencyOutputDto;
+use App\Domain\UseCases\ProcessInsertCurrency\Dto\AddCurrencyInputDto;
 
 class ProcessInsertCurrencyUseCase
 {
@@ -20,11 +21,13 @@ class ProcessInsertCurrencyUseCase
         $this->getCurrenciesRepository = $getCurrenciesRepository;
     }
 
-    public function insertCurrency($inputData)
+    public function insertCurrency(AddCurrencyInputDto $inputData): AddCurrencyOutputDto
     {
         $currency = new CurrencyEntity($inputData->indentificationName, 0);
         if (!$currency->isIndentificationNameWithThreeLetters()) {
-            return false;
+            $outputDto = new AddCurrencyOutputDto('error', 'currency indentification name does not follow rules');
+
+            return $outputDto;
         }
 
         $persistData = $this->persistData($currency->getIndentificationName());

@@ -11,28 +11,19 @@ use Tests\TestCase;
 
 class ProccessInsertCurrencyTest extends TestCase
 {
-    // private $insertCurrencyRepositoryMock;
-    // private $getCurrenciesRepositoryMock;
+    private $insertCurrencyRepositoryMock;
+    private $getCurrenciesRepositoryMock;
 
-    // protected function setUp(): void
-    // {
-    //     parent::setUp();
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    //     $this->insertCurrencyRepositoryMock = $this->mock(CurrencyInsertRepository::class);
-    //     $this->insertCurrencyRepositoryMock->shouldReceive('insert')->andReturn('Insertion ocurred with success');
+        $this->insertCurrencyRepositoryMock = $this->mock(CurrencyInsertRepository::class);
+        $this->insertCurrencyRepositoryMock->shouldReceive('insert')->andReturn('Insertion ocurred with success');
 
-    //     $this->getCurrenciesRepositoryMock = $this->mock(CurrencygetAllRepository::class);
-    //     $this->getCurrenciesRepositoryMock->shouldReceive('getAll')->andReturn(['ABC', 'DEF']);
-    // }
-
-    // public function testShouldNotInsertCurrencyWithutDtoInputData()
-    // {
-    // }
-
-    // public function testShouldInsertReturnInDtoOutputFormatonResponse()
-    // {
-    // }
-
+        $this->getCurrenciesRepositoryMock = $this->mock(CurrencygetAllRepository::class);
+        $this->getCurrenciesRepositoryMock->shouldReceive('getAll')->andReturn(['ABC', 'DEF']);
+    }
 
     public function testShouldNotAcceptInsertCurrencyWithDifferentSizeThreeIndentificationName()
     {
@@ -46,7 +37,7 @@ class ProccessInsertCurrencyTest extends TestCase
         $result = $proccessInsertCurrency->insertCurrency($formatInputData);
 
         $this->assertEquals(
-            $result['status'],
+            $result->status,
             'error'
         );
     }
