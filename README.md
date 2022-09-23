@@ -17,9 +17,18 @@ Este é um [desafio técnico da Hurb](https://github.com/hurbcom/challenge-bravo
 
 
 
+## Funcionamento da API
+
+Ao rodar o servidor será automaticamente feito um seed para as 5 moedas obrigatórias para conversão (USD, BRL, EUR, BTC, ETH).  
+
+A moeda de lastro é o dólar americano (USD), então todas as outras moedas são salvas com suas taxas de acordo com o dólar, ou seja, quanto de cada moeda vale 1 dólar. Isso foi feito para facilitação das contas de conversão. Essa lógica permite conversão entre moedas fictícias. Também é permitido adicionar e remover moedas, que não sejam as moedas que foram seedadas.
+  
+Para obtenção das cotações atuais foi utilizada a [API externa Exchange Rate](https://www.abstractapi.com/api/exchange-rate-api).
+
 ## Documentação
 
 É possível acessar a documentação desta API - criada utilizando Swagger - na rota `/api-documentation` da própria API.
+Lá estará descrito todos os endpoints e exemplos de uso.
 
 
 ## Rodando localmente
@@ -120,3 +129,11 @@ Running 1s test @ http://localhost:5000/exchange?from=USD&to=BRL&amount=10
 10 workers
 
 ![teste-estresse](teste-de-estresse.png)
+
+Foram feitos 7k requests em 1 seg com latência média de 165.84 ms. Dos 7k requests, 5689 tiveram sucesso. Sendo assim a API suporta o volume de requisições proposto pelo desafio.
+## Observações finais
+
+- Escolhi utilizar Redis pois não existem muitos relacionamentos entre os dados e por se tratar de dados que precisam ser atualizados constantemente. A chave é expirada em 1h após o seed, fazendo que os dados de cotação sejam renovados após esse tempo. O Redis também é super performático em relação as outras opções, porém, pensando em escalabilidade ele não seria a melhor opção, podendo ser substituído por um banco NoSQL como o MongoDB.
+- A API externa gera uma API KEY única para cada usuário, por questão de facilitação da correção deixei exposta aqui, sendo uma falha de segurança, mas não seria o ideal.
+- Nos meus testes utilizando nodemon, caso REDIS_HOST fosse diferente de localhost ocorre um erro de conexão.
+- REDIS_KEY do .env precisa obrigatoriamente ser diferente do REDIS_KEY do .env.test para não causar conflito entre as chaves e dados salvos.  
