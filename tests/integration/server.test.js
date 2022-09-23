@@ -30,11 +30,6 @@ describe('App integration tests', () => {
 			expect(response.status).toBe(200)
 			expect(response.body).toEqual(currenciesTest[0])
 		})
-
-		it('should return 404 if currency does not exist', async () => {
-			const response = await request.get('/currencies/NOT')
-			expect(response.status).toBe(404)
-		})
 	})
 
 	describe('POST /currencies', () => {
@@ -53,15 +48,14 @@ describe('App integration tests', () => {
 			expect(response.status).toBe(201)
 		})
 
-		it('should return 409 if currency already exists', async () => {
+		it('should return 422 given invalid body', async () => {
 			const response = await request.post('/currencies').send({
 				name: 'Moeda Teste',
 				code: 'MTS',
-				rate: 1.2,
-				type: 'crypto'
+				rate: 1.2
 			})
 
-			expect(response.status).toBe(409)
+			expect(response.status).toBe(422)
 		})
 	})
 
@@ -76,11 +70,6 @@ describe('App integration tests', () => {
 
 			expect(currency).toBe(undefined)
 			expect(response.status).toBe(200)
-		})
-
-		it("should return 409 and not delete the currency if it's a base currency", async () => {
-			const response = await request.delete('/currencies/USD')
-			expect(response.status).toBe(409)
 		})
 
 		it('should return 404 if currency does not exist', async () => {
@@ -106,18 +95,9 @@ describe('App integration tests', () => {
 			expect(response.body).toEqual(conversion)
 		})
 
-		it('should return 400 if one or more parameters is missing', async () => {
-			const response = await request.post('/exchange?from=&to=BRL&amount=10')
-
-			expect(response.status).toBe(400)
-		})
-
-		it('should return 422 if one code is not in the database', async () => {
-			const response = await request.post(
-				'/exchange?from=USD&to=MTS&amount=10'
-			)
-
-            expect(response.status).toBe(422)
+		it('should return 500 if one or more queries are not provided', async () => {
+			const response = await request.post('/exchange')
+			expect(response.status).toBe(500)
 		})
 	})
 })

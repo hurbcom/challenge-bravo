@@ -9,6 +9,13 @@
     "dev": "nodemon src/server.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest -i"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!<rootDir>/node_modules/"
+    ],
+    "collectCoverage": true
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mdeosjr/challenge-bravo.git"
