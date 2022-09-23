@@ -1,0 +1,221 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Challenge Bravo - Hurb",
+        "description": "An API that makes currency conversion based on live and real values. Also supports inclusion/deletion of new currencies.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/currencies": {
+            "get": {
+                "summary": "Get all currencies",
+                "description": "Returns a list of all currencies available in the database.",
+                "tags": [
+                    "Currencies"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Currency"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Save a new currency",
+                "description": "Add a new currency to the database",
+                "tags": [
+                    "Currencies"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Currency"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "409": {
+                        "description": "This code already exists"
+                    },
+                    "422": {
+                        "description": "One or more properties are missing"
+                    }
+                }
+            }
+        },
+        "/currencies/{code}": {
+            "get": {
+                "summary": "Get one currency",
+                "description": "Return one currency given a code as paramater",
+                "tags": [
+                    "Currencies"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "code",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The code of one currency",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Currency not found"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Currency"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a currency",
+                "description": "Delete a currency from the database",
+                "tags": [
+                    "Currencies"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "code",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The code of one currency",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Currency not found"
+                    },
+                    "409": {
+                        "description": "This is a base currency, can't delete it!"
+                    }
+                }
+            }
+        },
+        "/exchange": {
+            "post": {
+                "summary": "Exchange currency",
+                "description": "Exchange a currency to another",
+                "tags": [
+                    "Exchange"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "from",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The currency code to be converted",
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "to",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The currency code to be converted to",
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "amount",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "The amount of money to be converted",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Exchange"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing info to convert, check your parameters"
+                    },
+                    "422": {
+                        "description": "One or both currencies are not included in database"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Currency": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "rate": {
+                        "type": "number"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Exchange": {
+                "type": "object",
+                "properties": {
+                    "from": {
+                        "type": "string"
+                    },
+                    "to": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number"
+                    },
+                    "conversion": {
+                        "type": "number"
+                    }
+                }
+            }
+        }
+    }
+}

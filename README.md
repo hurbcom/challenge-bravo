@@ -1,82 +1,139 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+# Challenge Bravo - Hurb
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+Este é um [desafio técnico da Hurb](https://github.com/hurbcom/challenge-bravo/blob/main/README.pt.md), que consiste na criação de uma API que realiza a conversão entre moedas reais, crypto ou fictícias.
 
-The API must convert between the following currencies:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
 
-Other coins could be added as usage.
+## Stack utilizada
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+- Node.js 
+- Express.js 
+- Axios 
+- Redis 
+- Docker
+- Jest
+- Swagger-ui-express
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+## Funcionamento da API
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+Ao rodar o servidor será automaticamente feito um seed para as 5 moedas obrigatórias para conversão (USD, BRL, EUR, BTC, ETH).  
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+A moeda de lastro é o dólar americano (USD), então todas as outras moedas são salvas com suas taxas de acordo com o dólar, ou seja, quanto de cada moeda vale 1 dólar. Isso foi feito para facilitação das contas de conversão. Essa lógica permite conversão entre moedas fictícias. Também é permitido adicionar e remover moedas, que não sejam as moedas que foram seedadas.
+  
+Para obtenção das cotações atuais foi utilizada a [API externa Exchange Rate](https://www.abstractapi.com/api/exchange-rate-api).
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+## Documentação
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+É possível acessar a documentação desta API - criada utilizando Swagger - na rota `/api-documentation` da própria API.
+Lá estará descrito todos os endpoints e exemplos de uso.
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+## Rodando localmente
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Clone o projeto
+```bash
+  git clone https://github.com/mdeosjr/challenge-bravo
+```
 
-## Requirements
+Entre no diretório do projeto
+```bash
+  cd challenge-bravo
+```
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+Instale as dependências
+```bash
+  npm install
+```
 
-## Evaluation criteria
+Adicione as variáveis de ambiente seguindo .env.example (ou copie e cole as seguintes variáveis)
+```bash
+  PORT=5000
+  REDIS_PORT=6379
+  REDIS_HOST=localhost
+  REDIS_KEY=currencies
+  API_KEY=bc48f82c06ff4196b304e5a0f8a8ee7d
+```
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+Inicie o servidor
+```bash
+  npm run start
 
-## Doubts
+      ou
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+  npm run dev
+```
 
-Godspeed! ;)
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## Docker-compose
+
+Caso seja a primeira vez rodando a aplicação pelo Docker, utilize o comando
+```bash
+  docker-compose up --build
+```
+
+E para as próximas vezes utilize o comando
+```bash
+  docker-compose up 
+```
+## Testes
+
+Foram realizados testes de integração, para resposta das controllers, e testes unitários, para possíveis erros da aplicação, no nível das services. 
+Importante ressaltar a utilização do `.env.test` (copie as variáveis de `.env.test.example`) para que seja criada uma chave diferente no Redis, e assim não intefira na chave sendo utilizada pela API.
+Ao rodar (utilize o comando `npm t`) será criada uma pasta de coverage onde terá o seguinte resultado.
+
+
+File                         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------------------------|---------|----------|---------|---------|-------------------
+All files                    |   84.87 |    77.14 |      80 |   86.11 |                   
+ src                         |      50 |        0 |       0 |      50 |                   
+  db.js                      |   33.33 |      100 |       0 |   33.33 | 9-10              
+  index.js                   |      75 |      100 |       0 |      75 | 20-21             
+  server.js                  |       0 |        0 |       0 |       0 | 3-7               
+  setup.js                   |     100 |      100 |     100 |     100 |                   
+ src/controllers             |     100 |      100 |     100 |     100 |                   
+  currenciesController.js    |     100 |      100 |     100 |     100 |                   
+  exchangesController.js     |     100 |      100 |     100 |     100 |                   
+ src/middlewares             |     100 |      100 |     100 |     100 |                   
+  errorHandlingMiddleware.js |     100 |      100 |     100 |     100 |                   
+  validateSchema.js          |     100 |      100 |     100 |     100 |                   
+ src/repositories            |     100 |      100 |     100 |     100 |                   
+  currenciesRepository.js    |     100 |      100 |     100 |     100 |                   
+ src/routes                  |     100 |      100 |     100 |     100 |                   
+  currenciesRoute.js         |     100 |      100 |     100 |     100 |                   
+  exchangesRoute.js          |     100 |      100 |     100 |     100 |                   
+  routes.js                  |     100 |      100 |     100 |     100 |                   
+ src/schemas                 |     100 |      100 |     100 |     100 |                   
+  newCurrencySchema.js       |     100 |      100 |     100 |     100 |                   
+ src/services                |     100 |      100 |     100 |     100 |                   
+  currenciesService.js       |     100 |      100 |     100 |     100 |                   
+  exchangesService.js        |     100 |      100 |     100 |     100 |                   
+ src/utils                   |   41.17 |       40 |      50 |   41.66 |                   
+  errorUtils.js              |   66.66 |       50 |     100 |      80 | 9                 
+  seed.js                    |    12.5 |        0 |       0 |   14.28 | 7-45              
+
+Test Suites: 2 passed, 2 total  
+Tests:       15 passed, 15 total  
+Snapshots:   0 total  
+Time:        1.679 s, estimated 2 s
+
+
+## Teste de estresse
+
+Para estressar a API foi utilizado o [Autocannon](https://github.com/mcollina/autocannon#readme), com o comando `npx autocannon -c 1000 -d 1 -w 10 --renderStatusCodes -l -W [-c 1 -d 2] -m 'POST' 'http://localhost:5000/exchange?from=USD&to=BRL&amount=10'`, e foram obtidos os seguintes resultados:
+
+Running 1s test @ http://localhost:5000/exchange?from=USD&to=BRL&amount=10
+1000 connections
+10 workers
+
+![teste-estresse](teste-de-estresse.png)
+
+Foram feitos 7k requests em 1 seg com latência média de 165.84 ms. Dos 7k requests, 5689 tiveram sucesso. Sendo assim a API suporta o volume de requisições proposto pelo desafio.
+## Observações finais
+
+- Escolhi utilizar Redis pois não existem muitos relacionamentos entre os dados e por se tratar de dados que precisam ser atualizados constantemente. A chave é expirada em 1h após o seed, fazendo que os dados de cotação sejam renovados após esse tempo. O Redis também é super performático em relação as outras opções, porém, pensando em escalabilidade ele não seria a melhor opção, podendo ser substituído por um banco NoSQL como o MongoDB.
+- A API externa gera uma API KEY única para cada usuário, por questão de facilitação da correção deixei exposta aqui, sendo uma falha de segurança, mas não seria o ideal.
+- Nos meus testes utilizando nodemon, caso REDIS_HOST fosse diferente de localhost ocorre um erro de conexão.
+- REDIS_KEY do .env precisa obrigatoriamente ser diferente do REDIS_KEY do .env.test para não causar conflito entre as chaves e dados salvos.  
