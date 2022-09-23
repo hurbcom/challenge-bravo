@@ -15,9 +15,9 @@ async function getCurrency(req, res) {
 }
 
 async function createCurrency(req, res) {
-	const { name, code, rate } = req.body
+	const { name, code, rate, type } = req.body
 
-	await currenciesService.create(name, code, +rate)
+	await currenciesService.create(name, code, +rate, type)
 
 	res.sendStatus(201)
 }
