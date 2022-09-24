@@ -9,7 +9,7 @@ use App\Domain\Entity\Currency\CurrencyInsertRepository;
 use App\Domain\Entity\Currency\CurrencygetAllRepository;
 use Tests\TestCase;
 
-class ProccessInsertCurrencyTest extends TestCase
+class ProcessInsertCurrencyTest extends TestCase
 {
     private $insertCurrencyRepositoryMock;
     private $getCurrenciesRepositoryMock;
