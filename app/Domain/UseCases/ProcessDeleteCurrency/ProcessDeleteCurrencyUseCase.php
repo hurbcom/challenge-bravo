@@ -33,7 +33,7 @@ class ProcessDeleteCurrencyUseCase
     {
         $currencies = $this->getCurrenciesRepository->getAll();
 
-        if (in_array($currencyIndentificationName, $currencies)) {
+        if (!in_array($currencyIndentificationName, $currencies)) {
             return false;
         }
 
