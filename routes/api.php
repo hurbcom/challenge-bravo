@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InsertCurrencyController;
 use App\Http\Controllers\ConverterController;
+use App\Http\Controllers\ShowCurrenciesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/currency/create', [InsertCurrencyController::class, 'handle']);
 Route::get('/currency/conversion', [ConverterController::class, 'handle']);
+Route::get('/currency/show', [ShowCurrenciesController::class, 'handle']);
