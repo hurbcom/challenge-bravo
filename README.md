@@ -18,16 +18,45 @@
 ### **1. Documentation in External Apps**
 Down bellow is listed the documentations title, explation and link:
 
-- Decision Make: Documentation with tecnologies definitions and why the was chosen **(PERSONALY USED BY THE DEVELOPER)** [link](https://drive.google.com/file/d/1XKXzJ90-D0SeW4vTlFdl-VuK7vO0xDfd/view?usp=sharing).
-- Tasks Division: Documentation with tasks divided in kanban methodology [link](https://trello.com/b/AI2iEO0U/bravo-challenge).
 - API Routes Implementation: Documentantion using Swagger framework [link](soon).
-- General: Documentation to explain decision make and act like a information repository to the whole team, with a better UX/UI interface using Notion app [link](soon).
 
 ### **2. Tecnologies**
-Soon
+1. PHP 8
+2. Laravel 9
+3. Composer
+4. Redis
+5. Docker
 
 ### **3. Architecture Used**
-Soon
+The architecture is based on Clean Architecture, but with some changes!
+
+1. The first to point is on the Interface Layer and Frameworks and Drives:
+This layer was merged into one, because the project is small plus apply YAGNI.
+
+2. The second to point is the Enterprise Bussines Rules and Application Business Rules kept same.
+
+In the image bellow, taken by Guilherme Biff Zarelli post [link](https://medium.com/luizalabs/descomplicando-a-clean-architecture-cf4dfc4a1ac6), shows how the architecture is:
+<br>
+<img src="https://miro.medium.com/max/720/0*J8pxLe88qYFN7wUf.png" width="70%">
+
+And in the folder structure, using laravel default, has been added some more to attendant the architecture:
+```
+.
+├── app                     # Already exists as default
+│   ├── Domain              # Created to encapsulate challenge rules
+│       ├── Entity          # Entity representations
+│       ├── UseCases        # use cases representation
+│   ├── Console             # Already exists as default and where crontab script is defined.
+│   ├── Adpaters            # implementation repositories from domain and consume API
+│       ├── Apis
+│       ├── Repository
+│   └── Http                # Already exists as default
+│       ├── Controllers     # Where the connection to REST be consumed plus use cases be implemented
+│   └── ...                
+├── ...
+├── routes                  # Already exists as default to open API end points
+└── ...
+```
 
 ### **4. How to Use on Your Machine**
 
@@ -36,6 +65,8 @@ Soon
 - Clone this repository.
 
 #### Runing
+`Notice: It's not needed to run command to install dependencies because there is a configuration to do it automatially.`
+
 - Run command `docker compose up` in root folder (where docker-compose.yaml file is).
 - Use the routes describred in the API Routes Implementation.
 
