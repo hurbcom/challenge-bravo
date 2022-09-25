@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Adapter\Repository\ShowCurrenciesAdatperRepository;
+use App\Adapter\Apis\ExchangeRatePopulationApiAdapter;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,7 +17,21 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            $exchangeRatePopulationApi = new ExchangeRatePopulationApiAdapter();
+            $getCurrencies = new ShowCurrenciesAdatperRepository();
+
+            $currencies = $getCurrencies->getAll();
+
+            foreach ($currencies as $currency) {
+                $exchangeRatePopulationApi->execute($currency);
+
+                # Due to Api restrictions (only one request in free plan).
+                sleep(1);
+            }
+        })
+        // ->everyFiveMinutes();
+        ->everyMinute();
     }
 
     /**
