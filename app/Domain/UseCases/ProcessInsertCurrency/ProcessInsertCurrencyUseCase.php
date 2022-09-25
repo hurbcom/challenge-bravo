@@ -47,7 +47,11 @@ class ProcessInsertCurrencyUseCase
                 $exchangeRateBaseCurrency
             );
 
-            $this->persistInsertFictionalCurrencyData($currency->getIndentificationName());
+            $persistData = $this->persistInsertFictionalCurrencyData($currency->getIndentificationName());
+
+            if ($persistData instanceof AddCurrencyOutputDto) {
+                return $persistData;
+            }
         }
 
         $persistData = $this->persistInsertCurrencyData($currency->getIndentificationName(), $exchangeRate);
@@ -62,7 +66,7 @@ class ProcessInsertCurrencyUseCase
         $currencies = $this->getCurrenciesRepository->getAll();
 
         if (in_array($currencyIndentificationName, $currencies)) {
-            $outputDto = new AddCurrencyOutputDto('error', 'currency alredy exists');
+            $outputDto = new AddCurrencyOutputDto('error', 'currency already exists');
 
             return $outputDto;
         }
@@ -75,7 +79,7 @@ class ProcessInsertCurrencyUseCase
         $currencies = $this->fictionalCurrencyRepository->getAll();
 
         if (in_array($currencyIndentificationName, $currencies)) {
-            $outputDto = new AddCurrencyOutputDto('error', 'currency alredy exists');
+            $outputDto = new AddCurrencyOutputDto('error', 'currency already exists');
 
             return $outputDto;
         }
