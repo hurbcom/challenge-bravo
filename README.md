@@ -14,16 +14,16 @@ Descprition in challenge bravo repository [link](https://github.com/hurbcom/chal
     - Unit / Integeration
     - Stress
 5. API Routes
-6. Improvements
+6. Warning
 
-### **1. Tecnologies**
+## **1. Tecnologies**
 1. PHP 8
 2. Laravel 9
 3. Composer
 4. Redis
 5. Docker
 
-### **2. Architecture Used**
+## **2. Architecture Used**
 The architecture is based on Clean Architecture, but with some changes!
 
 1. The first to point is on the Interface Layer and Frameworks and Drives:
@@ -54,7 +54,7 @@ And in the folder structure, using laravel default, has been added some more to 
 └── ...
 ```
 
-### **3. How to Use on Your Machine**
+## **3. How to Use on Your Machine**
 
 #### Cloning
 - Install Docker locally [Docker site](https://docs.docker.com/desktop/).
@@ -68,10 +68,10 @@ Notice: It's not needed to run command to install dependencies because there is 
 - Run command `docker compose up` in root folder (where docker-compose.yaml file is).
 - Use the routes describred in the API Routes Implementation.
 
-### **4. Tests**
-Soon
+## **4. Tests**
+-
 
-### **5. API Routes**
+## **5. API Routes**
 
 ### Currencies
 
@@ -246,5 +246,21 @@ Soon
     }
     ```
 
-### **6. Improvements**
-Soon
+## **6. Warning**
+Some features are not implemented, as:
+
+- Add script to a crontab in nginx container
+To the api that gets the exchange rate be up to date, it was created an script that runs every 5 minutes. Its possible
+to run manually by entering the app container with bash and run "php artisan schedule:work" in command line.
+
+- Stress test was not done
+
+- Update fictional rate is not implement, so the first input of user worn be changed with api updater.
+
+Some features need to be updated, as:
+
+- The automated tests (unit, feature) was created and at first, with the api not suporting fictional currencies, everything was ok.
+But if the implementation of fictional currencies, some tests broke.
+- The automated tests (feature) is not using an tecnology to refresh database, so error in insert and delete currency happens
+because of data stored or no in database.
+
