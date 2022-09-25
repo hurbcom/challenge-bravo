@@ -65,7 +65,9 @@ And in the folder structure, using laravel default, has been added some more to 
 - Clone this repository.
 
 #### Runing
-```Notice: It's not needed to run command to install dependencies because there is a configuration to do it automatially.```
+```
+Notice: It's not needed to run command to install dependencies because there is a configuration to do it automatially.
+```
 
 - Run command `docker compose up` in root folder (where docker-compose.yaml file is).
 - Use the routes describred in the API Routes Implementation.
