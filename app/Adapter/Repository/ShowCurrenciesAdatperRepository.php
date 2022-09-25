@@ -9,12 +9,12 @@ class ShowCurrenciesAdatperRepository implements CurrencygetAllRepository
 {
     public function getAll(): array|false
     {
-        $result = Redis::command('KEYS', ['*']);
+        $result = Redis::command('SCAN', ['0', 'TYPE', 'STRING']);
 
-        if (empty($result)) {
+        if (empty($result[1])) {
             return false;
         }
 
-        return $result;
+        return $result[1];
     }
 }
