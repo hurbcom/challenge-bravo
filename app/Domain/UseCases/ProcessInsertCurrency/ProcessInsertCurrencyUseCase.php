@@ -5,7 +5,7 @@ namespace App\Domain\UseCases\ProcessInsertCurrency;
 use App\Domain\Entity\Currency\CurrencyInsertRepository;
 use App\Domain\Entity\Currency\CurrencygetAllRepository;
 use App\Domain\Entity\Currency\CurrencyRateRepository;
-use App\Domain\Entity\Currency\CurrencyInsertRateToFictionalRepository;
+use App\Domain\Entity\Currency\FictionalCurrencyDataInfoRepository;
 use App\Domain\Entity\Currency\CurrencyEntity;
 use App\Domain\UseCases\ProcessInsertCurrency\Dto\AddCurrencyOutputDto;
 use App\Domain\UseCases\ProcessInsertCurrency\Dto\AddCurrencyInputDto;
@@ -15,15 +15,18 @@ class ProcessInsertCurrencyUseCase
     protected $insertCurrencyRepository;
     protected $getCurrenciesRepository;
     protected $getCurrencyRateRepository;
+    protected $fictionalCurrencyRepository;
 
     public function __construct(
         CurrencyInsertRepository $insertCurrencyRepository,
         CurrencygetAllRepository $getCurrenciesRepository,
         CurrencyRateRepository $getCurrencyRateRepository,
+        FictionalCurrencyDataInfoRepository $fictionalCurrencyRepository
     ) {
         $this->repository = $insertCurrencyRepository;
         $this->getCurrenciesRepository = $getCurrenciesRepository;
         $this->getCurrencyRateRepository = $getCurrencyRateRepository;
+        $this->fictionalCurrencyRepository = $fictionalCurrencyRepository;
     }
 
     public function insertCurrency(AddCurrencyInputDto $inputData): AddCurrencyOutputDto
@@ -43,16 +46,18 @@ class ProcessInsertCurrencyUseCase
                 $inputData->valueBasedOnRealCurrency,
                 $exchangeRateBaseCurrency
             );
+
+            $this->persistInsertFictionalCurrencyData($currency->getIndentificationName());
         }
 
-        $persistData = $this->persistData($currency->getIndentificationName(), $exchangeRate);
+        $persistData = $this->persistInsertCurrencyData($currency->getIndentificationName(), $exchangeRate);
 
         $response = $this->createReturn($persistData);
 
         return $response;
     }
 
-    public function persistData($currencyIndentificationName, $exchangeRate)
+    public function persistInsertCurrencyData($currencyIndentificationName, $exchangeRate)
     {
         $currencies = $this->getCurrenciesRepository->getAll();
 
@@ -63,6 +68,19 @@ class ProcessInsertCurrencyUseCase
         }
 
         return $this->repository->insert($currencyIndentificationName, $exchangeRate);
+    }
+
+    public function persistInsertFictionalCurrencyData($currencyIndentificationName)
+    {
+        $currencies = $this->fictionalCurrencyRepository->getAll();
+
+        if (in_array($currencyIndentificationName, $currencies)) {
+            $outputDto = new AddCurrencyOutputDto('error', 'currency alredy exists');
+
+            return $outputDto;
+        }
+
+        return $this->fictionalCurrencyRepository->insert($currencyIndentificationName);
     }
 
     public function createReturn($data): AddCurrencyOutputDto

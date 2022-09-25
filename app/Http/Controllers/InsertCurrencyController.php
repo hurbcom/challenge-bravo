@@ -7,6 +7,7 @@ use App\Domain\UseCases\ProcessInsertCurrency\Dto\AddCurrencyInputDto;
 use App\Adapter\Repository\AddCurrencyAdatperRepository;
 use App\Adapter\Repository\ShowCurrenciesAdatperRepository;
 use App\Adapter\Repository\CurrencyRateAdapterRepository;
+use App\Adapter\Repository\FictionalCurrencyDataInfoAdatperRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,15 +16,18 @@ class InsertCurrencyController extends Controller
     protected $addCurrencyrepository;
     protected $showAllCurrencyrepository;
     protected $getCurrencyRateRepository;
+    protected $fictionalCurrencyRepository;
 
     public function __construct(
         AddCurrencyAdatperRepository $addCurrencyrepository,
         ShowCurrenciesAdatperRepository $showAllCurrencyrepository,
-        CurrencyRateAdapterRepository $getCurrencyRateRepository
+        CurrencyRateAdapterRepository $getCurrencyRateRepository,
+        FictionalCurrencyDataInfoAdatperRepository $fictionalCurrencyRepository
     ) {
         $this->addCurrencyrepository = $addCurrencyrepository;
         $this->showAllCurrencyrepository = $showAllCurrencyrepository;
         $this->getCurrencyRateRepository = $getCurrencyRateRepository;
+        $this->fictionalCurrencyRepository = $fictionalCurrencyRepository;
     }
 
     public function handle(Request $request)
@@ -53,7 +57,8 @@ class InsertCurrencyController extends Controller
         $useCase = new ProcessInsertCurrencyUseCase(
             $this->addCurrencyrepository,
             $this->showAllCurrencyrepository,
-            $this->getCurrencyRateRepository
+            $this->getCurrencyRateRepository,
+            $this->fictionalCurrencyRepository
         );
 
         $inputData = new AddCurrencyInputDto(
