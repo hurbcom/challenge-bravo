@@ -4,5 +4,5 @@ namespace App\Domain\Entity\Currency;
 
 interface CurrencyInsertRepository
 {
-    public function insert($indentificationName): string|false;
+    public function insert($indentificationName, $exchangeRate): string|false;
 }

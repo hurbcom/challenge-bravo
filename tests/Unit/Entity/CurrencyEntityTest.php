@@ -46,7 +46,7 @@ class CurrencyEntityTest extends TestCase
         );
     }
 
-    public function testShouldExchangeRateAcceptBooleanValues()
+    public function testShouldNotExchangeRateAcceptBooleanValues()
     {
         $indentificationName = 'ABC';
         $exchangeRate = false;
@@ -59,7 +59,7 @@ class CurrencyEntityTest extends TestCase
         );
     }
 
-    public function testShouldExchangeRateAcceptArrayValues()
+    public function testShouldNotExchangeRateAcceptArrayValues()
     {
         $indentificationName = 'ABC';
         $exchangeRate = [1,1];
@@ -72,7 +72,7 @@ class CurrencyEntityTest extends TestCase
         );
     }
 
-    public function testShouldExchangeRateAcceptStringValues()
+    public function testShouldNotExchangeRateAcceptStringValues()
     {
         $indentificationName = 'ABC';
         $exchangeRate = 'ABC';

@@ -6,11 +6,13 @@ class CurrencyEntity
 {
     protected $indentificationName;
     protected $exchangeRate;
+    protected $defaultValueForFictional;
 
     public function __construct($indentificationName, $exchangeRate)
     {
         $this->indentificationName = $indentificationName;
         $this->exchangeRate = $exchangeRate;
+        $this->defaultValueForFictional = 1;
     }
 
     public function isIndentificationNameWithThreeLetters()
@@ -29,6 +31,17 @@ class CurrencyEntity
         }
 
         return false;
+    }
+
+    public function getCurrencyExchangeForFictionalType(
+        $valueRepresentationOnBaseCurrency,
+        $exchangeRateBaseCurrency
+    ) {
+        $resultCalcGetConversionDirect = ($valueRepresentationOnBaseCurrency/$exchangeRateBaseCurrency);
+
+        $result = ($this->defaultValueForFictional/$resultCalcGetConversionDirect);
+
+        return $result;
     }
 
     public function getIndentificationName()
