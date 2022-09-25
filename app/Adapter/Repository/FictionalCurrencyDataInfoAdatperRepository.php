@@ -9,13 +9,13 @@ class FictionalCurrencyDataInfoAdatperRepository implements FictionalCurrencyDat
 {
     public function getAll(): array|false
     {
-        $result = Redis::command('KEYS', ['*']);
+        $result = Redis::command('SSCAN', ['fictionalCurrencies', 0]);
 
-        if (empty($result)) {
+        if (empty($result[1])) {
             return false;
         }
 
-        return $result;
+        return $result[1];
     }
 
     public function insert($indentificationName): string|false

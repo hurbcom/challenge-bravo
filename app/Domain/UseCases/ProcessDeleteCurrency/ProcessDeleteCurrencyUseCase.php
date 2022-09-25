@@ -4,20 +4,23 @@ namespace App\Domain\UseCases\ProcessDeleteCurrency;
 
 use App\Domain\Entity\Currency\CurrencyDeleteRepository;
 use App\Domain\Entity\Currency\CurrencygetAllRepository;
-use App\Domain\Entity\Currency\CurrencyEntity;
+use App\Domain\Entity\Currency\FictionalCurrencyDataInfoRepository;
 use App\Domain\UseCases\ProcessDeleteCurrency\Dto\DeleteCurrencyOutputDto;
 
 class ProcessDeleteCurrencyUseCase
 {
     private $repository;
     protected $getCurrenciesRepository;
+    protected $fictionalCurrencyRepository;
 
     public function __construct(
         CurrencyDeleteRepository $repository,
         CurrencygetAllRepository $getCurrenciesRepository,
+        FictionalCurrencyDataInfoRepository $fictionalCurrencyRepository
     ) {
         $this->repository = $repository;
         $this->getCurrenciesRepository = $getCurrenciesRepository;
+        $this->fictionalCurrencyRepository = $fictionalCurrencyRepository;
     }
 
     public function deleteCurrency($inputData): DeleteCurrencyOutputDto
@@ -36,6 +39,14 @@ class ProcessDeleteCurrencyUseCase
         if (!in_array($currencyIndentificationName, $currencies)) {
             return false;
         }
+
+        $fictionalCurrencies = $this->fictionalCurrencyRepository->getAll();
+
+        if (!in_array($currencyIndentificationName, $fictionalCurrencies)) {
+            return false;
+        }
+
+        $this->fictionalCurrencyRepository->delete($currencyIndentificationName);
 
         return $this->repository->delete($currencyIndentificationName);
     }
