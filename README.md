@@ -1,33 +1,29 @@
 # Bravo Challenge
 ## An API to currency conversion
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+Descprition in challenge bravo repository [link](https://github.com/hurbcom/challenge-bravo)
 
 ### Sumary
 
-1. Documentation in External Apps
-2. Tecnologies
-3. Architecture Used
-4. How to Use on Your Machine
+1. Tecnologies
+2. Architecture Used
+3. How to Use on Your Machine
     - Cloning
     - Runing
-5. Automated Tests
-6. API Routes
-7. Improvements
+4. Tests
+    - Unit / Integeration
+    - Stress
+5. API Routes
+6. Improvements
 
-### **1. Documentation in External Apps**
-Down bellow is listed the documentations title, explation and link:
-
-- API Routes Implementation: Documentantion using Swagger framework [link](soon).
-
-### **2. Tecnologies**
+### **1. Tecnologies**
 1. PHP 8
 2. Laravel 9
 3. Composer
 4. Redis
 5. Docker
 
-### **3. Architecture Used**
+### **2. Architecture Used**
 The architecture is based on Clean Architecture, but with some changes!
 
 1. The first to point is on the Interface Layer and Frameworks and Drives:
@@ -58,7 +54,7 @@ And in the folder structure, using laravel default, has been added some more to 
 └── ...
 ```
 
-### **4. How to Use on Your Machine**
+### **3. How to Use on Your Machine**
 
 #### Cloning
 - Install Docker locally [Docker site](https://docs.docker.com/desktop/).
@@ -72,8 +68,183 @@ Notice: It's not needed to run command to install dependencies because there is 
 - Run command `docker compose up` in root folder (where docker-compose.yaml file is).
 - Use the routes describred in the API Routes Implementation.
 
-### **5. API Routes**
+### **4. Tests**
 Soon
+
+### **5. API Routes**
+
+### Currencies
+
+- POST /currency/create
+
+    Create Currency
+
+    **Body Params Explation**
+
+    - indentificationName = string | size = 3 
+    - isFictional = boolean
+    - baseCurrencyForFictionalType = string | size = 3
+    -  valueBasedOnRealCurrency = float
+
+    **Exemple body**
+
+    ```
+    {
+        "indentificationName": "FKE",
+        "isFictional": true,
+        "baseCurrencyForFictionalType": "BRL",
+        "valueBasedOnRealCurrency": 0.50
+    }
+    ```
+
+    **Responses**
+
+    In Success
+    ```
+    {
+        data: {
+            status: "success",
+            message: "Insertion with success"
+        }
+    }
+    ```
+
+    In Error
+
+    `Notice: In Error responses, the message param can be error with database integrations, etc.`
+    ```
+    {
+        data: {
+            status: "error",
+            message: "currency already exists"
+        }
+    }
+    ```
+
+- GET /currency/show
+
+    Show Currencies
+
+    **Body Params Explation**
+
+    No Body params is needed.
+
+    **Exemple body**
+
+    No body exemple is needed.
+
+    **Responses**
+
+    In Success
+    ```
+    {
+        data: {
+            status: "success",
+            message: [
+                "FKE",
+                "ABD",
+                "TEF"
+            ]
+        }
+    }
+    ```
+
+    In Error
+
+    `Notice: In Error responses, the message param can be error with database integrations, etc. But status param will be always "error".`
+    ```
+    {
+        data: {
+            status: "error",
+            message: "a error has occured while list the currencies"
+        }
+    }
+    ```
+- GET /currency/conversion
+
+    Convert a currency
+
+    **Body Params Explation**
+
+    - currencyFrom = string | size = 3 
+    - currencyTo = string | size = 3 
+    - amount = float
+
+    **Exemple body**
+
+    ```
+    {
+        "currencyFrom": "BRL",
+	    "currencyTo": "EUR",
+	    "amount": 100.00
+    }
+    ```
+
+     **Responses**
+
+    In Success
+    ```
+    {
+        "data": {
+            "status": "success",
+            "message": "conversion made with success",
+            "valueConverted": 506.7704407836381
+        }
+    }
+    ```
+
+    In Error
+
+    `Notice: In Error responses, the errorMessage param can be error with database integrations, etc.`
+    ```
+    {
+        data: {
+            status: "error",
+            errorMessage: "invalid amount value"
+        }
+    }
+    ```
+
+- DELETE /currency/delete/{indenttificationName}
+
+    Delete currency
+
+    **Body Params Explation**
+
+    No Body params is needed.
+
+    **Query params**
+
+    - indenttificationName = string | size = 3
+
+    **Exemple body**
+
+    No body exemple is needed.
+
+    **Responses**
+
+    In Success
+    ```
+    {
+        "data": {
+            "status": "success",
+            "errorMessage": "currency deleted with success"
+        }
+    }
+    ```
+
+    In Error
+
+    `Notice: In Error responses, the errorMessage param can be error with database integrations, etc.`
+
+    ```
+    {
+        data: {
+            status: "error",
+            errorMessage: "not possible to delete given value"
+        }
+    }
+    ```
 
 ### **6. Improvements**
 Soon
