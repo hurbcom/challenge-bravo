@@ -58,13 +58,13 @@ Code that was done by me is located at this folder strucuture:
 └──
 ```
 
-## **2. Architecture Used**
+## **3. Architecture Used**
 The architecture used is based on the Clean Architecture, as the encapsulation of business logic and the separation of mechanism and delivery bring benefits.
 
 With some changes to this project:
 
 1. The first to point is on the Interface Layer and Frameworks and Drives:
-These two layers was merged into one, because of the project's size.
+These two layers was merged into one, because of the project's size plus YAGNI.
 
 2. The second to point is the Enterprise Bussines Rules and Application Business Rules kept same.
 
@@ -92,7 +92,7 @@ And in the folder structure, using laravel default, has been added some more to 
 └── ...
 ```
 
-## **3. How to Use on Your Machine**
+## **4. How to Use on Your Machine**
 
 #### Cloning
 - Install Docker locally [Docker site](https://docs.docker.com/desktop/).
@@ -106,7 +106,7 @@ Notice: It's not needed to run command to install dependencies because there is 
 - Run command `docker compose up` in root folder (where docker-compose.yaml file is).
 - Use your local IP (ex: localhost) and the routes describred in the API Routes Implementation.
 
-## **4. Tests**
+## **5. Tests**
 - Unit / Integration
 
     Unit tests were implemented to ensure assertiveness in the smallest amount of code and expected behavior.
@@ -120,7 +120,7 @@ Notice: It's not needed to run command to install dependencies because there is 
 - Stress Test
     Not done.
 
-## **5. API Routes**
+## **6. API Routes**
 
 ### Currencies
 
@@ -295,7 +295,7 @@ Notice: It's not needed to run command to install dependencies because there is 
     }
     ```
 
-## **6. Not done/Updated Features**
+## **7. Not done/Updated Features**
 Some features are not implemented, listed bellow:
 
 - Stress test was not done
