@@ -6,15 +6,16 @@ Descprition in challenge bravo repository [link](https://github.com/hurbcom/chal
 ### Sumary
 
 1. Tecnologies
-2. Architecture Used
-3. How to Use on Your Machine
+2. BoilerPlate
+3. Architecture Used
+4. How to Use on Your Machine
     - Cloning
     - Runing
-4. Tests
+5. Tests
     - Unit / Integeration
-    - Stress
-5. API Routes
-6. Warning
+    - Stress Test
+6. API Routes
+7. Not done/Updated Features
 
 ## **1. Tecnologies**
 1. PHP 8
@@ -23,11 +24,47 @@ Descprition in challenge bravo repository [link](https://github.com/hurbcom/chal
 4. Redis
 5. Docker
 
+## **2. Boilerplate**
+
+Using Laravel, there are folders and code default.
+
+Code that was done by me is located at this folder strucuture:
+
+```
+.
+├── app                    
+│   ├── Domain              
+│       ├── Entity                              # Here
+│       ├── UseCases                            # Here
+│   ├── Console
+|       ├── Kernel.php                          # Here
+│   ├── Adpaters            
+│       ├── Apis                                # Here
+│       ├── Repository                          # Here
+│   └── Http                
+│       ├── Controllers                         # Here
+│   └── ... 
+├── ...
+├── nginx                                       # Here
+├── ...               
+├── ...
+├── routes                                      # Here
+├── ...
+├── tests                                       # Here
+├── docker-compose.yaml                         # Here
+├── dockerFile-app                              # Here
+├── dockerFile-cronjob                          # Here
+├── dockerFile-dependency-manager-composer      # Here
+└──
+```
+
 ## **2. Architecture Used**
-The architecture is based on Clean Architecture, but with some changes!
+The architecture used is based on the Clean Architecture, as the encapsulation of business logic and the separation of mechanism and delivery bring benefits.
+
+With some changes to this project:
 
 1. The first to point is on the Interface Layer and Frameworks and Drives:
-This layer was merged into one, because the project is small plus apply YAGNI.
+These two layers was merged into one, because of the project's size.
 
 2. The second to point is the Enterprise Bussines Rules and Application Business Rules kept same.
 
@@ -50,7 +87,8 @@ And in the folder structure, using laravel default, has been added some more to 
 │       ├── Controllers     # Where the connection to REST be consumed plus use cases be implemented
 │   └── ...                
 ├── ...
-├── routes                  # Already exists as default to open API end points
+├── routes                  # Already exists as default to open API end ├── ...
+├── tests                  # Already exists as default to implement automated tests
 └── ...
 ```
 
@@ -66,10 +104,21 @@ Notice: It's not needed to run command to install dependencies because there is 
 ```
 
 - Run command `docker compose up` in root folder (where docker-compose.yaml file is).
-- Use the routes describred in the API Routes Implementation.
+- Use your local IP (ex: localhost) and the routes describred in the API Routes Implementation.
 
 ## **4. Tests**
--
+- Unit / Integration
+
+    Unit tests were implemented to ensure assertiveness in the smallest amount of code and expected behavior.
+
+    Integration tests were implemented to ensure the database joins the code in general.
+
+    Down bellow a picture showing the results:
+
+    <br>
+    <img src="output_automated_tets.png" width="70%">
+- Stress Test
+    Not done.
 
 ## **5. API Routes**
 
@@ -246,21 +295,15 @@ Notice: It's not needed to run command to install dependencies because there is 
     }
     ```
 
-## **6. Warning**
-Some features are not implemented, as:
-
-- Add script to a crontab in nginx container
-To the api that gets the exchange rate be up to date, it was created an script that runs every 5 minutes. Its possible
-to run manually by entering the app container with bash and run "php artisan schedule:work" in command line.
+## **6. Not done/Updated Features**
+Some features are not implemented, listed bellow:
 
 - Stress test was not done
 
-- Update fictional rate is not implement, so the first input of user worn be changed with api updater.
+- Update fictional rate is not implement, so the first input of user will not be changed with api updater.
 
-Some features need to be updated, as:
+Some features need to be updated, listed bellow:
 
-- The automated tests (unit, feature) was created and at first, with the api not suporting fictional currencies, everything was ok.
-But if the implementation of fictional currencies, some tests broke.
 - The automated tests (feature) is not using an tecnology to refresh database, so error in insert and delete currency happens
 because of data stored or no in database.
 
