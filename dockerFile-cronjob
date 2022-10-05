@@ -1,7 +1,8 @@
 
-FROM alpine:3.16
+# FROM alpine:3.16
+FROM php:8.1.10-fpm-alpine3.16
 
-RUN apk add --update php-8.1
+# RUN apk add --update php-8.1
 
 RUN touch crontab.tmp \
     && echo '* * * * * cd /var/www && php artisan schedule:run >> /dev/stdout 2>&1' > crontab.tmp \

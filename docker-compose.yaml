@@ -35,6 +35,8 @@ services:
       - ./:/var/www/
     depends_on:
       - app
+    networks:
+      - app-networks
 
   database:
       image: redis:alpine
