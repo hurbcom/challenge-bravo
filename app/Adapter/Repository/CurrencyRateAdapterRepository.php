@@ -17,9 +17,4 @@ class CurrencyRateAdapterRepository implements CurrencyRateRepository
 
         return $result;
     }
-
-    public function update($indentificationName): float|false
-    {
-        return false;
-    }
 }
