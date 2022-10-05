@@ -10,6 +10,7 @@ Descprition in challenge bravo repository [link](https://github.com/hurbcom/chal
 3. Architecture Used
 4. How to Use on Your Machine
     - Cloning
+    - Set Env Variables
     - Runing
 5. Tests
     - Unit / Integeration
@@ -98,6 +99,9 @@ And in the folder structure, using laravel default, has been added some more to 
 - Install Docker locally [Docker site](https://docs.docker.com/desktop/).
 - Clone this repository.
 
+#### Set Env Variables
+- Create an account on abstractapi [link](https://www.abstractapi.com/api/exchange-rate-api) to get your key and add it on `API_KEY_ABSTRACT_API` variable env.
+- REDIS env password variable value is NULL.
 #### Runing
 ```
 Notice: It's not needed to run command to install dependencies because there is a configuration to do it automatially.
