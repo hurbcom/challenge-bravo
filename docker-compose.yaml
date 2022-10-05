@@ -25,6 +25,18 @@ services:
       - app
     networks:
       - app-networks
+  
+  cron-jobs:
+    build:
+      context: .
+      dockerfile: dockerFile-cronjob
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/
+    depends_on:
+      - app
+    networks:
+      - app-networks
 
   database:
       image: redis:alpine
