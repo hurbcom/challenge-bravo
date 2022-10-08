@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
 
-@Module({})
+import { ConversionService } from './conversion.service';
+
+@Module({
+    providers: [ConversionService],
+})
 export class ConversionModule {}
