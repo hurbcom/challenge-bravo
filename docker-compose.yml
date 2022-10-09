@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+    postgres:
+        image: postgres:alpine
+        container_name: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: development
+            POSTGRES_DB: challenge-bravo
+            PGDATA: /var/lib/postgres
+        ports:
+            - "5432:5432"
+    redis:
+        image: redis:alpine
+        container_name: redis
+        restart: always
+        volumes:
+            - ./redis:/data
+        ports:
+            - "6379:6379"
+volumes:
+    redis:
+        driver: local
+
+

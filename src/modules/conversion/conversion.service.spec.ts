@@ -16,4 +16,12 @@ describe('ConversionService', () => {
     it('should be defined', () => {
         expect(service).toBeDefined();
     });
+
+    it('should throw error when invalid params are passed', () => {
+        return;
+    });
+
+    it('should convert from USD to BRL', () => {
+        return;
+    });
 });
