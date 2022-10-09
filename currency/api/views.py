@@ -44,3 +44,18 @@ class FictionalCurrencyView(APIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, pk: int) -> Response:
+        try:
+            currency = FictionalCurrency.objects.get(pk=pk)
+        except FictionalCurrency.DoesNotExist:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = FictionalCurrencySerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.update(currency, serializer.validated_data)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
