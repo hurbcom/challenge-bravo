@@ -6,6 +6,7 @@
   "author": "hdbenosx10 <benosx03@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/big.js": "^6.1.6",
     "@types/jest": "^29.1.2",
     "@types/node": "^18.8.3",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
@@ -15,10 +16,17 @@
     "husky": "^8.0.1",
     "jest": "^29.1.2",
     "lint-staged": "^13.0.3",
+    "nodemon": "^2.0.20",
     "ts-jest": "^29.0.3",
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "test": "jest"
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json -w & nodemon --on-change-only -q -w dist dist/index.js",
+    "test": "jest --passWithNoTests",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "big.js": "^6.2.1"
   }
 }
