@@ -15,9 +15,9 @@ class FictionalCurrenciesView(APIView):
 
 
 class FictionalCurrencyView(APIView):
-    def delete(self, request, pk: int) -> Response:
+    def delete(self, request, currency_short_name: str) -> Response:
         try:
-            currency = FictionalCurrency.objects.get(pk=pk)
+            currency = FictionalCurrency.objects.get(currency_short_name=currency_short_name)
         except FictionalCurrency.DoesNotExist:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
 
@@ -25,9 +25,9 @@ class FictionalCurrencyView(APIView):
 
         return Response({}, status=status.HTTP_200_OK)
 
-    def get(self, request, pk: int) -> Response:
+    def get(self, request, currency_short_name: str) -> Response:
         try:
-            currency = FictionalCurrency.objects.get(pk=pk)
+            currency = FictionalCurrency.objects.get(currency_short_name=currency_short_name)
         except FictionalCurrency.DoesNotExist:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
 
@@ -45,9 +45,9 @@ class FictionalCurrencyView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, pk: int) -> Response:
+    def put(self, request, currency_short_name: str) -> Response:
         try:
-            currency = FictionalCurrency.objects.get(pk=pk)
+            currency = FictionalCurrency.objects.get(currency_short_name=currency_short_name)
         except FictionalCurrency.DoesNotExist:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
 
