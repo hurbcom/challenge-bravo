@@ -28,3 +28,34 @@ class FictionalCurrency(Model):
 
     def __str__(self) -> str:
         return self.currency_short_name
+
+    @staticmethod
+    def get_currency_base_data(currency_name: str) -> dict:
+        """Get currency base data.
+
+        Args:
+            currency_name (str): Currency name
+
+        Returns:
+            A dictionary containing the base structure that a currency must have within the system
+        """
+        # NOTE (@gustavo): When it is a real currency, the currency_backing will be the currency
+        #                  itself
+        currency_data = {
+            'currency_amount': 1.0,
+            'currency_backing': currency_name,
+            'currency_name': currency_name,
+            'is_fictional': False,
+        }
+
+        try:
+            currency = FictionalCurrency.objects.get(currency_short_name=currency_name)
+        except FictionalCurrency.DoesNotExist:
+            return currency_data
+
+        return {
+            'currency_amount': float(currency.currency_amount),
+            'currency_backing': currency.currency_backing,
+            'currency_name': currency_name,
+            'is_fictional': True,
+        }
