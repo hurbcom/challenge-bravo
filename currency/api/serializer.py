@@ -1,15 +1,13 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
 from currency.models import FictionalCurrency
 
 
-class FictionalCurrencySerializer(ModelSerializer):
+class FictionalCurrencySerializer(serializers.ModelSerializer):
+    currency_backing = serializers.CharField()
+    currency_short_name = serializers.CharField()
+    currency_amount = serializers.FloatField()
+
     class Meta:
+        fields = '__all__'
         model = FictionalCurrency
-        fields = (
-            'currency_backing',
-            'created_at',
-            'currency_amount',
-            'currency_short_name',
-            'updated_at'
-        )
