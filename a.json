@@ -1,0 +1,32 @@
+// https://economia.awesomeapi.com.br/last/BRL-USD
+{
+    "USDBRL": {
+        "code": "USD",
+        "codein": "BRL",
+        "name": "Dólar Americano/Real Brasileiro",
+        "high": "5.2629",
+        "low": "5.261",
+        "varBid": "-0.0016",
+        "pctChange": "-0.03",
+        "bid": "5.2605",
+        "ask": "5.2615",
+        "timestamp": "1665697331",
+        "create_date": "2022-10-13 18:42:11"
+    }
+}
+
+{
+    "BRLUSD": {
+        "code": "BRL",
+        "codein": "USD",
+        "name": "Real Brasileiro/Dólar Americano",
+        "high": "0.1901",
+        "low": "0.19",
+        "varBid": "0.0001",
+        "pctChange": "0.05",
+        "bid": "0.1901",
+        "ask": "0.1901",
+        "timestamp": "1665697301",
+        "create_date": "2022-10-13 18:41:41"
+    }
+}
