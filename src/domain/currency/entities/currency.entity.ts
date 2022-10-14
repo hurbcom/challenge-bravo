@@ -7,8 +7,8 @@ export class Currency {
   private _backingCurrency: string;
   private _unitCost: string;
 
-  constructor(code: string, unitCost: string, backingCurrency = 'USD') {
-    this._id = randomUUID();
+  constructor(code: string, unitCost: string, id = randomUUID(), backingCurrency = 'USD') {
+    this._id = id;
     this._code = code;
     this._unitCost = unitCost;
     this._backingCurrency = backingCurrency;
