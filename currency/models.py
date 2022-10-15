@@ -20,7 +20,7 @@ class FictionalCurrency(Model):
         max_digits=10,
     )
 
-    currency_short_name = CharField('Nome da Moeda Abreviado', max_length=10, unique=True)
+    currency_short_name = CharField('Nome da Moeda Abreviado', max_length=3, unique=True)
 
     updated_at = DateTimeField('Data de Atualização', auto_now=True)
 
