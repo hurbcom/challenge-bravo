@@ -13,7 +13,7 @@ export class PostgresService implements TypeOrmOptionsFactory {
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_SCHEMA,
-        entities: [__dirname + '/../modules/**/*.entity.{js,ts}'],
+        entities: [__dirname + '/../modules/**/*.entities.{js,ts}'],
         synchronize: false,
         logging: process.env.NODE_ENV === 'development',
         autoLoadEntities: true,

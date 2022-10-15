@@ -1,8 +1,14 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 
-import { ConversionService } from './conversion.service';
+import { AwesomeApiService } from '../../libraries/price/price-services/awesome-api.service';
+
+import { ConversionController } from './controllers/conversion.controller';
+import { ConversionService } from './services/conversion.service';
 
 @Module({
-    providers: [ConversionService],
+    imports: [HttpModule],
+    providers: [ConversionService, AwesomeApiService],
+    controllers: [ConversionController],
 })
 export class ConversionModule {}
