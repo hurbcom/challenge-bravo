@@ -34,7 +34,7 @@ def fictional_currency(fictional_currency_data) -> FictionalCurrency:
 @pytest.fixture
 def fictional_currency_data(currency_short_name, fake) -> dict:
     return {
-        'currency_amount': str(fake.pydecimal(left_digits=2, positive=True, right_digits=2)),
+        'currency_amount': fake.pyfloat(left_digits=2, positive=True, right_digits=2),
         'currency_backing': currency_short_name,
         'currency_short_name': fake.currency_code(),
     }
