@@ -85,8 +85,7 @@ class TestFictionalCurrencyView:
 
         assert not FictionalCurrency.objects.exists()
 
-        assert response.json() == {}
-        assert response.status_code == status.HTTP_200_OK
+        assert response.status_code == status.HTTP_204_NO_CONTENT
 
     def test_get_with_currency_does_not_exist(self, client, url):
         response = client.get(url())
