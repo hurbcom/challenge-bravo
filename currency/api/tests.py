@@ -19,13 +19,7 @@ def currency_short_name(fake) -> str:
 
 @pytest.fixture
 def expected_currency(fictional_currency) -> dict:
-    date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
-
-    expected_json_response = model_to_dict(fictional_currency, exclude='id')
-    expected_json_response['created_at'] = fictional_currency.created_at.strftime(date_format)
-    expected_json_response['updated_at'] = fictional_currency.updated_at.strftime(date_format)
-
-    return expected_json_response
+    return model_to_dict(fictional_currency, exclude='id')
 
 
 @pytest.fixture
