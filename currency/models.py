@@ -67,3 +67,16 @@ class FictionalCurrency(Model):
             'currency_name': currency_name,
             'is_fictional': True,
         }
+
+
+class OfficialCurrency:
+    @staticmethod
+    def all():
+        return [
+            {
+                'currency_short_name': currency,
+                'currency_backing': currency,
+                'currency_amount': 1.0,
+            }
+            for currency in OFFICIAL_CURRENCIES
+        ]

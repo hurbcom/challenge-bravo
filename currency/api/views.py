@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from currency.api.serializer import FictionalCurrencySerializer
 from currency.converters import get_currency_conversion_data
 from currency.errors import CurrencyUnknownError
-from currency.models import FictionalCurrency
+from currency.models import FictionalCurrency, OfficialCurrency
 
 
 class ConvertCurrencyViewSet(APIView):
@@ -45,6 +45,9 @@ class FictionalCurrenciesView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class OfficialCurrenciesView(APIView):
+    def get(self, request) -> Response:
+        return Response(OfficialCurrency.all(), status=status.HTTP_200_OK)
 
 class FictionalCurrencyView(APIView):
     def delete(self, request, currency_short_name: str) -> Response:
