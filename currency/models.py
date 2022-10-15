@@ -5,9 +5,11 @@ from django.db.models import DateTimeField
 from django.db.models import DecimalField
 from django.db.models import Model
 
+from currency.utils.constants import CURRENCIES_CHOICES
+
 
 class FictionalCurrency(Model):
-    currency_backing = CharField('Moeda de Lastro', max_length=10)
+    currency_backing = CharField('Moeda de Lastro', choices=tuple(CURRENCIES_CHOICES), max_length=3)
 
     created_at = DateTimeField('Data de Criação', auto_now_add=True)
 
