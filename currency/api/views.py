@@ -23,7 +23,7 @@ class FictionalCurrencyView(APIView):
 
         currency.delete()
 
-        return Response({}, status=status.HTTP_200_OK)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def get(self, request, currency_short_name: str) -> Response:
         try:
