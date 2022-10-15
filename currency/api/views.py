@@ -3,7 +3,21 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from currency.api.serializer import FictionalCurrencySerializer
+from currency.converters import get_currency_conversion_data
 from currency.models import FictionalCurrency
+
+
+class ConvertCurrencyViewSet(APIView):
+    def get(self, request, amount: str, currency_from: str, currency_to: str) -> Response:
+        if not currency_from or not currency_to:
+            return Response({}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+        currency_from = FictionalCurrency.get_currency_base_data(currency_from.upper())
+        currency_to = FictionalCurrency.get_currency_base_data(currency_to.upper())
+
+        converted_value = get_currency_conversion_data(float(amount), currency_from, currency_to)
+
+        return Response(round(converted_value, 2))
 
 
 class FictionalCurrenciesView(APIView):
