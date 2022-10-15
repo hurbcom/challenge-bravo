@@ -26,4 +26,4 @@ def get_currency_conversion_data(amount: float, currency_from: dict, currency_to
 
     total_currency_value = currency_from['currency_amount'] * currency_quote
 
-    return round((total_currency_value * amount) / currency_to['currency_amount'], 2)
+    return (total_currency_value * amount) / currency_to['currency_amount']
