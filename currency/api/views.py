@@ -10,9 +10,9 @@ from currency.models import FictionalCurrency, OfficialCurrency
 
 class ConvertCurrencyViewSet(APIView):
     def get(self, request) -> Response:
-        amount = request.GET.get('currency_amount')
-        currency_from = request.GET.get('currency_from')
-        currency_to = request.GET.get('currency_to')
+        amount = request.GET.get('amount')
+        currency_from = request.GET.get('from')
+        currency_to = request.GET.get('to')
 
         if not currency_from or not currency_to:
             return Response({}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
