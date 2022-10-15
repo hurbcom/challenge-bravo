@@ -9,5 +9,5 @@ class FictionalCurrencySerializer(serializers.ModelSerializer):
     currency_amount = serializers.FloatField()
 
     class Meta:
-        fields = '__all__'
+        fields = ('currency_backing', 'currency_amount', 'currency_short_name')
         model = FictionalCurrency
