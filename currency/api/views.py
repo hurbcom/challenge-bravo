@@ -4,16 +4,34 @@ from rest_framework.views import APIView
 
 from currency.api.serializer import FictionalCurrencySerializer
 from currency.converters import get_currency_conversion_data
+from currency.errors import CurrencyUnknownError
 from currency.models import FictionalCurrency
 
 
 class ConvertCurrencyViewSet(APIView):
-    def get(self, request, amount: str, currency_from: str, currency_to: str) -> Response:
+    def get(self, request) -> Response:
+        amount = request.GET.get('currency_amount')
+        currency_from = request.GET.get('currency_from')
+        currency_to = request.GET.get('currency_to')
+
         if not currency_from or not currency_to:
             return Response({}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        currency_from = FictionalCurrency.get_currency_base_data(currency_from.upper())
-        currency_to = FictionalCurrency.get_currency_base_data(currency_to.upper())
+        try:
+            currency_from = FictionalCurrency.get_currency_base_data(currency_from.upper())
+        except CurrencyUnknownError:
+            return Response(
+                {'message': f'Currency "{currency_from}" is not valid'},
+                status=status.HTTP_422_UNPROCESSABLE_ENTITY
+            )
+
+        try:
+            currency_to = FictionalCurrency.get_currency_base_data(currency_to.upper())
+        except CurrencyUnknownError:
+            return Response(
+                {'message': f'Currency "{currency_to}" is not valid'},
+                status=status.HTTP_422_UNPROCESSABLE_ENTITY
+            )
 
         converted_value = get_currency_conversion_data(float(amount), currency_from, currency_to)
 
