@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -5,7 +6,9 @@ from rest_framework.views import APIView
 from currency.api.serializer import FictionalCurrencySerializer
 from currency.converters import get_currency_conversion_data
 from currency.errors import CurrencyUnknownError
-from currency.models import FictionalCurrency, OfficialCurrency
+from currency.models import FictionalCurrency
+from currency.models import OfficialCurrency
+from currency.utils.constants import CACHE_TTL_IN_SECONDS
 
 
 class ConvertCurrencyViewSet(APIView):
@@ -13,6 +16,10 @@ class ConvertCurrencyViewSet(APIView):
         amount = request.GET.get('amount')
         currency_from = request.GET.get('from')
         currency_to = request.GET.get('to')
+
+        cache_key = f'{currency_from}.{currency_to}.{amount}'
+        if result := cache.get(cache_key):
+            return Response(result)
 
         if not currency_from or not currency_to:
             return Response({}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
@@ -34,6 +41,8 @@ class ConvertCurrencyViewSet(APIView):
             )
 
         converted_value = get_currency_conversion_data(float(amount), currency_from, currency_to)
+
+        cache.set(cache_key, round(converted_value, 2), CACHE_TTL_IN_SECONDS)
 
         return Response(round(converted_value, 2))
 
