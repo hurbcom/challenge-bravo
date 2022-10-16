@@ -72,6 +72,11 @@ class FictionalCurrency(Model):
 class OfficialCurrency:
     @staticmethod
     def all():
+        """Get all official currencies and add in a normalized data structure.
+
+        Returns:
+            A list of dictionaries containing the data of official currencies.
+        """
         return [
             {
                 'currency_short_name': currency,
