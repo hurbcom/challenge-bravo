@@ -1,7 +1,9 @@
 import { Controller, Get, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { ConversionService } from '../services/conversion.service';
 
+@ApiTags('Conversion')
 @Controller('conversion')
 export class ConversionController {
     constructor(private readonly _conversionService: ConversionService) {}

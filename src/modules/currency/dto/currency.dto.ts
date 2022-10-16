@@ -8,10 +8,12 @@ export class CurrencyDto {
     name: string;
 
     @ApiProperty()
+    @IsNotEmpty()
     @IsString()
     code: string;
 
     @ApiProperty()
     @IsNumber()
+    @IsNotEmpty()
     ratio: number;
 }

@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { ApiBody, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CurrencyDto } from '../dto/currency.dto';
 import { CurrencyService } from '../services/currency.service';
 
+@ApiTags('Currency')
 @Controller('currency')
 export class CurrencyController {
     constructor(private readonly _currencyService: CurrencyService) {}
