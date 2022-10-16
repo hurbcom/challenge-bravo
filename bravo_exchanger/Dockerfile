@@ -2,6 +2,12 @@ FROM python:3.8.10-slim-buster
 
 ENV CACHE_BACKEND="django.core.cache.backends.dummy.DummyCache" \
     CACHE_LOCATION="" \
+    DB_ENGINE="django.db.backends.sqlite3" \
+    DB_NAME="db.sqlite3" \
+    DB_USER="" \
+    DB_HOST="" \
+    DB_PORT="" \
+    DB_PASSWORD="" \
     SECRET_KEY="secret" \
     DEBUG=0
 
