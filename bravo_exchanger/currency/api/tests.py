@@ -20,7 +20,7 @@ def expected_currency(fictional_currency) -> dict:
 class TestFictionalCurrenciesView:
     @pytest.fixture
     def url(self) -> str:
-        return '/api/currencies/'
+        return '/api/fictional-currencies/'
 
     def test_get_without_currencies(self, client, url):
         response = client.get(url)
@@ -37,9 +37,13 @@ class TestFictionalCurrenciesView:
 
 class TestFictionalCurrencyView:
     @pytest.fixture
-    def url(self, currency_short_name) -> str:
+    def base_url(self):
+        return '/api/fictional-currency/'
+
+    @pytest.fixture
+    def url(self, base_url, currency_short_name) -> str:
         def _url(currency_short_name=currency_short_name) -> Callable:
-            return f'/api/currency/{currency_short_name}/'
+            return f'{base_url}{currency_short_name}/'
 
         return _url
 
@@ -71,17 +75,18 @@ class TestFictionalCurrencyView:
         assert response.status_code == status.HTTP_200_OK
 
     @pytest.mark.parametrize('field', ['currency_backing', 'currency_short_name'])
-    def test_post_with_invalid_serializer(self, client, field, fictional_currency_data):
+    def test_post_with_invalid_serializer(self, base_url, client, field, fictional_currency_data):
         new_currency = deepcopy(fictional_currency_data)
         new_currency.pop(field)
 
-        url = '/api/currency/'
-        response = client.post(url, content_type='application/json', data=json.dumps(new_currency))
+        response = client.post(
+            base_url, content_type='application/json', data=json.dumps(new_currency)
+        )
 
         assert response.json() == {field: ['Este campo é obrigatório.']}
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_post_success(self, client, fake, fictional_currency_data, url):
+    def test_post_success(self, base_url, client, fake, fictional_currency_data, url):
         new_currency_name = fake.currency_code()
 
         new_currency = deepcopy(fictional_currency_data)
@@ -91,8 +96,9 @@ class TestFictionalCurrencyView:
 
         assert FictionalCurrency.objects.count() == 0
 
-        url = '/api/currency/'
-        response = client.post(url, content_type='application/json', data=json.dumps(new_currency))
+        response = client.post(
+            base_url, content_type='application/json', data=json.dumps(new_currency)
+        )
 
         assert FictionalCurrency.objects.filter(currency_short_name=new_currency_name).exists()
 
