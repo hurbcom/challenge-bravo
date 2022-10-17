@@ -1,5 +1,5 @@
 export interface CreateCurrencyDTO {
   code: string;
-  backingCurrency: string;
+  backingCurrency?: string;
   unitCost: string;
 }
