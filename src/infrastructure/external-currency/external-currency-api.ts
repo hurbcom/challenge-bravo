@@ -1,8 +1,16 @@
+import axios from 'axios';
+import Big from 'big.js';
 import { ExternalCurrencyAPI } from '../../domain/currency/services/external-currency-api.service';
 
 export class AwesomeCurrencyAPI implements ExternalCurrencyAPI {
-  convert(from: string, to: string): Promise<string> {
-    throw new Error('Method not implemented.');
+  private readonly _baseUrl = 'https://economia.awesomeapi.com.br/'; 
+  async convert(from: string, to: string, amount: string): Promise<string> {
+    const response = await axios.get(`${this._baseUrl}/last/${from}-${to}`);
+    const body = response.data;
+    return new Big(body[`${from}${to}`].bid)
+      .times(amount)
+      .round(2)
+      .valueOf();
   }
     
 }
