@@ -157,3 +157,6 @@ feitas, foi decidido utilizar cache na operação de conversão de moedas.
 Para o cache foi utilizado o [Redis](https://redis.io/), que possui ligação nativa com o Django.
 
 No banco de dados foi utilizado PostgreSQL rodando em um container Docker.
+
+Para facilitar a correção, a SECRET_KEY foi deixada exposta, podendo ser considerado isso uma falha
+de segurança.
