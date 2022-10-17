@@ -10,30 +10,29 @@ export class ExpressServer {
 		this.execute()
   }
 
-	private execute() {
+	private execute(): void {
 		this.configs()
 		this.middlewares()
 		this.routes()
 		this.database()
 	}
 
-	private configs () {
+	private configs (): void {
 		this.express.set('port', process.env.PORT)
 	}
 
-	private middlewares() {
+	private middlewares(): void {
 		this.express.use(bodyParser.json())
 		this.express.use(bodyParser.urlencoded({ extended: true }))
 	}
 
-	private routes() {
+	private routes(): void {
 		this.express.use(routes)
 	}
 
-	private async database() {
+	private async database(): Promise<void> {
 		await AppDataSource.initialize()
 	}
-
 }
 
 

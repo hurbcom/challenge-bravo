@@ -6,13 +6,13 @@ export class CurrencyConversionValidator {
     const schema = joi.object({
       from: joi.string()
         .alphanum()
-        .min(1)
+        .min(3)
         .max(10)
         .required(),
   
       to: joi.string()
         .alphanum()
-        .min(1)
+        .min(3)
         .max(10)
         .required(),
       
