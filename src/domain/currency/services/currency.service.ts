@@ -18,10 +18,6 @@ export class CurrencyService {
     await this.currencyRepository.create(currency);
     return currency;
   }
-
-  async findCurrency(code: string): Promise<Currency | null> {
-    return this.currencyRepository.findByCurrencyCode(code);
-  }
   
   async convertCurrency(fromCode: string, toCode: string, amount: string) {
     const fromCurrency = await this.currencyRepository.findByCurrencyCode(fromCode);
