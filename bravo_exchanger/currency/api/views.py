@@ -11,7 +11,7 @@ from currency.models import OfficialCurrency
 from currency.utils.constants import CACHE_TTL_IN_SECONDS
 
 
-class ConvertCurrencyViewSet(APIView):
+class ConvertCurrencyView(APIView):
     def get(self, request) -> Response:
         amount = request.GET.get('amount')
         currency_from = request.GET.get('from')
@@ -54,9 +54,11 @@ class FictionalCurrenciesView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 class OfficialCurrenciesView(APIView):
     def get(self, request) -> Response:
         return Response(OfficialCurrency.all(), status=status.HTTP_200_OK)
+
 
 class FictionalCurrencyView(APIView):
     def delete(self, request, currency_short_name: str) -> Response:

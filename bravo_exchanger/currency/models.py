@@ -48,11 +48,11 @@ class FictionalCurrency(Model):
         """
         if currency_name in OFFICIAL_CURRENCIES:
             return {
-            'currency_amount': 1.0,
-            'currency_backing': currency_name,
-            'currency_name': currency_name,
-            'is_fictional': False,
-        }
+                'currency_amount': 1.0,
+                'currency_backing': currency_name,
+                'currency_name': currency_name,
+                'is_fictional': False,
+            }
 
         # NOTE (@gustavo): When it is a real currency, the currency_backing will be the currency
         #                  itself
