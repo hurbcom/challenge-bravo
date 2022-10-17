@@ -27,11 +27,11 @@ export class CurrencyService {
     }
     if(!fromCurrency && toCurrency){
       const fromValue = await this.externalCurrencyAPI.convert(fromCode, process.env.DEFAULT_BACKING_CURRENCY || 'USD', amount);
-      new Currency(fromCode, fromValue).convert(toCurrency, amount);
+      return new Currency(fromCode, fromValue).convert(toCurrency, amount);
     } 
     if(!toCurrency && fromCurrency) {
       const toValue = await this.externalCurrencyAPI.convert(toCode, process.env.DEFAULT_BACKING_CURRENCY || 'USD', amount);
-      new Currency(fromCode, toValue).convert(fromCurrency, amount);
+      return new Currency(fromCode, toValue).convert(fromCurrency, amount);
     }
     return this.externalCurrencyAPI.convert(fromCode, toCode, amount);
   }
