@@ -1,8 +1,11 @@
 import json
 from copy import deepcopy
+from http import HTTPStatus
 from typing import Callable
+from unittest.mock import patch
 
 import pytest
+from currency.errors import CurrencyUnknownError
 from django.forms.models import model_to_dict
 from rest_framework import status
 
@@ -15,6 +18,103 @@ pytestmark = pytest.mark.django_db
 @pytest.fixture
 def expected_currency(fictional_currency) -> dict:
     return model_to_dict(fictional_currency, exclude='id')
+
+
+class TestConvertCurrencyView:
+    @pytest.fixture
+    def params_request(self) -> dict:
+        return {'amount': 1.0, 'from': 'USD', 'to': 'USD'}
+
+    @pytest.fixture
+    def url(self) -> str:
+        return '/api/convert/'
+
+    @patch('currency.api.views.cache')
+    def test_get_with_cached_value(self, mock_cache, client, params_request, url):
+        cache_key = f'{params_request["from"]}.{params_request["to"]}.{params_request["amount"]}'
+
+        mock_cache.get.return_value = 1.0
+
+        response = client.get(url, data=params_request)
+
+        assert response.json() == 1.0
+        assert response.reason_phrase == HTTPStatus.OK.phrase
+        assert response.status_code == HTTPStatus.OK
+
+        mock_cache.get.assert_called_once_with(cache_key)
+
+    @pytest.mark.parametrize('field', ['from', 'to'])
+    @patch('currency.api.views.cache')
+    def test_get_without_currency_value(self, mock_cache, client, field, params_request, url):
+        params = deepcopy(params_request)
+        params.pop(field)
+
+        mock_cache.get.return_value = False
+
+        response = client.get(url, data=params)
+
+        assert response.json() == {}
+        assert response.reason_phrase == HTTPStatus.UNPROCESSABLE_ENTITY.phrase
+        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+
+        mock_cache.set.assert_not_called()
+
+    @patch('currency.api.views.FictionalCurrency.get_currency_base_data')
+    @patch('currency.api.views.cache')
+    def test_get_with_currency_unknown_error(
+        self, mock_cache, mock_get_currency_base_data, client, params_request, url
+    ):
+        currency_from = params_request['from']
+
+        expected_message_response = f'Currency "{currency_from}" is not valid'
+
+        mock_cache.get.return_value = False
+
+        mock_get_currency_base_data.side_effect = CurrencyUnknownError
+
+        response = client.get(url, data=params_request)
+
+        assert response.json() == {'message': expected_message_response}
+        assert response.reason_phrase == HTTPStatus.UNPROCESSABLE_ENTITY.phrase
+        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+
+        mock_cache.set.assert_not_called()
+
+    @patch('currency.api.views.get_currency_conversion_data')
+    @patch('currency.api.views.FictionalCurrency.get_currency_base_data')
+    @patch('currency.api.views.cache')
+    def test_get_with_success(
+        self,
+        mock_cache,
+        mock_get_currency_base_data,
+        mock_get_currency_conversion_data,
+        client,
+        currency_short_name,
+        params_request,
+        url
+    ):
+        currency_base_data = {
+            'currency_amount': '1.0',
+            'currency_backing': currency_short_name,
+            'currency_name': currency_short_name,
+            'is_fictional': False,
+        }
+
+        mock_cache.get.return_value = False
+
+        mock_get_currency_base_data.return_value = currency_base_data
+
+        mock_get_currency_conversion_data.return_value = 1.0
+
+        response = client.get(url, data=params_request)
+
+        assert response.json() == 1.0
+        assert response.reason_phrase == HTTPStatus.OK.phrase
+        assert response.status_code == HTTPStatus.OK
+
+        mock_cache.set.assert_called_once()
+        mock_get_currency_base_data.assert_called()
+        mock_get_currency_conversion_data.assert_called()
 
 
 class TestFictionalCurrenciesView:
