@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes'
+import { AppDataSource } from './configs/typeorm.config';
 import 'dotenv/config'
-
 export class ExpressServer {
 	public express: express.Application = express();
 
@@ -14,6 +14,7 @@ export class ExpressServer {
 		this.configs()
 		this.middlewares()
 		this.routes()
+		this.database()
 	}
 
 	private configs () {
@@ -27,6 +28,10 @@ export class ExpressServer {
 
 	private routes() {
 		this.express.use(routes)
+	}
+
+	private async database() {
+		await AppDataSource.initialize()
 	}
 
 }
