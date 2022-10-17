@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { CurrencyEntity } from '../../modules/currency/entities/currency.entity';
 
 export default class CurrencySeeds implements Seeder {
-  public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
+  public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<void> {
     const repository = dataSource.getRepository(CurrencyEntity);
     await repository.insert([
       {
