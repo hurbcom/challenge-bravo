@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { CurrencyQuoteDto } from '../../_common/dto/currency-quote.dto';
 import { CurrencyRepository } from '../repositories/currency.repository';
 
 @Injectable()
@@ -15,7 +16,11 @@ export class CurrencyService {
     }
 
     public async getCurrencyById(id: string) {
-        return this._currencyRepository.findOneBy({ id });
+        return this._currencyRepository.findOneBy({ id, isActive: true });
+    }
+
+    public async getCurrencyByCode(code: string) {
+        return this._currencyRepository.findOneBy({ code, isActive: true });
     }
 
     public async createCurrency(data) {
@@ -28,5 +33,9 @@ export class CurrencyService {
 
     public async deleteCurrency(id: string) {
         return this._currencyRepository.softDeleteById(id);
+    }
+
+    public async updateQuotes(quotes: CurrencyQuoteDto[]) {
+        return this._currencyRepository.updateCurrencyQuotes(quotes);
     }
 }

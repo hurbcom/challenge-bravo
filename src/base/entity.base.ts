@@ -1,4 +1,4 @@
-import { BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, BeforeInsert, BeforeUpdate, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export abstract class EntityBase extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -12,4 +12,9 @@ export abstract class EntityBase extends BaseEntity {
 
     @Column({ name: 'updated_at', type: 'timestamptz', nullable: true })
     updatedAt?: Date;
+
+    @BeforeUpdate()
+    private updateColumn() {
+        this.updatedAt = new Date();
+    }
 }

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { redisConfig } from './config/redis.config';
 import { PostgresService } from './database/services/postgres/postgres.service';
+import { QuoteModule } from './libraries/quote/quote.module';
 import { ConversionModule } from './modules/conversion/conversion.module';
 import { CurrencyModule } from './modules/currency/currency.module';
 
@@ -13,10 +14,11 @@ import { CurrencyModule } from './modules/currency/currency.module';
         ConfigModule.forRoot({
             isGlobal: true,
         }),
-        TypeOrmModule.forRootAsync({ useClass: PostgresService, inject: [PostgresService] }),
         CacheModule.register(redisConfig()),
+        TypeOrmModule.forRootAsync({ useClass: PostgresService, inject: [PostgresService] }),
         ConversionModule,
         CurrencyModule,
+        QuoteModule,
     ],
 })
 export class AppModule {}
