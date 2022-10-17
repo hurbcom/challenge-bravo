@@ -5,7 +5,7 @@ import { CurrencyRepository } from '../../../../../domain/currency/repositories/
 export class MongoCurrencyRepository implements CurrencyRepository {
   constructor(private readonly prismaClient: PrismaClient) {}
   async findByCurrencyCode(code: string): Promise<Currency | null> {
-    const result = await this.prismaClient.currency.findFirst({
+    const result = await this.prismaClient.currency.findUnique({
       where: {
         code
       }
