@@ -20,6 +20,7 @@ export class CurrencyService {
   }
   
   async convertCurrency(fromCode: string, toCode: string, amount: string) {
+    if(fromCode === toCode) return amount;
     const fromCurrency = await this.currencyRepository.findByCurrencyCode(fromCode);
     const toCurrency = await this.currencyRepository.findByCurrencyCode(toCode);
     if(fromCurrency && toCurrency) {
