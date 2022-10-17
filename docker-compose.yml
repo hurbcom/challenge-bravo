@@ -1,0 +1,15 @@
+version: "3.4"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: build
+    command: ["yarn", "start:dev"]
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./.env
+    volumes:
+      - ./:/app
+      - /app/node_modules
