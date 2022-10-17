@@ -18,7 +18,10 @@ export class CurrencyController {
     const value = await this.currencyService.convertCurrency(String(from), String(to), String(amount));
     return res.status(200).json(value);
   }
-  deleteCurrency(req: Request, res: Response) {
-    return {'Hello': 'World'};
+  async deleteCurrency(req: Request, res: Response) {
+    const {currencyCode} = req.query;
+    if(!currencyCode) return res.status(400).json({message: 'Missing arguments'});
+    await this.currencyService.deleteCurrency(String(currencyCode));
+    return res.status(200);
   }
 }

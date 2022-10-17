@@ -28,4 +28,12 @@ export class MongoCurrencyRepository implements CurrencyRepository {
       }
     });
   }    
+
+  async deleteByCurrencyCode(code: string): Promise<void> {
+    await this.prismaClient.currency.delete({
+      where: {
+        code
+      }
+    });
+  }
 }

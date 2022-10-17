@@ -19,7 +19,7 @@ export class CurrencyService {
     return currency;
   }
   
-  async convertCurrency(fromCode: string, toCode: string, amount: string) {
+  async convertCurrency(fromCode: string, toCode: string, amount: string): Promise<string> {
     if(fromCode === toCode) return amount;
     const fromCurrency = await this.currencyRepository.findByCurrencyCode(fromCode);
     const toCurrency = await this.currencyRepository.findByCurrencyCode(toCode);
@@ -35,6 +35,10 @@ export class CurrencyService {
       return new Currency(fromCode, toValue).convert(fromCurrency, amount);
     }
     return this.externalCurrencyAPI.convert(fromCode, toCode, amount);
+  }
+
+  async deleteCurrency(code: string): Promise<void> {
+    return this.currencyRepository.deleteByCurrencyCode(code);
   }
 }
 
