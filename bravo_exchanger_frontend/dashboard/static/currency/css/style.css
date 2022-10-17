@@ -1,0 +1,60 @@
+@font-face {
+    font-family: Nunito, sans-serif;
+    src: url('//fonts.googleapis.com/css?family=Nunito');
+}
+
+h3 {
+    font-size: 24px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 700;
+    line-height: 26.4px;
+}
+
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.header {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.form-content {
+    margin: 0px 79px;
+}
+
+form button {
+    background: #675AFE;
+    transition: 0.3s ease;
+}
+
+form button:hover {
+    background: #4534fe;
+}
+
+/* Customize container */
+@media (min-width: 768px) {
+    .container {
+        max-width: 730px;
+    }
+}
+
+.general-content {
+    text-align: center;
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.general-content p {
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+@media screen and (min-width: 768px) {
+    .header {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}

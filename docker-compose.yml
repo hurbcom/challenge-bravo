@@ -1,0 +1,49 @@
+version: '3.7'
+
+networks:
+  hurb:
+
+
+services:
+  backend:
+    build: ./bravo_exchanger
+    image: hurb/bravo_exchanger
+    environment:
+      - CACHE_BACKEND=django_redis.cache.RedisCache
+      - CACHE_LOCATION=redis://cache:6379
+      - DEBUG=1
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_PASSWORD=postgres
+    networks:
+      - hurb
+    ports:
+      - 8001:8001
+    restart: always
+
+  frontend:
+    build: ./bravo_exchanger_frontend
+    image: hurb/bravo_exchanger_frontend
+    environment:
+      - CURRENCY_API_URL=http://backend:8001
+    networks:
+      - hurb
+    ports:
+      - 8000:8000
+    restart: always
+
+  cache:
+    image: redis:alpine
+    networks:
+      - hurb
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    networks:
+      - hurb
+    environment:
+      POSTGRES_PASSWORD: postgres
