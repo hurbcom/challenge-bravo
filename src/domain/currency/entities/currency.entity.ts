@@ -1,13 +1,12 @@
 import Big from 'big.js';
-import { randomUUID } from 'crypto';
 
 export class Currency {
-  private _id: string;
+  private _id: string | undefined;
   private _code: string;
   private _backingCurrency: string;
   private _unitCost: string;
 
-  constructor(code: string, unitCost: string, id = randomUUID(), backingCurrency = 'USD') {
+  constructor(code: string, unitCost: string, backingCurrency = 'USD', id?: string) {
     this._id = id;
     this._code = code;
     this._unitCost = unitCost;
@@ -27,7 +26,7 @@ export class Currency {
     }
   }
 
-  get id(): string {
+  get id(): string | undefined {
     return this._id;
   }
   
