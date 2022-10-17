@@ -12,7 +12,7 @@ datasource db {
 
 model Currency {
   id               String @id @default(auto()) @map("_id") @db.ObjectId
-  code             String
+  code             String @unique
   backingCurrency  String @default("USD")
   unitCost         String
 }
