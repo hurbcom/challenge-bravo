@@ -1,4 +1,4 @@
-import { ExpressServer } from './server'
+import { ExpressServer } from './http/server'
 
 const server = new ExpressServer().express
 

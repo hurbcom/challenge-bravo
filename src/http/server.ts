@@ -1,9 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes'
-import { AppDataSource } from './configs/typeorm.config';
-import { redisClient } from './configs/redis.config';
+import { AppDataSource } from '../configs/typeorm.config';
+import { redisClient } from '../configs/redis.config';
 import 'dotenv/config'
+import { errorMiddleware } from './middlewares/error.middleware';
 
 export class ExpressServer {
 	public express: express.Application = express();
@@ -14,8 +15,9 @@ export class ExpressServer {
 
 	private execute(): void {
 		this.configs()
-		this.middlewares()
+		this.payloadMiddlewares()
 		this.routes()
+		this.errorMiddlewares()
 		this.database()
 		this.redis()
 	}
@@ -24,9 +26,13 @@ export class ExpressServer {
 		this.express.set('port', process.env.PORT)
 	}
 
-	private middlewares(): void {
+	private payloadMiddlewares(): void {
 		this.express.use(bodyParser.json())
 		this.express.use(bodyParser.urlencoded({ extended: true }))
+	}
+
+	private errorMiddlewares(): void {
+		this.express.use(errorMiddleware)
 	}
 
 	private routes(): void {
