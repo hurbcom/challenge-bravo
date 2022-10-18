@@ -7,7 +7,7 @@ export class DeleteCurrencyService {
     try {
       const currencyRepository = container.resolve(CurrencyRepository)
       const deleteCurrency = await currencyRepository.deleteByCode(code)
-      if(!deleteCurrency) throw new Error ('Was not possible to delete this currency')
+      if(!deleteCurrency) throw Error ('Was not possible to delete this currency')
       return true
     } catch (error) {
       throw error
