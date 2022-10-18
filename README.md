@@ -2,6 +2,8 @@
 
 # Iniciando 🛠
 
+## Requisitos: docker, docker-compose
+
 ## Variaveis de desenvolvimento necessárias
 ```bash
 # É possivel simplesmente transformar o .env.example em .env
@@ -29,7 +31,7 @@ $ npm start
 $ npm run setup:dev
 # Roda o setup e os testes
 $ npm run test
-# Roda somente os testes 
+# Roda somente os testes em watch mode
 $ npm run test:dev
 # Roda o teste de stress/carga
 $ npm run test:stress
@@ -45,5 +47,14 @@ $ npm run test:stress
 - Joi
 - Jest
 - Autocannon
+
+# Arquitetura
+
+- Modularização por contexto
+- Modulo: controller, services, repositories, resources
+- Cache de requisições por 30s (tempo de atualização da API externa)
+- Middlewares de validação de payload
+- Middleware de error
+- Testes (autocannon e jest)
 
 # [Documentação Postman](./doc/Desafio%20Hotel%20Urbano.postman_collection.json) 📖
