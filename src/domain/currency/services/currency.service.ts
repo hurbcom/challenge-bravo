@@ -10,6 +10,10 @@ export class CurrencyService {
   ) {}
   
   async createCurrency(createCurrencyDTO: CreateCurrencyDTO): Promise<Currency> {
+    const exists = await this.currencyRepository.findByCurrencyCode(createCurrencyDTO.code);
+    if(exists) {
+      throw new Error('Currency already exists');
+    }
     const currency = new Currency(
       createCurrencyDTO.code,
       createCurrencyDTO.unitCost,
