@@ -39,7 +39,7 @@ Certo! agora que o banco de dados foi configurado é possível inserir dados fic
 ##### Executando Seeders
 ```bash
 # Executar seeders
-yarn seed:run
+yarn typeorm:seed
 ```
 Prontinho! agora a aplicação já está configurada e populada para desenvolvimento.
 
