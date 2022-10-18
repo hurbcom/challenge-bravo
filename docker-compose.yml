@@ -1,7 +1,29 @@
 version: "3.8"
 services:
+    app:
+        build:
+            context: .
+            dockerfile: iac/containers/node/Dockerfile
+            target: installer
+        command: ["yarn", "start:dev"]
+        ports:
+            - "3000:3000"
+        env_file:
+            - .env.example
+        environment:
+            DB_HOST: postgres
+            REDIS_HOST: redis
+        volumes:
+            - ./:/app
+            - /app/node_modules
+        depends_on:
+            - postgres
+            - redis
+
     postgres:
-        image: postgres:alpine
+        build:
+            context: .
+            dockerfile: iac/containers/postgres/Dockerfile
         container_name: postgres
         restart: always
         environment:
@@ -12,7 +34,9 @@ services:
         ports:
             - "5432:5432"
     redis:
-        image: redis:alpine
+        build:
+            context: .
+            dockerfile: iac/containers/redis/Dockerfile
         container_name: redis
         restart: always
         volumes:
