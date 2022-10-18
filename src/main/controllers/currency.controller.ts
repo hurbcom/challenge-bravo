@@ -22,7 +22,7 @@ export class CurrencyController {
     const {from, to, amount} = req.query;
     if(!from || !to || !amount) return res.status(400).json({message: 'Missing arguments'});
     const value = await this.currencyService.convertCurrency(String(from), String(to), String(amount));
-    return res.status(200).json(value);
+    return res.status(200).json({value});
   }
   async deleteCurrency(req: Request, res: Response) {
     const {currencyCode} = req.query;
