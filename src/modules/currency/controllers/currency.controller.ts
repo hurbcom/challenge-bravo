@@ -5,6 +5,8 @@ import { CurrencyConversionRequestDTO } from '../resources/currency-conversion/d
 import { CurrencyConversionService } from '../resources/currency-conversion/services/currency-conversion.service';
 import { CreateCurrencyService } from '../resources/create-currency/services/create-currency.service';
 import { CreateCurrencyRequestDTO } from '../resources/create-currency/dtos/create-currency.dto';
+import { DeleteCurrencyService } from '../resources/delete-currency/services/delete-currency.service';
+import { DeleteCurrencyRequestDTO } from '../resources/delete-currency/dtos/delete-currency.dto';
 
 export class CurrencyController {
   
@@ -36,7 +38,17 @@ export class CurrencyController {
     }
   }
 
-  public async removeCurrency() {
-    
+  public async deleteCurrency(req: Request<{}, {}, {}, {}>, res: Response): Promise<Response> {
+    try {
+      const deleteCurrencyService = container.resolve(DeleteCurrencyService);
+      const payload = req.query as DeleteCurrencyRequestDTO
+      const response = await deleteCurrencyService.execute(payload.code)
+      return res.status(204).send(response)
+    } catch (error) {
+      return res.status(400).send({
+        message: 'Was not possible to execute your request',
+        error: error
+      })
+    }
   }
 }

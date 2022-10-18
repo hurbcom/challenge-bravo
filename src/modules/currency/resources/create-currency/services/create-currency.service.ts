@@ -5,7 +5,6 @@ import { CurrencyRepository } from '../../../repository/currency.repository';
 import { CreateCurrencyRequestDTO } from '../dtos/create-currency.dto';
 
 export class CreateCurrencyService {
-
   public async execute(data: CreateCurrencyRequestDTO): Promise<CurrencyEntity> {
     try {
       const currencyRepository = container.resolve(CurrencyRepository)

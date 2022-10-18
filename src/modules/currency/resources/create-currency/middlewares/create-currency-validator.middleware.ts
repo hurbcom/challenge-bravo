@@ -21,7 +21,7 @@ export class CreateCurrencyValidator {
         .required()
     })
 
-    const validation = schema.validate(req.query, { abortEarly: false })
+    const validation = schema.validate(req.body, { abortEarly: false })
 
     if(validation.error) {
       return res.status(400).send({
