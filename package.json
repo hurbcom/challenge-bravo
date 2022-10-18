@@ -10,7 +10,7 @@
     "start": "node dist/src/index.js",
     "start:dev": "concurrently \"npm run start:watch\" \"npm run compile:dev\"",
     "start:watch": "nodemon dist/src/index.js",
-    "test": "jest",
+    "test": "npm run setup:dev && jest",
     "test:dev": "jest --watch",
     "test:stress": "autocannon http://localhost:8080/currency/conversion?from=EUR&amount=1&to=BRL -d 10 -c 10 -w 1",
     "compile": "tsc",
