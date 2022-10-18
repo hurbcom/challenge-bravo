@@ -21,6 +21,8 @@ export class CurrencyConversionService {
   }
 
   private async findCurrencyUnitCostByCode(code: string): Promise<string> {
+    if(code === apiConfigs.backeCurrency.code) return '1'
+
     const currencyPriceService = container.resolve(CurrencyPriceService)
     const currencyRepository = container.resolve(CurrencyRepository)
     const cacheService = container.resolve(CacheService)
@@ -34,7 +36,7 @@ export class CurrencyConversionService {
     
     const currencyUnitCost = externalApiCurrencySearch?.bid || localCurrencySearch?.unitCost
     await cacheService.setRedisCache(code, currencyUnitCost)
-    
+
     return currencyUnitCost
   }
 
