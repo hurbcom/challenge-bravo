@@ -1,5 +1,5 @@
 export interface CreateCurrencyRequestDTO {
-  currencyCode: string,
+  code: string,
   backedCurrencyCode: string,
   unitCost: string
 }

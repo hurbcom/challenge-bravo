@@ -4,7 +4,7 @@ import joi from 'joi'
 export class CreateCurrencyValidator {
   public async validateSchema(req: Request, res: Response, next: NextFunction) {
     const schema = joi.object({
-      currencyCode: joi.string()
+      code: joi.string()
         .alphanum()
         .min(3)
         .max(10)
