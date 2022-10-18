@@ -5,7 +5,8 @@ import { CurrencyConversionRequestDTO } from '../resources/currency-conversion/d
 import { CurrencyConversionService } from '../resources/currency-conversion/services/currency-conversion.service';
 
 export class CurrencyController {
-  public async convertCurrency(req: Request<{}, {}, {}, {}>, res: Response): Promise<Response> {
+  
+  public async currencyConversion(req: Request<{}, {}, {}, {}>, res: Response): Promise<Response> {
     try {
       const currencyConversionService = container.resolve(CurrencyConversionService);
       const payload = req.query as CurrencyConversionRequestDTO

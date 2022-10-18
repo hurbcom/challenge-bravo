@@ -7,4 +7,4 @@ export const currencyRouter = Router()
 const currencyConversionController = new CurrencyController()
 const currencyConversionValidator = new CurrencyConversionValidator()
 
-currencyRouter.get('/conversion', currencyConversionValidator.validateSchema, currencyConversionController.convertCurrency)
+currencyRouter.get('/conversion', currencyConversionValidator.validateSchema, currencyConversionController.currencyConversion)
