@@ -27,6 +27,7 @@ const MockRepository = () => ({
   create: jest
     .fn()
     .mockImplementation((currency: Currency) => Promise.resolve(currency)),
+  deleteByCurrencyCode: jest.fn()
 });
 
 const MockAPI = () => ({
@@ -37,7 +38,7 @@ describe('Currency service unit tests', () => {
   const currencyService = new CurrencyService(MockRepository(), MockAPI());
   it('should create currency', async () => {
     const input = {
-      code: 'HURB',
+      code: 'HURB2',
       unitCost: '100'
     };
 
@@ -47,6 +48,18 @@ describe('Currency service unit tests', () => {
     expect(currency.unitCost).toBe(input.unitCost);
     expect(currency.code).toBe(input.code);
   });
+
+  it('should throw Currency already exists', async () => {
+    const input = {
+      code: 'HURB',
+      unitCost: '100'
+    };
+
+    const currency = currencyService.createCurrency(input);
+
+    expect(currency).rejects.toThrow('Currency already exists');
+  });
+
 
   it('should convert customs currencies', async () => {
     const result = await currencyService.convertCurrency('BENIN','HURB','10');
