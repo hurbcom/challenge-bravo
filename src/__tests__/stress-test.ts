@@ -5,4 +5,4 @@ autocannon.default({
   connections: 50,
   amount: 1000,
   duration: 1,
-}, console.log)
+}, (err, result) => console.log(result))
