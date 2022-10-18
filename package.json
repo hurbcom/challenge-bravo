@@ -12,7 +12,7 @@
     "start:watch": "nodemon dist/src/index.js",
     "test": "jest",
     "test:dev": "jest --watch",
-    "test:stress": "cross-env NODE_ENV=development ts-node ./src/__tests__/stress-test.ts",
+    "test:stress": "autocannon http://localhost:8080/currency/conversion?from=EUR&amount=1&to=BRL -d 10 -c 10 -w 1",
     "compile": "tsc",
     "compile:dev": "tsc -w",
     "typeorm": "cross-env NODE_ENV=development typeorm-ts-node-esm -d ./src/configs/typeorm.config.ts",
