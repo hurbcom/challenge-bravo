@@ -7,8 +7,8 @@ Esta aplicação faz parte do teste de habilidade e competências técnicas da H
 
 O objetivo principal é a construção de uma API que possibilite a conversão entre moedas com valores reais e ficticios.
 
-É possível consultar a [documentação da API](https://hurb-bravo-challenge.herokuapp.com/docs) e realizar testes a partir do endpoint
-https://hurb-bravo-challenge.herokuapp.com/
+É possível consultar a [documentação da API](https://challenge-bravo.herokuapp.com/docs) e realizar testes a partir do endpoint
+https://challenge-bravo.herokuapp.com/
 
 ## Ferramentas e bibliotecas 🔨
 - [Nestjs](https://docs.nestjs.com/)
