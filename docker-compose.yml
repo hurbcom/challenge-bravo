@@ -1,0 +1,17 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:alpine
+    restart: 'no'
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: development
+      POSTGRES_DB: desafio-hurb
+      PGDATA: /var/lib/postgres
+  redis:
+    image: redis:7.0.5-alpine
+    restart: 'no'
+    ports:
+      - '6379:6379'
