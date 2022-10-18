@@ -4,6 +4,9 @@
   "description": "desafio para hotelurbano",
   "main": "dist/index.js",
   "scripts": {
+    "preinstall": "docker-compose up -d",
+    "postinstall": "npm run compile",
+    "prestart": "npm run typeorm:m:run",
     "start": "node dist/index.js",
     "start:dev": "concurrently \"npm run start:watch\" \"npm run compile:dev\"",
     "start:watch": "nodemon dist/index.js",
