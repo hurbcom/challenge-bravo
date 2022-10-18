@@ -10,14 +10,10 @@ import { CacheService } from '../../../../cache/cache.service';
 export class CurrencyConversionService {
 
   public async execute(data: CurrencyConversionRequestDTO): Promise<CurrencyConversionResponseDTO> {
-    try {
-      const fromCurrencyUnitCost = await this.findCurrencyUnitCostByCode(data.from)
-      const toCurrencyUnitCost = await this.findCurrencyUnitCostByCode(data.to)
-      const conversionPrice = await this.converCurrenciesUnitCosts(fromCurrencyUnitCost, toCurrencyUnitCost, data.amount)
-      return { value: conversionPrice }
-    } catch (error) {
-      throw error
-    }
+    const fromCurrencyUnitCost = await this.findCurrencyUnitCostByCode(data.from)
+    const toCurrencyUnitCost = await this.findCurrencyUnitCostByCode(data.to)
+    const conversionPrice = await this.converCurrenciesUnitCosts(fromCurrencyUnitCost, toCurrencyUnitCost, data.amount)
+    return { value: conversionPrice }
   }
 
   private async findCurrencyUnitCostByCode(code: string): Promise<string> {

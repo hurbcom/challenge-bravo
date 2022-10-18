@@ -36,8 +36,8 @@ export class CurrencyController {
     try {
       const deleteCurrencyService = container.resolve(DeleteCurrencyService);
       const payload = req.query as DeleteCurrencyRequestDTO
-      const response = await deleteCurrencyService.execute(payload.code)
-      return res.status(204).send(response)
+      await deleteCurrencyService.execute(payload.code)
+      return res.sendStatus(204)
     } catch (error) {
       next(error)
     }
