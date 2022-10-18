@@ -2,7 +2,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes'
 import { AppDataSource } from './configs/typeorm.config';
+import { redisClient } from './configs/redis.config';
 import 'dotenv/config'
+
 export class ExpressServer {
 	public express: express.Application = express();
 
@@ -15,6 +17,7 @@ export class ExpressServer {
 		this.middlewares()
 		this.routes()
 		this.database()
+		this.redis()
 	}
 
 	private configs (): void {
@@ -32,6 +35,10 @@ export class ExpressServer {
 
 	private async database(): Promise<void> {
 		await AppDataSource.initialize()
+	}
+
+	private async redis(): Promise<void> {
+		//await redisClient.connect()
 	}
 }
 
