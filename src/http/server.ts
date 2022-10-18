@@ -19,7 +19,6 @@ export class ExpressServer {
 		this.routes()
 		this.errorMiddlewares()
 		this.database()
-		this.redis()
 	}
 
 	private configs (): void {
@@ -41,10 +40,6 @@ export class ExpressServer {
 
 	private async database(): Promise<void> {
 		await AppDataSource.initialize()
-	}
-
-	private async redis(): Promise<void> {
-		//await redisClient.connect()
 	}
 }
 
