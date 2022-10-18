@@ -15,6 +15,7 @@ https://challenge-bravo.herokuapp.com/
 - [TypeORM](https://docs.nestjs.com/)
 - [Nestjs Seeder](https://github.com/edwardanthony/nestjs-seeder)
 - [Swagger](https://swagger.io/docs/)
+- [Redis](https://redis.io/documentation)
 
 ## Executando a aplicação 🚀
 
