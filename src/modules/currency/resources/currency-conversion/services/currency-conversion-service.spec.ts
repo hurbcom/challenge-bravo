@@ -1,4 +1,4 @@
-import { beforeAll, beforeEach, describe, expect, it, jest, test} from '@jest/globals';
+import { beforeAll, describe, expect, it} from '@jest/globals';
 import { AppDataSource } from '../../../../../configs/typeorm.config';
 import { CurrencyConversionService } from './currency-conversion.service'
 
@@ -17,10 +17,18 @@ describe('Should test delete currency service', () => {
       to: 'EUR',
       amount:'1'
     })
-    expect(result.value).toBeGreaterThanOrEqual
+
+    expect(result).toBeTruthy()
+    expect(+result.value).toBeGreaterThan(0)
+    expect(result.value).toEqual(expect.any(String));
   })
 
-  it('Should return false when delete HOLA (no exist) from database', async ()=> {
-    //expect(() => deleteCurrencyService.execute('HOLA')).rejects.toThrowError() 
+  it('Should throw error when use unrecognized currency code', async ()=> {
+    const result = currencyConversionService.execute({
+      from: 'CRAZY',
+      to: 'EUR',
+      amount:'1'
+    })
+    expect(result).rejects.toThrowError()
   })
 })

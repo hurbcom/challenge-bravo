@@ -13,10 +13,13 @@ describe('Should test delete currency service', () => {
 
   it('Should return true when delete HURB (seed) from database', async ()=> {
     const result = await deleteCurrencyService.execute('HURB')
+    
+    expect(result).toBeTruthy()
     expect(result).toBe(true)
   })
 
-  it('Should return false when delete HOLA (no exist) from database', async ()=> {
-    expect(() => deleteCurrencyService.execute('HOLA')).rejects.toThrowError() 
+  it('Should throw error when delete HOLA (no exist) from database', async ()=> {
+    const result = deleteCurrencyService.execute('HOLA')
+    expect(result).rejects.toThrowError() 
   })
 })
