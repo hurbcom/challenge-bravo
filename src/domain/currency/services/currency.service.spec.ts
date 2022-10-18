@@ -31,11 +31,16 @@ const MockRepository = () => ({
 });
 
 const MockAPI = () => ({
-  convert: jest.fn().mockImplementation((from, to, amount)=> Promise.resolve(String(amount * 10)))
+  convert: jest.fn().mockImplementation(()=> Promise.resolve('1'))
+});
+
+const MockCacheManager = () => ({
+  getCache:jest.fn(),
+  setCache:jest.fn()
 });
 
 describe('Currency service unit tests', () => {
-  const currencyService = new CurrencyService(MockRepository(), MockAPI());
+  const currencyService = new CurrencyService(MockRepository(), MockAPI(), MockCacheManager());
   it('should create currency', async () => {
     const input = {
       code: 'HURB2',
@@ -67,7 +72,7 @@ describe('Currency service unit tests', () => {
   });
 
   it('should convert real currencies', async () => {
-    const result = await currencyService.convertCurrency('USD','BRL','10');
-    expect(result).toBe('100');
+    const result = await currencyService.convertCurrency('USD','BRL','10.5');
+    expect(result).toBe('10.5');
   });
 });
