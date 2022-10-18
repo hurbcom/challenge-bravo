@@ -1,6 +1,6 @@
 # Desafio - Hotel Urbano
 
-# Iniciando
+# Iniciando 🛠
 
 ## Variaveis de desenvolvimento necessárias
 ```bash
@@ -23,23 +23,27 @@ $ npm install
 $ npm start
 ```
 
-
 ## Rodando testes
 ```bash
+# Setup do banco para os testes
+$ npm run setup:dev
+# Roda o setup e os testes
 $ npm run test
-$ npm run test:watch
+# Roda somente os testes 
+$ npm run test:dev
+# Roda o teste de stress/carga
 $ npm run test:stress
 ```
 
-## [Documentação Postman](./doc/Desafio%20Hotel%20Urbano.postman_collection.json)
+# Tecnologias 💻
 
-
-# Tecnologias
-
-- Express
-- Joi
+- Typescript
 - Postgres
 - Redis
+- Express
 - TypeORM
-- Typescript
+- Joi
+- Jest
 - Autocannon
+
+# [Documentação Postman](./doc/Desafio%20Hotel%20Urbano.postman_collection.json) 📖
