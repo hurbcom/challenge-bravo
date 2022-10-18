@@ -1,6 +1,6 @@
 import { DeleteResult, Repository } from "typeorm";
 import { AppDataSource } from "../../../configs/typeorm.config";
-import { CreateCurrencyRequestDTO } from "../dtos/create-currency.dto";
+import { CreateCurrencyRequestDTO } from "../resources/create-currency/dtos/create-currency.dto";
 import { CurrencyEntity } from "../entities/currency.entity";
 
 export class CurrencyRepository {

@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { CurrencyConversionRequestDTO } from '../dtos/currency-conversion.dto';
-import { CurrencyConversionService } from '../services/currency-conversion.service';
+import { CurrencyConversionRequestDTO } from '../resources/currency-conversion/dtos/currency-conversion.dto';
+import { CurrencyConversionService } from '../resources/currency-conversion/services/currency-conversion.service';
 
 export class CurrencyController {
   public async convertCurrency(req: Request<{}, {}, {}, {}>, res: Response): Promise<Response> {
@@ -17,5 +17,13 @@ export class CurrencyController {
         error: error
       })
     }
+  }
+
+  public async createCurrency() {
+
+  }
+
+  public async removeCurrency() {
+    
   }
 }

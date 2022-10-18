@@ -5,7 +5,7 @@ export class CurrencyEntity {
 	@PrimaryGeneratedColumn('uuid')
 	public id: string
 
-	@Column({ nullable: false })
+	@Column({ nullable: false, unique: true })
 	public code: string
 
 	@Column({ name: 'backed_currency_code', nullable: false })

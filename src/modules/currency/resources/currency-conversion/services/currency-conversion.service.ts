@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import bigjs from 'big.js'
 import { container } from 'tsyringe';
-import { CurrencyPriceService } from '../../external-currency-api/services/currency-price.service';
+import { CurrencyPriceService } from '../../../../external-currency-api/services/currency-price.service';
 import { CurrencyConversionRequestDTO, CurrencyConversionResponseDTO } from "../dtos/currency-conversion.dto";
-import { CurrencyRepository } from '../repository/currency.repository';
-import { apiConfigs } from '../../../configs/api.config';
+import { CurrencyRepository } from '../../../repository/currency.repository';
+import { apiConfigs } from '../../../../../configs/api.config';
 
 export class CurrencyConversionService {
 

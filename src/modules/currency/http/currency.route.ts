@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { CurrencyController } from '../controllers/currency.controller'
-import { CurrencyConversionValidator } from '../middlewares/currency-conversion-validator.middleware'
+import { CurrencyConversionValidator } from '../resources/currency-conversion/middlewares/currency-conversion-validator.middleware'
 
 export const currencyRouter = Router()
 
