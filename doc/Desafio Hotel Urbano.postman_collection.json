@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "f9a9431f-072c-41e9-9f42-837f36c01d38",
+		"name": "Desafio Hotel Urbano",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14647797"
+	},
+	"item": [
+		{
+			"name": "Convert currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/currency/conversion?from=CHALLENGE&amount=1&to=USD",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currency",
+						"conversion"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "CHALLENGE",
+							"description": "From currency code"
+						},
+						{
+							"key": "amount",
+							"value": "1",
+							"description": "Amount to convert"
+						},
+						{
+							"key": "to",
+							"value": "USD",
+							"description": "To currency code"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create currency",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "code",
+							"value": "CHALLENGE",
+							"type": "text"
+						},
+						{
+							"key": "backedCurrencyCode",
+							"value": "USD",
+							"type": "text"
+						},
+						{
+							"key": "unitCost",
+							"value": "100",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/currency",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currency"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete currency",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/currency?code=CHALLENGE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currency"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "CHALLENGE"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
