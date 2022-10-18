@@ -8,9 +8,7 @@ Bravo challenge made using NodeJS, Express and MongoDB.
 First of all it was interesting deal with a "money api", to handle with imprecision of floating points i've used an amazining library called Big.js.
 I decided to go with some DDD strategies to keep my domain cleanest as possible, perhaps i didn`t go all the way down avoiding acidental complexity.
 I chosed mongo + prisma cause in this api we don't need relations at all, maybe my worst decision here, the chemistry between this two technologies is pretty awfull, because of limitations i've lost a bunch o time figuring out some configurations, btw all solved using Mongo Atlas cluster.
-Unfortunelly i couldn't implement redis, it would be wonderfull to handle with req/sec.
 ### Improvments
-- Use redis to cache request to save resource
 - Implement Errors filter
 - Implement Logger
 ## Setting Up
