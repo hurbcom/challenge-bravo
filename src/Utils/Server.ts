@@ -1,24 +1,24 @@
-import express, { Application } from "express";
+import express, { Application } from 'express'
+import cors from 'cors'
 
-import { Router, Request, Response } from "express";
+import { CurrencyRoutes } from 'Controllers/CurrencyController'
 
 const routes = (app: Application) => {
-    const route = Router();
+  app.use('/currency', CurrencyRoutes())
+}
 
-    route.get("/", (req: Request, res: Response) => {
-        res.json({ message: "hello world with Typescript" });
-    });
-
-    app.use(route);
-};
+const modules = (app: Application) => {
+  app.use(cors())
+}
 
 export const init = () => {
-    const app = express();
+  const app = express()
 
-    routes(app);
+  routes(app)
+  modules(app)
 
-    const port = 3000;
-    app.listen(port, () => {
-        console.log(`Server started at: http://localhost:${port}`);
-    });
-};
+  const port = 3000
+  app.listen(port, () => {
+    console.log(`Server started at: http://localhost:${port}`)
+  })
+}

@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+  # myapp:
+  #   image: 'YOUR_APPLICATION_IMAGE'
