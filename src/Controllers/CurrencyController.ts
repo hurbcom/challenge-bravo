@@ -17,7 +17,11 @@ export const GetCurrencyByParameter = async (req: Request, res: Response) => {
 
     const { from, to, amount } = query
 
-    const data = await convertCoin(from, to, +amount)
+    const data = await convertCoin(
+      from.toUpperCase(),
+      to.toUpperCase(),
+      +amount
+    )
     return successResponse(res, { data })
   } catch (error) {
     return errorResponse(res, error)

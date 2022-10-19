@@ -1,3 +1,3 @@
-import { init } from "Utils/Server";
+import { init } from 'Utils/Server'
 
-init();
+init()
