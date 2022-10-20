@@ -1,7 +1,7 @@
 # Bravo Challenge
 ## An API to currency conversion
 
-# **Warning: ** Not complete + need refactor!
+# **WARNING:** Not complete + need refactor!
 
 Descprition in challenge bravo repository [link](https://github.com/hurbcom/challenge-bravo)
 
