@@ -9,6 +9,7 @@ const routes = (app: Application) => {
 }
 
 const modules = (app: Application) => {
+  app.use(express.json())
   app.use(cors())
 }
 
@@ -19,9 +20,9 @@ const midlewares = (app: Application) => {
 export const init = () => {
   const app = express()
 
+  modules(app)
   midlewares(app)
   routes(app)
-  modules(app)
 
   const port = 3000
   app.listen(port, () => {

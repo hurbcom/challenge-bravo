@@ -5,3 +5,12 @@ export const ValidateGetCurrencyByParameter = Joi.object({
   to: Joi.string().required(),
   amount: Joi.string().required()
 })
+
+export const ValidateCreateCurrency = Joi.object({
+  from: Joi.string().required(),
+  value: Joi.number().required()
+})
+
+export const ValidateRemoveCurrency = Joi.object({
+  from: Joi.string().required()
+})

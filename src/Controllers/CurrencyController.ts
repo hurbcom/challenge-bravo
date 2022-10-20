@@ -1,9 +1,18 @@
 import { Request, Response, Router } from 'express'
+import { createCurrency, deleteCurrency } from 'Repository/CurrenciesRepository'
 import { convertCoin } from 'Services/CurrencyService'
 import RequestError from 'Utils/RequestError'
 import { errorResponse, successResponse } from 'Utils/Responses'
-import { TGetCurrencyByParameter } from './types'
-import { ValidateGetCurrencyByParameter } from './Validations'
+import {
+  TCreateCurrency,
+  TGetCurrencyByParameter,
+  TDeleteCurrency
+} from './types'
+import {
+  ValidateGetCurrencyByParameter,
+  ValidateCreateCurrency,
+  ValidateRemoveCurrency
+} from './Validations'
 
 export const GetCurrencyByParameter = async (req: Request, res: Response) => {
   try {
@@ -28,10 +37,50 @@ export const GetCurrencyByParameter = async (req: Request, res: Response) => {
   }
 }
 
+export const CreateNewCurrency = async (req: Request, res: Response) => {
+  try {
+    const body = req.body as TCreateCurrency
+
+    const validation = ValidateCreateCurrency.validate(body)
+
+    if (validation.error) {
+      throw new RequestError(validation.error.message, {}, 400)
+    }
+
+    const { from, value } = body
+
+    await createCurrency(from.toUpperCase(), value)
+    return successResponse(res, {}, 201)
+  } catch (error) {
+    return errorResponse(res, error)
+  }
+}
+
+export const RemoveCurrency = async (req: Request, res: Response) => {
+  try {
+    const body = req.query as TDeleteCurrency
+
+    const validation = ValidateRemoveCurrency.validate(body)
+
+    if (validation.error) {
+      throw new RequestError(validation.error.message, {}, 400)
+    }
+
+    const { from } = body
+
+    await deleteCurrency(from.toUpperCase())
+    return successResponse(res, {}, 202)
+  } catch (error) {
+    return errorResponse(res, error)
+  }
+}
+
 export const CurrencyRoutes = () => {
   const route = Router()
 
   route.get('/', GetCurrencyByParameter)
+  route.post('/', CreateNewCurrency)
+  route.delete('/', RemoveCurrency)
 
   return route
 }

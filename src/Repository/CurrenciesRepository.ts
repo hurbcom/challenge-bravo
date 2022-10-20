@@ -29,8 +29,7 @@ const requestCoin = async (
 
     return response.data[`${keyWithout}`]
   } catch (error: any) {
-    console.log('Request Error:::', error?.response?.data)
-    throw new RequestError('Error on request coins')
+    throw new RequestError('Coin not found', {}, 400)
   }
 }
 
@@ -38,24 +37,39 @@ export const retriveValueCoin = async (
   from: string,
   to: string
 ): Promise<TRetriveValueCoin> => {
-  if (!currencies[from]) {
-    const dataCoin = await requestCoin(from, 'USD')
-    currencies[from] = +dataCoin.bid
-  }
-
-  if (!currencies[to]) {
-    let dataCoin = 1
-
-    if (to !== 'USD') {
-      const response = await requestCoin('USD', to)
-      dataCoin = +response.bid
+  try {
+    if (!currencies[from]) {
+      const dataCoin = await requestCoin(from, 'USD')
+      currencies[from] = +dataCoin.bid
     }
 
-    currencies[to] = dataCoin
-  }
+    if (!currencies[to]) {
+      let dataCoin = 1
 
-  return {
-    fromQuotation: currencies[from],
-    toQuotation: currencies[to] || 1
+      if (to !== 'USD') {
+        const response = await requestCoin('USD', to)
+        dataCoin = +response.bid
+      }
+
+      currencies[to] = dataCoin
+    }
+
+    return {
+      fromQuotation: currencies[from],
+      toQuotation: currencies[to] || 1
+    }
+  } catch (error) {
+    console.log('error:::', error)
+    throw error
   }
+}
+
+export const createCurrency = (from: string, value: number): number => {
+  currencies[from] = value
+
+  return value
+}
+
+export const deleteCurrency = (from: string): void => {
+  delete currencies[from]
 }
