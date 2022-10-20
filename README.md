@@ -1,6 +1,8 @@
 # Bravo Challenge
 ## An API to currency conversion
 
+# Not complete + need refactor!
+
 Descprition in challenge bravo repository [link](https://github.com/hurbcom/challenge-bravo)
 
 ### Sumary
