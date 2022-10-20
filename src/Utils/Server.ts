@@ -3,29 +3,47 @@ import cors from 'cors'
 import morgan from 'morgan'
 
 import { CurrencyRoutes } from 'Controllers/CurrencyController'
+import { initRedisConnection } from './Redis'
 
 const routes = (app: Application) => {
+  console.log('Loading routes::::')
+
   app.use('/api/currency', CurrencyRoutes())
 }
 
 const modules = (app: Application) => {
+  console.log('Loading modules::::')
+
   app.use(express.json())
   app.use(cors())
 }
 
-const midlewares = (app: Application) => {
-  app.use(morgan(':method :url :response-time ms'))
+const databaseConnection = async () => {
+  console.log('Connecting to database::::')
+
+  await initRedisConnection()
 }
 
-export const init = () => {
+const midlewares = (app: Application) => {
+  console.log('Loading middlewares::::')
+
+  app.use(morgan(':method :url :response-time ms :status'))
+}
+
+export const init = async () => {
   const app = express()
 
   modules(app)
   midlewares(app)
   routes(app)
 
-  const port = 3000
+  await databaseConnection()
+
+  const port = process.env.PORT || 3000
+
   app.listen(port, () => {
-    console.log(`Server started at: http://localhost:${port}`)
+    console.log('\n+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+')
+    console.log(`| Server started at: http://localhost:${port} |`)
+    console.log('+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n')
   })
 }

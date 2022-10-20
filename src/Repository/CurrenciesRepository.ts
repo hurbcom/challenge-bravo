@@ -1,13 +1,7 @@
 import axios from 'axios'
+import { getRedisValue, removeRedisValue, setRedisValue } from 'Utils/Redis'
 import RequestError from 'Utils/RequestError'
-import {
-  TCurrencies,
-  TRequestCoin,
-  TRequestCoinBody,
-  TRetriveValueCoin
-} from './types'
-
-let currencies = {} as TCurrencies
+import { TRequestCoin, TRequestCoinBody } from './types'
 
 export const DEFAULT_COINS = ['BRL', 'EUR', 'BTC', 'ETH'] as string[]
 
@@ -33,43 +27,30 @@ const requestCoin = async (
   }
 }
 
-export const retriveValueCoin = async (
-  from: string,
-  to: string
-): Promise<TRetriveValueCoin> => {
+export const retriveCoinFromCache = async (coin: string) => {
   try {
-    if (!currencies[from]) {
-      const dataCoin = await requestCoin(from, 'USD')
-      currencies[from] = +dataCoin.bid
+    let currencies = await getRedisValue(coin)
+    if (currencies) {
+      return currencies
     }
 
-    if (!currencies[to]) {
-      let dataCoin = 1
+    const currencyFrom = await requestCoin(coin, 'USD')
 
-      if (to !== 'USD') {
-        const response = await requestCoin('USD', to)
-        dataCoin = +response.bid
-      }
+    await setRedisValue(coin, +currencyFrom.bid)
 
-      currencies[to] = dataCoin
-    }
-
-    return {
-      fromQuotation: currencies[from],
-      toQuotation: currencies[to] || 1
-    }
+    return +currencyFrom.bid
   } catch (error) {
-    console.log('error:::', error)
-    throw error
+    throw new RequestError('Coin not found', {}, 400)
   }
 }
 
-export const createCurrency = (from: string, value: number): number => {
-  currencies[from] = value
-
-  return value
+export const createCurrency = async (
+  from: string,
+  value: number
+): Promise<void> => {
+  await setRedisValue(from, value)
 }
 
-export const deleteCurrency = (from: string): void => {
-  delete currencies[from]
+export const deleteCurrency = async (from: string): Promise<void> => {
+  await removeRedisValue(from)
 }

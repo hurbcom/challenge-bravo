@@ -66,9 +66,9 @@ export const RemoveCurrency = async (req: Request, res: Response) => {
       throw new RequestError(validation.error.message, {}, 400)
     }
 
-    const { from } = body
+    const { coin } = body
 
-    await deleteCurrency(from.toUpperCase())
+    await deleteCurrency(coin.toUpperCase())
     return successResponse(res, {}, 202)
   } catch (error) {
     return errorResponse(res, error)
@@ -80,7 +80,7 @@ export const CurrencyRoutes = () => {
 
   route.get('/', GetCurrencyByParameter)
   route.post('/', CreateNewCurrency)
-  route.delete('/', RemoveCurrency)
+  route.delete('/:coin', RemoveCurrency)
 
   return route
 }

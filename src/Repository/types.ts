@@ -20,7 +20,3 @@ export type TRetriveValueCoin = {
   fromQuotation: number
   toQuotation: number
 }
-
-export type TCurrencies = {
-  [key: string]: number
-}

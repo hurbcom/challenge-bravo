@@ -10,5 +10,5 @@ export type TCreateCurrency = {
 }
 
 export type TDeleteCurrency = {
-  from: string
+  coin: string
 }

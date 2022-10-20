@@ -3,7 +3,20 @@ version: '2'
 services:
   redis:
     image: 'bitnami/redis:latest'
+    container_name: cache
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-  # myapp:
-  #   image: 'YOUR_APPLICATION_IMAGE'
+    ports:
+      - 6379:6379
+  app:
+    build: ./
+    links:
+      - redis
+    ports:
+      - 3001:3001
+    environment:
+      - REDIS_URL_CONNECTION=redis://@cache:6379
+      - NODE_ENV=development
+      - PORT=3001
+    command:
+      sh -c 'npm run start:prd'
