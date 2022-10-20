@@ -24,7 +24,7 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "start": "nodemon --watch 'src/' --exec 'env-cmd -f .env ts-node -r tsconfig-paths/register src/index.ts' -e ts",
+    "start": "nodemon --watch 'src/' --exec \"env-cmd -f .env ts-node -r tsconfig-paths/register src/index.ts\" -e ts",
     "start:prd": "TS_NODE_BASEURL=./dist/src node -r tsconfig-paths/register dist/src/index.js",
     "build": "rm -rf dist && tsc"
   }
