@@ -11,10 +11,6 @@ I used https://docs.awesomeapi.com.br/api-de-moedas to get the currency quote an
 -   [Django REST Framework](https://www.django-rest-framework.org/): To build the endpoints
 -   [PostgreSQL](https://www.postgresql.org/): Database
 -   [Docker](https://www.docker.com/): For application container
--   [Heroku](https://www.heroku.com/): To deploy of [staging](https://challenge-bravo-stg.herokuapp.com/) and [production](https://challenge-bravo-prd.herokuapp.com/)
-
-**Production**: https://challenge-bravo-prd.herokuapp.com/  
-**Staging**: https://challenge-bravo-stg.herokuapp.com/
 
 ## Development
 

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fc79610e3e1405efdf0e8848786e20259b7d4083244bbf3a86c878cdc6b80cc8"
+            "sha256": "ea4c6e060cee12f2c761a82c1391a847c9b238106728e8331681b828e9005710"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -216,14 +216,6 @@
             ],
             "index": "pypi",
             "version": "==22.1"
-        },
-        "django-heroku": {
-            "hashes": [
-                "sha256:2bc690aab89eedbe01311752320a9a12e7548e3b0ed102681acc5736a41a4762",
-                "sha256:6af4bc3ae4a9b55eaad6dbe5164918982d2762661aebc9f83d9fa49f6009514e"
-            ],
-            "index": "pypi",
-            "version": "==0.3.1"
         },
         "djangorestframework": {
             "hashes": [
@@ -466,14 +458,6 @@
             ],
             "markers": "platform_python_implementation == 'CPython'",
             "version": "==1.1.3.post0"
-        },
-        "gunicorn": {
-            "hashes": [
-                "sha256:9dcc4547dbb1cb284accfb15ab5667a0e5d1881cc443e0677b4882a4067a807e",
-                "sha256:e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8"
-            ],
-            "index": "pypi",
-            "version": "==20.1.0"
         },
         "idna": {
             "hashes": [

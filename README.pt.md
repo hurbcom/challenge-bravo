@@ -11,10 +11,7 @@ Utilizei https://docs.awesomeapi.com.br/api-de-moedas para buscar a cotação da
 -   [Django REST Framework](https://www.django-rest-framework.org/): Para construção dos endpoints
 -   [PostgreSQL](https://www.postgresql.org/): Banco de dados
 -   [Docker](https://www.docker.com/): Para container da aplicação
--   [Heroku](https://www.heroku.com/): Para deploy de [staging](https://challenge-bravo-stg.herokuapp.com/) e [produção](https://challenge-bravo-prd.herokuapp.com/)
 
-**Produção**: https://challenge-bravo-prd.herokuapp.com/  
-**Staging**: https://challenge-bravo-stg.herokuapp.com/
 
 ## Desenvolvimento
 
