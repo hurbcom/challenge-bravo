@@ -1,5 +1,6 @@
 import { retriveCoinFromCache } from 'Repository/CurrenciesRepository'
 import { TRetriveValueCoin } from 'Repository/types'
+import { getRedisValue } from 'Utils/Redis'
 import { TConvertCoin } from './types'
 
 export const retriveValueCoin = async (
@@ -43,5 +44,17 @@ export const convertCoin = async (
     to,
     amount,
     converted: +converted.toFixed(4)
+  }
+}
+
+export const populateCache = async (): Promise<void> => {
+  const defaultCoins = ['BRL', 'EUR', 'BTC', 'ETH']
+
+  const currenciesInCache = await Promise.all(
+    defaultCoins.map((coin) => getRedisValue(coin))
+  )
+
+  if (currenciesInCache.some((currentValue) => !currentValue)) {
+    await Promise.all(defaultCoins.map((coin) => retriveCoinFromCache(coin)))
   }
 }

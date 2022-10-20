@@ -1,4 +1,4 @@
-import { createClient, RedisClientType } from 'redis'
+import { createClient } from 'redis'
 
 let client = null as any
 
@@ -17,7 +17,10 @@ export const initRedisConnection = async () => {
 }
 
 export const setRedisValue = async (key: string, value: number) => {
-  await client.set(key, value)
+  await client.set(key, value, {
+    EX: 3600,
+    NX: true
+  })
 }
 
 export const getRedisValue = async (key: string): Promise<number | null> => {
