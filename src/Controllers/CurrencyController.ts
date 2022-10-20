@@ -58,7 +58,7 @@ export const CreateNewCurrency = async (req: Request, res: Response) => {
 
 export const RemoveCurrency = async (req: Request, res: Response) => {
   try {
-    const body = req.query as TDeleteCurrency
+    const body = req.params as TDeleteCurrency
 
     const validation = ValidateRemoveCurrency.validate(body)
 

@@ -12,5 +12,5 @@ export const ValidateCreateCurrency = Joi.object({
 })
 
 export const ValidateRemoveCurrency = Joi.object({
-  from: Joi.string().required()
+  coin: Joi.string().required()
 })
