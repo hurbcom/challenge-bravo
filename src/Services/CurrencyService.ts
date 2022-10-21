@@ -1,11 +1,7 @@
 import axios from 'axios'
 import { retriveCoinFromCache } from 'Repository/CurrenciesRepository'
 import { TRetriveValueCoin } from 'Repository/types'
-import {
-  getRedisValue,
-  multipleSetRedisValue,
-  setRedisValue
-} from 'Utils/Redis'
+import { setRedisValue } from 'Utils/Redis'
 import { TConvertCoin } from './types'
 
 export const retriveValueCoin = async (
