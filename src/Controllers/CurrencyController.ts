@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express'
 import { createCurrency, deleteCurrency } from 'Repository/CurrenciesRepository'
 import { convertCoin } from 'Services/CurrencyService'
+import { getRedisValue, setRedisValue } from 'Utils/Redis'
 import RequestError from 'Utils/RequestError'
 import { errorResponse, successResponse } from 'Utils/Responses'
 import {
@@ -10,8 +11,7 @@ import {
 } from './types'
 import {
   ValidateGetCurrencyByParameter,
-  ValidateCreateCurrency,
-  ValidateRemoveCurrency
+  ValidateCreateCurrency
 } from './Validations'
 
 export const GetCurrencyByParameter = async (req: Request, res: Response) => {
@@ -59,12 +59,6 @@ export const CreateNewCurrency = async (req: Request, res: Response) => {
 export const RemoveCurrency = async (req: Request, res: Response) => {
   try {
     const body = req.params as TDeleteCurrency
-
-    const validation = ValidateRemoveCurrency.validate(body)
-
-    if (validation.error) {
-      throw new RequestError(validation.error.message, {}, 400)
-    }
 
     const { coin } = body
 

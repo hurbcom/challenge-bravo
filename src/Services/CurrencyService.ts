@@ -1,6 +1,11 @@
+import axios from 'axios'
 import { retriveCoinFromCache } from 'Repository/CurrenciesRepository'
 import { TRetriveValueCoin } from 'Repository/types'
-import { getRedisValue } from 'Utils/Redis'
+import {
+  getRedisValue,
+  multipleSetRedisValue,
+  setRedisValue
+} from 'Utils/Redis'
 import { TConvertCoin } from './types'
 
 export const retriveValueCoin = async (
@@ -48,13 +53,19 @@ export const convertCoin = async (
 }
 
 export const populateCache = async (): Promise<void> => {
-  const defaultCoins = ['BRL', 'EUR', 'BTC', 'ETH']
-
-  const currenciesInCache = await Promise.all(
-    defaultCoins.map((coin) => getRedisValue(coin))
+  const response = await axios.get(
+    'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.json'
   )
 
-  if (currenciesInCache.some((currentValue) => !currentValue)) {
-    await Promise.all(defaultCoins.map((coin) => retriveCoinFromCache(coin)))
+  const currencies = response.data.usd
+
+  const keys = Object.keys(currencies)
+  const instances = []
+
+  for (let index = 0; index < keys.length; index++) {
+    const key = keys[index]
+    instances.push(setRedisValue(key.toUpperCase(), 1 / currencies[key]))
   }
+
+  await Promise.all(instances)
 }

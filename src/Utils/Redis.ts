@@ -17,10 +17,14 @@ export const initRedisConnection = async () => {
 }
 
 export const setRedisValue = async (key: string, value: number) => {
-  await client.set(key, value, {
-    EX: 3600,
-    NX: true
-  })
+  await client.set(key, value)
+}
+
+type TSetRedisValue = {
+  [key: string]: number
+}
+export const multipleSetRedisValue = async (records: TSetRedisValue) => {
+  await client.mset(records)
 }
 
 export const getRedisValue = async (key: string): Promise<number | null> => {

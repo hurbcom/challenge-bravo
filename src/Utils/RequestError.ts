@@ -10,14 +10,6 @@ class RequestError extends Error {
     this.data = data || {}
     this.statusCode = statusCode || 500
   }
-
-  public toObject() {
-    return {
-      message: this.message,
-      data: this.data,
-      statusCode: this.statusCode
-    }
-  }
 }
 
 export default RequestError

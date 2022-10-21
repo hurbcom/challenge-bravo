@@ -26,11 +26,6 @@ export const errorResponse = (
       message: error.message,
       data: error.data
     }
-  } else if (error instanceof Error) {
-    responseData = {
-      message: error.message,
-      data: {}
-    }
   }
 
   return res.status(status).json(responseData)

@@ -37,7 +37,7 @@ const midlewares = (app: Application) => {
   app.use(morgan(':method :url :response-time ms :status'))
 }
 
-export const init = async () => {
+export const init = async (): Promise<Application> => {
   const app = express()
 
   modules(app)
@@ -47,11 +47,5 @@ export const init = async () => {
   await databaseConnection()
   await loadCache()
 
-  const port = process.env.PORT || 3000
-
-  app.listen(port, () => {
-    console.log('\n+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+')
-    console.log(`| Server started at: http://localhost:${port} |`)
-    console.log('+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n')
-  })
+  return app
 }
