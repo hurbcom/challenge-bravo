@@ -1,0 +1,63 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dockerFile-app
+    volumes:
+      - ./:/var/www/
+    working_dir: /var/www/
+    depends_on:
+      - dependency-manager-composer
+      - database
+    networks:
+      - app-networks
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/
+      - ./nginx:/etc/nginx/conf.d/
+    depends_on:
+      - app
+    networks:
+      - app-networks
+  
+  cron-jobs:
+    build:
+      context: .
+      dockerfile: dockerFile-cronjob
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/
+    depends_on:
+      - app
+    networks:
+      - app-networks
+
+  database:
+      image: redis:alpine
+      ports:
+        - 6379:6379
+      environment:
+        - ALLOW_EMPTY_PASSWORD=yes
+      networks:
+        - app-networks
+  
+  dependency-manager-composer:
+    build:
+        context: .
+        dockerfile: dockerFile-dependency-manager-composer
+    command: composer install
+    volumes:
+        - ./:/var/www/
+
+networks:
+  app-networks:
+    driver: bridge
+
+
+  

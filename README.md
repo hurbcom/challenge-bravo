@@ -1,82 +1,315 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# Bravo Challenge
+## An API to currency conversion
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+# **WARNING:** Not complete + need refactor!
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+Descprition in challenge bravo repository [link](https://github.com/hurbcom/challenge-bravo)
 
-The API must convert between the following currencies:
+### Sumary
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+1. Tecnologies
+2. BoilerPlate
+3. Architecture Used
+4. How to Use on Your Machine
+    - Cloning
+    - Set Env Variables
+    - Runing
+5. Tests
+    - Unit / Integeration
+    - Stress Test
+6. API Routes
+7. Not done/Updated Features
 
-Other coins could be added as usage.
+## **1. Tecnologies**
+1. PHP 8
+2. Laravel 9
+3. Composer
+4. Redis
+5. Docker
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+## **2. Boilerplate**
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+Using Laravel, there are folders and code default.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Code that was done by me is located at this folder strucuture:
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+```
+.
+├── app                    
+│   ├── Domain              
+│       ├── Entity                              # Here
+│       ├── UseCases                            # Here
+│   ├── Console
+|       ├── Kernel.php                          # Here
+│   ├── Adpaters            
+│       ├── Apis                                # Here
+│       ├── Repository                          # Here
+│   └── Http                
+│       ├── Controllers                         # Here
+│   └── ... 
+├── ...
+├── nginx                                       # Here
+├── ...               
+├── ...
+├── routes                                      # Here
+├── ...
+├── tests                                       # Here
+├── docker-compose.yaml                         # Here
+├── dockerFile-app                              # Here
+├── dockerFile-cronjob                          # Here
+├── dockerFile-dependency-manager-composer      # Here
+└──
+```
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+## **3. Architecture Used**
+The architecture used is based on the Clean Architecture, as the encapsulation of business logic and the separation of mechanism and delivery bring benefits.
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+With some changes to this project:
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+1. The first to point is on the Interface Layer and Frameworks and Drives:
+These two layers was merged into one, because of the project's size plus YAGNI.
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+2. The second to point is the Enterprise Bussines Rules and Application Business Rules kept same.
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+In the image bellow, taken by Guilherme Biff Zarelli post [link](https://medium.com/luizalabs/descomplicando-a-clean-architecture-cf4dfc4a1ac6), shows how the architecture is:
+<br>
+<img src="https://miro.medium.com/max/720/0*J8pxLe88qYFN7wUf.png" width="70%">
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+And in the folder structure, using laravel default, has been added some more to attendant the architecture:
+```
+.
+├── app                     # Already exists as default
+│   ├── Domain              # Created to encapsulate challenge rules
+│       ├── Entity          # Entity representations
+│       ├── UseCases        # use cases representation
+│   ├── Console             # Already exists as default and where crontab script is defined.
+│   ├── Adpaters            # implementation repositories from domain and consume API
+│       ├── Apis
+│       ├── Repository
+│   └── Http                # Already exists as default
+│       ├── Controllers     # Where the connection to REST be consumed plus use cases be implemented
+│   └── ...                
+├── ...
+├── routes                  # Already exists as default to open API end ├── ...
+├── tests                  # Already exists as default to implement automated tests
+└── ...
+```
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+## **4. How to Use on Your Machine**
 
-## Requirements
+#### Cloning
+- Install Docker locally [Docker site](https://docs.docker.com/desktop/).
+- Clone this repository.
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+#### Set Env Variables
+- Create an account on abstractapi [link](https://www.abstractapi.com/api/exchange-rate-api) to get your key and add it on `API_KEY_ABSTRACT_API` variable env.
+- REDIS env password variable value is NULL.
+#### Runing
+```
+Notice: It's not needed to run command to install dependencies because there is a configuration to do it automatially.
+```
 
-## Evaluation criteria
+- Run command `docker compose up` in root folder (where docker-compose.yaml file is).
+- Use your local IP (ex: localhost) and the routes describred in the API Routes Implementation.
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+## **5. Tests**
+- Unit / Integration
 
-## Doubts
+    Unit tests were implemented to ensure assertiveness in the smallest amount of code and expected behavior.
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+    Integration tests were implemented to ensure the database joins the code in general.
 
-Godspeed! ;)
+    Down bellow a picture showing the results:
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+    <br>
+    <img src="output_automated_tets.png" width="70%">
+- Stress Test
+    Not done.
+
+## **6. API Routes**
+
+### Currencies
+
+- POST /currency/create
+
+    Create Currency
+
+    **Body Params Explation**
+
+    - indentificationName = string | size = 3 
+    - isFictional = boolean
+    - baseCurrencyForFictionalType = string | size = 3
+    -  valueBasedOnRealCurrency = float
+
+    **Exemple body**
+
+    ```
+    {
+        "indentificationName": "FKE",
+        "isFictional": true,
+        "baseCurrencyForFictionalType": "BRL",
+        "valueBasedOnRealCurrency": 0.50
+    }
+    ```
+
+    **Responses**
+
+    In Success
+    ```
+    {
+        data: {
+            status: "success",
+            message: "Insertion with success"
+        }
+    }
+    ```
+
+    In Error
+
+    `Notice: In Error responses, the message param can be error with database integrations, etc.`
+    ```
+    {
+        data: {
+            status: "error",
+            message: "currency already exists"
+        }
+    }
+    ```
+
+- GET /currency/show
+
+    Show Currencies
+
+    **Body Params Explation**
+
+    No Body params is needed.
+
+    **Exemple body**
+
+    No body exemple is needed.
+
+    **Responses**
+
+    In Success
+    ```
+    {
+        data: {
+            status: "success",
+            message: [
+                "FKE",
+                "ABD",
+                "TEF"
+            ]
+        }
+    }
+    ```
+
+    In Error
+
+    `Notice: In Error responses, the message param can be error with database integrations, etc. But status param will be always "error".`
+    ```
+    {
+        data: {
+            status: "error",
+            message: "a error has occured while list the currencies"
+        }
+    }
+    ```
+- GET /currency/conversion
+
+    Convert a currency
+
+    **Body Params Explation**
+
+    - currencyFrom = string | size = 3 
+    - currencyTo = string | size = 3 
+    - amount = float
+
+    **Exemple body**
+
+    ```
+    {
+        "currencyFrom": "BRL",
+	    "currencyTo": "EUR",
+	    "amount": 100.00
+    }
+    ```
+
+     **Responses**
+
+    In Success
+    ```
+    {
+        "data": {
+            "status": "success",
+            "message": "conversion made with success",
+            "valueConverted": 506.7704407836381
+        }
+    }
+    ```
+
+    In Error
+
+    `Notice: In Error responses, the errorMessage param can be error with database integrations, etc.`
+    ```
+    {
+        data: {
+            status: "error",
+            errorMessage: "invalid amount value"
+        }
+    }
+    ```
+
+- DELETE /currency/delete/{indenttificationName}
+
+    Delete currency
+
+    **Body Params Explation**
+
+    No Body params is needed.
+
+    **Query params**
+
+    - indenttificationName = string | size = 3
+
+    **Exemple body**
+
+    No body exemple is needed.
+
+    **Responses**
+
+    In Success
+    ```
+    {
+        "data": {
+            "status": "success",
+            "errorMessage": "currency deleted with success"
+        }
+    }
+    ```
+
+    In Error
+
+    `Notice: In Error responses, the errorMessage param can be error with database integrations, etc.`
+
+    ```
+    {
+        data: {
+            status: "error",
+            errorMessage: "not possible to delete given value"
+        }
+    }
+    ```
+
+## **7. Not done/Updated Features**
+Some features are not implemented, listed bellow:
+
+- Stress test was not done
+
+- Update fictional rate is not implement, so the first input of user will not be changed with api updater.
+
+Some features need to be updated, listed bellow:
+
+- The automated tests (feature) is not using an tecnology to refresh database, so error in insert and delete currency happens
+because of data stored or no in database.
+
