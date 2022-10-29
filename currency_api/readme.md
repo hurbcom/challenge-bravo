@@ -34,7 +34,7 @@ Gerenciamento de moedas:
 
 Converter valores de moedas:
 
-[POST] http://localhost:8080/convert - ex.: {"from": "brl", "to": "usd", "value": 83.5)}
+[POST] http://localhost:8080/convert - ex.: {"from": "brl", "to": "usd", "value": 83.5}
 
 
 
