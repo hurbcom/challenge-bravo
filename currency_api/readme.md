@@ -1,5 +1,5 @@
 ### IMPORTANTE ####
-Foi utilizado Cloud MongoDB, e para testar é necessário me informar o IP para liberar o acesso ao banco de dados.
+Foi utilizado Cloud MongoDB, e para testar é necessário me informar o IP para liberar o acesso ao banco de dados OU alterar a conection string no arquivo '.env'
 
 
 
