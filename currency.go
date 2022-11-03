@@ -5,40 +5,57 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/victorananias/challenge-bravo/api"
+	"github.com/victorananias/challenge-bravo/repositories"
 	"github.com/victorananias/challenge-bravo/responses"
 )
 
-func Get(responseWriter http.ResponseWriter, request *http.Request) {
-	to := request.URL.Query().Get("to")
-	from := request.URL.Query().Get("from")
-	value, err := strconv.ParseFloat(request.URL.Query().Get("value"), 32)
+func ConversionsHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	sourceCurrency := request.URL.Query().Get("from")
+	targetCurrency := request.URL.Query().Get("to")
+	amount, err := strconv.ParseFloat(request.URL.Query().Get("amount"), 32)
+
 	if err != nil {
-		respondWithJson(responseWriter, responses.DefaultResponse{
-			Message: "error parsing value",
+		sendJson(responseWriter, responses.DefaultResponse{
+			Message: "error parsing amount",
+			Success: false,
 		}, http.StatusBadRequest)
 		return
 	}
 
-	api := api.NewApi()
-
-	res, err := api.CurrentValue(from, to)
-
+	currenciesRepository := repositories.NewCurrenciesRepository()
+	currency, err := currenciesRepository.Get(sourceCurrency, targetCurrency)
 	if err != nil {
-		respondWithJson(responseWriter, responses.DefaultResponse{
+		sendJson(responseWriter, responses.DefaultResponse{
 			Message: err.Error(),
+			Success: false,
 		}, http.StatusInternalServerError)
 		return
 	}
-	convertedValue := value * res.Quotes[from+to]
-
-	respondWithJson(responseWriter, responses.ConversionResponse{
+	convertedValue := amount * currency.Value
+	sendJson(responseWriter, responses.ConversionResponse{
 		Value:    convertedValue,
-		Currency: to,
+		Currency: targetCurrency,
 	}, http.StatusOK)
+
+	// api := api.NewApi()
+	// res, err := api.CurrentValue(from, to)
+
+	// if err != nil {
+	// 	sendJson(responseWriter, responses.DefaultResponse{
+	// 		Message: err.Error(),
+	// 		Success: false,
+	// 	}, http.StatusInternalServerError)
+	// 	return
+	// }
+	// convertedValue = value * res.Quotes[from+to]
+
+	// sendJson(responseWriter, responses.ConversionResponse{
+	// 	Value:    convertedValue,
+	// 	Currency: to,
+	// }, http.StatusOK)
 }
 
-func respondWithJson(responseWriter http.ResponseWriter, i interface{}, status int) {
+func sendJson(responseWriter http.ResponseWriter, i interface{}, status int) {
 	jsonResponse, _ := json.Marshal(i)
 	(responseWriter).WriteHeader(status)
 	_, err := (responseWriter).Write(jsonResponse)

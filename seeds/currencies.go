@@ -27,19 +27,25 @@ func main() {
 		log.Fatal(err)
 	}
 	for _, currencyCode := range initCurrencies {
-		api1 := api.NewApi()
-		apiValue, err := api1.CurrentValue(currencyCode, backingCurrency.Code)
-		if err != nil {
-			log.Fatal(err)
-		}
-		currency := models.Currency{
-			Code:                currencyCode,
-			Value:               float32(apiValue.Quotes[currencyCode]),
-			BackingCurrencyCode: backingCurrency.BackingCurrencyCode,
-		}
-		_, err = repository.Create(currency)
-		if err != nil {
-			log.Fatal(err)
-		}
+		create(currencyCode, backingCurrency.Code)
+		create(backingCurrency.Code, currencyCode)
+	}
+}
+func create(from, to string) {
+	repository := repositories.NewCurrenciesRepository()
+	api1 := api.NewApi()
+	apiValue, err := api1.CurrentValue(from, to)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Print(apiValue.Quotes[from+to])
+	currency := models.Currency{
+		Code:                from,
+		Value:               apiValue.Quotes[from+to],
+		BackingCurrencyCode: to,
+	}
+	_, err = repository.Create(currency)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

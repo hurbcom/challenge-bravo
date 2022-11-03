@@ -10,7 +10,7 @@ type Routes struct {
 type HandlerFunc func(http.ResponseWriter, *http.Request)
 
 func (routes *Routes) RegisterAll() {
-	routes.register("/conversions", Get, http.MethodGet)
+	routes.register("/conversions", ConversionsHandler, http.MethodGet)
 }
 
 func (routes *Routes) register(route string, handler HandlerFunc, method string) {

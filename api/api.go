@@ -32,9 +32,9 @@ func NewApi() *Api {
 	return &api
 }
 
-func (api *Api) CurrentValue(currency, source string) (LiveResponse, error) {
+func (api *Api) CurrentValue(from, to string) (LiveResponse, error) {
 	result := LiveResponse{}
-	url := fmt.Sprintf("%s/live?source=%s&currencies=%s", api.settings.ApiUrl, currency, source)
+	url := fmt.Sprintf("%s/live?source=%s&currencies=%s", api.settings.ApiUrl, from, to)
 	log.Printf("external api called: %s", url)
 
 	client := &http.Client{}
