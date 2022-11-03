@@ -1,3 +1,3 @@
 import Redis from 'ioredis';
 
-export const redisClient = new Redis(process.env.REDIS_HOST || '6379');
+export const redisClient = new Redis(Number(process.env.REDIS_PORT) || 6379, process.env.REDIS_HOST || 'localhost');
