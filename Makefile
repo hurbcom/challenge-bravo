@@ -1,2 +1,2 @@
 test:
-	go test -v ./tests/*
+	go clean -testcache && go test -v ./tests/*
