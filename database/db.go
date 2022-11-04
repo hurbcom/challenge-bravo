@@ -14,7 +14,7 @@ var (
 )
 
 func ConectaComBancoDeDados() {
-	databaseUrl := "host=postgres13 user=postgres password=postgres dbname=challenge_bravo port=5432 sslmode=disable"
+	databaseUrl := "host=postgres13 user=postgres password=postgres dbname=challenge_bravo_dev port=5432 sslmode=disable"
 	DB, err = gorm.Open(postgres.Open(databaseUrl))
 	if err != nil {
 		log.Panic("Erro ao conectar com banco de dados")
