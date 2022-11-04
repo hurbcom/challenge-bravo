@@ -6,6 +6,6 @@ type Currency struct {
 	gorm.Model
 	Key           string `json:"key"`
 	Description   string `json:"description"`
-	Enabled       string `json:"enabled"`
+	Enabled       bool   `json:"enabled"`
 	QuotationType string `json:"quotationType"`
 }

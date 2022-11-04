@@ -8,13 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Index(c *gin.Context) {
+func ListCurrencies(c *gin.Context) {
 	var currencies []models.Currency
 	database.DB.Find(&currencies)
 	c.JSON(200, currencies)
 }
 
-func Create(c *gin.Context) {
+func CreateCurrency(c *gin.Context) {
 	var currency models.Currency
 	if err := c.ShouldBindJSON(&currency); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -25,7 +25,7 @@ func Create(c *gin.Context) {
 	c.JSON(http.StatusOK, currency)
 }
 
-func Show(c *gin.Context) {
+func ShowCurrency(c *gin.Context) {
 	var currency models.Currency
 	id := c.Params.ByName("id")
 	database.DB.First(&currency, id)
@@ -39,7 +39,7 @@ func Show(c *gin.Context) {
 	c.JSON(http.StatusOK, currency)
 }
 
-func Delete(c *gin.Context) {
+func DeleteCurrency(c *gin.Context) {
 	var currency models.Currency
 	id := c.Params.ByName("id")
 	database.DB.Delete(&currency, id)

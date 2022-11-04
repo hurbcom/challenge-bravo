@@ -20,4 +20,5 @@ func ConectaComBancoDeDados() {
 		log.Panic("Erro ao conectar com banco de dados")
 	}
 	DB.AutoMigrate(&models.Currency{})
+	DB.AutoMigrate(&models.Conversion{})
 }
