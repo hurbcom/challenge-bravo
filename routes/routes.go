@@ -7,12 +7,12 @@ import (
 
 func HandleRequests() {
 	r := gin.Default()
-	r.GET("api/currency", controllers.ListCurrencies)
-	r.POST("api/currency", controllers.CreateCurrency)
-	r.GET("api/currency/:id", controllers.ShowCurrency)
-	r.DELETE("api/currency/:id", controllers.DeleteCurrency)
+	r.GET("currency", controllers.ListCurrencies)
+	r.POST("currency", controllers.CreateCurrency)
+	r.GET("currency/:id", controllers.ShowCurrency)
+	r.DELETE("currency/:id", controllers.DeleteCurrency)
 
-	r.GET("api/conversion", controllers.Convert)
+	r.GET("conversion", controllers.Convert)
 
 	r.Run()
 }
