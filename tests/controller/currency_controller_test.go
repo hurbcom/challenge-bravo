@@ -1,13 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/felipepnascimento/api-go-gin/controllers"
-	"github.com/felipepnascimento/api-go-gin/database"
-	"github.com/felipepnascimento/api-go-gin/models"
+	"github.com/felipepnascimento/challenge-bravo-flp/controllers"
+	"github.com/felipepnascimento/challenge-bravo-flp/database"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -24,6 +25,8 @@ func CreateCurrencyMock() {
 	currency := models.Currency{Key: "USD", Description: "USD", Enabled: true}
 	database.DB.Create(&currency)
 	ID = int(currency.ID)
+	fmt.Println("Opa")
+	fmt.Println(ID)
 }
 
 func DeleteCurrencyMock() {
@@ -32,12 +35,24 @@ func DeleteCurrencyMock() {
 }
 
 func TestListCurrencies(t *testing.T) {
-	database.ConectaComBancoDeDados()
+	database.ConnectDatabase()
 	CreateCurrencyMock()
 	defer DeleteCurrencyMock()
 	r := SetupTestsRoutes()
 	r.GET("/currency", controllers.ListCurrencies)
 	req, _ := http.NewRequest("GET", "/currency", nil)
+	resposta := httptest.NewRecorder()
+	r.ServeHTTP(resposta, req)
+	assert.Equal(t, http.StatusOK, resposta.Code)
+}
+
+func TestShowCurrency(t *testing.T) {
+	database.ConnectDatabase()
+	CreateCurrencyMock()
+	defer DeleteCurrencyMock()
+	r := SetupTestsRoutes()
+	r.GET("/currency/:cpf", controllers.ShowCurrency)
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", ID), nil)
 	resposta := httptest.NewRecorder()
 	r.ServeHTTP(resposta, req)
 	assert.Equal(t, http.StatusOK, resposta.Code)

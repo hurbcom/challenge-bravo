@@ -1,6 +1,8 @@
 version: "3.9"
 services:
   postgres13:
+    tty: true
+    stdin_open: true
     image: postgres:13-alpine
     environment:
       POSTGRES_USER: postgres
@@ -11,12 +13,13 @@ services:
     volumes:
       - postgres13:/var/lib/postgresql/data
   challenge_bravo:
+    tty: true
+    stdin_open: true
     build:
-      dockerfile: Dockerfile
       context: .
-      target: dev
+      dockerfile: Dockerfile
     ports:
-      - 8000:8080
+      - 8080:8080
     volumes:
       - .:/opt/app/api
     depends_on:

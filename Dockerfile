@@ -1,8 +1,18 @@
-FROM golang:1.16 as base
+FROM golang:1.16-alpine
 
-FROM base as dev
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash build-base
 
-RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+WORKDIR /app
 
-WORKDIR /opt/app/api
-CMD ["air"]
+COPY go.mod ./
+COPY go.sum ./
+RUN go mod download
+
+COPY . .
+
+RUN go build -o /main
+
+EXPOSE 8080
+
+CMD [ "/main" ]
