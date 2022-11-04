@@ -3,7 +3,7 @@ package database
 import (
 	"log"
 
-	"github.com/felipepnascimento/api-go-gin/models"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -13,7 +13,7 @@ var (
 	err error
 )
 
-func ConectaComBancoDeDados() {
+func ConnectDatabase() {
 	databaseUrl := "host=postgres13 user=postgres password=postgres dbname=challenge_bravo_dev port=5432 sslmode=disable"
 	DB, err = gorm.Open(postgres.Open(databaseUrl))
 	if err != nil {

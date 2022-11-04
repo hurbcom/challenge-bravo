@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/felipepnascimento/api-go-gin/database"
-	"github.com/felipepnascimento/api-go-gin/routes"
+	"github.com/felipepnascimento/challenge-bravo-flp/database"
+	"github.com/felipepnascimento/challenge-bravo-flp/routes"
 )
 
 func main() {
-	database.ConectaComBancoDeDados()
+	database.ConnectDatabase()
 	routes.HandleRequests()
 }

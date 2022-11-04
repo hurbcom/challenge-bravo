@@ -3,7 +3,7 @@ package controllers
 import (
 	"strconv"
 
-	"github.com/felipepnascimento/api-go-gin/models"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	"github.com/gin-gonic/gin"
 )
 

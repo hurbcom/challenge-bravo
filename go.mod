@@ -1,4 +1,4 @@
-module github.com/felipepnascimento/api-go-gin
+module github.com/felipepnascimento/challenge-bravo-flp
 
 go 1.16
 

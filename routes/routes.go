@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/felipepnascimento/api-go-gin/controllers"
+	"github.com/felipepnascimento/challenge-bravo-flp/controllers"
 	"github.com/gin-gonic/gin"
 )
 

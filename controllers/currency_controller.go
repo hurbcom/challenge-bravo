@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/felipepnascimento/api-go-gin/database"
-	"github.com/felipepnascimento/api-go-gin/models"
+	"github.com/felipepnascimento/challenge-bravo-flp/database"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	"github.com/gin-gonic/gin"
 )
 
