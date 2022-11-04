@@ -9,7 +9,7 @@ services:
     ports:
       - 5434:5432
     volumes:
-      - ./migration/initial-migration.sql:/docker-entrypoint-initdb.d/initial-migration.sql
+      - postgres13:/var/lib/postgresql/data
   challenge_bravo:
     build:
       dockerfile: Dockerfile
@@ -21,3 +21,7 @@ services:
       - .:/opt/app/api
     depends_on:
       - postgres13
+
+volumes:
+    postgres13:
+    challenge_bravo:
