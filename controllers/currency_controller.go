@@ -40,11 +40,35 @@ func ShowCurrency(c *gin.Context) {
 	c.JSON(http.StatusOK, currency)
 }
 
-func ConvertCurrency(c *gin.Context) {
+func GetConvertParams(c *gin.Context) (string, string, float32) {
 	from := c.Query("from")
 	to := c.Query("to")
 	a, _ := strconv.ParseFloat(c.Query("amount"), 32)
-	var amount = float32(a)
+	amount := float32(a)
+
+	return from, to, amount
+}
+
+func ConvertCurrency(c *gin.Context) {
+	from, to, amount := GetConvertParams(c)
+
+	if from == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"Bad Request": "From parameter is required"})
+		return
+	}
+
+	if to == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"Bad Request": "To parameter is required"})
+		return
+	}
+
+	if amount == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"Bad Request": "Amount parameter is required"})
+		return
+	}
 
 	var conversion = models.Conversion{
 		From:   from,

@@ -136,3 +136,48 @@ func TestConvertCurrency(t *testing.T) {
 	assert.Equal(t, float32(2.1), expectedConversion.Amount)
 	assert.Equal(t, float32(4.2), expectedConversion.Result)
 }
+
+func TestConvertCurrencyWithoutFromParam(t *testing.T) {
+	r := SetupTestsRoutes()
+	r.GET("conversion", controllers.ConvertCurrency)
+	urlPath := fmt.Sprintf("/conversion?to=%s&amount=%f", "EUR", 2.10)
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, req)
+
+	expectedResponse := `{"Bad Request":"From parameter is required"}`
+	responseBody, _ := ioutil.ReadAll(response.Body)
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+	assert.Equal(t, expectedResponse, string(responseBody))
+}
+
+func TestConvertCurrencyWithoutToParam(t *testing.T) {
+	r := SetupTestsRoutes()
+	r.GET("conversion", controllers.ConvertCurrency)
+	urlPath := fmt.Sprintf("/conversion?from=%s&amount=%f", "BTC", 2.10)
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, req)
+
+	expectedResponse := `{"Bad Request":"To parameter is required"}`
+	responseBody, _ := ioutil.ReadAll(response.Body)
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+	assert.Equal(t, expectedResponse, string(responseBody))
+}
+
+func TestConvertCurrencyWithoutToAmount(t *testing.T) {
+	r := SetupTestsRoutes()
+	r.GET("conversion", controllers.ConvertCurrency)
+	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s", "BTC", "EUR")
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, req)
+
+	expectedResponse := `{"Bad Request":"Amount parameter is required"}`
+	responseBody, _ := ioutil.ReadAll(response.Body)
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+	assert.Equal(t, expectedResponse, string(responseBody))
+}
