@@ -40,6 +40,13 @@ func ShowCurrency(c *gin.Context) {
 	c.JSON(http.StatusOK, currency)
 }
 
+func DeleteCurrency(c *gin.Context) {
+	var currency models.Currency
+	id := c.Params.ByName("id")
+	database.DB.Delete(&currency, id)
+	c.JSON(http.StatusOK, gin.H{"data": "Currency successfully deleted"})
+}
+
 func GetConvertParams(c *gin.Context) (string, string, float32) {
 	from := c.Query("from")
 	to := c.Query("to")

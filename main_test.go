@@ -89,7 +89,7 @@ func TestShowCurrency(t *testing.T) {
 	CreateCurrencyMock()
 	defer DeleteCurrencyMock()
 	r := SetupTestsRoutes()
-	r.GET("currency/:id", controllers.ShowCurrency)
+	r.GET("/currency/:id", controllers.ShowCurrency)
 
 	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", ID), nil)
 	response := httptest.NewRecorder()
@@ -106,7 +106,7 @@ func TestShowCurrency(t *testing.T) {
 
 func TestShowCurrencyNotFound(t *testing.T) {
 	r := SetupTestsRoutes()
-	r.GET("currency/:id", controllers.ShowCurrency)
+	r.GET("/currency/:id", controllers.ShowCurrency)
 
 	req, _ := http.NewRequest("GET", "/currency/1", nil)
 	response := httptest.NewRecorder()
@@ -117,6 +117,20 @@ func TestShowCurrencyNotFound(t *testing.T) {
 
 	assert.Equal(t, http.StatusNotFound, response.Code)
 	assert.Equal(t, expectedResponse, string(responseBody))
+}
+
+func TestDeleteCurrency(t *testing.T) {
+	database.ConnectDatabase()
+	CreateCurrencyMock()
+	r := SetupTestsRoutes()
+	r.DELETE("/currency/:id", controllers.DeleteCurrency)
+
+	urlPath := fmt.Sprintf("/currency/%d", ID)
+	req, _ := http.NewRequest("DELETE", urlPath, nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, req)
+
+	assert.Equal(t, http.StatusOK, response.Code)
 }
 
 func TestConvertCurrency(t *testing.T) {
