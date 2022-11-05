@@ -118,3 +118,21 @@ func TestShowCurrencyNotFound(t *testing.T) {
 	assert.Equal(t, http.StatusNotFound, response.Code)
 	assert.Equal(t, expectedResponse, string(responseBody))
 }
+
+func TestConvertCurrency(t *testing.T) {
+	r := SetupTestsRoutes()
+	r.GET("conversion", controllers.ConvertCurrency)
+	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", "BTC", "EUR", 2.10)
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, req)
+
+	var expectedConversion models.Conversion
+	json.Unmarshal(response.Body.Bytes(), &expectedConversion)
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "BTC", expectedConversion.From)
+	assert.Equal(t, "EUR", expectedConversion.To)
+	assert.Equal(t, float32(2.1), expectedConversion.Amount)
+	assert.Equal(t, float32(4.2), expectedConversion.Result)
+}
