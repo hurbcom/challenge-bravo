@@ -6,6 +6,7 @@ import (
 
 	"github.com/felipepnascimento/challenge-bravo-flp/database"
 	"github.com/felipepnascimento/challenge-bravo-flp/models"
+	"github.com/felipepnascimento/challenge-bravo-flp/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +17,7 @@ func ListCurrencies(c *gin.Context) {
 }
 
 func CreateCurrency(c *gin.Context) {
+	// TODO Colocar validações no model
 	var currency models.Currency
 	if err := c.ShouldBindJSON(&currency); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -56,6 +58,13 @@ func GetConvertParams(c *gin.Context) (string, string, float32) {
 	return from, to, amount
 }
 
+func GetCurrencyByKey(key string) models.Currency {
+	var currency models.Currency
+	database.DB.Where("key = ?", key).First(&currency)
+
+	return currency
+}
+
 func ConvertCurrency(c *gin.Context) {
 	from, to, amount := GetConvertParams(c)
 
@@ -77,11 +86,28 @@ func ConvertCurrency(c *gin.Context) {
 		return
 	}
 
+	fromCurrency := GetCurrencyByKey(from)
+	toCurrency := GetCurrencyByKey(to)
+
+	if fromCurrency.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"Bad Request": "From currency does not exists or is not available to conversion"})
+		return
+	}
+
+	if toCurrency.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"Bad Request": "To currency does not exists or is not available to conversion"})
+		return
+	}
+
+	quote := services.LayerApiGetRate(to)
+
 	var conversion = models.Conversion{
 		From:   from,
 		To:     to,
 		Amount: amount,
-		Result: amount * 2,
+		Result: amount * quote,
 	}
 	c.JSON(200, conversion)
 }

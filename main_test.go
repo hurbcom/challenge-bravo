@@ -16,29 +16,27 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var ID int
-
 func SetupTestsRoutes() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	routes := gin.Default()
 	return routes
 }
 
-func CreateCurrencyMock() {
-	currency := models.Currency{Key: "USD", Description: "USD description", QuotationType: "QuotationType"}
+func CreateCurrencyMock(key string, description string, quotationType string) int {
+	currency := models.Currency{Key: key, Description: description, QuotationType: quotationType}
 	database.DB.Create(&currency)
-	ID = int(currency.ID)
+	return int(currency.ID)
 }
 
-func DeleteCurrencyMock() {
+func DeleteCurrencyMock(id int) {
 	var currency models.Currency
-	database.DB.Delete(&currency, ID)
+	database.DB.Delete(&currency, id)
 }
 
 func TestListCurrencies(t *testing.T) {
 	database.ConnectDatabase()
-	CreateCurrencyMock()
-	defer DeleteCurrencyMock()
+	id := CreateCurrencyMock("USD", "USD description", "QuotationType")
+	defer DeleteCurrencyMock(id)
 	r := SetupTestsRoutes()
 	r.GET("currency", controllers.ListCurrencies)
 
@@ -61,9 +59,6 @@ func TestCreateCurrencyWithNilValues(t *testing.T) {
 }
 
 func TestCreateCurrency(t *testing.T) {
-	database.ConnectDatabase()
-	defer DeleteCurrencyMock()
-
 	r := SetupTestsRoutes()
 	r.POST("currency", controllers.CreateCurrency)
 
@@ -76,7 +71,8 @@ func TestCreateCurrency(t *testing.T) {
 	var expectedCurrency models.Currency
 	json.Unmarshal(response.Body.Bytes(), &expectedCurrency)
 
-	ID = int(expectedCurrency.ID)
+	id := int(expectedCurrency.ID)
+	defer DeleteCurrencyMock(id)
 
 	assert.Equal(t, http.StatusOK, response.Code)
 	assert.Equal(t, "created key", expectedCurrency.Key)
@@ -86,12 +82,12 @@ func TestCreateCurrency(t *testing.T) {
 
 func TestShowCurrency(t *testing.T) {
 	database.ConnectDatabase()
-	CreateCurrencyMock()
-	defer DeleteCurrencyMock()
+	id := CreateCurrencyMock("USD", "USD description", "QuotationType")
+	defer DeleteCurrencyMock(id)
 	r := SetupTestsRoutes()
 	r.GET("/currency/:id", controllers.ShowCurrency)
 
-	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", ID), nil)
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", id), nil)
 	response := httptest.NewRecorder()
 	r.ServeHTTP(response, req)
 
@@ -121,11 +117,11 @@ func TestShowCurrencyNotFound(t *testing.T) {
 
 func TestDeleteCurrency(t *testing.T) {
 	database.ConnectDatabase()
-	CreateCurrencyMock()
+	id := CreateCurrencyMock("USD", "USD description", "QuotationType")
 	r := SetupTestsRoutes()
 	r.DELETE("/currency/:id", controllers.DeleteCurrency)
 
-	urlPath := fmt.Sprintf("/currency/%d", ID)
+	urlPath := fmt.Sprintf("/currency/%d", id)
 	req, _ := http.NewRequest("DELETE", urlPath, nil)
 	response := httptest.NewRecorder()
 	r.ServeHTTP(response, req)
@@ -133,28 +129,10 @@ func TestDeleteCurrency(t *testing.T) {
 	assert.Equal(t, http.StatusOK, response.Code)
 }
 
-func TestConvertCurrency(t *testing.T) {
-	r := SetupTestsRoutes()
-	r.GET("conversion", controllers.ConvertCurrency)
-	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", "BTC", "EUR", 2.10)
-	req, _ := http.NewRequest("GET", urlPath, nil)
-	response := httptest.NewRecorder()
-	r.ServeHTTP(response, req)
-
-	var expectedConversion models.Conversion
-	json.Unmarshal(response.Body.Bytes(), &expectedConversion)
-
-	assert.Equal(t, http.StatusOK, response.Code)
-	assert.Equal(t, "BTC", expectedConversion.From)
-	assert.Equal(t, "EUR", expectedConversion.To)
-	assert.Equal(t, float32(2.1), expectedConversion.Amount)
-	assert.Equal(t, float32(4.2), expectedConversion.Result)
-}
-
 func TestConvertCurrencyWithoutFromParam(t *testing.T) {
 	r := SetupTestsRoutes()
 	r.GET("conversion", controllers.ConvertCurrency)
-	urlPath := fmt.Sprintf("/conversion?to=%s&amount=%f", "EUR", 2.10)
+	urlPath := fmt.Sprintf("/conversion?to=%s&amount=%f", "EUR", 1.0)
 	req, _ := http.NewRequest("GET", urlPath, nil)
 	response := httptest.NewRecorder()
 	r.ServeHTTP(response, req)
@@ -169,7 +147,7 @@ func TestConvertCurrencyWithoutFromParam(t *testing.T) {
 func TestConvertCurrencyWithoutToParam(t *testing.T) {
 	r := SetupTestsRoutes()
 	r.GET("conversion", controllers.ConvertCurrency)
-	urlPath := fmt.Sprintf("/conversion?from=%s&amount=%f", "BTC", 2.10)
+	urlPath := fmt.Sprintf("/conversion?from=%s&amount=%f", "BTC", 1.0)
 	req, _ := http.NewRequest("GET", urlPath, nil)
 	response := httptest.NewRecorder()
 	r.ServeHTTP(response, req)
@@ -194,4 +172,66 @@ func TestConvertCurrencyWithoutToAmount(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, response.Code)
 	assert.Equal(t, expectedResponse, string(responseBody))
+}
+
+func TestConvertCurrencyWithInvalidFrom(t *testing.T) {
+	database.ConnectDatabase()
+	toId := CreateCurrencyMock("EUR", "EUR description", "QuotationType")
+	defer DeleteCurrencyMock(toId)
+
+	r := SetupTestsRoutes()
+	r.GET("conversion", controllers.ConvertCurrency)
+	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", "BTC", "EUR", 1.0)
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, req)
+
+	expectedResponse := `{"Bad Request":"From currency does not exists or is not available to conversion"}`
+	responseBody, _ := ioutil.ReadAll(response.Body)
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+	assert.Equal(t, expectedResponse, string(responseBody))
+}
+
+func TestConvertCurrencyWithInvalidTo(t *testing.T) {
+	database.ConnectDatabase()
+	fromId := CreateCurrencyMock("BTC", "BTC description", "QuotationType")
+	defer DeleteCurrencyMock(fromId)
+
+	r := SetupTestsRoutes()
+	r.GET("conversion", controllers.ConvertCurrency)
+	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", "BTC", "EUR", 1.0)
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, req)
+
+	expectedResponse := `{"Bad Request":"To currency does not exists or is not available to conversion"}`
+	responseBody, _ := ioutil.ReadAll(response.Body)
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+	assert.Equal(t, expectedResponse, string(responseBody))
+}
+
+func TestConvertCurrency(t *testing.T) {
+	database.ConnectDatabase()
+	btcId := CreateCurrencyMock("USD", "USD description", "QuotationType")
+	eurId := CreateCurrencyMock("BRL", "BRL description", "QuotationType")
+	defer DeleteCurrencyMock(btcId)
+	defer DeleteCurrencyMock(eurId)
+
+	r := SetupTestsRoutes()
+	r.GET("conversion", controllers.ConvertCurrency)
+	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", "USD", "BRL", 1.0)
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, req)
+
+	var expectedConversion models.Conversion
+	json.Unmarshal(response.Body.Bytes(), &expectedConversion)
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "USD", expectedConversion.From)
+	assert.Equal(t, "BRL", expectedConversion.To)
+	assert.Equal(t, float32(1.0), expectedConversion.Amount)
+	assert.Equal(t, float32(5.044204), expectedConversion.Result)
 }
