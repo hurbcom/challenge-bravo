@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type Currency struct {
+type Rate struct {
 	ObjectId            string
 	Code                string
 	Value               float64

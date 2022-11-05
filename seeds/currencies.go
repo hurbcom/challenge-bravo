@@ -12,39 +12,57 @@ var initCurrencies = []string{
 	"BRL",
 	"EUR",
 	"BTC",
-	"ETH",
 }
 
 func main() {
-	repository := repositories.NewCurrenciesRepository()
-	backingCurrency := models.Currency{
+	repository := repositories.NewExchangesRepository()
+	backingRate := models.Rate{
 		Code:                "USD",
 		Value:               1,
 		BackingCurrencyCode: "USD",
 	}
-	_, err := repository.Create(backingCurrency)
+	err := repository.Create(backingRate)
+	if err != nil {
+		log.Fatal(err)
+	}
+	ethToUsd := models.Rate{
+		Code:                "ETH",
+		Value:               1539.46,
+		BackingCurrencyCode: "USD",
+	}
+	usdToEth := models.Rate{
+		Code:                "USD",
+		Value:               0.00065,
+		BackingCurrencyCode: "ETH",
+	}
+	err = repository.Create(ethToUsd)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = repository.Create(usdToEth)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, currencyCode := range initCurrencies {
-		create(currencyCode, backingCurrency.Code)
-		create(backingCurrency.Code, currencyCode)
+		create(currencyCode, backingRate.Code)
+		create(backingRate.Code, currencyCode)
 	}
 }
+
 func create(from, to string) {
-	repository := repositories.NewCurrenciesRepository()
+	repository := repositories.NewExchangesRepository()
 	api1 := api.NewApi()
 	apiValue, err := api1.CurrentValue(from, to)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Print(apiValue.Quotes[from+to])
-	currency := models.Currency{
+
+	rate := models.Rate{
 		Code:                from,
-		Value:               apiValue.Quotes[from+to],
+		Value:               apiValue.Rates[to],
 		BackingCurrencyCode: to,
 	}
-	_, err = repository.Create(currency)
+	err = repository.Create(rate)
 	if err != nil {
 		log.Fatal(err)
 	}

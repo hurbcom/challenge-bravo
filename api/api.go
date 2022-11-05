@@ -11,13 +11,16 @@ import (
 	"github.com/victorananias/challenge-bravo/settings"
 )
 
+var RateUnavailableError = errors.New("rate unavailable")
+
 type Api struct {
 	settings *settings.Settings
 }
 
-type LiveResponse struct {
-	Quotes    map[string]float64 `json:"quotes"`
-	Source    string             `json:"source"`
+type CurrentResponse struct {
+	Base      string             `json:"base"`
+	Date      string             `json:"date"`
+	Rates     map[string]float64 `json:"rates"`
 	Success   bool               `json:"success"`
 	Timestamp int                `json:"timestamp"`
 }
@@ -32,9 +35,9 @@ func NewApi() *Api {
 	return &api
 }
 
-func (api *Api) CurrentValue(from, to string) (LiveResponse, error) {
-	result := LiveResponse{}
-	url := fmt.Sprintf("%s/live?source=%s&currencies=%s", api.settings.ApiUrl, from, to)
+func (api *Api) CurrentValue(from, to string) (CurrentResponse, error) {
+	result := CurrentResponse{}
+	url := fmt.Sprintf("%s/latest?base=%s&symbols=%s", api.settings.ApiUrl, from, to)
 	log.Printf("external api called: %s", url)
 
 	client := &http.Client{}
@@ -49,6 +52,9 @@ func (api *Api) CurrentValue(from, to string) (LiveResponse, error) {
 	if err != nil {
 		log.Print(err.Error())
 		return result, errors.New("error consuming external api")
+	}
+	if res.StatusCode == http.StatusBadRequest {
+		return result, RateUnavailableError
 	}
 	if res.Body != nil {
 		defer res.Body.Close()
