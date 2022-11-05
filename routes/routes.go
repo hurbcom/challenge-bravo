@@ -11,7 +11,7 @@ func HandleRequests() {
 	r.POST("currency", controllers.CreateCurrency)
 	r.GET("currency/:id", controllers.ShowCurrency)
 
-	r.GET("conversion", controllers.Convert)
+	r.GET("conversion", controllers.ConvertCurrency)
 
 	r.Run()
 }

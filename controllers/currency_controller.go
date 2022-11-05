@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/felipepnascimento/challenge-bravo-flp/database"
 	"github.com/felipepnascimento/challenge-bravo-flp/models"
@@ -37,4 +38,19 @@ func ShowCurrency(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, currency)
+}
+
+func ConvertCurrency(c *gin.Context) {
+	from := c.Query("from")
+	to := c.Query("to")
+	a, _ := strconv.ParseFloat(c.Query("amount"), 32)
+	var amount = float32(a)
+
+	var conversion = models.Conversion{
+		From:   from,
+		To:     to,
+		Amount: amount,
+		Result: amount * 2,
+	}
+	c.JSON(200, conversion)
 }
