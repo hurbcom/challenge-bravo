@@ -10,8 +10,8 @@ import (
 )
 
 func rootHandler() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, entities.Response{
+	return func(c *gin.Context) {
+		c.JSON(http.StatusOK, entities.Response{
 			Success: true,
 			Message: "Hello World!",
 			Data:    struct{}{},
