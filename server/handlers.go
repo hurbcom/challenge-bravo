@@ -8,8 +8,8 @@ type Handlers struct {
 	CurrencyHandler handlers.CurrencyHandler
 }
 
-func SetupHandlers(uscs *Usecases) *Handlers {
-	currencyHandlers := handlers.InitializeCurrencyHandler(uscs.CurrencyUsecase)
+func SetupHandlers(useCases *Usecases) *Handlers {
+	currencyHandlers := handlers.InitializeCurrencyHandler(useCases.CurrencyUsecase)
 
 	return &Handlers{
 		CurrencyHandler: currencyHandlers,

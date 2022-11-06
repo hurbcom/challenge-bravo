@@ -20,14 +20,14 @@ func rootHandler() gin.HandlerFunc {
 	}
 }
 
-func registerRoutes(router *gin.Engine, hndlrs *Handlers) {
+func registerRoutes(router *gin.Engine, handlers *Handlers) {
 	serveHttp := utils.ServeHTTP
 
 	router.GET("/", rootHandler())
-	router.GET("/api/currency", serveHttp(hndlrs.CurrencyHandler.GetAllCurrencies))
-	router.GET("/api/currency/:id", serveHttp(hndlrs.CurrencyHandler.GetCurrencyByID))
-	router.POST("/api/currency", serveHttp(hndlrs.CurrencyHandler.CreateCurrency))
-	router.DELETE("/api/currency/:id", serveHttp(hndlrs.CurrencyHandler.DeleteCurrency))
+	router.GET("/api/currency", serveHttp(handlers.CurrencyHandler.GetAllCurrencies))
+	router.GET("/api/currency/:id", serveHttp(handlers.CurrencyHandler.GetCurrencyByID))
+	router.POST("/api/currency", serveHttp(handlers.CurrencyHandler.CreateCurrency))
+	router.DELETE("/api/currency/:id", serveHttp(handlers.CurrencyHandler.DeleteCurrency))
 }
 
 func SetupServer() {
@@ -37,12 +37,12 @@ func SetupServer() {
 	db := config.ConnectDB(configs)
 
 	repos := SetupRepositories(db)
-	uscs := SetupUsecases(repos)
-	hdnlrs := SetupHandlers(uscs)
+	useCases := SetupUsecases(repos)
+	handlers := SetupHandlers(useCases)
 
 	router := gin.Default()
 
-	registerRoutes(router, hdnlrs)
+	registerRoutes(router, handlers)
 
 	router.Run(":9090")
 }
