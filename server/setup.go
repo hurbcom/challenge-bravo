@@ -24,10 +24,10 @@ func registerRoutes(router *gin.Engine, hndlrs *Handlers) {
 	serveHttp := utils.ServeHTTP
 
 	router.GET("/", rootHandler())
-	router.GET("/currency", serveHttp(hndlrs.CurrencyHandler.GetAllCurrencies))
-	router.GET("/currency/:id", serveHttp(hndlrs.CurrencyHandler.GetCurrencyByID))
-	router.POST("/currency", serveHttp(hndlrs.CurrencyHandler.CreateCurrency))
-	router.DELETE("/currency/:id", serveHttp(hndlrs.CurrencyHandler.DeleteCurrency))
+	router.GET("/api/currency", serveHttp(hndlrs.CurrencyHandler.GetAllCurrencies))
+	router.GET("/api/currency/:id", serveHttp(hndlrs.CurrencyHandler.GetCurrencyByID))
+	router.POST("/api/currency", serveHttp(hndlrs.CurrencyHandler.CreateCurrency))
+	router.DELETE("/api/currency/:id", serveHttp(hndlrs.CurrencyHandler.DeleteCurrency))
 }
 
 func SetupServer() {

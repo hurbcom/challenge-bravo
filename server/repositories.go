@@ -2,14 +2,14 @@ package server
 
 import (
 	repositories "github.com/felipepnascimento/challenge-bravo-flp/repositories"
-	"github.com/jmoiron/sqlx"
+	"gorm.io/gorm"
 )
 
 type Repositories struct {
 	CurrencyRepository repositories.CurrencyRepository
 }
 
-func SetupRepositories(db *sqlx.DB) *Repositories {
+func SetupRepositories(db *gorm.DB) *Repositories {
 	currencyRepository := repositories.InitializeCurrencyRepository(db)
 
 	return &Repositories{

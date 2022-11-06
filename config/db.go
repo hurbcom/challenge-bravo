@@ -2,25 +2,30 @@ package config
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/felipepnascimento/challenge-bravo-flp/entities"
-	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var DB *sqlx.DB
+var (
+	DB  *gorm.DB
+	err error
+)
 
 // ConnectDB to get all needed db connections for application
-func ConnectDB(config *entities.Config) *sqlx.DB {
+func ConnectDB(config *entities.Config) *gorm.DB {
 	DB = getDBConnection(config)
 
 	return DB
 }
 
-func getDBConnection(config *entities.Config) *sqlx.DB {
-	var dbConnectionStr string
+func getDBConnection(config *entities.Config) *gorm.DB {
+	var databaseUrl string
 
-	dbConnectionStr = fmt.Sprintf(
+	databaseUrl = fmt.Sprintf(
 		"host=%s port=%d dbname=%s user=%s password=%s sslmode=disable",
 		config.Database.Host,
 		config.Database.Port,
@@ -29,19 +34,11 @@ func getDBConnection(config *entities.Config) *sqlx.DB {
 		config.Database.Password,
 	)
 
-	db, err := sqlx.Open("postgres", dbConnectionStr)
+	DB, err = gorm.Open(postgres.Open(databaseUrl))
 	if err != nil {
-		panic(err)
+		log.Panic("Erro ao conectar com banco de dados")
 	}
+	DB.AutoMigrate(&entities.Currency{})
 
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-
-	db.SetMaxIdleConns(1)
-	db.SetMaxOpenConns(5)
-
-	fmt.Println("Connected to DB")
-	return db
+	return DB
 }

@@ -2,39 +2,27 @@ package utils
 
 import (
 	"fmt"
-	"github.com/jmoiron/sqlx"
+
+	"github.com/felipepnascimento/challenge-bravo-flp/config"
+	"gorm.io/gorm"
 )
 
 type TruncateTableExecutor struct {
-	db *sqlx.DB
+	db *gorm.DB
 }
 
-func InitTruncateTableExecutor(db *sqlx.DB) TruncateTableExecutor {
+func InitTruncateTableExecutor(db *gorm.DB) TruncateTableExecutor {
 	return TruncateTableExecutor{
 		db,
 	}
 }
 
 func (executor *TruncateTableExecutor) TruncateTable(tableNames []string) {
-	var err error
+	for _, name := range tableNames {
+		query := fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY CASCADE;", name)
 
-	tx, err := executor.db.Beginx()
-	if err != nil {
-		panic(err)
-	} else {
-		for _, name := range tableNames {
-			query := fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY CASCADE;", name)
-			_, err := tx.Exec(query)
-			if err != nil {
-				panic(err)
-			}
+		if result := config.DB.Raw(query); result.Error != nil {
+			panic(result.Error)
 		}
-	}
-
-	if err == nil {
-		tx.Commit()
-	} else {
-		tx.Rollback()
-		panic(err)
 	}
 }
