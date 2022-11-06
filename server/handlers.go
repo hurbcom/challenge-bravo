@@ -5,13 +5,13 @@ import (
 )
 
 type Handlers struct {
-	TweetHandler handlers.TweetHandler
+	CurrencyHandler handlers.CurrencyHandler
 }
 
 func SetupHandlers(uscs *Usecases) *Handlers {
-	tweetHandlers := handlers.InitializeTweetHandler(uscs.TweetUsecase)
+	currencyHandlers := handlers.InitializeCurrencyHandler(uscs.CurrencyUsecase)
 
 	return &Handlers{
-		TweetHandler: tweetHandlers,
+		CurrencyHandler: currencyHandlers,
 	}
 }

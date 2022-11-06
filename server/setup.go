@@ -24,12 +24,10 @@ func registerRoutes(router *gin.Engine, hndlrs *Handlers) {
 	serveHttp := utils.ServeHTTP
 
 	router.GET("/", rootHandler())
-	router.GET("/tweet", serveHttp(hndlrs.TweetHandler.GetAllTweets))
-	router.GET("/tweet/:id", serveHttp(hndlrs.TweetHandler.GetTweetByID))
-	router.GET("/tweet/search", serveHttp(hndlrs.TweetHandler.SearchTweetByText))
-	router.POST("/tweet", serveHttp(hndlrs.TweetHandler.CreateTweet))
-	router.PUT("/tweet", serveHttp(hndlrs.TweetHandler.UpdateTweet))
-	router.DELETE("/tweet/:id", serveHttp(hndlrs.TweetHandler.DeleteTweet))
+	router.GET("/currency", serveHttp(hndlrs.CurrencyHandler.GetAllCurrencies))
+	router.GET("/currency/:id", serveHttp(hndlrs.CurrencyHandler.GetCurrencyByID))
+	router.POST("/currency", serveHttp(hndlrs.CurrencyHandler.CreateCurrency))
+	router.DELETE("/currency/:id", serveHttp(hndlrs.CurrencyHandler.DeleteCurrency))
 }
 
 func SetupServer() {

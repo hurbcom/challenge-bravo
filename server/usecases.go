@@ -3,13 +3,13 @@ package server
 import usecases "github.com/felipepnascimento/challenge-bravo-flp/usecases"
 
 type Usecases struct {
-	TweetUsecase usecases.TweetUsecase
+	CurrencyUsecase usecases.CurrencyUsecase
 }
 
 func SetupUsecases(repos *Repositories) *Usecases {
-	tweetUsecase := usecases.InitializeTweetUsecase(repos.TweetRepository)
+	currencyUsecase := usecases.InitializeCurrencyUsecase(repos.CurrencyRepository)
 
 	return &Usecases{
-		TweetUsecase: tweetUsecase,
+		CurrencyUsecase: currencyUsecase,
 	}
 }

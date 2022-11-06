@@ -6,13 +6,13 @@ import (
 )
 
 type Repositories struct {
-	TweetRepository repositories.TweetRepository
+	CurrencyRepository repositories.CurrencyRepository
 }
 
 func SetupRepositories(db *sqlx.DB) *Repositories {
-	tweetRepository := repositories.InitializeTweetRepository(db)
+	currencyRepository := repositories.InitializeCurrencyRepository(db)
 
 	return &Repositories{
-		TweetRepository: tweetRepository,
+		CurrencyRepository: currencyRepository,
 	}
 }
