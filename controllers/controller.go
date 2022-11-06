@@ -101,13 +101,14 @@ func ConvertCurrency(c *gin.Context) {
 		return
 	}
 
-	quote := services.LayerApiGetRate(to)
+	// TODO handle error
+	rate, _ := services.GetCurrencyRate(to)
 
 	var conversion = models.Conversion{
 		From:   from,
 		To:     to,
 		Amount: amount,
-		Result: amount * quote,
+		Result: amount * rate,
 	}
 	c.JSON(200, conversion)
 }
