@@ -44,5 +44,5 @@ func SetupServer() {
 
 	registerRoutes(router, handlers)
 
-	router.Run(":9090")
+	router.Run(":8080")
 }
