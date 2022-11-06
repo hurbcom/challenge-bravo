@@ -10,18 +10,30 @@ type Routes struct {
 type HandlerFunc func(http.ResponseWriter, *http.Request)
 
 func (routes *Routes) RegisterAll() {
-	routes.register("/conversions", ConversionsHandler, http.MethodGet)
+	routes.register("/", map[string]HandlerFunc{
+		http.MethodPost:   CreateHandler,
+		http.MethodDelete: DeleteHandler,
+	})
+	routes.register("/conversions", map[string]HandlerFunc{
+		http.MethodGet: ConversionsHandler,
+	})
 }
 
-func (routes *Routes) register(route string, handler HandlerFunc, method string) {
-	http.HandleFunc(route, routes.setup(handler, method))
+func (routes *Routes) register(route string, handlers map[string]HandlerFunc) {
+	http.HandleFunc(route, routes.setup(handlers))
 }
 
-func (routes *Routes) setup(handler func(http.ResponseWriter, *http.Request), method string) HandlerFunc {
-	return func(responsewriter http.ResponseWriter, request *http.Request) {
-		routes.setupCors(responsewriter)
-		if request.Method == method {
-			handler(responsewriter, request)
+func (routes *Routes) setup(handlers map[string]HandlerFunc) HandlerFunc {
+	return func(responseWriter http.ResponseWriter, request *http.Request) {
+		routes.setupCors(responseWriter)
+		if handler, ok := handlers[request.Method]; ok {
+			handler(responseWriter, request)
+		} else {
+			responseWriter.WriteHeader(http.StatusNotFound)
+			_, err := responseWriter.Write([]byte{})
+			if err != nil {
+				http.Error((responseWriter), err.Error(), http.StatusBadRequest)
+			}
 		}
 	}
 }

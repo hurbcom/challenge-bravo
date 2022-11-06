@@ -11,7 +11,7 @@ import (
 	"github.com/victorananias/challenge-bravo/settings"
 )
 
-var RateUnavailableError = errors.New("rate unavailable")
+var ErrRateUnavailable = errors.New("rate unavailable")
 
 type Api struct {
 	settings *settings.Settings
@@ -54,7 +54,7 @@ func (api *Api) CurrentValue(from, to string) (CurrentResponse, error) {
 		return result, errors.New("error consuming external api")
 	}
 	if res.StatusCode == http.StatusBadRequest {
-		return result, RateUnavailableError
+		return result, ErrRateUnavailable
 	}
 	if res.Body != nil {
 		defer res.Body.Close()
@@ -69,6 +69,6 @@ func (api *Api) CurrentValue(from, to string) (CurrentResponse, error) {
 		log.Print(err.Error())
 		return result, errors.New("error unmarshing external api response")
 	}
-
+	log.Print(result)
 	return result, nil
 }

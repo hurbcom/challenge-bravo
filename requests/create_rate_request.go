@@ -1,7 +1,7 @@
 package requests
 
 type CreateRateRequest struct {
-	CurrencyCode        string
-	BackingCurrencyCode string
-	Value               float64
+	CurrencyCode        string  `json:"currencyCode"`
+	BackingCurrencyCode string  `json:"backingCurrencyCode"`
+	Value               float64 `json:"value"`
 }

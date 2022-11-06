@@ -1,6 +1,7 @@
 {
     "ApiKey": "HUEeuOf562bZBVbbz8MkhgJzuha63nxy",
     "ApiUrl": "https://api.apilayer.com/exchangerates_data",
+    "BackingCurrencyCode": "USD",
     "Db": {
         "ConnectionString": "mongodb://root:123password@localhost:27017",
         "Name": "currencies"

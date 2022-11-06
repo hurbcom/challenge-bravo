@@ -6,9 +6,10 @@ import (
 )
 
 type Settings struct {
-	ApiKey string
-	ApiUrl string
-	Db     DbSettings
+	ApiKey              string
+	ApiUrl              string
+	BackingCurrencyCode string
+	Db                  DbSettings
 }
 
 type DbSettings struct {
