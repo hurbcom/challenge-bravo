@@ -1,4 +1,4 @@
-module github.com/felipepnascimento/challenge-bravo-flp/
+module github.com/felipepnascimento/challenge-bravo-flp
 
 go 1.16
 
