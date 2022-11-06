@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
-	"github.com/jmoiron/sqlx"
 	"gorm.io/gorm"
 )
 
@@ -63,12 +62,4 @@ func (repository *currencyRepository) DeleteCurrency(id int) error {
 	}
 
 	return nil
-}
-
-func deleteCurrency(tx *sqlx.Tx, id int) error {
-	_, err := tx.Exec(`
-		DELETE FROM currencys WHERE id=$1;
-	`, id)
-
-	return err
 }

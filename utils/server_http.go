@@ -23,7 +23,6 @@ func ServeHTTP(handle appHandler) gin.HandlerFunc {
 		if result.Err == nil {
 			ctx.JSON(result.StatusCode, entities.Response{
 				Success: true,
-				Message: result.Message,
 				Data:    result.Data,
 			})
 		} else {

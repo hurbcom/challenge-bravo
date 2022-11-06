@@ -1,13 +1,13 @@
 package entities
 
 type Response struct {
-	Success bool `json:"success"`
-	Message string `json:"message"`
-	Data interface{} `json:"data"`
+	Success bool        `json:"success"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
 type AppError struct {
-	Err error
+	Err        error
 	StatusCode int
 }
 
@@ -16,8 +16,7 @@ func (appError *AppError) Error() string {
 }
 
 type AppResult struct {
-	Data interface{}
-	Message string
-	Err error
+	Data       interface{}
+	Err        error
 	StatusCode int
 }

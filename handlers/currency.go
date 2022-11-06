@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -28,19 +27,13 @@ func InitializeCurrencyHandler(usecase usecases.CurrencyUsecase) CurrencyHandler
 func (handler *currencyHandler) GetAllCurrencies(*gin.Context) *entities.AppResult {
 	var result entities.AppResult
 
-	currencys, err := handler.currencyUsecase.GetAllCurrencies()
-	if err == nil {
-		result.StatusCode = http.StatusOK
-		result.Message = "Success to get all currencys"
-		if len(*currencys) == 0 {
-			result.Data = []struct{}{}
-		} else {
-			result.Data = currencys
-		}
-	} else {
+	currencies, err := handler.currencyUsecase.GetAllCurrencies()
+	if err != nil {
 		result.StatusCode = http.StatusInternalServerError
-		result.Err = err
-		result.Data = []struct{}{}
+		result.Err = err.(*entities.AppError).Err
+	} else {
+		result.StatusCode = http.StatusOK
+		result.Data = currencies
 	}
 
 	return &result
@@ -51,19 +44,12 @@ func (handler *currencyHandler) GetCurrencyByID(ctx *gin.Context) *entities.AppR
 	id, err := strconv.Atoi(ctx.Param("id"))
 
 	currency, err := handler.currencyUsecase.GetCurrencyByID(id)
-	if err == nil {
-		result.StatusCode = http.StatusOK
-		result.Message = fmt.Sprintf("Success to get currency with id %d", id)
-		if currency == nil {
-			result.Data = struct{}{}
-		} else {
-			result.Data = currency
-		}
-	} else {
-		fmt.Println()
+	if err != nil {
 		result.StatusCode = err.(*entities.AppError).StatusCode
 		result.Err = err.(*entities.AppError).Err
-		result.Data = struct{}{}
+	} else {
+		result.StatusCode = http.StatusOK
+		result.Data = currency
 	}
 
 	return &result
@@ -74,20 +60,18 @@ func (handler *currencyHandler) CreateCurrency(ctx *gin.Context) *entities.AppRe
 	var result entities.AppResult
 
 	if err := ctx.ShouldBindJSON(&currency); err != nil {
-		result.Err = err
-		result.Message = "username and text can not be empty"
+		result.Err = err.(*entities.AppError).Err
 		result.StatusCode = http.StatusBadRequest
 		return &result
 	}
 
 	err := handler.currencyUsecase.CreateCurrency(&currency)
-	if err == nil {
-		result.Message = "Success to create currency"
-		result.StatusCode = http.StatusCreated
-	} else {
+	if err != nil {
 		result.Err = err.(*entities.AppError).Err
-		result.Message = err.(*entities.AppError).Error()
 		result.StatusCode = err.(*entities.AppError).StatusCode
+	} else {
+		result.Data = currency
+		result.StatusCode = http.StatusOK
 	}
 
 	return &result
@@ -99,13 +83,11 @@ func (handler *currencyHandler) DeleteCurrency(ctx *gin.Context) *entities.AppRe
 	id, err := strconv.Atoi(ctx.Param("id"))
 
 	err = handler.currencyUsecase.DeleteCurrency(id)
-	if err == nil {
-		result.Message = fmt.Sprintf("Success to delete currency with id %d", id)
-		result.StatusCode = http.StatusAccepted
-	} else {
+	if err != nil {
 		result.Err = err.(*entities.AppError).Err
-		result.Message = err.(*entities.AppError).Error()
 		result.StatusCode = err.(*entities.AppError).StatusCode
+	} else {
+		result.StatusCode = http.StatusAccepted
 	}
 
 	return &result
