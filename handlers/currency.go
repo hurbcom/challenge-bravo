@@ -14,25 +14,14 @@ type currencyHandler struct {
 }
 
 type CurrencyHandler interface {
-	GetAllCurrencies(c *gin.Context)
 	CreateCurrency(c *gin.Context)
+	GetAllCurrencies(c *gin.Context)
 	GetCurrencyByID(c *gin.Context)
 	DeleteCurrency(c *gin.Context)
 }
 
 func InitializeCurrencyHandler(usecase usecases.CurrencyUsecase) CurrencyHandler {
 	return &currencyHandler{usecase}
-}
-
-func (handler *currencyHandler) GetAllCurrencies(c *gin.Context) {
-	currencies, err := handler.currencyUsecase.GetAllCurrencies()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error()})
-		return
-	}
-
-	c.JSON(200, currencies)
 }
 
 func (handler *currencyHandler) CreateCurrency(c *gin.Context) {
@@ -52,6 +41,17 @@ func (handler *currencyHandler) CreateCurrency(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, currency)
+}
+
+func (handler *currencyHandler) GetAllCurrencies(c *gin.Context) {
+	currencies, err := handler.currencyUsecase.GetAllCurrencies()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, currencies)
 }
 
 func (handler *currencyHandler) GetCurrencyByID(c *gin.Context) {

@@ -25,7 +25,7 @@ func (suite *currencyHandlerSuite) SetupSuite() {
 	handler := InitializeCurrencyHandler(usecase)
 
 	router := gin.Default()
-	// router.POST("/currency", handler.CreateCurrency)
+	router.POST("/currency", handler.CreateCurrency)
 	router.GET("/currency", handler.GetAllCurrencies)
 	// router.GET("/currency/:id", handler.GetCurrencyByID)
 
@@ -38,6 +38,16 @@ func (suite *currencyHandlerSuite) SetupSuite() {
 
 func (suite *currencyHandlerSuite) TearDownSuite() {
 	defer suite.testingServer.Close()
+}
+
+func (suite *currencyHandlerSuite) TestCreateCurrencyWithNilValues() {
+	response, _ := http.Post(fmt.Sprintf("%s/currency", suite.testingServer.URL), "application/json", nil)
+
+	responseBody := entities.Response{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.usecase.AssertExpectations(suite.T())
 }
 
 func (suite *currencyHandlerSuite) TestGetAllCurrencies() {
@@ -61,16 +71,6 @@ func (suite *currencyHandlerSuite) TestGetAllCurrencies() {
 	suite.Equal(http.StatusOK, response.StatusCode)
 	suite.usecase.AssertExpectations(suite.T())
 }
-
-// func (suite *currencyHandlerSuite) TestCreateCurrencyWithNilValues() {
-// 	response, _ := http.Post(fmt.Sprintf("%s/currency", suite.testingServer.URL), "application/json", nil)
-
-// 	responseBody := entities.Response{}
-// 	json.NewDecoder(response.Body).Decode(&responseBody)
-
-// 	suite.Equal(http.StatusBadRequest, response.StatusCode)
-// 	suite.usecase.AssertExpectations(suite.T())
-// }
 
 func TestCurrencyHandler(t *testing.T) {
 	suite.Run(t, new(currencyHandlerSuite))

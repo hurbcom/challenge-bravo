@@ -12,14 +12,22 @@ type currencyRepository struct {
 }
 
 type CurrencyRepository interface {
+	CreateCurrency(currency *entities.Currency) error
 	GetAllCurrencies() (*[]entities.Currency, error)
 	GetCurrencyByID(id int) (*entities.Currency, error)
-	CreateCurrency(currency *entities.Currency) error
 	DeleteCurrency(id int) error
 }
 
 func InitializeCurrencyRepository(db *gorm.DB) CurrencyRepository {
 	return &currencyRepository{db}
+}
+
+func (repository *currencyRepository) CreateCurrency(currency *entities.Currency) error {
+	if result := repository.db.Create(&currency); result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
 
 func (repository *currencyRepository) GetAllCurrencies() (*[]entities.Currency, error) {
@@ -44,14 +52,6 @@ func (repository *currencyRepository) GetCurrencyByID(id int) (*entities.Currenc
 	}
 
 	return &currency, nil
-}
-
-func (repository *currencyRepository) CreateCurrency(currency *entities.Currency) error {
-	if result := repository.db.Create(&currency); result.Error != nil {
-		return result.Error
-	}
-
-	return nil
 }
 
 func (repository *currencyRepository) DeleteCurrency(id int) error {

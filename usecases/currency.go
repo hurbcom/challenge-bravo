@@ -13,18 +13,14 @@ type currencyUsecase struct {
 }
 
 type CurrencyUsecase interface {
-	GetAllCurrencies() (*[]entities.Currency, error)
 	CreateCurrency(currency *entities.Currency) error
+	GetAllCurrencies() (*[]entities.Currency, error)
 	GetCurrencyByID(id int) (*entities.Currency, error)
 	DeleteCurrency(id int) error
 }
 
 func InitializeCurrencyUsecase(repository repositories.CurrencyRepository) CurrencyUsecase {
 	return &currencyUsecase{repository}
-}
-
-func (usecase *currencyUsecase) GetAllCurrencies() (*[]entities.Currency, error) {
-	return usecase.currencyRepository.GetAllCurrencies()
 }
 
 func (usecase *currencyUsecase) CreateCurrency(currency *entities.Currency) error {
@@ -49,6 +45,10 @@ func (usecase *currencyUsecase) CreateCurrency(currency *entities.Currency) erro
 		}
 	}
 	return nil
+}
+
+func (usecase *currencyUsecase) GetAllCurrencies() (*[]entities.Currency, error) {
+	return usecase.currencyRepository.GetAllCurrencies()
 }
 
 func (usecase *currencyUsecase) GetCurrencyByID(id int) (*entities.Currency, error) {
