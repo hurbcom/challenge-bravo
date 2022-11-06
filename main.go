@@ -1,11 +1,9 @@
 package main
 
 import (
-	"github.com/felipepnascimento/challenge-bravo-flp/database"
-	"github.com/felipepnascimento/challenge-bravo-flp/routes"
+	"github.com/felipepnascimento/challenge-bravo-flp/server"
 )
 
 func main() {
-	database.ConnectDatabase()
-	routes.HandleRequests()
+	server.SetupServer()
 }

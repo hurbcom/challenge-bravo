@@ -1,8 +1,14 @@
-FROM golang:1.16 as base
+FROM golang:latest
 
-FROM base as dev
+RUN apt update && apt upgrade -y && \
+    apt install -y git \
+    make openssh-client
 
-RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+WORKDIR /app
 
-WORKDIR /opt/app/api
-CMD ["air"]
+RUN curl -fLo install.sh https://raw.githubusercontent.com/cosmtrek/air/master/install.sh \
+    && chmod +x install.sh && sh install.sh && cp ./bin/air /bin/air
+
+COPY sql/tweet.sql /docker-entrypoint-initdb.d/
+
+CMD air

@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: challenge_bravo_flp_app
+    env_file:
+      - ".env"
+    ports:
+      - "9090:9090"
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+    links:
+      - db
+  db:
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
+    ports:
+      - "5432:5432"
+    container_name: challenge_bravo_flp_db
+    env_file:
+      - ".env"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${DB}
+    volumes:
+      - challenge_bravo_flp_db_volume:/var/lib/postgresql/data
+volumes:
+  challenge_bravo_flp_db_volume:
+    driver: local
