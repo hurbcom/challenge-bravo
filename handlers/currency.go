@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
+	"github.com/felipepnascimento/challenge-bravo-flp/entities"
 	usecases "github.com/felipepnascimento/challenge-bravo-flp/usecases"
 	"github.com/gin-gonic/gin"
 )
@@ -14,81 +14,69 @@ type currencyHandler struct {
 }
 
 type CurrencyHandler interface {
-	GetAllCurrencies(ctx *gin.Context) *entities.AppResult
-	GetCurrencyByID(ctx *gin.Context) *entities.AppResult
-	CreateCurrency(ctx *gin.Context) *entities.AppResult
-	DeleteCurrency(ctx *gin.Context) *entities.AppResult
+	GetAllCurrencies(c *gin.Context)
+	CreateCurrency(c *gin.Context)
+	GetCurrencyByID(c *gin.Context)
+	DeleteCurrency(c *gin.Context)
 }
 
 func InitializeCurrencyHandler(usecase usecases.CurrencyUsecase) CurrencyHandler {
 	return &currencyHandler{usecase}
 }
 
-func (handler *currencyHandler) GetAllCurrencies(*gin.Context) *entities.AppResult {
-	var result entities.AppResult
-
+func (handler *currencyHandler) GetAllCurrencies(c *gin.Context) {
 	currencies, err := handler.currencyUsecase.GetAllCurrencies()
 	if err != nil {
-		result.StatusCode = http.StatusInternalServerError
-		result.Err = err.(*entities.AppError).Err
-	} else {
-		result.StatusCode = http.StatusOK
-		result.Data = currencies
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error()})
+		return
 	}
 
-	return &result
+	c.JSON(200, currencies)
 }
 
-func (handler *currencyHandler) GetCurrencyByID(ctx *gin.Context) *entities.AppResult {
-	var result entities.AppResult
-	id, err := strconv.Atoi(ctx.Param("id"))
-
-	currency, err := handler.currencyUsecase.GetCurrencyByID(id)
-	if err != nil {
-		result.StatusCode = err.(*entities.AppError).StatusCode
-		result.Err = err.(*entities.AppError).Err
-	} else {
-		result.StatusCode = http.StatusOK
-		result.Data = currency
-	}
-
-	return &result
-}
-
-func (handler *currencyHandler) CreateCurrency(ctx *gin.Context) *entities.AppResult {
+func (handler *currencyHandler) CreateCurrency(c *gin.Context) {
 	var currency entities.Currency
-	var result entities.AppResult
 
-	if err := ctx.ShouldBindJSON(&currency); err != nil {
-		result.Err = err.(*entities.AppError).Err
-		result.StatusCode = http.StatusBadRequest
-		return &result
+	if err := c.ShouldBindJSON(&currency); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error()})
+		return
 	}
 
 	err := handler.currencyUsecase.CreateCurrency(&currency)
 	if err != nil {
-		result.Err = err.(*entities.AppError).Err
-		result.StatusCode = err.(*entities.AppError).StatusCode
-	} else {
-		result.Data = currency
-		result.StatusCode = http.StatusOK
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error()})
+		return
 	}
 
-	return &result
+	c.JSON(http.StatusOK, currency)
 }
 
-func (handler *currencyHandler) DeleteCurrency(ctx *gin.Context) *entities.AppResult {
-	var result entities.AppResult
+func (handler *currencyHandler) GetCurrencyByID(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
 
-	id, err := strconv.Atoi(ctx.Param("id"))
+	currency, _ := handler.currencyUsecase.GetCurrencyByID(id)
 
-	err = handler.currencyUsecase.DeleteCurrency(id)
-	if err != nil {
-		result.Err = err.(*entities.AppError).Err
-		result.StatusCode = err.(*entities.AppError).StatusCode
-	} else {
-		result.StatusCode = http.StatusAccepted
+	if currency.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"Not found": "Currency not found"})
+		return
 	}
 
-	return &result
+	c.JSON(http.StatusOK, currency)
+}
+
+func (handler *currencyHandler) DeleteCurrency(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	err := handler.currencyUsecase.DeleteCurrency(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": "Currency successfully deleted"})
 }

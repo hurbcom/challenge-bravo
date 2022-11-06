@@ -14,8 +14,8 @@ type currencyUsecase struct {
 
 type CurrencyUsecase interface {
 	GetAllCurrencies() (*[]entities.Currency, error)
-	GetCurrencyByID(id int) (*entities.Currency, error)
 	CreateCurrency(currency *entities.Currency) error
+	GetCurrencyByID(id int) (*entities.Currency, error)
 	DeleteCurrency(id int) error
 }
 
@@ -25,17 +25,6 @@ func InitializeCurrencyUsecase(repository repositories.CurrencyRepository) Curre
 
 func (usecase *currencyUsecase) GetAllCurrencies() (*[]entities.Currency, error) {
 	return usecase.currencyRepository.GetAllCurrencies()
-}
-
-func (usecase *currencyUsecase) GetCurrencyByID(id int) (*entities.Currency, error) {
-	currency, _ := usecase.currencyRepository.GetCurrencyByID(id)
-	if currency == nil {
-		return nil, &entities.AppError{
-			Err:        errors.New("currency is not found"),
-			StatusCode: http.StatusNotFound,
-		}
-	}
-	return currency, nil
 }
 
 func (usecase *currencyUsecase) CreateCurrency(currency *entities.Currency) error {
@@ -48,7 +37,7 @@ func (usecase *currencyUsecase) CreateCurrency(currency *entities.Currency) erro
 
 	if !currency.IsValid() {
 		return &entities.AppError{
-			Err:        errors.New("username and text cannot be empty"),
+			Err:        errors.New("key and description cannot be empty"),
 			StatusCode: http.StatusBadRequest,
 		}
 	}
@@ -60,6 +49,17 @@ func (usecase *currencyUsecase) CreateCurrency(currency *entities.Currency) erro
 		}
 	}
 	return nil
+}
+
+func (usecase *currencyUsecase) GetCurrencyByID(id int) (*entities.Currency, error) {
+	currency, _ := usecase.currencyRepository.GetCurrencyByID(id)
+	if currency == nil {
+		return nil, &entities.AppError{
+			Err:        errors.New("currency is not found"),
+			StatusCode: http.StatusNotFound,
+		}
+	}
+	return currency, nil
 }
 
 func (usecase *currencyUsecase) DeleteCurrency(id int) error {

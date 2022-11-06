@@ -6,7 +6,6 @@ import (
 
 	config "github.com/felipepnascimento/challenge-bravo-flp/config"
 	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
-	utils "github.com/felipepnascimento/challenge-bravo-flp/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,13 +20,11 @@ func rootHandler() gin.HandlerFunc {
 }
 
 func registerRoutes(router *gin.Engine, handlers *Handlers) {
-	serveHttp := utils.ServeHTTP
-
 	router.GET("/", rootHandler())
-	router.GET("/api/currency", serveHttp(handlers.CurrencyHandler.GetAllCurrencies))
-	router.GET("/api/currency/:id", serveHttp(handlers.CurrencyHandler.GetCurrencyByID))
-	router.POST("/api/currency", serveHttp(handlers.CurrencyHandler.CreateCurrency))
-	router.DELETE("/api/currency/:id", serveHttp(handlers.CurrencyHandler.DeleteCurrency))
+	router.GET("/api/currency", handlers.CurrencyHandler.GetAllCurrencies)
+	router.GET("/api/currency/:id", handlers.CurrencyHandler.GetCurrencyByID)
+	router.POST("/api/currency", handlers.CurrencyHandler.CreateCurrency)
+	router.DELETE("/api/currency/:id", handlers.CurrencyHandler.DeleteCurrency)
 }
 
 func SetupServer() {
