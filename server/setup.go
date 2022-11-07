@@ -5,26 +5,21 @@ import (
 	"net/http"
 
 	config "github.com/felipepnascimento/challenge-bravo-flp/config"
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
 	"github.com/gin-gonic/gin"
 )
 
 func rootHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.JSON(http.StatusOK, entities.Response{
-			Success: true,
-			Message: "Hello World!",
-			Data:    struct{}{},
-		})
+		c.JSON(http.StatusOK, "Hello World!")
 	}
 }
 
 func registerRoutes(router *gin.Engine, handlers *Handlers) {
 	router.GET("/", rootHandler())
-	router.GET("/api/currency", handlers.CurrencyHandler.GetAllCurrencies)
-	router.GET("/api/currency/:id", handlers.CurrencyHandler.GetCurrencyByID)
-	router.POST("/api/currency", handlers.CurrencyHandler.CreateCurrency)
-	router.DELETE("/api/currency/:id", handlers.CurrencyHandler.DeleteCurrency)
+	router.GET("/currency", handlers.CurrencyHandler.GetAllCurrencies)
+	router.GET("/currency/:id", handlers.CurrencyHandler.GetCurrencyByID)
+	router.POST("/currency", handlers.CurrencyHandler.CreateCurrency)
+	router.DELETE("/currency/:id", handlers.CurrencyHandler.DeleteCurrency)
 }
 
 func SetupServer() {

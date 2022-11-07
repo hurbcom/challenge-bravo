@@ -3,7 +3,6 @@
 package mocks
 
 import (
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
 	gin "github.com/gin-gonic/gin"
 
 	mock "github.com/stretchr/testify/mock"
@@ -14,68 +13,24 @@ type CurrencyHandler struct {
 	mock.Mock
 }
 
-// CreateCurrency provides a mock function with given fields: ctx
-func (_m *CurrencyHandler) CreateCurrency(ctx *gin.Context) *entities.AppResult {
-	ret := _m.Called(ctx)
-
-	var r0 *entities.AppResult
-	if rf, ok := ret.Get(0).(func(*gin.Context) *entities.AppResult); ok {
-		r0 = rf(ctx)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entities.AppResult)
-		}
-	}
-
-	return r0
+// CreateCurrency provides a mock function with given fields: c
+func (_m *CurrencyHandler) CreateCurrency(c *gin.Context) {
+	_m.Called(c)
 }
 
-// DeleteCurrency provides a mock function with given fields: ctx
-func (_m *CurrencyHandler) DeleteCurrency(ctx *gin.Context) *entities.AppResult {
-	ret := _m.Called(ctx)
-
-	var r0 *entities.AppResult
-	if rf, ok := ret.Get(0).(func(*gin.Context) *entities.AppResult); ok {
-		r0 = rf(ctx)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entities.AppResult)
-		}
-	}
-
-	return r0
+// DeleteCurrency provides a mock function with given fields: c
+func (_m *CurrencyHandler) DeleteCurrency(c *gin.Context) {
+	_m.Called(c)
 }
 
-// GetAllCurrencies provides a mock function with given fields: ctx
-func (_m *CurrencyHandler) GetAllCurrencies(ctx *gin.Context) *entities.AppResult {
-	ret := _m.Called(ctx)
-
-	var r0 *entities.AppResult
-	if rf, ok := ret.Get(0).(func(*gin.Context) *entities.AppResult); ok {
-		r0 = rf(ctx)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entities.AppResult)
-		}
-	}
-
-	return r0
+// GetAllCurrencies provides a mock function with given fields: c
+func (_m *CurrencyHandler) GetAllCurrencies(c *gin.Context) {
+	_m.Called(c)
 }
 
-// GetCurrencyByID provides a mock function with given fields: ctx
-func (_m *CurrencyHandler) GetCurrencyByID(ctx *gin.Context) *entities.AppResult {
-	ret := _m.Called(ctx)
-
-	var r0 *entities.AppResult
-	if rf, ok := ret.Get(0).(func(*gin.Context) *entities.AppResult); ok {
-		r0 = rf(ctx)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entities.AppResult)
-		}
-	}
-
-	return r0
+// GetCurrencyByID provides a mock function with given fields: c
+func (_m *CurrencyHandler) GetCurrencyByID(c *gin.Context) {
+	_m.Called(c)
 }
 
 type mockConstructorTestingTNewCurrencyHandler interface {

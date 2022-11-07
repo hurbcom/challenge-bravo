@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -27,7 +29,7 @@ func (suite *currencyHandlerSuite) SetupSuite() {
 	router := gin.Default()
 	router.POST("/currency", handler.CreateCurrency)
 	router.GET("/currency", handler.GetAllCurrencies)
-	// router.GET("/currency/:id", handler.GetCurrencyByID)
+	router.GET("/currency/:id", handler.GetCurrencyByID)
 
 	testingServer := httptest.NewServer(router)
 
@@ -43,10 +45,33 @@ func (suite *currencyHandlerSuite) TearDownSuite() {
 func (suite *currencyHandlerSuite) TestCreateCurrencyWithNilValues() {
 	response, _ := http.Post(fmt.Sprintf("%s/currency", suite.testingServer.URL), "application/json", nil)
 
-	responseBody := entities.Response{}
-	json.NewDecoder(response.Body).Decode(&responseBody)
-
 	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.usecase.AssertExpectations(suite.T())
+}
+
+func (suite *currencyHandlerSuite) TestCreateCurrency() {
+	currency := entities.Currency{
+		Key:           "created key",
+		Description:   "created description",
+		QuotationType: "created quotationType",
+	}
+
+	suite.usecase.On("CreateCurrency", &currency).Return(nil)
+
+	requestBody, err := json.Marshal(&currency)
+	suite.NoError(err, "can not marshal struct to json")
+
+	response, err := http.Post(fmt.Sprintf("%s/currency", suite.testingServer.URL), "application/json", bytes.NewBuffer(requestBody))
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	var expectedCurrency entities.Currency
+	json.NewDecoder(response.Body).Decode(&expectedCurrency)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal(expectedCurrency.Key, "created key")
+	suite.Equal(expectedCurrency.Description, "created description")
+	suite.Equal(expectedCurrency.QuotationType, "created quotationType")
 	suite.usecase.AssertExpectations(suite.T())
 }
 
@@ -65,10 +90,46 @@ func (suite *currencyHandlerSuite) TestGetAllCurrencies() {
 	suite.NoError(err, "no error when calling this endpoint")
 	defer response.Body.Close()
 
-	responseBody := entities.Response{}
-	json.NewDecoder(response.Body).Decode(&responseBody)
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.usecase.AssertExpectations(suite.T())
+}
+
+func (suite *currencyHandlerSuite) TestGetCurrencyByIDNotFound() {
+	id := 1
+
+	suite.usecase.On("GetCurrencyByID", id).Return(nil, nil)
+	response, err := http.Get(fmt.Sprintf("%s/currency/%d", suite.testingServer.URL, id))
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	expectedResponse := `{"Not found":"Currency not found"}`
+	responseBody, _ := ioutil.ReadAll(response.Body)
+
+	suite.Equal(http.StatusNotFound, response.StatusCode)
+	suite.Equal(expectedResponse, string(responseBody))
+	suite.usecase.AssertExpectations(suite.T())
+}
+
+func (suite *currencyHandlerSuite) TestGetCurrencyByID() {
+	id := 2
+	currency := entities.Currency{
+		Key:           "USD",
+		Description:   "USD Description",
+		QuotationType: "QuotationType",
+	}
+
+	suite.usecase.On("GetCurrencyByID", id).Return(&currency, nil)
+	response, err := http.Get(fmt.Sprintf("%s/currency/%d", suite.testingServer.URL, id))
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	var expectedCurrency entities.Currency
+	json.NewDecoder(response.Body).Decode(&expectedCurrency)
 
 	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal(expectedCurrency.Key, "USD")
+	suite.Equal(expectedCurrency.Description, "USD Description")
+	suite.Equal(expectedCurrency.QuotationType, "QuotationType")
 	suite.usecase.AssertExpectations(suite.T())
 }
 

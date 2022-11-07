@@ -28,15 +28,13 @@ func (handler *currencyHandler) CreateCurrency(c *gin.Context) {
 	var currency entities.Currency
 
 	if err := c.ShouldBindJSON(&currency); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	err := handler.currencyUsecase.CreateCurrency(&currency)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -46,8 +44,7 @@ func (handler *currencyHandler) CreateCurrency(c *gin.Context) {
 func (handler *currencyHandler) GetAllCurrencies(c *gin.Context) {
 	currencies, err := handler.currencyUsecase.GetAllCurrencies()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -59,9 +56,8 @@ func (handler *currencyHandler) GetCurrencyByID(c *gin.Context) {
 
 	currency, _ := handler.currencyUsecase.GetCurrencyByID(id)
 
-	if currency.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"Not found": "Currency not found"})
+	if currency == nil {
+		c.JSON(http.StatusNotFound, gin.H{"Not found": "Currency not found"})
 		return
 	}
 
@@ -73,8 +69,7 @@ func (handler *currencyHandler) DeleteCurrency(c *gin.Context) {
 
 	err := handler.currencyUsecase.DeleteCurrency(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

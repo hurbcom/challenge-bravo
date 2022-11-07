@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"errors"
-	"net/http"
 
 	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
 	repositories "github.com/felipepnascimento/challenge-bravo-flp/repositories"
@@ -25,24 +24,16 @@ func InitializeCurrencyUsecase(repository repositories.CurrencyRepository) Curre
 
 func (usecase *currencyUsecase) CreateCurrency(currency *entities.Currency) error {
 	if currency == nil {
-		return &entities.AppError{
-			Err:        errors.New("currency is nil pointer"),
-			StatusCode: http.StatusInternalServerError,
-		}
+		return errors.New("currency is nil")
 	}
 
 	if !currency.IsValid() {
-		return &entities.AppError{
-			Err:        errors.New("key and description cannot be empty"),
-			StatusCode: http.StatusBadRequest,
-		}
+		return errors.New("key and description cannot be empty")
 	}
+
 	err := usecase.currencyRepository.CreateCurrency(currency)
 	if err != nil {
-		return &entities.AppError{
-			Err:        err,
-			StatusCode: http.StatusInternalServerError,
-		}
+		return err
 	}
 	return nil
 }
@@ -54,10 +45,7 @@ func (usecase *currencyUsecase) GetAllCurrencies() (*[]entities.Currency, error)
 func (usecase *currencyUsecase) GetCurrencyByID(id int) (*entities.Currency, error) {
 	currency, _ := usecase.currencyRepository.GetCurrencyByID(id)
 	if currency == nil {
-		return nil, &entities.AppError{
-			Err:        errors.New("currency is not found"),
-			StatusCode: http.StatusNotFound,
-		}
+		return nil, errors.New("currency is not found")
 	}
 	return currency, nil
 }
