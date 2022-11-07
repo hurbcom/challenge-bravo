@@ -21,7 +21,7 @@ func (executor *TruncateTableExecutor) TruncateTable(tableNames []string) {
 	for _, name := range tableNames {
 		query := fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY CASCADE;", name)
 
-		if result := config.DB.Raw(query); result.Error != nil {
+		if result := config.DB.Exec(query); result.Error != nil {
 			panic(result.Error)
 		}
 	}
