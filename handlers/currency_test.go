@@ -55,13 +55,13 @@ func (suite *currencyHandlerSuite) TestCreateCurrency() {
 	suite.usecase.On("CreateCurrency", &currency).Return(nil)
 
 	requestBody, err := json.Marshal(&currency)
-	suite.NoError(err, "can not marshal struct to json")
+	suite.NoError(err)
 
 	req, _ := http.NewRequest("POST", "/currency", bytes.NewBuffer(requestBody))
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 
-	suite.NoError(err, "no error when calling the endpoint")
+	suite.NoError(err)
 
 	var expectedCurrency entities.Currency
 	json.NewDecoder(response.Body).Decode(&expectedCurrency)
