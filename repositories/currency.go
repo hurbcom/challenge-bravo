@@ -1,8 +1,6 @@
 package repositories
 
 import (
-	"errors"
-
 	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
 	"gorm.io/gorm"
 )
@@ -45,10 +43,6 @@ func (repository *currencyRepository) GetCurrencyByID(id int) (*entities.Currenc
 
 	if result := repository.db.First(&currency, id); result.Error != nil {
 		return nil, result.Error
-	}
-
-	if currency.ID == 0 {
-		return nil, errors.New("Currency not found")
 	}
 
 	return &currency, nil
