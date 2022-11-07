@@ -17,35 +17,32 @@ import (
 
 type currencyHandlerSuite struct {
 	suite.Suite
-	usecase       *mocks.CurrencyUsecase
-	handler       CurrencyHandler
-	testingServer *httptest.Server
+	usecase *mocks.CurrencyUsecase
+	handler CurrencyHandler
+	routes  *gin.Engine
 }
 
 func (suite *currencyHandlerSuite) SetupSuite() {
 	usecase := new(mocks.CurrencyUsecase)
 	handler := InitializeCurrencyHandler(usecase)
 
-	router := gin.Default()
-	router.POST("/currency", handler.CreateCurrency)
-	router.GET("/currency", handler.GetAllCurrencies)
-	router.GET("/currency/:id", handler.GetCurrencyByID)
+	routes := gin.Default()
+	routes.POST("/currency", handler.CreateCurrency)
+	routes.GET("/currency", handler.GetAllCurrencies)
+	routes.GET("/currency/:id", handler.GetCurrencyByID)
+	routes.DELETE("/currency/:id", handler.DeleteCurrency)
 
-	testingServer := httptest.NewServer(router)
-
-	suite.testingServer = testingServer
+	suite.routes = routes
 	suite.usecase = usecase
 	suite.handler = handler
 }
 
-func (suite *currencyHandlerSuite) TearDownSuite() {
-	defer suite.testingServer.Close()
-}
-
 func (suite *currencyHandlerSuite) TestCreateCurrencyWithNilValues() {
-	response, _ := http.Post(fmt.Sprintf("%s/currency", suite.testingServer.URL), "application/json", nil)
+	req, _ := http.NewRequest("POST", "/currency", nil)
+	response := httptest.NewRecorder()
+	suite.routes.ServeHTTP(response, req)
 
-	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.Equal(http.StatusBadRequest, response.Code)
 	suite.usecase.AssertExpectations(suite.T())
 }
 
@@ -55,20 +52,21 @@ func (suite *currencyHandlerSuite) TestCreateCurrency() {
 		Description:   "created description",
 		QuotationType: "created quotationType",
 	}
-
 	suite.usecase.On("CreateCurrency", &currency).Return(nil)
 
 	requestBody, err := json.Marshal(&currency)
 	suite.NoError(err, "can not marshal struct to json")
 
-	response, err := http.Post(fmt.Sprintf("%s/currency", suite.testingServer.URL), "application/json", bytes.NewBuffer(requestBody))
+	req, _ := http.NewRequest("POST", "/currency", bytes.NewBuffer(requestBody))
+	response := httptest.NewRecorder()
+	suite.routes.ServeHTTP(response, req)
+
 	suite.NoError(err, "no error when calling the endpoint")
-	defer response.Body.Close()
 
 	var expectedCurrency entities.Currency
 	json.NewDecoder(response.Body).Decode(&expectedCurrency)
 
-	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal(http.StatusOK, response.Code)
 	suite.Equal(expectedCurrency.Key, "created key")
 	suite.Equal(expectedCurrency.Description, "created description")
 	suite.Equal(expectedCurrency.QuotationType, "created quotationType")
@@ -86,11 +84,11 @@ func (suite *currencyHandlerSuite) TestGetAllCurrencies() {
 
 	suite.usecase.On("GetAllCurrencies").Return(&currencies, nil)
 
-	response, err := http.Get(fmt.Sprintf("%s/currency", suite.testingServer.URL))
-	suite.NoError(err, "no error when calling this endpoint")
-	defer response.Body.Close()
+	req, _ := http.NewRequest("GET", "/currency", nil)
+	response := httptest.NewRecorder()
+	suite.routes.ServeHTTP(response, req)
 
-	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal(http.StatusOK, response.Code)
 	suite.usecase.AssertExpectations(suite.T())
 }
 
@@ -98,14 +96,15 @@ func (suite *currencyHandlerSuite) TestGetCurrencyByIDNotFound() {
 	id := 1
 
 	suite.usecase.On("GetCurrencyByID", id).Return(nil, nil)
-	response, err := http.Get(fmt.Sprintf("%s/currency/%d", suite.testingServer.URL, id))
-	suite.NoError(err, "no error when calling this endpoint")
-	defer response.Body.Close()
+
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", id), nil)
+	response := httptest.NewRecorder()
+	suite.routes.ServeHTTP(response, req)
 
 	expectedResponse := `{"Not found":"Currency not found"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(http.StatusNotFound, response.StatusCode)
+	suite.Equal(http.StatusNotFound, response.Code)
 	suite.Equal(expectedResponse, string(responseBody))
 	suite.usecase.AssertExpectations(suite.T())
 }
@@ -119,17 +118,34 @@ func (suite *currencyHandlerSuite) TestGetCurrencyByID() {
 	}
 
 	suite.usecase.On("GetCurrencyByID", id).Return(&currency, nil)
-	response, err := http.Get(fmt.Sprintf("%s/currency/%d", suite.testingServer.URL, id))
-	suite.NoError(err, "no error when calling this endpoint")
-	defer response.Body.Close()
+
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", id), nil)
+	response := httptest.NewRecorder()
+	suite.routes.ServeHTTP(response, req)
 
 	var expectedCurrency entities.Currency
 	json.NewDecoder(response.Body).Decode(&expectedCurrency)
 
-	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal(http.StatusOK, response.Code)
 	suite.Equal(expectedCurrency.Key, "USD")
 	suite.Equal(expectedCurrency.Description, "USD Description")
 	suite.Equal(expectedCurrency.QuotationType, "QuotationType")
+	suite.usecase.AssertExpectations(suite.T())
+}
+
+func (suite *currencyHandlerSuite) TestDeleteCurrency() {
+	id := 1
+	suite.usecase.On("DeleteCurrency", id).Return(nil)
+
+	req, _ := http.NewRequest("DELETE", fmt.Sprintf("/currency/%d", id), nil)
+	response := httptest.NewRecorder()
+	suite.routes.ServeHTTP(response, req)
+
+	expectedResponse := `{"data":"Currency successfully deleted"}`
+	responseBody, _ := ioutil.ReadAll(response.Body)
+
+	suite.Equal(http.StatusOK, response.Code)
+	suite.Equal(expectedResponse, string(responseBody))
 	suite.usecase.AssertExpectations(suite.T())
 }
 
