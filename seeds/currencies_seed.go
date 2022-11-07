@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/victorananias/challenge-bravo/api"
 	"github.com/victorananias/challenge-bravo/models"
 	"github.com/victorananias/challenge-bravo/repositories"
+	"github.com/victorananias/challenge-bravo/services"
 	"github.com/victorananias/challenge-bravo/settings"
 )
 
@@ -20,11 +20,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("couldn't load settings")
 	}
-	repository := repositories.NewExchangesRepository()
+	repository := repositories.NewCurrenciesRepository()
 	if err != nil {
 		log.Fatal(err)
 	}
-	ethToUsd := models.Rate{
+	ethToUsd := models.Currency{
 		Code:                "ETH",
 		Value:               1539.46,
 		BackingCurrencyCode: settings.BackingCurrencyCode,
@@ -33,24 +33,24 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, currencyCode := range initCurrencies {
-		create(currencyCode, settings.BackingCurrencyCode)
+	for _, code := range initCurrencies {
+		create(code, settings.BackingCurrencyCode)
 	}
 }
 
 func create(sourceCurrency, targetCurrency string) {
-	repository := repositories.NewExchangesRepository()
-	api1 := api.NewApi()
+	repository := repositories.NewCurrenciesRepository()
+	api1 := services.NewExchangeApiService()
 	apiValue, err := api1.CurrentValue(sourceCurrency, targetCurrency)
 	if err != nil {
 		log.Fatal(err)
 	}
-	rate := models.Rate{
+	currency := models.Currency{
 		Code:                sourceCurrency,
-		Value:               apiValue.Rates[targetCurrency],
+		Value:               apiValue.Value,
 		BackingCurrencyCode: targetCurrency,
 	}
-	err = repository.CreateOrUpdate(rate)
+	err = repository.CreateOrUpdate(currency)
 	if err != nil {
 		log.Fatal(err)
 	}

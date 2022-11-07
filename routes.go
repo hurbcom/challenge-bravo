@@ -2,6 +2,8 @@ package main
 
 import (
 	"net/http"
+
+	"github.com/victorananias/challenge-bravo/controllers"
 )
 
 type Routes struct {
@@ -10,12 +12,12 @@ type Routes struct {
 type HandlerFunc func(http.ResponseWriter, *http.Request)
 
 func (routes *Routes) RegisterAll() {
-	routes.register("/", map[string]HandlerFunc{
-		http.MethodPost:   CreateHandler,
-		http.MethodDelete: DeleteHandler,
+	routes.register("/currencies", map[string]HandlerFunc{
+		http.MethodPost:   controllers.CreateCurrencyHandler,
+		http.MethodDelete: controllers.DeleteCurrencyHandler,
 	})
 	routes.register("/conversions", map[string]HandlerFunc{
-		http.MethodGet: ConversionsHandler,
+		http.MethodGet: controllers.ConversionsHandler,
 	})
 }
 
@@ -25,7 +27,7 @@ func (routes *Routes) register(route string, handlers map[string]HandlerFunc) {
 
 func (routes *Routes) setup(handlers map[string]HandlerFunc) HandlerFunc {
 	return func(responseWriter http.ResponseWriter, request *http.Request) {
-		routes.setupCors(responseWriter)
+		routes.setupHeaders(responseWriter)
 		if handler, ok := handlers[request.Method]; ok {
 			handler(responseWriter, request)
 		} else {
@@ -38,7 +40,7 @@ func (routes *Routes) setup(handlers map[string]HandlerFunc) HandlerFunc {
 	}
 }
 
-func (routes *Routes) setupCors(responsewriter http.ResponseWriter) {
+func (routes *Routes) setupHeaders(responsewriter http.ResponseWriter) {
 	responsewriter.Header().Set("Access-Control-Allow-Origin", "*")
 	responsewriter.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	responsewriter.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
