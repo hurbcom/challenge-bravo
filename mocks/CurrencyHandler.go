@@ -28,8 +28,8 @@ func (_m *CurrencyHandler) GetAllCurrencies(c *gin.Context) {
 	_m.Called(c)
 }
 
-// GetCurrencyByID provides a mock function with given fields: c
-func (_m *CurrencyHandler) GetCurrencyByID(c *gin.Context) {
+// GetCurrencyBy provides a mock function with given fields: c
+func (_m *CurrencyHandler) GetCurrencyBy(c *gin.Context) {
 	_m.Called(c)
 }
 
