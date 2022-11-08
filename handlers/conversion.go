@@ -46,14 +46,24 @@ func (handler *conversionHandler) Convert(c *gin.Context) {
 		return
 	}
 
-	_, err = handler.exchangeRateUsecase.GetCurrencyRate(to)
+	rate, err := handler.exchangeRateUsecase.GetCurrencyRate(to)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Internal Server Error": err.Error()})
 		return
 	}
 
-	// criar o conversion e retornar
+	err = handler.conversionUsecase.CreateConversion(&entities.Conversion{
+		From:   from,
+		To:     to,
+		Amount: amount,
+		Result: amount * rate,
+	})
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Internal Server Error": err.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, conversion)
 }

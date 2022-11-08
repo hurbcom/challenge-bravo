@@ -55,8 +55,6 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutFromParam() {
 
 	suite.Equal(http.StatusBadRequest, response.Code)
 	suite.Equal(expectedResponse, string(responseBody))
-
-	suite.conversionUsecase.AssertExpectations(suite.T())
 }
 
 func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutToParam() {
@@ -75,8 +73,6 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutToParam() {
 
 	suite.Equal(http.StatusBadRequest, response.Code)
 	suite.Equal(expectedResponse, string(responseBody))
-
-	suite.conversionUsecase.AssertExpectations(suite.T())
 }
 
 func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutAmountParam() {
@@ -95,13 +91,11 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutAmountParam() {
 
 	suite.Equal(http.StatusBadRequest, response.Code)
 	suite.Equal(expectedResponse, string(responseBody))
-
-	suite.conversionUsecase.AssertExpectations(suite.T())
 }
 
 func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundFromCurrency() {
-	from := "BRL"
-	to := "USD"
+	from := "CUR1"
+	to := "CUR2"
 	amount := 10.0
 	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", from, to, amount)
 
@@ -109,32 +103,6 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundFromCurrency() {
 	response := httptest.NewRecorder()
 
 	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(nil, nil)
-
-	suite.routes.ServeHTTP(response, req)
-
-	expectedResponse := `{"Bad Request":"From currency does not exists or is not available to conversion"}`
-	responseBody, _ := ioutil.ReadAll(response.Body)
-
-	suite.Equal(http.StatusBadRequest, response.Code)
-	suite.Equal(expectedResponse, string(responseBody))
-
-	suite.conversionUsecase.AssertExpectations(suite.T())
-}
-
-func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundToCurrency() {
-	from := "BRL"
-	to := "USD"
-	amount := 10.0
-	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", from, to, amount)
-
-	req, _ := http.NewRequest("GET", urlPath, nil)
-	response := httptest.NewRecorder()
-
-	fromCurrency := entities.Currency{
-		Key: from,
-	}
-
-	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(fromCurrency, nil)
 	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(nil, nil)
 
 	suite.routes.ServeHTTP(response, req)
@@ -145,54 +113,140 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundToCurrency() {
 	suite.Equal(http.StatusBadRequest, response.Code)
 	suite.Equal(expectedResponse, string(responseBody))
 
+	suite.currencyUsecase.AssertExpectations(suite.T())
 	suite.conversionUsecase.AssertExpectations(suite.T())
+	suite.exchangeRateUsecase.AssertExpectations(suite.T())
 }
 
-func (suite *conversionHandlerSuite) TestConvertCurrencyInternalServerError() {
-	from := "BRL"
-	to := "USD"
+func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundToCurrency() {
+	from := "CUR3"
+	to := "CUR4"
 	amount := 10.0
 	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", from, to, amount)
 
 	req, _ := http.NewRequest("GET", urlPath, nil)
 	response := httptest.NewRecorder()
 
+	fromCurrency := entities.Currency{
+		Key: from,
+	}
+
+	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(nil, nil)
+
+	suite.routes.ServeHTTP(response, req)
+
+	expectedResponse := `{"Bad Request":"To currency does not exists or is not available to conversion"}`
+	responseBody, _ := ioutil.ReadAll(response.Body)
+
+	suite.Equal(http.StatusBadRequest, response.Code)
+	suite.Equal(expectedResponse, string(responseBody))
+
+	suite.currencyUsecase.AssertExpectations(suite.T())
+	suite.conversionUsecase.AssertExpectations(suite.T())
+	suite.exchangeRateUsecase.AssertExpectations(suite.T())
+}
+
+func (suite *conversionHandlerSuite) TestConvertCurrencyInternalServerError() {
+	from := "CUR5"
+	to := "CUR6"
+	amount := 10.0
+	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", from, to, amount)
+
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
+
+	fromCurrency := entities.Currency{
+		Key: from,
+	}
 	toCurrency := entities.Currency{
 		Key: to,
 	}
+	rate := float32(0)
 
+	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
 	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(&toCurrency, nil)
-	suite.exchangeRateUsecase.On("GetCurrencyRate", to).Return(nil, errors.New("Some generic error "))
+	suite.exchangeRateUsecase.On("GetCurrencyRate", to).Return(&rate, errors.New("Some generic error "))
 
 	suite.routes.ServeHTTP(response, req)
 
 	suite.Equal(http.StatusInternalServerError, response.Code)
+	suite.currencyUsecase.AssertExpectations(suite.T())
 	suite.conversionUsecase.AssertExpectations(suite.T())
+	suite.exchangeRateUsecase.AssertExpectations(suite.T())
 }
 
-// func (suite *conversionHandlerSuite) TestConvertCurrencySuccessfully() {
-// 	from := "BRL"
-// 	to := "USD"
-// 	amount := 10.0
-// 	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", from, to, amount)
+func (suite *conversionHandlerSuite) TestConvertCurrencyCreateConversionError() {
+	from := "CUR7"
+	to := "CUR8"
+	amount := float32(10.0)
+	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", from, to, amount)
 
-// 	req, _ := http.NewRequest("GET", urlPath, nil)
-// 	response := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
 
-// 	exchangeResult := entities.ExchangeResult{
-// 		Success: true,
-// 		Base:    "USD",
-// 		Date:    "2022-11-08",
-// 		Rates:   map[string]float32{"USD": 50.0},
-// 	}
+	fromCurrency := entities.Currency{
+		Key: from,
+	}
+	toCurrency := entities.Currency{
+		Key: to,
+	}
+	rate := float32(50)
+	conversion := entities.Conversion{
+		From:   from,
+		To:     to,
+		Amount: amount,
+		Result: amount * rate,
+	}
 
-// 	suite.exchangeRateUsecase.On("GetCurrencyRate", to).Return(&exchangeResult, nil)
+	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(&toCurrency, nil)
+	suite.exchangeRateUsecase.On("GetCurrencyRate", to).Return(rate, nil)
+	suite.conversionUsecase.On("CreateConversion", &conversion).Return(errors.New("Some generic error"))
 
-// 	suite.routes.ServeHTTP(response, req)
+	suite.routes.ServeHTTP(response, req)
 
-// 	suite.Equal(http.StatusOK, response.Code)
-// 	suite.conversionUsecase.AssertExpectations(suite.T())
-// }
+	suite.Equal(http.StatusInternalServerError, response.Code)
+	suite.currencyUsecase.AssertExpectations(suite.T())
+	suite.conversionUsecase.AssertExpectations(suite.T())
+	suite.exchangeRateUsecase.AssertExpectations(suite.T())
+}
+
+func (suite *conversionHandlerSuite) TestConvertCurrencySuccessfully() {
+	from := "CUR9"
+	to := "CUR10"
+	amount := float32(10.0)
+	urlPath := fmt.Sprintf("/conversion?from=%s&to=%s&amount=%f", from, to, amount)
+
+	req, _ := http.NewRequest("GET", urlPath, nil)
+	response := httptest.NewRecorder()
+
+	fromCurrency := entities.Currency{
+		Key: from,
+	}
+	toCurrency := entities.Currency{
+		Key: to,
+	}
+	rate := float32(50)
+	conversion := entities.Conversion{
+		From:   from,
+		To:     to,
+		Amount: amount,
+		Result: amount * rate,
+	}
+
+	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(&toCurrency, nil)
+	suite.exchangeRateUsecase.On("GetCurrencyRate", to).Return(rate, nil)
+	suite.conversionUsecase.On("CreateConversion", &conversion).Return(nil)
+
+	suite.routes.ServeHTTP(response, req)
+
+	suite.Equal(http.StatusOK, response.Code)
+	suite.currencyUsecase.AssertExpectations(suite.T())
+	suite.conversionUsecase.AssertExpectations(suite.T())
+	suite.exchangeRateUsecase.AssertExpectations(suite.T())
+}
 
 func TestConversionHandler(t *testing.T) {
 	suite.Run(t, new(conversionHandlerSuite))
