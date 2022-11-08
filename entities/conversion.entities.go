@@ -11,7 +11,7 @@ type Conversion struct {
 }
 
 func (currency *Conversion) IsValid() bool {
-	if currency.From == "" || currency.To == "" || currency.Amount <= 0 || currency.Result <= 0 {
+	if currency.From == "" || currency.To == "" || currency.Amount < 0 || currency.Result < 0 {
 		return false
 	}
 	return true
