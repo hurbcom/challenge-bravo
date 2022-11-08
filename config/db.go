@@ -39,6 +39,7 @@ func getDBConnection(config *entities.Config) *gorm.DB {
 		log.Panic("Erro ao conectar com banco de dados")
 	}
 	DB.AutoMigrate(&entities.Currency{})
+	DB.AutoMigrate(&entities.Conversion{})
 
 	return DB
 }
