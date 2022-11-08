@@ -16,17 +16,14 @@ services:
     links:
       - db
   db:
-    build:
-      context: .
-      dockerfile: postgres.Dockerfile
+    image: postgres:alpine
     ports:
       - "5432:5432"
     container_name: challenge_bravo_flp_db
     env_file:
       - ".env"
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_DB=${DB}
     volumes:
       - challenge_bravo_flp_db_volume:/var/lib/postgresql/data
