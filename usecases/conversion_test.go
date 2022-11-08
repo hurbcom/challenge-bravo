@@ -3,8 +3,8 @@ package usecases
 import (
 	"testing"
 
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
 	"github.com/felipepnascimento/challenge-bravo-flp/mocks"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 
 	"github.com/stretchr/testify/suite"
 )
@@ -28,7 +28,7 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithNilValues() {
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidFrom() {
-	conversion := entities.Conversion{
+	conversion := models.Conversion{
 		To:     "to",
 		Amount: 1,
 		Result: 2,
@@ -39,7 +39,7 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidFrom() {
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidTo() {
-	conversion := entities.Conversion{
+	conversion := models.Conversion{
 		From:   "from",
 		Amount: 1,
 		Result: 2,
@@ -50,7 +50,7 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidTo() {
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidAmount() {
-	conversion := entities.Conversion{
+	conversion := models.Conversion{
 		From:   "from",
 		To:     "to",
 		Amount: -1,
@@ -62,7 +62,7 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidAmount() {
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidResult() {
-	conversion := entities.Conversion{
+	conversion := models.Conversion{
 		From:   "from",
 		To:     "to",
 		Amount: 1,
@@ -74,7 +74,7 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidResult() {
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversion() {
-	conversion := entities.Conversion{
+	conversion := models.Conversion{
 		From:   "from",
 		To:     "to",
 		Amount: 1,

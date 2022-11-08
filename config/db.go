@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/felipepnascimento/challenge-bravo-flp/entities"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -38,8 +39,8 @@ func getDBConnection(config *entities.Config) *gorm.DB {
 	if err != nil {
 		log.Panic("Erro ao conectar com banco de dados")
 	}
-	DB.AutoMigrate(&entities.Currency{})
-	DB.AutoMigrate(&entities.Conversion{})
+	DB.AutoMigrate(&models.Currency{})
+	DB.AutoMigrate(&models.Conversion{})
 
 	return DB
 }

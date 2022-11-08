@@ -1,20 +1,20 @@
 package server
 
 import (
-	handlers "github.com/felipepnascimento/challenge-bravo-flp/handlers"
+	controllers "github.com/felipepnascimento/challenge-bravo-flp/controllers"
 )
 
-type Handlers struct {
-	CurrencyHandler   handlers.CurrencyHandler
-	ConversionHandler handlers.ConversionHandler
+type Controllers struct {
+	CurrencyController   controllers.CurrencyController
+	ConversionController controllers.ConversionController
 }
 
-func SetupHandlers(useCases *Usecases) *Handlers {
-	currencyHandlers := handlers.InitializeCurrencyHandler(useCases.CurrencyUsecase)
-	conversionHandlers := handlers.InitializeConversionHandler(useCases.ConversionUsecase, useCases.CurrencyUsecase, useCases.ExchangeRateUsecase)
+func SetupControllers(useCases *Usecases) *Controllers {
+	currencyControllers := controllers.InitializeCurrencyController(useCases.CurrencyUsecase)
+	conversionControllers := controllers.InitializeConversionController(useCases.ConversionUsecase, useCases.CurrencyUsecase, useCases.ExchangeRateUsecase)
 
-	return &Handlers{
-		CurrencyHandler:   currencyHandlers,
-		ConversionHandler: conversionHandlers,
+	return &Controllers{
+		CurrencyController:   currencyControllers,
+		ConversionController: conversionControllers,
 	}
 }

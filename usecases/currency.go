@@ -3,7 +3,7 @@ package usecases
 import (
 	"errors"
 
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	repositories "github.com/felipepnascimento/challenge-bravo-flp/repositories"
 )
 
@@ -12,9 +12,9 @@ type currencyUsecase struct {
 }
 
 type CurrencyUsecase interface {
-	CreateCurrency(currency *entities.Currency) error
-	GetAllCurrencies() (*[]entities.Currency, error)
-	GetCurrencyBy(column string, value string) (*entities.Currency, error)
+	CreateCurrency(currency *models.Currency) error
+	GetAllCurrencies() (*[]models.Currency, error)
+	GetCurrencyBy(column string, value string) (*models.Currency, error)
 	DeleteCurrency(id int) error
 }
 
@@ -22,7 +22,7 @@ func InitializeCurrencyUsecase(repository repositories.CurrencyRepository) Curre
 	return &currencyUsecase{repository}
 }
 
-func (usecase *currencyUsecase) CreateCurrency(currency *entities.Currency) error {
+func (usecase *currencyUsecase) CreateCurrency(currency *models.Currency) error {
 	if currency == nil {
 		return errors.New("currency is nil")
 	}
@@ -38,11 +38,11 @@ func (usecase *currencyUsecase) CreateCurrency(currency *entities.Currency) erro
 	return nil
 }
 
-func (usecase *currencyUsecase) GetAllCurrencies() (*[]entities.Currency, error) {
+func (usecase *currencyUsecase) GetAllCurrencies() (*[]models.Currency, error) {
 	return usecase.currencyRepository.GetAllCurrencies()
 }
 
-func (usecase *currencyUsecase) GetCurrencyBy(column string, value string) (*entities.Currency, error) {
+func (usecase *currencyUsecase) GetCurrencyBy(column string, value string) (*models.Currency, error) {
 	currency, _ := usecase.currencyRepository.GetCurrencyBy(column, value)
 	if currency == nil {
 		return nil, errors.New("currency is not found")

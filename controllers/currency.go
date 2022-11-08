@@ -1,38 +1,38 @@
-package handlers
+package controllers
 
 import (
 	"net/http"
 	"strconv"
 
-	"github.com/felipepnascimento/challenge-bravo-flp/entities"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	usecases "github.com/felipepnascimento/challenge-bravo-flp/usecases"
 	"github.com/gin-gonic/gin"
 )
 
-type currencyHandler struct {
+type currencyController struct {
 	currencyUsecase usecases.CurrencyUsecase
 }
 
-type CurrencyHandler interface {
+type CurrencyController interface {
 	CreateCurrency(c *gin.Context)
 	GetAllCurrencies(c *gin.Context)
 	GetCurrencyBy(c *gin.Context)
 	DeleteCurrency(c *gin.Context)
 }
 
-func InitializeCurrencyHandler(usecase usecases.CurrencyUsecase) CurrencyHandler {
-	return &currencyHandler{usecase}
+func InitializeCurrencyController(usecase usecases.CurrencyUsecase) CurrencyController {
+	return &currencyController{usecase}
 }
 
-func (handler *currencyHandler) CreateCurrency(c *gin.Context) {
-	var currency entities.Currency
+func (controller *currencyController) CreateCurrency(c *gin.Context) {
+	var currency models.Currency
 
 	if err := c.ShouldBindJSON(&currency); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err := handler.currencyUsecase.CreateCurrency(&currency)
+	err := controller.currencyUsecase.CreateCurrency(&currency)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -41,8 +41,8 @@ func (handler *currencyHandler) CreateCurrency(c *gin.Context) {
 	c.JSON(http.StatusOK, currency)
 }
 
-func (handler *currencyHandler) GetAllCurrencies(c *gin.Context) {
-	currencies, err := handler.currencyUsecase.GetAllCurrencies()
+func (controller *currencyController) GetAllCurrencies(c *gin.Context) {
+	currencies, err := controller.currencyUsecase.GetAllCurrencies()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -51,10 +51,10 @@ func (handler *currencyHandler) GetAllCurrencies(c *gin.Context) {
 	c.JSON(200, currencies)
 }
 
-func (handler *currencyHandler) GetCurrencyBy(c *gin.Context) {
+func (controller *currencyController) GetCurrencyBy(c *gin.Context) {
 	id := c.Param("id")
 
-	currency, _ := handler.currencyUsecase.GetCurrencyBy("id", id)
+	currency, _ := controller.currencyUsecase.GetCurrencyBy("id", id)
 
 	if currency == nil {
 		c.JSON(http.StatusNotFound, gin.H{"Not found": "Currency not found"})
@@ -64,10 +64,10 @@ func (handler *currencyHandler) GetCurrencyBy(c *gin.Context) {
 	c.JSON(http.StatusOK, currency)
 }
 
-func (handler *currencyHandler) DeleteCurrency(c *gin.Context) {
+func (controller *currencyController) DeleteCurrency(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	err := handler.currencyUsecase.DeleteCurrency(id)
+	err := controller.currencyUsecase.DeleteCurrency(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

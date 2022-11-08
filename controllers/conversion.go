@@ -1,31 +1,31 @@
-package handlers
+package controllers
 
 import (
 	"errors"
 	"net/http"
 	"strconv"
 
-	"github.com/felipepnascimento/challenge-bravo-flp/entities"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	usecases "github.com/felipepnascimento/challenge-bravo-flp/usecases"
 	"github.com/gin-gonic/gin"
 )
 
-type conversionHandler struct {
+type conversionController struct {
 	conversionUsecase   usecases.ConversionUsecase
 	currencyUsecase     usecases.CurrencyUsecase
 	exchangeRateUsecase usecases.ExchangeRateUsecase
 }
 
-type ConversionHandler interface {
+type ConversionController interface {
 	Convert(c *gin.Context)
 }
 
-func InitializeConversionHandler(conversionUsecase usecases.ConversionUsecase, currencyUsecase usecases.CurrencyUsecase, exchangeRateUsecase usecases.ExchangeRateUsecase) ConversionHandler {
-	return &conversionHandler{conversionUsecase, currencyUsecase, exchangeRateUsecase}
+func InitializeConversionController(conversionUsecase usecases.ConversionUsecase, currencyUsecase usecases.CurrencyUsecase, exchangeRateUsecase usecases.ExchangeRateUsecase) ConversionController {
+	return &conversionController{conversionUsecase, currencyUsecase, exchangeRateUsecase}
 }
 
-func (handler *conversionHandler) Convert(c *gin.Context) {
-	var conversion entities.Conversion
+func (controller *conversionController) Convert(c *gin.Context) {
+	var conversion models.Conversion
 
 	from, to, amount := GetConvertParams(c)
 
@@ -36,8 +36,8 @@ func (handler *conversionHandler) Convert(c *gin.Context) {
 		return
 	}
 
-	fromCurrency, _ := handler.currencyUsecase.GetCurrencyBy("key", from)
-	toCurrency, _ := handler.currencyUsecase.GetCurrencyBy("key", to)
+	fromCurrency, _ := controller.currencyUsecase.GetCurrencyBy("key", from)
+	toCurrency, _ := controller.currencyUsecase.GetCurrencyBy("key", to)
 
 	err = ValidateCurrencies(fromCurrency, toCurrency)
 
@@ -46,14 +46,14 @@ func (handler *conversionHandler) Convert(c *gin.Context) {
 		return
 	}
 
-	rate, err := handler.exchangeRateUsecase.GetCurrencyRate(to)
+	rate, err := controller.exchangeRateUsecase.GetCurrencyRate(to)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Internal Server Error": err.Error()})
 		return
 	}
 
-	err = handler.conversionUsecase.CreateConversion(&entities.Conversion{
+	err = controller.conversionUsecase.CreateConversion(&models.Conversion{
 		From:   from,
 		To:     to,
 		Amount: amount,
@@ -93,7 +93,7 @@ func ValidateConvertParams(from string, to string, amount float32) error {
 	return nil
 }
 
-func ValidateCurrencies(fromCurrency *entities.Currency, toCurrency *entities.Currency) error {
+func ValidateCurrencies(fromCurrency *models.Currency, toCurrency *models.Currency) error {
 	if fromCurrency == nil {
 		return errors.New("From currency does not exists or is not available to conversion")
 	}

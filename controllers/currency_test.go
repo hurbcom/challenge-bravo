@@ -1,4 +1,4 @@
-package handlers
+package controllers
 
 import (
 	"bytes"
@@ -9,35 +9,35 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/felipepnascimento/challenge-bravo-flp/entities"
 	"github.com/felipepnascimento/challenge-bravo-flp/mocks"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
 )
 
-type currencyHandlerSuite struct {
+type currencyControllerSuite struct {
 	suite.Suite
-	usecase *mocks.CurrencyUsecase
-	handler CurrencyHandler
-	routes  *gin.Engine
+	usecase    *mocks.CurrencyUsecase
+	controller CurrencyController
+	routes     *gin.Engine
 }
 
-func (suite *currencyHandlerSuite) SetupSuite() {
+func (suite *currencyControllerSuite) SetupSuite() {
 	usecase := new(mocks.CurrencyUsecase)
-	handler := InitializeCurrencyHandler(usecase)
+	controller := InitializeCurrencyController(usecase)
 
 	routes := gin.Default()
-	routes.POST("/currency", handler.CreateCurrency)
-	routes.GET("/currency", handler.GetAllCurrencies)
-	routes.GET("/currency/:id", handler.GetCurrencyBy)
-	routes.DELETE("/currency/:id", handler.DeleteCurrency)
+	routes.POST("/currency", controller.CreateCurrency)
+	routes.GET("/currency", controller.GetAllCurrencies)
+	routes.GET("/currency/:id", controller.GetCurrencyBy)
+	routes.DELETE("/currency/:id", controller.DeleteCurrency)
 
 	suite.routes = routes
 	suite.usecase = usecase
-	suite.handler = handler
+	suite.controller = controller
 }
 
-func (suite *currencyHandlerSuite) TestCreateCurrencyWithNilValues() {
+func (suite *currencyControllerSuite) TestCreateCurrencyWithNilValues() {
 	req, _ := http.NewRequest("POST", "/currency", nil)
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
@@ -46,8 +46,8 @@ func (suite *currencyHandlerSuite) TestCreateCurrencyWithNilValues() {
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func (suite *currencyHandlerSuite) TestCreateCurrency() {
-	currency := entities.Currency{
+func (suite *currencyControllerSuite) TestCreateCurrency() {
+	currency := models.Currency{
 		Key:           "created key",
 		Description:   "created description",
 		QuotationType: "created quotationType",
@@ -63,7 +63,7 @@ func (suite *currencyHandlerSuite) TestCreateCurrency() {
 
 	suite.NoError(err)
 
-	var expectedCurrency entities.Currency
+	var expectedCurrency models.Currency
 	json.NewDecoder(response.Body).Decode(&expectedCurrency)
 
 	suite.Equal(http.StatusOK, response.Code)
@@ -73,8 +73,8 @@ func (suite *currencyHandlerSuite) TestCreateCurrency() {
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func (suite *currencyHandlerSuite) TestGetAllCurrencies() {
-	currencies := []entities.Currency{
+func (suite *currencyControllerSuite) TestGetAllCurrencies() {
+	currencies := []models.Currency{
 		{
 			Key:           "USD",
 			Description:   "USD Description",
@@ -92,7 +92,7 @@ func (suite *currencyHandlerSuite) TestGetAllCurrencies() {
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func (suite *currencyHandlerSuite) TestGetCurrencyByNotFound() {
+func (suite *currencyControllerSuite) TestGetCurrencyByNotFound() {
 	column := "id"
 	id := "1"
 
@@ -110,10 +110,10 @@ func (suite *currencyHandlerSuite) TestGetCurrencyByNotFound() {
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func (suite *currencyHandlerSuite) TestGetCurrencyBy() {
+func (suite *currencyControllerSuite) TestGetCurrencyBy() {
 	column := "id"
 	id := "2"
-	currency := entities.Currency{
+	currency := models.Currency{
 		Key:           "USD",
 		Description:   "USD Description",
 		QuotationType: "QuotationType",
@@ -125,7 +125,7 @@ func (suite *currencyHandlerSuite) TestGetCurrencyBy() {
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 
-	var expectedCurrency entities.Currency
+	var expectedCurrency models.Currency
 	json.NewDecoder(response.Body).Decode(&expectedCurrency)
 
 	suite.Equal(http.StatusOK, response.Code)
@@ -135,7 +135,7 @@ func (suite *currencyHandlerSuite) TestGetCurrencyBy() {
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func (suite *currencyHandlerSuite) TestDeleteCurrency() {
+func (suite *currencyControllerSuite) TestDeleteCurrency() {
 	id := 1
 	suite.usecase.On("DeleteCurrency", id).Return(nil)
 
@@ -151,6 +151,6 @@ func (suite *currencyHandlerSuite) TestDeleteCurrency() {
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func TestCurrencyHandler(t *testing.T) {
-	suite.Run(t, new(currencyHandlerSuite))
+func TestCurrencyController(t *testing.T) {
+	suite.Run(t, new(currencyControllerSuite))
 }

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
 	"github.com/felipepnascimento/challenge-bravo-flp/mocks"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 
 	"github.com/stretchr/testify/suite"
 )
@@ -29,7 +29,7 @@ func (suite *currencyUsecaseSuite) TestCreateCurrencyWithNilValues() {
 }
 
 func (suite *currencyUsecaseSuite) TestCreateCurrencyWithInvalidKey() {
-	currency := entities.Currency{
+	currency := models.Currency{
 		Description:   "description",
 		QuotationType: "quotationType",
 	}
@@ -39,7 +39,7 @@ func (suite *currencyUsecaseSuite) TestCreateCurrencyWithInvalidKey() {
 }
 
 func (suite *currencyUsecaseSuite) TestCreateCurrencyWithInvalidDescription() {
-	currency := entities.Currency{
+	currency := models.Currency{
 		Key:           "key",
 		QuotationType: "quotationType",
 	}
@@ -49,7 +49,7 @@ func (suite *currencyUsecaseSuite) TestCreateCurrencyWithInvalidDescription() {
 }
 
 func (suite *currencyUsecaseSuite) TestCreateCurrency() {
-	currency := entities.Currency{
+	currency := models.Currency{
 		Key:           "key",
 		Description:   "description",
 		QuotationType: "quotationType",
@@ -62,7 +62,7 @@ func (suite *currencyUsecaseSuite) TestCreateCurrency() {
 }
 
 func (suite *currencyUsecaseSuite) TestGetAllCurrencies() {
-	currencies := []entities.Currency{
+	currencies := []models.Currency{
 		{
 			Key:           "key",
 			Description:   "description",
@@ -97,7 +97,7 @@ func (suite *currencyUsecaseSuite) TestGetCurrencyByNotFound() {
 func (suite *currencyUsecaseSuite) TestGetCurrencyBy() {
 	column := "id"
 	id := "2"
-	currency := entities.Currency{
+	currency := models.Currency{
 		Key:           "key",
 		Description:   "description",
 		QuotationType: "quotationType",

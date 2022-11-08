@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
+	models "github.com/felipepnascimento/challenge-bravo-flp/models"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -13,11 +13,11 @@ type CurrencyUsecase struct {
 }
 
 // CreateCurrency provides a mock function with given fields: currency
-func (_m *CurrencyUsecase) CreateCurrency(currency *entities.Currency) error {
+func (_m *CurrencyUsecase) CreateCurrency(currency *models.Currency) error {
 	ret := _m.Called(currency)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*entities.Currency) error); ok {
+	if rf, ok := ret.Get(0).(func(*models.Currency) error); ok {
 		r0 = rf(currency)
 	} else {
 		r0 = ret.Error(0)
@@ -41,15 +41,15 @@ func (_m *CurrencyUsecase) DeleteCurrency(id int) error {
 }
 
 // GetAllCurrencies provides a mock function with given fields:
-func (_m *CurrencyUsecase) GetAllCurrencies() (*[]entities.Currency, error) {
+func (_m *CurrencyUsecase) GetAllCurrencies() (*[]models.Currency, error) {
 	ret := _m.Called()
 
-	var r0 *[]entities.Currency
-	if rf, ok := ret.Get(0).(func() *[]entities.Currency); ok {
+	var r0 *[]models.Currency
+	if rf, ok := ret.Get(0).(func() *[]models.Currency); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*[]entities.Currency)
+			r0 = ret.Get(0).(*[]models.Currency)
 		}
 	}
 
@@ -64,15 +64,15 @@ func (_m *CurrencyUsecase) GetAllCurrencies() (*[]entities.Currency, error) {
 }
 
 // GetCurrencyBy provides a mock function with given fields: column, value
-func (_m *CurrencyUsecase) GetCurrencyBy(column string, value string) (*entities.Currency, error) {
+func (_m *CurrencyUsecase) GetCurrencyBy(column string, value string) (*models.Currency, error) {
 	ret := _m.Called(column, value)
 
-	var r0 *entities.Currency
-	if rf, ok := ret.Get(0).(func(string, string) *entities.Currency); ok {
+	var r0 *models.Currency
+	if rf, ok := ret.Get(0).(func(string, string) *models.Currency); ok {
 		r0 = rf(column, value)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entities.Currency)
+			r0 = ret.Get(0).(*models.Currency)
 		}
 	}
 

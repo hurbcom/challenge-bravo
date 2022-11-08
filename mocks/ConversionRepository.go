@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
+	models "github.com/felipepnascimento/challenge-bravo-flp/models"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -13,11 +13,11 @@ type ConversionRepository struct {
 }
 
 // CreateConversion provides a mock function with given fields: conversion
-func (_m *ConversionRepository) CreateConversion(conversion *entities.Conversion) error {
+func (_m *ConversionRepository) CreateConversion(conversion *models.Conversion) error {
 	ret := _m.Called(conversion)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*entities.Conversion) error); ok {
+	if rf, ok := ret.Get(0).(func(*models.Conversion) error); ok {
 		r0 = rf(conversion)
 	} else {
 		r0 = ret.Error(0)

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/felipepnascimento/challenge-bravo-flp/config"
-	"github.com/felipepnascimento/challenge-bravo-flp/entities"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	"github.com/felipepnascimento/challenge-bravo-flp/utils"
 
 	"github.com/stretchr/testify/suite"
@@ -31,7 +31,7 @@ func (suite *currencyRepositorySuite) TearDownTest() {
 }
 
 func (suite *currencyRepositorySuite) TestCreateCurrency() {
-	currency := entities.Currency{
+	currency := models.Currency{
 		Key:           "key",
 		Description:   "description",
 		QuotationType: "quotationType",
@@ -42,7 +42,7 @@ func (suite *currencyRepositorySuite) TestCreateCurrency() {
 }
 
 func (suite *currencyRepositorySuite) TestCreateCurrencyWithDuplicatedKey() {
-	currency := entities.Currency{
+	currency := models.Currency{
 		Key:           "key",
 		Description:   "description",
 		QuotationType: "quotationType",
@@ -56,13 +56,13 @@ func (suite *currencyRepositorySuite) TestCreateCurrencyWithDuplicatedKey() {
 }
 
 func (suite *currencyRepositorySuite) TestGetAllCurrencies() {
-	currency := entities.Currency{
+	currency := models.Currency{
 		Key:           "key",
 		Description:   "description",
 		QuotationType: "quotationType",
 	}
 
-	currencyOne := entities.Currency{
+	currencyOne := models.Currency{
 		Key:           "key_one",
 		Description:   "description",
 		QuotationType: "quotationType",
@@ -90,7 +90,7 @@ func (suite *currencyRepositorySuite) TestGetCurrencyByNotFound() {
 func (suite *currencyRepositorySuite) TestGetCurrencyBy() {
 	column := "id"
 	id := "1"
-	currency := entities.Currency{
+	currency := models.Currency{
 		Key:           "key",
 		Description:   "description",
 		QuotationType: "quotationType",
@@ -109,7 +109,7 @@ func (suite *currencyRepositorySuite) TestGetCurrencyBy() {
 func (suite *currencyRepositorySuite) TestDeleteCurrency() {
 	column := "id"
 	id := "1"
-	currency := entities.Currency{
+	currency := models.Currency{
 		Key:           "key",
 		Description:   "description",
 		QuotationType: "quotationType",

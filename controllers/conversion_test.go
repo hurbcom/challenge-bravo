@@ -1,4 +1,4 @@
-package handlers
+package controllers
 
 import (
 	"errors"
@@ -8,38 +8,38 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/felipepnascimento/challenge-bravo-flp/entities"
 	"github.com/felipepnascimento/challenge-bravo-flp/mocks"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
 )
 
-type conversionHandlerSuite struct {
+type conversionControllerSuite struct {
 	suite.Suite
 	conversionUsecase   *mocks.ConversionUsecase
 	currencyUsecase     *mocks.CurrencyUsecase
 	exchangeRateUsecase *mocks.ExchangeRateUsecase
-	handler             ConversionHandler
+	controller          ConversionController
 	routes              *gin.Engine
 }
 
-func (suite *conversionHandlerSuite) SetupSuite() {
+func (suite *conversionControllerSuite) SetupSuite() {
 	conversionUsecase := new(mocks.ConversionUsecase)
 	currencyUsecase := new(mocks.CurrencyUsecase)
 	exchangeRateUsecase := new(mocks.ExchangeRateUsecase)
-	handler := InitializeConversionHandler(conversionUsecase, currencyUsecase, exchangeRateUsecase)
+	controller := InitializeConversionController(conversionUsecase, currencyUsecase, exchangeRateUsecase)
 
 	routes := gin.Default()
-	routes.GET("/conversion", handler.Convert)
+	routes.GET("/conversion", controller.Convert)
 
 	suite.routes = routes
 	suite.conversionUsecase = conversionUsecase
 	suite.currencyUsecase = currencyUsecase
 	suite.exchangeRateUsecase = exchangeRateUsecase
-	suite.handler = handler
+	suite.controller = controller
 }
 
-func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutFromParam() {
+func (suite *conversionControllerSuite) TestConvertCurrencyWithoutFromParam() {
 	from := ""
 	to := "USD"
 	amount := 10.0
@@ -57,7 +57,7 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutFromParam() {
 	suite.Equal(expectedResponse, string(responseBody))
 }
 
-func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutToParam() {
+func (suite *conversionControllerSuite) TestConvertCurrencyWithoutToParam() {
 	from := "BRL"
 	to := ""
 	amount := 10.0
@@ -75,7 +75,7 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutToParam() {
 	suite.Equal(expectedResponse, string(responseBody))
 }
 
-func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutAmountParam() {
+func (suite *conversionControllerSuite) TestConvertCurrencyWithoutAmountParam() {
 	from := "BRL"
 	to := "USD"
 	amount := 0.0
@@ -93,7 +93,7 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyWithoutAmountParam() {
 	suite.Equal(expectedResponse, string(responseBody))
 }
 
-func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundFromCurrency() {
+func (suite *conversionControllerSuite) TestConvertCurrencyNotFoundFromCurrency() {
 	from := "CUR1"
 	to := "CUR2"
 	amount := 10.0
@@ -118,7 +118,7 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundFromCurrency() {
 	suite.exchangeRateUsecase.AssertExpectations(suite.T())
 }
 
-func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundToCurrency() {
+func (suite *conversionControllerSuite) TestConvertCurrencyNotFoundToCurrency() {
 	from := "CUR3"
 	to := "CUR4"
 	amount := 10.0
@@ -127,7 +127,7 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundToCurrency() {
 	req, _ := http.NewRequest("GET", urlPath, nil)
 	response := httptest.NewRecorder()
 
-	fromCurrency := entities.Currency{
+	fromCurrency := models.Currency{
 		Key: from,
 	}
 
@@ -147,7 +147,7 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyNotFoundToCurrency() {
 	suite.exchangeRateUsecase.AssertExpectations(suite.T())
 }
 
-func (suite *conversionHandlerSuite) TestConvertCurrencyInternalServerError() {
+func (suite *conversionControllerSuite) TestConvertCurrencyInternalServerError() {
 	from := "CUR5"
 	to := "CUR6"
 	amount := 10.0
@@ -156,10 +156,10 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyInternalServerError() {
 	req, _ := http.NewRequest("GET", urlPath, nil)
 	response := httptest.NewRecorder()
 
-	fromCurrency := entities.Currency{
+	fromCurrency := models.Currency{
 		Key: from,
 	}
-	toCurrency := entities.Currency{
+	toCurrency := models.Currency{
 		Key: to,
 	}
 	rate := float32(0)
@@ -176,7 +176,7 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyInternalServerError() {
 	suite.exchangeRateUsecase.AssertExpectations(suite.T())
 }
 
-func (suite *conversionHandlerSuite) TestConvertCurrencyCreateConversionError() {
+func (suite *conversionControllerSuite) TestConvertCurrencyCreateConversionError() {
 	from := "CUR7"
 	to := "CUR8"
 	amount := float32(10.0)
@@ -185,14 +185,14 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyCreateConversionError() 
 	req, _ := http.NewRequest("GET", urlPath, nil)
 	response := httptest.NewRecorder()
 
-	fromCurrency := entities.Currency{
+	fromCurrency := models.Currency{
 		Key: from,
 	}
-	toCurrency := entities.Currency{
+	toCurrency := models.Currency{
 		Key: to,
 	}
 	rate := float32(50)
-	conversion := entities.Conversion{
+	conversion := models.Conversion{
 		From:   from,
 		To:     to,
 		Amount: amount,
@@ -212,7 +212,7 @@ func (suite *conversionHandlerSuite) TestConvertCurrencyCreateConversionError() 
 	suite.exchangeRateUsecase.AssertExpectations(suite.T())
 }
 
-func (suite *conversionHandlerSuite) TestConvertCurrencySuccessfully() {
+func (suite *conversionControllerSuite) TestConvertCurrencySuccessfully() {
 	from := "CUR9"
 	to := "CUR10"
 	amount := float32(10.0)
@@ -221,14 +221,14 @@ func (suite *conversionHandlerSuite) TestConvertCurrencySuccessfully() {
 	req, _ := http.NewRequest("GET", urlPath, nil)
 	response := httptest.NewRecorder()
 
-	fromCurrency := entities.Currency{
+	fromCurrency := models.Currency{
 		Key: from,
 	}
-	toCurrency := entities.Currency{
+	toCurrency := models.Currency{
 		Key: to,
 	}
 	rate := float32(50)
-	conversion := entities.Conversion{
+	conversion := models.Conversion{
 		From:   from,
 		To:     to,
 		Amount: amount,
@@ -248,6 +248,6 @@ func (suite *conversionHandlerSuite) TestConvertCurrencySuccessfully() {
 	suite.exchangeRateUsecase.AssertExpectations(suite.T())
 }
 
-func TestConversionHandler(t *testing.T) {
-	suite.Run(t, new(conversionHandlerSuite))
+func TestConversionController(t *testing.T) {
+	suite.Run(t, new(conversionControllerSuite))
 }

@@ -8,20 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func rootHandler() gin.HandlerFunc {
+func rootController() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.JSON(http.StatusOK, "Hello World!")
 	}
 }
 
-func registerRoutes(router *gin.Engine, handlers *Handlers) {
-	router.GET("/", rootHandler())
-	router.GET("/currency", handlers.CurrencyHandler.GetAllCurrencies)
-	router.GET("/currency/:id", handlers.CurrencyHandler.GetCurrencyBy)
-	router.POST("/currency", handlers.CurrencyHandler.CreateCurrency)
-	router.DELETE("/currency/:id", handlers.CurrencyHandler.DeleteCurrency)
+func registerRoutes(router *gin.Engine, controllers *Controllers) {
+	router.GET("/", rootController())
+	router.GET("/currency", controllers.CurrencyController.GetAllCurrencies)
+	router.GET("/currency/:id", controllers.CurrencyController.GetCurrencyBy)
+	router.POST("/currency", controllers.CurrencyController.CreateCurrency)
+	router.DELETE("/currency/:id", controllers.CurrencyController.DeleteCurrency)
 
-	router.GET("/conversion", handlers.ConversionHandler.Convert)
+	router.GET("/conversion", controllers.ConversionController.Convert)
 }
 
 func SetupServer() {
@@ -34,11 +34,11 @@ func SetupServer() {
 	repos := SetupRepositories(db)
 	services := SetupServices(httpClient)
 	useCases := SetupUsecases(repos, services)
-	handlers := SetupHandlers(useCases)
+	controllers := SetupControllers(useCases)
 
 	router := gin.Default()
 
-	registerRoutes(router, handlers)
+	registerRoutes(router, controllers)
 
 	router.Run(":8080")
 }

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/felipepnascimento/challenge-bravo-flp/config"
-	"github.com/felipepnascimento/challenge-bravo-flp/entities"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	"github.com/felipepnascimento/challenge-bravo-flp/utils"
 
 	"github.com/stretchr/testify/suite"
@@ -31,7 +31,7 @@ func (suite *conversionRepositorySuite) TearDownTest() {
 }
 
 func (suite *conversionRepositorySuite) TestCreateConversion() {
-	conversion := entities.Conversion{
+	conversion := models.Conversion{
 		From:   "From",
 		To:     "To",
 		Amount: 1.1,

@@ -3,7 +3,7 @@ package usecases
 import (
 	"errors"
 
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
+	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	repositories "github.com/felipepnascimento/challenge-bravo-flp/repositories"
 )
 
@@ -12,14 +12,14 @@ type conversionUsecase struct {
 }
 
 type ConversionUsecase interface {
-	CreateConversion(conversion *entities.Conversion) error
+	CreateConversion(conversion *models.Conversion) error
 }
 
 func InitializeConversionUsecase(repository repositories.ConversionRepository) ConversionUsecase {
 	return &conversionUsecase{repository}
 }
 
-func (usecase *conversionUsecase) CreateConversion(conversion *entities.Conversion) error {
+func (usecase *conversionUsecase) CreateConversion(conversion *models.Conversion) error {
 	if conversion == nil {
 		return errors.New("conversion is nil")
 	}
