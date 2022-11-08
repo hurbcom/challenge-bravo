@@ -13,14 +13,16 @@ type ExchangeRateService struct {
 }
 
 // GetLatestRate provides a mock function with given fields: toCurrency
-func (_m *ExchangeRateService) GetLatestRate(toCurrency string) (entities.ExchangeResult, error) {
+func (_m *ExchangeRateService) GetLatestRate(toCurrency string) (*entities.ExchangeResult, error) {
 	ret := _m.Called(toCurrency)
 
-	var r0 entities.ExchangeResult
-	if rf, ok := ret.Get(0).(func(string) entities.ExchangeResult); ok {
+	var r0 *entities.ExchangeResult
+	if rf, ok := ret.Get(0).(func(string) *entities.ExchangeResult); ok {
 		r0 = rf(toCurrency)
 	} else {
-		r0 = ret.Get(0).(entities.ExchangeResult)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*entities.ExchangeResult)
+		}
 	}
 
 	var r1 error
