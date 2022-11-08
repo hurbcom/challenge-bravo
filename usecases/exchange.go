@@ -3,22 +3,21 @@
 package usecases
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
-	"net/http"
 
-	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
+	"github.com/felipepnascimento/challenge-bravo-flp/services"
 )
 
-type exchangeUsecase struct{}
+type exchangeUsecase struct {
+	service services.ExchangeRateService
+}
 
 type ExchangeUsecase interface {
 	GetCurrencyRate(toCurrency string) (float32, error)
 }
 
-func InitializeExchangeUsecase() ExchangeUsecase {
-	return &exchangeUsecase{}
+func InitializeExchangeUsecase(service services.ExchangeRateService) ExchangeUsecase {
+	return &exchangeUsecase{service}
 }
 
 func (usecase *exchangeUsecase) GetCurrencyRate(toCurrency string) (float32, error) {
@@ -26,7 +25,7 @@ func (usecase *exchangeUsecase) GetCurrencyRate(toCurrency string) (float32, err
 		return 0, errors.New("to currency cannot be empty")
 	}
 
-	result, err := DoGetExchangeRate(toCurrency)
+	result, err := usecase.service.GetLatestRate(toCurrency)
 	if err != nil {
 		return 0, err
 	}
@@ -35,27 +34,5 @@ func (usecase *exchangeUsecase) GetCurrencyRate(toCurrency string) (float32, err
 		return 0, errors.New("Can not find target currency rate")
 	}
 
-	return result.Rates[toCurrency], nil
-}
-
-func DoGetExchangeRate(toCurrency string) (entities.ExchangeResult, error) {
-	BASE_CURRENCY := "USD"
-	BASE_URL := "https://api.exchangerate.host/latest?base=%s&symbols=%s"
-
-	client := http.Client{}
-	baseUrl := fmt.Sprintf(BASE_URL, BASE_CURRENCY, toCurrency)
-	request, err := http.NewRequest("GET", baseUrl, nil)
-	if err != nil {
-		return entities.ExchangeResult{}, errors.New("An error occurred to create new request")
-	}
-
-	resp, err := client.Do(request)
-	if err != nil {
-		return entities.ExchangeResult{}, errors.New("An error occurred to makes the request")
-	}
-
-	var exchangeResult entities.ExchangeResult
-	json.NewDecoder(resp.Body).Decode(&exchangeResult)
-
-	return exchangeResult, nil
+	return float32(result.Rates[toCurrency]), nil
 }
