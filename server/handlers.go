@@ -11,7 +11,7 @@ type Handlers struct {
 
 func SetupHandlers(useCases *Usecases) *Handlers {
 	currencyHandlers := handlers.InitializeCurrencyHandler(useCases.CurrencyUsecase)
-	conversionHandlers := handlers.InitializeConversionHandler(useCases.ConversionUsecase)
+	conversionHandlers := handlers.InitializeConversionHandler(useCases.ConversionUsecase, useCases.CurrencyUsecase)
 
 	return &Handlers{
 		CurrencyHandler:   currencyHandlers,
