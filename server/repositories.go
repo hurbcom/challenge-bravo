@@ -6,13 +6,16 @@ import (
 )
 
 type Repositories struct {
-	CurrencyRepository repositories.CurrencyRepository
+	CurrencyRepository   repositories.CurrencyRepository
+	ConversionRepository repositories.ConversionRepository
 }
 
 func SetupRepositories(db *gorm.DB) *Repositories {
 	currencyRepository := repositories.InitializeCurrencyRepository(db)
+	conversionRepository := repositories.InitializeConversionRepository(db)
 
 	return &Repositories{
-		CurrencyRepository: currencyRepository,
+		CurrencyRepository:   currencyRepository,
+		ConversionRepository: conversionRepository,
 	}
 }

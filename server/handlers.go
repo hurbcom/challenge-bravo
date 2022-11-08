@@ -5,13 +5,16 @@ import (
 )
 
 type Handlers struct {
-	CurrencyHandler handlers.CurrencyHandler
+	CurrencyHandler   handlers.CurrencyHandler
+	ConversionHandler handlers.ConversionHandler
 }
 
 func SetupHandlers(useCases *Usecases) *Handlers {
 	currencyHandlers := handlers.InitializeCurrencyHandler(useCases.CurrencyUsecase)
+	conversionHandlers := handlers.InitializeConversionHandler(useCases.ConversionUsecase)
 
 	return &Handlers{
-		CurrencyHandler: currencyHandlers,
+		CurrencyHandler:   currencyHandlers,
+		ConversionHandler: conversionHandlers,
 	}
 }
