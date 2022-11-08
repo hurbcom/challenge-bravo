@@ -15,14 +15,14 @@ type exchangeRateService struct {
 }
 
 type ExchangeRateService interface {
-	GetLatestRate(toCurrency string) (entities.ExchangeResult, error)
+	GetLatestRate(toCurrency string) (*entities.ExchangeResult, error)
 }
 
 func InitializeExchangeRateService(httpClient utils.HTTPClient) ExchangeRateService {
 	return &exchangeRateService{httpClient}
 }
 
-func (service *exchangeRateService) GetLatestRate(toCurrency string) (entities.ExchangeResult, error) {
+func (service *exchangeRateService) GetLatestRate(toCurrency string) (*entities.ExchangeResult, error) {
 	BASE_CURRENCY := "USD"
 	BASE_URL := "https://api.exchangerate.host/latest?base=%s&symbols=%s"
 
@@ -31,11 +31,11 @@ func (service *exchangeRateService) GetLatestRate(toCurrency string) (entities.E
 	resp, err := service.httpClient.Do(req)
 
 	if err != nil {
-		return entities.ExchangeResult{}, errors.New("An error occurred to makes the request")
+		return nil, errors.New("An error occurred to makes the request")
 	}
 
 	var exchangeResult entities.ExchangeResult
 	json.NewDecoder(resp.Body).Decode(&exchangeResult)
 
-	return exchangeResult, nil
+	return &exchangeResult, nil
 }

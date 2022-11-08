@@ -32,9 +32,9 @@ func SetupServer() {
 	httpClient := &http.Client{}
 
 	repos := SetupRepositories(db)
-	useCases := SetupUsecases(repos)
 	services := SetupServices(httpClient)
-	handlers := SetupHandlers(useCases, services)
+	useCases := SetupUsecases(repos, services)
+	handlers := SetupHandlers(useCases)
 
 	router := gin.Default()
 

@@ -8,19 +8,19 @@ import (
 	"github.com/felipepnascimento/challenge-bravo-flp/services"
 )
 
-type exchangeUsecase struct {
+type exchangeRateUsecase struct {
 	service services.ExchangeRateService
 }
 
-type ExchangeUsecase interface {
+type ExchangeRateUsecase interface {
 	GetCurrencyRate(toCurrency string) (float32, error)
 }
 
-func InitializeExchangeUsecase(service services.ExchangeRateService) ExchangeUsecase {
-	return &exchangeUsecase{service}
+func InitializeExchangeRateUsecase(service services.ExchangeRateService) ExchangeRateUsecase {
+	return &exchangeRateUsecase{service}
 }
 
-func (usecase *exchangeUsecase) GetCurrencyRate(toCurrency string) (float32, error) {
+func (usecase *exchangeRateUsecase) GetCurrencyRate(toCurrency string) (float32, error) {
 	if toCurrency == "" {
 		return 0, errors.New("to currency cannot be empty")
 	}

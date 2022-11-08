@@ -58,7 +58,7 @@ func (suite *exchangeRateServiceSuite) TestGetLatestRate() {
 	}
 
 	suite.NoError(err)
-	suite.Equal(result, expectedResult)
+	suite.Equal(result, &expectedResult)
 	suite.httpClient.AssertExpectations(suite.T())
 }
 

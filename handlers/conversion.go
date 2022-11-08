@@ -11,16 +11,17 @@ import (
 )
 
 type conversionHandler struct {
-	conversionUsecase usecases.ConversionUsecase
-	currencyUsecase   usecases.CurrencyUsecase
+	conversionUsecase   usecases.ConversionUsecase
+	currencyUsecase     usecases.CurrencyUsecase
+	exchangeRateUsecase usecases.ExchangeRateUsecase
 }
 
 type ConversionHandler interface {
 	Convert(c *gin.Context)
 }
 
-func InitializeConversionHandler(conversionUsecase usecases.ConversionUsecase, currencyUsecase usecases.CurrencyUsecase) ConversionHandler {
-	return &conversionHandler{conversionUsecase, currencyUsecase}
+func InitializeConversionHandler(conversionUsecase usecases.ConversionUsecase, currencyUsecase usecases.CurrencyUsecase, exchangeRateUsecase usecases.ExchangeRateUsecase) ConversionHandler {
+	return &conversionHandler{conversionUsecase, currencyUsecase, exchangeRateUsecase}
 }
 
 func (handler *conversionHandler) Convert(c *gin.Context) {
@@ -38,12 +39,21 @@ func (handler *conversionHandler) Convert(c *gin.Context) {
 	fromCurrency, _ := handler.currencyUsecase.GetCurrencyBy("key", from)
 	toCurrency, _ := handler.currencyUsecase.GetCurrencyBy("key", to)
 
-	err = ValidateCurrencies(*fromCurrency, *toCurrency)
+	err = ValidateCurrencies(fromCurrency, toCurrency)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"Bad Request": err.Error()})
 		return
 	}
+
+	_, err = handler.exchangeRateUsecase.GetCurrencyRate(to)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Internal Server Error": err.Error()})
+		return
+	}
+
+	// criar o conversion e retornar
 
 	c.JSON(http.StatusOK, conversion)
 }
@@ -73,12 +83,12 @@ func ValidateConvertParams(from string, to string, amount float32) error {
 	return nil
 }
 
-func ValidateCurrencies(fromCurrency entities.Currency, toCurrency entities.Currency) error {
-	if fromCurrency.ID == 0 {
+func ValidateCurrencies(fromCurrency *entities.Currency, toCurrency *entities.Currency) error {
+	if fromCurrency == nil {
 		return errors.New("From currency does not exists or is not available to conversion")
 	}
 
-	if toCurrency.ID == 0 {
+	if toCurrency == nil {
 		return errors.New("To currency does not exists or is not available to conversion")
 	}
 

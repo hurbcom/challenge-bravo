@@ -12,12 +12,12 @@ import (
 type enchangeUsecaseSuite struct {
 	suite.Suite
 	service *mocks.ExchangeRateService
-	usecase ExchangeUsecase
+	usecase ExchangeRateUsecase
 }
 
 func (suite *enchangeUsecaseSuite) SetupSuite() {
 	service := new(mocks.ExchangeRateService)
-	usecase := InitializeExchangeUsecase(service)
+	usecase := InitializeExchangeRateUsecase(service)
 	suite.service = service
 	suite.usecase = usecase
 }
@@ -29,8 +29,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithEmptyToCurrency() 
 
 func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithError() {
 	toCurrency := "BLR"
-	exchangeResult := entities.ExchangeResult{}
-	suite.service.On("GetLatestRate", toCurrency).Return(exchangeResult, errors.New("Some generic error"))
+	suite.service.On("GetLatestRate", toCurrency).Return(nil, errors.New("Some generic error"))
 
 	_, err := suite.usecase.GetCurrencyRate(toCurrency)
 
@@ -46,7 +45,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNotFoundRate() {
 		Base:    "USD",
 		Rates:   map[string]float32{"BRL": rate},
 	}
-	suite.service.On("GetLatestRate", toCurrency).Return(exchangeResult, nil)
+	suite.service.On("GetLatestRate", toCurrency).Return(&exchangeResult, nil)
 
 	_, err := suite.usecase.GetCurrencyRate(toCurrency)
 
@@ -62,7 +61,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRate() {
 		Base:    "USD",
 		Rates:   map[string]float32{"BRL": rate},
 	}
-	suite.service.On("GetLatestRate", toCurrency).Return(exchangeResult, nil)
+	suite.service.On("GetLatestRate", toCurrency).Return(&exchangeResult, nil)
 
 	result, err := suite.usecase.GetCurrencyRate(toCurrency)
 
@@ -71,6 +70,6 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRate() {
 	suite.service.AssertExpectations(suite.T())
 }
 
-func TestExchangeUsecase(t *testing.T) {
+func TestExchangeRateUsecase(t *testing.T) {
 	suite.Run(t, new(enchangeUsecaseSuite))
 }

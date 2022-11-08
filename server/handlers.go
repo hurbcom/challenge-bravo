@@ -9,9 +9,9 @@ type Handlers struct {
 	ConversionHandler handlers.ConversionHandler
 }
 
-func SetupHandlers(useCases *Usecases, services *Services) *Handlers {
+func SetupHandlers(useCases *Usecases) *Handlers {
 	currencyHandlers := handlers.InitializeCurrencyHandler(useCases.CurrencyUsecase)
-	conversionHandlers := handlers.InitializeConversionHandler(useCases.ConversionUsecase, useCases.CurrencyUsecase, services.ExchangeRateService)
+	conversionHandlers := handlers.InitializeConversionHandler(useCases.ConversionUsecase, useCases.CurrencyUsecase, useCases.ExchangeRateUsecase)
 
 	return &Handlers{
 		CurrencyHandler:   currencyHandlers,
