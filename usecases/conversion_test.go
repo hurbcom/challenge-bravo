@@ -27,12 +27,6 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithNilValues() {
 	suite.Equal(err.Error(), "conversion is nil")
 }
 
-//	conversion := entities.Conversion{
-//	    From:   "from",
-//	    To:     "to",
-//	    Amount: 1,
-//	    Result: 2,
-//	}
 func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidFrom() {
 	conversion := entities.Conversion{
 		To:     "to",
