@@ -12,15 +12,15 @@ var ApiPort = 0
 
 func Load() {
 
-	var erro error
+	var err error
 
-	if erro = godotenv.Load(); erro != nil {
-		log.Fatal(erro)
+	if err = godotenv.Load(); err != nil {
+		log.Fatal(err)
 	}
 
-	ApiPort, erro = strconv.Atoi(os.Getenv("API_PORT"))
+	ApiPort, err = strconv.Atoi(os.Getenv("API_PORT"))
 
-	if erro != nil {
+	if err != nil {
 		ApiPort = 9000
 	}
 }
