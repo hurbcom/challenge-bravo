@@ -4,6 +4,6 @@ type ExchangeResult struct {
 	Motd    map[string]string
 	Success bool
 	Base    string
-	date    string
+	Date    string
 	Rates   map[string]float32
 }
