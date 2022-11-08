@@ -78,16 +78,18 @@ func (suite *currencyRepositorySuite) TestGetAllCurrencies() {
 	suite.Equal(len(*currencies), 2, "insert 2 records before get all data, so it should contain three currencies")
 }
 
-func (suite *currencyRepositorySuite) TestGetCurrencyByIDNotFound() {
-	id := 1
+func (suite *currencyRepositorySuite) TestGetCurrencyByNotFound() {
+	column := "id"
+	id := "1"
 
-	_, err := suite.repository.GetCurrencyByID(id)
+	_, err := suite.repository.GetCurrencyBy(column, id)
 	suite.Error(err)
 	suite.Equal(err.Error(), "record not found")
 }
 
-func (suite *currencyRepositorySuite) TestGetCurrencyByID() {
-	id := 1
+func (suite *currencyRepositorySuite) TestGetCurrencyBy() {
+	column := "id"
+	id := "1"
 	currency := entities.Currency{
 		Key:           "key",
 		Description:   "description",
@@ -97,7 +99,7 @@ func (suite *currencyRepositorySuite) TestGetCurrencyByID() {
 	err := suite.repository.CreateCurrency(&currency)
 	suite.NoError(err)
 
-	result, err := suite.repository.GetCurrencyByID(id)
+	result, err := suite.repository.GetCurrencyBy(column, id)
 	suite.NoError(err)
 	suite.Equal(currency.Key, (*result).Key)
 	suite.Equal(currency.Description, (*result).Description)
@@ -105,7 +107,8 @@ func (suite *currencyRepositorySuite) TestGetCurrencyByID() {
 }
 
 func (suite *currencyRepositorySuite) TestDeleteCurrency() {
-	id := 1
+	column := "id"
+	id := "1"
 	currency := entities.Currency{
 		Key:           "key",
 		Description:   "description",
@@ -115,13 +118,13 @@ func (suite *currencyRepositorySuite) TestDeleteCurrency() {
 	err := suite.repository.CreateCurrency(&currency)
 	suite.NoError(err)
 
-	_, err = suite.repository.GetCurrencyByID(id)
+	_, err = suite.repository.GetCurrencyBy(column, id)
 	suite.NoError(err)
 
-	err = suite.repository.DeleteCurrency(id)
+	err = suite.repository.DeleteCurrency(1)
 	suite.NoError(err)
 
-	_, err = suite.repository.GetCurrencyByID(id)
+	_, err = suite.repository.GetCurrencyBy(column, id)
 	suite.Equal(err.Error(), "record not found")
 }
 

@@ -16,7 +16,7 @@ type currencyHandler struct {
 type CurrencyHandler interface {
 	CreateCurrency(c *gin.Context)
 	GetAllCurrencies(c *gin.Context)
-	GetCurrencyByID(c *gin.Context)
+	GetCurrencyBy(c *gin.Context)
 	DeleteCurrency(c *gin.Context)
 }
 
@@ -51,10 +51,10 @@ func (handler *currencyHandler) GetAllCurrencies(c *gin.Context) {
 	c.JSON(200, currencies)
 }
 
-func (handler *currencyHandler) GetCurrencyByID(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
+func (handler *currencyHandler) GetCurrencyBy(c *gin.Context) {
+	id := c.Param("id")
 
-	currency, _ := handler.currencyUsecase.GetCurrencyByID(id)
+	currency, _ := handler.currencyUsecase.GetCurrencyBy("id", id)
 
 	if currency == nil {
 		c.JSON(http.StatusNotFound, gin.H{"Not found": "Currency not found"})

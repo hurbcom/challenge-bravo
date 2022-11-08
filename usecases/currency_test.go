@@ -83,27 +83,29 @@ func (suite *currencyUsecaseSuite) TestGetAllCurrencies() {
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func (suite *currencyUsecaseSuite) TestGetCurrencyByIDNotFound() {
-	id := 1
-	suite.repository.On("GetCurrencyByID", id).Return(nil, errors.New("currency is not found"))
-	result, err := suite.usecase.GetCurrencyByID(id)
+func (suite *currencyUsecaseSuite) TestGetCurrencyByNotFound() {
+	column := "id"
+	id := "1"
+	suite.repository.On("GetCurrencyBy", column, id).Return(nil, errors.New("currency is not found"))
+	result, err := suite.usecase.GetCurrencyBy(column, id)
 
 	suite.Nil(result)
 	suite.Equal(err.Error(), "currency is not found")
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func (suite *currencyUsecaseSuite) TestGetCurrencyByID() {
-	id := 2
+func (suite *currencyUsecaseSuite) TestGetCurrencyBy() {
+	column := "id"
+	id := "2"
 	currency := entities.Currency{
 		Key:           "key",
 		Description:   "description",
 		QuotationType: "quotationType",
 	}
 
-	suite.repository.On("GetCurrencyByID", id).Return(&currency, nil)
+	suite.repository.On("GetCurrencyBy", column, id).Return(&currency, nil)
 
-	result, err := suite.usecase.GetCurrencyByID(id)
+	result, err := suite.usecase.GetCurrencyBy(column, id)
 	suite.Nil(err)
 	suite.Equal(currency, *result)
 }

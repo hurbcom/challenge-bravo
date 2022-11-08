@@ -29,7 +29,7 @@ func (suite *currencyHandlerSuite) SetupSuite() {
 	routes := gin.Default()
 	routes.POST("/currency", handler.CreateCurrency)
 	routes.GET("/currency", handler.GetAllCurrencies)
-	routes.GET("/currency/:id", handler.GetCurrencyByID)
+	routes.GET("/currency/:id", handler.GetCurrencyBy)
 	routes.DELETE("/currency/:id", handler.DeleteCurrency)
 
 	suite.routes = routes
@@ -92,12 +92,13 @@ func (suite *currencyHandlerSuite) TestGetAllCurrencies() {
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func (suite *currencyHandlerSuite) TestGetCurrencyByIDNotFound() {
-	id := 1
+func (suite *currencyHandlerSuite) TestGetCurrencyByNotFound() {
+	column := "id"
+	id := "1"
 
-	suite.usecase.On("GetCurrencyByID", id).Return(nil, nil)
+	suite.usecase.On("GetCurrencyBy", column, id).Return(nil, nil)
 
-	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", id), nil)
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%s", id), nil)
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 
@@ -109,17 +110,18 @@ func (suite *currencyHandlerSuite) TestGetCurrencyByIDNotFound() {
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func (suite *currencyHandlerSuite) TestGetCurrencyByID() {
-	id := 2
+func (suite *currencyHandlerSuite) TestGetCurrencyBy() {
+	column := "id"
+	id := "2"
 	currency := entities.Currency{
 		Key:           "USD",
 		Description:   "USD Description",
 		QuotationType: "QuotationType",
 	}
 
-	suite.usecase.On("GetCurrencyByID", id).Return(&currency, nil)
+	suite.usecase.On("GetCurrencyBy", column, id).Return(&currency, nil)
 
-	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", id), nil)
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%s", id), nil)
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 

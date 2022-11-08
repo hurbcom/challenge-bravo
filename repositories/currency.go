@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"fmt"
+
 	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
 	"gorm.io/gorm"
 )
@@ -12,7 +14,7 @@ type currencyRepository struct {
 type CurrencyRepository interface {
 	CreateCurrency(currency *entities.Currency) error
 	GetAllCurrencies() (*[]entities.Currency, error)
-	GetCurrencyByID(id int) (*entities.Currency, error)
+	GetCurrencyBy(column string, value string) (*entities.Currency, error)
 	DeleteCurrency(id int) error
 }
 
@@ -38,10 +40,11 @@ func (repository *currencyRepository) GetAllCurrencies() (*[]entities.Currency, 
 	return &currencies, nil
 }
 
-func (repository *currencyRepository) GetCurrencyByID(id int) (*entities.Currency, error) {
+func (repository *currencyRepository) GetCurrencyBy(column string, value string) (*entities.Currency, error) {
 	var currency entities.Currency
+	query := fmt.Sprintf("%s = ?", column)
 
-	if result := repository.db.First(&currency, id); result.Error != nil {
+	if result := repository.db.Where(query, value).First(&currency); result.Error != nil {
 		return nil, result.Error
 	}
 

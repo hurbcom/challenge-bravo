@@ -63,13 +63,13 @@ func (_m *CurrencyUsecase) GetAllCurrencies() (*[]entities.Currency, error) {
 	return r0, r1
 }
 
-// GetCurrencyByID provides a mock function with given fields: id
-func (_m *CurrencyUsecase) GetCurrencyByID(id int) (*entities.Currency, error) {
-	ret := _m.Called(id)
+// GetCurrencyBy provides a mock function with given fields: column, value
+func (_m *CurrencyUsecase) GetCurrencyBy(column string, value string) (*entities.Currency, error) {
+	ret := _m.Called(column, value)
 
 	var r0 *entities.Currency
-	if rf, ok := ret.Get(0).(func(int) *entities.Currency); ok {
-		r0 = rf(id)
+	if rf, ok := ret.Get(0).(func(string, string) *entities.Currency); ok {
+		r0 = rf(column, value)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.Currency)
@@ -77,8 +77,8 @@ func (_m *CurrencyUsecase) GetCurrencyByID(id int) (*entities.Currency, error) {
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int) error); ok {
-		r1 = rf(id)
+	if rf, ok := ret.Get(1).(func(string, string) error); ok {
+		r1 = rf(column, value)
 	} else {
 		r1 = ret.Error(1)
 	}
