@@ -38,11 +38,13 @@ func InsertCurrency(currency models.Currency) {
 
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 
 	err = redisClient.Set(currency.Name, currencyJSON, 0).Err()
 
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 }

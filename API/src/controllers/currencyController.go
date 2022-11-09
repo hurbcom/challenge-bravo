@@ -71,13 +71,12 @@ func ConvertCurrency(response http.ResponseWriter, request *http.Request) {
 	fromCurrency = getCurrencyFromDatabase(fromCurrencyParam)
 	toCurrency = getCurrencyFromDatabase(toCurrencyParam)
 
-	//TODO Don't update currencies that do not exist in the API
-	if !isUpdated(fromCurrency) {
+	if fromCurrency.IsAutoUpdatable && !isUpdated(fromCurrency) {
 		fromCurrency.ConversionRate = GetConversionRateBasedOnUSDFromAPI("USD", fromCurrency.Name)
 		updateCurrency(fromCurrency)
 	}
 
-	if !isUpdated(toCurrency) {
+	if toCurrency.IsAutoUpdatable && !isUpdated(toCurrency) {
 		toCurrency.ConversionRate = GetConversionRateBasedOnUSDFromAPI("USD", toCurrency.Name)
 		updateCurrency(toCurrency)
 	}
@@ -159,6 +158,21 @@ func getCurrencyFromDatabase(currencyName string) models.Currency {
 }
 
 func InsertCurrency(response http.ResponseWriter, request *http.Request) {
+
+	requestBody, err := io.ReadAll(request.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var currency models.Currency
+
+	if err = json.Unmarshal(requestBody, &currency); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	repositories.InsertCurrency(currency)
 }
 
 func RemoveCurrency(response http.ResponseWriter, request *http.Request) {
