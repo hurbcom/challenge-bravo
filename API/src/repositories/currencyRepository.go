@@ -40,7 +40,6 @@ func InsertCurrency(currency models.Currency) {
 		fmt.Println(err)
 	}
 
-	//TODO Solve ID issue here - Name will be repeated
 	err = redisClient.Set(currency.Name, currencyJSON, 0).Err()
 
 	if err != nil {
