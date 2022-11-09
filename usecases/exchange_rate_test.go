@@ -139,29 +139,30 @@ func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWithHURBCurrencyAndInvalid
 }
 
 func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWithHURBCurrencyAndValidToCurrency() {
+	customAmount := float32(54)
 	fromCurrency := models.Currency{
 		Key:            "HURB",
 		ExchangeApi:    false,
-		CustomAmount:   10,
-		CustomCurrency: "USD",
+		CustomAmount:   customAmount,
+		CustomCurrency: "BRL",
 	}
 	toCurrency := models.Currency{
-		Key:         "BRL",
+		Key:         "USD",
 		ExchangeApi: true,
 	}
 
-	rate := float32(1.1)
+	rate := float32(2)
 	exchangeResult := entities.ExchangeResult{
 		Success: true,
-		Base:    "USD",
-		Rates:   map[string]float32{"BRL": rate},
+		Base:    "BRL",
+		Rates:   map[string]float32{"USD": rate},
 	}
 	suite.service.On("GetLatestRate", fromCurrency.CustomCurrency, toCurrency.Key).Return(&exchangeResult, nil)
 
 	result, err := suite.usecase.GetCurrencyRate(&fromCurrency, &toCurrency)
 
 	suite.NoError(err)
-	suite.Equal(rate, result)
+	suite.Equal((rate * customAmount), result)
 	suite.service.AssertExpectations(suite.T())
 }
 

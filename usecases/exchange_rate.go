@@ -59,5 +59,11 @@ func RateByCustomQuotation(usecase *exchangeRateUsecase, fromCurrency *models.Cu
 		return 0, errors.New("from currency must have custom currency and custom amount")
 	}
 
-	return RateByExchangeApi(usecase, fromCurrency.CustomCurrency, toCurrency.Key)
+	rate, err := RateByExchangeApi(usecase, fromCurrency.CustomCurrency, toCurrency.Key)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return (rate * fromCurrency.CustomAmount), nil
 }

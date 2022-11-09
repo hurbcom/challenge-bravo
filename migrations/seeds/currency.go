@@ -67,4 +67,16 @@ func (seed *currencySeed) SeedInitialCurrency() {
 		}
 		seed.currencyUsecase.CreateCurrency(&currency)
 	}
+
+	key = "HURB"
+	if found, _ := seed.currencyUsecase.GetCurrencyByKey(key); found == nil {
+		currency := models.Currency{
+			Key:            key,
+			Description:    "HURB description",
+			ExchangeApi:    false,
+			CustomAmount:   99,
+			CustomCurrency: "BRL",
+		}
+		seed.currencyUsecase.CreateCurrency(&currency)
+	}
 }
