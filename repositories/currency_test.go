@@ -18,7 +18,7 @@ type currencyRepositorySuite struct {
 
 func (suite *currencyRepositorySuite) SetupSuite() {
 
-	configs := config.GetConfig()
+	configs := config.GetTestConfig()
 	db := config.ConnectDB(configs)
 	repository := InitializeCurrencyRepository(db)
 

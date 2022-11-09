@@ -11,10 +11,12 @@ services:
       - "8080:8080"
     depends_on:
       - db
+      - db_test
     volumes:
       - ./:/app
     links:
       - db
+      - db_test
   db:
     build:
       context: .
@@ -26,9 +28,21 @@ services:
       - ".env"
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
-      - POSTGRES_DB=${DB}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - challenge_bravo_flp_db_volume:/var/lib/postgresql/data
+  db_test:
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
+    ports:
+      - "${DB_PORT_TEST}:5432"
+    container_name: challenge_bravo_flp_db_test
+    env_file:
+      - ".env"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=${DB_NAME_TEST}
 volumes:
   challenge_bravo_flp_db_volume:
     driver: local

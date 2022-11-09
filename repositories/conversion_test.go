@@ -18,7 +18,7 @@ type conversionRepositorySuite struct {
 
 func (suite *conversionRepositorySuite) SetupSuite() {
 
-	configs := config.GetConfig()
+	configs := config.GetTestConfig()
 	db := config.ConnectDB(configs)
 	repository := InitializeConversionRepository(db)
 
