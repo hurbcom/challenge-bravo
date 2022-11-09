@@ -29,7 +29,7 @@ func GetCurrencyByName(currencyName string) (models.Currency, error) {
 	return currency, nil
 }
 
-func InsertCurrency(currency models.Currency) {
+func InsertCurrency(currency models.Currency) error {
 
 	redisClient := database.Connect()
 	defer redisClient.ClientKill(config.DBPort)
@@ -37,14 +37,14 @@ func InsertCurrency(currency models.Currency) {
 	currencyJSON, err := json.Marshal(currency)
 
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
 	err = redisClient.Set(currency.Name, currencyJSON, 0).Err()
 
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
+
+	return nil
 }

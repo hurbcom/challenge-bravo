@@ -4,6 +4,7 @@ import (
 	"api/src/config"
 	"api/src/models"
 	"api/src/repositories"
+	"api/src/responses"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -157,7 +158,7 @@ func getCurrencyFromDatabase(currencyName string) models.Currency {
 	return currency
 }
 
-func InsertCurrency(response http.ResponseWriter, request *http.Request) {
+func InsertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
 
 	requestBody, err := io.ReadAll(request.Body)
 	if err != nil {
@@ -172,7 +173,13 @@ func InsertCurrency(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	repositories.InsertCurrency(currency)
+	currency.LastUpdated = time.Now()
+
+	if err = repositories.InsertCurrency(currency); err != nil {
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
+	}
+
+	responses.JSON(responseWriter, http.StatusCreated, currency)
 }
 
 func RemoveCurrency(response http.ResponseWriter, request *http.Request) {
