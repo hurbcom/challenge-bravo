@@ -13,19 +13,23 @@ type exchangeRateUsecase struct {
 }
 
 type ExchangeRateUsecase interface {
-	GetCurrencyRate(toCurrency string) (float32, error)
+	GetCurrencyRate(fromCurrency string, toCurrency string) (float32, error)
 }
 
 func InitializeExchangeRateUsecase(service services.ExchangeRateService) ExchangeRateUsecase {
 	return &exchangeRateUsecase{service}
 }
 
-func (usecase *exchangeRateUsecase) GetCurrencyRate(toCurrency string) (float32, error) {
+func (usecase *exchangeRateUsecase) GetCurrencyRate(fromCurrency string, toCurrency string) (float32, error) {
+	if fromCurrency == "" {
+		return 0, errors.New("from currency cannot be empty")
+	}
+
 	if toCurrency == "" {
 		return 0, errors.New("to currency cannot be empty")
 	}
 
-	result, err := usecase.service.GetLatestRate(toCurrency)
+	result, err := usecase.service.GetLatestRate(fromCurrency, toCurrency)
 	if err != nil {
 		return 0, err
 	}

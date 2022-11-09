@@ -22,22 +22,33 @@ func (suite *enchangeUsecaseSuite) SetupSuite() {
 	suite.usecase = usecase
 }
 
+func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithEmptyFromCurrency() {
+	fromCurrency := ""
+	toCurrency := "BLR"
+	_, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
+	suite.Equal(err.Error(), "from currency cannot be empty")
+}
+
 func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithEmptyToCurrency() {
-	_, err := suite.usecase.GetCurrencyRate("")
+	fromCurrency := "USD"
+	toCurrency := ""
+	_, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
 	suite.Equal(err.Error(), "to currency cannot be empty")
 }
 
 func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithError() {
+	fromCurrency := "USD"
 	toCurrency := "BLR"
-	suite.service.On("GetLatestRate", toCurrency).Return(nil, errors.New("Some generic error"))
+	suite.service.On("GetLatestRate", fromCurrency, toCurrency).Return(nil, errors.New("Some generic error"))
 
-	_, err := suite.usecase.GetCurrencyRate(toCurrency)
+	_, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
 
 	suite.Equal(err.Error(), "Some generic error")
 	suite.service.AssertExpectations(suite.T())
 }
 
 func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNotFoundRate() {
+	fromCurrency := "NOT-EXISTS"
 	toCurrency := "NOT-EXISTS"
 	rate := float32(1.1)
 	exchangeResult := entities.ExchangeResult{
@@ -45,15 +56,16 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNotFoundRate() {
 		Base:    "USD",
 		Rates:   map[string]float32{"BRL": rate},
 	}
-	suite.service.On("GetLatestRate", toCurrency).Return(&exchangeResult, nil)
+	suite.service.On("GetLatestRate", fromCurrency, toCurrency).Return(&exchangeResult, nil)
 
-	_, err := suite.usecase.GetCurrencyRate(toCurrency)
+	_, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
 
 	suite.Equal(err.Error(), "Can not find target currency rate")
 	suite.service.AssertExpectations(suite.T())
 }
 
 func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRate() {
+	fromCurrency := "USD"
 	toCurrency := "BRL"
 	rate := float32(1.1)
 	exchangeResult := entities.ExchangeResult{
@@ -61,9 +73,9 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRate() {
 		Base:    "USD",
 		Rates:   map[string]float32{"BRL": rate},
 	}
-	suite.service.On("GetLatestRate", toCurrency).Return(&exchangeResult, nil)
+	suite.service.On("GetLatestRate", fromCurrency, toCurrency).Return(&exchangeResult, nil)
 
-	result, err := suite.usecase.GetCurrencyRate(toCurrency)
+	result, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
 
 	suite.NoError(err)
 	suite.Equal(result, rate)
