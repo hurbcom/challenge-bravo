@@ -16,7 +16,6 @@ var (
 	err error
 )
 
-// ConnectDB to get all needed db connections for application
 func ConnectDB(config *entities.Config) *gorm.DB {
 	DB = getDBConnection(config)
 
@@ -35,10 +34,15 @@ func getDBConnection(config *entities.Config) *gorm.DB {
 		config.Database.Password,
 	)
 
-	DB, err = gorm.Open(postgres.Open(databaseUrl))
+	DB, err = gorm.Open(postgres.Open(databaseUrl), &gorm.Config{
+		SkipDefaultTransaction: true,
+		PrepareStmt:            true,
+	})
+
 	if err != nil {
 		log.Panic("Erro ao conectar com banco de dados")
 	}
+
 	DB.AutoMigrate(&models.Currency{})
 	DB.AutoMigrate(&models.Conversion{})
 
