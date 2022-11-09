@@ -33,12 +33,10 @@ func (repository *currencyRepository) CreateCurrency(currency *models.Currency) 
 	}
 
 	if err == nil {
-		tx.Commit()
+		return tx.Commit()
 	} else {
-		tx.Rollback()
+		return tx.Rollback()
 	}
-
-	return nil
 }
 
 func (repository *currencyRepository) GetAllCurrencies() (*[]models.Currency, error) {
@@ -97,12 +95,10 @@ func (repository *currencyRepository) DeleteCurrency(id int) error {
 	}
 
 	if err == nil {
-		tx.Commit()
+		return tx.Commit()
 	} else {
-		tx.Rollback()
+		return tx.Rollback()
 	}
-
-	return nil
 }
 
 func insertCurrency(tx *sqlx.Tx, currency *models.Currency) error {

@@ -29,12 +29,10 @@ func (repository *conversionRepository) CreateConversion(conversion *models.Conv
 	}
 
 	if err == nil {
-		tx.Commit()
+		return tx.Commit()
 	} else {
-		tx.Rollback()
+		return tx.Rollback()
 	}
-
-	return nil
 }
 
 func insertConversion(tx *sqlx.Tx, conversion *models.Conversion) error {
