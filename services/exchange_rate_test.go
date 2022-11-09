@@ -27,20 +27,22 @@ func (suite *exchangeRateServiceSuite) SetupSuite() {
 }
 
 func (suite *exchangeRateServiceSuite) TestGetLatestRateWitError() {
+	fromCurrency := ""
 	toCurrency := ""
-	req := MockGet(toCurrency)
+	req := MockGet(fromCurrency, toCurrency)
 	resp := http.Response{}
 
 	suite.httpClient.On("Do", req).Return(&resp, errors.New("Some generic error"))
 
-	_, err := suite.service.GetLatestRate(toCurrency)
+	_, err := suite.service.GetLatestRate(fromCurrency, toCurrency)
 	suite.Equal(err.Error(), "An error occurred to makes the request")
 	suite.httpClient.AssertExpectations(suite.T())
 }
 
 func (suite *exchangeRateServiceSuite) TestGetLatestRate() {
+	fromCurrency := "USD"
 	toCurrency := "BRL"
-	req := MockGet(toCurrency)
+	req := MockGet(fromCurrency, toCurrency)
 	respBody := ioutil.NopCloser(bytes.NewBufferString(`{"Success": true, "Base": "USD", "Date": "2022-11-08", "Rates": {"BRL": 1.1}}`))
 	resp := http.Response{
 		Body: respBody,
@@ -48,7 +50,7 @@ func (suite *exchangeRateServiceSuite) TestGetLatestRate() {
 
 	suite.httpClient.On("Do", req).Return(&resp, nil)
 
-	result, err := suite.service.GetLatestRate(toCurrency)
+	result, err := suite.service.GetLatestRate(fromCurrency, toCurrency)
 
 	expectedResult := entities.ExchangeResult{
 		Success: true,
@@ -62,11 +64,10 @@ func (suite *exchangeRateServiceSuite) TestGetLatestRate() {
 	suite.httpClient.AssertExpectations(suite.T())
 }
 
-func MockGet(toCurrency string) *http.Request {
-	BASE_CURRENCY := "USD"
+func MockGet(fromCurrency, toCurrency string) *http.Request {
 	BASE_URL := "https://api.exchangerate.host/latest?base=%s&symbols=%s"
 
-	baseUrl := fmt.Sprintf(BASE_URL, BASE_CURRENCY, toCurrency)
+	baseUrl := fmt.Sprintf(BASE_URL, fromCurrency, toCurrency)
 	req, _ := http.NewRequest("GET", baseUrl, nil)
 
 	return req
