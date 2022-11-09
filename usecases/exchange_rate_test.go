@@ -26,14 +26,14 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithEmptyFromCurrency(
 	fromCurrency := ""
 	toCurrency := "BLR"
 	_, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
-	suite.Equal(err.Error(), "from currency cannot be empty")
+	suite.Equal("from currency cannot be empty", err.Error())
 }
 
 func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithEmptyToCurrency() {
 	fromCurrency := "USD"
 	toCurrency := ""
 	_, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
-	suite.Equal(err.Error(), "to currency cannot be empty")
+	suite.Equal("to currency cannot be empty", err.Error())
 }
 
 func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithError() {
@@ -43,7 +43,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithError() {
 
 	_, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
 
-	suite.Equal(err.Error(), "Some generic error")
+	suite.Equal("Some generic error", err.Error())
 	suite.service.AssertExpectations(suite.T())
 }
 
@@ -60,7 +60,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNotFoundRate() {
 
 	_, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
 
-	suite.Equal(err.Error(), "Can not find target currency rate")
+	suite.Equal("Can not find target currency rate", err.Error())
 	suite.service.AssertExpectations(suite.T())
 }
 
@@ -78,7 +78,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRate() {
 	result, err := suite.usecase.GetCurrencyRate(fromCurrency, toCurrency)
 
 	suite.NoError(err)
-	suite.Equal(result, rate)
+	suite.Equal(rate, result)
 	suite.service.AssertExpectations(suite.T())
 }
 

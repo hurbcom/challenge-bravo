@@ -17,7 +17,7 @@ func rootController() gin.HandlerFunc {
 func registerRoutes(router *gin.Engine, controllers *Controllers) {
 	router.GET("/", rootController())
 	router.GET("/currency", controllers.CurrencyController.GetAllCurrencies)
-	router.GET("/currency/:id", controllers.CurrencyController.GetCurrencyBy)
+	router.GET("/currency/:id", controllers.CurrencyController.GetCurrencyById)
 	router.POST("/currency", controllers.CurrencyController.CreateCurrency)
 	router.DELETE("/currency/:id", controllers.CurrencyController.DeleteCurrency)
 

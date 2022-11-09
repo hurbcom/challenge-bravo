@@ -14,7 +14,8 @@ type currencyUsecase struct {
 type CurrencyUsecase interface {
 	CreateCurrency(currency *models.Currency) error
 	GetAllCurrencies() (*[]models.Currency, error)
-	GetCurrencyBy(column string, value string) (*models.Currency, error)
+	GetCurrencyById(id int) (*models.Currency, error)
+	GetCurrencyByKey(key string) (*models.Currency, error)
 	DeleteCurrency(id int) error
 }
 
@@ -42,8 +43,16 @@ func (usecase *currencyUsecase) GetAllCurrencies() (*[]models.Currency, error) {
 	return usecase.currencyRepository.GetAllCurrencies()
 }
 
-func (usecase *currencyUsecase) GetCurrencyBy(column string, value string) (*models.Currency, error) {
-	currency, _ := usecase.currencyRepository.GetCurrencyBy(column, value)
+func (usecase *currencyUsecase) GetCurrencyById(id int) (*models.Currency, error) {
+	currency, _ := usecase.currencyRepository.GetCurrencyById(id)
+	if currency == nil {
+		return nil, errors.New("currency is not found")
+	}
+	return currency, nil
+}
+
+func (usecase *currencyUsecase) GetCurrencyByKey(key string) (*models.Currency, error) {
+	currency, _ := usecase.currencyRepository.GetCurrencyByKey(key)
 	if currency == nil {
 		return nil, errors.New("currency is not found")
 	}

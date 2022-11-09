@@ -19,46 +19,51 @@ func InitializeCurrencySeed(usecase usecases.CurrencyUsecase) CurrencySeed {
 
 func (seed *currencySeed) SeedInitialCurrency() {
 	key := "USD"
-	if found, _ := seed.currencyUsecase.GetCurrencyBy("key", key); found == nil {
+	if found, _ := seed.currencyUsecase.GetCurrencyByKey(key); found == nil {
 		currency := models.Currency{
 			Key:         key,
 			Description: "USD description",
+			ExchangeApi: true,
 		}
 		seed.currencyUsecase.CreateCurrency(&currency)
 	}
 
 	key = "BRL"
-	if found, _ := seed.currencyUsecase.GetCurrencyBy("key", key); found == nil {
+	if found, _ := seed.currencyUsecase.GetCurrencyByKey(key); found == nil {
 		currency := models.Currency{
 			Key:         key,
 			Description: "BRL description",
+			ExchangeApi: true,
 		}
 		seed.currencyUsecase.CreateCurrency(&currency)
 	}
 
 	key = "EUR"
-	if found, _ := seed.currencyUsecase.GetCurrencyBy("key", key); found == nil {
+	if found, _ := seed.currencyUsecase.GetCurrencyByKey(key); found == nil {
 		currency := models.Currency{
 			Key:         key,
 			Description: "EUR description",
+			ExchangeApi: true,
 		}
 		seed.currencyUsecase.CreateCurrency(&currency)
 	}
 
 	key = "BTC"
-	if found, _ := seed.currencyUsecase.GetCurrencyBy("key", key); found == nil {
+	if found, _ := seed.currencyUsecase.GetCurrencyByKey(key); found == nil {
 		currency := models.Currency{
 			Key:         key,
 			Description: "BTC description",
+			ExchangeApi: true,
 		}
 		seed.currencyUsecase.CreateCurrency(&currency)
 	}
 
 	key = "ETH"
-	if found, _ := seed.currencyUsecase.GetCurrencyBy("key", key); found == nil {
+	if found, _ := seed.currencyUsecase.GetCurrencyByKey(key); found == nil {
 		currency := models.Currency{
 			Key:         key,
 			Description: "ETH description",
+			ExchangeApi: true,
 		}
 		seed.currencyUsecase.CreateCurrency(&currency)
 	}

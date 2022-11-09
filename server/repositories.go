@@ -2,7 +2,7 @@ package server
 
 import (
 	repositories "github.com/felipepnascimento/challenge-bravo-flp/repositories"
-	"gorm.io/gorm"
+	"github.com/jmoiron/sqlx"
 )
 
 type Repositories struct {
@@ -10,7 +10,7 @@ type Repositories struct {
 	ConversionRepository repositories.ConversionRepository
 }
 
-func SetupRepositories(db *gorm.DB) *Repositories {
+func SetupRepositories(db *sqlx.DB) *Repositories {
 	currencyRepository := repositories.InitializeCurrencyRepository(db)
 	conversionRepository := repositories.InitializeConversionRepository(db)
 

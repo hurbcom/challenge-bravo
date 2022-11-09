@@ -16,7 +16,9 @@ services:
     links:
       - db
   db:
-    image: postgres:alpine
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
     ports:
       - "5432:5432"
     container_name: challenge_bravo_flp_db

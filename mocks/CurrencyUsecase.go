@@ -63,13 +63,13 @@ func (_m *CurrencyUsecase) GetAllCurrencies() (*[]models.Currency, error) {
 	return r0, r1
 }
 
-// GetCurrencyBy provides a mock function with given fields: column, value
-func (_m *CurrencyUsecase) GetCurrencyBy(column string, value string) (*models.Currency, error) {
-	ret := _m.Called(column, value)
+// GetCurrencyById provides a mock function with given fields: id
+func (_m *CurrencyUsecase) GetCurrencyById(id int) (*models.Currency, error) {
+	ret := _m.Called(id)
 
 	var r0 *models.Currency
-	if rf, ok := ret.Get(0).(func(string, string) *models.Currency); ok {
-		r0 = rf(column, value)
+	if rf, ok := ret.Get(0).(func(int) *models.Currency); ok {
+		r0 = rf(id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*models.Currency)
@@ -77,8 +77,31 @@ func (_m *CurrencyUsecase) GetCurrencyBy(column string, value string) (*models.C
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string, string) error); ok {
-		r1 = rf(column, value)
+	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetCurrencyByKey provides a mock function with given fields: key
+func (_m *CurrencyUsecase) GetCurrencyByKey(key string) (*models.Currency, error) {
+	ret := _m.Called(key)
+
+	var r0 *models.Currency
+	if rf, ok := ret.Get(0).(func(string) *models.Currency); ok {
+		r0 = rf(key)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*models.Currency)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(key)
 	} else {
 		r1 = ret.Error(1)
 	}

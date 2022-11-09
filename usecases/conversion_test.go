@@ -24,7 +24,7 @@ func (suite *conversionUsecaseSuite) SetupSuite() {
 
 func (suite *conversionUsecaseSuite) TestCreateConversionWithNilValues() {
 	err := suite.usecase.CreateConversion(nil)
-	suite.Equal(err.Error(), "conversion is nil")
+	suite.Equal("conversion is nil", err.Error())
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidFrom() {
@@ -35,7 +35,7 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidFrom() {
 	}
 
 	err := suite.usecase.CreateConversion(&conversion)
-	suite.Equal(err.Error(), "From, To, Amount and result cannot be empty")
+	suite.Equal("From, To, Amount and result cannot be empty", err.Error())
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidTo() {
@@ -46,7 +46,7 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidTo() {
 	}
 
 	err := suite.usecase.CreateConversion(&conversion)
-	suite.Equal(err.Error(), "From, To, Amount and result cannot be empty")
+	suite.Equal("From, To, Amount and result cannot be empty", err.Error())
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidAmount() {
@@ -58,7 +58,7 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidAmount() {
 	}
 
 	err := suite.usecase.CreateConversion(&conversion)
-	suite.Equal(err.Error(), "From, To, Amount and result cannot be empty")
+	suite.Equal("From, To, Amount and result cannot be empty", err.Error())
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidResult() {
@@ -70,7 +70,7 @@ func (suite *conversionUsecaseSuite) TestCreateConversionWithInvalidResult() {
 	}
 
 	err := suite.usecase.CreateConversion(&conversion)
-	suite.Equal(err.Error(), "From, To, Amount and result cannot be empty")
+	suite.Equal("From, To, Amount and result cannot be empty", err.Error())
 }
 
 func (suite *conversionUsecaseSuite) TestCreateConversion() {

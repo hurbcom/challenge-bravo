@@ -25,34 +25,31 @@ func (suite *currencyUsecaseSuite) SetupSuite() {
 
 func (suite *currencyUsecaseSuite) TestCreateCurrencyWithNilValues() {
 	err := suite.usecase.CreateCurrency(nil)
-	suite.Equal(err.Error(), "currency is nil")
+	suite.Equal("currency is nil", err.Error())
 }
 
 func (suite *currencyUsecaseSuite) TestCreateCurrencyWithInvalidKey() {
 	currency := models.Currency{
 		Description:   "description",
-		QuotationType: "quotationType",
 	}
 
 	err := suite.usecase.CreateCurrency(&currency)
-	suite.Equal(err.Error(), "key and description cannot be empty")
+	suite.Equal("key and description cannot be empty", err.Error())
 }
 
 func (suite *currencyUsecaseSuite) TestCreateCurrencyWithInvalidDescription() {
 	currency := models.Currency{
 		Key:           "key",
-		QuotationType: "quotationType",
 	}
 
 	err := suite.usecase.CreateCurrency(&currency)
-	suite.Equal(err.Error(), "key and description cannot be empty")
+	suite.Equal("key and description cannot be empty", err.Error())
 }
 
 func (suite *currencyUsecaseSuite) TestCreateCurrency() {
 	currency := models.Currency{
 		Key:           "key",
 		Description:   "description",
-		QuotationType: "quotationType",
 	}
 	suite.repository.On("CreateCurrency", &currency).Return(nil)
 
@@ -66,48 +63,43 @@ func (suite *currencyUsecaseSuite) TestGetAllCurrencies() {
 		{
 			Key:           "key",
 			Description:   "description",
-			QuotationType: "quotationType",
 		},
 		{
 			Key:           "key",
 			Description:   "description",
-			QuotationType: "quotationType",
 		},
 	}
 	suite.repository.On("GetAllCurrencies").Return(&currencies, nil)
 
 	result, err := suite.usecase.GetAllCurrencies()
 	suite.NoError(err)
-	suite.Equal(len(*result), len(currencies))
-	suite.Equal(*result, currencies)
+	suite.Equal(len(currencies), len(*result))
+	suite.Equal(currencies, *result)
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func (suite *currencyUsecaseSuite) TestGetCurrencyByNotFound() {
-	column := "id"
-	id := "1"
-	suite.repository.On("GetCurrencyBy", column, id).Return(nil, errors.New("currency is not found"))
-	result, err := suite.usecase.GetCurrencyBy(column, id)
+func (suite *currencyUsecaseSuite) TestGetCurrencyByIdNotFound() {
+	id := 1
+	suite.repository.On("GetCurrencyById", id).Return(nil, errors.New("currency is not found"))
+	result, err := suite.usecase.GetCurrencyById(id)
 
 	suite.Nil(result)
-	suite.Equal(err.Error(), "currency is not found")
+	suite.Equal("currency is not found", err.Error())
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func (suite *currencyUsecaseSuite) TestGetCurrencyBy() {
-	column := "id"
-	id := "2"
+func (suite *currencyUsecaseSuite) TestGetCurrencyById() {
+	id := 2
 	currency := models.Currency{
 		Key:           "key",
 		Description:   "description",
-		QuotationType: "quotationType",
 	}
 
-	suite.repository.On("GetCurrencyBy", column, id).Return(&currency, nil)
+	suite.repository.On("GetCurrencyById", id).Return(&currency, nil)
 
-	result, err := suite.usecase.GetCurrencyBy(column, id)
+	result, err := suite.usecase.GetCurrencyById(id)
 	suite.Nil(err)
-	suite.Equal(currency, *result)
+	suite.Equal(*result, currency)
 }
 
 func (suite *currencyUsecaseSuite) TestDeleteCurrency() {

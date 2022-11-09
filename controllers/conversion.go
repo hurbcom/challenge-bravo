@@ -34,8 +34,8 @@ func (controller *conversionController) Convert(c *gin.Context) {
 		return
 	}
 
-	fromCurrency, _ := controller.currencyUsecase.GetCurrencyBy("key", from)
-	toCurrency, _ := controller.currencyUsecase.GetCurrencyBy("key", to)
+	fromCurrency, _ := controller.currencyUsecase.GetCurrencyByKey(from)
+	toCurrency, _ := controller.currencyUsecase.GetCurrencyByKey(to)
 
 	err = ValidateCurrencies(fromCurrency, toCurrency)
 

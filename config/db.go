@@ -5,24 +5,22 @@ import (
 	"log"
 
 	"github.com/felipepnascimento/challenge-bravo-flp/entities"
-	"github.com/felipepnascimento/challenge-bravo-flp/models"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 var (
-	DB  *gorm.DB
+	DB  *sqlx.DB
 	err error
 )
 
-func ConnectDB(config *entities.Config) *gorm.DB {
+func ConnectDB(config *entities.Config) *sqlx.DB {
 	DB = getDBConnection(config)
 
 	return DB
 }
 
-func getDBConnection(config *entities.Config) *gorm.DB {
+func getDBConnection(config *entities.Config) *sqlx.DB {
 	var databaseUrl string
 
 	databaseUrl = fmt.Sprintf(
@@ -34,17 +32,14 @@ func getDBConnection(config *entities.Config) *gorm.DB {
 		config.Database.Password,
 	)
 
-	DB, err = gorm.Open(postgres.Open(databaseUrl), &gorm.Config{
-		SkipDefaultTransaction: true,
-		PrepareStmt:            true,
-	})
+	DB, err := sqlx.Open("postgres", databaseUrl)
 
 	if err != nil {
 		log.Panic("Erro ao conectar com banco de dados")
 	}
 
-	DB.AutoMigrate(&models.Currency{})
-	DB.AutoMigrate(&models.Conversion{})
+	DB.SetMaxIdleConns(1)
+	DB.SetMaxOpenConns(5)
 
 	return DB
 }

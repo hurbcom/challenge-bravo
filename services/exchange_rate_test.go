@@ -35,7 +35,7 @@ func (suite *exchangeRateServiceSuite) TestGetLatestRateWitError() {
 	suite.httpClient.On("Do", req).Return(&resp, errors.New("Some generic error"))
 
 	_, err := suite.service.GetLatestRate(fromCurrency, toCurrency)
-	suite.Equal(err.Error(), "An error occurred to makes the request")
+	suite.Equal("An error occurred to makes the request", err.Error())
 	suite.httpClient.AssertExpectations(suite.T())
 }
 
@@ -60,7 +60,7 @@ func (suite *exchangeRateServiceSuite) TestGetLatestRate() {
 	}
 
 	suite.NoError(err)
-	suite.Equal(result, &expectedResult)
+	suite.Equal(&expectedResult, result)
 	suite.httpClient.AssertExpectations(suite.T())
 }
 

@@ -32,9 +32,8 @@ func (suite *currencyRepositorySuite) TearDownTest() {
 
 func (suite *currencyRepositorySuite) TestCreateCurrency() {
 	currency := models.Currency{
-		Key:           "key",
-		Description:   "description",
-		QuotationType: "quotationType",
+		Key:         "unique_key",
+		Description: "description",
 	}
 
 	err := suite.repository.CreateCurrency(&currency)
@@ -43,29 +42,26 @@ func (suite *currencyRepositorySuite) TestCreateCurrency() {
 
 func (suite *currencyRepositorySuite) TestCreateCurrencyWithDuplicatedKey() {
 	currency := models.Currency{
-		Key:           "key",
-		Description:   "description",
-		QuotationType: "quotationType",
+		Key:         "key",
+		Description: "description",
 	}
 
 	err := suite.repository.CreateCurrency(&currency)
 	suite.NoError(err)
 
 	err = suite.repository.CreateCurrency(&currency)
-	suite.Equal(err.Error(), "ERROR: duplicate key value violates unique constraint \"currencies_pkey\" (SQLSTATE 23505)")
+	suite.Equal("pq: duplicate key value violates unique constraint \"currencies_key_key\"", err.Error())
 }
 
 func (suite *currencyRepositorySuite) TestGetAllCurrencies() {
 	currency := models.Currency{
-		Key:           "key",
-		Description:   "description",
-		QuotationType: "quotationType",
+		Key:         "key_one",
+		Description: "description",
 	}
 
 	currencyOne := models.Currency{
-		Key:           "key_one",
-		Description:   "description",
-		QuotationType: "quotationType",
+		Key:         "key_two",
+		Description: "description",
 	}
 
 	err := suite.repository.CreateCurrency(&currency)
@@ -75,57 +71,75 @@ func (suite *currencyRepositorySuite) TestGetAllCurrencies() {
 
 	currencies, err := suite.repository.GetAllCurrencies()
 	suite.NoError(err)
-	suite.Equal(len(*currencies), 2, "insert 2 records before get all data, so it should contain three currencies")
+	suite.Equal(2, len(*currencies))
 }
 
-func (suite *currencyRepositorySuite) TestGetCurrencyByNotFound() {
-	column := "id"
-	id := "1"
+func (suite *currencyRepositorySuite) TestGetCurrencyByIdNotFound() {
+	id := 1
 
-	_, err := suite.repository.GetCurrencyBy(column, id)
+	_, err := suite.repository.GetCurrencyById(id)
 	suite.Error(err)
-	suite.Equal(err.Error(), "record not found")
+	suite.Equal("sql: no rows in result set", err.Error())
 }
 
-func (suite *currencyRepositorySuite) TestGetCurrencyBy() {
-	column := "id"
-	id := "1"
+func (suite *currencyRepositorySuite) TestGetCurrencyById() {
+	id := 1
 	currency := models.Currency{
-		Key:           "key",
-		Description:   "description",
-		QuotationType: "quotationType",
+		Key:         "key",
+		Description: "description",
 	}
 
 	err := suite.repository.CreateCurrency(&currency)
 	suite.NoError(err)
 
-	result, err := suite.repository.GetCurrencyBy(column, id)
+	result, err := suite.repository.GetCurrencyById(id)
 	suite.NoError(err)
-	suite.Equal(currency.Key, (*result).Key)
-	suite.Equal(currency.Description, (*result).Description)
-	suite.Equal(currency.QuotationType, (*result).QuotationType)
+	suite.Equal((*result).Key, currency.Key)
+	suite.Equal((*result).Description, currency.Description)
+}
+
+func (suite *currencyRepositorySuite) TestGetCurrencyByKeyNotFound() {
+	key := "NOT"
+
+	_, err := suite.repository.GetCurrencyByKey(key)
+	suite.Error(err)
+	suite.Equal("sql: no rows in result set", err.Error())
+}
+
+func (suite *currencyRepositorySuite) TestGetCurrencyByKey() {
+	key := "key"
+	currency := models.Currency{
+		Key:         "key",
+		Description: "description",
+	}
+
+	err := suite.repository.CreateCurrency(&currency)
+	suite.NoError(err)
+
+	result, err := suite.repository.GetCurrencyByKey(key)
+	suite.NoError(err)
+	suite.Equal((*result).Key, currency.Key)
+	suite.Equal((*result).Description, currency.Description)
 }
 
 func (suite *currencyRepositorySuite) TestDeleteCurrency() {
-	column := "id"
-	id := "1"
+	id := 1
 	currency := models.Currency{
-		Key:           "key",
-		Description:   "description",
-		QuotationType: "quotationType",
+		Key:         "key",
+		Description: "description",
 	}
 
 	err := suite.repository.CreateCurrency(&currency)
 	suite.NoError(err)
 
-	_, err = suite.repository.GetCurrencyBy(column, id)
+	_, err = suite.repository.GetCurrencyById(id)
 	suite.NoError(err)
 
 	err = suite.repository.DeleteCurrency(1)
 	suite.NoError(err)
 
-	_, err = suite.repository.GetCurrencyBy(column, id)
-	suite.Equal(err.Error(), "record not found")
+	_, err = suite.repository.GetCurrencyById(id)
+	suite.Equal("sql: no rows in result set", err.Error())
 }
 
 func TestCurrencyRepository(t *testing.T) {

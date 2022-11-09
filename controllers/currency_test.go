@@ -29,7 +29,7 @@ func (suite *currencyControllerSuite) SetupSuite() {
 	routes := gin.Default()
 	routes.POST("/currency", controller.CreateCurrency)
 	routes.GET("/currency", controller.GetAllCurrencies)
-	routes.GET("/currency/:id", controller.GetCurrencyBy)
+	routes.GET("/currency/:id", controller.GetCurrencyById)
 	routes.DELETE("/currency/:id", controller.DeleteCurrency)
 
 	suite.routes = routes
@@ -42,15 +42,14 @@ func (suite *currencyControllerSuite) TestCreateCurrencyWithNilValues() {
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 
-	suite.Equal(http.StatusBadRequest, response.Code)
+	suite.Equal(response.Code, http.StatusBadRequest)
 	suite.usecase.AssertExpectations(suite.T())
 }
 
 func (suite *currencyControllerSuite) TestCreateCurrency() {
 	currency := models.Currency{
-		Key:           "created key",
-		Description:   "created description",
-		QuotationType: "created quotationType",
+		Key:         "created key",
+		Description: "created description",
 	}
 	suite.usecase.On("CreateCurrency", &currency).Return(nil)
 
@@ -66,19 +65,17 @@ func (suite *currencyControllerSuite) TestCreateCurrency() {
 	var expectedCurrency models.Currency
 	json.NewDecoder(response.Body).Decode(&expectedCurrency)
 
-	suite.Equal(http.StatusOK, response.Code)
-	suite.Equal(expectedCurrency.Key, "created key")
-	suite.Equal(expectedCurrency.Description, "created description")
-	suite.Equal(expectedCurrency.QuotationType, "created quotationType")
+	suite.Equal(response.Code, http.StatusOK)
+	suite.Equal("created key", expectedCurrency.Key)
+	suite.Equal("created description", expectedCurrency.Description)
 	suite.usecase.AssertExpectations(suite.T())
 }
 
 func (suite *currencyControllerSuite) TestGetAllCurrencies() {
 	currencies := []models.Currency{
 		{
-			Key:           "USD",
-			Description:   "USD Description",
-			QuotationType: "QuotationType",
+			Key:         "USD",
+			Description: "USD Description",
 		},
 	}
 
@@ -88,50 +85,46 @@ func (suite *currencyControllerSuite) TestGetAllCurrencies() {
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 
-	suite.Equal(http.StatusOK, response.Code)
+	suite.Equal(response.Code, http.StatusOK)
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func (suite *currencyControllerSuite) TestGetCurrencyByNotFound() {
-	column := "id"
-	id := "1"
+func (suite *currencyControllerSuite) TestGetCurrencyByIdNotFound() {
+	id := 1
 
-	suite.usecase.On("GetCurrencyBy", column, id).Return(nil, nil)
+	suite.usecase.On("GetCurrencyById", id).Return(nil, nil)
 
-	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%s", id), nil)
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", id), nil)
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 
 	expectedResponse := `{"Not found":"Currency not found"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(http.StatusNotFound, response.Code)
-	suite.Equal(expectedResponse, string(responseBody))
+	suite.Equal(response.Code, http.StatusNotFound)
+	suite.Equal(string(responseBody), expectedResponse)
 	suite.usecase.AssertExpectations(suite.T())
 }
 
-func (suite *currencyControllerSuite) TestGetCurrencyBy() {
-	column := "id"
-	id := "2"
+func (suite *currencyControllerSuite) TestGetCurrencyById() {
+	id := 2
 	currency := models.Currency{
-		Key:           "USD",
-		Description:   "USD Description",
-		QuotationType: "QuotationType",
+		Key:         "USD",
+		Description: "USD Description",
 	}
 
-	suite.usecase.On("GetCurrencyBy", column, id).Return(&currency, nil)
+	suite.usecase.On("GetCurrencyById", id).Return(&currency, nil)
 
-	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%s", id), nil)
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/currency/%d", id), nil)
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 
 	var expectedCurrency models.Currency
 	json.NewDecoder(response.Body).Decode(&expectedCurrency)
 
-	suite.Equal(http.StatusOK, response.Code)
-	suite.Equal(expectedCurrency.Key, "USD")
-	suite.Equal(expectedCurrency.Description, "USD Description")
-	suite.Equal(expectedCurrency.QuotationType, "QuotationType")
+	suite.Equal(response.Code, http.StatusOK)
+	suite.Equal("USD", expectedCurrency.Key)
+	suite.Equal("USD Description", expectedCurrency.Description)
 	suite.usecase.AssertExpectations(suite.T())
 }
 
@@ -146,8 +139,8 @@ func (suite *currencyControllerSuite) TestDeleteCurrency() {
 	expectedResponse := `{"data":"Currency successfully deleted"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(http.StatusOK, response.Code)
-	suite.Equal(expectedResponse, string(responseBody))
+	suite.Equal(response.Code, http.StatusOK)
+	suite.Equal(string(responseBody), expectedResponse)
 	suite.usecase.AssertExpectations(suite.T())
 }
 

@@ -5,12 +5,12 @@ import (
 )
 
 type Conversion struct {
-	ID        uint    `gorm:"primaryKey"`
-	From      string  `json:"from"`
-	To        string  `json:"to"`
-	Amount    float32 `json:"amount"`
-	Result    float32 `json:"result"`
-	CreatedAt time.Time
+	ID        int       `json:"id" db:"id"`
+	From      string    `json:"from" db:"from"`
+	To        string    `json:"to" db:"to"`
+	Amount    float32   `json:"amount"  db:"amount"`
+	Result    float32   `json:"result" db:"result"`
+	CreatedAt time.Time `json:"createdAt" db:"created_at"`
 }
 
 func (currency *Conversion) IsValid() bool {

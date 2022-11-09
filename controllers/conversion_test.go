@@ -53,8 +53,8 @@ func (suite *conversionControllerSuite) TestConvertCurrencyWithoutFromParam() {
 	expectedResponse := `{"Bad Request":"From parameter is required"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(http.StatusBadRequest, response.Code)
-	suite.Equal(expectedResponse, string(responseBody))
+	suite.Equal(response.Code, http.StatusBadRequest)
+	suite.Equal(string(responseBody), expectedResponse)
 }
 
 func (suite *conversionControllerSuite) TestConvertCurrencyWithoutToParam() {
@@ -71,8 +71,8 @@ func (suite *conversionControllerSuite) TestConvertCurrencyWithoutToParam() {
 	expectedResponse := `{"Bad Request":"To parameter is required"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(http.StatusBadRequest, response.Code)
-	suite.Equal(expectedResponse, string(responseBody))
+	suite.Equal(response.Code, http.StatusBadRequest)
+	suite.Equal(string(responseBody), expectedResponse)
 }
 
 func (suite *conversionControllerSuite) TestConvertCurrencyWithoutAmountParam() {
@@ -89,8 +89,8 @@ func (suite *conversionControllerSuite) TestConvertCurrencyWithoutAmountParam() 
 	expectedResponse := `{"Bad Request":"Amount parameter is required"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(http.StatusBadRequest, response.Code)
-	suite.Equal(expectedResponse, string(responseBody))
+	suite.Equal(response.Code, http.StatusBadRequest)
+	suite.Equal(string(responseBody), expectedResponse)
 }
 
 func (suite *conversionControllerSuite) TestConvertCurrencyNotFoundFromCurrency() {
@@ -102,16 +102,16 @@ func (suite *conversionControllerSuite) TestConvertCurrencyNotFoundFromCurrency(
 	req, _ := http.NewRequest("GET", urlPath, nil)
 	response := httptest.NewRecorder()
 
-	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(nil, nil)
-	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(nil, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", from).Return(nil, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", to).Return(nil, nil)
 
 	suite.routes.ServeHTTP(response, req)
 
 	expectedResponse := `{"Bad Request":"From currency does not exists or is not available to conversion"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(http.StatusBadRequest, response.Code)
-	suite.Equal(expectedResponse, string(responseBody))
+	suite.Equal(response.Code, http.StatusBadRequest)
+	suite.Equal(string(responseBody), expectedResponse)
 
 	suite.currencyUsecase.AssertExpectations(suite.T())
 	suite.conversionUsecase.AssertExpectations(suite.T())
@@ -131,16 +131,16 @@ func (suite *conversionControllerSuite) TestConvertCurrencyNotFoundToCurrency() 
 		Key: from,
 	}
 
-	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
-	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(nil, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", from).Return(&fromCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", to).Return(nil, nil)
 
 	suite.routes.ServeHTTP(response, req)
 
 	expectedResponse := `{"Bad Request":"To currency does not exists or is not available to conversion"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(http.StatusBadRequest, response.Code)
-	suite.Equal(expectedResponse, string(responseBody))
+	suite.Equal(response.Code, http.StatusBadRequest)
+	suite.Equal(string(responseBody), expectedResponse)
 
 	suite.currencyUsecase.AssertExpectations(suite.T())
 	suite.conversionUsecase.AssertExpectations(suite.T())
@@ -164,13 +164,13 @@ func (suite *conversionControllerSuite) TestConvertCurrencyInternalServerError()
 	}
 	rate := float32(0)
 
-	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
-	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(&toCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", from).Return(&fromCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", to).Return(&toCurrency, nil)
 	suite.exchangeRateUsecase.On("GetCurrencyRate", from, to).Return(&rate, errors.New("Some generic error "))
 
 	suite.routes.ServeHTTP(response, req)
 
-	suite.Equal(http.StatusInternalServerError, response.Code)
+	suite.Equal(response.Code, http.StatusInternalServerError)
 	suite.currencyUsecase.AssertExpectations(suite.T())
 	suite.conversionUsecase.AssertExpectations(suite.T())
 	suite.exchangeRateUsecase.AssertExpectations(suite.T())
@@ -199,14 +199,14 @@ func (suite *conversionControllerSuite) TestConvertCurrencyCreateConversionError
 		Result: amount * rate,
 	}
 
-	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
-	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(&toCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", from).Return(&fromCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", to).Return(&toCurrency, nil)
 	suite.exchangeRateUsecase.On("GetCurrencyRate", from, to).Return(rate, nil)
 	suite.conversionUsecase.On("CreateConversion", &conversion).Return(errors.New("Some generic error"))
 
 	suite.routes.ServeHTTP(response, req)
 
-	suite.Equal(http.StatusInternalServerError, response.Code)
+	suite.Equal(response.Code, http.StatusInternalServerError)
 	suite.currencyUsecase.AssertExpectations(suite.T())
 	suite.conversionUsecase.AssertExpectations(suite.T())
 	suite.exchangeRateUsecase.AssertExpectations(suite.T())
@@ -235,14 +235,14 @@ func (suite *conversionControllerSuite) TestConvertCurrencySuccessfully() {
 		Result: amount * rate,
 	}
 
-	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
-	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(&toCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", from).Return(&fromCurrency, nil)
+	suite.currencyUsecase.On("GetCurrencyByKey", to).Return(&toCurrency, nil)
 	suite.exchangeRateUsecase.On("GetCurrencyRate", from, to).Return(rate, nil)
 	suite.conversionUsecase.On("CreateConversion", &conversion).Return(nil)
 
 	suite.routes.ServeHTTP(response, req)
 
-	suite.Equal(http.StatusOK, response.Code)
+	suite.Equal(response.Code, http.StatusOK)
 	suite.currencyUsecase.AssertExpectations(suite.T())
 	suite.conversionUsecase.AssertExpectations(suite.T())
 	suite.exchangeRateUsecase.AssertExpectations(suite.T())
