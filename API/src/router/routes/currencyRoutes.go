@@ -11,4 +11,10 @@ var currencyRoutes = []Route{
 		Method:   http.MethodGet,
 		Function: controllers.ConvertCurrency,
 	},
+
+	{
+		URI:      "/currency/{name}",
+		Method:   http.MethodGet,
+		Function: controllers.GetCurrencyConversionRateFromDatabase,
+	},
 }

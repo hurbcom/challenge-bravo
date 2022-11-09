@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -8,7 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var ApiPort = 0
+var DBPass, ApiPort, DBPort, DBAddr, UrlToExternalAPI = "", 0, "", "", ""
 
 func Load() {
 
@@ -23,4 +24,17 @@ func Load() {
 	if err != nil {
 		ApiPort = 9000
 	}
+
+	DBServer := os.Getenv("DB_SERVER")
+	DBPass = os.Getenv("DB_PASS")
+	DBPort = os.Getenv("DB_PORT")
+
+	DBAddr := DBServer + ":" + DBPort
+
+	fmt.Println("DBServer: ", DBServer)
+	fmt.Println("DBPort: ", DBPort)
+	fmt.Println("DBAddr: ", DBAddr)
+
+	UrlToExternalAPI = os.Getenv("EXTERNAL_API")
+
 }
