@@ -7,12 +7,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/go-redis/redis"
 )
 
 func InitRedisDatabase() {
@@ -44,8 +45,8 @@ func InitRedisDatabase() {
 
 func ConvertCurrency(response http.ResponseWriter, request *http.Request) /*float64*/ {
 
-	fromCurrency := strings.ToUpper(request.URL.Query().Get("from"))
-	toCurrency := strings.ToUpper(request.URL.Query().Get("to"))
+	fromCurrencyParam := strings.ToUpper(request.URL.Query().Get("from"))
+	toCurrencyParam := strings.ToUpper(request.URL.Query().Get("to"))
 	amount, err := strconv.ParseFloat(request.URL.Query().Get("amount"), 64)
 
 	if amount <= 0 || err != nil {
@@ -55,29 +56,60 @@ func ConvertCurrency(response http.ResponseWriter, request *http.Request) /*floa
 		return
 	}
 
-	isFromCurrencyAllowed := repositories.IsAllowedCurrency(fromCurrency)
-	isToCurrencyAllowed := repositories.IsAllowedCurrency(toCurrency)
+	isFromCurrencyAllowed := IsAllowedCurrency(fromCurrencyParam)
+	isToCurrencyAllowed := IsAllowedCurrency(toCurrencyParam)
 
 	if !isFromCurrencyAllowed {
-		fmt.Printf("\n currency %s not allowed \n", fromCurrency)
+		fmt.Printf("\n currency %s not allowed \n", fromCurrencyParam)
 		return
 	}
 
 	if !isToCurrencyAllowed {
-		fmt.Printf("\n currency %s not allowed \n", toCurrency)
+		fmt.Printf("\n currency %s not allowed \n", toCurrencyParam)
 		return
 	}
 
-	//TODO Choose a strategy to retrieve from database or external API
-	// every 10 seconds
-	fromCurrencyConversionRate := repositories.GetCurrencyConversionRateFromDatabase(fromCurrency)
-	toCurrencyConversionRate := repositories.GetCurrencyConversionRateFromDatabase(toCurrency)
+	var fromCurrency, toCurrency models.Currency
 
-	conversionRate := toCurrencyConversionRate / fromCurrencyConversionRate
+	fromCurrency = getCurrencyFromDatabase(fromCurrencyParam)
+	toCurrency = getCurrencyFromDatabase(toCurrencyParam)
+
+	//TODO Don't update currencies that do not exist in the API
+	if !isUpdated(fromCurrency) {
+		fromCurrency.ConversionRate = GetConversionRateBasedOnUSDFromAPI("USD", fromCurrency.Name)
+		updateCurrency(fromCurrency)
+	}
+
+	if !isUpdated(toCurrency) {
+		toCurrency.ConversionRate = GetConversionRateBasedOnUSDFromAPI("USD", toCurrency.Name)
+		updateCurrency(toCurrency)
+	}
+
+	conversionRate := toCurrency.ConversionRate / fromCurrency.ConversionRate
 
 	valueConverted := amount * conversionRate
 
 	fmt.Println("Converted Value:", valueConverted)
+}
+
+func updateCurrency(currency models.Currency) {
+	currency.LastUpdated = time.Now()
+	repositories.InsertCurrency(currency)
+}
+
+func IsAllowedCurrency(currencyName string) bool {
+
+	_, err := repositories.GetCurrencyByName(currencyName)
+
+	if err == redis.Nil {
+		return false
+	}
+
+	return true
+}
+
+func isUpdated(currency models.Currency) bool {
+	return currency.LastUpdated.Add(time.Second * 11).After(time.Now())
 }
 
 func GetConversionRateBasedOnUSDFromAPI(fromCurrency string, toCurrency string) float64 {
@@ -111,12 +143,16 @@ func GetConversionRateBasedOnUSDFromAPI(fromCurrency string, toCurrency string) 
 	return conversionRate
 }
 
-func GetCurrencyConversionRateFromDatabase(response http.ResponseWriter, request *http.Request) {
-	parameters := mux.Vars(request)
-	currencyName := parameters["name"]
+func getCurrencyFromDatabase(currencyName string) models.Currency {
 
-	conversionRate := repositories.GetCurrencyConversionRateFromDatabase(currencyName)
-	fmt.Println("Conversion Rate: ", conversionRate)
+	var currency models.Currency
+
+	currency, err := repositories.GetCurrencyByName(currencyName)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return currency
 }
 
 func InsertCurrency(response http.ResponseWriter, request *http.Request) {

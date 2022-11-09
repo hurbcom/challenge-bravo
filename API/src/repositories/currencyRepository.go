@@ -6,47 +6,27 @@ import (
 	"api/src/models"
 	"encoding/json"
 	"fmt"
-
-	"github.com/go-redis/redis"
 )
 
-func GetCurrencyConversionRateFromDatabase(currencyName string) float64 {
+func GetCurrencyByName(currencyName string) (models.Currency, error) {
 
 	redisClient := database.Connect()
 	defer redisClient.ClientKill(config.DBPort)
 
+	var currency models.Currency
+
 	dbResultJSON, err := redisClient.Get(currencyName).Result()
 	if err != nil {
-		fmt.Println("error getting currency conversion rate from database:", err)
+		fmt.Println("error getting currency from database:", err)
+		return currency, err
 	}
-
-	var currency models.Currency
 
 	err = json.Unmarshal([]byte(dbResultJSON), &currency)
 	if err != nil {
 		fmt.Println("error unmarshalling dbResultJSON:", err)
 	}
 
-	currencyConversionRate := currency.ConversionRate
-
-	return currencyConversionRate
-}
-
-func IsAllowedCurrency(currencyName string) bool {
-	redisClient := database.Connect()
-	defer redisClient.ClientKill(config.DBPort)
-
-	_, err := redisClient.Get(currencyName).Result()
-
-	if err == redis.Nil {
-		return false
-	}
-
-	if err != nil {
-		fmt.Println("error getting currency conversion rate from database:", err)
-	}
-
-	return true
+	return currency, nil
 }
 
 func InsertCurrency(currency models.Currency) {
