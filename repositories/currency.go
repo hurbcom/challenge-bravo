@@ -64,7 +64,7 @@ func (repository *currencyRepository) GetAllCurrencies() (*[]models.Currency, er
 func (repository *currencyRepository) GetCurrencyById(id int) (*models.Currency, error) {
 	var currency models.Currency
 
-	err := repository.db.Get(&currency, `SELECT id, key, description FROM currencies WHERE id=$1;`, id)
+	err := repository.db.Get(&currency, `SELECT id, key, description, exchange_api, custom_amount, custom_currency FROM currencies WHERE id=$1;`, id)
 
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func (repository *currencyRepository) GetCurrencyById(id int) (*models.Currency,
 func (repository *currencyRepository) GetCurrencyByKey(key string) (*models.Currency, error) {
 	var currency models.Currency
 
-	err := repository.db.Get(&currency, `SELECT id, key, description FROM currencies WHERE key=$1;`, key)
+	err := repository.db.Get(&currency, `SELECT id, key, description, exchange_api, custom_amount, custom_currency FROM currencies WHERE key=$1;`, key)
 
 	if err != nil {
 		return nil, err
