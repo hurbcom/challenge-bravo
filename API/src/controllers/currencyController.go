@@ -43,7 +43,7 @@ func InitRedisDatabase() {
 	repositories.InsertCurrency(currency)
 }
 
-func ConvertCurrency(response http.ResponseWriter, request *http.Request) /*float64*/ {
+func ConvertCurrency(response http.ResponseWriter, request *http.Request) {
 
 	fromCurrencyParam := strings.ToUpper(request.URL.Query().Get("from"))
 	toCurrencyParam := strings.ToUpper(request.URL.Query().Get("to"))
