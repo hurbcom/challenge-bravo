@@ -40,7 +40,5 @@ ddosify -t http://localhost:8080/conversion?from=USD&to=BRL&amount=1 -n 1000 -d 
 For this, see [that](TODO-swagger)
 
 # TODOS
-- Colocar um CI no github
-- Colocar um linter no projeto
 - Colocar o swagger na API
-- tentar expor o test coverage (opcional)
+- Melhorar o test coverage
