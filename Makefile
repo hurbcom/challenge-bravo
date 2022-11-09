@@ -1,5 +1,5 @@
 test:
-	go clean -testcache && go test ./...
+	go clean -testcache && go test ./... -cover
 
 controllers-test:
 	go clean -testcache && go test ./controllers
