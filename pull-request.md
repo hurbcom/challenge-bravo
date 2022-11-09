@@ -27,6 +27,12 @@ And then, run:
 ddosify -t http://localhost:8080/conversion?from=USD&to=BRL&amount=1 -n 1000 -d 1 -p HTTP -T 0
 ```
 
+> Note: In my tests, i get 100% of a 1000 requests in 1s, but, the exchange API returns internal server error sometimes. If you run the stress code many times, you will see the same results as mine. I think if was in production, maybe we use some premium service with zero downtime.
+
+<p align="center">
+  <img src="stress.png" alt="Stress Test" />
+</p>
+
 ## 4. API documentation
 For this, see [that](TODO-swagger)
 
