@@ -56,15 +56,12 @@ func ConvertCurrency(response http.ResponseWriter, request *http.Request) /*floa
 		return
 	}
 
-	isFromCurrencyAllowed := IsAllowedCurrency(fromCurrencyParam)
-	isToCurrencyAllowed := IsAllowedCurrency(toCurrencyParam)
-
-	if !isFromCurrencyAllowed {
+	if !IsAllowedCurrency(fromCurrencyParam) {
 		fmt.Printf("\n currency %s not allowed \n", fromCurrencyParam)
 		return
 	}
 
-	if !isToCurrencyAllowed {
+	if !IsAllowedCurrency(toCurrencyParam) {
 		fmt.Printf("\n currency %s not allowed \n", toCurrencyParam)
 		return
 	}
