@@ -99,6 +99,12 @@ func IsAllowedCurrency(currencyName string) bool {
 	_, err := repositories.GetCurrencyByName(currencyName)
 
 	if err == redis.Nil {
+		err = nil
+		return false
+	}
+
+	if err != nil {
+		fmt.Println("error trying to get currency by name: ", err)
 		return false
 	}
 
