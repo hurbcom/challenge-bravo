@@ -25,8 +25,6 @@ func InitializeConversionController(conversionUsecase usecases.ConversionUsecase
 }
 
 func (controller *conversionController) Convert(c *gin.Context) {
-	var conversion models.Conversion
-
 	from, to, amount := GetConvertParams(c)
 
 	err := ValidateConvertParams(from, to, amount)
@@ -53,12 +51,13 @@ func (controller *conversionController) Convert(c *gin.Context) {
 		return
 	}
 
-	err = controller.conversionUsecase.CreateConversion(&models.Conversion{
+	conversion := models.Conversion{
 		From:   from,
 		To:     to,
 		Amount: amount,
 		Result: amount * rate,
-	})
+	}
+	err = controller.conversionUsecase.CreateConversion(&conversion)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Internal Server Error": err.Error()})
