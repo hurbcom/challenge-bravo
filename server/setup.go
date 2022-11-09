@@ -24,6 +24,12 @@ func registerRoutes(router *gin.Engine, controllers *Controllers) {
 	router.GET("/conversion", controllers.ConversionController.Convert)
 }
 
+func StartSeed(seeds *Seeds) {
+	fmt.Println("Starting seeds Migration")
+
+	seeds.CurrencySeed.SeedInitialCurrency()
+}
+
 func SetupServer() {
 	fmt.Println("Setting up server")
 
@@ -35,10 +41,12 @@ func SetupServer() {
 	services := SetupServices(httpClient)
 	useCases := SetupUsecases(repos, services)
 	controllers := SetupControllers(useCases)
+	seeds := SetupSeeds(useCases)
 
 	router := gin.Default()
 
 	registerRoutes(router, controllers)
+	StartSeed(seeds)
 
 	router.Run(":8080")
 }

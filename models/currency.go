@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type Currency struct {
 	gorm.Model
-	Key           string `json:"key"`
-	Description   string `json:"description"`
-	QuotationType string `json:"quotationType"`
+	Key           string `gorm:"size:255;index:idx_currency_key,unique" json:"key"`
+	Description   string `gorm:"size:255" json:"description"`
+	QuotationType string `gorm:"default:exchange_api" json:"quotationType"`
 }
 
 func (currency *Currency) IsValid() bool {
