@@ -44,7 +44,7 @@ func (controller *conversionController) Convert(c *gin.Context) {
 		return
 	}
 
-	rate, err := controller.exchangeRateUsecase.GetCurrencyRate(to)
+	rate, err := controller.exchangeRateUsecase.GetCurrencyRate(from, to)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Internal Server Error": err.Error()})

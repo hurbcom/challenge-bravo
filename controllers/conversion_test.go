@@ -166,7 +166,7 @@ func (suite *conversionControllerSuite) TestConvertCurrencyInternalServerError()
 
 	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
 	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(&toCurrency, nil)
-	suite.exchangeRateUsecase.On("GetCurrencyRate", to).Return(&rate, errors.New("Some generic error "))
+	suite.exchangeRateUsecase.On("GetCurrencyRate", from, to).Return(&rate, errors.New("Some generic error "))
 
 	suite.routes.ServeHTTP(response, req)
 
@@ -201,7 +201,7 @@ func (suite *conversionControllerSuite) TestConvertCurrencyCreateConversionError
 
 	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
 	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(&toCurrency, nil)
-	suite.exchangeRateUsecase.On("GetCurrencyRate", to).Return(rate, nil)
+	suite.exchangeRateUsecase.On("GetCurrencyRate", from, to).Return(rate, nil)
 	suite.conversionUsecase.On("CreateConversion", &conversion).Return(errors.New("Some generic error"))
 
 	suite.routes.ServeHTTP(response, req)
@@ -237,7 +237,7 @@ func (suite *conversionControllerSuite) TestConvertCurrencySuccessfully() {
 
 	suite.currencyUsecase.On("GetCurrencyBy", "key", from).Return(&fromCurrency, nil)
 	suite.currencyUsecase.On("GetCurrencyBy", "key", to).Return(&toCurrency, nil)
-	suite.exchangeRateUsecase.On("GetCurrencyRate", to).Return(rate, nil)
+	suite.exchangeRateUsecase.On("GetCurrencyRate", from, to).Return(rate, nil)
 	suite.conversionUsecase.On("CreateConversion", &conversion).Return(nil)
 
 	suite.routes.ServeHTTP(response, req)

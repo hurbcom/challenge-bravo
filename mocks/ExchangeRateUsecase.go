@@ -9,20 +9,20 @@ type ExchangeRateUsecase struct {
 	mock.Mock
 }
 
-// GetCurrencyRate provides a mock function with given fields: toCurrency
-func (_m *ExchangeRateUsecase) GetCurrencyRate(toCurrency string) (float32, error) {
-	ret := _m.Called(toCurrency)
+// GetCurrencyRate provides a mock function with given fields: fromCurrency, toCurrency
+func (_m *ExchangeRateUsecase) GetCurrencyRate(fromCurrency string, toCurrency string) (float32, error) {
+	ret := _m.Called(fromCurrency, toCurrency)
 
 	var r0 float32
-	if rf, ok := ret.Get(0).(func(string) float32); ok {
-		r0 = rf(toCurrency)
+	if rf, ok := ret.Get(0).(func(string, string) float32); ok {
+		r0 = rf(fromCurrency, toCurrency)
 	} else {
 		r0 = ret.Get(0).(float32)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(toCurrency)
+	if rf, ok := ret.Get(1).(func(string, string) error); ok {
+		r1 = rf(fromCurrency, toCurrency)
 	} else {
 		r1 = ret.Error(1)
 	}

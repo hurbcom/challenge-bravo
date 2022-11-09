@@ -12,13 +12,13 @@ type ExchangeRateService struct {
 	mock.Mock
 }
 
-// GetLatestRate provides a mock function with given fields: toCurrency
-func (_m *ExchangeRateService) GetLatestRate(toCurrency string) (*entities.ExchangeResult, error) {
-	ret := _m.Called(toCurrency)
+// GetLatestRate provides a mock function with given fields: fromCurrency, toCurrency
+func (_m *ExchangeRateService) GetLatestRate(fromCurrency string, toCurrency string) (*entities.ExchangeResult, error) {
+	ret := _m.Called(fromCurrency, toCurrency)
 
 	var r0 *entities.ExchangeResult
-	if rf, ok := ret.Get(0).(func(string) *entities.ExchangeResult); ok {
-		r0 = rf(toCurrency)
+	if rf, ok := ret.Get(0).(func(string, string) *entities.ExchangeResult); ok {
+		r0 = rf(fromCurrency, toCurrency)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.ExchangeResult)
@@ -26,8 +26,8 @@ func (_m *ExchangeRateService) GetLatestRate(toCurrency string) (*entities.Excha
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(toCurrency)
+	if rf, ok := ret.Get(1).(func(string, string) error); ok {
+		r1 = rf(fromCurrency, toCurrency)
 	} else {
 		r1 = ret.Error(1)
 	}
