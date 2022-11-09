@@ -1,13 +1,16 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+)
 
 type Conversion struct {
-	gorm.Model
-	From   string  `json:"from"`
-	To     string  `json:"to"`
-	Amount float32 `json:"amount"`
-	Result float32 `json:"result"`
+	ID        uint    `gorm:"primaryKey"`
+	From      string  `json:"from"`
+	To        string  `json:"to"`
+	Amount    float32 `json:"amount"`
+	Result    float32 `json:"result"`
+	CreatedAt time.Time
 }
 
 func (currency *Conversion) IsValid() bool {
