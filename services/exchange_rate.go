@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	entities "github.com/felipepnascimento/challenge-bravo-flp/entities"
-	"github.com/felipepnascimento/challenge-bravo-flp/models"
 	"github.com/felipepnascimento/challenge-bravo-flp/utils"
 )
 
@@ -16,17 +15,17 @@ type exchangeRateService struct {
 }
 
 type ExchangeRateService interface {
-	GetLatestRate(fromCurrency *models.Currency, toCurrency *models.Currency) (*entities.ExchangeResult, error)
+	GetLatestRate(fromCurrency string, toCurrency string) (*entities.ExchangeResult, error)
 }
 
 func InitializeExchangeRateService(httpClient utils.HTTPClient) ExchangeRateService {
 	return &exchangeRateService{httpClient}
 }
 
-func (service *exchangeRateService) GetLatestRate(fromCurrency *models.Currency, toCurrency *models.Currency) (*entities.ExchangeResult, error) {
+func (service *exchangeRateService) GetLatestRate(fromCurrency string, toCurrency string) (*entities.ExchangeResult, error) {
 	BASE_URL := "https://api.exchangerate.host/latest?base=%s&symbols=%s"
 
-	baseUrl := fmt.Sprintf(BASE_URL, fromCurrency.Key, toCurrency.Key)
+	baseUrl := fmt.Sprintf(BASE_URL, fromCurrency, toCurrency)
 	req, _ := http.NewRequest("GET", baseUrl, nil)
 	resp, err := service.httpClient.Do(req)
 
