@@ -23,7 +23,7 @@ func (suite *enchangeUsecaseSuite) SetupSuite() {
 	suite.usecase = usecase
 }
 
-func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNilFromCurrency() {
+func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWithNilFromCurrency() {
 	toCurrency := models.Currency{
 		Key:         "BLR",
 		ExchangeApi: true,
@@ -32,7 +32,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNilFromCurrency() 
 	suite.Equal("from currency cannot be nil", err.Error())
 }
 
-func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNilToCurrency() {
+func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWithNilToCurrency() {
 	fromCurrency := models.Currency{
 		Key:         "USD",
 		ExchangeApi: true,
@@ -42,7 +42,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNilToCurrency() {
 	suite.Equal("to currency cannot be nil", err.Error())
 }
 
-func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithError() {
+func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWithError() {
 	fromCurrency := models.Currency{
 		Key:         "USD",
 		ExchangeApi: true,
@@ -59,7 +59,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithError() {
 	suite.service.AssertExpectations(suite.T())
 }
 
-func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNotFoundRate() {
+func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWithNotFoundRate() {
 	fromCurrency := models.Currency{
 		Key:         "NOT-EXISTS",
 		ExchangeApi: true,
@@ -82,7 +82,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWithNotFoundRate() {
 	suite.service.AssertExpectations(suite.T())
 }
 
-func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRate() {
+func (suite *enchangeUsecaseSuite) TestGetCurrencyRate() {
 	fromCurrency := models.Currency{
 		Key:         "USD",
 		ExchangeApi: true,
@@ -106,7 +106,7 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRate() {
 	suite.service.AssertExpectations(suite.T())
 }
 
-func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWhenExchangeApiIsFalse() {
+func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWhenExchangeApiIsFalse() {
 	fromCurrency := models.Currency{
 		Key:         "FAKE-CURRENCY",
 		ExchangeApi: false,
