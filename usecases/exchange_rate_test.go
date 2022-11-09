@@ -108,25 +108,17 @@ func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRate() {
 
 func (suite *enchangeUsecaseSuite) TestTestGetCurrencyRateWhenExchangeApiIsFalse() {
 	fromCurrency := models.Currency{
-		Key:         "USD",
+		Key:         "FAKE-CURRENCY",
 		ExchangeApi: false,
 	}
 	toCurrency := models.Currency{
 		Key:         "BRL",
 		ExchangeApi: true,
 	}
-	rate := float32(1.1)
-	exchangeResult := entities.ExchangeResult{
-		Success: true,
-		Base:    "USD",
-		Rates:   map[string]float32{"BRL": rate},
-	}
-	suite.service.On("GetLatestRate", fromCurrency.Key, toCurrency.Key).Return(&exchangeResult, nil)
 
-	result, err := suite.usecase.GetCurrencyRate(&fromCurrency, &toCurrency)
+	_, err := suite.usecase.GetCurrencyRate(&fromCurrency, &toCurrency)
 
-	suite.NoError(err)
-	suite.Equal(rate, result)
+	suite.Equal("This currency conversion is not allowed by Exchange API", err.Error())
 	suite.service.AssertExpectations(suite.T())
 }
 

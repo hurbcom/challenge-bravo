@@ -30,18 +30,22 @@ func (usecase *exchangeRateUsecase) GetCurrencyRate(fromCurrency *models.Currenc
 		return 0, errors.New("to currency cannot be nil")
 	}
 
-	if fromCurrency.ExchangeApi || toCurrency.ExchangeApi {
-		result, err := usecase.service.GetLatestRate(fromCurrency.Key, toCurrency.Key)
-		if err != nil {
-			return 0, err
-		}
-
-		if result.Rates[toCurrency.Key] == 0 {
-			return 0, errors.New("Can not find target currency rate")
-		}
-
-		return float32(result.Rates[toCurrency.Key]), nil
+	if fromCurrency.ExchangeApi && toCurrency.ExchangeApi {
+		return RateByExchangeApi(usecase, fromCurrency.Key, toCurrency.Key)
 	}
 
 	return 0, errors.New("This currency conversion is not allowed by Exchange API")
+}
+
+func RateByExchangeApi(usecase *exchangeRateUsecase, from string, to string) (float32, error) {
+	result, err := usecase.service.GetLatestRate(from, to)
+	if err != nil {
+		return 0, err
+	}
+
+	if result.Rates[to] == 0 {
+		return 0, errors.New("Can not find target currency rate")
+	}
+
+	return float32(result.Rates[to]), nil
 }
