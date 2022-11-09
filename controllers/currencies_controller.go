@@ -8,8 +8,6 @@ import (
 
 	"github.com/victorananias/challenge-bravo/contracts/requests"
 	"github.com/victorananias/challenge-bravo/contracts/responses"
-	"github.com/victorananias/challenge-bravo/models"
-	"github.com/victorananias/challenge-bravo/repositories"
 	"github.com/victorananias/challenge-bravo/services"
 )
 
@@ -21,14 +19,8 @@ func CreateCurrencyHandler(responseWriter http.ResponseWriter, request *http.Req
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
-	exchangesRepository := repositories.NewCurrenciesRepository()
-
-	currency := models.Currency{
-		Code:                currencyRequest.Code,
-		Value:               currencyRequest.Value,
-		BackingCurrencyCode: currencyRequest.BackingCurrencyCode,
-	}
-	err = exchangesRepository.CreateOrUpdate(currency)
+	currenciesService := services.NewCurrenciesService()
+	err = currenciesService.CreateOrUpdate(currencyRequest.Code, currencyRequest.Value)
 	if err != nil {
 		respondWithJson(responseWriter, responses.NewMessageResponse(err.Error()), http.StatusBadRequest)
 		return
@@ -39,9 +31,9 @@ func CreateCurrencyHandler(responseWriter http.ResponseWriter, request *http.Req
 
 func DeleteCurrencyHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	code := strings.TrimPrefix(request.URL.Path, "/")
-	exchangesRepository := repositories.NewCurrenciesRepository()
+	currenciesService := services.NewCurrenciesService()
 
-	err := exchangesRepository.DeleteByCurrencyCode(code)
+	err := currenciesService.DeleteCurrency(code)
 	if err != nil {
 		respondWithJson(responseWriter, responses.NewMessageResponse(err.Error()), http.StatusBadRequest)
 		return

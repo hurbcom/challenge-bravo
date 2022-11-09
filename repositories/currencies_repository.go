@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"errors"
-	"log"
 	"time"
 
 	"github.com/victorananias/challenge-bravo/models"
@@ -17,7 +16,7 @@ var NoDocumentInResultErrMessage = "mongo: no documents in result"
 var ErrNoDocumentFound error = errors.New("no document found")
 
 type ICurrenciesRepository interface {
-	DeleteByCurrencyCode(string) error
+	DeleteCurrency(string, string) error
 	CreateOrUpdate(models.Currency) error
 	GetCurrency(string, string) (models.Currency, error)
 }
@@ -34,10 +33,9 @@ func NewCurrenciesRepository() ICurrenciesRepository {
 	}
 }
 
-func (repository *CurrenciesRepository) DeleteByCurrencyCode(code string) error {
-	filter := bson.M{"code": code, "backingCurrencyCode": repository.settings.BackingCurrencyCode}
+func (repository *CurrenciesRepository) DeleteCurrency(code, backingCurrencyCode string) error {
+	filter := bson.M{"code": code, "backingCurrencyCode": backingCurrencyCode}
 	res, err := repository.collection().DeleteOne(repository.ctx, filter)
-	log.Print(res)
 	if err != nil {
 		return err
 	}

@@ -2,10 +2,11 @@ package services
 
 import (
 	"errors"
+	"strings"
 
+	"github.com/victorananias/challenge-bravo/helpers"
 	"github.com/victorananias/challenge-bravo/models"
 	"github.com/victorananias/challenge-bravo/repositories"
-	"github.com/victorananias/challenge-bravo/settings"
 )
 
 type CurrenciesService struct {
@@ -15,12 +16,25 @@ type CurrenciesService struct {
 }
 
 func NewCurrenciesService() *CurrenciesService {
-	settings, _ := settings.NewSettings()
 	return &CurrenciesService{
-		BackingCurrencyCode: settings.BackingCurrencyCode,
+		BackingCurrencyCode: helpers.Env.BackingCurrencyCode,
 		ExchangeApiService:  NewExchangeApiService(),
 		Repository:          repositories.NewCurrenciesRepository(),
 	}
+}
+
+func (service *CurrenciesService) CreateOrUpdate(currencyCode string, value float64) error {
+	if strings.Trim(currencyCode, " ") == "" {
+		return errors.New("invalid field: \"code\" should not be empty")
+	}
+	if value <= 0 {
+		return errors.New("invalid field: \"value\" should be a positive number")
+	}
+	return service.Repository.CreateOrUpdate(models.Currency{
+		Code:                currencyCode,
+		Value:               value,
+		BackingCurrencyCode: service.BackingCurrencyCode,
+	})
 }
 
 func (service *CurrenciesService) ConvertCurrencies(amount float64, sourceCurrencyCode, targetCurrencyCode string) (float64, error) {
@@ -47,7 +61,7 @@ func (service *CurrenciesService) GetCurrency(currency string) (models.Currency,
 			return currencyFromRepository, err
 		}
 
-		currencyFromApi, err := service.ExchangeApiService.CurrentValue(currency, service.BackingCurrencyCode)
+		currencyFromApi, err := service.ExchangeApiService.GetCurrency(currency, service.BackingCurrencyCode)
 
 		if err != nil {
 			return currencyFromRepository, nil
@@ -59,7 +73,7 @@ func (service *CurrenciesService) GetCurrency(currency string) (models.Currency,
 		}
 		return currencyFromApi, nil
 	} else if errors.Is(err, repositories.ErrNoDocumentFound) {
-		currencyFromApi, err := service.ExchangeApiService.CurrentValue(currency, service.BackingCurrencyCode)
+		currencyFromApi, err := service.ExchangeApiService.GetCurrency(currency, service.BackingCurrencyCode)
 
 		if err != nil {
 			return currencyFromApi, err
@@ -72,6 +86,9 @@ func (service *CurrenciesService) GetCurrency(currency string) (models.Currency,
 		return currencyFromApi, nil
 	}
 	return currencyFromRepository, err
+}
+func (service *CurrenciesService) DeleteCurrency(currency string) error {
+	return service.Repository.DeleteCurrency(currency, service.BackingCurrencyCode)
 }
 
 func (service *CurrenciesService) ConvertFromCurrencies(amount float64, sourceCurrency, targetCurrency models.Currency) float64 {

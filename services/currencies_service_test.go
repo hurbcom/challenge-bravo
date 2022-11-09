@@ -97,7 +97,7 @@ func TestGetCurrencyShouldUpdateWhenNotUpdated(t *testing.T) {
 
 	exchangeApiServiceMock.
 		EXPECT().
-		CurrentValue(yesterdayCurrency.Code, yesterdayCurrency.BackingCurrencyCode).
+		GetCurrency(yesterdayCurrency.Code, yesterdayCurrency.BackingCurrencyCode).
 		Return(todayCurrency, nil)
 
 	service := services.CurrenciesService{
@@ -120,6 +120,45 @@ func TestGetCurrencyShouldUpdateWhenNotUpdated(t *testing.T) {
 	}
 
 	currencyEquals(t, result, todayCurrency)
+}
+
+func TestGetCurrencyShouldReturnDbCurrencyWhenNotInApi(t *testing.T) {
+	backingCurrencyCode := "USD"
+	currency := models.Currency{
+		Code:                "D&D",
+		Value:               4,
+		BackingCurrencyCode: backingCurrencyCode,
+		UpdatedAt:           time.Now().AddDate(0, 0, -1),
+	}
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	currenciesRepositoryMock := mock_repositories.NewMockICurrenciesRepository(ctrl)
+	exchangeApiServiceMock := mock_services.NewMockIExchangeApiService(ctrl)
+
+	currenciesRepositoryMock.
+		EXPECT().
+		GetCurrency(currency.Code, currency.BackingCurrencyCode).
+		Return(currency, nil)
+
+	exchangeApiServiceMock.
+		EXPECT().
+		GetCurrency(currency.Code, currency.BackingCurrencyCode).
+		Return(models.Currency{}, repositories.ErrNoDocumentFound)
+
+	service := services.CurrenciesService{
+		BackingCurrencyCode: backingCurrencyCode,
+		Repository:          currenciesRepositoryMock,
+		ExchangeApiService:  exchangeApiServiceMock,
+	}
+
+	result, err := service.GetCurrency(currency.Code)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	currencyEquals(t, result, currency)
 }
 
 func TestGetCurrencyShouldCreateWhenNotInDb(t *testing.T) {
@@ -147,7 +186,7 @@ func TestGetCurrencyShouldCreateWhenNotInDb(t *testing.T) {
 
 	exchangeApiServiceMock.
 		EXPECT().
-		CurrentValue(currency.Code, currency.BackingCurrencyCode).
+		GetCurrency(currency.Code, currency.BackingCurrencyCode).
 		Return(currency, nil)
 
 	service := services.CurrenciesService{
@@ -184,7 +223,7 @@ func TestGetCurrencyShouldReturnErrorWhenDoesntExist(t *testing.T) {
 
 	exchangeApiServiceMock.
 		EXPECT().
-		CurrentValue(currency1.Code, currency1.BackingCurrencyCode).
+		GetCurrency(currency1.Code, currency1.BackingCurrencyCode).
 		Return(models.Currency{}, services.ErrCurrencyUnavailable)
 
 	service := services.CurrenciesService{
@@ -222,6 +261,33 @@ func TestConvertFromCurrencies(t *testing.T) {
 
 	if result != expected {
 		t.Errorf("result expected %v got %v", expected, result)
+	}
+}
+
+func TestCreateOrUpdateCurrencyShouldValidateCodeAndValue(t *testing.T) {
+	backingCurrencyCode := "USD"
+	service := services.CurrenciesService{
+		BackingCurrencyCode: backingCurrencyCode,
+	}
+	emptyCode := " "
+	err := service.CreateOrUpdate(emptyCode, 1.2)
+
+	if err.Error() != "invalid field: \"code\" should not be empty" {
+		t.Error()
+	}
+
+	zeroValue := 0.0
+	err = service.CreateOrUpdate("VALIDCODE", zeroValue)
+
+	if err.Error() != "invalid field: \"value\" should be a positive number" {
+		t.Error(err)
+	}
+
+	nevativeValue := -1.0
+	err = service.CreateOrUpdate("VALIDCODE", nevativeValue)
+
+	if err.Error() != "invalid field: \"value\" should be a positive number" {
+		t.Error(err)
 	}
 }
 

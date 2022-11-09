@@ -7,48 +7,41 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 
+	"github.com/victorananias/challenge-bravo/helpers"
 	"github.com/victorananias/challenge-bravo/models"
-	"github.com/victorananias/challenge-bravo/settings"
 )
 
 var ErrCurrencyUnavailable = errors.New("currency unavailable")
 
 type IExchangeApiService interface {
-	CurrentValue(string, string) (models.Currency, error)
+	GetCurrency(string, string) (models.Currency, error)
 }
 
 type ExchangeApiService struct {
-	settings *settings.Settings
 }
 
 type CurrentResponse struct {
-	Base       string             `json:"base"`
-	Date       time.Time          `json:"date"`
-	Currencies map[string]float64 `json:"currencies"`
-	Success    bool               `json:"success"`
-	Timestamp  int                `json:"timestamp"`
+	Base      string             `json:"base"`
+	Date      string             `json:"date"`
+	Rates     map[string]float64 `json:"rates"`
+	Success   bool               `json:"success"`
+	Timestamp int                `json:"timestamp"`
 }
 
 func NewExchangeApiService() *ExchangeApiService {
 	api := ExchangeApiService{}
-	settings, err := settings.NewSettings()
-	if err != nil {
-		log.Fatalf("no settings found")
-	}
-	api.settings = settings
 	return &api
 }
 
-func (api *ExchangeApiService) CurrentValue(sourceCurrencyCode, targetCurrencyCode string) (models.Currency, error) {
+func (api *ExchangeApiService) GetCurrency(sourceCurrencyCode, targetCurrencyCode string) (models.Currency, error) {
 	result := CurrentResponse{}
-	url := fmt.Sprintf("%s/latest?base=%s&symbols=%s", api.settings.ApiUrl, sourceCurrencyCode, targetCurrencyCode)
+	url := fmt.Sprintf("%s/latest?base=%s&symbols=%s", helpers.Env.ExchangeApiUrl, sourceCurrencyCode, targetCurrencyCode)
 	log.Printf("external api called at %s", url)
 
 	client := &http.Client{}
 	req, err := http.NewRequest(http.MethodGet, url, nil)
-	req.Header.Set("apikey", api.settings.ApiKey)
+	req.Header.Set("apikey", helpers.Env.ExchangeApiKey)
 
 	if err != nil {
 		log.Print(err.Error())
@@ -76,13 +69,16 @@ func (api *ExchangeApiService) CurrentValue(sourceCurrencyCode, targetCurrencyCo
 		return models.Currency{}, errors.New("error unmarshing external api response")
 	}
 	log.Print(result)
-	return api.currentResponseToCurrency(result, targetCurrencyCode), nil
+	return api.apiCurrencyToCurrency(result), nil
 }
 
-func (api *ExchangeApiService) currentResponseToCurrency(response CurrentResponse, targetCurrencyCode string) models.Currency {
-	return models.Currency{
-		Code:                response.Base,
-		Value:               response.Currencies[targetCurrencyCode],
-		BackingCurrencyCode: targetCurrencyCode,
+func (api *ExchangeApiService) apiCurrencyToCurrency(response CurrentResponse) models.Currency {
+	for rate, currency := range response.Rates {
+		return models.Currency{
+			Code:                response.Base,
+			Value:               currency,
+			BackingCurrencyCode: rate,
+		}
 	}
+	return models.Currency{}
 }

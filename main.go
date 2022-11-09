@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/victorananias/challenge-bravo/settings"
+	"github.com/victorananias/challenge-bravo/helpers"
 )
 
 var (
@@ -12,9 +12,9 @@ var (
 )
 
 func main() {
-	_, err := settings.NewSettings()
+	err := helpers.LoadEnv()
 	if err != nil {
-		log.Fatalf("couldn't load settings")
+		log.Fatalf("could not load settings %s", err.Error())
 	}
 	routes.RegisterAll()
 	server.Start()

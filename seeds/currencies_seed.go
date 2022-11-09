@@ -3,22 +3,21 @@ package main
 import (
 	"log"
 
+	"github.com/victorananias/challenge-bravo/helpers"
 	"github.com/victorananias/challenge-bravo/models"
 	"github.com/victorananias/challenge-bravo/repositories"
 	"github.com/victorananias/challenge-bravo/services"
-	"github.com/victorananias/challenge-bravo/settings"
 )
 
 var initCurrencies = []string{
 	"BRL",
 	"EUR",
-	"BTC",
 }
 
 func main() {
-	settings, err := settings.NewSettings()
+	err := helpers.LoadEnv()
 	if err != nil {
-		log.Fatalf("couldn't load settings")
+		log.Fatalf("could not load settings")
 	}
 	repository := repositories.NewCurrenciesRepository()
 	if err != nil {
@@ -27,30 +26,25 @@ func main() {
 	ethToUsd := models.Currency{
 		Code:                "ETH",
 		Value:               1539.46,
-		BackingCurrencyCode: settings.BackingCurrencyCode,
+		BackingCurrencyCode: helpers.Env.BackingCurrencyCode,
 	}
 	err = repository.CreateOrUpdate(ethToUsd)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, code := range initCurrencies {
-		create(code, settings.BackingCurrencyCode)
+		create(code, helpers.Env.BackingCurrencyCode)
 	}
 }
 
 func create(sourceCurrency, targetCurrency string) {
-	repository := repositories.NewCurrenciesRepository()
+	repository := services.NewCurrenciesService()
 	api1 := services.NewExchangeApiService()
-	apiValue, err := api1.CurrentValue(sourceCurrency, targetCurrency)
+	apiValue, err := api1.GetCurrency(sourceCurrency, targetCurrency)
 	if err != nil {
 		log.Fatal(err)
 	}
-	currency := models.Currency{
-		Code:                sourceCurrency,
-		Value:               apiValue.Value,
-		BackingCurrencyCode: targetCurrency,
-	}
-	err = repository.CreateOrUpdate(currency)
+	err = repository.CreateOrUpdate(sourceCurrency, apiValue.Value)
 	if err != nil {
 		log.Fatal(err)
 	}
