@@ -2,14 +2,17 @@ Your name: Felipe de Paula do Nascimento
 Your Github homepage: https://github.com/felipepnascimento
 Original challenge URL: https://github.com/hurbcom/challenge-bravo/pulls/ID_DO_PR
 
+# Requirements
+- Docker
+- Docker Compose
+
 ## 1. Running the application
-Prefer docker to run this app
+First things first, clone the `sample.env` file to `.env` file to setup env vars, and then run the commands bellow:
 
 1. Run `docker-compose up --build` in the main folder of this app
 2. See `challenge_bravo_flp_app` and `challenge_bravo_flp_db` running in your local docker.
 
 ## 2. Running the tests
-
 1. Run `docker-compose exec app bash`
 2. Run `make test` and see the results
 
@@ -37,9 +40,7 @@ ddosify -t http://localhost:8080/conversion?from=USD&to=BRL&amount=1 -n 1000 -d 
 For this, see [that](TODO-swagger)
 
 # TODOS
-- Fazer um if para buscar pela API ou não (DIFICIL)
-    - codar o bypass, quando a moeda não existir na API de conversão, baseado no exchange_api
+- Colocar um CI no github
 - Colocar um linter no projeto
 - Colocar o swagger na API
-- Colocar um CI no github
 - tentar expor o test coverage (opcional)
