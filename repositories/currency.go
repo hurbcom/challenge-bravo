@@ -107,8 +107,8 @@ func (repository *currencyRepository) DeleteCurrency(id int) error {
 
 func insertCurrency(tx *sqlx.Tx, currency *models.Currency) error {
 	_, err := tx.NamedExec(`
-		INSERT INTO currencies(key, description, exchange_api)
-		VALUES (:key, :description, :exchange_api);
+		INSERT INTO currencies(key, description, exchange_api, custom_amount, custom_currency)
+		VALUES (:key, :description, :exchange_api, :custom_amount, :custom_currency);
 	`, currency)
 
 	return err

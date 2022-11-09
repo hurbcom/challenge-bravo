@@ -106,9 +106,25 @@ func (suite *enchangeUsecaseSuite) TestGetCurrencyRate() {
 	suite.service.AssertExpectations(suite.T())
 }
 
-func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWhenExchangeApiIsFalse() {
+func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWithHURBCurrencyAndInvalidToCurrency() {
 	fromCurrency := models.Currency{
-		Key:         "FAKE-CURRENCY",
+		Key:         "HURB",
+		ExchangeApi: false,
+	}
+	toCurrency := models.Currency{
+		Key:         "BRL",
+		ExchangeApi: false,
+	}
+
+	_, err := suite.usecase.GetCurrencyRate(&fromCurrency, &toCurrency)
+
+	suite.Equal("To currency must be converted by ExchangeApi", err.Error())
+	suite.service.AssertExpectations(suite.T())
+}
+
+func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWithHURBCurrencyAndInvalidFromCurrency() {
+	fromCurrency := models.Currency{
+		Key:         "HURB",
 		ExchangeApi: false,
 	}
 	toCurrency := models.Currency{
@@ -118,7 +134,34 @@ func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWhenExchangeApiIsFalse() {
 
 	_, err := suite.usecase.GetCurrencyRate(&fromCurrency, &toCurrency)
 
-	suite.Equal("This currency conversion is not allowed by Exchange API", err.Error())
+	suite.Equal("from currency must have custom currency and custom amount", err.Error())
+	suite.service.AssertExpectations(suite.T())
+}
+
+func (suite *enchangeUsecaseSuite) TestGetCurrencyRateWithHURBCurrencyAndValidToCurrency() {
+	fromCurrency := models.Currency{
+		Key:            "HURB",
+		ExchangeApi:    false,
+		CustomAmount:   10,
+		CustomCurrency: "USD",
+	}
+	toCurrency := models.Currency{
+		Key:         "BRL",
+		ExchangeApi: true,
+	}
+
+	rate := float32(1.1)
+	exchangeResult := entities.ExchangeResult{
+		Success: true,
+		Base:    "USD",
+		Rates:   map[string]float32{"BRL": rate},
+	}
+	suite.service.On("GetLatestRate", fromCurrency.CustomCurrency, toCurrency.Key).Return(&exchangeResult, nil)
+
+	result, err := suite.usecase.GetCurrencyRate(&fromCurrency, &toCurrency)
+
+	suite.NoError(err)
+	suite.Equal(rate, result)
 	suite.service.AssertExpectations(suite.T())
 }
 

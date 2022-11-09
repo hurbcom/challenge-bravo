@@ -4,8 +4,9 @@ CREATE TABLE IF NOT EXISTS currencies
     "key" VARCHAR(255) UNIQUE NOT NULL,
     "description" VARCHAR(255) NOT NULL,
     exchange_api boolean DEFAULT true,
-    created_at  timestamptz  NOT NULL DEFAULT Now(),
-    updated_at timestamptz  NOT NULL DEFAULT Now()
+    custom_amount float DEFAULT 0,
+    custom_currency VARCHAR(255) DEFAULT 0,
+    created_at  timestamptz  NOT NULL DEFAULT Now()
 );
 
 CREATE TABLE IF NOT EXISTS conversions
