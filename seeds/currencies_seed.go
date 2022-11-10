@@ -25,10 +25,19 @@ func main() {
 	}
 	ethToUsd := models.Currency{
 		Code:                "ETH",
-		Value:               1539.46,
+		Value:               1156.94,
+		BackingCurrencyCode: helpers.Env.BackingCurrencyCode,
+	}
+	btcToUsd := models.Currency{
+		Code:                "BTC",
+		Value:               16387,
 		BackingCurrencyCode: helpers.Env.BackingCurrencyCode,
 	}
 	err = repository.CreateOrUpdate(ethToUsd)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = repository.CreateOrUpdate(btcToUsd)
 	if err != nil {
 		log.Fatal(err)
 	}
