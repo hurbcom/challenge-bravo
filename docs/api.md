@@ -3,10 +3,11 @@ Table of Contents
 - [Conversion controller](#conversion-controller)
 - [Currency controller](#currency-controller)
 
-
 Conversion controller
 -----------------
+
 <details>
+
 <summary>GET: &nbsp &nbsp /conversion?from=FROM&to=TO&amount=0.0</summary>
 
 Converts source amount currency to the final currency.
@@ -70,6 +71,7 @@ Responses examples JSON
 
 Currency controller
 -----------------
+
 <details>
 
 <summary>POST: &nbsp &nbsp /currency</summary>
@@ -157,7 +159,6 @@ Responses examples JSON
 <details>
 
 <summary>GET: &nbsp &nbsp /currency</summary>
-</details>
 
 List all available currencies.
 
@@ -202,11 +203,11 @@ Responses examples JSON
     "Internal Server Error": "Some generic error"
 }
 ```
+</details>
 
 <details>
 
 <summary>GET: &nbsp &nbsp /currency/{id}</summary>
-</details>
 
 List currency by id
 
@@ -245,6 +246,7 @@ Responses examples JSON
     "Not found": "Currency not found"
 }
 ```
+</details>
 <details>
 
 <summary>DELETE: &nbsp &nbsp /currency/{id}</summary>
