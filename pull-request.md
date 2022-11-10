@@ -16,6 +16,7 @@ Table of Contents
   * [Examples](#examples)
     + [Convert USD to BRL](#convert-usd-to-brl)
     + [Create new currency](#create-new-currency)
+
 Requirements
 -----------------
 - Docker
