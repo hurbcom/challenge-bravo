@@ -1,0 +1,11 @@
+consumes:
+    - application/json
+info:
+    title: Challenge Bravo
+    version: 0.1.0
+paths: {}
+produces:
+    - application/json
+schemes:
+    - http
+swagger: "2.0"
