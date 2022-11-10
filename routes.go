@@ -12,8 +12,10 @@ type Routes struct {
 type HandlerFunc func(http.ResponseWriter, *http.Request)
 
 func (routes *Routes) RegisterAll() {
+	routes.register("/currencies", map[string]HandlerFunc{
+		http.MethodPost: controllers.CreateCurrencyHandler,
+	})
 	routes.register("/currencies/", map[string]HandlerFunc{
-		http.MethodPost:   controllers.CreateCurrencyHandler,
 		http.MethodDelete: controllers.DeleteCurrencyHandler,
 	})
 	routes.register("/conversions", map[string]HandlerFunc{

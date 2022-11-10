@@ -30,7 +30,8 @@ func CreateCurrencyHandler(responseWriter http.ResponseWriter, request *http.Req
 }
 
 func DeleteCurrencyHandler(responseWriter http.ResponseWriter, request *http.Request) {
-	code := strings.TrimPrefix(request.URL.Path, "/")
+	url := strings.Split(request.URL.Path, "/")
+	code := url[len(url)-1]
 	currenciesService := services.NewCurrenciesService()
 
 	err := currenciesService.DeleteCurrency(code)
