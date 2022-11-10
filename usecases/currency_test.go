@@ -30,7 +30,8 @@ func (suite *currencyUsecaseSuite) TestCreateCurrencyWithNilValues() {
 
 func (suite *currencyUsecaseSuite) TestCreateCurrencyWithInvalidKey() {
 	currency := models.Currency{
-		Description:   "description",
+		Description: "description",
+		ExchangeApi: true,
 	}
 
 	err := suite.usecase.CreateCurrency(&currency)
@@ -39,17 +40,59 @@ func (suite *currencyUsecaseSuite) TestCreateCurrencyWithInvalidKey() {
 
 func (suite *currencyUsecaseSuite) TestCreateCurrencyWithInvalidDescription() {
 	currency := models.Currency{
-		Key:           "key",
+		Key:         "key",
+		ExchangeApi: true,
 	}
 
 	err := suite.usecase.CreateCurrency(&currency)
 	suite.Equal("key and description cannot be empty", err.Error())
 }
 
+func (suite *currencyUsecaseSuite) TestCreateCurrencyWithoutCustomAttrs() {
+	currency := models.Currency{
+		Key:         "key",
+		Description: "description",
+		ExchangeApi: false,
+	}
+
+	err := suite.usecase.CreateCurrency(&currency)
+	suite.Equal("for custom currencies, CustomCurrency and CustomAmount cannot be empty", err.Error())
+}
+
+func (suite *currencyUsecaseSuite) TestCreateCurrencyWithCustomAttrs() {
+	currency := models.Currency{
+		Key:            "key",
+		Description:    "description",
+		ExchangeApi:    false,
+		CustomCurrency: "custom",
+		CustomAmount:   10,
+	}
+
+	suite.repository.On("CreateCurrency", &currency).Return(nil)
+
+	err := suite.usecase.CreateCurrency(&currency)
+	suite.NoError(err)
+	suite.repository.AssertExpectations(suite.T())
+}
+
+func (suite *currencyUsecaseSuite) TestCreateCurrencyUnexpectedError() {
+	currency := models.Currency{
+		Key:         "key",
+		Description: "description",
+		ExchangeApi: true,
+	}
+	suite.repository.On("CreateCurrency", &currency).Return(errors.New("Some generic error"))
+
+	err := suite.usecase.CreateCurrency(&currency)
+	suite.Equal("Some generic error", err.Error())
+	suite.repository.AssertExpectations(suite.T())
+}
+
 func (suite *currencyUsecaseSuite) TestCreateCurrency() {
 	currency := models.Currency{
-		Key:           "key",
-		Description:   "description",
+		Key:         "key_success",
+		Description: "description",
+		ExchangeApi: true,
 	}
 	suite.repository.On("CreateCurrency", &currency).Return(nil)
 
@@ -61,12 +104,14 @@ func (suite *currencyUsecaseSuite) TestCreateCurrency() {
 func (suite *currencyUsecaseSuite) TestGetAllCurrencies() {
 	currencies := []models.Currency{
 		{
-			Key:           "key",
-			Description:   "description",
+			Key:         "key",
+			Description: "description",
+			ExchangeApi: true,
 		},
 		{
-			Key:           "key",
-			Description:   "description",
+			Key:         "key",
+			Description: "description",
+			ExchangeApi: true,
 		},
 	}
 	suite.repository.On("GetAllCurrencies").Return(&currencies, nil)
@@ -91,8 +136,9 @@ func (suite *currencyUsecaseSuite) TestGetCurrencyByIdNotFound() {
 func (suite *currencyUsecaseSuite) TestGetCurrencyById() {
 	id := 2
 	currency := models.Currency{
-		Key:           "key",
-		Description:   "description",
+		Key:         "key",
+		Description: "description",
+		ExchangeApi: true,
 	}
 
 	suite.repository.On("GetCurrencyById", id).Return(&currency, nil)

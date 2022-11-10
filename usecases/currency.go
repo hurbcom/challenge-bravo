@@ -32,6 +32,10 @@ func (usecase *currencyUsecase) CreateCurrency(currency *models.Currency) error 
 		return errors.New("key and description cannot be empty")
 	}
 
+	if !currency.ExchangeApi && (currency.CustomCurrency == "" || currency.CustomAmount == 0) {
+		return errors.New("for custom currencies, CustomCurrency and CustomAmount cannot be empty")
+	}
+
 	err := usecase.currencyRepository.CreateCurrency(currency)
 	if err != nil {
 		return err
