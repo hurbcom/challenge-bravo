@@ -17,7 +17,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// TODO Temp Func to ease initial rework when redis is restarted - REMOVE
 func InitRedisDatabase() {
 	USDconversionRate := 1.0
 	currency := models.Currency{Name: "USD", ConversionRate: USDconversionRate,
@@ -109,7 +108,6 @@ func ConvertCurrency(responseWriter http.ResponseWriter, request *http.Request) 
 		return
 	}
 
-	//TODO implement worker
 	if fromCurrency.IsAutoUpdatable && !isUpdated(fromCurrency) {
 
 		fromCurrency.ConversionRate, err = GetConversionRateBasedOnUSDFromAPI("USD", fromCurrency.Name)
@@ -266,5 +264,4 @@ func DeleteCurrency(responseWriter http.ResponseWriter, request *http.Request) {
 		err := fmt.Errorf("no key %s found to be deleted", currencyNameParam)
 		responses.Error(responseWriter, http.StatusNotFound, err)
 	}
-
 }
