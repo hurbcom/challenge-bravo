@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -17,105 +16,159 @@ import (
 	"github.com/go-redis/redis"
 )
 
+// TODO Temp Func to ease initial rework when redis is restarted - REMOVE
 func InitRedisDatabase() {
 	USDconversionRate := 1.0
 	currency := models.Currency{Name: "USD", ConversionRate: USDconversionRate,
 		LastUpdated: time.Now()}
 	repositories.InsertCurrency(currency)
 
-	BRLconversionRate := GetConversionRateBasedOnUSDFromAPI("USD", "BRL")
+	BRLconversionRate, _ := GetConversionRateBasedOnUSDFromAPI("USD", "BRL")
 	currency = models.Currency{Name: "BRL", ConversionRate: BRLconversionRate,
 		LastUpdated: time.Now()}
 	repositories.InsertCurrency(currency)
 
-	EURconversionRate := GetConversionRateBasedOnUSDFromAPI("USD", "EUR")
+	EURconversionRate, _ := GetConversionRateBasedOnUSDFromAPI("USD", "EUR")
 	currency = models.Currency{Name: "EUR", ConversionRate: EURconversionRate,
 		LastUpdated: time.Now()}
 	repositories.InsertCurrency(currency)
 
-	BTCconversionRate := GetConversionRateBasedOnUSDFromAPI("USD", "BTC")
+	BTCconversionRate, _ := GetConversionRateBasedOnUSDFromAPI("USD", "BTC")
 	currency = models.Currency{Name: "BTC", ConversionRate: BTCconversionRate,
 		LastUpdated: time.Now()}
 	repositories.InsertCurrency(currency)
 
-	ETHconversionRate := GetConversionRateBasedOnUSDFromAPI("USD", "ETH")
+	ETHconversionRate, _ := GetConversionRateBasedOnUSDFromAPI("USD", "ETH")
 	currency = models.Currency{Name: "ETH", ConversionRate: ETHconversionRate,
 		LastUpdated: time.Now()}
 	repositories.InsertCurrency(currency)
 }
 
-func ConvertCurrency(response http.ResponseWriter, request *http.Request) {
+func ConvertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
 
 	fromCurrencyParam := strings.ToUpper(request.URL.Query().Get("from"))
 	toCurrencyParam := strings.ToUpper(request.URL.Query().Get("to"))
 	amount, err := strconv.ParseFloat(request.URL.Query().Get("amount"), 64)
 
-	if amount <= 0 || err != nil {
-		fmt.Printf(`\n error parsing amount from string to float.
-		\n Amount: %0.2f 
-		\n Error: %s`, amount, err)
+	if err != nil {
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
 		return
 	}
 
-	if !IsAllowedCurrency(fromCurrencyParam) {
-		fmt.Printf("\n currency %s not allowed \n", fromCurrencyParam)
+	if amount <= 0 {
+		responses.JSON(responseWriter, http.StatusBadRequest, "Amount must be greater than 0.")
 		return
 	}
 
-	if !IsAllowedCurrency(toCurrencyParam) {
-		fmt.Printf("\n currency %s not allowed \n", toCurrencyParam)
+	isFromCurrencyAllowed, err := IsAllowedCurrency(fromCurrencyParam)
+	if err != nil {
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
+		return
+	}
+
+	if !isFromCurrencyAllowed {
+		message := fmt.Sprintf("currency %s not allowed", fromCurrencyParam)
+		responses.JSON(responseWriter, http.StatusBadRequest, message)
+		return
+	}
+
+	isToCurrencyAllowed, err := IsAllowedCurrency(toCurrencyParam)
+	if err != nil {
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
+		return
+	}
+
+	if !isToCurrencyAllowed {
+		message := fmt.Sprintf("currency %s not allowed", toCurrencyParam)
+		responses.JSON(responseWriter, http.StatusBadRequest, message)
 		return
 	}
 
 	var fromCurrency, toCurrency models.Currency
 
-	fromCurrency = getCurrencyFromDatabase(fromCurrencyParam)
-	toCurrency = getCurrencyFromDatabase(toCurrencyParam)
+	fromCurrency, err = getCurrencyFromDatabase(fromCurrencyParam)
+	if err != nil {
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
+		return
+	}
 
+	toCurrency, err = getCurrencyFromDatabase(toCurrencyParam)
+	if err != nil {
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
+		return
+	}
+
+	//TODO implement worker
 	if fromCurrency.IsAutoUpdatable && !isUpdated(fromCurrency) {
-		fromCurrency.ConversionRate = GetConversionRateBasedOnUSDFromAPI("USD", fromCurrency.Name)
-		updateCurrency(fromCurrency)
+
+		fromCurrency.ConversionRate, err = GetConversionRateBasedOnUSDFromAPI("USD", fromCurrency.Name)
+		if err != nil {
+			responses.Error(responseWriter, http.StatusInternalServerError, err)
+			return
+		}
+
+		if err := updateCurrency(fromCurrency); err != nil {
+			responses.Error(responseWriter, http.StatusInternalServerError, err)
+			return
+		}
+
 	}
 
 	if toCurrency.IsAutoUpdatable && !isUpdated(toCurrency) {
-		toCurrency.ConversionRate = GetConversionRateBasedOnUSDFromAPI("USD", toCurrency.Name)
-		updateCurrency(toCurrency)
+
+		toCurrency.ConversionRate, err = GetConversionRateBasedOnUSDFromAPI("USD", toCurrency.Name)
+		if err != nil {
+			responses.Error(responseWriter, http.StatusInternalServerError, err)
+			return
+		}
+
+		if err := updateCurrency(toCurrency); err != nil {
+			responses.Error(responseWriter, http.StatusInternalServerError, err)
+			return
+		}
+
 	}
 
 	conversionRate := toCurrency.ConversionRate / fromCurrency.ConversionRate
 
-	valueConverted := amount * conversionRate
+	convertedValue := amount * conversionRate
 
-	fmt.Println("Converted Value:", valueConverted)
+	conversionResponse := models.ConversionResponse{
+		FromCurrency:   fromCurrencyParam,
+		ToCurrency:     toCurrencyParam,
+		Amount:         amount,
+		ConvertedValue: convertedValue,
+	}
+	responses.JSON(responseWriter, http.StatusOK, conversionResponse)
 }
 
-func updateCurrency(currency models.Currency) {
+func updateCurrency(currency models.Currency) error {
 	currency.LastUpdated = time.Now()
-	repositories.InsertCurrency(currency)
+	return repositories.InsertCurrency(currency)
 }
 
-func IsAllowedCurrency(currencyName string) bool {
+func IsAllowedCurrency(currencyName string) (bool, error) {
 
 	_, err := repositories.GetCurrencyByName(currencyName)
 
 	if err == redis.Nil {
 		err = nil
-		return false
+		return false, nil
 	}
 
 	if err != nil {
 		fmt.Println("error trying to get currency by name: ", err)
-		return false
+		return false, err
 	}
 
-	return true
+	return true, nil
 }
 
 func isUpdated(currency models.Currency) bool {
 	return currency.LastUpdated.Add(time.Second * 11).After(time.Now())
 }
 
-func GetConversionRateBasedOnUSDFromAPI(fromCurrency string, toCurrency string) float64 {
+func GetConversionRateBasedOnUSDFromAPI(fromCurrency string, toCurrency string) (float64, error) {
 
 	urlToExternalAPI :=
 		config.UrlToExternalAPI + "?fsym=" + fromCurrency + `&tsyms=` + toCurrency + "," + fromCurrency
@@ -123,53 +176,58 @@ func GetConversionRateBasedOnUSDFromAPI(fromCurrency string, toCurrency string) 
 	currencyAPIResponse, err := http.Get(urlToExternalAPI)
 
 	if err != nil {
-		fmt.Printf("\n error trying to call external API: %s", err)
-		return 0
+		fmt.Println("error trying to call external API:", err)
+		return 0, err
 	}
 
 	responseData, err := io.ReadAll(currencyAPIResponse.Body)
 
 	if err != nil {
-		fmt.Printf("\n error trying to read response data: %s", err)
-		return 0
+		fmt.Println("error trying to read response data:", err)
+		return 0, err
 	}
 
 	var mapAPIResponse map[string]float64
 
-	json.Unmarshal(responseData, &mapAPIResponse)
+	if err = json.Unmarshal(responseData, &mapAPIResponse); err != nil {
+		fmt.Println("error trying to Unmarshal response data:", err)
+		return 0, err
+	}
 
 	fromCurrencyConverted := mapAPIResponse[fromCurrency]
 	toCurrencyConverted := mapAPIResponse[toCurrency]
 
 	conversionRate := toCurrencyConverted / fromCurrencyConverted
 
-	return conversionRate
+	return conversionRate, nil
 }
 
-func getCurrencyFromDatabase(currencyName string) models.Currency {
+func getCurrencyFromDatabase(currencyName string) (models.Currency, error) {
 
 	var currency models.Currency
 
 	currency, err := repositories.GetCurrencyByName(currencyName)
 	if err != nil {
-		log.Fatal(err)
+		return models.Currency{}, err
 	}
 
-	return currency
+	return currency, nil
 }
 
 func InsertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
 
 	requestBody, err := io.ReadAll(request.Body)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("error trying to read from request body: ", err)
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
 		return
 	}
 
 	var currency models.Currency
 
 	if err = json.Unmarshal(requestBody, &currency); err != nil {
-		fmt.Println(err)
+		fmt.Println("error trying to Unmarshal request body: ", err)
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
 		return
 	}
 

@@ -6,6 +6,8 @@ import (
 	"api/src/models"
 	"encoding/json"
 	"fmt"
+
+	"github.com/go-redis/redis"
 )
 
 func GetCurrencyByName(currencyName string) (models.Currency, error) {
@@ -16,9 +18,15 @@ func GetCurrencyByName(currencyName string) (models.Currency, error) {
 	var currency models.Currency
 
 	dbResultJSON, err := redisClient.Get(currencyName).Result()
+
+	if err == redis.Nil {
+		fmt.Println("no results found for key", currencyName)
+		return models.Currency{}, err
+	}
+
 	if err != nil {
 		fmt.Println("error getting currency from database:", err)
-		return currency, err
+		return models.Currency{}, err
 	}
 
 	err = json.Unmarshal([]byte(dbResultJSON), &currency)
