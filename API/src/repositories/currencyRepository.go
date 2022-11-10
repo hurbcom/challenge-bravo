@@ -21,7 +21,7 @@ func GetCurrencyByName(currencyName string) (models.Currency, error) {
 
 	if err == redis.Nil {
 		fmt.Println("no results found for key", currencyName)
-		return models.Currency{}, err
+		return models.Currency{}, nil
 	}
 
 	if err != nil {
@@ -55,4 +55,11 @@ func InsertCurrency(currency models.Currency) error {
 	}
 
 	return nil
+}
+
+func DeleteCurrency(currencyName string) *redis.IntCmd {
+	redisClient := database.Connect()
+	defer redisClient.ClientKill(config.DBPort)
+
+	return redisClient.Del(currencyName)
 }

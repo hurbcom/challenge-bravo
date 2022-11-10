@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis"
+	"github.com/gorilla/mux"
 )
 
 // TODO Temp Func to ease initial rework when redis is restarted - REMOVE
@@ -211,6 +212,11 @@ func getCurrencyFromDatabase(currencyName string) (models.Currency, error) {
 		return models.Currency{}, err
 	}
 
+	if currency == (models.Currency{}) && err == nil {
+		err = fmt.Errorf("no results found for key %s", currencyName)
+		return models.Currency{}, err
+	}
+
 	return currency, nil
 }
 
@@ -232,6 +238,7 @@ func InsertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
 	}
 
 	currency.LastUpdated = time.Now()
+	currency.Name = strings.ToUpper(currency.Name)
 
 	if err = repositories.InsertCurrency(currency); err != nil {
 		responses.Error(responseWriter, http.StatusInternalServerError, err)
@@ -240,5 +247,14 @@ func InsertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
 	responses.JSON(responseWriter, http.StatusCreated, currency)
 }
 
-func RemoveCurrency(response http.ResponseWriter, request *http.Request) {
+func DeleteCurrency(responseWriter http.ResponseWriter, request *http.Request) {
+	parameters := mux.Vars(request)
+
+	currencyNameParam := parameters["name"]
+
+	if repositories.DeleteCurrency(currencyNameParam).Val() == 0 {
+		err := fmt.Errorf("no key %s found to be deleted", currencyNameParam)
+		responses.Error(responseWriter, http.StatusNotFound, err)
+	}
+
 }
