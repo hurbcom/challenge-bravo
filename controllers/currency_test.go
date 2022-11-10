@@ -42,7 +42,7 @@ func (suite *currencyControllerSuite) TestCreateCurrencyWithNilValues() {
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 
-	suite.Equal(response.Code, http.StatusBadRequest)
+	suite.Equal(http.StatusBadRequest, response.Code)
 	suite.usecase.AssertExpectations(suite.T())
 }
 
@@ -65,7 +65,7 @@ func (suite *currencyControllerSuite) TestCreateCurrency() {
 	var expectedCurrency models.Currency
 	json.NewDecoder(response.Body).Decode(&expectedCurrency)
 
-	suite.Equal(response.Code, http.StatusOK)
+	suite.Equal(http.StatusOK, response.Code)
 	suite.Equal("created key", expectedCurrency.Key)
 	suite.Equal("created description", expectedCurrency.Description)
 	suite.usecase.AssertExpectations(suite.T())
@@ -85,7 +85,7 @@ func (suite *currencyControllerSuite) TestGetAllCurrencies() {
 	response := httptest.NewRecorder()
 	suite.routes.ServeHTTP(response, req)
 
-	suite.Equal(response.Code, http.StatusOK)
+	suite.Equal(http.StatusOK, response.Code)
 	suite.usecase.AssertExpectations(suite.T())
 }
 
@@ -101,7 +101,7 @@ func (suite *currencyControllerSuite) TestGetCurrencyByIdNotFound() {
 	expectedResponse := `{"Not found":"Currency not found"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(response.Code, http.StatusNotFound)
+	suite.Equal(http.StatusNotFound, response.Code)
 	suite.Equal(string(responseBody), expectedResponse)
 	suite.usecase.AssertExpectations(suite.T())
 }
@@ -122,7 +122,7 @@ func (suite *currencyControllerSuite) TestGetCurrencyById() {
 	var expectedCurrency models.Currency
 	json.NewDecoder(response.Body).Decode(&expectedCurrency)
 
-	suite.Equal(response.Code, http.StatusOK)
+	suite.Equal(http.StatusOK, response.Code)
 	suite.Equal("USD", expectedCurrency.Key)
 	suite.Equal("USD Description", expectedCurrency.Description)
 	suite.usecase.AssertExpectations(suite.T())
@@ -139,7 +139,7 @@ func (suite *currencyControllerSuite) TestDeleteCurrency() {
 	expectedResponse := `{"data":"Currency successfully deleted"}`
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
-	suite.Equal(response.Code, http.StatusOK)
+	suite.Equal(http.StatusOK, response.Code)
 	suite.Equal(string(responseBody), expectedResponse)
 	suite.usecase.AssertExpectations(suite.T())
 }
