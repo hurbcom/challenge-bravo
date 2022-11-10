@@ -15,3 +15,32 @@ $ docker compose up
 
 
 
+## Routes
+
+### Create currency:
+```
+/currencies
+```
+Body:
+```json
+{
+    "code":"D&D",
+    "value": 2
+}
+```
+### Delete currency:
+```
+/currencies/${code}
+```
+### Convert currency:
+```
+/conversions?from=${sourceCurrencyCode}&to=${targetCurrencyCode}&amount=${amountToConvert}
+```
+
+## Default Currencies
+* USD
+* BRL
+* EUR
+* ETH
+* BTC
+
