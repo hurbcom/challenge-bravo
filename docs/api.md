@@ -1,74 +1,15 @@
-Felipe de Paula do Nascimento
-
-https://github.com/felipepnascimento
-
-https://github.com/hurbcom/challenge-bravo
-
 Table of Contents
 -----------------
-- [Table of Contents](#table-of-contents)
-- [Requirements](#requirements)
-- [Installation](#installation)
-  * [Running the application](#running-the-application)
-  * [Running the tests](#running-the-tests)
-  * [Running stress tests](#running-stress-tests)
-- [Using the API](#using-the-api)
-  * [Examples](#examples)
-    + [Convert USD to BRL](#convert-usd-to-brl)
-    + [Create new currency](#create-new-currency)
-Requirements
+- [Conversion controller](#conversion-controller)
+- [Currency controller](#currency-controller)
+
+
+Conversion controller
 -----------------
-- Docker
-- Docker Compose
-- An API platform or cli to make http requests
+<details>
+<summary>GET: &nbsp &nbsp /conversion?from=FROM&to=TO&amount=0.0</summary>
 
-Installation
------------------
-### Running the application
-First things first, clone the `sample.env` file to `.env` file to setup env vars, and then run the commands bellow:
-
-1. Run `docker-compose up --build` in the main folder of this app
-2. See `challenge_bravo_flp_app` and `challenge_bravo_flp_db` running in your local docker and at http://localhost:8080
-
-### Running the tests
-1. Run `docker-compose exec app bash`
-2. Run `make test` and see the results
-> Or run `make test` local if you running your postgres locally
-
-### Running stress tests
-
-I choose the [Ddosify - High-performance load testing tool](https://github.com/ddosify/ddosify) to make the stress tests.
-
-For run the test locally, [install](https://github.com/ddosify/ddosify#installation) ddosify by official documentation. See for [Macbook](https://github.com/ddosify/ddosify#homebrew-tap-macos-and-linux) or [Linux](https://github.com/ddosify/ddosify#apk-deb-rpm-arch-linux-freebsd-packages). Make sure this application is running on port `:8080`
-
-And then, run:
-
-```bash
-ddosify -t http://localhost:8080/conversion?from=USD&to=BRL&amount=1 -n 1000 -d 1 -p HTTP -T 0
-```
-
-> Note: In my tests, i get 100% of a 1000 requests in 1s, but sometimes, the exchange API returns internal server error. If you run the stress code many times, you will see the same results as mine, success results. I think if it was in production, maybe we use some premium service with zero downtime.
-
-<p align="center">
-  <img src="./docs/stress.gif" alt="Stress Test" />
-</p>
-
-Using the API
------------------
-
-This API was seeded with some example data, see [Currency Seed](./migrations/seeds/currency.go) for more details.
-
-> Available currency conversions: _USD, BRL, EUR, BTC, ETH and HURB_
-
-### Examples
-<p align="center">
-  <img src="./docs/conversion.gif" alt="Stress Test" />
-</p>
-
-#### Convert USD to BRL
-_Converts 25 dollars to reais_
-
-> GET: /conversion?from=USD&to=BRL&amount=25
+Converts source amount currency to the final currency.
 
 Parameters:
 |    Name    |    Type    |    Required    |    Description    |
@@ -125,10 +66,15 @@ Responses examples JSON
 }
 ```
 
-#### Create new currency
-_Create YER currency_
+</details>
 
-> POST: /currency
+Currency controller
+-----------------
+<details>
+
+<summary>POST: &nbsp &nbsp /currency</summary>
+
+Creates a new currency to conversions.
 
 Parameters:
 |    Name    |    Type    |    Required    |    Description    |
@@ -206,5 +152,133 @@ Responses examples JSON
     "error": "for custom currencies, CustomCurrency and CustomAmount cannot be empty"
 }
 ```
+</details>
 
-See [API documentation](./docs/api.md) for more details.
+<details>
+
+<summary>GET: &nbsp &nbsp /currency</summary>
+</details>
+
+List all available currencies.
+
+Responses:
+|    Code    |    Description    |
+|    ----    |    -----------    |
+|    200     |    Success     |
+|    500     |    Internal Server error    |
+
+
+Responses examples JSON
+> 200 - Success
+
+```JSON
+[
+  {
+      "id": 1,
+      "key": "USD",
+      "description": "USD description",
+      "exchangeApi": true,
+      "customAmount": 0,
+      "customCurrency": "",
+      "createdAt": "2022-11-09T20:03:04.726652Z"
+  },
+  {
+      "id": 2,
+      "key": "BRL",
+      "description": "BRL description",
+      "exchangeApi": true,
+      "customAmount": 0,
+      "customCurrency": "",
+      "createdAt": "2022-11-09T20:03:04.728497Z"
+  },
+  // and go on...
+]
+```
+
+> 500 - Internal server error
+
+```JSON
+{
+    "Internal Server Error": "Some generic error"
+}
+```
+
+<details>
+
+<summary>GET: &nbsp &nbsp /currency/{id}</summary>
+</details>
+
+List currency by id
+
+Parameters:
+|    Name    |    Type    |    Required    |    Description    |
+|    ----    |    ----    |    --------    |    -----------    |
+|    id      |    integer |    true        |    ID of your currency   |
+
+Responses:
+|    Code    |    Description    |
+|    ----    |    -----------    |
+|    200     |    Success     |
+|    404     |    Not found    |
+
+
+Responses examples JSON
+> 200 - Success
+
+```JSON
+{
+    "id": 1,
+    "key": "USD",
+    "description": "USD description",
+    "exchangeApi": true,
+    "customAmount": 0,
+    "customCurrency": "",
+    "createdAt": "0001-01-01T00:00:00Z"
+}
+
+```
+
+> 404 - Not found
+
+```JSON
+{
+    "Not found": "Currency not found"
+}
+```
+<details>
+
+<summary>DELETE: &nbsp &nbsp /currency/{id}</summary>
+
+Delete currency by id
+
+Parameters:
+|    Name    |    Type    |    Required    |    Description    |
+|    ----    |    ----    |    --------    |    -----------    |
+|    id      |    integer |    true        |    ID of your currency   |
+
+Responses:
+|    Code    |    Description    |
+|    ----    |    -----------    |
+|    200     |    Success     |
+|    500     |    Internal server error    |
+
+
+Responses examples JSON
+> 200 - Success
+
+```JSON
+{
+    "data": "Currency successfully deleted"
+}
+
+```
+
+> 500 - Internal server error
+
+```JSON
+{
+    "Internal Server Error": "Some generic error"
+}
+```
+
+</details>
