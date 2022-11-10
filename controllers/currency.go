@@ -44,7 +44,7 @@ func (controller *currencyController) CreateCurrency(c *gin.Context) {
 func (controller *currencyController) GetAllCurrencies(c *gin.Context) {
 	currencies, err := controller.currencyUsecase.GetAllCurrencies()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
