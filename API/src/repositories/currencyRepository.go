@@ -19,11 +19,6 @@ func GetCurrencyByName(currencyName string) (models.Currency, error) {
 
 	dbResultJSON, err := redisClient.Get(currencyName).Result()
 
-	if err == redis.Nil {
-		fmt.Println("no results found for key", currencyName)
-		return models.Currency{}, nil
-	}
-
 	if err != nil {
 		fmt.Println("error getting currency from database:", err)
 		return models.Currency{}, err

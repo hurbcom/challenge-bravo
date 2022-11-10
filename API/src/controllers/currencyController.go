@@ -88,12 +88,22 @@ func ConvertCurrency(responseWriter http.ResponseWriter, request *http.Request) 
 	var fromCurrency, toCurrency models.Currency
 
 	fromCurrency, err = getCurrencyFromDatabase(fromCurrencyParam)
+	if err == redis.Nil {
+		err = fmt.Errorf("no results found for key %s", toCurrencyParam)
+		responses.Error(responseWriter, http.StatusNotFound, err)
+	}
+
 	if err != nil {
 		responses.Error(responseWriter, http.StatusInternalServerError, err)
 		return
 	}
 
 	toCurrency, err = getCurrencyFromDatabase(toCurrencyParam)
+	if err == redis.Nil {
+		err = fmt.Errorf("no results found for key %s", toCurrencyParam)
+		responses.Error(responseWriter, http.StatusNotFound, err)
+	}
+
 	if err != nil {
 		responses.Error(responseWriter, http.StatusInternalServerError, err)
 		return
@@ -158,7 +168,6 @@ func IsAllowedCurrency(currencyName string) (bool, error) {
 	}
 
 	if err != nil {
-		fmt.Println("error trying to get currency by name: ", err)
 		return false, err
 	}
 
@@ -208,12 +217,13 @@ func getCurrencyFromDatabase(currencyName string) (models.Currency, error) {
 	var currency models.Currency
 
 	currency, err := repositories.GetCurrencyByName(currencyName)
-	if err != nil {
+
+	if currency == (models.Currency{}) && err == redis.Nil {
+		err = fmt.Errorf("no results found for key %s", currencyName)
 		return models.Currency{}, err
 	}
 
-	if currency == (models.Currency{}) && err == nil {
-		err = fmt.Errorf("no results found for key %s", currencyName)
+	if err != nil {
 		return models.Currency{}, err
 	}
 
