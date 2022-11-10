@@ -6,8 +6,8 @@ https://github.com/hurbcom/challenge-bravo
 
 Table of Contents
 -----------------
-- [Table of Contents](#table-of-contents)
 - [Requirements](#requirements)
+- [Introduction](#introduction)
 - [Installation](#installation)
   * [Running the application](#running-the-application)
   * [Running the tests](#running-the-tests)
@@ -16,6 +16,18 @@ Table of Contents
   * [Examples](#examples)
     + [Convert USD to BRL](#convert-usd-to-brl)
     + [Create new currency](#create-new-currency)
+
+Introduction
+-----------------
+This API was builded with convert currency proposal.
+
+I've used GoLang with main programming language, Docker and Docker Compose to run the application and Postgres with database.
+
+I've used a library called [Mockery](https://github.com/vektra/mockery) to mock all the tests, see more in the [README file](./mocks/README.md) on mocks folders.
+
+I don't used any framework (swagger, stoplight, etc) to build an API documentation, but I write some documentation in this repo, see [API documentations](./docs/api.md) README for more.
+
+For run this API, follow the next steps till the end. Any doubs or suggestions, call me. Enjoy the API.
 
 Requirements
 -----------------
@@ -54,6 +66,16 @@ ddosify -t http://localhost:8080/conversion?from=USD&to=BRL&amount=1 -n 1000 -d 
   <img src="./docs/stress.gif" alt="Stress Test" />
 </p>
 
+Test results
+-----------------
+See below all tests results. Fell free to [run the tests](#running-the-tests) any time.
+
+```
+ok  	./controllers	0.012s	coverage: 87.9% of statements
+ok  	./repositories	0.132s	coverage: 81.5% of statements
+ok  	./services	    0.012s	coverage: 100.0% of statements
+ok  	./usecases	    0.014s	coverage: 88.5% of statements
+```
 Using the API
 -----------------
 
