@@ -41,4 +41,3 @@ For this, see [that](TODO-swagger)
 
 # TODOS
 - Colocar o swagger na API
-- Melhorar o test coverage
