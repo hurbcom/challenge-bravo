@@ -60,6 +60,8 @@ This API was seeded with some example data, see [Currency Seed](./migrations/see
 
 > Available currency conversions: _USD, BRL, EUR, BTC, ETH and HURB_
 
+> IMPORTANT: I don't create any kind of authentication is this API, it is public. But a think in production I'll make a `basic authentication`, `JWT authentication` or `OAuth`.
+
 ### Examples
 <p align="center">
   <img src="./docs/conversion.gif" alt="Stress Test" />
