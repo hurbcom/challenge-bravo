@@ -7,17 +7,17 @@ import (
 
 var currencyRoutes = []Route{
 	{
-		URI:      "/currency/convert",
+		URI:      "/currencies/convert",
 		Method:   http.MethodGet,
 		Function: controllers.ConvertCurrency,
 	},
 	{
-		URI:      "/currency",
+		URI:      "/currencies",
 		Method:   http.MethodPost,
 		Function: controllers.InsertCurrency,
 	},
 	{
-		URI:      "/currency/{name}",
+		URI:      "/currencies/{name}",
 		Method:   http.MethodDelete,
 		Function: controllers.DeleteCurrency,
 	},
