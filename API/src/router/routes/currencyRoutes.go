@@ -21,4 +21,9 @@ var currencyRoutes = []Route{
 		Method:   http.MethodDelete,
 		Function: controllers.DeleteCurrency,
 	},
+	{
+		URI:      "/currencies",
+		Method:   http.MethodGet,
+		Function: controllers.GetAllCurrencies,
+	},
 }

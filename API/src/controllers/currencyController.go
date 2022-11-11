@@ -35,7 +35,16 @@ func InitRedisDatabase() {
 
 		repositories.InsertCurrency(currency)
 	}
+}
 
+func GetAllCurrencies(responseWriter http.ResponseWriter, request *http.Request) {
+
+	allCurrencies, err := repositories.GetAllCurrencies()
+	if err != nil {
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
+	}
+
+	responses.JSON(responseWriter, http.StatusOK, allCurrencies)
 }
 
 func UpdateAllUpdatableCurrencies() {
