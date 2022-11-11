@@ -75,6 +75,14 @@ func InsertCurrency(currency models.Currency) error {
 	return nil
 }
 
+func UpdateCurrency(currency models.Currency) error {
+	if err := InsertCurrency(currency); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func DeleteCurrency(currencyName string) *redis.IntCmd {
 	redisClient := database.Connect()
 	defer redisClient.ClientKill(config.DBPort)

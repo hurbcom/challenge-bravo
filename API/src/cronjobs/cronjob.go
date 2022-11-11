@@ -10,7 +10,7 @@ import (
 func RunCronjob() {
 	cronjobScheduler := gocron.NewScheduler(time.UTC)
 
-	cronjobScheduler.Every(15).Seconds().Do(controllers.UpdateAllCurrencies)
+	cronjobScheduler.Every(15).Seconds().Do(controllers.UpdateAllUpdatableCurrencies)
 
 	cronjobScheduler.StartAsync()
 }

@@ -38,7 +38,7 @@ func InitRedisDatabase() {
 
 }
 
-func UpdateAllCurrencies() {
+func UpdateAllUpdatableCurrencies() {
 	fmt.Println("##### NEW JOB RUN #####")
 	currencies, err := repositories.GetAllUpdatableCurrencies()
 	if err != nil {
@@ -64,7 +64,7 @@ func UpdateAllCurrencies() {
 			IsAutoUpdatable: true,
 		}
 
-		if err := repositories.InsertCurrency(newCurrency); err != nil {
+		if err := repositories.UpdateCurrency(newCurrency); err != nil {
 			log.Fatal(err)
 		}
 	}
