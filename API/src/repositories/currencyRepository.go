@@ -1,8 +1,6 @@
 package repositories
 
 import (
-	"api/src/config"
-	"api/src/database"
 	"api/src/models"
 	"encoding/json"
 	"fmt"
@@ -10,17 +8,23 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func GetAllCurrencies() ([]models.Currency, error) {
-	redisClient := database.Connect()
-	defer redisClient.ClientKill(config.DBPort)
+type currencies struct {
+	db *redis.Client
+}
+
+func NewCurrencyRepository(db *redis.Client) *currencies {
+	return &currencies{db}
+}
+
+func (currencyRepo currencies) GetAllCurrencies() ([]models.Currency, error) {
 
 	var currencies []models.Currency
 
-	dbResultIterator := redisClient.Scan(0, "*", 0).Iterator()
+	dbResultIterator := currencyRepo.db.Scan(0, "*", 0).Iterator()
 
 	for i := 0; dbResultIterator.Next(); i++ {
 
-		currencyFromDatabase, err := GetCurrencyByName(dbResultIterator.Val())
+		currencyFromDatabase, err := currencyRepo.GetCurrencyByName(dbResultIterator.Val())
 		if err != nil {
 			return nil, err
 		}
@@ -32,9 +36,9 @@ func GetAllCurrencies() ([]models.Currency, error) {
 	return currencies, nil
 }
 
-func GetAllUpdatableCurrencies() ([]models.Currency, error) {
+func (currencyRepo currencies) GetAllUpdatableCurrencies() ([]models.Currency, error) {
 
-	currencies, err := GetAllCurrencies()
+	currencies, err := currencyRepo.GetAllCurrencies()
 	if err != nil {
 		return nil, err
 	}
@@ -50,32 +54,26 @@ func GetAllUpdatableCurrencies() ([]models.Currency, error) {
 	return updatableCurrencies, nil
 }
 
-func GetCurrencyByName(currencyName string) (models.Currency, error) {
+func (currencyRepo currencies) GetCurrencyByName(currencyName string) (models.Currency, error) {
 
-	redisClient := database.Connect()
-	defer redisClient.ClientKill(config.DBPort)
+	var currencyFromDatabase models.Currency
 
-	var currency models.Currency
-
-	dbResultJSON, err := redisClient.Get(currencyName).Result()
+	dbResultJSON, err := currencyRepo.db.Get(currencyName).Result()
 
 	if err != nil {
 		fmt.Println("error getting currency from database:", err)
 		return models.Currency{}, err
 	}
 
-	err = json.Unmarshal([]byte(dbResultJSON), &currency)
+	err = json.Unmarshal([]byte(dbResultJSON), &currencyFromDatabase)
 	if err != nil {
 		fmt.Println("error unmarshalling dbResultJSON:", err)
 	}
 
-	return currency, nil
+	return currencyFromDatabase, nil
 }
 
-func InsertCurrency(currency models.Currency) error {
-
-	redisClient := database.Connect()
-	defer redisClient.ClientKill(config.DBPort)
+func (currencyRepo currencies) InsertCurrency(currency models.Currency) error {
 
 	currencyJSON, err := json.Marshal(currency)
 
@@ -83,7 +81,7 @@ func InsertCurrency(currency models.Currency) error {
 		return err
 	}
 
-	err = redisClient.Set(currency.Name, currencyJSON, 0).Err()
+	err = currencyRepo.db.Set(currency.Name, currencyJSON, 0).Err()
 
 	if err != nil {
 		return err
@@ -92,17 +90,14 @@ func InsertCurrency(currency models.Currency) error {
 	return nil
 }
 
-func UpdateCurrency(currency models.Currency) error {
-	if err := InsertCurrency(currency); err != nil {
+func (currencyRepo currencies) UpdateCurrency(currency models.Currency) error {
+	if err := currencyRepo.InsertCurrency(currency); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func DeleteCurrency(currencyName string) *redis.IntCmd {
-	redisClient := database.Connect()
-	defer redisClient.ClientKill(config.DBPort)
-
-	return redisClient.Del(currencyName)
+func (currencyRepo currencies) DeleteCurrency(currencyName string) *redis.IntCmd {
+	return currencyRepo.db.Del(currencyName)
 }
