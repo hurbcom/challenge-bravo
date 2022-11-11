@@ -3,8 +3,8 @@ package controllers
 import (
 	"api/src/config"
 	"api/src/models"
-	"api/src/repositories"
 	"api/src/responses"
+	"api/src/services"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -13,7 +13,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
 )
 
@@ -33,13 +32,13 @@ func InitRedisDatabase() {
 			ConversionRate:  conversionRateByCurrency.ConversionRate,
 			IsAutoUpdatable: true}
 
-		repositories.InsertCurrency(currency)
+		services.InsertCurrency(currency)
 	}
 }
 
 func GetAllCurrencies(responseWriter http.ResponseWriter, request *http.Request) {
 
-	allCurrencies, err := repositories.GetAllCurrencies()
+	allCurrencies, err := services.GetAllCurrencies()
 	if err != nil {
 		responses.Error(responseWriter, http.StatusInternalServerError, err)
 	}
@@ -49,7 +48,8 @@ func GetAllCurrencies(responseWriter http.ResponseWriter, request *http.Request)
 
 func UpdateAllUpdatableCurrencies() {
 	fmt.Println("##### NEW JOB RUN #####")
-	currencies, err := repositories.GetAllUpdatableCurrencies()
+
+	currencies, err := services.GetAllUpdatableCurrencies()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -73,7 +73,7 @@ func UpdateAllUpdatableCurrencies() {
 			IsAutoUpdatable: true,
 		}
 
-		if err := repositories.UpdateCurrency(newCurrency); err != nil {
+		if err := services.UpdateCurrency(newCurrency); err != nil {
 			log.Fatal(err)
 		}
 	}
@@ -95,7 +95,7 @@ func ConvertCurrency(responseWriter http.ResponseWriter, request *http.Request) 
 		return
 	}
 
-	isFromCurrencyAllowed, err := IsAllowedCurrency(fromCurrencyParam)
+	isFromCurrencyAllowed, err := services.IsAllowedCurrency(fromCurrencyParam)
 	if err != nil {
 		responses.Error(responseWriter, http.StatusInternalServerError, err)
 		return
@@ -107,7 +107,7 @@ func ConvertCurrency(responseWriter http.ResponseWriter, request *http.Request) 
 		return
 	}
 
-	isToCurrencyAllowed, err := IsAllowedCurrency(toCurrencyParam)
+	isToCurrencyAllowed, err := services.IsAllowedCurrency(toCurrencyParam)
 	if err != nil {
 		responses.Error(responseWriter, http.StatusInternalServerError, err)
 		return
@@ -119,57 +119,12 @@ func ConvertCurrency(responseWriter http.ResponseWriter, request *http.Request) 
 		return
 	}
 
-	var fromCurrency, toCurrency models.Currency
-
-	fromCurrency, err = getCurrencyFromDatabase(fromCurrencyParam)
-	if err == redis.Nil {
-		err = fmt.Errorf("no results found for key %s", toCurrencyParam)
-		responses.Error(responseWriter, http.StatusNotFound, err)
-	}
-
+	conversionResponse, err := services.ConvertCurrency(fromCurrencyParam, toCurrencyParam, amount)
 	if err != nil {
 		responses.Error(responseWriter, http.StatusInternalServerError, err)
-		return
 	}
 
-	toCurrency, err = getCurrencyFromDatabase(toCurrencyParam)
-	if err == redis.Nil {
-		err = fmt.Errorf("no results found for key %s", toCurrencyParam)
-		responses.Error(responseWriter, http.StatusNotFound, err)
-	}
-
-	if err != nil {
-		responses.Error(responseWriter, http.StatusInternalServerError, err)
-		return
-	}
-
-	conversionRate := toCurrency.ConversionRate / fromCurrency.ConversionRate
-
-	convertedValue := amount * conversionRate
-
-	conversionResponse := models.ConversionResponse{
-		FromCurrency:   fromCurrencyParam,
-		ToCurrency:     toCurrencyParam,
-		Amount:         amount,
-		ConvertedValue: convertedValue,
-	}
 	responses.JSON(responseWriter, http.StatusOK, conversionResponse)
-}
-
-func IsAllowedCurrency(currencyName string) (bool, error) {
-
-	_, err := repositories.GetCurrencyByName(currencyName)
-
-	if err == redis.Nil {
-		err = nil
-		return false, nil
-	}
-
-	if err != nil {
-		return false, err
-	}
-
-	return true, nil
 }
 
 func GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) ([]models.ConversionRateFromAPI, error) {
@@ -214,24 +169,6 @@ func GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) 
 	return conversionRatesFromAPI, nil
 }
 
-func getCurrencyFromDatabase(currencyName string) (models.Currency, error) {
-
-	var currency models.Currency
-
-	currency, err := repositories.GetCurrencyByName(currencyName)
-
-	if currency == (models.Currency{}) && err == redis.Nil {
-		err = fmt.Errorf("no results found for key %s", currencyName)
-		return models.Currency{}, err
-	}
-
-	if err != nil {
-		return models.Currency{}, err
-	}
-
-	return currency, nil
-}
-
 func InsertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
 
 	requestBody, err := io.ReadAll(request.Body)
@@ -249,9 +186,7 @@ func InsertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	currency.Name = strings.ToUpper(currency.Name)
-
-	if err = repositories.InsertCurrency(currency); err != nil {
+	if err = services.InsertCurrency(currency); err != nil {
 		responses.Error(responseWriter, http.StatusInternalServerError, err)
 	}
 
@@ -259,12 +194,13 @@ func InsertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
 }
 
 func DeleteCurrency(responseWriter http.ResponseWriter, request *http.Request) {
-	parameters := mux.Vars(request)
 
+	parameters := mux.Vars(request)
 	currencyNameParam := parameters["name"]
 
-	if repositories.DeleteCurrency(currencyNameParam).Val() == 0 {
-		err := fmt.Errorf("no key %s found to be deleted", currencyNameParam)
-		responses.Error(responseWriter, http.StatusNotFound, err)
+	if err := services.DeleteCurrency(currencyNameParam); err != nil {
+		responses.Error(responseWriter, http.StatusInternalServerError, err)
 	}
+
+	responses.JSON(responseWriter, http.StatusOK, nil)
 }
