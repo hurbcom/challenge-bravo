@@ -10,6 +10,29 @@ import (
 	"github.com/go-redis/redis"
 )
 
+func GetAllUpdatableCurrencies() ([]models.Currency, error) {
+	redisClient := database.Connect()
+	defer redisClient.ClientKill(config.DBPort)
+
+	var currencies []models.Currency
+
+	dbResultIterator := redisClient.Scan(0, "*", 0).Iterator()
+
+	for i := 0; dbResultIterator.Next(); i++ {
+
+		currencyFromDatabase, err := GetCurrencyByName(dbResultIterator.Val())
+		if err != nil {
+			return nil, err
+		}
+
+		if currencyFromDatabase.IsAutoUpdatable {
+			currencies = append(currencies, currencyFromDatabase)
+		}
+	}
+
+	return currencies, nil
+}
+
 func GetCurrencyByName(currencyName string) (models.Currency, error) {
 
 	redisClient := database.Connect()
