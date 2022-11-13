@@ -1,7 +1,10 @@
 using HURB.Core.Entities.Base;
 
-public class Country : Entity
+namespace HURB.Core.Entities
 {
-    public string DisplayName { get; set; }
-    public string ThreeLetterISORegionName { get; set; }
+    public class Country : Entity
+    {
+        public string DisplayName { get; set; }
+        public string ThreeLetterISORegionName { get; set; }
+    }
 }

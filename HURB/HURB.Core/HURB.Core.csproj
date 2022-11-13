@@ -19,4 +19,9 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Interfaces\Services\" />
+      <Folder Include="Model\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
 </Project>

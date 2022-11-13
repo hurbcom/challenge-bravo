@@ -10,4 +10,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HURB.Application\HURB.Application.csproj" />
+    <ProjectReference Include="..\HURB.Core\HURB.Core.csproj" />
+    <ProjectReference Include="..\HURB.CrossCutting\HURB.CrossCutting.csproj" />
+    <ProjectReference Include="..\HURB.Infrastructure\HURB.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

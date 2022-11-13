@@ -1,17 +1,20 @@
 using HURB.Core.Entities.Base;
 
-public class QuotationCurrency : Entity
+namespace HURB.Core.Entities
 {
-    public Guid CountryId { get; set; }
-    public Guid CurrencyId { get; set; }
-    public decimal Value { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
+    public class QuotationCurrency : Entity
+    {
+        public Guid CountryId { get; set; }
+        public Guid CurrencyId { get; set; }
+        public decimal Value { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
-    #region NAVIGATION PROPERTIES
+        #region NAVIGATION PROPERTIES
 
-    public virtual Country Country { get; set; }
-    public virtual Currency Currency { get; set; }
+        public virtual Country Country { get; set; }
+        public virtual Currency Currency { get; set; }
 
-    #endregion
+        #endregion
+    }
 }
