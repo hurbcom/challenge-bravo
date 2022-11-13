@@ -21,6 +21,9 @@ namespace HURB.API.Controllers
             {
                 var result = await procedure();
 
+                if (_notification.HasNotifications)
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { validationResults = _notification.Notifications });
+
                 if (result is ObjectResult)
                     return result;
 

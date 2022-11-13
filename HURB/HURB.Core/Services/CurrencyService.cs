@@ -20,7 +20,6 @@ namespace HURB.Core.Services
             if (!IsValidAdd(entity))
                 return;
 
-            await _repository.OpenTransactionAsync();
             await _repository.InsertAsync(entity);
             await _repository.CommitAsync();
         }
@@ -30,7 +29,6 @@ namespace HURB.Core.Services
             if (!IsValidUpdate(entity))
                 return await Task.FromResult(entity);
 
-            await _repository.OpenTransactionAsync();
             await _repository.UpdateAsync(entity);
             await _repository.CommitAsync();
 
@@ -50,7 +48,7 @@ namespace HURB.Core.Services
         private bool IsValidUpdate(Currency entity)
         {
             bool isValid = true;
-            ValidateIfExists(entity.Id, entity.ISOCurrencySymbol, isValid);
+            ValidateIfExists(entity.Id, entity.ISOCurrencySymbol, ref isValid);
 
             return isValid;
         }
@@ -65,7 +63,7 @@ namespace HURB.Core.Services
             }
         }
 
-        private void ValidateIfExists(Guid id, string ISOCurrencySymbol, bool isValid)
+        private void ValidateIfExists(Guid id, string ISOCurrencySymbol, ref bool isValid)
         {
             var currencyAny = _repository.AnyAsync(x => x.Id != id && x.ISOCurrencySymbol.ToLower() == ISOCurrencySymbol.ToLower());
             if (currencyAny.Result)

@@ -8,6 +8,7 @@ namespace HURB.Application.Interfaces
         Task<ICollection<GetCurrencyResponse>> GetAllAsync();
         Task<GetCurrencyResponse> GetByIdAsync(Guid id);
         Task AddAsync(AddCurrencyRequest model);
-        Task<UpdateCurrencyRequest> UpdateAsync(UpdateCurrencyRequest model);
+        Task UpdateAsync(UpdateCurrencyRequest model);
+        Task DeleteAsync(Guid id);
     }
 }

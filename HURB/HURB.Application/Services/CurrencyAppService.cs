@@ -39,9 +39,16 @@ namespace HURB.Application.Services
             return _mapper.Map<GetCurrencyResponse>(result);
         }
 
-        public Task<UpdateCurrencyRequest> UpdateAsync(UpdateCurrencyRequest model)
+        public async Task UpdateAsync(UpdateCurrencyRequest model)
         {
-            throw new NotImplementedException();
+            var currency = _mapper.Map<Currency>(model);
+            await _service.UpdateAsync(currency);
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            await _repository.DeleteAsync(id);
+            await _repository.CommitAsync();
         }
     }
 }

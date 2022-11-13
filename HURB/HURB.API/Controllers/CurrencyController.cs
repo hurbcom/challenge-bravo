@@ -15,9 +15,7 @@ namespace HURB.API.Controllers
         private readonly ICurrencyAppService _appService;
 
         public CurrencyController(ICurrencyAppService appService, DomainNotification notification) : base(notification)
-        {
-            _appService = appService;
-        }
+            => _appService = appService;
 
         [HttpGet]
         [ProducesResponseType(typeof(ICollection<GetCurrencyResponse>), (int)HttpStatusCode.OK)]
@@ -42,7 +40,7 @@ namespace HURB.API.Controllers
         }
 
         [HttpPost()]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(IReadOnlyCollection<Notification>), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> AddAsync([FromBody] AddCurrencyRequest model)
         {
@@ -52,7 +50,32 @@ namespace HURB.API.Controllers
             return await ReturnPackageAsync(async () =>
             {
                 await _appService.AddAsync(model);
-            });
+            }, HttpStatusCode.Created);
+        }
+
+        [HttpPut()]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(IReadOnlyCollection<Notification>), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateCurrencyRequest model)
+        {
+            if (!model.IsValid())
+                return await Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.BadRequest, new { validationResults = model.Notifications }));
+
+            return await ReturnPackageAsync(async () =>
+            {
+                await _appService.UpdateAsync(model);
+            }, HttpStatusCode.NoContent);
+        }
+
+        [HttpDelete()]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> DeleteAsync([FromBody] Guid id)
+        {
+            return await ReturnPackageAsync(async () =>
+            {
+                await _appService.DeleteAsync(id);
+            }, HttpStatusCode.NoContent);
         }
     }
 }
