@@ -1,3 +1,4 @@
+using HURB.Core;
 using HURB.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace HURB.API.Controllers
     {
         private readonly ICountryRepository _repository;
 
-        public CountryController(ICountryRepository repository)
+        public CountryController(ICountryRepository repository, DomainNotification notification) : base(notification)
         {
             _repository = repository;
         }

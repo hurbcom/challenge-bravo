@@ -2,6 +2,7 @@ using Flunt.Notifications;
 using HURB.Application.Interfaces;
 using HURB.Application.Model.Request.Currency;
 using HURB.Application.Model.Response.Currency;
+using HURB.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -13,7 +14,7 @@ namespace HURB.API.Controllers
     {
         private readonly ICurrencyAppService _appService;
 
-        public CurrencyController(ICurrencyAppService appService)
+        public CurrencyController(ICurrencyAppService appService, DomainNotification notification) : base(notification)
         {
             _appService = appService;
         }

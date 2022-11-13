@@ -2,24 +2,29 @@ using AutoMapper;
 using HURB.Application.Interfaces;
 using HURB.Application.Model.Request.Currency;
 using HURB.Application.Model.Response.Currency;
+using HURB.Core.Entities;
 using HURB.Core.Interfaces.Repositories;
+using HURB.Core.Interfaces.Services;
 
 namespace HURB.Application.Services
 {
     public class CurrencyAppService : ICurrencyAppService
     {
+        private readonly ICurrencyService _service;
         private readonly ICurrencyRepository _repository;
         private readonly IMapper _mapper;
 
-        public CurrencyAppService(ICurrencyRepository repository, IMapper mapper)
+        public CurrencyAppService(ICurrencyService service, ICurrencyRepository repository, IMapper mapper)
         {
+            _service = service;
             _repository = repository;
             _mapper = mapper;
         }
 
-        public Task AddAsync(AddCurrencyRequest model)
+        public async Task AddAsync(AddCurrencyRequest model)
         {
-            throw new NotImplementedException();
+            var currency = _mapper.Map<Currency>(model);
+            await _service.AddAsync(currency);
         }
 
         public async Task<ICollection<GetCurrencyResponse>> GetAllAsync()

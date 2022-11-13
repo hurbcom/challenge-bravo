@@ -1,3 +1,4 @@
+using HURB.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -7,6 +8,11 @@ namespace HURB.API.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
+        private readonly DomainNotification _notification;
+
+        public BaseController(DomainNotification notification)
+            => _notification = notification;
+
         protected async Task<IActionResult> ReturnPackageAsync(Func<Task<dynamic>> procedure,
                                                                HttpStatusCode status = HttpStatusCode.OK,
                                                                string? message = null)
@@ -36,6 +42,9 @@ namespace HURB.API.Controllers
             try
             {
                 await procedure();
+
+                if (_notification.HasNotifications)
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { validationResults = _notification.Notifications });
 
                 if (message == null)
                     return StatusCode((int)status);

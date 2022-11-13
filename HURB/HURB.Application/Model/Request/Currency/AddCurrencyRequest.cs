@@ -18,7 +18,7 @@ namespace HURB.Application.Model.Request.Currency
         #region MAP
 
         public static void Mapping(IMapperConfigurationExpression cfg)
-            => cfg.CreateMap<UpdateCurrencyRequest, Core.Entities.Currency>();
+            => cfg.CreateMap<AddCurrencyRequest, Core.Entities.Currency>();
 
         #endregion MAP
     }
