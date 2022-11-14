@@ -19,6 +19,7 @@ namespace HURB.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(ICollection<GetCurrencyResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
         {
             return await ReturnPackageAsync(async () =>
@@ -30,6 +31,7 @@ namespace HURB.API.Controllers
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ICollection<GetCurrencyResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
             return await ReturnPackageAsync(async () =>
@@ -42,6 +44,7 @@ namespace HURB.API.Controllers
         [HttpPost()]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(IReadOnlyCollection<Notification>), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> AddAsync([FromBody] AddCurrencyRequest model)
         {
             if (!model.IsValid())
@@ -56,6 +59,7 @@ namespace HURB.API.Controllers
         [HttpPut()]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(IReadOnlyCollection<Notification>), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> UpdateAsync([FromBody] UpdateCurrencyRequest model)
         {
             if (!model.IsValid())

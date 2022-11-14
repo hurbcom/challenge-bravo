@@ -11,7 +11,7 @@ namespace HURB.CrossCutting.Extensions
         {
             services.AddScoped<DomainNotification>();
             services.AddScoped<ICurrencyService, CurrencyService>();
-
+            services.AddScoped<IQuotationService, QuotationService>(); 
             return services;
         }
     }
