@@ -1,4 +1,5 @@
 using Flunt.Notifications;
+using HURB.Application.Model.Request.Quotation;
 using HURB.Core;
 using HURB.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,11 @@ namespace HURB.API.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IReadOnlyCollection<Notification>), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> GetByIdAsync(string from, string to, decimal amount)
+        public async Task<IActionResult> GetByIdAsync([FromQuery] QuotationRequest model)
         {
             return await ReturnPackageAsync(async () =>
             {
-                var result = await _service.GetQuotation(from, to, amount);
+                var result = await _service.GetQuotation(model.From, model.To, model.Amount);
                 return result;
             });
         }
