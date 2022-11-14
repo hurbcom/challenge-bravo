@@ -3,15 +3,15 @@
 [[English](README.md) | [Português](README.pt.md) | [Comentários](README.comments.md)]
 
 Stack da API:
-•	.NET 6
-•	C#
-•	SQL Server
-•	Entity Framework Core
+- .NET 6
+- C#
+- SQL Server
+- Entity Framework Core
 
 Detalhes para criação do BD da API:
-•	Após fazer o Pull da API, na solução dendo da pasta SQLs ficam os seguintes Scripts:
-•	01 - CREATE-TABLES.sql
-•	02 - INSERT-TABLES.sql
+- Após fazer o Pull da API, na solução dendo da pasta SQLs ficam os seguintes Scripts:
+ - 01 - CREATE-TABLES.sql
+ - 02 - INSERT-TABLES.sql
   Eles precisam ser executados conforme ordem dos arquivos.
 
 Gerar Token
@@ -24,15 +24,15 @@ Ex: `bearer TOKEN`
 </p>
 
 Detalhes Controllers:
-•	Para alguns endpoints com a finalidade de proteger algumas rotas foi implementado o JWT para geração de Token e validação de acesso.
-•	Conforme mencionado para atender de forma bem simples a aplicação para gerar Tokens e validar algumas permissões, foi criado uma estrutura bem simples de Usuário e Perfil, no qual temos em nosso BD:
+- Para alguns endpoints com a finalidade de proteger algumas rotas foi implementado o JWT para geração de Token e validação de acesso.
+- Conforme mencionado para atender de forma bem simples a aplicação para gerar Tokens e validar algumas permissões, foi criado uma estrutura bem simples de Usuário e Perfil, no qual temos em nosso BD:
 Tabela: User
 	Name			Perfil
 	User			  1	
 	Analyst		  	  2
 	Admintratrator	  3
-•	Na API temos um enumerador para atender os Perfis relacionado ao nosso BD.
-•	Em nossa API somente o Perfil Analyst estaremos sendo ultilizado.
+- Na API temos um enumerador para atender os Perfis relacionado ao nosso BD.
+- Em nossa API somente o Perfil Analyst estaremos sendo ultilizado.
 
 Controller - Auth
 - Controller responsável por gerar o Token a partir do "acesso" do usuário.
