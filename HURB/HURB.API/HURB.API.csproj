@@ -1,20 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\HURB.Application\HURB.Application.csproj" />
-    <ProjectReference Include="..\HURB.Core\HURB.Core.csproj" />
-    <ProjectReference Include="..\HURB.CrossCutting\HURB.CrossCutting.csproj" />
-    <ProjectReference Include="..\HURB.Infrastructure\HURB.Infrastructure.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\HURB.Application\HURB.Application.csproj" />
+        <ProjectReference Include="..\HURB.Core\HURB.Core.csproj" />
+        <ProjectReference Include="..\HURB.CrossCutting\HURB.CrossCutting.csproj" />
+        <ProjectReference Include="..\HURB.Infrastructure\HURB.Infrastructure.csproj" />
+    </ItemGroup>
 
 </Project>

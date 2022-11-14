@@ -10,6 +10,7 @@ namespace HURB.CrossCutting.Extensions
         public static IServiceCollection AddServiceInjections(this IServiceCollection services)
         {
             services.AddScoped<DomainNotification>();
+            services.AddScoped<AuthToken>();
             services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddScoped<IQuotationService, QuotationService>(); 
             return services;

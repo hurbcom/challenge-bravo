@@ -1,8 +1,11 @@
 using Flunt.Notifications;
+using HURB.API.Attribute;
 using HURB.Application.Interfaces;
 using HURB.Application.Model.Request.Currency;
 using HURB.Application.Model.Response.Currency;
 using HURB.Core;
+using HURB.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -10,6 +13,7 @@ namespace HURB.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CurrencyController : BaseController
     {
         private readonly ICurrencyAppService _appService;
@@ -17,9 +21,8 @@ namespace HURB.API.Controllers
         public CurrencyController(ICurrencyAppService appService, DomainNotification notification) : base(notification)
             => _appService = appService;
 
-        [HttpGet]
+        [HttpGet, VerifyPermission(Profile.Analyst)]
         [ProducesResponseType(typeof(ICollection<GetCurrencyResponse>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
         {
             return await ReturnPackageAsync(async () =>
@@ -29,9 +32,8 @@ namespace HURB.API.Controllers
             });
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:guid}"), VerifyPermission(Profile.Analyst)]
         [ProducesResponseType(typeof(ICollection<GetCurrencyResponse>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
             return await ReturnPackageAsync(async () =>
@@ -41,10 +43,9 @@ namespace HURB.API.Controllers
             });
         }
 
-        [HttpPost()]
+        [HttpPost(), VerifyPermission(Profile.Analyst)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(IReadOnlyCollection<Notification>), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> AddAsync([FromBody] AddCurrencyRequest model)
         {
             if (!model.IsValid())
@@ -56,10 +57,9 @@ namespace HURB.API.Controllers
             }, HttpStatusCode.Created);
         }
 
-        [HttpPut()]
+        [HttpPut(), VerifyPermission(Profile.Analyst)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(IReadOnlyCollection<Notification>), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> UpdateAsync([FromBody] UpdateCurrencyRequest model)
         {
             if (!model.IsValid())
@@ -71,9 +71,8 @@ namespace HURB.API.Controllers
             }, HttpStatusCode.NoContent);
         }
 
-        [HttpDelete()]
+        [HttpDelete(), VerifyPermission(Profile.Analyst)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> DeleteAsync([FromBody] Guid id)
         {
             return await ReturnPackageAsync(async () =>

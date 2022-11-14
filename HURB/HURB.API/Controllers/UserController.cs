@@ -1,25 +1,23 @@
-using HURB.API.Attribute;
 using HURB.Core;
 using HURB.Core.Entities;
 using HURB.Core.Interfaces.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace HURB.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class CountryController : BaseController
+    public class UserController : BaseController
     {
-        private readonly ICountryRepository _repository;
+        private readonly IUserRepository _repository;
 
-        public CountryController(ICountryRepository repository, DomainNotification notification) : base(notification)
+        public UserController(IUserRepository repository, DomainNotification notification) : base(notification)
             => _repository = repository;
 
-        [HttpGet, VerifyPermission(Profile.Analyst)]
-        [ProducesResponseType(typeof(ICollection<Country>), (int)HttpStatusCode.OK)]
+        [HttpGet]
+        [ProducesResponseType(typeof(ICollection<User>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetAll()
         {
             return await ReturnPackageAsync(async () =>

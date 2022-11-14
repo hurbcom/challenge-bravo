@@ -30,3 +30,9 @@ INSERT [dbo].[QuotationCurrency] ([Id], [CountryId], [CurrencyId], [Value], [Sta
 GO
 INSERT [dbo].[QuotationCurrency] ([Id], [CountryId], [CurrencyId], [Value], [StartDate], [EndDate]) VALUES (N'13db545a-3ec1-4faf-ad94-fb6c727e237f', N'8c78aa1c-9650-4c51-9789-9e36fb74d494', N'e4b45aec-bc0e-4a1e-8112-342bd1fa842b', CAST(1.00000000 AS Decimal(16, 8)), CAST(N'2022-11-12T19:46:03.0800000' AS DateTime2), NULL)
 GO
+INSERT [dbo].[User] ([Id], [Name], [Profile]) VALUES (N'3a98820e-687d-4d6c-be42-339f74d015ec', N'Administrator', 3)
+GO
+INSERT [dbo].[User] ([Id], [Name], [Profile]) VALUES (N'f6080296-d13d-4aad-aded-a63f0c160269', N'Analyst', 2)
+GO
+INSERT [dbo].[User] ([Id], [Name], [Profile]) VALUES (N'afc45768-91f8-48c8-a5f4-b57f33872778', N'User', 1)
+GO

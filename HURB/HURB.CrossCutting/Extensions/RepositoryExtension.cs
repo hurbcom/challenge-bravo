@@ -11,7 +11,8 @@ namespace HURB.CrossCutting.Extensions
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<IQuotationCurrencyRepository, QuotationCurrencyRepository>();
-
+            services.AddScoped<IUserRepository, UserRepository>();
+            
             return services;
         }
     }

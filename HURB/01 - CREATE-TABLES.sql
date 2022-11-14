@@ -26,11 +26,19 @@ CREATE TABLE [Currency] (
 );
 GO
 
+CREATE TABLE [User] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] varchar(30) NOT NULL,
+    [Profile] int NOT NULL,
+    CONSTRAINT [PK_User] PRIMARY KEY ([Id])
+);
+GO
+
 CREATE TABLE [QuotationCurrency] (
     [Id] uniqueidentifier NOT NULL,
     [CountryId] uniqueidentifier NOT NULL,
     [CurrencyId] uniqueidentifier NOT NULL,
-    [Value] decimal(6,8) NOT NULL,
+    [Value] decimal(16,8) NOT NULL,
     [StartDate] datetime2 NOT NULL,
     [EndDate] datetime2 NULL,
     CONSTRAINT [PK_QuotationCurrency] PRIMARY KEY ([Id]),
