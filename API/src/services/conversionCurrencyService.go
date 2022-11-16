@@ -20,7 +20,7 @@ func NewConversionService(repository ConversionRepository, currencySearchService
 
 func (conversionService ConversionService) ConvertCurrency(fromCurrencyParam, toCurrencyParam string, amount float64) (models.ConversionResponse, error) {
 
-	isFromCurrencyAllowed, err := IsAllowedCurrency(fromCurrencyParam)
+	isFromCurrencyAllowed, err := conversionService.currencySearchService.IsAllowedCurrency(fromCurrencyParam)
 	if err != nil {
 		return models.ConversionResponse{}, err
 	}
@@ -30,7 +30,7 @@ func (conversionService ConversionService) ConvertCurrency(fromCurrencyParam, to
 		return models.ConversionResponse{}, message
 	}
 
-	isToCurrencyAllowed, err := IsAllowedCurrency(fromCurrencyParam)
+	isToCurrencyAllowed, err := conversionService.currencySearchService.IsAllowedCurrency(fromCurrencyParam)
 	if err != nil {
 		return models.ConversionResponse{}, err
 	}

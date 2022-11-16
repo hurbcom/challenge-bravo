@@ -2,9 +2,7 @@ package services
 
 import (
 	"api/src/config"
-	"api/src/database"
 	"api/src/models"
-	"api/src/repositories"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,9 +13,6 @@ import (
 
 type CurrencyRepository interface {
 	GetAllUpdatableCurrencies() ([]models.Currency, error)
-	/*UpdateCurrency(models.Currency) error
-	InsertCurrency(models.Currency) error
-	DeleteCurrency(string) error*/
 	GetAllCurrencies() ([]models.Currency, error)
 	GetCurrencyByName(string) (models.Currency, error)
 }
@@ -50,14 +45,9 @@ func (currencyService CurrencyService) GetAllCurrencies() ([]models.Currency, er
 	return currencies, nil
 }
 
-func IsAllowedCurrency(currencyName string) (bool, error) {
+func (currencyService CurrencyService) IsAllowedCurrency(currencyName string) (bool, error) {
 
-	database := database.Connect()
-	defer database.Close()
-
-	repository := repositories.NewCurrencyRepository(database)
-
-	_, err := repository.GetCurrencyByName(currencyName)
+	_, err := currencyService.repository.GetCurrencyByName(currencyName)
 
 	if err == redis.Nil {
 		err = nil
