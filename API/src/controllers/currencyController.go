@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -15,6 +16,7 @@ import (
 
 type CurrencyService interface {
 	UpdateAllUpdatableCurrencies()
+	GetCurrenciesBasedOnUSDFromAPI(string, []string) ([]models.ConversionRateFromAPI, error)
 	GetAllUpdatableCurrencies() ([]models.Currency, error)
 	UpdateCurrency(models.Currency) error
 	ConvertCurrency(string, string, float64) (models.ConversionResponse, error)
@@ -31,9 +33,9 @@ func NewCurrencyController(service CurrencyService) *CurrencyController {
 	return &CurrencyController{service}
 }
 
-/*func InitRedisDatabase() {
+func (currencyController CurrencyController) DatabaseSeed() {
 
-	conversionRatesByCurrency, err := GetCurrenciesBasedOnUSDFromAPI("USD",
+	conversionRatesByCurrency, err := currencyController.service.GetCurrenciesBasedOnUSDFromAPI("USD",
 		[]string{"BRL", "EUR", "BTC", "ETH", "USD"})
 
 	if err != nil {
@@ -47,9 +49,9 @@ func NewCurrencyController(service CurrencyService) *CurrencyController {
 			ConversionRate:  conversionRateByCurrency.ConversionRate,
 			IsAutoUpdatable: true}
 
-		services.InsertCurrency(currency)
+		currencyController.service.InsertCurrency(currency)
 	}
-}*/
+}
 
 func (currencyController CurrencyController) GetAllCurrencies(responseWriter http.ResponseWriter, request *http.Request) {
 

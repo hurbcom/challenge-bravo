@@ -45,7 +45,7 @@ func (currencyService CurrencyService) UpdateAllUpdatableCurrencies() {
 		currencyNames = append(currencyNames, currency.Name)
 	}
 
-	conversionRatesByCurrency, err := GetCurrenciesBasedOnUSDFromAPI("USD",
+	conversionRatesByCurrency, err := currencyService.GetCurrenciesBasedOnUSDFromAPI("USD",
 		currencyNames)
 	if err != nil {
 		log.Fatal(err)
@@ -152,7 +152,7 @@ func IsAllowedCurrency(currencyName string) (bool, error) {
 	return true, nil
 }
 
-func GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) ([]models.ConversionRateFromAPI, error) {
+func (currencyService CurrencyService) GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) ([]models.ConversionRateFromAPI, error) {
 
 	urlToExternalAPI := config.UrlToExternalAPI + "?fsym=" + fromCurrency + `&tsyms=` + fromCurrency
 

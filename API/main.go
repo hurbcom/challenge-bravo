@@ -16,7 +16,6 @@ import (
 
 func main() {
 	config.Load()
-	//controllers.InitRedisDatabase()
 
 	database := database.Connect()
 	defer database.Close()
@@ -24,6 +23,8 @@ func main() {
 	currencyRepository := repositories.NewCurrencyRepository(database)
 	currencyService := services.NewCurrencyService(currencyRepository)
 	currencyController := controllers.NewCurrencyController(currencyService)
+
+	currencyController.DatabaseSeed()
 
 	cronjob := cronjobs.NewCurrencyCronJob(currencyController)
 	go cronjob.Run()
