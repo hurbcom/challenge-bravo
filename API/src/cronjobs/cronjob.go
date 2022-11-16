@@ -1,16 +1,27 @@
 package cronjobs
 
 import (
-	"api/src/controllers"
 	"time"
 
 	"github.com/go-co-op/gocron"
 )
 
-func RunCronjob() {
+type CurrencyController interface {
+	UpdateAllUpdatableCurrencies()
+}
+
+type CurrencyCronJob struct {
+	controller CurrencyController
+}
+
+func NewCurrencyCronJob(controller CurrencyController) *CurrencyCronJob {
+	return &CurrencyCronJob{controller}
+}
+
+func (currencyCronJob CurrencyCronJob) Run() {
 	cronjobScheduler := gocron.NewScheduler(time.UTC)
 
-	cronjobScheduler.Every(15).Seconds().Do(controllers.UpdateAllUpdatableCurrencies)
+	cronjobScheduler.Every(15).Seconds().Do(currencyCronJob.controller.UpdateAllUpdatableCurrencies)
 
 	cronjobScheduler.StartAsync()
 }

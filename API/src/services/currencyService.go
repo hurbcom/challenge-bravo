@@ -15,14 +15,27 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func UpdateAllUpdatableCurrencies() {
+type CurrencyRepository interface {
+	GetAllUpdatableCurrencies() ([]models.Currency, error)
+	UpdateCurrency(models.Currency) error
+	InsertCurrency(models.Currency) error
+	DeleteCurrency(string) error
+	GetAllCurrencies() ([]models.Currency, error)
+	GetCurrencyByName(string) (models.Currency, error)
+}
+
+type CurrencyService struct {
+	repository CurrencyRepository
+}
+
+func NewCurrencyService(repository CurrencyRepository) *CurrencyService {
+	return &CurrencyService{repository}
+}
+
+func (currencyService CurrencyService) UpdateAllUpdatableCurrencies() {
 	fmt.Println("##### NEW JOB RUN #####")
-	database := database.Connect()
-	defer database.Close()
 
-	repository := repositories.NewCurrencyRepository(database)
-
-	currencies, err := repository.GetAllUpdatableCurrencies()
+	currencies, err := currencyService.repository.GetAllUpdatableCurrencies()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,19 +59,15 @@ func UpdateAllUpdatableCurrencies() {
 			IsAutoUpdatable: true,
 		}
 
-		if err := repository.UpdateCurrency(newCurrency); err != nil {
+		if err := currencyService.repository.UpdateCurrency(newCurrency); err != nil {
 			log.Fatal(err)
 		}
 	}
 }
 
-func GetAllUpdatableCurrencies() ([]models.Currency, error) {
-	database := database.Connect()
-	defer database.Close()
+func (currencyService CurrencyService) GetAllUpdatableCurrencies() ([]models.Currency, error) {
 
-	repository := repositories.NewCurrencyRepository(database)
-
-	updatableCurrencies, err := repository.GetAllUpdatableCurrencies()
+	updatableCurrencies, err := currencyService.repository.GetAllUpdatableCurrencies()
 	if err != nil {
 		return nil, err
 	}
@@ -66,13 +75,9 @@ func GetAllUpdatableCurrencies() ([]models.Currency, error) {
 	return updatableCurrencies, nil
 }
 
-func GetAllCurrencies() ([]models.Currency, error) {
-	database := database.Connect()
-	defer database.Close()
+func (currencyService CurrencyService) GetAllCurrencies() ([]models.Currency, error) {
 
-	repository := repositories.NewCurrencyRepository(database)
-
-	currencies, err := repository.GetAllCurrencies()
+	currencies, err := currencyService.repository.GetAllCurrencies()
 	if err != nil {
 		return nil, err
 	}
@@ -80,24 +85,34 @@ func GetAllCurrencies() ([]models.Currency, error) {
 	return currencies, nil
 }
 
-func ConvertCurrency(fromCurrencyParam, toCurrencyParam string, amount float64) (models.ConversionResponse, error) {
+func (currencyService CurrencyService) ConvertCurrency(fromCurrencyParam, toCurrencyParam string, amount float64) (models.ConversionResponse, error) {
 
-	fromCurrency, err := getCurrencyFromDatabase(fromCurrencyParam)
-	if err == redis.Nil {
-		err = fmt.Errorf("no results found for key %s", toCurrencyParam)
-		return models.ConversionResponse{}, err
-	}
-
+	isFromCurrencyAllowed, err := IsAllowedCurrency(fromCurrencyParam)
 	if err != nil {
 		return models.ConversionResponse{}, err
 	}
 
-	toCurrency, err := getCurrencyFromDatabase(toCurrencyParam)
-	if err == redis.Nil {
-		err = fmt.Errorf("no results found for key %s", toCurrencyParam)
+	if !isFromCurrencyAllowed {
+		message := fmt.Errorf("currency %s not allowed", fromCurrencyParam)
+		return models.ConversionResponse{}, message
+	}
+
+	isToCurrencyAllowed, err := IsAllowedCurrency(fromCurrencyParam)
+	if err != nil {
 		return models.ConversionResponse{}, err
 	}
 
+	if !isToCurrencyAllowed {
+		message := fmt.Errorf("currency %s not allowed", fromCurrencyParam)
+		return models.ConversionResponse{}, message
+	}
+
+	fromCurrency, err := currencyService.getCurrencyFromDatabase(fromCurrencyParam)
+	if err != nil {
+		return models.ConversionResponse{}, err
+	}
+
+	toCurrency, err := currencyService.getCurrencyFromDatabase(toCurrencyParam)
 	if err != nil {
 		return models.ConversionResponse{}, err
 	}
@@ -179,19 +194,9 @@ func GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) 
 	return conversionRatesFromAPI, nil
 }
 
-func getCurrencyFromDatabase(currencyName string) (models.Currency, error) {
+func (currencyService CurrencyService) getCurrencyFromDatabase(currencyName string) (models.Currency, error) {
 
-	database := database.Connect()
-	defer database.Close()
-
-	repository := repositories.NewCurrencyRepository(database)
-
-	currency, err := repository.GetCurrencyByName(currencyName)
-
-	if currency == (models.Currency{}) && err == redis.Nil {
-		err = fmt.Errorf("no results found for key %s", currencyName)
-		return models.Currency{}, err
-	}
+	currency, err := currencyService.repository.GetCurrencyByName(currencyName)
 
 	if err != nil {
 		return models.Currency{}, err
@@ -200,44 +205,29 @@ func getCurrencyFromDatabase(currencyName string) (models.Currency, error) {
 	return currency, nil
 }
 
-func InsertCurrency(currency models.Currency) error {
-
-	database := database.Connect()
-	defer database.Close()
-
-	repository := repositories.NewCurrencyRepository(database)
+func (currencyService CurrencyService) InsertCurrency(currency models.Currency) error {
 
 	currency.Name = strings.ToUpper(currency.Name)
 
-	if err := repository.InsertCurrency(currency); err != nil {
+	if err := currencyService.repository.InsertCurrency(currency); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func DeleteCurrency(currencyName string) error {
+func (currencyService CurrencyService) DeleteCurrency(currencyName string) error {
 
-	database := database.Connect()
-	defer database.Close()
-
-	repository := repositories.NewCurrencyRepository(database)
-
-	if repository.DeleteCurrency(currencyName).Val() == 0 {
-		err := fmt.Errorf("no key %s found to be deleted", currencyName)
+	if err := currencyService.repository.DeleteCurrency(currencyName); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func UpdateCurrency(currency models.Currency) error {
-	database := database.Connect()
-	defer database.Close()
+func (currencyService CurrencyService) UpdateCurrency(currency models.Currency) error {
 
-	repository := repositories.NewCurrencyRepository(database)
-
-	if err := repository.UpdateCurrency(currency); err != nil {
+	if err := currencyService.repository.UpdateCurrency(currency); err != nil {
 		return err
 	}
 

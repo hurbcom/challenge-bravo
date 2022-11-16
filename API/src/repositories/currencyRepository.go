@@ -8,15 +8,15 @@ import (
 	"github.com/go-redis/redis"
 )
 
-type currencies struct {
+type currencyRepository struct {
 	db *redis.Client
 }
 
-func NewCurrencyRepository(db *redis.Client) *currencies {
-	return &currencies{db}
+func NewCurrencyRepository(db *redis.Client) *currencyRepository {
+	return &currencyRepository{db}
 }
 
-func (currencyRepo currencies) GetAllCurrencies() ([]models.Currency, error) {
+func (currencyRepo currencyRepository) GetAllCurrencies() ([]models.Currency, error) {
 
 	var currencies []models.Currency
 
@@ -36,7 +36,7 @@ func (currencyRepo currencies) GetAllCurrencies() ([]models.Currency, error) {
 	return currencies, nil
 }
 
-func (currencyRepo currencies) GetAllUpdatableCurrencies() ([]models.Currency, error) {
+func (currencyRepo currencyRepository) GetAllUpdatableCurrencies() ([]models.Currency, error) {
 
 	currencies, err := currencyRepo.GetAllCurrencies()
 	if err != nil {
@@ -54,11 +54,16 @@ func (currencyRepo currencies) GetAllUpdatableCurrencies() ([]models.Currency, e
 	return updatableCurrencies, nil
 }
 
-func (currencyRepo currencies) GetCurrencyByName(currencyName string) (models.Currency, error) {
+func (currencyRepo currencyRepository) GetCurrencyByName(currencyName string) (models.Currency, error) {
 
 	var currencyFromDatabase models.Currency
 
 	dbResultJSON, err := currencyRepo.db.Get(currencyName).Result()
+
+	if err == redis.Nil {
+		err = fmt.Errorf("no results found for key %s", currencyName)
+		return models.Currency{}, err
+	}
 
 	if err != nil {
 		fmt.Println("error getting currency from database:", err)
@@ -68,12 +73,13 @@ func (currencyRepo currencies) GetCurrencyByName(currencyName string) (models.Cu
 	err = json.Unmarshal([]byte(dbResultJSON), &currencyFromDatabase)
 	if err != nil {
 		fmt.Println("error unmarshalling dbResultJSON:", err)
+		return models.Currency{}, err
 	}
 
 	return currencyFromDatabase, nil
 }
 
-func (currencyRepo currencies) InsertCurrency(currency models.Currency) error {
+func (currencyRepo currencyRepository) InsertCurrency(currency models.Currency) error {
 
 	currencyJSON, err := json.Marshal(currency)
 
@@ -90,7 +96,7 @@ func (currencyRepo currencies) InsertCurrency(currency models.Currency) error {
 	return nil
 }
 
-func (currencyRepo currencies) UpdateCurrency(currency models.Currency) error {
+func (currencyRepo currencyRepository) UpdateCurrency(currency models.Currency) error {
 	if err := currencyRepo.InsertCurrency(currency); err != nil {
 		return err
 	}
@@ -98,6 +104,12 @@ func (currencyRepo currencies) UpdateCurrency(currency models.Currency) error {
 	return nil
 }
 
-func (currencyRepo currencies) DeleteCurrency(currencyName string) *redis.IntCmd {
-	return currencyRepo.db.Del(currencyName)
+func (currencyRepo currencyRepository) DeleteCurrency(currencyName string) error {
+	intCmd := currencyRepo.db.Del(currencyName)
+	if intCmd.Val() == 0 {
+		err := fmt.Errorf("currency %s not found", currencyName)
+		return err
+	}
+
+	return nil
 }
