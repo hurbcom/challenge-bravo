@@ -8,18 +8,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
-	"strings"
 
 	"github.com/go-redis/redis"
 )
 
 type CurrencyRepository interface {
 	GetAllUpdatableCurrencies() ([]models.Currency, error)
-	UpdateCurrency(models.Currency) error
+	/*UpdateCurrency(models.Currency) error
 	InsertCurrency(models.Currency) error
-	DeleteCurrency(string) error
+	DeleteCurrency(string) error*/
 	GetAllCurrencies() ([]models.Currency, error)
 	GetCurrencyByName(string) (models.Currency, error)
 }
@@ -30,39 +28,6 @@ type CurrencyService struct {
 
 func NewCurrencyService(repository CurrencyRepository) *CurrencyService {
 	return &CurrencyService{repository}
-}
-
-func (currencyService CurrencyService) UpdateAllUpdatableCurrencies() {
-	fmt.Println("##### NEW JOB RUN #####")
-
-	currencies, err := currencyService.repository.GetAllUpdatableCurrencies()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var currencyNames []string
-	for _, currency := range currencies {
-		currencyNames = append(currencyNames, currency.Name)
-	}
-
-	conversionRatesByCurrency, err := currencyService.GetCurrenciesBasedOnUSDFromAPI("USD",
-		currencyNames)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, newConversionRate := range conversionRatesByCurrency {
-
-		newCurrency := models.Currency{
-			Name:            newConversionRate.Name,
-			ConversionRate:  newConversionRate.ConversionRate,
-			IsAutoUpdatable: true,
-		}
-
-		if err := currencyService.repository.UpdateCurrency(newCurrency); err != nil {
-			log.Fatal(err)
-		}
-	}
 }
 
 func (currencyService CurrencyService) GetAllUpdatableCurrencies() ([]models.Currency, error) {
@@ -83,52 +48,6 @@ func (currencyService CurrencyService) GetAllCurrencies() ([]models.Currency, er
 	}
 
 	return currencies, nil
-}
-
-func (currencyService CurrencyService) ConvertCurrency(fromCurrencyParam, toCurrencyParam string, amount float64) (models.ConversionResponse, error) {
-
-	isFromCurrencyAllowed, err := IsAllowedCurrency(fromCurrencyParam)
-	if err != nil {
-		return models.ConversionResponse{}, err
-	}
-
-	if !isFromCurrencyAllowed {
-		message := fmt.Errorf("currency %s not allowed", fromCurrencyParam)
-		return models.ConversionResponse{}, message
-	}
-
-	isToCurrencyAllowed, err := IsAllowedCurrency(fromCurrencyParam)
-	if err != nil {
-		return models.ConversionResponse{}, err
-	}
-
-	if !isToCurrencyAllowed {
-		message := fmt.Errorf("currency %s not allowed", fromCurrencyParam)
-		return models.ConversionResponse{}, message
-	}
-
-	fromCurrency, err := currencyService.getCurrencyFromDatabase(fromCurrencyParam)
-	if err != nil {
-		return models.ConversionResponse{}, err
-	}
-
-	toCurrency, err := currencyService.getCurrencyFromDatabase(toCurrencyParam)
-	if err != nil {
-		return models.ConversionResponse{}, err
-	}
-
-	conversionRate := toCurrency.ConversionRate / fromCurrency.ConversionRate
-
-	convertedValue := amount * conversionRate
-
-	conversionResponse := models.ConversionResponse{
-		FromCurrency:   fromCurrencyParam,
-		ToCurrency:     toCurrencyParam,
-		Amount:         amount,
-		ConvertedValue: convertedValue,
-	}
-
-	return conversionResponse, nil
 }
 
 func IsAllowedCurrency(currencyName string) (bool, error) {
@@ -203,33 +122,4 @@ func (currencyService CurrencyService) getCurrencyFromDatabase(currencyName stri
 	}
 
 	return currency, nil
-}
-
-func (currencyService CurrencyService) InsertCurrency(currency models.Currency) error {
-
-	currency.Name = strings.ToUpper(currency.Name)
-
-	if err := currencyService.repository.InsertCurrency(currency); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (currencyService CurrencyService) DeleteCurrency(currencyName string) error {
-
-	if err := currencyService.repository.DeleteCurrency(currencyName); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (currencyService CurrencyService) UpdateCurrency(currency models.Currency) error {
-
-	if err := currencyService.repository.UpdateCurrency(currency); err != nil {
-		return err
-	}
-
-	return nil
 }

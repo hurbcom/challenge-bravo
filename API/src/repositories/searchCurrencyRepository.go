@@ -78,38 +78,3 @@ func (currencyRepo currencyRepository) GetCurrencyByName(currencyName string) (m
 
 	return currencyFromDatabase, nil
 }
-
-func (currencyRepo currencyRepository) InsertCurrency(currency models.Currency) error {
-
-	currencyJSON, err := json.Marshal(currency)
-
-	if err != nil {
-		return err
-	}
-
-	err = currencyRepo.db.Set(currency.Name, currencyJSON, 0).Err()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (currencyRepo currencyRepository) UpdateCurrency(currency models.Currency) error {
-	if err := currencyRepo.InsertCurrency(currency); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (currencyRepo currencyRepository) DeleteCurrency(currencyName string) error {
-	intCmd := currencyRepo.db.Del(currencyName)
-	if intCmd.Val() == 0 {
-		err := fmt.Errorf("currency %s not found", currencyName)
-		return err
-	}
-
-	return nil
-}

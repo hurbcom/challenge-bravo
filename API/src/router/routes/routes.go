@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -13,9 +14,12 @@ type Route struct {
 }
 
 func Configure(router *mux.Router) *mux.Router {
-	routes := currencyRoutes
+	routes := searchCurrencyRoutes
+	routes = append(routes, conversionRoutes...)
+	routes = append(routes, syncRoutes...)
 
 	for _, route := range routes {
+		fmt.Println(route)
 		router.HandleFunc(route.URI, route.Function).Methods(route.Method)
 	}
 

@@ -3,25 +3,16 @@ package controllers
 import (
 	"api/src/models"
 	"api/src/responses"
-	"encoding/json"
-	"fmt"
-	"io"
-	"log"
 	"net/http"
-	"strconv"
-	"strings"
-
-	"github.com/gorilla/mux"
 )
 
 type CurrencyService interface {
-	UpdateAllUpdatableCurrencies()
+	//UpdateAllUpdatableCurrencies()
 	GetCurrenciesBasedOnUSDFromAPI(string, []string) ([]models.ConversionRateFromAPI, error)
 	GetAllUpdatableCurrencies() ([]models.Currency, error)
-	UpdateCurrency(models.Currency) error
-	ConvertCurrency(string, string, float64) (models.ConversionResponse, error)
+	/*UpdateCurrency(models.Currency) error
 	InsertCurrency(models.Currency) error
-	DeleteCurrency(string) error
+	DeleteCurrency(string) error*/
 	GetAllCurrencies() ([]models.Currency, error)
 }
 
@@ -31,26 +22,6 @@ type CurrencyController struct {
 
 func NewCurrencyController(service CurrencyService) *CurrencyController {
 	return &CurrencyController{service}
-}
-
-func (currencyController CurrencyController) DatabaseSeed() {
-
-	conversionRatesByCurrency, err := currencyController.service.GetCurrenciesBasedOnUSDFromAPI("USD",
-		[]string{"BRL", "EUR", "BTC", "ETH", "USD"})
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, conversionRateByCurrency := range conversionRatesByCurrency {
-
-		currency := models.Currency{
-			Name:            conversionRateByCurrency.Name,
-			ConversionRate:  conversionRateByCurrency.ConversionRate,
-			IsAutoUpdatable: true}
-
-		currencyController.service.InsertCurrency(currency)
-	}
 }
 
 func (currencyController CurrencyController) GetAllCurrencies(responseWriter http.ResponseWriter, request *http.Request) {
@@ -63,33 +34,14 @@ func (currencyController CurrencyController) GetAllCurrencies(responseWriter htt
 	responses.JSON(responseWriter, http.StatusOK, allCurrencies)
 }
 
+func (currencyController CurrencyController) GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) ([]models.ConversionRateFromAPI, error) {
+	return currencyController.service.GetCurrenciesBasedOnUSDFromAPI(fromCurrency, toCurrencies)
+}
+
+/*
 func (currencyController CurrencyController) UpdateAllUpdatableCurrencies() {
 	fmt.Println("##### NEW JOB RUN #####")
 	currencyController.service.UpdateAllUpdatableCurrencies()
-}
-
-func (currencyController CurrencyController) ConvertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
-
-	fromCurrencyParam := strings.ToUpper(request.URL.Query().Get("from"))
-	toCurrencyParam := strings.ToUpper(request.URL.Query().Get("to"))
-	amount, err := strconv.ParseFloat(request.URL.Query().Get("amount"), 64)
-
-	if err != nil {
-		responses.Error(responseWriter, http.StatusInternalServerError, err)
-		return
-	}
-
-	if amount <= 0 {
-		responses.JSON(responseWriter, http.StatusBadRequest, "Amount must be greater than 0.")
-		return
-	}
-
-	conversionResponse, err := currencyController.service.ConvertCurrency(fromCurrencyParam, toCurrencyParam, amount)
-	if err != nil {
-		responses.Error(responseWriter, http.StatusInternalServerError, err)
-	}
-
-	responses.JSON(responseWriter, http.StatusOK, conversionResponse)
 }
 
 func (currencyController CurrencyController) InsertCurrency(responseWriter http.ResponseWriter, request *http.Request) {
@@ -127,3 +79,4 @@ func (currencyController CurrencyController) DeleteCurrency(responseWriter http.
 
 	responses.JSON(responseWriter, http.StatusOK, nil)
 }
+*/

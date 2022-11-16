@@ -17,19 +17,29 @@ import (
 func main() {
 	config.Load()
 
-	database := database.Connect()
-	defer database.Close()
+	db := database.Connect()
+	defer db.Close()
 
-	currencyRepository := repositories.NewCurrencyRepository(database)
-	currencyService := services.NewCurrencyService(currencyRepository)
-	currencyController := controllers.NewCurrencyController(currencyService)
+	searchCurrencyRepository := repositories.NewCurrencyRepository(db)
+	searchCurrencyService := services.NewCurrencyService(searchCurrencyRepository)
+	searchCurrencyController := controllers.NewCurrencyController(searchCurrencyService)
 
-	currencyController.DatabaseSeed()
+	conversionService := services.NewConversionService(searchCurrencyRepository, *searchCurrencyService)
+	conversionController := controllers.NewConversionController(conversionService)
 
-	cronjob := cronjobs.NewCurrencyCronJob(currencyController)
+	syncRepository := repositories.NewSyncRepository(db)
+	syncService := services.NewSyncService(syncRepository, searchCurrencyService)
+	syncController := controllers.NewSyncCurrencyController(syncService)
+
+	seed := database.NewDatabaseSeed(searchCurrencyController, syncService)
+	seed.SeedDatabase()
+
+	cronjob := cronjobs.NewCurrencyCronJob(syncController)
 	go cronjob.Run()
 
-	routes.GenerateRoutes(currencyController)
+	routes.GenerateSearchCurrencyRoutes(searchCurrencyController)
+	routes.GenerateConversionRoutes(conversionController)
+	routes.GenerateSyncRoutes(syncController)
 	router := router.Generate()
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.ApiPort), router))
