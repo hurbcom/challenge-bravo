@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -19,7 +18,6 @@ func Configure(router *mux.Router) *mux.Router {
 	routes = append(routes, syncRoutes...)
 
 	for _, route := range routes {
-		fmt.Println(route)
 		router.HandleFunc(route.URI, route.Function).Methods(route.Method)
 	}
 
