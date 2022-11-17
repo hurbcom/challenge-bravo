@@ -30,13 +30,13 @@ func (conversionService ConversionService) ConvertCurrency(fromCurrencyParam, to
 		return models.ConversionResponse{}, message
 	}
 
-	isToCurrencyAllowed, err := conversionService.SearchService.IsAllowedCurrency(fromCurrencyParam)
+	isToCurrencyAllowed, err := conversionService.SearchService.IsAllowedCurrency(toCurrencyParam)
 	if err != nil {
 		return models.ConversionResponse{}, err
 	}
 
 	if !isToCurrencyAllowed {
-		message := fmt.Errorf("currency %s not allowed", fromCurrencyParam)
+		message := fmt.Errorf("currency %s not allowed", toCurrencyParam)
 		return models.ConversionResponse{}, message
 	}
 
