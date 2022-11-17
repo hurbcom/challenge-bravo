@@ -5,22 +5,22 @@ import (
 	"fmt"
 )
 
-type ConversionRepository interface {
-	GetCurrencyByName(string) (models.Currency, error)
+type SearchConversionService interface {
+	IsAllowedCurrency(string) (bool, error)
+	GetCurrencyFromDatabase(string) (models.Currency, error)
 }
 
 type ConversionService struct {
-	repository            ConversionRepository
-	currencySearchService CurrencyService
+	SearchService SearchConversionService
 }
 
-func NewConversionService(repository ConversionRepository, currencySearchService CurrencyService) *ConversionService {
-	return &ConversionService{repository, currencySearchService}
+func NewConversionService(searchService SearchService) *ConversionService {
+	return &ConversionService{searchService}
 }
 
 func (conversionService ConversionService) ConvertCurrency(fromCurrencyParam, toCurrencyParam string, amount float64) (models.ConversionResponse, error) {
 
-	isFromCurrencyAllowed, err := conversionService.currencySearchService.IsAllowedCurrency(fromCurrencyParam)
+	isFromCurrencyAllowed, err := conversionService.SearchService.IsAllowedCurrency(fromCurrencyParam)
 	if err != nil {
 		return models.ConversionResponse{}, err
 	}
@@ -30,7 +30,7 @@ func (conversionService ConversionService) ConvertCurrency(fromCurrencyParam, to
 		return models.ConversionResponse{}, message
 	}
 
-	isToCurrencyAllowed, err := conversionService.currencySearchService.IsAllowedCurrency(fromCurrencyParam)
+	isToCurrencyAllowed, err := conversionService.SearchService.IsAllowedCurrency(fromCurrencyParam)
 	if err != nil {
 		return models.ConversionResponse{}, err
 	}
@@ -40,12 +40,12 @@ func (conversionService ConversionService) ConvertCurrency(fromCurrencyParam, to
 		return models.ConversionResponse{}, message
 	}
 
-	fromCurrency, err := conversionService.currencySearchService.getCurrencyFromDatabase(fromCurrencyParam)
+	fromCurrency, err := conversionService.SearchService.GetCurrencyFromDatabase(fromCurrencyParam)
 	if err != nil {
 		return models.ConversionResponse{}, err
 	}
 
-	toCurrency, err := conversionService.currencySearchService.getCurrencyFromDatabase(toCurrencyParam)
+	toCurrency, err := conversionService.SearchService.GetCurrencyFromDatabase(toCurrencyParam)
 	if err != nil {
 		return models.ConversionResponse{}, err
 	}

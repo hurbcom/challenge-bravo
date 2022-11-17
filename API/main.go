@@ -24,7 +24,7 @@ func main() {
 	searchCurrencyService := services.NewCurrencyService(searchCurrencyRepository)
 	searchCurrencyController := controllers.NewCurrencyController(searchCurrencyService)
 
-	conversionService := services.NewConversionService(searchCurrencyRepository, *searchCurrencyService)
+	conversionService := services.NewConversionService(*searchCurrencyService)
 	conversionController := controllers.NewConversionController(conversionService)
 
 	syncRepository := repositories.NewSyncRepository(db)

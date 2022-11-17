@@ -17,15 +17,15 @@ type CurrencyRepository interface {
 	GetCurrencyByName(string) (models.Currency, error)
 }
 
-type CurrencyService struct {
+type SearchService struct {
 	repository CurrencyRepository
 }
 
-func NewCurrencyService(repository CurrencyRepository) *CurrencyService {
-	return &CurrencyService{repository}
+func NewCurrencyService(repository CurrencyRepository) *SearchService {
+	return &SearchService{repository}
 }
 
-func (currencyService CurrencyService) GetAllUpdatableCurrencies() ([]models.Currency, error) {
+func (currencyService SearchService) GetAllUpdatableCurrencies() ([]models.Currency, error) {
 
 	updatableCurrencies, err := currencyService.repository.GetAllUpdatableCurrencies()
 	if err != nil {
@@ -35,7 +35,7 @@ func (currencyService CurrencyService) GetAllUpdatableCurrencies() ([]models.Cur
 	return updatableCurrencies, nil
 }
 
-func (currencyService CurrencyService) GetAllCurrencies() ([]models.Currency, error) {
+func (currencyService SearchService) GetAllCurrencies() ([]models.Currency, error) {
 
 	currencies, err := currencyService.repository.GetAllCurrencies()
 	if err != nil {
@@ -45,7 +45,7 @@ func (currencyService CurrencyService) GetAllCurrencies() ([]models.Currency, er
 	return currencies, nil
 }
 
-func (currencyService CurrencyService) IsAllowedCurrency(currencyName string) (bool, error) {
+func (currencyService SearchService) IsAllowedCurrency(currencyName string) (bool, error) {
 
 	_, err := currencyService.repository.GetCurrencyByName(currencyName)
 
@@ -61,7 +61,7 @@ func (currencyService CurrencyService) IsAllowedCurrency(currencyName string) (b
 	return true, nil
 }
 
-func (currencyService CurrencyService) GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) ([]models.ConversionRateFromAPI, error) {
+func (currencyService SearchService) GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) ([]models.ConversionRateFromAPI, error) {
 
 	urlToExternalAPI := config.UrlToExternalAPI + "?fsym=" + fromCurrency + `&tsyms=` + fromCurrency
 
@@ -103,7 +103,7 @@ func (currencyService CurrencyService) GetCurrenciesBasedOnUSDFromAPI(fromCurren
 	return conversionRatesFromAPI, nil
 }
 
-func (currencyService CurrencyService) getCurrencyFromDatabase(currencyName string) (models.Currency, error) {
+func (currencyService SearchService) GetCurrencyFromDatabase(currencyName string) (models.Currency, error) {
 
 	currency, err := currencyService.repository.GetCurrencyByName(currencyName)
 
