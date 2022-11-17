@@ -1,4 +1,4 @@
-package services
+package services_test
 
 import (
 	"api/src/adapters"
@@ -13,10 +13,22 @@ type SearchRepositoryMock struct {
 
 func (searchRepository *SearchRepositoryMock) GetCurrencyByName(currencyName string) (models.Currency, error) {
 
-	currency := models.Currency{
-		Name:            "FIC",
-		ConversionRate:  15.2,
-		IsAutoUpdatable: false,
+	currency := models.Currency{}
+
+	if currencyName == "FIC" {
+		currency = models.Currency{
+			Name:            "FIC",
+			ConversionRate:  15.2,
+			IsAutoUpdatable: false,
+		}
+	}
+
+	if currencyName == "SHURATO" {
+		currency = models.Currency{
+			Name:            "SHURATO",
+			ConversionRate:  43.997,
+			IsAutoUpdatable: true,
+		}
 	}
 
 	return currency, nil
@@ -34,7 +46,20 @@ func (searchRepository *SearchRepositoryMock) GetAllCurrencies() ([]models.Curre
 }
 
 func (searchRepository *SearchRepositoryMock) GetAllUpdatableCurrencies() ([]models.Currency, error) {
-	return nil, nil
+	currencies := []models.Currency{
+		{
+			Name:            "FIC",
+			ConversionRate:  9,
+			IsAutoUpdatable: false,
+		},
+		{
+			Name:            "SHURATO",
+			ConversionRate:  0.87,
+			IsAutoUpdatable: true,
+		},
+	}
+
+	return currencies, nil
 }
 
 type ExternalAPIAdapterMock struct {
@@ -71,27 +96,99 @@ func (externalAPIAdapterMock *ExternalAPIAdapterMock) GetCurrenciesBasedOnUSD(fr
 	return mapFromAPI, nil
 }
 
-func TestIsAllowedCurrency(t *testing.T) {
+type allUpdatableCurrenciesScenario struct {
+	input            models.Currency
+	shouldBeReturned bool
+}
+
+func TestGetAllUpdatableCurrencies(t *testing.T) {
+
+	scenarios := []allUpdatableCurrenciesScenario{
+		{
+			models.Currency{
+				Name:            "FIC",
+				ConversionRate:  9,
+				IsAutoUpdatable: false,
+			},
+			true,
+		},
+		{
+			models.Currency{
+				Name:            "SHURATO",
+				ConversionRate:  0.87,
+				IsAutoUpdatable: true,
+			},
+			true,
+		},
+		{
+			models.Currency{
+				Name:            "SHREK",
+				ConversionRate:  12,
+				IsAutoUpdatable: false,
+			},
+			false,
+		},
+	}
 
 	searchRepository := SearchRepositoryMock{}
 	externalApiAdapter := adapters.ExternalAPIAdapter{}
 	searchService := services.NewCurrencyService(&searchRepository, &externalApiAdapter)
 
-	currency := models.Currency{
-		Name:            "FIC",
-		ConversionRate:  15.2,
-		IsAutoUpdatable: false,
-	}
-
-	isAllowed, err := searchService.IsAllowedCurrency(currency.Name)
+	updatableCurrencies, err := searchService.GetAllUpdatableCurrencies()
 	if err != nil {
 		t.Error(err)
 	}
 
-	if !isAllowed {
-		t.Error(fmt.Errorf("EXPECTED 'ALLOWED' BUT RECEIVED 'NOT ALLOWED'"))
+	wasReturned := false
+	for _, scenario := range scenarios {
+
+		wasReturned = false
+
+		for _, updatableCurrency := range updatableCurrencies {
+
+			if updatableCurrency == scenario.input {
+				wasReturned = true
+				break
+			}
+		}
+
+		if !wasReturned && scenario.shouldBeReturned {
+			t.Errorf("Expected %t for currency %s, but received %t",
+				scenario.shouldBeReturned, scenario.input.Name, !scenario.shouldBeReturned)
+		}
+
+	}
+}
+
+type isAllowedScenario struct {
+	input    string
+	expected bool
+}
+
+func TestIsAllowedCurrency(t *testing.T) {
+
+	successScenarios := []isAllowedScenario{
+		{"FIC", true},
+		{"SHREK", false},
+		{"SHURATO", true},
 	}
 
+	searchRepository := SearchRepositoryMock{}
+	externalApiAdapter := adapters.ExternalAPIAdapter{}
+	searchService := services.NewCurrencyService(&searchRepository, &externalApiAdapter)
+
+	for _, successScenario := range successScenarios {
+
+		isAllowed, err := searchService.IsAllowedCurrency(successScenario.input)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if isAllowed != successScenario.expected {
+			t.Error(fmt.Errorf("\nCurrency %s: expected %t but received %t",
+				successScenario.input, successScenario.expected, isAllowed))
+		}
+	}
 }
 
 func TestGetCurrenciesBasedOnUSDFromAPI(t *testing.T) {
