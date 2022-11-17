@@ -78,21 +78,14 @@ func (searchConversionService *SearchConversionServiceMock) GetCurrencyFromDatab
 	return currency, nil
 }
 
-type testScenario struct {
+type scenario struct {
 	fromCurrencyName       string
 	toCurrencyName         string
 	amount                 float64
 	expectedConvertedValue float64
 }
 
-type failScenario struct {
-	fromCurrencyName       string
-	toCurrencyName         string
-	amount                 float64
-	expectedConvertedValue float64
-}
-
-var testScenarios = []testScenario{
+var successScenarios = []scenario{
 	{
 		fromCurrencyName:       "USD",
 		toCurrencyName:         "BRL",
@@ -119,7 +112,7 @@ var testScenarios = []testScenario{
 	},
 }
 
-var errorScenarios = []failScenario{
+var errorScenarios = []scenario{
 	{
 		fromCurrencyName:       "XONPLK",
 		toCurrencyName:         "ZENIAT",
@@ -139,20 +132,20 @@ func TestConvertCurrency(t *testing.T) {
 	searchService := SearchConversionServiceMock{}
 	conversionService := services.ConversionService{SearchService: &searchService}
 
-	for _, scenario := range testScenarios {
+	for _, successScenario := range successScenarios {
 
 		conversionResponse, err := conversionService.ConvertCurrency(
-			scenario.fromCurrencyName, scenario.toCurrencyName, scenario.amount)
+			successScenario.fromCurrencyName, successScenario.toCurrencyName, successScenario.amount)
 		if err != nil {
 			t.Error(err)
 		}
 
 		receivedConvertedValue := conversionResponse.ConvertedValue
 
-		if scenario.expectedConvertedValue != receivedConvertedValue {
+		if successScenario.expectedConvertedValue != receivedConvertedValue {
 			t.Error(fmt.Errorf("\nfromCurrency: %s | toCurrency: %s | EXPECTED: %.8F | RECEIVED: %.8F",
-				scenario.fromCurrencyName, scenario.toCurrencyName,
-				scenario.expectedConvertedValue, receivedConvertedValue))
+				successScenario.fromCurrencyName, successScenario.toCurrencyName,
+				successScenario.expectedConvertedValue, receivedConvertedValue))
 		}
 	}
 
