@@ -1,0 +1,19 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "description": "Desafio de Backend do Hurb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viniciusnuunes/challenge-bravo.git"
+  },
+  "author": "Vinicius Nunes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/viniciusnuunes/challenge-bravo/issues"
+  },
+  "homepage": "https://github.com/viniciusnuunes/challenge-bravo#readme"
+}
