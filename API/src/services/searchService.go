@@ -3,8 +3,6 @@ package services
 import (
 	"api/src/models"
 	"fmt"
-
-	"github.com/go-redis/redis"
 )
 
 type SearchRepository interface {
@@ -49,11 +47,6 @@ func (searchService SearchService) GetAllCurrencies() ([]models.Currency, error)
 func (searchService SearchService) IsAllowedCurrency(currencyName string) (bool, error) {
 
 	_, err := searchService.repository.GetCurrencyByName(currencyName)
-
-	if err == redis.Nil {
-		err = nil
-		return false, nil
-	}
 
 	if err != nil {
 		return false, err
