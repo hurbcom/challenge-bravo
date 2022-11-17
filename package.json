@@ -2,9 +2,11 @@
   "name": "challenge-bravo",
   "version": "1.0.0",
   "description": "Desafio de Backend do Hurb",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node node_modules/nodemon/bin/nodemon src/server.js",
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,15 @@
   "bugs": {
     "url": "https://github.com/viniciusnuunes/challenge-bravo/issues"
   },
-  "homepage": "https://github.com/viniciusnuunes/challenge-bravo#readme"
+  "homepage": "https://github.com/viniciusnuunes/challenge-bravo#readme",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.2"
+  },
+  "devDependencies": {
+    "git-commit-msg-linter": "^4.2.1",
+    "jest": "^29.3.1",
+    "nodemon": "^2.0.20"
+  }
 }
