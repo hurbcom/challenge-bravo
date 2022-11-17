@@ -61,7 +61,7 @@ func (currencyRepo currencyRepository) GetCurrencyByName(currencyName string) (m
 	dbResultJSON, err := currencyRepo.db.Get(currencyName).Result()
 
 	if err == redis.Nil {
-		err = fmt.Errorf("no results found for key %s", currencyName)
+		err = nil
 		return models.Currency{}, err
 	}
 

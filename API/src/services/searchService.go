@@ -46,10 +46,15 @@ func (searchService SearchService) GetAllCurrencies() ([]models.Currency, error)
 
 func (searchService SearchService) IsAllowedCurrency(currencyName string) (bool, error) {
 
-	_, err := searchService.repository.GetCurrencyByName(currencyName)
+	result, err := searchService.repository.GetCurrencyByName(currencyName)
 
 	if err != nil {
 		return false, err
+	}
+
+	if (result == models.Currency{}) {
+		err = nil
+		return false, nil
 	}
 
 	return true, nil
