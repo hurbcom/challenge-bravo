@@ -1,4 +1,4 @@
-package services
+package services_test
 
 import (
 	"api/src/models"
@@ -85,6 +85,13 @@ type testScenario struct {
 	expectedConvertedValue float64
 }
 
+type failScenario struct {
+	fromCurrencyName       string
+	toCurrencyName         string
+	amount                 float64
+	expectedConvertedValue float64
+}
+
 var testScenarios = []testScenario{
 	{
 		fromCurrencyName:       "USD",
@@ -112,6 +119,21 @@ var testScenarios = []testScenario{
 	},
 }
 
+var errorScenarios = []failScenario{
+	{
+		fromCurrencyName:       "XONPLK",
+		toCurrencyName:         "ZENIAT",
+		amount:                 10.0,
+		expectedConvertedValue: 0,
+	},
+	{
+		fromCurrencyName:       "USD",
+		toCurrencyName:         "ZENIAT",
+		amount:                 10.0,
+		expectedConvertedValue: 0,
+	},
+}
+
 func TestConvertCurrency(t *testing.T) {
 
 	searchService := SearchConversionServiceMock{}
@@ -131,6 +153,15 @@ func TestConvertCurrency(t *testing.T) {
 			t.Error(fmt.Errorf("\nfromCurrency: %s | toCurrency: %s | EXPECTED: %.8F | RECEIVED: %.8F",
 				scenario.fromCurrencyName, scenario.toCurrencyName,
 				scenario.expectedConvertedValue, receivedConvertedValue))
+		}
+	}
+
+	for _, errorScenario := range errorScenarios {
+
+		_, err := conversionService.ConvertCurrency(
+			errorScenario.fromCurrencyName, errorScenario.toCurrencyName, errorScenario.amount)
+		if err == nil {
+			t.Error("\nError Scenario passed! - ", errorScenario)
 		}
 	}
 
