@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api/src/adapters"
 	"api/src/config"
 	"api/src/controllers"
 	"api/src/cronjobs"
@@ -21,7 +22,8 @@ func main() {
 	defer db.Close()
 
 	searchCurrencyRepository := repositories.NewCurrencyRepository(db)
-	searchCurrencyService := services.NewCurrencyService(searchCurrencyRepository)
+	externalApiAdapter := adapters.ExternalAPIAdapter{}
+	searchCurrencyService := services.NewCurrencyService(searchCurrencyRepository, &externalApiAdapter)
 	searchCurrencyController := controllers.NewCurrencyController(searchCurrencyService)
 
 	conversionService := services.NewConversionService(*searchCurrencyService)

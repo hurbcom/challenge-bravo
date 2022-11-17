@@ -1,33 +1,34 @@
 package services
 
 import (
-	"api/src/config"
 	"api/src/models"
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 
 	"github.com/go-redis/redis"
 )
 
-type CurrencyRepository interface {
+type SearchRepository interface {
 	GetAllUpdatableCurrencies() ([]models.Currency, error)
 	GetAllCurrencies() ([]models.Currency, error)
 	GetCurrencyByName(string) (models.Currency, error)
 }
 
+type ExternalAPIAdapter interface {
+	GetCurrenciesBasedOnUSD(string, []string) (map[string]float64, error)
+}
+
 type SearchService struct {
-	repository CurrencyRepository
+	repository  SearchRepository
+	externalAPI ExternalAPIAdapter
 }
 
-func NewCurrencyService(repository CurrencyRepository) *SearchService {
-	return &SearchService{repository}
+func NewCurrencyService(repository SearchRepository, externalAPI ExternalAPIAdapter) *SearchService {
+	return &SearchService{repository, externalAPI}
 }
 
-func (currencyService SearchService) GetAllUpdatableCurrencies() ([]models.Currency, error) {
+func (searchService SearchService) GetAllUpdatableCurrencies() ([]models.Currency, error) {
 
-	updatableCurrencies, err := currencyService.repository.GetAllUpdatableCurrencies()
+	updatableCurrencies, err := searchService.repository.GetAllUpdatableCurrencies()
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +36,9 @@ func (currencyService SearchService) GetAllUpdatableCurrencies() ([]models.Curre
 	return updatableCurrencies, nil
 }
 
-func (currencyService SearchService) GetAllCurrencies() ([]models.Currency, error) {
+func (searchService SearchService) GetAllCurrencies() ([]models.Currency, error) {
 
-	currencies, err := currencyService.repository.GetAllCurrencies()
+	currencies, err := searchService.repository.GetAllCurrencies()
 	if err != nil {
 		return nil, err
 	}
@@ -45,9 +46,9 @@ func (currencyService SearchService) GetAllCurrencies() ([]models.Currency, erro
 	return currencies, nil
 }
 
-func (currencyService SearchService) IsAllowedCurrency(currencyName string) (bool, error) {
+func (searchService SearchService) IsAllowedCurrency(currencyName string) (bool, error) {
 
-	_, err := currencyService.repository.GetCurrencyByName(currencyName)
+	_, err := searchService.repository.GetCurrencyByName(currencyName)
 
 	if err == redis.Nil {
 		err = nil
@@ -61,32 +62,11 @@ func (currencyService SearchService) IsAllowedCurrency(currencyName string) (boo
 	return true, nil
 }
 
-func (currencyService SearchService) GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) ([]models.ConversionRateFromAPI, error) {
+func (searchService SearchService) GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) ([]models.ConversionRateFromAPI, error) {
 
-	urlToExternalAPI := config.UrlToExternalAPI + "?fsym=" + fromCurrency + `&tsyms=` + fromCurrency
-
-	for _, toCurrency := range toCurrencies {
-		urlToExternalAPI += "," + toCurrency
-	}
-
-	currencyAPIResponse, err := http.Get(urlToExternalAPI)
-
+	mapAPIResponse, err := searchService.externalAPI.GetCurrenciesBasedOnUSD(fromCurrency, toCurrencies)
 	if err != nil {
 		fmt.Println("error trying to call external API:", err)
-		return nil, err
-	}
-
-	responseData, err := io.ReadAll(currencyAPIResponse.Body)
-
-	if err != nil {
-		fmt.Println("error trying to read response data:", err)
-		return nil, err
-	}
-
-	var mapAPIResponse map[string]float64
-
-	if err = json.Unmarshal(responseData, &mapAPIResponse); err != nil {
-		fmt.Println("error trying to Unmarshal response data:", err)
 		return nil, err
 	}
 
@@ -103,9 +83,9 @@ func (currencyService SearchService) GetCurrenciesBasedOnUSDFromAPI(fromCurrency
 	return conversionRatesFromAPI, nil
 }
 
-func (currencyService SearchService) GetCurrencyFromDatabase(currencyName string) (models.Currency, error) {
+func (searchService SearchService) GetCurrencyFromDatabase(currencyName string) (models.Currency, error) {
 
-	currency, err := currencyService.repository.GetCurrencyByName(currencyName)
+	currency, err := searchService.repository.GetCurrencyByName(currencyName)
 
 	if err != nil {
 		return models.Currency{}, err
