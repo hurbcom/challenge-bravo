@@ -387,6 +387,40 @@ func TestGetCurrenciesBasedOnUSDFromAPI(t *testing.T) {
 	}
 }
 
+type currencyByNameScenario struct {
+	currencyName     string
+	shouldBeReturned bool
+}
+
 func TestGetCurrencyFromDatabase(t *testing.T) {
 
+	scenarios := []currencyByNameScenario{
+		{"FIC", true},
+		{"SHREK", false},
+		{"SHURATO", true},
+	}
+
+	searchRepository := SearchRepositoryMock{}
+	externalApiAdapter := adapters.ExternalAPIAdapter{}
+	searchService := services.NewCurrencyService(&searchRepository, &externalApiAdapter)
+
+	for _, scenario := range scenarios {
+
+		currencyFromDatabase, err := searchService.GetCurrencyFromDatabase(scenario.currencyName)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if (currencyFromDatabase == models.Currency{}) && scenario.shouldBeReturned {
+			t.Errorf("Currency %s was supposed to be found, but wasnt.", scenario.currencyName)
+		}
+
+		if currencyFromDatabase.Name != scenario.currencyName && scenario.shouldBeReturned {
+			t.Errorf("Expected %s | RECEIVED %s", scenario.currencyName, currencyFromDatabase.Name)
+		}
+
+		if currencyFromDatabase.Name == scenario.currencyName && !scenario.shouldBeReturned {
+			t.Errorf("Currency %s was not supposed to be found, but was.", scenario.currencyName)
+		}
+	}
 }
