@@ -1,6 +1,13 @@
-const { PORT } = require('./properties')
+const { PORT, ENV } = require('./properties')
 const app = require('./app')
+const db = require('./database')
 
-app.listen(PORT, () => {
-	console.log(`Server is running at port ${PORT}`)
-})
+db.start()
+	.then(() => {
+		app.listen(PORT, () => {
+			console.log(`Server is running at port ${PORT} on environment ${ENV}`)
+		})
+	})
+	.catch(() => {
+		process.exit()
+	})
