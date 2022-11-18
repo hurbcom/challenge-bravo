@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  server:
+    container_name: QUOTATION_API
+    build: '.'
+    volumes:
+      - ./:/node-app
+      - ./node_modules:/node-app/node_modules
+    environment:
+      NODE_ENV: DEV
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - '3000:3000'
+
+  db:
+    image: 'mongo'
+    container_name: MONGODB
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data/db:/data/db
