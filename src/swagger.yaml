@@ -1,0 +1,64 @@
+swagger: '2.0'
+info:
+  title: 'Currency Converter API'
+  description: 'API de conversão de moedas online'
+  version: 1.0.0
+  contact:
+    email: 'vinibda@gmail.com'
+host: 'localhost:3000'
+basePath: '/'
+tags:
+  - name: 'converter'
+    description: 'Endpopints relacionados a conversão de moedas'
+schemes:
+  - 'http'
+paths:
+  /converter:
+    get:
+      tags:
+        - 'converter'
+      summary: 'Get converted currency'
+      description: 'Obtem o valor convertido da moeda selecionada'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: from
+          in: query
+          description: Moeda Origem
+          required: true
+          schema:
+            type: string
+            example: BRL
+        - name: to
+          in: query
+          description: Moeda Destino
+          required: true
+          schema:
+            type: string
+            example: USD
+        - name: value
+          in: query
+          description: Valor
+          required: true
+          schema:
+            type: number
+            example: 59.90
+        - name: type
+          in: query
+          description: Tipo do valor [buy | sell]
+          required: true
+          schema:
+            type: string
+            example: sell
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-01-01'
