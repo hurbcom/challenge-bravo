@@ -15,6 +15,11 @@ func (searchConversionService *SearchConversionServiceMock) IsAllowedCurrency(cu
 	allowedCurrencies := []string{"USD", "BRL", "BTC", "ETH", "EUR"}
 
 	for _, allowedCurrency := range allowedCurrencies {
+
+		if currencyName == "WRONG" {
+			return true, fmt.Errorf("WRONG currency should not be allowed")
+		}
+
 		if currencyName == allowedCurrency {
 			return true, nil
 		}
@@ -25,8 +30,6 @@ func (searchConversionService *SearchConversionServiceMock) IsAllowedCurrency(cu
 
 func (searchConversionService *SearchConversionServiceMock) GetCurrencyFromDatabase(currencyName string) (models.Currency, error) {
 
-	currency := models.Currency{}
-
 	databaseCurrencies := []string{"USD", "BRL", "BTC", "ETH", "EUR"}
 
 	existsOnDatabase := false
@@ -36,6 +39,8 @@ func (searchConversionService *SearchConversionServiceMock) GetCurrencyFromDatab
 			break
 		}
 	}
+
+	currency := models.Currency{}
 
 	if !existsOnDatabase {
 		err := fmt.Errorf("\nCurrency %s not found", currencyName)
@@ -127,6 +132,18 @@ func TestConvertCurrency(t *testing.T) {
 			amount:                 10.0,
 			expectedConvertedValue: 0,
 		},
+		{
+			fromCurrencyName:       "WRONG",
+			toCurrencyName:         "ZENIAT",
+			amount:                 10.0,
+			expectedConvertedValue: 0,
+		},
+		{
+			fromCurrencyName:       "USD",
+			toCurrencyName:         "WRONG",
+			amount:                 10.0,
+			expectedConvertedValue: 0,
+		},
 	}
 
 	searchService := SearchConversionServiceMock{}
@@ -156,6 +173,6 @@ func TestConvertCurrency(t *testing.T) {
 		if err == nil {
 			t.Error("\nError Scenario passed! - ", errorScenario)
 		}
-	}
 
+	}
 }
