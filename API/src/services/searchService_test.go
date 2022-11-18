@@ -13,6 +13,10 @@ type SearchRepositoryMock struct {
 
 func (searchRepository *SearchRepositoryMock) GetCurrencyByName(currencyName string) (models.Currency, error) {
 
+	if currencyName == "WRONG" {
+		return models.Currency{}, fmt.Errorf("WRONG should not be found")
+	}
+
 	currency := models.Currency{}
 
 	if currencyName == "FIC" {
@@ -59,6 +63,7 @@ func (searchRepository *SearchRepositoryMock) GetAllCurrencies() ([]models.Curre
 }
 
 func (searchRepository *SearchRepositoryMock) GetAllUpdatableCurrencies() ([]models.Currency, error) {
+
 	currencies := []models.Currency{
 		{
 			Name:            "FIC",
@@ -383,8 +388,13 @@ func TestGetCurrenciesBasedOnUSDFromAPI(t *testing.T) {
 				t.Error(err)
 			}
 		}
-
 	}
+
+	_, err = searchService.GetCurrenciesBasedOnUSDFromAPI("WRONG", []string{"USD", "BRL", "BTC"})
+	if err == nil {
+		t.Error(err)
+	}
+
 }
 
 type currencyByNameScenario struct {
@@ -398,6 +408,7 @@ func TestGetCurrencyFromDatabase(t *testing.T) {
 		{"FIC", true},
 		{"SHREK", false},
 		{"SHURATO", true},
+		{"WRONG", false},
 	}
 
 	searchRepository := SearchRepositoryMock{}
@@ -407,7 +418,7 @@ func TestGetCurrencyFromDatabase(t *testing.T) {
 	for _, scenario := range scenarios {
 
 		currencyFromDatabase, err := searchService.GetCurrencyFromDatabase(scenario.currencyName)
-		if err != nil {
+		if err != nil && scenario.shouldBeReturned {
 			t.Error(err)
 		}
 
