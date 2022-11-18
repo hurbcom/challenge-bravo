@@ -36,13 +36,26 @@ func (searchRepository *SearchRepositoryMock) GetCurrencyByName(currencyName str
 
 func (searchRepository *SearchRepositoryMock) GetAllCurrencies() ([]models.Currency, error) {
 
-	currency := models.Currency{
-		Name:            "FIC",
-		ConversionRate:  15.2,
-		IsAutoUpdatable: false,
+	currencies := []models.Currency{
+		{
+			Name:            "FIC",
+			ConversionRate:  12,
+			IsAutoUpdatable: false,
+		},
+		{
+			Name:            "SHURATO",
+			ConversionRate:  171,
+			IsAutoUpdatable: true,
+		},
+
+		{
+			Name:            "SAZON",
+			ConversionRate:  3.889,
+			IsAutoUpdatable: true,
+		},
 	}
 
-	return []models.Currency{currency}, nil
+	return currencies, nil
 }
 
 func (searchRepository *SearchRepositoryMock) GetAllUpdatableCurrencies() ([]models.Currency, error) {
@@ -50,7 +63,7 @@ func (searchRepository *SearchRepositoryMock) GetAllUpdatableCurrencies() ([]mod
 		{
 			Name:            "FIC",
 			ConversionRate:  9,
-			IsAutoUpdatable: false,
+			IsAutoUpdatable: true,
 		},
 		{
 			Name:            "SHURATO",
@@ -97,36 +110,68 @@ func (externalAPIAdapterMock *ExternalAPIAdapterMock) GetCurrenciesBasedOnUSD(fr
 }
 
 type allUpdatableCurrenciesScenario struct {
-	input            models.Currency
-	shouldBeReturned bool
+	currencies        []models.Currency
+	shouldAllRowsMeet bool
 }
 
 func TestGetAllUpdatableCurrencies(t *testing.T) {
 
 	scenarios := []allUpdatableCurrenciesScenario{
 		{
-			models.Currency{
-				Name:            "FIC",
-				ConversionRate:  9,
-				IsAutoUpdatable: false,
-			},
-			true,
+			[]models.Currency{
+				{
+					Name:            "FIC",
+					ConversionRate:  9,
+					IsAutoUpdatable: true,
+				},
+				{
+					Name:            "SHURATO",
+					ConversionRate:  0.87,
+					IsAutoUpdatable: true,
+				},
+			}, true,
 		},
 		{
-			models.Currency{
-				Name:            "SHURATO",
-				ConversionRate:  0.87,
-				IsAutoUpdatable: true,
-			},
-			true,
+			[]models.Currency{
+				{
+					Name:            "FIC",
+					ConversionRate:  12,
+					IsAutoUpdatable: false,
+				},
+			}, false,
 		},
 		{
-			models.Currency{
-				Name:            "SHREK",
-				ConversionRate:  12,
-				IsAutoUpdatable: false,
-			},
-			false,
+			[]models.Currency{
+				{
+					Name:            "FIC",
+					ConversionRate:  12,
+					IsAutoUpdatable: false,
+				},
+				{
+					Name:            "SHURATO",
+					ConversionRate:  171,
+					IsAutoUpdatable: true,
+				},
+			}, false,
+		},
+		{
+			[]models.Currency{
+				{
+					Name:            "FIC",
+					ConversionRate:  12,
+					IsAutoUpdatable: false,
+				},
+				{
+					Name:            "SHURATO",
+					ConversionRate:  0.87,
+					IsAutoUpdatable: true,
+				},
+				{
+					Name:            "WRONGONE",
+					ConversionRate:  4.54,
+					IsAutoUpdatable: true,
+				},
+			}, false,
 		},
 	}
 
@@ -139,24 +184,133 @@ func TestGetAllUpdatableCurrencies(t *testing.T) {
 		t.Error(err)
 	}
 
-	wasReturned := false
-	for _, scenario := range scenarios {
+	for index, scenario := range scenarios {
 
-		wasReturned = false
+		if len(scenario.currencies) == len(updatableCurrencies) {
+			allRowsMeet := true
 
-		for _, updatableCurrency := range updatableCurrencies {
+			for index, updatableCurrency := range updatableCurrencies {
+				if updatableCurrency != scenario.currencies[index] {
+					allRowsMeet = false
+					break
+				}
+			}
 
-			if updatableCurrency == scenario.input {
-				wasReturned = true
-				break
+			if allRowsMeet != scenario.shouldAllRowsMeet {
+				t.Errorf("Expected %t for scenario %d, but received %t",
+					scenario.shouldAllRowsMeet, index+1, allRowsMeet)
 			}
 		}
 
-		if !wasReturned && scenario.shouldBeReturned {
-			t.Errorf("Expected %t for currency %s, but received %t",
-				scenario.shouldBeReturned, scenario.input.Name, !scenario.shouldBeReturned)
+		if len(scenario.currencies) != len(updatableCurrencies) && scenario.shouldAllRowsMeet {
+			t.Errorf("Expected %d rows for scenario %d, but received %d",
+				len(updatableCurrencies), index+1, len(scenario.currencies))
+		}
+	}
+}
+
+type allCurrenciesScenario struct {
+	currencies        []models.Currency
+	shouldAllRowsMeet bool
+}
+
+func TestGetAllCurrencies(t *testing.T) {
+
+	scenarios := []allCurrenciesScenario{
+		{
+			[]models.Currency{
+				{
+					Name:            "FIC",
+					ConversionRate:  12,
+					IsAutoUpdatable: false,
+				},
+				{
+					Name:            "SHURATO",
+					ConversionRate:  171,
+					IsAutoUpdatable: true,
+				},
+				{
+					Name:            "SAZON",
+					ConversionRate:  3.889,
+					IsAutoUpdatable: true,
+				},
+			}, true,
+		},
+		{
+			[]models.Currency{
+				{
+					Name:            "FIC",
+					ConversionRate:  12,
+					IsAutoUpdatable: false,
+				},
+			}, false,
+		},
+		{
+			[]models.Currency{
+				{
+					Name:            "FIC",
+					ConversionRate:  12,
+					IsAutoUpdatable: false,
+				},
+				{
+					Name:            "SHURATO",
+					ConversionRate:  171,
+					IsAutoUpdatable: true,
+				},
+			}, false,
+		},
+		{
+			[]models.Currency{
+				{
+					Name:            "FIC",
+					ConversionRate:  12,
+					IsAutoUpdatable: false,
+				},
+				{
+					Name:            "SHURATO",
+					ConversionRate:  171,
+					IsAutoUpdatable: true,
+				},
+				{
+					Name:            "WRONGONE",
+					ConversionRate:  4.54,
+					IsAutoUpdatable: true,
+				},
+			}, false,
+		},
+	}
+
+	searchRepository := SearchRepositoryMock{}
+	externalApiAdapter := adapters.ExternalAPIAdapter{}
+	searchService := services.NewCurrencyService(&searchRepository, &externalApiAdapter)
+
+	allCurrencies, err := searchService.GetAllCurrencies()
+	if err != nil {
+		t.Error(err)
+	}
+
+	for index, scenario := range scenarios {
+
+		if len(scenario.currencies) == len(allCurrencies) {
+			allRowsMeet := true
+
+			for index, currency := range allCurrencies {
+				if currency != scenario.currencies[index] {
+					allRowsMeet = false
+					break
+				}
+			}
+
+			if allRowsMeet != scenario.shouldAllRowsMeet {
+				t.Errorf("Expected %t for scenario %d, but received %t",
+					scenario.shouldAllRowsMeet, index+1, allRowsMeet)
+			}
 		}
 
+		if len(scenario.currencies) != len(allCurrencies) && scenario.shouldAllRowsMeet {
+			t.Errorf("Expected %d rows for scenario %d, but received %d",
+				len(allCurrencies), index+1, len(scenario.currencies))
+		}
 	}
 }
 
@@ -231,4 +385,8 @@ func TestGetCurrenciesBasedOnUSDFromAPI(t *testing.T) {
 		}
 
 	}
+}
+
+func TestGetCurrencyFromDatabase(t *testing.T) {
+
 }
