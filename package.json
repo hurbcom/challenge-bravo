@@ -5,11 +5,11 @@
   "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node node_modules/nodemon/bin/nodemon src/server"
+    "dev": "nodemon -L src/server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/viniciusnuunes/challenge-bravo.git"
+    "url": "git+https://github.com/viniciusnuunes/challenge-bravo.git"    
   },
   "author": "Vinicius Nunes",
   "license": "ISC",
