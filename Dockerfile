@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD nodemon -e yaml -L --watch . src/server.js
+CMD ["npm", "start"]

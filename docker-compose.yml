@@ -2,7 +2,7 @@ version: '3'
 
 services:
   server:
-    container_name: QUOTATION_API
+    container_name: CURRENCY_CONVERTER_API
     build: '.'
     volumes:
       - ./:/node-app

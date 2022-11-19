@@ -9,5 +9,6 @@ db.start()
 		})
 	})
 	.catch(() => {
+		console.log('object')
 		process.exit()
 	})
