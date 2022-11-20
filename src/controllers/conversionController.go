@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"api/src/models"
-	"api/src/responses"
+	"challenge-bravo/src/models"
+	"challenge-bravo/src/responses"
 	"net/http"
 	"strconv"
 	"strings"

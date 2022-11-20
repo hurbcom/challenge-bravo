@@ -1,7 +1,7 @@
 package database
 
 import (
-	"api/src/config"
+	"challenge-bravo/src/config"
 
 	"github.com/go-redis/redis"
 )

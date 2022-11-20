@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"api/src/models"
+	"challenge-bravo/src/models"
 	"encoding/json"
 	"fmt"
 

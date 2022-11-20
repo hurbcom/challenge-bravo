@@ -1,7 +1,7 @@
 package adapters
 
 import (
-	"api/src/config"
+	"challenge-bravo/src/config"
 	"encoding/json"
 	"fmt"
 	"io"

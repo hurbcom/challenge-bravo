@@ -1,7 +1,7 @@
 package router
 
 import (
-	"api/src/router/routes"
+	"challenge-bravo/src/router/routes"
 
 	"github.com/gorilla/mux"
 )

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"api/src/models"
+	"challenge-bravo/src/models"
 	"log"
 )
 

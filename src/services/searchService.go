@@ -1,7 +1,7 @@
 package services
 
 import (
-	"api/src/models"
+	"challenge-bravo/src/models"
 	"fmt"
 )
 

@@ -1,9 +1,9 @@
 package services_test
 
 import (
-	"api/src/adapters"
-	"api/src/models"
-	"api/src/services"
+	"challenge-bravo/src/adapters"
+	"challenge-bravo/src/models"
+	"challenge-bravo/src/services"
 	"fmt"
 	"testing"
 )
