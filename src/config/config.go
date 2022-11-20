@@ -29,7 +29,7 @@ func Load() {
 	DBPass = os.Getenv("DB_PASS")
 	DBPort = os.Getenv("DB_PORT")
 
-	DBAddr := DBServer + ":" + DBPort
+	DBAddr = DBServer + ":" + DBPort
 
 	fmt.Println("DBServer: ", DBServer)
 	fmt.Println("DBPort: ", DBPort)
