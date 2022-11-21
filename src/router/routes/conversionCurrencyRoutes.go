@@ -16,7 +16,7 @@ func NewConversionRoutes(controller ConversionController) *ConversionRoutes {
 
 var conversionRoutes = []Route{
 	{
-		URI:    "/currencies/convert",
+		URI:    "/convert",
 		Method: http.MethodGet,
 	},
 }
