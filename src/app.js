@@ -4,11 +4,11 @@ const app = express()
 const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
 const swaggerDoc = YAML.load('./src/swagger.yaml')
-const converterRouter = require('./routes/converterRouter')
+const routers = require('./routes')
 
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: false }))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
-app.use('/converter', converterRouter)
+app.use('/quotation', routers.quotation)
 
 module.exports = app

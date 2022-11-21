@@ -1,14 +1,18 @@
 const { PORT, ENV } = require('./properties')
 const app = require('./app')
-const db = require('./database')
+const dbConnection = require('./database/connection')
+const scripts = require('./scripts')
 
-db.start()
+dbConnection
+	.start()
 	.then(() => {
 		app.listen(PORT, () => {
 			console.log(`Server is running at port ${PORT} on environment ${ENV}`)
 		})
+
+		scripts.initializeQuotationsInDB()
 	})
-	.catch(() => {
-		console.log('object')
+	.catch((err) => {
+		console.log(err.message)
 		process.exit()
 	})
