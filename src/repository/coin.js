@@ -22,19 +22,15 @@ exports.findAllByOrigin = (origin) => {
 }
 
 /**
- * Realiza a atualização das cotações de uma moeda
- * @param {Object} coin Objeto da Moeda contendo seu código e cotação
+ * Realiza o update da Moeda
+ * @param {string} coinCode Código da moeda - BRL - BTC ..
+ * @param {object} coin Campos a serem atualizados
  * @returns {Promise<Document>} Resultado do update
+ * @author Vinícius Nunes
  */
-exports.updateCoinQuotation = (coin) => {
-	const mongoQuery = { code: coin.code }
-	const mongoUpdate = {
-		quotation: {
-			buy: coin.quotation.buy,
-			sell: coin.quotation.sell,
-		},
-	}
+exports.update = (coinCode, coin) => {
+	const mongoQuery = { code: coinCode }
 	const mongoOptions = { new: true }
 
-	return coinModel.findOneAndUpdate(mongoQuery, mongoUpdate, mongoOptions)
+	return coinModel.findOneAndUpdate(mongoQuery, coin, mongoOptions)
 }

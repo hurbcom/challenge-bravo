@@ -20,7 +20,13 @@ exports.updateApiQuotations = () => {
 		.then((onlineQuotations) => {
 			return Promise.all(
 				onlineQuotations.map((quotation) => {
-					return repository.coin.updateCoinQuotation(quotation)
+					let coin = {
+						quotation: {
+							buy: quotation.quotation.buy,
+							sell: quotation.quotation.sell,
+						},
+					}
+					return repository.coin.update(quotation.code, coin)
 				})
 			)
 		})
