@@ -80,6 +80,15 @@ func (searchRepository *SearchRepositoryMock) GetAllUpdatableCurrencies() ([]mod
 	return currencies, nil
 }
 
+func (searchRepository *SearchRepositoryMock) IsAllowedCurrency(currencyName string) (bool, error) {
+
+	if currencyName == "SHREK" {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 type ExternalAPIAdapterMock struct {
 }
 
