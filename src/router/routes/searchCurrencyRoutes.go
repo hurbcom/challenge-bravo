@@ -4,16 +4,16 @@ import (
 	"net/http"
 )
 
-type CurrencyController interface {
+type SearchController interface {
 	GetAllCurrencies(http.ResponseWriter, *http.Request)
 }
 
-type CurrencyRoutes struct {
-	controller CurrencyController
+type SearchRoutes struct {
+	controller SearchController
 }
 
-func NewCurrencyRoutes(controller CurrencyController) *CurrencyRoutes {
-	return &CurrencyRoutes{controller}
+func NewSearchRoutes(controller SearchController) *SearchRoutes {
+	return &SearchRoutes{controller}
 }
 
 var searchCurrencyRoutes = []Route{
@@ -21,10 +21,14 @@ var searchCurrencyRoutes = []Route{
 		URI:    "/currencies",
 		Method: http.MethodGet,
 	},
+	{
+		URI:    "/currencies/{name}",
+		Method: http.MethodGet,
+	},
 }
 
-func GenerateSearchCurrencyRoutes(controller CurrencyController) {
-	newCurrencyRoutes := NewCurrencyRoutes(controller)
+func GenerateSearchCurrencyRoutes(controller SearchController) {
+	newSearchRoutes := NewSearchRoutes(controller)
 
-	searchCurrencyRoutes[0].Function = newCurrencyRoutes.controller.GetAllCurrencies
+	searchCurrencyRoutes[0].Function = newSearchRoutes.controller.GetAllCurrencies
 }
