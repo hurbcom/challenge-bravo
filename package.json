@@ -23,6 +23,7 @@
     "express": "^4.18.2",
     "lodash": "^4.17.21",
     "mongoose": "^6.7.2",
+    "nock": "^13.2.9",
     "swagger-ui-express": "^4.6.0",
     "yamljs": "^0.3.0"
   },
