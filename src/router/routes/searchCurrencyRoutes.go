@@ -6,6 +6,7 @@ import (
 
 type SearchController interface {
 	GetAllCurrencies(http.ResponseWriter, *http.Request)
+	GetCurrencyByName(http.ResponseWriter, *http.Request)
 }
 
 type SearchRoutes struct {
@@ -31,4 +32,5 @@ func GenerateSearchCurrencyRoutes(controller SearchController) {
 	newSearchRoutes := NewSearchRoutes(controller)
 
 	searchCurrencyRoutes[0].Function = newSearchRoutes.controller.GetAllCurrencies
+	searchCurrencyRoutes[1].Function = newSearchRoutes.controller.GetCurrencyByName
 }
