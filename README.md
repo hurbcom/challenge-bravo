@@ -10,7 +10,7 @@
     -> Deletar uma Moeda cadastrada pelo seu Nome
     -> Converter uma Moeda em outra, ambas devendo estar previamente registradas na API
 
-  Outras funcionalidades:  
+  Outras funcionalidades:
     -> Caso a Moeda cadastrada exista na API externa utilizada e esteja com a flag "isAutoUpdatable" como "true", ela será automaticamente atualizada a cada 15 segundos via CronJob.
 
     -> Caso a Moeda cadastrada NÃO exista na API externa utilizada e esteja com a flag "isAutoUpdatable" como "true", um log no servidor apontará que a Moeda não existe na API, manterá sua taxa de conversão como a previamente cadastrada pelo usuário e alterará a flag "isAutoUpdatable" para "false".
