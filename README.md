@@ -59,19 +59,19 @@
 ## Endpoints
 
 Retorna todas as moedas cadastradas:
-  curl http://localhost:5000/currencies
+  <pre><code>curl http://localhost:5000/currencies</code></pre>
 
 Retorna uma moeda cadastrada:
-  curl http://localhost:5000/currencies/BRL
+  <pre><code>curl http://localhost:5000/currencies/BRL</code></pre>
 
 Adiciona a moeda "TEST", com a taxa de conversão igual a 88 (Taxa de Conversão calculada em relação ao dólar americano) e a flag "isAutoUpdatable" igual a "false":
-  curl --header "Content-Type: application/json" -d "{\"name\":\"TEST\", \"conversionRate\":88, \"isAutoUpdatable\": false}" http://localhost:5000/currencies
+  <pre><code>curl --header "Content-Type: application/json" -d "{\"name\":\"TEST\", \"conversionRate\":88, \"isAutoUpdatable\": false}" http://localhost:5000/currencies</code></pre>
 
 Remove uma moeda pelo seu nome:
-  curl -X DELETE http://localhost:5000/currencies/TEST
+  <pre><code>curl -X DELETE http://localhost:5000/currencies/TEST</code></pre>
 
 Conversão entre moedas:
-  curl "http://localhost:5000/convert?from=USD&amount=10&to=BRL"
+  <pre><code>curl "http://localhost:5000/convert?from=USD&amount=10&to=BRL"</code></pre>
     
 
 ## Cobertura de Testes
@@ -80,13 +80,13 @@ Conversão entre moedas:
 
   Para executar os testes, acessar a pasta de Services e rodar, conforme necessidade:
     
-    <pre><code>go test -v --cover</code></pre>
+    go test -v --cover
       -> Mostra os testes que passaram ou falharam com a porcentagem de cobertura.
   
-    <pre><code>go test --coverprofile coverage.txt</code></pre>
+    go test --coverprofile coverage.txt
       -> Gera o arquivo de cobertura para ser lido no próximo comando.
 
-    <pre><code>go tool cover --html=coverage.txt</code></pre>
+    go tool cover --html=coverage.txt
       -> Abre em um navegador, separado por cada arquivo testado, uma visibilidade de todas as linhas cobertas pelos testes e a porcentagem de cobertura de cada arquivo.
 
 
