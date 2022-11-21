@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  redis-db:
+    image: "redis:7.0.5"
+    restart: unless-stopped
+    container_name: redis-db
+    ports:
+      - 6379:6379
+
+  app:  
+    depends_on:
+      - redis-db 
+    build: .
+    container_name: challenge-bravo
+    ports:
+      - "5000:5000"
