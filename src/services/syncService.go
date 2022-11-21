@@ -48,10 +48,25 @@ func (syncService SyncService) UpdateAllUpdatableCurrencies() {
 
 	for _, newConversionRate := range conversionRatesByCurrency {
 
+		conversionRate := newConversionRate.ConversionRate
+		isAutoUpdatable := true
+
+		if newConversionRate.ConversionRate == 0 {
+			fmt.Printf("\nCurrency %s does not exist in External API. Setting its update flag to false.",
+				newConversionRate.Name)
+
+			for index := range currencies {
+				if newConversionRate.Name == currencies[index].Name {
+					conversionRate = currencies[index].ConversionRate
+					isAutoUpdatable = false
+				}
+			}
+		}
+
 		newCurrency := models.Currency{
 			Name:            newConversionRate.Name,
-			ConversionRate:  newConversionRate.ConversionRate,
-			IsAutoUpdatable: true,
+			ConversionRate:  conversionRate,
+			IsAutoUpdatable: isAutoUpdatable,
 		}
 
 		if err := syncService.repository.UpdateCurrency(newCurrency); err != nil {
