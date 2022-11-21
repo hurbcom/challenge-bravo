@@ -9,6 +9,7 @@ type SearchRepository interface {
 	GetAllUpdatableCurrencies() ([]models.Currency, error)
 	GetAllCurrencies() ([]models.Currency, error)
 	GetCurrencyByName(string) (models.Currency, error)
+	IsAllowedCurrency(string) (bool, error)
 }
 
 type ExternalAPIAdapter interface {
@@ -46,18 +47,12 @@ func (searchService SearchService) GetAllCurrencies() ([]models.Currency, error)
 
 func (searchService SearchService) IsAllowedCurrency(currencyName string) (bool, error) {
 
-	result, err := searchService.repository.GetCurrencyByName(currencyName)
-
+	isAllowedCurrency, err := searchService.repository.IsAllowedCurrency(currencyName)
 	if err != nil {
 		return false, err
 	}
 
-	if (result == models.Currency{}) {
-		err = nil
-		return false, nil
-	}
-
-	return true, nil
+	return isAllowedCurrency, nil
 }
 
 func (searchService SearchService) GetCurrenciesBasedOnUSDFromAPI(fromCurrency string, toCurrencies []string) ([]models.ConversionRateFromAPI, error) {

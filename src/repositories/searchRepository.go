@@ -54,6 +54,31 @@ func (currencyRepo currencyRepository) GetAllUpdatableCurrencies() ([]models.Cur
 	return updatableCurrencies, nil
 }
 
+func (currencyRepo currencyRepository) IsAllowedCurrency(currencyName string) (bool, error) {
+
+	isAllowedJSON, err := currencyRepo.db.Get(currencyName).Result()
+
+	if err == redis.Nil {
+		err = nil
+		return false, err
+	}
+
+	if err != nil {
+		fmt.Println("error getting currency from database:", err)
+		return false, err
+	}
+
+	var isAllowedCurrency bool
+
+	err = json.Unmarshal([]byte(isAllowedJSON), &isAllowedCurrency)
+	if err != nil {
+		fmt.Println("error unmarshalling dbResultJSON:", err)
+		return false, err
+	}
+
+	return isAllowedCurrency, nil
+}
+
 func (currencyRepo currencyRepository) GetCurrencyByName(currencyName string) (models.Currency, error) {
 
 	var currencyFromDatabase models.Currency
@@ -61,7 +86,7 @@ func (currencyRepo currencyRepository) GetCurrencyByName(currencyName string) (m
 	dbResultJSON, err := currencyRepo.db.Get(currencyName).Result()
 
 	if err == redis.Nil {
-		err = nil
+		err = fmt.Errorf("currency %s not found on database", currencyName)
 		return models.Currency{}, err
 	}
 
