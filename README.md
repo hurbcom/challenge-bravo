@@ -59,19 +59,19 @@
 ## Endpoints
 
 Retorna todas as moedas cadastradas:
-  <pre><code>curl http://localhost:5000/currencies</code></pre>
+  curl http://localhost:5000/currencies
 
 Retorna uma moeda cadastrada:
-  <pre><code>curl http://localhost:5000/currencies/BRL</code></pre>
+  curl http://localhost:5000/currencies/BRL
 
 Adiciona a moeda "TEST", com a taxa de conversão igual a 88 (Taxa de Conversão calculada em relação ao dólar americano) e a flag "isAutoUpdatable" igual a "false":
-  <pre><code>curl --header "Content-Type: application/json" -d "{\"name\":\"TEST\", \"conversionRate\":88, \"isAutoUpdatable\": false}" http://localhost:5000/currencies</code></pre>
+  curl --header "Content-Type: application/json" -d "{\"name\":\"TEST\", \"conversionRate\":88, \"isAutoUpdatable\": false}" http://localhost:5000/currencies
 
 Remove uma moeda pelo seu nome:
-  <pre><code>curl -X DELETE http://localhost:5000/currencies/TEST</code></pre>
+  curl -X DELETE http://localhost:5000/currencies/TEST
 
 Conversão entre moedas:
-  <pre><code>curl "http://localhost:5000/convert?from=USD&amount=10&to=BRL"</code></pre>
+  curl "http://localhost:5000/convert?from=USD&amount=10&to=BRL"
     
 
 ## Cobertura de Testes
