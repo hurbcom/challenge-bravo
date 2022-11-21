@@ -13,6 +13,11 @@ exports.AWESOME_API_SUCCESS_RESPONSE = {
 		create_date: '2022-11-21 11:09:32',
 	},
 }
+exports.AWESOME_API_NOT_FOUND_RESPONSE = {
+	status: 404,
+	code: 'CoinNotExists',
+	message: 'moeda nao encontrada BRL-BRL',
+}
 
 exports.LAST_QUOTATION_SUCCESS_RESPONSE = [
 	{

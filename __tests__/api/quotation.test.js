@@ -20,3 +20,18 @@ test('It should get the last quotation between 2 coins', async () => {
 
 	expect(response).toEqual(mockValues.LAST_QUOTATION_SUCCESS_RESPONSE)
 })
+
+test('It should fails to get a quotation', async () => {
+	const from = 'BRL'
+	const to = 'BRL'
+
+	const concatened = `${from}-${to}`
+
+	nock(AWESOMEAPI_URI)
+		.get(`${AWESOMEAPI_ENDPOINT_LAST}/${concatened}`)
+		.reply(404, mockValues.AWESOME_API_NOT_FOUND_RESPONSE)
+
+	await expect(async () => {
+		await quotationApi.getLastQuotation([concatened])
+	}).rejects.toThrow()
+})
