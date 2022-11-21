@@ -4,10 +4,14 @@
   <img src="HURB - DESAFIO BRAVO.png" alt="architecture_desafio-bravo"/> 
 
   Através da API é possível:
-    -> Consultar todas as Moedas cadastradas
+    -> Consultar todas as Moedas cadastradas<br>
+
     -> Consultar uma Moeda cadastrada pelo Nome
+
     -> Inserir uma nova Moeda no Banco de Dados
+
     -> Deletar uma Moeda cadastrada pelo seu Nome
+
     -> Converter uma Moeda em outra, ambas devendo estar previamente registradas na API
 
   Outras funcionalidades:
