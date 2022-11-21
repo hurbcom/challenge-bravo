@@ -3,8 +3,8 @@
 ## Arquitetura do Projeto de API
   <img src="HURB - DESAFIO BRAVO.png" alt="architecture_desafio-bravo"/> 
 
-  Através da API é possível:
-    -> Consultar todas as Moedas cadastradas<br>
+  Através da API é possível:<br>
+    -> Consultar todas as Moedas cadastradas
 
     -> Consultar uma Moeda cadastrada pelo Nome
 
