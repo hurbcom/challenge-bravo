@@ -1,7 +1,7 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
 ## Arquitetura do Projeto de API
-  # <img src="HURB - DESAFIO BRAVO.png" alt="architecture_desafio-bravo"/> 
+  <img src="HURB - DESAFIO BRAVO.png" alt="architecture_desafio-bravo"/> 
 
   Através da API é possível:
     -> Consultar todas as Moedas cadastradas
@@ -48,7 +48,7 @@
       -> Módulo responsável por disponibilizar buscas e atualizações no banco de dados Redis.
 
 ## Como instalar e rodar o Projeto
-  Para subir as imagens de BD e App, rodar, na raiz do projeto, dentro do arquivo "CHALLENGE-BRAVO":
+  Para subir as imagens de BD e App, bastar rodar, na raiz do projeto, dentro do arquivo "CHALLENGE-BRAVO":
    
   <pre><code>docker-compose up</code></pre>
 
