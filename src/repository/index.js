@@ -1,0 +1,1 @@
+exports.coin = require('./coin')
