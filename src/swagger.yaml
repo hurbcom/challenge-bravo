@@ -10,6 +10,8 @@ basePath: '/'
 tags:
   - name: 'converter'
     description: 'Endpopints relacionados a conversão de moedas'
+  - name: 'update'
+    description: 'Endpoint relacionados a atualização das cotações'
 schemes:
   - 'http'
 paths:
@@ -62,3 +64,29 @@ paths:
               date:
                 type: date
                 example: '2022-01-01'
+  /update:
+    post:
+      tags:
+        - 'update'
+      summary: 'Update Quotations'
+      description: 'Realiza a atualização das cotações online'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-01-01'
+              statusCode:
+                type: number
+                example: 200
+              data:
+                type: object
+                example:

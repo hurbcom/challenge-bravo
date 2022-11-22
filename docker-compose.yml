@@ -1,14 +1,12 @@
 version: '3'
 
 services:
-  server:
-    container_name: CURRENCY_CONVERTER_API
+  quotation-manager:
+    container_name: quotation-manager
     build: '.'
     volumes:
       - ./:/node-app
       - ./node_modules:/node-app/node_modules
-    environment:
-      NODE_ENV: DEV
     depends_on:
       - db
     links:
@@ -18,7 +16,7 @@ services:
 
   db:
     image: 'mongo'
-    container_name: MONGODB
+    container_name: mongodb
     ports:
       - '27017:27017'
     volumes:

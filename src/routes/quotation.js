@@ -4,7 +4,7 @@ const controller = require('../controllers')
 
 router.post('/update', async (req, res) => {
 	try {
-		const response = await controller.quotation.updateApiQuotatiions()
+		const response = await controller.quotation.updateApiQuotations()
 
 		res.status(200).json(response)
 	} catch (err) {
