@@ -10,5 +10,6 @@ app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: false }))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
 app.use('/quotation', routers.quotation)
+app.use('/converter', routers.converter)
 
 module.exports = app
