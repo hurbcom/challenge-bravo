@@ -21,6 +21,14 @@ exports.findAllByOrigin = (origin) => {
 		})
 }
 
+exports.findOne = (code) => {
+	const mongoQuery = {
+		code: code,
+	}
+
+	return coinModel.findOne(mongoQuery)
+}
+
 /**
  * Realiza o update da Moeda
  * @param {string} coinCode Código da moeda - BRL - BTC ..
