@@ -63,7 +63,24 @@ paths:
                 example: false
               date:
                 type: date
-                example: '2022-01-01'
+                example: '2022-11-21T23:00:00.000Z'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
   /update:
     post:
       tags:
@@ -83,10 +100,27 @@ paths:
                 example: false
               date:
                 type: date
-                example: '2022-01-01'
+                example: '2022-11-21T23:00:00.000Z'
               statusCode:
                 type: number
                 example: 200
-              data:
-                type: object
-                example:
+              message:
+                type: string
+                example: 'Atualização realizada com sucesso'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
