@@ -8,7 +8,6 @@ test('It should return a default response with error false and 2xx status code',
 	expect(response.error).toEqual(false)
 	expect(response.statusCode).toEqual(200)
 	expect(response.message).toEqual('Tudo certo')
-	expect(response.data).toEqual({ message: 'Tudo certo' })
 	done()
 })
 
@@ -20,6 +19,5 @@ test('It should return a default response with error true and !2xx and !3xx stat
 	expect(response.error).toEqual(true)
 	expect(response.statusCode).toEqual(400)
 	expect(response.message).toEqual('Bad Request')
-	expect(response.data).toEqual({ message: 'Erro de validação' })
 	done()
 })

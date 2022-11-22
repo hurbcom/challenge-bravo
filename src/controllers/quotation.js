@@ -34,11 +34,7 @@ exports.updateApiQuotations = () => {
 			console.log(
 				`Update das cotações realizado com sucesso: ${docsUpdated.length} registros atualizados`
 			)
-			return utils.defaultResponse(
-				200,
-				'Atualização realizada com sucesso',
-				docsUpdated
-			)
+			return utils.defaultResponse(200, 'Atualização realizada com sucesso')
 		})
 		.catch((err) => {
 			throw err
