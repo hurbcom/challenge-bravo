@@ -1,6 +1,13 @@
-const { isNumber } = require('lodash')
+const { isNumber, isNaN } = require('lodash')
 const HandledError = require('../helpers/HandledError')
 
+/**
+ * Faz a verificação dos campos obrigatórios para
+ * ser realizada a conversão da moeda
+ * @param {object} params Objeto contendo FROM, TO, AMOUNT
+ * @returns {void | Error} Lança erro em caso de falha na validação
+ * @author Vinícius Nunes
+ */
 exports.validateQueryParamsToConverter = (params) => {
 	const expectedParams = ['from', 'to', 'amount']
 
@@ -15,40 +22,24 @@ exports.validateQueryParamsToConverter = (params) => {
 	if (paramsNotFound.length > 0) {
 		throw new HandledError(
 			400,
-			`Os parâmetros devem ser enviados: ${paramsNotFound.join(', ')}`
+			`Os parâmetros a seguir devem ser enviados corretamente: ${paramsNotFound.join(
+				', '
+			)}`
 		)
 	}
 
 	validateAmount(params.amount)
-
-	if (!isNumber(parseInt(params.amount))) {
-		throw new HandledError(400, 'O parâmetro amount deve ser um número válido')
-	}
-
-	if (params.amount <= 0) {
-		throw new HandledError(
-			400,
-			'O parâmetro amount deve conter um valor acima de 0'
-		)
-	}
 }
 
 function validateAmount(amount) {
-	if (!isNumber(parseInt(amount))) {
+	if (isNaN(+amount)) {
 		throw new HandledError(400, 'O parâmetro amount deve ser um número válido')
 	}
 
 	if (amount <= 0) {
 		throw new HandledError(
 			400,
-			'O parâmetro amount deve conter um valor acima de 0'
-		)
-	}
-
-	if (amount.includes(',')) {
-		throw new HandledError(
-			400,
-			'O parâmetro amount deve seguir o padrão com ponto. Ex.: 59.9'
+			'O parâmetro amount deve ser um valor positivo acima de 0'
 		)
 	}
 }

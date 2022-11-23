@@ -7,22 +7,21 @@ const HandledError = require('../helpers/HandledError')
 
 router.get('/', async (req, res) => {
 	try {
-		const { from, to, amount, type } = req.query
+		validation.validateQueryParamsToConverter(req.query)
+
+		let { from, to, amount, type } = req.query
 
 		const params = {
-			from,
-			to,
+			from: from.toUpperCase(),
+			to: to.toUpperCase(),
 			amount,
-			type,
+			type: type?.toLowerCase(),
 		}
-
-		validation.validateQueryParamsToConverter(params)
 
 		const response = await controller.converter.currencyConverter(params)
 
 		res.status(200).json(response)
 	} catch (err) {
-		console.log(err)
 		if (err instanceof HandledError) {
 			res.status(err.statusCode).json(err.showError())
 		} else {
