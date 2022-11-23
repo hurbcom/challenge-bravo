@@ -19,7 +19,7 @@ test('It should update all API quotations', async () => {
 
 	const response = await quotationController.updateApiQuotations()
 
-	console.log(response.data)
-
-	expect(response).toEqual(mockValues.SUCCESS_RESPONSE)
+	expect(response).toEqual(
+		mockValues.DEFAULT_RESPONSE('Atualização realizada com sucesso', 201)
+	)
 })

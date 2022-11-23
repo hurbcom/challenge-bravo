@@ -3,16 +3,17 @@ version: '3'
 services:
   quotation-manager:
     container_name: quotation-manager
-    build: '.'
+    build: .
+    command: npm run dev
     volumes:
-      - ./:/node-app
-      - ./node_modules:/node-app/node_modules
+      - .:/node-app
+      - /node-app/node_modules
+    ports:
+      - '3000:3000'
     depends_on:
       - db
     links:
       - db
-    ports:
-      - '3000:3000'
 
   db:
     image: 'mongo'
