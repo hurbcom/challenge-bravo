@@ -1,5 +1,6 @@
-const { isNumber, isNaN } = require('lodash')
+const { isNaN } = require('lodash')
 const HandledError = require('../helpers/HandledError')
+const utils = require('../utils')
 
 /**
  * Faz a verificação dos campos obrigatórios para
@@ -29,6 +30,37 @@ exports.validateQueryParamsToConverter = (params) => {
 	}
 
 	validateAmount(params.amount)
+}
+
+/**
+ * Faz a validação do payload para cadastro de nova moeda
+ * @param {object} payload Body contendo os dados da Moeda
+ * @author Vinícius Nunes
+ */
+exports.validateAddCurrencyPaylaod = (payload) => {
+	const expectedFields = [
+		'code',
+		'name',
+		'quotation',
+		'quotation.buy',
+		'quotation.sell',
+	]
+
+	let fieldsNotFound = utils.verifyKeysPayload(payload, expectedFields)
+
+	if (fieldsNotFound.length > 0) {
+		throw new HandledError(
+			400,
+			`Os campos a seguir são obrigatórios: ${fieldsNotFound.join(', ')}`
+		)
+	}
+
+	if (isNaN(+payload.quotation.sell) || isNaN(+payload.quotation.buy)) {
+		throw new HandledError(
+			400,
+			'Os campos de valores devem conter números válidos'
+		)
+	}
 }
 
 function validateAmount(amount) {

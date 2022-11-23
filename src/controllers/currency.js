@@ -20,3 +20,7 @@ exports.listAllCurrencies = () => {
 			throw err
 		})
 }
+
+exports.addCurrency = (payload) => {
+	return 'ok'
+}
