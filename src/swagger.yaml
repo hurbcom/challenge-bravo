@@ -289,6 +289,74 @@ paths:
               message:
                 type: string
                 example: 'errorMessage'
+  /currency/{currencyCode}:
+    patch:
+      tags:
+        - 'currency'
+      summary: 'Atualizar Moeda'
+      description: 'Realiza a atualização dos dados de uma moeda'
+      operationId: 'patchCurrency'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'payload'
+          description: 'Campos da Moeda que podem ser atualizados'
+          required: true
+          schema:
+            $ref: '#/definitions/Currency'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: Moeda atualizada com sucesso
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: '{validationErrorMessage}'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
 definitions:
   Currency:
     type: object
