@@ -3,6 +3,7 @@ const factory = require('../factory')
 const { defaultResponse } = require('../utils')
 const { isEmpty } = require('lodash')
 const HandledError = require('../helpers/HandledError')
+const redis = require('../redis')
 
 /**
  * Busca todas as Moedas existentes no Banco de Dados
@@ -21,8 +22,8 @@ exports.listAllCurrencies = () => {
 
 	return repository.currency
 		.listAll(projection)
-		.then((docs) => {
-			return defaultResponse(200, docs)
+		.then((result) => {
+			return defaultResponse(200, result)
 		})
 		.catch((err) => {
 			console.log(`Não foi possível obter a lista de Moedas: ${err.message}`)
@@ -47,6 +48,7 @@ exports.addCurrency = (payload) => {
 			payload.code = payload.code.toUpperCase()
 
 			await repository.currency.save(payload)
+			await redis.setValue(payload.code, payload.quotation)
 
 			return defaultResponse(201, 'Moeda cadastrada com sucesso')
 		})
@@ -64,6 +66,8 @@ exports.addCurrency = (payload) => {
  * @author Vinícius Nunes
  */
 exports.updateCurrency = (code, payload) => {
+	// TODO: [BUG] o payload está sobrescrevendo o quotation
+	// caso somente uma cotação seja informada
 	return repository.currency
 		.update(code, payload)
 		.then((result) => {
@@ -71,6 +75,9 @@ exports.updateCurrency = (code, payload) => {
 				throw new HandledError(404, 'Moeda não encontrada')
 			}
 
+			return redis.setValue(result.code, result.quotation)
+		})
+		.then(() => {
 			return defaultResponse(200, 'Moeda atualizada com sucesso')
 		})
 		.catch((err) => {
@@ -93,6 +100,9 @@ exports.removeCurrency = (code) => {
 				throw new HandledError(404, 'Moeda não encontrada')
 			}
 
+			return redis.removeValue(code)
+		})
+		.then(() => {
 			return defaultResponse(200, 'Moeda removida com sucesso')
 		})
 		.catch((err) => {

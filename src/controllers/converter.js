@@ -3,6 +3,7 @@ const { round, isEmpty } = require('lodash')
 const HandledError = require('../helpers/HandledError')
 const factory = require('../factory')
 const { defaultResponse } = require('../utils')
+const redis = require('../redis')
 
 /**
  * Converte o valor origem para o valor destino
@@ -18,24 +19,24 @@ exports.currencyConverter = (queryParams) => {
 	to = to.toUpperCase()
 
 	const currencyFrom = () => {
-		return repository.currency.findOne(from)
+		return redis.getValue(from)
 	}
 
 	const currencyTo = () => {
-		return repository.currency.findOne(to)
+		return redis.getValue(to)
 	}
 
 	return Promise.all([currencyFrom(), currencyTo()])
-		.then((docs) => {
-			if (docs[0] == null || docs[1] == null) {
+		.then((result) => {
+			if (result[0] == null || result[1] == null) {
 				throw new HandledError(
 					404,
 					'A combinação de moedas informadas não se encontram disponíveis para conversão'
 				)
 			}
 
-			const dbFromAmount = docs[0].quotation[type]
-			const dbToAmount = docs[1].quotation[type]
+			const dbFromAmount = JSON.parse(result[0])[type]
+			const dbToAmount = JSON.parse(result[1])[type]
 
 			const amountConverted = factory.quotation.converterAmount(
 				dbFromAmount,

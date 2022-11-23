@@ -3,6 +3,7 @@ const api = require('../api')
 const repository = require('../repository')
 const { isEmpty } = require('lodash')
 const { COINS, BASE_COIN } = require('../properties')
+const redis = require('../redis')
 
 /**
  * Script que realiza a primeira carga no
@@ -16,8 +17,8 @@ const { COINS, BASE_COIN } = require('../properties')
 exports.initializeQuotationsInDB = (coins = COINS, baseCoin = BASE_COIN) => {
 	return repository.currency
 		.findAllByOrigin('API')
-		.then(async (docs) => {
-			if (isEmpty(docs)) {
+		.then(async (result) => {
+			if (isEmpty(result)) {
 				console.log(
 					`Nenhum registro encontrado. Iniciando a primeira carga das cotações via API: ${coins.join(
 						', '
@@ -27,11 +28,12 @@ exports.initializeQuotationsInDB = (coins = COINS, baseCoin = BASE_COIN) => {
 				coins = coins.map((coin) => `${coin}-${baseCoin}`)
 				const quotations = await api.quotation.getLastQuotation(coins)
 
-				for (let coin of quotations) {
-					new models.coin({ ...coin, origin: 'API' }).save()
+				for (let currency of quotations) {
+					new models.currency({ ...currency, origin: 'API' }).save()
+					redis.setValue(currency.code, currency.quotation)
 				}
 
-				const dolar = new models.coin({
+				const usd = {
 					name: 'Dólar Americano',
 					code: 'USD',
 					quotation: {
@@ -39,8 +41,10 @@ exports.initializeQuotationsInDB = (coins = COINS, baseCoin = BASE_COIN) => {
 						sell: 1,
 					},
 					origin: 'MANUAL',
-					updatedAt: new Date(),
-				}).save()
+				}
+
+				new models.currency(usd).save()
+				redis.setValue(usd.code, usd.quotation)
 
 				console.log('Primeira carga de cotações executada com sucesso')
 			}
