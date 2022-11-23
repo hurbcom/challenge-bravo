@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
 
 router.patch('/:currencyCode', async (req, res) => {
 	try {
-		const { currencyCode } = req.params
+		const currencyCode = req.params?.currencyCode.toUpperCase()
 		const { body } = req
 
 		if (isEmpty(body)) {
@@ -51,6 +51,22 @@ router.patch('/:currencyCode', async (req, res) => {
 			currencyCode,
 			body
 		)
+
+		res.status(response.statusCode || 200).json(response)
+	} catch (err) {
+		if (err instanceof HandledError) {
+			res.status(err.statusCode).json(err.showError())
+		} else {
+			res.status(500).json(utils.defaultResponse(500, err.message))
+		}
+	}
+})
+
+router.delete('/:currencyCode', async (req, res) => {
+	try {
+		const currencyCode = req.params?.currencyCode.toUpperCase()
+
+		const response = await controller.currency.removeCurrency(currencyCode)
 
 		res.status(response.statusCode || 200).json(response)
 	} catch (err) {
