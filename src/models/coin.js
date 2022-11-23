@@ -8,7 +8,7 @@ const coinSchema = new Schema(
 			buy: { type: Number, require: true },
 			sell: { type: Number, require: true },
 		},
-		origin: { type: String, enum: ['API', 'MANUAL'] },
+		origin: { type: String, enum: ['API', 'MANUAL'], default: 'MANUAL' },
 	},
 	{ timestamps: true }
 )
