@@ -28,10 +28,10 @@ exports.initializeQuotationsInDB = (coins = COINS, baseCoin = BASE_COIN) => {
 				const quotations = await api.quotation.getLastQuotation(coins)
 
 				for (let coin of quotations) {
-					new models.coin({ ...coin, origin: 'API' }).save()
+					new models.currency({ ...coin, origin: 'API' }).save()
 				}
 
-				const dolar = new models.coin({
+				const dolar = new models.currency({
 					name: 'Dólar Americano',
 					code: 'USD',
 					quotation: {
