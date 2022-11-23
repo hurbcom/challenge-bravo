@@ -68,3 +68,12 @@ exports.update = (coinCode, coin) => {
 
 	return coinModel.findOneAndUpdate(mongoQuery, coin, mongoOptions)
 }
+
+exports.remove = (coinCode, query = {}) => {
+	const mongoQuery = {
+		...query,
+		code: coinCode,
+	}
+
+	return coinModel.findOneAndDelete(mongoQuery)
+}

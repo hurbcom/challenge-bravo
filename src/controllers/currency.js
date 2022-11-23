@@ -68,3 +68,18 @@ exports.updateCurrency = (code, payload) => {
 			throw err
 		})
 }
+
+exports.removeCurrency = (code) => {
+	return repository.coin
+		.remove(code, { origin: 'MANUAL' })
+		.then((result) => {
+			if (isEmpty(result)) {
+				throw new HandledError(404, 'Moeda não encontrada')
+			}
+
+			return defaultResponse(200, 'Moeda removida com sucesso')
+		})
+		.catch((err) => {
+			throw err
+		})
+}
