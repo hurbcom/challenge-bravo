@@ -2,7 +2,7 @@ const api = require('../api')
 const repository = require('../repository')
 const { BASE_COIN } = require('../properties')
 const utils = require('../utils')
-
+const redis = require('../redis')
 /**
  * Realiza a atualização online das cotações existentes no DB
  * @returns {Promise<Array<Document>>}
@@ -25,6 +25,8 @@ exports.updateApiQuotations = () => {
 							sell: quotation.quotation.sell,
 						},
 					}
+
+					redis.setValue(quotation.code, quotation.quotation)
 					return repository.currency.update(quotation.code, coin)
 				})
 			)
