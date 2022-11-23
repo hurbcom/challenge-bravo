@@ -1,4 +1,4 @@
-exports.DB_COIN_FIND = [
+exports.DB_CURRENCY_FIND = [
 	{
 		_id: '637bb3e5136e0856ef14caf0',
 		name: 'Real Brasileiro',
