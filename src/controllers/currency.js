@@ -58,7 +58,6 @@ exports.updateCurrency = (code, payload) => {
 	return repository.coin
 		.update(code, payload)
 		.then((result) => {
-			console.log(result)
 			if (isEmpty(result)) {
 				throw new HandledError(404, 'Moeda não encontrada')
 			}
@@ -66,7 +65,6 @@ exports.updateCurrency = (code, payload) => {
 			return defaultResponse(200, 'Moeda atualizada com sucesso')
 		})
 		.catch((err) => {
-			console.log(err)
 			throw err
 		})
 }
