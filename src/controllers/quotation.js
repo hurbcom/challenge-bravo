@@ -10,7 +10,7 @@ const utils = require('../utils')
  * @author Vinícius Nunes
  */
 exports.updateApiQuotations = () => {
-	return repository.coin
+	return repository.currency
 		.findAllByOrigin('API')
 		.then((docs) => {
 			let listOfCoins = docs.map((coin) => `${coin.code}-${BASE_COIN}`)
@@ -26,7 +26,7 @@ exports.updateApiQuotations = () => {
 							sell: quotation.quotation.sell,
 						},
 					}
-					return repository.coin.update(quotation.code, coin)
+					return repository.currency.update(quotation.code, coin)
 				})
 			)
 		})

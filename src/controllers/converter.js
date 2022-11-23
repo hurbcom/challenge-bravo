@@ -12,11 +12,11 @@ exports.currencyConverter = (queryParams) => {
 	to = to.toUpperCase()
 
 	const currencyFrom = () => {
-		return repository.coin.findOne(from)
+		return repository.currency.findOne(from)
 	}
 
 	const currencyTo = () => {
-		return repository.coin.findOne(to)
+		return repository.currency.findOne(to)
 	}
 
 	return Promise.all([currencyFrom(), currencyTo()])

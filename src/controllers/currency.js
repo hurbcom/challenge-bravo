@@ -19,7 +19,7 @@ exports.listAllCurrencies = () => {
 		createdAt: 1,
 	}
 
-	return repository.coin
+	return repository.currency
 		.listAll(projection)
 		.then((docs) => {
 			return defaultResponse(200, docs)
@@ -36,7 +36,7 @@ exports.listAllCurrencies = () => {
  * @returns {object} Objeto de resposta padrão
  */
 exports.addCurrency = (payload) => {
-	return repository.coin
+	return repository.currency
 		.findOne(payload.code)
 		.then(async (doc) => {
 			if (!isEmpty(doc)) {
@@ -45,7 +45,7 @@ exports.addCurrency = (payload) => {
 
 			payload.code = payload.code.toUpperCase()
 
-			await repository.coin.save(payload)
+			await repository.currency.save(payload)
 
 			return defaultResponse(201, 'Moeda cadastrada com sucesso')
 		})
@@ -55,7 +55,7 @@ exports.addCurrency = (payload) => {
 }
 
 exports.updateCurrency = (code, payload) => {
-	return repository.coin
+	return repository.currency
 		.update(code, payload)
 		.then((result) => {
 			if (isEmpty(result)) {
@@ -70,7 +70,7 @@ exports.updateCurrency = (code, payload) => {
 }
 
 exports.removeCurrency = (code) => {
-	return repository.coin
+	return repository.currency
 		.remove(code, { origin: 'MANUAL' })
 		.then((result) => {
 			if (isEmpty(result)) {
