@@ -1,1 +1,1 @@
-exports.coin = require('./coin')
+exports.currency = require('./currency')

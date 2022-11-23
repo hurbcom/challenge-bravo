@@ -3,6 +3,7 @@ const factory = require('../factory')
 const { defaultResponse } = require('../utils')
 const { isEmpty } = require('lodash')
 const HandledError = require('../helpers/HandledError')
+const redis = require('../redis')
 
 /**
  * Busca todas as Moedas existentes no Banco de Dados
@@ -19,10 +20,10 @@ exports.listAllCurrencies = () => {
 		createdAt: 1,
 	}
 
-	return repository.coin
+	return repository.currency
 		.listAll(projection)
-		.then((docs) => {
-			return defaultResponse(200, docs)
+		.then((result) => {
+			return defaultResponse(200, result)
 		})
 		.catch((err) => {
 			console.log(`Não foi possível obter a lista de Moedas: ${err.message}`)
@@ -34,9 +35,10 @@ exports.listAllCurrencies = () => {
  * Salva uma nova moeda no banco de dados
  * @param {object} payload Payload que contem a Moeda a ser cadastrada
  * @returns {object} Objeto de resposta padrão
+ * @author Vinícius Nunes
  */
 exports.addCurrency = (payload) => {
-	return repository.coin
+	return repository.currency
 		.findOne(payload.code)
 		.then(async (doc) => {
 			if (!isEmpty(doc)) {
@@ -45,41 +47,66 @@ exports.addCurrency = (payload) => {
 
 			payload.code = payload.code.toUpperCase()
 
-			await repository.coin.save(payload)
+			await repository.currency.save(payload)
+			await redis.setValue(payload.code, payload.quotation)
 
 			return defaultResponse(201, 'Moeda cadastrada com sucesso')
 		})
 		.catch((err) => {
+			console.log(`Não foi possível adicionar a Moeda: ${err.message}`)
 			throw err
 		})
 }
 
+/**
+ * Atualiza os dados da Moeda
+ * @param {string} code Código da Moeda
+ * @param {object} payload Objeto Currency
+ * @returns {object} Objeto de resposta padrão
+ * @author Vinícius Nunes
+ */
 exports.updateCurrency = (code, payload) => {
-	return repository.coin
+	// TODO: [BUG] o payload está sobrescrevendo o quotation
+	// caso somente uma cotação seja informada
+	return repository.currency
 		.update(code, payload)
 		.then((result) => {
 			if (isEmpty(result)) {
 				throw new HandledError(404, 'Moeda não encontrada')
 			}
 
+			return redis.setValue(result.code, result.quotation)
+		})
+		.then(() => {
 			return defaultResponse(200, 'Moeda atualizada com sucesso')
 		})
 		.catch((err) => {
+			console.log(`Não foi possível atualizar a Moeda: ${err.message}`)
 			throw err
 		})
 }
 
+/**
+ * Remove a Moeda do banco de dados
+ * @param {string} code Código da Moeda
+ * @returns {object} Objeto de resposta padrão
+ * @author Vinícius Nunes
+ */
 exports.removeCurrency = (code) => {
-	return repository.coin
+	return repository.currency
 		.remove(code, { origin: 'MANUAL' })
 		.then((result) => {
 			if (isEmpty(result)) {
 				throw new HandledError(404, 'Moeda não encontrada')
 			}
 
+			return redis.removeValue(code)
+		})
+		.then(() => {
 			return defaultResponse(200, 'Moeda removida com sucesso')
 		})
 		.catch((err) => {
+			console.log(`Não foi possível remover a Moeda: ${err.message}`)
 			throw err
 		})
 }

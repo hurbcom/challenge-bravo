@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  quotation-manager:
-    container_name: quotation-manager
+  api:
+    container_name: currency-converter
     build: .
     command: npm run dev
     volumes:
@@ -12,8 +12,13 @@ services:
       - '3000:3000'
     depends_on:
       - db
+      - redis
     links:
       - db
+      - redis
+    environment:
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
 
   db:
     image: 'mongo'
@@ -22,3 +27,15 @@ services:
       - '27017:27017'
     volumes:
       - ./data/db:/data/db
+
+  redis:
+    image: redis:alpine
+    container_name: cache
+    restart: always
+    volumes:
+      - redis:/data
+    ports:
+      - '6379:6379'
+volumes:
+  redis:
+    driver: local
