@@ -1,11 +1,11 @@
 const { createClient } = require('redis')
 const { REDIS_URI } = require('../properties')
 
-exports.start = (URI = REDIS_URI) => {
-	const client = createClient({
-		url: URI,
-	})
+const client = createClient({
+	url: REDIS_URI,
+})
 
+exports.start = () => {
 	return client
 		.connect()
 		.then((result) => {
@@ -16,4 +16,16 @@ exports.start = (URI = REDIS_URI) => {
 			console.log(`Não foi possível se conectar ao Redis: ${err.message}`)
 			throw err
 		})
+}
+
+exports.setValue = (key, value) => {
+	return client.set(key, JSON.stringify(value))
+}
+
+exports.removeValue = (key) => {
+	return client.del(key)
+}
+
+exports.getValue = (key) => {
+	return client.get(key)
 }
