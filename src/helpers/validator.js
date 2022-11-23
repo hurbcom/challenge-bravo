@@ -55,6 +55,10 @@ exports.validateAddCurrencyPaylaod = (payload) => {
 		)
 	}
 
+	if (payload.code.length != 3) {
+		throw new HandledError(400, 'O código da Moeda deve conter 3 caracteres')
+	}
+
 	if (isNaN(+payload.quotation.sell) || isNaN(+payload.quotation.buy)) {
 		throw new HandledError(
 			400,

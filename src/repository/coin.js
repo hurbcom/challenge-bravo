@@ -46,6 +46,16 @@ exports.listAll = (fields) => {
 }
 
 /**
+ * Salva um novo registro no banco de dados
+ * @param {object} coin Modelo esperado para ser salvo no DB
+ * @returns {Promise<Document>}
+ * @author Vinícius Nunes
+ */
+exports.save = (coin) => {
+	return new coinModel(coin).save()
+}
+
+/**
  * Realiza o update da Moeda
  * @param {string} coinCode Código da moeda - BRL - BTC ..
  * @param {object} coin Campos a serem atualizados

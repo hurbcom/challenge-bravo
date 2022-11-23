@@ -9,7 +9,7 @@ router.get('/list', async (req, res) => {
 	try {
 		const response = await controller.currency.listAllCurrencies()
 
-		res.status(200).json(response)
+		res.status(response.statusCode || 200).json(response)
 	} catch (err) {
 		if (err instanceof HandledError) {
 			res.status(err.statusCode).json(err.showError())
@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
 
 		const response = await controller.currency.addCurrency(body)
 
-		res.status(200).json(response)
+		res.status(response.statusCode || 200).json(response)
 	} catch (err) {
 		if (err instanceof HandledError) {
 			res.status(err.statusCode).json(err.showError())
