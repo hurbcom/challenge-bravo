@@ -1,4 +1,3 @@
-const models = require('../models')
 const api = require('../api')
 const repository = require('../repository')
 const { BASE_COIN } = require('../properties')
@@ -12,8 +11,8 @@ const utils = require('../utils')
 exports.updateApiQuotations = () => {
 	return repository.currency
 		.findAllByOrigin('API')
-		.then((docs) => {
-			let listOfCoins = docs.map((coin) => `${coin.code}-${BASE_COIN}`)
+		.then((result) => {
+			let listOfCoins = result.map((coin) => `${coin.code}-${BASE_COIN}`)
 
 			return api.quotation.getLastQuotation(listOfCoins)
 		})
@@ -34,9 +33,13 @@ exports.updateApiQuotations = () => {
 			console.log(
 				`Update das cotações realizado com sucesso: ${docsUpdated.length} registros atualizados`
 			)
+
 			return utils.defaultResponse(201, 'Atualização realizada com sucesso')
 		})
 		.catch((err) => {
+			console.log(
+				`Não foi possível realizar a atualização das cotações: ${err.message}`
+			)
 			throw err
 		})
 }
