@@ -11,6 +11,7 @@ exports.start = (URI = DATABASE_URI) => {
 	return mongoose
 		.connect(URI, {
 			useNewUrlParser: true,
+			maxPoolSize: 1000,
 		})
 		.then((result) => {
 			const { name, host } = result.connection
