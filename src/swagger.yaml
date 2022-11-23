@@ -12,7 +12,7 @@ tags:
     description: 'Endpopints relacionados a conversão de moedas'
   - name: 'quotation'
     description: 'Endpoint relacionados as cotações'
-  - name: 'coin'
+  - name: 'currency'
     description: 'Endpoints relacionados as Moedas'
 schemes:
   - 'http'
@@ -174,10 +174,10 @@ paths:
               message:
                 type: string
                 example: 'errorMessage'
-  /coin/list:
+  /currency/list:
     get:
       tags:
-        - 'coin'
+        - 'currency'
       summary: 'Obtem Lista de Moedas'
       description: 'Lista as Moedas cadastradas no banco de dados'
       produces:
@@ -222,7 +222,3 @@ paths:
               message:
                 type: string
                 example: 'errorMessage'
-definitions:
-  Coin List:
-    type: array
-    example: 'BRL'
