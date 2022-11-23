@@ -9,11 +9,11 @@ host: 'localhost:3000'
 basePath: '/'
 tags:
   - name: 'converter'
-    description: 'Endpopints relacionados a conversão de moedas'
+    description: 'Conversão de Moedas'
   - name: 'quotation'
-    description: 'Endpoint relacionados as cotações'
+    description: 'Cotação de Moedas'
   - name: 'currency'
-    description: 'Endpoints relacionados as Moedas'
+    description: 'Gestão das Moedas'
 schemes:
   - 'http'
 paths:
@@ -21,9 +21,9 @@ paths:
     get:
       tags:
         - 'converter'
-      summary: 'Realiza Conversão'
+      summary: 'Realizar Conversão'
       description: 'Obtem o valor convertido da moeda selecionada'
-      operationId: 'converterCurrency'
+      operationId: 'getConverter'
       produces:
         - 'application/json'
       parameters:
@@ -136,8 +136,8 @@ paths:
     post:
       tags:
         - 'quotation'
-      summary: 'Atualiza Cotações'
-      description: 'Realiza a atualização das cotações online'
+      summary: 'Atualizar Cotações'
+      description: 'Realiza a atualização das cotações online. Obs.: Somente as moedas online, as cadastradas manualmente devem ser atualizadas manualmente'
       operationId: 'updateQuotation'
       produces:
         - 'application/json'
@@ -249,7 +249,7 @@ paths:
       tags:
         - 'currency'
       summary: 'Atualizar Moeda'
-      description: 'Realiza a atualização dos dados de uma moeda'
+      description: 'Realiza a atualização dos dados de uma moeda. Pode enviar um ou mais campos para atualizar'
       operationId: 'patchCurrency'
       produces:
         - 'application/json'
@@ -321,7 +321,7 @@ paths:
       tags:
         - 'currency'
       summary: 'Remover Moeda'
-      description: 'Realiza a remoção da Moeda. Somente as moedas que foram cadastradas posteriormente podem ser removidas'
+      description: 'Realiza a remoção da Moeda. Somente as moedas que foram cadastradas manualmente podem ser removidas'
       operationId: 'deleteCurrency'
       produces:
         - 'application/json'
@@ -387,7 +387,7 @@ paths:
     get:
       tags:
         - 'currency'
-      summary: 'Obtem Lista de Moedas'
+      summary: 'Obter Lista de Moedas'
       description: 'Lista as Moedas cadastradas no banco de dados'
       operationId: 'getCurrencyList'
       produces:
@@ -451,3 +451,11 @@ definitions:
             type: number
             example: 0.6648
             summary: Cotação de venda
+      createdAt:
+        type: date
+        example: '2022-11-21T23:00:00.000Z'
+        summary: Não é necessário enviar este campo ao Criar/Atualizar uma Moeda
+      updatedAt:
+        type: date
+        example: '2022-11-21T23:00:00.000Z'
+        summary: Não é necessário enviar este campo ao Criar/Atualizar uma Moeda
