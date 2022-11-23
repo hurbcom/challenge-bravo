@@ -14,7 +14,7 @@ const { COINS, BASE_COIN } = require('../properties')
  * @author Vinícius Nunes
  */
 exports.initializeQuotationsInDB = (coins = COINS, baseCoin = BASE_COIN) => {
-	return repository.coin
+	return repository.currency
 		.findAllByOrigin('API')
 		.then(async (docs) => {
 			if (isEmpty(docs)) {

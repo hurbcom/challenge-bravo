@@ -4,6 +4,12 @@ const HandledError = require('../helpers/HandledError')
 const factory = require('../factory')
 const { defaultResponse } = require('../utils')
 
+/**
+ * Converte o valor origem para o valor destino
+ * @param {object} queryParams Params -> FROM, TO, AMOUNT, TYPE?
+ * @returns {object} Objeto de resposta padrão
+ * @author Vinícius Nunes
+ */
 exports.currencyConverter = (queryParams) => {
 	let { from, to, amount, type } = queryParams
 
@@ -12,11 +18,11 @@ exports.currencyConverter = (queryParams) => {
 	to = to.toUpperCase()
 
 	const currencyFrom = () => {
-		return repository.coin.findOne(from)
+		return repository.currency.findOne(from)
 	}
 
 	const currencyTo = () => {
-		return repository.coin.findOne(to)
+		return repository.currency.findOne(to)
 	}
 
 	return Promise.all([currencyFrom(), currencyTo()])
@@ -46,6 +52,9 @@ exports.currencyConverter = (queryParams) => {
 			return defaultResponse(200, response)
 		})
 		.catch((err) => {
+			console.log(
+				`Não foi possível realizar a conversão dos valores: ${err.message}`
+			)
 			throw err
 		})
 }
