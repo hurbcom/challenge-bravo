@@ -35,14 +35,14 @@ exports.findOne = (code) => {
 
 /**
  * Busca todas as moedas no banco
- * @param {string} fields Campos a serem selecionados. Ex.: 'code name quotation'
+ * @param {object | string} projection Campos a serem selecionados. Ex.: {code: 1, __id: 0} ou 'code name quotation'
  * @returns {Promise<Document[]>} Array dos registros encontrados
  * @author Vinícius Nunes
  */
-exports.listAll = (fields) => {
+exports.listAll = (projection) => {
 	const mongoOptions = { lean: true }
 
-	return coinModel.find({}, fields, mongoOptions)
+	return coinModel.find({}, projection, mongoOptions)
 }
 
 /**

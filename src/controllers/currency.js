@@ -9,12 +9,18 @@ const { isEmpty } = require('lodash')
  * @author Vinícius Nunes
  */
 exports.listAllCurrencies = () => {
-	return repository.coin
-		.listAll('code')
-		.then((docs) => {
-			const currencyCodes = factory.currency.formatCurrencyCodesToResponse(docs)
+	const projection = {
+		_id: 0,
+		code: 1,
+		name: 1,
+		quotation: 1,
+		updatedAt: 1,
+	}
 
-			return defaultResponse(200, currencyCodes)
+	return repository.coin
+		.listAll(projection)
+		.then((docs) => {
+			return defaultResponse(200, docs)
 		})
 		.catch((err) => {
 			console.log(`Não foi possível obter a lista de Moedas: ${err.message}`)

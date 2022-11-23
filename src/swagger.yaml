@@ -269,13 +269,9 @@ paths:
                 type: number
                 example: 200
               message:
-                type: string
-                example:
-                  - 'BRL'
-                  - 'USD'
-                  - 'EUR'
-                  - 'BTC'
-                  - 'ETH'
+                type: array
+                items:
+                  $ref: '#/definitions/Currency'
         500:
           description: Internal Server Error
           schema:
