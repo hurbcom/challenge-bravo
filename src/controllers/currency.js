@@ -2,6 +2,7 @@ const repository = require('../repository')
 const factory = require('../factory')
 const { defaultResponse } = require('../utils')
 const { isEmpty } = require('lodash')
+const HandledError = require('../helpers/HandledError')
 
 /**
  * Busca todas as Moedas existentes no Banco de Dados
@@ -15,6 +16,7 @@ exports.listAllCurrencies = () => {
 		name: 1,
 		quotation: 1,
 		updatedAt: 1,
+		createdAt: 1,
 	}
 
 	return repository.coin
@@ -46,6 +48,21 @@ exports.addCurrency = (payload) => {
 			await repository.coin.save(payload)
 
 			return defaultResponse(201, 'Moeda cadastrada com sucesso')
+		})
+		.catch((err) => {
+			throw err
+		})
+}
+
+exports.updateCurrency = (code, payload) => {
+	return repository.coin
+		.update(code, payload)
+		.then((result) => {
+			if (isEmpty(result)) {
+				throw new HandledError(404, 'Moeda não encontrada')
+			}
+
+			return defaultResponse(200, 'Moeda atualizada com sucesso')
 		})
 		.catch((err) => {
 			throw err

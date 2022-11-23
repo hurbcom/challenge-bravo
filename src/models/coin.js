@@ -1,15 +1,17 @@
 const { model, Schema } = require('mongoose')
 
-const coinSchema = new Schema({
-	name: { type: String, require: true },
-	code: { type: String, require: true, unique: true },
-	quotation: {
-		buy: { type: Number, require: true },
-		sell: { type: Number, require: true },
+const coinSchema = new Schema(
+	{
+		name: { type: String, require: true },
+		code: { type: String, require: true, unique: true },
+		quotation: {
+			buy: { type: Number, require: true },
+			sell: { type: Number, require: true },
+		},
+		origin: { type: String, enum: ['API', 'MANUAL'], default: 'MANUAL' },
 	},
-	origin: { type: String, enum: ['API', 'MANUAL'] },
-	updatedAt: { type: Date, default: Date.now },
-})
+	{ timestamps: true }
+)
 
 const coin = model('Coin', coinSchema)
 module.exports = coin

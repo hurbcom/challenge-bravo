@@ -13,7 +13,7 @@ exports.findAllByOrigin = (origin) => {
 	const mongoOptions = { lean: true }
 
 	return coinModel
-		.find(mongoOptions, {}, mongoOptions)
+		.find(mongoQuery, {}, mongoOptions)
 		.then((doc) => {
 			return doc
 		})

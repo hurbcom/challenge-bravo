@@ -15,12 +15,6 @@ exports.updateApiQuotations = () => {
 		.then((docs) => {
 			let listOfCoins = docs.map((coin) => `${coin.code}-${BASE_COIN}`)
 
-			// Removendo o proprio USD-USD da lista pois não há
-			// essa cotação na API
-			listOfCoins = listOfCoins.filter(
-				(elt) => elt != `${BASE_COIN}-${BASE_COIN}`
-			)
-
 			return api.quotation.getLastQuotation(listOfCoins)
 		})
 		.then((onlineQuotations) => {
