@@ -2,11 +2,23 @@ const express = require('express')
 const router = express.Router()
 const controller = require('../controllers')
 const utils = require('../utils')
+const validation = require('../helpers/validator')
 const HandledError = require('../helpers/HandledError')
 
-router.post('/update', async (req, res) => {
+router.get('/', async (req, res) => {
 	try {
-		const response = await controller.quotation.updateApiQuotations()
+		validation.validateQueryParamsToConverter(req.query)
+
+		let { from, to, amount, type } = req.query
+
+		const params = {
+			from: from.toUpperCase(),
+			to: to.toUpperCase(),
+			amount,
+			type: type?.toLowerCase(),
+		}
+
+		const response = await controller.converter.currencyConverter(params)
 
 		res.status(200).json(response)
 	} catch (err) {

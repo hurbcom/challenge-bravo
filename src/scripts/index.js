@@ -31,6 +31,17 @@ exports.initializeQuotationsInDB = (coins = COINS, baseCoin = BASE_COIN) => {
 					new models.coin({ ...coin, origin: 'API' }).save()
 				}
 
+				const dolar = new models.coin({
+					name: 'Dólar Americano',
+					code: 'USD',
+					quotation: {
+						buy: 1,
+						sell: 1,
+					},
+					origin: 'MANUAL',
+					updatedAt: new Date(),
+				}).save()
+
 				console.log('Primeira carga de cotações executada com sucesso')
 			}
 		})

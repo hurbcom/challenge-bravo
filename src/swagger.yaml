@@ -38,7 +38,7 @@ paths:
           schema:
             type: string
             example: USD
-        - name: value
+        - name: amount
           in: query
           description: Valor
           required: true
@@ -47,8 +47,7 @@ paths:
             example: 59.90
         - name: type
           in: query
-          description: Tipo do valor [buy | sell]
-          required: true
+          description: Tipo do valor [buy | sell] - Caso não informado, será usado sell como padrão
           schema:
             type: string
             example: sell
@@ -64,6 +63,55 @@ paths:
               date:
                 type: date
                 example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: object
+                properties:
+                  from:
+                    type: string
+                    example: BRL
+                  to:
+                    type: string
+                    example: USD
+                  amount:
+                    type: number
+                    example: 11.2432
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: '{validationErrorMessage}'
+        404:
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: '{badRequestValidation}'
         500:
           description: Internal Server Error
           schema:
@@ -80,7 +128,7 @@ paths:
                 example: 500
               message:
                 type: string
-                example: 'errorMessage'
+                example: '{errorMessage}'
   /update:
     post:
       tags:
