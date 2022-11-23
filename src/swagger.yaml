@@ -1,0 +1,461 @@
+swagger: '2.0'
+info:
+  title: 'Currency Converter API'
+  description: 'API de conversão de moedas online'
+  version: 1.0.0
+  contact:
+    email: 'vinibda@gmail.com'
+host: 'localhost:3000'
+basePath: '/'
+tags:
+  - name: 'converter'
+    description: 'Conversão de Moedas'
+  - name: 'quotation'
+    description: 'Cotação de Moedas'
+  - name: 'currency'
+    description: 'Gestão das Moedas'
+schemes:
+  - 'http'
+paths:
+  /converter:
+    get:
+      tags:
+        - 'converter'
+      summary: 'Realizar Conversão'
+      description: 'Obtem o valor convertido da moeda selecionada'
+      operationId: 'getConverter'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: from
+          in: query
+          description: Moeda Origem
+          required: true
+          schema:
+            type: string
+            example: BRL
+        - name: to
+          in: query
+          description: Moeda Destino
+          required: true
+          schema:
+            type: string
+            example: USD
+        - name: amount
+          in: query
+          description: Valor
+          required: true
+          schema:
+            type: number
+            example: 59.90
+        - name: type
+          in: query
+          description: Tipo do valor [buy | sell] - Caso não informado, será usado sell como padrão
+          schema:
+            type: string
+            example: sell
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: object
+                properties:
+                  from:
+                    type: string
+                    example: BRL
+                  to:
+                    type: string
+                    example: USD
+                  amount:
+                    type: number
+                    example: 11.2432
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: '{validationErrorMessage}'
+        404:
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: '{badRequestValidation}'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: '{errorMessage}'
+  /quotation/update:
+    post:
+      tags:
+        - 'quotation'
+      summary: 'Atualizar Cotações'
+      description: 'Realiza a atualização das cotações online. Obs.: Somente as moedas online, as cadastradas manualmente devem ser atualizadas manualmente'
+      operationId: 'updateQuotation'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: 'Atualização realizada com sucesso'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
+  /currency:
+    post:
+      tags:
+        - 'currency'
+      summary: 'Cadastrar Moeda'
+      description: 'Realiza o cadastro de uma nova Moeda. Ao cadastrar a cotação, atente-se em utilizar como base USD para que as conversões sejam feitas corretamente'
+      operationId: 'postCurrency'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'payload'
+          description: 'Dados da Moeda a ser cadastrada'
+          required: true
+          schema:
+            $ref: '#/definitions/Currency'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: Moeda cadastrada com sucesso
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: '{validationErrorMessage}'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
+  /currency/{currencyCode}:
+    patch:
+      tags:
+        - 'currency'
+      summary: 'Atualizar Moeda'
+      description: 'Realiza a atualização dos dados de uma moeda. Pode enviar um ou mais campos para atualizar'
+      operationId: 'patchCurrency'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: path
+          name: currencyCode
+          description: Código da Moeda
+          required: true
+          type: string
+        - in: 'body'
+          name: 'payload'
+          description: 'Campos da Moeda que podem ser atualizados'
+          required: true
+          schema:
+            $ref: '#/definitions/Currency'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: Moeda atualizada com sucesso
+        404:
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 404
+              message:
+                type: string
+                example: 'Moeda não encontrada'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
+    delete:
+      tags:
+        - 'currency'
+      summary: 'Remover Moeda'
+      description: 'Realiza a remoção da Moeda. Somente as moedas que foram cadastradas manualmente podem ser removidas'
+      operationId: 'deleteCurrency'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: path
+          name: currencyCode
+          description: Código da Moeda
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: Moeda removida com sucesso
+        404:
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 404
+              message:
+                type: string
+                example: 'Moeda não encontrada'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
+  /currency/list:
+    get:
+      tags:
+        - 'currency'
+      summary: 'Obter Lista de Moedas'
+      description: 'Lista as Moedas cadastradas no banco de dados'
+      operationId: 'getCurrencyList'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: array
+                items:
+                  $ref: '#/definitions/Currency'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
+definitions:
+  Currency:
+    type: object
+    properties:
+      code:
+        type: string
+        example: 'AUD'
+        summary: 'Código da Moeda'
+      name:
+        type: string
+        example: Dólar Australiano
+        summary: Nome da Moeda
+      quotation:
+        type: object
+        properties:
+          buy:
+            type: number
+            example: 0.6644
+            summary: Cotação de compra
+          sell:
+            type: number
+            example: 0.6648
+            summary: Cotação de venda
+      createdAt:
+        type: date
+        example: '2022-11-21T23:00:00.000Z'
+        summary: Não é necessário enviar este campo ao Criar/Atualizar uma Moeda
+      updatedAt:
+        type: date
+        example: '2022-11-21T23:00:00.000Z'
+        summary: Não é necessário enviar este campo ao Criar/Atualizar uma Moeda

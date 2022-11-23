@@ -1,0 +1,15 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 30
+      arrivalRate: 500
+      name: 1000 requests per second for 30 seconds
+scenarios:
+  - name: '[Endpoint] Converter Currency'
+    flow:
+      - get:
+          url: '/converter'
+          qs:
+            from: 'BRL'
+            to: 'USD'
+            amount: '50'
