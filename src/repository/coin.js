@@ -1,15 +1,19 @@
 const coinModel = require('../models/coin')
+const { Document } = require('mongoose')
 
 /**
  * Busca todas as moedas baseada na sua origem - API ou MANUAL
  * @param {string} origin Origeem da cotação [API ou MANUAL]
- * @returns {Promise<Array<Document>>} Array dos registros encontrados
+ * @returns {Promise<Document[]>} Array dos registros encontrados
  */
 exports.findAllByOrigin = (origin) => {
+	const mongoQuery = {
+		origin: origin,
+	}
+	const mongoOptions = { lean: true }
+
 	return coinModel
-		.find({
-			origin: origin,
-		})
+		.find(mongoOptions, {}, mongoOptions)
 		.then((doc) => {
 			return doc
 		})
@@ -27,6 +31,18 @@ exports.findOne = (code) => {
 	}
 
 	return coinModel.findOne(mongoQuery)
+}
+
+/**
+ * Busca todas as moedas no banco
+ * @param {string} fields Campos a serem selecionados. Ex.: 'code name quotation'
+ * @returns {Promise<Document[]>} Array dos registros encontrados
+ * @author Vinícius Nunes
+ */
+exports.listAll = (fields) => {
+	const mongoOptions = { lean: true }
+
+	return coinModel.find({}, fields, mongoOptions)
 }
 
 /**

@@ -10,8 +10,10 @@ basePath: '/'
 tags:
   - name: 'converter'
     description: 'Endpopints relacionados a conversão de moedas'
-  - name: 'update'
-    description: 'Endpoint relacionados a atualização das cotações'
+  - name: 'quotation'
+    description: 'Endpoint relacionados as cotações'
+  - name: 'currency'
+    description: 'Endpoints relacionados as Moedas'
 schemes:
   - 'http'
 paths:
@@ -19,7 +21,7 @@ paths:
     get:
       tags:
         - 'converter'
-      summary: 'Get converted currency'
+      summary: 'Realiza Conversão'
       description: 'Obtem o valor convertido da moeda selecionada'
       produces:
         - 'application/json'
@@ -129,11 +131,11 @@ paths:
               message:
                 type: string
                 example: '{errorMessage}'
-  /update:
+  /quotation/update:
     post:
       tags:
-        - 'update'
-      summary: 'Update Quotations'
+        - 'quotation'
+      summary: 'Atualiza Cotações'
       description: 'Realiza a atualização das cotações online'
       produces:
         - 'application/json'
@@ -155,6 +157,54 @@ paths:
               message:
                 type: string
                 example: 'Atualização realizada com sucesso'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
+  /currency/list:
+    get:
+      tags:
+        - 'currency'
+      summary: 'Obtem Lista de Moedas'
+      description: 'Lista as Moedas cadastradas no banco de dados'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: string
+                example:
+                  - 'BRL'
+                  - 'USD'
+                  - 'EUR'
+                  - 'BTC'
+                  - 'ETH'
         500:
           description: Internal Server Error
           schema:
