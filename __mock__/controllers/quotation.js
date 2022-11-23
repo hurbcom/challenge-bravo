@@ -34,9 +34,11 @@ exports.GET_LAST_QUOTATION_API_SUCCESS = [
 	},
 ]
 
-exports.SUCCESS_RESPONSE = {
-	error: false,
-	date: new Date('2022-11-21T23:00:00.000Z'),
-	statusCode: 200,
-	message: 'Atualização realizada com sucesso',
+exports.DEFAULT_RESPONSE = (message, statuscode = 200, error = false) => {
+	return {
+		error: error,
+		date: new Date('2022-11-21T23:00:00.000Z'),
+		statusCode: statuscode,
+		message: message,
+	}
 }
