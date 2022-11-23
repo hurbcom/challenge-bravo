@@ -321,7 +321,7 @@ paths:
       tags:
         - 'currency'
       summary: 'Remover Moeda'
-      description: 'Realiza a remoção da Moeda'
+      description: 'Realiza a remoção da Moeda. Somente as moedas que foram cadastradas posteriormente podem ser removidas'
       operationId: 'deleteCurrency'
       produces:
         - 'application/json'
