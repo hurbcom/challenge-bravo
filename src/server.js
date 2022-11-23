@@ -10,7 +10,7 @@ Promise.all([dbConnection.start(), redisConnection.start()])
 			console.log(`Server is running at port ${PORT} on environment ${ENV}`)
 		})
 
-		scripts.initializeQuotationsInDB()
+		return scripts.initializeQuotationsInDB()
 	})
 	.catch((err) => {
 		console.log(err.message)
