@@ -1,6 +1,6 @@
 const { model, Schema } = require('mongoose')
 
-const coinSchema = new Schema(
+const currencySchema = new Schema(
 	{
 		name: { type: String, require: true },
 		code: { type: String, require: true, unique: true },
@@ -13,5 +13,5 @@ const coinSchema = new Schema(
 	{ timestamps: true }
 )
 
-const coin = model('Coin', coinSchema)
-module.exports = coin
+const currency = model('Currency', currencySchema)
+module.exports = currency

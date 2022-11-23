@@ -1,4 +1,4 @@
-const coinModel = require('../models/coin')
+const Currency = require('../models/currency')
 const { Document } = require('mongoose')
 
 /**
@@ -12,25 +12,21 @@ exports.findAllByOrigin = (origin) => {
 	}
 	const mongoOptions = { lean: true }
 
-	return coinModel
-		.find(mongoQuery, {}, mongoOptions)
-		.then((doc) => {
-			return doc
-		})
-		.catch((err) => {
-			console.log(
-				`Não foi possível obter a lista de moedas por origem: ${err.message}`
-			)
-			throw err
-		})
+	return Currency.find(mongoQuery, {}, mongoOptions)
 }
 
+/**
+ * Localiza o registro pelo código da moeda
+ * @param {string} code Código da Moeda
+ * @returns {Promise<Document>} Document do mongo
+ * @author Vinícius Nunes
+ */
 exports.findOne = (code) => {
 	const mongoQuery = {
 		code: code,
 	}
 
-	return coinModel.findOne(mongoQuery)
+	return Currency.findOne(mongoQuery)
 }
 
 /**
@@ -42,38 +38,45 @@ exports.findOne = (code) => {
 exports.listAll = (projection) => {
 	const mongoOptions = { lean: true }
 
-	return coinModel.find({}, projection, mongoOptions)
+	return Currency.find({}, projection, mongoOptions)
 }
 
 /**
  * Salva um novo registro no banco de dados
  * @param {object} coin Modelo esperado para ser salvo no DB
- * @returns {Promise<Document>}
+ * @returns {Promise<Document>} Document do mongo
  * @author Vinícius Nunes
  */
 exports.save = (coin) => {
-	return new coinModel(coin).save()
+	return new Currency(coin).save()
 }
 
 /**
  * Realiza o update da Moeda
- * @param {string} coinCode Código da moeda - BRL - BTC ..
- * @param {object} coin Campos a serem atualizados
- * @returns {Promise<Document>} Resultado do update
+ * @param {string} code Código da moeda - BRL - BTC ..
+ * @param {object} currency Campos a serem atualizados
+ * @returns {Promise<Document>} Document do mongo
  * @author Vinícius Nunes
  */
-exports.update = (coinCode, coin) => {
-	const mongoQuery = { code: coinCode }
+exports.update = (code, currency) => {
+	const mongoQuery = { code: code }
 	const mongoOptions = { new: true }
 
-	return coinModel.findOneAndUpdate(mongoQuery, coin, mongoOptions)
+	return Currency.findOneAndUpdate(mongoQuery, currency, mongoOptions)
 }
 
-exports.remove = (coinCode, query = {}) => {
+/**
+ * Remove o registro do banco de dados
+ * @param {string} code Código da Moeda
+ * @param {object} query Query String para fazer o filtro
+ * @returns {Promise<Document>} Document do mongo
+ * @author Vinícius Nunes
+ */
+exports.remove = (code, query = {}) => {
 	const mongoQuery = {
 		...query,
-		code: coinCode,
+		code: code,
 	}
 
-	return coinModel.findOneAndDelete(mongoQuery)
+	return Currency.findOneAndDelete(mongoQuery)
 }
