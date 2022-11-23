@@ -23,6 +23,7 @@ paths:
         - 'converter'
       summary: 'Realiza Conversão'
       description: 'Obtem o valor convertido da moeda selecionada'
+      operationId: 'converterCurrency'
       produces:
         - 'application/json'
       parameters:
@@ -137,6 +138,7 @@ paths:
         - 'quotation'
       summary: 'Atualiza Cotações'
       description: 'Realiza a atualização das cotações online'
+      operationId: 'updateQuotation'
       produces:
         - 'application/json'
       responses:
@@ -174,12 +176,81 @@ paths:
               message:
                 type: string
                 example: 'errorMessage'
+  /currency:
+    post:
+      tags:
+        - 'currency'
+      summary: 'Cadastrar Moeda'
+      description: 'Realiza o cadastro de uma nova Moeda. Ao cadastrar a cotação, atente-se em utilizar como base USD para que as conversões sejam feitas corretamente'
+      operationId: 'postCurrency'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'payload'
+          description: 'Dados da Moeda a ser cadastrada'
+          required: true
+          schema:
+            $ref: '#/definitions/Currency'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: Moeda cadastrada com sucesso
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: '{validationErrorMessage}'
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              date:
+                type: date
+                example: '2022-11-21T23:00:00.000Z'
+              statusCode:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: 'errorMessage'
   /currency/list:
     get:
       tags:
         - 'currency'
       summary: 'Obtem Lista de Moedas'
       description: 'Lista as Moedas cadastradas no banco de dados'
+      operationId: 'getCurrencyList'
       produces:
         - 'application/json'
       responses:
@@ -222,3 +293,26 @@ paths:
               message:
                 type: string
                 example: 'errorMessage'
+definitions:
+  Currency:
+    type: object
+    properties:
+      code:
+        type: string
+        example: 'AUD'
+        summary: 'Código da Moeda'
+      name:
+        type: string
+        example: Dólar Australiano
+        summary: Nome da Moeda
+      quotation:
+        type: object
+        properties:
+          buy:
+            type: number
+            example: 0.6644
+            summary: Cotação de compra
+          sell:
+            type: number
+            example: 0.6648
+            summary: Cotação de venda
