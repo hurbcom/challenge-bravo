@@ -4,7 +4,7 @@ const controller = require('../controllers')
 const utils = require('../utils')
 const HandledError = require('../helpers/HandledError')
 
-router.post('/update', async (req, res) => {
+router.put('/update', async (req, res) => {
 	try {
 		const response = await controller.quotation.updateApiQuotations()
 

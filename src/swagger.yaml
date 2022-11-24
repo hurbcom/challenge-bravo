@@ -133,12 +133,12 @@ paths:
                 type: string
                 example: '{errorMessage}'
   /quotation/update:
-    post:
+    put:
       tags:
         - 'quotation'
       summary: 'Atualizar Cotações'
       description: 'Realiza a atualização das cotações online. Obs.: Somente as moedas online, as cadastradas manualmente devem ser atualizadas manualmente'
-      operationId: 'updateQuotation'
+      operationId: 'putQuotation'
       produces:
         - 'application/json'
       responses:
