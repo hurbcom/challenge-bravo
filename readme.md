@@ -118,9 +118,7 @@ Conclui-se que a API estando deployada num bom servidor Linux (ElasticBeanstalk)
 
 Isso se da pela escolha de manter os dados das cotações em cache com o Redis
 
-### Considerações finais
-
-##### Testes unitários
+#### Testes unitários
 
 Foi utilizado jest para fazer a cobertura de testes unitários. Para executar os testes, rode o comando baixo
 
