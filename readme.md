@@ -2,16 +2,16 @@
 
 ### Tecnologias utilizadas
 
-- NodeJS
+- NodeJS - 14.20.1
 - Express
 - Mongoose
 - Jest
-- MongoDB
-- Docker
-- Docker Compose
+- MongoDB - latest
+- Docker - 20.10.21
+- Docker Compose - 2.12.2
 - Redis
 
-Não foi utilizado nenhum framework de boilerplate, a API foi escrita do 0 utilizando `npm --init`
+Não foi utilizado nenhum framework de boilerplate, a API foi escrita do 0 utilizando `npm init`
 
 ### Como rodar o projeto
 
