@@ -5,6 +5,8 @@
 - NodeJS - 14.20.1
 - Express
 - Mongoose
+- Axios
+- Swagger
 - Jest
 - MongoDB - latest
 - Docker - 20.10.21
@@ -62,9 +64,9 @@ Nela você consegue
 - Atualizar
 - Remover
 
-# Teste de Carga
+### Teste de Carga
 
-### Executando
+#### Executando
 
 Para os testes de carga da API, foi utilizada a ferramenta **Artillery**.
 Caso deseje realizar este teste na sua maquina, é necessário instalar a ferramenta de forma global
@@ -86,7 +88,7 @@ Você pode abrir o arquivo `convert-currency.yml` e alterar as propriedades do t
 - duration - duração do teste em ms
 - arrivalRate - quantidade de requisições simuladas por segundo
 
-### Resultados
+#### Resultados
 
 Foram realizados dois testes, numa máquina Linux com Ubuntu e um Windows 11
 
@@ -115,3 +117,15 @@ Abaixo é o resultado rodando no Windows 11 com as seguintes especificações
 Conclui-se que a API estando deployada num bom servidor Linux (ElasticBeanstalk), suporta até mais que 1000 requisições por segundo.
 
 Isso se da pela escolha de manter os dados das cotações em cache com o Redis
+
+### Considerações finais
+
+##### Melhorias
+
+- Inserir api_key/autenticação nas requisições para que não sejam feitas por qualquer pessoa (falha de segurança atual)
+- Deployar a API num EBS com a utilização do CI/CD
+- Utilizar cloudwatch com Lambda para realizar as atualizações da cotação periodicamente
+
+##### Dificuldades
+
+- O cronjob não saiu conforme o esperado, ele chega a fazer o request mas não enxerga a URL. Por estar proximo do prazo de entrega, não consegui implementar. Caso queira ver o estado da implementação, verifique a branch `cronjob`
