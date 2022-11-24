@@ -1,0 +1,1 @@
+*/1 * * * * root curl --request PUT --url http://localhost:3000/quotation/update >> /var/log/cron.log

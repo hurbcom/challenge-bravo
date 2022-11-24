@@ -4,7 +4,7 @@ services:
   api:
     container_name: currency-converter
     build: .
-    command: npm run dev
+    command: npm start
     volumes:
       - .:/node-app
       - /node-app/node_modules
@@ -16,6 +16,7 @@ services:
     links:
       - db
       - redis
+      - cronjob
     environment:
       REDIS_HOST: cache
       REDIS_PORT: 6379
@@ -36,6 +37,13 @@ services:
       - redis:/data
     ports:
       - '6379:6379'
+
+  cronjob:
+    container_name: cronjob
+    build:
+      context: ./cronjob/
+      dockerfile: Dockerfile
+
 volumes:
   redis:
     driver: local
