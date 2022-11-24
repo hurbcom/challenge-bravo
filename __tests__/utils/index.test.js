@@ -21,3 +21,24 @@ test('It should return a default response with error true and !2xx and !3xx stat
 	expect(response.message).toEqual('Bad Request')
 	done()
 })
+
+test('It should validate with success a payload object', () => {
+	const payload = {
+		name: 'vinicius',
+		lastName: 'nunes',
+	}
+
+	const requiredFields = ['name', 'lastName']
+
+	expect(utils.verifyKeysPayload(payload, requiredFields)).toEqual([])
+})
+
+test('It should validate with fail a payload object', () => {
+	const payload = {
+		name: 'vinicius',
+	}
+
+	const requiredFields = ['name', 'lastName']
+
+	expect(utils.verifyKeysPayload(payload, requiredFields)).toEqual(['lastName'])
+})
