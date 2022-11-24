@@ -120,12 +120,18 @@ Isso se da pela escolha de manter os dados das cotações em cache com o Redis
 
 ### Considerações finais
 
+##### Testes unitários
+
+Foi utilizado jest para fazer a cobertura de testes unitários. Para executar os testes, rode o comando baixo
+
+```sh
+npm run test
+```
+
+### Considerações finais
+
 ##### Melhorias
 
 - Inserir api_key/autenticação nas requisições para que não sejam feitas por qualquer pessoa (falha de segurança atual)
 - Deployar a API num EBS com a utilização do CI/CD
 - Utilizar cloudwatch com Lambda para realizar as atualizações da cotação periodicamente
-
-##### Dificuldades
-
-- O cronjob não saiu conforme o esperado, ele chega a fazer o request mas não enxerga a URL. Por estar proximo do prazo de entrega, não consegui implementar. Caso queira ver o estado da implementação, verifique a branch `cronjob`
