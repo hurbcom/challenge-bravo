@@ -1,2 +1,2 @@
 * * * * * echo "Cronjob Runned" > /proc/1/fd/1 2>/proc/1/fd/2
-* * * * * curl --request PUT --url http://localhost:3000/quotation/update > /proc/1/fd/1 2>/proc/1/fd/2
+* * * * * curl --request PUT --url http://172.21.0.10:3000/quotation/update > /proc/1/fd/1 2>/proc/1/fd/2
