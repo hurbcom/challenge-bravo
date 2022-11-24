@@ -4,18 +4,23 @@ services:
   api:
     container_name: currency-converter
     build: .
-    command: npm run dev
+    command: npm start
     volumes:
       - .:/node-app
       - /node-app/node_modules
     ports:
       - '3000:3000'
+    networks:
+      appNetwork:
+        ipv4_address: 172.21.0.10
+
     depends_on:
       - db
       - redis
     links:
       - db
       - redis
+      - cronjob
     environment:
       REDIS_HOST: cache
       REDIS_PORT: 6379
@@ -27,6 +32,9 @@ services:
       - '27017:27017'
     volumes:
       - ./data/db:/data/db
+    networks:
+      appNetwork:
+        ipv4_address: 172.21.0.20
 
   redis:
     image: redis:alpine
@@ -36,6 +44,27 @@ services:
       - redis:/data
     ports:
       - '6379:6379'
+    networks:
+      appNetwork:
+        ipv4_address: 172.21.0.30
+
+  cronjob:
+    container_name: cronjob
+    build:
+      context: ./cronjob/
+      dockerfile: Dockerfile
+    networks:
+      appNetwork:
+        ipv4_address: 172.21.0.40
+
+networks:
+  appNetwork:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.21.0.0/24"
+
 volumes:
   redis:
     driver: local
