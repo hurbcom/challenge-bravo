@@ -5,9 +5,12 @@ import (
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/mysqldialect"
+	"github.com/uptrace/bun/extra/bundebug"
 )
 
-func Connect() (*sql.DB, error) {
+func Connect() (*sql.DB, *bun.DB, error) {
 	// to connect on another database, just follow the string below with the standart
 	//"Username:password@/database?charset=utf8&parseTime=True&loc=Local"
 
@@ -27,11 +30,13 @@ func Connect() (*sql.DB, error) {
 	db, err := sql.Open("mysql", strConn)
 	if err != nil {
 		log.Fatal(err.Error())
-		return nil, err
+		return nil, nil, err
 	}
 	if err = db.Ping(); err != nil {
 		log.Fatal(err.Error())
-		return nil, err
+		return nil, nil, err
 	}
-	return db, nil
+	dbun := bun.NewDB(db, mysqldialect.New())
+	dbun.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+	return db, dbun, nil
 }

@@ -1,123 +1,136 @@
 package models
 
 import (
+	"context"
+	"errors"
+	"time"
+
+	"github.com/Ricardo-Sales/challenge-bravo/cerrors"
 	"github.com/Ricardo-Sales/challenge-bravo/database"
+	"github.com/uptrace/bun"
 )
 
 type Currency struct {
-	ID    uint32  `json:"id"`
-	Name  string  `json:"name"`
-	ToUsd float64 `json:"tousd"`
+	bun.BaseModel `bun:"table:currency,alias:cr"`
+
+	ID         uint32     `json:"id" bun:"id,pk,autoincrement"`
+	Code       string     `json:"code" bun:"code,notnull"`
+	Name       string     `json:"name" bun:"name,notnull"`
+	ToUsd      float64    `json:"tousd" bun:"tousd,notnull"`
+	Type       string     `json:"type" bun:"type,notnull"`
+	CreateDate *time.Time `json:"create_date" bun:"create_date"`
+	UpdateDate *time.Time `json:"update_date,omitempty" bun:"update_date,nullzero,default:on update current_timestamp()"`
 }
 
 func GetAll() ([]Currency, error) {
+	ctx := context.Background()
 
 	var crs []Currency
 	var err error
 
-	db, err := database.Connect()
+	_, dbun, err := database.Connect()
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer dbun.Close()
+	defer ctx.Done()
 
-	rows, err := db.Query("select id, name, tousd from currency")
+	err = dbun.NewSelect().Model(&crs).Scan(ctx)
 	if err != nil {
 		return nil, err
 	}
-
-	for rows.Next() {
-		var currency Currency
-		if err = rows.Scan(&currency.ID, &currency.Name, &currency.ToUsd); err != nil {
-			return nil, err
-		}
-		crs = append(crs, currency)
-	}
-
 	return crs, err
 }
 
 func (cr *Currency) Save() error {
+	ctx := context.Background()
 
-	db, err := database.Connect()
+	_, dbun, err := database.Connect()
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer dbun.Close()
+	defer ctx.Done()
 
-	statement, err := db.Prepare("insert into currency (name, tousd) values(?,?)")
+	_, err = dbun.NewInsert().Model(cr).Exec(ctx)
 	if err != nil {
 		return err
 	}
-	insert, err := statement.Exec(cr.Name, cr.ID)
-	if err != nil {
-		return err
-	}
-	ID, err := insert.LastInsertId()
-	if err != nil {
-		return err
-	}
-	cr.ID = uint32(ID)
 
+	err = dbun.NewSelect().Model(cr).Where("id=?", cr.ID).Scan(ctx)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (cr *Currency) GetOne() error {
 
-	db, err := database.Connect()
+	ctx := context.Background()
+	_, dbun, err := database.Connect()
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer dbun.Close()
+	defer ctx.Done()
 
-	rows, err := db.Query("select name, tousd from currency where id = ?", cr.ID)
+	rows, err := dbun.NewSelect().Model(cr).Where("id = ?", cr.ID).ScanAndCount(ctx)
+	if rows == 0 {
+		return errors.New(cerrors.ErrResourceNotFound)
+	}
 	if err != nil {
 		return err
-	}
-
-	if rows.Next() {
-		if err = rows.Scan(&cr.Name, &cr.ToUsd); err != nil {
-			return err
-		}
 	}
 
 	return nil
 }
 
 func (cr *Currency) Update() error {
-
-	db, err := database.Connect()
+	ctx := context.Background()
+	_, dbun, err := database.Connect()
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer dbun.Close()
+	defer ctx.Done()
 
-	statement, err := db.Prepare("update currency set name=?, tousd = ? where id = ?")
+	_, err = dbun.NewUpdate().
+		Model(cr).
+		ExcludeColumn("create_date").
+		Set("code=?", cr.Code).
+		Set("name=?", cr.Name).
+		Set("tousd=?", cr.ToUsd).
+		Set("update_date=?", time.Now().UTC()).
+		WherePK().
+		Exec(ctx)
 	if err != nil {
 		return err
 	}
-	if _, err = statement.Exec(cr.Name, cr.ToUsd); err != nil {
+
+	err = dbun.NewSelect().
+		Model(cr).
+		Where("id = ?", cr.ID).
+		Scan(ctx)
+	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
 func (cr *Currency) Delete() error {
-
-	db, err := database.Connect()
+	ctx := context.Background()
+	_, dbun, err := database.Connect()
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer dbun.Close()
+	defer ctx.Done()
 
-	statement, err := db.Prepare("delete from currency where id = ?")
+	_, err = dbun.NewDelete().Model(cr).WherePK().Exec(ctx)
+
 	if err != nil {
 		return err
 	}
 
-	if _, err = statement.Exec(cr.ID); err != nil {
-		return err
-	}
 	return nil
 }
