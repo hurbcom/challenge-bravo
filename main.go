@@ -8,7 +8,9 @@ import (
 )
 
 func main() {
-	router := routers.Generate()
 
+	router := routers.Generate()
+	log.Println("Servidor iniciado")
 	log.Fatal(http.ListenAndServe(":8000", router))
+
 }

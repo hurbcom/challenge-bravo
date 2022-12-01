@@ -2,28 +2,38 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/Ricardo-Sales/challenge-bravo/cerrors"
 	"github.com/Ricardo-Sales/challenge-bravo/models"
+	val "github.com/go-playground/validator/v10"
+	"github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
+)
+
+const (
+	ERROR_TYPE = "invalid value of type"
 )
 
 func GetAllCurrency(w http.ResponseWriter, r *http.Request) {
 	var crs []models.Currency
 	var err error
+	var details string
 
 	crs, err = models.GetAll()
 	if err != nil {
+		details = fmt.Sprintf(cerrors.ErrSearchCurrencyDB + "\n" + err.Error())
 		cerr := cerrors.Cerror{
 			Message:     "Internal server error",
 			StatusCode:  http.StatusInternalServerError,
 			Attribute:   "body",
 			Description: "ERROR_SEARCH_DATABASE",
-			Details:     cerrors.ErrSearchCurrencyDB + err.Error(),
+			Details:     details,
 		}
 		cerr.LogAndPostNewHurbError(w, r)
 		return
@@ -40,6 +50,7 @@ func GetAllCurrency(w http.ResponseWriter, r *http.Request) {
 func GetOneCurrency(w http.ResponseWriter, r *http.Request) {
 	var cr models.Currency
 	var err error
+	var details string
 
 	params := mux.Vars(r)
 	id, err := strconv.ParseUint(params["id"], 10, 32)
@@ -69,12 +80,13 @@ func GetOneCurrency(w http.ResponseWriter, r *http.Request) {
 			cerr.LogAndPostNewHurbError(w, r)
 			return
 		} else {
+			details = fmt.Sprintf(cerrors.ErrSearchCurrencyDB + "\n" + err.Error())
 			cerr := cerrors.Cerror{
 				Message:     "Internal server error",
 				StatusCode:  http.StatusInternalServerError,
 				Attribute:   "body",
 				Description: "ERROR_SEARCH_DATABASE",
-				Details:     cerrors.ErrSearchCurrencyDB + err.Error(),
+				Details:     details,
 			}
 			cerr.LogAndPostNewHurbError(w, r)
 			return
@@ -92,36 +104,54 @@ func GetOneCurrency(w http.ResponseWriter, r *http.Request) {
 func PostCurrency(w http.ResponseWriter, r *http.Request) {
 
 	var cr models.Currency
+	var cerrs []cerrors.Cerror
+	var details string
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
+		details = fmt.Sprintf(cerrors.ErrParseBody + "\n" + err.Error())
 		cerr := cerrors.Cerror{
 			Message:     "Internal server error",
 			StatusCode:  http.StatusInternalServerError,
 			Attribute:   "body",
 			Description: "ERROR_PARSE_BODY",
-			Details:     cerrors.ErrParseBody + err.Error(),
+			Details:     details,
 		}
 		cerr.LogAndPostNewHurbError(w, r)
 		return
 	}
+	defer r.Body.Close()
 
-	cerr := UnmarshalValidating(body, &cr)
-	if cerr.Message != "nil" {
-		cerr.LogAndPostNewHurbError(w, r)
+	cerrs = UnmarshalValidating(body, &cr)
+	if len(cerrs) > 0 {
+		cerrors.LogAndPostNewArrayHurbError(w, r, cerrs)
+		return
+	}
+
+	validate := val.New()
+	err = validate.Struct(cr)
+	if err != nil {
+		cerrors.TreatValidateFields(w, r, err)
 		return
 	}
 
 	if err = cr.Save(); err != nil {
-		cerr := cerrors.Cerror{
-			Message:     "Internal server error",
-			StatusCode:  http.StatusInternalServerError,
-			Attribute:   "currency",
-			Description: "ERROR_DATABASE",
-			Details:     cerrors.ErrUpdateCurrencyDB + err.Error(),
+		if err == err.(*mysql.MySQLError) && err.(*mysql.MySQLError).Number == 1062 {
+			cerrors.TreatDatabaseError(w, r, err)
+			return
+		} else {
+			details = fmt.Sprintf(cerrors.ErrSaveCurrencyDB + "\n" + err.Error())
+			cerr := cerrors.Cerror{
+				Message:     "Internal server error",
+				StatusCode:  http.StatusInternalServerError,
+				Attribute:   "currency",
+				Description: "ERROR_DATABASE",
+				Details:     details,
+			}
+
+			cerr.LogAndPostNewHurbError(w, r)
+			return
 		}
-		cerr.LogAndPostNewHurbError(w, r)
-		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -135,6 +165,8 @@ func PostCurrency(w http.ResponseWriter, r *http.Request) {
 
 func PutCurrency(w http.ResponseWriter, r *http.Request) {
 	var cr models.Currency
+	var details string
+	var cerrs []cerrors.Cerror
 
 	params := mux.Vars(r)
 	ID, err := strconv.ParseUint(params["id"], 10, 32)
@@ -153,45 +185,53 @@ func PutCurrency(w http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
+		details = fmt.Sprintf(cerrors.ErrParseBody + "\n" + err.Error())
 		cerr := cerrors.Cerror{
 			Message:     "Internal server error",
 			StatusCode:  http.StatusInternalServerError,
 			Attribute:   "body",
 			Description: "ERROR_PARSE_BODY",
-			Details:     cerrors.ErrParseBody + err.Error(),
+			Details:     details,
 		}
 		cerr.LogAndPostNewHurbError(w, r)
 		return
 	}
-	// implementando metodo de validação do unmarshal
+	defer r.Body.Close()
 
-	cerr := UnmarshalValidating(body, &cr)
-	if cerr.Message != "nil" {
-		cerr.LogAndPostNewHurbError(w, r)
+	cerrs = UnmarshalValidating(body, &cr)
+	if len(cerrs) > 0 {
+		cerrors.LogAndPostNewArrayHurbError(w, r, cerrs)
 		return
 	}
 
 	if err = cr.Update(); err != nil {
-		cerr := cerrors.Cerror{
-			Message:     "Internal server error",
-			StatusCode:  http.StatusInternalServerError,
-			Attribute:   "currency",
-			Description: "ERROR_DATABASE",
-			Details:     cerrors.ErrUpdateCurrencyDB + err.Error(),
+		if err == err.(*mysql.MySQLError) && err.(*mysql.MySQLError).Number == 1062 {
+			cerrors.TreatDatabaseError(w, r, err)
+			return
+		} else {
+			details = fmt.Sprintf(cerrors.ErrUpdateCurrencyDB + "\n" + err.Error())
+			cerr := cerrors.Cerror{
+				Message:     "Internal server error",
+				StatusCode:  http.StatusInternalServerError,
+				Attribute:   "currency",
+				Description: "ERROR_DATABASE",
+				Details:     details,
+			}
+			cerr.LogAndPostNewHurbError(w, r)
+			return
 		}
-		cerr.LogAndPostNewHurbError(w, r)
-		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	if err = json.NewEncoder(w).Encode(cr); err != nil {
+		details = fmt.Sprintf(cerrors.ErrSendResponseBody + "\n" + err.Error())
 		cerr := cerrors.Cerror{
 			Message:     "Internal server error",
 			StatusCode:  http.StatusInternalServerError,
 			Attribute:   "currency",
 			Description: "ERROR_SEND_BODY",
-			Details:     cerrors.ErrSendResponseBody + err.Error(),
+			Details:     details,
 		}
 		cerr.LogAndPostNewHurbError(w, r)
 		return
@@ -200,6 +240,7 @@ func PutCurrency(w http.ResponseWriter, r *http.Request) {
 
 func DeleteCurrency(w http.ResponseWriter, r *http.Request) {
 	var cr models.Currency
+	var details string
 
 	params := mux.Vars(r)
 	ID, err := strconv.ParseUint(params["id"], 10, 32)
@@ -209,7 +250,7 @@ func DeleteCurrency(w http.ResponseWriter, r *http.Request) {
 			StatusCode:  http.StatusBadRequest,
 			Attribute:   "id",
 			Description: "INVALID_FORMAT",
-			Details:     cerrors.ErrInvalidToUsd,
+			Details:     cerrors.ErrInvalidID,
 		}
 		cerr.LogAndPostNewHurbError(w, r)
 		return
@@ -217,12 +258,13 @@ func DeleteCurrency(w http.ResponseWriter, r *http.Request) {
 	cr.ID = uint32(ID)
 
 	if err = cr.Delete(); err != nil {
+		details = fmt.Sprintf(cerrors.ErrDeleteCurrencyDB + "\n" + err.Error())
 		cerr := cerrors.Cerror{
 			Message:     "Internal server error",
 			StatusCode:  http.StatusInternalServerError,
 			Attribute:   "currency",
 			Description: "ERROR_DATABASE",
-			Details:     cerrors.ErrUpdateCurrencyDB + err.Error(),
+			Details:     details,
 		}
 		cerr.LogAndPostNewHurbError(w, r)
 		return
@@ -232,26 +274,23 @@ func DeleteCurrency(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func UnmarshalValidating(body []byte, cr *models.Currency) cerrors.Cerror {
-	Nilerr := cerrors.Cerror{
-		Message:     "nil",
-		StatusCode:  0,
-		Attribute:   "",
-		Description: "",
-		Details:     "",
-	}
+func UnmarshalValidating(body []byte, cr *models.Currency) []cerrors.Cerror {
+	var details string
+	var cerrs []cerrors.Cerror
 
 	aux := make(map[string]interface{})
 	err := json.Unmarshal(body, &aux)
 	if err != nil {
+		details = fmt.Sprintf(cerrors.ErrUnmarshalBody + "\n" + err.Error())
 		cerr := cerrors.Cerror{
 			Message:     "Internal server error",
 			StatusCode:  http.StatusInternalServerError,
 			Attribute:   "body",
 			Description: "ERROR_UNMARSHAL",
-			Details:     cerrors.ErrUnmarshalBody + err.Error(),
+			Details:     details,
 		}
-		return cerr
+		cerrs = append(cerrs, cerr)
+
 	}
 
 	if reflect.TypeOf(aux["code"]) != reflect.TypeOf(cr.Code) {
@@ -262,16 +301,16 @@ func UnmarshalValidating(body []byte, cr *models.Currency) cerrors.Cerror {
 			Description: "INVALID_DATA_TYPE",
 			Details:     cerrors.ErrInvalidCode,
 		}
-		return cerr
-	} else if aux["code"] == nil || aux["code"] == "" {
+		cerrs = append(cerrs, cerr)
+	} else if strings.ToUpper(aux["code"].(string)) != aux["code"].(string) {
 		cerr := cerrors.Cerror{
 			Message:     "Bad Request",
 			StatusCode:  http.StatusBadRequest,
 			Attribute:   "code",
-			Description: "INVALID_FORMAT",
-			Details:     cerrors.ErrEmptycode,
+			Description: "INVALID_DATA_TYPE",
+			Details:     cerrors.ErrCaseCode,
 		}
-		return cerr
+		cerrs = append(cerrs, cerr)
 	} else {
 		cr.Code = (aux["code"]).(string)
 	}
@@ -284,16 +323,7 @@ func UnmarshalValidating(body []byte, cr *models.Currency) cerrors.Cerror {
 			Description: "INVALID_DATA_TYPE",
 			Details:     cerrors.ErrInvalidName,
 		}
-		return cerr
-	} else if aux["name"] == nil || aux["name"] == "" {
-		cerr := cerrors.Cerror{
-			Message:     "Bad Request",
-			StatusCode:  http.StatusBadRequest,
-			Attribute:   "code",
-			Description: "INVALID_FORMAT",
-			Details:     cerrors.ErrEmptyName,
-		}
-		return cerr
+		cerrs = append(cerrs, cerr)
 	} else {
 		cr.Name = (aux["name"]).(string)
 	}
@@ -306,18 +336,9 @@ func UnmarshalValidating(body []byte, cr *models.Currency) cerrors.Cerror {
 			Description: "INVALID_DATA_TYPE",
 			Details:     cerrors.ErrInvalidToUsd,
 		}
-		return cerr
-	} else if aux["tousd"] == nil || aux["tousd"] == "" {
-		cerr := cerrors.Cerror{
-			Message:     "Bad Request",
-			StatusCode:  http.StatusBadRequest,
-			Attribute:   "code",
-			Description: "INVALID_FORMAT",
-			Details:     cerrors.ErrEmptyToUsd,
-		}
-		return cerr
+		cerrs = append(cerrs, cerr)
 	} else {
-		cr.ToUsd = (aux["tousd"]).(float64)
+		cr.ToUsd = (aux["tousd"]).(string)
 	}
 	if reflect.TypeOf(aux["type"]) != reflect.TypeOf(cr.Type) {
 		cerr := cerrors.Cerror{
@@ -327,19 +348,42 @@ func UnmarshalValidating(body []byte, cr *models.Currency) cerrors.Cerror {
 			Description: "INVALID_DATA_TYPE",
 			Details:     cerrors.ErrInvalidType,
 		}
-		return cerr
-	} else if aux["type"] == nil || aux["type"] == "" {
+		cerrs = append(cerrs, cerr)
+	} else if strings.ToUpper(aux["type"].(string)) != aux["type"].(string) {
+		cerr := cerrors.Cerror{
+			Message:     "Bad Request",
+			StatusCode:  http.StatusBadRequest,
+			Attribute:   "code",
+			Description: "INVALID_DATA_TYPE",
+			Details:     cerrors.ErrCaseType,
+		}
+		cerrs = append(cerrs, cerr)
+	} else if res := ValidateType(aux["type"].(string)); res == ERROR_TYPE {
 		cerr := cerrors.Cerror{
 			Message:     "Bad Request",
 			StatusCode:  http.StatusBadRequest,
 			Attribute:   "code",
 			Description: "INVALID_FORMAT",
-			Details:     cerrors.ErrEmptyType,
+			Details:     cerrors.ErrInvalidType,
 		}
-		return cerr
+		cerrs = append(cerrs, cerr)
 	} else {
 		cr.Type = (aux["type"]).(string)
 	}
 
-	return Nilerr
+	return cerrs
+}
+
+func ValidateType(typ string) string {
+
+	switch typ {
+	case "PHY": // for physical currency ex: USD, BRL
+		return typ
+	case "VIR": // for virtual currency ex: BTC, ETH
+		return typ
+	case "FIC": // for ficticious currency ex: PSN, GTA
+		return typ
+	default:
+		return ERROR_TYPE
+	}
 }

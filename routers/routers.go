@@ -15,6 +15,7 @@ func Generate() *mux.Router {
 	router.HandleFunc("/currency/{id}", controllers.GetOneCurrency).Methods(http.MethodGet)
 	router.HandleFunc("/currency/{id}", controllers.PutCurrency).Methods(http.MethodPut)
 	router.HandleFunc("/currency/{id}", controllers.DeleteCurrency).Methods(http.MethodDelete)
+	router.HandleFunc("/quotation/", controllers.CalculateQuotation).Methods(http.MethodGet)
 
 	return router
 }
