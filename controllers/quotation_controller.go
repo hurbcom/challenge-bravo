@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"reflect"
 	"strconv"
 
 	"github.com/Ricardo-Sales/challenge-bravo/cerrors"
@@ -326,7 +327,6 @@ func GetFullQuotation(codeIn string, codeOut string) (models.Quotation, cerrors.
 }
 
 func UnmarshalQuotation(body []byte, code string) (models.Quotation, cerrors.Cerror) {
-	var details string
 	var cerr cerrors.Cerror
 	var mapAux map[string]any
 	var quot models.Quotation
@@ -341,23 +341,75 @@ func UnmarshalQuotation(body []byte, code string) (models.Quotation, cerrors.Cer
 
 	err := json.Unmarshal(body, &mapAux)
 	if err != nil {
-		details = fmt.Sprintf(cerrors.ErrUnmarshalBody + "\n" + err.Error())
 		cerr = cerrors.Cerror{
 			Message:     "Internal server error",
 			StatusCode:  http.StatusInternalServerError,
 			Attribute:   "body",
 			Description: "ERROR_UNMARSHAL",
-			Details:     details,
+			Details:     cerrors.ErrUnmarshalBodyQuotation,
 		}
 		return quot, cerr
 	}
 
 	aux := mapAux[code].(map[string]any)
+
+	if reflect.TypeOf(aux["code"]) != reflect.TypeOf(quot.Code) {
+		cerr := cerrors.Cerror{
+			Message:     "Bad Request",
+			StatusCode:  http.StatusBadRequest,
+			Attribute:   "code",
+			Description: "INVALID_DATA_TYPE",
+			Details:     cerrors.ErrInvalidCodeQuot,
+		}
+		return quot, cerr
+	}
+
+	if reflect.TypeOf(aux["codein"]) != reflect.TypeOf(quot.Codein) {
+		cerr := cerrors.Cerror{
+			Message:     "Bad Request",
+			StatusCode:  http.StatusBadRequest,
+			Attribute:   "codein",
+			Description: "INVALID_DATA_TYPE",
+			Details:     cerrors.ErrInvalidCodeInQuot,
+		}
+		return quot, cerr
+	}
+	if reflect.TypeOf(aux["name"]) != reflect.TypeOf(quot.Name) {
+		cerr := cerrors.Cerror{
+			Message:     "Bad Request",
+			StatusCode:  http.StatusBadRequest,
+			Attribute:   "name",
+			Description: "INVALID_DATA_TYPE",
+			Details:     cerrors.ErrInvalidNameQuot,
+		}
+		return quot, cerr
+	}
+	if reflect.TypeOf(aux["bid"]) != reflect.TypeOf(quot.Value) {
+		cerr := cerrors.Cerror{
+			Message:     "Bad Request",
+			StatusCode:  http.StatusBadRequest,
+			Attribute:   "value",
+			Description: "INVALID_DATA_TYPE",
+			Details:     cerrors.ErrInvalidValueQuot,
+		}
+		return quot, cerr
+	}
+	if reflect.TypeOf(aux["create_date"]) != reflect.TypeOf(quot.CreateDate) {
+		cerr := cerrors.Cerror{
+			Message:     "Bad Request",
+			StatusCode:  http.StatusBadRequest,
+			Attribute:   "create_date",
+			Description: "INVALID_DATA_TYPE",
+			Details:     cerrors.ErrInvalidCreateDateQuot,
+		}
+		return quot, cerr
+	}
+
 	quot.Code = aux["code"].(string)
-	quot.Codein = (aux["codein"]).(string)
-	quot.Name = (aux["name"]).(string)
-	quot.Value = (aux["bid"]).(string)
-	quot.CreateDate = (aux["create_date"]).(string)
+	quot.Codein = aux["codein"].(string)
+	quot.Name = aux["name"].(string)
+	quot.Value = aux["bid"].(string)
+	quot.CreateDate = aux["create_date"].(string)
 
 	return quot, cerrNil
 }

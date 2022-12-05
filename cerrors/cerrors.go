@@ -12,27 +12,35 @@ import (
 )
 
 const (
-	ErrInvalidID    = "ID not found "
-	ErrInvalidCode  = "code field must be string "
-	ErrCaseCode     = "code field must be upper case "
-	ErrInvalidName  = "name field must be string "
-	ErrInvalidToUsd = "tousd field must be string "
-	ErrInvalidTType = "type field must be string"
-	ErrCaseType     = "type field must be upper case "
+	ErrInvalidID       = "ID not found "
+	ErrInvalidCode     = "code field must be string "
+	ErrCaseCode        = "code field must be upper case "
+	ErrInvalidName     = "name field must be string "
+	ErrInvalidToUsd    = "tousd field must be string "
+	ErrInvalidDotToUsd = "tousd field must have a dot '.' for decimals "
+	ErrInvalidTType    = "type field must be string"
+	ErrCaseType        = "type field must be upper case "
 
 	ErrInvalidType = "type field must have only 'phy','vir' or 'fic' upper case values "
 
-	ErrParseBody        = "error when reading request body "
-	ErrUnmarshalBody    = "error when unmarshal request body "
-	ErrUpdateCurrencyDB = "error when update currency on database "
-	ErrSearchCurrencyDB = "error when search currency on database "
-	ErrSaveCurrencyDB   = "error when save currency on database "
-	ErrDuplicateCodeDB  = "existing value in code field "
-	ErrDeleteCurrencyDB = "error when delete currency on database "
+	ErrParseBody              = "error when reading request body "
+	ErrUnmarshalBody          = "error when unmarshal request body "
+	ErrUnmarshalBodyQuotation = "error when unmarshal request body from quotation "
+	ErrUpdateCurrencyDB       = "error when update currency on database "
+	ErrSearchCurrencyDB       = "error when search currency on database "
+	ErrSaveCurrencyDB         = "error when save currency on database "
+	ErrDuplicateCodeDB        = "existing value in code field "
+	ErrDeleteCurrencyDB       = "error when delete currency on database "
 
 	ErrSendResponseBody = "error when send response body "
 
 	ErrResourceNotFound = "resource not found "
+
+	ErrInvalidCodeQuot       = "code field must be string "
+	ErrInvalidCodeInQuot     = "codein field must be string "
+	ErrInvalidNameQuot       = "codein field must be string "
+	ErrInvalidValueQuot      = "value field must be string "
+	ErrInvalidCreateDateQuot = "create_date field must be string "
 )
 
 type Cerror struct {

@@ -337,6 +337,16 @@ func UnmarshalValidating(body []byte, cr *models.Currency) []cerrors.Cerror {
 			Details:     cerrors.ErrInvalidToUsd,
 		}
 		cerrs = append(cerrs, cerr)
+	} else if vaux := strings.Split(aux["tousd"].(string), ","); len(vaux) > 1 {
+		cerr := cerrors.Cerror{
+			Message:     "Bad Request",
+			StatusCode:  http.StatusBadRequest,
+			Attribute:   "tousd",
+			Description: "INVALID_DATA_TYPE",
+			Details:     cerrors.ErrInvalidDotToUsd,
+		}
+		cerrs = append(cerrs, cerr)
+
 	} else {
 		cr.ToUsd = (aux["tousd"]).(string)
 	}
