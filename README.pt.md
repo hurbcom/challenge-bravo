@@ -2,80 +2,115 @@
 
 [[English](README.md) | [Português](README.pt.md)]
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+ A API para conversão de moedas foi desenvolvida em linguagem Golang tem como objetivo capturar a cotação atual das moedas e realizar a conversão para as moedas cadastradas.
 
-A API precisa converter entre as seguintes moedas:
+ A API converte entre as seguintes moedas:
 
 -   USD
 -   BRL
 -   EUR
 -   BTC
 -   ETH
+-   PSN (moeda Virtual da Play station Network)
+-   XBX (moeda Virtual da Xbox)
 
-Outras moedas podem ser adicionadas conforme o uso.
+Caso o usuário queira cadastrar novas moedas, é possivel realizar uma requisição HTTP com o corpo da requisição do formato JSON do exemplo abaixo:
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+{
+    "code": "XBX",  
+    "name": "Xbox Coins",
+    "tousd": "1,50",
+    "type": "FIC"
+}
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+onde: 
+code = Codigo da moeda
+name = nome da moeda
+tousd = fator de conversão da moeda para Dólar (lastro)
+type = tipo de moeda (fisica (PHY) para moedas como dolar, real brasileiro e etc, virtual (VIR) para criptomoedas e ficticia (FIC) para moedas utilizadas em plataforma de jogos e que necessitam de conversão para comprá-las )
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+para o armazenamento das moedas no banco de dados, foi criada a seguinte estrutura utilizando o mysql
+ 
+CREATE TABLE `currency` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(4) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `tousd` varchar(50) NOT NULL,
+  `type` varchar(3) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code_UNIQUE` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
-A API deve suportar conversão entre moedas fiduciárias, crypto e fictícias. Exemplo: BRL->HURB, HURB->ETH
+para realizar o CRUD da moeda e necessário realizar as requisições nos seguintes caminhos
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+POST: localhost:8000/currency
+PUT: localhost:8000/currency/:id
+GET: localhost:8000/currency/:id
+DELETE: localhost:8000/currency/:id
+GET: localhost:8000/currency/
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de Dungeons & Dragons sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+para cada caminho temos as seguintes Status-Code
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+200 - para os casos de conclusao da requisição com sucesso
+204 - para os casos de deleção con sucesso
+400 - pra os casos de requisição inadequada (valores fora do padrão)
+404 - para os casos de recurso (entidade) não encontrado
+500 - para erros internos como os de acesso a banco de dados
 
-Ref:
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+para a requisição da conversão da moeda, deve-se realizar uma requisição HTTP para o seguinte caminho
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+GET localhost:8000/quotation/?from=PSN&to=BRL&amount=10
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+onde:
+from = moeda inicial
+to = moeda de destino da conversão
+amount = valor de conversão.
 
-## Requisitos
+no caso, pode-se ler ?from=PSN&to=BRL&amount=10 como:
+converter da moeda "from" para a moeda "to" o valor de "amount"
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **main** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+Como exemplo, temos o caso da seguinte requisição HTTP
 
-## Critério de avaliação
+GET localhost:8000/quotation/?from=PSN&to=BRL&amount=10
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+como resultado, teremos a seguinte resposta no formato JSON:
 
-## Dúvidas
+{
+    "code": "Play Station Coins",
+    "codein": "Brazilian-Real",
+    "name": "Play Station Coins/Brazilian-Real",
+    "bid": "65.685759",
+    "create_date": "2022-12-05 13:12:19"
+}
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+## Pontos de Vulnerabilidade
 
-Boa sorte e boa viagem! ;)
+- A API, para realizar a conversão, requisita de uma api publica para coletar os valores atualizados das cotações, contudo, o body de resposta desta API publica resulta no campo de conversão em string, o que dificulta na precisão dos parametros de conversão de moedas.
+A documentação da API de conversão de moedas se encontra em:
+
+https://docs.awesomeapi.com.br/api-de-moedas
+
+As issues relatando os erros de formato da cotação se encontram em:
+
+https://github.com/raniellyferreira/economy-api/issues
+
+- No crud das moedas, o campo "tousd", por ser uma string, aceita outros tipos de separadores que não o ponto ".". Por mais que se tenha validação deste campo, o usuário pode informar um valor que não é o esperado e nao ser realizada a conversão da cota corretamente
+
+## Points of Vulnerability
+
+- The API, to carry out the conversion, requests a public api to collect the updated quote values, however, the response body of this public API results in the conversion field in string, which makes it difficult to accurately convert currency parameters .
+Documentation for the Currency Conversion API can be found at:
+
+https://docs.awesomeapi.com.br/api-de-moedas
+
+Issues reporting quote format errors can be found at:
+
+https://github.com/raniallyferreira/economy-api/issues
+
+- In the crud of coins, the "tousd" field, as it is a string, accepts other types of separators than the dot ".". As much as this field is validated, the user can enter a value that is not expected and the quota conversion will not be carried out correctly
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
