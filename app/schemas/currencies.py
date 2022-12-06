@@ -1,6 +1,6 @@
 from typing import List, Optional
-import datetime
-from pydantic import BaseModel, validator
+from datetime import datetime
+from pydantic import BaseModel, validator, Field, root_validator
 
 
 class Currency(BaseModel):
@@ -62,7 +62,7 @@ class CurrencyDatabase(BaseModel):
         orm_mode = True
 
 
-class CurrencyOut(BaseModel):
+class CurrencyOutput(BaseModel):
     currency_code: str
     rate: float
     backed_by: str
@@ -71,8 +71,8 @@ class CurrencyOut(BaseModel):
 
 
 class CurrencyResponse(BaseModel):
-    data: CurrencyOut
+    data: CurrencyOutput
 
 
 class MultipleCurrencyResponse(BaseModel):
-    data: List[CurrencyOut]
+    data: List[CurrencyOutput]
