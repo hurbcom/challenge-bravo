@@ -24,7 +24,7 @@ class CurrenciesCoinsbaseModel(Base):
 
 
 class CreatedCoinsModel(Base):
-    __tablename__ = "fictitious_currencies"
+    __tablename__ = "created_currencies"
 
     id = Column(Integer, primary_key=True)
     currency_code = Column(String, nullable=False, index=True, unique=True)

@@ -1,8 +1,11 @@
 version: "3"
 
 services:
+
     api:
-        build: .
+        build:
+            context: .
+            dockerfile: Dockerfile
         restart: always
         container_name: api
         depends_on:
@@ -11,13 +14,14 @@ services:
             - 8000:8000
         env_file:
             - ./.env
-        command: bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+        command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
         volumes:
             - ./:/usr/src/app
 
     postgres:
         image: postgres
         restart: always
+        command: postgres -c 'max_connections=2500'
         container_name: db
         env_file:
             - ./.env
