@@ -10,7 +10,7 @@ from app.schemas.currencies import (
 )
 from app.services.currencies import CurrencyService
 
-router = APIRouter(prefix="/currency", tags=["Currency"])
+router = APIRouter(prefix="/currencies", tags=["Currencies"])
 
 
 @router.get(

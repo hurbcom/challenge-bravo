@@ -2,7 +2,6 @@ from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel, validator, Field, root_validator
 
-
 class Currency(BaseModel):
     currency_code: str
     rate: float
