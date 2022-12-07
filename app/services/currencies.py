@@ -5,7 +5,7 @@ from fastapi import HTTPException, status
 from pydantic import BaseModel, validator
 from sqlalchemy.orm import Query, Session
 
-from app.models import CurrenciesCoinsbaseModel, CreatedCoinsModel
+from app.models import CreatedCoinsModel, CurrenciesCoinsbaseModel
 from app.schemas.currencies import CurrencyDatabase
 
 
@@ -93,12 +93,8 @@ class CurrencyService(BaseModel):
     def update(self, db: Session, original_currency_code: str) -> CurrencyDatabase:
         original_currency_code = original_currency_code.upper()
         if (
-            original_currency_db_coinbase_api := db.query(
-                CurrenciesCoinsbaseModel
-            )
-            .filter(
-                CurrenciesCoinsbaseModel.currency_code == original_currency_code
-            )
+            original_currency_db_coinbase_api := db.query(CurrenciesCoinsbaseModel)
+            .filter(CurrenciesCoinsbaseModel.currency_code == original_currency_code)
             .first()
         ):
             raise HTTPException(
@@ -112,13 +108,13 @@ class CurrencyService(BaseModel):
                 .filter(CreatedCoinsModel.currency_code == original_currency_code)
                 .first()
             )
-            
+
             if not original_currency_code_in_db:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"Original currency code {original_currency_code} not found",
                 )
-            
+
             if self._find_currency_in_db(db=db):
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
@@ -130,7 +126,6 @@ class CurrencyService(BaseModel):
                 detail=f"Currency code {self.currency_code} not found",
             )
 
-    
         if not self._find_backed_currency_in_db(db=db):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

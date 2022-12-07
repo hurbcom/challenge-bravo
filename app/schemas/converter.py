@@ -2,6 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, validator
 
+
 class InputConversionSchema(BaseModel):
     from_: str
     to: str

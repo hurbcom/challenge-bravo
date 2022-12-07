@@ -5,11 +5,13 @@ from app.database import get_db
 from app.schemas.converter import ConverterModelResponse, InputConversionSchema
 from app.services.converter import ConvertOperator
 
-router = APIRouter(prefix="/converter", tags=["Convert"])
+router = APIRouter(prefix="/converter", tags=["Converter"])
 
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=ConverterModelResponse)
-def converter(params: InputConversionSchema = Depends(), db: Session = Depends(get_db)):
+async def converter(
+    params: InputConversionSchema = Depends(), db: Session = Depends(get_db)
+):
 
     converter = ConvertOperator(**params.dict(), db=db)
     converter_result = converter.convert_currencies()

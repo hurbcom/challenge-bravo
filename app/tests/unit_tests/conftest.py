@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.database import Base, SessionLocal, engine, get_db
 from app.main import app
-from app.models import CurrenciesCoinsbaseModel, CreatedCoinsModel
+from app.models import CreatedCoinsModel, CurrenciesCoinsbaseModel
 from app.schemas.currencies import Currency
 
 CURRENCY_VALUES_TEST_DATA = {
@@ -19,6 +19,7 @@ CURRENCY_VALUES_TEST_DATA = {
         },
     }
 }
+
 
 @pytest.fixture
 def real_currency_data_brl() -> dict:
@@ -55,7 +56,9 @@ def created_currency_data_hurb_all_fields_input() -> dict:
         "backed_currency_amount": 3.0,
     }
 
+
 client = TestClient(app)
+
 
 @pytest.fixture
 def session():
