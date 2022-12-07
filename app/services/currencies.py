@@ -103,7 +103,7 @@ class CurrencyService(BaseModel):
         ):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail=f"Currency code {original_currency_code} is an coinbase_api currency and cannot be changed",
+                detail=f"Currency code {original_currency_code} is an coinbase currency and cannot be changed",
             )
 
         if original_currency_code != self.currency_code:
@@ -162,10 +162,10 @@ class CurrencyService(BaseModel):
                 detail=f"Currency code {self.currency_code} not found",
             )
 
-        if currency.currency_type == "coinbase_api":
+        if currency.currency_type == "coinbase":
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail=f"Currency code {self.currency_code} is an coinbase_api currency and cannot be deleted",
+                detail=f"Currency code {self.currency_code} is an coinbase currency and cannot be deleted",
             )
 
         currency_query = db.query(CreatedCoinsModel).filter(

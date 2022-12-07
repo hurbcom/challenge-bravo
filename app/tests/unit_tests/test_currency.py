@@ -1,83 +1,78 @@
-from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.models import CurrenciesCoinsbaseModel
 from app.schemas.currencies import CurrencyInput
-from fastapi.testclient import TestClient
+
 import pytest
-from fastapi.testclient import TestClient
-from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
 
-from app.models import CurrenciesCoinsbaseModel
-from app.schemas.currencies import CurrencyInput
+from fastapi.testclient import TestClient
 
 from app.schemas.currencies import Currency
 
-TEST_FICTITIOUS_CURRENCY_CODE = "HURB"
+TEST_CREATED_CURRENCY_CODE = "HURB"
 TEST_COINBASE_CURRENCY_CODE = "BRL"
 
 # CREATE OPERATIONS
 def test_should_not_create_existing_currency_in_database(
     client: TestClient, real_currency_data_brl: dict
 ):
-    res = client.post("/currencies/", json=real_currency_data_brl)
-    assert res.status_code == 409
+    response = client.post("/currencies/", json=real_currency_data_brl)
+    assert response.status_code == 409
     assert (
-        res.json()["detail"]
+        response.json()["detail"]
         == f"Currency code {real_currency_data_brl['currency_code']} already exists"
     )
 
 
 def test_should_create_currency_that_not_exists_in_database(
-    client: TestClient, fictitious_currency_data_hurb: dict
+    client: TestClient, created_currency_data_hurb: dict
 ):
-    res = client.post("/currencies/", json=fictitious_currency_data_hurb)
-    print(res.json())
-    res_data = res.json()["data"]
+    response = client.post("/currencies/", json=created_currency_data_hurb)
+    print(response.json())
+    res_data = response.json()["data"]
 
-    assert res.status_code == 201
-    assert res_data["currency_code"] == fictitious_currency_data_hurb["currency_code"]
-    assert res_data["rate"] == fictitious_currency_data_hurb["rate"]
-    assert res_data["backed_by"] == fictitious_currency_data_hurb["backed_by"]
+    assert response.status_code == 201
+    assert res_data["currency_code"] == created_currency_data_hurb["currency_code"]
+    assert res_data["rate"] == created_currency_data_hurb["rate"]
+    assert res_data["backed_by"] == created_currency_data_hurb["backed_by"]
 
 
 def test_should_create_currency_with_alternative_body(
-    client: TestClient, fictitious_currency_data_hurb_alternative_input
+    client: TestClient, created_currency_data_hurb_alternative_input
 ):
-    payload = fictitious_currency_data_hurb_alternative_input
-    res = client.post("/currencies/", json=payload)
-    res_data = res.json()["data"]
+    payload = created_currency_data_hurb_alternative_input
+    response = client.post("/currencies/", json=payload)
+    res_data = response.json()["data"]
 
-    assert res.status_code == 201
+    assert response.status_code == 201
     assert res_data["currency_code"] == payload["currency_code"]
     assert res_data["rate"] == payload["amount"] / payload["backed_currency_amount"]
     assert res_data["backed_by"] == payload["backed_by"]
 
 
 def test_should_not_create_currency_with_missing_fields_in_body(
-    client: TestClient, fictitious_currency_data_hurb_missing_field_input: dict
+    client: TestClient, created_currency_data_hurb_missing_field_input: dict
 ):
-    res = client.post(
-        "/currencies/", json=fictitious_currency_data_hurb_missing_field_input
+    response = client.post(
+        "/currencies/", json=created_currency_data_hurb_missing_field_input
     )
 
-    assert res.status_code == 422
+    assert response.status_code == 422
     assert (
-        res.json()["detail"][0]["msg"]
-        == "You should provide whether a rate field or an amount and backed_currency_amount fields"
+        response.json()["detail"][0]["msg"]
+        == "Needs provide rate field or an amount with backed_currency_amount"
     )
 
 
 def test_should_not_create_currency_with_wrong_fields_in_body(
-    client: TestClient, fictitious_currency_data_hurb_all_fields_input: dict
+    client: TestClient, created_currency_data_hurb_all_fields_input: dict
 ):
-    res = client.post("/currencies/", json=fictitious_currency_data_hurb_all_fields_input)
+    response = client.post("/currencies/", json=created_currency_data_hurb_all_fields_input)
 
-    assert res.status_code == 422
+    assert response.status_code == 422
     assert (
-        res.json()["detail"][0]["msg"]
-        == "You should provide only a rate field or an amount and backed_currency_amount fields"
+        response.json()["detail"][0]["msg"]
+        == "Needs provide only a rate field or amount with backed_currency_amount fields"
     )
 
 # READ OPERATIONS
@@ -99,10 +94,10 @@ def test_should_get_all_currencies_in_db(
     expected_backed_by,
     expected_currency_type,
 ):
-    res = client.get("/currency")
-    res_data = res.json()["data"][index]
+    response = client.get("/currencies/")
+    res_data = response.json()["data"][index]
 
-    assert res.status_code == 200
+    assert response.status_code == 200
     assert res_data["currency_code"] == expected_currency_code
     assert res_data["rate"] == expected_rate
     assert res_data["backed_by"] == expected_backed_by
@@ -126,10 +121,10 @@ def test_should_get_specific_existing_currency_in_db(
     expected_backed_by,
     expected_currency_type,
 ):
-    res = client.get(f"/currency/{currency_code}/")
-    res_data = res.json()["data"]
+    response = client.get(f"/currencies/{currency_code}/")
+    res_data = response.json()["data"]
 
-    assert res.status_code == 200
+    assert response.status_code == 200
     assert res_data["currency_code"] == currency_code
     assert res_data["backed_by"] == expected_backed_by
     assert res_data["rate"] == expected_rate
@@ -138,18 +133,17 @@ def test_should_get_specific_existing_currency_in_db(
 
 def test_should_not_get_non_existing_currency_in_db(client: TestClient):
     currency_code = "HURB"
-    res = client.get(f"/currency/{currency_code}/")
-    assert res.status_code == 404
-    assert res.json()["detail"] == f"Currency code {currency_code} not found"
+    response = client.get(f"/currencies/{currency_code}/")
+    assert response.status_code == 404
 
 
 def test_should_get_existing_currency_in_db(
     client: TestClient, create_hurb_currency: dict
 ):
     currency = Currency(**create_hurb_currency)
-    res = client.get(f"/currency/{currency.currency_code}/")
-    res_data = res.json()["data"]
-    assert res.status_code == 200
+    response = client.get(f"/currencies/{currency.currency_code}/")
+    res_data = response.json()["data"]
+    assert response.status_code == 200
     assert res_data["currency_code"] == currency.currency_code
 
 # UPDATE OPERATIONS
@@ -163,7 +157,7 @@ def test_should_update_existing_currency_in_database(
     client: TestClient,
     session: Session,
     create_hurb_currency,
-    fictitious_currency_data_hurb: dict,
+    created_currency_data_hurb: dict,
 ):
     original_currency = CurrencyInput(**create_hurb_currency)
     currency_id_db = (
@@ -175,47 +169,47 @@ def test_should_update_existing_currency_in_database(
         .scalar()
     )
 
-    payload = fictitious_currency_data_hurb.copy()
+    payload = created_currency_data_hurb.copy()
     payload["rate"] = NEW_RATE
 
-    res = client.put(f"/currency/{original_currency.currency_code}", json=payload)
-    res_data = res.json()["data"]
+    response = client.put(f"/currencies/{original_currency.currency_code}", json=payload)
+    res_data = response.json()["data"]
 
     updated_currency = CurrencyInput(**payload)
-    assert res.status_code == 200
+    assert response.status_code == 200
     assert res_data["currency_code"] == updated_currency.currency_code
     assert res_data["rate"] == updated_currency.rate
     assert res_data["backed_by"] == updated_currency.backed_by
 
 
 def test_should_not_update_currency_not_found_in_db(
-    client: TestClient, fictitious_currency_data_hurb: dict
+    client: TestClient, created_currency_data_hurb: dict
 ):
-    payload = fictitious_currency_data_hurb.copy()
+    payload = created_currency_data_hurb.copy()
     payload["rate"] = NEW_RATE
     updated_currency = CurrencyInput(**payload)
 
-    res = client.put(f"/currency/{updated_currency.currency_code}", json=payload)
-    assert res.status_code == 404
+    response = client.put(f"/currencies/{updated_currency.currency_code}", json=payload)
+    assert response.status_code == 404
 
 
 def test_should_update_currency_not_found_in_db_using_alternative_input(
-    client: TestClient, fictitious_currency_data_hurb_alternative_input: dict
+    client: TestClient, created_currency_data_hurb_alternative_input: dict
 ):
-    payload = fictitious_currency_data_hurb_alternative_input.copy()
+    payload = created_currency_data_hurb_alternative_input.copy()
     payload["amount"] = NEW_AMOUNT
     payload["backed_currency_amount"] = NEW_BACKED_CURRENCY_AMOUNT
     updated_currency = CurrencyInput(**payload)
 
-    res = client.put(f"/currency/{updated_currency.currency_code}", json=payload)
-    assert res.status_code == 404
+    response = client.put(f"/currencies/{updated_currency.currency_code}", json=payload)
+    assert response.status_code == 404
 
 
 def test_should_update_currency_found_in_db_using_alternative_input(
     client: TestClient,
     session: Session,
     create_hurb_currency,
-    fictitious_currency_data_hurb_alternative_input: dict,
+    created_currency_data_hurb_alternative_input: dict,
 ):
     original_currency = CurrencyInput(**create_hurb_currency)
     currency_id_db = (
@@ -227,15 +221,15 @@ def test_should_update_currency_found_in_db_using_alternative_input(
         .scalar()
     )
 
-    payload = fictitious_currency_data_hurb_alternative_input.copy()
+    payload = created_currency_data_hurb_alternative_input.copy()
     payload["amount"] = NEW_AMOUNT
     payload["backed_currency_amount"] = NEW_BACKED_CURRENCY_AMOUNT
 
-    res = client.put(f"/currency/{original_currency.currency_code}", json=payload)
-    res_data = res.json()["data"]
+    response = client.put(f"/currencies/{original_currency.currency_code}", json=payload)
+    res_data = response.json()["data"]
 
     updated_currency = CurrencyInput(**payload)
-    assert res.status_code == 200
+    assert response.status_code == 200
     assert res_data["currency_code"] == updated_currency.currency_code
     assert res_data["rate"] == updated_currency.rate
     assert res_data["backed_by"] == updated_currency.backed_by
@@ -245,7 +239,7 @@ def test_should_not_update_currency_found_in_db_with_missing_field(
     client: TestClient,
     session: Session,
     create_hurb_currency,
-    fictitious_currency_data_hurb_missing_field_input: dict,
+    created_currency_data_hurb_missing_field_input: dict,
 ):
     original_currency = CurrencyInput(**create_hurb_currency)
     currency_id_db = (
@@ -257,56 +251,54 @@ def test_should_not_update_currency_found_in_db_with_missing_field(
         .scalar()
     )
 
-    payload = fictitious_currency_data_hurb_missing_field_input.copy()
+    payload = created_currency_data_hurb_missing_field_input.copy()
     payload["amount"] = NEW_AMOUNT
 
-    res = client.put(f"/currency/{original_currency.currency_code}", json=payload)
+    response = client.put(f"/currencies/{original_currency.currency_code}", json=payload)
 
-    assert res.status_code == 422
+    assert response.status_code == 422
     assert (
-        res.json()["detail"][0]["msg"]
-        == "You should provide whether a rate field or an amount and backed_currency_amount fields"
+        response.json()["detail"][0]["msg"]
+        == "Needs provide rate field or an amount with backed_currency_amount"
+
     )
 
 
 def test_should_update_currency_found_in_db_providing_invalid_fields_in_body(
     client: TestClient,
     create_hurb_currency: dict,
-    fictitious_currency_data_hurb_all_fields_input: dict,
+    created_currency_data_hurb_all_fields_input: dict,
 ):
-    res = client.put(
-        f"/currency/{create_hurb_currency['currency_code']}",
-        json=fictitious_currency_data_hurb_all_fields_input,
+    response = client.put(
+        f"/currencies/{create_hurb_currency['currency_code']}",
+        json=created_currency_data_hurb_all_fields_input,
     )
-    assert res.status_code == 422
+    assert response.status_code == 422
     assert (
-        res.json()["detail"][0]["msg"]
-        == "You should provide only a rate field or an amount and backed_currency_amount fields"
+        response.json()["detail"][0]["msg"]
+        == "Needs provide only a rate field or amount with backed_currency_amount fields"
     )
 
 
 def test_should_not_update_coinbase_api_currency_found_in_db(
-    client: TestClient, real_currency_data_brl, fictitious_currency_data_test: dict
+    client: TestClient, real_currency_data_brl, created_currency_data_test: dict
 ):
-    res = client.put(
-        f"/currency/{real_currency_data_brl['currency_code']}",
-        json=fictitious_currency_data_test,
+    response = client.put(
+        f"/currencies/{real_currency_data_brl['currency_code']}",
+        json=created_currency_data_test,
     )
-    assert res.status_code == 409
+    assert response.status_code == 409
     assert (
-        res.json()["detail"]
-        == f"Currency code {real_currency_data_brl['currency_code']} is an coinbase_api currency and cannot be changed"
+        response.json()["detail"]
+        == f"Currency code {real_currency_data_brl['currency_code']} is an coinbase currency and cannot be changed"
     )
 # DELETE OPERATIONS
 def test_found_in_db(
     client: TestClient, session: Session, create_hurb_currency: CurrencyInput
 ):
-    """
-    Try to delete a fictitious currency found in database
-    """
     currency = CurrencyInput(**create_hurb_currency)
-    res = client.delete(f"/currency/{currency.currency_code}")
-    assert res.status_code == 204
+    response = client.delete(f"/currencies/{currency.currency_code}")
+    assert response.status_code == 204
     currency_db: CurrenciesCoinsbaseModel = (
         session.query(CurrenciesCoinsbaseModel)
         .filter(
@@ -318,17 +310,14 @@ def test_found_in_db(
 
 
 def test_not_found_in_db(client: TestClient, session: Session):
-    """
-    Try to delete a fictitious currency not found in database
-    """
-    res = client.delete(f"/currency/{TEST_FICTITIOUS_CURRENCY_CODE}")
+    response = client.delete(f"/currencies/{TEST_CREATED_CURRENCY_CODE}")
 
-    assert res.status_code == 404
+    assert response.status_code == 404
     currency_db: CurrenciesCoinsbaseModel = (
         session.query(CurrenciesCoinsbaseModel)
         .filter(
             CurrenciesCoinsbaseModel.currency_code
-            == TEST_FICTITIOUS_CURRENCY_CODE
+            == TEST_CREATED_CURRENCY_CODE
         )
         .first()
     )

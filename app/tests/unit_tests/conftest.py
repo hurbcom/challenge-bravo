@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from app.database import Base, SessionLocal, engine, get_db
 from app.main import app
 from app.models import CurrenciesCoinsbaseModel, CreatedCoinsModel
-from app.models import CurrenciesCoinsbaseModel, CreatedCoinsModel
 from app.schemas.currencies import Currency
 
 CURRENCY_VALUES_TEST_DATA = {
