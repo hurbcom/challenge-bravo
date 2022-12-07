@@ -192,49 +192,6 @@ def test_should_not_update_currency_not_found_in_db(
     response = client.put(f"/currencies/{updated_currency.currency_code}", json=payload)
     assert response.status_code == 404
 
-
-def test_should_update_currency_not_found_in_db_using_alternative_input(
-    client: TestClient, created_currency_data_hurb_alternative_input: dict
-):
-    payload = created_currency_data_hurb_alternative_input.copy()
-    payload["amount"] = NEW_AMOUNT
-    payload["backed_currency_amount"] = NEW_BACKED_CURRENCY_AMOUNT
-    updated_currency = CurrencyInput(**payload)
-
-    response = client.put(f"/currencies/{updated_currency.currency_code}", json=payload)
-    assert response.status_code == 404
-
-
-def test_should_update_currency_found_in_db_using_alternative_input(
-    client: TestClient,
-    session: Session,
-    create_hurb_currency,
-    created_currency_data_hurb_alternative_input: dict,
-):
-    original_currency = CurrencyInput(**create_hurb_currency)
-    currency_id_db = (
-        session.query(CurrenciesCoinsbaseModel.id)
-        .filter(
-            CurrenciesCoinsbaseModel.currency_code
-            == original_currency.currency_code
-        )
-        .scalar()
-    )
-
-    payload = created_currency_data_hurb_alternative_input.copy()
-    payload["amount"] = NEW_AMOUNT
-    payload["backed_currency_amount"] = NEW_BACKED_CURRENCY_AMOUNT
-
-    response = client.put(f"/currencies/{original_currency.currency_code}", json=payload)
-    res_data = response.json()["data"]
-
-    updated_currency = CurrencyInput(**payload)
-    assert response.status_code == 200
-    assert res_data["currency_code"] == updated_currency.currency_code
-    assert res_data["rate"] == updated_currency.rate
-    assert res_data["backed_by"] == updated_currency.backed_by
-
-
 def test_should_not_update_currency_found_in_db_with_missing_field(
     client: TestClient,
     session: Session,
