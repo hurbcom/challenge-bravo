@@ -23,10 +23,6 @@ def coinbase_currencies_updater():
     if coinbase_currencies_response.status_code == 200:
         db.query(CoinbaseCurrenciesPublicApiModel).delete()
 
-        db.execute(
-            "ALTER SEQUENCE coinbase_currencies_public_api_id_seq RESTART WITH 1"
-        )
-
     currencies = coinbase_currencies_response.json()["data"]["rates"]
 
     for currency_code, rate in currencies.items():

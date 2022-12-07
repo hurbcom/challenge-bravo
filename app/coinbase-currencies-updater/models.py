@@ -5,7 +5,7 @@ Base = declarative_base()
 
 
 class CoinbaseCurrenciesPublicApiModel(Base):
-    __tablename__ = "coinbase"
+    __tablename__ = "coinbase_currencies"
 
     id = Column(Integer, primary_key=True)
     currency_code = Column(String, nullable=False, index=True, unique=True)
