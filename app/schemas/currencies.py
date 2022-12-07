@@ -1,6 +1,8 @@
-from typing import List, Optional
 from datetime import datetime
-from pydantic import BaseModel, validator, Field, root_validator
+from typing import List, Optional
+
+from pydantic import BaseModel, Field, root_validator, validator
+
 
 class Currency(BaseModel):
     currency_code: str
@@ -15,6 +17,7 @@ class Currency(BaseModel):
     @validator("backed_by")
     def uppercase_backed_by(cls, backed_by: str):
         return backed_by.upper()
+
 
 class CurrencyInput(Currency):
     rate: Optional[float]
@@ -48,6 +51,7 @@ class CurrencyInput(Currency):
         values["amount"] = None
         values["backed_currency_amount"] = None
         return values
+
 
 class CurrencyDatabase(BaseModel):
     id: int

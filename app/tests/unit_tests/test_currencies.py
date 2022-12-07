@@ -1,13 +1,9 @@
+import pytest
+from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.models import CurrenciesCoinsbaseModel
-from app.schemas.currencies import CurrencyInput
-
-import pytest
-
-from fastapi.testclient import TestClient
-
-from app.schemas.currencies import Currency
+from app.schemas.currencies import Currency, CurrencyInput
 
 TEST_CREATED_CURRENCY_CODE = "HURB"
 TEST_COINBASE_CURRENCY_CODE = "BRL"
@@ -67,13 +63,16 @@ def test_should_not_create_currency_with_missing_fields_in_body(
 def test_should_not_create_currency_with_wrong_fields_in_body(
     client: TestClient, created_currency_data_hurb_all_fields_input: dict
 ):
-    response = client.post("/currencies/", json=created_currency_data_hurb_all_fields_input)
+    response = client.post(
+        "/currencies/", json=created_currency_data_hurb_all_fields_input
+    )
 
     assert response.status_code == 422
     assert (
         response.json()["detail"][0]["msg"]
         == "Needs provide only a rate field or amount with backed_currency_amount fields"
     )
+
 
 # READ OPERATIONS
 @pytest.mark.parametrize(
@@ -146,6 +145,7 @@ def test_should_get_existing_currency_in_db(
     assert response.status_code == 200
     assert res_data["currency_code"] == currency.currency_code
 
+
 # UPDATE OPERATIONS
 
 NEW_RATE = 50.41
@@ -163,8 +163,7 @@ def test_should_update_existing_currency_in_database(
     currency_id_db = (
         session.query(CurrenciesCoinsbaseModel.id)
         .filter(
-            CurrenciesCoinsbaseModel.currency_code
-            == original_currency.currency_code
+            CurrenciesCoinsbaseModel.currency_code == original_currency.currency_code
         )
         .scalar()
     )
@@ -172,7 +171,9 @@ def test_should_update_existing_currency_in_database(
     payload = created_currency_data_hurb.copy()
     payload["rate"] = NEW_RATE
 
-    response = client.put(f"/currencies/{original_currency.currency_code}", json=payload)
+    response = client.put(
+        f"/currencies/{original_currency.currency_code}", json=payload
+    )
     res_data = response.json()["data"]
 
     updated_currency = CurrencyInput(**payload)
@@ -192,6 +193,7 @@ def test_should_not_update_currency_not_found_in_db(
     response = client.put(f"/currencies/{updated_currency.currency_code}", json=payload)
     assert response.status_code == 404
 
+
 def test_should_not_update_currency_found_in_db_with_missing_field(
     client: TestClient,
     session: Session,
@@ -202,8 +204,7 @@ def test_should_not_update_currency_found_in_db_with_missing_field(
     currency_id_db = (
         session.query(CurrenciesCoinsbaseModel.id)
         .filter(
-            CurrenciesCoinsbaseModel.currency_code
-            == original_currency.currency_code
+            CurrenciesCoinsbaseModel.currency_code == original_currency.currency_code
         )
         .scalar()
     )
@@ -211,13 +212,14 @@ def test_should_not_update_currency_found_in_db_with_missing_field(
     payload = created_currency_data_hurb_missing_field_input.copy()
     payload["amount"] = NEW_AMOUNT
 
-    response = client.put(f"/currencies/{original_currency.currency_code}", json=payload)
+    response = client.put(
+        f"/currencies/{original_currency.currency_code}", json=payload
+    )
 
     assert response.status_code == 422
     assert (
         response.json()["detail"][0]["msg"]
         == "Needs provide rate field or an amount with backed_currency_amount"
-
     )
 
 
@@ -249,6 +251,8 @@ def test_should_not_update_coinbase_api_currency_found_in_db(
         response.json()["detail"]
         == f"Currency code {real_currency_data_brl['currency_code']} is an coinbase currency and cannot be changed"
     )
+
+
 # DELETE OPERATIONS
 def test_found_in_db(
     client: TestClient, session: Session, create_hurb_currency: CurrencyInput
@@ -258,9 +262,7 @@ def test_found_in_db(
     assert response.status_code == 204
     currency_db: CurrenciesCoinsbaseModel = (
         session.query(CurrenciesCoinsbaseModel)
-        .filter(
-            CurrenciesCoinsbaseModel.currency_code == currency.currency_code
-        )
+        .filter(CurrenciesCoinsbaseModel.currency_code == currency.currency_code)
         .first()
     )
     assert currency_db is None
@@ -272,10 +274,7 @@ def test_not_found_in_db(client: TestClient, session: Session):
     assert response.status_code == 404
     currency_db: CurrenciesCoinsbaseModel = (
         session.query(CurrenciesCoinsbaseModel)
-        .filter(
-            CurrenciesCoinsbaseModel.currency_code
-            == TEST_CREATED_CURRENCY_CODE
-        )
+        .filter(CurrenciesCoinsbaseModel.currency_code == TEST_CREATED_CURRENCY_CODE)
         .first()
     )
     assert currency_db is None

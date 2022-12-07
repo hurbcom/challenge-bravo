@@ -24,9 +24,7 @@ def test_should_convert_currency_from_database(
     create_hurb_currency,
     create_test_currency,
 ):
-    convert_response = client.get(
-        f"/converter/?from_={from_}&to={to}&amount={amount}"
-    )
+    convert_response = client.get(f"/converter/?from_={from_}&to={to}&amount={amount}")
     convert_response_data = convert_response.json()["data"]
 
     assert convert_response.status_code == status_code
