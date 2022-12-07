@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
+from app.routers import currencies, converter
 
 app = FastAPI()
 
-@app.get("/currencies")
-def root():
-    return {"message": "API From Mi Rosa to HURB!"}
+app.include_router(currencies.router)
+app.include_router(converter.router)
