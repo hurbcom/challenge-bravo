@@ -30,5 +30,18 @@ services:
         volumes:
             - postgres-db:/var/lib/postgresql/data
 
+    coinbase-currencies-updater:
+        build:
+            context: ./app/coinbase-currencies-updater
+            dockerfile: ./Dockerfile.coinbaseupdater
+        depends_on:
+            - postgres
+        restart: always
+        container_name: coinbase-currencies-updater
+        env_file:
+            - ./.env
+        volumes:
+            - ./coinbase-currencies-updater:/coinbase-currencies-updater
+
 volumes:
     postgres-db:
