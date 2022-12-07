@@ -1,5 +1,6 @@
 from fastapi import FastAPI, status
-from app.routers import currencies, converter
+
+from app.routers import converter, currencies
 
 app = FastAPI()
 
