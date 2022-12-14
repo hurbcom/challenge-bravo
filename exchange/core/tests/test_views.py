@@ -88,6 +88,17 @@ class CurrencyDetailGetViewTest(APITestCase):
                 self.assertIn(key, self.response.json())
 
 
+class CurrencyDetailNotFoundTest(APITestCase):
+    def setUp(self):
+        self.response = self.client.get(reverse('currency-detail', args=[0]))
+
+    def test_get(self):
+        self.assertEqual(404, self.response.status_code)
+
+    def test_json(self):
+        self.assertEqual({'detail': 'Not found.'}, self.response.json())
+
+
 class CurrencyDetailPutValidViewTest(APITestCase):
     def setUp(self):
         self.currency = Currency.objects.create(code='BRL', rate=5.321)
