@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'test_without_migrations',
     'rest_framework',
     'exchange.core',
+    'exchange.coinbase',
 ]
 
 MIDDLEWARE = [
@@ -115,4 +116,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Timeouts
 CACHE_TIMEOUT_IN_SECONDS = config('CACHE_TIMEOUT_IN_SECONDS', default=120, cast=int)
+SCHEDULER_TIMEOUT_IN_MINUTES = config('SCHEDULER_TIMEOUT_IN_MINUTES', default=1, cast=int)
+
+# APIs
+API_COINBASE_BACKED_TO_USD = config('API_COINBASE_BACKED_TO_USD')
