@@ -6,13 +6,13 @@ class CurrencyConvertGetValidTest(APITestCase):
     fixtures = ['currencies.json']
 
     def test_get(self):
-        query_strings = {'from': 'BRL', 'to': 'USD', 'amount': 1}
-        response = self.client.get(reverse('convert'), query_strings)
+        query_params = {'from': 'BRL', 'to': 'USD', 'amount': 1}
+        response = self.client.get(reverse('convert'), query_params)
         self.assertEqual(200, response.status_code)
 
     def test_json(self):
-        query_strings = {'from': 'BRL', 'to': 'USD', 'amount': 1}
-        response = self.client.get(reverse('convert'), query_strings)
+        query_params = {'from': 'BRL', 'to': 'USD', 'amount': 1}
+        response = self.client.get(reverse('convert'), query_params)
 
         contents = ('from_', 'to', 'amount', 'rates', 'converted_amount')
         for key in contents:
@@ -31,8 +31,8 @@ class CurrencyConvertGetValidTest(APITestCase):
         response = self._get_and_return_json({'from': 'GTA$', 'to': 'HURB', 'amount': 1250000})
         self.assertEqual(7.36, response.get('converted_amount'))
 
-    def _get_and_return_json(self, qs):
-        response = self.client.get(reverse('convert'), qs)
+    def _get_and_return_json(self, query_params):
+        response = self.client.get(reverse('convert'), query_params)
         return response.json()
 
 
@@ -41,7 +41,7 @@ class CurrencyConvertGetInvalidTest(APITestCase):
         response = self.client.get(reverse('convert'))
         self.assertEqual(400, response.status_code)
 
-    def test_erros_without_query_strings(self):
+    def test_erros_without_query_params(self):
         response = self.client.get(reverse('convert'))
         errors = response.json().get('errors')
 
@@ -76,6 +76,6 @@ class CurrencyConvertGetInvalidTest(APITestCase):
         errors = self._get_and_return_errors({'from': 'BRL', 'to': 'USD', 'amount': '1abc'})
         self.assertListEqual([{'amount': 'A valid number is required.'}], errors)
 
-    def _get_and_return_errors(self, qs):
-        response = self.client.get(reverse('convert'), qs)
+    def _get_and_return_errors(self, query_params):
+        response = self.client.get(reverse('convert'), query_params)
         return response.json().get('errors')
