@@ -17,5 +17,10 @@ class Currency(models.Model):
     backed_to = models.CharField(max_length=10, default='USD')
     updated_at = models.DateTimeField(auto_now=True)
 
+    def convert_currency_rate_to_usd(self):
+        if self.backed_to != 'USD':
+            backed_currency = Currency.objects.get(code=self.backed_to)
+            self.rate *= backed_currency.rate
+
     def __str__(self):
         return self.code

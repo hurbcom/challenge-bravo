@@ -19,3 +19,23 @@ class CurrencySerializer(serializers.HyperlinkedModelSerializer):
         instance.backed_to = validated_data.get('backed_to', instance.backed_to).upper()
         instance.save()
         return instance
+
+
+class ConvertCurrencySerializer(serializers.Serializer):
+    from_ = serializers.CharField()
+    to = serializers.CharField()
+    amount = serializers.FloatField()
+    rates = serializers.ListField()
+    converted_amount = serializers.FloatField()
+
+
+class QueryParamsErrorSerializer(serializers.Serializer):
+    from_ = serializers.CharField()
+    to = serializers.CharField()
+    amount = serializers.CharField()
+    errors = serializers.ListField()
+
+
+class Http404Serializer(serializers.Serializer):
+    from_ = serializers.CharField()
+    to = serializers.CharField()
