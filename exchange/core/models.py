@@ -1,5 +1,7 @@
 from django.db import models
 
+from exchange.core.managers import CoinbaseManager
+
 
 class Currency(models.Model):
     FIAT = 'fiat'
@@ -16,6 +18,8 @@ class Currency(models.Model):
     type = models.CharField(max_length=50, choices=TYPES, default=FIAT)
     backed_to = models.CharField(max_length=10, default='USD')
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = CoinbaseManager()
 
     def convert_currency_rate_to_usd(self):
         if self.backed_to != 'USD':
