@@ -21,21 +21,21 @@ class CurrencySerializer(serializers.HyperlinkedModelSerializer):
         return instance
 
 
-class ConvertCurrencySerializer(serializers.Serializer):
+class BaseSerializer(serializers.Serializer):
     from_ = serializers.CharField()
     to = serializers.CharField()
+
+
+class ConvertCurrencySerializer(BaseSerializer):
     amount = serializers.FloatField()
     rates = serializers.ListField()
     converted_amount = serializers.FloatField()
 
 
-class QueryParamsErrorSerializer(serializers.Serializer):
-    from_ = serializers.CharField()
-    to = serializers.CharField()
+class QueryParamsErrorSerializer(BaseSerializer):
     amount = serializers.CharField()
     errors = serializers.ListField()
 
 
-class Http404Serializer(serializers.Serializer):
-    from_ = serializers.CharField()
-    to = serializers.CharField()
+class Http404Serializer(BaseSerializer):
+    pass

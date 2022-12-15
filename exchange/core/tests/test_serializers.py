@@ -1,17 +1,30 @@
 from django.test import TestCase
+from rest_framework import serializers
 
 from exchange.core.models import Currency
-from exchange.core.serializers import CurrencySerializer
+from exchange.core.serializers import (
+    CurrencySerializer,
+    ConvertCurrencySerializer,
+    QueryParamsErrorSerializer,
+    Http404Serializer)
 
 
 class CurrencySerializerFieldsTest(TestCase):
     def test_fields(self):
-        currency = Currency.objects.create(code='brl', rate=5.321)
-        serializer = CurrencySerializer(instance=currency)
+        serializer = CurrencySerializer()
 
-        self.assertSequenceEqual(
-            set(serializer.data),
-            set(['pk', 'code', 'backed_to', 'rate', 'type', 'updated_at']))
+        contents = (
+            ('pk', serializers.IntegerField),
+            ('code', serializers.CharField),
+            ('backed_to', serializers.CharField),
+            ('rate', serializers.FloatField),
+            ('type', serializers.ChoiceField),
+            ('updated_at', serializers.DateTimeField),
+        )
+
+        for field, instance in contents:
+            with self.subTest():
+                self.assertIsInstance(serializer.fields[field], instance)
 
 
 class CurrencySerializerCreate(TestCase):
@@ -54,3 +67,50 @@ class CurrencySerializerUpdate(TestCase):
 
     def test_rate(self):
         self.assertEqual(1.0, self.currency.rate)
+
+
+class ConvertCurrencySerializerFieldsTest(TestCase):
+    def test_fields(self):
+        serializer = ConvertCurrencySerializer()
+
+        contents = (
+            ('from_', serializers.CharField),
+            ('to', serializers.CharField),
+            ('amount', serializers.FloatField),
+            ('rates', serializers.ListField),
+            ('converted_amount', serializers.FloatField),
+        )
+
+        for field, instance in contents:
+            with self.subTest():
+                self.assertIsInstance(serializer.fields[field], instance)
+
+
+class QueryParamsErrorSerializerFieldsTest(TestCase):
+    def test_fields(self):
+        serializer = QueryParamsErrorSerializer()
+
+        contents = (
+            ('from_', serializers.CharField),
+            ('to', serializers.CharField),
+            ('amount', serializers.CharField),
+            ('errors', serializers.ListField),
+        )
+
+        for field, instance in contents:
+            with self.subTest():
+                self.assertIsInstance(serializer.fields[field], instance)
+
+
+class Http404SerializerFieldsTest(TestCase):
+    def test_fields(self):
+        serializer = Http404Serializer()
+
+        contents = (
+            ('from_', serializers.CharField),
+            ('to', serializers.CharField),
+        )
+
+        for field, instance in contents:
+            with self.subTest():
+                self.assertIsInstance(serializer.fields[field], instance)
