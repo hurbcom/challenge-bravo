@@ -167,3 +167,13 @@ class CurrencyListInvalidPutViewTest(APITestCase):
         return response.json().get(key)
 
 
+class CurrencyDetailDeleteViewTest(APITestCase):
+    def setUp(self):
+        currency = Currency.objects.create(code='BRL', rate=5.321)
+        self.response = self.client.delete(reverse('currency-detail', args=[currency.pk]))
+
+    def test_delete(self):
+        self.assertEqual(204, self.response.status_code)
+
+    def test_currency(self):
+        self.assertFalse(Currency.objects.exists())
