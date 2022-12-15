@@ -47,22 +47,22 @@ class CurrencyListPostValidViewTest(APITestCase):
 
 class CurrencyListPostInvalidViewTest(APITestCase):
     def test_code_blank(self):
-        errors = self._post_and_get_errors(code='')
+        errors = self._post_and_return_errors(code='')
         self.assertSequenceEqual(errors, ['This field may not be blank.'])
 
     def test_rate_blank(self):
-        errors = self._post_and_get_errors(rate='')
+        errors = self._post_and_return_errors(rate='')
         self.assertSequenceEqual(errors, ['A valid number is required.'])
 
     def test_rate_not_a_number(self):
-        errors = self._post_and_get_errors(rate='abc')
+        errors = self._post_and_return_errors(rate='abc')
         self.assertSequenceEqual(errors, ['A valid number is required.'])
 
     def test_type_not_available(self):
-        errors = self._post_and_get_errors(type='abc')
+        errors = self._post_and_return_errors(type='abc')
         self.assertSequenceEqual(errors, ['"abc" is not a valid choice.'])
 
-    def _post_and_get_errors(self, **kwargs):
+    def _post_and_return_errors(self, **kwargs):
         valid_data = {'code': 'BRL', 'rate': 5.321}
         data = dict(valid_data, **kwargs)
         response = self.client.post(reverse('currency-list'), data)
@@ -76,22 +76,22 @@ class CurrencyListPutInvalidViewTest(APITestCase):
         self.currency = Currency.objects.create(**self.valid_data)
 
     def test_code_blank(self):
-        errors = self._put_and_get_errors(code='')
+        errors = self._put_and_return_errors(code='')
         self.assertSequenceEqual(errors, ['This field may not be blank.'])
 
     def test_rate_blank(self):
-        errors = self._put_and_get_errors(rate='')
+        errors = self._put_and_return_errors(rate='')
         self.assertSequenceEqual(errors, ['A valid number is required.'])
 
     def test_rate_not_a_number(self):
-        errors = self._put_and_get_errors(rate='abc')
+        errors = self._put_and_return_errors(rate='abc')
         self.assertSequenceEqual(errors, ['A valid number is required.'])
 
     def test_type_not_available(self):
-        errors = self._put_and_get_errors(type='abc')
+        errors = self._put_and_return_errors(type='abc')
         self.assertSequenceEqual(errors, ['"abc" is not a valid choice.'])
 
-    def _put_and_get_errors(self, **kwargs):
+    def _put_and_return_errors(self, **kwargs):
         data = dict(self.valid_data, **kwargs)
         response = self.client.put(
             reverse('currency-detail', args=[self.currency.pk]), data)
