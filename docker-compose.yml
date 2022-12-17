@@ -4,6 +4,7 @@ services:
   api:
     build: ./
     command: python manage.py runserver 0.0.0.0:8000
+    restart: always
     volumes:
       - ./exchange/:/usr/src/app/
     ports:
@@ -15,9 +16,12 @@ services:
 
   cache:
     image: redis:alpine
+    restart: always
 
   db:
     image: postgres:13
+    command: postgres -c "max_connections=2500"
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
