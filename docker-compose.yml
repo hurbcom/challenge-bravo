@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  web:
+  api:
     build: ./
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -12,6 +12,9 @@ services:
       - ./.env
     depends_on:
       - db
+
+  cache:
+    image: redis:alpine
 
   db:
     image: postgres:13
