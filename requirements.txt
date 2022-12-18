@@ -2,9 +2,11 @@ APScheduler==3.9.1.post1
 Django==4.1.4
 django-test-without-migrations==0.6
 dj-database-url==1.0.0
+dj-static==0.0.6
 djangorestframework==3.14.0
 hiredis==2.1.0
 python-decouple==3.6
-psycopg2-binary==2.9.5
 requests==2.28.1
+psycopg2-binary==2.9.5
 redis==4.4.0
+gunicorn==20.1.0
