@@ -21,6 +21,9 @@ class Currency(models.Model):
 
     objects = CoinbaseManager()
 
+    class Meta:
+        ordering = ['pk']
+
     def convert_currency_rate_to_usd(self):
         if self.backed_to != 'USD':
             backed_currency = Currency.objects.get(code=self.backed_to)
