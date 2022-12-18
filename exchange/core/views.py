@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import views, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from exchange.core.models import Currency
@@ -21,8 +22,8 @@ class CurrencyModelViewSet(viewsets.ModelViewSet):
     serializer_class = CurrencySerializer
 
 
-class ConvertCurrencyAPIView(views.APIView):
-    def get(self, request):
+class ConvertCurrencyGenericViewSet(viewsets.GenericViewSet):
+    def list(self, request):
         query_params = QueryParamsValidator(request.query_params)
 
         if not query_params.is_valid():
