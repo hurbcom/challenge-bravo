@@ -100,12 +100,12 @@ Open the project link [http://localhost:8000/](http://localhost:8000/).
 ```bash
 $ python manage.py test
 
-Found 56 test(s).
+Found 54 test(s).
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
-........................................................
+......................................................
 ----------------------------------------------------------------------
-Ran 56 tests in 1.593s
+Ran 54 tests in 1.148s
 
 OK
 Destroying test database for alias 'default'...
@@ -135,12 +135,12 @@ _WARNING_. The _k6_ uses ~1-5MB per VU (virtual user). In these scenario we use 
 ```bash
 $ coverage run --source='.' manage.py test && coverage report
 
-Found 56 test(s).
+Found 54 test(s).
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
-........................................................
+......................................................
 ----------------------------------------------------------------------
-Ran 56 tests in 1.718s
+Ran 54 tests in 1.148s
 
 OK
 Destroying test database for alias 'default'...
@@ -165,10 +165,10 @@ exchange/core/models.py                                      21      0   100%
 exchange/core/serializers.py                                 28      0   100%
 exchange/core/tests/__init__.py                               0      0   100%
 exchange/core/tests/test_currency_convert_views.py           57      0   100%
-exchange/core/tests/test_currency_detail_views.py            47      0   100%
-exchange/core/tests/test_currency_list_views.py              72      0   100%
+exchange/core/tests/test_currency_detail_views.py            68      0   100%
+exchange/core/tests/test_currency_list_views.py              51      0   100%
 exchange/core/tests/test_models.py                           23      0   100%
-exchange/core/tests/test_serializers.py                      57      0   100%
+exchange/core/tests/test_serializers.py                      53      0   100%
 exchange/core/validators.py                                  24      0   100%
 exchange/core/views.py                                       39      3    92%
 exchange/settings.py                                         26      0   100%
@@ -176,5 +176,5 @@ exchange/urls.py                                              7      0   100%
 exchange/wsgi.py                                              5      5     0%
 manage.py                                                    12      2    83%
 -----------------------------------------------------------------------------
-TOTAL                                                       492     18    96%
+TOTAL                                                       488     18    96%
 ```
