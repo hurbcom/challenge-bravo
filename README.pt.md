@@ -1,53 +1,52 @@
 # Challenge Bravo
-[[English](README.md) | [Portuguese](README.pt.md)]
+[[Inglês](README.md) | [Português](README.pt.md)]
 
-# Introduction
-The project goal is to provide a public API responsible for currency conversion (USD, BRL, EUR, ETH, BTC) that have a backing currency (USD), making it possible to create, read, update and delete real currencies (FIAT), cryptos and fictitious.
+# Introdução
+O projeto tem como objetivo prover uma API pública responsável pela conversão monetária (USD, BRL, EUR, ETH, BTC) que possuem uma moeda de lastro (USD), sendo possível criar, ler, atualizar e deletar moedas reais (FIAT), cryptos e fictícias.
 
 ![Default home view](screen-shot_api-home.png?raw=True "Title")
 
-### Main features
+### Principais funcionalidades
+* Conversão entre duas moedas (FIAT, Crypto ou Fictícia).
 
-* Conversion between two currencies (FIAT, Crypto or Fiction).
+* Criação, leitura, atualização e deleção de moedas.
 
-* Creating, reading, updating and deleting currency.
+* Rotina de atualização automática dos valores reais das moedas.
 
-* Routine for automatic updating of real currency rates.
-
-# Quickstart
-First clone the project repository from [Github](https://github.com/assisthiago/challenge-bravo) and switch to the new directory:
+# Começo rápido
+Primeiro clone o repositódio do projeto do [Github](https://github.com/assisthiago/challenge-bravo) e entre no novo diretório:
 ```bash
 $ git clone git@github.com:assisthiago/challenge-bravo.git
 $ cd challenge-bravo
 ```
 
-Create a virtualenv for your project on the root directory and active:
+Crie um virtualenv para seu projeto na raiz do diretório e ative:
 ```bash
 $ python3 -m venv .venv
 $ source .venv/bin/active
 ```
 
-Install project dependecies:
+Instale as dependências do projeto:
 ```bash
 $ pip install -r requirements.txt
 ```
 
-Then simply apply the migrations:
+Depois, simplesmente rode as migrações:
 ```bash
 $ python manage.py migrate
 ```
 
-Copy the file `.env-sample` from `contrib/` to project root:
+Copie o arquivo `.env-sample` do diretório `contrib/` para a raiz do projeto:
 ```bash
 $ cp contrib/.env-sample .env
 ```
 
-You can now run the development server:
+Agora você está pronto para rodar o servidor de desenvolvimento localmente:
 ```bash
 $ python manage.py runserver
 ```
 
-_OPTIONAL_. If you want to add some initial data, simply run:
+_OPCIONAL_. Caso queira incluir dados de forma rápida, simplesmente rode o comando:
 ```bash
 $ python manage.py loaddata exchange/core/fixtures/currencies.json
 Installed 7 object(s) from 1 fixture(s)
@@ -55,7 +54,7 @@ Installed 7 object(s) from 1 fixture(s)
 
 # Docker
 
-Update the copied file `.env` to:
+Atualize o arquivo copiado `.env` para:
 ```
 # DJANGO SETTINGS
 DEBUG=True
@@ -78,7 +77,7 @@ CACHE_BACKEND=django.core.cache.backends.redis.RedisCache
 CACHE_LOCATION=redis://cache:6379
 ```
 
-You can now run:
+Agora rode o comando do `docker-compose`:
 ```bash
 $ docker-compose up --build
 ...
@@ -89,14 +88,13 @@ challenge-bravo-api-1    | Starting development server at http://0.0.0.0:8000/
 challenge-bravo-api-1    | Quit the server with CONTROL-C.
 ```
 
-Open the project link [http://localhost:8000/](http://localhost:8000/).
+Abra o link [http://localhost:8000/](http://localhost:8000/) do projeto.
 
-# Tests
+# Testes
 
-### Units
+### Unitários
 ```bash
 $ python manage.py test
-
 Found 56 test(s).
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
@@ -108,7 +106,7 @@ OK
 Destroying test database for alias 'default'...
 ```
 
-_OBSERVATION_. Do not forget to comment the variables on `.env` file to run these tests.
+_OBSERVAÇÃO_. Não se esqueça de comentar as variávels do arquivo `.env` para rodar esses testes.
 ```
 # DATABASE
 # DATABASE_URL=postgresql://admin:1q2w3e4r@db:5432/development
@@ -118,8 +116,8 @@ _OBSERVATION_. Do not forget to comment the variables on `.env` file to run thes
 # CACHE_LOCATION=redis://cache:6379
 ```
 
-### Load
-Follow the instructions for install the [k6](https://k6.io/) and then run:
+### Estresse
+Sigua as instruções para a instalação do [k6](https://k6.io/) e em seguida rode:
 ```bash
 $ k6 run test_load_k6.js
 
@@ -161,12 +159,12 @@ default ↓ [======================================] 0735/1000 VUs  1m0s
      vus_max........................: 1000    min=1000 max=1000
 ```
 
-_WARNING_. The _k6_ uses ~1-5MB per VU (virtual user). In these scenario we use 10000VUs (~1-5GB).
+_ATENÇÃO_. O _k6_ utiliza cerca de ~1-5MB por VU (usuário virtual). Nesse teste utilizamos 10000VUs (~1-5GB).
 
-### Coverage
+
+### Cobertura
 ```bash
 $ coverage run --source='.' manage.py test && coverage report
-
 Found 56 test(s).
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
