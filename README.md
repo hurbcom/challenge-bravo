@@ -24,10 +24,10 @@ $ git clone git@github.com:assisthiago/challenge-bravo.git
 $ cd challenge-bravo
 ```
 
-Create a virtualenv for your project on the root directory and active:
+Create a virtualenv for your project on the root directory and activate:
 ```bash
 $ python3 -m venv .venv
-$ source .venv/bin/active
+$ source .venv/bin/activate
 ```
 
 Install project dependecies:
@@ -35,14 +35,14 @@ Install project dependecies:
 $ pip install -r requirements.txt
 ```
 
-Then simply apply the migrations:
-```bash
-$ python manage.py migrate
-```
-
 Copy the file `.env-sample` from `contrib/` to project root:
 ```bash
 $ cp contrib/.env-sample .env
+```
+
+Then simply apply the migrations:
+```bash
+$ python manage.py migrate
 ```
 
 You can now run the development server:

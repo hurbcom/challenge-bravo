@@ -26,7 +26,7 @@ $ cd challenge-bravo
 Crie um virtualenv para seu projeto na raiz do diretório e ative:
 ```bash
 $ python3 -m venv .venv
-$ source .venv/bin/active
+$ source .venv/bin/activate
 ```
 
 Instale as dependências do projeto:
@@ -34,14 +34,14 @@ Instale as dependências do projeto:
 $ pip install -r requirements.txt
 ```
 
-Depois, simplesmente rode as migrações:
-```bash
-$ python manage.py migrate
-```
-
 Copie o arquivo `.env-sample` do diretório `contrib/` para a raiz do projeto:
 ```bash
 $ cp contrib/.env-sample .env
+```
+
+Depois, simplesmente rode as migrações:
+```bash
+$ python manage.py migrate
 ```
 
 Agora você está pronto para rodar o servidor de desenvolvimento localmente:
