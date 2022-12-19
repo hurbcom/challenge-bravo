@@ -8,5 +8,6 @@ class CoinbaseConfig(AppConfig):
     def ready(self):
         from exchange.coinbase.schedulers import start_job_coinbase_updater
 
+        # Runs the job responsible for update the currency rate dinamic and automatically.
         start_job_coinbase_updater()
         return super().ready()

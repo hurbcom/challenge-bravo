@@ -5,6 +5,11 @@ from exchange.coinbase.views import CoinbaseAPIView
 
 
 def start_job_coinbase_updater():
+    """
+    Instantiate a BackgrounScheduler to run CoinbaseAPIView.coinbase_updater method
+    on SCHEDULER_TIMEOUT_IN_MINUTES interval (default 2 minutes).
+    """
+
     scheduler = BackgroundScheduler()
     coinbase = CoinbaseAPIView()
 
