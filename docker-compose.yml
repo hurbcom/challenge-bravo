@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: always
+    volumes:
+      - ./exchange/:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  cache:
+    image: redis:alpine
+    restart: always
+
+  db:
+    image: postgres:13
+    command: postgres -c "max_connections=2500"
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1q2w3e4r
+      - POSTGRES_DB=development
+
+volumes:
+  postgres_data:

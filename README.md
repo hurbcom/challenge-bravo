@@ -1,82 +1,180 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
-
+# Challenge Bravo
 [[English](README.md) | [Portuguese](README.pt.md)]
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+# Introduction
+The project goal is to provide a public API responsible for currency conversion (USD, BRL, EUR, ETH, BTC) that have a backing currency (USD), making it possible to create, read, update and delete real currencies (FIAT), cryptos and fictitious.
 
-The API must convert between the following currencies:
+### API
+[https://challengebravo-assisthiago.herokuapp.com/](https://challengebravo-assisthiago.herokuapp.com/)
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+![Default home view](screen-shot_api-home.png?raw=True "API Home")
 
-Other coins could be added as usage.
+### Main features
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+* Conversion between two currencies (FIAT, Crypto or Fiction).
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+* Creating, reading, updating and deleting currency.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+* Routine for automatic updating of real currency rates.
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+# Quickstart
+First clone the project repository from [Github](https://github.com/assisthiago/challenge-bravo) and switch to the new directory:
+```bash
+$ git clone git@github.com:assisthiago/challenge-bravo.git
+$ cd challenge-bravo
+```
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+Create a virtualenv for your project on the root directory and activate:
+```bash
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+```
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+Install project dependecies:
+```bash
+$ pip install -r requirements.txt
+```
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+Copy the file `.env-sample` from `contrib/` to project root:
+```bash
+$ cp contrib/.env-sample .env
+```
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+Then simply apply the migrations:
+```bash
+$ python manage.py migrate
+```
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+You can now run the development server:
+```bash
+$ python manage.py runserver
+```
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+_OPTIONAL_. If you want to add some initial data, simply run:
+```bash
+$ python manage.py loaddata exchange/core/fixtures/currencies.json
+Installed 7 object(s) from 1 fixture(s)
+```
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+# Docker
 
-## Requirements
+Update the copied file `.env` to:
+```
+# DJANGO SETTINGS
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1, localhost
+CACHE_TIMEOUT_IN_SECONDS=30
+SCHEDULER_TIMEOUT_IN_MINUTES=1
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+# API
+API_COINBASE_BACKED_TO_USD=https://api.coinbase.com/v2/exchange-rates/?currency=USD
 
-## Evaluation criteria
+# === DOCKER REQUIRED ===
+# -- Comment these variables to run locally with `$ python manage.py runserver`
+# -- Uncomment these variables to run locally with `$ docker-compose run --build`
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+# DATABASE
+DATABASE_URL=postgresql://admin:1q2w3e4r@db:5432/development
 
-## Doubts
+# CACHE
+CACHE_BACKEND=django.core.cache.backends.redis.RedisCache
+CACHE_LOCATION=redis://cache:6379
+```
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+You can now run:
+```bash
+$ docker-compose up --build
+...
+challenge-bravo-api-1    | System check identified no issues (0 silenced).
+challenge-bravo-api-1    | December 19, 2022 - 14:56:04
+challenge-bravo-api-1    | Django version 4.1.4, using settings 'exchange.settings'
+challenge-bravo-api-1    | Starting development server at http://0.0.0.0:8000/
+challenge-bravo-api-1    | Quit the server with CONTROL-C.
+```
 
-Godspeed! ;)
+Open the project link [http://localhost:8000/](http://localhost:8000/).
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+# Tests
+
+### Units
+```bash
+$ python manage.py test
+
+Found 54 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+......................................................
+----------------------------------------------------------------------
+Ran 54 tests in 1.148s
+
+OK
+Destroying test database for alias 'default'...
+```
+
+_OBSERVATION_. Do not forget to comment the variables on `.env` file to run these tests.
+```
+# DATABASE
+# DATABASE_URL=postgresql://admin:1q2w3e4r@db:5432/development
+
+# CACHE
+# CACHE_BACKEND=django.core.cache.backends.redis.RedisCache
+# CACHE_LOCATION=redis://cache:6379
+```
+
+### Load
+Follow the instructions for install the [k6](https://k6.io/) and then run:
+```bash
+$ k6 run test_load_k6.js
+```
+
+![Default test-load view](screen-shot_test-load.png?raw=True "Test load")
+
+_WARNING_. The _k6_ uses ~1-5MB per VU (virtual user). In these scenario we use 10000VUs (~1-5GB).
+
+### Coverage
+```bash
+$ coverage run --source='.' manage.py test && coverage report
+
+Found 54 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+......................................................
+----------------------------------------------------------------------
+Ran 54 tests in 1.148s
+
+OK
+Destroying test database for alias 'default'...
+Name                                                      Stmts   Miss  Cover
+-----------------------------------------------------------------------------
+contrib/__init__.py                                           0      0   100%
+contrib/secret_gen.py                                         5      0   100%
+exchange/__init__.py                                          0      0   100%
+exchange/asgi.py                                              4      4     0%
+exchange/coinbase/__init__.py                                 0      0   100%
+exchange/coinbase/apps.py                                     8      0   100%
+exchange/coinbase/schedulers.py                               8      0   100%
+exchange/coinbase/tests.py                                    9      0   100%
+exchange/coinbase/views.py                                   23      4    83%
+exchange/core/__init__.py                                     0      0   100%
+exchange/core/apps.py                                         4      0   100%
+exchange/core/managers.py                                     4      0   100%
+exchange/core/migrations/0001_initial.py                      5      0   100%
+exchange/core/migrations/0002_alter_currency_options.py       4      0   100%
+exchange/core/migrations/__init__.py                          0      0   100%
+exchange/core/models.py                                      21      0   100%
+exchange/core/serializers.py                                 28      0   100%
+exchange/core/tests/__init__.py                               0      0   100%
+exchange/core/tests/test_currency_convert_views.py           57      0   100%
+exchange/core/tests/test_currency_detail_views.py            68      0   100%
+exchange/core/tests/test_currency_list_views.py              51      0   100%
+exchange/core/tests/test_models.py                           23      0   100%
+exchange/core/tests/test_serializers.py                      53      0   100%
+exchange/core/validators.py                                  24      0   100%
+exchange/core/views.py                                       39      3    92%
+exchange/settings.py                                         26      0   100%
+exchange/urls.py                                              7      0   100%
+exchange/wsgi.py                                              5      5     0%
+manage.py                                                    12      2    83%
+-----------------------------------------------------------------------------
+TOTAL                                                       488     18    96%
+```

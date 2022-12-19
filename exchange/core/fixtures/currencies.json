@@ -1,0 +1,79 @@
+[
+{
+    "model": "core.currency",
+    "pk": 1,
+    "fields": {
+        "code": "USD",
+        "rate": 1.0,
+        "type": "fiat",
+        "backed_to": "USD",
+        "updated_at": "2022-12-14T14:15:10.882Z"
+    }
+},
+{
+    "model": "core.currency",
+    "pk": 2,
+    "fields": {
+        "code": "BRL",
+        "rate": 5.322499999999999,
+        "type": "fiat",
+        "backed_to": "USD",
+        "updated_at": "2022-12-14T17:24:30.696Z"
+    }
+},
+{
+    "model": "core.currency",
+    "pk": 3,
+    "fields": {
+        "code": "EUR",
+        "rate": 0.9387,
+        "type": "fiat",
+        "backed_to": "USD",
+        "updated_at": "2022-12-14T14:15:37.377Z"
+    }
+},
+{
+    "model": "core.currency",
+    "pk": 4,
+    "fields": {
+        "code": "BTC",
+        "rate": 5.52983108854e-05,
+        "type": "crypto",
+        "backed_to": "USD",
+        "updated_at": "2022-12-14T14:16:25.975Z"
+    }
+},
+{
+    "model": "core.currency",
+    "pk": 5,
+    "fields": {
+        "code": "ETH",
+        "rate": 0.0007497656982193,
+        "type": "crypto",
+        "backed_to": "USD",
+        "updated_at": "2022-12-14T17:24:45.574Z"
+    }
+},
+{
+    "model": "core.currency",
+    "pk": 6,
+    "fields": {
+        "code": "HURB",
+        "rate": 0.5,
+        "type": "fictional",
+        "backed_to": "EUR",
+        "updated_at": "2022-12-14T14:17:00.600Z"
+    }
+},
+{
+    "model": "core.currency",
+    "pk": 7,
+    "fields": {
+        "code": "GTA$",
+        "rate": 14970.06,
+        "type": "fictional",
+        "backed_to": "BRL",
+        "updated_at": "2022-12-14T14:17:38.986Z"
+    }
+}
+]
