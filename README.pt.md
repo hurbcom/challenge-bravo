@@ -7,7 +7,7 @@ O projeto tem como objetivo prover uma API pública responsável pela conversão
 ### API
 [https://challengebravo-assisthiago.herokuapp.com/](https://challengebravo-assisthiago.herokuapp.com/)
 
-![Default home view](screen-shot_api-home.png?raw=True "Title")
+![Default home view](screen-shot_api-home.png?raw=True "API Home")
 
 ### Principais funcionalidades
 * Conversão entre duas moedas (FIAT, Crypto ou Fictícia).
@@ -123,44 +123,9 @@ _OBSERVAÇÃO_. Não se esqueça de comentar as variávels do arquivo `.env` par
 Sigua as instruções para a instalação do [k6](https://k6.io/) e em seguida rode:
 ```bash
 $ k6 run test_load_k6.js
-
-          /\      |‾‾| /‾‾/   /‾‾/
-     /\  /  \     |  |/  /   /  /
-    /  \/    \    |     (   /   ‾‾\
-   /          \   |  |\  \ |  (‾)  |
-  / __________ \  |__| \__\ \_____/ .io
-
-  execution: local
-     script: test_load_k6.js
-     output: -
-
-  scenarios: (100.00%) 1 scenario, 1000 max VUs, 1m30s max duration (incl. graceful stop):
-           * default: Up to 1000 looping VUs for 1m0s over 3 stages (gracefulRampDown: 30s, gracefulStop: 30s)
-
-
-running (1m18.1s), 0000/1000 VUs, 2904 complete and 0 interrupted iterations
-default ↓ [======================================] 0735/1000 VUs  1m0s
-
-     ✓ status was 200
-
-     checks.........................: 100.00% ✓ 2904   ✗ 0
-     data_received..................: 6.9 MB  88 kB/s
-     data_sent......................: 945 kB  12 kB/s
-     http_req_blocked...............: avg=161.29ms min=2µs      med=16µs   max=787.48ms p(90)=472.17ms p(95)=489.19ms
-     http_req_connecting............: avg=51.95ms  min=0s       med=0s     max=270.63ms p(90)=153.91ms p(95)=158.73ms
-     http_req_duration..............: avg=20.53s   min=167.41ms med=23.85s max=27.66s   p(90)=26.7s    p(95)=27.29s
-       { expected_response:true }...: avg=20.53s   min=167.41ms med=23.85s max=27.66s   p(90)=26.7s    p(95)=27.29s
-     http_req_failed................: 0.00%   ✓ 0      ✗ 2904
-     http_req_receiving.............: avg=176.33µs min=21µs     med=106µs  max=4.89ms   p(90)=313.7µs  p(95)=478.84µs
-     http_req_sending...............: avg=576.67µs min=8µs      med=53µs   max=126.72ms p(90)=514.5µs  p(95)=1.84ms
-     http_req_tls_handshaking.......: avg=109.12ms min=0s       med=0s     max=617.14ms p(90)=314.55ms p(95)=331.88ms
-     http_req_waiting...............: avg=20.53s   min=166.99ms med=23.85s max=27.66s   p(90)=26.7s    p(95)=27.29s
-     http_reqs......................: 2904    37.163155/s
-     iteration_duration.............: avg=21.69s   min=1.65s    med=24.86s max=28.66s   p(90)=27.7s    p(95)=28.29s
-     iterations.....................: 2904    37.163155/s
-     vus............................: 6       min=6    max=1000
-     vus_max........................: 1000    min=1000 max=1000
 ```
+
+![Default test-load view](screen-shot_test-load.png?raw=True "Test load")
 
 _ATENÇÃO_. O _k6_ utiliza cerca de ~1-5MB por VU (usuário virtual). Nesse teste utilizamos 10000VUs (~1-5GB).
 
