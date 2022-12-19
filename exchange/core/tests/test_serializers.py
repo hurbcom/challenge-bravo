@@ -11,6 +11,9 @@ from exchange.core.serializers import (
 
 class CurrencySerializerFieldsTest(TestCase):
     def test_fields(self):
+        """CurrencySerialiser must have these fields:
+        pk, code, backed_to, rate, type, updated_at
+        """
         serializer = CurrencySerializer()
 
         contents = (
@@ -29,48 +32,54 @@ class CurrencySerializerFieldsTest(TestCase):
 
 class CurrencySerializerCreate(TestCase):
     def setUp(self):
+        """Creates a currency for all tests"""
         self.currency = CurrencySerializer().create(
             {'code': 'brl', 'backed_to': 'usd', 'rate': 5.321})
 
-    def test_create(self):
-        self.assertTrue(Currency.objects.exists())
-
     def test_instance(self):
+        """Currency created must be instance of CurrencyModel"""
         self.assertIsInstance(self.currency, Currency)
 
     def test_code_uppercase(self):
+        """Currency `code` must be uppercase"""
         self.assertEqual('BRL', self.currency.code)
 
     def test_backed_to_uppercase(self):
+        """Currency `backed_to` must be uppercase"""
         self.assertEqual('USD', self.currency.backed_to)
+
+    def test_rate(self):
+        """Currency `rate` must be 5.321"""
+        self.assertEqual(5.321, self.currency.rate)
 
 
 class CurrencySerializerUpdate(TestCase):
     def setUp(self):
+        """Creates and updates currency for all tests"""
         self.currency = CurrencySerializer().create(
             {'code': 'brl', 'backed_to': 'usd', 'rate': 5.321})
 
         self.currency = CurrencySerializer().update(
             self.currency, {'code': 'btc', 'backed_to': 'brl', 'rate': 1.0})
 
-    def test_update(self):
-        self.assertTrue(Currency.objects.exists())
-
-    def test_instance(self):
-        self.assertIsInstance(self.currency, Currency)
-
     def test_code(self):
+        """Currency `code` must be uppercase"""
         self.assertEqual('BTC', self.currency.code)
 
     def test_backed_to(self):
+        """Currency `backed_to` must be uppercase"""
         self.assertEqual('BRL', self.currency.backed_to)
 
     def test_rate(self):
+        """Currency `rate` must be 1.0"""
         self.assertEqual(1.0, self.currency.rate)
 
 
 class ConvertCurrencySerializerFieldsTest(TestCase):
     def test_fields(self):
+        """ConvertSerialiser must have these fields:
+        from_, to, amount, rates, converted_amount
+        """
         serializer = ConvertCurrencySerializer()
 
         contents = (
@@ -88,6 +97,9 @@ class ConvertCurrencySerializerFieldsTest(TestCase):
 
 class QueryParamsErrorSerializerFieldsTest(TestCase):
     def test_fields(self):
+        """ConvertSerialiser must have these fields:
+        from_, to, amount, errors
+        """
         serializer = QueryParamsErrorSerializer()
 
         contents = (
@@ -104,6 +116,9 @@ class QueryParamsErrorSerializerFieldsTest(TestCase):
 
 class Http404SerializerFieldsTest(TestCase):
     def test_fields(self):
+        """ConvertSerialiser must have these fields:
+        from_, to
+        """
         serializer = Http404Serializer()
 
         contents = (

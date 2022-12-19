@@ -8,7 +8,7 @@ from exchange.core.models import Currency
 
 class CoinbaseAPIView(views.APIView):
     def coinbase_updater(self):
-        """Updates the currency rate dynamiclly that exists on database
+        """Updates the currency rate dynamiclly that exists on database.
 
         : return Response
         """
@@ -25,7 +25,7 @@ class CoinbaseAPIView(views.APIView):
                 pass
 
     def _get_coinbase(self):
-        """Makes GET request on API_COINBASE_BACKED_TO_USD
+        """Makes GET request on API_COINBASE_BACKED_TO_USD.
 
         : return requests.Response.json or None
         """

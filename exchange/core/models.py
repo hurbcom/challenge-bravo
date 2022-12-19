@@ -25,6 +25,10 @@ class Currency(models.Model):
         ordering = ['pk']
 
     def convert_currency_rate_to_usd(self):
+        """Convert the rate to USD that is backed to a different one.
+
+        : return None
+        """
         if self.backed_to != 'USD':
             backed_currency = Currency.objects.get(code=self.backed_to)
             self.rate *= backed_currency.rate

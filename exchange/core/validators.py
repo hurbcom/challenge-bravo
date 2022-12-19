@@ -6,6 +6,10 @@ class QueryParamsValidator:
         self.errors = []
 
     def is_valid(self):
+        """Validates the query params sent from request.
+
+        : return bool
+        """
         if not self.from_:
             self.errors.append({'from_': 'This field may not be blank.'})
 
@@ -23,6 +27,10 @@ class QueryParamsValidator:
         return True
 
     def _amount_is_float(self):
+        """Checks if is float and transform into it.
+
+        : return bool
+        """
         try:
             self.amount = float(self.amount)
             return True
