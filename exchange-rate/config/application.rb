@@ -5,12 +5,16 @@ require "rails/all"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+# Load env file
+Dotenv::Railtie.load
 
 module ExchangeRate
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
     config.cache_store = :redis_cache_store, { url: ENV.fetch('REDIS_URL') }
+    config.autoload_paths << "#{Rails.root}/lib"
+
 
     # Configuration for the application, engines, and railties goes here.
     #

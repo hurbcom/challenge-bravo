@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+    exchange-rate-service:
+        build: &exchange-rate-service-local
+            context: "./exchange-rate"
+            target: base
+        volumes:
+            - ./exchange-rate:/app
+        ports:
+            - "3000:3000"
+        depends_on:
+            - exchange-rate-redis
+
+    exchange-rate-redis:
+        image: redis
