@@ -1,11 +1,18 @@
 import { Router } from 'express'
-import quotationApi from '../services/api'
+
+import { ALL_COINS as validCoins} from '../services/connections'
+import { quotationApi } from '../services/api'
 
 const quotationRouter = Router()
 
 quotationRouter.get('/', async (req, res) => {
-    const response = await quotationApi.get('/last/USD-BRL')
-    res.json(response.data)
+  const response = await Promise.all<object>(
+      validCoins.map(async (coins) => {
+          const request = await quotationApi.get(`/last/${coins}-USD`)
+          return request.data
+      })
+  )
+  res.json(response)
 })
 
 export { quotationRouter }

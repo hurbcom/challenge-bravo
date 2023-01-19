@@ -6,3 +6,19 @@ datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
 }
+
+model Coins {
+    id         String   @id @default(uuid())
+    code       String   @unique
+    name       String
+    high       String
+    low        String
+    type       CoinType @default(FIDUCIARY)
+    updated_at DateTime @default(now())
+}
+
+enum CoinType {
+    FIDUCIARY
+    FICTITIOUS
+    CRYPTO
+}
