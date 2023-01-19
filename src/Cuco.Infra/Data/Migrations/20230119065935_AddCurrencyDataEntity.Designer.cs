@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cuco.Infra.Data.Migrations
 {
     [DbContext(typeof(CucoDbContext))]
-    [Migration("20230119054351_AddCurrencyData")]
-    partial class AddCurrencyData
+    [Migration("20230119065935_AddCurrencyDataEntity")]
+    partial class AddCurrencyDataEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,9 @@ namespace Cuco.Infra.Data.Migrations
                     b.Property<string>("Symbol")
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
+
+                    b.Property<bool>("Available")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("LastUpdateAt")
                         .HasColumnType("datetime(6)");

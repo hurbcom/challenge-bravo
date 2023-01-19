@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Cuco.Infra.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCurrencyData : Migration
+    public partial class AddCurrencyDataEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +23,8 @@ namespace Cuco.Infra.Data.Migrations
                     Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ValueInDollar = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    LastUpdateAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    LastUpdateAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Available = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
