@@ -1,4 +1,7 @@
-using Cuco.Infra.Data.UnitsOfWork;
+using Cuco.Commons.Base;
+using Cuco.Domain.CurrenciesData.Models.Entities;
+using Cuco.Domain.CurrenciesData.Services.Repositories;
+using Cuco.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,25 +21,27 @@ public static class SetupServicesExtensions
         return services;
     }
 
+    private static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)
+        => configuration?.GetConnectionString("Redis") is { } connectionString
+            ? services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = connectionString;
+                    options.InstanceName = "CucoAPI:";
+                })
+            : services;
+
     private static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionString = configuration?.GetConnectionString("CucoDBContext") ?? "";
-
-        var serverVersion = ServerVersion.AutoDetect(connectionString);
-
-        services.AddDbContext<CucoDbContext>(options =>
-        {
-            options
-                .UseMySql(connectionString, serverVersion, o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore))
-                .EnableDetailedErrors();
-        });
-
-        return services;
-    }
+        => configuration?.GetConnectionString("CucoDBContext") is { } connectionString
+            ? services.AddDbContext<CucoDbContext>(options =>
+                {
+                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore))
+                           .EnableDetailedErrors();
+                })
+            : services;
 
     private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
         => services.AddScoped<IUnitOfWork, UnitOfWork>();
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
-        => services;
+        => services.AddScoped<ICurrencyDataRepository, CurrencyDataRepository>();
 }
