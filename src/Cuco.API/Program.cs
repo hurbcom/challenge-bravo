@@ -1,7 +1,4 @@
-using Cuco.Infra.Data;
 using Cuco.IoC.Extensions;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
