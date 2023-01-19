@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="CurrenciesData\Services\**" />
-    <EmbeddedResource Remove="CurrenciesData\Services\**" />
-    <None Remove="CurrenciesData\Services\**" />
+    <ProjectReference Include="..\Cuco.Commons\Cuco.Commons.csproj" />
   </ItemGroup>
 
 </Project>
