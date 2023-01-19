@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Cuco.Infra.data.Migrations
+namespace Cuco.Infra.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddCurrencyData : Migration
@@ -19,18 +18,16 @@ namespace Cuco.Infra.data.Migrations
                 name: "CurrencyData",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Symbol = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ValueInDollar = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     LastUpdateAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CurrencyData", x => x.Id);
+                    table.PrimaryKey("PK_CurrencyData", x => x.Symbol);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }

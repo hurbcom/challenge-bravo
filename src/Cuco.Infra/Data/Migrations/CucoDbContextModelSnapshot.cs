@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Cuco.Infra.data.Migrations
+namespace Cuco.Infra.Data.Migrations
 {
     [DbContext(typeof(CucoDbContext))]
     partial class CucoDbContextModelSnapshot : ModelSnapshot
@@ -21,9 +21,9 @@ namespace Cuco.Infra.data.Migrations
 
             modelBuilder.Entity("Cuco.Domain.CurrenciesData.Models.Entities.CurrencyData", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                    b.Property<string>("Symbol")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
 
                     b.Property<DateTime>("LastUpdateAt")
                         .HasColumnType("datetime(6)");
@@ -33,15 +33,10 @@ namespace Cuco.Infra.data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
                     b.Property<decimal>("ValueInDollar")
                         .HasColumnType("decimal(65,30)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Symbol");
 
                     b.ToTable("CurrencyData", (string)null);
                 });
