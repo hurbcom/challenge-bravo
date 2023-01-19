@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Cuco.IoC</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cuco.Application\Cuco.Application.csproj" />
+    <ProjectReference Include="..\Cuco.Infra\Cuco.Infra.csproj" />
+  </ItemGroup>
+
+</Project>
