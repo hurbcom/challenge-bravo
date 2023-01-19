@@ -1,4 +1,6 @@
-using Cuco.Application.Tests;
+using Cuco.Application.Base;
+using Cuco.Application.CurrencyConversion.Models;
+using Cuco.Commons;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cuco.API.Controllers;
@@ -9,11 +11,29 @@ public class CurrencyConversionController : ControllerBase
 {
     [HttpGet]
 
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-    public async Task<ActionResult> PingAsync(
-        [FromServices] IRedisPing service)
+    [ProducesResponseType(typeof(Result<CurrencyConversionOutput>), StatusCodes.Status200OK)]
+    public async Task<ActionResult> ConvertCurrencyAsync(
+        [FromServices] IService<CurrencyConversionInput, CurrencyConversionOutput> service,
+        [FromQuery] string fromCurrency,
+        [FromQuery] string toCurrency,
+        [FromQuery] decimal amount)
     {
-        var result = await service.Ping();
-        return Ok(result);
+        try
+        {
+            var result = new Result<CurrencyConversionOutput>()
+            {
+                Output = await service.Handle(new()
+                {
+                    FromCurrency = fromCurrency,
+                    ToCurrency = toCurrency,
+                    Amount = amount
+                })
+            };
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 }
