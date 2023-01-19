@@ -1,13 +1,13 @@
-using Cuco.Domain.CurrenciesData.Models.Entities;
+using Cuco.Domain.Currencies.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Cuco.Infra.Data.Configuration;
-internal class CurrencyDataConfiguration : IEntityTypeConfiguration<CurrencyData>
+internal class CurrencyDataConfiguration : IEntityTypeConfiguration<Currency>
 {
-    public void Configure(EntityTypeBuilder<CurrencyData> builder)
+    public void Configure(EntityTypeBuilder<Currency> builder)
     {
-        builder.ToTable(nameof(CurrencyData));
+        builder.ToTable(nameof(Currency));
 
         builder.HasKey(c => c.Symbol);
 

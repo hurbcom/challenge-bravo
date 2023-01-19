@@ -1,7 +1,7 @@
 namespace Cuco.Application.GetCurrencyInUSD;
-internal class GetCurrencyInUSDService : IGetCurrencyInUSDService
+internal class GetCurrencyInUsdService : IGetCurrencyInUsdService
 {
-    public async Task<decimal?> GetCurrencyInUSDAsync(string currency)
+    public async Task<decimal?> GetCurrencyInUsdAsync(string currency)
     {
         currency= currency.ToLower();
         if (currency == "usd") return 1;
