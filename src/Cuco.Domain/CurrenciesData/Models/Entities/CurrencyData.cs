@@ -19,6 +19,7 @@ public class CurrencyData
     public string Symbol { get; private set; }
     public decimal ValueInDollar { get; private set; }
     public DateTime LastUpdateAt { get; private set; }
+    public bool Available { get; private set; }
 
     public void SetSymbol(string symbol)
         => Symbol = symbol;
