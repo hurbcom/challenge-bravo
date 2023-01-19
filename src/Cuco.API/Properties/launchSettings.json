@@ -9,7 +9,7 @@
         }
     },
     "profiles": {
-        "CurrencyConversion": {
+        "Cuco": {
             "commandName": "Project",
             "dotnetRunMessages": true,
             "launchBrowser": true,
