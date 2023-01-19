@@ -1,7 +1,5 @@
-using Cuco.Domain.Base;
-
 namespace Cuco.Domain.CurrenciesData.Models.Entities;
-public class CurrencyData : Entity
+public class CurrencyData
 {
     public CurrencyData(
         string name,
@@ -21,4 +19,13 @@ public class CurrencyData : Entity
     public string Symbol { get; private set; }
     public decimal ValueInDollar { get; private set; }
     public DateTime LastUpdateAt { get; private set; }
+
+    public void SetSymbol(string symbol)
+        => Symbol = symbol;
+
+    public void UpdatedNow()
+        => LastUpdateAt = DateTime.Now;
+
+    public void SetValueInDollar(decimal valueInDollar)
+        => ValueInDollar = valueInDollar;
 }

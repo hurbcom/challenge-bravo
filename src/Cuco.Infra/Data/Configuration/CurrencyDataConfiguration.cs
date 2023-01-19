@@ -9,7 +9,7 @@ internal class CurrencyDataConfiguration : IEntityTypeConfiguration<CurrencyData
     {
         builder.ToTable(nameof(CurrencyData));
 
-        builder.HasKey(c => c.Id);
+        builder.HasKey(c => c.Symbol);
 
         builder.Property(c => c.Symbol)
                .IsRequired()
