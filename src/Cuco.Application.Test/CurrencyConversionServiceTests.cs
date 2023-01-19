@@ -7,7 +7,7 @@ public class CurrencyConversionServiceTests
     }
 
     [Test]
-    public void Test1()
+    public void Returns()
     {
         Assert.Pass();
     }
