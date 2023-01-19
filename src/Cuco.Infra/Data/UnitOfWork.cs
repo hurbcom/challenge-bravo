@@ -1,4 +1,6 @@
-namespace Cuco.Infra.Data.UnitsOfWork;
+using Cuco.Commons.Base;
+
+namespace Cuco.Infra.Data;
 
 public class UnitOfWork : IUnitOfWork
 {
@@ -16,12 +18,8 @@ public class UnitOfWork : IUnitOfWork
             _db.SaveChanges();
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            var message = ex.Message;
-            if (ex.InnerException != null) message += $" - {ex.InnerException.Message}";
-            Console.WriteLine($"***ERROR: Error at UnitOfWork.Commit: {message}");
-
             return false;
         }
     }
