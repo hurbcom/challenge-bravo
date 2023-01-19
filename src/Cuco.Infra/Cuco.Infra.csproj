@@ -28,8 +28,4 @@
     <ProjectReference Include="..\Cuco.Domain\Cuco.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\UnitsOfWork" />
-  </ItemGroup>
-
 </Project>
