@@ -7,11 +7,11 @@ internal static class CurrencySeed
     internal static void GenerateInitialCurrencies(this MigrationBuilder migrationBuilder)
         => migrationBuilder.Sql(
         $@"
-            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('usd', 'Dollar',   1, TRUE, '9999-12-31');
-            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('brl', 'Real',     0, TRUE, '1000-01-01');
-            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('eur', 'Euro',     0, TRUE, '1000-01-01');
-            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('btc', 'Bitcoin',  0, TRUE, '1000-01-01');
-            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('eth', 'Ethereum', 0, TRUE, '1000-01-01');
+            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('USD', 'Dollar',   1, TRUE, '9999-12-31');
+            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('BRL', 'Real',     0, TRUE, '1000-01-01');
+            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('EUR', 'Euro',     0, TRUE, '1000-01-01');
+            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('BTC', 'Bitcoin',  0, TRUE, '1000-01-01');
+            INSERT INTO {nameof(Currency)}({nameof(Currency.Symbol)}, {nameof(Currency.Name)}, {nameof(Currency.ValueInDollar)}, {nameof(Currency.Available)}, {nameof(Currency.LastUpdateAt)}) VALUES ('ETH', 'Ethereum', 0, TRUE, '1000-01-01');
 
           ");
 
