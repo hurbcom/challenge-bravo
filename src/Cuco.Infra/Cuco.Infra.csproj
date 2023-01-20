@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Cuco.Domain\Cuco.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
 </Project>
