@@ -1,5 +1,7 @@
 using Cuco.Application.CurrencyConversion.Services;
 using Cuco.Application.GetCurrencyInUSD;
+using Cuco.Application.SyncCurrency;
+using Cuco.Commons.Base;
 using Cuco.Domain.Currencies.Services.Repositories;
 using Moq;
 
@@ -13,13 +15,16 @@ public class CurrencyConversionServiceTests
     private CurrencyConversionService _currencyConversionService;
 
     private readonly Mock<ICurrencyRepository> _currencyRepositoryMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+    private readonly Mock<ICache> _cacheMock = new();
 
     private Random _random = new();
 
     [SetUp]
     public void Setup()
     {
-        var getCurrencyInUsdService = new GetCurrencyInUsdService(_currencyRepositoryMock.Object);
+        var sync = new SyncCurrencyService(_currencyRepositoryMock.Object, _cacheMock.Object, new(), _unitOfWorkMock.Object);
+        var getCurrencyInUsdService = new GetCurrencyInUsdService(new(), _currencyRepositoryMock.Object, _cacheMock.Object, sync);
         _currencyConversionService = new(getCurrencyInUsdService, _currencyRepositoryMock.Object);
     }
 
