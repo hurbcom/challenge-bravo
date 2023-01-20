@@ -23,7 +23,7 @@ public class Currency : Entity
     public string Name { get; private set; }
     public decimal ValueInDollar { get; private set; }
     public DateTime? LastUpdateAt { get; private set; }
-    public bool Available { get; }
+    public bool Available { get; private set; }
 
     public void SetValueInDollar(decimal valueInDollar)
         => ValueInDollar = valueInDollar;

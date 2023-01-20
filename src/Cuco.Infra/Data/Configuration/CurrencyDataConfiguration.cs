@@ -9,8 +9,8 @@ internal class CurrencyDataConfiguration : IEntityTypeConfiguration<Currency>
     {
         builder.ToTable(nameof(Currency));
 
-        builder.HasKey(c => c.Symbol);
-
+        builder.HasIndex(c => c.Symbol)
+               .IsUnique();
         builder.Property(c => c.Symbol)
                .IsRequired()
                .HasMaxLength(10);
