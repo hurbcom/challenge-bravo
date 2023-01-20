@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cuco.Infra.Data.Migrations
 {
     [DbContext(typeof(CucoDbContext))]
-    [Migration("20230119065935_AddCurrencyDataEntity")]
-    partial class AddCurrencyDataEntity
+    [Migration("20230120175719_AddCurrencyInitialSeed")]
+    partial class AddCurrencyInitialSeed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,16 +22,16 @@ namespace Cuco.Infra.Data.Migrations
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Cuco.Domain.CurrenciesData.Models.Entities.CurrencyData", b =>
+            modelBuilder.Entity("Cuco.Domain.Currencies.Models.Entities.Currency", b =>
                 {
-                    b.Property<string>("Symbol")
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("Available")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime>("LastUpdateAt")
+                    b.Property<DateTime?>("LastUpdateAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
@@ -39,12 +39,20 @@ namespace Cuco.Infra.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
                     b.Property<decimal>("ValueInDollar")
                         .HasColumnType("decimal(65,30)");
 
-                    b.HasKey("Symbol");
+                    b.HasKey("Id");
 
-                    b.ToTable("CurrencyData", (string)null);
+                    b.HasIndex("Symbol")
+                        .IsUnique();
+
+                    b.ToTable("Currency", (string)null);
                 });
 #pragma warning restore 612, 618
         }

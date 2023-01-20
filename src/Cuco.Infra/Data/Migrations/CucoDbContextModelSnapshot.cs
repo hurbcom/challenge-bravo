@@ -21,12 +21,12 @@ namespace Cuco.Infra.Data.Migrations
 
             modelBuilder.Entity("Cuco.Domain.Currencies.Models.Entities.Currency", b =>
                 {
-                    b.Property<string>("Symbol")
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("Available")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastUpdateAt")
                         .HasColumnType("datetime(6)");
@@ -36,10 +36,18 @@ namespace Cuco.Infra.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
                     b.Property<decimal>("ValueInDollar")
                         .HasColumnType("decimal(65,30)");
 
-                    b.HasKey("Symbol");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Symbol")
+                        .IsUnique();
 
                     b.ToTable("Currency", (string)null);
                 });
