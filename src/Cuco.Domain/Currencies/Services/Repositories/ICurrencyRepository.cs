@@ -1,12 +1,13 @@
+using Cuco.Commons.Base;
 using Cuco.Domain.Currencies.Models.Entities;
 
 namespace Cuco.Domain.Currencies.Services.Repositories;
 
-public interface ICurrencyRepository
+public interface ICurrencyRepository : IRepository<Currency>
 {
-    Task InsertAsync(Currency entity);
     Task<bool> ExistsBySymbolAsync(string symbol);
-    Task<IList<Currency>> GetAllAsync();
     Task<Currency> GetBySymbolAsync(string symbol);
     Task DeleteBySymbolASync(string symbol);
+    Task<bool> IsAvailableAsync(string symbol);
+    Task<IList<Currency>> GetAllAvailableAsync();
 }
