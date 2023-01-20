@@ -7,7 +7,7 @@ namespace CurrencyConversion.Application.Test;
 public class CurrencyConversionServiceTests
 {
     private const string SameCurrencyMessage = "The currencies are the same, therefore the amount doesn't change.";
-    private const string CouldntFindCurrenciesMessage = "Couldn't get the value in dollar from the currencies.";
+    private const string CouldntFindCurrenciesValueMessage = "Couldn't get the value in dollar from the currencies.";
     private const string CouldntFindCurrenciesMessageBase = "Couldn't find the currency with symbol: ";
 
     private CurrencyConversionService _currencyConversionService;
@@ -19,7 +19,7 @@ public class CurrencyConversionServiceTests
     [SetUp]
     public void Setup()
     {
-        var getCurrencyInUsdService = new GetCurrencyInUsdService();
+        var getCurrencyInUsdService = new GetCurrencyInUsdService(_currencyRepositoryMock.Object);
         _currencyConversionService = new(getCurrencyInUsdService, _currencyRepositoryMock.Object);
     }
 
@@ -75,6 +75,25 @@ public class CurrencyConversionServiceTests
             Assert.That(result.ConvertedAmount, Is.Null);
             Assert.That(result.Details, Is.EqualTo(CouldntFindCurrenciesMessageBase + fromCurrency
                                           + '\n' + CouldntFindCurrenciesMessageBase + toCurrency));
+        });
+    }
+
+    [Test]
+    public async Task Convert_BothCurrenciesDidNotFindValue_ReturnsNullAndMessage()
+    {
+        var amount = _random.Next();
+        const string fromCurrency = "a";
+        const string toCurrency = "b";
+
+        _currencyRepositoryMock.Setup(r => r.ExistsBySymbolAsync(It.IsAny<string>())).ReturnsAsync(true);
+
+        var result = await _currencyConversionService.Handle(new()
+            { FromCurrency = fromCurrency, ToCurrency = toCurrency, Amount = amount });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.ConvertedAmount, Is.Null);
+            Assert.That(result.Details, Is.EqualTo(CouldntFindCurrenciesValueMessage));
         });
     }
 }
