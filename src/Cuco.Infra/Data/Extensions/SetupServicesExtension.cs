@@ -1,6 +1,7 @@
 using Cuco.Commons.Base;
 using Cuco.Domain.Currencies.Services.Repositories;
 using Cuco.Infra.Data.Repositories;
+using Cuco.Infra.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,8 @@ public static class SetupServicesExtensions
     public static IServiceCollection SetupDataServices(this IServiceCollection services, IConfiguration configuration)
     {
         services
+            .AddSettings(configuration)
+            .AddRedis(configuration)
             .AddContexts(configuration)
             .AddUnitOfWork()
             .AddRepositories();
@@ -20,14 +23,23 @@ public static class SetupServicesExtensions
         return services;
     }
 
+    private static IServiceCollection AddSettings(this IServiceCollection services, IConfiguration configuration)
+    {
+        var openExchangeSettings = configuration.GetSection("OpenExchangeSettings").Get<OpenExchangeSettings>();
+        return services.AddSingleton(openExchangeSettings);
+    }
+
     private static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)
-        => configuration?.GetConnectionString("Redis") is { } connectionString
-            ? services.AddStackExchangeRedisCache(options =>
-                {
-                    options.Configuration = connectionString;
-                    options.InstanceName = "CucoAPI:";
-                })
-            : services;
+    {
+        if (configuration?.GetConnectionString("Redis") is { } connectionString)
+            return services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = connectionString;
+                options.InstanceName = "CucoAPI:";
+            })
+                .AddSingleton<ICache, RedisCache>();
+        return services;
+    }
 
     private static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
         => configuration?.GetConnectionString("CucoDBContext") is { } connectionString
