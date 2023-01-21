@@ -1,8 +1,9 @@
-import axios from 'axios'
-import { QUOTATION_API } from './connections'
+import axios from "axios";
 
-const baseURL = QUOTATION_API
+import { QUOTATION_API } from "./connections";
+
+const baseURL = QUOTATION_API;
 
 export const quotationApi = axios.create({
-    baseURL
+    baseURL,
 });
