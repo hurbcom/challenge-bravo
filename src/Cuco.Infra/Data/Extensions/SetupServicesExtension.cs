@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using StackExchange.Redis;
 
 namespace Cuco.Infra.Data.Extensions;
 
@@ -18,7 +19,8 @@ public static class SetupServicesExtensions
             .AddRedis(configuration)
             .AddContexts(configuration)
             .AddUnitOfWork()
-            .AddRepositories();
+            .AddRepositories()
+            .AddMemoryCache();
 
         return services;
     }
@@ -33,11 +35,10 @@ public static class SetupServicesExtensions
     {
         if (configuration?.GetConnectionString("Redis") is { } connectionString)
             return services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = connectionString;
-                options.InstanceName = "CucoAPI:";
-            })
-                .AddSingleton<ICache, RedisCache>();
+                {
+                    options.Configuration = connectionString;
+                })
+                .AddSingleton<IRedisCache, RedisRedisCache>();
         return services;
     }
 
