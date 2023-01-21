@@ -29,6 +29,10 @@ class QuotationRepository {
 
         this.quotations.push(quotation);
     }
+
+    list(): Quotation[] {
+        return this.quotations;
+    }
 }
 
 export { QuotationRepository };

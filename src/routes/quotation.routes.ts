@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { response, Router } from "express";
 
 import { QuotationRepository } from "../repositories/QuotationsRepository";
 import { quotationApi } from "../services/api";
@@ -7,7 +7,7 @@ import { ALL_COINS as validCoins } from "../services/connections";
 const quotationRoutes = Router();
 const quotationRepository = new QuotationRepository();
 
-quotationRoutes.get("/", async (request, response) => {
+quotationRoutes.get("/api-quotations", async (request, response) => {
     const allQuotations = await Promise.all<object>(
         validCoins.map(async (coins) => {
             const request = await quotationApi.get(`/last/${coins}-USD`);
@@ -27,6 +27,12 @@ quotationRoutes.post("/", (request, response) => {
     quotationRepository.create({ code, name, high, low });
 
     return response.status(201).send();
+});
+
+quotationRoutes.get("/", (request, response) => {
+    const allQuotataions = quotationRepository.list();
+
+    return response.json(allQuotataions);
 });
 
 export { quotationRoutes };
