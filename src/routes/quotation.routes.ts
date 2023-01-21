@@ -24,6 +24,13 @@ quotationRoutes.get("/api-quotations", async (request, response) => {
 quotationRoutes.post("/", (request, response) => {
     const { code, name, high, low } = request.body;
 
+    const quotationAlredyExists = quotationRepository.findByCode(code);
+
+    if (quotationAlredyExists)
+        return response
+            .status(400)
+            .json({ error: "Coin alredy exists in dastabse!" });
+
     quotationRepository.create({ code, name, high, low });
 
     return response.status(201).send();

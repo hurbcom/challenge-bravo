@@ -33,6 +33,13 @@ class QuotationRepository {
     list(): Quotation[] {
         return this.quotations;
     }
+
+    findByCode(code: string): Quotation {
+        const quotation = this.quotations.find(
+            (quotation) => quotation.code === code
+        );
+        return quotation;
+    }
 }
 
 export { QuotationRepository };
