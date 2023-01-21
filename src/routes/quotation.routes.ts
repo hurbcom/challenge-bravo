@@ -1,4 +1,4 @@
-import { response, Router } from "express";
+import { Router } from "express";
 
 import { QuotationRepository } from "../repositories/QuotationsRepository";
 import { quotationApi } from "../services/api";
