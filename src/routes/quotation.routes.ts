@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { v4 as uuidv4 } from "uuid";
 
 import { Quotation } from "../model/Quotation";
 import { quotationApi } from "../services/api";
@@ -24,7 +23,9 @@ quotationRoutes.get("/", async (request, response) => {
 quotationRoutes.post("/", (request, response) => {
     const { code, name, high, low } = request.body;
 
-    const quotation: Quotation = {
+    const quotation = new Quotation();
+
+    Object.assign(quotation, {
         code,
         name,
         high,
@@ -32,7 +33,7 @@ quotationRoutes.post("/", (request, response) => {
         type: "FICTITIOUS",
         created_at: new Date(),
         updated_at: new Date(),
-    };
+    });
 
     return response.status(201).json({ quotation });
 });
