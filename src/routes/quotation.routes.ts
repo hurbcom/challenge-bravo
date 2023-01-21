@@ -1,10 +1,11 @@
 import { Router } from "express";
 
-import { Quotation } from "../model/Quotation";
+import { QuotationRepository } from "../repositories/QuotationsRepository";
 import { quotationApi } from "../services/api";
 import { ALL_COINS as validCoins } from "../services/connections";
 
 const quotationRoutes = Router();
+const quotationRepository = new QuotationRepository();
 
 quotationRoutes.get("/", async (request, response) => {
     const allQuotations = await Promise.all<object>(
@@ -23,19 +24,9 @@ quotationRoutes.get("/", async (request, response) => {
 quotationRoutes.post("/", (request, response) => {
     const { code, name, high, low } = request.body;
 
-    const quotation = new Quotation();
+    quotationRepository.create({ code, name, high, low });
 
-    Object.assign(quotation, {
-        code,
-        name,
-        high,
-        low,
-        type: "FICTITIOUS",
-        created_at: new Date(),
-        updated_at: new Date(),
-    });
-
-    return response.status(201).json({ quotation });
+    return response.status(201).send();
 });
 
 export { quotationRoutes };
