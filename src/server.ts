@@ -1,9 +1,11 @@
 import express from "express";
 
-import { quotationRouter } from "./routes/quotation.routes";
+import { quotationRoutes } from "./routes/quotation.routes";
 
 const app = express();
 
-app.use(quotationRouter);
+app.use(express.json());
+
+app.use(quotationRoutes);
 
 app.listen(3333, () => console.log("server running on port 3333"));
