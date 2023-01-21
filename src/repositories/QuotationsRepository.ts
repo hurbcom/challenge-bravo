@@ -36,7 +36,7 @@ class QuotationRepository {
 
     findByCode(code: string): Quotation {
         const quotation = this.quotations.find(
-            (quotation) => quotation.code === code
+            (quotation) => quotation.code.toUpperCase() === code
         );
         return quotation;
     }

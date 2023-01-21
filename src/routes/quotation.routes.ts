@@ -3,6 +3,7 @@ import { Router } from "express";
 import { QuotationRepository } from "../repositories/QuotationsRepository";
 import { quotationApi } from "../services/api";
 import { ALL_COINS as validCoins } from "../services/connections";
+import { CrateQuotationService } from "../services/CreateQuotationService";
 
 const quotationRoutes = Router();
 const quotationRepository = new QuotationRepository();
@@ -24,14 +25,11 @@ quotationRoutes.get("/api-quotations", async (request, response) => {
 quotationRoutes.post("/", (request, response) => {
     const { code, name, high, low } = request.body;
 
-    const quotationAlredyExists = quotationRepository.findByCode(code);
+    const createQuotationService = new CrateQuotationService(
+        quotationRepository
+    );
 
-    if (quotationAlredyExists)
-        return response
-            .status(400)
-            .json({ error: "Coin alredy exists in dastabse!" });
-
-    quotationRepository.create({ code, name, high, low });
+    createQuotationService.execute({ code, name, high, low });
 
     return response.status(201).send();
 });
