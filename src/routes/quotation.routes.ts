@@ -1,18 +1,37 @@
 import { Router } from "express";
+import { v4 as uuidv4 } from "uuid";
 
 import { quotationApi } from "../services/api";
 import { ALL_COINS as validCoins } from "../services/connections";
 
-const quotationRouter = Router();
+const quotationRoutes = Router();
 
-quotationRouter.get("/", async (req, res) => {
-    const response = await Promise.all<object>(
+quotationRoutes.get("/", async (request, response) => {
+    const allQuotations = await Promise.all<object>(
         validCoins.map(async (coins) => {
             const request = await quotationApi.get(`/last/${coins}-USD`);
             return request.data;
         })
     );
-    res.json(response);
+    response.json(allQuotations);
 });
 
-export { quotationRouter };
+/**
+ * endpoint de cadastro de novas moedas
+ * @param {object} request.body -> code, name, high, low
+ */
+quotationRoutes.post("/", (request, response) => {
+    const { code, name, high, low } = request.body;
+
+    const quotation = {
+        code,
+        name,
+        high,
+        low,
+        id: uuidv4(),
+    };
+
+    return response.status(201).json(quotation);
+});
+
+export { quotationRoutes };
