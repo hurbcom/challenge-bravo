@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { v4 as uuidv4 } from "uuid";
 
+import { Quotation } from "../model/Quotation";
 import { quotationApi } from "../services/api";
 import { ALL_COINS as validCoins } from "../services/connections";
 
@@ -23,15 +24,17 @@ quotationRoutes.get("/", async (request, response) => {
 quotationRoutes.post("/", (request, response) => {
     const { code, name, high, low } = request.body;
 
-    const quotation = {
+    const quotation: Quotation = {
         code,
         name,
         high,
         low,
-        id: uuidv4(),
+        type: "FICTITIOUS",
+        created_at: new Date(),
+        updated_at: new Date(),
     };
 
-    return response.status(201).json(quotation);
+    return response.status(201).json({ quotation });
 });
 
 export { quotationRoutes };
