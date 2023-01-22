@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8EAD6C91
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuco.Commons", "Cuco.Commons\Cuco.Commons.csproj", "{BAD66C43-F9FB-4D21-A564-3F2A310FFF72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuco.Cron", "Cuco.Cron\Cuco.Cron.csproj", "{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{BAD66C43-F9FB-4D21-A564-3F2A310FFF72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAD66C43-F9FB-4D21-A564-3F2A310FFF72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAD66C43-F9FB-4D21-A564-3F2A310FFF72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{3D70F3FF-A9E8-41F6-BBA6-5A32DDD361DD} = {14F0D11C-0F52-4598-A521-10DAD52DB04C}
 		{32A80C25-8B99-49D6-9D1D-D41FF8DABDC5} = {8EAD6C91-0A55-4ECD-BBA8-8FA9C8DE6EC8}
 		{BAD66C43-F9FB-4D21-A564-3F2A310FFF72} = {14F0D11C-0F52-4598-A521-10DAD52DB04C}
+		{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234} = {14F0D11C-0F52-4598-A521-10DAD52DB04C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1E89EA3-BE11-453C-9E2B-21B591F675A7}
