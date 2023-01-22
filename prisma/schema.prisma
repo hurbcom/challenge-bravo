@@ -16,6 +16,8 @@ model Coins {
     type       CoinType @default(FIDUCIARY)
     created_at DateTime @default(now())
     updated_at DateTime @default(now())
+
+    @@map("coins")
 }
 
 enum CoinType {

@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+    database:
+        image: postgres
+        container_name: database-challenge-bravo
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=admin
+            - POSTGRES_DB=challenge-bravo
+        volumes:
+            - pgdata:/data/postgres
+    app:
+        build: .
+        container_name: challenge-bravo
+        ports:
+            - 3333:3333
+        volumes:
+            - .:/usr/app
+
+volumes:
+    pgdata:
+        driver: local
