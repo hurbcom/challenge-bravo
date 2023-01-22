@@ -18,7 +18,7 @@ internal static class CurrencySeed
     internal static void DeleteInitialCurrencies(this MigrationBuilder migrationBuilder)
         => migrationBuilder.Sql
         ($@"
-               DELETE FROM {nameof(Currency)} WHERE {nameof(Currency.Symbol)} IN ('usd', 'brl', 'eur', 'btc', 'eth');
+               DELETE FROM {nameof(Currency)} WHERE {nameof(Currency.Symbol)} IN ('USD', 'BRL', 'EUR', 'BTC', 'ETH');
         ");
 }
 
