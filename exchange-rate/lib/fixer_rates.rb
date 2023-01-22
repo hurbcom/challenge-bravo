@@ -8,10 +8,17 @@ class FixerRates
         begin
             response = conn.get('latest', {base: @from, symbols: @to})
         rescue
-            raise  Faraday::ClientError, "Error while fetching rates from Fixer API"
+            raise  RatesService::FixerAPIError, "Error while fetching rates from Fixer API"
         end
         if response.status != 200
-            raise  Faraday::ClientError, "Response status was #{response.status}"
+            puts 'alo'
+            raise  RatesService::FixerAPIError, "Response status was #{response.status}"
+        end
+
+        unless response.body['rates']
+            Rails.logger.error(response.body['error'])
+            puts 'alo'
+            raise  RatesService::FixerAPIError, "Response body was #{response.body}"
         end
 
         JSON.parse(response.body)['rates'][@to]

@@ -1,5 +1,8 @@
 # Path: exchange-rate/lib/rates_service.rb
 class RatesService
+    class AbstractAPIError < StandardError; end
+    class FixerAPIError < StandardError; end
+
     def initialize(from:, to:)
         @from = from
         @to = to
@@ -10,7 +13,12 @@ class RatesService
         # Check if rates are already cached
         Rails.cache.fetch(@redis_path) do
             # If not, get the rates from the external API
-            rates_from_external_api
+            # and save to cache
+            begin
+                rates_from_external_api
+            rescue
+                Rails.logger.error("Error while fetching rates from cache and external API")
+            end
         end
     end
 
@@ -20,6 +28,16 @@ class RatesService
     # external APIs redundancy if needed
     def rates_from_external_api
         # External API call
-        FixerRates.new(from: @from, to: @to).get_latest_rates
+        begin
+            # This is being called two times for some reason
+            FixerRates.new(from: @from, to: @to).get_latest_rates
+        # Redundancy in case fixerRates don't exist or service is unavailable
+        rescue FixerAPIError => e
+            Rails.logger.error("Error while fetching rates from Fixer API")
+            AbstractRates.new(from: @from, to: @to).get_rate
+        rescue AbstractAPIError => e
+            Rails.logger.error("Error while fetching rates from external API")
+            raise e, "Failed to retrieve exchange rates"
+        end
     end
 end

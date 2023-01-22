@@ -1,9 +1,7 @@
 # Alpine for lighter image
 FROM ruby:3.0.0-alpine AS base
 
-# RUN apk add --no-cache build-base postgresql-dev postgresql-client tzdata openssl-dev libressl-dev git
-
-RUN apk add  --no-cache  build-base libressl-dev tzdata openssl-dev git
+RUN apk add --no-cache build-base postgresql-dev postgresql-client tzdata openssl-dev libressl-dev git
 
 ENV APP_HOME /app
 ENV APP_NAME="exchange-rate-service"

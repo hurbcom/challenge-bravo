@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 services:
     exchange-rate-service:
@@ -11,6 +11,14 @@ services:
             - "3000:3000"
         depends_on:
             - exchange-rate-redis
+            - exchange-rate-pg
 
     exchange-rate-redis:
         image: redis
+
+    exchange-rate-pg:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_DB: exchange_rate
