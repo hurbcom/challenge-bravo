@@ -13,8 +13,6 @@ public class CacheCurrencyValue
 
     private CacheCurrencyValue() { }
 
-    public string CacheValue => $"{ValueInDollar}:{IsReal}";
-
     public static CacheCurrencyValue CreateFromCache(string cacheCurrencyValue)
     {
         var parts = cacheCurrencyValue.Split(':');
@@ -26,4 +24,7 @@ public class CacheCurrencyValue
             IsReal = bool.Parse(parts[1])
         };
     }
+
+    public override string ToString()
+        => $"{ValueInDollar}:{IsReal}";
 }
