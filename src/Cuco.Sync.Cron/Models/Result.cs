@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Cuco.Cron.Models;
+namespace Cuco.Sync.Cron.Models;
 
 public abstract class Result
 {
