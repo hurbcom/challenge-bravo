@@ -1,5 +1,4 @@
 using Cuco.Commons.Base;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace Cuco.Application.Tests.RedisPingPongs;
 
@@ -16,7 +15,7 @@ public class RedisPing : IRedisPing
     {
         try
         {
-            await _redisCache.LockSetAsync("ping", "pong");
+            await _redisCache.SetAsync("ping", "pong");
             return true;
         }
         catch (Exception e)

@@ -56,7 +56,7 @@ public class UpdateCurrencyService : IService<UpdateCurrencyInput, UpdateCurrenc
             if (currency.ValueInDollar == valueInDollarOutput.ValueInDollar)
                 return true;
 
-            await _redisCache.LockSetAsync(currency.Symbol, valueInDollarOutput.ValueInDollar.ToString());
+            await _redisCache.SetAsync(currency.Symbol, valueInDollarOutput.ValueInDollar.ToString());
             currency.SetValueInDollar(valueInDollarOutput.ValueInDollar);
             return true;
         }
