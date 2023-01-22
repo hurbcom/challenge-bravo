@@ -1,4 +1,4 @@
-import { QuotationRepository } from "../../repositories/QuotationsRepository";
+import { QuotationRepository } from "../../repositories/implementations/QuotationsRepository";
 import { ListQuotationsController } from "./ListQuotationsController";
 import { ListQuotationsUseCase } from "./ListQuotationsUseCase";
 

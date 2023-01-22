@@ -1,8 +1,8 @@
-import { Quotation } from "../model/Quotation";
+import { Quotation } from "../../model/Quotation";
 import {
     IQuotationsRepository,
     ICreateQuotationDTO,
-} from "./IQuotationsRepository";
+} from "../IQuotationsRepository";
 
 class QuotationRepository implements IQuotationsRepository {
     private quotations: Quotation[];
