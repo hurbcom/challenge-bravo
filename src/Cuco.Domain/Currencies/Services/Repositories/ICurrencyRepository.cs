@@ -7,7 +7,7 @@ public interface ICurrencyRepository : IRepository<Currency>
 {
     Task<bool> ExistsBySymbolAsync(string symbol);
     Task<Currency> GetBySymbolAsync(string symbol);
-    Task DeleteBySymbolASync(string symbol);
+    Task<bool> DeleteBySymbolASync(string symbol);
     Task<bool> IsAvailableAsync(string symbol);
     Task<IList<Currency>> GetAllAvailableAsync();
 }
