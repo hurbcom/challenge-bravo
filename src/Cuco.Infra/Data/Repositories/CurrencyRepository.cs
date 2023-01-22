@@ -10,22 +10,18 @@ public class CurrencyRepository : Repository<Currency>, ICurrencyRepository
     {
     }
 
-    public async Task InsertAsync(Currency entity)
-        => await Db.Set<Currency>()
-            .AddAsync(entity);
-
     public async Task<bool> ExistsBySymbolAsync(string symbol)
         => await Db.Set<Currency>()
-            .AnyAsync();
+            .AnyAsync(c => c.Symbol.ToUpper() == symbol.ToUpper());
 
     public async Task<Currency> GetBySymbolAsync(string symbol)
         => await Db.Set<Currency>()
             .FirstOrDefaultAsync(c => c.Symbol == symbol);
 
-    public async Task DeleteBySymbolASync(string symbol)
+    public async Task<bool> DeleteBySymbolASync(string symbol)
         => await Db.Set<Currency>()
             .Where(c => c.Symbol == symbol)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync() == 1;
 
     public async Task<bool> IsAvailableAsync(string symbol)
         => await Db.Set<Currency>()
