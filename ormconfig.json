@@ -4,5 +4,9 @@
     "host": "localhost",
     "username": "admin",
     "password": "admin",
-    "database": "challenge-bravo"
+    "database": "challenge-bravo",
+    "migrations": ["./src/database/migrations/*.ts"],
+    "cli": {
+        "migrationsDir": "./src/database/migrations"
+    }
 }
