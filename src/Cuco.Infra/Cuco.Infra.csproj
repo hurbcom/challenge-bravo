@@ -21,8 +21,10 @@
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.2" />
     <PackageReference Include="MySql.Data" Version="8.0.32" />
+    <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.6.90" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
