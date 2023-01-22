@@ -13,18 +13,15 @@ services:
             - POSTGRES_DB=challenge-bravo
         volumes:
             - pgdata:/data/postgres
+        network_mode: host
     app:
         build: .
         container_name: challenge-bravo
-        restart: always
         ports:
             - 3333:3333
         volumes:
             - .:/usr/app
-        links:
-            - database
-        depends_on:
-            - database
+        network_mode: host
 
 
 volumes:

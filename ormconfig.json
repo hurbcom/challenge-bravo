@@ -1,0 +1,8 @@
+{
+    "type": "postgres",
+    "port": 5432,
+    "host": "localhost",
+    "username": "admin",
+    "password": "admin",
+    "database": "challenge-bravo"
+}
