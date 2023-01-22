@@ -15,13 +15,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cuco.API", "Cuco.API\Cuco.A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{14F0D11C-0F52-4598-A521-10DAD52DB04C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuco.Application.Test", "Cuco.Application.Test\Cuco.Application.Test.csproj", "{32A80C25-8B99-49D6-9D1D-D41FF8DABDC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuco.Application.Tests", "Cuco.Application.Tests\Cuco.Application.Tests.csproj", "{32A80C25-8B99-49D6-9D1D-D41FF8DABDC5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8EAD6C91-0A55-4ECD-BBA8-8FA9C8DE6EC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuco.Commons", "Cuco.Commons\Cuco.Commons.csproj", "{BAD66C43-F9FB-4D21-A564-3F2A310FFF72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuco.Cron", "Cuco.Cron\Cuco.Cron.csproj", "{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuco.Sync.Cron", "Cuco.Sync.Cron\Cuco.Sync.Cron.csproj", "{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuco.Infra.Tests", "Cuco.Infra.Tests\Cuco.Infra.Tests.csproj", "{7B9F8328-CE22-4AFC-A1FF-EF8E40A2D240}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,10 @@ Global
 		{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B9F8328-CE22-4AFC-A1FF-EF8E40A2D240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B9F8328-CE22-4AFC-A1FF-EF8E40A2D240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B9F8328-CE22-4AFC-A1FF-EF8E40A2D240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B9F8328-CE22-4AFC-A1FF-EF8E40A2D240}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +81,7 @@ Global
 		{32A80C25-8B99-49D6-9D1D-D41FF8DABDC5} = {8EAD6C91-0A55-4ECD-BBA8-8FA9C8DE6EC8}
 		{BAD66C43-F9FB-4D21-A564-3F2A310FFF72} = {14F0D11C-0F52-4598-A521-10DAD52DB04C}
 		{B7B4F00C-F5DD-46F0-BAC4-B576E16A8234} = {14F0D11C-0F52-4598-A521-10DAD52DB04C}
+		{7B9F8328-CE22-4AFC-A1FF-EF8E40A2D240} = {8EAD6C91-0A55-4ECD-BBA8-8FA9C8DE6EC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1E89EA3-BE11-453C-9E2B-21B591F675A7}
