@@ -8,7 +8,7 @@ public class CacheCurrencyValue
     public CacheCurrencyValue(decimal valueInDollar, bool isReal)
     {
         ValueInDollar = valueInDollar;
-        isReal = IsReal;
+        IsReal = isReal;
     }
 
     private CacheCurrencyValue() { }
