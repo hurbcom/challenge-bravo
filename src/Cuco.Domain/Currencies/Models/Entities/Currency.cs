@@ -30,4 +30,7 @@ public class Currency : Entity
 
     public void SetUpdatedAtUnix(long unixTimestamp)
         => LastUpdateAt = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp).DateTime;
+
+    public void SetName(string name)
+        => Name = name;
 }
