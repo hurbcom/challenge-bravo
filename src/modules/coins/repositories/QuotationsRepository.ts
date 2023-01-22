@@ -7,8 +7,18 @@ import {
 class QuotationRepository implements IQuotationsRepository {
     private quotations: Quotation[];
 
-    constructor() {
+    private static INSTANCE: QuotationRepository;
+
+    private constructor() {
         this.quotations = [];
+    }
+
+    public static getInstance(): QuotationRepository {
+        if (!QuotationRepository.INSTANCE) {
+            QuotationRepository.INSTANCE = new QuotationRepository();
+        }
+
+        return QuotationRepository.INSTANCE;
     }
 
     create({ code, name, high, low }: ICreateQuotationDTO): void {

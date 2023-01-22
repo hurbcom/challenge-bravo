@@ -1,12 +1,11 @@
 import { Router } from "express";
 
-import { QuotationRepository } from "../modules/coins/repositories/QuotationsRepository";
 import { quotationApi } from "../modules/coins/services/api";
 import { ALL_COINS as validCoins } from "../modules/coins/services/connections";
-import { CrateQuotationService } from "../modules/coins/services/CreateQuotationService";
+import { createQuotationController } from "../modules/coins/useCases/createQuotation";
+import { listQuotationsController } from "../modules/coins/useCases/listQuotations";
 
 const quotationRoutes = Router();
-const quotationRepository = new QuotationRepository();
 
 quotationRoutes.get("/api-quotations", async (request, response) => {
     const allQuotations = await Promise.all<object>(
@@ -18,26 +17,12 @@ quotationRoutes.get("/api-quotations", async (request, response) => {
     response.json(allQuotations);
 });
 
-/**
- * endpoint de cadastro de novas moedas
- * @param {object} request.body -> code, name, high, low
- */
 quotationRoutes.post("/", (request, response) => {
-    const { code, name, high, low } = request.body;
-
-    const createQuotationService = new CrateQuotationService(
-        quotationRepository
-    );
-
-    createQuotationService.execute({ code, name, high, low });
-
-    return response.status(201).send();
+    return createQuotationController.handle(request, response);
 });
 
 quotationRoutes.get("/", (request, response) => {
-    const allQuotataions = quotationRepository.list();
-
-    return response.json(allQuotataions);
+    return listQuotationsController.handle(request, response);
 });
 
 export { quotationRoutes };

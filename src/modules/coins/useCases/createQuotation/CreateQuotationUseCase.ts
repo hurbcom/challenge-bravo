@@ -1,4 +1,4 @@
-import { IQuotationsRepository } from "../repositories/IQuotationsRepository";
+import { IQuotationsRepository } from "../../repositories/IQuotationsRepository";
 
 interface IRquest {
     code: string;
@@ -7,7 +7,7 @@ interface IRquest {
     low: string;
 }
 
-class CrateQuotationService {
+class CreateQuotationUseCase {
     constructor(private quotationRepository: IQuotationsRepository) {}
 
     execute({ code, name, high, low }: IRquest): void {
@@ -21,4 +21,4 @@ class CrateQuotationService {
     }
 }
 
-export { CrateQuotationService };
+export { CreateQuotationUseCase };
