@@ -1,19 +1,20 @@
 using Cuco.Application.Base;
 using Cuco.Application.CurrencyConversion.Models;
-using Cuco.Application.GetCurrencyInUSD;
+using Cuco.Application.GetCurrencyInUSD.Models;
 using Cuco.Domain.Currencies.Services.Repositories;
 
 namespace Cuco.Application.CurrencyConversion.Services;
 internal class CurrencyConversionService : IService<CurrencyConversionInput, CurrencyConversionOutput>
 {
     private const string SameCurrencyMessage = "The currencies are the same, therefore the amount doesn't change.";
-    private const string CouldntFindCurrenciesValueMessage = "Couldn't get the value in dollar from the currencies.";
-    private const string CouldntFindCurrenciesMessageBase = "Couldn't find the currency with symbol: ";
+    private const string CouldNotFindCurrenciesValueMessageBase = "Couldn't get the value in dollar from the currency with symbol: ";
+    private const string CouldNotFindCurrenciesMessageBase = "Couldn't find the currency with symbol: ";
 
-    private readonly IGetCurrencyInUsdService _getCurrencyInUsdService;
+    private readonly IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput> _getCurrencyInUsdService;
     private readonly ICurrencyRepository _currencyRepository;
 
-    public CurrencyConversionService(IGetCurrencyInUsdService getCurrencyInUsdService, ICurrencyRepository currencyRepository)
+    public CurrencyConversionService(IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput> getCurrencyInUsdService,
+        ICurrencyRepository currencyRepository)
     {
         _getCurrencyInUsdService = getCurrencyInUsdService;
         _currencyRepository = currencyRepository;
@@ -21,31 +22,46 @@ internal class CurrencyConversionService : IService<CurrencyConversionInput, Cur
 
     public async Task<CurrencyConversionOutput> Handle(CurrencyConversionInput input)
     {
-        var errorMessage = await CheckCurrenciesExist(input);
-        if (!string.IsNullOrEmpty(errorMessage))
-            return GetOutput(null, errorMessage);
+        var errorMessageCurrencyExist = await CheckCurrenciesExist(input);
+        if (!string.IsNullOrEmpty(errorMessageCurrencyExist))
+            return GetOutput(null, errorMessageCurrencyExist);
 
         if (CheckCurrenciesEquals(input))
             return GetOutput(input.Amount, SameCurrencyMessage);
 
-        var fromCurrencyInUsd = await _getCurrencyInUsdService.GetCurrencyInUsdAsync(input.FromCurrency) ?? 0;
-        var toCurrencyInUsd = await _getCurrencyInUsdService.GetCurrencyInUsdAsync(input.ToCurrency) ?? 0;
-        if (fromCurrencyInUsd == 0 || toCurrencyInUsd == 0)
-            return GetOutput(null, CouldntFindCurrenciesValueMessage);
+        var (errorMessageGetValue, fromCurrencyInUsd, toCurrencyInUsd) = await GetCurrenciesValue(input);
+        if (!string.IsNullOrEmpty(errorMessageGetValue))
+            return GetOutput(null, errorMessageGetValue);
 
         var convertedValue = ConvertValue(fromCurrencyInUsd, toCurrencyInUsd, input.Amount);
         return GetOutput(convertedValue, $"Successfully converted from {input.FromCurrency} to {input.ToCurrency}");
+    }
+
+    private async Task<(string errorMessage, decimal fromCurrencyInUsd, decimal toCurrencyInUsd)> GetCurrenciesValue(CurrencyConversionInput input)
+    {
+        var errorMessage = string.Empty;
+
+        var fromCurrencyResult = await _getCurrencyInUsdService.Handle(new() { Symbol = input.FromCurrency});
+        if (fromCurrencyResult.ValueInDollar == 0)
+            errorMessage += $"{CouldNotFindCurrenciesValueMessageBase}{input.FromCurrency}";
+
+        var toCurrencyResult = await _getCurrencyInUsdService.Handle(new() { Symbol = input.ToCurrency});
+        if (toCurrencyResult.ValueInDollar == 0)
+            errorMessage += (errorMessage == string.Empty ? "" : "\n") +
+                            $"{CouldNotFindCurrenciesValueMessageBase}{input.ToCurrency}";
+
+        return (errorMessage, fromCurrencyResult.ValueInDollar, toCurrencyResult.ValueInDollar);
     }
 
     private async Task<string> CheckCurrenciesExist(CurrencyConversionInput input)
     {
         var errorMessage = string.Empty;
         if (!await _currencyRepository.ExistsBySymbolAsync(input.FromCurrency))
-            errorMessage += $"{CouldntFindCurrenciesMessageBase}{input.FromCurrency}";
+            errorMessage += $"{CouldNotFindCurrenciesMessageBase}{input.FromCurrency}";
 
         if (!await _currencyRepository.ExistsBySymbolAsync(input.ToCurrency))
             errorMessage += (errorMessage == string.Empty ? "" : "\n") +
-                            $"{CouldntFindCurrenciesMessageBase}{input.ToCurrency}";
+                            $"{CouldNotFindCurrenciesMessageBase}{input.ToCurrency}";
 
         return errorMessage;
     }
