@@ -1,6 +1,6 @@
-using System.Security.Cryptography;
 using System.Text;
 using Cuco.Commons.Base;
+using Murmur;
 using StackExchange.Redis;
 
 namespace Cuco.Infra.Data.Locking;
@@ -17,7 +17,7 @@ public class RedisLockingService : ILockingService
     }
 
     public async Task<bool> IsLockedAsync(string key)
-        => (await _redis.GetDatabase().LockQueryAsync(key)).HasValue;
+        => (await _redis.GetDatabase().LockQueryAsync(GetHashKey(key))).HasValue;
 
     public Task<bool> GetLockAsync(string key)
     {
@@ -39,9 +39,8 @@ public class RedisLockingService : ILockingService
 
     private static string GetHashKey(string key)
     {
-        using var hasher = SHA1.Create();
         var bytes = Encoding.UTF8.GetBytes(key);
-        var hash = hasher.ComputeHash(bytes);
-        return Convert.ToBase64String(hash);
+        var hash = MurmurHash.Create32();
+        return Convert.ToString(hash.ComputeHash(bytes));
     }
 }
