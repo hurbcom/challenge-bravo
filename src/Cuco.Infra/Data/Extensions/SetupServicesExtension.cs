@@ -38,7 +38,7 @@ public static class SetupServicesExtensions
                 {
                     options.Configuration = connectionString;
                 })
-                .AddSingleton<IRedisCache, RedisRedisCache>();
+                .AddSingleton<IRedisCache, RedisCache>();
         return services;
     }
 
