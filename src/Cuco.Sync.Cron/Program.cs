@@ -1,5 +1,4 @@
-﻿using Cuco.Cron;
-using Cuco.Cron.Handlers;
+﻿using Cuco.Sync.Cron.Handlers;
 using Hangfire;
 using Hangfire.MemoryStorage;
 

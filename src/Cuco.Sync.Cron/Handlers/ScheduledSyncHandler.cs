@@ -1,8 +1,8 @@
-using Cuco.Cron.Models;
+using Cuco.Sync.Cron.Models;
 using Flurl.Http;
 using Hangfire;
 
-namespace Cuco.Cron.Handlers;
+namespace Cuco.Sync.Cron.Handlers;
 
 internal static class ScheduledSyncHandler
 {
