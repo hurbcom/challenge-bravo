@@ -1,5 +1,7 @@
 using Cuco.Commons.Base;
 using Cuco.Domain.Currencies.Services.Repositories;
+using Cuco.Infra.Data.Cache;
+using Cuco.Infra.Data.Locking;
 using Cuco.Infra.Data.Repositories;
 using Cuco.Infra.Settings;
 using Microsoft.EntityFrameworkCore;
@@ -34,11 +36,9 @@ public static class SetupServicesExtensions
     private static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)
     {
         if (configuration?.GetConnectionString("Redis") is { } connectionString)
-            return services.AddStackExchangeRedisCache(options =>
-                {
-                    options.Configuration = connectionString;
-                })
-                .AddSingleton<IRedisCache, RedisCache>();
+            return services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(connectionString))
+                .AddSingleton<IRedisCache, RedisCache>()
+                .AddSingleton<ILockingService, RedisLockingService>();
         return services;
     }
 
