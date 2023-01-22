@@ -1,23 +1,25 @@
 using Cuco.Application.Base;
+using Cuco.Application.OpenExchangeRate.Adapters;
 using Cuco.Application.SyncCurrencies.Models;
 using Cuco.Commons.Base;
+using Cuco.Domain.Currencies.Models.Values;
 using Cuco.Domain.Currencies.Services.Repositories;
 
 namespace Cuco.Application.SyncCurrencies.Services;
 
 public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrenciesOutput>
 {
-    private readonly ICurrencyAdapter _currencyAdapter;
+    private readonly ICurrencyExchangeRateAdapter _currencyExchangeRateAdapter;
     private readonly ICurrencyRepository _currencyRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IRedisCache _redisCache;
 
-    public SyncCurrenciesService(ICurrencyRepository currencyRepository, IRedisCache redisCache, IUnitOfWork unitOfWork, ICurrencyAdapter currencyAdapter)
+    public SyncCurrenciesService(ICurrencyRepository currencyRepository, IRedisCache redisCache, IUnitOfWork unitOfWork, ICurrencyExchangeRateAdapter currencyExchangeRateAdapter)
     {
         _currencyRepository = currencyRepository;
         _redisCache = redisCache;
         _unitOfWork = unitOfWork;
-        _currencyAdapter = currencyAdapter;
+        _currencyExchangeRateAdapter = currencyExchangeRateAdapter;
     }
 
     public async Task<SyncCurrenciesOutput> Handle(SyncCurrenciesInput input)
@@ -25,16 +27,19 @@ public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrencie
         long timestamp;
         try
         {
-            var exchangeRates = await _currencyAdapter.GetAllRates();
+            var exchangeRates = await _currencyExchangeRateAdapter.GetAllRates();
             timestamp = exchangeRates.Timestamp;
             var currencies = (await _currencyRepository.GetAllAsync()).ToList();
+            var cacheKeyValuePairs = new Dictionary<string, string>();
 
             foreach (var currency in currencies.Where(c => !c.Available))
             {
                 if (exchangeRates.Rates.ContainsKey(currency.Symbol.ToUpper()))
                     exchangeRates.Rates.Remove(currency.Symbol.ToUpper());
                 if (!await _redisCache.ExistsAsync(currency.Symbol.ToUpper()))
-                    await _redisCache.LockSetAsync(currency.Symbol.ToUpper(), currency.ValueInDollar.ToString());
+                    await _redisCache.SetAsync(currency.Symbol.ToUpper(), currency.ValueInDollar.ToString());
+                var currencyValue = new CacheCurrencyValue(currency.ValueInDollar, false);
+                cacheKeyValuePairs.Add(currency.Symbol, currencyValue.CacheValue);
             }
 
             foreach (var symbol in exchangeRates.Rates.Keys)
@@ -45,9 +50,10 @@ public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrencie
                 if (currency is null) continue;
                 currency.SetValueInDollar(rate);
                 currency.SetUpdatedAtUnix(exchangeRates.Timestamp);
+                var currencyValue = new CacheCurrencyValue(currency.ValueInDollar, true);
+                cacheKeyValuePairs.Add(currency.Symbol, currencyValue.CacheValue);
             }
-
-            await _redisCache.LockMultipleSetAsync(exchangeRates.Rates);
+            await _redisCache.MultipleSetAsync(cacheKeyValuePairs);
 
         }
         catch (Exception e)
