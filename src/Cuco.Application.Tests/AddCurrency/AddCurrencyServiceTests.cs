@@ -1,5 +1,6 @@
-namespace CurrencyConversion.Application.Test;
-public class ListCurrenciesServiceTests
+namespace CurrencyConversion.Application.Tests.AddCurrency;
+
+public class AddCurrencyServiceTests
 {
     [SetUp]
     public void Setup()

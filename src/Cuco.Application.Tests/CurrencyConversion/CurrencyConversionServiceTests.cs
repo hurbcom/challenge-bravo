@@ -4,7 +4,7 @@ using Cuco.Application.GetCurrencyInUSD.Models;
 using Cuco.Domain.Currencies.Services.Repositories;
 using Moq;
 
-namespace CurrencyConversion.Application.Test;
+namespace CurrencyConversion.Application.Tests.CurrencyConversion;
 public class CurrencyConversionServiceTests
 {
     private const string SameCurrencyMessage = "The currencies are the same, therefore the amount doesn't change.";
