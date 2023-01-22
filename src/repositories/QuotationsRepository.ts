@@ -1,13 +1,10 @@
 import { Quotation } from "../model/Quotation";
+import {
+    IQuotationsRepository,
+    ICreateQuotationDTO,
+} from "./IQuotationsRepository";
 
-interface ICreateQuotationDTO {
-    code: string;
-    name: string;
-    high: string;
-    low: string;
-}
-
-class QuotationRepository {
+class QuotationRepository implements IQuotationsRepository {
     private quotations: Quotation[];
 
     constructor() {

@@ -1,4 +1,4 @@
-import { QuotationRepository } from "../repositories/QuotationsRepository";
+import { IQuotationsRepository } from "../repositories/IQuotationsRepository";
 
 interface IRquest {
     code: string;
@@ -8,7 +8,7 @@ interface IRquest {
 }
 
 class CrateQuotationService {
-    constructor(private quotationRepository: QuotationRepository) {}
+    constructor(private quotationRepository: IQuotationsRepository) {}
 
     execute({ code, name, high, low }: IRquest): void {
         const quotationAlredyExists = this.quotationRepository.findByCode(code);
