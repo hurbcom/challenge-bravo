@@ -3,11 +3,11 @@ using Cuco.Domain.Currencies.Models.Values;
 
 namespace Cuco.Application.GetCurrencyValueFromCache;
 
-public class GetCurrencyValueFromCacheService : ICurrencyValueHelper
+public class CurrencyValueHelper : ICurrencyValueHelper
 {
     private readonly IRedisCache _redisCache;
 
-    public GetCurrencyValueFromCacheService(IRedisCache redisCache)
+    public CurrencyValueHelper(IRedisCache redisCache)
     {
         _redisCache = redisCache;
     }
