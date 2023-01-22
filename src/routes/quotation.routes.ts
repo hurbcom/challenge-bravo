@@ -1,9 +1,9 @@
 import { Router } from "express";
 
-import { QuotationRepository } from "../repositories/QuotationsRepository";
-import { quotationApi } from "../services/api";
-import { ALL_COINS as validCoins } from "../services/connections";
-import { CrateQuotationService } from "../services/CreateQuotationService";
+import { QuotationRepository } from "../modules/coins/repositories/QuotationsRepository";
+import { quotationApi } from "../modules/coins/services/api";
+import { ALL_COINS as validCoins } from "../modules/coins/services/connections";
+import { CrateQuotationService } from "../modules/coins/services/CreateQuotationService";
 
 const quotationRoutes = Router();
 const quotationRepository = new QuotationRepository();
