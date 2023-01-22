@@ -31,7 +31,7 @@ app.SetupPipelineCucoApi();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("v1/swagger.json", "Sislog.Api v1");
+    c.SwaggerEndpoint("v1/swagger.json", "Cuco.Api v1");
 });
 
 app.UseRouting();
