@@ -3,13 +3,11 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 builder.Services.SetupServicesCucoApi(builder.Configuration);
 
 builder.Services.AddControllers();
 
-builder.Services.AddMvc()
-                .AddControllersAsServices();
+builder.Services.AddMvc().AddControllersAsServices();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -22,10 +20,8 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddHttpClient();
 
-// Build Application
 var app = builder.Build();
 
-// Set up application
 app.SetupPipelineCucoApi();
 
 app.UseSwagger();
