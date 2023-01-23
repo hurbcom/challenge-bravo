@@ -1,7 +1,6 @@
 using Cuco.Application.AddCurrency.Models;
 using Cuco.Application.Base;
 using Cuco.Application.CurrencyConversion.Models;
-using Cuco.Commons;
 using Cuco.Commons.Base;
 using Cuco.Commons.Redis;
 using Cuco.Domain.Currencies.Models.Entities;

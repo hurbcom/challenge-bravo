@@ -3,7 +3,7 @@ using Polly;
 using Polly.Retry;
 using StackExchange.Redis;
 
-namespace Cuco.Infra.Data.Cache;
+namespace Cuco.Infra.Data.Services.Cache;
 
 public class RedisCache : IRedisCache
 {

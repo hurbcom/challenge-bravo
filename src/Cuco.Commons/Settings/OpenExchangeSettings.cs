@@ -1,4 +1,4 @@
-namespace Cuco.Infra.Settings;
+namespace Cuco.Commons.Settings;
 
 public class OpenExchangeSettings
 {

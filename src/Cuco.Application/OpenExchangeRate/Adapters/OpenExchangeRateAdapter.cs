@@ -1,6 +1,5 @@
-using Cuco.Application.Base;
 using Cuco.Application.OpenExchangeRate.Models;
-using Cuco.Infra.Settings;
+using Cuco.Commons.Settings;
 using Flurl;
 using Flurl.Http;
 

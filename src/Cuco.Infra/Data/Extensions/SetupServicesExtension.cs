@@ -1,9 +1,11 @@
 using Cuco.Commons.Base;
+using Cuco.Commons.Settings;
 using Cuco.Domain.Currencies.Services.Repositories;
-using Cuco.Infra.Data.Cache;
-using Cuco.Infra.Data.Locking;
+using Cuco.Domain.Users.Services.Repositories;
 using Cuco.Infra.Data.Repositories;
-using Cuco.Infra.Settings;
+using Cuco.Infra.Data.Services.Cache;
+using Cuco.Infra.Data.Services.Locking;
+using Cuco.Infra.Data.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,5 +57,6 @@ public static class SetupServicesExtensions
         => services.AddScoped<IUnitOfWork, UnitOfWork>();
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
-        => services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+        => services.AddScoped<ICurrencyRepository, CurrencyRepository>()
+                   .AddScoped<IUserRepository, UserRepository>();
 }
