@@ -23,12 +23,8 @@ public class CurrencyRepository : Repository<Currency>, ICurrencyRepository
             .Where(c => c.Symbol == symbol)
             .ExecuteDeleteAsync() == 1;
 
-    public async Task<bool> IsAvailableAsync(string symbol)
+    public async Task<Currency> GetBySymbolAsNoTrackingAsync(string symbol)
         => await Db.Set<Currency>()
-            .AnyAsync(c => c.Symbol == symbol && c.Available);
-
-    public async Task<IList<Currency>> GetAllAvailableAsync()
-        => await Db.Set<Currency>()
-            .Where(c => c.Available)
-            .ToListAsync();
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Symbol == symbol);
 }
