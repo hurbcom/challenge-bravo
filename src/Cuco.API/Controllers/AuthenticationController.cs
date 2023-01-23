@@ -1,6 +1,5 @@
 using Cuco.Application.Token;
-using Cuco.Domain.Users.Models.Entities;
-using Cuco.Domain.Users.Services.Extensions;
+using Cuco.Domain.Users.Models.DTO;
 using Cuco.Domain.Users.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,16 +18,16 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("Authenticate")]
-    public async Task<ActionResult<string>> Authenticate([FromBody] User model)
+    public async Task<ActionResult<TokenDTO>> Authenticate([FromBody] SignInDTO signIn)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var user = await _userRepository.GetUserInfo(model.Name, model.Password.Hash());
+        var user = await _userRepository.GetUserDTO(signIn.Name, signIn.Password);
 
         if (user is null)
             return NotFound(new { message = "Invalid username or password" });
 
-        var token = _tokenAdapter.GenerateToken(user);
+        var token = new TokenDTO() { Name = signIn.Name, Token = $"Bearer {_tokenAdapter.GenerateToken(user)}" };
 
         return Ok(token);
     }
