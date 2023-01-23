@@ -4,5 +4,5 @@ namespace Cuco.Application.Token;
 
 public interface ITokenAdapter
 {
-    string GenerateToken(UserInfo user);
+    string GenerateToken(UserDTO user);
 }

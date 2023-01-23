@@ -1,11 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Cuco.Application.Token;
 using Cuco.Commons.Settings;
 using Cuco.Domain.Users.Models.DTO;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Cuco.Application.Token;
+namespace Cuco.Application.Users.Token;
 
 public class TokenAdapter : ITokenAdapter
 {
@@ -16,7 +17,7 @@ public class TokenAdapter : ITokenAdapter
         _securitySettings = securitySettings;
     }
 
-    public string GenerateToken(UserInfo user)
+    public string GenerateToken(UserDTO user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_securitySettings.Secret);
