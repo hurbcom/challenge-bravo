@@ -1,4 +1,4 @@
-import { Quotation } from "../model/Quotation";
+import { Quotation } from "../entities/Quotation";
 
 interface ICreateQuotationDTO {
     code: string;

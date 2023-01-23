@@ -1,4 +1,4 @@
-import { Quotation } from "../../model/Quotation";
+import { Quotation } from "../../entities/Quotation";
 import { IQuotationsRepository } from "../../repositories/IQuotationsRepository";
 
 class ListQuotationsUseCase {
