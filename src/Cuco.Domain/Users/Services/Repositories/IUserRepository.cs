@@ -6,5 +6,7 @@ namespace Cuco.Domain.Users.Services.Repositories;
 
 public interface IUserRepository : IRepository<User>
 {
-    Task<UserInfo> GetUserInfo(string name, string hashedPassword);
+    Task<UserDTO> GetUserDTO(string name, string password);
+    Task<bool> DeleteByNameAsync(string name);
+    Task<User> GetByNameAsync(string name);
 }
