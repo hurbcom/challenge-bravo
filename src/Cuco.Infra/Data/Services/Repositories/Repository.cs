@@ -16,8 +16,18 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         => await Db.Set<TEntity>()
             .FirstOrDefaultAsync(e => e.Id == id);
 
+    public async Task<TEntity> GetAsNoTrackingAsync(long id)
+        => await Db.Set<TEntity>()
+            .FirstOrDefaultAsync(e => e.Id == id);
+
     public async Task<IEnumerable<TEntity>> GetAllAsync()
         => await Db.Set<TEntity>()
+            .AsNoTracking()
+            .ToListAsync();
+
+    public async Task<IEnumerable<TEntity>> GetAllAsNoTrackingAsync()
+        => await Db.Set<TEntity>()
+            .AsNoTracking()
             .ToListAsync();
 
     public async Task AddAsync(TEntity entity)
