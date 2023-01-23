@@ -1,4 +1,3 @@
-using Cuco.Commons.Settings;
 using Cuco.Domain.Roles.Models.Enums;
 using Cuco.Domain.Users.Models.Entities;
 using Cuco.Domain.Users.Services.Extensions;
@@ -6,23 +5,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Cuco.Infra.Data.Seeds;
 
-internal class UserSeed
+internal static class UserSeed
 {
-    private readonly SecuritySettings _securitySettings;
-
-    public UserSeed(SecuritySettings securitySettings)
+    private const string UserFirstPassword = "9DdrS0qILyA!X4Zu5";
+    internal static void GenerateInitialUsers(this MigrationBuilder migrationBuilder)
     {
-        _securitySettings = securitySettings;
-    }
-
-    internal void GenerateInitialCurrencies(MigrationBuilder migrationBuilder)
-    {
-        var adminPassword = _securitySettings.AdminPassword.Hash();
-        var syncUserPassword = _securitySettings.SyncUserPassword.Hash();
+        var adminPassword = UserFirstPassword.Hash();
+        var syncUserPassword = UserFirstPassword.Hash();
         migrationBuilder.Sql(
             $@"
-            INSERT INTO {nameof(User)}({nameof(User.Name)},{nameof(User.Password)},{nameof(User.Role)}) VALUES ({_securitySettings.AdminName}, {adminPassword},{RoleId.Admin});
-            INSERT INTO {nameof(User)}({nameof(User.Name)},{nameof(User.Password)},{nameof(User.Role)}) VALUES ({_securitySettings.SyncUserName},{syncUserPassword},{RoleId.Sync});
+            INSERT INTO {nameof(User)}({nameof(User.Id)},{nameof(User.Name)},{nameof(User.Password)},{nameof(User.RoleId)}) VALUES (1,'ADMIN', '{adminPassword}',{RoleId.Admin.GetHashCode()});
+            INSERT INTO {nameof(User)}({nameof(User.Id)},{nameof(User.Name)},{nameof(User.Password)},{nameof(User.RoleId)}) VALUES (2,'SYNC','{syncUserPassword}',{RoleId.Sync.GetHashCode()});
           ");
+    }
+
+    internal static void DeleteInitialUsers(this MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.Sql
+        ($@"
+               DELETE FROM {nameof(User)} WHERE {nameof(User.Id)} IN (1, 2, 3, 4, 5);
+        ");
     }
 }
