@@ -8,6 +8,7 @@ internal static class ScheduledSyncHandler
 {
     private static readonly string SyncCurrenciesEndpointUrl =
         Environment.GetEnvironmentVariable("SyncCurrenciesEndpointUrl") ?? "http://localhost:5010/api/currency/sync";
+
     private static bool _started;
 
     public static async Task SyncCurrenciesAsync()
@@ -43,5 +44,7 @@ internal static class ScheduledSyncHandler
     }
 
     private static DateTime GetTimeOfNextCallFromTimestamp(long unixTimestamp)
-        => DateTimeOffset.FromUnixTimeSeconds(unixTimestamp).AddHours(1).ToUniversalTime().DateTime;
+    {
+        return DateTimeOffset.FromUnixTimeSeconds(unixTimestamp).AddHours(1).ToUniversalTime().DateTime;
+    }
 }

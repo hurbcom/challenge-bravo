@@ -1,7 +1,6 @@
 using Cuco.Application.Base;
 using Cuco.Application.OpenExchangeRate.Adapters;
 using Cuco.Application.SyncCurrencies.Models;
-using Cuco.Commons;
 using Cuco.Commons.Base;
 using Cuco.Commons.Redis;
 using Cuco.Domain.Currencies.Services.Repositories;
@@ -13,10 +12,11 @@ public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrencie
 {
     private readonly ICurrencyExchangeRateAdapter _currencyExchangeRateAdapter;
     private readonly ICurrencyRepository _currencyRepository;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IRedisCache _redisCache;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public SyncCurrenciesService(ICurrencyRepository currencyRepository, IRedisCache redisCache, IUnitOfWork unitOfWork, ICurrencyExchangeRateAdapter currencyExchangeRateAdapter)
+    public SyncCurrenciesService(ICurrencyRepository currencyRepository, IRedisCache redisCache, IUnitOfWork unitOfWork,
+        ICurrencyExchangeRateAdapter currencyExchangeRateAdapter)
     {
         _currencyRepository = currencyRepository;
         _redisCache = redisCache;
@@ -67,9 +67,11 @@ public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrencie
     }
 
     private static SyncCurrenciesOutput GetOutput(bool result, long timestamp)
-        => new()
+    {
+        return new()
         {
             Result = result,
             Timestamp = timestamp
         };
+    }
 }

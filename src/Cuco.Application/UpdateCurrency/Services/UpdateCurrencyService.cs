@@ -9,8 +9,8 @@ namespace Cuco.Application.UpdateCurrency.Services;
 
 public class UpdateCurrencyService : IService<UpdateCurrencyInput, UpdateCurrencyOutput>
 {
-    private readonly IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput> _getCurrencyInUsdService;
     private readonly ICurrencyRepository _currencyRepository;
+    private readonly IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput> _getCurrencyInUsdService;
     private readonly IRedisCache _redisCache;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -49,7 +49,8 @@ public class UpdateCurrencyService : IService<UpdateCurrencyInput, UpdateCurrenc
     {
         try
         {
-            var valueInDollarOutput = await _getCurrencyInUsdService.Handle(new() { Symbol = input.BaseCurrencySymbol });
+            var valueInDollarOutput = await _getCurrencyInUsdService.Handle(new GetCurrencyInUsdInput
+                { Symbol = input.BaseCurrencySymbol });
             if (valueInDollarOutput.ValueInDollar == 0)
                 return false;
 
@@ -68,10 +69,11 @@ public class UpdateCurrencyService : IService<UpdateCurrencyInput, UpdateCurrenc
     }
 
     private static UpdateCurrencyOutput GetOutput(Currency currency, bool result)
-        => new()
+    {
+        return new()
         {
             Currency = currency,
             Result = result
         };
-
+    }
 }

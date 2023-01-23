@@ -4,6 +4,7 @@ using Cuco.Commons.Base;
 using Cuco.Domain.Currencies.Services.Repositories;
 
 namespace Cuco.Application.GetCurrencyInUSD.Services;
+
 internal class GetCurrencyInUsdService : IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput>
 {
     private const string BaseCurrencySymbol = "USD";
@@ -24,7 +25,7 @@ internal class GetCurrencyInUsdService : IService<GetCurrencyInUsdInput, GetCurr
         if (string.IsNullOrEmpty(input.Symbol))
             return GetOutput(DefaultNonValue);
 
-        var symbol= input.Symbol.ToUpper();
+        var symbol = input.Symbol.ToUpper();
         if (symbol == BaseCurrencySymbol) return GetOutput(BaseValue);
 
         return await GetValue(symbol);
@@ -48,8 +49,10 @@ internal class GetCurrencyInUsdService : IService<GetCurrencyInUsdInput, GetCurr
     }
 
     private static GetCurrencyInUsdOutput GetOutput(decimal valueInDollar)
-        => new()
+    {
+        return new()
         {
             ValueInDollar = valueInDollar
         };
+    }
 }

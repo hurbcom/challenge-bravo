@@ -10,7 +10,6 @@ namespace Cuco.API.Controllers;
 public class CurrencyConversionController : ControllerBase
 {
     [HttpGet]
-
     [ProducesResponseType(typeof(Result<CurrencyConversionOutput>), StatusCodes.Status200OK)]
     public async Task<ActionResult> ConvertCurrencyAsync(
         [FromServices] IService<CurrencyConversionInput, CurrencyConversionOutput> service,
@@ -20,9 +19,9 @@ public class CurrencyConversionController : ControllerBase
     {
         try
         {
-            var result = new Result<CurrencyConversionOutput>()
+            var result = new Result<CurrencyConversionOutput>
             {
-                Output = await service.Handle(new()
+                Output = await service.Handle(new CurrencyConversionInput
                 {
                     FromCurrency = fromCurrency,
                     ToCurrency = toCurrency,

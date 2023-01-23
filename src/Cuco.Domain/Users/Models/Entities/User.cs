@@ -6,11 +6,6 @@ namespace Cuco.Domain.Users.Models.Entities;
 
 public class User : Entity
 {
-    public string Name { get; private set; }
-    public string Password { get; private set; }
-    public Role Role { get; private set; }
-    public long RoleId { get; private set; }
-
     public User(string name, string password, Role role)
     {
         Name = name;
@@ -19,4 +14,8 @@ public class User : Entity
         RoleId = role.Id;
     }
 
+    public string Name { get; }
+    public string Password { get; }
+    public Role Role { get; }
+    public long RoleId { get; }
 }

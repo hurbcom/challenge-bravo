@@ -2,7 +2,6 @@ using Cuco.Commons.Base;
 using Cuco.Commons.Settings;
 using Cuco.Domain.Currencies.Services.Repositories;
 using Cuco.Domain.Users.Services.Repositories;
-using Cuco.Infra.Data.Repositories;
 using Cuco.Infra.Data.Services.Cache;
 using Cuco.Infra.Data.Services.Locking;
 using Cuco.Infra.Data.Services.Repositories;
@@ -45,18 +44,25 @@ public static class SetupServicesExtensions
     }
 
     private static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
-        => configuration?.GetConnectionString("CucoDBContext") is { } connectionString
+    {
+        return configuration?.GetConnectionString("CucoDBContext") is { } connectionString
             ? services.AddDbContext<CucoDbContext>(options =>
-                {
-                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore))
-                           .EnableDetailedErrors();
-                })
+            {
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+                        o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore))
+                    .EnableDetailedErrors();
+            })
             : services;
+    }
 
     private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
-        => services.AddScoped<IUnitOfWork, UnitOfWork>();
+    {
+        return services.AddScoped<IUnitOfWork, UnitOfWork>();
+    }
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
-        => services.AddScoped<ICurrencyRepository, CurrencyRepository>()
-                   .AddScoped<IUserRepository, UserRepository>();
+    {
+        return services.AddScoped<ICurrencyRepository, CurrencyRepository>()
+            .AddScoped<IUserRepository, UserRepository>();
+    }
 }

@@ -27,7 +27,8 @@ public class RedisCache : IRedisCache
         {
             return await _retryPolicy.ExecuteAsync(async () =>
             {
-                if (await _lockingService.IsLockedAsync(key) || await _lockingService.IsLockedAsync(UniversalLockString))
+                if (await _lockingService.IsLockedAsync(key) ||
+                    await _lockingService.IsLockedAsync(UniversalLockString))
                     throw new RedisConnectionException(ConnectionFailureType.None, "Key Locked.");
                 return await _redis.GetDatabase().StringGetAsync(key);
             });
@@ -40,17 +41,23 @@ public class RedisCache : IRedisCache
     }
 
     public Task<bool> ExistsAsync(string key)
-        => _redis.GetDatabase().KeyExistsAsync(key);
+    {
+        return _redis.GetDatabase().KeyExistsAsync(key);
+    }
 
     public Task SetAsync(string key, string value)
-        => SetWithLock(key, Task () => _redis.GetDatabase().StringSetAsync(key, value));
+    {
+        return SetWithLock(key, Task() => _redis.GetDatabase().StringSetAsync(key, value));
+    }
 
     public Task MultipleSetAsync<TValue>(IDictionary<string, TValue> newValues)
-        => SetWithLock(UniversalLockString, async () =>
+    {
+        return SetWithLock(UniversalLockString, async () =>
         {
             foreach (var key in newValues.Keys)
                 await _redis.GetDatabase().StringSetAsync(key, newValues[key].ToString() ?? string.Empty);
         });
+    }
 
     private async Task SetWithLock(string key, Func<Task> action)
     {

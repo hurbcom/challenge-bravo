@@ -34,14 +34,16 @@ public class DeleteCurrencyService : IService<DeleteCurrencyInput, DeleteCurrenc
         {
             Console.WriteLine(e);
             return GetOutput(false, $"An error occurred while trying to remove symbol {input.Symbol}." +
-                                                $"\nError:{e.Message}");
+                                    $"\nError:{e.Message}");
         }
     }
 
     private static DeleteCurrencyOutput GetOutput(bool result, string details)
-        => new()
+    {
+        return new()
         {
             Result = result,
             Details = details
         };
+    }
 }

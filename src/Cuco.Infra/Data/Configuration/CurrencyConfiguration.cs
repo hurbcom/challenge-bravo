@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Cuco.Infra.Data.Configuration;
+
 internal class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
 {
     public void Configure(EntityTypeBuilder<Currency> builder)
@@ -10,16 +11,16 @@ internal class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
         builder.ToTable(nameof(Currency));
 
         builder.HasIndex(c => c.Symbol)
-               .IsUnique();
+            .IsUnique();
         builder.Property(c => c.Symbol)
-               .IsRequired()
-               .HasMaxLength(10);
+            .IsRequired()
+            .HasMaxLength(10);
 
         builder.Property(c => c.Name)
-               .IsRequired()
-               .HasMaxLength(100);
+            .IsRequired()
+            .HasMaxLength(100);
 
         builder.Property(c => c.ValueInDollar)
-               .IsRequired();
+            .IsRequired();
     }
 }

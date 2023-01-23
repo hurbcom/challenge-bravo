@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Cuco.Domain</RootNamespace>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>Cuco.Domain</RootNamespace>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Cuco.Commons\Cuco.Commons.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Cuco.Commons\Cuco.Commons.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="BCrypt" Version="1.0.0" />
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="BCrypt" Version="1.0.0"/>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3"/>
+    </ItemGroup>
 
 </Project>

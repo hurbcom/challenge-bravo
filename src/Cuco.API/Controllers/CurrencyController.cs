@@ -28,7 +28,7 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<IEnumerable<Currency>>()
+            var result = new Result<IEnumerable<Currency>>
             {
                 Output = await _currencyRepository.GetAllAsNoTrackingAsync()
             };
@@ -47,7 +47,7 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<Currency>()
+            var result = new Result<Currency>
             {
                 Output = await _currencyRepository.GetBySymbolAsNoTrackingAsync(symbol)
             };
@@ -69,7 +69,7 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<AddCurrencyOutput>()
+            var result = new Result<AddCurrencyOutput>
             {
                 Output = await service.Handle(input)
             };
@@ -91,7 +91,7 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<UpdateCurrencyOutput>()
+            var result = new Result<UpdateCurrencyOutput>
             {
                 Output = await service.Handle(input)
             };
@@ -113,9 +113,9 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<DeleteCurrencyOutput>()
+            var result = new Result<DeleteCurrencyOutput>
             {
-                Output = await service.Handle(new() { Symbol = symbol })
+                Output = await service.Handle(new DeleteCurrencyInput { Symbol = symbol })
             };
             return Ok(result);
         }
@@ -134,7 +134,7 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<SyncCurrenciesOutput>()
+            var result = new Result<SyncCurrenciesOutput>
             {
                 Output = await service.Handle(default)
             };

@@ -21,7 +21,8 @@ namespace Cuco.Application.Extensions;
 public static class SetupCucoApplicationsExtension
 {
     public static IServiceCollection SetupApplicationCucoApi(this IServiceCollection services)
-        => services
+    {
+        return services
             .AddScoped<IService<CurrencyConversionInput, CurrencyConversionOutput>, CurrencyConversionService>()
             .AddScoped<IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput>, GetCurrencyInUsdService>()
             .AddScoped<IService<SyncCurrenciesInput, SyncCurrenciesOutput>, SyncCurrenciesService>()
@@ -31,4 +32,5 @@ public static class SetupCucoApplicationsExtension
             .AddScoped<ICurrencyExchangeRateAdapter, OpenExchangeRateAdapter>()
             .AddScoped<IRedisPing, RedisPing>()
             .AddSingleton<ITokenAdapter, TokenAdapter>();
+    }
 }

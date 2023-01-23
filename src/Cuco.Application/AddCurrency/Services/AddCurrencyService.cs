@@ -8,12 +8,13 @@ using Cuco.Domain.Currencies.Services.Repositories;
 using Newtonsoft.Json;
 
 namespace Cuco.Application.AddCurrency.Services;
+
 internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput>
 {
-    private readonly IService<CurrencyConversionInput, CurrencyConversionOutput> _syncCurrencyService;
     private readonly ICurrencyRepository _currencyRepository;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IRedisCache _redisCache;
+    private readonly IService<CurrencyConversionInput, CurrencyConversionOutput> _syncCurrencyService;
+    private readonly IUnitOfWork _unitOfWork;
 
     public AddCurrencyService(IService<CurrencyConversionInput, CurrencyConversionOutput> syncCurrencyService,
         ICurrencyRepository currencyRepository, IUnitOfWork unitOfWork, IRedisCache redisCache)
@@ -60,12 +61,13 @@ internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput
             return GetOutput(null);
         try
         {
-            var convertToDollarOutput = await _syncCurrencyService.Handle(new()
+            var convertToDollarOutput = await _syncCurrencyService.Handle(new CurrencyConversionInput
                 { FromCurrency = input.BaseCurrencySymbol, ToCurrency = "USD", Amount = input.BaseCurrencyValue });
             if (convertToDollarOutput.ConvertedAmount is null)
                 return GetOutput(null);
 
-            var currency = new Currency(input.Name, input.Symbol, convertToDollarOutput.ConvertedAmount.Value, DateTime.Now,
+            var currency = new Currency(input.Name, input.Symbol, convertToDollarOutput.ConvertedAmount.Value,
+                DateTime.Now,
                 false);
             await _redisCache.SetAsync(currency.Symbol, currency.ValueInDollar.ToString());
             _unitOfWork.Commit();
@@ -79,8 +81,10 @@ internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput
     }
 
     private static AddCurrencyOutput GetOutput(Currency currency)
-        => new()
+    {
+        return new()
         {
             Currency = currency
         };
+    }
 }

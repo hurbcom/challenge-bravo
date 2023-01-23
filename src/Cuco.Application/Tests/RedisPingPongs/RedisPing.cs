@@ -23,6 +23,9 @@ public class RedisPing : IRedisPing
             return false;
         }
     }
+
     public async Task<string> Ping()
-        => await _redisCache.GetAsync("ping");
+    {
+        return await _redisCache.GetAsync("ping");
+    }
 }

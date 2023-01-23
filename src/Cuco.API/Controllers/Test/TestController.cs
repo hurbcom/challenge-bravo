@@ -11,15 +11,21 @@ public class TestController : ControllerBase
     [HttpGet("ping")]
     [ProducesResponseType(typeof(Result<string>), StatusCodes.Status200OK)]
     public ActionResult Ping()
-        => Ok(new Result<string>() { Output = "PONG" });
+    {
+        return Ok(new Result<string> { Output = "PONG" });
+    }
 
     [HttpGet("redis-pong")]
     [ProducesResponseType(typeof(Result<string>), StatusCodes.Status200OK)]
     public async Task<ActionResult> RedisPongAsync([FromServices] IRedisPing service)
-        => Ok(await service.AddPong());
+    {
+        return Ok(await service.AddPong());
+    }
 
     [HttpGet("redis-ping")]
     [ProducesResponseType(typeof(Result<string>), StatusCodes.Status200OK)]
     public async Task<ActionResult> RedisPingAsync([FromServices] IRedisPing service)
-        => Ok(await service.Ping());
+    {
+        return Ok(await service.Ping());
+    }
 }

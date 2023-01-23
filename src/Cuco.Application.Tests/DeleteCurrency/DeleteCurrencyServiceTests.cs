@@ -1,4 +1,5 @@
 namespace CurrencyConversion.Application.Tests.DeleteCurrency;
+
 public class DeleteCurrencyServiceTests
 {
     [SetUp]

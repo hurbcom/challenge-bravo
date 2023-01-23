@@ -9,8 +9,8 @@ namespace Cuco.API.Controllers;
 [Route("auth")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly IUserRepository _userRepository;
     private readonly ITokenAdapter _tokenAdapter;
+    private readonly IUserRepository _userRepository;
 
     public AuthenticationController(IUserRepository userRepository, ITokenAdapter tokenAdapter)
     {

@@ -21,7 +21,8 @@ builder.Services.AddSwaggerGen(c =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
             new OpenApiSecurityScheme
             {
@@ -38,9 +39,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddHttpClient();
 
-builder.Services.AddAuthorization(options =>
-{
-});
+builder.Services.AddAuthorization(options => { });
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("Security:Secret").Value ?? string.Empty);
 builder.Services.AddAuthentication(x =>
@@ -66,10 +65,7 @@ var app = builder.Build();
 app.SetupPipelineCucoApi();
 
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("v1/swagger.json", "Cuco.Api v1");
-});
+app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "Cuco.Api v1"); });
 
 app.UseRouting();
 

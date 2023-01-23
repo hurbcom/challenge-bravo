@@ -16,7 +16,9 @@ public class RedisLockingService : ILockingService
     }
 
     public async Task<bool> IsLockedAsync(string key)
-        => (await _redis.GetDatabase().LockQueryAsync(AddLockPrefix(key))).HasValue;
+    {
+        return (await _redis.GetDatabase().LockQueryAsync(AddLockPrefix(key))).HasValue;
+    }
 
     public Task<bool> GetLockAsync(string key)
     {
@@ -34,8 +36,12 @@ public class RedisLockingService : ILockingService
     }
 
     public Task ReleaseLockAsync(string key)
-        => _redis.GetDatabase().LockReleaseAsync(AddLockPrefix(key), Environment.MachineName);
+    {
+        return _redis.GetDatabase().LockReleaseAsync(AddLockPrefix(key), Environment.MachineName);
+    }
 
     private static string AddLockPrefix(string key)
-        => key + LockPrefix;
+    {
+        return key + LockPrefix;
+    }
 }

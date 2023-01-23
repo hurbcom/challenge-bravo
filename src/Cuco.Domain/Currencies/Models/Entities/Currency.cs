@@ -1,6 +1,7 @@
 using Cuco.Commons.Base;
 
 namespace Cuco.Domain.Currencies.Models.Entities;
+
 public class Currency : Entity
 {
     public Currency(
@@ -17,7 +18,9 @@ public class Currency : Entity
         Available = available;
     }
 
-    protected Currency() { }
+    protected Currency()
+    {
+    }
 
     public string Symbol { get; }
     public string Name { get; private set; }
@@ -26,11 +29,17 @@ public class Currency : Entity
     public bool Available { get; }
 
     public void SetValueInDollar(decimal valueInDollar)
-        => ValueInDollar = valueInDollar;
+    {
+        ValueInDollar = valueInDollar;
+    }
 
     public void SetUpdatedAtUnix(long unixTimestamp)
-        => LastUpdateAt = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp).DateTime;
+    {
+        LastUpdateAt = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp).DateTime;
+    }
 
     public void SetName(string name)
-        => Name = name;
+    {
+        Name = name;
+    }
 }

@@ -28,7 +28,8 @@ public class TokenAdapter : ITokenAdapter
                 new(ClaimTypes.Role, user.Role.Name)
             }),
             Expires = DateTime.UtcNow.AddHours(_securitySettings.ExpirationInHours),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);

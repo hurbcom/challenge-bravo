@@ -29,8 +29,9 @@ public class OpenExchangeRateAdapter : ICurrencyExchangeRateAdapter
         }
         catch (Exception e)
         {
-            Console.WriteLine("An error occurred trying to Get the Exchange Rate of all Currencies available for Open Exchange API." +
-                              $"\nError: {e.Message}");
+            Console.WriteLine(
+                "An error occurred trying to Get the Exchange Rate of all Currencies available for Open Exchange API." +
+                $"\nError: {e.Message}");
             return null;
         }
     }

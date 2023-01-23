@@ -1,4 +1,5 @@
 namespace CurrencyConversion.Application.Tests.ListCurrencies;
+
 public class ListCurrenciesServiceTests
 {
     [SetUp]
