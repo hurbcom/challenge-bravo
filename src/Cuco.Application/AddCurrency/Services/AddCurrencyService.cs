@@ -1,26 +1,28 @@
 using Cuco.Application.AddCurrency.Models;
 using Cuco.Application.Base;
 using Cuco.Application.CurrencyConversion.Models;
-using Cuco.Application.GetCurrencyValueFromCache;
+using Cuco.Commons;
 using Cuco.Commons.Base;
+using Cuco.Commons.Redis;
 using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;
+using Newtonsoft.Json;
 
 namespace Cuco.Application.AddCurrency.Services;
 internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput>
 {
     private readonly IService<CurrencyConversionInput, CurrencyConversionOutput> _syncCurrencyService;
-    private readonly ICurrencyValueHelper _currencyValueHelper;
     private readonly ICurrencyRepository _currencyRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IRedisCache _redisCache;
 
     public AddCurrencyService(IService<CurrencyConversionInput, CurrencyConversionOutput> syncCurrencyService,
-        ICurrencyRepository currencyRepository, IUnitOfWork unitOfWork, ICurrencyValueHelper currencyValueHelper)
+        ICurrencyRepository currencyRepository, IUnitOfWork unitOfWork, IRedisCache redisCache)
     {
         _syncCurrencyService = syncCurrencyService;
         _currencyRepository = currencyRepository;
         _unitOfWork = unitOfWork;
-        _currencyValueHelper = currencyValueHelper;
+        _redisCache = redisCache;
     }
 
 
@@ -36,14 +38,18 @@ internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput
 
     private async Task<AddCurrencyOutput> AddRealCurrency(AddCurrencyInput input)
     {
-        if (!await _currencyValueHelper.IsReal(input.Symbol))
+        var symbolsSerialized = await _redisCache.GetAsync(RedisValues.CurrencySymbolsKey);
+        if (string.IsNullOrEmpty(symbolsSerialized))
+            return GetOutput(null);
+        var symbols = JsonConvert.DeserializeObject<HashSet<string>>(symbolsSerialized);
+        if (!symbols.Contains(input.Symbol.ToUpper()))
             return GetOutput(null);
 
-        var valueIndDollar = await _currencyValueHelper.ValueInDollar(input.Symbol);
-        if (valueIndDollar == 0)
+        var cachedValue = decimal.Parse(await _redisCache.GetAsync(input.Symbol));
+        if (cachedValue == 0)
             return GetOutput(null);
 
-        var currency = new Currency(input.Name, input.Symbol, valueIndDollar, DateTime.Now, true);
+        var currency = new Currency(input.Name, input.Symbol, cachedValue, DateTime.Now, true);
         await _currencyRepository.AddAsync(currency);
         _unitOfWork.Commit();
         return GetOutput(currency);
@@ -62,7 +68,7 @@ internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput
 
             var currency = new Currency(input.Name, input.Symbol, convertToDollarOutput.ConvertedAmount.Value, DateTime.Now,
                 false);
-            await _currencyValueHelper.SetImaginaryCurrencyValue(currency.Symbol, currency.ValueInDollar);
+            await _redisCache.SetAsync(currency.Symbol, currency.ValueInDollar.ToString());
             _unitOfWork.Commit();
             return GetOutput(currency);
         }

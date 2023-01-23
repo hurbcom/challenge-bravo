@@ -1,6 +1,5 @@
 using Cuco.Application.Base;
 using Cuco.Application.GetCurrencyInUSD.Models;
-using Cuco.Application.GetCurrencyValueFromCache;
 using Cuco.Commons.Base;
 using Cuco.Domain.Currencies.Services.Repositories;
 
@@ -12,12 +11,12 @@ internal class GetCurrencyInUsdService : IService<GetCurrencyInUsdInput, GetCurr
     private const decimal DefaultNonValue = 0;
 
     private readonly ICurrencyRepository _currencyRepository;
-    private readonly ICurrencyValueHelper _currencyValueHelper;
+    private readonly IRedisCache _redisCache;
 
-    public GetCurrencyInUsdService(ICurrencyRepository currencyRepository, ICurrencyValueHelper currencyValueHelper)
+    public GetCurrencyInUsdService(ICurrencyRepository currencyRepository, IRedisCache redisCache)
     {
         _currencyRepository = currencyRepository;
-        _currencyValueHelper = currencyValueHelper;
+        _redisCache = redisCache;
     }
 
     public async Task<GetCurrencyInUsdOutput> Handle(GetCurrencyInUsdInput input)
@@ -35,9 +34,9 @@ internal class GetCurrencyInUsdService : IService<GetCurrencyInUsdInput, GetCurr
     {
         try
         {
-            var value = await _currencyValueHelper.ValueInDollar(symbol);
-            if (value > 0)
-                return GetOutput(value);
+            var cachedValue = decimal.Parse(await _redisCache.GetAsync(symbol));
+            if (cachedValue > 0)
+                return GetOutput(cachedValue);
             var currency = await _currencyRepository.GetBySymbolAsync(symbol);
             return GetOutput(currency.ValueInDollar);
         }
