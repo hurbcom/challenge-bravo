@@ -38,10 +38,9 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
             .ToListAsync();
     }
 
-    public async Task AddAsync(TEntity entity)
+    public void Insert(TEntity entity)
     {
-        await Db.Set<TEntity>()
-            .AddAsync(entity);
+        Db.Set<TEntity>().Add(entity);
     }
 
     public async Task DeleteAsync(long id)

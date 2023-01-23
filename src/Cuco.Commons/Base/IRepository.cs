@@ -6,6 +6,6 @@ public interface IRepository<TEntity> where TEntity : Entity
     Task<TEntity> GetAsNoTrackingAsync(long id);
     Task<IEnumerable<TEntity>> GetAllAsync();
     Task<IEnumerable<TEntity>> GetAllAsNoTrackingAsync();
-    Task AddAsync(TEntity entity);
+    void Insert(TEntity entity);
     Task DeleteAsync(long id);
 }
