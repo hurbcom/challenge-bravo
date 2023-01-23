@@ -1,7 +1,7 @@
 {
     "$schema": "https://json.schemastore.org/launchsettings.json",
     "profiles": {
-        "Cuco": {
+        "Cuco Dev": {
             "commandName": "Project",
             "dotnetRunMessages": true,
             "launchBrowser": true,
@@ -9,6 +9,14 @@
             "applicationUrl": "http://localhost:5010;https://localhost:5011",
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        "Cuco Stg": {
+            "commandName": "Project",
+            "dotnetRunMessages": true,
+            "applicationUrl": "http://localhost:5010;https://localhost:5011",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Staging"
             }
         }
     }
