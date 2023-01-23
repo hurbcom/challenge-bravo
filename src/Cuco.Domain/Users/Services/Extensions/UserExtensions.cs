@@ -1,18 +1,14 @@
-using DevOne.Security.Cryptography.BCrypt;
-
 namespace Cuco.Domain.Users.Services.Extensions;
-
+using BCrypt.Net;
 public static class UserExtensions
 {
-    private const int WorkFactor = 200;
-
     public static string Hash(this string password)
     {
-        return BCryptHelper.HashPassword(password, BCryptHelper.GenerateSalt(WorkFactor));
+        return BCrypt.HashPassword(password);
     }
 
     public static bool Verify(this string password, string hashedPassword)
     {
-        return BCryptHelper.CheckPassword(password, hashedPassword);
+        return BCrypt.Verify(password, hashedPassword);
     }
 }
