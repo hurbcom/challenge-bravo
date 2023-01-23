@@ -10,11 +10,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable(nameof(User));
 
-        builder.Property(c => c.Name)
+        builder.HasKey(u => u.Id);
+
+        builder.Property(u => u.Name)
             .IsRequired()
             .HasMaxLength(250);
 
-        builder.Property(c => c.Password)
+        builder.Property(u => u.Password)
             .IsRequired();
+
+        builder.HasOne(u => u.Role)
+            .WithMany()
+            .HasForeignKey(u => u.RoleId);
     }
 }
