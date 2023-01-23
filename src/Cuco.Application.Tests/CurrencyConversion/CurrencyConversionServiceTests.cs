@@ -1,7 +1,6 @@
 using Cuco.Application.Base;
 using Cuco.Application.CurrencyConversion.Services;
 using Cuco.Application.GetCurrencyInUSD.Models;
-using Cuco.Domain.Currencies.Services.Repositories;
 using Moq;
 
 namespace CurrencyConversion.Application.Tests.CurrencyConversion;
@@ -13,7 +12,6 @@ public class CurrencyConversionServiceTests
 
     private CurrencyConversionService _currencyConversionService;
 
-    private readonly Mock<ICurrencyRepository> _currencyRepositoryMock = new();
     private readonly Mock<IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput>> _getCurrencyInUsdServiceMock = new();
 
     private readonly Random _random = new();
@@ -21,16 +19,13 @@ public class CurrencyConversionServiceTests
     [SetUp]
     public void Setup()
     {
-        _currencyConversionService = new(
-            _getCurrencyInUsdServiceMock.Object,
-            _currencyRepositoryMock.Object);
+        _currencyConversionService = new(_getCurrencyInUsdServiceMock.Object);
     }
 
     [Test]
-    public async Task Convert_SameCurrencyThatExists_ReturnsSameAmountAndMessage()
+    public async Task Convert_SameCurrency_ReturnsSameAmountAndMessage()
     {
         var amount = _random.Next();
-        _currencyRepositoryMock.Setup(r => r.ExistsBySymbolAsync(It.IsAny<string>())).ReturnsAsync(true);
         const string currency = "currency";
         var result = await _currencyConversionService.Handle(new()
             { FromCurrency = currency, ToCurrency = currency, Amount = amount });
@@ -42,44 +37,6 @@ public class CurrencyConversionServiceTests
         });
     }
 
-    [TestCase("exists", "not")]
-    [TestCase("not", "exists")]
-    public async Task Convert_OneCurrencyDoesNotExist_ReturnsNullAndMessage(string fromCurrency, string toCurrency)
-    {
-        var amount = _random.Next();
-        _currencyRepositoryMock.Setup(r => r.ExistsBySymbolAsync(It.IsAny<string>()))
-            .ReturnsAsync((string n) => n == "exists");
-
-        var result = await _currencyConversionService.Handle(new()
-            { FromCurrency = fromCurrency, ToCurrency = toCurrency, Amount = amount });
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result.ConvertedAmount, Is.Null);
-            Assert.That(result.Details, Is.EqualTo(CouldNotFindCurrenciesMessageBase+"not"));
-        });
-    }
-
-    [Test]
-    public async Task Convert_BothCurrenciesDoNotExist_ReturnsNullAndMessage()
-    {
-        var amount = _random.Next();
-        const string fromCurrency = "a";
-        const string toCurrency = "b";
-
-        _currencyRepositoryMock.Setup(r => r.ExistsBySymbolAsync(It.IsAny<string>())).ReturnsAsync(false);
-
-        var result = await _currencyConversionService.Handle(new()
-            { FromCurrency = fromCurrency, ToCurrency = toCurrency, Amount = amount });
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result.ConvertedAmount, Is.Null);
-            Assert.That(result.Details, Is.EqualTo(CouldNotFindCurrenciesMessageBase + fromCurrency
-                                          + '\n' + CouldNotFindCurrenciesMessageBase + toCurrency));
-        });
-    }
-
     [TestCase("hasValue", "not")]
     [TestCase("not", "hasValue")]
     public async Task Convert_OneCurrenciesDidNotFindValue_ReturnsNullAndMessage(string fromCurrency, string toCurrency)
@@ -88,8 +45,6 @@ public class CurrencyConversionServiceTests
         var failOutput = new GetCurrencyInUsdOutput() { ValueInDollar = 0 };
         var validOutput = new GetCurrencyInUsdOutput() { ValueInDollar = 5 };
 
-
-        _currencyRepositoryMock.Setup(r => r.ExistsBySymbolAsync(It.IsAny<string>())).ReturnsAsync(true);
         _getCurrencyInUsdServiceMock.Setup(g => g.Handle(It.IsAny<GetCurrencyInUsdInput>()))
             .ReturnsAsync((GetCurrencyInUsdInput i) =>
                 i.Symbol == "hasValue" ? validOutput : failOutput);
@@ -112,7 +67,6 @@ public class CurrencyConversionServiceTests
         const string toCurrency = "b";
         var failOutput = new GetCurrencyInUsdOutput() { ValueInDollar = 0 };
 
-        _currencyRepositoryMock.Setup(r => r.ExistsBySymbolAsync(It.IsAny<string>())).ReturnsAsync(true);
         _getCurrencyInUsdServiceMock.Setup(g => g.Handle(It.IsAny<GetCurrencyInUsdInput>()))
             .ReturnsAsync(failOutput);
 
@@ -136,7 +90,6 @@ public class CurrencyConversionServiceTests
         const string toCurrency = "b";
         var toCurrencyOutput = new GetCurrencyInUsdOutput() { ValueInDollar = 2 };
 
-        _currencyRepositoryMock.Setup(r => r.ExistsBySymbolAsync(It.IsAny<string>())).ReturnsAsync(true);
         _getCurrencyInUsdServiceMock.Setup(g => g.Handle(It.IsAny<GetCurrencyInUsdInput>()))
             .ReturnsAsync((GetCurrencyInUsdInput i) => i.Symbol == "a" ? fromCurrencyOutput : toCurrencyOutput);
 
