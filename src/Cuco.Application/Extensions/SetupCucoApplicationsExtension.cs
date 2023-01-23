@@ -1,6 +1,6 @@
 using Cuco.Application.AddCurrency.Models;
-using Cuco.Application.AddCurrency.Services;
 using Cuco.Application.Base;
+using Cuco.Application.Currencies.AddCurrency.Services;
 using Cuco.Application.CurrencyConversion.Models;
 using Cuco.Application.CurrencyConversion.Services;
 using Cuco.Application.DeleteCurrency.Models;
@@ -10,10 +10,11 @@ using Cuco.Application.GetCurrencyInUSD.Services;
 using Cuco.Application.OpenExchangeRate.Adapters;
 using Cuco.Application.SyncCurrencies.Models;
 using Cuco.Application.SyncCurrencies.Services;
-using Cuco.Application.Tests.RedisPingPongs;
 using Cuco.Application.Token;
 using Cuco.Application.UpdateCurrency.Models;
 using Cuco.Application.UpdateCurrency.Services;
+using Cuco.Application.UserProviders;
+using Cuco.Application.Users.Token;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cuco.Application.Extensions;
@@ -30,7 +31,7 @@ public static class SetupCucoApplicationsExtension
             .AddScoped<IService<UpdateCurrencyInput, UpdateCurrencyOutput>, UpdateCurrencyService>()
             .AddScoped<IService<DeleteCurrencyInput, DeleteCurrencyOutput>, DeleteCurrencyService>()
             .AddScoped<ICurrencyExchangeRateAdapter, OpenExchangeRateAdapter>()
-            .AddScoped<IRedisPing, RedisPing>()
-            .AddSingleton<ITokenAdapter, TokenAdapter>();
+            .AddSingleton<ITokenAdapter, TokenAdapter>()
+            .AddTransient<IUserProvider, UserProvider>();
     }
 }
