@@ -1,12 +1,11 @@
-using System.Text;
 using Cuco.Commons.Base;
-using Murmur;
 using StackExchange.Redis;
 
-namespace Cuco.Infra.Data.Locking;
+namespace Cuco.Infra.Data.Services.Locking;
 
 public class RedisLockingService : ILockingService
 {
+    private const string LockPrefix = "_distributed_lock";
     private static readonly TimeSpan LockExpiry = TimeSpan.FromSeconds(1);
 
     private readonly IConnectionMultiplexer _redis;
@@ -17,14 +16,14 @@ public class RedisLockingService : ILockingService
     }
 
     public async Task<bool> IsLockedAsync(string key)
-        => (await _redis.GetDatabase().LockQueryAsync(GetHashKey(key))).HasValue;
+        => (await _redis.GetDatabase().LockQueryAsync(AddLockPrefix(key))).HasValue;
 
     public Task<bool> GetLockAsync(string key)
     {
         try
         {
             return _redis.GetDatabase().LockTakeAsync(
-                GetHashKey(key),
+                AddLockPrefix(key),
                 Environment.MachineName,
                 LockExpiry);
         }
@@ -35,12 +34,8 @@ public class RedisLockingService : ILockingService
     }
 
     public Task ReleaseLockAsync(string key)
-        => _redis.GetDatabase().LockReleaseAsync(GetHashKey(key), Environment.MachineName);
+        => _redis.GetDatabase().LockReleaseAsync(AddLockPrefix(key), Environment.MachineName);
 
-    private static string GetHashKey(string key)
-    {
-        var bytes = Encoding.UTF8.GetBytes(key);
-        var hash = MurmurHash.Create32();
-        return Convert.ToString(hash.ComputeHash(bytes));
-    }
+    private static string AddLockPrefix(string key)
+        => key + LockPrefix;
 }
