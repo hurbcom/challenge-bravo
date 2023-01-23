@@ -31,7 +31,9 @@ public static class SetupServicesExtensions
     private static IServiceCollection AddSettings(this IServiceCollection services, IConfiguration configuration)
     {
         var openExchangeSettings = configuration.GetSection("OpenExchangeSettings").Get<OpenExchangeSettings>();
-        return services.AddSingleton(openExchangeSettings);
+        var securitySettings = configuration.GetSection("Security").Get<SecuritySettings>();
+        return services.AddSingleton(openExchangeSettings)
+                       .AddSingleton(securitySettings);
     }
 
     private static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)
