@@ -26,13 +26,12 @@ class CurrencyRepository implements ICurrencyRepository {
 
     async list(): Promise<Currency[]> {
         const currency = await this.repository.find();
-
         return currency;
     }
 
     async findByCode(code: string): Promise<Currency> {
-        const quotation = await this.repository.findOne({ code });
-        return quotation;
+        const currency = await this.repository.findOne({ code });
+        return currency;
     }
 }
 

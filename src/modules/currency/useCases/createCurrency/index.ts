@@ -3,14 +3,12 @@ import { CreateCurrencyController } from "./CreateCurrencyCrontroller";
 import { CreateCurrencyUseCase } from "./CreateCurrencyUseCase";
 
 export default (): CreateCurrencyController => {
-    const quotationsRepository = new CurrencyRepository();
-    const createQuotationUseCase = new CreateCurrencyUseCase(
-        quotationsRepository
+    const currencyRepository = new CurrencyRepository();
+    const createCurrencyUseCase = new CreateCurrencyUseCase(currencyRepository);
+
+    const createCurrencyController = new CreateCurrencyController(
+        createCurrencyUseCase
     );
 
-    const createQuotationController = new CreateCurrencyController(
-        createQuotationUseCase
-    );
-
-    return createQuotationController;
+    return createCurrencyController;
 };

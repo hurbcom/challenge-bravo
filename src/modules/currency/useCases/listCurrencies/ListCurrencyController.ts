@@ -3,12 +3,12 @@ import { Request, Response } from "express";
 import { ListCurrencyUseCase } from "./ListCurrencyUseCase";
 
 class ListCurrencyController {
-    constructor(private listCurrencyUseCase: ListQuotationsUseCase) {}
+    constructor(private listCurrencyUseCase: ListCurrencyUseCase) {}
 
-    handle(request: Request, response: Response): Response {
-        const allQuotataions = this.listCurrencyUseCase.execute();
-
-        return response.json(allQuotataions);
+    async handle(request: Request, response: Response): Promise<Response> {
+        const allCurrencies = await this.listCurrencyUseCase.execute();
+        console.log("allcurrencies", allCurrencies);
+        return response.json(allCurrencies);
     }
 }
 

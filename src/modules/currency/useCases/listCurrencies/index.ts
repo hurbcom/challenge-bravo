@@ -2,10 +2,13 @@ import { CurrencyRepository } from "../../repositories/implementations/CurrencyR
 import { ListCurrencyController } from "./ListCurrencyController";
 import { ListCurrencyUseCase } from "./ListCurrencyUseCase";
 
-const quotationRepository = null;
-const listQuotationUseCase = new ListCurrencyUseCase(quotationRepository);
-const listQuotationsController = new ListCurrencyController(
-    listQuotationUseCase
-);
+export default (): ListCurrencyController => {
+    const currencyRepository = new CurrencyRepository();
+    const listCurrencyUseCase = new ListCurrencyUseCase(currencyRepository);
 
-export { listQuotationsController };
+    const listCurrencyController = new ListCurrencyController(
+        listCurrencyUseCase
+    );
+
+    return listCurrencyController;
+};
