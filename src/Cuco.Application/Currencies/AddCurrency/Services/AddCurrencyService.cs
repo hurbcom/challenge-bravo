@@ -7,7 +7,7 @@ using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;
 using Newtonsoft.Json;
 
-namespace Cuco.Application.AddCurrency.Services;
+namespace Cuco.Application.Currencies.AddCurrency.Services;
 
 internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput>
 {
@@ -33,50 +33,51 @@ internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput
             await _currencyRepository.ExistsBySymbolAsync(input.Symbol))
             return GetOutput(null);
 
-        return input.IsReal ? await AddRealCurrency(input) : await AddCustomCurrency(input);
-    }
-
-    private async Task<AddCurrencyOutput> AddRealCurrency(AddCurrencyInput input)
-    {
-        var symbolsSerialized = await _redisCache.GetAsync(RedisValues.CurrencySymbolsKey);
-        if (string.IsNullOrEmpty(symbolsSerialized))
+        var currency = input.IsReal ? await AddRealCurrency(input) : await AddCustomCurrency(input);
+        if (currency is null)
             return GetOutput(null);
-        var symbols = JsonConvert.DeserializeObject<HashSet<string>>(symbolsSerialized);
-        if (!symbols.Contains(input.Symbol.ToUpper()))
-            return GetOutput(null);
-
-        var cachedValue = decimal.Parse(await _redisCache.GetAsync(input.Symbol));
-        if (cachedValue == 0)
-            return GetOutput(null);
-
-        var currency = new Currency(input.Name, input.Symbol, cachedValue, DateTime.Now, true);
-        await _currencyRepository.AddAsync(currency);
+        _currencyRepository.Insert(currency);
         _unitOfWork.Commit();
         return GetOutput(currency);
     }
 
-    private async Task<AddCurrencyOutput> AddCustomCurrency(AddCurrencyInput input)
+    private async Task<Currency> AddRealCurrency(AddCurrencyInput input)
+    {
+        var symbolsSerialized = await _redisCache.GetAsync(RedisValues.CurrencySymbolsKey);
+        if (string.IsNullOrEmpty(symbolsSerialized))
+            return null;
+        var symbols = JsonConvert.DeserializeObject<HashSet<string>>(symbolsSerialized);
+        if (!symbols.Contains(input.Symbol.ToUpper()))
+            return null;
+
+        var cachedValue = decimal.Parse(await _redisCache.GetAsync(input.Symbol));
+        return cachedValue == 0 ?
+            null :
+            new Currency(input.Name, input.Symbol, cachedValue, DateTime.Now, true);
+    }
+
+    private async Task<Currency> AddCustomCurrency(AddCurrencyInput input)
     {
         if (string.IsNullOrEmpty(input.BaseCurrencySymbol) || input.BaseCurrencyValue <= 0)
-            return GetOutput(null);
+            return null;
         try
         {
             var convertToDollarOutput = await _syncCurrencyService.Handle(new CurrencyConversionInput
                 { FromCurrency = input.BaseCurrencySymbol, ToCurrency = "USD", Amount = input.BaseCurrencyValue });
             if (convertToDollarOutput.ConvertedAmount is null)
-                return GetOutput(null);
+                return null;
 
-            var currency = new Currency(input.Name, input.Symbol, convertToDollarOutput.ConvertedAmount.Value,
+            await _redisCache.SetAsync(input.Symbol, input.BaseCurrencyValue.ToString());
+            return new Currency(input.Name,
+                input.Symbol,
+                convertToDollarOutput.ConvertedAmount.Value,
                 DateTime.Now,
                 false);
-            await _redisCache.SetAsync(currency.Symbol, currency.ValueInDollar.ToString());
-            _unitOfWork.Commit();
-            return GetOutput(currency);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return GetOutput(null);
+            return null;
         }
     }
 
