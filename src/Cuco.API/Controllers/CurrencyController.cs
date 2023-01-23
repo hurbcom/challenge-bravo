@@ -6,6 +6,7 @@ using Cuco.Application.UpdateCurrency.Models;
 using Cuco.Commons;
 using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;
+using Cuco.Domain.Roles.Models.Consts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -105,7 +106,7 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpDelete("{symbol}")]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize(Roles = $"{RoleNames.Admin}")]
     [ProducesResponseType(typeof(Result<DeleteCurrencyOutput>), StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteAsync(
         [FromServices] IService<DeleteCurrencyInput, DeleteCurrencyOutput> service,
