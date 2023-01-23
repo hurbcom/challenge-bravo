@@ -1,11 +1,12 @@
 using Cuco.Application.AddCurrency.Models;
 using Cuco.Application.Base;
 using Cuco.Application.DeleteCurrency.Models;
-using Cuco.Application.GetCurrencyInUSD.Models;
-using Cuco.Application.ListCurrencies.Models;
 using Cuco.Application.SyncCurrencies.Models;
 using Cuco.Application.UpdateCurrency.Models;
 using Cuco.Commons;
+using Cuco.Domain.Currencies.Models.Entities;
+using Cuco.Domain.Currencies.Services.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cuco.API.Controllers;
@@ -14,16 +15,22 @@ namespace Cuco.API.Controllers;
 [Route("api/currency")]
 public class CurrencyController : ControllerBase
 {
+    private readonly ICurrencyRepository _currencyRepository;
+
+    public CurrencyController(ICurrencyRepository currencyRepository)
+    {
+        _currencyRepository = currencyRepository;
+    }
+
     [HttpGet("all")]
-    [ProducesResponseType(typeof(Result<ListCurrenciesOutput>), StatusCodes.Status200OK)]
-    public async Task<ActionResult> GetAllAsync(
-        [FromServices] IService<ListCurrenciesInput, ListCurrenciesOutput> service)
+    [ProducesResponseType(typeof(Result<IEnumerable<Currency>>), StatusCodes.Status200OK)]
+    public async Task<ActionResult> GetAllAsync()
     {
         try
         {
-            var result = new Result<ListCurrenciesOutput>()
+            var result = new Result<IEnumerable<Currency>>()
             {
-                Output = await service.Handle(new())
+                Output = await _currencyRepository.GetAllAsNoTrackingAsync()
             };
             return Ok(result);
         }
@@ -34,17 +41,15 @@ public class CurrencyController : ControllerBase
         }
     }
 
-    [HttpGet("usd-value/{symbol}")]
-    [ProducesResponseType(typeof(Result<GetCurrencyInUsdOutput>), StatusCodes.Status200OK)]
-    public async Task<ActionResult> GetBySymbolValueAsync(
-        [FromServices] IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput> service,
-        string symbol)
+    [HttpGet("{symbol}")]
+    [ProducesResponseType(typeof(Result<Currency>), StatusCodes.Status200OK)]
+    public async Task<ActionResult> GetBySymbolValueAsync(string symbol)
     {
         try
         {
-            var result = new Result<GetCurrencyInUsdOutput>()
+            var result = new Result<Currency>()
             {
-                Output = await service.Handle(new() {Symbol = symbol})
+                Output = await _currencyRepository.GetBySymbolAsNoTrackingAsync(symbol)
             };
             return Ok(result);
         }
@@ -56,6 +61,7 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "ADMIN")]
     [ProducesResponseType(typeof(Result<AddCurrencyOutput>), StatusCodes.Status200OK)]
     public async Task<ActionResult> AddAsync(
         [FromServices] IService<AddCurrencyInput, AddCurrencyOutput> service,
@@ -77,6 +83,7 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "ADMIN")]
     [ProducesResponseType(typeof(Result<UpdateCurrencyOutput>), StatusCodes.Status200OK)]
     public async Task<ActionResult> UpdateAsync(
         [FromServices] IService<UpdateCurrencyInput, UpdateCurrencyOutput> service,
@@ -98,6 +105,7 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpDelete("{symbol}")]
+    [Authorize(Roles = "ADMIN")]
     [ProducesResponseType(typeof(Result<DeleteCurrencyOutput>), StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteAsync(
         [FromServices] IService<DeleteCurrencyInput, DeleteCurrencyOutput> service,
@@ -118,7 +126,8 @@ public class CurrencyController : ControllerBase
         }
     }
 
-    [HttpGet("sync")]
+    [HttpPut("sync")]
+    [Authorize(Roles = "ADMIN,SYNC")]
     [ProducesResponseType(typeof(Result<SyncCurrenciesOutput>), StatusCodes.Status200OK)]
     public async Task<ActionResult> SyncCurrenciesAsync(
         [FromServices] IService<SyncCurrenciesInput, SyncCurrenciesOutput> service)
