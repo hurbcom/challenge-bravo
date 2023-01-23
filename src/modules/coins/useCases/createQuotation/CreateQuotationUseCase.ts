@@ -10,8 +10,10 @@ interface IRquest {
 class CreateQuotationUseCase {
     constructor(private quotationRepository: IQuotationsRepository) {}
 
-    execute({ code, name, high, low }: IRquest): void {
-        const quotationAlredyExists = this.quotationRepository.findByCode(code);
+    async execute({ code, name, high, low }: IRquest): Promise<void> {
+        const quotationAlredyExists = await this.quotationRepository.findByCode(
+            code
+        );
 
         if (quotationAlredyExists) {
             throw new Error("Coin alredy exists in database!");

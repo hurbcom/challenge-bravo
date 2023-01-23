@@ -2,7 +2,7 @@ import { QuotationRepository } from "../../repositories/implementations/Quotatio
 import { ListQuotationsController } from "./ListQuotationsController";
 import { ListQuotationsUseCase } from "./ListQuotationsUseCase";
 
-const quotationRepository = QuotationRepository.getInstance();
+const quotationRepository = null;
 const listQuotationUseCase = new ListQuotationsUseCase(quotationRepository);
 const listQuotationsController = new ListQuotationsController(
     listQuotationUseCase

@@ -5,10 +5,10 @@ import { CreateQuotationUseCase } from "./CreateQuotationUseCase";
 class CreateQuotationController {
     constructor(private createQuotationUseCase: CreateQuotationUseCase) {}
 
-    handle(request: Request, response: Response): Response {
+    async handle(request: Request, response: Response): Promise<Response> {
         const { code, name, high, low } = request.body;
 
-        this.createQuotationUseCase.execute({ code, name, high, low });
+        await this.createQuotationUseCase.execute({ code, name, high, low });
 
         return response.status(201).send();
     }

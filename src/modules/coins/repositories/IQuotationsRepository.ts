@@ -8,9 +8,9 @@ interface ICreateQuotationDTO {
 }
 
 interface IQuotationsRepository {
-    findByCode(code: string): Quotation;
-    list(): Quotation[];
-    create({ code, name, high, low }: ICreateQuotationDTO): void;
+    findByCode(code: string): Promise<Quotation>;
+    list(): Promise<Quotation[]>;
+    create({ code, name, high, low }: ICreateQuotationDTO): Promise<void>;
 }
 
 export { IQuotationsRepository, ICreateQuotationDTO };

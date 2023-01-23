@@ -2,11 +2,15 @@ import { QuotationRepository } from "../../repositories/implementations/Quotatio
 import { CreateQuotationController } from "./CreateQuotationCrontroller";
 import { CreateQuotationUseCase } from "./CreateQuotationUseCase";
 
-const QuotationsRepository = QuotationRepository.getInstance();
-const createQuotationUseCase = new CreateQuotationUseCase(QuotationsRepository);
+export default (): CreateQuotationController => {
+    const quotationsRepository = new QuotationRepository();
+    const createQuotationUseCase = new CreateQuotationUseCase(
+        quotationsRepository
+    );
 
-const createQuotationController = new CreateQuotationController(
-    createQuotationUseCase
-);
+    const createQuotationController = new CreateQuotationController(
+        createQuotationUseCase
+    );
 
-export { createQuotationController };
+    return createQuotationController;
+};

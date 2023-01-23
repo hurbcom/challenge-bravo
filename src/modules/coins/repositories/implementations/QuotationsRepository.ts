@@ -1,3 +1,5 @@
+import { getRepository, Repository } from "typeorm";
+
 import { Quotation } from "../../entities/Quotation";
 import {
     IQuotationsRepository,
@@ -5,46 +7,36 @@ import {
 } from "../IQuotationsRepository";
 
 class QuotationRepository implements IQuotationsRepository {
-    private quotations: Quotation[];
+    private repository: Repository<Quotation>;
 
-    private static INSTANCE: QuotationRepository;
-
-    private constructor() {
-        this.quotations = [];
+    constructor() {
+        this.repository = getRepository(Quotation);
     }
 
-    public static getInstance(): QuotationRepository {
-        if (!QuotationRepository.INSTANCE) {
-            QuotationRepository.INSTANCE = new QuotationRepository();
-        }
-
-        return QuotationRepository.INSTANCE;
-    }
-
-    create({ code, name, high, low }: ICreateQuotationDTO): void {
-        const quotation = new Quotation();
-
-        Object.assign(quotation, {
+    async create({
+        code,
+        name,
+        high,
+        low,
+    }: ICreateQuotationDTO): Promise<void> {
+        const quotation = this.repository.create({
             code,
             name,
             high,
             low,
-            type: "FICTITIOUS",
-            created_at: new Date(),
-            updated_at: new Date(),
+            type: "TESTE",
         });
-
-        this.quotations.push(quotation);
+        await this.repository.save(quotation);
     }
 
-    list(): Quotation[] {
-        return this.quotations;
+    async list(): Promise<Quotation[]> {
+        const quotation = await this.repository.find();
+
+        return quotation;
     }
 
-    findByCode(code: string): Quotation {
-        const quotation = this.quotations.find(
-            (quotation) => quotation.code.toUpperCase() === code
-        );
+    async findByCode(code: string): Promise<Quotation> {
+        const quotation = await this.repository.findOne({ code });
         return quotation;
     }
 }
