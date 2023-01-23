@@ -1,4 +1,5 @@
 using System.Text;
+using Cuco.API.Extensions;
 using Cuco.IoC.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -12,36 +13,15 @@ builder.Services.AddControllers();
 
 builder.Services.AddMvc().AddControllersAsServices();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please insert JWT with Bearer into field",
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] { }
-        }
-    });
-});
+if (builder.Environment.IsDevelopment())
+    builder.Services.SetupSwaggerServices(builder.Configuration);
 
 builder.Services.AddHttpClient();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorization(options => { });
 
-var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("Security:Secret").Value ?? string.Empty);
+var secret = builder.Configuration.GetSection("Security:Secret").Value ?? string.Empty;
+var key = Encoding.ASCII.GetBytes(secret);
 builder.Services.AddAuthentication(x =>
     {
         x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -64,8 +44,8 @@ var app = builder.Build();
 
 app.SetupPipelineCucoApi();
 
-app.UseSwagger();
-app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "Cuco.Api v1"); });
+if (app.Environment.IsDevelopment())
+    app.SetupSwaggerApp();
 
 app.UseRouting();
 
