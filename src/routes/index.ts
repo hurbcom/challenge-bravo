@@ -1,9 +1,9 @@
 import { Router } from "express";
 
-import { quotationRoutes } from "./quotation.routes";
+import { currencyRoutes } from "./currency.routes";
 
 const router = Router();
 
-router.use("/quotations", quotationRoutes);
+router.use("/currency", currencyRoutes);
 
 export { router };

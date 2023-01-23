@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
-@Entity("coins")
-class Quotation {
+@Entity("currency")
+class Currency {
     @PrimaryColumn()
     id?: string;
 
@@ -34,4 +34,4 @@ class Quotation {
     }
 }
 
-export { Quotation };
+export { Currency };
