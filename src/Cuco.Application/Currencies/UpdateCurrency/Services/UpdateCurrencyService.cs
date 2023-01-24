@@ -70,7 +70,7 @@ public class UpdateCurrencyService : IService<UpdateCurrencyInput, UpdateCurrenc
 
     private static UpdateCurrencyOutput GetOutput(Currency currency, bool result)
     {
-        return new()
+        return new UpdateCurrencyOutput
         {
             Currency = currency,
             Result = result

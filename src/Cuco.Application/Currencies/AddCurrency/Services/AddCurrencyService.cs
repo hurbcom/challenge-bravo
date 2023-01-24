@@ -51,9 +51,7 @@ internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput
             return null;
 
         var cachedValue = decimal.Parse(await _redisCache.GetAsync(input.Symbol));
-        return cachedValue == 0 ?
-            null :
-            new Currency(input.Name, input.Symbol, cachedValue, DateTime.Now, true);
+        return cachedValue == 0 ? null : new Currency(input.Name, input.Symbol, cachedValue, DateTime.Now, true);
     }
 
     private async Task<Currency> AddCustomCurrency(AddCurrencyInput input)
@@ -83,7 +81,7 @@ internal class AddCurrencyService : IService<AddCurrencyInput, AddCurrencyOutput
 
     private static AddCurrencyOutput GetOutput(Currency currency)
     {
-        return new()
+        return new AddCurrencyOutput
         {
             Currency = currency
         };

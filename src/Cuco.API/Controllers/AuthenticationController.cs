@@ -27,7 +27,7 @@ public class AuthenticationController : ControllerBase
         if (user is null)
             return NotFound(new { message = "Invalid username or password" });
 
-        var token = new TokenDTO() { Name = signIn.Name, Token = $"Bearer {_tokenAdapter.GenerateToken(user)}" };
+        var token = new TokenDTO { Name = signIn.Name, Token = $"Bearer {_tokenAdapter.GenerateToken(user)}" };
 
         return Ok(token);
     }

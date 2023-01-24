@@ -68,7 +68,7 @@ public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrencie
 
     private static SyncCurrenciesOutput GetOutput(bool result, long timestamp)
     {
-        return new()
+        return new SyncCurrenciesOutput
         {
             Result = result,
             Timestamp = timestamp

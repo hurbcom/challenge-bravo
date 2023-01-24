@@ -33,7 +33,7 @@ public static class SetupServicesExtensions
         var openExchangeSettings = configuration.GetSection("OpenExchangeSettings").Get<OpenExchangeSettings>();
         var securitySettings = configuration.GetSection("Security").Get<SecuritySettings>();
         return services.AddSingleton(openExchangeSettings)
-                       .AddSingleton(securitySettings);
+            .AddSingleton(securitySettings);
     }
 
     private static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)

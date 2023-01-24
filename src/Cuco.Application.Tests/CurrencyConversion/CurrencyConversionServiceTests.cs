@@ -9,6 +9,7 @@ namespace Cuco.Application.Tests.CurrencyConversion;
 public class CurrencyConversionServiceTests
 {
     private const string SameCurrencyMessage = "The currencies are the same, therefore the amount doesn't change.";
+
     private const string CouldNotFindCurrenciesValueMessageBase =
         "Couldn't get the value in dollar from the currency with symbol: ";
 

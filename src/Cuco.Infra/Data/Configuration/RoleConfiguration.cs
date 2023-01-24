@@ -1,4 +1,3 @@
-using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Roles.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

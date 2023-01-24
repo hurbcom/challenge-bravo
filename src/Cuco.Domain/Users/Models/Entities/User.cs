@@ -14,7 +14,9 @@ public class User : Entity
         RoleId = role.Id;
     }
 
-    protected User() { }
+    protected User()
+    {
+    }
 
     public string Name { get; }
     public string Password { get; private set; }
@@ -22,5 +24,7 @@ public class User : Entity
     public long RoleId { get; }
 
     public void SetPassword(string newPassword)
-        => Password = newPassword.Hash();
+    {
+        Password = newPassword.Hash();
+    }
 }

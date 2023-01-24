@@ -50,7 +50,7 @@ internal class GetCurrencyInUsdService : IService<GetCurrencyInUsdInput, GetCurr
 
     private static GetCurrencyInUsdOutput GetOutput(decimal valueInDollar)
     {
-        return new()
+        return new GetCurrencyInUsdOutput
         {
             ValueInDollar = valueInDollar
         };

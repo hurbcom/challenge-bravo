@@ -62,7 +62,7 @@ internal class CurrencyConversionService : IService<CurrencyConversionInput, Cur
 
     private static CurrencyConversionOutput GetOutput(decimal? amount, string details)
     {
-        return new()
+        return new CurrencyConversionOutput
         {
             ConvertedAmount = amount,
             Details = details

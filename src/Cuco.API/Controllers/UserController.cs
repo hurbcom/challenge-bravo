@@ -14,9 +14,9 @@ namespace Cuco.API.Controllers;
 [Route("api/user")]
 public class UserController : ControllerBase
 {
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IUserProvider _userProvider;
     private readonly IUserRepository _userRepository;
-    private readonly IUnitOfWork _unitOfWork;
 
     public UserController(IUserProvider userProvider, IUserRepository userRepository, IUnitOfWork unitOfWork)
     {
@@ -34,14 +34,14 @@ public class UserController : ControllerBase
     {
         try
         {
-            var role =  await roleRepository.GetAsNoTrackingAsync(input.Role.GetHashCode());
+            var role = await roleRepository.GetAsNoTrackingAsync(input.Role.GetHashCode());
             var user = new User(input.Name, input.Password, role);
             _userRepository.Insert(user);
             if (!_unitOfWork.Commit())
                 return StatusCode(StatusCodes.Status500InternalServerError);
             var result = new Result<UserDTO>
             {
-                Output = new() { Name = user.Name, Role = user.Role }
+                Output = new UserDTO { Name = user.Name, Role = user.Role }
             };
             return Ok(result);
         }
@@ -69,7 +69,7 @@ public class UserController : ControllerBase
             _unitOfWork.Commit();
             var result = new Result<UserDTO>
             {
-                Output = new() { Name = user.Name, Role = user.Role }
+                Output = new UserDTO { Name = user.Name, Role = user.Role }
             };
             return Ok(result);
         }
@@ -94,7 +94,7 @@ public class UserController : ControllerBase
 
             if (!await _userRepository.DeleteByNameAsync(name) && !_unitOfWork.Commit())
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            var result = new Result<bool>()
+            var result = new Result<bool>
             {
                 Output = true
             };

@@ -5,5 +5,4 @@ namespace Cuco.Domain.Roles.Services.Repositories;
 
 public interface IRoleRepository : IRepository<Role>
 {
-
 }

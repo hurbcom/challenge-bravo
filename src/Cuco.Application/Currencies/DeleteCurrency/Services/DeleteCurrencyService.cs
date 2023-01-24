@@ -40,7 +40,7 @@ public class DeleteCurrencyService : IService<DeleteCurrencyInput, DeleteCurrenc
 
     private static DeleteCurrencyOutput GetOutput(bool result, string details)
     {
-        return new()
+        return new DeleteCurrencyOutput
         {
             Result = result,
             Details = details

@@ -1,13 +1,11 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace Cuco.API.Extensions;
 
 public static class SetupSwaggerExtension
 {
-    public static IServiceCollection SetupSwaggerServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection SetupSwaggerServices(this IServiceCollection services,
+        IConfiguration configuration)
     {
         return services.AddSwaggerGen(c =>
         {
@@ -32,7 +30,7 @@ public static class SetupSwaggerExtension
                             Id = "Bearer"
                         }
                     },
-                    new string[] {}
+                    new string[] { }
                 }
             });
         });

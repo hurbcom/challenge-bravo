@@ -8,7 +8,7 @@ public class UserProvider : IUserProvider
 {
     private readonly ClaimsPrincipal _principal;
 
-    public UserProvider (IHttpContextAccessor context)
+    public UserProvider(IHttpContextAccessor context)
     {
         if (context is null) throw new ArgumentNullException(nameof(context));
         _principal = context.HttpContext?.User ?? throw new ArgumentNullException(nameof(_principal));

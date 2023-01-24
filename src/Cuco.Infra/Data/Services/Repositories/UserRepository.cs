@@ -19,7 +19,7 @@ public class UserRepository : Repository<User>, IUserRepository
             .Where(u => u.Name == name)
             .FirstOrDefaultAsync();
         return password.Verify(user.Password)
-            ? new UserDTO() { Name = user.Name, Role = user.Role }
+            ? new UserDTO { Name = user.Name, Role = user.Role }
             : null;
     }
 
@@ -34,6 +34,5 @@ public class UserRepository : Repository<User>, IUserRepository
     {
         return await Db.Set<User>()
             .FirstOrDefaultAsync(u => u.Name == name);
-
     }
 }

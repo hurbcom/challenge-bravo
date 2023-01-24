@@ -8,6 +8,7 @@ namespace Cuco.Infra.Data.Seeds;
 internal static class UserSeed
 {
     private const string UserFirstPassword = "9DdrS0qILyA!X4Zu5";
+
     internal static void GenerateInitialUsers(this MigrationBuilder migrationBuilder)
     {
         var adminPassword = UserFirstPassword.Hash();
