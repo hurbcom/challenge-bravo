@@ -14,7 +14,8 @@ using Cuco.Application.Token;
 using Cuco.Application.UpdateCurrency.Models;
 using Cuco.Application.UpdateCurrency.Services;
 using Cuco.Application.UserProviders;
-using Cuco.Application.Users.Token;
+using Cuco.Application.Users.TokenAdapters;
+using Cuco.Application.Users.UserProviders;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cuco.Application.Extensions;

@@ -1,4 +1,4 @@
-namespace CurrencyConversion.Application.Tests.AddCurrency;
+namespace Cuco.Application.Tests.AddCurrency;
 
 public class AddCurrencyServiceTests
 {

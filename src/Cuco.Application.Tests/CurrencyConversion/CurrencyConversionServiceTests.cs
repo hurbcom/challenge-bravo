@@ -4,7 +4,7 @@ using Cuco.Application.CurrencyConversion.Services;
 using Cuco.Application.GetCurrencyInUSD.Models;
 using Moq;
 
-namespace CurrencyConversion.Application.Tests.CurrencyConversion;
+namespace Cuco.Application.Tests.CurrencyConversion;
 
 public class CurrencyConversionServiceTests
 {
@@ -84,7 +84,7 @@ public class CurrencyConversionServiceTests
     }
 
     [Test]
-    public async Task Convert_BothCurrenciesFoundValue_ReturnsNullAndMessage()
+    public async Task Convert_BothCurrenciesFoundValue_ReturnsValueAndMessage()
     {
         var amount = _random.Next();
         const string fromCurrency = "a";

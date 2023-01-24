@@ -8,28 +8,14 @@
 
     <ItemGroup>
         <PackageReference Include="Flurl.Http" Version="3.2.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
         <ProjectReference Include="..\Cuco.Domain\Cuco.Domain.csproj" />
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
             <_Parameter1>Cuco.Application.Tests</_Parameter1>
         </AssemblyAttribute>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
-          <HintPath>..\..\..\..\..\..\usr\lib\dotnet\shared\Microsoft.AspNetCore.App\6.0.13\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
-        </Reference>
-        <Reference Include="Microsoft.IdentityModel.Tokens">
-            <HintPath>..\..\..\..\.nuget\packages\microsoft.identitymodel.tokens\6.10.0\lib\netstandard2.0\Microsoft.IdentityModel.Tokens.dll</HintPath>
-        </Reference>
-        <Reference Include="System.IdentityModel.Tokens.Jwt">
-            <HintPath>..\..\..\..\.nuget\packages\system.identitymodel.tokens.jwt\6.10.0\lib\netstandard2.0\System.IdentityModel.Tokens.Jwt.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Currencies" />
     </ItemGroup>
 
 </Project>

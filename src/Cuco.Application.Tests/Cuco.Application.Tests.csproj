@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <IsPackable>false</IsPackable>
 
-        <RootNamespace>CurrencyConversion.Application.Tests</RootNamespace>
+        <RootNamespace>Cuco.Application.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
