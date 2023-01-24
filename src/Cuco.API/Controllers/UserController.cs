@@ -1,4 +1,4 @@
-using Cuco.Application.UserProviders;
+using Cuco.Application.Users.UserProviders;
 using Cuco.Commons;
 using Cuco.Commons.Base;
 using Cuco.Domain.Roles.Models.Consts;

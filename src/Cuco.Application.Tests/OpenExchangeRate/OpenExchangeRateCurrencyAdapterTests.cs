@@ -1,4 +1,4 @@
-namespace CurrencyConversion.Application.Tests.OpenExchangeRate;
+namespace Cuco.Application.Tests.OpenExchangeRate;
 
 public class OpenExchangeRateCurrencyAdapterTests
 {

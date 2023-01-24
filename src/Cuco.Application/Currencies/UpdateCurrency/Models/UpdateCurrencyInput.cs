@@ -1,4 +1,4 @@
-namespace Cuco.Application.UpdateCurrency.Models;
+namespace Cuco.Application.Currencies.UpdateCurrency.Models;
 
 public class UpdateCurrencyInput
 {

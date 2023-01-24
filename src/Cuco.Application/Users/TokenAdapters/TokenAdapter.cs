@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Cuco.Application.Token;
 using Cuco.Commons.Settings;
 using Cuco.Domain.Users.Models.DTO;
 using Microsoft.IdentityModel.Tokens;

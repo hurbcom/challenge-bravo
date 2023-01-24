@@ -1,4 +1,4 @@
-namespace Cuco.Application.AddCurrency.Models;
+namespace Cuco.Application.Currencies.AddCurrency.Models;
 
 public class AddCurrencyInput
 {

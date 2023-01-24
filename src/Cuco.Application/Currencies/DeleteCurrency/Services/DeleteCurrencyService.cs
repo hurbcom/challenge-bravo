@@ -1,8 +1,8 @@
 using Cuco.Application.Base;
-using Cuco.Application.DeleteCurrency.Models;
+using Cuco.Application.Currencies.DeleteCurrency.Models;
 using Cuco.Domain.Currencies.Services.Repositories;
 
-namespace Cuco.Application.DeleteCurrency.Services;
+namespace Cuco.Application.Currencies.DeleteCurrency.Services;
 
 public class DeleteCurrencyService : IService<DeleteCurrencyInput, DeleteCurrencyOutput>
 {

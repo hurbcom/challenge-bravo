@@ -1,4 +1,4 @@
-using Cuco.Application.Token;
+using Cuco.Application.Users.TokenAdapters;
 using Cuco.Domain.Users.Models.DTO;
 using Cuco.Domain.Users.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;

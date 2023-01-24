@@ -1,6 +1,6 @@
 using Cuco.Domain.Currencies.Models.Entities;
 
-namespace Cuco.Application.AddCurrency.Models;
+namespace Cuco.Application.Currencies.AddCurrency.Models;
 
 public class AddCurrencyOutput
 {

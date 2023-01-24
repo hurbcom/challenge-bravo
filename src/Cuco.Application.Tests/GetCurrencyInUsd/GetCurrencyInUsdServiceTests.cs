@@ -1,4 +1,4 @@
-namespace CurrencyConversion.Application.Tests.GetCurrencyInUsd;
+namespace Cuco.Application.Tests.GetCurrencyInUsd;
 
 public class GetCurrencyInUsdServiceTests
 {

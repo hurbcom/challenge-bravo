@@ -1,7 +1,7 @@
 using Cuco.Application.Base;
+using Cuco.Application.Currencies.GetCurrencyInUSD.Models;
 using Cuco.Application.CurrencyConversion.Models;
 using Cuco.Application.CurrencyConversion.Services;
-using Cuco.Application.GetCurrencyInUSD.Models;
 using Moq;
 
 namespace Cuco.Application.Tests.CurrencyConversion;

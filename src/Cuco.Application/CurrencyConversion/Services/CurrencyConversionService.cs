@@ -1,6 +1,6 @@
 using Cuco.Application.Base;
+using Cuco.Application.Currencies.GetCurrencyInUSD.Models;
 using Cuco.Application.CurrencyConversion.Models;
-using Cuco.Application.GetCurrencyInUSD.Models;
 
 namespace Cuco.Application.CurrencyConversion.Services;
 

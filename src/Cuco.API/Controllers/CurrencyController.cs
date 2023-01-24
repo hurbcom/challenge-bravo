@@ -1,8 +1,8 @@
-using Cuco.Application.AddCurrency.Models;
 using Cuco.Application.Base;
-using Cuco.Application.DeleteCurrency.Models;
-using Cuco.Application.SyncCurrencies.Models;
-using Cuco.Application.UpdateCurrency.Models;
+using Cuco.Application.Currencies.AddCurrency.Models;
+using Cuco.Application.Currencies.DeleteCurrency.Models;
+using Cuco.Application.Currencies.SyncCurrencies.Models;
+using Cuco.Application.Currencies.UpdateCurrency.Models;
 using Cuco.Commons;
 using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;

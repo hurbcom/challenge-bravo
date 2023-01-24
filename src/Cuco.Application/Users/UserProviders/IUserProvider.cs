@@ -1,4 +1,4 @@
-namespace Cuco.Application.UserProviders;
+namespace Cuco.Application.Users.UserProviders;
 
 public interface IUserProvider
 {

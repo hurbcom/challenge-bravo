@@ -1,4 +1,4 @@
-namespace Cuco.Application.GetCurrencyInUSD.Models;
+namespace Cuco.Application.Currencies.GetCurrencyInUSD.Models;
 
 public class GetCurrencyInUsdOutput
 {

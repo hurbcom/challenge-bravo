@@ -1,9 +1,9 @@
 using Cuco.Application.Base;
-using Cuco.Application.GetCurrencyInUSD.Models;
+using Cuco.Application.Currencies.GetCurrencyInUSD.Models;
 using Cuco.Commons.Base;
 using Cuco.Domain.Currencies.Services.Repositories;
 
-namespace Cuco.Application.GetCurrencyInUSD.Services;
+namespace Cuco.Application.Currencies.GetCurrencyInUSD.Services;
 
 internal class GetCurrencyInUsdService : IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput>
 {

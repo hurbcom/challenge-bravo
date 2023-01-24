@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Cuco.Application.UserProviders;
 using Microsoft.AspNetCore.Http;
 
 namespace Cuco.Application.Users.UserProviders;

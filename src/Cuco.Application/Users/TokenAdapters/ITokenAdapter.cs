@@ -1,6 +1,6 @@
 using Cuco.Domain.Users.Models.DTO;
 
-namespace Cuco.Application.Token;
+namespace Cuco.Application.Users.TokenAdapters;
 
 public interface ITokenAdapter
 {

@@ -1,12 +1,12 @@
 using Cuco.Application.Base;
+using Cuco.Application.Currencies.SyncCurrencies.Models;
 using Cuco.Application.OpenExchangeRate.Adapters;
-using Cuco.Application.SyncCurrencies.Models;
 using Cuco.Commons.Base;
 using Cuco.Commons.Redis;
 using Cuco.Domain.Currencies.Services.Repositories;
 using Newtonsoft.Json;
 
-namespace Cuco.Application.SyncCurrencies.Services;
+namespace Cuco.Application.Currencies.SyncCurrencies.Services;
 
 public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrenciesOutput>
 {

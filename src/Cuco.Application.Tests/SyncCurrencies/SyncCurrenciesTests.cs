@@ -1,4 +1,4 @@
-namespace CurrencyConversion.Application.Tests.SyncCurrencies;
+namespace Cuco.Application.Tests.SyncCurrencies;
 
 public class SyncCurrenciesTests
 {

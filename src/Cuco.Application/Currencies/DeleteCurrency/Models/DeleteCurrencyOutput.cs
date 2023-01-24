@@ -1,4 +1,4 @@
-namespace Cuco.Application.DeleteCurrency.Models;
+namespace Cuco.Application.Currencies.DeleteCurrency.Models;
 
 public class DeleteCurrencyOutput
 {
