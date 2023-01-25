@@ -128,7 +128,6 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpPut("sync")]
-    [Authorize(Roles = "ADMIN,SYNC")]
     [ProducesResponseType(typeof(Result<SyncCurrenciesOutput>), StatusCodes.Status200OK)]
     public async Task<ActionResult> SyncCurrenciesAsync(
         [FromServices] IService<SyncCurrenciesInput, SyncCurrenciesOutput> service)
