@@ -57,7 +57,8 @@ internal class CurrencyConversionService : IService<CurrencyConversionInput, Cur
 
     private static decimal ConvertValue(decimal fromCurrencyInUsd, decimal toCurrencyInUsd, decimal amount)
     {
-        return toCurrencyInUsd / fromCurrencyInUsd * amount;
+        return toCurrencyInUsd * amount
+               / fromCurrencyInUsd;
     }
 
     private static CurrencyConversionOutput GetOutput(decimal? amount, string details)

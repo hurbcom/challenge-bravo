@@ -102,7 +102,7 @@ public class CurrencyConversionServiceTests
         Assert.Multiple(() =>
         {
             Assert.That(result.ConvertedAmount,
-                Is.EqualTo(toCurrencyOutput.ValueInDollar / toCurrencyOutput.ValueInDollar * amount));
+                Is.EqualTo(toCurrencyOutput.ValueInDollar * amount / fromCurrencyOutput.ValueInDollar));
             Assert.That(result.Details, Is.EqualTo($"Successfully converted from {fromCurrency} to {toCurrency}"));
         });
     }
