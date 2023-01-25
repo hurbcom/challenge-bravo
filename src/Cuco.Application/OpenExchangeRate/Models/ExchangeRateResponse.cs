@@ -4,7 +4,9 @@ namespace Cuco.Application.OpenExchangeRate.Models;
 
 public class ExchangeRateResponse
 {
-    [JsonPropertyName("timestamp")] public long Timestamp { get; set; }
+    [JsonPropertyName("timestamp")]
+    public long Timestamp { get; init; }
 
-    [JsonPropertyName("rates")] public Dictionary<string, decimal> Rates { get; set; }
+    [JsonPropertyName("rates")]
+    public Dictionary<string, decimal> Rates { get; init; }
 }

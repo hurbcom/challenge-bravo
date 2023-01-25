@@ -22,9 +22,9 @@ public class OpenExchangeRateAdapter : ICurrencyExchangeRateAdapter
     {
         try
         {
-            return await (_openExchangeSettings.BaseUrl + RatesEndpoint)
+            return await GetFullRatesEndpoint(_openExchangeSettings.BaseUrl)
                 .SetQueryParam(AppIdParam, _openExchangeSettings.AppId)
-                .SetQueryParam(ShowAlternativeParam, 1)
+                .SetQueryParam(ShowAlternativeParam, true)
                 .GetJsonAsync<ExchangeRateResponse>();
         }
         catch (Exception e)
@@ -34,5 +34,12 @@ public class OpenExchangeRateAdapter : ICurrencyExchangeRateAdapter
                 $"\nError: {e.Message}");
             return null;
         }
+    }
+
+    private static string GetFullRatesEndpoint(string baseUrl)
+    {
+        if (baseUrl.Last() != '/')
+            return baseUrl + "/" + RatesEndpoint;
+        return baseUrl + RatesEndpoint;
     }
 }

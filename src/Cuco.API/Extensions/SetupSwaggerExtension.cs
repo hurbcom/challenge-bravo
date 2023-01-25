@@ -4,10 +4,9 @@ namespace Cuco.API.Extensions;
 
 public static class SetupSwaggerExtension
 {
-    public static IServiceCollection SetupSwaggerServices(this IServiceCollection services,
-        IConfiguration configuration)
+    public static void SetupSwaggerServices(this IServiceCollection services)
     {
-        return services.AddSwaggerGen(c =>
+        services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cuco API", Version = "v1" });
 
@@ -30,15 +29,17 @@ public static class SetupSwaggerExtension
                             Id = "Bearer"
                         }
                     },
-                    new string[] { }
+                    Array.Empty<string>()
                 }
             });
         });
     }
 
-    public static IApplicationBuilder SetupSwaggerApp(this IApplicationBuilder app)
+    public static void SetupSwaggerApp(this IApplicationBuilder app)
     {
-        return app.UseSwagger()
-            .UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "Cuco.Api v1"); });
+        app.UseSwagger().UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("v1/swagger.json", "Cuco.Api v1");
+        });
     }
 }
