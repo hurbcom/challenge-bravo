@@ -24,9 +24,12 @@ public class CurrencyRepository : Repository<Currency>, ICurrencyRepository
 
     public async Task<bool> DeleteBySymbolASync(string symbol)
     {
-        return await Db.Set<Currency>()
-            .Where(c => c.Symbol == symbol)
-            .ExecuteDeleteAsync() == 1;
+        var currency = await GetBySymbolAsync(symbol);
+        if (currency is null)
+            return false;
+
+        Db.Set<Currency>().Remove(currency);
+        return true;
     }
 
     public async Task<Currency> GetBySymbolAsNoTrackingAsync(string symbol)

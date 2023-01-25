@@ -12,22 +12,24 @@ public class UserRepository : Repository<User>, IUserRepository
     {
     }
 
-    public async Task<UserDTO> GetUserDTO(string name, string password)
+    public async Task<UserDto> GetUserDto(string name, string password)
     {
         var user = await Db.Set<User>()
             .Include(u => u.Role)
             .Where(u => u.Name == name)
             .FirstOrDefaultAsync();
         return password.Verify(user.Password)
-            ? new UserDTO { Name = user.Name, Role = user.Role }
+            ? new UserDto { Name = user.Name, Role = user.Role }
             : null;
     }
 
     public async Task<bool> DeleteByNameAsync(string name)
     {
-        return await Db.Set<User>()
-            .Where(c => c.Name == name)
-            .ExecuteDeleteAsync() == 1;
+        var user = await GetByNameAsync(name);
+        if (user is null) return false;
+
+        Db.Set<User>().Remove(user);
+        return true;
     }
 
     public async Task<User> GetByNameAsync(string name)
