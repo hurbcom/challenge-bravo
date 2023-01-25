@@ -6,7 +6,7 @@
 -   Apagar uma Moeda pelo Nome;
 -   Converter duas moedas;
 
-## Funcionalidade extra
+## Funcionalidade extra solicitada
 -   As moedas (USD, BRL, EUR, BTC, ETH) são cadastradas/atualizadas automaticamente a cada 30 segundos após o incio da api;
 
 ## Tecnologias utilizadas
@@ -73,5 +73,5 @@
   - Incluir autenticação para utilização da API.
 <br>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/hurbcom/challenge-bravo/main/ca.jpg" alt="Challange accepted" />
+  <img src="ca.jpg" alt="Challange accepted" />
 </p>
