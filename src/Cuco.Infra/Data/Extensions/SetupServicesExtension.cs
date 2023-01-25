@@ -31,27 +31,44 @@ public static class SetupServicesExtensions
     private static IServiceCollection AddSettings(this IServiceCollection services, IConfiguration configuration)
     {
         var openExchangeSettings = configuration.GetSection("OpenExchangeSettings").Get<OpenExchangeSettings>();
-        var securitySettings = configuration.GetSection("Security").Get<SecuritySettings>();
+        var securitySettings = configuration.GetSection("JWT").Get<SecuritySettings>();
         return services.AddSingleton(openExchangeSettings)
             .AddSingleton(securitySettings);
     }
 
     private static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)
     {
-        if (configuration?.GetConnectionString("Redis") is { } connectionString)
-            return services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(connectionString))
-                .AddSingleton<IRedisCache, RedisCache>()
-                .AddSingleton<ILockingService, RedisLockingService>();
-        return services;
+        var redis = configuration?.GetSection("Redis").Get<RedisSettings>();
+        if (redis is null) return services;
+        return services.AddSingleton<IConnectionMultiplexer>(_ =>
+            ConnectionMultiplexer.Connect(new ConfigurationOptions()
+                {
+                    EndPoints = { { redis.Host, redis.Port } },
+                    ConnectRetry = 2,
+                    ReconnectRetryPolicy = new LinearRetry(10),
+                    AbortOnConnectFail = false,
+                    ConnectTimeout = 5000,
+                    Password = redis.Password
+                }))
+            .AddSingleton<IRedisCache, RedisCache>()
+            .AddSingleton<ILockingService, RedisLockingService>();
     }
 
     private static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
     {
-        return configuration?.GetConnectionString("CucoDBContext") is { } connectionString
+        var connectionString = configuration?.GetConnectionString("CucoDBContext");
+        return connectionString is not null
             ? services.AddDbContext<CucoDbContext>(options =>
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
-                        o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore))
+                        o =>
+                        {
+                            o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+                            o.EnableRetryOnFailure(
+                                maxRetryCount: 10,
+                                maxRetryDelay: TimeSpan.FromSeconds(30),
+                                errorNumbersToAdd: null);
+                        })
                     .EnableDetailedErrors();
             })
             : services;
