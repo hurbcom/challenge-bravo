@@ -11,7 +11,7 @@ class RatesService
 
     def get_rate
         # Check if rates are already cached
-        Rails.cache.fetch(@redis_path) do
+        Rails.cache.fetch(@redis_path, expires_in: 60.minutes) do
             # If not, get the rates from the external API
             # and save to cache
             begin

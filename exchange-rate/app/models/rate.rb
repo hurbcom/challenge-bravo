@@ -7,5 +7,4 @@ class Rate < ApplicationRecord
     validates :rate, presence: true, numericality: { greater_than: 0 }
     # Source should be a valid URL
     validates :source, format: { with: URL_REGEX, allow_blank: true }
-
 end

@@ -1,2 +1,0 @@
-class CurrencyController < ApplicationController
-end
