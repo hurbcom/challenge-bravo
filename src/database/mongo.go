@@ -14,6 +14,11 @@ func Connection() (*mongo.Client, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if err = client.Ping(context.TODO(), nil); err != nil {
+		return nil, err
+	}
+
 	fmt.Println("MongoDb Connected...")
 	return client, nil
 }
