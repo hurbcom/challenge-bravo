@@ -2,14 +2,13 @@ package routes
 
 import (
 	"challenge-bravo/src/controllers"
-	"challenge-bravo/src/models"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
 func CreateCurrencyRoutes(router *mux.Router, currencyController *controllers.CurrencyController) {
-	routes := []models.Route{
+	routes := []Route{
 		{
 			URL:    "/currency",
 			Func:   currencyController.Create,
