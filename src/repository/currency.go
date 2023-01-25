@@ -40,7 +40,7 @@ func (repositoryCurrency CurrencyRepository) FindOne(code string) (models.Curren
 }
 
 func (repositoryCurrency CurrencyRepository) Delete(code string) (int64, error) {
-	filter := bson.D{{"code", code}}
+	filter := bson.D{{Key: "code", Value: code}}
 
 	result, err := repositoryCurrency.collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
