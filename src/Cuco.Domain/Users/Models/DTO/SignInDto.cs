@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Cuco.Domain.Users.Models.DTO;
 
-public class SignInDTO
+public class SignInDto
 {
     [JsonPropertyName("name")] public string Name { get; set; }
 

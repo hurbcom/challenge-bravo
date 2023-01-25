@@ -16,7 +16,7 @@ public class TokenAdapter : ITokenAdapter
         _securitySettings = securitySettings;
     }
 
-    public string GenerateToken(UserDTO user)
+    public string GenerateToken(UserDto user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_securitySettings.Secret);

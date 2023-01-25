@@ -27,10 +27,10 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = $"{RoleNames.Admin}")]
-    [ProducesResponseType(typeof(Result<UserDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<UserDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> AddAsync(
         [FromServices] IRoleRepository roleRepository,
-        [FromBody] SignUpDTO input)
+        [FromBody] SignUpDto input)
     {
         try
         {
@@ -39,9 +39,9 @@ public class UserController : ControllerBase
             _userRepository.Insert(user);
             if (!_unitOfWork.Commit())
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            var result = new Result<UserDTO>
+            var result = new Result<UserDto>
             {
-                Output = new UserDTO { Name = user.Name, Role = user.Role }
+                Output = new UserDto { Name = user.Name, Role = user.Role }
             };
             return Ok(result);
         }
@@ -54,9 +54,9 @@ public class UserController : ControllerBase
 
     [HttpPut("{name}")]
     [Authorize]
-    [ProducesResponseType(typeof(Result<UserDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<UserDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> UpdateAsync(
-        [FromBody] UpdatedUserDTO input,
+        [FromBody] UpdatedUserDto input,
         string name)
     {
         try
@@ -67,9 +67,9 @@ public class UserController : ControllerBase
             var user = await _userRepository.GetByNameAsync(name);
             user.SetPassword(input.NewPassword);
             _unitOfWork.Commit();
-            var result = new Result<UserDTO>
+            var result = new Result<UserDto>
             {
-                Output = new UserDTO { Name = user.Name, Role = user.Role }
+                Output = new UserDto { Name = user.Name, Role = user.Role }
             };
             return Ok(result);
         }

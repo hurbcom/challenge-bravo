@@ -2,7 +2,7 @@ using Cuco.Domain.Roles.Models.Enums;
 
 namespace Cuco.Domain.Users.Models.DTO;
 
-public class SignUpDTO
+public class SignUpDto
 {
     public string Name { get; set; }
     public string Password { get; set; }

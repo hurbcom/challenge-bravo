@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Cuco.Domain.Users.Models.DTO;
 
-public class TokenDTO
+public class TokenDto
 {
     [JsonPropertyName("name")] public string Name { get; set; }
 
