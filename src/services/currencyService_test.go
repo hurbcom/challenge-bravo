@@ -8,6 +8,9 @@ import (
 
 type RepositoryMock struct{}
 
+func (repo *RepositoryMock) FindAll() ([]models.Currency, error) {
+	return []models.Currency{}, nil
+}
 func (repo *RepositoryMock) FindOne(code string) (models.Currency, error) {
 	if code == "USD" {
 		return models.Currency{

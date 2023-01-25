@@ -23,12 +23,16 @@ func (service *CurrencyServiceMock) Create(currency models.Currency) error {
 	}
 	return nil
 }
+
 func (service *CurrencyServiceMock) Find(code string) (models.Currency, error) {
 	if code == "USD" {
 		return models.Currency{}, nil
 	} else {
 		return models.Currency{}, fmt.Errorf("Currency not Found")
 	}
+}
+func (service *CurrencyServiceMock) FindAll() ([]models.Currency, error) {
+	return []models.Currency{}, nil
 }
 func (service *CurrencyServiceMock) Delete(code string) (int64, error) {
 	if code == "USD" {
