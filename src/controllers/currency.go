@@ -15,6 +15,7 @@ import (
 type CurrencyService interface {
 	Create(models.Currency) error
 	Find(string) (models.Currency, error)
+	FindAll() ([]models.Currency, error)
 	Delete(string) (int64, error)
 	ConvertCurrency(string, string, float64) (models.ResponseCurrency, error)
 }
@@ -55,6 +56,14 @@ func (currControler CurrencyController) Find(w http.ResponseWriter, r *http.Requ
 	code := params["code"]
 
 	result, err := currControler.service.Find(code)
+	if err != nil {
+		responses.Error(w, http.StatusInternalServerError, err)
+	}
+	responses.JSON(w, http.StatusOK, result)
+}
+
+func (currControler CurrencyController) FindAll(w http.ResponseWriter, r *http.Request) {
+	result, err := currControler.service.FindAll()
 	if err != nil {
 		responses.Error(w, http.StatusInternalServerError, err)
 	}

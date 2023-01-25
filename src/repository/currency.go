@@ -69,3 +69,28 @@ func (repositoryCurrency CurrencyRepository) CreateCurrenciesFromApi(currencies 
 
 	return nil
 }
+
+func (repositoryCurrency CurrencyRepository) FindAll() ([]models.Currency, error) {
+	cursor, err := repositoryCurrency.collection.Find(context.TODO(), bson.D{{}}, options.Find())
+	if err != nil {
+		return []models.Currency{}, err
+	}
+
+	currencies := []models.Currency{}
+
+	for cursor.Next(context.TODO()) {
+		var currency models.Currency
+		err := cursor.Decode(&currency)
+		if err != nil {
+			return []models.Currency{}, err
+		}
+		currencies = append(currencies, currency)
+	}
+	if err := cursor.Err(); err != nil {
+		return []models.Currency{}, err
+	}
+
+	defer cursor.Close(context.TODO())
+
+	return currencies, nil
+}

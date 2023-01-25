@@ -10,6 +10,7 @@ import (
 
 type CurrencyRepository interface {
 	FindOne(string) (models.Currency, error)
+	FindAll() ([]models.Currency, error)
 	Create(models.Currency) error
 	Delete(string) (int64, error)
 	CreateCurrenciesFromApi([]models.Currency) error
@@ -48,6 +49,14 @@ func (serviceCurrency CurrencyService) Create(currency models.Currency) error {
 	return nil
 }
 
+func (serviceCurrency CurrencyService) FindAll() ([]models.Currency, error) {
+	result, err := serviceCurrency.Repository.FindAll()
+	if err != nil {
+		return []models.Currency{}, err
+	}
+
+	return result, nil
+}
 func (serviceCurrency CurrencyService) Find(code string) (models.Currency, error) {
 	result, err := serviceCurrency.Repository.FindOne(strings.ToUpper(code))
 	if err != nil {

@@ -16,6 +16,12 @@ func CreateCurrencyRoutes(router *mux.Router, currencyController *controllers.Cu
 			IsAuth: false,
 		},
 		{
+			URL:    "/currency",
+			Func:   currencyController.FindAll,
+			Method: http.MethodGet,
+			IsAuth: false,
+		},
+		{
 			URL:    "/currency/{code}",
 			Func:   currencyController.Find,
 			Method: http.MethodGet,
