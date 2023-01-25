@@ -9,7 +9,28 @@ import (
 type RepositoryMock struct{}
 
 func (repo *RepositoryMock) FindAll() ([]models.Currency, error) {
-	return []models.Currency{}, nil
+	return []models.Currency{
+		{
+			Code: "USD",
+			Bid:  1,
+		},
+		{
+			Code: "BRL",
+			Bid:  0.1958,
+		},
+		{
+			Code: "ETH",
+			Bid:  1554.39,
+		},
+		{
+			Code: "BTC",
+			Bid:  22711.8,
+		},
+		{
+			Code: "EUR",
+			Bid:  1.09,
+		},
+	}, nil
 }
 func (repo *RepositoryMock) FindOne(code string) (models.Currency, error) {
 	if code == "USD" {
@@ -176,5 +197,48 @@ func TestCurrencyServiceConvertCurrency(t *testing.T) {
 	}
 	if result.ToCurrency != expectResponse.ToCurrency {
 		t.Errorf("O Valor esperado era: '%s' e o recebido foi: '%s'", expectResponse.ToCurrency, result.ToCurrency)
+	}
+}
+
+func TestCurrencyServiceFindAll(t *testing.T) {
+	repositoryMock := RepositoryMock{}
+
+	newService := NewCurrencyService(&repositoryMock)
+
+	resultSuccess, err := newService.FindAll()
+	if err != nil {
+		t.Error(err)
+	}
+
+	successCurrencies := []models.Currency{
+		{
+			Code: "USD",
+			Bid:  1,
+		},
+		{
+			Code: "BRL",
+			Bid:  0.1958,
+		},
+		{
+			Code: "ETH",
+			Bid:  1554.39,
+		},
+		{
+			Code: "BTC",
+			Bid:  22711.8,
+		},
+		{
+			Code: "EUR",
+			Bid:  1.09,
+		},
+	}
+
+	for position, successResult := range resultSuccess {
+		if successResult.Bid != successCurrencies[position].Bid {
+			t.Errorf("resultado esperado era '%.2f' e o recebido foi '%.2f' \n", successCurrencies[position].Bid, successResult.Bid)
+		}
+		if successResult.Code != successCurrencies[position].Code {
+			t.Errorf("resultado esperado era '%s' e o recebido foi '%s' \n", successCurrencies[position].Code, successResult.Code)
+		}
 	}
 }
