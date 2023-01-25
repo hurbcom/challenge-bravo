@@ -1,12 +1,11 @@
 import { Router } from "express";
 
-import { quotations } from "../modules/currency/services/connections";
+import seedDatabseController from "../modules/currency/useCases/seedDatabase";
 
 const quotationsRoutes = Router();
 
-quotationsRoutes.get("/api-quotations", async (request, response) => {
-    const allQuotations = await quotations();
-    return response.json(allQuotations);
+quotationsRoutes.put("/update", (request, response) => {
+    return seedDatabseController().handle(request, response);
 });
 
 export { quotationsRoutes };

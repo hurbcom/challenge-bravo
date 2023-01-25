@@ -6,6 +6,7 @@ import { ALL_COINS, QUOTATION_API } from "../../services/connections";
 import {
     ICurrencyRepository,
     ICreateCurrencyDTO,
+    IConvertedCoins,
 } from "../ICurrencyRepository";
 
 class CurrencyRepository implements ICurrencyRepository {
@@ -54,7 +55,7 @@ class CurrencyRepository implements ICurrencyRepository {
                     `${QUOTATION_API}/last/${coins}-USD`
                 );
                 if (request.data) {
-                    const awsomeApiData = await this.repository.create({
+                    const awsomeApiData = this.repository.create({
                         code: request.data[`${coins}USD`].code,
                         codein: request.data[`${coins}USD`].codein,
                         name: request.data[`${coins}USD`].name,

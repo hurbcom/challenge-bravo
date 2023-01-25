@@ -7,7 +7,6 @@ class ListCurrencyController {
 
     async handle(request: Request, response: Response): Promise<Response> {
         const allCurrencies = await this.listCurrencyUseCase.execute();
-        console.log("allcurrencies", allCurrencies);
         return response.json(allCurrencies);
     }
 }
