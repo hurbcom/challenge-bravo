@@ -43,7 +43,7 @@
   Foi utilizada a api "https://min-api.cryptocompare.com/data/" para a consulta e atualização das moedas descritas acima.
 
 ## Cobertura de Testes
-  Realizei testes automatizados para os pacotes services e controllers, com cobertura de 90.0% para os services e 90.5% para os controllers
+  Realizei testes automatizados para os pacotes services e controllers, com cobertura de 96.0% para os services e 97.6% para os controllers
   # <img src="test.png" alt="Test Coverage"/> 
 
   Para executar os testes, acessar a pasta de Services e rodar, conforme necessidade:
