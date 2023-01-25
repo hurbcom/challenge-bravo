@@ -2,8 +2,8 @@ namespace Cuco.Application.Currencies.UpdateCurrency.Models;
 
 public class UpdateCurrencyInput
 {
-    public string Name { get; set; }
-    public string Symbol { get; set; }
-    public string BaseCurrencySymbol { get; set; }
-    public decimal? BaseCurrencyValue { get; set; }
+    public string Name { get; private set; }
+    public string Symbol { get; private set; }
+    public string BaseCurrencySymbol { get; private set; }
+    public decimal? BaseCurrencyValue { get; private set; }
 }
