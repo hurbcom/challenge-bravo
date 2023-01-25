@@ -27,7 +27,6 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     public async Task<IEnumerable<TEntity>> GetAllAsync()
     {
         return await Db.Set<TEntity>()
-            .AsNoTracking()
             .ToListAsync();
     }
 
@@ -43,10 +42,9 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         Db.Set<TEntity>().Add(entity);
     }
 
-    public async Task DeleteAsync(long id)
+    public void Delete(TEntity entity)
     {
-        await Db.Set<TEntity>()
-            .Where(e => e.Id == id)
-            .ExecuteDeleteAsync();
+        Db.Set<TEntity>()
+            .Remove(entity);
     }
 }
