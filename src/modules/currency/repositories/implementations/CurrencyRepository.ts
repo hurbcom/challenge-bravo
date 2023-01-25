@@ -49,7 +49,7 @@ class CurrencyRepository implements ICurrencyRepository {
      * Endpoint responsável em buscar as informções de cotação na awsomeapi
      */
     async defaultCoins(): Promise<void> {
-        const allQuotations = await Promise.all<object>(
+        await Promise.all<object>(
             ALL_COINS.map(async (coins) => {
                 const request = await axios.get(
                     `${QUOTATION_API}/last/${coins}-USD`

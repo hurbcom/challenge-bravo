@@ -11,7 +11,7 @@ interface IRquest {
 class CreateCurrencyUseCase {
     constructor(private currencyRepository: ICurrencyRepository) {}
 
-    async execute({ code, name, high, low }: IRquest): Promise<void> {
+    async execute({ code, codein, name, high, low }: IRquest): Promise<void> {
         const currencyAlredyExists = await this.currencyRepository.findByCode(
             code
         );
