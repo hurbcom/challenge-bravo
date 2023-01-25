@@ -6,3 +6,10 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
+  app:  
+    depends_on:
+      - mongodb 
+    build: .
+    container_name: challenge-bravo
+    ports:
+      - "5000:5000"
