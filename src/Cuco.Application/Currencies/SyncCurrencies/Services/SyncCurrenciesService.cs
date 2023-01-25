@@ -30,6 +30,7 @@ public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrencie
         try
         {
             var exchangeRates = await _currencyExchangeRateAdapter.GetAllRates();
+
             timestamp = exchangeRates.Timestamp;
             var currencies = (await _currencyRepository.GetAllAsync()).ToList();
 
@@ -46,12 +47,13 @@ public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrencie
             {
                 var currency = currencies.FirstOrDefault(c =>
                     string.Equals(c.Symbol, symbol, StringComparison.OrdinalIgnoreCase));
-                var rate = exchangeRates.Rates[symbol];
                 if (currency is null) continue;
+                var rate = exchangeRates.Rates[symbol];
                 currency.SetValueInDollar(rate);
                 currency.SetUpdatedAtUnix(exchangeRates.Timestamp);
             }
 
+            _unitOfWork.Commit();
             await _redisCache.MultipleSetAsync(exchangeRates.Rates);
             var symbols = JsonConvert.SerializeObject(exchangeRates.Rates.Select(r => r.Key).ToHashSet());
             await _redisCache.SetAsync(RedisValues.CurrencySymbolsKey, symbols);
@@ -60,7 +62,7 @@ public class SyncCurrenciesService : IService<SyncCurrenciesInput, SyncCurrencie
         {
             Console.WriteLine("Failed to sync Currencies values with the external API." +
                               $"\nError: {e.Message}");
-            return GetOutput(false, 0);
+            throw new Exception(e.Message);
         }
 
         return GetOutput(_unitOfWork.Commit(), timestamp);
