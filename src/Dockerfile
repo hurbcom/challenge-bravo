@@ -23,12 +23,16 @@ WORKDIR "/src/Cuco.Infra.Tests"
 RUN dotnet test "Cuco.Infra.Tests.csproj"
 
 FROM test AS build
+WORKDIR "/src/Cuco.API"
 RUN dotnet build "Cuco.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "Cuco.API.csproj" -c Release -o /app/publish
 
+
+
 FROM base AS final
+
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Cuco.API.dll"]

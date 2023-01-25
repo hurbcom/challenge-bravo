@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  cucoapi_0:
+    container_name: cucoapi_0
+    image: cucoapi:test
+    build:
+      context: ./src
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__CucoDBContext=server=mysql;port=3306;user=${MYSQLCUCOUSER};pwd=${MYSQLCUCOPWD};database=${MYSQLCUCODB}
+      - OpenExchangeSettings__AppId=${OPENEXCHANGEAPPID}
+      - Redis__Host=${REDISHOST}
+      - Redis__Port=${REDISPORT}
+      - Redis__Password=${REDISPASS}
+      - JWT__Secret=${JWTSECRET}
+      - JWT__ExpirationInHours=${TOKENEXPIRATIONINHOURS}
+    depends_on:
+      - redis
+      - mysql
+    networks:
+      - cuco-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  cucosync:
+    container_name: cucosync
+    image: cucosync
+    build:
+      context: ./Cuco.Sync.Cron
+    environment:
+      - SyncCurrenciesEndpointBaseUrl=${CUCOAPI}
+    networks:
+      - cuco-net
+    depends_on:
+      - nginx
+    deploy:
+      restart_policy:
+        condition: on-failure
+  
+  redis:
+    container_name: redis
+    image: redis
+    command: redis-server --requirepass ${REDISPASS}
+    networks:
+      - cuco-net
+    volumes: 
+      - redis_data:/data
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    sysctls:
+      - net.core.somaxconn=65535
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQLROOTPWD}
+      - MYSQL_DATABASE=${MYSQLCUCODB}
+      - MYSQL_USER=${MYSQLCUCOUSER}
+      - MYSQL_PASSWORD=${MYSQLCUCOPWD}
+    networks:
+      - cuco-net
+    volumes: 
+      - mysql_data:/var/lib/mysql
+    deploy:
+      restart_policy:
+        condition: on-failure
+      
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    build:
+      context: ./LoadBalancer
+    ports:
+      - "5100:5100"
+    networks:
+      - cuco-net
+    depends_on:
+      - cucoapi_0
+    deploy:
+      restart_policy:
+        condition: on-failure
+        
+networks:
+  cuco-net:
+    name: cuco-net
+    driver: bridge
+
+volumes:
+  redis_data:
+  mysql_data:

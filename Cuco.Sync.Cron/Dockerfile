@@ -2,17 +2,17 @@
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["Cuco.Cron/Cuco.Cron.csproj", "Cuco.Cron/"]
-RUN dotnet restore "Cuco.Cron/Cuco.Cron.csproj"
+WORKDIR "/src"
+COPY ["Cuco.Sync.Cron.csproj", "."]
+RUN dotnet restore "Cuco.Sync.Cron.csproj"
 COPY . .
-WORKDIR "/src/Cuco.Cron"
-RUN dotnet build "Cuco.Cron.csproj" -c Release -o /app/build
+WORKDIR "/src"
+RUN dotnet build "Cuco.Sync.Cron.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Cuco.Cron.csproj" -c Release -o /app/publish
+RUN dotnet publish "Cuco.Sync.Cron.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Cuco.Cron.dll"]
+ENTRYPOINT ["dotnet", "Cuco.Sync.Cron.dll"]

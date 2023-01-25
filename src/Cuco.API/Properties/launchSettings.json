@@ -6,17 +6,18 @@
             "dotnetRunMessages": true,
             "launchBrowser": true,
             "launchUrl": "swagger",
-            "applicationUrl": "http://localhost:5010;https://localhost:5011",
+            "applicationUrl": "http://localhost:5100",
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }
         },
         "Cuco Stg": {
             "commandName": "Project",
-            "dotnetRunMessages": true,
-            "applicationUrl": "http://localhost:5010;https://localhost:5011",
+            "dotnetRunMessages": false,
+            "launchBrowser": false,
+            "applicationUrl": "http://localhost:5100",
             "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Staging"
+                "ASPNETCORE_ENVIRONMENT": "Development"
             }
         }
     }
