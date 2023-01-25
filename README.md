@@ -1,6 +1,7 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
 ## Funcionalidades da API<br>
+-   Consultar todas as moedas cadastradas;
 -   Criar uma nova Moeda;
 -   Consultar uma Moeda pelo Nome;
 -   Apagar uma Moeda pelo Nome;
@@ -23,6 +24,9 @@
   <pre><code>docker-compose up</code></pre>
 ## Endpoints
 
+-   Retorna todas as moedas cadastradas:
+  <pre><code>curl http://localhost:5000/currency</code></pre>
+
 -   Retorna uma moeda cadastrada pelo nome:
   <pre><code>curl http://localhost:5000/currency/USD</code></pre>
 
@@ -39,7 +43,7 @@
   Foi utilizada a api "https://min-api.cryptocompare.com/data/" para a consulta e atualização das moedas descritas acima.
 
 ## Cobertura de Testes
-  Realizei os testes para os Services e Controllers com cobertura de 97.8% para os services e 100% para os controllers
+  Realizei testes automatizados para os pacotes services e controllers, com cobertura de 90.0% para os services e 90.5% para os controllers
   # <img src="test.png" alt="Test Coverage"/> 
 
   Para executar os testes, acessar a pasta de Services e rodar, conforme necessidade:
@@ -66,7 +70,7 @@
   # <img src="stress_test.png" alt="stress_test"/> 
 
 ## Oportunidades de Melhoria
-  - Gerar os outros métodos REST (GET allCurrencies, UPDATE currency) para a currency.
+  - Gerar os outros métodos REST (UPDATE currency) para a currency.
   
   - Criar um método para atualizar automaticamente as moedas que forem cadastradas no banco e que existirem na api externa.
 
