@@ -6,15 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cuco.API.Controllers;
 
 [ApiController]
-[Route("api/conversion")]
+[Route("api/convert")]
 public class CurrencyConversionController : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(Result<CurrencyConversionOutput>), StatusCodes.Status200OK)]
     public async Task<ActionResult> ConvertCurrencyAsync(
         [FromServices] IService<CurrencyConversionInput, CurrencyConversionOutput> service,
-        [FromQuery] string fromCurrency,
-        [FromQuery] string toCurrency,
+        [FromQuery] string from,
+        [FromQuery] string to,
         [FromQuery] decimal amount)
     {
         try
@@ -23,14 +23,14 @@ public class CurrencyConversionController : ControllerBase
             {
                 Output = await service.Handle(new CurrencyConversionInput
                 {
-                    FromCurrency = fromCurrency,
-                    ToCurrency = toCurrency,
+                    FromCurrency = from,
+                    ToCurrency = to,
                     Amount = amount
                 })
             };
             return Ok(result);
         }
-        catch (Exception e)
+        catch
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
