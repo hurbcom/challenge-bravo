@@ -1,16 +1,32 @@
 import { Currency } from "../entities/Currency";
 
-interface ICreateCurrencyDTO {
+interface IAwsomeApi {
     code: string;
+    codein: string;
     name: string;
     high: string;
     low: string;
+}
+interface ICreateCurrencyDTO {
+    code: string;
+    codein: string;
+    name: string;
+    high: string;
+    low: string;
+    type?: string;
 }
 
 interface ICurrencyRepository {
     findByCode(code: string): Promise<Currency>;
     list(): Promise<Currency[]>;
-    create({ code, name, high, low }: ICreateCurrencyDTO): Promise<void>;
+    create({
+        code,
+        codein,
+        name,
+        high,
+        low,
+    }: ICreateCurrencyDTO): Promise<void>;
+    defaultCoins(): Promise<void>;
 }
 
-export { ICurrencyRepository, ICreateCurrencyDTO };
+export { ICurrencyRepository, ICreateCurrencyDTO, IAwsomeApi };

@@ -16,6 +16,10 @@ export class CreateCurrency1674423830519 implements MigrationInterface {
                         type: "varchar",
                     },
                     {
+                        name: "codein",
+                        type: "varchar",
+                    },
+                    {
                         name: "name",
                         type: "varchar",
                     },

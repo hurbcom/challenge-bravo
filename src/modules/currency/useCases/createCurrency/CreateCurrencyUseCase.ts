@@ -2,6 +2,7 @@ import { ICurrencyRepository } from "../../repositories/ICurrencyRepository";
 
 interface IRquest {
     code: string;
+    codein: string;
     name: string;
     high: string;
     low: string;
@@ -19,7 +20,7 @@ class CreateCurrencyUseCase {
             throw new Error("Coin alredy exists in database!");
         }
 
-        this.currencyRepository.create({ code, name, high, low });
+        this.currencyRepository.create({ code, codein, name, high, low });
     }
 }
 

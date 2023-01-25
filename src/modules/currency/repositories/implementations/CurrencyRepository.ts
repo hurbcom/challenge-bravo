@@ -1,9 +1,12 @@
+import axios from "axios";
 import { getRepository, Repository } from "typeorm";
 
 import { Currency } from "../../entities/Currency";
+import { ALL_COINS, QUOTATION_API } from "../../services/connections";
 import {
     ICurrencyRepository,
     ICreateCurrencyDTO,
+    IAwsomeApi,
 } from "../ICurrencyRepository";
 
 class CurrencyRepository implements ICurrencyRepository {
@@ -13,13 +16,21 @@ class CurrencyRepository implements ICurrencyRepository {
         this.repository = getRepository(Currency);
     }
 
-    async create({ code, name, high, low }: ICreateCurrencyDTO): Promise<void> {
+    async create({
+        code,
+        codein,
+        name,
+        high,
+        low,
+        type = "AWSOME-API",
+    }: ICreateCurrencyDTO): Promise<void> {
         const currency = this.repository.create({
             code,
+            codein,
             name,
             high,
             low,
-            type: "TESTE",
+            type,
         });
         await this.repository.save(currency);
     }
@@ -32,6 +43,33 @@ class CurrencyRepository implements ICurrencyRepository {
     async findByCode(code: string): Promise<Currency> {
         const currency = await this.repository.findOne({ code });
         return currency;
+    }
+
+    /**
+     * Endpoint responsável em buscar as informções de cotação na awsomeapi
+     */
+    async defaultCoins(): Promise<void> {
+        const allQuotations = await Promise.all<object>(
+            ALL_COINS.map(async (coins) => {
+                const request = await axios.get(
+                    `${QUOTATION_API}/last/${coins}-USD`
+                );
+                if (request.data) {
+                    const awsomeApiData = await this.repository.create({
+                        code: request.data[`${coins}USD`].code,
+                        codein: request.data[`${coins}USD`].codein,
+                        name: request.data[`${coins}USD`].name,
+                        high: request.data[`${coins}USD`].high,
+                        low: request.data[`${coins}USD`].low,
+                        type: "AWSOME-API",
+                    });
+
+                    await this.repository.save(awsomeApiData);
+                    return;
+                }
+                throw new Error("Cannot connect to awsomeapi");
+            })
+        );
     }
 }
 

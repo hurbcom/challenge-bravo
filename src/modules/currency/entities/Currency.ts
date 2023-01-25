@@ -10,6 +10,9 @@ class Currency {
     code: string;
 
     @Column()
+    codein: string;
+
+    @Column()
     name: string;
 
     @Column()
