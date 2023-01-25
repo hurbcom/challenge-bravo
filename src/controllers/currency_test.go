@@ -234,3 +234,19 @@ func TestCurrencyControllerConvert(t *testing.T) {
 		}
 	}
 }
+
+func TestCurrencyContollerFindAll(t *testing.T) {
+	serviceMock := CurrencyServiceMock{}
+	newController := NewCurrencyController(&serviceMock)
+
+	rSuccess := httptest.NewRequest(http.MethodGet, "/currency", nil)
+	wSuccess := httptest.NewRecorder()
+
+	newController.FindAll(wSuccess, rSuccess)
+
+	gotSuccess := wSuccess.Result()
+
+	if !reflect.DeepEqual(http.StatusOK, gotSuccess.StatusCode) {
+		t.Errorf("wanted: %d, got; %d", http.StatusOK, gotSuccess.StatusCode)
+	}
+}
