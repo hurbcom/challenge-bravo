@@ -1,22 +1,30 @@
 using Cuco.Sync.Cron.Models;
 using Flurl.Http;
 using Hangfire;
+using Microsoft.Extensions.Hosting;
 
 namespace Cuco.Sync.Cron.Handlers;
 
-internal static class ScheduledSyncHandler
+internal class ScheduledSyncService : IHostedService
 {
-    private static readonly string SyncCurrenciesEndpointUrl =
-        Environment.GetEnvironmentVariable("SyncCurrenciesEndpointUrl") ?? "http://localhost:5010/api/currency/sync";
-
     private static bool _started;
+
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        return SyncCurrenciesAsync();
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        Console.WriteLine("Task stopped.");
+        return Task.CompletedTask;
+    }
 
     public static async Task SyncCurrenciesAsync()
     {
         try
         {
-            Console.WriteLine("Entered.");
-            var timestamp = (await SyncCurrenciesEndpointUrl.GetJsonAsync<Result>())?.ExchangeRateChangeResponse
+            var timestamp = (await GetSyncUrl().GetJsonAsync<Result>())?.ExchangeRateChangeResponse
                 ?.Timestamp;
             if (timestamp is null or 0)
             {
@@ -46,5 +54,13 @@ internal static class ScheduledSyncHandler
     private static DateTime GetTimeOfNextCallFromTimestamp(long unixTimestamp)
     {
         return DateTimeOffset.FromUnixTimeSeconds(unixTimestamp).AddHours(1).ToUniversalTime().DateTime;
+    }
+
+    private static string GetSyncUrl()
+    {
+        var cucoApiUrl = Environment.GetEnvironmentVariable("SyncCurrenciesEndpointBaseUrl") ?? "http://localhost:5010/api/";
+        return cucoApiUrl.Last() != '/'
+            ? cucoApiUrl + "/currency/sync"
+            : cucoApiUrl + "currency/sync";
     }
 }

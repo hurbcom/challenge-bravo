@@ -1,14 +1,20 @@
 ﻿using Cuco.Sync.Cron.Handlers;
 using Hangfire;
 using Hangfire.MemoryStorage;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 // Configure Hangfire
 GlobalConfiguration.Configuration.UseMemoryStorage();
 using var server = new BackgroundJobServer();
 
-// Run and setup recurring
-await ScheduledSyncHandler.SyncCurrenciesAsync();
+await ScheduledSyncService.SyncCurrenciesAsync();
 
-// Wait for the user to exit the application
-Console.WriteLine("Press any key to exit...");
-Console.ReadKey();
+
+var hostBuilder = new HostBuilder()
+    .ConfigureServices((hostContext, services) =>
+        {
+            services.AddHostedService<ScheduledSyncService>();
+        }
+    );
+await hostBuilder.RunConsoleAsync().ConfigureAwait(false);
