@@ -4,6 +4,8 @@ using Cuco.IoC.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
+const string defaultPolicyName = "DefaultPolicy";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.SetupServicesCucoApi(builder.Configuration);
@@ -12,16 +14,28 @@ builder.Services.AddControllers();
 
 builder.Services.AddMvc().AddControllersAsServices();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: defaultPolicyName,
+        b =>
+        {
+            b
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 if (builder.Environment.IsDevelopment())
-    builder.Services.SetupSwaggerServices(builder.Configuration);
+    builder.Services.SetupSwaggerServices();
 
-builder.Services.AddHttpClient();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddAuthorization(options => { });
+builder.Services.AddHttpClient()
+    .AddHttpContextAccessor();
 
-var secret = builder.Configuration.GetSection("Security:Secret").Value ?? string.Empty;
+var secret = builder.Configuration.GetSection("JWT:Secret").Value ?? string.Empty;
 var key = Encoding.ASCII.GetBytes(secret);
-builder.Services.AddAuthentication(x =>
+builder.Services.AddAuthorization()
+    .AddAuthentication(x =>
     {
         x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -41,15 +55,13 @@ builder.Services.AddAuthentication(x =>
 
 var app = builder.Build();
 
-app.SetupPipelineCucoApi();
-
 if (app.Environment.IsDevelopment())
     app.SetupSwaggerApp();
 
+app.SetupPipelineCucoApi();
 app.UseRouting();
-
 app.MapControllers();
-
+app.UseCors(defaultPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 
