@@ -4,5 +4,5 @@ namespace Cuco.Sync.Cron.Models;
 
 public abstract class Result
 {
-    [JsonPropertyName("output")] public ExchangeRateChangeResponse ExchangeRateChangeResponse { get; set; }
+    [JsonPropertyName("output")] public ExchangeRateChangeResponse ExchangeRateChangeResponse { get; private set; }
 }

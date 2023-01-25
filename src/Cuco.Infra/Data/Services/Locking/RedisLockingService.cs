@@ -29,7 +29,7 @@ public class RedisLockingService : ILockingService
                 Environment.MachineName,
                 LockExpiry);
         }
-        catch (Exception e)
+        catch
         {
             return Task.FromResult(false);
         }
