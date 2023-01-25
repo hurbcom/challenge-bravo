@@ -6,7 +6,6 @@ import { ALL_COINS, QUOTATION_API } from "../../services/connections";
 import {
     ICurrencyRepository,
     ICreateCurrencyDTO,
-    IAwsomeApi,
 } from "../ICurrencyRepository";
 
 class CurrencyRepository implements ICurrencyRepository {
@@ -64,6 +63,24 @@ class CurrencyRepository implements ICurrencyRepository {
                         type: "AWSOME-API",
                     });
 
+                    if (await this.findByCode(awsomeApiData.code)) {
+                        await this.repository
+                            .createQueryBuilder("currency")
+                            .update<Currency>(Currency, {
+                                code: awsomeApiData.code,
+                                codein: awsomeApiData.codein,
+                                name: awsomeApiData.name,
+                                high: awsomeApiData.high,
+                                low: awsomeApiData.low,
+                                type: awsomeApiData.type,
+                            })
+                            .where("currency.code = :code", {
+                                code: awsomeApiData.code,
+                            })
+                            .updateEntity(true)
+                            .execute();
+                        return;
+                    }
                     await this.repository.save(awsomeApiData);
                     return;
                 }
