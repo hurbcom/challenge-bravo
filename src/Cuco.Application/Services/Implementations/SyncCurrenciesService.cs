@@ -2,6 +2,7 @@ using Cuco.Application.Adapters;
 using Cuco.Application.Contracts.Responses;
 using Cuco.Commons.Base;
 using Cuco.Commons.Redis;
+using Cuco.Commons.Resources;
 using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;
 using Newtonsoft.Json;
@@ -31,8 +32,13 @@ public class SyncCurrenciesService : ISyncCurrenciesService
         try
         {
             var exchangeRates = await _currencyExchangeRateAdapter.GetAllRates();
+            if (exchangeRates?.Rates is null || !exchangeRates.Rates.Any())
+                return GetResponse(ErrorResources.FailedToRetrieveExchangeRatesFromExternalApi, false);
+
             timestamp = exchangeRates.Timestamp;
-            var currencies = (await _currencyRepository.GetAllAsync()).ToList();
+            var currencies = (await _currencyRepository.GetAllAsync())?.ToList();
+            if (currencies is null || !currencies.Any())
+                return GetResponse(ErrorResources.FailedToGetListOfCurrencies, false);
 
             await SyncNotAvailableCurrencies(currencies, exchangeRates);
             SyncAvailableCurrencies(exchangeRates, currencies);
@@ -45,7 +51,7 @@ public class SyncCurrenciesService : ISyncCurrenciesService
             throw new Exception(e.Message);
         }
 
-        return GetOutput(_unitOfWork.Commit(), timestamp);
+        return GetResponse(DetailsResources.SuccessfullySyncedCurrencies, _unitOfWork.Commit(), timestamp);
     }
 
     private async Task SyncNotAvailableCurrencies(List<Currency> currencies, ExchangeRateResponse exchangeRates)
@@ -81,10 +87,11 @@ public class SyncCurrenciesService : ISyncCurrenciesService
         await _redisCache.SetAsync(RedisValues.CurrencySymbolsKey, symbols);
     }
 
-    private static SyncCurrenciesResponse GetOutput(bool result, long timestamp)
+    private static SyncCurrenciesResponse GetResponse(string details, bool result, long timestamp = 0)
     {
         return new SyncCurrenciesResponse
         {
+            Details = details,
             Result = result,
             Timestamp = timestamp
         };
