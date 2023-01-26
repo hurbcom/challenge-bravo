@@ -1,6 +1,6 @@
 using Cuco.Domain.Roles.Models.Enums;
+using Cuco.Domain.Users.Extensions;
 using Cuco.Domain.Users.Models.Entities;
-using Cuco.Domain.Users.Services.Extensions;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Cuco.Infra.Data.Seeds;
@@ -12,11 +12,9 @@ internal static class UserSeed
     internal static void GenerateInitialUsers(this MigrationBuilder migrationBuilder)
     {
         var adminPassword = UserFirstPassword.Hash();
-        var syncUserPassword = UserFirstPassword.Hash();
         migrationBuilder.Sql(
             $@"
             INSERT INTO {nameof(User)}({nameof(User.Id)},{nameof(User.Name)},{nameof(User.Password)},{nameof(User.RoleId)}) VALUES (1,'ADMIN', '{adminPassword}',{RoleId.Admin.GetHashCode()});
-            INSERT INTO {nameof(User)}({nameof(User.Id)},{nameof(User.Name)},{nameof(User.Password)},{nameof(User.RoleId)}) VALUES (2,'SYNC','{syncUserPassword}',{RoleId.Sync.GetHashCode()});
           ");
     }
 

@@ -7,12 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Flurl.Http" Version="3.2.4"/>
-        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0"/>
-        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0"/>
-        <ProjectReference Include="..\Cuco.Domain\Cuco.Domain.csproj"/>
+        <PackageReference Include="Flurl.Http" Version="3.2.4" />
+        <PackageReference Include="LanguageExt.Core" Version="4.4.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
+        <ProjectReference Include="..\Cuco.Domain\Cuco.Domain.csproj" />
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
             <_Parameter1>Cuco.Application.Tests</_Parameter1>
         </AssemblyAttribute>

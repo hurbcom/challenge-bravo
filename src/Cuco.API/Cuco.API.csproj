@@ -22,11 +22,4 @@
     <ItemGroup>
         <ProjectReference Include="..\Cuco.IoC\Cuco.IoC.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
-    </ItemGroup>
-
 </Project>

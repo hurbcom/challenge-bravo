@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
-namespace Cuco.Application.Users.UserProviders;
+namespace Cuco.Application.Providers;
 
 public class UserProvider : IUserProvider
 {

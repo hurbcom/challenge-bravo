@@ -1,6 +1,6 @@
 using Cuco.Commons.Base;
 using Cuco.Domain.Roles.Models.Entities;
-using Cuco.Domain.Users.Services.Extensions;
+using Cuco.Domain.Users.Extensions;
 
 namespace Cuco.Domain.Users.Models.Entities;
 

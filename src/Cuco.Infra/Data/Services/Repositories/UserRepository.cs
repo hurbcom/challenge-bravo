@@ -1,6 +1,6 @@
+using Cuco.Domain.Users.Extensions;
 using Cuco.Domain.Users.Models.DTO;
 using Cuco.Domain.Users.Models.Entities;
-using Cuco.Domain.Users.Services.Extensions;
 using Cuco.Domain.Users.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 

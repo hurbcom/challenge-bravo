@@ -1,3 +1,5 @@
+using Cuco.Domain.Currencies.Extensions;
+using Cuco.Domain.Currencies.Models.DTOs;
 using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -37,5 +39,13 @@ public class CurrencyRepository : Repository<Currency>, ICurrencyRepository
         return await Db.Set<Currency>()
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Symbol == symbol);
+    }
+
+    public async Task<IEnumerable<CurrencyDto>> GetAllDtoAsync()
+    {
+        return await Db.Set<Currency>()
+            .AsNoTracking()
+            .Select(c => c.ToDto())
+            .ToListAsync();
     }
 }

@@ -1,4 +1,4 @@
-namespace Cuco.Domain.Users.Services.Extensions;
+namespace Cuco.Domain.Users.Extensions;
 
 public static class UserExtensions
 {
