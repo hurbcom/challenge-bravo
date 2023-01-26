@@ -1,9 +1,9 @@
-using Cuco.Application.OpenExchangeRate.Models;
+using Cuco.Application.Contracts.Responses;
 using Cuco.Commons.Settings;
 using Flurl;
 using Flurl.Http;
 
-namespace Cuco.Application.OpenExchangeRate.Adapters;
+namespace Cuco.Application.Adapters.Implementations;
 
 public class OpenExchangeRateAdapter : ICurrencyExchangeRateAdapter
 {

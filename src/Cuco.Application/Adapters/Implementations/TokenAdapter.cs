@@ -5,7 +5,7 @@ using Cuco.Commons.Settings;
 using Cuco.Domain.Users.Models.DTO;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Cuco.Application.Users.TokenAdapters;
+namespace Cuco.Application.Adapters.Implementations;
 
 public class TokenAdapter : ITokenAdapter
 {
