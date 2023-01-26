@@ -7,11 +7,19 @@ class ConvertCoinsUseCase {
     constructor(private currencyRepository: ICurrencyRepository) {}
 
     async execute({ from, to, amount }: IConvertedCoins): Promise<number> {
-        const code = await this.currencyRepository.findByCode(from);
-        const code1 = await this.currencyRepository.findByCode(to);
-        if (!(code && code1)) {
+        if ([from, to, amount].includes(undefined)) {
             throw new Error(
-                `Coins ${from} or ${to} does not exists in database. P`
+                "Please, inform data to variables from, to and amount"
+            );
+        }
+
+        const fromRepositoryCode = await this.currencyRepository.findByCode(
+            from
+        );
+        const toRepositoryCode = await this.currencyRepository.findByCode(to);
+        if (!(fromRepositoryCode && toRepositoryCode)) {
+            throw new Error(
+                `Coins ${from} or ${to} does not exists in database`
             );
         }
 

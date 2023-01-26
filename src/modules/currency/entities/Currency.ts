@@ -16,15 +16,6 @@ class Currency {
     name: string;
 
     @Column()
-    high: string;
-
-    @Column()
-    low: string;
-
-    @Column()
-    bid: string;
-
-    @Column()
     ask: string;
 
     @Column()

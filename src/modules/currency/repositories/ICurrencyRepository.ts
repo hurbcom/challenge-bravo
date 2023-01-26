@@ -7,11 +7,8 @@ interface IConvertedCoins {
 }
 interface ICreateCurrencyDTO {
     code: string;
-    codein: string;
     name: string;
-    high: string;
-    low: string;
-    bid: string;
+    codein?: string;
     ask: string;
     type?: string;
 }
@@ -19,15 +16,7 @@ interface ICreateCurrencyDTO {
 interface ICurrencyRepository {
     findByCode(code: string): Promise<Currency>;
     list(): Promise<Currency[]>;
-    create({
-        code,
-        codein,
-        name,
-        high,
-        low,
-        bid,
-        ask,
-    }: ICreateCurrencyDTO): Promise<void>;
+    create({ code, name, ask }: ICreateCurrencyDTO): Promise<void>;
     defaultCoins(): Promise<void>;
     convertCoins({ from, to, amount }: IConvertedCoins): Promise<number>;
 }

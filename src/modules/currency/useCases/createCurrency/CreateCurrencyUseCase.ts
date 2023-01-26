@@ -2,26 +2,20 @@ import { ICurrencyRepository } from "../../repositories/ICurrencyRepository";
 
 interface IRquest {
     code: string;
-    codein: string;
     name: string;
-    bid: string;
     ask: string;
-    high: string;
-    low: string;
 }
 
 class CreateCurrencyUseCase {
     constructor(private currencyRepository: ICurrencyRepository) {}
 
-    async execute({
-        code,
-        codein,
-        bid,
-        ask,
-        name,
-        high,
-        low,
-    }: IRquest): Promise<void> {
+    async execute({ code, ask, name }: IRquest): Promise<void> {
+        if ([code, ask, name].includes(undefined)) {
+            throw new Error(
+                "Please, inform values to variables code, ask and name!"
+            );
+        }
+
         const currencyAlredyExists = await this.currencyRepository.findByCode(
             code
         );
@@ -33,11 +27,7 @@ class CreateCurrencyUseCase {
         this.currencyRepository.create({
             code,
             ask,
-            bid,
-            codein,
             name,
-            high,
-            low,
         });
     }
 }

@@ -2,7 +2,7 @@ import axios from "axios";
 import { round } from "lodash";
 import { getRepository, Repository } from "typeorm";
 
-import { convertStringToValue } from "../../../../utils/index";
+import { convertStringToValue } from "../../../../utils";
 import { Currency } from "../../entities/Currency";
 import { ALL_COINS, QUOTATION_API } from "../../services/connections";
 import {
@@ -20,21 +20,15 @@ class CurrencyRepository implements ICurrencyRepository {
 
     async create({
         code,
-        codein,
+        codein = "USD",
         name,
-        high,
-        low,
-        bid,
         ask,
-        type = "AWSOME-API",
+        type = "FICTÍCIA",
     }: ICreateCurrencyDTO): Promise<void> {
         const currency = this.repository.create({
             code,
             codein,
             name,
-            high,
-            low,
-            bid,
             ask,
             type,
         });
@@ -65,15 +59,6 @@ class CurrencyRepository implements ICurrencyRepository {
                         code: request.data[`${coins}USD`].code,
                         codein: request.data[`${coins}USD`].codein,
                         name: request.data[`${coins}USD`].name,
-                        high: convertStringToValue(
-                            request.data[`${coins}USD`].high
-                        ),
-                        low: convertStringToValue(
-                            request.data[`${coins}USD`].low
-                        ),
-                        bid: convertStringToValue(
-                            request.data[`${coins}USD`].bid
-                        ),
                         ask: convertStringToValue(
                             request.data[`${coins}USD`].ask
                         ),
@@ -87,9 +72,6 @@ class CurrencyRepository implements ICurrencyRepository {
                                 code: awsomeApiData.code,
                                 codein: awsomeApiData.codein,
                                 name: awsomeApiData.name,
-                                high: awsomeApiData.high,
-                                low: awsomeApiData.low,
-                                bid: awsomeApiData.bid,
                                 ask: awsomeApiData.ask,
                                 type: awsomeApiData.type,
                             })
