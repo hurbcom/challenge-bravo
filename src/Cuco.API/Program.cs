@@ -6,63 +6,75 @@ using Microsoft.IdentityModel.Tokens;
 
 const string defaultPolicyName = "DefaultPolicy";
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.SetupServicesCucoApi(builder.Configuration);
-
-builder.Services.AddControllers();
-
-builder.Services.AddMvc().AddControllersAsServices();
-
-builder.Services.AddCors(options =>
+try
 {
-    options.AddPolicy(name: defaultPolicyName,
-        b =>
-        {
-            b
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsDevelopment())
-    builder.Services.SetupSwaggerServices();
+    builder.Services.SetupServicesCucoApi(builder.Configuration);
 
-builder.Services.AddHttpClient()
-    .AddHttpContextAccessor();
+    builder.Services.AddControllers();
 
-var secret = builder.Configuration.GetSection("JWT:Secret").Value ?? string.Empty;
-var key = Encoding.ASCII.GetBytes(secret);
-builder.Services.AddAuthorization()
-    .AddAuthentication(x =>
+    builder.Services.AddControllers();
+
+    builder.Services.AddCors(options =>
     {
-        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(x =>
-    {
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
+        options.AddPolicy(name: defaultPolicyName,
+            b =>
+            {
+                b
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
     });
 
-var app = builder.Build();
+    if (builder.Environment.IsDevelopment())
+        builder.Services.SetupSwaggerServices();
 
-if (app.Environment.IsDevelopment())
-    app.SetupSwaggerApp();
+    builder.Services.AddHttpClient()
+        .AddHttpContextAccessor();
 
-app.SetupPipelineCucoApi();
-app.UseRouting();
-app.MapControllers();
-app.UseCors(defaultPolicyName);
-app.UseAuthentication();
-app.UseAuthorization();
+    var secret = builder.Configuration.GetSection("JWT:Secret").Value ?? string.Empty;
+    var key = Encoding.ASCII.GetBytes(secret);
+    builder.Services.AddAuthorization()
+        .AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(x =>
+        {
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+        });
 
-app.Run();
+    var app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+        app.SetupSwaggerApp();
+
+    app.SetupPipelineCucoApi();
+    app.UseRouting();
+    app.MapControllers();
+    app.UseCors(defaultPolicyName);
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.Run();
+}
+catch (Exception)
+{
+    Console.WriteLine("Unhandled Exception encountered.");
+    throw;
+}
+finally
+{
+    Console.WriteLine("Shutting API down.");
+}

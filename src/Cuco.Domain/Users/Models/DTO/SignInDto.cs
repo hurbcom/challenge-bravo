@@ -1,10 +1,16 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Cuco.Domain.Users.Models.DTO;
 
 public class SignInDto
 {
-    [JsonPropertyName("name")] public string Name { get; set; }
+    [Required]
+    [JsonPropertyName("name")]
+    [StringLength(250, MinimumLength = 4)]
+    public string Name { get; init; }
 
-    [JsonPropertyName("password")] public string Password { get; set; }
+    [Required]
+    [JsonPropertyName("password")]
+    public string Password { get; init; }
 }

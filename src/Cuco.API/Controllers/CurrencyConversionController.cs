@@ -11,7 +11,7 @@ namespace Cuco.API.Controllers;
 public class CurrencyConversionController : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(Result<CurrencyConversionResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CurrencyConversionResponse), StatusCodes.Status200OK)]
     public async Task<ActionResult> ConvertCurrencyAsync(
         [FromServices] ICurrencyConversionService service,
         [FromQuery] string from,

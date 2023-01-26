@@ -1,4 +1,5 @@
 using Cuco.Application.Contracts.Responses;
+using Cuco.Commons.Resources;
 using Cuco.Domain.Currencies.Services.Repositories;
 
 namespace Cuco.Application.Services.Implementations;
@@ -18,12 +19,8 @@ public class DeleteCurrencyService : IDeleteCurrencyService
     {
         try
         {
-            if (string.IsNullOrEmpty(symbol))
-                return GetOutput(false, "String is null or empty.");
-            if (NecessaryCurrencies.Contains(symbol.ToUpper()))
-                return GetOutput(false, $"Can't remove the currency with Symbol: {symbol}");
-            if (!await _currencyRepository.ExistsBySymbolAsync(symbol))
-                return GetOutput(false, $"There is no currency with Symbol: {symbol}");
+            var errorMessages = await ValidateSymbol(symbol);
+            if (!string.IsNullOrEmpty(errorMessages)) return GetOutput(false, errorMessages);
 
             return await _currencyRepository.DeleteBySymbolASync(symbol)
                 ? GetOutput(true, $"Deleted currency with Symbol {symbol} successfully")
@@ -37,6 +34,25 @@ public class DeleteCurrencyService : IDeleteCurrencyService
         }
     }
 
+    private async Task<string> ValidateSymbol(string symbol)
+    {
+        if (string.IsNullOrEmpty(symbol))
+        {
+            return ErrorResources.SymbolMustExist;
+        }
+
+        if (NecessaryCurrencies.Contains(symbol.ToUpper()))
+        {
+            return symbol.CannotDeleteCurrency();
+        }
+
+        if (!await _currencyRepository.ExistsBySymbolAsync(symbol))
+        {
+            return symbol.CurrencyDoesNotExist();
+        }
+
+        return string.Empty;
+    }
 
     private static DeleteCurrencyResponse GetOutput(bool result, string details)
     {

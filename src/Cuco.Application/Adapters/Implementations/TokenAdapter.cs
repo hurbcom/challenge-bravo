@@ -18,20 +18,29 @@ public class TokenAdapter : ITokenAdapter
 
     public string GenerateToken(UserDto user)
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_securitySettings.Secret);
-        var tokenDescriptor = new SecurityTokenDescriptor
+        try
         {
-            Subject = new ClaimsIdentity(new Claim[]
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_securitySettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                new(ClaimTypes.Name, user.Name),
-                new(ClaimTypes.Role, user.Role.Name)
-            }),
-            Expires = DateTime.UtcNow.AddHours(_securitySettings.ExpirationInHours),
-            SigningCredentials =
-                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new(ClaimTypes.Name, user.Name),
+                    new(ClaimTypes.Role, user.Role.Name)
+                }),
+                Expires = DateTime.UtcNow.AddHours(_securitySettings.ExpirationInHours),
+                SigningCredentials =
+                    new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("An unexpected error occurred while trying to generate a token."
+                            + $"\nError: {e.Message}");
+            throw;
+        }
     }
 }

@@ -2,6 +2,6 @@ namespace Cuco.Application.Contracts.Responses;
 
 public class DeleteCurrencyResponse
 {
-    public bool Result { get; set; }
-    public string Details { get; set; }
+    public bool Result { get; init; }
+    public string Details { get; init; }
 }

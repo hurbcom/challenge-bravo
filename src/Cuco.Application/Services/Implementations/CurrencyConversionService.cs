@@ -1,14 +1,11 @@
 using Cuco.Application.Contracts.Requests;
 using Cuco.Application.Contracts.Responses;
+using Cuco.Commons.Resources;
 
 namespace Cuco.Application.Services.Implementations;
 
 public class CurrencyConversionService : ICurrencyConversionService
 {
-    private const string SameCurrencyMessage = "The currencies are the same, therefore the amount doesn't change.";
-
-    private const string CouldNotFindCurrenciesValueMessageBase = "Couldn't get the value in dollar from the currency with symbol: ";
-
     private readonly IConvertToDollarService _convertToDollarService;
 
     public CurrencyConversionService(IConvertToDollarService convertToDollarService)
@@ -19,30 +16,14 @@ public class CurrencyConversionService : ICurrencyConversionService
     public async Task<CurrencyConversionResponse> ConvertCurrency(CurrencyConversionRequest request)
     {
         if (CheckCurrenciesEquals(request))
-            return GetResponse(request.Amount, SameCurrencyMessage);
-
-        var (errorMessageGetValue, fromCurrencyInUsd, toCurrencyInUsd) = await GetCurrenciesValue(request);
-        if (!string.IsNullOrEmpty(errorMessageGetValue))
-            return GetResponse(null, errorMessageGetValue);
-
-        var convertedValue = ConvertValue(fromCurrencyInUsd, toCurrencyInUsd, request.Amount);
-        return GetResponse(convertedValue, $"Successfully converted from {request.FromCurrency} to {request.ToCurrency}");
-    }
-
-    private async Task<(string errorMessage, decimal fromCurrencyInUsd, decimal toCurrencyInUsd)> GetCurrenciesValue(
-        CurrencyConversionRequest request)
-    {
-        var errorMessage = string.Empty;
+            return GetResponse(request.Amount, DetailsResources.SameCurrencyMessage);
 
         var convertedValues = await _convertToDollarService.Convert(new[] {request.FromCurrency, request.ToCurrency});
-        if (convertedValues[0] == 0)
-            errorMessage += $"{CouldNotFindCurrenciesValueMessageBase}{request.FromCurrency}";
+        if (convertedValues.Length < 2 || convertedValues[0] == 0 || convertedValues[1] == 0)
+            return GetResponse(null, ErrorResources.FailedToConvertCurrenciesToDollar);
 
-        if (convertedValues[1] == 0)
-            errorMessage += (errorMessage == string.Empty ? "" : "\n") +
-                            $"{CouldNotFindCurrenciesValueMessageBase}{request.ToCurrency}";
-
-        return (errorMessage, convertedValues[0], convertedValues[1]);
+        var convertedValue = ConvertValue(convertedValues[0], convertedValues[1], request.Amount);
+        return GetResponse(convertedValue, request.FromCurrency.SuccessfullyConverted(request.ToCurrency));
     }
 
     private static bool CheckCurrenciesEquals(CurrencyConversionRequest request)
@@ -50,6 +31,14 @@ public class CurrencyConversionService : ICurrencyConversionService
         return string.Equals(request.FromCurrency, request.ToCurrency, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// Since both currencies are in the same base, you just need to check
+    /// the rate of the exchange (to/from) and multiply by the value.
+    /// </summary>
+    /// <param name="fromCurrencyInUsd"></param>
+    /// <param name="toCurrencyInUsd"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
     private static decimal ConvertValue(decimal fromCurrencyInUsd, decimal toCurrencyInUsd, decimal amount)
     {
         return toCurrencyInUsd * amount

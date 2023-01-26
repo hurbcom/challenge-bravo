@@ -23,7 +23,7 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpGet("all")]
-    [ProducesResponseType(typeof(Result<IEnumerable<CurrencyDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<CurrencyDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetAllAsync()
     {
         try
@@ -42,7 +42,7 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpGet("{symbol}")]
-    [ProducesResponseType(typeof(Result<CurrencyDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CurrencyDto), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetBySymbolValueAsync(string symbol)
     {
         try
@@ -62,7 +62,7 @@ public class CurrencyController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "ADMIN")]
-    [ProducesResponseType(typeof(Result<SaveCurrencyResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(SaveCurrencyResponse), StatusCodes.Status200OK)]
     public async Task<ActionResult> AddAsync(
         [FromServices] IAddCurrencyService service,
         [FromBody] SaveCurrencyRequest request)
@@ -84,7 +84,7 @@ public class CurrencyController : ControllerBase
 
     [HttpDelete("{symbol}")]
     [Authorize(Roles = $"{RoleNames.Admin}")]
-    [ProducesResponseType(typeof(Result<DeleteCurrencyResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(DeleteCurrencyResponse), StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteAsync(
         [FromServices] IDeleteCurrencyService service,
         string symbol)
@@ -105,16 +105,13 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpPut("sync")]
-    [ProducesResponseType(typeof(Result<SyncCurrenciesResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(SyncCurrenciesResponse), StatusCodes.Status200OK)]
     public async Task<ActionResult> SyncCurrenciesAsync(
         [FromServices] ISyncCurrenciesService service)
     {
         try
         {
-            var result = new Result<SyncCurrenciesResponse>
-            {
-                Output = await service.SyncCurrencies()
-            };
+            var result = await service.SyncCurrencies();
             return Ok(result);
         }
         catch (Exception e)

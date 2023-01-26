@@ -1,6 +1,7 @@
 using Cuco.Application.Contracts.Requests;
 using Cuco.Application.Contracts.Responses;
 using Cuco.Commons.Base;
+using Cuco.Commons.Resources;
 using Cuco.Domain.Currencies.Extensions;
 using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;
@@ -27,26 +28,20 @@ public class UpdateCurrencyService : IUpdateCurrencyService
 
     public async Task<SaveCurrencyResponse> UpdateCurrency(SaveCurrencyRequest request)
     {
-        if (string.IsNullOrEmpty(request.Symbol) ||
-            await _currencyRepository.GetBySymbolAsync(request.Symbol) is not { } currency)
-            return GetOutput(null, false);
-        if (currency.Available)
-            return GetOutput(null, false);
+        var validationErrors = await ValidateCurrency(request);
+        if (string.IsNullOrEmpty(validationErrors))
+            return GetResponse(validationErrors, false);
 
+        var currency = await _currencyRepository.GetBySymbolAsync(request.Symbol);
+        if (!currency.Available && HasValueChanged(request) && !await UpdateCurrencyValue(request, currency))
+            return GetResponse(ErrorResources.FailedToUpdateCurrencyValue, false, currency);
 
-        if (ValueChanged(request))
-            if (!await UpdateCurrencyValue(request, currency))
-                return GetOutput(currency, false);
-        if (!string.IsNullOrEmpty(request.Name) && request.Name != currency.Name)
+        if (HasNameChanged(request, currency))
             currency.SetName(request.Name);
 
-        var result = _unitOfWork.Commit();
-        return GetOutput(currency, result);
-    }
-
-    private static bool ValueChanged(SaveCurrencyRequest request)
-    {
-        return !string.IsNullOrEmpty(request.BaseCurrencySymbol) && request.ValueInBaseCurrency.HasValue;
+        return _unitOfWork.Commit()
+            ? GetResponse(DetailsResources.SuccessfullyUpdatedCurrency, true, currency)
+            : GetResponse(ErrorResources.FailedToCommitChanges, false, currency);
     }
 
     private async Task<bool> UpdateCurrencyValue(SaveCurrencyRequest request, Currency currency)
@@ -71,13 +66,39 @@ public class UpdateCurrencyService : IUpdateCurrencyService
         }
     }
 
-    private static SaveCurrencyResponse GetOutput(Currency currency, bool result)
+    private static bool HasNameChanged(SaveCurrencyRequest request, Currency currency)
+    {
+        return !string.IsNullOrEmpty(request.Name) && request.Name != currency.Name;
+    }
+
+    private static bool HasValueChanged(SaveCurrencyRequest request)
+    {
+        return !string.IsNullOrEmpty(request.BaseCurrencySymbol) && request.ValueInBaseCurrency.HasValue;
+    }
+
+    private static SaveCurrencyResponse GetResponse(string details, bool result, Currency currency = null)
     {
         return new SaveCurrencyResponse
         {
-            Currency = currency.ToDto(),
-            Result = result
+            Currency = currency?.ToDto(),
+            Result = result,
+            Details = details
         };
     }
 
+    private async Task<string> ValidateCurrency(SaveCurrencyRequest request)
+    {
+        var currencyValidationErrors = request.IsValid();
+        if (string.IsNullOrEmpty(currencyValidationErrors))
+        {
+            return currencyValidationErrors;
+        }
+
+        if (await _currencyRepository.ExistsBySymbolAsync(request.Symbol))
+        {
+            return request.Symbol.CurrencyDoesNotExist();
+        }
+
+        return string.Empty;
+    }
 }
