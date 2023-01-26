@@ -19,7 +19,7 @@ public class AuthenticationController : ControllerBase
         _tokenAdapter = tokenAdapter;
     }
 
-    [HttpPut("Authenticate")]
+    [HttpPost("Authenticate")]
     public async Task<ActionResult<TokenDto>> Authenticate([FromBody] SignInDto signIn)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);

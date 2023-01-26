@@ -22,7 +22,7 @@ public class CurrencyController : ControllerBase
         _currencyRepository = currencyRepository;
     }
 
-    [HttpGet("all")]
+    [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<CurrencyDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetAllAsync()
     {
