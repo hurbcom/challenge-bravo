@@ -15,15 +15,22 @@ public class CurrencyConversionService : ICurrencyConversionService
 
     public async Task<CurrencyConversionResponse> ConvertCurrency(CurrencyConversionRequest request)
     {
-        if (CheckCurrenciesEquals(request))
-            return GetResponse(request.Amount, DetailsResources.SameCurrencyMessage);
+        try
+        {
+            if (CheckCurrenciesEquals(request))
+                return GetResponse(request.Amount, DetailsResources.SameCurrencyMessage);
 
-        var convertedValues = await _convertToDollarService.Convert(new[] {request.FromCurrency, request.ToCurrency});
-        if (convertedValues.Length < 2 || convertedValues[0] == 0 || convertedValues[1] == 0)
-            return GetResponse(null, ErrorResources.FailedToConvertCurrenciesToDollar);
+            var convertedValues = await _convertToDollarService.Convert(new[] {request.FromCurrency, request.ToCurrency});
+            if (convertedValues.Length < 2 || convertedValues[0] == 0 || convertedValues[1] == 0)
+                return GetResponse(null, ErrorResources.FailedToConvertCurrenciesToDollar);
 
-        var convertedValue = ConvertValue(convertedValues[0], convertedValues[1], request.Amount);
-        return GetResponse(convertedValue, request.FromCurrency.SuccessfullyConverted(request.ToCurrency));
+            var convertedValue = ConvertValue(convertedValues[0], convertedValues[1], request.Amount);
+            return GetResponse(convertedValue, request.FromCurrency.SuccessfullyConverted(request.ToCurrency));
+        }
+        catch
+        {
+            return GetResponse(null, ErrorResources.UnexpectedErrorOccurred);
+        }
     }
 
     private static bool CheckCurrenciesEquals(CurrencyConversionRequest request)
