@@ -21,7 +21,7 @@ public class SaveCurrencyRequest
     [JsonPropertyName("is_real")]
     public bool IsReal { get; init; }
 
-    public string IsValid()
+    public virtual string IsValid()
     {
         var builder = new StringBuilder();
         if (string.IsNullOrWhiteSpace(Name))
