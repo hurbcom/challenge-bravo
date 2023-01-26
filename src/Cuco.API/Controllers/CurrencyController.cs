@@ -1,10 +1,9 @@
-using Cuco.Application.Base;
-using Cuco.Application.Currencies.AddCurrency.Models;
-using Cuco.Application.Currencies.DeleteCurrency.Models;
-using Cuco.Application.Currencies.SyncCurrencies.Models;
-using Cuco.Application.Currencies.UpdateCurrency.Models;
+using Cuco.Application.Contracts.Requests;
+using Cuco.Application.Contracts.Responses;
+using Cuco.Application.Services;
 using Cuco.Commons;
-using Cuco.Domain.Currencies.Models.Entities;
+using Cuco.Domain.Currencies.Extensions;
+using Cuco.Domain.Currencies.Models.DTOs;
 using Cuco.Domain.Currencies.Services.Repositories;
 using Cuco.Domain.Roles.Models.Consts;
 using Microsoft.AspNetCore.Authorization;
@@ -24,14 +23,14 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpGet("all")]
-    [ProducesResponseType(typeof(Result<IEnumerable<Currency>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<IEnumerable<CurrencyDto>>), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetAllAsync()
     {
         try
         {
-            var result = new Result<IEnumerable<Currency>>
+            var result = new Result<IEnumerable<CurrencyDto>>
             {
-                Output = await _currencyRepository.GetAllAsNoTrackingAsync()
+                Output = await _currencyRepository.GetAllDtoAsync()
             };
             return Ok(result);
         }
@@ -43,14 +42,14 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpGet("{symbol}")]
-    [ProducesResponseType(typeof(Result<Currency>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<CurrencyDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetBySymbolValueAsync(string symbol)
     {
         try
         {
-            var result = new Result<Currency>
+            var result = new Result<CurrencyDto>
             {
-                Output = await _currencyRepository.GetBySymbolAsNoTrackingAsync(symbol)
+                Output = (await _currencyRepository.GetBySymbolAsNoTrackingAsync(symbol))?.ToDto()
             };
             return Ok(result);
         }
@@ -63,38 +62,16 @@ public class CurrencyController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "ADMIN")]
-    [ProducesResponseType(typeof(Result<AddCurrencyOutput>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<SaveCurrencyResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult> AddAsync(
-        [FromServices] IService<AddCurrencyInput, AddCurrencyOutput> service,
-        [FromBody] AddCurrencyInput input)
+        [FromServices] IAddCurrencyService service,
+        [FromBody] SaveCurrencyRequest request)
     {
         try
         {
-            var result = new Result<AddCurrencyOutput>
+            var result = new Result<SaveCurrencyResponse>
             {
-                Output = await service.Handle(input)
-            };
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(StatusCodes.Status500InternalServerError);
-        }
-    }
-
-    [HttpPut]
-    [Authorize(Roles = "ADMIN")]
-    [ProducesResponseType(typeof(Result<UpdateCurrencyOutput>), StatusCodes.Status200OK)]
-    public async Task<ActionResult> UpdateAsync(
-        [FromServices] IService<UpdateCurrencyInput, UpdateCurrencyOutput> service,
-        [FromBody] UpdateCurrencyInput input)
-    {
-        try
-        {
-            var result = new Result<UpdateCurrencyOutput>
-            {
-                Output = await service.Handle(input)
+                Output = await service.AddCurrency(request)
             };
             return Ok(result);
         }
@@ -107,16 +84,16 @@ public class CurrencyController : ControllerBase
 
     [HttpDelete("{symbol}")]
     [Authorize(Roles = $"{RoleNames.Admin}")]
-    [ProducesResponseType(typeof(Result<DeleteCurrencyOutput>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<DeleteCurrencyResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteAsync(
-        [FromServices] IService<DeleteCurrencyInput, DeleteCurrencyOutput> service,
+        [FromServices] IDeleteCurrencyService service,
         string symbol)
     {
         try
         {
-            var result = new Result<DeleteCurrencyOutput>
+            var result = new Result<DeleteCurrencyResponse>
             {
-                Output = await service.Handle(new DeleteCurrencyInput { Symbol = symbol })
+                Output = await service.DeleteCurrency(symbol)
             };
             return Ok(result);
         }
@@ -128,15 +105,15 @@ public class CurrencyController : ControllerBase
     }
 
     [HttpPut("sync")]
-    [ProducesResponseType(typeof(Result<SyncCurrenciesOutput>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<SyncCurrenciesResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult> SyncCurrenciesAsync(
-        [FromServices] IService<SyncCurrenciesInput, SyncCurrenciesOutput> service)
+        [FromServices] ISyncCurrenciesService service)
     {
         try
         {
-            var result = new Result<SyncCurrenciesOutput>
+            var result = new Result<SyncCurrenciesResponse>
             {
-                Output = await service.Handle(default)
+                Output = await service.SyncCurrencies()
             };
             return Ok(result);
         }

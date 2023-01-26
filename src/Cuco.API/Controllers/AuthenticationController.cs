@@ -1,4 +1,4 @@
-using Cuco.Application.Users.TokenAdapters;
+using Cuco.Application.Adapters;
 using Cuco.Domain.Users.Models.DTO;
 using Cuco.Domain.Users.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,7 @@ public class AuthenticationController : ControllerBase
         _tokenAdapter = tokenAdapter;
     }
 
-    [HttpPost("Authenticate")]
+    [HttpPut("Authenticate")]
     public async Task<ActionResult<TokenDto>> Authenticate([FromBody] SignInDto signIn)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);

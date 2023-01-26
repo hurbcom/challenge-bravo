@@ -1,5 +1,6 @@
-using Cuco.Application.Base;
-using Cuco.Application.CurrencyConversion.Models;
+using Cuco.Application.Contracts.Requests;
+using Cuco.Application.Contracts.Responses;
+using Cuco.Application.Services;
 using Cuco.Commons;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,18 +11,18 @@ namespace Cuco.API.Controllers;
 public class CurrencyConversionController : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(Result<CurrencyConversionOutput>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<CurrencyConversionResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult> ConvertCurrencyAsync(
-        [FromServices] IService<CurrencyConversionInput, CurrencyConversionOutput> service,
+        [FromServices] ICurrencyConversionService service,
         [FromQuery] string from,
         [FromQuery] string to,
         [FromQuery] decimal amount)
     {
         try
         {
-            var result = new Result<CurrencyConversionOutput>
+            var result = new Result<CurrencyConversionResponse>
             {
-                Output = await service.Handle(new CurrencyConversionInput
+                Output = await service.ConvertCurrency(new CurrencyConversionRequest
                 {
                     FromCurrency = from,
                     ToCurrency = to,
