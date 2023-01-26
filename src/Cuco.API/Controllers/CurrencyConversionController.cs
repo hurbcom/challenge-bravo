@@ -1,12 +1,12 @@
 using Cuco.Application.Contracts.Requests;
 using Cuco.Application.Contracts.Responses;
 using Cuco.Application.Services;
-using Cuco.Commons;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cuco.API.Controllers;
 
 [ApiController]
+[Produces("application/json")]
 [Route("api/convert")]
 public class CurrencyConversionController : ControllerBase
 {
@@ -20,16 +20,15 @@ public class CurrencyConversionController : ControllerBase
     {
         try
         {
-            var result = new Result<CurrencyConversionResponse>
+            var response = await service.ConvertCurrency(new CurrencyConversionRequest
             {
-                Output = await service.ConvertCurrency(new CurrencyConversionRequest
-                {
-                    FromCurrency = from,
-                    ToCurrency = to,
-                    Amount = amount
-                })
-            };
-            return Ok(result);
+                FromCurrency = from,
+                ToCurrency = to,
+                Amount = amount
+            });
+            if (response is null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return Ok(response);
         }
         catch
         {

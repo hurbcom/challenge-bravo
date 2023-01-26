@@ -1,6 +1,5 @@
 using Cuco.Application.Providers;
-using Cuco.Commons;
-using Cuco.Commons.Base;
+    using Cuco.Commons.Base;
 using Cuco.Domain.Roles.Models.Consts;
 using Cuco.Domain.Roles.Services.Repositories;
 using Cuco.Domain.Users.Models.DTO;
@@ -11,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cuco.API.Controllers;
 
+[ApiController]
+[Produces("application/json")]
 [Route("api/user")]
 public class UserController : ControllerBase
 {
@@ -27,7 +28,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = $"{RoleNames.Admin}")]
-    [ProducesResponseType(typeof(Result<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     public async Task<ActionResult> AddAsync(
         [FromServices] IRoleRepository roleRepository,
         [FromBody] SignUpDto input)
@@ -39,10 +40,7 @@ public class UserController : ControllerBase
             _userRepository.Insert(user);
             if (!_unitOfWork.Commit())
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            var result = new Result<UserDto>
-            {
-                Output = new UserDto { Name = user.Name, Role = user.Role }
-            };
+            var result = new UserDto { Name = user.Name, Role = user.Role };
             return Ok(result);
         }
         catch (Exception e)
@@ -54,7 +52,7 @@ public class UserController : ControllerBase
 
     [HttpPut("{name}")]
     [Authorize]
-    [ProducesResponseType(typeof(Result<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     public async Task<ActionResult> UpdateAsync(
         [FromBody] UpdatedUserDto input,
         string name)
@@ -66,12 +64,10 @@ public class UserController : ControllerBase
 
             var user = await _userRepository.GetByNameAsync(name);
             user.SetPassword(input.NewPassword);
-            _unitOfWork.Commit();
-            var result = new Result<UserDto>
-            {
-                Output = new UserDto { Name = user.Name, Role = user.Role }
-            };
-            return Ok(result);
+            if (!_unitOfWork.Commit())
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            var userDto = new UserDto { Name = user.Name, Role = user.Role };
+            return Ok(userDto);
         }
         catch (Exception e)
         {
@@ -82,7 +78,7 @@ public class UserController : ControllerBase
 
     [HttpDelete("{name}")]
     [Authorize]
-    [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteAsync(
         string name)
     {
@@ -94,11 +90,7 @@ public class UserController : ControllerBase
 
             if (!await _userRepository.DeleteByNameAsync(name) && !_unitOfWork.Commit())
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            var result = new Result<bool>
-            {
-                Output = true
-            };
-            return Ok(result);
+            return Ok(true);
         }
         catch (Exception e)
         {

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cuco.API.Controllers;
 
+[ApiController]
+[Produces("application/json")]
 [Route("auth")]
 public class AuthenticationController : ControllerBase
 {

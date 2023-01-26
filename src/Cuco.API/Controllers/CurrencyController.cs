@@ -1,7 +1,6 @@
 using Cuco.Application.Contracts.Requests;
 using Cuco.Application.Contracts.Responses;
 using Cuco.Application.Services;
-using Cuco.Commons;
 using Cuco.Domain.Currencies.Extensions;
 using Cuco.Domain.Currencies.Models.DTOs;
 using Cuco.Domain.Currencies.Services.Repositories;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cuco.API.Controllers;
 
 [ApiController]
+[Produces("application/json")]
 [Route("api/currency")]
 public class CurrencyController : ControllerBase
 {
@@ -28,11 +28,10 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<IEnumerable<CurrencyDto>>
-            {
-                Output = await _currencyRepository.GetAllDtoAsync()
-            };
-            return Ok(result);
+            var currencies = await _currencyRepository.GetAllDtoAsync();
+            if (currencies is null || !currencies.Any())
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return Ok(currencies);
         }
         catch (Exception e)
         {
@@ -47,11 +46,10 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<CurrencyDto>
-            {
-                Output = (await _currencyRepository.GetBySymbolAsNoTrackingAsync(symbol))?.ToDto()
-            };
-            return Ok(result);
+            var currency = (await _currencyRepository.GetBySymbolAsNoTrackingAsync(symbol))?.ToDto();
+            if (currency is null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return Ok(currency);
         }
         catch (Exception e)
         {
@@ -69,11 +67,31 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<SaveCurrencyResponse>
-            {
-                Output = await service.AddCurrency(request)
-            };
-            return Ok(result);
+            var response = await service.AddCurrency(request);
+            if (response is null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    [HttpPut]
+    [Authorize(Roles = "ADMIN")]
+    [ProducesResponseType(typeof(SaveCurrencyResponse), StatusCodes.Status200OK)]
+    public async Task<ActionResult> UpdateAsync(
+        [FromServices] IUpdateCurrencyService service,
+        [FromBody] SaveCurrencyRequest request)
+    {
+        try
+        {
+            var response = await service.UpdateCurrency(request);
+            if (response is null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return Ok(response);
         }
         catch (Exception e)
         {
@@ -91,11 +109,10 @@ public class CurrencyController : ControllerBase
     {
         try
         {
-            var result = new Result<DeleteCurrencyResponse>
-            {
-                Output = await service.DeleteCurrency(symbol)
-            };
-            return Ok(result);
+            var response = await service.DeleteCurrency(symbol);
+            if (response is null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return Ok(response);
         }
         catch (Exception e)
         {

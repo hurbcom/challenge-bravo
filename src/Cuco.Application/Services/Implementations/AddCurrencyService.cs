@@ -32,7 +32,7 @@ internal class AddCurrencyService : IAddCurrencyService
     public async Task<SaveCurrencyResponse> AddCurrency(SaveCurrencyRequest request)
     {
         var validationErrors = await ValidateCurrency(request);
-        if (string.IsNullOrEmpty(validationErrors))
+        if (!string.IsNullOrEmpty(validationErrors))
             return GetResponse(validationErrors, false);
 
         var currency = request.IsReal ? await AddRealCurrency(request) : await AddCustomCurrency(request);
