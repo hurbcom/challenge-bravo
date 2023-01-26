@@ -25,7 +25,7 @@ internal class ConvertToDollarService : IConvertToDollarService
         var convertedValues = new decimal[symbols.Length];
         for (var i = 0; i < symbols.Length; i++)
         {
-            var symbol = symbols[i].ToUpper();
+            var symbol = symbols[i]?.ToUpper();
             if (string.IsNullOrEmpty(symbol))
             {
                 convertedValues[i] = DefaultNonValue;
@@ -45,8 +45,7 @@ internal class ConvertToDollarService : IConvertToDollarService
     {
         try
         {
-            var cachedValue = decimal.Parse(await _redisCache.GetAsync(symbol));
-            if (cachedValue > 0)
+            if(decimal.TryParse(await _redisCache.GetAsync(symbol), out var cachedValue))
                 return cachedValue;
             var currency = await _currencyRepository.GetBySymbolAsync(symbol);
             return currency.ValueInDollar;
