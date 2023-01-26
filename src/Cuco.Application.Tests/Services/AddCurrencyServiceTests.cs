@@ -1,6 +1,6 @@
-namespace Cuco.Application.Tests.GetCurrencyInUsd;
+namespace Cuco.Application.Tests.Services;
 
-public class GetCurrencyInUsdServiceTests
+public class AddCurrencyServiceTests
 {
     [SetUp]
     public void Setup()

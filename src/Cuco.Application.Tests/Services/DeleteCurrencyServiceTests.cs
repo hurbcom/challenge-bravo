@@ -1,4 +1,4 @@
-namespace Cuco.Application.Tests.DeleteCurrency;
+namespace Cuco.Application.Tests.Services;
 
 public class DeleteCurrencyServiceTests
 {
