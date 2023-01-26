@@ -11,6 +11,7 @@ public static class ErrorResources
         return $"There is no currency with Symbol: {symbol}";
     }
 
+    public const string UnexpectedErrorOccurred = "An unexpected error has occurred while trying to process your request.";
     public const string AddingCurrencyThatAlreadyExists = "The currency you are trying to add already exists.";
     public const string CurrencyNameMustExist = "A name must be specified for a currency.";
     public const string CurrencyNameLength = "The length of the name must be at most 100 characters.";
@@ -22,4 +23,6 @@ public static class ErrorResources
     public const string FailedToConvertCurrenciesToDollar = "Couldn't get the value in dollar from the currencies.";
     public const string FailedToUpdateCurrencyValue = "It wasn't possible to update the value of the currency.";
     public const string FailedToCommitChanges = "The changed were not saved.";
+    public const string FailedToRetrieveExchangeRatesFromExternalApi = "VALUE";
+    public const string FailedToGetListOfCurrencies = "VALUE;";
 }
