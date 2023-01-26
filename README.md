@@ -38,7 +38,7 @@ After you finish testing, to remove the containers from your computer simply run
 docker-compose down
 ```
 This command will build the API and its dependencies (*MySQL, Redis, Nginx*) and start them up as containers.
-The Load Balancer will be running on port 5100, and you can test if the API is working by making a GET request to http://localhost:5100/api/test/ping
+The Load Balancer will be running on port 5100, you can access the endpoints through there.
 
 I've provided an example .env file, which will be used to set up the environment variables inside the API and other servers. However, I recommend taking up some time to change them.
 You can use my App Id for the Open Exchange Rate, however, I do not guarantee that it will have any more uses left for this month. Therefore, I recommend you create your own [here](https://openexchangerates.org/).
@@ -64,7 +64,7 @@ Returns a JSON object with the converted amount and details of the conversion:
 ```
 
 ### Currency
-#### GET /api/currency/all:
+#### GET /api/currency:
 Retrieves a list of all currencies supported by the API.
 
 Example: GET /api/currency/all
@@ -132,7 +132,7 @@ Removes a currency from the list of supported currencies. The endpoint accepts t
 Example: DELETE /api/currency/D&D
 
 ### Auth
-#### PUT /api/auth/Authenticate:
+#### POST /api/auth/Authenticate:
 Generates a token for the user to be used on necessary endpoints.
 Example:
 ```JSON
