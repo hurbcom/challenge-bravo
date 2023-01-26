@@ -109,7 +109,7 @@ Example:
 ```
 
 #### PUT /api/currency/: ADMIN-ONLY 
-Adds a new currency to the list of supported currencies. 
+Updates a currency that is available on the list of currencies. 
 - The endpoint accepts a JSON object with the following properties:
   - name: The updated full name of the currency;
   - symbol: What will be used to find the currency to be changed.
