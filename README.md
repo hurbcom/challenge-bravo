@@ -52,7 +52,9 @@ Converts a given amount of money from one currency to another. The endpoint acce
 - from: the symbol of the currency to convert from (ex: USD, BRL)
 - to: the symbol of the currency to convert to (ex: EUR, BTC)
 - amount: the amount of money to convert
-Example: GET /api/currency/convert?from=USD&to=BRL&amount=100
+
+Example: GET /api/currency/convert?from=BTC&to=BRL&amount=100
+
 Returns a JSON object with the converted amount and details of the conversion:
 ```JSON
 {
@@ -64,7 +66,8 @@ Returns a JSON object with the converted amount and details of the conversion:
 ### Currency
 #### GET /api/currency/all:
 Retrieves a list of all currencies supported by the API.
-- Example: GET /api/currency/all
+
+Example: GET /api/currency/all
 - Returns a JSON array with the symbols of all supported currencies:
 ```JSON
 [
@@ -93,6 +96,7 @@ Adds a new currency to the list of supported currencies.
   - base_currency_symbol: The currency symbol used to create the new currency;
   - value_in_base_currency: The new currency value from the base currency;
   - is_real: If you want to add this as a live currency;
+  
 Example: 
 ```JSON
 {
@@ -111,6 +115,7 @@ Adds a new currency to the list of supported currencies.
   - symbol: What will be used to find the currency to be changed.
   - base_currency_symbol: The currency symbol used to update the currency;
   - base_currency_symbol: The updated currency value from the base currency;
+  
 Example: 
 ```JSON
 {
@@ -123,6 +128,7 @@ Example:
 
 #### DELETE /api/currency/{symbol}: ADMIN-ONLY
 Removes a currency from the list of supported currencies. The endpoint accepts the symbol of the currency to remove as a path parameter.
+
 Example: DELETE /api/currency/D&D
 
 ### Auth
