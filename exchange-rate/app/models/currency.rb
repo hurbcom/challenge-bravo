@@ -7,10 +7,7 @@ class Currency < ApplicationRecord
     validates :code, presence: true, uniqueness: true, length: 3..5
 
     # All codes must be saved uppercase
-    before_save { code.upcase! }
-
-    # protected
-
+    before_save { code.upcase! if code.present? }
 
     def create_rate(to_id:, rate:, source: nil)
         # Create rate
@@ -20,15 +17,4 @@ class Currency < ApplicationRecord
         inverse_rates.create( { from_currency_id: to_id, rate: 1/rate, source: source, date: Time.now } )
     end
 
-    # private
-
-    # def create_rate(to_id:, rate:, source: nil)
-    #     # Create rate
-    #     rates.create( { to_currency_id: to_id, rate: rate, source: source } )
-    # end
-
-    # def create_inverse_rate(rate:, source:)
-    #     # Create inverse rate
-    #     inverse_rates.create( { from: id, rate: 1/rate.to_f, source: source } )
-    # end
 end

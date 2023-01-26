@@ -16,7 +16,7 @@ class V1::CurrencyController < ApplicationController
     def create
         currency = Currency.new(currency_params)
         if currency.save
-            render json: currency
+            render json: currency, status: :created
         else
             render json: currency.errors, status: :unprocessable_entity
         end

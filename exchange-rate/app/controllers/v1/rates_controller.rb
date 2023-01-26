@@ -6,14 +6,14 @@ class V1::RatesController < ApplicationController
     def index
         rate = RatesService.new(to: params[:to], from: params[:from]).get_rate
         if rate
-            puts "wtf #{rate}"
             render json: { rate: rate }
         else
-            render json: nil, status: :internal_server_error
+            render json: nil, status: :not_found
         end
     end
 
     # POST /v1/rates?currency_id=1
+    # Rates are not updated, they are recreated to keep historical data.
     def create
         # Transaction so if both rates aren't created it's reverted
         Rate.transaction do
@@ -24,9 +24,10 @@ class V1::RatesController < ApplicationController
             # It's also easier to scale, i.e use different buy/selling prices. Easier to change.
             currency_from.create_rate(
                 to_id: currency_to.id,
-                rate: rate_params[:rate],
+                rate: rate_params[:rate].to_d,
                 source: rate_params[:source]
             )
+
             render json: { message: "Rate created successfully." }, status: :created
         rescue => e
             render json: { errors: e }, status: :unprocessable_entity
@@ -41,7 +42,7 @@ class V1::RatesController < ApplicationController
     end
 
     def rate_to_big_decimal
-        rate_params[:rate].to_d(10)
+        rate_params[:rate].to_d
     end
 
 end
