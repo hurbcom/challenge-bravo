@@ -1,7 +1,6 @@
-using Cuco.Application.Base;
-using Cuco.Application.Currencies.GetCurrencyInUSD.Models;
-using Cuco.Application.CurrencyConversion.Models;
-using Cuco.Application.CurrencyConversion.Services;
+using Cuco.Application.Contracts.Requests;
+using Cuco.Application.Services;
+using Cuco.Application.Services.Implementations;
 using Moq;
 
 namespace Cuco.Application.Tests.CurrencyConversion;
@@ -13,7 +12,7 @@ public class CurrencyConversionServiceTests
     private const string CouldNotFindCurrenciesValueMessageBase =
         "Couldn't get the value in dollar from the currency with symbol: ";
 
-    private readonly Mock<IService<GetCurrencyInUsdInput, GetCurrencyInUsdOutput>> _getCurrencyInUsdServiceMock = new();
+    private readonly Mock<IConvertToDollarService> _getCurrencyInUsdServiceMock = new();
 
     private readonly Random _random = new();
 
@@ -28,9 +27,10 @@ public class CurrencyConversionServiceTests
     [Test]
     public async Task Convert_SameCurrency_ReturnsSameAmountAndMessage()
     {
-        var amount = _random.Next();
+        const decimal amount = 10_000m;
         const string currency = "currency";
-        var result = await _currencyConversionService.Handle(new CurrencyConversionInput
+
+        var result = await _currencyConversionService.ConvertCurrency(new CurrencyConversionRequest
             { FromCurrency = currency, ToCurrency = currency, Amount = amount });
 
         Assert.Multiple(() =>
@@ -44,15 +44,18 @@ public class CurrencyConversionServiceTests
     [TestCase("not", "hasValue")]
     public async Task Convert_OneCurrenciesDidNotFindValue_ReturnsNullAndMessage(string fromCurrency, string toCurrency)
     {
-        var amount = _random.Next();
-        var failOutput = new GetCurrencyInUsdOutput { ValueInDollar = 0 };
-        var validOutput = new GetCurrencyInUsdOutput { ValueInDollar = 5 };
+        const decimal amount = 10_000m;
 
-        _getCurrencyInUsdServiceMock.Setup(g => g.Handle(It.IsAny<GetCurrencyInUsdInput>()))
-            .ReturnsAsync((GetCurrencyInUsdInput i) =>
-                i.Symbol == "hasValue" ? validOutput : failOutput);
+        _getCurrencyInUsdServiceMock.Setup(g => g.Convert(It.IsAny<string[]>()))
+            .ReturnsAsync((string[] symbols) =>
+            {
+                var values = new decimal[2];
+                for (var i = 0; i < symbols.Length; i++)
+                    values[i] = symbols[i] == "hasValue" ? 5 : 0;
+                return values;
+            });
 
-        var result = await _currencyConversionService.Handle(new CurrencyConversionInput
+        var result = await _currencyConversionService.ConvertCurrency(new CurrencyConversionRequest
             { FromCurrency = fromCurrency, ToCurrency = toCurrency, Amount = amount });
 
         Assert.Multiple(() =>
@@ -66,14 +69,14 @@ public class CurrencyConversionServiceTests
     public async Task Convert_BothCurrenciesDidNotFindValue_ReturnsNullAndMessage()
     {
         var amount = _random.Next();
+
         const string fromCurrency = "a";
         const string toCurrency = "b";
-        var failOutput = new GetCurrencyInUsdOutput { ValueInDollar = 0 };
+        var failOutput = new decimal[] { 0, 0 };
 
-        _getCurrencyInUsdServiceMock.Setup(g => g.Handle(It.IsAny<GetCurrencyInUsdInput>()))
-            .ReturnsAsync(failOutput);
+        _getCurrencyInUsdServiceMock.Setup(g => g.Convert(It.IsAny<string[]>())).ReturnsAsync(failOutput);
 
-        var result = await _currencyConversionService.Handle(new CurrencyConversionInput
+        var result = await _currencyConversionService.ConvertCurrency(new CurrencyConversionRequest
             { FromCurrency = fromCurrency, ToCurrency = toCurrency, Amount = amount });
 
         Assert.Multiple(() =>
@@ -88,21 +91,35 @@ public class CurrencyConversionServiceTests
     public async Task Convert_BothCurrenciesFoundValue_ReturnsValueAndMessage()
     {
         var amount = _random.Next();
+
         const string fromCurrency = "a";
-        var fromCurrencyOutput = new GetCurrencyInUsdOutput { ValueInDollar = 5 };
+        const decimal fromCurrencyValue = 5;
         const string toCurrency = "b";
-        var toCurrencyOutput = new GetCurrencyInUsdOutput { ValueInDollar = 2 };
+        const decimal toCurrencyValue = 2;
 
-        _getCurrencyInUsdServiceMock.Setup(g => g.Handle(It.IsAny<GetCurrencyInUsdInput>()))
-            .ReturnsAsync((GetCurrencyInUsdInput i) => i.Symbol == "a" ? fromCurrencyOutput : toCurrencyOutput);
+        _getCurrencyInUsdServiceMock.Setup(g => g.Convert(It.IsAny<string[]>()))
+            .ReturnsAsync((string[] symbols) =>
+            {
+                var values = new decimal[2];
+                for (var i = 0; i < symbols.Length; i++)
+                {
+                    values[i] = symbols[i] switch
+                    {
+                        "a" => fromCurrencyValue,
+                        "b" => toCurrencyValue,
+                        _ => 0
+                    };
+                }
+                return values;
+            });
 
-        var result = await _currencyConversionService.Handle(new CurrencyConversionInput
+        var result = await _currencyConversionService.ConvertCurrency(new CurrencyConversionRequest
             { FromCurrency = fromCurrency, ToCurrency = toCurrency, Amount = amount });
 
         Assert.Multiple(() =>
         {
             Assert.That(result.ConvertedAmount,
-                Is.EqualTo(toCurrencyOutput.ValueInDollar * amount / fromCurrencyOutput.ValueInDollar));
+                Is.EqualTo(fromCurrencyValue * amount / toCurrencyValue));
             Assert.That(result.Details, Is.EqualTo($"Successfully converted from {fromCurrency} to {toCurrency}"));
         });
     }
