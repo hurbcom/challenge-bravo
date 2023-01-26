@@ -22,9 +22,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_18_222501) do
   end
 
   create_table "rates", force: :cascade do |t|
-    t.float "rate", null: false
+    t.decimal "rate", precision: 10, scale: 6, null: false
     t.bigint "from_currency_id", null: false
     t.bigint "to_currency_id", null: false
+    t.datetime "date", null: false
     t.string "source"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

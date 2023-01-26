@@ -8,9 +8,11 @@ class AbstractRates
         begin
             response = conn.get('live/', {base: @from, target: @to})
         rescue
+            puts 'ooh abstract'
             raise  RatesService::AbstractAPIError, "Error while fetching rates from Abstract API"
         end
         if response.status != 200
+            puts 'ta de sacanagem?'
             raise  RatesService::AbstractAPIError, "Response status was #{response.status}"
         end
 

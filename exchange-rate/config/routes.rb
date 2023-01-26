@@ -5,6 +5,6 @@ Rails.application.routes.draw do
     # root "articles#index"
     namespace :v1 do
         resources :rates
-        resources :currencies
+        resources :currency
     end
 end
