@@ -3,7 +3,7 @@ import { Currency } from "../entities/Currency";
 interface IConvertedCoins {
     from: string;
     to: string;
-    amount: number;
+    amount: string;
 }
 interface ICreateCurrencyDTO {
     code: string;
@@ -11,6 +11,8 @@ interface ICreateCurrencyDTO {
     name: string;
     high: string;
     low: string;
+    bid: string;
+    ask: string;
     type?: string;
 }
 
@@ -23,6 +25,8 @@ interface ICurrencyRepository {
         name,
         high,
         low,
+        bid,
+        ask,
     }: ICreateCurrencyDTO): Promise<void>;
     defaultCoins(): Promise<void>;
     convertCoins({ from, to, amount }: IConvertedCoins): Promise<number>;

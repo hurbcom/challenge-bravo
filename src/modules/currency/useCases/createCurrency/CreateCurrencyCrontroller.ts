@@ -6,13 +6,15 @@ class CreateCurrencyController {
     constructor(private createCurrencyUseCase: CreateCurrencyUseCase) {}
 
     async handle(request: Request, response: Response): Promise<Response> {
-        const { code, codein, name, high, low } = request.body;
+        const { code, codein, bid, ask, name, high, low } = request.body;
 
         await this.createCurrencyUseCase.execute({
             code,
             codein,
             name,
             high,
+            bid,
+            ask,
             low,
         });
 

@@ -1,6 +1,8 @@
 import axios from "axios";
+import { round } from "lodash";
 import { getRepository, Repository } from "typeorm";
 
+import { convertStringToValue } from "../../../../utils/index";
 import { Currency } from "../../entities/Currency";
 import { ALL_COINS, QUOTATION_API } from "../../services/connections";
 import {
@@ -22,6 +24,8 @@ class CurrencyRepository implements ICurrencyRepository {
         name,
         high,
         low,
+        bid,
+        ask,
         type = "AWSOME-API",
     }: ICreateCurrencyDTO): Promise<void> {
         const currency = this.repository.create({
@@ -30,6 +34,8 @@ class CurrencyRepository implements ICurrencyRepository {
             name,
             high,
             low,
+            bid,
+            ask,
             type,
         });
         await this.repository.save(currency);
@@ -59,8 +65,18 @@ class CurrencyRepository implements ICurrencyRepository {
                         code: request.data[`${coins}USD`].code,
                         codein: request.data[`${coins}USD`].codein,
                         name: request.data[`${coins}USD`].name,
-                        high: request.data[`${coins}USD`].high,
-                        low: request.data[`${coins}USD`].low,
+                        high: convertStringToValue(
+                            request.data[`${coins}USD`].high
+                        ),
+                        low: convertStringToValue(
+                            request.data[`${coins}USD`].low
+                        ),
+                        bid: convertStringToValue(
+                            request.data[`${coins}USD`].bid
+                        ),
+                        ask: convertStringToValue(
+                            request.data[`${coins}USD`].ask
+                        ),
                         type: "AWSOME-API",
                     });
 
@@ -73,6 +89,8 @@ class CurrencyRepository implements ICurrencyRepository {
                                 name: awsomeApiData.name,
                                 high: awsomeApiData.high,
                                 low: awsomeApiData.low,
+                                bid: awsomeApiData.bid,
+                                ask: awsomeApiData.ask,
                                 type: awsomeApiData.type,
                             })
                             .where("currency.code = :code", {
@@ -88,6 +106,17 @@ class CurrencyRepository implements ICurrencyRepository {
                 throw new Error("Cannot connect to awsomeapi");
             })
         );
+    }
+
+    async convertCoins({ from, to, amount }: IConvertedCoins): Promise<number> {
+        const askFrom = await this.findByCode(from);
+        const askTo = await this.findByCode(to);
+
+        const result =
+            (parseFloat(askFrom.ask) / parseFloat(askTo.ask)) *
+            parseFloat(amount);
+
+        return round(result, 5);
     }
 }
 

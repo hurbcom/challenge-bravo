@@ -32,6 +32,14 @@ export class CreateCurrency1674423830519 implements MigrationInterface {
                         type: "varchar",
                     },
                     {
+                        name: "bid",
+                        type: "varchar",
+                    },
+                    {
+                        name: "ask",
+                        type: "varchar",
+                    },
+                    {
                         name: "type",
                         type: "varchar",
                     },

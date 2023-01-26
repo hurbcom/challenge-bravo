@@ -22,6 +22,12 @@ class Currency {
     low: string;
 
     @Column()
+    bid: string;
+
+    @Column()
+    ask: string;
+
+    @Column()
     type: string;
 
     @CreateDateColumn()

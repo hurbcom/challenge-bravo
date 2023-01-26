@@ -4,6 +4,8 @@ interface IRquest {
     code: string;
     codein: string;
     name: string;
+    bid: string;
+    ask: string;
     high: string;
     low: string;
 }
@@ -11,7 +13,15 @@ interface IRquest {
 class CreateCurrencyUseCase {
     constructor(private currencyRepository: ICurrencyRepository) {}
 
-    async execute({ code, codein, name, high, low }: IRquest): Promise<void> {
+    async execute({
+        code,
+        codein,
+        bid,
+        ask,
+        name,
+        high,
+        low,
+    }: IRquest): Promise<void> {
         const currencyAlredyExists = await this.currencyRepository.findByCode(
             code
         );
@@ -20,7 +30,15 @@ class CreateCurrencyUseCase {
             throw new Error("Coin alredy exists in database!");
         }
 
-        this.currencyRepository.create({ code, codein, name, high, low });
+        this.currencyRepository.create({
+            code,
+            ask,
+            bid,
+            codein,
+            name,
+            high,
+            low,
+        });
     }
 }
 
