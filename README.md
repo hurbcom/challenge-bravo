@@ -1,82 +1,129 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+<p align="center"><a href="https://www.hurb.com/br/" target="_blank"><img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" width="200" alt="LaraHurbvel Logo"></a></p>
 
-[[English](README.md) | [Portuguese](README.pt.md)]
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
 
-The API must convert between the following currencies:
+# Desafio Bravo
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+O desafio se baseava em criar uma API com retorno em JSON de conversão de moedas. Podendo inclusive criar moedas fictícias.
+A API precisa converter entre as seguintes moedas:
 
-Other coins could be added as usage.
+- USD
+- BRL
+- EUR
+- BTC
+- ETH
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+Outras moedas podem ser adicionadas conforme o uso.
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+## Linguagem de programação
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Escolhi o PHP por ser a liguagem que tive mais contato durante minha carreira como programador e fiz uso do framework Laravel na versão 9
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+Segue abaixo as pastas e arquivos que criei.
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+```
+- app
+    - Console
+        - Commands
+            - GetUpdatedCurrencyValues.php
+        - Kernel.php
+    - Helper
+        - SingleCurrency.php
+    - Http
+        - Controllers
+            - ConvertController.php
+            - CurrencyController.php
+        - Requests
+            - CurrencyRequest.php
+    - Interfaces
+        - CrudInterface.php
+    - Models
+        - Currency.php
+    - Repositories
+        - CurrencyRepository.php
+    - Services
+        - CurrencyApiService.php
+    - Traits
+        - ResponseTrait.php
+- database
+    - migrations
+        - 2023_01_19_182835_create_currencies_table.php
+    - seeders
+        - DatabaseSeeder.php
+- routes
+    - api.php
+- tests
+    - Feature
+        - CurrencyTest.php
+```
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+## Para rodar o sistema
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+Após baixar o sistema, entre na pasta raiz e rode exatamente o seguinte código.
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+```
+docker-compose up -d
+```
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+Rode o seguinte comando para entrar no container da aplicação.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+```
+docker-compose exec hurb_bravo bash
+```
 
-## Requirements
+Rode o seguinte comando para cadastrar as dependencias.
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+```
+composer install
+```
 
-## Evaluation criteria
+Por fim rode o seguinte comando
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+```
+php artisan migrate --seed && php artisan schedule:work
+```
 
-## Doubts
+Para rodas teste
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+```
+php artisan test
+```
 
-Godspeed! ;)
+## Testar a API
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Na raiz do projeto estou disponibilizando um arquivo chamado postman.json para testar os endpoints nesta ferramenta caso a utilizem.
+
+Do contrario podem seguir os exemplos
+
+- http://localhost:8180/api/currency (get) Lista as moedas no banco
+- http://localhost:8180/api/currency (post) Cria moeda no banco
+- http://localhost:8180/api/currency/{id} (put) Altera a moeda no banco
+- http://localhost:8180/api/currency/{id} (delete) Deleta a moeda no banco
+
+- http://localhost:8180/api/convert/{FROM}/{TO}/{AMOUNT} (get) Faz a conversão de valores.
+
+Como podem ver, eu criei a rota de conversão com uma URL mais limpa
+
+## Funcionalidade que criei
+
+O codigo tem um recurso que é iniciado logo ao executar o último comando de instalação. O comando que estou me referindo é o "php artisan schedule:work" em que irá buscar pelo arquivo Kernel.php e executar uma função de cron job a cada 1 minuto.
+
+Essa função faz as seguintes etapas
+
+1. Busca no banco de dados todas as moedas verdadeiras
+2. Envia essa lista para a API externa que retorna os valores atualizados das moedas
+3. Atualiza essa lista de moedas no banco e no Redis
+
+Os usuarios vão consultar dados pelo Redis, evitando queda de meu sistema e de terceiros. Alem de deixar o sistema mais performático e com menos consultas no banco de dados e request externo
+
+## Agradecimento
+
+Só tenho a agradecer a toda equipe Hurb, tenho muita vontade de fazer parte do time e tenho certeza que irei me dedicar ao máximo se eu conseguir a vaga.
+
+Gostaria muito da oportunidade, seja ela júnior, pleno ou sênior. O mais importante pra mim é fazer parte do time e tenho certeza que tenho muito a oferecer e irei me dedicar muito. O que tiver que aprender, ajutar, melhorar irei fazer.
+
+Estarei a disposição para qualquer dúvida.
+
+❤️ Muito obrigado.

@@ -1,0 +1,98 @@
+{
+	"info": {
+		"_postman_id": "71df7938-3249-448b-b101-9ec82f71d711",
+		"name": "Hurb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "9796786"
+	},
+	"item": [
+		{
+			"name": "Read all currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:80/api/currency"
+			},
+			"response": []
+		},
+		{
+			"name": "Create currency",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"acronym\": \"$NEW\",\r\n    \"name\": \"Nova moeda\",\r\n    \"amount\": \"1.99\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:80/api/currency"
+			},
+			"response": []
+		},
+		{
+			"name": "Update currency",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"acronym\": \"bb25\",\r\n    \"name\": \"moeda modificada 13\",\r\n    \"amount\": \"40\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:80/api/currency/2"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete currency",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:80/api/currency/3"
+			},
+			"response": []
+		},
+		{
+			"name": "Convert currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:80/api/convert/CAD/BRL/50"
+			},
+			"response": []
+		},
+		{
+			"name": "Supported currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:80/api/supported"
+			},
+			"response": []
+		},
+		{
+			"name": "Latet currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:80/api/latest"
+			},
+			"response": []
+		}
+	]
+}
