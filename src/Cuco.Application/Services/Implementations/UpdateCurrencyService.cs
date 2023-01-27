@@ -5,22 +5,23 @@ using Cuco.Commons.Resources;
 using Cuco.Domain.Currencies.Extensions;
 using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace Cuco.Application.Services.Implementations;
 
 public class UpdateCurrencyService : IUpdateCurrencyService
 {
-    private readonly IConvertToDollarService _getCurrencyInUsdService;
+    private readonly IGetDollarValueService _getCurrencyInUsdValueService;
     private readonly ICurrencyRepository _currencyRepository;
     private readonly IRedisCache _redisCache;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateCurrencyService(IConvertToDollarService getCurrencyInUsdService,
+    public UpdateCurrencyService(IGetDollarValueService getCurrencyInUsdValueService,
         ICurrencyRepository currencyRepository,
         IRedisCache redisCache,
         IUnitOfWork unitOfWork)
     {
-        _getCurrencyInUsdService = getCurrencyInUsdService;
+        _getCurrencyInUsdValueService = getCurrencyInUsdValueService;
         _currencyRepository = currencyRepository;
         _redisCache = redisCache;
         _unitOfWork = unitOfWork;
@@ -29,26 +30,26 @@ public class UpdateCurrencyService : IUpdateCurrencyService
     public async Task<SaveCurrencyResponse> UpdateCurrency(SaveCurrencyRequest request)
     {
         var validationErrors = await ValidateCurrency(request);
-        if (string.IsNullOrEmpty(validationErrors))
-            return GetResponse(validationErrors, false);
+        if (!string.IsNullOrEmpty(validationErrors))
+            return GetResponse(validationErrors, StatusCodes.Status400BadRequest);
 
         var currency = await _currencyRepository.GetBySymbolAsync(request.Symbol);
         if (!currency.Available && HasValueChanged(request) && !await UpdateCurrencyValue(request, currency))
-            return GetResponse(ErrorResources.FailedToUpdateCurrencyValue, false, currency);
+            return GetResponse(ErrorResources.FailedToUpdateCurrencyValue, StatusCodes.Status503ServiceUnavailable, currency);
 
         if (HasNameChanged(request, currency))
             currency.SetName(request.Name);
 
         return _unitOfWork.Commit()
-            ? GetResponse(DetailsResources.SuccessfullyUpdatedCurrency, true, currency)
-            : GetResponse(ErrorResources.FailedToCommitChanges, false, currency);
+            ? GetResponse(DetailsResources.SuccessfullyUpdatedCurrency, StatusCodes.Status200OK, currency)
+            : GetResponse(ErrorResources.FailedToCommitChanges, StatusCodes.Status503ServiceUnavailable, currency);
     }
 
     private async Task<bool> UpdateCurrencyValue(SaveCurrencyRequest request, Currency currency)
     {
         try
         {
-            var valueInDollar = (await _getCurrencyInUsdService.Convert(new[] { request.BaseCurrencySymbol }))[0];
+            var valueInDollar = (await _getCurrencyInUsdValueService.Convert(new[] { request.BaseCurrencySymbol }))[0];
             if (valueInDollar == 0)
                 return false;
 
@@ -76,12 +77,12 @@ public class UpdateCurrencyService : IUpdateCurrencyService
         return !string.IsNullOrEmpty(request.BaseCurrencySymbol) && request.ValueInBaseCurrency.HasValue;
     }
 
-    private static SaveCurrencyResponse GetResponse(string details, bool result, Currency currency = null)
+    private static SaveCurrencyResponse GetResponse(string details, int statusCode, Currency currency = null)
     {
         return new SaveCurrencyResponse
         {
             Currency = currency?.ToDto(),
-            Result = result,
+            StatusCode = statusCode,
             Details = details
         };
     }

@@ -19,10 +19,12 @@ public static class ErrorResources
     public const string SymbolLength = "The length of the symbol must be between 3 and 10 characters.";
     public const string BaseCurrencyMustExistForSaving = "A base currency must be specified if you are saving a custom currency.";
     public const string ValueInBaseCurrencyMustBeGreaterThanZero = "A currency with negative value cannot be created.";
-    public const string CurrencyCreationProblem = "A problem has occurred while trying to create the currencies.";
+    public const string CurrencyCreationProblem = "A problem has occurred while trying to create the currency.";
     public const string FailedToConvertCurrenciesToDollar = "Couldn't get the value in dollar from the currencies.";
     public const string FailedToUpdateCurrencyValue = "It wasn't possible to update the value of the currency.";
-    public const string FailedToCommitChanges = "The changed were not saved.";
-    public const string FailedToRetrieveExchangeRatesFromExternalApi = "VALUE";
-    public const string FailedToGetListOfCurrencies = "VALUE;";
+    public const string FailedToCommitChanges = "Changes were not saved.";
+    public const string FailedToRetrieveExchangeRatesFromExternalApi = "Failed to get the earliest exchange rates from the external API.";
+    public const string FailedToGetListOfCurrencies = "Couldn't the list of saved currencies.";
+    public const string FailedToDeleteCurrency = "An error occurred while trying to delete curerncy.";
+    public const string CannotConvertFromAEmptySymbol = "The symbols of the conversion must be given.";
 }

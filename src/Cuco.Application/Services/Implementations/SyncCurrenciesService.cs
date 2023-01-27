@@ -5,6 +5,7 @@ using Cuco.Commons.Redis;
 using Cuco.Commons.Resources;
 using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace Cuco.Application.Services.Implementations;
@@ -16,13 +17,15 @@ public class SyncCurrenciesService : ISyncCurrenciesService
     private readonly IRedisCache _redisCache;
     private readonly IUnitOfWork _unitOfWork;
 
-    public SyncCurrenciesService(ICurrencyRepository currencyRepository, IRedisCache redisCache, IUnitOfWork unitOfWork,
-        ICurrencyExchangeRateAdapter currencyExchangeRateAdapter)
+    public SyncCurrenciesService(ICurrencyExchangeRateAdapter currencyExchangeRateAdapter,
+        ICurrencyRepository currencyRepository,
+        IRedisCache redisCache,
+        IUnitOfWork unitOfWork)
     {
+        _currencyExchangeRateAdapter = currencyExchangeRateAdapter;
         _currencyRepository = currencyRepository;
         _redisCache = redisCache;
         _unitOfWork = unitOfWork;
-        _currencyExchangeRateAdapter = currencyExchangeRateAdapter;
     }
 
 
@@ -33,25 +36,25 @@ public class SyncCurrenciesService : ISyncCurrenciesService
         {
             var exchangeRates = await _currencyExchangeRateAdapter.GetAllRates();
             if (exchangeRates?.Rates is null || !exchangeRates.Rates.Any())
-                return GetResponse(ErrorResources.FailedToRetrieveExchangeRatesFromExternalApi, false);
+                return GetResponse(ErrorResources.FailedToRetrieveExchangeRatesFromExternalApi, StatusCodes.Status502BadGateway);
 
             timestamp = exchangeRates.Timestamp;
             var currencies = (await _currencyRepository.GetAllAsync())?.ToList();
             if (currencies is null || !currencies.Any())
-                return GetResponse(ErrorResources.FailedToGetListOfCurrencies, false);
+                return GetResponse(ErrorResources.FailedToGetListOfCurrencies, StatusCodes.Status503ServiceUnavailable);
 
             await SyncNotAvailableCurrencies(currencies, exchangeRates);
             SyncAvailableCurrencies(exchangeRates, currencies);
             await UpdateRedisWithNewExchangesAndSymbols(exchangeRates);
         }
-        catch (Exception e)
+        catch
         {
-            Console.WriteLine("Failed to sync Currencies values with the external API." +
-                              $"\nError: {e.Message}");
-            throw new Exception(e.Message);
+            return GetResponse(ErrorResources.UnexpectedErrorOccurred, StatusCodes.Status500InternalServerError);
         }
 
-        return GetResponse(DetailsResources.SuccessfullySyncedCurrencies, _unitOfWork.Commit(), timestamp);
+        return _unitOfWork.Commit()
+            ? GetResponse(DetailsResources.SuccessfullySyncedCurrencies, StatusCodes.Status200OK, timestamp)
+            : GetResponse(ErrorResources.FailedToCommitChanges, StatusCodes.Status503ServiceUnavailable, timestamp);
     }
 
     private async Task SyncNotAvailableCurrencies(List<Currency> currencies, ExchangeRateResponse exchangeRates)
@@ -66,7 +69,7 @@ public class SyncCurrenciesService : ISyncCurrenciesService
         }
     }
 
-    private void SyncAvailableCurrencies(ExchangeRateResponse exchangeRates, List<Currency> currencies)
+    private static void SyncAvailableCurrencies(ExchangeRateResponse exchangeRates, IList<Currency> currencies)
     {
         foreach (var symbol in exchangeRates.Rates.Keys)
         {
@@ -77,7 +80,6 @@ public class SyncCurrenciesService : ISyncCurrenciesService
             currency.SetValueInDollar(rate);
             currency.SetUpdatedAtUnix(exchangeRates.Timestamp);
         }
-        _unitOfWork.Commit();
     }
 
     private async Task UpdateRedisWithNewExchangesAndSymbols(ExchangeRateResponse exchangeRates)
@@ -87,12 +89,12 @@ public class SyncCurrenciesService : ISyncCurrenciesService
         await _redisCache.SetAsync(RedisValues.CurrencySymbolsKey, symbols);
     }
 
-    private static SyncCurrenciesResponse GetResponse(string details, bool result, long timestamp = 0)
+    private static SyncCurrenciesResponse GetResponse(string details, int statusCode, long timestamp = 0)
     {
         return new SyncCurrenciesResponse
         {
             Details = details,
-            Result = result,
+            StatusCode = statusCode,
             Timestamp = timestamp
         };
     }

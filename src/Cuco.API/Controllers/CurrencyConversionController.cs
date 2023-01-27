@@ -1,3 +1,4 @@
+using Cuco.API.Extensions;
 using Cuco.Application.Contracts.Requests;
 using Cuco.Application.Contracts.Responses;
 using Cuco.Application.Services;
@@ -12,6 +13,8 @@ public class CurrencyConversionController : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(CurrencyConversionResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> ConvertCurrencyAsync(
         [FromServices] ICurrencyConversionService service,
         [FromQuery] string from,
@@ -26,9 +29,9 @@ public class CurrencyConversionController : ControllerBase
                 ToCurrency = to,
                 Amount = amount
             });
-            if (response is null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            return Ok(response);
+            return response.IsOkay()
+                ? Ok(response)
+                : response.ToObjectResult();
         }
         catch
         {

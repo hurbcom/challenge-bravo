@@ -6,6 +6,7 @@ using Cuco.Commons.Resources;
 using Cuco.Domain.Currencies.Extensions;
 using Cuco.Domain.Currencies.Models.Entities;
 using Cuco.Domain.Currencies.Services.Repositories;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace Cuco.Application.Services.Implementations;
@@ -33,14 +34,15 @@ internal class AddCurrencyService : IAddCurrencyService
     {
         var validationErrors = await ValidateCurrency(request);
         if (!string.IsNullOrEmpty(validationErrors))
-            return GetResponse(validationErrors, false);
+            return GetResponse(validationErrors, StatusCodes.Status400BadRequest);
 
         var currency = request.IsReal ? await AddRealCurrency(request) : await AddCustomCurrency(request);
-        if (currency is null) return GetResponse(ErrorResources.CurrencyCreationProblem, false);
+        if (currency is null)
+            return GetResponse(ErrorResources.CurrencyCreationProblem, StatusCodes.Status503ServiceUnavailable);
         _currencyRepository.Insert(currency);
         return _unitOfWork.Commit()
-            ? GetResponse(DetailsResources.SuccessfullyAddedCurrency, true, currency)
-            : GetResponse(ErrorResources.FailedToCommitChanges, false, currency);
+            ? GetResponse(DetailsResources.SuccessfullyAddedCurrency, StatusCodes.Status201Created, currency)
+            : GetResponse(ErrorResources.FailedToCommitChanges, StatusCodes.Status503ServiceUnavailable, currency);
     }
 
     private async Task<Currency> AddRealCurrency(SaveCurrencyRequest request)
@@ -52,8 +54,9 @@ internal class AddCurrencyService : IAddCurrencyService
         if (!symbols.Contains(request.Symbol.ToUpper()))
             return null;
 
-        var cachedValue = decimal.Parse(await _redisCache.GetAsync(request.Symbol));
-        return cachedValue == 0 ? null : new Currency(request.Name, request.Symbol, cachedValue, DateTime.Now, true);
+        return decimal.TryParse(await _redisCache.GetAsync(request.Symbol.ToUpper()), out var cachedValue)
+            ? new Currency(request.Name, request.Symbol, cachedValue, DateTime.Now, true)
+            : null;
     }
 
     private async Task<Currency> AddCustomCurrency(SaveCurrencyRequest request)
@@ -83,12 +86,12 @@ internal class AddCurrencyService : IAddCurrencyService
         }
     }
 
-    private static SaveCurrencyResponse GetResponse(string details, bool result, Currency currency = null)
+    private static SaveCurrencyResponse GetResponse(string details, int statusCode, Currency currency = null)
     {
         return new SaveCurrencyResponse
         {
             Currency = currency?.ToDto(),
-            Result = result,
+            StatusCode = statusCode,
             Details = details
         };
     }
@@ -96,7 +99,7 @@ internal class AddCurrencyService : IAddCurrencyService
     private async Task<string> ValidateCurrency(SaveCurrencyRequest request)
     {
         var currencyValidationErrors = request.IsValid();
-        if (string.IsNullOrEmpty(currencyValidationErrors))
+        if (!string.IsNullOrEmpty(currencyValidationErrors))
         {
             return currencyValidationErrors;
         }

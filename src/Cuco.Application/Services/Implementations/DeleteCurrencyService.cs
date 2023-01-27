@@ -1,6 +1,7 @@
 using Cuco.Application.Contracts.Responses;
 using Cuco.Commons.Resources;
 using Cuco.Domain.Currencies.Services.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace Cuco.Application.Services.Implementations;
 
@@ -20,17 +21,16 @@ public class DeleteCurrencyService : IDeleteCurrencyService
         try
         {
             var errorMessages = await ValidateSymbol(symbol);
-            if (!string.IsNullOrEmpty(errorMessages)) return GetOutput(false, errorMessages);
+            if (!string.IsNullOrEmpty(errorMessages)) return GetOutput(StatusCodes.Status400BadRequest, errorMessages);
 
-            return await _currencyRepository.DeleteBySymbolASync(symbol)
-                ? GetOutput(true, $"Deleted currency with Symbol {symbol} successfully")
-                : GetOutput(false, $"An unexpected error occurred while trying to remove symbol {symbol}.");
+            return await _currencyRepository.DeleteBySymbolAsync(symbol)
+                ? GetOutput(StatusCodes.Status200OK, DetailsResources.SuccessfullyDeletedCurrency)
+                : GetOutput(StatusCodes.Status503ServiceUnavailable, ErrorResources.FailedToDeleteCurrency);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return GetOutput(false, $"An error occurred while trying to remove symbol {symbol}." +
-                                    $"\nError:{e.Message}");
+            return GetOutput(StatusCodes.Status503ServiceUnavailable, ErrorResources.UnexpectedErrorOccurred);
         }
     }
 
@@ -54,11 +54,11 @@ public class DeleteCurrencyService : IDeleteCurrencyService
         return string.Empty;
     }
 
-    private static DeleteCurrencyResponse GetOutput(bool result, string details)
+    private static DeleteCurrencyResponse GetOutput(int statusCode, string details)
     {
         return new DeleteCurrencyResponse
         {
-            Result = result,
+            StatusCode = statusCode,
             Details = details
         };
     }

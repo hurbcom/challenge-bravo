@@ -1,3 +1,4 @@
+using Cuco.API.Extensions;
 using Cuco.Application.Contracts.Requests;
 using Cuco.Application.Contracts.Responses;
 using Cuco.Application.Services;
@@ -61,6 +62,8 @@ public class CurrencyController : ControllerBase
     [HttpPost]
     [Authorize(Roles = "ADMIN")]
     [ProducesResponseType(typeof(SaveCurrencyResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status503ServiceUnavailable)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> AddAsync(
         [FromServices] IAddCurrencyService service,
         [FromBody] SaveCurrencyRequest request)
@@ -68,9 +71,9 @@ public class CurrencyController : ControllerBase
         try
         {
             var response = await service.AddCurrency(request);
-            if (response is null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            return Ok(response);
+            return response.IsOkay()
+                ? Ok(response)
+                : response.ToObjectResult();
         }
         catch (Exception e)
         {
@@ -82,6 +85,8 @@ public class CurrencyController : ControllerBase
     [HttpPut]
     [Authorize(Roles = "ADMIN")]
     [ProducesResponseType(typeof(SaveCurrencyResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status503ServiceUnavailable)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> UpdateAsync(
         [FromServices] IUpdateCurrencyService service,
         [FromBody] SaveCurrencyRequest request)
@@ -89,9 +94,9 @@ public class CurrencyController : ControllerBase
         try
         {
             var response = await service.UpdateCurrency(request);
-            if (response is null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            return Ok(response);
+            return response.IsOkay()
+                ? Ok(response)
+                : response.ToObjectResult();
         }
         catch (Exception e)
         {
@@ -103,6 +108,8 @@ public class CurrencyController : ControllerBase
     [HttpDelete("{symbol}")]
     [Authorize(Roles = $"{RoleNames.Admin}")]
     [ProducesResponseType(typeof(DeleteCurrencyResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status503ServiceUnavailable)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> DeleteAsync(
         [FromServices] IDeleteCurrencyService service,
         string symbol)
@@ -110,9 +117,9 @@ public class CurrencyController : ControllerBase
         try
         {
             var response = await service.DeleteCurrency(symbol);
-            if (response is null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            return Ok(response);
+            return response.IsOkay()
+                ? Ok(response)
+                : response.ToObjectResult();
         }
         catch (Exception e)
         {
@@ -121,15 +128,18 @@ public class CurrencyController : ControllerBase
         }
     }
 
-    [HttpPut("sync")]
+    [HttpGet("sync")]
     [ProducesResponseType(typeof(SyncCurrenciesResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult> SyncCurrenciesAsync(
         [FromServices] ISyncCurrenciesService service)
     {
         try
         {
-            var result = await service.SyncCurrencies();
-            return Ok(result);
+            var response = await service.SyncCurrencies();
+            return response.IsOkay()
+                ? Ok(response)
+                : response.ToObjectResult();
         }
         catch (Exception e)
         {

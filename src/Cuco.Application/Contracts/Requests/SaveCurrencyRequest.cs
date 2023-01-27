@@ -23,26 +23,26 @@ public class SaveCurrencyRequest
 
     public virtual string IsValid()
     {
-        var builder = new StringBuilder();
-        if (string.IsNullOrWhiteSpace(Name))
-            builder.AppendLine(ErrorResources.CurrencyNameMustExist);
-        else if (Name.Length > 100)
-            builder.AppendLine(ErrorResources.CurrencyNameLength);
-
         if (string.IsNullOrWhiteSpace(Symbol))
-            builder.AppendLine(ErrorResources.SymbolMustExist);
-        else if (Symbol.Length is < 3 or > 10)
-            builder.AppendLine(ErrorResources.SymbolLength);
+            return ErrorResources.SymbolMustExist;
+        if (Symbol.Length is < 3 or > 10)
+            return ErrorResources.SymbolLength;
 
-        if (IsReal) return builder.ToString();
+        if (string.IsNullOrWhiteSpace(Name))
+            return ErrorResources.CurrencyNameMustExist;
+        if (Name.Length > 100)
+            return ErrorResources.CurrencyNameLength;
+
+        if (IsReal) return string.Empty;
 
         if (string.IsNullOrWhiteSpace(BaseCurrencySymbol))
-            builder.AppendLine(ErrorResources.BaseCurrencyMustExistForSaving);
-        else if (BaseCurrencySymbol.Length is < 3 or > 10)
-            builder.AppendLine(ErrorResources.SymbolLength);
+            return ErrorResources.BaseCurrencyMustExistForSaving;
+        if (BaseCurrencySymbol.Length is < 3 or > 10)
+            return ErrorResources.SymbolLength;
 
         if (ValueInBaseCurrency <= 0)
-            builder.AppendLine(ErrorResources.ValueInBaseCurrencyMustBeGreaterThanZero);
-        return builder.ToString();
+            return ErrorResources.ValueInBaseCurrencyMustBeGreaterThanZero;
+
+        return string.Empty;
     }
 }
