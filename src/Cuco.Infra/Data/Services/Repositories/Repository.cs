@@ -21,6 +21,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     public async Task<TEntity> GetAsNoTrackingAsync(long id)
     {
         return await Db.Set<TEntity>()
+            .AsNoTracking()
             .FirstOrDefaultAsync(e => e.Id == id);
     }
 
