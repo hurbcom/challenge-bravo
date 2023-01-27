@@ -1,6 +1,4 @@
 using Cuco.Commons.Base;
-using Polly;
-using Polly.Retry;
 using StackExchange.Redis;
 
 namespace Cuco.Infra.Data.Services.Cache;
@@ -11,27 +9,21 @@ public class RedisCache : IRedisCache
 
     private readonly ILockingService _lockingService;
     private readonly IConnectionMultiplexer _redis;
-    private readonly AsyncRetryPolicy _retryPolicy;
 
     public RedisCache(ILockingService lockingService, IConnectionMultiplexer redis)
     {
         _lockingService = lockingService;
         _redis = redis;
-        _retryPolicy = Policy.Handle<RedisConnectionException>()
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt - 1)));
     }
 
     public async Task<string> GetAsync(string key)
     {
         try
         {
-            return await _retryPolicy.ExecuteAsync(async () =>
-            {
-                if (await _lockingService.IsLockedAsync(key) ||
-                    await _lockingService.IsLockedAsync(UniversalLockString))
-                    throw new RedisConnectionException(ConnectionFailureType.None, "Key Locked.");
-                return await _redis.GetDatabase().StringGetAsync(key);
-            });
+            if (await _lockingService.IsLockedAsync(key) ||
+                await _lockingService.IsLockedAsync(UniversalLockString))
+                return null;
+            return await _redis.GetDatabase().StringGetAsync(key);
         }
         catch (Exception e)
         {
