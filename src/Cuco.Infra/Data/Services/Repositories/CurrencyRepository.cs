@@ -24,7 +24,7 @@ public class CurrencyRepository : Repository<Currency>, ICurrencyRepository
             .FirstOrDefaultAsync(c => c.Symbol == symbol);
     }
 
-    public async Task<bool> DeleteBySymbolASync(string symbol)
+    public async Task<bool> DeleteBySymbolAsync(string symbol)
     {
         var currency = await GetBySymbolAsync(symbol);
         if (currency is null)
