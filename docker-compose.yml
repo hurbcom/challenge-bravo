@@ -1,0 +1,89 @@
+version: "3.7"
+services:
+    # image project
+    hurb_bravo:
+        build: 
+            args: 
+                user: wesllycode
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: laravel-app
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        depends_on: 
+            - redis
+            - queue
+        networks: 
+            - laravel-hurb_bravo
+    
+    # nginx
+    nginx:
+        image: nginx:alpine
+        restart: unless-stopped
+        ports: 
+            - 8180:80
+        volumes: 
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+        networks: 
+            - laravel-hurb_bravo
+
+    # db mysql
+    mysql:
+        image: mysql:5.7.22
+        restart: unless-stopped
+        environment: 
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+        volumes: 
+            - ./docker/mysql/dbdata:/var/lib/mysql
+        ports: 
+            - 3388:3306
+        networks: 
+            - laravel-hurb_bravo
+  
+    #PHPMYADMIN  Service
+    phpmyadmin:
+      container_name: phpmyadmin
+      image: phpmyadmin/phpmyadmin:latest
+      environment:
+        - PMA_HOST=mysql
+        - PMA_USER=${DB_USERNAME}
+        - PMA_PASSWORD=${DB_PASSWORD}
+      restart: always
+      ports:
+        - 8181:80
+      networks:
+        - laravel-hurb_bravo
+
+    # queue
+    queue:
+        build: 
+            args: 
+                user: wesllycode
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        command: "php artisan queue:work"
+        volumes: 
+            - ./:/var/www
+        depends_on: 
+            - redis
+        networks: 
+            - laravel-hurb_bravo
+
+    # redis
+    redis:
+        image: redis:latest
+        networks: 
+            - laravel-hurb_bravo
+
+networks:
+    laravel-hurb_bravo:
+        driver: bridge
