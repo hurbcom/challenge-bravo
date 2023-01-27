@@ -8,8 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Cuco.Application\Cuco.Application.csproj"/>
-        <ProjectReference Include="..\Cuco.Infra\Cuco.Infra.csproj"/>
+        <ProjectReference Include="..\Cuco.Application\Cuco.Application.csproj" />
+        <ProjectReference Include="..\Cuco.Infra\Cuco.Infra.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
     </ItemGroup>
 
 </Project>
