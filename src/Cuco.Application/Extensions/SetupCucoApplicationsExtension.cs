@@ -13,7 +13,7 @@ public static class SetupCucoApplicationsExtension
     {
         return services
             .AddScoped<ICurrencyConversionService, CurrencyConversionService>()
-            .AddScoped<IConvertToDollarService, ConvertToDollarService>()
+            .AddScoped<IGetDollarValueService, GetDollarValueValueService>()
             .AddScoped<ISyncCurrenciesService, SyncCurrenciesService>()
             .AddScoped<IAddCurrencyService, AddCurrencyService>()
             .AddScoped<IUpdateCurrencyService, UpdateCurrencyService>()

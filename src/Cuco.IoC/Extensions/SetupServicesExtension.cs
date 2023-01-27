@@ -11,6 +11,7 @@ public static class SetupServicesExtension
         IConfiguration configuration)
     {
         return services.SetupDataServices(configuration)
-            .SetupApplicationCucoApi();
+            .SetupApplicationCucoApi()
+            .SetupAuthServices(configuration);
     }
 }

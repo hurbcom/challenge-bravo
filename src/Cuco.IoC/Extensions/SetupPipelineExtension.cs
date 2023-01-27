@@ -7,7 +7,8 @@ public static class SetupPipelineExtension
 {
     public static IApplicationBuilder SetupPipelineCucoApi(this IApplicationBuilder app)
     {
-        app.SetupDataPipeline();
+        app.SetupDataPipeline()
+            .SetupAuthApp();
         return app;
     }
 }
