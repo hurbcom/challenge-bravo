@@ -18,7 +18,9 @@ For the 1000 requests per second requirement and to further improve the API's pe
 
 To ensure high throughput, I designed the API to be able to run as a distributed system. For this, I am using Redis for a distributed lock system to prevent the API from using deprecated values when updating currencies. I am also using Nginx, which is responsible for distributing requests among servers using the Round Robin strategy, to ensure that each server is receiving an even load.
 
-Lastly, I added a Cronjob to periodically update the currency exchange rates. This job is responsible for sending a request to the endpoint that starts the synchronization process and is called again once an hour has passed since the last update. This ensures that the API always has the most up-to-date rates available.
+I added a Cronjob to periodically update the currency exchange rates. This job is responsible for sending a request to the endpoint that starts the synchronization process and is called again once an hour has passed since the last update. This ensures that the API always has the most up-to-date rates available.
+
+Lastly, Swagger is used to facilitate testing the API while developing it. When running the API on a Development environment, you can access the [swagger page](https://localhost:5100/swagger/index.html), there you can see some deault request and response values and the available endpoints. 
 
 ## Getting Started
 To run the API, you will need to have Docker (and docker-compose) installed.
@@ -175,6 +177,14 @@ Deletes the user with the specified name.
 ##### Note:
 - Cannot delete "ADMIN", the base administrator.
 
+## Load Test
+To verify that the API could handle 1000 requests per second, k6 was used. It is an open-source tool that allows for specifying tests with very easy syntax in JS.
+
+To run the tests, you first need to install [k6](https://k6.io/). Then, navigate to the folder containing the tests. Once the application is running, simply do the command:
+```sh
+k6 run spike_test.js
+```
+
 ## Security
 The API uses JWT tokens for authentication and authorization. The tokens are passed in the headers of every request and are required for accessing some endpoints of the API.
 The User's password is encrypted using BCrypt and is never returned.
@@ -187,7 +197,7 @@ All sensitive data, such as connection strings and API keys, are stored as envir
 | .NET 6 | Web Framework |
 | [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) | ORM Framework |
 | [Pomelo](https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql) | ORM with MySQL |
-| [Polly](https://github.com/App-vNext/Polly) | Retry |
+| [Polly](https://github.com/App-vNext/Polly) | Retry Policy |
 | [Moq](https://github.com/moq/moq4) | Mock |
 | [NUnit](https://nunit.org/) | Unit Test |
 | [Flurl](https://flurl.dev/) | Http Requests |
@@ -196,28 +206,36 @@ All sensitive data, such as connection strings and API keys, are stored as envir
 | [MySQL](https://www.mysql.com/) | Main Database |
 | [Nginx](https://www.nginx.com/) | Load Balancer |
 | [Docker](https://www.docker.com/) | Container Creation |
+| [k6](https://www.k6.io/) | Load Testing |
+| [Hangfire](https://www.hangfire.io/) | Cronjob |
 
 ## Final Considerations
 
-I learned a lot while doing this application, how to orchestrate a system, for instance, it was also the first time I had to completely set up a solution, and also the first time I tried to tackle building a distributed system. With the knowledge I have acquired, I am confident that I could take on new challenges and complete tasks more efficiently in the future. Making this project was an amazing journey, and I hope that I continue this journey with the people from Hurb! Either way, I am very grateful for the opportunity, and for what I have learned through this project too.
+I learned a lot while doing this application, how to orchestrate a system, for instance, it was also the first time I had to completely set up a solution, and also the first time I tried to tackle building a distributed system. With the knowledge I have acquired, I am confident that I could take on new challenges and complete tasks more efficiently in the future. Making this project was an amazing journey, which I hope to continue by working with you!
+
+As a company with missions that are very dear to me, such as *the democratization of the process of travelling*, I believe that I would be a very good fit, and that I could really help you achieve your goals!
+
+Either way, I am very grateful for the opportunity, and for what I have learned. See you soon!
 
 ### Improvements:
 - System Design:
   - The design that I chose for the API does not work that well (or I couldn't make it work) within a containerized solution;
-  - Taking that into account, a lighter database could be used, and the currencies could be updated from the API itself.
+  - Sometimes the api launches before the MySQL has started, for instance. The API will keep closing, until MySQL is running;
+  - Taking that into account, a lighter database could be used to prevent that.
   - In a production environment, other services such as AWS, Azure, and Google Cloud, would be used, which would be better for this solution.
 - Resilience:
-  - I could have added more Retries and Circuit-Breaks. As it is now, it is only used by the cronjob, but it would be useful for accessing the external API. For example.
+  - I could have added Circuit-Breaking. As it is now, I use retry policies on the cronjob, and when syncing the currencies with the external API. But I didn't add circuit-breaking.
 - Logging:
   - The Application currently does not have any logging system. Therefore, it is not a production-ready code.
-  - Thus, a very necessary improvement would be to add logging.
+  - A very necessary improvement would be to add logging, and for that using a framework like Serilog would be great.
 - Better Exception Handling:
   - Right now the application is not as clear as it could be with the possible exceptions that it could throw.
   - For that, and for clearer returns, Language Extensions' Result type could help.
-- Integration Tests:
-  - Integration tests are an essential part of software development, and important for production-ready solutions.
+- Tests:
+  - More code covered by the unit tests.
+  - Integration tests are an essential part of software development, and important for production-ready solutions, so it would be an important improvement.
 - Identity:
-  - Using Identity for handling Users.
+  - Using Identity for handling Users and Roles.
 
 ### Auto-Generated Code:
 - Migrations:
