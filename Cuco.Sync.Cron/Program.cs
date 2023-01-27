@@ -7,12 +7,8 @@ using Microsoft.Extensions.Hosting;
 // Configure Hangfire
 GlobalConfiguration.Configuration.UseMemoryStorage();
 using var server = new BackgroundJobServer();
-
-await ScheduledSyncService.SyncCurrenciesAsync();
-
-
 var hostBuilder = new HostBuilder()
-    .ConfigureServices((hostContext, services) =>
+    .ConfigureServices((_, services) =>
         {
             services.AddHostedService<ScheduledSyncService>();
         }
