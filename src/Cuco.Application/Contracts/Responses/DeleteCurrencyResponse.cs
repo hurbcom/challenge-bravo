@@ -1,7 +1,7 @@
+using Cuco.Commons.Base;
+
 namespace Cuco.Application.Contracts.Responses;
 
-public class DeleteCurrencyResponse
+public class DeleteCurrencyResponse : Response
 {
-    public bool Result { get; init; }
-    public string Details { get; init; }
 }

@@ -1,10 +1,9 @@
 using System.Text.Json.Serialization;
+using Cuco.Commons.Base;
 
 namespace Cuco.Application.Contracts.Responses;
 
-public class SyncCurrenciesResponse
+public class SyncCurrenciesResponse : Response
 {
-    [JsonPropertyName("result")] public bool Result { get; init; }
     [JsonPropertyName("timestamp")] public long Timestamp { get; init; }
-    [JsonPropertyName("details")] public string Details { get; init; }
 }
