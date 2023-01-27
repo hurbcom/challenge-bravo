@@ -3,7 +3,7 @@ using Cuco.Domain.Currencies.Services.Repositories;
 
 namespace Cuco.Application.Services.Implementations;
 
-internal class ConvertToDollarService : IConvertToDollarService
+internal class GetDollarValueValueService : IGetDollarValueService
 {
     private const string BaseCurrencySymbol = "USD";
     private const decimal BaseValue = 1;
@@ -12,7 +12,7 @@ internal class ConvertToDollarService : IConvertToDollarService
     private readonly ICurrencyRepository _currencyRepository;
     private readonly IRedisCache _redisCache;
 
-    public ConvertToDollarService(ICurrencyRepository currencyRepository, IRedisCache redisCache)
+    public GetDollarValueValueService(ICurrencyRepository currencyRepository, IRedisCache redisCache)
     {
         _currencyRepository = currencyRepository;
         _redisCache = redisCache;

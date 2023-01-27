@@ -1,6 +1,6 @@
 namespace Cuco.Application.Services;
 
-public interface IConvertToDollarService
+public interface IGetDollarValueService
 {
     Task<decimal[]> Convert(string[] symbols);
 }
