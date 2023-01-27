@@ -22,15 +22,22 @@ public class AuthenticationController : ControllerBase
     [HttpPost("Authenticate")]
     public async Task<ActionResult<TokenDto>> Authenticate([FromBody] SignInDto signIn)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var user = await _userRepository.GetUserDto(signIn.Name, signIn.Password);
+            var user = await _userRepository.GetUserDto(signIn.Name, signIn.Password);
 
-        if (user is null)
-            return NotFound(new { message = "Invalid username or password" });
+            if (user is null)
+                return NotFound(new { message = "Invalid username or password" });
 
-        var token = new TokenDto { Name = signIn.Name, Token = $"Bearer {_tokenAdapter.GenerateToken(user)}" };
+            var token = new TokenDto { Name = signIn.Name, Token = $"Bearer {_tokenAdapter.GenerateToken(user)}" };
 
-        return Ok(token);
+            return Ok(token);
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 }
