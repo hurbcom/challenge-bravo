@@ -234,7 +234,8 @@ Either way, I am very grateful for the opportunity, and for what I have learned.
 - Tests:
   - More code covered by the unit tests.
   - Integration tests are an essential part of software development, and important for production-ready solutions, so it would be an important improvement.
-- Identity:
+- Security:
+  - Setting the API for HTTPS request, which would be safer.
   - Using Identity for handling Users and Roles.
 
 ### Auto-Generated Code:
@@ -256,5 +257,7 @@ Either way, I am very grateful for the opportunity, and for what I have learned.
   - Sometimes I ran the code clean-up tool, native to the IDE;
   - It is not auto-generated code, but it is a tool that manipulates the code.
 
-
-
+### Disclaimers:
+- The default admin user I've added to the API was a solution for making the API easier to set up, in a production-ready environment the admin would most likely be added through a SQL Query;
+- The environment files I've left are also to make the API easier to set up, however, in a real life repository, those files would have been added to the .gitignore, and not available when cloning;
+- I've set up the docker-compose.yaml to run just one instance of the API, so it is not as heavy when testing the API, for testing the distributed system, you can simply use the docker-compose-4.yaml file, remove the comments on the nginx.conf file, rebuild nginx's Dockerfile and finally use the command docker-compose run -d.
