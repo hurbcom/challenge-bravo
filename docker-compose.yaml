@@ -23,77 +23,12 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-  
-  cucoapi_1:
-    container_name: cucoapi_1
-    image: cucoapi:test
-    build:
-      context: ./src
-    environment:
-      - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__CucoDBContext=server=mysql;port=3306;user=${MYSQLCUCOUSER};pwd=${MYSQLCUCOPWD};database=${MYSQLCUCODB}
-      - OpenExchangeSettings__AppId=${OPENEXCHANGEAPPID}
-      - Redis__Host=${REDISHOST}
-      - Redis__Port=${REDISPORT}
-      - Redis__Password=${REDISPASS}
-      - JWT__Secret=${JWTSECRET}
-      - JWT__ExpirationInHours=${TOKENEXPIRATIONINHOURS}
-    depends_on:
-      - redis
-      - mysql
-    networks:
-      - cuco-net
-    deploy:
-      restart_policy:
-        condition: on-failure
-  
-  cucoapi_2:
-    container_name: cucoapi_2
-    image: cucoapi:test
-    build:
-      context: ./src
-    environment:
-      - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__CucoDBContext=server=mysql;port=3306;user=${MYSQLCUCOUSER};pwd=${MYSQLCUCOPWD};database=${MYSQLCUCODB}
-      - OpenExchangeSettings__AppId=${OPENEXCHANGEAPPID}
-      - Redis__Host=${REDISHOST}
-      - Redis__Port=${REDISPORT}
-      - Redis__Password=${REDISPASS}
-      - JWT__Secret=${JWTSECRET}
-      - JWT__ExpirationInHours=${TOKENEXPIRATIONINHOURS}
-    depends_on:
-      - redis
-      - mysql
-    networks:
-      - cuco-net
-    deploy:
-      restart_policy:
-        condition: on-failure
-        
-  cucoapi_3:
-    container_name: cucoapi_3
-    image: cucoapi:test
-    build:
-      context: ./src
-    environment:
-      - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__CucoDBContext=server=mysql;port=3306;user=${MYSQLCUCOUSER};pwd=${MYSQLCUCOPWD};database=${MYSQLCUCODB}
-      - OpenExchangeSettings__AppId=${OPENEXCHANGEAPPID}
-      - OpenExchangeSettings__BaseUrl=${OPENEXCHANGEBASEURL}
-      - Redis__Host=${REDISHOST}
-      - Redis__Port=${REDISPORT}
-      - Redis__Password=${REDISPASS}
-      - JWT__Secret=${JWTSECRET}
-      - JWT__ExpirationInHours=${TOKENEXPIRATIONINHOURS}
-    depends_on:
-      - redis
-      - mysql
-    networks:
-      - cuco-net
-    deploy:
-      restart_policy:
-        condition: on-failure
-  
+    healthcheck:
+      test: curl --fail http://localhost:80/healthz || exit 1
+      interval: 120s
+      retries: 10
+      timeout: 10s
+
   cucosync:
     container_name: cucosync
     image: cucosync
@@ -154,9 +89,6 @@ services:
       - cuco-net
     depends_on:
       - cucoapi_0
-      - cucoapi_1
-      - cucoapi_2
-      - cucoapi_3
     restart: on-failure
     deploy:
       restart_policy:

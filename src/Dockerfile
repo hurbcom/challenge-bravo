@@ -34,5 +34,6 @@ RUN dotnet publish "Cuco.API.csproj" -c Release -o /app/publish
 FROM base AS final
 
 WORKDIR /app
+RUN apt-get update && apt-get install curl -y
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Cuco.API.dll"]
