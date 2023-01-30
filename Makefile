@@ -7,7 +7,7 @@ database:
 dev:
 	@make build
 	@make database
-	docker-compose up exchange-rate-service
+	docker-compose up exchange-rate-service rate-converter-service
 
 clean:
 	docker-compose down -v
