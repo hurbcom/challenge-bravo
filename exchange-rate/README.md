@@ -1,35 +1,9 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
 ## Setup .env
 
 Env file holds important configuration, including api keys for exchange rate APIS.
 
 For Fixer api key go to (here)[https://fixer.io/]
-For Abstract api key to go (here)[]
+For Abstract api key to go (here)[https://app.abstractapi.com/]
 
 Here is the skeleton:
 
