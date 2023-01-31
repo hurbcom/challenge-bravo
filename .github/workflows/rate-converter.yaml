@@ -17,7 +17,7 @@ defaults:
 
 jobs:
   ci:
-    name: Cart CI
+    name: Rate Converter CI
     runs-on: ubuntu-latest
     env:
         BUILD_TARGETS: 'rate-converter-service-ci'

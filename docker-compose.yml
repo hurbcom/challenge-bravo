@@ -9,9 +9,11 @@ services:
             - ./exchange-rate:/app
         ports:
             - "3000:3000"
-        depends_on:
+        depends_on: &exchange-rate-service-deps
             - exchange-rate-redis
             - exchange-rate-pg
+        environment: &exchange-rate-service-env
+            - REDIS_URL=redis://exchange-rate-redis:6379/0
 
     exchange-rate-redis:
         image: redis
@@ -38,6 +40,9 @@ services:
     exchange-rate-service-ci:
         build: *exchange-rate-service-local
         command: bundle exec rspec
+        environment: *exchange-rate-service-env
+        depends_on: *exchange-rate-service-deps
+
 
     rate-converter-service-ci:
         build: *rate-converter-service-local

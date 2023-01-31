@@ -17,7 +17,7 @@ defaults:
 
 jobs:
   ci:
-    name: Cart CI
+    name: Exchange Rate CI
     runs-on: ubuntu-latest
     env:
         BUILD_TARGETS: 'exchange-rate-service-ci'

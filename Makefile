@@ -17,6 +17,7 @@ test:
 	@make test-rate-converter
 
 test-exchange-rate:
+	@make database
 	docker-compose run --rm exchange-rate-service-ci
 
 test-rate-converter:
