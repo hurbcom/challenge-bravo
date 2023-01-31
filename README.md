@@ -1,3 +1,67 @@
+
+# Currency Conversion Service
+The Currency Conversion Service is a combination of two main components: the Exchange Rate Service and the Rate Conversion Service. The Exchange Rate Service retrieves current exchange rates from a reliable source, while the Rate Conversion Service handles converting a given amount from one currency to another.
+
+
+
+![Currency Conversion Architecture](./rate.png).
+
+API Documentation is on [Postman](https://documenter.getpostman.com/view/7473147/2s935iskfh)
+
+The idea of two differents services is to make easy to scale and build different products. For example, the exchange rate service could be exposed through an API Gateway and allow for only getting the rates, instead of the conversion. This idea can be extended to different use cases.
+
+## Exchange Rate Service
+The Exchange Rate Service, written in Rails, provides up-to-date exchange rates for various currencies. It obtains exchange rates from a reliable source, such as an API, and updates them regularly to ensure accuracy.
+
+
+The service works in three stages:
+
+* Tries to retrieve rates from (Fixer API)[https://fixer.io/]
+* If Fixer API is unavailable or doesn't have the rates, it requests from (Abstract API)[https://app.abstractapi.com/]
+* If both external APIs fail, it searches its own database, a Postgres database.
+
+The service uses Redis cache to store the result. The flow and architecture of the Exchange Rate Service are illustrated in the following image:
+
+![Exchange Rate Flow](./exchange-rate.png).
+
+For more information on the configuration of the Exchange Rate Service, refer to the[Exchange Rate README](exchange-rate/README.md)
+
+Important to notice hera that the order is considering that external API will have most of the results, but it can be easily changed.
+
+##  Rate Conversion Service
+The Rate Conversion Service handles converting a given amount from one currency to another. The conversion is based on the exchange rates obtained from the Exchange Rate Service. To convert an amount, provide the following information:
+
+
+* From currency: the currency to be converted from
+* To currency: the currency to be converted to
+* Amount: the amount to be converted
+The rate conversion service will then return the converted amount.
+
+## Running
+To use the Currency Conversion Service, simply make a request to the Rate Conversion Service endpoint with the required information. The request should look like this:
+
+
+```
+curl --location --request GET 'localhost:8000/api/convert?amount=2&from=BRL&to=USD'
+```
+
+You can start everything by running `make dev`.
+
+## Running tests
+
+To run tests for both the Exchange Rate Service and the Rate Conversion Service, run `make test`. To test each service individually, run:
+
+```
+make test-exchange-rate
+make test-rate-converter
+
+```
+
+
+## Possible improvements
+
+Possible improvements include adding an API Gateway with authentication and network security configurations (such as DOS guard clauses). This solution is designed with scalability in mind, so it can be deployed in a Kubernetes environment within a Service Mesh scenario. For scalability purposes, requests could be handled by Kafka, although some latency may be introduced. gRPC could also be an option, but REST and Kafka have an advantage in terms of interoperability and development effort.
+
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
 [[English](README.md) | [Portuguese](README.pt.md)]
