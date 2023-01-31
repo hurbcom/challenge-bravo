@@ -1,0 +1,33 @@
+name: Rate Converter CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'rate-converter/**'
+  push:
+    branches:
+      - 'rate-converter-**'
+      - 'rate-converter/**'
+
+defaults:
+  run:
+    working-directory: ./
+
+jobs:
+  ci:
+    name: Rate Converter CI
+    runs-on: ubuntu-latest
+    env:
+        BUILD_TARGETS: 'rate-converter-service-ci'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: make build
+
+      - name: Test
+        run: make test-rate-converter

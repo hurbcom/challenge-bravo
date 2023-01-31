@@ -1,0 +1,27 @@
+{
+  "name": "rate-converter",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.2.6",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  },
+  "scripts": {
+    "start": "node app.ts",
+    "dev": "nodemon app.ts",
+    "build": "tsc",
+    "test": "jest --coverage",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.16",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.11.18",
+    "jest": "^29.4.1",
+    "nodemon": "^2.0.20",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  }
+}

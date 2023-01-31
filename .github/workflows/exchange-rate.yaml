@@ -1,0 +1,33 @@
+name: Exchange rate CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'exchange-rate/**'
+  push:
+    branches:
+      - 'exchange-rate-**'
+      - 'exchange-rate/**'
+
+defaults:
+  run:
+    working-directory: ./
+
+jobs:
+  ci:
+    name: Exchange Rate CI
+    runs-on: ubuntu-latest
+    env:
+        BUILD_TARGETS: 'exchange-rate-service-ci'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: make build
+
+      - name: Test
+        run: make test-exchange-rate
