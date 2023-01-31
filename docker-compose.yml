@@ -33,6 +33,16 @@ services:
             - ./rate-converter:/app
         ports:
             - "8000:8000"
+
+    ### CI ###
+    exchange-rate-service-ci:
+        build: *exchange-rate-service-local
+        command: bundle exec rspec
+
+    rate-converter-service-ci:
+        build: *rate-converter-service-local
+        command: yarn test
+
 volumes:
     postgresdata:
         driver: local

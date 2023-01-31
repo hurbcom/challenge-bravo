@@ -12,3 +12,12 @@ dev:
 clean:
 	docker-compose down -v
 
+test:
+	@make test-exchange-rate
+	@make test-rate-converter
+
+test-exchange-rate:
+	docker-compose run --rm exchange-rate-service-ci
+
+test-rate-converter:
+	docker-compose run --rm rate-converter-service-ci
