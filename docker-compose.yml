@@ -18,6 +18,8 @@ services:
 
     exchange-rate-pg:
         image: postgres
+        volumes:
+            - postgresdata:/var/lib/postgresql/data
         environment:
             POSTGRES_PASSWORD: postgres
             POSTGRES_USER: postgres
@@ -31,3 +33,6 @@ services:
             - ./rate-converter:/app
         ports:
             - "8000:8000"
+volumes:
+    postgresdata:
+        driver: local
