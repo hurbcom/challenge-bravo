@@ -7,5 +7,5 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/'],
   modulePathIgnorePatterns: ['dist', 'node_modules', 'coverage'],
   testMatch: ['**/?(*.)+(spec|test).(js|ts|tsx)'],
-  setupFilesAfterEnv: ['./jest.setup.js']
+  setupFilesAfterEnv: ['./src/__tests__/jest.setup.js']
 }
