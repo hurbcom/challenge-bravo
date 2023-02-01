@@ -10,6 +10,9 @@ services:
       - 6379:6379
   app:
     build: ./
+    depends_on:
+      redis:
+        condition: service_started
     links:
       - redis
     ports:
