@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import RequestError from './RequestError'
+import { RequestError } from './index'
 
 export const successResponse = (
   res: Response,
