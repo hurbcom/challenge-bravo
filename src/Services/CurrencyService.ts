@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { retriveCoinFromCache } from 'Repository/CurrenciesRepository'
 import { TRetriveValueCoin } from 'Repository/types'
-import { setRedisValue } from 'Utils/Redis'
+import { Redis } from 'Utils'
 import { TConvertCoin } from './types'
 
 export const retriveValueCoin = async (
@@ -58,9 +58,11 @@ export const populateCache = async (): Promise<void> => {
   const keys = Object.keys(currencies)
   const instances = []
 
+  const redis = new Redis()
+
   for (let index = 0; index < keys.length; index++) {
     const key = keys[index]
-    instances.push(setRedisValue(key.toUpperCase(), 1 / currencies[key]))
+    instances.push(redis.setRedisValue(key.toUpperCase(), 1 / currencies[key]))
   }
 
   await Promise.all(instances)

@@ -3,49 +3,52 @@ import cors from 'cors'
 import morgan from 'morgan'
 
 import { CurrencyRoutes } from 'Controllers/CurrencyController'
-import { initRedisConnection } from './Redis'
+import { Redis } from './Redis/Redis'
 import { populateCache } from 'Services/CurrencyService'
 
-const routes = (app: Application) => {
-  console.log('Loading routes::::')
+export class Server {
+  private routes = (app: Application) => {
+    console.log('Loading routes::::')
 
-  app.use('/api/currency', CurrencyRoutes())
-}
+    app.use('/api/currency', CurrencyRoutes())
+  }
 
-const modules = (app: Application) => {
-  console.log('Loading modules::::')
+  private modules = (app: Application) => {
+    console.log('Loading modules::::')
 
-  app.use(express.json())
-  app.use(cors())
-}
+    app.use(express.json())
+    app.use(cors())
+  }
 
-const databaseConnection = async () => {
-  console.log('Connecting to database::::')
+  private databaseConnection = async () => {
+    console.log('Connecting to database::::')
 
-  await initRedisConnection()
-}
+    const redis = new Redis()
+    await redis.initRedisConnection()
+  }
 
-const loadCache = async () => {
-  console.log('Loading cache::::')
+  private loadCache = async () => {
+    console.log('Loading cache::::')
 
-  await populateCache()
-}
+    await populateCache()
+  }
 
-const midlewares = (app: Application) => {
-  console.log('Loading middlewares::::')
+  private midlewares = (app: Application) => {
+    console.log('Loading middlewares::::')
 
-  app.use(morgan(':method :url :response-time ms :status'))
-}
+    app.use(morgan(':method :url :response-time ms :status'))
+  }
 
-export const init = async (): Promise<Application> => {
-  const app = express()
+  init = async (): Promise<Application> => {
+    const app = express()
 
-  modules(app)
-  midlewares(app)
-  routes(app)
+    this.modules(app)
+    this.midlewares(app)
+    this.routes(app)
 
-  await databaseConnection()
-  await loadCache()
+    await this.databaseConnection()
+    await this.loadCache()
 
-  return app
+    return app
+  }
 }

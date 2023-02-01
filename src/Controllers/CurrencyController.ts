@@ -1,8 +1,7 @@
 import { Request, Response, Router } from 'express'
 import { createCurrency, deleteCurrency } from 'Repository/CurrenciesRepository'
 import { convertCoin } from 'Services/CurrencyService'
-import { getRedisValue, setRedisValue } from 'Utils/Redis'
-import RequestError from 'Utils/RequestError'
+import { RequestError } from 'Utils'
 import { errorResponse, successResponse } from 'Utils/Responses'
 import {
   TCreateCurrency,

@@ -1,4 +1,4 @@
-class RequestError extends Error {
+export class RequestError extends Error {
   statusCode: number
   data: any
 
@@ -11,5 +11,3 @@ class RequestError extends Error {
     this.statusCode = statusCode || 500
   }
 }
-
-export default RequestError

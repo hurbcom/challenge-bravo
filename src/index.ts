@@ -1,6 +1,7 @@
-import { init } from 'Utils/Server'
+import { Server } from 'Utils'
 
-init().then((app) => {
+const server = new Server()
+server.init().then((app) => {
   const port = process.env.PORT || 3000
 
   app.listen(port, () => {
