@@ -3,11 +3,13 @@ import { TSetRedisValue, IRedis } from './types'
 
 let client = null as any
 export class Redis implements IRedis {
-  redisClient = null as any
+  protected redisClient!: any
 
   constructor() {
     if (client) {
       this.redisClient = client
+    } else {
+      this.initRedisConnection()
     }
   }
 
@@ -26,7 +28,7 @@ export class Redis implements IRedis {
     client = this.redisClient
   }
 
-  setRedisValue = async (key: string, value: number) => {
+  setRedisValue = async (key: string, value: string) => {
     await this.redisClient.set(key, value)
   }
 
@@ -34,7 +36,7 @@ export class Redis implements IRedis {
     await this.redisClient.mset(records)
   }
 
-  getRedisValue = async (key: string): Promise<number | null> => {
+  getRedisValue = async (key: string): Promise<string | null> => {
     const data = await this.redisClient.get(key)
 
     if (!data) {

@@ -1,7 +1,6 @@
 import { Request, Response, Router } from 'express'
-import { createCurrency, deleteCurrency } from 'Repository/CurrenciesRepository'
-import { convertCoin } from 'Services/CurrencyService'
-import { TConvertCoin } from 'Services/types'
+import { CurrencyService } from 'Services/Currency/CurrencyService'
+import { TConvertCoin } from 'Services/Currency/types'
 import { RequestError } from 'Utils'
 import { errorResponse, successResponse } from 'Utils/Responses'
 import {
@@ -16,6 +15,12 @@ import {
 } from './Validations'
 
 class CurrencyController implements ICurrencyController {
+  protected currencyService!: CurrencyService
+
+  constructor(services: CurrencyService = new CurrencyService()) {
+    this.currencyService = services
+  }
+
   GetCurrencyByParameter = async (
     req: Request,
     res: Response
@@ -31,7 +36,7 @@ class CurrencyController implements ICurrencyController {
 
       const { from, to, amount } = query
 
-      const data = await convertCoin(
+      const data = await this.currencyService.convertCoin(
         from.toUpperCase(),
         to.toUpperCase(),
         +amount
@@ -54,7 +59,7 @@ class CurrencyController implements ICurrencyController {
 
       const { from, value } = body
 
-      await createCurrency(from.toUpperCase(), value)
+      await this.currencyService.createNewCurrency(from.toUpperCase(), value)
       return successResponse(res, {}, 201)
     } catch (error) {
       return errorResponse(res, error)
@@ -67,7 +72,7 @@ class CurrencyController implements ICurrencyController {
 
       const { coin } = body
 
-      await deleteCurrency(coin.toUpperCase())
+      await this.currencyService.removeCurrency(coin.toUpperCase())
       return successResponse(res, {}, 202)
     } catch (error) {
       return errorResponse(res, error)

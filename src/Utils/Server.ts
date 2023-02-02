@@ -4,7 +4,6 @@ import morgan from 'morgan'
 
 import { CurrencyRoutes } from 'Controllers/CurrencyController'
 import { Redis } from './Redis/Redis'
-import { populateCache } from 'Services/CurrencyService'
 
 export class Server {
   private routes = (app: Application) => {
@@ -27,12 +26,6 @@ export class Server {
     await redis.initRedisConnection()
   }
 
-  private loadCache = async () => {
-    console.log('Loading cache::::')
-
-    await populateCache()
-  }
-
   private midlewares = (app: Application) => {
     console.log('Loading middlewares::::')
 
@@ -47,7 +40,6 @@ export class Server {
     this.routes(app)
 
     await this.databaseConnection()
-    await this.loadCache()
 
     return app
   }

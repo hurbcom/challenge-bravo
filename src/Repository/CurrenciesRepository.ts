@@ -1,34 +1,36 @@
 import { Redis, RequestError } from 'Utils'
+import { TCoinBase } from './types'
 
-export const DEFAULT_COINS = ['BRL', 'EUR', 'BTC', 'ETH'] as string[]
+export class CurrenciesRepository {
+  DEFAULT_COINS = ['BRL', 'EUR', 'BTC', 'ETH'] as string[]
+  protected redisClient!: Redis
 
-export const retriveCoinFromCache = async (coin: string) => {
-  try {
-    const redis = new Redis()
+  constructor(redis: Redis = new Redis()) {
+    this.redisClient = redis
+  }
 
-    let currencies = await redis.getRedisValue(coin)
-    if (!currencies) {
+  retriveCoinFromCache = async (coin: string): Promise<TCoinBase | null> => {
+    try {
+      let currencies = await this.redisClient
+        .getRedisValue(coin)
+        .catch(() => null)
+
+      if (!currencies) {
+        return null
+      }
+
+      return JSON.parse(currencies) as TCoinBase
+    } catch (error) {
+      console.log('error:::', error)
       throw new RequestError('Coin not found', {}, 400)
     }
-
-    return currencies
-  } catch (error) {
-    console.log('error:::', error)
-    throw new RequestError('Coin not found', {}, 400)
   }
-}
 
-export const createCurrency = async (
-  from: string,
-  value: number
-): Promise<void> => {
-  const redis = new Redis()
+  createCurrency = async (key: string, value: TCoinBase): Promise<void> => {
+    await this.redisClient.setRedisValue(key, JSON.stringify(value))
+  }
 
-  await redis.setRedisValue(from, value)
-}
-
-export const deleteCurrency = async (from: string): Promise<void> => {
-  const redis = new Redis()
-
-  await redis.removeRedisValue(from)
+  deleteCurrency = async (from: string): Promise<void> => {
+    await this.redisClient.removeRedisValue(from)
+  }
 }
