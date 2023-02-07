@@ -21,12 +21,15 @@ export class CurrencyController implements ICurrencyController {
 
   constructor(services: CurrencyService = new CurrencyService(requestCoin)) {
     this.currencyService = services
+
+    this.GetCurrencyByParameter = this.GetCurrencyByParameter.bind(this)
   }
 
-  GetCurrencyByParameter = async (
+  @ValidateRequest(ValidateGetCurrencyByParameter, 'query')
+  async GetCurrencyByParameter(
     req: TGetCurrencyByParameter,
     res: Response
-  ): Promise<Response<TConvertCoin>> => {
+  ): Promise<Response<TConvertCoin>> {
     try {
       const query = req.query
 
