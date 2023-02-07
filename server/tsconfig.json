@@ -1,0 +1,24 @@
+{
+  "ts-node": {
+    "transpileOnly": true,
+    "require": [ "tsconfig-paths/register" ],
+  },
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "rootDir": "./",
+    "moduleResolution": "Node",
+    "baseUrl": "./src",
+    "outDir": "./dist",
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "plugins": [
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
+  }
+}
