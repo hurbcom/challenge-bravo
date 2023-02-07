@@ -1,7 +1,9 @@
 import { Request, Response, Router } from 'express'
-import { CurrencyService } from 'Services/Currency/CurrencyService'
-import { TConvertCoin } from 'Services/Currency/types'
+import { requestCoin } from 'Services/CoinBase'
+import { CurrencyService } from 'Services/CurrencyService'
+import { TConvertCoin } from 'Services/CurrencyService/types'
 import { RequestError } from 'Utils'
+import { ValidateRequest } from 'Utils/Decorators/ValidateRequest'
 import { errorResponse, successResponse } from 'Utils/Responses'
 import {
   TCreateCurrency,
@@ -12,27 +14,21 @@ import {
 import {
   ValidateGetCurrencyByParameter,
   ValidateCreateCurrency
-} from './Validations'
+} from './validations'
 
-class CurrencyController implements ICurrencyController {
-  protected currencyService!: CurrencyService
+export class CurrencyController implements ICurrencyController {
+  private currencyService!: CurrencyService
 
-  constructor(services: CurrencyService = new CurrencyService()) {
+  constructor(services: CurrencyService = new CurrencyService(requestCoin)) {
     this.currencyService = services
   }
 
   GetCurrencyByParameter = async (
-    req: Request,
+    req: TGetCurrencyByParameter,
     res: Response
   ): Promise<Response<TConvertCoin>> => {
     try {
-      const query = req.query as TGetCurrencyByParameter
-
-      const validation = ValidateGetCurrencyByParameter.validate(query)
-
-      if (validation.error) {
-        throw new RequestError(validation.error.message, {}, 400)
-      }
+      const query = req.query
 
       const { from, to, amount } = query
 
@@ -43,6 +39,7 @@ class CurrencyController implements ICurrencyController {
       )
       return successResponse(res, { data })
     } catch (error) {
+      console.log('error:::', error)
       return errorResponse(res, error)
     }
   }
@@ -78,15 +75,4 @@ class CurrencyController implements ICurrencyController {
       return errorResponse(res, error)
     }
   }
-}
-
-export const CurrencyRoutes = () => {
-  const currencyController = new CurrencyController()
-  const route = Router()
-
-  route.get('/convert', currencyController.GetCurrencyByParameter)
-  route.post('/new', currencyController.CreateNewCurrency)
-  route.delete('/:coin', currencyController.RemoveCurrency)
-
-  return route
 }

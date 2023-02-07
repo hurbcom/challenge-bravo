@@ -2,7 +2,6 @@ import { Redis, RequestError } from 'Utils'
 import { TCoinBase } from './types'
 
 export class CurrenciesRepository {
-  DEFAULT_COINS = ['BRL', 'EUR', 'BTC', 'ETH'] as string[]
   protected redisClient!: Redis
 
   constructor(redis: Redis = new Redis()) {

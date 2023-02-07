@@ -8,9 +8,9 @@ export class Redis implements IRedis {
   constructor() {
     if (client) {
       this.redisClient = client
-    } else {
-      this.initRedisConnection()
     }
+
+    return this
   }
 
   initRedisConnection = async () => {
@@ -18,13 +18,14 @@ export class Redis implements IRedis {
       url: process.env.REDIS_URL_CONNECTION
     })
 
+    await this.redisClient.connect()
+
     this.redisClient.on('error', (err: Error) => {
       console.log('Redis Client Error:::', err)
 
       throw err
     })
 
-    await this.redisClient.connect()
     client = this.redisClient
   }
 

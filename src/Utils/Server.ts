@@ -2,14 +2,16 @@ import express, { Application } from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 
-import { CurrencyRoutes } from 'Controllers/CurrencyController'
+import { CurrencyRoutes } from 'Controllers/CurrencyController/routes'
 import { Redis } from './Redis/Redis'
+import { RouteNotFound } from './Middlewares/RouteNotFound'
 
 export class Server {
   private routes = (app: Application) => {
     console.log('Loading routes::::')
 
     app.use('/api/currency', CurrencyRoutes())
+    app.use('*', RouteNotFound)
   }
 
   private modules = (app: Application) => {
@@ -22,8 +24,7 @@ export class Server {
   private databaseConnection = async () => {
     console.log('Connecting to database::::')
 
-    const redis = new Redis()
-    await redis.initRedisConnection()
+    await new Redis().initRedisConnection()
   }
 
   private midlewares = (app: Application) => {
@@ -35,11 +36,11 @@ export class Server {
   init = async (): Promise<Application> => {
     const app = express()
 
+    await this.databaseConnection()
+
     this.modules(app)
     this.midlewares(app)
     this.routes(app)
-
-    await this.databaseConnection()
 
     return app
   }

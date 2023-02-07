@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import { TConvertCoin } from 'Services/types'
+import { TConvertCoin } from 'Services/CurrencyService/types'
 
 export interface ICurrencyController {
   GetCurrencyByParameter: (
-    req: Request,
+    req: TGetCurrencyByParameter,
     res: Response
   ) => Promise<Response<TConvertCoin>>
   CreateNewCurrency: (
@@ -16,10 +16,12 @@ export interface ICurrencyController {
   ) => Promise<Response<any, Record<string, any>>>
 }
 
-export type TGetCurrencyByParameter = {
-  from: string
-  to: string
-  amount: string
+export interface TGetCurrencyByParameter extends Express.Request {
+  query: {
+    from: string
+    to: string
+    amount: string
+  }
 }
 
 export type TCreateCurrency = {

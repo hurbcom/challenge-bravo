@@ -1,14 +1,21 @@
 import { CurrenciesRepository } from 'Repository/CurrenciesRepository'
 import { TRetriveValueCoin } from 'Repository/types'
-import { requestCoin } from 'Services/CoinBase'
+import { TRequestCoin } from 'Services/CoinBase/types'
 import { RequestError } from 'Utils'
-import { TConvertCoin } from './types'
+import { ICurrencyService, TConvertCoin } from './types'
 
-export class CurrencyService {
+export class CurrencyService implements ICurrencyService {
+  private DEFAULT_COINS = ['BRL', 'EUR', 'BTC', 'ETH'] as string[]
+
   protected currencyRepository!: CurrenciesRepository
+  protected requestCoin!: TRequestCoin
 
-  constructor(currency = new CurrenciesRepository()) {
-    this.currencyRepository = currency
+  constructor(
+    _requestCoin: TRequestCoin,
+    _currencyRepository: CurrenciesRepository = new CurrenciesRepository()
+  ) {
+    this.currencyRepository = _currencyRepository
+    this.requestCoin = _requestCoin
   }
 
   convertCoin = async (
@@ -41,7 +48,7 @@ export class CurrencyService {
       }
 
       if (to !== 'USD') {
-        const toCurrencyCache = await this.retriveCoin(to)
+        let toCurrencyCache = await this.retriveCoin(to)
         toCurrency = 1 / toCurrencyCache
       }
 
@@ -55,9 +62,9 @@ export class CurrencyService {
     }
   }
 
-  retriveCoin = async (coin: string) => {
+  retriveCoin = async (coin: string): Promise<number> => {
     try {
-      let coinBase: number | null = null
+      let coinBase: number = 0
 
       const coinCache = await this.currencyRepository.retriveCoinFromCache(coin)
 
@@ -66,7 +73,7 @@ export class CurrencyService {
       }
 
       if (!coinBase) {
-        coinBase = await requestCoin(coin)
+        coinBase = await this.requestCoin(coin)
         this.createNewCurrency(coin, coinBase)
       }
 
@@ -76,15 +83,18 @@ export class CurrencyService {
     }
   }
 
-  createNewCurrency = async (coinCode: string, value: number) => {
+  createNewCurrency = async (
+    coinCode: string,
+    value: number
+  ): Promise<void> => {
     await this.currencyRepository.createCurrency(coinCode, {
       name: coinCode,
       value: value,
-      requiredBySystem: false
+      requiredBySystem: this.DEFAULT_COINS.includes(coinCode)
     })
   }
 
-  removeCurrency = async (coinCode: string) => {
+  removeCurrency = async (coinCode: string): Promise<void> => {
     const coinCache = await this.currencyRepository.retriveCoinFromCache(
       coinCode
     )
