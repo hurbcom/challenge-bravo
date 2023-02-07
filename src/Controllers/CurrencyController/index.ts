@@ -1,8 +1,7 @@
-import { Request, Response, Router } from 'express'
+import { Response } from 'express'
 import { requestCoin } from 'Services/CoinBase'
 import { CurrencyService } from 'Services/CurrencyService'
 import { TConvertCoin } from 'Services/CurrencyService/types'
-import { RequestError } from 'Utils'
 import { ValidateRequest } from 'Utils/Decorators/ValidateRequest'
 import { errorResponse, successResponse } from 'Utils/Responses'
 import {
@@ -23,6 +22,8 @@ export class CurrencyController implements ICurrencyController {
     this.currencyService = services
 
     this.GetCurrencyByParameter = this.GetCurrencyByParameter.bind(this)
+    this.CreateNewCurrency = this.CreateNewCurrency.bind(this)
+    this.RemoveCurrency = this.RemoveCurrency.bind(this)
   }
 
   @ValidateRequest(ValidateGetCurrencyByParameter, 'query')
@@ -47,15 +48,10 @@ export class CurrencyController implements ICurrencyController {
     }
   }
 
-  CreateNewCurrency = async (req: Request, res: Response) => {
+  @ValidateRequest(ValidateCreateCurrency)
+  async CreateNewCurrency(req: TCreateCurrency, res: Response) {
     try {
-      const body = req.body as TCreateCurrency
-
-      const validation = ValidateCreateCurrency.validate(body)
-
-      if (validation.error) {
-        throw new RequestError(validation.error.message, {}, 400)
-      }
+      const body = req.body
 
       const { from, value } = body
 
@@ -66,9 +62,9 @@ export class CurrencyController implements ICurrencyController {
     }
   }
 
-  RemoveCurrency = async (req: Request, res: Response) => {
+  async RemoveCurrency(req: TDeleteCurrency, res: Response) {
     try {
-      const body = req.params as TDeleteCurrency
+      const body = req.params
 
       const { coin } = body
 
