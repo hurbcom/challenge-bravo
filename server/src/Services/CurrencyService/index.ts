@@ -87,6 +87,14 @@ export class CurrencyService implements ICurrencyService {
     coinCode: string,
     value: number
   ): Promise<void> => {
+    const coinCache = await this.currencyRepository.retriveCoinFromCache(
+      coinCode
+    )
+
+    if (coinCache) {
+      throw new RequestError('Coin already created!', {}, 400)
+    }
+
     await this.currencyRepository.createCurrency(coinCode, {
       name: coinCode,
       value: value,
