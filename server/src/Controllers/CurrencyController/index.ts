@@ -20,10 +20,6 @@ export class CurrencyController implements ICurrencyController {
 
   constructor(services: CurrencyService = new CurrencyService(requestCoin)) {
     this.currencyService = services
-
-    this.GetCurrencyByParameter = this.GetCurrencyByParameter.bind(this)
-    this.CreateNewCurrency = this.CreateNewCurrency.bind(this)
-    this.RemoveCurrency = this.RemoveCurrency.bind(this)
   }
 
   @ValidateRequest(ValidateGetCurrencyByParameter, 'query')

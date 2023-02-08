@@ -1,13 +1,20 @@
-import { Router } from 'express'
+import { Response, Router } from 'express'
 import { CurrencyController } from './index'
+import * as T from './types'
 
 export const CurrencyRoutes = () => {
   const currencyController = new CurrencyController()
   const route = Router()
 
-  route.get('/convert', currencyController.GetCurrencyByParameter)
-  route.post('/new', currencyController.CreateNewCurrency)
-  route.delete('/:coin', currencyController.RemoveCurrency)
+  route.get('/convert', (req: T.TGetCurrencyByParameter, res: Response) =>
+    currencyController.GetCurrencyByParameter(req, res)
+  )
+  route.post('/new', (req: T.TCreateCurrency, res: Response) =>
+    currencyController.CreateNewCurrency(req, res)
+  )
+  route.delete('/:coin', (req: T.TDeleteCurrency, res: Response) =>
+    currencyController.RemoveCurrency(req, res)
+  )
 
   return route
 }
