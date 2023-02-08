@@ -1,16 +1,15 @@
 import axios from 'axios'
 import { dataRedis } from 'mocks/Redis'
-import { populateCache } from 'Services/CurrencyService'
 import request from 'supertest'
 
-import { init } from 'Utils/Server'
+import { Server } from 'Utils/Server'
 jest.mock('axios')
 
 describe('Currency Controller', () => {
   let app = null as any
 
   beforeAll(async () => {
-    app = await init()
+    app = await new Server().init()
   })
 
   describe('Retrive quotation', () => {

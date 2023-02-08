@@ -1,0 +1,19 @@
+# Copy and install dependecies
+FROM node:lts
+
+WORKDIR /var/www/quotationBatch
+
+COPY ./ ./
+
+RUN rm -rf node_modules
+
+RUN npm i
+
+WORKDIR /var/www/quotationBatch/scripts
+
+RUN apt update && apt install -y cron rsyslog 
+
+RUN crontab crontab.sh
+RUN find . -type f -iname "*.sh" -exec chmod +x {} \;
+
+CMD ["./startContainer.sh"]

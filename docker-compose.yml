@@ -9,7 +9,7 @@ services:
     ports:
       - 6379:6379
   app:
-    build: ./
+    build: ./server
     depends_on:
       redis:
         condition: service_started
@@ -23,3 +23,13 @@ services:
       - PORT=3001
     command:
       sh -c 'npm run start:prd'
+  cron:
+    build: ./updateQuotationBatch
+    depends_on:
+      redis:
+        condition: service_started
+    links:
+      - redis
+    environment:
+      - REDIS_URL_CONNECTION=redis://@cache:6379
+      - COIN_API_KEY=4076F4D0-C443-4497-B391-548C71EA074B

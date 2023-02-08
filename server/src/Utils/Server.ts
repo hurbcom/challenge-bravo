@@ -7,6 +7,10 @@ import { Redis } from './Redis/Redis'
 import { RouteNotFound } from './Middlewares/RouteNotFound'
 
 export class Server {
+  constructor() {
+    return this
+  }
+
   private routes = (app: Application) => {
     console.log('Loading routes::::')
 
