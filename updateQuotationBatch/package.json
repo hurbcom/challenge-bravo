@@ -1,0 +1,17 @@
+{
+  "name": "update-quotation-batch",
+  "version": "1.0.0",
+  "main": "src/index.mjs",
+  "repository": "git@github.com:hurbcom/challenge-bravo.git",
+  "author": "Thomas Nishiduka <thomas.nishiduka@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "axios": "^1.1.2",
+    "env-cmd": "^10.1.0",
+    "redis": "^4.3.1"
+  },
+  "scripts": {
+    "start": "env-cmd -f .env node src/index.js"
+  }
+}
