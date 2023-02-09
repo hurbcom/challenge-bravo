@@ -1,19 +1,30 @@
 import { createClient } from 'redis'
-import { TSetRedisValue, IRedis } from './types'
+import * as RedisMocks from '../../mocks/Redis'
+import { IRedis } from './types'
 
 let client = null as any
 export class Redis implements IRedis {
   protected redisClient!: any
 
   constructor() {
+    /* istanbul ignore next */
     if (client) {
       this.redisClient = client
+    }
+
+    if (process.env.NODE_ENV === 'test') {
+      this.redisClient = RedisMocks
     }
 
     return this
   }
 
+  /* istanbul ignore next */
   initRedisConnection = async () => {
+    if (process.env.NODE_ENV === 'test') {
+      return null
+    }
+
     this.redisClient = createClient({
       url: process.env.REDIS_URL_CONNECTION
     })
@@ -31,10 +42,6 @@ export class Redis implements IRedis {
 
   setRedisValue = async (key: string, value: string) => {
     await this.redisClient.set(key, value)
-  }
-
-  multipleSetRedisValue = async (records: TSetRedisValue) => {
-    await this.redisClient.mset(records)
   }
 
   getRedisValue = async (key: string): Promise<string | null> => {

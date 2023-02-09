@@ -1,4 +1,4 @@
-import { Redis, RequestError } from 'Utils'
+import { Redis } from 'Utils'
 import { TCoinBase } from './types'
 
 export class CurrenciesRepository {
@@ -9,20 +9,13 @@ export class CurrenciesRepository {
   }
 
   retriveCoinFromCache = async (coin: string): Promise<TCoinBase | null> => {
-    try {
-      let currencies = await this.redisClient
-        .getRedisValue(coin)
-        .catch(() => null)
+    let currencies = await this.redisClient.getRedisValue(coin)
 
-      if (!currencies) {
-        return null
-      }
-
-      return JSON.parse(currencies) as TCoinBase
-    } catch (error) {
-      console.log('error:::', error)
-      throw new RequestError('Coin not found', {}, 400)
+    if (!currencies) {
+      return null
     }
+
+    return JSON.parse(currencies) as TCoinBase
   }
 
   setCurrency = async (key: string, value: TCoinBase): Promise<void> => {

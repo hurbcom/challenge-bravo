@@ -12,7 +12,8 @@
     "express": "^4.18.2",
     "joi": "^17.6.3",
     "morgan": "^1.10.0",
-    "redis": "^4.3.1"
+    "redis": "^4.3.1",
+    "run-script-os": "^1.1.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -31,7 +32,12 @@
   "scripts": {
     "start": "nodemon --watch 'src/' --exec \"env-cmd -f .env ts-node -r tsconfig-paths/register src/index.ts\" -e ts",
     "start:prd": "TS_NODE_BASEURL=./dist/src node -r tsconfig-paths/register dist/src/index.js",
-    "build": "rm -rf dist && tsc",
-    "test": "rm -rf coverage && NODE_ENV=test jest --coverage --detectOpenHandles --forceExit"
+    "build": "run-script-os",
+    "build:win32": "rmdir dist && tsc",
+    "build:linux:darwin": "rm -rf dist && tsc",
+    "runTest": "env-cmd -f .env.test jest --coverage --detectOpenHandles --forceExit",
+    "test": "run-script-os",
+    "test:win32": "yarn runTest",
+    "test:linux:darwin": "rm -rf coverage && yarn runTest"
   }
 }
