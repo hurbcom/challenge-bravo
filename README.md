@@ -8,6 +8,7 @@ Para o batch funcionar, é necessário que suba o container, pois toda a configu
 ## Para iniciar o projeto
 Antes de iniciar, é necessário ter o docker instalado, juntamente com o orquestrador `docker-composer`. 
 Para startar o projeto, é preciso rodar o comando `docker-compose up` na pasta raiz do projeto.
+Para iniciar o projeto `server`, é só entrar na pasta server, instalar as dependências com o `npm install` ou `yarn install` e rodar o comando `yarn start` ou `npm run start`. Lembrando que, para iniciar corretamente, é necessário que o Redis esteja rodando e que a ENV esteja corretamente setado.
 ## Desenvolvimento
 ### Server
 
