@@ -14,7 +14,10 @@ export interface ICurrencyService {
     amount: number
   ) => Promise<TConvertCoin>
 
-  retriveValueCoin: (from: string, to: string) => Promise<TRetriveValueCoin>
+  retriveCoinsFromCacheOrService: (
+    from: string,
+    to: string
+  ) => Promise<TRetriveValueCoin>
 
   retriveCoin: (coin: string) => Promise<number>
 

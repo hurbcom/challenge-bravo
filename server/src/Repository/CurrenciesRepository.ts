@@ -25,7 +25,7 @@ export class CurrenciesRepository {
     }
   }
 
-  createCurrency = async (key: string, value: TCoinBase): Promise<void> => {
+  setCurrency = async (key: string, value: TCoinBase): Promise<void> => {
     await this.redisClient.setRedisValue(key, JSON.stringify(value))
   }
 

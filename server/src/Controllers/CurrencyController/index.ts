@@ -8,11 +8,13 @@ import {
   TCreateCurrency,
   TGetCurrencyByParameter,
   TDeleteCurrency,
-  ICurrencyController
+  ICurrencyController,
+  TUpdateCurrency
 } from './types'
 import {
   ValidateGetCurrencyByParameter,
-  ValidateCreateCurrency
+  ValidateCreateCurrency,
+  ValidateUpdateCurrency
 } from './validations'
 
 export class CurrencyController implements ICurrencyController {
@@ -52,6 +54,19 @@ export class CurrencyController implements ICurrencyController {
       const { from, value } = body
 
       await this.currencyService.createNewCurrency(from.toUpperCase(), value)
+      return successResponse(res, {}, 201)
+    } catch (error) {
+      return errorResponse(res, error)
+    }
+  }
+
+  @ValidateRequest(ValidateUpdateCurrency)
+  async UpdateCurrency(req: TUpdateCurrency, res: Response) {
+    try {
+      const { value } = req.body
+      const { coin } = req.params
+
+      await this.currencyService.updateCurrency(coin.toUpperCase(), value)
       return successResponse(res, {}, 201)
     } catch (error) {
       return errorResponse(res, error)

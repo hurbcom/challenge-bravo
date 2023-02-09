@@ -31,6 +31,15 @@ export interface TCreateCurrency extends Express.Request {
   }
 }
 
+export interface TUpdateCurrency extends Express.Request {
+  params: {
+    coin: string
+  }
+  body: {
+    value: number
+  }
+}
+
 export interface TDeleteCurrency extends Express.Request {
   params: {
     coin: string

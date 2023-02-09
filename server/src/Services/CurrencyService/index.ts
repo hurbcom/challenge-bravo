@@ -23,7 +23,8 @@ export class CurrencyService implements ICurrencyService {
     to: string,
     amount: number
   ): Promise<TConvertCoin> => {
-    const { fromQuotation, toQuotation } = await this.retriveValueCoin(from, to)
+    const { fromQuotation, toQuotation } =
+      await this.retriveCoinsFromCacheOrService(from, to)
 
     let converted = amount * fromQuotation * toQuotation
 
@@ -35,7 +36,7 @@ export class CurrencyService implements ICurrencyService {
     }
   }
 
-  retriveValueCoin = async (
+  retriveCoinsFromCacheOrService = async (
     from: string,
     to: string
   ): Promise<TRetriveValueCoin> => {
@@ -95,7 +96,23 @@ export class CurrencyService implements ICurrencyService {
       throw new RequestError('Coin already created!', {}, 400)
     }
 
-    await this.currencyRepository.createCurrency(coinCode, {
+    await this.currencyRepository.setCurrency(coinCode, {
+      name: coinCode,
+      value: value,
+      requiredBySystem: this.DEFAULT_COINS.includes(coinCode)
+    })
+  }
+
+  updateCurrency = async (coinCode: string, value: number): Promise<void> => {
+    const coinCache = await this.currencyRepository.retriveCoinFromCache(
+      coinCode
+    )
+
+    if (!coinCache) {
+      throw new RequestError('Coin not found!', {}, 400)
+    }
+
+    await this.currencyRepository.setCurrency(coinCode, {
       name: coinCode,
       value: value,
       requiredBySystem: this.DEFAULT_COINS.includes(coinCode)
