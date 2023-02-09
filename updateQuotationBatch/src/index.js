@@ -3,7 +3,6 @@ import { ConnectRedisClient, SetItems } from './Utils/Redis.js'
 
 try {
   console.log('starting script:::')
-  console.log('process.env:::', process.env)
 
   const redisConnection = await ConnectRedisClient()
   const coins = await getCoinsFromService()
