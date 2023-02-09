@@ -155,7 +155,7 @@
 	"variable": [
 		{
 			"key": "API_URL",
-			"value": "localhost:3000"
+			"value": "localhost:3001"
 		}
 	]
 }
