@@ -1,0 +1,161 @@
+{
+	"info": {
+		"_postman_id": "50d8dd84-d311-4aae-ae7e-a082af9f44ed",
+		"name": "Bravo-Challenge-Thomas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Converter Moeda",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_URL}}/api/currency/convert?from=BRL&to=USD&amount=2",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"currency",
+						"convert"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "BRL"
+						},
+						{
+							"key": "to",
+							"value": "USD"
+						},
+						{
+							"key": "amount",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Adicionar nova moeda",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"from\": \"GTA\",\r\n\t\"value\": 110\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/currency/new",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"currency",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar moeda",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"from\": \"GTA\",\r\n\t\"value\": 110\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/currency/new",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"currency",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remover Moeda",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/api/currency/GTA",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"currency",
+						"GTA"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "localhost:3000"
+		}
+	]
+}
