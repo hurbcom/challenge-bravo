@@ -5,6 +5,8 @@ import morgan from 'morgan'
 import { CurrencyRoutes } from 'Controllers/CurrencyController/routes'
 import { Redis } from './Redis/Redis'
 import { RouteNotFound } from './Middlewares/RouteNotFound'
+import { corsOptions } from './Middlewares/Cors'
+import { setHearders } from './Middlewares/setHearders'
 
 export class Server {
   constructor() {
@@ -22,7 +24,8 @@ export class Server {
     console.log('Loading modules::::')
 
     app.use(express.json())
-    app.use(cors())
+    app.use(setHearders)
+    app.use(cors(corsOptions))
   }
 
   private databaseConnection = async () => {

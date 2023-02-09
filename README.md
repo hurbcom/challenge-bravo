@@ -8,7 +8,6 @@ Para o batch funcionar, é necessário que suba o container, pois toda a configu
 ## Para iniciar o projeto
 Antes de iniciar, é necessário ter o docker instalado, juntamente com o orquestrador `docker-composer`. 
 Para startar o projeto, é preciso rodar o comando `docker-compose up` na pasta raiz do projeto.
-
 ## Desenvolvimento
 ### Server
 
@@ -36,6 +35,10 @@ O fluxo ficou mais ou menos assim, considerando o payload `?from=BTC&to=EUR&amou
 - Requisita a cotação do BTC para USD e salva no banco;
 - Busca a cotação de EUR para USD, salva no banco;
 - Multiplica a `amount` pela cotação do BTC em USD e multiplica o resultado pelo EUR para USD
+
+#### CORS
+No projeto foi ativado o CORS somente para a ENV `NODE_ENV=production`. 
+Em todos os pontos foi colocado o NODE_ENV para diferente de production, mas caso deseja testar, é só trocar a ENV para production.
 
 #### Endpoints
 ##### GET `/api/currency/convert?from=BTC&to=EUR&amount=123.45`
