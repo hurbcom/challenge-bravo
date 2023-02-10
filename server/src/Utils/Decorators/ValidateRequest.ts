@@ -9,7 +9,7 @@ export function ValidateRequest(
   validationSchema: Joi.Schema,
   objectToValidate: TObjectToValidate = 'body'
 ) {
-  return (target: any, key: string, descriptor: PropertyDescriptor) => {
+  return (_target: any, _key: string, descriptor: PropertyDescriptor) => {
     const defaultValue = descriptor.value
 
     descriptor.value = async function (

@@ -13,5 +13,6 @@
   },
   "scripts": {
     "start": "env-cmd -f .env node src/index.js"
-  }
+  },
+  "devDependencies": {}
 }

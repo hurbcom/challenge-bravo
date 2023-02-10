@@ -6,6 +6,7 @@ import { ICurrencyService, TConvertCoin } from './types'
 
 export class CurrencyService implements ICurrencyService {
   private DEFAULT_COINS = ['BRL', 'EUR', 'BTC', 'ETH'] as string[]
+  private DOLAR_TO_DOLAR = 1
 
   protected currencyRepository!: CurrenciesRepository
   protected requestCoin!: TRequestCoin
@@ -26,7 +27,7 @@ export class CurrencyService implements ICurrencyService {
     const { fromQuotation, toQuotation } =
       await this.retriveCoinsFromCacheOrService(from, to)
 
-    let converted = amount * fromQuotation * toQuotation
+    const converted = amount * fromQuotation * toQuotation
 
     return {
       from,
@@ -41,22 +42,21 @@ export class CurrencyService implements ICurrencyService {
     to: string
   ): Promise<TRetriveValueCoin> => {
     try {
-      let fromCurrency = 1
-      let toCurrency = 1
+      const data = {
+        fromQuotation: this.DOLAR_TO_DOLAR,
+        toQuotation: this.DOLAR_TO_DOLAR
+      }
 
       if (from !== 'USD') {
-        fromCurrency = await this.retriveCoin(from)
+        data.fromQuotation = await this.retriveCoin(from)
       }
 
       if (to !== 'USD') {
-        let toCurrencyCache = await this.retriveCoin(to)
-        toCurrency = 1 / toCurrencyCache
+        const toCurrencyCache = await this.retriveCoin(to)
+        data.toQuotation = this.DOLAR_TO_DOLAR / toCurrencyCache
       }
 
-      return {
-        fromQuotation: fromCurrency,
-        toQuotation: toCurrency
-      }
+      return data
     } catch (error) {
       console.log('error:::', error)
       throw error
@@ -65,20 +65,16 @@ export class CurrencyService implements ICurrencyService {
 
   retriveCoin = async (coin: string): Promise<number> => {
     try {
-      let coinBase: number = 0
-
       const coinCache = await this.currencyRepository.retriveCoinFromCache(coin)
 
       if (coinCache) {
-        coinBase = coinCache.value
+        return coinCache.value
       }
 
-      if (!coinBase) {
-        coinBase = await this.requestCoin(coin)
-        this.createNewCurrency(coin, coinBase)
-      }
+      const coinRequested = await this.requestCoin(coin)
+      this.createNewCurrency(coin, coinRequested)
 
-      return coinBase
+      return coinRequested
     } catch (error) {
       throw new RequestError('Coin does not exist!', {}, 400)
     }

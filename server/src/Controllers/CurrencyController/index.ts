@@ -30,9 +30,7 @@ export class CurrencyController implements ICurrencyController {
     res: Response
   ): Promise<Response<TConvertCoin>> {
     try {
-      const query = req.query
-
-      const { from, to, amount } = query
+      const { from, to, amount } = req.query
 
       const data = await this.currencyService.convertCoin(
         from.toUpperCase(),
@@ -49,9 +47,7 @@ export class CurrencyController implements ICurrencyController {
   @ValidateRequest(ValidateCreateCurrency)
   async CreateNewCurrency(req: TCreateCurrency, res: Response) {
     try {
-      const body = req.body
-
-      const { from, value } = body
+      const { from, value } = req.body
 
       await this.currencyService.createNewCurrency(from.toUpperCase(), value)
       return successResponse(res, {}, 201)
@@ -75,9 +71,7 @@ export class CurrencyController implements ICurrencyController {
 
   async RemoveCurrency(req: TDeleteCurrency, res: Response) {
     try {
-      const body = req.params
-
-      const { coin } = body
+      const { coin } = req.params
 
       await this.currencyService.removeCurrency(coin.toUpperCase())
       return successResponse(res, {}, 202)

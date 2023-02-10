@@ -8,20 +8,17 @@ export async function getCoinsFromService() {
     currenciesDefault.map((coin) => requestCoin(coin))
   )
 
-  let coins = []
-
-  for (let index = 0; index < currenciesDefault.length; index++) {
-    const coin = currenciesDefault[index]
-
+  const coins = coinsInDollar.reduce((previous, coin) => {
     const struct = {
-      name: coin,
-      value: coinsInDollar[index],
+      name: coin.name,
+      value: coin.value,
       requiredBySystem: true
     }
 
-    coins.push(coin)
-    coins.push(JSON.stringify(struct))
-  }
+    previous[coin.name] = JSON.stringify(struct)
 
-  return coins
+    return previous
+  }, {})
+
+  return Object.entries(coins)
 }

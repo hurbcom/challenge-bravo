@@ -11,7 +11,10 @@ export async function requestCoin(coin) {
       }
     )
 
-    return response.data.rate
+    return {
+      name: response.data.asset_id_base,
+      value: response.data.rate
+    }
   } catch (e) {
     console.log('e:::', e)
     throw new Error('Coin not found')

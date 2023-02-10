@@ -18,8 +18,6 @@ export class Redis implements IRedis {
       url: process.env.REDIS_URL_CONNECTION
     })
 
-    console.log('this.redisClient:::', this.redisClient)
-
     await this.redisClient.connect()
 
     this.redisClient.on('error', (err: Error) => {

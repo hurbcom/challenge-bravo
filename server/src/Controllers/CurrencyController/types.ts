@@ -10,6 +10,10 @@ export interface ICurrencyController {
     req: TCreateCurrency,
     res: Response
   ) => Promise<Response<any, Record<string, any>>>
+  UpdateCurrency: (
+    req: TUpdateCurrency,
+    res: Response
+  ) => Promise<Response<any, Record<string, any>>>
   RemoveCurrency: (
     req: TDeleteCurrency,
     res: Response
