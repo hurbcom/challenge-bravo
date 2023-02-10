@@ -19,3 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get("/convert", [\App\Http\Controllers\CurrencyConversionController::class, 'convert']);
+
+// CRUD na para as moedas
+Route::get('/coin', [\App\Http\Controllers\CoinController::class, 'index']);
+Route::post('/coin', [\App\Http\Controllers\CoinController::class, 'store']);
