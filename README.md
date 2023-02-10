@@ -25,17 +25,17 @@ A organização de pastas ficou a seguinte:
 │   └── Utils
 ```
 
-Na pasta Controllers, ficaram os arquivos responsáveis por formar a rota, tratar o body e a passar a lógica para um Services.
-Na pasta Services ficaram os arquivos com toda a lógica e regra de negócios.
-Na pasta Repository ficaram as lógicas envolvendo banco de dados e popular o banco.
-Na pasta Utils ficaram alguns arquivos de apoio ao desenvolvimento.
+Na pasta Controllers, ficam os arquivos responsáveis por formar a rota, tratar o body e a passar a lógica para um Services.
+Na pasta Services ficam os arquivos com toda a lógica e regra de negócios.
+Na pasta Repository ficam as lógicas envolvendo banco de dados e popular o banco.
+Na pasta Utils ficam alguns arquivos de apoio ao desenvolvimento.
 
-A lógica base utilizada foi: pegar a moeda que está vindo e converte-la em Dollar, para padronizar todas as cotações.
-O fluxo ficou mais ou menos assim, considerando o payload `?from=BTC&to=EUR&amount=123.45`.
+A lógica base utilizada foi: pegar a moeda que está vindo e converte-la em Dolar, para padronizar todas as cotações.
+O fluxo ficou assim, considerando o payload `?from=BTC&to=EUR&amount=123.45`.
 
 - Requisita a cotação do BTC para USD e salva no banco;
 - Busca a cotação de EUR para USD, salva no banco;
-- Multiplica a `amount` pela cotação do BTC em USD e multiplica o resultado pelo EUR para USD
+- Multiplica o `amount` pela cotação do BTC em USD e multiplica o resultado pelo EUR para USD
 
 #### CORS
 No projeto foi ativado o CORS somente para a ENV `NODE_ENV=production`. 
@@ -77,6 +77,6 @@ ___
 Remove uma cotação
 
 ### Batch
-A aplicações foi escrita com JS Vanilla, para que seja um código simples de rodar, sem precisar de muitas dependências ou processos de builds.
+A aplicação foi escrita em JS Vanilla, para que seja um código simples de rodar, sem precisar de muitas dependências ou processos de builds.
 Para iniciar, é só executar o comando `yarn start` ou `npm run start`.
 Lembrando que, para iniciar é nessário que o .env esteja na pasta do batch. O .env é o mesmo da aplicação `server`.
