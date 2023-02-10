@@ -3,7 +3,7 @@ import { requestCoin } from 'Services/CoinBase'
 import { CurrencyService } from 'Services/CurrencyService'
 import { TConvertCoin } from 'Services/CurrencyService/types'
 import { ValidateRequest } from 'Utils/Decorators/ValidateRequest'
-import { errorResponse, successResponse } from 'Utils/Responses'
+import { errorResponse, successResponse } from 'Utils'
 import {
   TCreateCurrency,
   TGetCurrencyByParameter,

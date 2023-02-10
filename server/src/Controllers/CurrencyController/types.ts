@@ -16,7 +16,7 @@ export interface ICurrencyController {
   ) => Promise<Response<any, Record<string, any>>>
 }
 
-export interface TGetCurrencyByParameter extends Express.Request {
+export interface TGetCurrencyByParameter extends Request {
   query: {
     from: string
     to: string
@@ -24,14 +24,14 @@ export interface TGetCurrencyByParameter extends Express.Request {
   }
 }
 
-export interface TCreateCurrency extends Express.Request {
+export interface TCreateCurrency extends Request {
   body: {
     from: string
     value: number
   }
 }
 
-export interface TUpdateCurrency extends Express.Request {
+export interface TUpdateCurrency extends Request {
   params: {
     coin: string
   }
@@ -40,7 +40,7 @@ export interface TUpdateCurrency extends Express.Request {
   }
 }
 
-export interface TDeleteCurrency extends Express.Request {
+export interface TDeleteCurrency extends Request {
   params: {
     coin: string
   }
