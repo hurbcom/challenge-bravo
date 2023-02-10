@@ -23,3 +23,4 @@ Route::get("/convert", [\App\Http\Controllers\CurrencyConversionController::clas
 // CRUD na para as moedas
 Route::get('/coin', [\App\Http\Controllers\CoinController::class, 'index']);
 Route::post('/coin', [\App\Http\Controllers\CoinController::class, 'store']);
+Route::post('/coin/{id}', [\App\Http\Controllers\CoinController::class, 'update']);

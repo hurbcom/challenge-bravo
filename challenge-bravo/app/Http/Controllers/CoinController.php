@@ -35,6 +35,21 @@ class CoinController extends Controller
                 "error_description" => $ex->getMessage()
             ]);
         }
+    }
 
+    public function update(Request $request, $id){
+        try {
+            $coinData = $request->all();
+            $coin = Coin::findOrFail($id);
+            $coin->update($coinData);
+
+            return response()->json(["msg" => "Coin updated!"], 200);
+        
+        } catch(Exception $ex) {
+            return response()->json([
+                "error_msg" => "Error updating coin",
+                "error_description" => $ex->getMessage()
+            ]);
+        }
     }
 }
