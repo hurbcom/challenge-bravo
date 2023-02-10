@@ -3,9 +3,6 @@ type TData = {
 }
 export let dataRedis = {} as TData
 
-export const createClient = () => {}
-export const connect = () => {}
-
 export const set = (key: string, value: string) => {
   return new Promise((resolve) => {
     dataRedis[key] = value
@@ -25,3 +22,11 @@ export const del = (key: string) => {
     resolve(null)
   })
 }
+
+export const createClient = () => ({
+  connect: jest.fn,
+  on: jest.fn,
+  set,
+  get,
+  del
+})

@@ -7,11 +7,11 @@ export const corsOptions = {
     origin: string,
     callback: (err: Error | null, origin?: boolean) => void
   ) => {
-    if (
-      whitelist.indexOf(origin) !== -1 ||
-      process.env.NODE_ENV !== 'production'
-    ) {
-      callback(null, true)
+    if (!whitelist.includes(origin) || process.env.NODE_ENV !== 'production') {
+      const NO_ERROR = null
+      const ORIGIN_OK = true
+
+      callback(NO_ERROR, ORIGIN_OK)
     } else {
       callback(new Error('Not the same origin'))
     }

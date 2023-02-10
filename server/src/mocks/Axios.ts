@@ -3,6 +3,7 @@ const response = `{"time":"2023-02-09T17:08:27.0000000Z","asset_id_base":"BRL","
 
 export default {
   get: (url: string) => {
+    console.log('url:::', url)
     const splited = url.split('/')
     const to = splited[splited.length - 2]
     const from = splited[splited.length - 3]

@@ -1,33 +1,24 @@
-import { createClient } from 'redis'
-import * as RedisMocks from '../../mocks/Redis'
+import { createClient, RedisClientType } from 'redis'
 import { IRedis } from './types'
 
-let client = null as any
+let client = null as RedisClientType | null
 export class Redis implements IRedis {
   protected redisClient!: any
 
   constructor() {
-    /* istanbul ignore next */
     if (client) {
       this.redisClient = client
-    }
-
-    if (process.env.NODE_ENV === 'test') {
-      this.redisClient = RedisMocks
     }
 
     return this
   }
 
-  /* istanbul ignore next */
   initRedisConnection = async () => {
-    if (process.env.NODE_ENV === 'test') {
-      return null
-    }
-
     this.redisClient = createClient({
       url: process.env.REDIS_URL_CONNECTION
     })
+
+    console.log('this.redisClient:::', this.redisClient)
 
     await this.redisClient.connect()
 
