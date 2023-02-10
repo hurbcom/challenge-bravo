@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Exception;
-
+use App\Http\Requests\CurrencyConversionRequest;
 use App\Services\CurrencyConversionService;
 
 class CurrencyConversionController extends Controller
@@ -15,10 +14,10 @@ class CurrencyConversionController extends Controller
         $this->currencyConversor = $currencyConversor;
     }
 
-    public function convert(Request $request) {
+    public function convert(CurrencyConversionRequest $request) {
         try {
-            $from = $request->from;
-            $to   = $request->to;
+            $from = strtoupper($request->from);
+            $to   = strtoupper($request->to);
             $amount = $request->amount;
         
             $conversion = $this->currencyConversor->convert($amount, $from, $to);

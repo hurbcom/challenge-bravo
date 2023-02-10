@@ -55,7 +55,7 @@ class CurrencyConversionService {
 
             // faz o calculo de conversão das moedas usando o valor delas em dolar como lastro
             $resultConversion = ($amount * $fromCurrencyUSDValue) / $toCurrencyUSDValue;
-
+            
             return [
                 "result" => $resultConversion
             ];
