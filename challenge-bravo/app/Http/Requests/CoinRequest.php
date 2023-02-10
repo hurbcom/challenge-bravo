@@ -24,7 +24,7 @@ class CoinRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'     => 'required|size:100',
+            'name'     => 'required',
             'code'   => 'required|size:3|alpha',
             'dolarValue' => 'required|numeric|between:0,999999999999.99'
         ];
