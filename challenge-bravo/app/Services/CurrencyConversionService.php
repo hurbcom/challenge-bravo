@@ -28,7 +28,7 @@ class CurrencyConversionService {
                 return ["error" => "Coin $to doesn't avaliable"];
 
             if (!in_array($from, CurrencyConversionService::AVALIABLE_CURRENCIES))
-                return ["error" => "Coin $to doesn't avaliable"];
+                return ["error" => "Coin $from doesn't avaliable"];
 
             // faz request para a API de conversão
             $client = new Client();
@@ -57,12 +57,10 @@ class CurrencyConversionService {
             $resultConversion = ($amount * $fromCurrencyUSDValue) / $toCurrencyUSDValue;
 
             return [
-                "error" => [],
                 "result" => $resultConversion
             ];
 
         } catch (Exception $ex) {
-            dd($ex->getMessage());
             return false;
         }
     }
