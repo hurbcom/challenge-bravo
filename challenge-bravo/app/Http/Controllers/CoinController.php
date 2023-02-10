@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Coin;
+use App\Http\Requests\CoinRequest;
 use Exception;
 
 class CoinController extends Controller
@@ -17,7 +18,7 @@ class CoinController extends Controller
         ], 200);
     }
 
-    public function store(Request $request) {
+    public function store(CoinRequest $request) {
         try {
             $coin = new Coin;
             $coin->name = $request->name;
@@ -37,7 +38,7 @@ class CoinController extends Controller
         }
     }
 
-    public function update(Request $request, $id){
+    public function update(CoinRequest $request, $id){
         try {
             $coinData = $request->all();
             $coin = Coin::findOrFail($id);
@@ -63,7 +64,7 @@ class CoinController extends Controller
 
         } catch (Exception $ex) {
             return response()->json([
-                "error_msg" => "Error deleting coin",
+                "error_msg" => "Error showing coin",
                 "error_description" => $ex->getMessage()
             ]);
         }
