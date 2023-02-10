@@ -18,6 +18,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get("/convert", function (){
-    return "ok";
-});
+Route::get("/convert", [\App\Http\Controllers\CurrencyConversionController::class, 'convert']);
