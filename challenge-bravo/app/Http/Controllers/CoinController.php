@@ -11,7 +11,7 @@ class CoinController extends Controller
 {
     public function index() {
         $coins = Coin::all();
-        
+
         return response()->json([
             "data" => $coins
         ], 200);
@@ -31,7 +31,8 @@ class CoinController extends Controller
 
         } catch (Exception $ex) {
             return response()->json([
-                "error" => "Error saving coin"
+                "error_msg" => "Error saving coin",
+                "error_description" => $ex->getMessage()
             ]);
         }
 
