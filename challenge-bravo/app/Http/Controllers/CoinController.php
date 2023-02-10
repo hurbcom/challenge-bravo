@@ -52,4 +52,36 @@ class CoinController extends Controller
             ]);
         }
     }
+
+    public function show($id) {
+        try {
+            $coin = Coin::findOrFail($id);
+            
+            return response()->json([
+                "data" => $coin
+            ], 200);
+
+        } catch (Exception $ex) {
+            return response()->json([
+                "error_msg" => "Error deleting coin",
+                "error_description" => $ex->getMessage()
+            ]);
+        }
+    }
+
+    public function delete($id) {
+        try {
+            $coin = Coin::findOrFail($id);
+            $coin->delete();
+            return response()->json([
+                "msg" => "Coin Deleted!"
+            ], 200);
+
+        } catch (Exception $ex) {
+            return response()->json([
+                "error_msg" => "Error deleting coin",
+                "error_description" => $ex->getMessage()
+            ]);
+        }
+    }
 }
