@@ -35,38 +35,38 @@ class CurrencyConversionService {
             if (!in_array($from, $allAvaliablesCurrencyCode))
                 return ["error" => "Coin $from doesn't avaliable"];
 
+            // Caso a moeda origem seja igual a moeda destino retorna o valor
+            if ($from == $to)
+                return ["result" => $amount]; 
+            
             // faz request para a API de conversão
             $client = new Client();
             
-            // Converte valor unitário da moeda origem para dolar
             $fromCurrencyUSDValue = 0;
             // caso seja uma moeda real, pega o valor em dolar da API
             if(!in_array($from, $allPersonalCurrencies)) {
-                $fromCurrency = '';
-                if ($from == 'USD') {
-                    $fromCurrency = $client->get($this->currencyConversionAPIEnpoint . CurrencyConversionService::BACKING_CURRENCY);
-                } else {
+                if ($from != 'USD'){
                     $fromCurrency = $client->get($this->currencyConversionAPIEnpoint . $from . "-" . CurrencyConversionService::BACKING_CURRENCY);                
+                    $fromCurrency = json_decode($fromCurrency->getBody(), true);
+                    $fromCurrencyUSDValue = $fromCurrency[$from . CurrencyConversionService::BACKING_CURRENCY]["ask"];
+                } else {
+                    $fromCurrencyUSDValue = 1;
                 }
-                $fromCurrency = json_decode($fromCurrency->getBody(), true);
-                $fromCurrencyUSDValue = $fromCurrency[$from . CurrencyConversionService::BACKING_CURRENCY]["ask"];
             } else {
                 // caso não seja uma moeda real, pega o valor do banco
                 $fromCurrencyUSDValue = Coin::where('code', $from)->value('dolarValue');
             }
 
-            // Converte valor unitário da moeda destino para dolar
             $toCurrencyUSDValue = 0;
             // caso seja uma moeda real, pega o valor em dolar da API
             if (!in_array($to, $allPersonalCurrencies)) {
-                $toCurrency = '';
-                if ($to == 'USD') {
-                    $toCurrency = $client->get(CurrencyConversionService::BACKING_CURRENCY);
-                } else {
+                if ($to != 'USD'){
                     $toCurrency = $client->get($this->currencyConversionAPIEnpoint . $to . "-" . CurrencyConversionService::BACKING_CURRENCY);
+                    $toCurrency = json_decode($toCurrency->getBody(), true);
+                    $toCurrencyUSDValue = $toCurrency[$to . CurrencyConversionService::BACKING_CURRENCY]["ask"];
+                } else {
+                    $toCurrencyUSDValue = 1;
                 }
-                $toCurrency = json_decode($toCurrency->getBody(), true);
-                $toCurrencyUSDValue = $toCurrency[$to . CurrencyConversionService::BACKING_CURRENCY]["ask"];
             } else {
                 // caso não seja uma moeda real, pega o valor do banco
                 $toCurrencyUSDValue = Coin::where('code', $to)->value('dolarValue');
