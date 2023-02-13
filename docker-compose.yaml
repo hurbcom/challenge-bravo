@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: database
+    command: ["--init-file", "/docker-entrypoint-initdb.d/init.sql"]
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./challenge-bravo/init.sql:/docker-entrypoint-initdb.d/init.sql     
+  api:
+    build: ./
+    volumes:
+      - ./challenge-bravo:/challenge-bravo
+    ports:
+      - "8000:8000"
+    command:  sh -c "composer install && php artisan migrate --env=local && php artisan migrate --env=testing && php artisan test && php artisan serve --host=0.0.0.0 --port=8000 && tail -f /dev/null"
+    depends_on:
+      - db

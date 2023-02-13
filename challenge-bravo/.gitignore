@@ -3,7 +3,6 @@
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -15,3 +14,4 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/vendor
