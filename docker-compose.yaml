@@ -7,12 +7,12 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: database
     command: ["--init-file", "/docker-entrypoint-initdb.d/init.sql"]
-    ports:
-      - "3306:3306"
+    restart: always
     volumes:
       - ./challenge-bravo/init.sql:/docker-entrypoint-initdb.d/init.sql     
   api:
     build: ./
+    restart: always
     volumes:
       - ./challenge-bravo:/challenge-bravo
     ports:
