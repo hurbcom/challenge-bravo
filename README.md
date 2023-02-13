@@ -21,13 +21,13 @@ Além de descrever como realizar as requisições aqui,
 também criei uma collection no postman para testar esse projeto,
 a collection está localizada na pasta ```./docs/```, basta importar.
 
-## ✔ Realizar conversão entre moedas
+## ✔ Realiza conversão entre moedas
 
 Converte valores entre moedas
 
 ### Requisição
 
-```localhost:8000/api/convert?from=EUR&to=BRL&amount=100```
+```GET localhost:8000/api/convert?from=EUR&to=BRL&amount=100```
 
 ### Campos:
 * from: moeda de origem
@@ -86,29 +86,6 @@ Realiza a modificação de um moeda existente no banco
 ### Parametros de url
 * id: id da moeda no banco de dados
 
-## ✔ Atualiza os dados de uma moeda existente
-
-Realiza a modificação de um moeda existente no banco
-
-### Request
-```POST localhost:8000/api/coin/{id}```
-
-### Body
-~~~json
-{
-    "name": "GTA Coin",
-    "code": "GTC",
-    "dolarValue": 15.15
-}
-~~~
-
-### Campos:
-* name: o nome da Moeda a ser cadastrada
-* code: o código da moeda a ser cadastrada (exemplo: CBR)
-* dolarValue: valor da unidade da moeda (em dolar)
-
-### Parametros de url
-* id: id da moeda no banco de dados
 
 
 ## ✔ Mostra dados de uma moeda cadastrada
