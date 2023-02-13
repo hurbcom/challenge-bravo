@@ -58,4 +58,26 @@ class CurrencyConversionServiceTest extends TestCase
         
         $this->assertEquals(['result' => 10 ], $result); 
     }
+
+
+    /**
+     * Testa a conversão entre  moedas reais.
+     *
+     * @return void
+     */
+    public function testConversionWithRealCurrency(){
+        // Define os parâmetros de entrada
+        $amount = 10;
+        $from = 'BRL';
+        $to = 'EUR';
+        // Instancia o serviço a ser testado
+        $service = new CurrencyConversionService();
+
+        // Executa o método a ser testado e recebe o resultado
+        $result = $service->convert($amount, $from, $to);
+
+        // Verifica se o resultado contém o valor esperado
+        $this->assertTrue(array_key_exists('result', $result)); 
+    }
+
 }
