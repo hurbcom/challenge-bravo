@@ -1,0 +1,2 @@
+[run]
+omit = */models/*, */schemas/*, */wsgi.py, */__init__.py, */util/*, */tests/*, */dto/*, */main.py, */config.py, */repositories/*, */utils/*
