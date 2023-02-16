@@ -1,82 +1,128 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# Desafio Bravo - API de Cotações de Moedas
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+Este projeto é uma API de cotações de moedas desenvolvida para atender ao desafio da empresa Hurb. A aplicação fornece informações atualizadas sobre as taxas de câmbio entre diversas moedas e suporta um grande volume de requisições por segundo.
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+## Tecnologias Utilizadas
 
-The API must convert between the following currencies:
+A API foi desenvolvida utilizando as seguintes tecnologias:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+-   [FastAPI](https://fastapi.tiangolo.com/) - um framework web assíncrono para Python.
+-   [SQLAlchemy](https://www.sqlalchemy.org/) - uma biblioteca de mapeamento objeto-relacional para Python.
+-   [pytest](https://docs.pytest.org/en/latest/) - uma estrutura de teste para Python.
+-   [PostgreSQL](https://www.postgresql.org/) - um sistema gerenciador de banco de dados relacional.
+-   [Locust](https://locust.io/) - uma ferramenta para testes de carga e estresse.
 
-Other coins could be added as usage.
+## Instalação
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+Para executar a aplicação em sua máquina local, siga os passos abaixo:
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+1.  Faça o clone do repositório:
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+bashCopy code
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+`git clone https://github.com/willianweiss/challenge-bravo`
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+## Como rodar a aplicação
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+Para executar a aplicação, primeiro renomeie o arquivo `.env.example` para `.env`. Em seguida, execute o seguinte comando:
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+bashCopy code
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+`docker-compose up --build` 
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+A aplicação também pode ser executada utilizando os seguintes comandos e auxiliares:
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+Comando
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Descrição
 
-## Requirements
+`make build`
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+Builda a aplicação e aplica migrations alembic
 
-## Evaluation criteria
+`make down`
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+Derruba a aplicação (api, banco de dados e coinbase_feeder)
 
-## Doubts
+`make up`
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+Inicia a aplicação (api, banco de dados e coinbase_feeder)
 
-Godspeed! ;)
+`make test-cov`
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Executa testes unitários com cobertura de código
+
+`make lint`
+
+Aplica linters black e isort para formatação do código
+
+`make stress_tests`
+
+Executa testes de carga com locust
+
+## Endpoints
+
+A documentação extensa de todo tipo de input e output pode ser encontrada em [http://localhost:8000/docs](http://localhost:8000/docs) conforme indicação de como executar a aplicação.
+
+Endpoint
+
+Método
+
+Retorno
+
+`/currency`
+
+GET
+
+Retorna todas as moedas cadastradas
+
+`/currency/{currency_code}`
+
+GET
+
+Retorna a cotação de uma moeda específica
+
+`/currency`
+
+POST
+
+Cria uma moeda fictícia
+
+`/currency/{currency_code}`
+
+PUT
+
+Atualiza a cotação de uma moeda específica
+
+`/currency/{currency_code}`
+
+DELETE
+
+Deleta uma moeda específica
+
+`/convert`
+
+GET
+
+Converte o valor de uma moeda para outra
+
+![stress tests results](https://chat.openai.com/app/docs_images/endpoints.png)
+
+## Testes
+
+Foram criados testes unitários cobrindo todos endpoints da aplicação, convert/currency.
+
+Para executá-los, utilize o seguinte comando:
+
+bashCopy code
+
+`make test-cov` 
+
+O resultado do teste de cobertura será apresentado no terminal, assim como um relatório em formato xml, que pode ser encontrado no diretório `app`.
+
+## Banco de Dados
+
+O banco de dados é criado automaticamente quando a aplicação é iniciada e possui duas tabelas:
+
+-   `coinbase_currencies_public_api`: moedas e cotações da API Coinbase que podem ser acessadas no endpoint `'/currency'` [GET]
+-   `fictitious_currencies`: moedas e cotações das moedas fictícias criadas pelo usuário no ednpoint `'/currency'` [POST]
