@@ -1,0 +1,21 @@
+services:
+#    quote-service:
+#        build:
+#            context: .
+#            args:
+#                - JAR_FILE=./build/libs/QuoteService-0.0.1-SNAPSHOT.jar
+#        ports:
+#            - "8080:8080"
+#            - "5005:5005"
+#        environment:
+#            - SERVICE_PORT=8080
+
+    mongodb:
+        image: mongo
+        ports:
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: password
+        volumes:
+            - ./src/main/resources/database-initialization:/docker-entrypoint-initdb.d/

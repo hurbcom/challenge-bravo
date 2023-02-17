@@ -1,4 +1,4 @@
-package BravoChallenge.QuoteService
+package quoteservice
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
