@@ -39,6 +39,8 @@ func HttpLogger(handler http.Handler, log hclog.Logger) http.Handler {
 			req.Header.Set("X-Request-ID", uuid.New().String())
 		}
 
+		rw.Header().Add("Content-Type", "application/json; charset=utf-8")
+
 		rwr := &ResponseWriteRecorder{
 			StatusCode:     http.StatusOK,
 			log:            log,

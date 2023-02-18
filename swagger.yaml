@@ -1,0 +1,36 @@
+basePath: /
+consumes:
+    - application/json
+info:
+    description: Documentação da API de Moedas
+    title: API de Moedas.
+    version: 1.0.0
+paths:
+    /currency:
+        get:
+            description: Retorna as informações de todas as moedas
+            operationId: Listar
+            responses:
+                "200":
+                    $ref: '#/responses/currenciesResponse'
+            tags:
+                - Moedas
+    /currency/{id}:
+        get:
+            description: Retorna as informações da moeda solicitada
+            operationId: Obter
+            responses:
+                "200":
+                    $ref: '#/responses/currencyResponse'
+            tags:
+                - Moedas
+produces:
+    - application/json
+responses:
+    currenciesResponse:
+        description: Retorna as informações de todas as Moedas
+    currencyResponse:
+        description: Retorna as informações da Moeda solicitada
+schemes:
+    - http
+swagger: "2.0"
