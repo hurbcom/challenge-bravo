@@ -1,8 +1,9 @@
-package handler
+package router
 
 import (
 	"net/http"
 
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/controller"
 	"github.com/gorilla/mux"
 )
 
@@ -15,6 +16,8 @@ func NewMuxRouter() Router {
 }
 
 func (*MuxRouter) Serve() http.Handler {
+	muxDispatcher.NotFoundHandler = http.HandlerFunc(controller.NewNotFound().NotFound)
+
 	return muxDispatcher
 }
 

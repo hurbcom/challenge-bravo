@@ -7,10 +7,10 @@ swagger-run:
 # swagger: swagger-install
 # 	GO111MODULE=off swagger generate spec -o ./swagger.yaml --scan-models
 
-swagger-check: 
-	which swagger || (GO111MODULE=on go get -u github.com/go-swagger/go-swagger/cmd/swagger)
+swagger-check: swagger-run
+	which swagger || GO111MODULE=on go get -u github.com/go-swagger/go-swagger/cmd/swagger
 
 swagger: swagger-check
-	GO111MODULE=off swagger generate spec -o ./swagger.yaml --scan-models
+	GO111MODULE=off sudo swagger generate spec -o ./swagger.yaml --scan-models
 
 .PHONY: swagger swagger-check

@@ -11,3 +11,10 @@
 ```
 make swagger
 ```
+
+## Observações
+
+1. Restringir acesso aos endpoints de CRUD de Moedas
+2. Criar paginação no endpoint que lista todas as Moedas
+3. Substituir ID sequencial por UUID
+4. Incluir cabeçalhos HTTP de segurança

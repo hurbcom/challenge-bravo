@@ -8,8 +8,9 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/handler"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/route"
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/router"
+	gohandlers "github.com/gorilla/handlers"
 	"github.com/hashicorp/go-hclog"
 )
 
@@ -19,19 +20,26 @@ func main() {
 	log := hclog.Default()
 
 	// create a new router
-	handleRouter := handler.NewMuxRouter()
+	appRouter := router.NewMuxRouter()
 
 	// include the routes
-	route.CurrencyRoute(handleRouter)
-	route.SwaggerRoute(handleRouter)
+	route.CurrencyRoute(appRouter)
+	route.SwaggerRoute(appRouter)
 
-	// include the handler logger
-	handlerLogger := handler.HttpLogger(handleRouter.Serve(), log)
+	// create HTTP handler
+	httpHandler := appRouter.Serve()
+
+	// include the middleware handler CORS
+	corsHandler := gohandlers.CORS(gohandlers.AllowedOrigins([]string{""}))
+	httpHandler = corsHandler(httpHandler)
+
+	// include the middleware handler logger
+	httpHandler = router.HttpLogger(httpHandler, log)
 
 	// create a new server
 	httpServer := http.Server{
 		Addr:    serverAddr,
-		Handler: handlerLogger,
+		Handler: httpHandler,
 		// ErrorLog: log,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,

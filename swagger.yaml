@@ -1,6 +1,47 @@
 basePath: /
 consumes:
     - application/json
+definitions:
+    Currencies:
+        items:
+            $ref: '#/definitions/Currency'
+        type: array
+        x-go-package: github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model
+    Currency:
+        description: Definição da Estrutura da Moeda
+        properties:
+            created_at:
+                description: Data de Inclusão da Taxa (Gerado automaticamente na inclusão)
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            currency:
+                description: Sigla da Moeda
+                maxLength: 10
+                minLength: 3
+                type: string
+                x-go-name: Currency
+            id:
+                description: Identificador da Moeda (Gerado automaticamente na inclusão)
+                format: int64
+                type: integer
+                x-go-name: ID
+            rate_usd:
+                description: Taxa da Moeda em comparação a Moeda Dolar (USD)
+                format: float
+                type: number
+                x-go-name: RateUSD
+            reference_date:
+                description: Data de Referencia da Taxa
+                format: date-time
+                type: string
+                x-go-name: ReferenceDate
+        required:
+            - currency
+            - rate_usd
+            - reference_date
+        type: object
+        x-go-package: github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model
 info:
     description: Documentação da API de Moedas
     title: API de Moedas.
@@ -13,15 +54,76 @@ paths:
             responses:
                 "200":
                     $ref: '#/responses/currenciesResponse'
+                default:
+                    $ref: '#/responses/errorResponse'
             tags:
                 - Moedas
     /currency/{id}:
+        delete:
+            description: Apaga a moeda solicitada
+            operationId: Excluir
+            responses:
+                "201":
+                    $ref: '#/responses/noContentResponse'
+                default:
+                    $ref: '#/responses/errorResponse'
+            tags:
+                - Moedas
         get:
             description: Retorna as informações da moeda solicitada
             operationId: Obter
+            parameters:
+                - description: Identificador
+                  format: int64
+                  in: path
+                  name: id
+                  required: true
+                  type: integer
+                  x-go-name: ID
             responses:
                 "200":
                     $ref: '#/responses/currencyResponse'
+                default:
+                    $ref: '#/responses/errorResponse'
+            tags:
+                - Moedas
+        post:
+            description: Adiciona uma nova moeda
+            operationId: Incluir
+            responses:
+                "201":
+                    $ref: '#/responses/currencyResponse'
+                default:
+                    $ref: '#/responses/errorResponse'
+            tags:
+                - Moedas
+        put:
+            description: Atualiza as informações da moeda solicitada
+            operationId: Alterar
+            parameters:
+                - description: Identificador
+                  format: int64
+                  in: path
+                  name: id
+                  required: true
+                  type: integer
+                  x-go-name: ID
+            responses:
+                "200":
+                    $ref: '#/responses/currencyResponse'
+                default:
+                    $ref: '#/responses/errorResponse'
+            tags:
+                - Moedas
+    /currency/convert?from=BTC&to=EUR&amount=123.45:
+        get:
+            description: Conversão de valor entre moedas
+            operationId: Converter
+            responses:
+                "201":
+                    $ref: '#/responses/noContentResponse'
+                default:
+                    $ref: '#/responses/errorResponse'
             tags:
                 - Moedas
 produces:
@@ -29,8 +131,26 @@ produces:
 responses:
     currenciesResponse:
         description: Retorna as informações de todas as Moedas
+        schema:
+            $ref: '#/definitions/Currencies'
     currencyResponse:
-        description: Retorna as informações da Moeda solicitada
+        description: Retorna as informações da Moeda
+        schema:
+            $ref: '#/definitions/Currency'
+    errorResponse:
+        description: Retorna as informações do erro
+        schema:
+            properties:
+                code:
+                    format: float
+                    type: number
+                    x-go-name: Code
+                message:
+                    type: string
+                    x-go-name: Message
+            type: object
+    noContentResponse:
+        description: Criado com sucesso. (Não retorna nenhum conteúdo)
 schemes:
     - http
 swagger: "2.0"
