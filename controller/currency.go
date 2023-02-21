@@ -17,17 +17,85 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model"
+	logger "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service"
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/usecase"
+	"github.com/hashicorp/go-hclog"
 )
 
-type Currency struct{}
+type Currency struct {
+	useCaseCurrency usecase.Currency
+	log             hclog.Logger
+}
 
-func NewCurrency() *Currency {
-	return &Currency{}
+func NewCurrency(useCaseCurrency usecase.Currency, log hclog.Logger) *Currency {
+	return &Currency{
+		useCaseCurrency: useCaseCurrency,
+		log:             log,
+	}
+}
+
+// swagger:route POST /currency/{id} Moedas Incluir
+// Adiciona uma nova moeda
+// responses:
+//
+//	default: errorResponse
+//	201: currencyResponse
+func (controllerCurrency *Currency) Insert(rw http.ResponseWriter, req *http.Request) {
+
+	currency := &model.Currency{}
+
+	err := json.NewDecoder(req.Body).Decode(currency)
+
+	if err != nil {
+		responseError := &model.Error{
+			Code:    400.1,
+			Message: "Error deserializing currency",
+		}
+
+		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(responseError)
+		return
+	}
+
+	currencyResult, err := controllerCurrency.useCaseCurrency.Insert(currency)
+
+	if err != nil {
+		if _, ok := err.(usecase.CurrencyValidateError); ok {
+			responseError := &model.Error{
+				Code:    400.2,
+				Message: fmt.Sprintf("Error validating currency: %v", err.Error()),
+			}
+
+			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+			rw.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(rw).Encode(responseError)
+			return
+		} else {
+			responseError := &model.Error{
+				Code:    500.1,
+				Message: fmt.Sprintf("Error insert currency in database: %v", err.Error()),
+			}
+
+			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+			rw.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(rw).Encode(responseError)
+			return
+		}
+	}
+
+	rw.WriteHeader(http.StatusCreated)
+	json.NewEncoder(rw).Encode(currencyResult)
 }
 
 // swagger:route GET /currency/{id} Moedas Obter
@@ -37,15 +105,38 @@ func NewCurrency() *Currency {
 //  200: currencyResponse
 
 // ProductList returns all products from the data store
-func (controllerCurrency *Currency) Get(rw http.ResponseWriter, req *http.Request) {
-	currency := model.Currency{
-		ID:            1,
-		Currency:      "USD",
-		RateUSD:       1,
-		ReferenceDate: time.Now().UTC(),
-		CreatedAt:     time.Now().UTC(),
+func (controllerCurrency *Currency) GetByID(rw http.ResponseWriter, req *http.Request) {
+	id, err := strconv.Atoi(strings.Split(req.URL.Path, "/")[2])
+
+	if err != nil {
+		responseError := &model.Error{
+			Code:    400.3,
+			Message: "Invalid ID",
+		}
+
+		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(responseError)
+		return
 	}
-	json.NewEncoder(rw).Encode(currency)
+
+	currencyResult, err := controllerCurrency.useCaseCurrency.GetByID(int64(id))
+
+	if err != nil {
+		responseError := &model.Error{
+			Code:    500.2,
+			Message: fmt.Sprintf("Error get currency from database: %v", err.Error()),
+		}
+
+		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+		rw.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(rw).Encode(responseError)
+		return
+	}
+
+	json.NewEncoder(rw).Encode(currencyResult)
 }
 
 // swagger:route GET /currency Moedas Listar
@@ -59,38 +150,19 @@ func (controllerCurrency *Currency) List(rw http.ResponseWriter, req *http.Reque
 	currency := model.Currencies{
 		model.Currency{
 			ID:            1,
-			Currency:      "USD",
+			ShortName:     "USD",
 			RateUSD:       1,
 			ReferenceDate: time.Now().UTC(),
 			CreatedAt:     time.Now().UTC(),
 		},
 		model.Currency{
 			ID:            1,
-			Currency:      "USD",
+			ShortName:     "USD",
 			RateUSD:       1,
 			ReferenceDate: time.Now().UTC(),
 			CreatedAt:     time.Now().UTC(),
 		},
 	}
-	json.NewEncoder(rw).Encode(currency)
-}
-
-// swagger:route POST /currency/{id} Moedas Incluir
-// Adiciona uma nova moeda
-// responses:
-//
-//	default: errorResponse
-//	201: currencyResponse
-func (controllerCurrency *Currency) Insert(rw http.ResponseWriter, req *http.Request) {
-	currency := model.Currency{
-		ID:            1,
-		Currency:      "USD",
-		RateUSD:       1,
-		ReferenceDate: time.Now().UTC(),
-		CreatedAt:     time.Now().UTC(),
-	}
-
-	rw.WriteHeader(http.StatusCreated)
 	json.NewEncoder(rw).Encode(currency)
 }
 
@@ -103,7 +175,7 @@ func (controllerCurrency *Currency) Insert(rw http.ResponseWriter, req *http.Req
 func (controllerCurrency *Currency) Update(rw http.ResponseWriter, req *http.Request) {
 	currency := model.Currency{
 		ID:            1,
-		Currency:      "USD",
+		ShortName:     "USD",
 		RateUSD:       1,
 		ReferenceDate: time.Now().UTC(),
 		CreatedAt:     time.Now().UTC(),

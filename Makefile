@@ -13,4 +13,10 @@ swagger-check: swagger-run
 swagger: swagger-check
 	GO111MODULE=off sudo swagger generate spec -o ./swagger.yaml --scan-models
 
-.PHONY: swagger swagger-check
+go-test: 
+	go test -v -cover ./...
+
+go-run:
+	go run server.go
+
+.PHONY: swagger swagger-check go-test

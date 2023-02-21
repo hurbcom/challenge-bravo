@@ -23,7 +23,7 @@ func main() {
 	appRouter := router.NewMuxRouter()
 
 	// include the routes
-	route.CurrencyRoute(appRouter)
+	route.CurrencyRoute(appRouter, log)
 	route.SwaggerRoute(appRouter)
 
 	// create HTTP handler

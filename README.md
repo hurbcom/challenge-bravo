@@ -1,3 +1,12 @@
+## Executar a Aplicação
+```
+make run
+```
+ou
+```
+go run server.go
+```
+
 ## Documentação da API - Swagger
 
 ### Visualizar Documentação
@@ -12,9 +21,10 @@
 make swagger
 ```
 
-## Observações
+## Sugestões de Melhorias
 
 1. Restringir acesso aos endpoints de CRUD de Moedas
 2. Criar paginação no endpoint que lista todas as Moedas
 3. Substituir ID sequencial por UUID
 4. Incluir cabeçalhos HTTP de segurança
+5. Incluir controle de auditoria

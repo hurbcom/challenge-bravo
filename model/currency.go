@@ -11,12 +11,15 @@ type Currency struct {
 	// required: true
 	// min length: 3
 	// max length: 10
-	Currency string `json:"currency"`
+	// example: "USD", "EUR", "BRL", etc
+	ShortName string `json:"short_name"`
 	// Taxa da Moeda em comparação a Moeda Dolar (USD)
 	// required: true
+	// example: tem que ser diferente de 0 (zero)
 	RateUSD float32 `json:"rate_usd"`
 	// Data de Referencia da Taxa
 	// required: true
+	// example: Entre 01/01/1900 até a data corrente
 	ReferenceDate time.Time `json:"reference_date"`
 	// Data de Inclusão da Taxa (Gerado automaticamente na inclusão)
 	CreatedAt time.Time `json:"created_at"`
