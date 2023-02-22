@@ -1,5 +1,9 @@
 package quoteservice.web.entities
 
+import quoteservice.repositories.models.Rate
+import java.math.BigDecimal
+import kotlin.reflect.full.declaredMemberProperties
+
 data class Rates (
     val AED: String,
     val AFN: String,
@@ -22,7 +26,6 @@ data class Rates (
     val BOB: String,
     val BRL: String,
     val BSD: String,
-    val BTC: String,
     val BTN: String,
     val BWP: String,
     val BYN: String,
@@ -170,4 +173,22 @@ data class Rates (
     val ZAR: String,
     val ZMW: String,
     val ZWL: String
-)
+) {
+    fun convert(): List<Rate> {
+        var convertedRates = mutableListOf<Rate>()
+
+        Rates::class.declaredMemberProperties.forEach {
+            val fromUsd = it.get(this).toString().toBigDecimal()
+            val toUsd = BigDecimal(1.0).setScale(SCALE, BigDecimal.ROUND_HALF_EVEN) / fromUsd.setScale(
+                SCALE, BigDecimal.ROUND_HALF_EVEN
+            )
+            convertedRates.add(Rate(symbol = it.name, toUsd = toUsd.toString(), fromUsd = fromUsd.toString()))
+        }
+
+        return convertedRates
+    }
+
+    companion object {
+        const val SCALE = 6
+    }
+}

@@ -13,12 +13,41 @@ db.createUser(
 );
 
 
-db.createCollection("exchangedata");
-db.exchangedata.insert(
-    {
-        "last_update": "2023-02-17T18:52:40",
-        "rates": []
-    }
+
+db.createCollection("rates");
+db.rates.insertMany(
+    [
+        {
+            "symbol": "USD",
+            "toUsd": "1.000000",
+            "fromUsd": "1.000000",
+            "active": true
+        },
+        {
+            "symbol": "EUR",
+            "toUsd": "1.069118",
+            "fromUsd": "0.93535",
+            "active": true
+        },
+        {
+            "symbol": "BRL",
+            "toUsd": "0.193563",
+            "fromUsd": "5.166268",
+            "active": true
+        },
+        {
+            "symbol": "BTC",
+            "toUsd": "24788.461757",
+            "fromUsd": "0.000040",
+            "active": true
+        },
+        {
+            "symbol": "ETH",
+            "toUsd": "1703.121317",
+            "fromUsd": "0.00058",
+            "active": true
+        }
+    ]
 );
 
 console.log("------------------------------ Finished database initialization -----------------------------------------")

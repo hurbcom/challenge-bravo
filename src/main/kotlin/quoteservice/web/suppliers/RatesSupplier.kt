@@ -1,5 +1,7 @@
 package quoteservice.web.suppliers
 
+import quoteservice.repositories.models.Rate
+
 interface RatesSupplier {
-    fun getForexRates()
+    fun getRates(): List<Rate>
 }
