@@ -6,7 +6,7 @@ import quoteservice.processors.RatesProcessor
 
 @Component
 class UpdateRatesJob(
-    val ratesProcessor: RatesProcessor,
+    val ratesProcessor: RatesProcessor
 ) {
     @Scheduled(fixedDelay = 60000)
     fun process() {

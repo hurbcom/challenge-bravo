@@ -1,6 +1,8 @@
 package quoteservice.web.services
 
 import org.springframework.stereotype.Service
+import quoteservice.exceptions.CurrencyAlreadyAddedException
+import quoteservice.exceptions.UnsupportedCurrencyException
 import quoteservice.repositories.RatesRepository
 import quoteservice.repositories.models.Rate
 import quoteservice.web.entities.requests.AddCurrencyRequest
@@ -32,7 +34,7 @@ class RateServiceImpl(
     override fun add(request: AddCurrencyRequest) {
         runCatching {
             ratesRepository.findBySymbol(request.symbol).let {
-                if(it != null) throw Exception("Currency already exists in database")
+                if(it != null) throw CurrencyAlreadyAddedException("Currency already exists in database")
             }
 
             ratesRepository.save(
@@ -44,6 +46,7 @@ class RateServiceImpl(
                 )
             )
         }.getOrElse {
+            print("Exception at adding currency: ${it.message}")
             throw it
         }
     }
@@ -52,7 +55,7 @@ class RateServiceImpl(
         return rates.firstOrNull {
             it.symbol == currencySymbol && it.active
         }.let {
-            it ?: throw Exception()
+            it ?: throw UnsupportedCurrencyException("Currently the currency $currencySymbol is not supported")
         }
     }
 
@@ -61,10 +64,18 @@ class RateServiceImpl(
         toCurrencyUsdRate: BigDecimal,
         amount: BigDecimal
     ): BigDecimal {
-        return ((fromCurrencyUsdRate * toCurrencyUsdRate) * amount).setScale(SCALE, BigDecimal.ROUND_HALF_EVEN)
+        return ((fromCurrencyUsdRate * toCurrencyUsdRate) * amount).let {
+            if(it > BigDecimal.ONE){
+                it.setScale(SCALE_OF_TWO, BigDecimal.ROUND_HALF_EVEN)
+            }
+            else {
+                it.setScale(SCALE_OF_SIX, BigDecimal.ROUND_HALF_EVEN)
+            }
+        }
     }
 
     companion object {
-        const val SCALE = 2
+        const val SCALE_OF_TWO = 2
+        const val SCALE_OF_SIX = 6
     }
 }

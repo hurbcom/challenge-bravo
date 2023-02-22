@@ -46,6 +46,12 @@ db.rates.insertMany(
             "toUsd": "1703.121317",
             "fromUsd": "0.00058",
             "active": true
+        },
+        {
+            "symbol": "D&D",
+            "toUsd": "1834.000000",
+            "fromUsd": "0.000545",
+            "active": true
         }
     ]
 );

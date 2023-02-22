@@ -47,7 +47,7 @@ class RatesProcessor(
                 ratesRepository.save(it)
             }
         }.getOrElse {
-            println("Failure updating exchange rates")
+            println("Failure updating exchange rates: ${it.message}")
         }
     }
 
