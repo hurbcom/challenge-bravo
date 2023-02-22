@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  db:
+    container_name: hurbcom-postgres
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: db_hurbcom
+      POSTGRES_USER: userhurbcom
+      POSTGRES_PASSWORD: HURBcom123
+    volumes:
+      - hurbcom-db-data:/var/lib/postgres/data
+    networks:
+      - hurbcom-network
+
+ # adminer:
+  #   container_name: hurbcom-adminer
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - hurbcom-network
+
+volumes:
+  hurbcom-db-data:
+
+networks:
+  hurbcom-network:

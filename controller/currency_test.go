@@ -12,6 +12,7 @@ import (
 
 	mock_usecase "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/mock/usecase"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model"
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/database/repository"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/usecase"
 	"github.com/hashicorp/go-hclog"
 	"github.com/stretchr/testify/assert"
@@ -55,7 +56,7 @@ func TestInsertValidatingError(t *testing.T) {
 	currency := &model.Currency{}
 	errorMessage := "validating error"
 
-	mockUserCaseCurrency.On("Insert").Return(currency, usecase.CurrencyValidateError{Message: errorMessage})
+	mockUserCaseCurrency.On("Insert").Return(currency, usecase.ErrCurrencyValidate{Message: errorMessage})
 
 	controllerCurrency := NewCurrency(mockUserCaseCurrency, log)
 
@@ -82,6 +83,42 @@ func TestInsertValidatingError(t *testing.T) {
 
 	assert.Equal(t, float32(400.2), responseError.Code)
 	assert.Equal(t, fmt.Sprintf("Error validating currency: %v", errorMessage), responseError.Message)
+}
+
+func TestInsertDatabaseDuplicateKeyError(t *testing.T) {
+	log := hclog.Default()
+	mockUserCaseCurrency := new(mock_usecase.MockCurrency)
+
+	currency := &model.Currency{}
+	errExpected := repository.ErrDuplicateKey{Message: "duplicate key"}
+
+	mockUserCaseCurrency.On("Insert").Return(currency, errExpected)
+
+	controllerCurrency := NewCurrency(mockUserCaseCurrency, log)
+
+	var jsonReq, _ = json.Marshal(currency)
+
+	// Create a new HTTP POST request
+	req, _ := http.NewRequest(http.MethodPost, "/currency", bytes.NewBuffer(jsonReq))
+
+	// Assign HTTP Handler function (controller currency insert function)
+	handler := http.HandlerFunc(controllerCurrency.Insert)
+
+	// Record HTTP response (httptest)
+	res := httptest.NewRecorder()
+
+	// Dispatch the HTTP request
+	handler.ServeHTTP(res, req)
+
+	// Add Assertions on the HTTP status code and the response
+	assert.Equal(t, http.StatusBadRequest, res.Code)
+
+	var responseError model.Error
+	// Decode the HTTP response
+	json.NewDecoder(res.Body).Decode(&responseError)
+
+	assert.Equal(t, float32(400.5), responseError.Code)
+	assert.Contains(t, fmt.Sprintf("Error insert currency in database: %v", errExpected.Message), responseError.Message)
 }
 
 func TestInsertDatabaseError(t *testing.T) {

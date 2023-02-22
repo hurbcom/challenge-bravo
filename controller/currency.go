@@ -21,10 +21,10 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model"
-	logger "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service"
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/database/repository"
+	logger "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/logger"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/usecase"
 	"github.com/hashicorp/go-hclog"
 )
@@ -41,7 +41,7 @@ func NewCurrency(useCaseCurrency usecase.Currency, log hclog.Logger) *Currency {
 	}
 }
 
-// swagger:route POST /currency/{id} Moedas Incluir
+// swagger:route POST /currency Moedas Incluir
 // Adiciona uma nova moeda
 // responses:
 //
@@ -69,29 +69,34 @@ func (controllerCurrency *Currency) Insert(rw http.ResponseWriter, req *http.Req
 	currencyResult, err := controllerCurrency.useCaseCurrency.Insert(currency)
 
 	if err != nil {
-		if _, ok := err.(usecase.CurrencyValidateError); ok {
-			responseError := &model.Error{
+		var responseError *model.Error
+		if _, ok := err.(usecase.ErrCurrencyValidate); ok {
+			responseError = &model.Error{
 				Code:    400.2,
 				Message: fmt.Sprintf("Error validating currency: %v", err.Error()),
 			}
 
-			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+			rw.WriteHeader(http.StatusBadRequest)
+		} else if _, ok := err.(repository.ErrDuplicateKey); ok {
+			responseError = &model.Error{
+				Code:    400.5,
+				Message: fmt.Sprintf("Error insert currency in database: %v", err.Error()),
+			}
 
 			rw.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(rw).Encode(responseError)
-			return
 		} else {
-			responseError := &model.Error{
+			responseError = &model.Error{
 				Code:    500.1,
-				Message: fmt.Sprintf("Error insert currency in database: %v", err.Error()),
+				Message: "Error insert currency in database",
 			}
 
 			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
 
 			rw.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(rw).Encode(responseError)
-			return
 		}
+
+		json.NewEncoder(rw).Encode(responseError)
+		return
 	}
 
 	rw.WriteHeader(http.StatusCreated)
@@ -124,14 +129,25 @@ func (controllerCurrency *Currency) GetByID(rw http.ResponseWriter, req *http.Re
 	currencyResult, err := controllerCurrency.useCaseCurrency.GetByID(int64(id))
 
 	if err != nil {
-		responseError := &model.Error{
-			Code:    500.2,
-			Message: fmt.Sprintf("Error get currency from database: %v", err.Error()),
+		var responseError *model.Error
+		if _, ok := err.(repository.ErrNotFound); ok {
+			responseError = &model.Error{
+				Code:    404.1,
+				Message: "Not Found",
+			}
+
+			rw.WriteHeader(http.StatusNotFound)
+		} else {
+			responseError = &model.Error{
+				Code:    500.2,
+				Message: "Error get currency from database",
+			}
+
+			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+			rw.WriteHeader(http.StatusInternalServerError)
 		}
 
-		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
-
-		rw.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(rw).Encode(responseError)
 		return
 	}
@@ -147,23 +163,22 @@ func (controllerCurrency *Currency) GetByID(rw http.ResponseWriter, req *http.Re
 //	200: currenciesResponse
 
 func (controllerCurrency *Currency) List(rw http.ResponseWriter, req *http.Request) {
-	currency := model.Currencies{
-		model.Currency{
-			ID:            1,
-			ShortName:     "USD",
-			RateUSD:       1,
-			ReferenceDate: time.Now().UTC(),
-			CreatedAt:     time.Now().UTC(),
-		},
-		model.Currency{
-			ID:            1,
-			ShortName:     "USD",
-			RateUSD:       1,
-			ReferenceDate: time.Now().UTC(),
-			CreatedAt:     time.Now().UTC(),
-		},
+	currencies, err := controllerCurrency.useCaseCurrency.List()
+
+	if err != nil {
+		responseError := &model.Error{
+			Code:    500.3,
+			Message: "Error get all currencies from database",
+		}
+
+		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+		rw.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(rw).Encode(responseError)
+		return
 	}
-	json.NewEncoder(rw).Encode(currency)
+
+	json.NewEncoder(rw).Encode(currencies)
 }
 
 // swagger:route PUT /currency/{id} Moedas Alterar
@@ -173,14 +188,97 @@ func (controllerCurrency *Currency) List(rw http.ResponseWriter, req *http.Reque
 //	default: errorResponse
 //	200: currencyResponse
 func (controllerCurrency *Currency) Update(rw http.ResponseWriter, req *http.Request) {
-	currency := model.Currency{
-		ID:            1,
-		ShortName:     "USD",
-		RateUSD:       1,
-		ReferenceDate: time.Now().UTC(),
-		CreatedAt:     time.Now().UTC(),
+	id, err := strconv.Atoi(strings.Split(req.URL.Path, "/")[2])
+
+	if err != nil {
+		responseError := &model.Error{
+			Code:    400.3,
+			Message: "Invalid ID",
+		}
+
+		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(responseError)
+		return
 	}
-	json.NewEncoder(rw).Encode(currency)
+
+	currency := &model.Currency{}
+
+	err = json.NewDecoder(req.Body).Decode(currency)
+
+	if err != nil {
+		responseError := &model.Error{
+			Code:    400.1,
+			Message: "Error deserializing currency",
+		}
+
+		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(responseError)
+		return
+	}
+
+	if currency.ID != 0 && currency.ID != int64(id) {
+		responseError := &model.Error{
+			Code:    400.4,
+			Message: "URL Path ID divergent currency.ID",
+		}
+
+		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(responseError)
+		return
+	}
+
+	currency.ID = int64(id)
+
+	currencyResult, err := controllerCurrency.useCaseCurrency.Update(currency)
+
+	if err != nil {
+		var responseError *model.Error
+
+		if _, ok := err.(usecase.ErrCurrencyValidate); ok {
+			responseError = &model.Error{
+				Code:    400.2,
+				Message: fmt.Sprintf("Error validating currency: %v", err.Error()),
+			}
+
+			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+			rw.WriteHeader(http.StatusBadRequest)
+		} else if _, ok := err.(repository.ErrNotFound); ok {
+			responseError = &model.Error{
+				Code:    404.1,
+				Message: "Not Found",
+			}
+
+			rw.WriteHeader(http.StatusNotFound)
+		} else if _, ok := err.(repository.ErrDuplicateKey); ok {
+			responseError = &model.Error{
+				Code:    400.5,
+				Message: fmt.Sprintf("Error update currency in database: %v", err.Error()),
+			}
+
+			rw.WriteHeader(http.StatusBadRequest)
+		} else {
+			responseError = &model.Error{
+				Code:    500.4,
+				Message: "Error update currency in database",
+			}
+
+			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+			rw.WriteHeader(http.StatusInternalServerError)
+		}
+
+		json.NewEncoder(rw).Encode(responseError)
+		return
+	}
+
+	json.NewEncoder(rw).Encode(currencyResult)
 }
 
 // swagger:route DELETE /currency/{id} Moedas Excluir
@@ -188,31 +286,94 @@ func (controllerCurrency *Currency) Update(rw http.ResponseWriter, req *http.Req
 // responses:
 //
 //	default: errorResponse
-//	201: noContentResponse
+//	204: noContentResponse
 func (controllerCurrency *Currency) Delete(rw http.ResponseWriter, req *http.Request) {
+	id, err := strconv.Atoi(strings.Split(req.URL.Path, "/")[2])
+
+	if err != nil {
+		responseError := &model.Error{
+			Code:    400.3,
+			Message: "Invalid ID",
+		}
+
+		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(responseError)
+		return
+	}
+
+	err = controllerCurrency.useCaseCurrency.Delete(int64(id))
+
+	if err != nil {
+		var responseError *model.Error
+
+		if _, ok := err.(repository.ErrNotFound); ok {
+			responseError = &model.Error{
+				Code:    404.1,
+				Message: "Not Found",
+			}
+
+			rw.WriteHeader(http.StatusNotFound)
+		} else {
+			responseError = &model.Error{
+				Code:    500.5,
+				Message: "Error delete currency in database",
+			}
+
+			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+			rw.WriteHeader(http.StatusInternalServerError)
+		}
+
+		json.NewEncoder(rw).Encode(responseError)
+		return
+	}
+
 	rw.WriteHeader(http.StatusNoContent)
 }
 
-// swagger:route GET /currency/convert?from=BTC&to=EUR&amount=123.45 Moedas Converter
+// swagger:route GET /currency/convert?from=USD&to=BRL&amount=1.25 Moedas Converter
 // Conversão de valor entre moedas
 // responses:
 //
 //	default: errorResponse
-//	200: noContentResponse
+//	200: CurrencyConvertResponse
 func (controllerCurrency *Currency) Convert(rw http.ResponseWriter, req *http.Request) {
 	amount, _ := strconv.ParseFloat(req.URL.Query().Get("amount"), 32)
 
-	response := convert{
-		CurrencyFrom: req.URL.Query().Get("from"),
-		CurrencyTo:   req.URL.Query().Get("to"),
-		Amount:       float32(amount),
+	currencyConvert := &model.CurrencyConvert{
+		From:   req.URL.Query().Get("from"),
+		To:     req.URL.Query().Get("to"),
+		Amount: float32(amount),
 	}
 
-	json.NewEncoder(rw).Encode(response)
-}
+	currencyConvertResponse, err := controllerCurrency.useCaseCurrency.Convert(currencyConvert)
 
-type convert struct {
-	CurrencyFrom string
-	CurrencyTo   string
-	Amount       float32
+	if err != nil {
+		var responseError *model.Error
+
+		if _, ok := err.(usecase.ErrCurrencyConvertValidate); ok {
+			responseError = &model.Error{
+				Code:    400.2,
+				Message: fmt.Sprintf("Error validating parameters: %v", err.Error()),
+			}
+
+			rw.WriteHeader(http.StatusBadRequest)
+		} else {
+			responseError = &model.Error{
+				Code:    500.6,
+				Message: "Error convert currency",
+			}
+
+			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+
+			rw.WriteHeader(http.StatusInternalServerError)
+		}
+
+		json.NewEncoder(rw).Encode(responseError)
+		return
+	}
+
+	json.NewEncoder(rw).Encode(currencyConvertResponse)
 }

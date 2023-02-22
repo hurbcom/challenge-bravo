@@ -3,12 +3,14 @@ package route
 import (
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/controller"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/router"
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/database/repository"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/usecase"
 	"github.com/hashicorp/go-hclog"
 )
 
-func CurrencyRoute(appRouter router.Router, log hclog.Logger) {
-	currencyController := controller.NewCurrency(usecase.NewCurrency(), log)
+func CurrencyRoute(appRouter router.Router, repo repository.Repository, log hclog.Logger) {
+	repositoryCurrency := repo.Currency()
+	currencyController := controller.NewCurrency(usecase.NewCurrency(repositoryCurrency), log)
 
 	appRouter.Get("/currency", currencyController.List)
 	appRouter.Get("/currency/convert", currencyController.Convert)

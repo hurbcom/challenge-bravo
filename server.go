@@ -10,20 +10,68 @@ import (
 
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/route"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/router"
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/database"
+	repository "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/database/repository/postgres"
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/util"
 	gohandlers "github.com/gorilla/handlers"
 	"github.com/hashicorp/go-hclog"
 )
 
 func main() {
-	serverAddr := ":9000"
+	// create a new logger
+	log := hclog.New(&hclog.LoggerOptions{
+		Name:       "hurbcom-currency",
+		JSONFormat: false,
+		Level:      hclog.LevelFromString("DEBUG"),
+	})
 
-	log := hclog.Default()
+	// load configs
+	config, err := util.LoadConfig(".")
+
+	if err != nil {
+		log.Error("Cannot load application configs", "error", err)
+		return
+	}
+
+	log.Info("Configs loaded successfuly")
+
+	// update logger with new options
+	log = hclog.New(&hclog.LoggerOptions{
+		Name:       "hurbcom-currency",
+		JSONFormat: config.ServerLogJSONFormat,
+		Level:      hclog.LevelFromString(config.ServerLogLevel),
+	})
+
+	// run database migration
+	err = database.DBMigrationRun(config.DBURL, config.DBMigrationURL)
+
+	if err != nil {
+		log.Error("Cannot run db migration", "error", err)
+		os.Exit(1)
+	}
+
+	log.Info("DB migration run successfuly")
+
+	// create a new repository
+	repository, err := repository.NewPostgres(config)
+
+	if err != nil {
+		log.Error("Cannot connect to database", "error", err)
+		os.Exit(1)
+	}
+
+	defer repository.Close()
+
+	log.Info("Connected database successfuly")
+
+	// set server address
+	serverAddr := config.ServerAddress
 
 	// create a new router
 	appRouter := router.NewMuxRouter()
 
 	// include the routes
-	route.CurrencyRoute(appRouter, log)
+	route.CurrencyRoute(appRouter, repository, log)
 	route.SwaggerRoute(appRouter)
 
 	// create HTTP handler
@@ -68,6 +116,7 @@ func main() {
 	log.Info(fmt.Sprintf("HTTP server terminate signal %v", sig))
 
 	// gracefully shutdown the server, waiting max 30 seconds for current operations to complete
-	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
 	httpServer.Shutdown(ctx)
 }

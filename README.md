@@ -1,6 +1,16 @@
-## Executar a Aplicação
+## Executar a API
+1. Instalar o docker-compose. [documentação](https://docs.docker.com/compose/install/linux/)
+2. Na pasta raiz da API executar o comando
 ```
-make run
+make docker-compose-up
+```
+ou
+```
+docker-compose up -d
+```
+
+```
+make go-run
 ```
 ou
 ```
@@ -23,8 +33,10 @@ make swagger
 
 ## Sugestões de Melhorias
 
-1. Restringir acesso aos endpoints de CRUD de Moedas
-2. Criar paginação no endpoint que lista todas as Moedas
-3. Substituir ID sequencial por UUID
-4. Incluir cabeçalhos HTTP de segurança
-5. Incluir controle de auditoria
+1. Restringir acesso aos endpoints de CRUD de Moedas para evitar alteração indevida
+2. Incluir na documentação da API a relação dos erros que podem ser retornado
+3. Refatorar as validações de erros no controller
+4. Criar paginação no endpoint que lista todas as Moedas
+5. Substituir ID sequencial por UUID
+6. Incluir cabeçalhos HTTP de segurança
+7. Incluir controle de auditoria

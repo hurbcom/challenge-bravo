@@ -1,4 +1,4 @@
-package mock_usecase
+package mock_repository
 
 import (
 	"time"
@@ -13,28 +13,29 @@ type MockCurrency struct {
 
 func (mockCurrency *MockCurrency) Insert(currencyModel *model.Currency) (*model.Currency, error) {
 	args := mockCurrency.Called()
-	currencySource := *args.Get(0).(*model.Currency)
-	currencyResult := currencySource
 
-	currencyResult.ID = 1
-	currencyResult.CreatedAt = time.Now().UTC()
+	currencyModel = args.Get(0).(*model.Currency)
+	accountInserted := *currencyModel
 
-	return &currencyResult, args.Error(1)
+	accountInserted.ID = 1
+	accountInserted.CreatedAt = time.Now().UTC()
+
+	return &accountInserted, args.Error(1)
 }
 
 // TODO: to implement
 func (mockCurrency *MockCurrency) GetByID(id int64) (*model.Currency, error) {
-	return &model.Currency{}, nil
+	return nil, nil
 }
 
 // TODO: to implement
 func (mockCurrency *MockCurrency) List() (*model.Currencies, error) {
-	return &model.Currencies{}, nil
+	return nil, nil
 }
 
 // TODO: to implement
 func (mockCurrency *MockCurrency) Update(currencyModel *model.Currency) (*model.Currency, error) {
-	return &model.Currency{}, nil
+	return nil, nil
 }
 
 // TODO: to implement
@@ -43,6 +44,6 @@ func (mockCurrency *MockCurrency) Delete(id int64) error {
 }
 
 // TODO: to implement
-func (mockCurrency *MockCurrency) Convert(currencyConvert *model.CurrencyConvert) (*model.CurrencyConvertResponse, error) {
-	return &model.CurrencyConvertResponse{}, nil
+func (mockCurrency *MockCurrency) GetByShortName(shortName string) (*model.Currency, error) {
+	return nil, nil
 }

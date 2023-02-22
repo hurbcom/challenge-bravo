@@ -15,12 +15,6 @@ definitions:
                 format: date-time
                 type: string
                 x-go-name: CreatedAt
-            currency:
-                description: Sigla da Moeda
-                maxLength: 10
-                minLength: 3
-                type: string
-                x-go-name: Currency
             id:
                 description: Identificador da Moeda (Gerado automaticamente na inclusão)
                 format: int64
@@ -28,18 +22,93 @@ definitions:
                 x-go-name: ID
             rate_usd:
                 description: Taxa da Moeda em comparação a Moeda Dolar (USD)
+                example: 1
                 format: float
                 type: number
                 x-go-name: RateUSD
             reference_date:
                 description: Data de Referencia da Taxa
+                example: Entre 01/01/1900 até a data corrente
                 format: date-time
                 type: string
                 x-go-name: ReferenceDate
+            short_name:
+                description: Sigla da Moeda
+                example: BRL
+                maxLength: 10
+                minLength: 3
+                type: string
+                x-go-name: ShortName
         required:
-            - currency
+            - id
+            - short_name
             - rate_usd
             - reference_date
+            - created_at
+        type: object
+        x-go-package: github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model
+    CurrencyConvert:
+        description: Definição da Estrutura para Conversão de Moeda
+        properties:
+            Amount:
+                description: Valor na Moeda de Origem para ser Convertido
+                format: float
+                type: number
+            From:
+                description: Sigla da Moeda de Origem
+                example: USD
+                maxLength: 10
+                minLength: 3
+                type: string
+            To:
+                description: Sigla da Moeda de Destino
+                example: BRL
+                maxLength: 10
+                minLength: 3
+                type: string
+        required:
+            - From
+            - To
+            - Amount
+        type: object
+        x-go-package: github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model
+    CurrencyConvertResponse:
+        properties:
+            FromAmount:
+                description: Valor na Moeda de Origem para ser Convertido
+                format: float
+                type: number
+            FromCurrency:
+                description: Sigla da Moeda de Origem
+                example: USD
+                maxLength: 10
+                minLength: 3
+                type: string
+            FromReferenceDate:
+                description: Data de Referencia de Taxa de Conversão da Moeda de Origem
+                format: date-time
+                type: string
+            ToAmount:
+                description: Valor na Moeda de Destino
+                format: float
+                type: number
+            ToCurrency:
+                description: Sigla da Moeda de Destino
+                example: BRL
+                maxLength: 10
+                minLength: 3
+                type: string
+            ToReferenceDate:
+                description: Data de Referencia de Taxa de Conversão da Moeda de Destino
+                format: date-time
+                type: string
+        required:
+            - FromCurrency
+            - FromAmount
+            - FromReferenceDate
+            - ToCurrency
+            - ToAmount
+            - ToReferenceDate
         type: object
         x-go-package: github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model
 info:
@@ -58,12 +127,52 @@ paths:
                     $ref: '#/responses/errorResponse'
             tags:
                 - Moedas
+        post:
+            description: Adiciona uma nova moeda
+            operationId: Incluir
+            parameters:
+                - description: Informações da Moeda
+                  in: body
+                  name: Body
+                  schema:
+                    properties:
+                        rate_usd:
+                            description: Taxa da Moeda em comparação a Moeda Dolar (USD)
+                            example: 1
+                            format: float
+                            type: number
+                            x-go-name: RateUSD
+                        reference_date:
+                            description: Data de Referencia da Taxa
+                            example: Entre 01/01/1900 até a data corrente
+                            format: date-time
+                            type: string
+                            x-go-name: ReferenceDate
+                        short_name:
+                            description: Sigla da Moeda
+                            example: BRL
+                            maxLength: 10
+                            minLength: 3
+                            type: string
+                            x-go-name: ShortName
+                    required:
+                        - short_name
+                        - rate_usd
+                        - reference_date
+                    type: object
+            responses:
+                "201":
+                    $ref: '#/responses/currencyResponse'
+                default:
+                    $ref: '#/responses/errorResponse'
+            tags:
+                - Moedas
     /currency/{id}:
         delete:
             description: Apaga a moeda solicitada
             operationId: Excluir
             responses:
-                "201":
+                "204":
                     $ref: '#/responses/noContentResponse'
                 default:
                     $ref: '#/responses/errorResponse'
@@ -87,20 +196,39 @@ paths:
                     $ref: '#/responses/errorResponse'
             tags:
                 - Moedas
-        post:
-            description: Adiciona uma nova moeda
-            operationId: Incluir
-            responses:
-                "201":
-                    $ref: '#/responses/currencyResponse'
-                default:
-                    $ref: '#/responses/errorResponse'
-            tags:
-                - Moedas
         put:
             description: Atualiza as informações da moeda solicitada
             operationId: Alterar
             parameters:
+                - description: Informações da Moeda
+                  in: body
+                  name: Body
+                  schema:
+                    properties:
+                        rate_usd:
+                            description: Taxa da Moeda em comparação a Moeda Dolar (USD)
+                            example: 1
+                            format: float
+                            type: number
+                            x-go-name: RateUSD
+                        reference_date:
+                            description: Data de Referencia da Taxa
+                            example: Entre 01/01/1900 até a data corrente
+                            format: date-time
+                            type: string
+                            x-go-name: ReferenceDate
+                        short_name:
+                            description: Sigla da Moeda
+                            example: BRL
+                            maxLength: 10
+                            minLength: 3
+                            type: string
+                            x-go-name: ShortName
+                    required:
+                        - short_name
+                        - rate_usd
+                        - reference_date
+                    type: object
                 - description: Identificador
                   format: int64
                   in: path
@@ -115,13 +243,36 @@ paths:
                     $ref: '#/responses/errorResponse'
             tags:
                 - Moedas
-    /currency/convert?from=BTC&to=EUR&amount=123.45:
+    /currency/convert?from=USD&to=BRL&amount=1.25:
         get:
             description: Conversão de valor entre moedas
             operationId: Converter
+            parameters:
+                - description: Sigla da Moeda de Origem
+                  example: USD
+                  in: query
+                  name: from
+                  required: true
+                  type: string
+                  x-go-name: From
+                - description: Sigla da Moeda de Destino
+                  example: BRL
+                  in: query
+                  name: to
+                  required: true
+                  type: string
+                  x-go-name: To
+                - description: Valor na Moeda de Origem
+                  example: "1.25"
+                  format: float
+                  in: query
+                  name: amount
+                  required: true
+                  type: number
+                  x-go-name: Amount
             responses:
-                "201":
-                    $ref: '#/responses/noContentResponse'
+                "200":
+                    $ref: '#/responses/CurrencyConvertResponse'
                 default:
                     $ref: '#/responses/errorResponse'
             tags:
@@ -129,6 +280,10 @@ paths:
 produces:
     - application/json
 responses:
+    CurrencyConvertResponse:
+        description: Retorna as informações referente a conversão
+        schema:
+            $ref: '#/definitions/CurrencyConvertResponse'
     currenciesResponse:
         description: Retorna as informações de todas as Moedas
         schema:
@@ -142,15 +297,20 @@ responses:
         schema:
             properties:
                 code:
+                    description: Código do Erro
                     format: float
                     type: number
                     x-go-name: Code
                 message:
+                    description: Descrição do Erro
                     type: string
                     x-go-name: Message
+            required:
+                - code
+                - message
             type: object
     noContentResponse:
-        description: Criado com sucesso. (Não retorna nenhum conteúdo)
+        description: Excluído com sucesso. (Não retorna nenhum conteúdo)
 schemes:
     - http
 swagger: "2.0"

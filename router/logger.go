@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service"
+	logger "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/logger"
 	"github.com/google/uuid"
 	"github.com/hashicorp/go-hclog"
 )
@@ -21,7 +21,7 @@ func HttpLogger(handler http.Handler, log hclog.Logger) http.Handler {
 
 		rw.Header().Add("Content-Type", "application/json; charset=utf-8")
 
-		rwr := &service.ResponseWriteRecorder{
+		rwr := &logger.ResponseWriteRecorder{
 			StatusCode:     http.StatusOK,
 			Body:           []byte{},
 			ResponseWriter: rw,
@@ -29,8 +29,8 @@ func HttpLogger(handler http.Handler, log hclog.Logger) http.Handler {
 
 		handler.ServeHTTP(rwr, req)
 
-		logRequestArgs := service.LogSetRequestDefaultArgs(service.LogRequestArgs{}, req)
-		logRequestArgs = service.LogSetRequestFinishArgs(logRequestArgs, rwr, reqTimeStart)
+		logRequestArgs := logger.LogSetRequestDefaultArgs(logger.LogRequestArgs{}, req)
+		logRequestArgs = logger.LogSetRequestFinishArgs(logRequestArgs, rwr, reqTimeStart)
 
 		if rwr.StatusCode >= 100 && rwr.StatusCode < 200 {
 			// (100 to 199) informational responses
@@ -52,14 +52,14 @@ func HttpLogger(handler http.Handler, log hclog.Logger) http.Handler {
 			)
 		} else if rwr.StatusCode >= 400 && rwr.StatusCode < 500 {
 			// (400 to 499) client error responses
-			logRequestArgs = service.LogSetRequestBodyArg(logRequestArgs, rwr)
+			logRequestArgs = logger.LogSetRequestBodyArg(logRequestArgs, rwr)
 			log.Warn(
 				"client error response",
 				logRequestArgs...,
 			)
 		} else {
 			// (500 to 599) server error responses
-			logRequestArgs = service.LogSetRequestBodyArg(logRequestArgs, rwr)
+			logRequestArgs = logger.LogSetRequestBodyArg(logRequestArgs, rwr)
 			log.Error(
 				"server error response",
 				logRequestArgs...,
