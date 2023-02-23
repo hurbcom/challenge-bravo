@@ -1,82 +1,160 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
-
 [[English](README.md) | [Portuguese](README.pt.md)]
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+<h2>QuoteService</h2>
 
-The API must convert between the following currencies:
+<h3>About</h3>
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+This API purpose is to convert between fiat, crypto and imaginary/non-standard currencies. It is built using Spring Boot
+and Kotlin.
 
-Other coins could be added as usage.
+The API offers initial support to conversion between the following currencies:
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+- USD
+- BRL
+- EUR
+- BTC
+- ETH
+- D&D (Dungeons & Dragons Gold Coins which is an imaginary currency)
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+The basic idea of this API is to retrieve data from open quotes/exchange APIs and use them to calculate the conversions.
+As these supplier allow open use of the public APIs the implementation uses a routine to retrieve data from them at a
+configurable via environment variable delay in millis in order to avoid overtaxing them with requests and passing the
+rate limit. The data is then converted to the pattern defined in the code and then persisted on the database to usage in
+conversions afterwards. **Please note that conversions may differ from other engines like google or APIs due to
+the different rate sources.**
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+<h3>Setup</h3>
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+The API is dockerized which means that it should be relatively easy for to get it up and running. For you to get it
+running first clone this git repository to your machine. Open terminal and navigate to the root of the cloned repo,
+the use the following command:
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+``` docker-compose up --build ```
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+The process may take a while but eventually the service will be up and running. If you get any error regarding missing
+images just use the following command to each missing image:
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+``` docker pull <missing_image> ```
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+<h3>Usage</h3>
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+Currently, QuoteService offers 3 endpoints. One to convert between currencies, one to add a new currency and other to
+remove a currency.
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+</h2>Conversion Endpoint</h2>
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Verb: GET
 
-## Requirements
+This endpoint is used to convert an amount in a base currency to a target currency
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+The conversion endpoint route (locally) is:
+``` http://localhost:8080/currency/convert?from=<BaseCurrency>&to=<TargetCurrency>&amount=<Amount> ```
 
-## Evaluation criteria
+ex: ``` http://localhost:8080/currency/convert?from=ETH&to=BRL&amount=1 ```
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+You must add the following mandatory header: Header: ``` Authorization: <API-Key> ```
 
-## Doubts
+Below is the curl for calling the conversion endpoint (locally):
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+curl --location 'http://localhost:8080/currency/convert?from=ETH&to=BRL&amount=1' \
+--header 'Authorization: c4bf1743-1725-4a47-acbc-69668962fcdc'
 
-Godspeed! ;)
+</h2>Add Currency Endpoint</h2>
+
+This endpoint is used to add new currencies to the API
+
+Verb: POST
+
+The add currency endpoint route (locally) is:
+``` http://localhost:8080/currency/add ```
+
+You must add the following mandatory header: Header: ``` Authorization: <API-Key> ```
+
+Body:
+
+{
+
+    "symbol": <Currency-Symbol>,
+
+    "from_usd": <Conversion-Rate-From-USD>,
+
+    "to_usd": <Conversion-Rate-To-USD>
+
+}
+
+Parameters:
+- symbol: Oficial currency symbol (USD, BRL, EUR, BTC, ETH, etc...);
+- from_usd: Value resulting of the conversion of $1 USD to the currency being added
+(ex: How much is 1 US dollar in USD);
+- to_usd: Value resulting of the conversion of $1 of the currency being added to USD (ex: How much is 1 yen in USD).
+
+Below is the curl for calling the add currency endpoint (locally):
+
+curl --location 'http://localhost:8080/currency/add' \
+--header 'Authorization: c4bf1743-1725-4a47-acbc-69668962fcdc' \
+--header 'Content-Type: application/json' \
+--data '{
+"symbol": "BRL",
+"from_usd": "5.14723",
+"to_usd": "0.194279"
+}'
+
+Notice: Please observe that the more numbers after the dot the more precise the calculations will be.
+(the recommended scale is of 6 numbers after the dot.).
+
+</h2>Delete Currency Endpoint</h2>
+
+This endpoint is used to logically remove currency support from the API
+
+Verb: DELETE
+
+The delete currency endpoint route (locally) is:
+``` http://localhost:8080/currency/delete?currency=<CurrencySymbol> ```
+
+You must add the following mandatory header: Header: ``` Authorization: <API-Key> ```
+
+ex: ``` http://localhost:8080/currency/delete?currency=BRL ```
+
+Below it the curl for calling the add currency endpoint (locally):
+
+curl --location --request DELETE 'http://localhost:8080/currency/delete?currency=BRL' \
+--header 'Authorization: c4bf1743-1725-4a47-acbc-69668962fcdc'
+
+**Important Notice: The default value for the Authorization Header is c4bf1743-1725-4a47-acbc-69668962fcdc**
+
+<h3>Important Notice</h3>
+
+Currently, coverage in jacoco is relatively low due to the fact that I couldn't get the exclusion of classes to
+work properly yet. Basically jacoco is considering all classes in its report as can be seen in the images below:
+
 
 <p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
+  <img src="jacoco-report.jpg" alt="General Report" />
+</p>
+
+However, the classes that contain the most important code are well covered as can be seen
+below:
+
+Services:
+
+<p align="center">
+  <img src="jacoco-report-services-overview.jpg" alt="Services report overview" />
+</p>
+
+RateService:
+
+<p align="center">
+  <img src="jacoco-report-rate-service-overview.jpg" alt="RateService report coverage" />
+</p>
+
+Processors:
+
+<p align="center">
+  <img src="jacoco-report-processors-overview.jpg" alt="Processors report overview" />
+</p>
+
+RateProcessor:
+
+<p align="center">
+  <img src="jacoco-report-rate-processor-overview.jpg" alt="Processors report overview" />
 </p>

@@ -1,82 +1,165 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
+[[English](README.md) | [Portuguese](README.pt.md)]
 
-[[English](README.md) | [Português](README.pt.md)]
+<h2>QuoteService</h2>
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+<h3>Sobre o QuoteService</h3>
 
-A API precisa converter entre as seguintes moedas:
+O propósito desta api é realizar conversões entre moedas fiat, crypto e imaginárias/foras do padrão. Foi
+construído utilizando Spring Boot e Kotlin.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+A API oferece suporte inicial para conversão entre as seguintes moedas:
 
-Outras moedas podem ser adicionadas conforme o uso.
+- USD
+- BRL
+- EUR
+- BTC
+- ETH
+- D&D (Dungeons & Dragons Gold Coins que é uma moeda imaginária)
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
+A ideia básica desta API é recuperar dados de APIs abertas de câmbios/cotação e usá-las para calcular as conversões.
+Como os fornecedores permitem uso aberto de usar APIs públicas a implementação usa uma rotina para recuperar os dados
+delas em um tempo de delay configurável via variável de ambiente em millis de modo a evitar sobretaxá-las com
+requisições e ultrapassar seu rate limit. Os dados são então convertidos para o padrão definido no código e então
+persistidos no banco de dados para utilização posterior nas conversões. **Por favor note que as conversões podem
+diferenciar de outros motores como google ou outras APIs devido as diferentes fontes de cotações**
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+<h3>Setup</h3>
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+A API é dockerizada o que significa que deve ser relativamente fácil de a fazer rodar.
+Para realizar a inicialização primeiro clone esse repositório para sua máquina, então abra o terminal e navegue até a
+raiz do repositório clonado e então use o seguinte comando:
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+``` docker-compose up --build ```
 
-A API deve suportar conversão entre moedas fiduciárias, crypto e fictícias. Exemplo: BRL->HURB, HURB->ETH
+O processo pode demorar um pouco mas eventualmente o serviço estará "em pé" e "rodando". Se forem acusados erros de
+"missing images" basta utilizar o comando a seguir para cada uma das imagens faltando:
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+``` docker pull <imagem_faltando> ```
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de Dungeons & Dragons sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+<h3>Utilização</h3>
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+Currently, QuoteService offers 3 endpoints. One to convert between currencies, one to add a new currency and other to
+remove a currency.Atualmente, o QuoteService oferece 3 endpoints. Um para realizar conversões entre moedas, um para
+adicionar novas moedas individualmente e outro para remover moedas individualmente.
 
-Ref:
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+</h2>Endpoint de conversão</h2>
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+Verbo: GET
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Esse endpoint é usado para converter uma quantia em uma moeda base para uma em moeda alvo
 
-## Requisitos
+A rota do endpoint de conversão (localmente) é:
+``` http://localhost:8080/currency/convert?from=<BaseCurrency>&to=<TargetCurrency>&amount=<Amount> ```
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **main** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+ex: ``` http://localhost:8080/currency/convert?from=ETH&to=BRL&amount=1 ```
 
-## Critério de avaliação
+Você deve adicionar o seguinte header obrigatório: Header: ``` Authorization: <API-Key> ```
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+Abaixo está o curl para chamar o endpoint de conversão (localmente):
 
-## Dúvidas
+curl --location 'http://localhost:8080/currency/convert?from=ETH&to=BRL&amount=1' \
+--header 'Authorization: c4bf1743-1725-4a47-acbc-69668962fcdc'
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+</h2>Endpoint para adicionar moeda</h2>
 
-Boa sorte e boa viagem! ;)
+Esse endpoint é utilizado para adicionar novas moedas na API:
+
+Verbo: POST
+
+A rota do endpoint de adição de novas moedas é a seguinte (localmente):
+``` http://localhost:8080/currency/add ```
+
+Você deve adicionar o seguinte header obrigatório: Header: ``` Authorization: <API-Key> ```
+
+Body:
+
+{
+
+    "symbol": <Currency-Symbol>,
+
+    "from_usd": <Conversion-Rate-From-USD>,
+
+    "to_usd": <Conversion-Rate-To-USD>
+
+}
+
+Parâmetros:
+- symbol: Símbolo oficial da moeda (USD, BRL, EUR, BTC, ETH, etc...);
+- from_usd: Valor resultante da conversão de $1 USD para a moeda sendo adicionada
+(ex: Quanto vale um dólar americano em real);
+- to_usd: Valor resultante da conversão de $1 da moeda sendo adicionada para USD (ex: Quanto vale um real em dólar).
+
+
+Abaixo está o curl para chamar o endpoint de adição de moedas (localmente):
+
+curl --location 'http://localhost:8080/currency/add' \
+--header 'Authorization: c4bf1743-1725-4a47-acbc-69668962fcdc' \
+--header 'Content-Type: application/json' \
+--data '{
+"symbol": "BRL",
+"from_usd": "5.14723",
+"to_usd": "0.194279"
+}'
+
+Obs: Por favor note que quanto maior a quantidade depois do ponto mais preciso serão os cálculos
+(o valor recomendado de casas decimais é 6).
+
+Obs2: Ao invés de vírgula é usando ponto para representar so números com casas decimais.
+
+</h2>Endpoint para deletar moedas</h2>
+
+Esse endpoint é utilizado para remover moedar de forma lógica da API
+
+Verbo: DELETE
+
+A rota do endpoint de remoção de moedas é a seguinte (localmente):
+``` http://localhost:8080/currency/delete?currency=<CurrencySymbol> ```
+
+Você deve adicionar o seguinte header obrigatório: Header: ``` Authorization: <API-Key> ```
+
+ex: ``` http://localhost:8080/currency/delete?currency=BRL ```
+
+Abaixo está o curl para chamar o endpoint de remoção de moedas (localmente):
+
+curl --location --request DELETE 'http://localhost:8080/currency/delete?currency=BRL' \
+--header 'Authorization: c4bf1743-1725-4a47-acbc-69668962fcdc'
+
+**Observação importante: o valor padrão do header Authorization é c4bf1743-1725-4a47-acbc-69668962fcdc**
+
+<h3>Aviso importante</h3>
+
+Atualmente a cobertura no jacoco está relativamente baixa devido ao fato que ainda não consegui fazer com que a
+exclusão de classes funcionasse apropriadamente. Basicamente o jacoco está considerando todas as classes em seu
+relatório como pode ser visto na imagem abaixo:
+
 
 <p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
+  <img src="jacoco-report.jpg" alt="General Report" />
+</p>
+
+No entanto, as classes que contém as partes mais importantes do código estão com cobertura satisfatória como pode ser
+visto nas imagens abaixo:
+
+Services:
+
+<p align="center">
+  <img src="jacoco-report-services-overview.jpg" alt="Services report overview" />
+</p>
+
+RateService:
+
+<p align="center">
+  <img src="jacoco-report-rate-service-overview.jpg" alt="RateService report coverage" />
+</p>
+
+Processors:
+
+<p align="center">
+  <img src="jacoco-report-processors-overview.jpg" alt="Processors report overview" />
+</p>
+
+RateProcessor:
+
+<p align="center">
+  <img src="jacoco-report-rate-processor-overview.jpg" alt="Processors report overview" />
 </p>
