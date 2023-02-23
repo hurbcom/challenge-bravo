@@ -24,7 +24,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.github.kittinunf.fuel:fuel:2.3.1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation ("io.github.microutils:kotlin-logging-jvm:2.0.11")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.mockito:mockito-core")
 }
 
 tasks.withType<KotlinCompile> {
@@ -40,5 +42,16 @@ tasks.withType<Test> {
 }
 
 tasks.jacocoTestReport {
-	dependsOn(tasks.test)
+    dependsOn(tasks.test)
+    dependsOn(tasks.jacocoTestCoverageVerification)
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.2".toBigDecimal()
+            }
+        }
+    }
 }

@@ -8,7 +8,7 @@ import quoteservice.processors.RatesProcessor
 class UpdateRatesJob(
     val ratesProcessor: RatesProcessor
 ) {
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelayString = "\${quote-service.routines.update-job.fixed-delay}")
     fun process() {
         runCatching {
             ratesProcessor.updateRates()

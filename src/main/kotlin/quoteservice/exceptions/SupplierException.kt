@@ -1,6 +1,5 @@
 package quoteservice.exceptions
 
-data class CurrencyAlreadyAddedException (
+data class SupplierException (
     override val message: String
 ): Exception(message)
-

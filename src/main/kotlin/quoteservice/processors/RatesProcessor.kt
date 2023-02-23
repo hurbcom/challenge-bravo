@@ -2,6 +2,7 @@ package quoteservice.processors
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
+import quoteservice.loggers.Logger
 import quoteservice.repositories.RatesRepository
 import quoteservice.repositories.models.Rate
 import quoteservice.web.suppliers.RatesSupplier
@@ -9,11 +10,14 @@ import quoteservice.web.suppliers.RatesSupplier
 @Component
 class RatesProcessor(
     val ratesRepository: RatesRepository,
+    val logger: Logger,
     @Qualifier("forexSupplier") val forexSupplier: RatesSupplier,
     @Qualifier("cryptoSupplier") val cryptoSupplier: RatesSupplier
 ) {
     fun updateRates() {
         runCatching {
+            logger.kLogger.info { "Starting update rates routine processing" }
+
             val exchangeDataFromDatabase = ratesRepository.findAll()
             val updatedRates = mutableListOf<Rate>()
             val forexRates = forexSupplier.getRates()
@@ -45,9 +49,9 @@ class RatesProcessor(
             updatedRates.forEach {
                 ratesRepository.deleteBySymbol(it.symbol)
                 ratesRepository.save(it)
-            }
+            }.also { logger.kLogger.info { "Update rates routine executed with success" } }
         }.getOrElse {
-            println("Failure updating exchange rates: ${it.message}")
+            logger.kLogger.error { "Failure updating exchange rates: ${it.message}" }
         }
     }
 
