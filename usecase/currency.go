@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model"
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/cache"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/database/repository"
 )
 
@@ -21,6 +22,7 @@ type Currency interface {
 
 type CurrencyUseCase struct {
 	RepositoryCurrency repository.Currency
+	CacheCurrency      cache.Currency
 }
 
 // ErrCurrencyValidate denotes failing validate currency.
@@ -43,9 +45,10 @@ func (eccv ErrCurrencyConvertValidate) Error() string {
 	return eccv.Message
 }
 
-func NewCurrency(repositoryCurrency repository.Currency) Currency {
+func NewCurrency(repositoryCurrency repository.Currency, cacheCurrency cache.Currency) Currency {
 	return &CurrencyUseCase{
 		RepositoryCurrency: repositoryCurrency,
+		CacheCurrency:      cacheCurrency,
 	}
 }
 
@@ -74,6 +77,16 @@ func (currencyUsecase *CurrencyUseCase) Update(currencyModel *model.Currency) (*
 		return nil, err
 	}
 
+	currencyModelUpdated, err := currencyUsecase.RepositoryCurrency.Update(currencyModel)
+
+	if err == nil {
+		_, errCache := currencyUsecase.CacheCurrency.GetByShortName(currencyModelUpdated.ShortName)
+
+		if errCache != nil {
+			currencyUsecase.CacheCurrency.SetByShortName(currencyModelUpdated)
+		}
+	}
+
 	return currencyUsecase.RepositoryCurrency.Update(currencyModel)
 }
 
@@ -88,7 +101,7 @@ func (currencyUsecase *CurrencyUseCase) Convert(currencyConvertModel *model.Curr
 		return nil, err
 	}
 
-	currencyFrom, err := currencyUsecase.RepositoryCurrency.GetByShortName(currencyConvertModel.From)
+	currencyFrom, err := currencyUsecase.getByShortName(currencyConvertModel.From)
 
 	if err != nil {
 		if _, ok := err.(repository.ErrNotFound); ok {
@@ -98,7 +111,7 @@ func (currencyUsecase *CurrencyUseCase) Convert(currencyConvertModel *model.Curr
 		return nil, err
 	}
 
-	currencyTo, err := currencyUsecase.RepositoryCurrency.GetByShortName(currencyConvertModel.To)
+	currencyTo, err := currencyUsecase.getByShortName(currencyConvertModel.To)
 
 	if err != nil {
 		if _, ok := err.(repository.ErrNotFound); ok {
@@ -124,6 +137,20 @@ func (currencyUsecase *CurrencyUseCase) Convert(currencyConvertModel *model.Curr
 	}
 
 	return currencyConvertResponse, nil
+}
+
+func (currencyUsecase *CurrencyUseCase) getByShortName(shortName string) (currencyModel *model.Currency, err error) {
+	currencyModel, err = currencyUsecase.CacheCurrency.GetByShortName(shortName)
+
+	if err != nil {
+		currencyModel, err = currencyUsecase.RepositoryCurrency.GetByShortName(shortName)
+
+		if err == nil {
+			currencyUsecase.CacheCurrency.SetByShortName(currencyModel)
+		}
+	}
+
+	return currencyModel, err
 }
 
 func validateCurrencyModel(currencyModel *model.Currency) error {

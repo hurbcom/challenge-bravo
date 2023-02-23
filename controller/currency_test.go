@@ -22,7 +22,7 @@ func TestInsertDeserializingError(t *testing.T) {
 	log := hclog.Default()
 	mockUserCaseCurrency := new(mock_usecase.MockCurrency)
 
-	controllerCurrency := NewCurrency(mockUserCaseCurrency, log)
+	controllerCurrency := NewCurrency(log, mockUserCaseCurrency)
 
 	var jsonReq = []byte("")
 
@@ -58,7 +58,7 @@ func TestInsertValidatingError(t *testing.T) {
 
 	mockUserCaseCurrency.On("Insert").Return(currency, usecase.ErrCurrencyValidate{Message: errorMessage})
 
-	controllerCurrency := NewCurrency(mockUserCaseCurrency, log)
+	controllerCurrency := NewCurrency(log, mockUserCaseCurrency)
 
 	var jsonReq, _ = json.Marshal(currency)
 
@@ -94,7 +94,7 @@ func TestInsertDatabaseDuplicateKeyError(t *testing.T) {
 
 	mockUserCaseCurrency.On("Insert").Return(currency, errExpected)
 
-	controllerCurrency := NewCurrency(mockUserCaseCurrency, log)
+	controllerCurrency := NewCurrency(log, mockUserCaseCurrency)
 
 	var jsonReq, _ = json.Marshal(currency)
 
@@ -130,7 +130,7 @@ func TestInsertDatabaseError(t *testing.T) {
 
 	mockUserCaseCurrency.On("Insert").Return(currency, errors.New(errorMessage))
 
-	controllerCurrency := NewCurrency(mockUserCaseCurrency, log)
+	controllerCurrency := NewCurrency(log, mockUserCaseCurrency)
 
 	var jsonReq, _ = json.Marshal(currency)
 
@@ -171,7 +171,7 @@ func TestInsertSuccess(t *testing.T) {
 
 	mockUserCaseCurrency.On("Insert").Return(currency, nil)
 
-	controllerCurrency := NewCurrency(mockUserCaseCurrency, log)
+	controllerCurrency := NewCurrency(log, mockUserCaseCurrency)
 
 	var jsonReq, _ = json.Marshal(currency)
 

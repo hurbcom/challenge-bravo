@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	mock_cache "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/mock/cache"
 	mock_repository "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/mock/repository"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model"
 	"github.com/stretchr/testify/assert"
@@ -12,6 +13,7 @@ import (
 
 func TestInsertShortNameEmptyError(t *testing.T) {
 	mockRepositoryCurrency := new(mock_repository.MockCurrency)
+	mockCacheCurrency := new(mock_cache.MockCurrency)
 
 	referenceDate, _ := time.Parse("2006-01-02", "1900-01-01")
 
@@ -20,7 +22,7 @@ func TestInsertShortNameEmptyError(t *testing.T) {
 		ReferenceDate: referenceDate,
 	}
 
-	usecaseCurrency := NewCurrency(mockRepositoryCurrency)
+	usecaseCurrency := NewCurrency(mockRepositoryCurrency, mockCacheCurrency)
 
 	currencyResult, err := usecaseCurrency.Insert(&currency)
 
@@ -31,6 +33,7 @@ func TestInsertShortNameEmptyError(t *testing.T) {
 
 func TestInsertShortNameSizeLessError(t *testing.T) {
 	mockRepositoryCurrency := new(mock_repository.MockCurrency)
+	mockCacheCurrency := new(mock_cache.MockCurrency)
 
 	referenceDate, _ := time.Parse("2006-01-02", "1900-01-01")
 
@@ -40,7 +43,7 @@ func TestInsertShortNameSizeLessError(t *testing.T) {
 		ReferenceDate: referenceDate,
 	}
 
-	usecaseCurrency := NewCurrency(mockRepositoryCurrency)
+	usecaseCurrency := NewCurrency(mockRepositoryCurrency, mockCacheCurrency)
 
 	currencyResult, err := usecaseCurrency.Insert(&currency)
 
@@ -51,6 +54,7 @@ func TestInsertShortNameSizeLessError(t *testing.T) {
 
 func TestInsertShortNameSizeGreaterError(t *testing.T) {
 	mockRepositoryCurrency := new(mock_repository.MockCurrency)
+	mockCacheCurrency := new(mock_cache.MockCurrency)
 
 	referenceDate, _ := time.Parse("2006-01-02", "1900-01-01")
 
@@ -60,7 +64,7 @@ func TestInsertShortNameSizeGreaterError(t *testing.T) {
 		ReferenceDate: referenceDate,
 	}
 
-	usecaseCurrency := NewCurrency(mockRepositoryCurrency)
+	usecaseCurrency := NewCurrency(mockRepositoryCurrency, mockCacheCurrency)
 
 	currencyResult, err := usecaseCurrency.Insert(&currency)
 
@@ -71,6 +75,7 @@ func TestInsertShortNameSizeGreaterError(t *testing.T) {
 
 func TestInsertRateUSDZeroError(t *testing.T) {
 	mockRepositoryCurrency := new(mock_repository.MockCurrency)
+	mockCacheCurrency := new(mock_cache.MockCurrency)
 
 	referenceDate, _ := time.Parse("2006-01-02", "1900-01-01")
 
@@ -80,7 +85,7 @@ func TestInsertRateUSDZeroError(t *testing.T) {
 		ReferenceDate: referenceDate,
 	}
 
-	usecaseCurrency := NewCurrency(mockRepositoryCurrency)
+	usecaseCurrency := NewCurrency(mockRepositoryCurrency, mockCacheCurrency)
 
 	currencyResult, err := usecaseCurrency.Insert(&currency)
 
@@ -91,13 +96,14 @@ func TestInsertRateUSDZeroError(t *testing.T) {
 
 func TestInsertReferenceDateEmptyError(t *testing.T) {
 	mockRepositoryCurrency := new(mock_repository.MockCurrency)
+	mockCacheCurrency := new(mock_cache.MockCurrency)
 
 	currency := model.Currency{
 		ShortName: "TEST",
 		RateUSD:   1.23,
 	}
 
-	usecaseCurrency := NewCurrency(mockRepositoryCurrency)
+	usecaseCurrency := NewCurrency(mockRepositoryCurrency, mockCacheCurrency)
 
 	currencyResult, err := usecaseCurrency.Insert(&currency)
 
@@ -108,6 +114,7 @@ func TestInsertReferenceDateEmptyError(t *testing.T) {
 
 func TestInsertReferenceDateBeforeError(t *testing.T) {
 	mockRepositoryCurrency := new(mock_repository.MockCurrency)
+	mockCacheCurrency := new(mock_cache.MockCurrency)
 
 	referenceDate, _ := time.Parse("2006-01-02", "1899-12-31")
 
@@ -117,7 +124,7 @@ func TestInsertReferenceDateBeforeError(t *testing.T) {
 		ReferenceDate: referenceDate,
 	}
 
-	usecaseCurrency := NewCurrency(mockRepositoryCurrency)
+	usecaseCurrency := NewCurrency(mockRepositoryCurrency, mockCacheCurrency)
 
 	currencyResult, err := usecaseCurrency.Insert(&currency)
 
@@ -128,6 +135,7 @@ func TestInsertReferenceDateBeforeError(t *testing.T) {
 
 func TestInsertReferenceDateAfterError(t *testing.T) {
 	mockRepositoryCurrency := new(mock_repository.MockCurrency)
+	mockCacheCurrency := new(mock_cache.MockCurrency)
 
 	referenceDate := time.Now().UTC().Truncate(24*time.Hour).AddDate(0, 0, 1)
 
@@ -137,7 +145,7 @@ func TestInsertReferenceDateAfterError(t *testing.T) {
 		ReferenceDate: referenceDate,
 	}
 
-	usecaseCurrency := NewCurrency(mockRepositoryCurrency)
+	usecaseCurrency := NewCurrency(mockRepositoryCurrency, mockCacheCurrency)
 
 	currencyResult, err := usecaseCurrency.Insert(&currency)
 
@@ -148,6 +156,7 @@ func TestInsertReferenceDateAfterError(t *testing.T) {
 
 func TestInsertRepositoryError(t *testing.T) {
 	mockRepositoryCurrency := new(mock_repository.MockCurrency)
+	mockCacheCurrency := new(mock_cache.MockCurrency)
 
 	referenceDate, _ := time.Parse("2006-01-02", "1900-01-01")
 
@@ -161,7 +170,7 @@ func TestInsertRepositoryError(t *testing.T) {
 
 	mockRepositoryCurrency.On("Insert").Return(currency, errSpected)
 
-	usecaseCurrency := NewCurrency(mockRepositoryCurrency)
+	usecaseCurrency := NewCurrency(mockRepositoryCurrency, mockCacheCurrency)
 
 	_, err := usecaseCurrency.Insert(currency)
 
@@ -171,6 +180,7 @@ func TestInsertRepositoryError(t *testing.T) {
 
 func TestInsertSuccess(t *testing.T) {
 	mockRepositoryCurrency := new(mock_repository.MockCurrency)
+	mockCacheCurrency := new(mock_cache.MockCurrency)
 
 	referenceDate, _ := time.Parse("2006-01-02", "1900-01-01")
 
@@ -182,7 +192,7 @@ func TestInsertSuccess(t *testing.T) {
 
 	mockRepositoryCurrency.On("Insert").Return(currency, nil)
 
-	usecaseCurrency := NewCurrency(mockRepositoryCurrency)
+	usecaseCurrency := NewCurrency(mockRepositoryCurrency, mockCacheCurrency)
 
 	currencyResult, err := usecaseCurrency.Insert(currency)
 

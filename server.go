@@ -10,6 +10,7 @@ import (
 
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/route"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/router"
+	cache "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/cache/redis"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/database"
 	repository "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/database/repository/postgres"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/util"
@@ -64,6 +65,18 @@ func main() {
 
 	log.Info("Connected database successfuly")
 
+	// create a new cache
+	cache, err := cache.NewRedis(config)
+
+	if err != nil {
+		log.Error("Cannot connect to cache", "error", err)
+		os.Exit(1)
+	}
+
+	defer cache.Close()
+
+	log.Info("Connected cache successfuly")
+
 	// set server address
 	serverAddr := config.ServerAddress
 
@@ -71,7 +84,7 @@ func main() {
 	appRouter := router.NewMuxRouter()
 
 	// include the routes
-	route.CurrencyRoute(appRouter, repository, log)
+	route.CurrencyRoute(appRouter, log, repository, cache)
 	route.SwaggerRoute(appRouter)
 
 	// create HTTP handler

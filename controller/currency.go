@@ -30,14 +30,14 @@ import (
 )
 
 type Currency struct {
-	useCaseCurrency usecase.Currency
-	log             hclog.Logger
+	Log             hclog.Logger
+	UseCaseCurrency usecase.Currency
 }
 
-func NewCurrency(useCaseCurrency usecase.Currency, log hclog.Logger) *Currency {
+func NewCurrency(log hclog.Logger, useCaseCurrency usecase.Currency) *Currency {
 	return &Currency{
-		useCaseCurrency: useCaseCurrency,
-		log:             log,
+		Log:             log,
+		UseCaseCurrency: useCaseCurrency,
 	}
 }
 
@@ -59,14 +59,14 @@ func (controllerCurrency *Currency) Insert(rw http.ResponseWriter, req *http.Req
 			Message: "Error deserializing currency",
 		}
 
-		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+		logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(responseError)
 		return
 	}
 
-	currencyResult, err := controllerCurrency.useCaseCurrency.Insert(currency)
+	currencyResult, err := controllerCurrency.UseCaseCurrency.Insert(currency)
 
 	if err != nil {
 		var responseError *model.Error
@@ -90,7 +90,7 @@ func (controllerCurrency *Currency) Insert(rw http.ResponseWriter, req *http.Req
 				Message: "Error insert currency in database",
 			}
 
-			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+			logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 			rw.WriteHeader(http.StatusInternalServerError)
 		}
@@ -119,14 +119,14 @@ func (controllerCurrency *Currency) GetByID(rw http.ResponseWriter, req *http.Re
 			Message: "Invalid ID",
 		}
 
-		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+		logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(responseError)
 		return
 	}
 
-	currencyResult, err := controllerCurrency.useCaseCurrency.GetByID(int64(id))
+	currencyResult, err := controllerCurrency.UseCaseCurrency.GetByID(int64(id))
 
 	if err != nil {
 		var responseError *model.Error
@@ -143,7 +143,7 @@ func (controllerCurrency *Currency) GetByID(rw http.ResponseWriter, req *http.Re
 				Message: "Error get currency from database",
 			}
 
-			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+			logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 			rw.WriteHeader(http.StatusInternalServerError)
 		}
@@ -163,7 +163,7 @@ func (controllerCurrency *Currency) GetByID(rw http.ResponseWriter, req *http.Re
 //	200: currenciesResponse
 
 func (controllerCurrency *Currency) List(rw http.ResponseWriter, req *http.Request) {
-	currencies, err := controllerCurrency.useCaseCurrency.List()
+	currencies, err := controllerCurrency.UseCaseCurrency.List()
 
 	if err != nil {
 		responseError := &model.Error{
@@ -171,7 +171,7 @@ func (controllerCurrency *Currency) List(rw http.ResponseWriter, req *http.Reque
 			Message: "Error get all currencies from database",
 		}
 
-		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+		logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 		rw.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(rw).Encode(responseError)
@@ -196,7 +196,7 @@ func (controllerCurrency *Currency) Update(rw http.ResponseWriter, req *http.Req
 			Message: "Invalid ID",
 		}
 
-		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+		logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(responseError)
@@ -213,7 +213,7 @@ func (controllerCurrency *Currency) Update(rw http.ResponseWriter, req *http.Req
 			Message: "Error deserializing currency",
 		}
 
-		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+		logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(responseError)
@@ -226,7 +226,7 @@ func (controllerCurrency *Currency) Update(rw http.ResponseWriter, req *http.Req
 			Message: "URL Path ID divergent currency.ID",
 		}
 
-		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+		logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(responseError)
@@ -235,7 +235,7 @@ func (controllerCurrency *Currency) Update(rw http.ResponseWriter, req *http.Req
 
 	currency.ID = int64(id)
 
-	currencyResult, err := controllerCurrency.useCaseCurrency.Update(currency)
+	currencyResult, err := controllerCurrency.UseCaseCurrency.Update(currency)
 
 	if err != nil {
 		var responseError *model.Error
@@ -246,7 +246,7 @@ func (controllerCurrency *Currency) Update(rw http.ResponseWriter, req *http.Req
 				Message: fmt.Sprintf("Error validating currency: %v", err.Error()),
 			}
 
-			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+			logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 			rw.WriteHeader(http.StatusBadRequest)
 		} else if _, ok := err.(repository.ErrNotFound); ok {
@@ -269,7 +269,7 @@ func (controllerCurrency *Currency) Update(rw http.ResponseWriter, req *http.Req
 				Message: "Error update currency in database",
 			}
 
-			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+			logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 			rw.WriteHeader(http.StatusInternalServerError)
 		}
@@ -296,14 +296,14 @@ func (controllerCurrency *Currency) Delete(rw http.ResponseWriter, req *http.Req
 			Message: "Invalid ID",
 		}
 
-		logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+		logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(responseError)
 		return
 	}
 
-	err = controllerCurrency.useCaseCurrency.Delete(int64(id))
+	err = controllerCurrency.UseCaseCurrency.Delete(int64(id))
 
 	if err != nil {
 		var responseError *model.Error
@@ -321,7 +321,7 @@ func (controllerCurrency *Currency) Delete(rw http.ResponseWriter, req *http.Req
 				Message: "Error delete currency in database",
 			}
 
-			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+			logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 			rw.WriteHeader(http.StatusInternalServerError)
 		}
@@ -348,7 +348,7 @@ func (controllerCurrency *Currency) Convert(rw http.ResponseWriter, req *http.Re
 		Amount: float32(amount),
 	}
 
-	currencyConvertResponse, err := controllerCurrency.useCaseCurrency.Convert(currencyConvert)
+	currencyConvertResponse, err := controllerCurrency.UseCaseCurrency.Convert(currencyConvert)
 
 	if err != nil {
 		var responseError *model.Error
@@ -366,7 +366,7 @@ func (controllerCurrency *Currency) Convert(rw http.ResponseWriter, req *http.Re
 				Message: "Error convert currency",
 			}
 
-			logger.LogErrorRequest(controllerCurrency.log, req, responseError.Message, err)
+			logger.LogErrorRequest(controllerCurrency.Log, req, responseError.Message, err)
 
 			rw.WriteHeader(http.StatusInternalServerError)
 		}

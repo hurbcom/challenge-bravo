@@ -13,6 +13,8 @@ type Config struct {
 	DBDriver            string `mapstructure:"DB_DRIVER"`
 	DBURL               string `mapstructure:"DB_URL"`
 	DBMigrationURL      string `mapstructure:"DB_MIGRATION_URL"`
+	CacheURL            string `mapstructure:"CACHE_URL"`
+	CacheExpiration     string `mapstructure:"CACHE_EXPIRATION"`
 }
 
 // loadConfig reads configurations from file or environment variables
@@ -24,6 +26,7 @@ func LoadConfig(path string) (config *Config, err error) {
 	viper.SetDefault("SERVER_ADDRESS", ":9000")
 	viper.SetDefault("SERVER_LOG_LEVEL", "DEBUG")
 	viper.SetDefault("SERVER_LOG_JSON_FORMAT", true)
+	viper.SetDefault("CACHE_EXPIRATION", "1m")
 
 	viper.AutomaticEnv()
 

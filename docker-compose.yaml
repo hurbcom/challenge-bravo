@@ -25,6 +25,15 @@ services:
   #   networks:
   #     - hurbcom-network
 
+  cache:
+    container_name: hurbcom-redis
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - hurbcom-network
+
 volumes:
   hurbcom-db-data:
 
