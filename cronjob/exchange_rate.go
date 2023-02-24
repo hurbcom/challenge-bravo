@@ -11,7 +11,8 @@ import (
 	"github.com/hashicorp/go-hclog"
 )
 
-func ExchangeRate(config *util.Config, log hclog.Logger, repositoryCurrency repository.Currency, cacheCurrency cache.Currency) {
+func ExchangeRate(config *util.Config, log hclog.Logger, repositoryCurrency repository.Currency,
+	cacheCurrency cache.Currency, cacheExchangeRate cache.ExchangeRate) {
 	scheduler := gocron.NewScheduler(time.UTC)
 
 	// err := usecase.NewExchangeRate(config, log, repositoryCurrency, cacheCurrency)
@@ -22,7 +23,7 @@ func ExchangeRate(config *util.Config, log hclog.Logger, repositoryCurrency repo
 
 	scheduler.Every(5).Minutes().Do(func() {
 
-		err := usecase.NewExchangeRate(config, log, repositoryCurrency, cacheCurrency)
+		err := usecase.NewExchangeRate(config, log, repositoryCurrency, cacheCurrency, cacheExchangeRate)
 
 		if err != nil {
 			log.Warn("Error Loading Exchange Rates", "error", err)

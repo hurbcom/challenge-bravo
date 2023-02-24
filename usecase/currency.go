@@ -149,7 +149,7 @@ func (currencyUsecase *CurrencyUseCase) getByShortName(shortName string) (curren
 	return currencyModel, err
 }
 
-func (currencyUsecase *CurrencyUseCase) validateCurrencyModel(currencyModel *model.Currency) error {
+func (*CurrencyUseCase) validateCurrencyModel(currencyModel *model.Currency) error {
 	message := []string{}
 	referenceDateMin := time.Date(1900, 01, 01, 00, 00, 00, 000, time.UTC)
 	referenceDateMax := time.Now().UTC().Truncate(24 * time.Hour)
@@ -177,7 +177,7 @@ func (currencyUsecase *CurrencyUseCase) validateCurrencyModel(currencyModel *mod
 	return nil
 }
 
-func (currencyUsecase *CurrencyUseCase) validateCurrencyConvertModel(currencyConvertModel *model.CurrencyConvert) error {
+func (*CurrencyUseCase) validateCurrencyConvertModel(currencyConvertModel *model.CurrencyConvert) error {
 	message := []string{}
 
 	if currencyConvertModel.From == "" {

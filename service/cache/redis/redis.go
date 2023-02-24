@@ -46,3 +46,7 @@ func (*RedisCache) Check() error {
 func (*RedisCache) Currency() cache.Currency {
 	return NewCurrency()
 }
+
+func (*RedisCache) ExchangeRate() cache.ExchangeRate {
+	return NewExchangeRate()
+}

@@ -13,7 +13,7 @@ func NewNotFound() *NotFound {
 	return &NotFound{}
 }
 
-func (controllerNotFound *NotFound) NotFound(rw http.ResponseWriter, req *http.Request) {
+func (*NotFound) NotFound(rw http.ResponseWriter, req *http.Request) {
 	errorNotFound := model.Error{
 		Code:    404,
 		Message: "Not Found",

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/cronjob"
@@ -79,7 +80,7 @@ func main() {
 	log.Info("Connected cache successfuly")
 
 	//cronJobs(log)
-	cronjob.ExchangeRate(config, log, repository.Currency(), cache.Currency())
+	cronjob.ExchangeRate(config, log, repository.Currency(), cache.Currency(), cache.ExchangeRate())
 
 	if err != nil {
 		log.Warn("Error Loading Exchange Rates", "error", err)
@@ -100,7 +101,7 @@ func main() {
 	httpHandler := appRouter.Serve()
 
 	// include the middleware handler CORS
-	corsHandler := gohandlers.CORS(gohandlers.AllowedOrigins([]string{""}))
+	corsHandler := gohandlers.CORS(gohandlers.AllowedOrigins(strings.Split(config.ServerCORSAllowedOrigins, ";")))
 	httpHandler = corsHandler(httpHandler)
 
 	// include the middleware handler logger
@@ -142,17 +143,3 @@ func main() {
 	defer cancel()
 	httpServer.Shutdown(ctx)
 }
-
-// func currencyUpdate(log hclog.Logger) {
-// 	log.Info("currencyUpdate")
-// }
-
-// func cronJobs(log hclog.Logger) {
-// 	scheduler := gocron.NewScheduler(time.UTC)
-
-// 	scheduler.Every(30).Minutes().Do(func() {
-// 		usecase.GetExchangeRate()
-// 	})
-
-// 	scheduler.StartAsync()
-// }

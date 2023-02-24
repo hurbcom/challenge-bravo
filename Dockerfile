@@ -19,6 +19,7 @@ FROM alpine:3.17
 WORKDIR /app
 
 COPY --from=builder /app/hurbcom-currency .
+COPY --from=builder /app/swagger.yaml .
 COPY --from=builder /app/service/database/migration ./migration
 
 EXPOSE 9000

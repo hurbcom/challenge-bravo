@@ -14,8 +14,8 @@ func NewCurrency() cache.Currency {
 	return &Currency{}
 }
 
-func (*Currency) SetByShortName(currencyModel *model.Currency) error {
-	key := keyFormatted("short_name", currencyModel.ShortName)
+func (cacheCurrency *Currency) SetByShortName(currencyModel *model.Currency) error {
+	key := cacheCurrency.keyFormatted("short_name", currencyModel.ShortName)
 	value, err := json.Marshal(currencyModel)
 
 	if err != nil {
@@ -25,8 +25,8 @@ func (*Currency) SetByShortName(currencyModel *model.Currency) error {
 	return client.Set(ctx, key, value, expiration).Err()
 }
 
-func (*Currency) GetByShortName(shortName string) (*model.Currency, error) {
-	key := keyFormatted("short_name", shortName)
+func (cacheCurrency *Currency) GetByShortName(shortName string) (*model.Currency, error) {
+	key := cacheCurrency.keyFormatted("short_name", shortName)
 	value, err := client.Get(ctx, key).Result()
 
 	if err != nil {
@@ -39,11 +39,11 @@ func (*Currency) GetByShortName(shortName string) (*model.Currency, error) {
 	return currencyModel, err
 }
 
-func (*Currency) DelByShortName(shortName string) error {
-	key := keyFormatted("short_name", shortName)
+func (cacheCurrency *Currency) DelByShortName(shortName string) error {
+	key := cacheCurrency.keyFormatted("short_name", shortName)
 	return client.Del(ctx, key).Err()
 }
 
-func keyFormatted(fieldName, fieldValue string) string {
+func (*Currency) keyFormatted(fieldName, fieldValue string) string {
 	return fmt.Sprintf("%v:%v:%v", "currency", fieldName, fieldValue)
 }
