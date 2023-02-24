@@ -12,36 +12,41 @@ A Modeda utilizada como lastro é o Dolar (USD).
 A documentação dos endpoints estão disponíveis na própria API "/docs".
 
 ## Etapas para poder executar a API na máquina local
-1. Docker instalado
+1. Docker instalado. [documentação](https://docs.docker.com/engine/install/)
 2. Docker-compose instalado. [documentação](https://docs.docker.com/compose/install/linux/)
-3. Go instalado
-4. Executar o comando abaixo na pasta raiz do projeto para subir os serviços de banco e de cache
-```
-make docker-compose-up
-```
-ou
-```
-docker-compose up -d
-```
-5. Executar o projeto
-```
-make go-run
-```
-ou
-```
-go run server.go
-```
+3. Go instalado. [documentação](https://go.dev/doc/install)
+
+#### Obs: Os comandos a seguir devem ser executados na pasta raiz do projeto.
+
+4. Subir os serviços de banco de dados e de cache utilizados pela API
+    ```
+    make docker-compose-up
+    ```
+    ou
+    ```
+    docker-compose up -d
+    ```
+
+5. Executar a API
+
+    - Direto na máquina local
+        ```
+        make go-run
+        ```
+        ou
+        ```
+        go run server.go
+        ```
+
+    - Dentro do Docker
+        ```
+        make docker-build
+        make docker-run
+        ```
+
 6. Endpoint da API [localhost:9000](localhost:9000)
 7. Endpoin da documentação da API [localhost:9000/docs](localhost:9000/docs)
 
-## Atualização da Documentação da API - Swagger
-
-1. Instalar na máquina o [go-swagger](https://goswagger.io/install.html)
-2. Especificação das tags para geração automatica da documentação [aqui](https://goswagger.io/use/spec.html)
-3. Executar o comando abaixo para atualizar a documentação
-```
-make swagger
-```
 
 ## Informações sobre a atualização automatica das taxas de cambio
 Encontrei um endpoint publico para obter as taxas de cambio do Banco Central Europeu. [link](https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml)
@@ -51,7 +56,7 @@ Esse endpoint tem como lastro a moeda Euro (EUR) onde fiz um de/para no código 
 Optei por usar esse endpoint pela veracidade da informação por ser do Banco Central da Europa e também porque não encontrei facilmente um endpoint publico para obter a taxa de cambio em dolar, então preferi utilizar o tempo para implementar mais recursos na API que na minha visão acredito fazer mais sentido para vcs avaliarem a minha maturidade em desenvolvimento.
 
 ## Descrição Técnica
-1. Banco de dados Postgres por ser um serviço de banco relacional robusto, completo e open source que atende perfeitamente desde pequenas aplicações até apliações robustas.
+1. Banco de dados Postgres por ser um serviço de banco relacional robusto, completo e open source que atende perfeitamente desde pequenas aplicações até apliações robustas e compatível com serviços de banco
 2. Cache Redis por ser um serviço de cache robusto, open source, amplamente utilizado e compatível com serviço de cache em nuvem como o memory store do GCP. O cace é utilizado para melhoria de performance no endpoint de conversão e para controle da atualiação automatica das taxas de cambio 
 3. Migration para versionamento de alterações no banco de dados.
 4. Health Check [localhost:9000/healthz](localhost:9000/healthz) para monitorar se a aplicação está no ar e se os serviços de banco de dados e cache estão funcionando.
@@ -63,9 +68,20 @@ Optei por usar esse endpoint pela veracidade da informação por ser do Banco Ce
 10. Projeto já contém um arquivo config.env com todas as configurações necessárias para poder executar a API no ambiente local. 
 11. Docker-compose para poder subir os serviços de banco de dados e cache para poder rodas a API no ambiente local.
 12. Dockfile para poder realizar o build da API e gerar imagem docker para rodar no ambiente local.
-13. Github action para validar PR e Push para a branch main iniciando um processo de CI/CD.
+13. Github Action para validar PR e Push para a branch main iniciando um processo de CI/CD.
 14. Makefile para poder executar de forma simples diversos comandos.
 15. É possível trocar o manipulador de rotas, banco de dados e serviço de cache facilmente devido a utilização do Clean Architecture no projeto.
+
+## Geração da Documentação da API - Swagger
+
+1. Instalar na máquina o [go-swagger](https://goswagger.io/install.html)
+
+2. Especificação das tags para geração automatica da documentação [aqui](https://goswagger.io/use/spec.html)
+
+3. Executar o comando abaixo na pasta raiz da API para atualizar a documentação
+    ```
+    make swagger
+    ```
 
 ## Sugestões de Melhorias
 
@@ -78,8 +94,6 @@ Optei por usar esse endpoint pela veracidade da informação por ser do Banco Ce
 7. Incluir controle de auditoria
 8. Atualização assincrona das moedas através do cronjob
 
-**Obs:** Com certeza tem mais melhorias a ser feita tanto no código quanto na documentação. Melhoria continua deve fazer parte da vida útil de toda aplicação.
+    #### **Obs:** Com certeza tem mais melhorias a ser feita tanto no código quanto na documentação. Melhoria continua deve fazer parte da vida útil de toda aplicação.
 
 # Espero que gostem bastante do projeto que entreguei ;)
-Como disse anteriormente com certeza tem melhorias a ser feita, pois toda vez que olho um código escrito por mim ou outra pessoal sempre vejo que é possível melhorar.
-É muito provável que possa ter esquecido de incluir informações na documentação e caso aconteça peço desculpas antecipadamente.
