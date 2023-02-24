@@ -65,6 +65,7 @@ Optei por usar esse endpoint pela veracidade da informação por ser do Banco Ce
 7. Middleware para logar o resultado de todas as requisição contendo informações da origem da requisição e request id para ajudar no troubleshooting da aplicação. O request id ajuda a rastrear um a mesma requisição por diversos microservicos e as informações da origem ajudam a identificar se o problema está relacionado a uma origem ou dispositivo especifico.
 8. CronJob que executa a cada 30 minutos para buscar as taxas de cambio do dia e atualizar nossa API. O endpoint utilizado é atualizado apenas uma vez por dia mas coloquei para rodar de 30 em 30 minutos caso aconteça algum erro no processo de atualização. Antes de fazer a requisição para obter as informações a API verifica se o mesmo já foi atualizado no dia e caso positivo ignora a execução.
 9. Carregamento de configurações da API através de váriaveis de ambiente ou arquivo de configuração "config.env" na pasta raiz da aplicação.
+10. Testes Unitários. Aplicados apenas na inclusão de Moeda para demonstrar conhecimento. Tenho total conciencia que é importante e que deve ser aplicada em toda a API.
 10. Projeto já contém um arquivo config.env com todas as configurações necessárias para poder executar a API no ambiente local. 
 11. Docker-compose para poder subir os serviços de banco de dados e cache para poder rodas a API no ambiente local.
 12. Dockfile para poder realizar o build da API e gerar imagem docker para rodar no ambiente local.

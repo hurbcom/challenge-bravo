@@ -19,7 +19,7 @@ import (
 )
 
 func TestInsertDeserializingError(t *testing.T) {
-	log := hclog.Default()
+	log := hclog.New(&hclog.LoggerOptions{Level: hclog.LevelFromString("OFF")})
 	mockUserCaseCurrency := new(mock_usecase.MockCurrency)
 
 	controllerCurrency := NewCurrency(log, mockUserCaseCurrency)
@@ -50,7 +50,7 @@ func TestInsertDeserializingError(t *testing.T) {
 }
 
 func TestInsertValidatingError(t *testing.T) {
-	log := hclog.Default()
+	log := hclog.New(&hclog.LoggerOptions{Level: hclog.LevelFromString("OFF")})
 	mockUserCaseCurrency := new(mock_usecase.MockCurrency)
 
 	currency := &model.Currency{}
@@ -86,7 +86,7 @@ func TestInsertValidatingError(t *testing.T) {
 }
 
 func TestInsertDatabaseDuplicateKeyError(t *testing.T) {
-	log := hclog.Default()
+	log := hclog.New(&hclog.LoggerOptions{Level: hclog.LevelFromString("OFF")})
 	mockUserCaseCurrency := new(mock_usecase.MockCurrency)
 
 	currency := &model.Currency{}
@@ -122,7 +122,7 @@ func TestInsertDatabaseDuplicateKeyError(t *testing.T) {
 }
 
 func TestInsertDatabaseError(t *testing.T) {
-	log := hclog.Default()
+	log := hclog.New(&hclog.LoggerOptions{Level: hclog.LevelFromString("OFF")})
 	mockUserCaseCurrency := new(mock_usecase.MockCurrency)
 
 	currency := &model.Currency{}
@@ -158,7 +158,7 @@ func TestInsertDatabaseError(t *testing.T) {
 }
 
 func TestInsertSuccess(t *testing.T) {
-	log := hclog.Default()
+	log := hclog.New(&hclog.LoggerOptions{Level: hclog.LevelFromString("OFF")})
 	mockUserCaseCurrency := new(mock_usecase.MockCurrency)
 
 	referenceDateString, _ := time.Parse("2006-01-02", "2022-02-01")
