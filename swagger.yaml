@@ -28,7 +28,7 @@ definitions:
                 x-go-name: RateUSD
             reference_date:
                 description: Data de Referencia da Taxa
-                example: Entre 01/01/1900 até a data corrente
+                example: "2019-08-24T00:00:00Z"
                 format: date-time
                 type: string
                 x-go-name: ReferenceDate
@@ -144,7 +144,7 @@ paths:
                             x-go-name: RateUSD
                         reference_date:
                             description: Data de Referencia da Taxa
-                            example: Entre 01/01/1900 até a data corrente
+                            example: "2019-08-24T00:00:00Z"
                             format: date-time
                             type: string
                             x-go-name: ReferenceDate
@@ -213,7 +213,7 @@ paths:
                             x-go-name: RateUSD
                         reference_date:
                             description: Data de Referencia da Taxa
-                            example: Entre 01/01/1900 até a data corrente
+                            example: "2019-08-24T00:00:00Z"
                             format: date-time
                             type: string
                             x-go-name: ReferenceDate

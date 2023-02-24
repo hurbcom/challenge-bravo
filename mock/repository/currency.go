@@ -47,3 +47,8 @@ func (mockCurrency *MockCurrency) Delete(id int64) error {
 func (mockCurrency *MockCurrency) GetByShortName(shortName string) (*model.Currency, error) {
 	return nil, nil
 }
+
+// TODO: to implement
+func (mockCurrency *MockCurrency) UpdateByExchangeRate(currencyExchangeRateModel *model.CurrencyExchangeRate) error {
+	return nil
+}

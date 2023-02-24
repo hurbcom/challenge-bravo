@@ -24,3 +24,8 @@ func (mockCurrency *MockCurrency) GetByShortName(shortName string) (*model.Curre
 
 	return currencyModel, args.Error(1)
 }
+func (mockCurrency *MockCurrency) DelByShortName(shortName string) error {
+	args := mockCurrency.Called()
+
+	return args.Error(0)
+}

@@ -3,6 +3,7 @@ module github.com/CharlesSchiavinato/hurbcom-challenge-bravo
 go 1.19
 
 require (
+	github.com/go-co-op/gocron v1.18.0
 	github.com/go-openapi/runtime v0.25.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-migrate/migrate/v4 v4.15.2
@@ -45,6 +46,7 @@ require (
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/spf13/afero v1.9.3 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
@@ -53,6 +55,7 @@ require (
 	github.com/subosito/gotenv v1.4.2 // indirect
 	go.mongodb.org/mongo-driver v1.11.2 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect

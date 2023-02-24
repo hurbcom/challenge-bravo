@@ -9,4 +9,5 @@ type Currency interface {
 	Update(currencyModel *model.Currency) (*model.Currency, error)
 	Delete(id int64) error
 	GetByShortName(shortName string) (*model.Currency, error)
+	UpdateByExchangeRate(currencyExchangeRateModel *model.CurrencyExchangeRate) error
 }

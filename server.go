@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/cronjob"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/route"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/router"
 	cache "github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/cache/redis"
@@ -77,6 +78,13 @@ func main() {
 
 	log.Info("Connected cache successfuly")
 
+	//cronJobs(log)
+	cronjob.ExchangeRate(config, log, repository.Currency(), cache.Currency())
+
+	if err != nil {
+		log.Warn("Error Loading Exchange Rates", "error", err)
+	}
+
 	// set server address
 	serverAddr := config.ServerAddress
 
@@ -86,6 +94,7 @@ func main() {
 	// include the routes
 	route.CurrencyRoute(appRouter, log, repository, cache)
 	route.SwaggerRoute(appRouter)
+	route.HealthzRoute(appRouter, log, repository, cache)
 
 	// create HTTP handler
 	httpHandler := appRouter.Serve()
@@ -133,3 +142,17 @@ func main() {
 	defer cancel()
 	httpServer.Shutdown(ctx)
 }
+
+// func currencyUpdate(log hclog.Logger) {
+// 	log.Info("currencyUpdate")
+// }
+
+// func cronJobs(log hclog.Logger) {
+// 	scheduler := gocron.NewScheduler(time.UTC)
+
+// 	scheduler.Every(30).Minutes().Do(func() {
+// 		usecase.GetExchangeRate()
+// 	})
+
+// 	scheduler.StartAsync()
+// }

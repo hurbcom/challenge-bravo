@@ -39,6 +39,11 @@ func (*Currency) GetByShortName(shortName string) (*model.Currency, error) {
 	return currencyModel, err
 }
 
+func (*Currency) DelByShortName(shortName string) error {
+	key := keyFormatted("short_name", shortName)
+	return client.Del(ctx, key).Err()
+}
+
 func keyFormatted(fieldName, fieldValue string) string {
 	return fmt.Sprintf("%v:%v:%v", "currency", fieldName, fieldValue)
 }

@@ -2,13 +2,13 @@ package usecase
 
 import (
 	"fmt"
-	"math"
 	"strings"
 	"time"
 
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/model"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/cache"
 	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/service/database/repository"
+	"github.com/CharlesSchiavinato/hurbcom-challenge-bravo/util"
 )
 
 type Currency interface {
@@ -53,7 +53,7 @@ func NewCurrency(repositoryCurrency repository.Currency, cacheCurrency cache.Cur
 }
 
 func (currencyUsecase *CurrencyUseCase) Insert(currencyModel *model.Currency) (*model.Currency, error) {
-	err := validateCurrencyModel(currencyModel)
+	err := currencyUsecase.validateCurrencyModel(currencyModel)
 
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func (currencyUsecase *CurrencyUseCase) List() (*model.Currencies, error) {
 }
 
 func (currencyUsecase *CurrencyUseCase) Update(currencyModel *model.Currency) (*model.Currency, error) {
-	err := validateCurrencyModel(currencyModel)
+	err := currencyUsecase.validateCurrencyModel(currencyModel)
 
 	if err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ func (currencyUsecase *CurrencyUseCase) Delete(id int64) error {
 }
 
 func (currencyUsecase *CurrencyUseCase) Convert(currencyConvertModel *model.CurrencyConvert) (*model.CurrencyConvertResponse, error) {
-	err := validateCurrencyConvertModel(currencyConvertModel)
+	err := currencyUsecase.validateCurrencyConvertModel(currencyConvertModel)
 
 	if err != nil {
 		return nil, err
@@ -123,16 +123,12 @@ func (currencyUsecase *CurrencyUseCase) Convert(currencyConvertModel *model.Curr
 
 	toAmount := ((currencyConvertModel.Amount / currencyFrom.RateUSD) * currencyTo.RateUSD)
 
-	// round to 4 decimals
-	precision := 4
-	toAmount = float32(math.Round(float64(toAmount)*(math.Pow10(precision))) / math.Pow10(precision))
-
 	currencyConvertResponse := &model.CurrencyConvertResponse{
 		FromCurrency:      currencyFrom.ShortName,
 		FromAmount:        float32(currencyConvertModel.Amount),
 		FromReferenceDate: currencyFrom.ReferenceDate,
 		ToCurrency:        currencyTo.ShortName,
-		ToAmount:          toAmount,
+		ToAmount:          float32(util.MathRoundPrecision(float64(toAmount), 6)), // round to 6 decimals precision
 		ToReferenceDate:   currencyTo.ReferenceDate,
 	}
 
@@ -153,7 +149,7 @@ func (currencyUsecase *CurrencyUseCase) getByShortName(shortName string) (curren
 	return currencyModel, err
 }
 
-func validateCurrencyModel(currencyModel *model.Currency) error {
+func (currencyUsecase *CurrencyUseCase) validateCurrencyModel(currencyModel *model.Currency) error {
 	message := []string{}
 	referenceDateMin := time.Date(1900, 01, 01, 00, 00, 00, 000, time.UTC)
 	referenceDateMax := time.Now().UTC().Truncate(24 * time.Hour)
@@ -181,7 +177,7 @@ func validateCurrencyModel(currencyModel *model.Currency) error {
 	return nil
 }
 
-func validateCurrencyConvertModel(currencyConvertModel *model.CurrencyConvert) error {
+func (currencyUsecase *CurrencyUseCase) validateCurrencyConvertModel(currencyConvertModel *model.CurrencyConvert) error {
 	message := []string{}
 
 	if currencyConvertModel.From == "" {

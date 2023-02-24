@@ -20,7 +20,7 @@ type Currency struct {
 	RateUSD float32 `json:"rate_usd"`
 	// Data de Referencia da Taxa
 	// required: true
-	// example: Entre 01/01/1900 até a data corrente
+	// example: 2019-08-24T00:00:00Z
 	ReferenceDate time.Time `json:"reference_date"`
 	// Data de Inclusão da Taxa (Gerado automaticamente na inclusão)
 	// required: true
@@ -47,6 +47,12 @@ type CurrencyConvert struct {
 	// Valor na Moeda de Origem para ser Convertido
 	// required: true
 	Amount float32
+}
+
+type CurrencyExchangeRate struct {
+	ShortName     string
+	RateUSD       float32
+	ReferenceDate time.Time
 }
 
 // Retorna as informações da Moeda
@@ -117,7 +123,7 @@ type currencyParametersWrapper struct {
 		RateUSD float32 `json:"rate_usd"`
 		// Data de Referencia da Taxa
 		// required: true
-		// example: Entre 01/01/1900 até a data corrente
+		// example: 2019-08-24T00:00:00Z
 		ReferenceDate time.Time `json:"reference_date"`
 	}
 }

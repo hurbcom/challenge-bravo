@@ -98,18 +98,9 @@ func (*Currency) GetByShortName(shortName string) (*model.Currency, error) {
 		&currencyModel.CreatedAt,
 	)
 
-	// err.(*errors.errorString)
 	if err != nil && err.Error() == "sql: no rows in result set" {
 		err = repository.ErrNotFound{Message: err.Error()}
 	}
-	// repository error not found
-
-	// if errors.As(err, *errors.errorString)
-	// if errS, ok := err.(errtst); ok {
-	// 	if errS.s == "sql: no rows in result set" {
-	// 		err = repository.ErrDuplicateKey{Message: errS.s}
-	// 	}
-	// }
 
 	return &currencyModel, err
 }
@@ -204,10 +195,40 @@ func (*Currency) Delete(id int64) error {
 	WHERE
 		id = $1`
 
-	result, err := conn.Exec(query, id)
+	sqlResult, err := conn.Exec(query, id)
 
 	if err == nil {
-		rowsAffected, errRA := result.RowsAffected()
+		rowsAffected, errRA := sqlResult.RowsAffected()
+
+		if errRA != nil {
+			err = errRA
+		} else if rowsAffected == 0 {
+			err = repository.ErrNotFound{}
+		}
+	}
+
+	return err
+}
+
+func (*Currency) UpdateByExchangeRate(currencyExchangeRateModel *model.CurrencyExchangeRate) error {
+	query :=
+		`UPDATE
+		currencies
+	SET
+		rate_usd = $2,
+		reference_date = $3
+	WHERE
+		short_name = $1 and reference_date < $3;`
+
+	sqlResult, err := conn.Exec(
+		query,
+		currencyExchangeRateModel.ShortName,
+		currencyExchangeRateModel.RateUSD,
+		currencyExchangeRateModel.ReferenceDate,
+	)
+
+	if err == nil {
+		rowsAffected, errRA := sqlResult.RowsAffected()
 
 		if errRA != nil {
 			err = errRA

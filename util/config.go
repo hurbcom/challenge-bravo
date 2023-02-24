@@ -15,6 +15,7 @@ type Config struct {
 	DBMigrationURL      string `mapstructure:"DB_MIGRATION_URL"`
 	CacheURL            string `mapstructure:"CACHE_URL"`
 	CacheExpiration     string `mapstructure:"CACHE_EXPIRATION"`
+	ExchangeRateURL     string `mapstructure:"EXCHANGE_RATE_URL"`
 }
 
 // loadConfig reads configurations from file or environment variables
@@ -26,7 +27,12 @@ func LoadConfig(path string) (config *Config, err error) {
 	viper.SetDefault("SERVER_ADDRESS", ":9000")
 	viper.SetDefault("SERVER_LOG_LEVEL", "DEBUG")
 	viper.SetDefault("SERVER_LOG_JSON_FORMAT", true)
+	viper.SetDefault("DB_DRIVER", "")
+	viper.SetDefault("DB_URL", "")
+	viper.SetDefault("DB_MIGRATION_URL", "")
+	viper.SetDefault("CACHE_URL", "")
 	viper.SetDefault("CACHE_EXPIRATION", "1m")
+	viper.SetDefault("EXCHANGE_RATE_URL", "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml")
 
 	viper.AutomaticEnv()
 
