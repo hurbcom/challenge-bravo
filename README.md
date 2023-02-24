@@ -1,82 +1,100 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+## Descrição da API
+API para conversão de moedas onde é possível realiza a conversão entre as moedas previamentes cadastradas. 
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+Existe um cronjob para manter as taxas de conversões atualizadas das principais moedas como Dolar (USD), Euro (EUR), Real (BRL), etc desde que a moeda esteja cadastrada no sistema.
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+No cadastro da Moeda contém a data de referencia da taxa de cambio utilizada para conversão isso ajuda o usuário a saber se a taxa está atualizada, principalmente para os casos de moedas que não são atualizadas automaticamente.
 
-The API must convert between the following currencies:
+A Modeda utilizada como lastro é o Dolar (USD).
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+É possível realizar todas as operações de CRUD de Moedas e realizar a Conversão.
 
-Other coins could be added as usage.
+A documentação dos endpoints estão disponíveis na própria API "/docs".
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+## Etapas para poder executar a API na máquina local
+1. Docker instalado. [documentação](https://docs.docker.com/engine/install/)
+2. Docker-compose instalado. [documentação](https://docs.docker.com/compose/install/linux/)
+3. Go instalado. [documentação](https://go.dev/doc/install)
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+#### Obs: Os comandos a seguir devem ser executados na pasta raiz do projeto.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+4. Subir os serviços de banco de dados e de cache utilizados pela API
+    ```
+    make docker-compose-up
+    ```
+    ou
+    ```
+    docker-compose up -d
+    ```
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+5. Executar a API
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+    - Direto na máquina local
+        ```
+        make go-run
+        ```
+        ou
+        ```
+        go run server.go
+        ```
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+    - Dentro do Docker
+        ```
+        make docker-build
+        make docker-run
+        ```
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+6. Endpoint da API [localhost:9000](localhost:9000)
+7. Endpoin da documentação da API [localhost:9000/docs](localhost:9000/docs)
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+## Informações sobre a atualização automatica das taxas de cambio
+Encontrei um endpoint publico para obter as taxas de cambio do Banco Central Europeu. [link](https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml)
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+Esse endpoint tem como lastro a moeda Euro (EUR) onde fiz um de/para no código para tornar o Dolar (USD) a moeda de lastro.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+Optei por usar esse endpoint pela veracidade da informação por ser do Banco Central da Europa e também porque não encontrei facilmente um endpoint publico para obter a taxa de cambio em dolar, então preferi utilizar o tempo para implementar mais recursos na API que na minha visão acredito fazer mais sentido para vcs avaliarem a minha maturidade em desenvolvimento.
 
-## Requirements
+## Descrição Técnica
+1. Banco de dados Postgres por ser um serviço de banco relacional robusto, completo e open source que atende perfeitamente desde pequenas aplicações até apliações robustas e compatível com serviços de banco
+2. Cache Redis por ser um serviço de cache robusto, open source, amplamente utilizado e compatível com serviço de cache em nuvem como o memory store do GCP. O cace é utilizado para melhoria de performance no endpoint de conversão e para controle da atualiação automatica das taxas de cambio 
+3. Migration para versionamento de alterações no banco de dados.
+4. Health Check [localhost:9000/healthz](localhost:9000/healthz) para monitorar se a aplicação está no ar e se os serviços de banco de dados e cache estão funcionando.
+5. Swagger para manter a documentação da API atualizada de forma automática utilizando tags no código.
+6. CORS para poder permitir requisições de origem diferente da API.
+7. Middleware para logar o resultado de todas as requisição contendo informações da origem da requisição e request id para ajudar no troubleshooting da aplicação. O request id ajuda a rastrear um a mesma requisição por diversos microservicos e as informações da origem ajudam a identificar se o problema está relacionado a uma origem ou dispositivo especifico.
+8. CronJob que executa a cada 30 minutos para buscar as taxas de cambio do dia e atualizar nossa API. O endpoint utilizado é atualizado apenas uma vez por dia mas coloquei para rodar de 30 em 30 minutos caso aconteça algum erro no processo de atualização. Antes de fazer a requisição para obter as informações a API verifica se o mesmo já foi atualizado no dia e caso positivo ignora a execução.
+9. Carregamento de configurações da API através de váriaveis de ambiente ou arquivo de configuração "config.env" na pasta raiz da aplicação.
+10. Testes Unitários. Aplicados apenas na inclusão de Moeda para demonstrar conhecimento. Tenho total conciencia que é importante e que deve ser aplicada em toda a API.
+10. Projeto já contém um arquivo config.env com todas as configurações necessárias para poder executar a API no ambiente local. 
+11. Docker-compose para poder subir os serviços de banco de dados e cache para poder rodas a API no ambiente local.
+12. Dockfile para poder realizar o build da API e gerar imagem docker para rodar no ambiente local.
+13. Github Action para validar PR e Push para a branch main iniciando um processo de CI/CD.
+14. Makefile para poder executar de forma simples diversos comandos.
+15. É possível trocar o manipulador de rotas, banco de dados e serviço de cache facilmente devido a utilização do Clean Architecture no projeto.
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+## Geração da Documentação da API - Swagger
 
-## Evaluation criteria
+1. Instalar na máquina o [go-swagger](https://goswagger.io/install.html)
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+2. Especificação das tags para geração automatica da documentação [aqui](https://goswagger.io/use/spec.html)
 
-## Doubts
+3. Executar o comando abaixo na pasta raiz da API para atualizar a documentação
+    ```
+    make swagger
+    ```
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+## Sugestões de Melhorias
 
-Godspeed! ;)
+1. Restringir acesso aos endpoints de CRUD de Moedas para evitar alteração indevida
+2. Incluir na documentação da API a relação dos erros que podem ser retornado
+3. Refatorar as validações de erros.
+4. Criar paginação no endpoint que lista todas as Moedas
+5. Substituir ID sequencial por UUID
+6. Incluir cabeçalhos HTTP de segurança
+7. Incluir controle de auditoria
+8. Atualização assincrona das moedas através do cronjob
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+    #### **Obs:** Com certeza tem mais melhorias a ser feita tanto no código quanto na documentação. Melhoria continua deve fazer parte da vida útil de toda aplicação.
+
+# Espero que gostem bastante do projeto que entreguei ;)
