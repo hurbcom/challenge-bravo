@@ -21,11 +21,11 @@ export class CurrencyService implements ICurrencyService {
     constructor(
         @inject("CurrencyRepository")
         private readonly currencyRepository: ICurrencyRepository,
-        @inject("CoincapRepository")
-        private readonly coincapRepository: IExternalSourceType
+        @inject("CoingateRepository")
+        private readonly coingateRepository: IExternalSourceType
     ) {
         this.sourceTypes = {
-            coincap: this.coincapRepository,
+            coingate: this.coingateRepository,
         };
     }
 

@@ -1,13 +1,13 @@
 import { Container } from "inversify";
 import { type ICurrencyRepository } from "../Infra/Repository/types/CurrencyRepo.interface";
 import { CurrencyService, type IExternalSourceType } from "./Currency";
-import { CoincapRepositoryMock } from "./mocks/CoincapRepositoryMock";
+import { CoingateRepositoryMock } from "./mocks/CoingateRepositoryMock";
 import { CurrencyRepositoryMock } from "./mocks/CurrencyRepositoryMock";
 
 describe("CurrencyService", () => {
     let currencyService: CurrencyService;
     let currencyRepository: ICurrencyRepository;
-    let coincapRepository: IExternalSourceType;
+    let coingateRepository: IExternalSourceType;
 
     beforeAll(() => {
         const container = new Container();
@@ -18,15 +18,15 @@ describe("CurrencyService", () => {
             .inSingletonScope();
 
         container
-            .bind<IExternalSourceType>("CoincapRepository")
-            .to(CoincapRepositoryMock)
+            .bind<IExternalSourceType>("CoingateRepository")
+            .to(CoingateRepositoryMock)
             .inSingletonScope();
 
         container.bind<CurrencyService>("CurrencyService").to(CurrencyService);
 
         currencyService = container.get<CurrencyService>("CurrencyService");
-        coincapRepository =
-            container.get<IExternalSourceType>("CoincapRepository");
+        coingateRepository =
+            container.get<IExternalSourceType>("CoingateRepository");
         currencyRepository =
             container.get<ICurrencyRepository>("CurrencyRepository");
     });
@@ -76,11 +76,11 @@ describe("CurrencyService", () => {
         expect(value).toBe(0.9);
     });
 
-    it("should get coincap type(getDollarRateBySourceType)", async () => {
+    it("should get coingate type(getDollarRateBySourceType)", async () => {
         jest.spyOn(currencyRepository, "getDollarRate").mockResolvedValue(null);
         const value = await currencyService.getDollarRateBySourceType({
             id: "BRL",
-            sourceType: "coincap",
+            sourceType: "coingate",
         });
         expect(value).toBe(0.5);
     });
@@ -93,7 +93,7 @@ describe("CurrencyService", () => {
         );
         await currencyService.getDollarRateBySourceType({
             id: "BRL",
-            sourceType: "coincap",
+            sourceType: "coingate",
         });
         expect(setDollarRateSpyOn).toHaveBeenNthCalledWith(1, "BRL", 0.5);
     });
@@ -101,7 +101,7 @@ describe("CurrencyService", () => {
     it("should return null when not found(getDollarRateBySourceType)", async () => {
         jest.spyOn(currencyRepository, "getDollarRate").mockResolvedValue(null);
         jest.spyOn(
-            coincapRepository,
+            coingateRepository,
             "getExternalDollarValue"
         ).mockResolvedValue(null);
         const setDollarRateSpyOn = jest.spyOn(
@@ -110,7 +110,7 @@ describe("CurrencyService", () => {
         );
         const value = await currencyService.getDollarRateBySourceType({
             id: "BRL",
-            sourceType: "coincap",
+            sourceType: "coingate",
         });
         expect(setDollarRateSpyOn).toHaveBeenCalledTimes(0);
         expect(value).toBe(null);

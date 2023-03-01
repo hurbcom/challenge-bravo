@@ -5,15 +5,15 @@ import { type ICurrencyRepository } from "../../Infra/Repository/types/CurrencyR
 const currencyData: Record<string, Currency> = {
     BRL: {
         id: "BRL",
-        sourceType: "coincap",
+        sourceType: "coingate",
     },
     USD: {
         id: "USD",
-        sourceType: "coincap",
+        sourceType: "coingate",
     },
     EUR: {
         id: "EUR",
-        sourceType: "coincap",
+        sourceType: "coingate",
     },
     TES: {
         id: "TES",
