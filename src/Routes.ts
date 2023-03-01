@@ -15,6 +15,10 @@ app.post(
     "/currency",
     currencyController.createCurrency.bind(currencyController)
 );
+app.delete(
+    "/currency/:currencyId",
+    currencyController.deleteCurrency.bind(currencyController)
+);
 
 const errorConstructor =
     injectContainer.get<ErrorController>("ErrorController");

@@ -80,4 +80,8 @@ export class CurrencyService implements ICurrencyService {
         await classValidator(currency);
         await this.currencyRepository.setCurrency(currency);
     }
+
+    async deleteCurrency(currencyId: string) {
+        await this.currencyRepository.deleteCurrency(currencyId);
+    }
 }

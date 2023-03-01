@@ -51,6 +51,10 @@ export class CurrencyRedisRepository implements ICurrencyRepository {
         await this.client.set(`currency:${value.id}`, JSON.stringify(value));
     }
 
+    async deleteCurrency(currencyId: string) {
+        await this.client.del(`currency:${currencyId}`);
+    }
+
     async getDollarRate(currencyId: string): Promise<number | null> {
         const data = await this.client.get(`dollar-rate:${currencyId}`);
         return data !== null ? Number(data) : null;

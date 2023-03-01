@@ -80,4 +80,17 @@ describe("GET /user", function () {
 
         expect(data.body.message).toBe("id should not be null or undefined");
     });
+
+    it("should create a currency", async function () {
+        await request(app)
+            .delete("/currency/HURB")
+            .set("Accept", "application/json")
+            .expect(201);
+
+        const data = await request(app)
+            .get("/currency?from=HURB&to=USD&amount=10")
+            .set("Accept", "application/json")
+            .expect(404);
+        expect(data.body.message).toBe("Not found currency");
+    });
 });

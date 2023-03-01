@@ -37,4 +37,9 @@ export class CurrencyController {
         await this.currencyService.createCurrency(req.body);
         res.status(201).send();
     }
+
+    async deleteCurrency(req: Request, res: Response): Promise<void> {
+        await this.currencyService.deleteCurrency(req.params.currencyId);
+        res.status(201).send();
+    }
 }

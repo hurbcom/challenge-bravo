@@ -55,4 +55,22 @@ describe("CurrencyRedisRepository", () => {
         const value = await repo.getDollarRate("HURB");
         expect(value).toBe(0.3);
     });
+
+    it("should create Currency (getCurrency)", async () => {
+        await repo.setCurrency({
+            id: "TES",
+            sourceType: "fixed",
+            dollarRate: 0.9,
+        });
+        const value = await repo.getCurrency("TES");
+        expect(value?.id).toBe("TES");
+        expect(value?.sourceType).toBe("fixed");
+        expect(value?.dollarRate).toBe(0.9);
+    });
+
+    it("should delete Currency (getCurrency)", async () => {
+        await repo.deleteCurrency("TES");
+        const value = await repo.getCurrency("TES");
+        expect(value).toBeNull();
+    });
 });

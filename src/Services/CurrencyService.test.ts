@@ -160,4 +160,13 @@ describe("CurrencyService", () => {
         );
         expect(setCurrencySpyOn).toHaveBeenCalledTimes(0);
     });
+
+    it("should delete a currency(deleteCurrency)", async () => {
+        const deleteCurrencySpyOn = jest.spyOn(
+            currencyRepository,
+            "deleteCurrency"
+        );
+        await currencyService.deleteCurrency("TES");
+        expect(deleteCurrencySpyOn).toHaveBeenCalledTimes(1);
+    });
 });

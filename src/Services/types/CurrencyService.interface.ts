@@ -7,4 +7,5 @@ export interface ICurrencyService {
         amount: number
     ) => Promise<{ total: number }>;
     createCurrency: (data: Currency) => Promise<void>;
+    deleteCurrency: (currencyId: string) => Promise<void>;
 }

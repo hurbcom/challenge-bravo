@@ -37,6 +37,8 @@ export class CurrencyRepositoryMock implements ICurrencyRepository {
         return currencyData[id];
     }
 
+    async deleteCurrency(id: string) {}
+
     async getDollarRate(id: string) {
         return currencyDollarData[id];
     }
