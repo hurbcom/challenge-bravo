@@ -1,3 +1,4 @@
+import debug from "debug";
 import { injectable } from "inversify";
 import { createClient, type RedisClientType } from "redis";
 import { type Currency } from "../../../Entities/Currency.interface";
@@ -6,13 +7,14 @@ import { type ICurrencyRepository } from "../types/CurrencyRepo.interface";
 
 @injectable()
 export class CurrencyRedisRepository implements ICurrencyRepository {
+    private readonly logger = debug("app:CurrencyRedisRepository");
     private readonly client: RedisClientType;
     constructor() {
         this.client = createClient({
             url: process.env.REDIS_URL,
         });
         this.init().finally(() => {
-            console.log("Connected to redis");
+            this.logger("Connected to redis");
         });
     }
 
