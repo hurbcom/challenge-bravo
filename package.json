@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon ./src/main.ts",
     "test": "jest --runInBand --detectOpenHandles --forceExit",
-    "test:watch": "jest --runInBand --detectOpenHandles --forceExit --watch"
+    "test:watch": "jest --runInBand --detectOpenHandles --forceExit --watch",
+    "test:stress": "artillery run ./artillary.yaml"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "@types/jest": "^29.4.0",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "artillery": "^2.0.0-30",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard-with-typescript": "^34.0.0",
