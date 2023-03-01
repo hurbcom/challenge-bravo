@@ -1,19 +1,9 @@
 import { inject, injectable } from "inversify";
-import { type Currency } from "../Entities/Currency";
+import { type Currency } from "../Entities/Currency.interface";
 import NotFoundError from "../Infra/Errors/NotFoundError";
 import { ICurrencyRepository } from "../Infra/Repository/types/CurrencyRepo.interface";
-
-export interface ICurrencyService {
-    getConversion: (
-        originCurrencyId: string,
-        outCurrencyId: string,
-        amount: number
-    ) => Promise<{ total: number }>;
-}
-
-export interface IExternalSourceType {
-    getExternalDollarValue: (currencyId: string) => Promise<number | null>;
-}
+import { IExternalSourceType } from "../Infra/Repository/types/ExternalSourceType.interface";
+import { type ICurrencyService } from "./types/CurrencyService.interface";
 
 @injectable()
 export class CurrencyService implements ICurrencyService {

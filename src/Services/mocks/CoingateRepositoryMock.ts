@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { type IExternalSourceType } from "../Currency";
+import { type IExternalSourceType } from "../../Infra/Repository/types/ExternalSourceType.interface";
 
 @injectable()
 export class CoingateRepositoryMock implements IExternalSourceType {

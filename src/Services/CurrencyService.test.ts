@@ -1,6 +1,7 @@
 import { Container } from "inversify";
 import { type ICurrencyRepository } from "../Infra/Repository/types/CurrencyRepo.interface";
-import { CurrencyService, type IExternalSourceType } from "./Currency";
+import { type IExternalSourceType } from "../Infra/Repository/types/ExternalSourceType.interface";
+import { CurrencyService } from "./CurrencyService";
 import { CoingateRepositoryMock } from "./mocks/CoingateRepositoryMock";
 import { CurrencyRepositoryMock } from "./mocks/CurrencyRepositoryMock";
 
