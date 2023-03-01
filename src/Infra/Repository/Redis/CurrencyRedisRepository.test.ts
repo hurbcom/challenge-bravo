@@ -12,6 +12,11 @@ describe("CurrencyRedisRepository", () => {
         await repo.close();
     });
 
+    it("should get all Currency (getCurrency)", async () => {
+        const value = await repo.getAllCurrencies();
+        expect(value.length).toBe(5);
+    });
+
     it("should get Currency (getCurrency)", async () => {
         const value = await repo.getCurrency("BRL");
         expect(value?.id).toBe("BRL");

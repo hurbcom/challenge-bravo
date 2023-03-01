@@ -1,6 +1,7 @@
 import { type Currency } from "../../../Entities/Currency.interface";
 
 export interface ICurrencyRepository {
+    getAllCurrencies: () => Promise<Currency[]>;
     getCurrency: (currencyId: string) => Promise<Currency | null>;
     setCurrency: (currency: Currency) => Promise<void>;
     getDollarRate: (currencyId: string) => Promise<number | null>;

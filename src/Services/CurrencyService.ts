@@ -64,4 +64,13 @@ export class CurrencyService implements ICurrencyService {
         }
         return null;
     }
+
+    async getAllCurrenciesDollarRateCache() {
+        const allCurrency = await this.currencyRepository.getAllCurrencies();
+        await Promise.all(
+            allCurrency.map(
+                async (item) => await this.getDollarRateBySourceType(item)
+            )
+        );
+    }
 }

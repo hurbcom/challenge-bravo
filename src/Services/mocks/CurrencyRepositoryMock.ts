@@ -29,6 +29,10 @@ const currencyDollarData: Record<string, number> = {
 
 @injectable()
 export class CurrencyRepositoryMock implements ICurrencyRepository {
+    async getAllCurrencies() {
+        return Object.values(currencyData);
+    }
+
     async getCurrency(id: string) {
         return currencyData[id];
     }

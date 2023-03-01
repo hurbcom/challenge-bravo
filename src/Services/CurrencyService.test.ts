@@ -116,4 +116,24 @@ describe("CurrencyService", () => {
         expect(setDollarRateSpyOn).toHaveBeenCalledTimes(0);
         expect(value).toBe(null);
     });
+
+    it("should get all currencies cache (getAllCurrenciesDollarRateCache)", async () => {
+        const getAllCurrenciesSpyOn = jest.spyOn(
+            currencyRepository,
+            "getAllCurrencies"
+        );
+        const getDollarRateSpyOn = jest
+            .spyOn(currencyRepository, "getDollarRate")
+            .mockResolvedValue(null);
+        const setDollarRateSpyOn = jest.spyOn(
+            currencyRepository,
+            "setDollarRate"
+        );
+
+        await currencyService.getAllCurrenciesDollarRateCache();
+
+        expect(getAllCurrenciesSpyOn).toHaveBeenCalledTimes(1);
+        expect(getDollarRateSpyOn).toHaveBeenCalledTimes(3);
+        expect(setDollarRateSpyOn).toHaveBeenCalledTimes(3);
+    });
 });
