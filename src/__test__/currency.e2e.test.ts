@@ -67,4 +67,17 @@ describe("GET /user", function () {
             .expect(200);
         expect(data.body.total).toBe(5);
     });
+
+    it("should get badRequest error when create a currency without id", async function () {
+        const data = await request(app)
+            .post("/currency")
+            .set("Accept", "application/json")
+            .send({
+                sourceType: "fixed",
+                dollarRate: 0.5,
+            })
+            .expect(400);
+
+        expect(data.body.message).toBe("id should not be null or undefined");
+    });
 });
