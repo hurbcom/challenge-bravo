@@ -7,10 +7,14 @@ import injectContainer from "./invesity";
 import { type ErrorController } from "./Controller/ErrorController";
 
 const app = express();
-
+app.use(express.json());
 const currencyController =
     injectContainer.get<CurrencyController>("CurrencyController");
 app.get("/currency", currencyController.getConversion.bind(currencyController));
+app.post(
+    "/currency",
+    currencyController.createCurrency.bind(currencyController)
+);
 
 const errorConstructor =
     injectContainer.get<ErrorController>("ErrorController");

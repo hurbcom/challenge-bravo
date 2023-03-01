@@ -1,7 +1,7 @@
 import debug from "debug";
 import { injectable } from "inversify";
 import { createClient, type RedisClientType } from "redis";
-import { type Currency } from "../../../Entities/Currency.interface";
+import { type Currency } from "../../../Entities/Currency";
 import CurrencySeed from "../../DB/Seeds/CurrencySeed";
 import { type ICurrencyRepository } from "../types/CurrencyRepo.interface";
 

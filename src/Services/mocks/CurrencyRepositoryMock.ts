@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { type Currency } from "../../Entities/Currency.interface";
+import { type Currency } from "../../Entities/Currency";
 import { type ICurrencyRepository } from "../../Infra/Repository/types/CurrencyRepo.interface";
 
 const currencyData: Record<string, Currency> = {

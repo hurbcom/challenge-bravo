@@ -49,4 +49,22 @@ describe("GET /user", function () {
             .expect(500);
         expect(data.body.message).toBe("internal server error");
     });
+
+    it("should create a currency", async function () {
+        await request(app)
+            .post("/currency")
+            .set("Accept", "application/json")
+            .send({
+                id: "HURB",
+                sourceType: "fixed",
+                dollarRate: 0.5,
+            })
+            .expect(201);
+
+        const data = await request(app)
+            .get("/currency?from=HURB&to=USD&amount=10")
+            .set("Accept", "application/json")
+            .expect(200);
+        expect(data.body.total).toBe(5);
+    });
 });

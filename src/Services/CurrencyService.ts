@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
-import { type Currency } from "../Entities/Currency.interface";
+import { Currency } from "../Entities/Currency";
+import { classValidator } from "../Infra/ClassValidator/ClassValidator";
 import NotFoundError from "../Infra/Errors/NotFoundError";
 import { ICurrencyRepository } from "../Infra/Repository/types/CurrencyRepo.interface";
 import { IExternalSourceType } from "../Infra/Repository/types/ExternalSourceType.interface";
@@ -72,5 +73,11 @@ export class CurrencyService implements ICurrencyService {
                 async (item) => await this.getDollarRateBySourceType(item)
             )
         );
+    }
+
+    async createCurrency(data: Currency) {
+        const currency = new Currency(data);
+        await classValidator(currency);
+        await this.currencyRepository.setCurrency(currency);
     }
 }

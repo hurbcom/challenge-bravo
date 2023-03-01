@@ -1,4 +1,4 @@
-import { type Currency } from "../../../Entities/Currency.interface";
+import { type Currency } from "../../../Entities/Currency";
 
 export interface ICurrencyRepository {
     getAllCurrencies: () => Promise<Currency[]>;

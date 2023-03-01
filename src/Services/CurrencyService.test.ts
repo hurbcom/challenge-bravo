@@ -136,4 +136,28 @@ describe("CurrencyService", () => {
         expect(getDollarRateSpyOn).toHaveBeenCalledTimes(3);
         expect(setDollarRateSpyOn).toHaveBeenCalledTimes(3);
     });
+
+    it("should create a currency(createCurrency)", async () => {
+        const setCurrencySpyOn = jest.spyOn(currencyRepository, "setCurrency");
+        await currencyService.createCurrency({
+            id: "TES",
+            sourceType: "fixed",
+            dollarRate: 0.9,
+        });
+        expect(setCurrencySpyOn).toHaveBeenCalledTimes(1);
+    });
+
+    it("should not create a currency when not valid(createCurrency)", async () => {
+        const setCurrencySpyOn = jest.spyOn(currencyRepository, "setCurrency");
+        await expect(
+            currencyService.createCurrency({
+                id: "TES",
+                sourceType: "test",
+                dollarRate: 0.9,
+            })
+        ).rejects.toThrow(
+            "sourceType must be one of the following values: fixed, coingate"
+        );
+        expect(setCurrencySpyOn).toHaveBeenCalledTimes(0);
+    });
 });

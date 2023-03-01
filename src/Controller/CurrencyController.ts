@@ -32,4 +32,9 @@ export class CurrencyController {
             });
         }
     }
+
+    async createCurrency(req: Request, res: Response): Promise<void> {
+        await this.currencyService.createCurrency(req.body);
+        res.status(201).send();
+    }
 }
