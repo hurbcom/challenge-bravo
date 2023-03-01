@@ -30,4 +30,23 @@ describe("GET /user", function () {
             'queries "from", "to" and "amount" is required'
         );
     });
+
+    it("should get 404 error when request a currency not registred", async function () {
+        const data = await request(app)
+            .get("/currency?from=WWW&to=BRL&amount=1")
+            .set("Accept", "application/json")
+            .expect(404);
+        expect(data.body.message).toBe("Not found currency");
+    });
+
+    it("should get 500 error when get unknow error", async function () {
+        jest.spyOn(currencyRepository, "getCurrency").mockImplementation(() => {
+            throw new Error("internal-serve-error");
+        });
+        const data = await request(app)
+            .get("/currency?from=BTC&to=BRL&amount=1")
+            .set("Accept", "application/json")
+            .expect(500);
+        expect(data.body.message).toBe("internal server error");
+    });
 });
