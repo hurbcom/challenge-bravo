@@ -12,7 +12,7 @@ export class CurrencyRedisRepository implements ICurrencyRepository {
             url: process.env.REDIS_URL,
         });
         this.init().finally(() => {
-            console.log("Conected to redis");
+            console.log("Connected to redis");
         });
     }
 

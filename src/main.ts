@@ -1,3 +1,4 @@
+import "dotenv/config";
 import app from "./Routes";
 
 const port = 3000;
