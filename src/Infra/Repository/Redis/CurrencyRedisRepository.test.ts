@@ -5,7 +5,7 @@ describe("CurrencyRedisRepository", () => {
 
     beforeAll(async () => {
         repo = new CurrencyRedisRepository();
-        await repo.init();
+        await repo.reset();
     });
 
     afterAll(async () => {

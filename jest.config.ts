@@ -8,6 +8,7 @@ export default {
         "./src/**/*.{ts,tsx}",
         "!**/node_modules/**",
         "!./src/**/*.interface.{ts,tsx}",
+        "!./src/main.{ts,tsx}",
     ],
     globalSetup: "<rootDir>/jest.global.setup.ts",
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],

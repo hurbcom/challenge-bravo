@@ -16,6 +16,11 @@ export class CurrencyRedisRepository implements ICurrencyRepository {
         });
     }
 
+    async reset() {
+        await this.client.flushDb();
+        await this.init();
+    }
+
     async init(): Promise<void> {
         try {
             await this.client.connect();
