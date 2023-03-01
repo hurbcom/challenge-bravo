@@ -33,10 +33,12 @@ export class CurrencyRedisRepository implements ICurrencyRepository {
     async getAllCurrencies() {
         const keys = await this.client.keys("currency:*");
         const values = await this.client.mGet(keys);
-        const currencies: Currency[] =
-            values
-                ?.map((item) => (item !== null ? JSON.parse(item) : null))
-                .filter((item) => item != null) ?? [];
+        const valuesWithoutNull = values.filter(
+            (item) => item !== null
+        ) as string[];
+        const currencies: Currency[] = valuesWithoutNull.map((item) =>
+            JSON.parse(item)
+        );
         return currencies;
     }
 

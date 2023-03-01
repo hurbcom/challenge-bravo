@@ -6,9 +6,13 @@ export async function classValidator(dataToValidate: object) {
         await validateOrReject(dataToValidate);
         return true;
     } catch (error) {
-        const message = Object.values(
-            (error as ValidationError[])[0]?.constraints ?? {}
-        )[0];
+        let message = "Valitation error";
+        const classValidatorConstraints = (error as ValidationError[])[0]
+            ?.constraints;
+        if (classValidatorConstraints != null) {
+            message = Object.values(classValidatorConstraints)[0];
+        }
+
         throw new BadRequestError(message);
     }
 }

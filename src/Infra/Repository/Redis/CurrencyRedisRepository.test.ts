@@ -12,7 +12,7 @@ describe("CurrencyRedisRepository", () => {
         await repo.close();
     });
 
-    it("should get all Currency (getCurrency)", async () => {
+    it("should get all Currency (getAllCurrencies)", async () => {
         const value = await repo.getAllCurrencies();
         expect(value.length).toBe(5);
     });
