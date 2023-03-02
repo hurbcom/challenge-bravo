@@ -13,6 +13,9 @@ export class CurrencyRedisRepository implements ICurrencyRepository {
         this.client = createClient({
             url: process.env.REDIS_URL,
         });
+        this.client.on("error", (err) => {
+            this.logger(err);
+        });
         this.init().finally(() => {
             this.logger("Connected to redis");
         });

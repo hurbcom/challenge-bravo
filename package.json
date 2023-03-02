@@ -7,7 +7,9 @@
     "dev": "nodemon ./src/main.ts",
     "test": "jest --runInBand --detectOpenHandles --forceExit",
     "test:watch": "jest --runInBand --detectOpenHandles --forceExit --watch",
-    "test:stress": "artillery run ./artillary.yaml"
+    "test:stress": "artillery run ./artillary.yaml",
+    "build": "tsc",
+    "start": "node ./dist/src/main.js"
   },
   "author": "",
   "license": "ISC",

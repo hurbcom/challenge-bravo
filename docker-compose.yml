@@ -4,3 +4,16 @@ services:
       image: redis:alpine
       ports:
         - "6379:6379"
+      networks:
+        - intranet
+  currency-api:
+    build: .
+    networks:
+      - intranet
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - DEBUG=app:*
+networks:
+  intranet:
