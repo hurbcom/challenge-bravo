@@ -8,19 +8,19 @@ import (
 	"github.com/ElladanTasartir/challenge-bravo/internal/domain/repositories"
 )
 
-type DynamicCurrencyStrategy struct {
+type CustomCurrencyStrategy struct {
 	repository      repositories.CurrencyRepository
 	cacheRepository repositories.CurrencyCacheRepository
 }
 
-func NewDynamicCurrencyStrategy(repository repositories.CurrencyRepository, cacheRepository repositories.CurrencyCacheRepository) *DynamicCurrencyStrategy {
-	return &DynamicCurrencyStrategy{
+func NewCustomCurrencyStrategy(repository repositories.CurrencyRepository, cacheRepository repositories.CurrencyCacheRepository) *CustomCurrencyStrategy {
+	return &CustomCurrencyStrategy{
 		repository:      repository,
 		cacheRepository: cacheRepository,
 	}
 }
 
-func (strategy *DynamicCurrencyStrategy) GetCurrency(name string) (*entity.Currency, error) {
+func (strategy *CustomCurrencyStrategy) GetCurrency(name string) (*entity.Currency, error) {
 	cachedCurrency := strategy.cacheRepository.GetCurrency(name)
 	if cachedCurrency != nil {
 		return cachedCurrency, nil

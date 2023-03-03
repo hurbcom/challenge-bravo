@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"fmt"
-
 	"github.com/ElladanTasartir/challenge-bravo/internal/domain/entity"
 )
 
@@ -13,14 +11,14 @@ type ConvertedCurrencyResponse struct {
 }
 
 type ConvertCurrencyUseCase struct {
-	dynamicCurrencyStrategy  entity.CurrencyStrategy
+	customCurrencyStrategy   entity.CurrencyStrategy
 	officialCurrencyStrategy entity.CurrencyStrategy
 	officialCurrencies       []string
 }
 
-func NewConvertCurrencyUseCase(dynamicCurrencyStrategy entity.CurrencyStrategy, officialCurrencyStrategy entity.CurrencyStrategy, officialCurrencies []string) *ConvertCurrencyUseCase {
+func NewConvertCurrencyUseCase(customCurrencyStrategy entity.CurrencyStrategy, officialCurrencyStrategy entity.CurrencyStrategy, officialCurrencies []string) *ConvertCurrencyUseCase {
 	return &ConvertCurrencyUseCase{
-		dynamicCurrencyStrategy:  dynamicCurrencyStrategy,
+		customCurrencyStrategy:   customCurrencyStrategy,
 		officialCurrencyStrategy: officialCurrencyStrategy,
 		officialCurrencies:       officialCurrencies,
 	}
@@ -38,13 +36,17 @@ func (convertCurrencyUseCase *ConvertCurrencyUseCase) ConvertCurrency(from, to s
 		return nil, err
 	}
 
-	convertedAmount := (amount * fromCurrency.Rate) / toCurrency.Rate
+	convertedAmount := convertCurrencyUseCase.ConvertAmount(amount, fromCurrency, toCurrency)
 
 	return &ConvertedCurrencyResponse{
 		From:  fromCurrency.Name,
 		To:    toCurrency.Name,
 		Value: convertedAmount,
 	}, nil
+}
+
+func (convertCurrencyUseCase *ConvertCurrencyUseCase) ConvertAmount(amount float64, fromCurrency, toCurrency *entity.Currency) float64 {
+	return (amount * fromCurrency.Rate) / toCurrency.Rate
 }
 
 func (convertCurrencyUseCase *ConvertCurrencyUseCase) handleAsyncRequest(fromCurrency, toCurrency *entity.Currency) (*entity.Currency, *entity.Currency, error) {
@@ -62,7 +64,6 @@ func (convertCurrencyUseCase *ConvertCurrencyUseCase) handleAsyncRequest(fromCur
 			responseCurrencies[index] = currency
 			index++
 		case err := <-errorChannel:
-			fmt.Println(err)
 			return nil, nil, err
 		}
 	}
@@ -89,5 +90,5 @@ func (convertCurrencyUseCase *ConvertCurrencyUseCase) getAccurateStrategy(curren
 		return convertCurrencyUseCase.officialCurrencyStrategy
 	}
 
-	return convertCurrencyUseCase.dynamicCurrencyStrategy
+	return convertCurrencyUseCase.customCurrencyStrategy
 }
