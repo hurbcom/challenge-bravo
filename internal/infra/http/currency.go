@@ -39,14 +39,13 @@ func createCurrency(createCurrencyUseCase *usecase.CreateCurrencyUseCase) func(c
 			return
 		}
 
-		createdCurrency, err := createCurrencyUseCase.CreateCurrency(payload)
+		createdCurrency, err := createCurrencyUseCase.CreateCurrency(&payload)
 		if err != nil {
 			ctx.Error(err)
 			return
 		}
 
 		ctx.JSON(http.StatusCreated, createdCurrency)
-		return
 	}
 }
 
@@ -67,7 +66,6 @@ func deleteCurrency(deleteCurrencyUseCase *usecase.DeleteCurrencyUseCase) func(c
 		}
 
 		ctx.JSON(http.StatusNoContent, nil)
-		return
 	}
 }
 
@@ -97,7 +95,6 @@ func convertCurrency(convertCurrencyUseCase *usecase.ConvertCurrencyUseCase) fun
 		}
 
 		ctx.JSON(http.StatusOK, response)
-		return
 	}
 }
 
@@ -109,7 +106,7 @@ func (server *Server) addCurrencyRoutes() {
 	currencyCacheRepository := cache.NewCurrencyCacheRepository(server.cacheClient, os.Getenv("REDIS_TTL"))
 
 	officialCurrencyStrategy := strategy.NewOfficialCurrencyStrategy(currencyClient, currencyCacheRepository)
-	dynamicCurrencyStrategy := strategy.NewDynamicCurrencyStrategy(currencyRepository, currencyCacheRepository)
+	dynamicCurrencyStrategy := strategy.NewCustomCurrencyStrategy(currencyRepository, currencyCacheRepository)
 
 	createCurrencyUseCase := usecase.NewCreateCurrencyUseCase(currencyRepository, currencyCacheRepository, officialCurrencies)
 	deleteCurrencyUseCase := usecase.NewDeleteCurrencyUseCase(currencyRepository, currencyCacheRepository, officialCurrencies)
