@@ -27,7 +27,7 @@ func NewCreateCurrencyUseCase(repository repositories.CurrencyRepository, cacheR
 	}
 }
 
-func (createCurrency *CreateCurrencyUseCase) CreateCurrency(payload CurrencyPayload) (*entity.Currency, error) {
+func (createCurrency *CreateCurrencyUseCase) CreateCurrency(payload *CurrencyPayload) (*entity.Currency, error) {
 	newCurrency := &entity.Currency{
 		Name: payload.Name,
 		Rate: payload.Rate,
@@ -36,6 +36,13 @@ func (createCurrency *CreateCurrencyUseCase) CreateCurrency(payload CurrencyPayl
 	if newCurrency.IsOfficialCurrency(createCurrency.officialCurrencies) {
 		return nil, &errors.CurrencyAlreadyExists{
 			Name: payload.Name,
+		}
+	}
+
+	currencyIsCached := createCurrency.cacheRepository.GetCurrency(payload.Name)
+	if currencyIsCached != nil {
+		return nil, &errors.CurrencyAlreadyExists{
+			Name: currencyIsCached.Name,
 		}
 	}
 
