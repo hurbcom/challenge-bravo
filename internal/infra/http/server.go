@@ -45,7 +45,7 @@ func Run(config *ServerConfig, storageClient *storage.StorageClient, cacheClient
 		log.Fatalf(err.Error())
 	}
 
-	fmt.Println(fmt.Sprintf("Successfully started application on port %d", config.Port))
+	fmt.Printf("Successfully started application on port %d\n", config.Port)
 
 	return &server
 }
@@ -54,13 +54,13 @@ func notFound(ctx *gin.Context) {
 	ctx.JSON(404, gin.H{
 		"message": "Resource not found",
 	})
-	return
 }
 
 func errorMiddleware(ctx *gin.Context) {
 	ctx.Next()
 
 	var badRequestError *domainErrors.BadRequestError
+	var clientFailed *domainErrors.ClientFailed
 	var currencyNotFound *domainErrors.CurrencyNotFound
 	var unprocessableError *domainErrors.UnprocessableError
 	var currencyExistsError *domainErrors.CurrencyAlreadyExists
@@ -73,6 +73,10 @@ func errorMiddleware(ctx *gin.Context) {
 
 		if errors.As(err.Err, &badRequestError) {
 			ctx.JSON(http.StatusBadRequest, response)
+			return
+		}
+		if errors.As(err.Err, &clientFailed) {
+			ctx.JSON(http.StatusInternalServerError, response)
 			return
 		}
 		if errors.As(err.Err, &currencyNotFound) {
@@ -95,7 +99,6 @@ func errorMiddleware(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Internal Server Error",
 		})
-		return
 	}
 }
 
