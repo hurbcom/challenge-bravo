@@ -33,19 +33,34 @@ func (deleteCurrencyUseCase *DeleteCurrencyUseCase) DeleteCurrency(name string) 
 		}
 	}
 
-	_, err := deleteCurrencyUseCase.repository.GetCurrencyByName(name)
+	currencyIsCached := deleteCurrencyUseCase.cacheRepository.GetCurrency(name)
+	if currencyIsCached != nil {
+		return deleteCurrencyUseCase.delete(currencyIsCached)
+	}
+
+	currencyFound, err := deleteCurrencyUseCase.repository.GetCurrencyByName(name)
 	if err != nil {
 		return err
 	}
 
-	err = deleteCurrencyUseCase.repository.DeleteCurrency(name)
+	if currencyFound == nil {
+		return &errors.CurrencyNotFound{
+			Name: name,
+		}
+	}
+
+	return deleteCurrencyUseCase.delete(currencyFound)
+}
+
+func (deleteCurrencyUseCase *DeleteCurrencyUseCase) delete(currency *entity.Currency) error {
+	err := deleteCurrencyUseCase.repository.DeleteCurrency(currency.Name)
 	if err != nil {
 		return err
 	}
 
-	ok := deleteCurrencyUseCase.cacheRepository.DeleteCurrency(name)
+	ok := deleteCurrencyUseCase.cacheRepository.DeleteCurrency(currency.Name)
 	if !ok {
-		fmt.Printf("Failed to delete currency '%s'\n", name)
+		fmt.Printf("Failed to delete currency from cache '%s'\n", currency.Name)
 	}
 
 	return nil
