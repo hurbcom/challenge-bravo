@@ -1,8 +1,8 @@
 package entity
 
 type Currency struct {
-	Name string  `bson:"name"`
-	Rate float64 `bson:"rate"`
+	Name string  `json:"name"`
+	Rate float64 `json:"rate"`
 }
 
 type CurrencyStrategy interface {
