@@ -17,6 +17,7 @@ docker-compose up -d
 - `from`: Nome da moeda que deseja comparar
 - `to`: Nome da moeda que seja converter o valor para
 - `amount`: Quantidade de dinheiro que deseja converter para a outra moeda
+
 Um exemplo de request seria:
 <pre><code>
 curl --request GET \
@@ -32,6 +33,7 @@ curl --request GET \
 }
 ```
 Sendo name o nome da moeda e rate o valor em USD que uma unidade da moeda representa.
+
 Um exemplo de request seria:
 <pre><code>
 curl --request POST \
@@ -46,6 +48,7 @@ curl --request POST \
 ### Deletar Moeda
 É possível deletar uma moeda fictícia existente no banco de dados através do endpoint `/currencies` enviando um método DELETE no seguinte formato:
 `http://localhost:8080/currencies/NOME_DA_MOEDA`.
+
 Um exemplo de request seria:
 <pre><code>
 curl --request DELETE \
