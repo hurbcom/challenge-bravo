@@ -52,7 +52,7 @@ curl --request POST \
 Um exemplo de request seria:
 ```bash
 curl --request DELETE \
-  --url http://localhost:8080/currencies/D&D
+  --url http://localhost:8080/currencies/D%26D
 ``` 
 
 ## Sobre as Moedas e o padrão Strategy:
