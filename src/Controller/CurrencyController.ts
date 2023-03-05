@@ -40,6 +40,6 @@ export class CurrencyController {
 
     async deleteCurrency(req: Request, res: Response): Promise<void> {
         await this.currencyService.deleteCurrency(req.params.currencyId);
-        res.status(201).send();
+        res.status(204).send();
     }
 }

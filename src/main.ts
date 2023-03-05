@@ -23,9 +23,6 @@ async function main() {
 }
 
 main()
-    .then((e) => {
-        logger(e);
-    })
     .catch((e) => {
         logger(e);
     })

@@ -85,7 +85,7 @@ describe("GET /user", function () {
         await request(app)
             .delete("/currency/HURB")
             .set("Accept", "application/json")
-            .expect(201);
+            .expect(204);
 
         const data = await request(app)
             .get("/currency?from=HURB&to=USD&amount=10")
