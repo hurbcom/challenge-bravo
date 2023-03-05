@@ -1,82 +1,105 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+## Descrição do projeto
+Esta é uma API responsável por converter valores entre moedas (tanto moedas reais quanto fictícias). É possível também adicionar e remover moedas fictícias pela API.
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+## Inicialização da aplicação
+Esta aplicação utiliza conteinerização com Docker, então é necessário ter o Docker instalado para facilitar o processo de inicialização do projeto.
+Para iniciar a API junto com as suas dependências de bancos de dados é necessário apenas executar o comando:
+<pre><code>
+docker-compose up -d
+</code></pre>
 
-The API must convert between the following currencies:
+## Funcionalidades
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## Converter Moedas
+É possível converter um valor de uma moeda para outra (tanto fictícias quanto moedas oficiais) através do endpoint `/currencies/convert` enviando um método GET com os seguintes parâmetros de query:
+- `from`: Nome da moeda que deseja comparar
+- `to`: Nome da moeda que seja converter o valor para
+- `amount`: Quantidade de dinheiro que deseja converter para a outra moeda
+Um exemplo de request seria:
+<pre><code>
+curl --request GET \
+  --url 'http://localhost:8080/currencies/convert?from=USD&to=D%26D&amount=70'
+</code></pre>
 
-Other coins could be added as usage.
+### Criar Moeda
+É possível adicionar uma nova moeda fictícia através do endpoint `/currencies` enviando um método POST no seguinte formato:
+<pre><code>
+curl --request POST \
+  --url http://localhost:8080/currencies \
+  --header 'Content-Type: application/json' \
+  --data '{
+        "name": "D&D",
+        "rate": 60.35
+}'
+</code></pre>
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+### Deletar Moeda
+É possível deletar uma moeda fictícia existente no banco de dados através do endpoint `/currencies` enviando um método DELETe no seguinte formato:
+<pre><code>
+curl --request DELETE \
+  --url http://localhost:8080/currencies/D&D
+</code></pre> 
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+## Sobre as Moedas e o padrão Strategy:
+Dentro da API existem dois tipos de moedas possíveis: 
+- Moedas reais (estas precisam ter seus valores capturados com a cotação oficial)
+- Moedas fictícias (estas precisam ser armazenadas em um banco de dados da aplicação para consulta)
+Vendo que uma mesma entidade precisaria ter dois tipos de algoritmo para que seus dados fossem capturados da forma correta, foi utilizado o padrão Strategy para que a regra de negócio não precisasse saber da implementação deste algoritmo e apenas pedisse para que a estratégia selecionada trouxesse o dado e a implementação da estratégia iria se encarregar de saber onde os dados devem ser pegos.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+Foram criadas duas estratégias:
+- `OfficialCurrencyStrategy`: Estratégia que vai buscar os valores da moeda em uma API pública com a cotação atual de dada moeda (configurável via `.env`)
+- `CustomCurrencyStrategy`: Estratégia que vai buscar os valores da moeda fictícia no banco de dados da aplicação.
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Ambas estratégias utilizam de caching de dados para evitar sobrecarga.
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+## Tecnologias utilizadas
+- Golang para o Backend
+- Live Reload com Air
+- MongoDB para persistência
+- Redis para caching
+- Docker para conteinerização
+- Vegeta para o teste de stress da aplicação
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+## Configurações do Projeto 
+Dentro da pasta `/config` é possível alterar as variáveis ambientes do projeto. Estas são:
+- `PORT`: Porta para qual a aplicação escutará requisições HTTP (`8080` por padrão)
+- `ENVIRONMENT`: Ambiente no qual a aplicação está rodando (`local` por padrão)
+- `OFFICIAL_CURRENCIES`: Moedas oficiais que a aplicação irá suportar no formato `MOEDA,OUTRAMOEDA,OUTRAMOEDA,` (`EUR,USD,BRL,BTC,ETH` são as moedas suportadas por padrão)
+- `MONDODB_HOST`: Endereço para conexão com o MongoDB (`mongodb://challenge-bravo:challenge-password@mongo:27017`, ou seja, se conecta com a instância do MongoDB rodando no Docker)
+- `MONGODB_DATABASE`: Banco de dados que será utilizado pela aplicação no MongoDB (`currencies` por padrão)
+- `REDIS_HOST`: Endereço para conexão com o Redis (`redis:6379`, ou seja, se conecta com a instância do Redis rodando no Docker)
+- `REDIS_PASSWORD`: Senha para autenticação da instancia do Redis (`challenge-bravo`, senha utilizada pela instância do Docker)
+- `REDIS_TTL`: Tempo de expiração do cache em minutos (`5` por padrão)
+- `CURRENCY_API_URL`: URL da API com valor atualizado das moedas oficiais (`https://api.coingate.com/api/v2/rates/merchant` por padrão)
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+## Testes
+O projeto possui testes unitários de seus casos de uso. Para validar os testes é necessário utilizar o comando:
+<pre><code>
+go test -v ./... 
+</code></pre>
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+Para validar os testes e gerar um arquivo de coverage é necessário utilizar o comando:
+<pre><code>
+go test -v ./... -coverprofile=coverage.txt
+</code></pre>
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+Para gerar um arquivo html com as linhas de código cobertas pelos testes é necessário utilizar o comando:
+<pre><code>
+go tool cover -html=coverage.txt
+</code></pre> 
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+### <strong>Coverage final de: `91.3%`</strong>
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
 
-## Requirements
+## Teste de Estresse
+O teste de estresse da aplicação foi realizado através da ferramenta Vegeta. A aplicação foi estressada por 1 minuto com 1000 requests por segundo e conseguiu lidar com o excesso de carga com facilidade (principalmente por ter uma camada de cache não estressando a API pública e por funcionar em localhost sem latência real de rede).
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+O resultado foi:
 
-## Evaluation criteria
+<img src="assets/stress-test.png" alt="Resultado do Teste de Estresse" height=200 /> 
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
-
-## Doubts
-
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
-
-Godspeed! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+## Possíveis melhorias
+- Rate limit na aplicação para evitar DDoS
+- Autenticação para evitar com que sejam criadas moedas de forma indevida
