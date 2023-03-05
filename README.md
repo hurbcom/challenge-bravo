@@ -1,7 +1,7 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
 ## Descrição do projeto
-Esta é uma API responsável por converter valores entre moedas (tanto moedas reais quanto fictícias). É possível também adicionar e remover moedas fictícias pela API.
+Esta é uma API responsável por converter valores entre moedas (tanto moedas reais quanto fictícias). É possível também adicionar e remover moedas fictícias pela API. Todos os dados das moedas são lastreados em USD, desta forma, todos os cálculos usam o Dólar como base.
 
 ## Inicialização da aplicação
 Esta aplicação utiliza conteinerização com Docker, então é necessário ter o Docker instalado para facilitar o processo de inicialização do projeto.
@@ -25,6 +25,14 @@ curl --request GET \
 
 ### Criar Moeda
 É possível adicionar uma nova moeda fictícia através do endpoint `/currencies` enviando um método POST no seguinte formato:
+```json
+{
+  "name": "D&D",
+  "rate": 60.35
+}
+```
+Sendo name o nome da moeda e rate o valor em USD que uma unidade da moeda representa.
+Um exemplo de request seria:
 <pre><code>
 curl --request POST \
   --url http://localhost:8080/currencies \
@@ -36,7 +44,9 @@ curl --request POST \
 </code></pre>
 
 ### Deletar Moeda
-É possível deletar uma moeda fictícia existente no banco de dados através do endpoint `/currencies` enviando um método DELETe no seguinte formato:
+É possível deletar uma moeda fictícia existente no banco de dados através do endpoint `/currencies` enviando um método DELETE no seguinte formato:
+`http://localhost:8080/currencies/NOME_DA_MOEDA`.
+Um exemplo de request seria:
 <pre><code>
 curl --request DELETE \
   --url http://localhost:8080/currencies/D&D
