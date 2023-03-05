@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  app:
+    container_name: challenge-bravo
+    build: .
+    env_file: ./config/.env
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      - .:/app
+    ports:
+      - 8080:8080
+
+  mongo:
+    container_name: challenge-bravo-mongo
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_PASSWORD: challenge-password
+      MONGO_INITDB_ROOT_USERNAME: challenge-bravo
+      MONGO_INITDB_DATABASE: currencies
+    ports:
+      - 27017:27017
+
+  redis:
+    container_name: challenge-bravo-redis
+    image: redis:latest
+    command: redis-server --requirepass challenge-bravo
+    ports:
+      - 6379:6379
+
+  

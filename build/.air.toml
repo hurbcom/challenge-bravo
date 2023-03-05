@@ -1,0 +1,22 @@
+root = "./"
+
+[build]
+  bin = "./challenge-bravo"
+  cmd = "go build -o ./challenge-bravo ./cmd/challenge-bravo/main.go"
+  delay = 1000
+  exclude_dir = ["assets", "tmp"]
+  exclude_regex = ["_test.go"]
+  kill_delay = "0s"
+  log = "build-errors.log"
+  send_interrupt = false
+  stop_on_error = true
+
+[color]
+  app = ""
+  build = "yellow"
+  main = "magenta"
+  runner = "green"
+  watcher = "cyan"
+
+[log]
+  time = false
