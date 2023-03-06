@@ -1,24 +1,25 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
 # Menu
-- [Como rodar o projeto?](#como-rodar-o-projeto?)
-    - [Pre-requisito](#Pre-requisito)
-    - [Comandos para instalar os pacotes](#Comandos-para-intalar-os-pacotes)
-    - [Comandos para rodar em dev](#Comandos-para-rodar-em-dev)
-    - [Comandos para rodar em Prod](#Comandos-para-rodar-em-prod)
-- [Endpoints](#Endpoints)
-    - [Conversão da moeda(GET)](#Conversão-da-moeda(GET))
-    - [Adição de moeda(POST)](#Adição-de-moeda(POST))
-    - [Remoção de moeda(DELETE)](#Remoção-de-moeda(DELETE))
-- [O Problema](#O-Problema)
-- [A Solução](#A-Solução)
-    - [Escolhas técnicas](#Escolha-tecnicas)
-    - [Arquitetura do projeto](#Arquitetura-do-projeto)
-    - [Clean Architecture Layers](#Clean-Architecture-Layers)
-    - [As Entidades](#As-Entidades)
-    - [Fluxograma da conversão](#Fluxograma-da-conversão)
-    - [Testes](#Testes)
-    - [Teste de estresse](#Teste-de-estresse)
+- [Como rodar o projeto?](#como-rodar-o-projeto)
+    - [Pre-requisito](#pre-requisito)
+    - [Comandos para instalar os pacotes](#comandos-para-instalar-os-pacotes)
+    - [Comandos para rodar em dev](#comandos-para-rodar-em-dev)
+    - [Comandos para rodar em Prod](#comandos-para-rodar-em-prod)
+- [Endpoints](#endpoints)
+    - [Conversão da moeda(GET)](#conversão-da-moedaget)
+    - [Adição de moeda(POST)](#adição-de-moedapost)
+    - [Remoção de moeda(DELETE)](#remoção-de-moedadelete)
+- [O Problema](#o-problema)
+- [A Solução](#a-solução)
+    - [Escolhas técnicas](#escolhas-técnicas)
+    - [SourceType](#sourcetype)
+    - [Arquitetura do projeto](#arquitetura-do-projeto)
+    - [Clean Architecture Layers](#clean-architecture-layers)
+    - [As Entidades](#as-entidades)
+    - [Fluxograma da conversão](#fluxograma-da-conversão)
+    - [Testes](#testes)
+    - [Teste de estresse](#teste-de-estresse)
 
 # Como rodar o projeto?
 ## Pre-requisito
@@ -131,6 +132,10 @@ Usando o eslint + pritter + typescript busco ter uma melhor qualidade de código
 
 ### Inversion of control
 Como nesse projeto busco utilizar o conceito de inversão de controle, optei por utilizar o invesify, uma lib que facilita a gerenciar a inversão de controle.
+## SourceType
+Utilizei esse mecanismo para poder ter várias opções de obtenção do valor da moeda em dólar, dessa forma é possível adicionar facilmente outro sourceType, além do fixed e coingate.
+
+Exemplo, caso queria adicionar outra API externa, basca criar uma classe que implementa a interface IExternalSourceType, adicionar ele no CurrencyService e depois adicionar esse sourceType na validação da criação de uma nova currency/moeda. 
 ## Arquitetura do projeto
 Visão geral da comunicação do sistema:
 
