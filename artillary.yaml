@@ -1,0 +1,9 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 10
+      arrivalRate: 1500
+scenarios:
+  - flow:
+    - get:
+        url: "/currency?from=BRL&to=EUR&amount=500"
