@@ -1,0 +1,39 @@
+{
+  "currencyBacking": "USD",
+  "currencies": [
+    {
+      "abbreviation": "USD",
+      "isFictional": false
+    },
+    {
+      "abbreviation": "BRL",
+      "isFictional": false
+    },
+    {
+      "abbreviation": "EUR",
+      "isFictional": false
+    },
+    {
+      "abbreviation": "BTC",
+      "isFictional": false
+    },
+    {
+      "abbreviation": "ETH",
+      "isFictional": false
+    },
+    {
+      "abbreviation": "BYN",
+      "isFictional": false
+    },
+    {
+      "abbreviation": "HUGO",
+      "isFictional": true,
+      "currencyBackingUnitValue": 0.2
+    },
+    {
+      "abbreviation": "JBS",
+      "isFictional": true,
+      "currencyBackingUnitValue": 0.16
+    }
+  ]
+}

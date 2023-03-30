@@ -1,0 +1,42 @@
+{
+  "name": "hurb-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "coverage": "nyc mocha --timeout=3000",
+    "swagger": "node swagger.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.3.4",
+    "expect.js": "^0.3.1",
+    "express": "^4.18.2",
+    "express-jsonschema": "^1.1.6",
+    "mocha": "^10.2.0",
+    "mock-require": "^3.0.3",
+    "swagger-autogen": "^2.23.1",
+    "swagger-ui-express": "^4.6.2",
+    "xml-js": "^1.6.11"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/express-jsonschema": "^1.1.1",
+    "@types/swagger-ui-express": "^4.1.3",
+    "nyc": "^15.1.0"
+  },
+  "nyc": {    
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "all": false,
+    "check-coverage": true,
+    "branches": 80,
+    "lines": 80,
+    "functions": 80,
+    "statements": 80
+  }
+}

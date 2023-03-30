@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "3f58032d-5893-4ea2-9518-91e558aa8966",
+		"name": "hurb-challenge",
+		"description": "Coleção de chamadas HTTP para o desafio da HURB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Conversão de Moeda",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"from\": \"BRL\",\n\t\"to\": \"USD\",\n\t\"amount\": 100\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/currency-conversion",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currency-conversion"
+					]
+				},
+				"description": "Api de Conversão de moedas"
+			},
+			"response": []
+		},
+		{
+			"name": "Nova Moeda",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"currency\": \"JBS\",\n    \"isFictional\": true,\n    \"currencyBackingUnitValue\": 0.16\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/save-currency",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"save-currency"
+					]
+				},
+				"description": "Api de cadastro de nova moeda."
+			},
+			"response": []
+		},
+		{
+			"name": "Deleção de Moeda",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"currency\": \"HURB\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/delete-currency",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"delete-currency"
+					]
+				},
+				"description": "Api para deletar uma moeda cadastrada."
+			},
+			"response": []
+		}
+	]
+}

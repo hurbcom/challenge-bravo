@@ -1,0 +1,28 @@
+{
+  "BRLUSD": {
+    "code": "BRL",
+    "codein": "USD",
+    "name": "Real Brasileiro/Dólar Americano",
+    "high": "0.197",
+    "low": "0.1938",
+    "varBid": "0.0012",
+    "pctChange": "0.61",
+    "bid": "0.1958",
+    "ask": "0.1958",
+    "timestamp": "1680199911",
+    "create_date": "2023-03-30 15:11:51"
+  },
+  "BYNUSD": {
+    "code": "BYN",
+    "codein": "USD",
+    "name": "Rublo Bielorrusso/Dólar Americano",
+    "high": "0.3992",
+    "low": "0.3961",
+    "varBid": "-0.0031",
+    "pctChange": "-0.77",
+    "bid": "0.3952",
+    "ask": "0.3971",
+    "timestamp": "1680198635",
+    "create_date": "2023-03-30 14:50:35"
+  }
+}
