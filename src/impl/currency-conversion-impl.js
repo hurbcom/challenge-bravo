@@ -18,9 +18,11 @@ const axios_1 = __importDefault(require("axios"));
 const xml_js_1 = require("xml-js");
 const api_error_1 = __importDefault(require("./errors/api-error"));
 const currency_error_1 = __importDefault(require("./errors/currency-error"));
+const cache_impl_1 = __importDefault(require("./cache-impl"));
 class CurrencyConversionImpl {
     constructor() {
         this.validation = new validation_impl_1.default();
+        this.cache = new cache_impl_1.default();
     }
     getCurrencyConversion(body) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -79,26 +81,13 @@ class CurrencyConversionImpl {
     }
     getQuotationFromThirdParty(conversion) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cache = utils_1.default.loadJsonFileByName("cache-quotations.json");
-            let quotaion = cache[conversion.replace('-', '')];
-            if (!this.checkIfConversionHasValidCache(conversion, cache)) {
-                const response = yield this.callThirdPartyApi(conversion);
-                quotaion = response;
-                cache[conversion.replace('-', '')] = quotaion;
-                utils_1.default.saveJsonFile(cache, "cache-quotations.json");
+            if (this.cache.checkIfConversionHasValidCache(conversion)) {
+                return this.cache.getQuotationCache(conversion);
             }
-            return quotaion;
+            const response = yield this.callThirdPartyApi(conversion);
+            this.cache.saveQuotationCache(response, conversion);
+            return response;
         });
-    }
-    checkIfConversionHasValidCache(conversion, cache) {
-        let quotaion = cache[conversion.replace('-', '')];
-        if (quotaion) {
-            const date = new Date(quotaion.create_date);
-            date.setHours(date.getHours() + 3);
-            const now = new Date();
-            return now.getTime() <= date.getTime();
-        }
-        return false;
     }
     callThirdPartyApi(conversion) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -109,6 +98,16 @@ class CurrencyConversionImpl {
         });
     }
     getAvailableCurrencyConversion() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.cache.checkIfExistAvailableApiValidCache()) {
+                return this.cache.getAvailableApisCache();
+            }
+            const response = yield this.callThirdPartyAvailableConversions();
+            this.cache.saveAvailableApisCache(response);
+            return response;
+        });
+    }
+    callThirdPartyAvailableConversions() {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.get('https://economia.awesomeapi.com.br/xml/available').catch(err => {
                 throw new api_error_1.default("Algo deu errado com a API para verificação de disponibilidade de conversão. Contacte o suporte.");

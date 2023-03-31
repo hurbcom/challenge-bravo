@@ -51,7 +51,7 @@ const doc = {
         ErrorNewCurrency: {
             "statusCode": 500,
             "errorType": "ErroInexperado",
-            "message": "Moeda: HURA Já está cadastrada."
+            "message": "Moeda: HURB Já está cadastrada."
         },
         SuccessDeleteCurrency: {
             "message": "Moeda Deletada com sucesso."
@@ -59,7 +59,7 @@ const doc = {
         ErrorDeleteCurrency: {
             "statusCode": 500,
             "errorType": "ErroInexperado",
-            "message": "A moeda: HURA que você está tentando deletar, não existe."
+            "message": "A moeda: HURB que você está tentando deletar, não existe."
         }
     }
 };

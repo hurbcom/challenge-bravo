@@ -3,14 +3,14 @@
     "code": "BRL",
     "codein": "USD",
     "name": "Real Brasileiro/Dólar Americano",
-    "high": "0.197",
-    "low": "0.1938",
-    "varBid": "0.0012",
-    "pctChange": "0.61",
-    "bid": "0.1958",
-    "ask": "0.1958",
-    "timestamp": "1680199911",
-    "create_date": "2023-03-30 15:11:51"
+    "high": "0.1976",
+    "low": "0.1957",
+    "varBid": "0.0006",
+    "pctChange": "0.29",
+    "bid": "0.1968",
+    "ask": "0.1969",
+    "timestamp": "1680271973",
+    "create_date": "2023-03-31 11:12:53"
   },
   "BYNUSD": {
     "code": "BYN",

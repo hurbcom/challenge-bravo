@@ -10,13 +10,16 @@ import { xml2json } from "xml-js";
 import ApiError from "./errors/api-error";
 import CurrencyQuotationResponse from "../entities/currency-conversion/currency-quotation-response";
 import CurrencyError from "./errors/currency-error";
+import CacheImpl from "./cache-impl";
 
 export default class CurrencyConversionImpl {
 
     private validation: ValidationImpl;
+    private cache: CacheImpl;
 
     constructor() {
-        this.validation = new ValidationImpl();        
+        this.validation = new ValidationImpl();
+        this.cache = new CacheImpl();        
     }
     
     public async getCurrencyConversion(body: CurrencyConversionRequest): Promise<CurrencyConversionResponse> {
@@ -82,32 +85,17 @@ export default class CurrencyConversionImpl {
         return Number(quotation.bid);
     }
 
-    protected async getQuotationFromThirdParty(conversion: string): Promise<AwesomeQuotation> {
-        const cache: any = Utils.loadJsonFileByName("cache-quotations.json");
-        let quotaion = cache[conversion.replace('-', '')];
+    protected async getQuotationFromThirdParty(conversion: string): Promise<AwesomeQuotation> {       
 
-        if(!this.checkIfConversionHasValidCache(conversion, cache)) {
-            const response = await this.callThirdPartyApi(conversion);
-            quotaion = response;
-            cache[conversion.replace('-', '')] = quotaion;
-            Utils.saveJsonFile(cache, "cache-quotations.json");
-        }
-
-        return quotaion;
-    }
-
-    protected checkIfConversionHasValidCache(conversion: string, cache: any): boolean {
-        let quotaion = cache[conversion.replace('-', '')];
+        if(this.cache.checkIfConversionHasValidCache(conversion)) {
+            return this.cache.getQuotationCache(conversion);
+        }       
         
-        if(quotaion) {
-            const date = new Date(quotaion.create_date);
-            date.setHours(date.getHours() + 3);
-            const now = new Date();
+        const response = await this.callThirdPartyApi(conversion);
 
-            return now.getTime() <= date.getTime();
-        }
+        this.cache.saveQuotationCache(response, conversion);
 
-        return false;
+        return response;
     }
 
     protected async callThirdPartyApi(conversion: string) {
@@ -118,13 +106,26 @@ export default class CurrencyConversionImpl {
     }
 
     protected async getAvailableCurrencyConversion() {
+        if(this.cache.checkIfExistAvailableApiValidCache()) {
+            return this.cache.getAvailableApisCache();
+        }
+
+        const response = await this.callThirdPartyAvailableConversions();
+        this.cache.saveAvailableApisCache(response);
+
+        return response;
+    }
+
+    protected async callThirdPartyAvailableConversions() {
         const response = await axios.get('https://economia.awesomeapi.com.br/xml/available').catch(err => {            
             throw new ApiError("Algo deu errado com a API para verificação de disponibilidade de conversão. Contacte o suporte.");
         });
 
         const xmlToJson = JSON.parse(xml2json(response.data, {compact: true, spaces: 4}));
-        return Object.keys(xmlToJson['xml']);        
+        return Object.keys(xmlToJson['xml']);   
     }
+
+
 
     
     protected getCurrencyConversionResponse(body: CurrencyConversionRequest, calculatedAmount: string): CurrencyConversionResponse {
