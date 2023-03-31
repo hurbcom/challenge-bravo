@@ -1,82 +1,52 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+Aplicação desenvolvida para o desafio Bravo da HURB.
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+- libs utilizadas: 
+ - chamadas HTTP/Endpoints
+    - axios
+ - testes unitarios 
+    - mocha
+    - mock-require
+    - expect.js
+    - nyc
+- validações
+    - express-jsonschema
+- documentação
+    - swagger-autogen
+    - swagger-ui-express
+- frameworks
+    - TypeScript
+    - ExpressJs
+    
+ 
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+1 - Api de conversão monetária espera receber 3 parametros em uma requisição POST, os parametros são "from", "to" e "amount" onde "from" é o código da moeda de origem, "to" é o código da moeda de destino da conversão e "amount" é a quantidade a ser convertida
+    a - a api do desafio utiliza a api externa awesomeapi para busca dos dados de cotação para moedas reais.
+    b - utilizei um sistema de cache local usando arquivos json para criar caches com validade de 1 hora. Em uma aplicação real eu utilizaria um servidor redis ou memcache para guardar as informações temporariamente e poupar tempo de requisição e consumo de api externa no processo. para o desafio, achei melhor utilizar algo em arquivo mesmo para poupar tempo.
+    
+2 - A api apresenta validação de requisição utilizando json schema, como a api é bastante simples e a cobertura do json schema já supre a necessidade de segurança para os cenarios propostos, não inclui uma biblioteca para validação de XSS(cross-site scripting) mas em uma aplicação real ela estaria presente e o desenvolvimento seria feito usando a metodologia de Security by design;
 
-The API must convert between the following currencies:
+3 - Api de cadastro de novas moedas espera receber 3 parametros porém apenas dois deles são obrigatórios, são eles "currency" que é o codigo para a nova moeda (codigo deve possuir entre 3 e 4 caracteres), caso a moeda seja uma moeda ficticia os outros dois campos precisam ser preenchido, seriam eles: "isFictional" campo booleano que indica que a moeda é ficticia, "currencyBackingUnitValue" campo numérico que indica o valor unitario da moeda na cotação do lastro(nessa caso, USD dólar). um exemplo para o campo currencyBackingUnitValue seria a cotação de 1 real em dolar:  BRL 1 = USD 0.1957, sendo assim, caso você cadastre uma nova moeda ficticia insida nesse campo a contação do de para com o dolar. Ex: HURB 1 = USD 0.2557 logo currencyBackingUnitValue = 0.2557
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+4 - Api de deleção de moeda espera receber apenas um parametro "currency" que é o codigo da moeda a ser deletada. O código precisa possuir de 3 a 4 caracteres. USD dolar não pode ser removido pois é utilizado como lastro.
 
-Other coins could be added as usage.
+5 - para iniciar a api, instale as dependencias utilizando o camando "npm install" na raiz do projeto e execute o arquivo index.js com o comando node index.js
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+6 - a api possui uma documentação em swagger, para acessa-la basta utilizar o endereço http://localhost:3000/doc, caso o swagger não esteja disponivel execute o arquivo swagger.js antes de iniciar a aplicação com o comando node swagger.js
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+7 - na raiz do projeto tambem pode ser encontrado um arquivo Dockerfile que prepara o projeto para utilização em um container docker para utilizalo basta rodar os comandos abaixo na raiz do projeto onde se encontra o arquivo "Dockerfile" (estou presumindo que a maquina já possua docker instalado):
+    - docker build . -t hurb-challenge
+    - docker run -p 3000:3000 -d hurb-challenge
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+8 - preparei um arquivo com a coleção tambem para postman (ferramenta de teste para chamadas de api) para utiliza-la basta apenas importar no postman o arquivo hurb-challenge.postman_collection.json
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+9 - a pasta test contem testes unitarios para o projeto, eu realizei apenas teste para 2 funções diferentes com o objetivo de demonstrar que eu sei fazer testes e como são feitos, não prolonguei muito nesse quisito pois estava com pouco tempo disponivel devido as demandas do meu trabalho
+    - para executar os testes unitarios basta executar o comando npm run test na raiz do projeto
+    - o projeto tambem possui configurado a lib NYC que é utilizado para cobertura de codigo para rodar os testes com cobertura basta apenas rodar o comando npm run coverage
+    - a cobertura está configurada para falhar caso não atinja 80% do codigo com testes, nesse cenario ela irá falhar pois eu só fiz 2 testes unitarios, mas é apenas um exemplo.
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+10 - por ultimo mas não menos importante, a API está exposta na porta 3000, então todos os endpoints devem apontar para a porta 3000 e deve-se tomar cuidado para não iniciar a api em uma maquina no qual a porta 3000 ja esteja ocupada.
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+11 - O desafio foi aceito e realizado, espero que gostem !!.
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+obs - utilizem os arquivos .ts para avaliação do codigo, por favor.
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
-
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
-
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
-
-## Requirements
-
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
-
-## Evaluation criteria
-
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
-
-## Doubts
-
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
-
-Godspeed! ;)
-
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>

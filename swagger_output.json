@@ -1,0 +1,255 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "HURB Code Challenge",
+    "description": "Documentação da api do desafio de código do HURB."
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "CurrencyController",
+      "description": "Controller para a api de converção"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/currency-conversion": {
+      "post": {
+        "tags": [
+          "CurrencyController"
+        ],
+        "description": "Endpoint Usado para conversão monetária.",
+        "parameters": [
+          {
+            "name": "CurrencyConversionRequest",
+            "in": "body",
+            "description": "converção monetária.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CurrencyConvertion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversão obtida com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/SuccessCurrencyConversion"
+            }
+          }
+        }
+      }
+    },
+    "/save-currency": {
+      "put": {
+        "tags": [
+          "CurrencyController"
+        ],
+        "description": "Endpoint usado para salvar uma nova moeda para conversão.",
+        "parameters": [
+          {
+            "name": "SaveCurrencyRequest",
+            "in": "body",
+            "description": "Salvar Nova Moeda para uso na api de conversão.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SaveNewCurrency"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Nova moeda cadastrada com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/SuccessNewCurrency"
+            }
+          },
+          "500": {
+            "description": "erro moeda cadastrada duas vezes.",
+            "schema": {
+              "$ref": "#/definitions/ErrorNewCurrency"
+            }
+          }
+        }
+      }
+    },
+    "/delete-currency": {
+      "delete": {
+        "tags": [
+          "CurrencyController"
+        ],
+        "description": "Endpoint para deletar uma moeda previamente cadastrada na api.",
+        "parameters": [
+          {
+            "name": "DeleteCurrencyRequest",
+            "in": "body",
+            "description": "Deletar Moeda Existente na API - Não tente deletar a moeda usada de lastro.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteCurrency"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "moeda deletada com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/SuccessDeleteCurrency"
+            }
+          },
+          "500": {
+            "description": "erro moeda deletada duas vezes.",
+            "schema": {
+              "$ref": "#/definitions/ErrorDeleteCurrency"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CurrencyConvertion": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "example": "BRL"
+        },
+        "to": {
+          "type": "string",
+          "example": "USD"
+        },
+        "amount": {
+          "type": "number",
+          "example": 100
+        }
+      },
+      "required": [
+        "from",
+        "to",
+        "amount"
+      ]
+    },
+    "SaveNewCurrency": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string",
+          "example": "HURB"
+        },
+        "isFictional": {
+          "type": "boolean",
+          "example": true
+        },
+        "currencyBackingUnitValue": {
+          "type": "number",
+          "example": 0.16
+        }
+      },
+      "required": [
+        "currency"
+      ]
+    },
+    "DeleteCurrency": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string",
+          "example": "HURB"
+        }
+      },
+      "required": [
+        "currency"
+      ]
+    },
+    "SuccessCurrencyConversion": {
+      "type": "object",
+      "properties": {
+        "quotation": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "example": "BRL"
+            },
+            "to": {
+              "type": "string",
+              "example": "USD"
+            },
+            "originalAmount": {
+              "type": "string",
+              "example": "100.00"
+            },
+            "convertedAmount": {
+              "type": "string",
+              "example": "19.5800"
+            }
+          }
+        }
+      }
+    },
+    "SuccessNewCurrency": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Nova moeda salva com sucesso."
+        }
+      }
+    },
+    "ErrorNewCurrency": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 500
+        },
+        "errorType": {
+          "type": "string",
+          "example": "ErroInexperado"
+        },
+        "message": {
+          "type": "string",
+          "example": "Moeda: HURB Já está cadastrada."
+        }
+      }
+    },
+    "SuccessDeleteCurrency": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Moeda Deletada com sucesso."
+        }
+      }
+    },
+    "ErrorDeleteCurrency": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 500
+        },
+        "errorType": {
+          "type": "string",
+          "example": "ErroInexperado"
+        },
+        "message": {
+          "type": "string",
+          "example": "A moeda: HURB que você está tentando deletar, não existe."
+        }
+      }
+    }
+  }
+}
