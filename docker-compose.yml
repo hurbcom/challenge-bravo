@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+    postgres:
+        image: postgres
+        #volumes:
+            #- ./01-basegeografica.sql:/docker-entrypoint-initdb.d/01-basegeografica.sql
+            #- ./02-basegeografica.sql:/docker-entrypoint-initdb.d/02-basegeografica.sql
+        environment:
+            POSTGRES_PASSWORD: "123456"
+        ports:
+            - "5432:5432"
+    redis:
+        image: redis:6.2-alpine
+        restart: always
+        ports:
+            - '6379:6379'
+        command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+        volumes:
+            - cache:/data
+    app:
+        build: .
+        image: app:1.0
+        ports:
+            - '8080:8080'
+        links:
+            - "postgres:postgres"
+            - "redis:redis"
+volumes:
+    cache:
+        driver: local
