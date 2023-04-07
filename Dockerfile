@@ -5,7 +5,7 @@ WORKDIR /app
 COPY go.mod ./
 RUN go mod download
 
-COPY ./src/*.go ./
+COPY . .
 
 RUN go build -o /chanllenge-bravo
 

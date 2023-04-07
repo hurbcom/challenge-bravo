@@ -22,9 +22,23 @@ services:
         image: app:1.0
         ports:
             - '8080:8080'
+        environment:
+            - API_AWESOME_BASE_URL = https://economia.awesomeapi.com.br
+            - DATABASE_HOST=postgres
+            - DATABASE_USER=postgres
+            - DATABASE_PASSWORD=123456
+            - DATABASE_NAME=postgres
+            - DATABASE_PORT=5432
+            - DATABASE_TIMEZONE=America/Sao_Paulo
+            - CACHE_HOST=redis
+            - CACHE_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+            - CACHE_PORT=6379
         links:
             - "postgres:postgres"
             - "redis:redis"
+        depends_on:
+            - postgres
+            - redis
 volumes:
     cache:
         driver: local
