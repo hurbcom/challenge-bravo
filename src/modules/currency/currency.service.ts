@@ -65,8 +65,6 @@ export class CurrencyService {
                 `The '${to}' currency code informed in the 'to' field is not supported.`,
             );
 
-        console.log(currencyFrom, currencyTo, amount);
-
         const exchangeRate =
             Number(currencyTo.exchangeRate) / Number(currencyFrom.exchangeRate);
 
