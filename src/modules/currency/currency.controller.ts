@@ -1,10 +1,33 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Query,
+} from '@nestjs/common';
 import { CurrencyService } from './currency.service';
-import { ResponseCurrencyDto, ResponseQuotationDto } from './dto';
+import {
+    CreateFicticiusDto,
+    ResponseCurrencyDto,
+    ResponseQuotationDto,
+} from './dto';
+import { Currency } from './entities';
 
 @Controller('currency')
 export class CurrencyController {
     constructor(private readonly currencyService: CurrencyService) {}
+
+    @Post()
+    async createQuotation(@Body() body: CreateFicticiusDto): Promise<Currency> {
+        return this.currencyService.createQuotation(body);
+    }
+
+    @Delete(':code')
+    async delete(@Param('code') code: string): Promise<any> {
+        return this.currencyService.deleteCoin(code);
+    }
 
     @Get()
     async getQuotation(

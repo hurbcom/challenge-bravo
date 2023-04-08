@@ -4,8 +4,12 @@ import {
     HttpStatus,
     Injectable,
 } from '@nestjs/common';
-import { CreateCurrencyDto } from './dto/create-currency.dto';
-import { ResponseCurrencyDto, ResponseQuotationDto } from './dto';
+
+import {
+    CreateFicticiusDto,
+    ResponseCurrencyDto,
+    ResponseQuotationDto,
+} from './dto';
 import { format } from 'date-fns';
 import { Model } from 'mongoose';
 import { HttpService } from '@nestjs/axios';
@@ -233,5 +237,43 @@ export class CurrencyService {
         return aggregateCoins.map((aggregate) => {
             return CurrencyMapper.toDto(aggregate.lastRate);
         });
+    }
+
+    async createQuotation(ficticiusDto: CreateFicticiusDto) {
+        let coin = await this.findOneCurrency(ficticiusDto.code);
+        if (coin && coin.type !== 'FICTICIUS')
+            throw new BadRequestException(
+                `currency with code "${ficticiusDto.code}" cannot be created as it exists as FIAT or Crypto`,
+            );
+
+        if (ficticiusDto.quotation) {
+            ficticiusDto.amount = ficticiusDto.quotation;
+            ficticiusDto.baseAmount = 1;
+        }
+
+        const backing = await this.getQuotation(
+            ficticiusDto.baseCode,
+            'USD', //backingCode
+            1,
+        );
+
+        return this.saveCurrency({
+            name: ficticiusDto.name,
+            code: ficticiusDto.code,
+            exchangeRate: String(
+                ficticiusDto.amount /
+                    (ficticiusDto.baseAmount * backing.result),
+            ),
+            supportCode: 'USD',
+            type: 'FICTICIUS',
+            created: format(new Date(), 'yyyy-MM-dd'),
+        });
+    }
+
+    async deleteCoin(code: string) {
+        return this.currencyModel.updateMany(
+            { code: code.toUpperCase(), deleted: null },
+            { deleted: new Date() },
+        );
     }
 }
