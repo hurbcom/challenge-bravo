@@ -42,11 +42,13 @@ export class CurrencyService {
         to: string,
         amount: number,
     ): Promise<ResponseQuotationDto> {
+        const supportCode = this.configService.get('supportCode');
+
         // Check if the backing currency quote exists
-        let currencyBacking = await this.findOneCurrency('USD');
+        let currencyBacking = await this.findOneCurrency(supportCode);
         if (!currencyBacking) {
-            await this.syncFiatQuotations();
-            await this.syncCryptoQuotations();
+            await this.syncFiatQuotations(supportCode);
+            await this.syncCryptoQuotations(supportCode);
         }
 
         // Find in mongodb the from currency
@@ -83,7 +85,7 @@ export class CurrencyService {
      * @param {string} supportCode
      * @returns {Promise<void>}
      */
-    async syncFiatQuotations(supportCode: string = 'USD'): Promise<void> {
+    async syncFiatQuotations(supportCode: string): Promise<void> {
         try {
             const currentDate = format(new Date(), 'yyyy-MM-dd');
             const fiatApi = this.configService.get('fiatApi');
@@ -136,7 +138,7 @@ export class CurrencyService {
      * @param {string} supportCode
      * @returns {Promise<void>}
      */
-    async syncCryptoQuotations(supportCode: string = 'USD'): Promise<void> {
+    async syncCryptoQuotations(supportCode: string): Promise<void> {
         try {
             const currentDate = format(new Date(), 'yyyy-MM-dd');
             const cryptoApi = this.configService.get('cryptoApi');
@@ -213,6 +215,7 @@ export class CurrencyService {
                     { created: format(new Date(), 'yyy-MM-dd') },
                     { type: 'FICTICIUS' },
                 ],
+                supportCode: this.configService.get('supportCode'),
             })
             .sort({ $natural: -1 })
             .exec();
@@ -240,6 +243,8 @@ export class CurrencyService {
     }
 
     async createQuotation(ficticiusDto: CreateFicticiusDto) {
+        const supportCode = this.configService.get('supportCode');
+
         let coin = await this.findOneCurrency(ficticiusDto.code);
         if (coin && coin.type !== 'FICTICIUS')
             throw new BadRequestException(
@@ -253,7 +258,7 @@ export class CurrencyService {
 
         const backing = await this.getQuotation(
             ficticiusDto.baseCode,
-            'USD', //backingCode
+            supportCode, //backingCode
             1,
         );
 
@@ -264,7 +269,7 @@ export class CurrencyService {
                 ficticiusDto.amount /
                     (ficticiusDto.baseAmount * backing.result),
             ),
-            supportCode: 'USD',
+            supportCode,
             type: 'FICTICIUS',
             created: format(new Date(), 'yyyy-MM-dd'),
         });

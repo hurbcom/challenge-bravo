@@ -15,6 +15,7 @@ export interface EnvironmentVariables {
         url: string;
         token: string;
     };
+    supportCode: string;
 }
 
 export default (): EnvironmentVariables => ({
@@ -32,4 +33,5 @@ export default (): EnvironmentVariables => ({
         url: EnvironmentChecker.string('FIAT_API_URL'),
         token: EnvironmentChecker.string('FIAT_API_TOKEN'),
     },
+    supportCode: EnvironmentChecker.string('SUPPORT_CODE'),
 });
