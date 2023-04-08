@@ -1,4 +1,4 @@
-import { EnvironmentChecker } from '../libs/environment-checker';
+import EnvironmentChecker from '../libs/environment-checker';
 
 export interface EnvironmentVariables {
     url: string;
