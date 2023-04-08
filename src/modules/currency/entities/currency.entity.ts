@@ -18,7 +18,7 @@ export class Currency {
     type?: 'FIAT' | 'CRYPTO' | 'FICTICIUS';
 
     @Prop({ required: false, default: 'USD' })
-    backing?: string;
+    supportCode?: string;
 
     @Prop({ default: format(new Date(), 'yyyy-MM-dd') })
     created: string;

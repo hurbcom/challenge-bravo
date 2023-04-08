@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 class QuotationInfoDto {
     @ApiProperty()
-    quotation: number;
+    exchangeRate: number;
 
     @ApiProperty()
     lastUpdate: string;

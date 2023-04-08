@@ -1,16 +1,6 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Body,
-    Patch,
-    Param,
-    Delete,
-    Query,
-} from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
-import { CreateCurrencyDto } from './dto/create-currency.dto';
-import { ResponseQuotationDto } from './dto';
+import { ResponseCurrencyDto, ResponseQuotationDto } from './dto';
 
 @Controller('currency')
 export class CurrencyController {
@@ -23,5 +13,15 @@ export class CurrencyController {
         @Query('amount') amount: string,
     ): Promise<ResponseQuotationDto> {
         return this.currencyService.getQuotation(from, to, +amount);
+    }
+
+    @Get('/reset')
+    async reset(): Promise<void> {
+        return this.currencyService.reset();
+    }
+
+    @Get('/list')
+    async list(): Promise<ResponseCurrencyDto[]> {
+        return this.currencyService.list();
     }
 }

@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Currency, CurrencyDocument } from './entities/currency.entity';
 import { EnvironmentVariables } from 'src/config/configuration';
+import { CurrencyMapper } from './currency.mapper';
 
 @Injectable()
 export class CurrencyService {
@@ -58,15 +59,17 @@ export class CurrencyService {
                 `The '${to}' currency code informed in the 'to' field is not supported.`,
             );
 
-        const quotation =
+        console.log(currencyFrom, currencyTo, amount);
+
+        const exchangeRate =
             Number(currencyTo.exchangeRate) / Number(currencyFrom.exchangeRate);
 
         return {
             info: {
-                quotation,
+                exchangeRate,
                 lastUpdate: currencyFrom.created,
             },
-            result: quotation * amount,
+            result: exchangeRate * amount,
         };
     }
 
@@ -103,7 +106,7 @@ export class CurrencyService {
                     exchangeRate: lastQuotations?.conversion_rates[code],
                     created: currentDate,
                     type: 'FIAT',
-                    backing: supportCode,
+                    supportCode,
                 }),
             );
 
@@ -129,7 +132,7 @@ export class CurrencyService {
      * @param {string} supportCode
      * @returns {Promise<void>}
      */
-    async syncCryptoQuotations(supportCode: string = 'USD'): Promise<any> {
+    async syncCryptoQuotations(supportCode: string = 'USD'): Promise<void> {
         try {
             const currentDate = format(new Date(), 'yyyy-MM-dd');
             const cryptoApi = this.configService.get('cryptoApi');
@@ -148,22 +151,24 @@ export class CurrencyService {
 
             if (!codes?.success) throw 'Crypto external api codes failed';
 
-            const suportedCodes: Currency[] = Object.values(codes.crypto).map(
+            const currencies: Currency[] = Object.values(codes.crypto).map(
                 (value: { symbol: string; name: string }) => ({
                     code: value.symbol,
                     name: value.name,
-                    exchangeRate: lastQuotations?.rates[value.symbol],
+                    exchangeRate: String(
+                        1 / Number(lastQuotations?.rates[value.symbol]),
+                    ),
                     created: currentDate,
                     type: 'CRYPTO',
-                    backing: supportCode,
+                    supportCode,
                 }),
             );
 
-            for (let suportedCode of suportedCodes) {
-                suportedCode = await this.saveCurrency(suportedCode);
+            for (let currency of currencies) {
+                currency = await this.saveCurrency(currency);
             }
 
-            return suportedCodes;
+            return;
         } catch (error) {
             throw new HttpException(
                 error.message ?? error.response,
@@ -207,5 +212,26 @@ export class CurrencyService {
             })
             .sort({ $natural: -1 })
             .exec();
+    }
+
+    async reset(): Promise<void> {
+        await this.currencyModel.deleteMany({});
+    }
+
+    async list(): Promise<ResponseCurrencyDto[]> {
+        const aggregateCoins = await this.currencyModel.aggregate([
+            {
+                $group: {
+                    _id: '$code',
+                    lastRate: {
+                        $last: '$$ROOT',
+                    },
+                },
+            },
+        ]);
+
+        return aggregateCoins.map((aggregate) => {
+            return CurrencyMapper.toDto(aggregate.lastRate);
+        });
     }
 }
