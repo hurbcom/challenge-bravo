@@ -20,12 +20,14 @@ export class CurrencyController {
     constructor(private readonly currencyService: CurrencyService) {}
 
     @Post()
-    async createQuotation(@Body() body: CreateFicticiusDto): Promise<Currency> {
+    async createQuotation(
+        @Body() body: CreateFicticiusDto,
+    ): Promise<ResponseCurrencyDto> {
         return this.currencyService.createQuotation(body);
     }
 
     @Delete(':code')
-    async delete(@Param('code') code: string): Promise<any> {
+    async delete(@Param('code') code: string): Promise<void> {
         return this.currencyService.deleteCoin(code);
     }
 

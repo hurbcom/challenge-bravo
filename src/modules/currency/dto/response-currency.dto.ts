@@ -8,8 +8,11 @@ export class ResponseCurrencyDto {
     code: string;
 
     @ApiProperty()
-    rate: string;
+    exchangeRate: string;
 
     @ApiProperty()
     type: string;
+
+    @ApiProperty()
+    lastUpdate: string;
 }
