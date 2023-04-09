@@ -3,7 +3,6 @@ import {
     HttpException,
     HttpStatus,
     Injectable,
-    NotFoundException,
 } from '@nestjs/common';
 
 import {
@@ -291,7 +290,7 @@ export class CurrencyService {
         );
 
         if (!updateResponse.modifiedCount) {
-            throw new NotFoundException(
+            throw new BadRequestException(
                 `No active currency found for code ${code}`,
             );
         }
