@@ -20,8 +20,8 @@ export class Currency {
     @Prop({ required: false, default: 'USD' })
     supportCode?: string;
 
-    @Prop({ default: format(new Date(), 'yyyy-MM-dd') })
-    created: string;
+    @Prop()
+    created: Date;
 
     @Prop()
     deleted?: Date;

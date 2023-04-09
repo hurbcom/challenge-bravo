@@ -16,6 +16,7 @@ export interface EnvironmentVariables {
         token: string;
     };
     supportCode: string;
+    refetchTimeInSeconds: number;
 }
 
 export default (): EnvironmentVariables => ({
@@ -34,4 +35,5 @@ export default (): EnvironmentVariables => ({
         token: EnvironmentChecker.string('FIAT_API_TOKEN'),
     },
     supportCode: EnvironmentChecker.string('SUPPORT_CODE'),
+    refetchTimeInSeconds: EnvironmentChecker.number('REFETCH_TIME_IN_SECONDS'),
 });

@@ -3,6 +3,7 @@ import {
     HttpException,
     HttpStatus,
     Injectable,
+    NotFoundException,
 } from '@nestjs/common';
 
 import {
@@ -10,7 +11,7 @@ import {
     ResponseCurrencyDto,
     ResponseQuotationDto,
 } from './dto';
-import { format } from 'date-fns';
+import { format, subSeconds } from 'date-fns';
 import { Model } from 'mongoose';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
@@ -71,7 +72,7 @@ export class CurrencyService {
         return {
             info: {
                 exchangeRate,
-                lastUpdate: currencyFrom.created,
+                lastUpdate: format(currencyFrom.created, 'yyy-MM-dd HH:mm:ss'),
             },
             result: exchangeRate * amount,
         };
@@ -85,7 +86,6 @@ export class CurrencyService {
      */
     async syncFiatQuotations(supportCode: string): Promise<void> {
         try {
-            const currentDate = format(new Date(), 'yyyy-MM-dd');
             const fiatApi = this.configService.get('fiatApi');
             const fiatBaseUrl = `${fiatApi.url}/${fiatApi.token}`;
 
@@ -108,7 +108,7 @@ export class CurrencyService {
                     code,
                     name,
                     exchangeRate: lastQuotations?.conversion_rates[code],
-                    created: currentDate,
+                    created: new Date(),
                     type: 'FIAT',
                     supportCode,
                 }),
@@ -138,7 +138,6 @@ export class CurrencyService {
      */
     async syncCryptoQuotations(supportCode: string): Promise<void> {
         try {
-            const currentDate = format(new Date(), 'yyyy-MM-dd');
             const cryptoApi = this.configService.get('cryptoApi');
 
             const { data: lastQuotations } =
@@ -162,7 +161,7 @@ export class CurrencyService {
                     exchangeRate: String(
                         1 / Number(lastQuotations?.rates[value.symbol]),
                     ),
-                    created: currentDate,
+                    created: new Date(),
                     type: 'CRYPTO',
                     supportCode,
                 }),
@@ -199,7 +198,8 @@ export class CurrencyService {
      * @description Query the last inserted currency in mongodb where:
      * Code equal to the search code;
      * Cannot have been deleted;
-     * Creation date equal to today or type equal to fictional.
+     * Creation date equal to today or type equal to fictional;
+     * supportCode is equal to defined in environment.
      *
      * @param {string} code - Currency code to search
      * @returns {Promise<Currency>}
@@ -210,7 +210,14 @@ export class CurrencyService {
                 code,
                 deleted: null,
                 $or: [
-                    { created: format(new Date(), 'yyy-MM-dd') },
+                    {
+                        created: {
+                            $gte: subSeconds(
+                                new Date(),
+                                this.configService.get('refetchTimeInSeconds'),
+                            ),
+                        },
+                    },
                     { type: 'FICTICIUS' },
                 ],
                 supportCode: this.configService.get('supportCode'),
@@ -240,7 +247,9 @@ export class CurrencyService {
         });
     }
 
-    async createQuotation(ficticiusDto: CreateFicticiusDto) {
+    async createQuotation(
+        ficticiusDto: CreateFicticiusDto,
+    ): Promise<ResponseCurrencyDto> {
         const supportCode = this.configService.get('supportCode');
 
         let coin = await this.findOneCurrency(ficticiusDto.code);
@@ -260,7 +269,7 @@ export class CurrencyService {
             1,
         );
 
-        return this.saveCurrency({
+        const createdCurrency = await this.saveCurrency({
             name: ficticiusDto.name,
             code: ficticiusDto.code,
             exchangeRate: String(
@@ -269,14 +278,24 @@ export class CurrencyService {
             ),
             supportCode,
             type: 'FICTICIUS',
-            created: format(new Date(), 'yyyy-MM-dd'),
+            created: new Date(),
         });
+
+        return CurrencyMapper.toDto(createdCurrency);
     }
 
-    async deleteCoin(code: string) {
-        return this.currencyModel.updateMany(
+    async deleteCoin(code: string): Promise<void> {
+        const updateResponse = await this.currencyModel.updateMany(
             { code: code.toUpperCase(), deleted: null },
             { deleted: new Date() },
         );
+
+        if (!updateResponse.modifiedCount) {
+            throw new NotFoundException(
+                `No active currency found for code ${code}`,
+            );
+        }
+
+        return;
     }
 }
