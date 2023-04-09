@@ -34,8 +34,6 @@ export const ApiGeneralDocumentation = <TModel extends Type<any>>({
         model = GlobalEmptyResponseDto;
     }
 
-    console.log(okResponse);
-
     const defaultDecorators = [
         ApiExtraModels(model as TModel),
         ApiOkResponse({

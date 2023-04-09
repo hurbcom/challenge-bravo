@@ -18,7 +18,6 @@ export class HealthController {
     @ApiGeneralDocumentation({})
     async mongodb() {
         const response = await this.currencyService.findOneCurrency('USD');
-        console.log(response);
         if (!response) {
             throw new BadRequestException('Mongodb is not active');
         }
