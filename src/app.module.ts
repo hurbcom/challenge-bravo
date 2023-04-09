@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { CurrencyModule } from './modules/currency/currency.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CurrencyModule, HealthModule } from './modules';
 
 @Module({
     imports: [
@@ -12,6 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
             `${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}`,
         ), //TODO use asyncForRoot to read env from configModule
         CurrencyModule,
+        HealthModule,
     ],
     controllers: [AppController],
 })
