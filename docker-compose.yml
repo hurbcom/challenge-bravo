@@ -1,44 +1,45 @@
 version: '3.8'
 services:
-    postgres:
-        image: postgres
-        #volumes:
-            #- ./01-basegeografica.sql:/docker-entrypoint-initdb.d/01-basegeografica.sql
-            #- ./02-basegeografica.sql:/docker-entrypoint-initdb.d/02-basegeografica.sql
+    mongo:
+        image: mongo
+        restart: always
         environment:
-            POSTGRES_PASSWORD: "123456"
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: 123456
+            MONGO_INITDB_DATABASE: hurb
         ports:
-            - "5432:5432"
+            - "27017:27017"
+        networks:
+            - hurb-network
     redis:
         image: redis:6.2-alpine
         restart: always
         ports:
             - '6379:6379'
         command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
-        volumes:
-            - cache:/data
+        networks:
+            - hurb-network
     app:
         build: .
-        image: app:1.0
+        image: app:2
         ports:
             - '8080:8080'
         environment:
-            - API_AWESOME_BASE_URL = https://economia.awesomeapi.com.br
-            - DATABASE_HOST=postgres
-            - DATABASE_USER=postgres
+            - ENV=DOCKER
+            - API_AWESOME_BASE_URL=https://economia.awesomeapi.com.br
+            - DATABASE_HOST=mongo
+            - DATABASE_USER=root
             - DATABASE_PASSWORD=123456
-            - DATABASE_NAME=postgres
-            - DATABASE_PORT=5432
-            - DATABASE_TIMEZONE=America/Sao_Paulo
+            - DATABASE_PORT=27017
+            - DATABASE_NAME=hurb
             - CACHE_HOST=redis
             - CACHE_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
             - CACHE_PORT=6379
-        links:
-            - "postgres:postgres"
-            - "redis:redis"
         depends_on:
-            - postgres
+            - mongo
             - redis
-volumes:
-    cache:
-        driver: local
+        networks:
+            - hurb-network
+networks:
+    hurb-network:
+        driver: bridge

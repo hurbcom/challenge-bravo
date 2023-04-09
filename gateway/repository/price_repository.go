@@ -20,12 +20,12 @@ type (
 	}
 
 	priceRepositoryImpl struct {
-		db    database.DatabaseConnection
+		db    database.MongoDatabaseConnection
 		cache cache.RedisCacheConnection
 	}
 )
 
-func NewPriceRepository(db database.DatabaseConnection, cache cache.RedisCacheConnection) PriceRepository {
+func NewPriceRepository(db database.MongoDatabaseConnection, cache cache.RedisCacheConnection) PriceRepository {
 	return &priceRepositoryImpl{
 		db:    db,
 		cache: cache,

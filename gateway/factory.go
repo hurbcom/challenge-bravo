@@ -16,7 +16,7 @@ func loadAwesomeApiClient() {
 }
 
 func loadPriceRepository() {
-	priceRepository = repository.NewPriceRepository(infra.GetDatabaseConnection(), infra.GetRedisCacheConnection())
+	priceRepository = repository.NewPriceRepository(infra.GetMongoDatabaseConnection(), infra.GetRedisCacheConnection())
 }
 
 func LoadGateways() {

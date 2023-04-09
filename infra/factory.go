@@ -19,7 +19,7 @@ const (
 var (
 	environment          env.Environment
 	httpClient           http_client.HttpClient
-	databaseConnection   database.DatabaseConnection
+	databaseConnection   database.MongoDatabaseConnection
 	redisCacheConnection cache.RedisCacheConnection
 )
 
@@ -77,7 +77,7 @@ func GetHttpClient() http_client.HttpClient {
 	return httpClient
 }
 
-func GetDatabaseConnection() database.DatabaseConnection {
+func GetMongoDatabaseConnection() database.MongoDatabaseConnection {
 	if databaseConnection == nil {
 		loadDatabaseConnection()
 	}
