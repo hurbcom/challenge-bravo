@@ -1,12 +1,4 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Post,
-    Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
 import {
     CreateFicticiusDto,
@@ -16,6 +8,7 @@ import {
 import { Currency } from './entities';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiGeneralDocumentation } from 'src/libs/decorators/ApiGeneralDocumentation';
+import { QueryRequired } from 'src/libs/decorators';
 
 @Controller('currencies')
 @ApiTags('Currency')
@@ -46,9 +39,9 @@ export class CurrencyController {
         description: 'Calculate exchange rate between to currencies',
     })
     async getQuotation(
-        @Query('from') from: string,
-        @Query('to') to: string,
-        @Query('amount') amount: string,
+        @QueryRequired('from') from: string,
+        @QueryRequired('to') to: string,
+        @QueryRequired('amount') amount: string,
     ): Promise<ResponseQuotationDto> {
         return this.currencyService.getQuotation(from, to, +amount);
     }

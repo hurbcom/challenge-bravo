@@ -122,9 +122,6 @@ export class CurrencyService {
             throw new HttpException(
                 error.message ?? error.response,
                 HttpStatus.BAD_REQUEST,
-                {
-                    cause: error,
-                },
             );
         }
     }
@@ -145,7 +142,10 @@ export class CurrencyService {
                 );
 
             if (!lastQuotations?.success)
-                throw 'Crypto external api quotation failed';
+                throw (
+                    lastQuotations?.error?.info ??
+                    'Crypto external api quotation failed'
+                );
 
             const { data: codes } = await this.httpService.axiosRef.get(
                 `${cryptoApi.url}/list?access_key=${cryptoApi.token}`,
@@ -172,12 +172,10 @@ export class CurrencyService {
 
             return;
         } catch (error) {
+            console.log(error);
             throw new HttpException(
                 error.message ?? error.response,
                 HttpStatus.BAD_REQUEST,
-                {
-                    cause: error,
-                },
             );
         }
     }
