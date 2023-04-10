@@ -7,8 +7,7 @@ import {
 } from './dto';
 import { Currency } from './entities';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ApiGeneralDocumentation } from 'src/libs/decorators/ApiGeneralDocumentation';
-import { QueryRequired } from 'src/libs/decorators';
+import { QueryRequired, ApiGeneralDocumentation } from '../../libs/decorators';
 
 @Controller('currencies')
 @ApiTags('Currency')
