@@ -16,31 +16,20 @@ $ cp .env.sample .env
 ```
 
 #### Inicialização do projeto
-Execute o arquivo shell abaixo com todos os comandos necessários para a inicialização
 ```bash
-$ sh start.sh
-```
-
-ou utilize os comandos abaixo
-
-```bash
-
 $ docker-compose up
-$ npm install
-$ npm run start
 ```
 
 
 ## Acessar API
-
-Para acessar a API utilize a URL:
+#### Para acessar a API utilize a URL:
 ```bash
-http://localhost:3000
+http://0.0.0.0:3000
 ```
 
-A documentação swagger pode ser acessar em:
+#### Swagger autogerado:
 ```bash
-http://localhost:3000/docs
+http://0.0.0.0:3000/docs
 ```
 
 
