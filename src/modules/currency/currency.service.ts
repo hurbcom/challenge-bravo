@@ -3,6 +3,7 @@ import {
     HttpException,
     HttpStatus,
     Injectable,
+    Logger,
 } from '@nestjs/common';
 
 import {
@@ -27,6 +28,7 @@ export class CurrencyService {
         private readonly configService: ConfigService<EnvironmentVariables>,
         private readonly httpService: HttpService,
     ) {}
+    private readonly logger = new Logger(CurrencyService.name);
 
     /**
      * @description Calculates the quotation between two currencies using a backing currency
@@ -117,6 +119,7 @@ export class CurrencyService {
                 suportedCode = await this.saveCurrency(suportedCode);
             }
 
+            this.logger.debug('Sync FIAT');
             return;
         } catch (error) {
             throw new HttpException(
@@ -170,6 +173,7 @@ export class CurrencyService {
                 currency = await this.saveCurrency(currency);
             }
 
+            this.logger.debug('Sync CRYPTO');
             return;
         } catch (error) {
             console.log(error);
