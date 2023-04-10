@@ -10,7 +10,7 @@ import { CurrencyModule, HealthModule } from './modules';
         ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
         MongooseModule.forRoot(
             `${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}`,
-        ), //TODO use asyncForRoot to read env from configModule
+        ),
         CurrencyModule,
         HealthModule,
     ],
