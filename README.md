@@ -31,6 +31,20 @@ $ npm install
 $ npm run start
 ```
 
+
+## Acessar API
+
+Para acessar a API utilize a URL:
+```bash
+http://localhost:3000
+```
+
+A documentação swagger pode ser acessar em:
+```bash
+http://localhost:3000/docs
+```
+
+
 ## Documentação da API
 
 ### Calcular cotação
