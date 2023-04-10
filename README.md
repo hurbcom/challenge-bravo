@@ -4,7 +4,9 @@
 
 ## Descrição
 
-Esse projeto é uma API rest para conversão monetária entre moedas fiduciárias, crypto e fictícias. Para a execução do cálculo de cotação foi utilizada uma moeda de lasto que pode ser definida via arquivo .env.
+Esse projeto trata-se de uma API REST para conversão monetária entre moedas fiduciárias, crypto e fictícias. Para a execução do cálculo de cotação foi utilizada uma moeda de lasto que pode ser definida via arquivo .env.
+
+O projeto foi desenvolvido utilizado o framework NestJs. Os principais arquivos com a lógica do negócio estão contidos na pasta `/src/modules/currency`.
 
 ## Setup do projeto
 #### Clone o reposítorio para sua máquina local e crei o arquivo .env
@@ -33,7 +35,7 @@ $ npm run start
 
 ### Calcular cotação
 
-`GET /currencies/?from=?&to=?&amount=?`
+`GET /currencies/?from={code}&to={code}&amount={amount}`
 
 | Parâmetro query  | Tipo       | Descrição                                   | Obrigatório | 
 | :---------- | :--------- | :------------------------------------------ | :------------------------------------------ |
@@ -111,7 +113,7 @@ Resposta para ambos os cenários
 
 ### Desabilitar uma moeda
 
-`DELETE /currencies/${code}`
+`DELETE /currencies/{code}`
 
 | Parâmetro url   | Tipo       | Descrição                                   | Obrigatório | 
 | :---------- | :--------- | :------------------------------------------ | :------------------------------------------ |
