@@ -1,28 +1,24 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/VictorNapoles/challenge-bravo/gateway"
 	"github.com/VictorNapoles/challenge-bravo/infra"
-	"log"
+	"strings"
 )
 
 func main() {
 	infra.LoadInfra()
 	gateway.LoadGateways()
 
-	pong, err := infra.GetRedisCacheConnection().Ping(context.Background()).Result()
-	fmt.Println(pong, err)
-
-	err = infra.GetMongoDatabaseConnection().Ping(context.Background(), nil)
+	quotes, err := gateway.GetAwesomeApiClient().GetAvailableQuotes()
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
 
-	price, err := gateway.GetAwesomeApiClient().GetPrice("BRL", "USD")
-	if err != nil {
-		fmt.Println(err)
+	for key, element := range quotes {
+		if strings.HasSuffix(key, "USD") || strings.HasPrefix(key, "USD") {
+			fmt.Println(fmt.Sprintf("%s - %s", key, element))
+		}
 	}
-	fmt.Println(price)
 }
