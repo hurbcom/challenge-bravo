@@ -8,20 +8,24 @@ import (
 
 var (
 	awesomeApiClient awesomeapi.AwesomeApiClient
-	priceRepository  repository.PriceRepository
+	priceRepository  repository.CurrencyRepository
 )
 
 func loadAwesomeApiClient() {
 	awesomeApiClient = awesomeapi.NewAwesomeApiClient(infra.GetHttpClient(), infra.GetEnvironment())
 }
 
-func loadPriceRepository() {
-	priceRepository = repository.NewPriceRepository(infra.GetMongoDatabaseConnection(), infra.GetRedisCacheConnection())
+func loadCurrencyRepository() {
+	databaseName, err := infra.GetDatabaseName()
+	if err != nil {
+		return
+	}
+	priceRepository = repository.NewCurrencyRepository(infra.GetMongoDatabaseConnection(), infra.GetRedisCacheConnection(), databaseName)
 }
 
 func LoadGateways() {
 	loadAwesomeApiClient()
-	loadPriceRepository()
+	loadCurrencyRepository()
 }
 
 func GetAwesomeApiClient() awesomeapi.AwesomeApiClient {
@@ -30,9 +34,9 @@ func GetAwesomeApiClient() awesomeapi.AwesomeApiClient {
 	}
 	return awesomeApiClient
 }
-func GetPriceRepository() repository.PriceRepository {
+func GetCurrencyRepository() repository.CurrencyRepository {
 	if priceRepository == nil {
-		loadPriceRepository()
+		loadCurrencyRepository()
 	}
 	return priceRepository
 }
