@@ -23,7 +23,11 @@ export class CurrencyController {
     constructor(private readonly currencyService: CurrencyService) {}
 
     @Post()
-    @ApiGeneralDocumentation({ model: ResponseCurrencyDto })
+    @ApiGeneralDocumentation({
+        model: ResponseCurrencyDto,
+        description:
+            'Create a new dummy currency or update its exchange rate if it exists',
+    })
     async createQuotation(
         @Body() body: CreateFicticiusDto,
     ): Promise<ResponseCurrencyDto> {
@@ -31,18 +35,16 @@ export class CurrencyController {
     }
 
     @Delete(':code')
-    @ApiGeneralDocumentation({})
+    @ApiGeneralDocumentation({ description: 'Disable a currency by its code' })
     async delete(@Param('code') code: string): Promise<void> {
         return this.currencyService.deleteCoin(code);
     }
 
     @Get()
-    @ApiResponse({
-        status: 200,
-        description: 'Success response',
-        type: ResponseQuotationDto,
+    @ApiGeneralDocumentation({
+        model: ResponseQuotationDto,
+        description: 'Calculate exchange rate between to currencies',
     })
-    @ApiGeneralDocumentation({ model: ResponseQuotationDto })
     async getQuotation(
         @Query('from') from: string,
         @Query('to') to: string,
@@ -51,14 +53,18 @@ export class CurrencyController {
         return this.currencyService.getQuotation(from, to, +amount);
     }
 
-    @Get('/reset')
-    @ApiGeneralDocumentation({})
-    async reset(): Promise<void> {
-        return this.currencyService.reset();
-    }
+    // @Get('/reset')
+    // @ApiGeneralDocumentation({})
+    // async reset(): Promise<void> {
+    //     return this.currencyService.reset();
+    // }
 
     @Get('/list')
-    @ApiGeneralDocumentation({ model: ResponseCurrencyDto, isArray: true })
+    @ApiGeneralDocumentation({
+        model: ResponseCurrencyDto,
+        isArray: true,
+        description: 'List all available currencies',
+    })
     async list(): Promise<ResponseCurrencyDto[]> {
         return this.currencyService.list();
     }

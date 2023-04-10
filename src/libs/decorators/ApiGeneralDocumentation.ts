@@ -6,6 +6,7 @@ import {
     ApiNotFoundResponse,
     ApiInternalServerErrorResponse,
     ApiBadRequestResponse,
+    ApiOperation,
 } from '@nestjs/swagger';
 
 class GlobalEmptyResponseDto {}
@@ -13,9 +14,11 @@ class GlobalEmptyResponseDto {}
 export const ApiGeneralDocumentation = <TModel extends Type<any>>({
     isArray,
     model,
+    description,
 }: {
     isArray?: boolean;
     model?: TModel | GlobalEmptyResponseDto;
+    description?: string;
 }) => {
     let okResponse: object = null;
 
@@ -35,9 +38,11 @@ export const ApiGeneralDocumentation = <TModel extends Type<any>>({
     }
 
     const defaultDecorators = [
+        ApiOperation({ description }),
         ApiExtraModels(model as TModel),
         ApiOkResponse({
             description: 'Success response',
+            schema: okResponse,
         }),
         ApiBadRequestResponse({
             description: 'Bad request',

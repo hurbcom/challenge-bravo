@@ -225,12 +225,13 @@ export class CurrencyService {
             .exec();
     }
 
-    async reset(): Promise<void> {
-        await this.currencyModel.deleteMany({});
-    }
+    // async reset(): Promise<void> {
+    //     await this.currencyModel.deleteMany({});
+    // }
 
     async list(): Promise<ResponseCurrencyDto[]> {
         const aggregateCoins = await this.currencyModel.aggregate([
+            { $match: { deleted: null } },
             {
                 $group: {
                     _id: '$code',
