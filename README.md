@@ -2,7 +2,7 @@
 
 ## Descrição
 
-API REST para conversão monetária entre moedas fiduciárias, crypto e fictícias. Para a execução do cálculo de cotação foi utilizada uma moeda de lasto que pode ser definida via arquivo .env.
+API REST para conversão monetária entre moedas fiduciárias, crypto e fictícias. Para a execução do cálculo de cotação foi utilizada uma moeda de lastro que pode ser definida via arquivo .env.
 
 O projeto foi desenvolvido utilizado o framework NestJs. Os principais arquivos com a lógica do negócio estão contidos na pasta `/src/modules/currency`.
 
