@@ -1,3 +1,4 @@
+
 # Resolução desafio Bravo 
 
 ## Descrição
@@ -19,7 +20,6 @@ $ cp .env.sample .env
 ```bash
 $ docker-compose up
 ```
-
 
 ## Acessar API
 #### Para acessar a API utilize a URL:
@@ -76,7 +76,7 @@ curl --request GET \
 * Campo `quotation` é obrigatório para casos onde os campos `amount` e `baseAmount` não forem informados.
 
 #### Exemplo de requisição e resposta
-Requisição usando `amount` e `baseAmount`
+Requisição usando `amount` e `baseAmount`:
 ```curl
 curl --request POST \
   --url http://0.0.0.0:3000/currencies \
@@ -89,7 +89,7 @@ curl --request POST \
 	"baseAmount": 83.5
 }
 ```
-Requisição usando `quotation`
+Requisição usando `quotation`:
 ```curl
 curl --request POST \
   --url http://0.0.0.0:3000/currencies \
@@ -131,3 +131,13 @@ curl --request DELETE \
 **SUPPORT_CODE**: Moeda utilizada como base para cálculos de cotação, onde todas as cotação serão armazenadas em paridade com a moeda definida.
 
 **REFETCH_TIME_IN_SECONDS** - Tempo em segundos para que as moedas armazenadas sejam definidas como desatualizadas e uma nova sincronização com a API externa seja realizada.
+
+## Ferramentas utilizadas
+
+**Framework NestJs** - Para organização do código e aplicação de inversão de dependências;
+
+**Mongodb** - Utilizado para armazenamento das moedas e suas cotações, sempre que o tempo de expiração for identificado e uma nova consulta na api externa for realizada;
+
+**Jest** - Para testes unitários e de integração;
+
+**Docker** - Visando a facilidade para colocar a aplicação no ar. Já planejando a utilização do mesmo em ambiente de produção.
