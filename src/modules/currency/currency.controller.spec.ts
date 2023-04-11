@@ -1,74 +1,144 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CurrencyController } from './currency.controller';
 import { CurrencyService } from './currency.service';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Connection, connect, Model } from 'mongoose';
-import { Currency, CurrencySchema } from './entities/currency.entity';
-import { getModelToken } from '@nestjs/mongoose';
-import { ResponseCurrencyDtoStub } from 'test/stubs/response-currency.dto.stub';
-import { ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
+import {
+    ResponseQuotationDtoStub,
+    ResponseCurrencyDtoStub,
+} from '../../../test/stubs';
+
+import { CreateFictitiumDto } from './dto';
+
+const responseCurrencyList = [
+    ResponseCurrencyDtoStub(),
+    ResponseCurrencyDtoStub(),
+    ResponseCurrencyDtoStub(),
+];
 
 describe('CurrencyController', () => {
     let currencyController: CurrencyController;
-    let config: ConfigService;
-    let mongod: MongoMemoryServer;
-    let mongoConnection: Connection;
-    let currencyModel: Model<Currency>;
+    let currencyService: CurrencyService;
 
     beforeAll(async () => {
-        mongod = await MongoMemoryServer.create();
-        const uri = mongod.getUri();
-        mongoConnection = (await connect(uri)).connection;
-        currencyModel = mongoConnection.model(Currency.name, CurrencySchema);
         const app: TestingModule = await Test.createTestingModule({
             imports: [HttpModule],
             controllers: [CurrencyController],
             providers: [
-                CurrencyService,
                 {
-                    provide: getModelToken(Currency.name),
-                    useValue: currencyModel,
-                },
-                {
-                    provide: ConfigService,
+                    provide: CurrencyService,
                     useValue: {
-                        get: jest.fn((Key: string, DefaultValue: string) => {
-                            switch (Key) {
-                                case 'FILES':
-                                    return './fakedata/';
-                                    break;
-                                case 'PORT':
-                                    return '9999';
-                                    break;
-                                default:
-                                    return DefaultValue;
-                            }
-                        }),
+                        quotation: jest
+                            .fn()
+                            .mockResolvedValue(ResponseQuotationDtoStub()),
+                        create: jest
+                            .fn()
+                            .mockResolvedValue(ResponseCurrencyDtoStub()),
+                        disable: jest.fn().mockResolvedValue(undefined),
+                        list: jest.fn().mockRejectedValue(responseCurrencyList),
                     },
                 },
             ],
         }).compile();
 
         currencyController = app.get<CurrencyController>(CurrencyController);
-        config = app.get<ConfigService>(ConfigService);
-    });
-
-    afterAll(async () => {
-        await mongoConnection.dropDatabase();
-        await mongoConnection.close();
-        await mongod.stop();
-    });
-
-    afterEach(async () => {
-        const collections = mongoConnection.collections;
-        for (const key in collections) {
-            const collection = collections[key];
-            await collection.deleteMany({});
-        }
+        currencyService = app.get<CurrencyService>(CurrencyService);
     });
 
     it('should be defined', () => {
         expect(currencyController).toBeDefined();
+    });
+
+    describe('quotation', () => {
+        it('should return a calculated quotation', async () => {
+            const quotation = await currencyController.quotation(
+                'USD',
+                'BRL',
+                '100',
+            );
+
+            expect(quotation).toEqual(ResponseQuotationDtoStub());
+            expect(typeof quotation.result).toEqual('number');
+            expect(currencyService.quotation).toHaveBeenCalledWith(
+                'USD',
+                'BRL',
+                100,
+            );
+        });
+
+        it('should throw an bad request exception', () => {
+            jest.spyOn(currencyService, 'quotation').mockRejectedValueOnce(
+                new Error(),
+            );
+
+            expect(
+                currencyController.quotation('USD', 'BRL', '100'),
+            ).rejects.toThrowError();
+        });
+    });
+
+    describe('create', () => {
+        it('should create a new currency using amount and baseAmount', async () => {
+            const body: CreateFictitiumDto = {
+                name: 'PSN Coin',
+                code: 'PSN',
+                baseCode: 'USD',
+                amount: 1250000,
+                baseAmount: 84.5,
+            };
+            const exhangeRate = body.amount / body.baseAmount;
+
+            const create = await currencyController.create(body);
+
+            expect(create).toEqual(ResponseCurrencyDtoStub());
+            expect(create.exchangeRate.toFixed(4)).toEqual(
+                exhangeRate.toFixed(4),
+            );
+            expect(currencyService.create).toHaveBeenCalledWith(body);
+        });
+
+        it('should create a new currency using quotation', async () => {
+            const body = {
+                name: 'PSN Coin',
+                code: 'PSN',
+                baseCode: 'USD',
+                quotation: 14792.899408284,
+            };
+
+            const create = await currencyController.create(body);
+
+            expect(create).toEqual(ResponseCurrencyDtoStub());
+            expect(currencyService.create).toHaveBeenCalledWith(body);
+        });
+
+        it('should throw an bad request exception when same required field was not found', () => {
+            jest.spyOn(currencyService, 'create').mockRejectedValueOnce(
+                new Error(),
+            );
+
+            expect(
+                currencyController.create({
+                    name: 'PSN Coin',
+                    code: 'PSN',
+                    baseCode: 'USD',
+                }),
+            ).rejects.toThrowError();
+        });
+    });
+
+    describe('delete', () => {
+        it('should delete a currency if it exists', async () => {
+            const result = await currencyController.delete('PSN');
+
+            expect(result).toBeUndefined();
+            expect(currencyService.disable).toHaveBeenCalledWith('PSN');
+        });
+
+        it('should throw an bad request exception when currency code not found', () => {
+            jest.spyOn(currencyService, 'disable').mockRejectedValueOnce(
+                new Error(),
+            );
+
+            expect(currencyController.delete('PSN')).rejects.toThrowError();
+        });
     });
 });

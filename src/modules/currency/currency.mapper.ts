@@ -7,7 +7,7 @@ export class CurrencyMapper {
         let dto: ResponseCurrencyDto = {
             code: document.code,
             name: document.name,
-            exchangeRate: document.exchangeRate,
+            exchangeRate: Number(document.exchangeRate),
             type: document.type,
             lastUpdate: format(document.created, 'yyyy-MM-dd HH:mm:ss'),
         };

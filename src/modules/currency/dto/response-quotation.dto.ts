@@ -5,7 +5,7 @@ class QuotationInfoDto {
     exchangeRate: number;
 
     @ApiProperty()
-    lastUpdate: string;
+    lastUpdate?: string;
 }
 
 export class ResponseQuotationDto {

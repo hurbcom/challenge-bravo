@@ -14,8 +14,8 @@ export class Currency {
     @Prop({ required: true })
     exchangeRate: string;
 
-    @Prop({ required: false, default: 'FICTICIUS' })
-    type?: 'FIAT' | 'CRYPTO' | 'FICTICIUS';
+    @Prop({ required: false, default: 'FICTITIUM' })
+    type?: 'FIAT' | 'CRYPTO' | 'FICTITIUM';
 
     @Prop({ required: false, default: 'USD' })
     supportCode?: string;

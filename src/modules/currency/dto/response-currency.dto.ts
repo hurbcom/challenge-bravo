@@ -8,7 +8,7 @@ export class ResponseCurrencyDto {
     code: string;
 
     @ApiProperty()
-    exchangeRate: string;
+    exchangeRate: number;
 
     @ApiProperty()
     type: string;

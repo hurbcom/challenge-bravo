@@ -18,7 +18,7 @@ export class HealthController {
     @Get('/mongodb')
     @ApiGeneralDocumentation({ description: 'Check database health' })
     async mongodb() {
-        const response = await this.currencyService.findOneCurrency('USD');
+        const response = await this.currencyService.findOne('USD');
         if (!response) {
             throw new BadRequestException('Mongodb is not active');
         }

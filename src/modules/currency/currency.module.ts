@@ -21,7 +21,6 @@ export class CurrencyModule implements OnModuleInit {
         private currencyService: CurrencyService,
         private configService: ConfigService,
     ) {}
-
     onModuleInit() {
         const supportCode = this.configService.get('supportCode');
         this.currencyService.syncFiatQuotations(supportCode);

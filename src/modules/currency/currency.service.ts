@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 
 import {
-    CreateFicticiusDto,
+    CreateFictitiumDto,
     ResponseCurrencyDto,
     ResponseQuotationDto,
 } from './dto';
@@ -39,7 +39,7 @@ export class CurrencyService {
      * @param {number} amount - value to convert between currencies
      * @returns {Promise<ResponseQuotationDto>}
      */
-    async getQuotation(
+    async quotation(
         from: string,
         to: string,
         amount: number,
@@ -47,21 +47,21 @@ export class CurrencyService {
         const supportCode = this.configService.get('supportCode');
 
         // Check if the backing currency quote exists
-        let currencyBacking = await this.findOneCurrency(supportCode);
+        let currencyBacking = await this.findOne(supportCode);
         if (!currencyBacking) {
             await this.syncFiatQuotations(supportCode);
             await this.syncCryptoQuotations(supportCode);
         }
 
         // Find in mongodb the from currency
-        const currencyFrom = await this.findOneCurrency(from);
+        const currencyFrom = await this.findOne(from);
         if (!currencyFrom)
             throw new BadRequestException(
                 `The '${from}' currency code informed in the 'from' field is not supported.`,
             );
 
         // Find in mongodb the to currency
-        const currencyTo = await this.findOneCurrency(to);
+        const currencyTo = await this.findOne(to);
         if (!currencyTo)
             throw new BadRequestException(
                 `The '${to}' currency code informed in the 'to' field is not supported.`,
@@ -73,7 +73,7 @@ export class CurrencyService {
         return {
             info: {
                 exchangeRate,
-                lastUpdate: format(currencyFrom.created, 'yyy-MM-dd HH:mm:ss'),
+                lastUpdate: format(new Date(), 'yyy-MM-dd HH:mm:ss'),
             },
             result: exchangeRate * amount,
         };
@@ -176,7 +176,6 @@ export class CurrencyService {
             this.logger.debug('Sync CRYPTO');
             return;
         } catch (error) {
-            console.log(error);
             throw new HttpException(
                 error.message ?? error.response,
                 HttpStatus.BAD_REQUEST,
@@ -191,8 +190,8 @@ export class CurrencyService {
      * @returns {Promise<Currency>}
      */
     async saveCurrency(data: Currency): Promise<Currency> {
-        const createdCoin = new this.currencyModel(data);
-        return createdCoin.save();
+        const createdCoin = await this.currencyModel.create(data);
+        return createdCoin;
     }
 
     /**
@@ -205,7 +204,7 @@ export class CurrencyService {
      * @param {string} code - Currency code to search
      * @returns {Promise<Currency>}
      */
-    async findOneCurrency(code: string): Promise<Currency> {
+    async findOne(code: string): Promise<Currency> {
         return this.currencyModel
             .findOne({
                 code,
@@ -219,7 +218,7 @@ export class CurrencyService {
                             ),
                         },
                     },
-                    { type: 'FICTICIUS' },
+                    { type: 'FICTITIUM' },
                 ],
                 supportCode: this.configService.get('supportCode'),
             })
@@ -249,44 +248,48 @@ export class CurrencyService {
         });
     }
 
-    async createQuotation(
-        ficticiusDto: CreateFicticiusDto,
+    async create(
+        fictitiumDto: CreateFictitiumDto,
     ): Promise<ResponseCurrencyDto> {
         const supportCode = this.configService.get('supportCode');
 
-        let coin = await this.findOneCurrency(ficticiusDto.code);
-        if (coin && coin.type !== 'FICTICIUS')
+        console.log(fictitiumDto);
+
+        let coin = await this.findOne(fictitiumDto.code);
+        if (coin && coin.type !== 'FICTITIUM')
             throw new BadRequestException(
-                `currency with code "${ficticiusDto.code}" cannot be created as it exists as FIAT or Crypto`,
+                `currency with code "${fictitiumDto.code}" cannot be created as it exists as FIAT or Crypto`,
             );
 
-        if (ficticiusDto.quotation) {
-            ficticiusDto.amount = ficticiusDto.quotation;
-            ficticiusDto.baseAmount = 1;
+        if (fictitiumDto.quotation) {
+            fictitiumDto.amount = fictitiumDto.quotation;
+            fictitiumDto.baseAmount = 1;
         }
 
-        const backing = await this.getQuotation(
-            ficticiusDto.baseCode,
+        console.log(supportCode);
+
+        const backing = await this.quotation(
+            fictitiumDto.baseCode,
             supportCode, //backingCode
             1,
         );
 
         const createdCurrency = await this.saveCurrency({
-            name: ficticiusDto.name,
-            code: ficticiusDto.code,
+            name: fictitiumDto.name,
+            code: fictitiumDto.code,
             exchangeRate: String(
-                ficticiusDto.amount /
-                    (ficticiusDto.baseAmount * backing.result),
+                fictitiumDto.amount /
+                    (fictitiumDto.baseAmount * backing.result),
             ),
             supportCode,
-            type: 'FICTICIUS',
+            type: 'FICTITIUM',
             created: new Date(),
         });
 
         return CurrencyMapper.toDto(createdCurrency);
     }
 
-    async deleteCoin(code: string): Promise<void> {
+    async disable(code: string): Promise<void> {
         const updateResponse = await this.currencyModel.updateMany(
             { code: code.toUpperCase(), deleted: null },
             { deleted: new Date() },

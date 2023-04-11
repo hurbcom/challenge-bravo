@@ -108,7 +108,7 @@ Resposta para ambos os cenários
 	"code": "PSN",
 	"name": "PSN Coin",
 	"exchangeRate": "74844.67455621302",
-	"type": "FICTICIUS",
+	"type": "FICTITIUM",
 	"lastUpdate": "2023-04-09 22:00:04"
 }
 ```

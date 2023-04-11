@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString, ValidateIf } from 'class-validator';
 
-export class CreateFicticiusDto {
+export class CreateFictitiumDto {
     @ApiProperty({ example: 'Hotel Urbano Coin' })
     @IsString()
     name: string;
