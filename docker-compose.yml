@@ -1,0 +1,14 @@
+version: '3.1'
+services:
+  mongo-db:
+    image: mongo
+    ports:
+      - 27017:27017
+  api:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo-db
