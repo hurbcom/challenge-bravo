@@ -33,7 +33,7 @@ type (
 )
 
 func NewQuoteRepository(redis cache.RedisCacheConnection) QuoteRepository {
-	return quoteRepositoryImpl{
+	return &quoteRepositoryImpl{
 		redis: redis,
 	}
 }
