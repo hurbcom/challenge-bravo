@@ -1,0 +1,29 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { format } from 'date-fns';
+import { Document } from 'mongoose';
+
+export type CurrencyDocument = Currency & Document;
+@Schema()
+export class Currency {
+    @Prop({ required: true })
+    name: string;
+
+    @Prop({ required: true })
+    code: string;
+
+    @Prop({ required: true })
+    exchangeRate: string;
+
+    @Prop({ required: false, default: 'FICTITIUM' })
+    type?: 'FIAT' | 'CRYPTO' | 'FICTITIUM';
+
+    @Prop({ required: false, default: 'USD' })
+    supportCode?: string;
+
+    @Prop()
+    created: Date;
+
+    @Prop()
+    deleted?: Date;
+}
+export const CurrencySchema = SchemaFactory.createForClass(Currency);
