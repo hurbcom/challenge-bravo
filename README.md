@@ -1,82 +1,143 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+# Resolução desafio Bravo 
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+## Descrição
 
-The API must convert between the following currencies:
+API REST para conversão monetária entre moedas fiduciárias, crypto e fictícias. Para a execução do cálculo de cotação foi utilizada uma moeda de lastro que pode ser definida via arquivo .env.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+O projeto foi desenvolvido utilizado o framework NestJs. Os principais arquivos com a lógica do negócio estão contidos na pasta `/src/modules/currency`.
 
-Other coins could be added as usage.
+Nenhum teste em animais foi realizado durante o desenvolvimento do projeto.
+## Setup do projeto
+#### Clone o reposítorio para sua máquina local e crei o arquivo .env
+```bash
+$ git clone git@github.com:jeffersonalexandro/challenge-bravo.git
+$ cd ./challenge-bravo 
+$ cp .env.sample .env
+```
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+#### Inicialização do projeto
+```bash
+$ docker-compose up
+```
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+## Acessar API
+#### Para acessar a API utilize a URL:
+```bash
+http://0.0.0.0:3000
+```
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+#### Swagger autogerado:
+```bash
+http://0.0.0.0:3000/docs
+```
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+## Documentação da API
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+### Calcular cotação
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+`GET /currencies/?from={code}&to={code}&amount={amount}`
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+| Parâmetro query  | Tipo       | Descrição                                   | Obrigatório | 
+| :---------- | :--------- | :------------------------------------------ | :------------------------------------------ |
+| `from` | `string` | Moeda base. Indica em qual moeda o valor informado para cálculo encontra-se | Sim |
+| `to` | `string` | Moeda alvo. Define a moeda de saída do resultado do cálculo | Sim |
+| `amount` | `number` | Valor total que será convertido | Sim |
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+#### Exemplo de requisição e resposta
+```curl
+curl --request GET \
+  --url 'http://0.0.0.0:3000/currencies?from=USD&to=BRL&amount=83'
+```
+```javascript
+{
+	"info": {
+		"exchangeRate": 5.0595,
+		"lastUpdate": "2023-04-09 22:47:39"
+	},
+	"result": 419.9385
+}
+```
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+### Criar uma moeda fictícia
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+`POST /currencies/`
 
-## Requirements
+| Parâmetro body  | Tipo       | Descrição                                   | Obrigatório                             | 
+| :---------- | :--------- | :------------------------------------------ | :------------------------------------------ |
+| `name`      | `string` | Nome da moeda que será criada | Sim |
+| `code`      | `string` | Código da moeda que será criada | Sim |
+| `baseCode`      | `string` | Código da moeda base | Sim |
+| `amount`      | `number` | Valor que referencia o código informado em `code`, utilizado para cálculo da cotação | Não |
+| `baseAmount`      | `number` | Valor que referencia o código informado em `baseCode`, utilizado para cálculo da cotação  | Não |
+| `quotation`      | `number` | Valor calculado da cotação entre `code` e `baseCode` | Sim* |
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+* Campo `quotation` é obrigatório para casos onde os campos `amount` e `baseAmount` não forem informados.
 
-## Evaluation criteria
+#### Exemplo de requisição e resposta
+Requisição usando `amount` e `baseAmount`:
+```curl
+curl --request POST \
+  --url http://0.0.0.0:3000/currencies \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"name": "PSN Coin",
+	"code": "PSN",
+	"baseCode": "BRL",
+	"amount": 1250000,
+	"baseAmount": 83.5
+}
+```
+Requisição usando `quotation`:
+```curl
+curl --request POST \
+  --url http://0.0.0.0:3000/currencies \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"name": "PSN Coin",
+	"code": "PSN",
+	"baseCode": "BRL",
+	"quotation": 14970.0598802395
+}
+```
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+Resposta para ambos os cenários
+```javascript
+{
+	"code": "PSN",
+	"name": "PSN Coin",
+	"exchangeRate": "74844.67455621302",
+	"type": "FICTITIUM",
+	"lastUpdate": "2023-04-09 22:00:04"
+}
+```
 
-## Doubts
+### Desabilitar uma moeda
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+`DELETE /currencies/{code}`
 
-Godspeed! ;)
+| Parâmetro url   | Tipo       | Descrição                                   | Obrigatório | 
+| :---------- | :--------- | :------------------------------------------ | :------------------------------------------ |
+| `code` | `string` | Código da moeda que será desabilitada | Sim |
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+#### Exemplo de requisição
+```curl
+curl --request DELETE \
+  --url http://0.0.0.0:3000/currencies/HURB
+```
+## Variáveis de ambiente
+
+**SUPPORT_CODE**: Moeda utilizada como base para cálculos de cotação, onde todas as cotação serão armazenadas em paridade com a moeda definida.
+
+**REFETCH_TIME_IN_SECONDS** - Tempo em segundos para que as moedas armazenadas sejam definidas como desatualizadas e uma nova sincronização com a API externa seja realizada.
+
+## Ferramentas utilizadas
+
+**Framework NestJs** - Para organização do código e aplicação de inversão de dependências;
+
+**Mongodb** - Utilizado para armazenamento das moedas e suas cotações, sempre que o tempo de expiração for identificado e uma nova consulta na api externa for realizada;
+
+**Jest** - Para testes unitários e de integração;
+
+**Docker** - Visando a facilidade para colocar a aplicação no ar. Já planejando a utilização do mesmo em ambiente de produção.
