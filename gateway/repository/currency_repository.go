@@ -19,13 +19,14 @@ type (
 		Code                  string             `bson:"code"`
 		CurrencyName          string             `bson:"currencyName"`
 		UnitValueBankCurrency float64            `bson:"unitValueBankCurrency"`
+        IsBankCurrency        bool               `bson:"isBankCurrency"`
 		Quotable              bool               `bson:"quotable"`
 	}
 
 	CurrencyRepository interface {
 		GetByCode(code string) (CurrencyEntity, error)
 		Save(entity CurrencyEntity) (CurrencyEntity, error)
-		Remove(code string) (int64, error)
+		Delete(code string) (int64, error)
 	}
 
 	currencyRepositoryImpl struct {
@@ -65,7 +66,7 @@ func (c currencyRepositoryImpl) Save(entity CurrencyEntity) (CurrencyEntity, err
 	return currency, nil
 }
 
-func (c currencyRepositoryImpl) Remove(code string) (int64, error) {
+func (c currencyRepositoryImpl) Delete(code string) (int64, error) {
 	filter := bson.D{{"code", code}}
 	result, err := c.getCollection().DeleteMany(context.TODO(), filter, nil)
 
