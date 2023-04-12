@@ -19,7 +19,7 @@ type (
 		Code                  string             `bson:"code"`
 		CurrencyName          string             `bson:"currencyName"`
 		UnitValueBankCurrency float64            `bson:"unitValueBankCurrency"`
-        IsBankCurrency        bool               `bson:"isBankCurrency"`
+		IsBankCurrency        bool               `bson:"isBankCurrency"`
 		Quotable              bool               `bson:"quotable"`
 	}
 
