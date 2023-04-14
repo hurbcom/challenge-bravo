@@ -35,6 +35,7 @@ services:
             - CACHE_HOST=redis
             - CACHE_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
             - CACHE_PORT=6379
+            - BANK_CURRENCY_CODE=USD
         depends_on:
             - mongo
             - redis
