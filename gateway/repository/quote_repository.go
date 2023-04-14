@@ -22,8 +22,8 @@ type (
 	}
 	QuoteRepository interface {
 		CheckIsAvailableQuote(from, to string) (bool, error)
-		SaveQuote(entity QuoteEntity) error
-		GetQuote(from, to string) (QuoteEntity, error)
+		SaveQuote(entity *QuoteEntity) error
+		GetQuote(from, to string) (*QuoteEntity, error)
 		SetAvailableQuote(from, to string) error
 	}
 
@@ -38,7 +38,7 @@ func NewQuoteRepository(redis cache.RedisCacheConnection) QuoteRepository {
 	}
 }
 
-func (q quoteRepositoryImpl) CheckIsAvailableQuote(from, to string) (bool, error) {
+func (q *quoteRepositoryImpl) CheckIsAvailableQuote(from, to string) (bool, error) {
 	result, err := q.redis.Get(context.Background(), getKey("%s%s%s", AVAILABLE_QUOTE_KEY, from, to)).Bool()
 	if err != nil {
 		return false, err
@@ -47,7 +47,7 @@ func (q quoteRepositoryImpl) CheckIsAvailableQuote(from, to string) (bool, error
 	return result, nil
 }
 
-func (q quoteRepositoryImpl) SaveQuote(entity QuoteEntity) error {
+func (q *quoteRepositoryImpl) SaveQuote(entity *QuoteEntity) error {
 	jsonResult, err := json.Marshal(entity)
 
 	if err != nil {
@@ -63,25 +63,25 @@ func (q quoteRepositoryImpl) SaveQuote(entity QuoteEntity) error {
 	return nil
 }
 
-func (q quoteRepositoryImpl) GetQuote(from, to string) (QuoteEntity, error) {
+func (q *quoteRepositoryImpl) GetQuote(from, to string) (*QuoteEntity, error) {
 	result, err := q.redis.Get(context.Background(), getKey("%s%s%s", QUOTE_KEY, from, to)).Bytes()
 
 	if err != nil {
-		return QuoteEntity{}, err
+		return nil, err
 	}
 	var quote QuoteEntity
 
 	err = json.Unmarshal(result, &quote)
 
 	if err != nil {
-		return QuoteEntity{}, err
+		return nil, err
 	}
 
-	return quote, nil
+	return &quote, nil
 
 }
 
-func (q quoteRepositoryImpl) SetAvailableQuote(from, to string) error {
+func (q *quoteRepositoryImpl) SetAvailableQuote(from, to string) error {
 	cmd := q.redis.Set(context.TODO(), getKey("%s%s%s", AVAILABLE_QUOTE_KEY, from, to), true, 0)
 
 	if cmd.Err() != nil {

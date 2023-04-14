@@ -23,7 +23,7 @@ type (
     }
 
     AwesomeApiClient interface {
-        GetQuote(from, to string) (QuoteDto, error)
+        GetQuote(from, to string) (*QuoteDto, error)
         GetAvailableQuotes() (map[string]string, error)
     }
 
@@ -37,18 +37,20 @@ func NewAwesomeApiClient(httpClient http_client.HttpClient, environment env.Envi
     return &awesomeApiClientImpl{httpClient, environment}
 }
 
-func (a *awesomeApiClientImpl) GetQuote(from, to string) (QuoteDto, error) {
+func (a *awesomeApiClientImpl) GetQuote(from, to string) (*QuoteDto, error) {
     url := a.getUrl(fmt.Sprintf("/last/%s-%s", from, to))
     r, err := a.httpClient.Get(url)
 
     if err != nil {
-        return QuoteDto{}, err
+        return nil, err
     }
     defer r.Body.Close()
 
     var result QuoteResultDto
     json.NewDecoder(r.Body).Decode(&result)
-    return result[fmt.Sprintf("%s%s", from, to)], nil
+    quoteDto := result[fmt.Sprintf("%s%s", from, to)]
+
+    return &quoteDto, nil
 }
 
 func (a *awesomeApiClientImpl) GetAvailableQuotes() (map[string]string, error) {
