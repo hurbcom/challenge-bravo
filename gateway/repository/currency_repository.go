@@ -26,6 +26,7 @@ type (
 		CurrencyName          string             `bson:"currencyName"`
 		UnitValueBankCurrency float64            `bson:"unitValueBankCurrency"`
 		QuoteType             QuoteTypeEntity    `bson:"quoteType"`
+		Deletable             bool               `bson:"deletable"`
 	}
 
 	CurrencyRepository interface {
