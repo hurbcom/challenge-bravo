@@ -27,6 +27,10 @@ type (
 	}
 )
 
+func NewSaveCurrency(environment env.Environment, currencyRepository repository.CurrencyRepository, validateNewCurrency ValidateNewCurrency, getQuoteType GetQuoteType, getQuoteToBankCurrency GetQuoteToBankCurrency, getQuoteFromBankCurrency GetQuoteFromBankCurrency) SaveCurrency {
+	return &saveCurrencyImpl{environment: environment, currencyRepository: currencyRepository, validateNewCurrency: validateNewCurrency, getQuoteType: getQuoteType, getQuoteToBankCurrency: getQuoteToBankCurrency, getQuoteFromBankCurrency: getQuoteFromBankCurrency}
+}
+
 func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error) {
 	quoteType, err := s.getQuoteType.Execute(&GetQuoteTypeDto{Code: dto.Code})
 	if err != nil {
@@ -59,6 +63,7 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 			CurrencyName:          regex.Split(quote.Name, -1)[0],
 			UnitValueBankCurrency: quote.Amount,
 			QuoteType:             repository.QuoteToBankCurrency,
+			Deletable:             true,
 		})
 
 	case domain.QuoteFromBankCurrency:
@@ -73,6 +78,7 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 			CurrencyName:          regex.Split(quote.Name, -1)[1],
 			UnitValueBankCurrency: quote.Amount,
 			QuoteType:             repository.QuoteFromBankCurrency,
+			Deletable:             true,
 		})
 
 	default:
@@ -81,6 +87,7 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 			CurrencyName:          dto.CurrencyName,
 			UnitValueBankCurrency: dto.UnitValueBankCurrency,
 			QuoteType:             repository.QuoteNotAvailable,
+			Deletable:             true,
 		})
 	}
 

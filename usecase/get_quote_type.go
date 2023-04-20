@@ -20,6 +20,10 @@ type (
 	}
 )
 
+func NewGetQuoteType(quoteRepository repository.QuoteRepository, environment env.Environment) GetQuoteType {
+	return &getQuoteTypeImpl{quoteRepository: quoteRepository, environment: environment}
+}
+
 func (s *getQuoteTypeImpl) Execute(dto *GetQuoteTypeDto) (domain.QuoteType, error) {
 	bankCurrencyCode, err := s.environment.Get(BANK_CURRENCY_CODE_ENV_VAR)
 	if err != nil {
