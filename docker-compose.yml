@@ -25,6 +25,7 @@ services:
         ports:
             - '8080:8080'
         environment:
+            - APP_URL=http://localhost:8080
             - ENV=DOCKER
             - API_AWESOME_BASE_URL=https://economia.awesomeapi.com.br
             - DATABASE_HOST=mongo
@@ -36,6 +37,8 @@ services:
             - CACHE_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
             - CACHE_PORT=6379
             - BANK_CURRENCY_CODE=USD
+            - GIN_MODE=release
+            - INITIAL_CURRENCIES=USD,BRL,EUR,BTC,ETH
         depends_on:
             - mongo
             - redis
