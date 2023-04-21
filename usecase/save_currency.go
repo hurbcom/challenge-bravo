@@ -38,8 +38,10 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 	}
 
 	err = s.validateNewCurrency.Execute(&ValidateNewCurrencyDto{
-		CurrencyCode: dto.Code,
-		quoteType:    quoteType,
+		CurrencyCode:          dto.Code,
+		quoteType:             quoteType,
+		UnitValueBankCurrency: dto.UnitValueBankCurrency,
+		CurrencyName:          dto.CurrencyName,
 	})
 
 	if err != nil {

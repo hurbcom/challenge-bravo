@@ -56,7 +56,7 @@ func (g *getQuoteImpl) Execute(dto *GetQuoteDto) (*domain.Quote, error) {
 		return nil, err
 	}
 
-	quoteAmount := fromBankCurrencyValue * toBankCurrencyValue
+	quoteAmount := (dto.Amount * fromBankCurrencyValue) * (1 / toBankCurrencyValue)
 
 	return &domain.Quote{
 		From:   dto.From,

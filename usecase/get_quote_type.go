@@ -25,7 +25,7 @@ func NewGetQuoteType(quoteRepository repository.QuoteRepository, environment env
 }
 
 func (s *getQuoteTypeImpl) Execute(dto *GetQuoteTypeDto) (domain.QuoteType, error) {
-	bankCurrencyCode, err := s.environment.Get(BANK_CURRENCY_CODE_ENV_VAR)
+	bankCurrencyCode, err := s.environment.Get(BankCurrencyCodeEnvVar)
 	if err != nil {
 		return domain.QuoteNotAvailable, err
 	}

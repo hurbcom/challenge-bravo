@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	BANK_CURRENCY_CODE_ENV_VAR = "BANK_CURRENCY_CODE"
+	BankCurrencyCodeEnvVar = "BANK_CURRENCY_CODE"
 )
 
 type (
@@ -47,7 +47,7 @@ func loadSaveCurrency() {
 	saveCurrency = NewSaveCurrency(infra.GetEnvironment(), gateway.GetCurrencyRepository(), ValidateNewCurrencyUsecase(), GetQuoteTypeUsecase(), GetQuoteToBankCurrencyUsecase(), GetQuoteFromBankCurrencyUsecase())
 }
 func loadValidateNewCurrency() {
-	validateNewCurrency = NewValidateNewCurrency()
+	validateNewCurrency = NewValidateNewCurrency(gateway.GetCurrencyRepository())
 }
 func loadDeleteCurrency() {
 	deleteCurrency = NewDeleteCurrency(gateway.GetCurrencyRepository())
@@ -56,7 +56,7 @@ func loadGetQuote() {
 	getQuote = NewGetQuote(gateway.GetCurrencyRepository(), GetExternalQuoteUsecase())
 }
 
-func LoadUsecase() {
+func LoadUsecases() {
 	loadGetExternalQuote()
 	loadGetQuoteFromBankCurrency()
 	loadGetQuoteToBankCurrency()
@@ -108,12 +108,12 @@ func SaveCurrencyUsecase() SaveCurrency {
 	}
 	return saveCurrency
 }
-func DeleteCurrencyUsecase() GetQuote {
+func DeleteCurrencyUsecase() DeleteCurrency {
 
 	if deleteCurrency == nil {
 		loadDeleteCurrency()
 	}
-	return getQuote
+	return deleteCurrency
 }
 func GetQuoteUsecase() GetQuote {
 

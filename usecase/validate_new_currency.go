@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"github.com/VictorNapoles/challenge-bravo/domain"
+	"github.com/VictorNapoles/challenge-bravo/gateway/repository"
 )
 
 type (
@@ -15,14 +16,26 @@ type (
 		Execute(dto *ValidateNewCurrencyDto) error
 	}
 
-	validateNewCurrencyImpl struct{}
+	validateNewCurrencyImpl struct {
+		currencyRepository repository.CurrencyRepository
+	}
 )
 
-func NewValidateNewCurrency() ValidateNewCurrency {
-	return &validateNewCurrencyImpl{}
+func NewValidateNewCurrency(currencyRepository repository.CurrencyRepository) ValidateNewCurrency {
+	return &validateNewCurrencyImpl{currencyRepository}
 }
 
 func (s *validateNewCurrencyImpl) Execute(dto *ValidateNewCurrencyDto) error {
+	currencyEntity, err := s.currencyRepository.GetByCode(dto.CurrencyCode)
+	if err != nil {
+		return err
+	}
+
+	if currencyEntity.Code != "" {
+		return &UsecaseError{
+			Message: "Currency already registered in the database",
+		}
+	}
 	var availableQuote = dto.quoteType == domain.QuoteToBankCurrency || dto.quoteType == domain.QuoteFromBankCurrency
 
 	if availableQuote && dto.UnitValueBankCurrency != 0 {
