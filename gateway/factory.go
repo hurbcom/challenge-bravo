@@ -9,7 +9,7 @@ import (
 var (
 	awesomeApiClient   awesomeapi.AwesomeApiClient
 	currencyRepository repository.CurrencyRepository
-	quoteRepository repository.QuoteRepository
+	quoteRepository    repository.QuoteRepository
 )
 
 func loadAwesomeApiClient() {
@@ -25,15 +25,14 @@ func loadCurrencyRepository() {
 }
 
 func loadQuoteRepository() {
-    quoteRepository = repository.NewQuoteRepository(infra.GetRedisCacheConnection())
+	quoteRepository = repository.NewQuoteRepository(infra.GetRedisCacheConnection())
 }
 
 func LoadGateways() {
 	loadAwesomeApiClient()
 	loadCurrencyRepository()
-    loadQuoteRepository()
+	loadQuoteRepository()
 }
-
 
 func GetAwesomeApiClient() awesomeapi.AwesomeApiClient {
 	if awesomeApiClient == nil {
@@ -51,7 +50,11 @@ func GetCurrencyRepository() repository.CurrencyRepository {
 
 func GetQuoteRepository() repository.QuoteRepository {
 	if quoteRepository == nil {
-        loadQuoteRepository()
+		loadQuoteRepository()
 	}
 	return quoteRepository
+}
+
+func loadInitialData() {
+
 }
