@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	CURRENCY_COLLECTION = "currency"
+	CurrencyCollection = "currency"
 
 	QuoteToBankCurrency QuoteTypeEntity = iota
 	QuoteFromBankCurrency
@@ -53,7 +53,7 @@ func NewCurrencyRepository(db database.MongoDatabaseConnection, cache cache.Redi
 func (c *currencyRepositoryImpl) GetByCode(code string) (*CurrencyEntity, error) {
 	var currency CurrencyEntity
 	err := c.getCollection().FindOne(context.TODO(), bson.D{{"code", code}}).Decode(&currency)
-	if err != nil {
+	if err != nil && err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	return &currency, nil
@@ -84,6 +84,6 @@ func (c *currencyRepositoryImpl) Delete(code string) (int64, error) {
 }
 func (c *currencyRepositoryImpl) getCollection() *mongo.Collection {
 	database := c.db.Database(c.databaseName)
-	collection := database.Collection(CURRENCY_COLLECTION)
+	collection := database.Collection(CurrencyCollection)
 	return collection
 }

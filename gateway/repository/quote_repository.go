@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/VictorNapoles/challenge-bravo/infra/cache"
+	"github.com/go-redis/redis/v8"
 	"time"
 )
 
 const (
-	AVAILABLE_QUOTE_KEY = "qoute:available:"
-	QUOTE_KEY           = "qoute:"
+	AvailableQuoteKey = "qoute:available:"
+	QuoteKey          = "qoute:"
 )
 
 type (
@@ -39,9 +40,15 @@ func NewQuoteRepository(redis cache.RedisCacheConnection) QuoteRepository {
 }
 
 func (q *quoteRepositoryImpl) CheckIsAvailableQuote(from, to string) (bool, error) {
-	result, err := q.redis.Get(context.Background(), getKey("%s%s%s", AVAILABLE_QUOTE_KEY, from, to)).Bool()
+	result, err := q.redis.Get(context.Background(), getKey("%s%s%s", AvailableQuoteKey, from, to)).Bool()
 	if err != nil {
-		return false, err
+		switch err {
+		case redis.Nil:
+			return false, nil
+		default:
+			return false, err
+		}
+
 	}
 
 	return result, nil
@@ -54,7 +61,7 @@ func (q *quoteRepositoryImpl) SaveQuote(entity *QuoteEntity) error {
 		return err
 	}
 
-	cmd := q.redis.Set(context.Background(), getKey("%s%s%s", QUOTE_KEY, entity.From, entity.To), jsonResult, time.Second)
+	cmd := q.redis.Set(context.Background(), getKey("%s%s%s", QuoteKey, entity.From, entity.To), jsonResult, time.Second)
 
 	if cmd.Err() != nil {
 		return cmd.Err()
@@ -64,7 +71,7 @@ func (q *quoteRepositoryImpl) SaveQuote(entity *QuoteEntity) error {
 }
 
 func (q *quoteRepositoryImpl) GetQuote(from, to string) (*QuoteEntity, error) {
-	result, err := q.redis.Get(context.Background(), getKey("%s%s%s", QUOTE_KEY, from, to)).Bytes()
+	result, err := q.redis.Get(context.Background(), getKey("%s%s%s", QuoteKey, from, to)).Bytes()
 
 	if err != nil {
 		return nil, err
@@ -82,7 +89,7 @@ func (q *quoteRepositoryImpl) GetQuote(from, to string) (*QuoteEntity, error) {
 }
 
 func (q *quoteRepositoryImpl) SetAvailableQuote(from, to string) error {
-	cmd := q.redis.Set(context.TODO(), getKey("%s%s%s", AVAILABLE_QUOTE_KEY, from, to), true, 0)
+	cmd := q.redis.Set(context.TODO(), getKey("%s%s%s", AvailableQuoteKey, from, to), true, 0)
 
 	if cmd.Err() != nil {
 		return cmd.Err()
