@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	CACHE_HOST_ENV_VAR     = "CACHE_HOST"
-	CACHE_PASSWORD_ENV_VAR = "CACHE_PASSWORD"
-	CACHE_PORT_ENV_VAR     = "CACHE_PORT"
+	CacheHostEnvVar     = "CACHE_HOST"
+	CachePasswordEnvVar = "CACHE_PASSWORD"
+	CachePortEnvVar     = "CACHE_PORT"
 )
 
 type (
@@ -25,17 +25,17 @@ type (
 
 func NewCacheConnection(environment env.Environment) (RedisCacheConnection, error) {
 
-	host, err := environment.Get(CACHE_HOST_ENV_VAR)
+	host, err := environment.Get(CacheHostEnvVar)
 	if err != nil {
 		return nil, err
 	}
 
-	port, err := environment.Get(CACHE_PORT_ENV_VAR)
+	port, err := environment.Get(CachePortEnvVar)
 	if err != nil {
 		return nil, err
 	}
 
-	password, err := environment.Get(CACHE_PASSWORD_ENV_VAR)
+	password, err := environment.Get(CachePasswordEnvVar)
 	if err != nil {
 		return nil, err
 	}
