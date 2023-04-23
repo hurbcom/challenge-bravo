@@ -51,6 +51,7 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 	regex := regexp.MustCompile(`/`)
 	var quote *domain.Quote
 	var currencyEntity *repository.CurrencyEntity
+	var amount float64
 
 	switch quoteType {
 	case domain.QuoteToBankCurrency:
@@ -60,12 +61,12 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 			return nil, err
 		}
 
+		amount = quote.Amount
 		currencyEntity, err = s.currencyRepository.Save(&repository.CurrencyEntity{
-			Code:                  dto.Code,
-			CurrencyName:          regex.Split(quote.Name, -1)[0],
-			UnitValueBankCurrency: quote.Amount,
-			QuoteType:             repository.QuoteToBankCurrency,
-			Deletable:             true,
+			Code:         dto.Code,
+			CurrencyName: regex.Split(quote.Name, -1)[0],
+			QuoteType:    repository.QuoteToBankCurrency,
+			Deletable:    true,
 		})
 
 	case domain.QuoteFromBankCurrency:
@@ -75,15 +76,16 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 			return nil, err
 		}
 
+		amount = quote.Amount
 		currencyEntity, err = s.currencyRepository.Save(&repository.CurrencyEntity{
-			Code:                  dto.Code,
-			CurrencyName:          regex.Split(quote.Name, -1)[1],
-			UnitValueBankCurrency: quote.Amount,
-			QuoteType:             repository.QuoteFromBankCurrency,
-			Deletable:             true,
+			Code:         dto.Code,
+			CurrencyName: regex.Split(quote.Name, -1)[1],
+			QuoteType:    repository.QuoteFromBankCurrency,
+			Deletable:    true,
 		})
 
 	default:
+		amount = dto.UnitValueBankCurrency
 		currencyEntity, err = s.currencyRepository.Save(&repository.CurrencyEntity{
 			Code:                  dto.Code,
 			CurrencyName:          dto.CurrencyName,
@@ -100,6 +102,6 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 	return &domain.Currency{
 		Code:                  currencyEntity.Code,
 		CurrencyName:          currencyEntity.CurrencyName,
-		UnitValueBankCurrency: currencyEntity.UnitValueBankCurrency,
+		UnitValueBankCurrency: amount,
 	}, nil
 }

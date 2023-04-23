@@ -43,6 +43,11 @@ func (s *validateNewCurrencyImpl) Execute(dto *ValidateNewCurrencyDto) error {
 			Message: "It is a quotable currency. The unit value of bank currency must be null or zero",
 		}
 	}
+	if availableQuote && dto.CurrencyName != "" {
+		return &UsecaseError{
+			Message: "It is a quotable currency. The currency name must be null",
+		}
+	}
 
 	if !availableQuote && dto.UnitValueBankCurrency == 0 {
 		return &UsecaseError{

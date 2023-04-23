@@ -74,7 +74,12 @@ func (q *quoteRepositoryImpl) GetQuote(from, to string) (*QuoteEntity, error) {
 	result, err := q.redis.Get(context.Background(), getKey("%s%s%s", QuoteKey, from, to)).Bytes()
 
 	if err != nil {
-		return nil, err
+		switch err {
+		case redis.Nil:
+			return &QuoteEntity{}, nil
+		default:
+			return nil, err
+		}
 	}
 	var quote QuoteEntity
 
