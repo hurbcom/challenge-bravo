@@ -3,7 +3,6 @@ package usecase
 import (
 	"github.com/VictorNapoles/challenge-bravo/domain"
 	"github.com/VictorNapoles/challenge-bravo/gateway/repository"
-	env "github.com/VictorNapoles/challenge-bravo/infra/environment"
 	"regexp"
 )
 
@@ -18,7 +17,6 @@ type (
 	}
 
 	saveCurrencyImpl struct {
-		environment              env.Environment
 		currencyRepository       repository.CurrencyRepository
 		validateNewCurrency      ValidateNewCurrency
 		getQuoteType             GetQuoteType
@@ -27,8 +25,8 @@ type (
 	}
 )
 
-func NewSaveCurrency(environment env.Environment, currencyRepository repository.CurrencyRepository, validateNewCurrency ValidateNewCurrency, getQuoteType GetQuoteType, getQuoteToBankCurrency GetQuoteToBankCurrency, getQuoteFromBankCurrency GetQuoteFromBankCurrency) SaveCurrency {
-	return &saveCurrencyImpl{environment: environment, currencyRepository: currencyRepository, validateNewCurrency: validateNewCurrency, getQuoteType: getQuoteType, getQuoteToBankCurrency: getQuoteToBankCurrency, getQuoteFromBankCurrency: getQuoteFromBankCurrency}
+func NewSaveCurrency(currencyRepository repository.CurrencyRepository, validateNewCurrency ValidateNewCurrency, getQuoteType GetQuoteType, getQuoteToBankCurrency GetQuoteToBankCurrency, getQuoteFromBankCurrency GetQuoteFromBankCurrency) SaveCurrency {
+	return &saveCurrencyImpl{currencyRepository: currencyRepository, validateNewCurrency: validateNewCurrency, getQuoteType: getQuoteType, getQuoteToBankCurrency: getQuoteToBankCurrency, getQuoteFromBankCurrency: getQuoteFromBankCurrency}
 }
 
 func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error) {
@@ -62,12 +60,12 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 		}
 
 		amount = quote.Amount
-		currencyEntity, err = s.currencyRepository.Save(&repository.CurrencyEntity{
+		currencyEntity = &repository.CurrencyEntity{
 			Code:         dto.Code,
 			CurrencyName: regex.Split(quote.Name, -1)[0],
 			QuoteType:    repository.QuoteToBankCurrency,
 			Deletable:    true,
-		})
+		}
 
 	case domain.QuoteFromBankCurrency:
 		quote, err = s.getQuoteFromBankCurrency.Execute(&GetQuoteFromBankCurrencyDto{CurrencyCode: dto.Code})
@@ -77,23 +75,25 @@ func (s saveCurrencyImpl) Execute(dto *SaveCurrencyDto) (*domain.Currency, error
 		}
 
 		amount = quote.Amount
-		currencyEntity, err = s.currencyRepository.Save(&repository.CurrencyEntity{
+		currencyEntity = &repository.CurrencyEntity{
 			Code:         dto.Code,
 			CurrencyName: regex.Split(quote.Name, -1)[1],
 			QuoteType:    repository.QuoteFromBankCurrency,
 			Deletable:    true,
-		})
+		}
 
 	default:
 		amount = dto.UnitValueBankCurrency
-		currencyEntity, err = s.currencyRepository.Save(&repository.CurrencyEntity{
+		currencyEntity = &repository.CurrencyEntity{
 			Code:                  dto.Code,
 			CurrencyName:          dto.CurrencyName,
 			UnitValueBankCurrency: dto.UnitValueBankCurrency,
 			QuoteType:             repository.QuoteNotAvailable,
 			Deletable:             true,
-		})
+		}
 	}
+
+	currencyEntity, err = s.currencyRepository.Save(currencyEntity)
 
 	if err != nil {
 		return nil, err

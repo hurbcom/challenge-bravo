@@ -47,7 +47,7 @@ func (s *getExternalQuoteImpl) Execute(dto *GetExternalQuoteDto) (*domain.Quote,
 	}
 }
 
-func (s getExternalQuoteImpl) getQuoteToBankCurrency(dto *GetExternalQuoteDto, bankCurrencyCode string) (*domain.Quote, error) {
+func (s *getExternalQuoteImpl) getQuoteToBankCurrency(dto *GetExternalQuoteDto, bankCurrencyCode string) (*domain.Quote, error) {
 	externalQuoteCache, err := s.quoteRepository.GetQuote(dto.CurrencyCode, bankCurrencyCode)
 
 	if err != nil {

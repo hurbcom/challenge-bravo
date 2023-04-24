@@ -44,7 +44,7 @@ func loadGetQuoteType() {
 	getQuoteType = NewGetQuoteType(gateway.GetQuoteRepository(), infra.GetEnvironment())
 }
 func loadSaveCurrency() {
-	saveCurrency = NewSaveCurrency(infra.GetEnvironment(), gateway.GetCurrencyRepository(), ValidateNewCurrencyUsecase(), GetQuoteTypeUsecase(), GetQuoteToBankCurrencyUsecase(), GetQuoteFromBankCurrencyUsecase())
+	saveCurrency = NewSaveCurrency(gateway.GetCurrencyRepository(), ValidateNewCurrencyUsecase(), GetQuoteTypeUsecase(), GetQuoteToBankCurrencyUsecase(), GetQuoteFromBankCurrencyUsecase())
 }
 func loadValidateNewCurrency() {
 	validateNewCurrency = NewValidateNewCurrency(gateway.GetCurrencyRepository())

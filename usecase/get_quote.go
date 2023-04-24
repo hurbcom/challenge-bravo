@@ -67,22 +67,22 @@ func (g *getQuoteImpl) Execute(dto *GetQuoteDto) (*domain.Quote, error) {
 
 }
 
-func (g *getQuoteImpl) getBankCurrencyValue(fromCurrencyEntity *repository.CurrencyEntity) (float64, error) {
+func (g *getQuoteImpl) getBankCurrencyValue(currencyEntity *repository.CurrencyEntity) (float64, error) {
 
-	quoteType := g.getQuoteType(fromCurrencyEntity)
+	quoteType := g.getQuoteType(currencyEntity)
 
 	if quoteType == domain.QuoteToBankCurrency || quoteType == domain.QuoteFromBankCurrency {
 		quote, err := g.getExternalQuote.Execute(&GetExternalQuoteDto{
-			CurrencyCode: fromCurrencyEntity.Code,
+			CurrencyCode: currencyEntity.Code,
 			QuoteType:    quoteType,
 		})
 		if err != nil {
 			return 0, err
 		}
 
-		return quote.Amount, err
+		return quote.Amount, nil
 	}
-	return fromCurrencyEntity.UnitValueBankCurrency, nil
+	return currencyEntity.UnitValueBankCurrency, nil
 }
 
 func (g *getQuoteImpl) getCurrencyNotFoundMessage(currencyCode string) string {
