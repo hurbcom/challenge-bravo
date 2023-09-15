@@ -21,4 +21,11 @@ export class InMemoryCurrencyRepository {
     }
     return this.currencies
   }
+
+  registerCurrency (currency) {
+    const { code, price } = currency
+    this.currencies.rates[code] = price
+
+    return this.currencies
+  }
 }
