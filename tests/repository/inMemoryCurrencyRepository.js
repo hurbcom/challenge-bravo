@@ -28,4 +28,8 @@ export class InMemoryCurrencyRepository {
 
     return this.currencies
   }
+
+  deleteCurrency (code) {
+    delete this.currencies.rates[code]
+  }
 }
