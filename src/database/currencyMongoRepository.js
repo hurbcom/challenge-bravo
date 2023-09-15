@@ -6,9 +6,10 @@ class CurrencyMongoRepository {
   #db
   #collection
 
-  async connect () {
+  async connect (databaseUrl = null) {
     try {
-      this.#client = new MongoClient('mongodb://root:root@localhost:27017')
+      console.log(databaseUrl)
+      this.#client = new MongoClient(databaseUrl || 'mongodb://root:root@localhost:27017')
       await this.#client.connect()
       this.#db = this.#client.db('bravo')
       this.#collection = this.#db.collection('currency')
@@ -18,6 +19,10 @@ class CurrencyMongoRepository {
     }
 
     return true
+  }
+
+  async disconnect () {
+    this.#client.close()
   }
 
   async getCurrencies (code = null) {
@@ -30,6 +35,19 @@ class CurrencyMongoRepository {
       const currencies = await this.#collection.find({}).toArray()
 
       return CurrencyMongoMappers.toDomain(currencies)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  async updateCurrency (currency) {
+    const { base, code, updated, price } = currency
+    const query = { base, code }
+    const update = { $set: { price, updated } }
+    const options = { upsert: true }
+    try {
+      const updateResult = await this.#collection.updateOne(query, update, options)
+      return updateResult
     } catch (error) {
       throw new Error(error)
     }

@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+    mongo:
+        image: mongo:6.0.5
+        container_name: conversion_db
+        environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=root
+        ports:
+            - 27017:27017
+
+    mongo_tmpfs:
+        container_name: in-memory-mongo
+        image: mongo:6.0.5
+        environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=root
+        ports:
+            - 27017:27017
+
+        tmpfs:
+        - /data/db

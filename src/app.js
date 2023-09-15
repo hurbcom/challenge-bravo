@@ -1,19 +1,23 @@
 import express from 'express'
 import { router } from './http/routes/routes.js'
-import CurrencyMongoRepository from './database/currencyMongoRepository.js'
 
-const app = express()
+export class App {
+  constructor () {
+    this.server = express()
+    this.middleware()
+    this.router()
+  }
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+  middleware () {
+    this.server.use(express.json())
+    this.server.use(express.urlencoded({ extended: true }))
+  }
 
-app.get('/', (req, res) => {
-  res.send({ message: 'Hello World' })
-})
+  router () {
+    this.server.get('/', (req, res) => {
+      res.send({ message: 'Hello World' })
+    })
 
-app.use(router)
-
-await CurrencyMongoRepository.connect()
-app.listen(3000, () => {
-  console.log('server running at port 3000')
-})
+    this.server.use(router)
+  }
+}

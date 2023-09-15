@@ -5,8 +5,9 @@
   "description": "[[English](README.md) | [Português](README.pt.md)]",
   "main": "index.js",
   "scripts": {
-    "test": "vitest",
-    "dev": "nodemon ./src/app.js"
+    "test": "npm run test:setup && sleep 1 && vitest ",
+    "test:setup": "docker compose restart mongo_tmpfs && sleep 1 && node ./src/utils/setupTest.js ",
+    "dev": "nodemon ./src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "mongodb": "^6.1.0"
+    "mongodb": "^6.1.0",
+    "supertest": "^6.3.3"
   }
 }

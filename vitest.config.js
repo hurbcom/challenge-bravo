@@ -6,6 +6,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reportsDirectory: './tests/unit/coverage'
-    }
+    },
+    watchExclude: ['src/controller/**']
   }
 })
