@@ -1,5 +1,6 @@
 import express from 'express'
 import { router } from './http/routes/routes.js'
+import CurrencyMongoRepository from './database/currencyMongoRepository.js'
 
 const app = express()
 
@@ -12,6 +13,7 @@ app.get('/', (req, res) => {
 
 app.use(router)
 
+await CurrencyMongoRepository.connect()
 app.listen(3000, () => {
   console.log('server running at port 3000')
 })
