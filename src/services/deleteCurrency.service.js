@@ -1,3 +1,5 @@
+import { NotFoundError } from '../utils/apiError.js'
+
 export class DeleteCurrencyService {
   #currencyRepository
   constructor (currencyRepository) {
@@ -9,7 +11,7 @@ export class DeleteCurrencyService {
    */
   async execute (code) {
     const currency = await this.#currencyRepository.getCurrencies(code)
-    if (!currency) throw new Error('Currency not found')
+    if (!currency) throw new NotFoundError('Currency not found')
 
     await this.#currencyRepository.deleteCurrency(code.toUpperCase())
 

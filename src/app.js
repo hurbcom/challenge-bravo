@@ -1,11 +1,13 @@
 import express from 'express'
 import { router } from './http/routes/routes.js'
+import { errorHandler } from './http/middleware/errorHandler.js'
 
 export class App {
   constructor () {
     this.server = express()
     this.middleware()
     this.router()
+    this.errorHandler()
   }
 
   middleware () {
@@ -17,7 +19,10 @@ export class App {
     this.server.get('/', (req, res) => {
       res.send({ message: 'Hello World' })
     })
-
     this.server.use(router)
+  }
+
+  errorHandler () {
+    this.server.use(errorHandler)
   }
 }

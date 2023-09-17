@@ -1,3 +1,5 @@
+import { BadRequestError } from '../utils/apiError.js'
+
 export class RegisterCurrencyService {
   #currencyRepository
   constructor (currencyRepository) {
@@ -12,14 +14,8 @@ export class RegisterCurrencyService {
    */
   async execute (currency) {
     const currencyAlreadyRegistered = await this.#currencyRepository.getCurrencies(currency.code)
-    if (currencyAlreadyRegistered) throw new Error('Currency already registered')
-
-    try {
-      const response = await this.#currencyRepository.registerCurrency({ base: 'USD', ...currency })
-
-      return response
-    } catch (error) {
-      throw new Error(error.message)
-    }
+    if (currencyAlreadyRegistered) throw new BadRequestError('Currency already registered')
+    const response = await this.#currencyRepository.registerCurrency({ base: 'USD', ...currency })
+    return response
   }
 }

@@ -8,7 +8,6 @@ class CurrencyMongoRepository {
 
   async connect (databaseUrl = null) {
     try {
-      console.log(databaseUrl)
       this.#client = new MongoClient(databaseUrl || 'mongodb://root:root@localhost:27017')
       await this.#client.connect()
       this.#db = this.#client.db('bravo')
