@@ -39,6 +39,17 @@ class CurrencyMongoRepository {
     }
   }
 
+  async registerCurrency (currency) {
+    const { base, code, price } = currency
+
+    try {
+      const result = await this.#collection.insertOne({ base, code, price })
+      return result.insertedId
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
   async updateCurrency (currency) {
     const { base, code, updated, price } = currency
     const query = { base, code }

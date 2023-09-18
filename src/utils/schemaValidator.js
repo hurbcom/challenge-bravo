@@ -6,4 +6,9 @@ const schemaValidatorConvert = Joi.object({
   amount: Joi.number().required()
 })
 
-export { schemaValidatorConvert }
+const schemaValidatorRegister = Joi.object({
+  code: Joi.string().required(),
+  price: Joi.number().greater(0)
+})
+
+export { schemaValidatorConvert, schemaValidatorRegister }
