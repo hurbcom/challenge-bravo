@@ -6,5 +6,4 @@ const validatorSchemaMiddleware = (schema, properties) => async (req, res, next)
     return res.status(400).json({ error: error.message.replace(/['"]/g, '') })
   }
 }
-
 export { validatorSchemaMiddleware }
