@@ -62,6 +62,17 @@ class CurrencyMongoRepository {
       throw new Error(error)
     }
   }
+
+  async deleteCurrency (code) {
+    try {
+      const deleteResult = await this.#collection.deleteOne({ code })
+      if (!deleteResult.deletedCount) return false
+
+      return true
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 }
 
 export default new CurrencyMongoRepository()
