@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import axios from 'axios'
 
-export default class AbstractApi {
+export class AbstractApi {
   #request
   constructor (request = axios) {
     this.#request = request
