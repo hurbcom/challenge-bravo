@@ -1,0 +1,115 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+      "title": "Api de conversão de moeda(cambio)",
+      "description": "Essa API permite fazer conversão monetária entre moedas, registrar novas moedas e excluí-las, ** todas as taxas de câmbio estão com base: USD **.",
+      "version": "1.0.0"
+  },
+  "paths": {
+      "/currency/convert": {
+        "get":{
+          "tags":["Currency"],
+          "description": "Rota responsável por fazer a conversão entre duas moedas.",
+          "parameters": [
+            {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "A moeda de destino para conversão (ex: USD)."
+          },
+            {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "A moeda de origem para conversão (ex: EUR)."
+          },
+            {
+            "in": "query",
+            "name": "amount",
+            "required": true,
+            "schema": {
+              "type": "number"
+            },
+            "description": "A quantidade a ser convertida."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "retornao resultado da conversão se for bem sussedido"
+            },
+          "400": {
+            "description": "moeda não foi encontrada pelo código fornecido"
+            }
+          }
+        }
+      },
+      "/currency": {
+          "post": {
+              "description": "Rota responsável por registrar novas moedas.",
+              "tags": [
+                  "Currency"
+              ],
+              "requestBody": {
+                  "content": {
+                      "application/json": {
+                          "schema": {  
+                              "type": "object",
+                              "properties": {
+                                  "code": {
+                                      "type": "string"
+                                  },
+                                  "price": {
+                                      "type": "number"
+                                  }
+                              }
+                          },
+                          "examples": {
+                              "currency": {
+                                  "value": {
+                                      "code": "BAV",
+                                      "price": 1.5
+                                  }
+                              }
+                          }
+                      }
+                  }
+              },
+              "responses": {
+                  "200": {
+                      "description": "retorna o id da moeda"
+                  },
+                  "400": {
+                      "description": "code ou price incorretos."
+                  }
+              }
+          },
+
+          "delete": {
+            "tags":["Currency"],
+            "description": "deleta uma moeda pelo coódigo",
+            "parameters": [
+              {
+                "name": "code",
+                "in": "path",
+                "required": true
+              }
+            ],
+            "responses": {
+              "200": {
+                  "description": "retorna status code 200 se for bem sussedido"
+              },
+              "404": {
+                  "description": "moeda não foi encontrada pelo código fornecido"
+              }
+          }
+          }
+      }
+  
+  }
+}
