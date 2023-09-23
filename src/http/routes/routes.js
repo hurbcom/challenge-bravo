@@ -4,6 +4,7 @@ import { RegisterCurrencyController } from '../controllers/registerCurrency.cont
 import { DeleteCurrencyController } from '../controllers/deleteCurrency.controller.js'
 import { validatorSchemaMiddleware } from '../middleware/validatorSchema.middleware.js'
 import { schemaValidatorConvert, schemaValidatorRegister } from '../../utils/schemaValidator.js'
+import { errorHandlerMiddleware } from '../middleware/errorHandler.middleware.js'
 
 const router = Router()
 
@@ -16,5 +17,7 @@ router.get('/currency/convert', validatorSchemaMiddleware(schemaValidatorConvert
 
 router.post('/currency', validatorSchemaMiddleware(schemaValidatorRegister, 'body'), new RegisterCurrencyController().handler)
 router.delete('/currency/:code', new DeleteCurrencyController().handler)
+
+router.use(errorHandlerMiddleware)
 
 export { router }
