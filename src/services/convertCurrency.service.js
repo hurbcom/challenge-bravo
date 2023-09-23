@@ -8,7 +8,6 @@ export class ConvertCurrencyService {
 
   async execute (request) {
     const { from, to, amount } = request
-
     const { rates } = await this.#currencyRepository.getCurrencies()
     let priceFrom = 1
     if (from !== 'USD') {

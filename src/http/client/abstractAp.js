@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import axios from 'axios'
-import { readFileSync } from 'node:fs'
 
 export class AbstractApi {
   #request
@@ -9,8 +8,6 @@ export class AbstractApi {
   }
 
   async getCurrencies () {
-    const { supportedCurrencies } = JSON.parse(readFileSync('src/http/client/supportedCurrencies.json', 'utf-8'))
-    const target = this.#toTarget(supportedCurrencies)
     const response = await this.#request.get(`https://exchange-rates.abstractapi.com/v1/live?target=${target}&api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD`)
 
     return this.#toUpdateMongodb(response.data)

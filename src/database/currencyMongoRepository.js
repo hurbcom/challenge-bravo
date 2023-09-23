@@ -52,22 +52,33 @@ class CurrencyMongoRepository extends Connection {
     }
   }
 
-  async updateSupportCurrency (code) {
+  async updateSupportedCurrency (code) {
     try {
-      const response = await Connection.db.collection('supported_currency').updateOne({ base: 'USD' }, { $push: { code } }, { upsert: true })
-      return response
+      const updateResult = await Connection.db.collection('supported_currency').updateOne({ base: 'USD' }, { $push: { supported_currencies: code } }, { upsert: true })
+      return updateResult
     } catch (error) {
       throw error
     }
   }
 
-  async deleteSupportCurrency (code) {
+  async deleteSupportedCurrency (code) {
     try {
-      const response = await Connection.db.collection('supported_currency').updateOne(
+      const deleteResult = await Connection.db.collection('supported_currency').updateOne(
         { base: 'USD' },
         { $pull: { supported_currencies: code } }
       )
-      return response
+      if (!deleteResult.deletedCount) return false
+
+      return true
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getSupportedCurrencies (code = null) {
+    try {
+      const currencies = await Connection.db.collection('supported_currency').find({}).toArray()
+      return currencies
     } catch (error) {
       throw error
     }
