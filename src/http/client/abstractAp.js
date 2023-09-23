@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 import axios from 'axios'
+import { GetSupportedCurrencies } from '../../services/getSupportedCurrencies.service.js'
+import { CurrencyMongoRepository } from '../../database/currencyMongoRepository.js'
 
 export class AbstractApi {
   #request
@@ -8,6 +10,11 @@ export class AbstractApi {
   }
 
   async getCurrencies () {
+    const currencyRepository = new CurrencyMongoRepository()
+    const getSupportedCurrenciesService = new GetSupportedCurrencies(currencyRepository)
+    const [{ supported_currencies }] = await getSupportedCurrenciesService.execute()
+    const target = this.#toTarget(supported_currencies)
+
     const response = await this.#request.get(`https://exchange-rates.abstractapi.com/v1/live?target=${target}&api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD`)
 
     return this.#toUpdateMongodb(response.data)

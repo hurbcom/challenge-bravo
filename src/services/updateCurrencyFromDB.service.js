@@ -1,6 +1,6 @@
 import { AbstractApi } from '../http/client/abstractAp.js'
 
-export class UpdateManyCurrencyService {
+export class UpdateCurrencyFromDBService {
   #currencyRespository
   constructor (currencyRespository) {
     this.#currencyRespository = currencyRespository

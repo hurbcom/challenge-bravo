@@ -75,7 +75,7 @@ class CurrencyMongoRepository extends Connection {
     }
   }
 
-  async getSupportedCurrencies (code = null) {
+  async getSupportedCurrencies () {
     try {
       const currencies = await Connection.db.collection('supported_currency').find({}).toArray()
       return currencies
