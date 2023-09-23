@@ -1,5 +1,5 @@
 import { ConvertCurrencyService } from '../../services/convertCurrency.service.js'
-import CurrencyMongoRepository from '../../database/currencyMongoRepository.js'
+import { CurrencyMongoRepository } from '../../database/currencyMongoRepository.js'
 import { schemaValidatorConvert } from '../../utils/schemaValidator.js'
 
 export class ConvertCurrencyController {
@@ -10,7 +10,8 @@ export class ConvertCurrencyController {
     } catch (error) {
       return res.status(400).json({ error: error.message.replace(/['"]/g, '') })
     }
-    const convert = new ConvertCurrencyService(CurrencyMongoRepository)
+    const currencyRepository = new CurrencyMongoRepository()
+    const convert = new ConvertCurrencyService(currencyRepository)
     try {
       const response = await convert.execute({ from, to, amount: Number(amount) })
       return res.status(200).json({ converted: response })

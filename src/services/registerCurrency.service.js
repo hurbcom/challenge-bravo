@@ -8,7 +8,7 @@ export class RegisterCurrencyService {
 
   /*
   currency {
-    abbreviation: String,
+    code: String,
     price: Number
   }
    */

@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios'
+import { readFileSync } from 'node:fs'
 
 export class AbstractApi {
   #request
@@ -8,17 +9,24 @@ export class AbstractApi {
   }
 
   async getCurrencies () {
-    const response = await this.#request.get('https://exchange-rates.abstractapi.com/v1/live?target=EUR%2CBRL%2CBTC%2CETH&api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD')
+    const { supportedCurrencies } = JSON.parse(readFileSync('src/http/client/supportedCurrencies.json', 'utf-8'))
+    const target = this.#toTarget(supportedCurrencies)
+    const response = await this.#request.get(`https://exchange-rates.abstractapi.com/v1/live?target=${target}&api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD`)
 
     return this.#toUpdateMongodb(response.data)
   }
 
-  #toUpdateMongodb ({ base, last_updated, exchange_rates }) {
+  async getCurrencyByCode (code) {
+    const response = await this.#request.get(`https://exchange-rates.abstractapi.com/v1/live?target=${code}&api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD`)
+
+    return this.#getCurrencyByCodeNormalized(code, response.data)
+  }
+
+  #toUpdateMongodb ({ base, exchange_rates }) {
     const currencies = []
     for (const key in exchange_rates) {
       const currency = {
         base,
-        updated: last_updated,
         code: key,
         price: exchange_rates[key]
       }
@@ -26,5 +34,26 @@ export class AbstractApi {
     }
 
     return currencies
+  }
+
+  #getCurrencyByCodeNormalized (code, { exchange_rates }) {
+    const currency = {
+      code,
+      price: exchange_rates[code]
+    }
+    return currency
+  }
+
+  #toTarget (supportedCurrencies) {
+    let target = ''
+    // eslint-disable-next-line prefer-const
+    for (let i in supportedCurrencies) {
+      // eslint-disable-next-line eqeqeq
+      if (i == supportedCurrencies.length - 1) {
+        target += supportedCurrencies[i]
+        return target
+      }
+      target += `${supportedCurrencies[i]}%2C`
+    }
   }
 }

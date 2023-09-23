@@ -1,37 +1,15 @@
-import { MongoClient } from 'mongodb'
 import CurrencyMongoMappers from './currencyMongoMapper.js'
+import { Connection } from './connection/connection.js'
 
-class CurrencyMongoRepository {
-  #client
-  #db
-  #collection
-
-  async connect (databaseUrl = null) {
-    try {
-      this.#client = new MongoClient(databaseUrl || 'mongodb://root:root@localhost:27017')
-      await this.#client.connect()
-      this.#db = this.#client.db('bravo')
-      this.#collection = this.#db.collection('currency')
-      console.log('successfully connecting')
-    } catch (error) {
-      throw new Error(error)
-    }
-
-    return true
-  }
-
-  async disconnect () {
-    this.#client.close()
-  }
-
+class CurrencyMongoRepository extends Connection {
   async getCurrencies (code = null) {
     try {
       if (code) {
-        const currency = await this.#collection.find({ code }).toArray()
+        const currency = await Connection.db.collection('currency').find({ code }).toArray()
         if (!currency.length) return false
         return CurrencyMongoMappers.toDomain(currency)
       }
-      const currencies = await this.#collection.find({}).toArray()
+      const currencies = await Connection.db.collection('currency').find({}).toArray()
 
       return CurrencyMongoMappers.toDomain(currencies)
     } catch (error) {
@@ -43,7 +21,7 @@ class CurrencyMongoRepository {
     const { base, code, price } = currency
 
     try {
-      const result = await this.#collection.insertOne({ base, code, price })
+      const result = await Connection.db.collection('currency').insertOne({ base, code, price })
       return result.insertedId
     } catch (error) {
       throw new Error(error)
@@ -51,12 +29,12 @@ class CurrencyMongoRepository {
   }
 
   async updateCurrency (currency) {
-    const { base, code, updated, price } = currency
+    const { base, code, price } = currency
     const query = { base, code }
-    const update = { $set: { price, updated } }
+    const update = { $set: { price } }
     const options = { upsert: true }
     try {
-      const updateResult = await this.#collection.updateOne(query, update, options)
+      const updateResult = await Connection.db.collection('currency').updateOne(query, update, options)
       return updateResult
     } catch (error) {
       throw new Error(error)
@@ -65,7 +43,7 @@ class CurrencyMongoRepository {
 
   async deleteCurrency (code) {
     try {
-      const deleteResult = await this.#collection.deleteOne({ code })
+      const deleteResult = await Connection.db.collection('currency').deleteOne({ code })
       if (!deleteResult.deletedCount) return false
 
       return true
@@ -73,6 +51,27 @@ class CurrencyMongoRepository {
       throw new Error(error)
     }
   }
+
+  async updateSupportCurrency (code) {
+    try {
+      const response = await Connection.db.collection('supported_currency').updateOne({ base: 'USD' }, { $push: { code } }, { upsert: true })
+      return response
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async deleteSupportCurrency (code) {
+    try {
+      const response = await Connection.db.collection('supported_currency').updateOne(
+        { base: 'USD' },
+        { $pull: { supported_currencies: code } }
+      )
+      return response
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
-export default new CurrencyMongoRepository()
+export { CurrencyMongoRepository }
