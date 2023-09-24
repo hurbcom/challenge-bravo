@@ -13,7 +13,6 @@ export class DeleteCurrencyService {
     const currency = await this.#currencyRepository.getCurrencies(code)
     if (!currency) throw new NotFoundError('Currency not found')
 
-    this.#currencyRepository.deleteSupportedCurrency(code)
     await this.#currencyRepository.deleteCurrency(code)
 
     return true
