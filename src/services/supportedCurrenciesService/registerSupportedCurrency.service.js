@@ -1,6 +1,6 @@
 import { NotFoundError } from '../../utils/apiError.js'
 
-class RegisterSupportedCurrency {
+class RegisterSupportedCurrencyService {
   #supportedCurrencyRepository
   #registerCurrencyService
   #resourceExtern
@@ -18,10 +18,10 @@ class RegisterSupportedCurrency {
     }
 
     await this.#registerCurrencyService.execute(currency)
-    const response = await this.#supportedCurrencyRepository.registerSupportedCurrency(code)
+    await this.#supportedCurrencyRepository.registerSupportedCurrency(code)
 
-    return response
+    return true
   }
 }
 
-export { RegisterSupportedCurrency }
+export { RegisterSupportedCurrencyService }

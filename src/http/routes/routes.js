@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { ConvertCurrencyController } from '../controllers/convertCurrency.controller.js'
 import { RegisterCurrencyController } from '../controllers/registerCurrency.controller.js'
 import { DeleteCurrencyController } from '../controllers/deleteCurrency.controller.js'
+import { RegisterSupportedCurrencyController } from '../controllers/supportedCurrency/registerSupportedCurrency.controller.js'
 import { validatorSchemaMiddleware } from '../middleware/validatorSchema.middleware.js'
 import { schemaValidatorConvert, schemaValidatorRegister } from '../../utils/schemaValidator.js'
 import { errorHandlerMiddleware } from '../middleware/errorHandler.middleware.js'
@@ -14,9 +15,10 @@ router.get('/currency/convert', validatorSchemaMiddleware(schemaValidatorConvert
     convertCurrencyController.handler(req, res, next)
   }
 )
-
 router.post('/currency', validatorSchemaMiddleware(schemaValidatorRegister, 'body'), new RegisterCurrencyController().handler)
 router.delete('/currency/:code', new DeleteCurrencyController().handler)
+
+router.post('/supported-currency/', new RegisterSupportedCurrencyController().handler)
 
 router.use(errorHandlerMiddleware)
 

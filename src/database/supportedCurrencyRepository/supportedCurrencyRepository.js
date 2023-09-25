@@ -7,10 +7,10 @@ class SupportedCurrencyRepository extends Connection {
     this.#collection = Connection.db.collection('supported_currency')
   }
 
-  async updateSupportedCurrency (code) {
+  async registerSupportedCurrency (code) {
     try {
-      const updateResult = await this.#collection.updateOne({ base: 'USD' }, { $push: { supported_currencies: code } }, { upsert: true })
-      return updateResult
+      await this.#collection.updateOne({ base: 'USD' }, { $push: { supported_currencies: code } }, { upsert: true })
+      return true
     } catch (error) {
       throw error
     }
