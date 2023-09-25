@@ -1,11 +1,11 @@
 import { CurrencyMongoRepository } from './database/currencyMongoRepository.js'
 import { UpdateCurrencyFromDBService } from './services/updateCurrencyFromDB.service.js'
 import { App } from './app.js'
+import { Connection } from './database/connection/connection.js'
 
 const server = new App().server
-
+await Connection.connect()
 const currencyMongoRepository = new CurrencyMongoRepository()
-await currencyMongoRepository.connect()
 const updateCurrencyFromDBService = new UpdateCurrencyFromDBService(currencyMongoRepository)
 
 setInterval(async () => {

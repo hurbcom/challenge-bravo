@@ -4,7 +4,7 @@ export class Connection {
   static client
   static db
 
-  async connect (databaseUrl = 'mongodb://root:root@localhost:27017') {
+  static async connect (databaseUrl = 'mongodb://root:root@localhost:27017') {
     try {
       if (!Connection.client) {
         Connection.client = new MongoClient(databaseUrl)
