@@ -50,9 +50,7 @@ class CurrencyMongoRepository extends Connection {
   async deleteCurrency (code) {
     try {
       const deleteResult = await this.#collection.deleteOne({ code })
-      if (!deleteResult.deletedCount) return false
-
-      return true
+      return !!deleteResult.deletedCount
     } catch (error) {
       throw new Error(error)
     }
