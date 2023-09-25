@@ -7,6 +7,6 @@ export default defineConfig({
       provider: 'v8',
       reportsDirectory: './tests/unit/coverage'
     },
-    watchExclude: ['src/http/controllers/**']
+    watchExclude: ['src/http/controllers/**/**']
   }
 })

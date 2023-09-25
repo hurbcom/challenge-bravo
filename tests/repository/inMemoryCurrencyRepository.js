@@ -30,6 +30,8 @@ export class InMemoryCurrencyRepository {
   }
 
   deleteCurrency (code) {
+    if (!this.currencies.rates[code]) return false
     delete this.currencies.rates[code]
+    return true
   }
 }

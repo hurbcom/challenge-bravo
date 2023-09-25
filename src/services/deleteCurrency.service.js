@@ -10,10 +10,10 @@ export class DeleteCurrencyService {
   code: string
    */
   async execute (code) {
-    const currency = await this.#currencyRepository.getCurrencies(code)
-    if (!currency) throw new NotFoundError('Currency not found')
-
-    await this.#currencyRepository.deleteCurrency(code)
+    const deleteResult = await this.#currencyRepository.deleteCurrency(code)
+    if (!deleteResult) {
+      throw new NotFoundError('Currency not found')
+    }
 
     return true
   }
