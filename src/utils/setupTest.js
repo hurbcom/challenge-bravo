@@ -1,8 +1,8 @@
 import { makeCurrenciesApi } from '../../tests/make-currencies-api/make-currencies-api.js'
 import { CurrencyMongoRepository } from '../database/currencyMongoRepository.js'
 
+await CurrencyMongoRepository.connect()
 const currencyMongoRepository = new CurrencyMongoRepository()
-await currencyMongoRepository.connect('mongodb://root:root@localhost:27017')
 const arrayPromise = makeCurrenciesApi.map((currency) => {
   return currencyMongoRepository.updateCurrency(currency)
     .catch(e => e)

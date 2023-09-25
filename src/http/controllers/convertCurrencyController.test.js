@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { App } from '../../app.js'
 import request from 'supertest'
-import { CurrencyMongoRepository } from '../../database/currencyMongoRepository.js'
+import { Connection } from '../../database/connection/connection.js'
 
 describe('Convert Currency Controller', async () => {
   const app = new App().server
-  const currencyMongoRepository = new CurrencyMongoRepository()
-  await currencyMongoRepository.connect()
+  await Connection.connect()
 
   it('should return conversion between two currencies', async () => {
     const response = await request(app)

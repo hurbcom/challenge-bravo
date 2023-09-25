@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import request from 'supertest'
 import { App } from '../../app.js'
-import { CurrencyMongoRepository } from '../../database/currencyMongoRepository.js'
+import { Connection } from '../../database/connection/connection.js'
 
 describe('Delete Currency Controller', async () => {
   const app = new App().server
-  const currencyMongoRepository = new CurrencyMongoRepository()
-  await currencyMongoRepository.connect()
+  await Connection.connect()
 
   it('should delete an currency', async () => {
     await request(app)
