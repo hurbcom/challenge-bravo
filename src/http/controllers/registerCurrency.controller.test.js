@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import request from 'supertest'
 import { App } from '../../app.js'
-import CurrencyMongoRepository from '../../database/currencyMongoRepository.js'
+import { CurrencyMongoRepository } from '../../database/currencyMongoRepository.js'
 describe('Register Controller', async () => {
-  await CurrencyMongoRepository.connect()
   const app = new App().server
+  const currencyMongoRepository = new CurrencyMongoRepository()
+  await currencyMongoRepository.connect()
 
   it('should register an currency', async () => {
     const response = await request(app)
