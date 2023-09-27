@@ -21,3 +21,8 @@ services:
 
         tmpfs:
         - /data/db
+    redis:
+        image: redis:7.2.0-alpine
+        container_name: conversion_redis
+        ports:
+            - 6379:6379

@@ -1,7 +1,8 @@
+/* eslint-disable prefer-const */
 /* eslint-disable camelcase */
 import axios from 'axios'
-import { GetSupportedCurrencies } from '../../services/getSupportedCurrencies.service.js'
-import { CurrencyMongoRepository } from '../../database/currencyMongoRepository.js'
+import { SupportedCurrencyRepository } from '../../database/supportedCurrencyRepository/supportedCurrencyRepository.js'
+import { RedisRepository } from '../../database/redis/redisRepository.js'
 
 export class AbstractApi {
   #request
@@ -10,33 +11,35 @@ export class AbstractApi {
   }
 
   async getCurrencies () {
-    const currencyRepository = new CurrencyMongoRepository()
-    const getSupportedCurrenciesService = new GetSupportedCurrencies(currencyRepository)
-    const [{ supported_currencies }] = await getSupportedCurrenciesService.execute()
-    const target = this.#toTarget(supported_currencies)
-
-    const response = await this.#request.get(`https://exchange-rates.abstractapi.com/v1/live?target=${target}&api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD`)
-
-    return this.#toUpdateMongodb(response.data)
+    const { data } = await this.#request.get('https://exchange-rates.abstractapi.com/v1/live?api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD')
+    return data
   }
 
   async getCurrencyByCode (code) {
-    const response = await this.#request.get(`https://exchange-rates.abstractapi.com/v1/live?target=${code}&api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD`)
+    const redisRepository = new RedisRepository()
+    let rates = await JSON.parse(await redisRepository.get('exchange_rates'))
+    redisRepository.disconnect()
+    if (!rates) {
+      console.log('hi')
+      const { data } = await this.#request.get(`https://exchange-rates.abstractapi.com/v1/live?target=${code}&api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD`)
+      rates = data
+    }
 
-    return this.#getCurrencyByCodeNormalized(code, response.data)
+    return this.#getCurrencyByCodeNormalized(code, rates)
   }
 
-  #toUpdateMongodb ({ base, exchange_rates }) {
+  async toUpdateMongodb ({ base, exchange_rates }) {
+    const supportedCurrencyRepository = new SupportedCurrencyRepository()
+    const [{ supported_currencies }] = await supportedCurrencyRepository.getSupportedCurrencies()
     const currencies = []
-    for (const key in exchange_rates) {
+    for (let code of supported_currencies) {
       const currency = {
         base,
-        code: key,
-        price: exchange_rates[key]
+        code,
+        price: exchange_rates[code]
       }
       currencies.push(currency)
     }
-
     return currencies
   }
 

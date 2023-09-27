@@ -1,21 +1,24 @@
-import { AbstractApi } from '../http/client/abstractAp.js'
-
 export class UpdateCurrencyFromDBService {
-  #currencyRespository
-  constructor (currencyRespository) {
-    this.#currencyRespository = currencyRespository
+  #currencyRepository
+  #clientApi
+  #cacheRepository
+  constructor (currencyRepository, clientApi, cacheRepository) {
+    this.#currencyRepository = currencyRepository
+    this.#clientApi = clientApi
+    this.#cacheRepository = cacheRepository
   }
 
   async execute () {
     try {
-      const abstractApi = new AbstractApi()
-      const currencies = await abstractApi.getCurrencies()
-      const arrayPromise = currencies.map((currency) => {
-        return this.#currencyRespository.updateCurrency(currency).catch(e => e)
+      const currencies = await this.#clientApi.getCurrencies()
+      this.#cacheRepository.set('exchange_rates', JSON.stringify(currencies), 'EX', 10800)
+      const currenciesToUpdateDB = await this.#clientApi.toUpdateMongodb(currencies)
+      const arrayPromise = currenciesToUpdateDB.map((currency) => {
+        return this.#currencyRepository.updateCurrency(currency).catch(e => e)
       })
 
       const resultUpdated = await Promise.all(arrayPromise)
-        .catch(error => console.log(`Erro ao executar ${error}`))
+        .catch(error => console.log(`Error when executing ${error}`))
 
       return resultUpdated
     } catch (error) {
