@@ -1,6 +1,6 @@
 import { NotFoundError } from '../../utils/apiError.js'
 
-class RegisterSupportedCurrencyService {
+class ExtendSupportedCurrencyService {
   #supportedCurrencyRepository
   #registerCurrencyService
   #resourceExtern
@@ -24,4 +24,4 @@ class RegisterSupportedCurrencyService {
   }
 }
 
-export { RegisterSupportedCurrencyService }
+export { ExtendSupportedCurrencyService }

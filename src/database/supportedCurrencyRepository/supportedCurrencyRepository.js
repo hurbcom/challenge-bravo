@@ -16,6 +16,15 @@ class SupportedCurrencyRepository extends Connection {
     }
   }
 
+  async addSupportedCurrencies (supportedCurrencies) {
+    try {
+      await this.#collection.insertOne(supportedCurrencies)
+      return true
+    } catch (error) {
+      throw error
+    }
+  }
+
   async deleteSupportedCurrency (code) {
     try {
       const deleteResult = await this.#collection.updateOne(

@@ -10,9 +10,7 @@ class RedisRepository extends Redis {
       process.exit(1)
     })
 
-    super.on('connect', () => {
-      console.log('Redis connected')
-    })
+    super.on('connect', () => {})
   }
 }
 
