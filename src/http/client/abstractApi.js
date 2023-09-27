@@ -3,6 +3,7 @@
 import axios from 'axios'
 import { SupportedCurrencyRepository } from '../../database/supportedCurrencyRepository/supportedCurrencyRepository.js'
 import { RedisRepository } from '../../database/redis/redisRepository.js'
+import 'dotenv/config'
 
 export class AbstractApi {
   #request
@@ -11,7 +12,7 @@ export class AbstractApi {
   }
 
   async getCurrencies () {
-    const { data } = await this.#request.get('https://exchange-rates.abstractapi.com/v1/live?api_key=df95a7b88370483a9ee7144a25cf89ef&base=USD')
+    const { data } = await this.#request.get(`https://exchange-rates.abstractapi.com/v1/live?api_key=${process.env.ABSTRACT_API_KEY}&base=USD`)
     return data
   }
 

@@ -3,7 +3,7 @@ import { SupportedCurrencyRepository } from '../database/supportedCurrencyReposi
 import { UpdateCurrencyFromDBService } from '../services/updateCurrencyFromDB.service.js'
 import { AddSupportedCurrencies } from '../services/supportedCurrenciesService/addSupportedCurrencies.service.js'
 import { RedisRepository } from '../database/redis/redisRepository.js'
-import { AbstractApi } from '../http/client/abstractAp.js'
+import { AbstractApi } from '../http/client/abstractApi.js'
 import { Connection } from '../database/connection/connection.js'
 
 await Connection.connect()

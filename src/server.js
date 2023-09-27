@@ -1,7 +1,7 @@
 import { CurrencyMongoRepository } from './database/currencyMongoRepository.js'
 import { UpdateCurrencyFromDBService } from './services/updateCurrencyFromDB.service.js'
 import { RedisRepository } from './database/redis/redisRepository.js'
-import { AbstractApi } from './http/client/abstractAp.js'
+import { AbstractApi } from './http/client/abstractApi.js'
 import { Connection } from './database/connection/connection.js'
 import { setupInit } from './utils/setupInit.js'
 import { App } from './app.js'

@@ -1,6 +1,6 @@
 import { ExtendSupportedCurrencyService } from '../../../services/supportedCurrenciesService/extendSupportedCurrency.service.js'
 import { SupportedCurrencyRepository } from '../../../database/supportedCurrencyRepository/supportedCurrencyRepository.js'
-import { AbstractApi } from '../../client/abstractAp.js'
+import { AbstractApi } from '../../client/abstractApi.js'
 import { RegisterCurrencyService } from '../../../services/registerCurrency.service.js'
 import { CurrencyMongoRepository } from '../../../database/currencyMongoRepository.js'
 
