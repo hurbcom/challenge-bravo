@@ -1,10 +1,11 @@
 import { MongoClient } from 'mongodb'
+import 'dotenv/config'
 
 export class Connection {
   static client
   static db
 
-  static async connect (databaseUrl = 'mongodb://root:root@localhost:27017') {
+  static async connect (databaseUrl = process.env.DATABASE_MONGO_URL) {
     try {
       if (!Connection.client) {
         Connection.client = new MongoClient(databaseUrl)

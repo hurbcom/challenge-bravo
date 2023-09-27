@@ -1,8 +1,9 @@
 import Redis from 'ioredis'
+import 'dotenv/config'
 
 class RedisRepository extends Redis {
   constructor () {
-    super()
+    super(process.env.DATABASE_REDIS_URL)
 
     super.on('error', (error) => {
       console.log('Error on Redis')
