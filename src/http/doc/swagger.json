@@ -41,10 +41,51 @@
         ],
         "responses": {
           "200": {
-            "description": "retornao resultado da conversão se for bem sussedido"
+            "description": "retornao resultado da conversão se for bem sussedido.",
+            "content": {
+                "application/json":{
+                    "schema": {
+                        "type": "object",
+                        "properties":{
+                            "message":{
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "examples": {
+                        "successful response":{
+                            "value":{
+                                "converted": "number"
+                            }
+                        }
+                    }
+                }
+              }
             },
-          "400": {
-            "description": "moeda não foi encontrada pelo código fornecido"
+            "400": {
+                "description": "retornará um error Bad Request se alguns dos parâmetros de consulta não for fornecido."
+                },
+          "404": {
+            "description": "retornará um error Not Found se algumas das moedas fornecidas não for encontrada.",
+            "content": {
+                "application/json":{
+                    "schema": {
+                        "type": "object",
+                        "properties":{
+                            "message":{
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "examples": {
+                        "error":{
+                            "value":{
+                                "message": "Currency not found: AUD"
+                            }
+                        }
+                    }
+                }
+              }
             }
           }
         }
@@ -58,7 +99,7 @@
               "requestBody": {
                   "content": {
                       "application/json": {
-                          "schema": {  
+                          "schema": {
                               "type": "object",
                               "properties": {
                                   "code": {
@@ -109,7 +150,85 @@
               }
           }
           }
+      },
+      "/currency/supported-currency":{
+        "post": {
+            "description": "Rota estender as moedas suportadas pela api. Ao adicionar enviar o código de uma moeda verdadeira a api ira buscar a moeda em uma api externa de contação de moedas, se não eontrar a moeda returnará um erro",
+          "tags": [
+              "Currency"
+          ],
+          "requestBody": {
+              "content": {
+                  "application/json": {
+                      "schema": {
+                          "type": "object",
+                          "properties": {
+                              "code": {
+                                  "type": "string"
+                              }
+                          }
+                      },
+                      "examples": {
+                          "currency": {
+                              "value": {
+                                  "code": "AUD"
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "responses": {
+              "200": {
+                  "description": "Se não houver nenhum erro, retornará status code de 200 sem nenhum dado no corpo da requisição"
+              },
+              "400": {
+                  "description": "returna uma message de error se o corpo da requisão não atender as requisitos",
+                  "content": {
+                    "application/json":{
+                        "schema": {
+                            "type": "object",
+                            "properties":{
+                                "message":{
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "error":{
+                                "value":{
+                                    "message": "code must not be empty and different of string"
+                                }
+                            }
+                        }
+                    }
+                  }
+              }
+
+          }
+        },
+
+        "delete": {
+            "tags":["Currency"],
+            "description": "deleta uma moeda suportada pela api pelo coódigo",
+            "parameters": [
+              {
+                "name": "code",
+                "in": "path",
+                "required": true
+              }
+            ],
+            "responses": {
+              "200": {
+                  "description": "retorna status code 200 se for bem sussedido"
+              },
+              "404": {
+                  "description": "moeda não foi encontrada pelo código fornecido"
+              }
+          }
+          }
       }
-  
+
+
   }
 }
