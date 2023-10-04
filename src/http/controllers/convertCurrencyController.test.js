@@ -1,11 +1,14 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, beforeAll } from 'vitest'
 import { App } from '../../app.js'
 import request from 'supertest'
 import { Connection } from '../../database/connection/connection.js'
+import 'dotenv/config.js'
 
 describe('Convert Currency Controller', async () => {
   const app = new App().server
-  await Connection.connect()
+  beforeAll(async () => {
+    await Connection.connect(process.env.DATABASE_MONGO_TMPFS_URL)
+  })
 
   it('should return conversion between two currencies', async () => {
     const response = await request(app)
