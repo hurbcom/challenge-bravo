@@ -43,7 +43,7 @@ git clone https://github.com/mtts021/challenge-bravo.git
 cd challenge-bravo
 ```
 
-### suba os containers com
+### suba os containers
 
 ```bash
 docker compose up -d
