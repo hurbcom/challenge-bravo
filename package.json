@@ -7,7 +7,9 @@
   "scripts": {
     "test": "vitest ",
     "test:setup": "docker compose restart mongo_tmpfs && sleep 1 && node ./src/utils/setupTest.js ",
-    "dev": "nodemon ./src/server.js"
+    "dev": "nodemon ./src/server.js",
+    "start": "node src/server.js"
+
   },
   "keywords": [],
   "author": "",
