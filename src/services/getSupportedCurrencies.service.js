@@ -1,5 +1,9 @@
 class GetSupportedCurrencies {
   #currencyRepository
+  /**
+   *
+   * @param {InstanceType} currencyRepository
+   */
   constructor (currencyRepository) {
     this.#currencyRepository = currencyRepository
   }

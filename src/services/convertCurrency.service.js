@@ -2,10 +2,23 @@ import { NotFoundError } from '../utils/apiError.js'
 
 export class ConvertCurrencyService {
   #currencyRepository
+
+  /**
+   *
+   * @param {InstanceType} currencyRepository
+   */
   constructor (currencyRepository) {
     this.#currencyRepository = currencyRepository
   }
 
+  /**
+   *
+   * @param {object} request
+   * @param {string} request.from
+   * @param {string} request.to
+   * @param {number} request.amount
+   * @returns {Promise<number>}
+   */
   async execute (request) {
     const { from, to, amount } = request
     const { rates } = await this.#currencyRepository.getCurrencies()

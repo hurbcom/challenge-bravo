@@ -2,6 +2,13 @@ export class UpdateCurrencyFromDBService {
   #currencyRepository
   #clientApi
   #cacheRepository
+
+  /**
+     *
+     * @param {InstanceType} currencyRepository
+     * @param {InstanceType} clientApi
+     * @param {InstanceType} cacheRepository
+     */
   constructor (currencyRepository, clientApi, cacheRepository) {
     this.#currencyRepository = currencyRepository
     this.#clientApi = clientApi
