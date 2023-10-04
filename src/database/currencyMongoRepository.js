@@ -56,7 +56,7 @@ class CurrencyMongoRepository extends Connection {
     }
   }
 
-  async deleteMany() {
+  async deleteMany () {
     const deleteManyResult = await this.#collection.deleteMany({})
 
     return deleteManyResult

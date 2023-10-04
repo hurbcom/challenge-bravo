@@ -153,7 +153,7 @@
       },
       "/currency/supported-currency":{
         "post": {
-            "description": "Rota estender as moedas suportadas pela api. Ao adicionar enviar o código de uma moeda verdadeira a api ira buscar a moeda em uma api externa de contação de moedas, se não eontrar a moeda returnará um erro",
+            "description": "Rota estender as moedas suportadas pela api. Ao enviar o código de uma moeda verdadeira a api ira buscar a moeda em uma api externa de contação de moedas, se não a encontrar, returnará um erro",
           "tags": [
               "Currency"
           ],
