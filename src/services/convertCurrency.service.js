@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+import { CurrencyRepository } from '../repositories/currencyRepository.js'
 import { NotFoundError } from '../utils/apiError.js'
 
 export class ConvertCurrencyService {
@@ -5,7 +7,7 @@ export class ConvertCurrencyService {
 
   /**
    *
-   * @param {InstanceType} currencyRepository
+   * @param {InstanceType<new CurrencyRepository>} currencyRepository
    */
   constructor (currencyRepository) {
     this.#currencyRepository = currencyRepository
@@ -24,23 +26,22 @@ export class ConvertCurrencyService {
     if (from === to) {
       return amount
     }
-    const { rates } = await this.#currencyRepository.getCurrencies()
-    let priceFrom = 1
-    if (from !== 'USD') {
-      priceFrom = rates[from]
-      if (!priceFrom) {
-        throw new NotFoundError(`Currency not found: ${from}`)
-      }
-    }
-    const usd = (amount / priceFrom)
+    const currencies = await this.#currencyRepository.getCurrencies()
+
+    const fromCurrency = currencies.find(currency => currency.code === from)
+    if (!fromCurrency) throw new NotFoundError(`Currency not found: ${from}`)
+
+    const usd = (amount / fromCurrency.price)
     if (to === 'USD') {
       return Number(usd.toFixed(4))
     }
-    const priceTo = rates[to]
-    if (!priceTo) {
+
+    const toCurrency = currencies.find(currency => currency.code === to)
+    if (!toCurrency) {
       throw new NotFoundError(`Currency not found: ${to}`)
     }
-    const response = usd * priceTo
+
+    const response = usd * toCurrency.price
 
     return Number(response.toFixed(4))
   }
