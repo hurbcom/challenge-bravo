@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { CurrencyRepository } from '../../src/app/repositories/currencyRepository.js'
+import { CurrencyRepository } from '../../src/repositories/currencyRepository.js'
 import { makeCurrenciesApi } from '../make-currencies-api/make-currencies-api.js'
 
 /**
@@ -23,8 +23,8 @@ export class InMemoryCurrencyRepository {
     this.currencies.push(currency)
   }
 
-  async updateCurrency ({base, code, price}) {
-    const currency = this.currencies.find(currency => currency.code === paramCurrency.code)
+  async updateCurrency ({ base, code, price }) {
+    const currency = this.currencies.find(currency => currency.code === code)
 
     if (!currency) {
       throw new Error('currency not found')
@@ -32,9 +32,9 @@ export class InMemoryCurrencyRepository {
 
     const index = this.currencies.indexOf(currency)
     this.currencies[index] = {
-        base: base ?? 'USD',
-        code,
-        price
+      base: base ?? 'USD',
+      code,
+      price
     }
   }
 

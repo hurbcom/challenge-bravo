@@ -2,7 +2,7 @@ import { expect, test, describe } from 'vitest'
 import { InMemoryCurrencyRepository } from '../../tests/repository/inMemoryCurrencyRepository.js'
 import { RegisterCurrencyService } from './registerCurrency.service'
 
-describe('Insert currency service', () => {
+describe('Register currency service', () => {
   const currencyRepository = new InMemoryCurrencyRepository()
   const registerCurrency = new RegisterCurrencyService(currencyRepository)
   test('should be able register an new currency', async () => {
@@ -12,16 +12,7 @@ describe('Insert currency service', () => {
     })
 
     expect(response).toBeTruthy()
-    expect(response).toEqual({
-      base: 'USD',
-      rates: {
-        EUR: 0.918442,
-        BRL: 4.916146,
-        BTC: 0.000039,
-        ETH: 0.000571,
-        MAT: 0.987
-      }
-    })
+    expect(currencyRepository.currencies[4].code).toEqual('MAT')
   })
 
   test('should not be able register currency already registered', async () => {

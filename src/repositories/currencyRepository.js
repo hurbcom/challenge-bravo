@@ -1,6 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-import { Currency } from '../entities/currency.entity.js'
-
 /**
  * @interface
  */
