@@ -1,37 +1,48 @@
-export class InMemoryCurrencyRepository {
-  currencies = {
-    base: 'USD',
-    rates: {
-      EUR: 0.918442,
-      BRL: 4.916146,
-      BTC: 0.000039,
-      ETH: 0.000571
-    }
-  }
+// eslint-disable-next-line no-unused-vars
+import { CurrencyRepository } from '../../src/app/repositories/currencyRepository.js'
+import { makeCurrenciesApi } from '../make-currencies-api/make-currencies-api.js'
 
-  getCurrencies (code = null) {
+/**
+ * @implements {CurrencyRepository}
+ */
+export class InMemoryCurrencyRepository {
+  currencies = [...makeCurrenciesApi]
+
+  getCurrencies (code) {
     if (code) {
-      const result = this.currencies.rates[code]
+      const result = this.currencies.find(currency => currency.code === code)
       if (!result) {
         return false
       }
-      const response = {}
-      response[code] = result
-      return response
+      return result
     }
     return this.currencies
   }
 
   registerCurrency (currency) {
-    const { code, price } = currency
-    this.currencies.rates[code] = price
+    this.currencies.push(currency)
+  }
 
-    return this.currencies
+  async updateCurrency ({base, code, price}) {
+    const currency = this.currencies.find(currency => currency.code === paramCurrency.code)
+
+    if (!currency) {
+      throw new Error('currency not found')
+    }
+
+    const index = this.currencies.indexOf(currency)
+    this.currencies[index] = {
+        base: base ?? 'USD',
+        code,
+        price
+    }
   }
 
   deleteCurrency (code) {
-    if (!this.currencies.rates[code]) return false
-    delete this.currencies.rates[code]
+    const currency = this.currencies.find(currency => currency.code === code)
+    if (!currency) return false
+    const index = this.currencies.indexOf(currency)
+    this.currencies.splice(index, 1)
     return true
   }
 }
