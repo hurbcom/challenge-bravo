@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+    app:
+        build: .
+        container_name: conversion_app
+        ports:
+        - 3000:3000
+        volumes:
+        - .:/usr/app
+        - nodemodules:/usr/app/node_modules
+        depends_on:
+        - mongo
+
+    mongo:
+        image: mongo:6.0.5
+        container_name: conversion_db
+        environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=root
+
+    mongo_tmpfs:
+        container_name: in-memory-mongo
+        image: mongo:6.0.5
+        environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=root
+
+        tmpfs:
+        - /data/db
+    redis:
+        image: redis:7.2.0-alpine
+        container_name: conversion_redis
+        ports:
+            - 6379:6379
+
+volumes:
+    nodemodules: {}

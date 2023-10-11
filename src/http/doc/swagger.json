@@ -1,0 +1,234 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+      "title": "Api de conversão de moeda(cambio)",
+      "description": "Essa API permite fazer conversão monetária entre moedas, registrar novas moedas e excluí-las, ** todas as taxas de câmbio estão com base: USD **.",
+      "version": "1.0.0"
+  },
+  "paths": {
+      "/currency/convert": {
+        "get":{
+          "tags":["Currency"],
+          "description": "Rota responsável por fazer a conversão entre duas moedas.",
+          "parameters": [
+            {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "A moeda de destino para conversão (ex: USD)."
+          },
+            {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "A moeda de origem para conversão (ex: EUR)."
+          },
+            {
+            "in": "query",
+            "name": "amount",
+            "required": true,
+            "schema": {
+              "type": "number"
+            },
+            "description": "A quantidade a ser convertida."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "retornao resultado da conversão se for bem sussedido.",
+            "content": {
+                "application/json":{
+                    "schema": {
+                        "type": "object",
+                        "properties":{
+                            "message":{
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "examples": {
+                        "successful response":{
+                            "value":{
+                                "converted": "number"
+                            }
+                        }
+                    }
+                }
+              }
+            },
+            "400": {
+                "description": "retornará um error Bad Request se alguns dos parâmetros de consulta não for fornecido."
+                },
+          "404": {
+            "description": "retornará um error Not Found se algumas das moedas fornecidas não for encontrada.",
+            "content": {
+                "application/json":{
+                    "schema": {
+                        "type": "object",
+                        "properties":{
+                            "message":{
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "examples": {
+                        "error":{
+                            "value":{
+                                "message": "Currency not found: AUD"
+                            }
+                        }
+                    }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/currency": {
+          "post": {
+              "description": "Rota responsável por registrar novas moedas.",
+              "tags": [
+                  "Currency"
+              ],
+              "requestBody": {
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "type": "object",
+                              "properties": {
+                                  "code": {
+                                      "type": "string"
+                                  },
+                                  "price": {
+                                      "type": "number"
+                                  }
+                              }
+                          },
+                          "examples": {
+                              "currency": {
+                                  "value": {
+                                      "code": "BAV",
+                                      "price": 1.5
+                                  }
+                              }
+                          }
+                      }
+                  }
+              },
+              "responses": {
+                  "200": {
+                      "description": "retorna o id da moeda"
+                  },
+                  "400": {
+                      "description": "code ou price incorretos."
+                  }
+              }
+          },
+
+          "delete": {
+            "tags":["Currency"],
+            "description": "deleta uma moeda pelo coódigo",
+            "parameters": [
+              {
+                "name": "code",
+                "in": "path",
+                "required": true
+              }
+            ],
+            "responses": {
+              "200": {
+                  "description": "retorna status code 200 se for bem sussedido"
+              },
+              "404": {
+                  "description": "moeda não foi encontrada pelo código fornecido"
+              }
+          }
+          }
+      },
+      "/currency/supported-currency":{
+        "post": {
+            "description": "Rota estender as moedas suportadas pela api. Ao enviar o código de uma moeda verdadeira a api ira buscar a moeda em uma api externa de contação de moedas, se não a encontrar, returnará um erro",
+          "tags": [
+              "Currency"
+          ],
+          "requestBody": {
+              "content": {
+                  "application/json": {
+                      "schema": {
+                          "type": "object",
+                          "properties": {
+                              "code": {
+                                  "type": "string"
+                              }
+                          }
+                      },
+                      "examples": {
+                          "currency": {
+                              "value": {
+                                  "code": "AUD"
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "responses": {
+              "200": {
+                  "description": "Se não houver nenhum erro, retornará status code de 200 sem nenhum dado no corpo da requisição"
+              },
+              "400": {
+                  "description": "returna uma message de error se o corpo da requisão não atender as requisitos",
+                  "content": {
+                    "application/json":{
+                        "schema": {
+                            "type": "object",
+                            "properties":{
+                                "message":{
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "error":{
+                                "value":{
+                                    "message": "code must not be empty and different of string"
+                                }
+                            }
+                        }
+                    }
+                  }
+              }
+
+          }
+        },
+
+        "delete": {
+            "tags":["Currency"],
+            "description": "deleta uma moeda suportada pela api pelo coódigo",
+            "parameters": [
+              {
+                "name": "code",
+                "in": "path",
+                "required": true
+              }
+            ],
+            "responses": {
+              "200": {
+                  "description": "retorna status code 200 se for bem sussedido"
+              },
+              "404": {
+                  "description": "moeda não foi encontrada pelo código fornecido"
+              }
+          }
+          }
+      }
+
+
+  }
+}

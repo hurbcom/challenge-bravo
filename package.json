@@ -1,0 +1,37 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "[[English](README.md) | [Português](README.pt.md)]",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest ",
+    "test:setup": "docker compose restart mongo_tmpfs && sleep 1 && node ./src/utils/setupTest.js ",
+    "dev": "nodemon ./src/server.js",
+    "start": "node src/server.js"
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.49.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "git-commit-msg-linter": "^5.0.4",
+    "nodemon": "^3.0.1",
+    "vitest": "^0.34.4"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "ioredis": "^5.3.2",
+    "joi": "^17.10.2",
+    "mongodb": "^6.1.0",
+    "supertest": "^6.3.3",
+    "swagger-ui-express": "^5.0.0"
+  }
+}
