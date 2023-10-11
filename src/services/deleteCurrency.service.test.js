@@ -7,6 +7,7 @@ describe('Delete Currency service', () => {
   const deleteCurrencyService = new DeleteCurrencyService(currencyRepository)
   test('should be able delete a currency', async () => {
     await expect(deleteCurrencyService.execute('BRL')).resolves.toBeTruthy()
+    expect(currencyRepository.currencies.find(currency => currency.code === 'BRL')).toBeFalsy()
   })
   test('should return an error when deleting a non-existent currency', async () => {
     await expect(deleteCurrencyService.execute('FAKE')).rejects.toThrow()
