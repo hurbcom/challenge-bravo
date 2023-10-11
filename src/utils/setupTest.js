@@ -9,7 +9,7 @@ async function setupTest () {
   })
 
   await Promise.all(arrayPromise)
-    .catch(error => console.log(`Erro ao executar ${error}`))
+    .catch(error => console.log(`Error when executing ${error}`))
 }
 
 export { setupTest }
