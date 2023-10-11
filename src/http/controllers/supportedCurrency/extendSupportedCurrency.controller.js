@@ -1,6 +1,6 @@
 import { ExtendSupportedCurrencyService } from '../../../services/supportedCurrenciesService/extendSupportedCurrency.service.js'
 import { SupportedCurrencyRepository } from '../../../database/supportedCurrencyRepository/supportedCurrencyRepository.js'
-import { AbstractApi } from '../../client/abstractApi.js'
+import { CurrencyApiClient } from '../../client/currencyApi.client.js'
 import { RegisterCurrencyService } from '../../../services/registerCurrency.service.js'
 import { CurrencyMongoRepository } from '../../../database/currencyMongoRepository.js'
 
@@ -9,7 +9,7 @@ class ExtendSupportedCurrencyController {
     const supportedCurrenciesRepository = new SupportedCurrencyRepository()
     const currencyRepository = new CurrencyMongoRepository()
     const registerCurrencyService = new RegisterCurrencyService(currencyRepository)
-    const resourceExtern = new AbstractApi()
+    const resourceExtern = new CurrencyApiClient()
     const extendSupportedCurrency = new ExtendSupportedCurrencyService(supportedCurrenciesRepository, registerCurrencyService, resourceExtern)
 
     const { code } = req.body
