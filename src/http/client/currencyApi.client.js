@@ -4,7 +4,7 @@ import axios from 'axios'
 import { SupportedCurrencyRepository } from '../../database/supportedCurrencyRepository/supportedCurrencyRepository.js'
 import { RedisRepository } from '../../database/redis/redisRepository.js'
 
-export class CurrencyApi {
+export class CurrencyApiClient {
   #request
   #cacheRepository
   constructor () {
@@ -35,7 +35,7 @@ export class CurrencyApi {
     const currencies = []
     for (const code of supported_currencies) {
       const currency = {
-        base: 'UDS',
+        base: 'USD',
         code,
         price: rates[code]
       }

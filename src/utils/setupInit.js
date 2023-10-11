@@ -1,10 +1,10 @@
 import { CurrencyMongoRepository } from '../database/currencyMongoRepository.js'
 import { SupportedCurrencyRepository } from '../database/supportedCurrencyRepository/supportedCurrencyRepository.js'
-import { UpdateCurrencyFromDBService } from '../services/updateCurrencyFromDB.service.js'
+import { UpdateManyCurrencyService } from '../services/updateManyCurrency.service.js'
 import { AddSupportedCurrencies } from '../services/supportedCurrenciesService/addSupportedCurrencies.service.js'
-import { RedisRepository } from '../database/redis/redisRepository.js'
-import { AbstractApi } from '../http/client/abstractApi.js'
 import { Connection } from '../database/connection/connection.js'
+import { CurrencyApiClient } from '../http/client/currencyApi.client.js'
+import { RedisRepository } from '../database/redis/redisRepository.js'
 
 await Connection.connect()
 
@@ -14,13 +14,17 @@ const supportedCurrencyRepository = new SupportedCurrencyRepository()
 const redisRepository = new RedisRepository()
 
 // client api
-const clientApi = new AbstractApi()
+const currencyApiClient = new CurrencyApiClient()
 
 // services
-const updateCurrencyFromDBService = new UpdateCurrencyFromDBService(currencyRepository, clientApi, redisRepository)
 const addSupportedCurrencies = new AddSupportedCurrencies(supportedCurrencyRepository)
 
+const updateManyCurrency = new UpdateManyCurrencyService(currencyRepository)
+const currencies = await currencyApiClient.getCurrencies()
+
 export async function setupInit () {
+  redisRepository.set('exchange_rates', JSON.stringify(currencies), 'EX', 10800)
+  redisRepository.disconnect()
   await addSupportedCurrencies.execute()
-  await updateCurrencyFromDBService.execute()
+  await updateManyCurrency.execute(await currencyApiClient.normalizeToMongo(currencies))
 }
