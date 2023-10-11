@@ -1,4 +1,3 @@
-import CurrencyMongoMappers from './currencyMongoMapper.js'
 import { Connection } from './connection/connection.js'
 
 class CurrencyMongoRepository extends Connection {
@@ -11,13 +10,13 @@ class CurrencyMongoRepository extends Connection {
   async getCurrencies (code = null) {
     try {
       if (code) {
-        const currency = await this.#collection.find({ code }).toArray()
-        if (!currency.length) return false
-        return CurrencyMongoMappers.toDomain(currency)
+        const [currency] = await this.#collection.find({ code }).toArray()
+        if (!currency) return false
+        return currency
       }
       const currencies = await this.#collection.find({}).toArray()
 
-      return CurrencyMongoMappers.toDomain(currencies)
+      return currencies
     } catch (error) {
       throw new Error(error)
     }

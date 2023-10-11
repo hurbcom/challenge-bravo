@@ -11,7 +11,6 @@ export class Connection {
         Connection.client = new MongoClient(databaseUrl)
         await Connection.client.connect()
         Connection.db = Connection.client.db('bravo')
-        console.log('successfully connecting')
       }
     } catch (error) {
       throw new Error(error)
