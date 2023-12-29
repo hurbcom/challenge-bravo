@@ -61,4 +61,20 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
             );
         }
     }
+
+    async findAll(): Promise<any> {
+        try {
+            const currencies = await this.CurrencyModel.find()
+
+            if (currencies.length < 1) {
+                throw new PersistenceError(`not found`);
+            }
+
+            return currencies;
+        } catch (e) {
+            throw new PersistenceError(
+                `Error on CurrencyRepository.update: ${JSON.stringify(e, null, 4)}`
+            );
+        }
+    }
 }

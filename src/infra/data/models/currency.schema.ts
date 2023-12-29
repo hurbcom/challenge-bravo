@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import { CurrencyEntityProps } from '../../../domain/entities/currency.entity';
 
 const CurrencySchema = new Schema<CurrencyEntityProps>(

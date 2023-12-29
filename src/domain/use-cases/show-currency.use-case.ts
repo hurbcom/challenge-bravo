@@ -1,7 +1,7 @@
 import CurrencyEntity, { CurrencyEntityProps } from '../entities/currency.entity';
 import CurrencyRepository from '../repositories/currency.repository';
 
-export default class LoginCurrencyUseCase {
+export default class ShowCurrencyUseCase {
   constructor(private readonly currencyRepository: CurrencyRepository) { }
 
   async execute(currencyEntityProps: CurrencyEntityProps): Promise<CurrencyEntity | null> {

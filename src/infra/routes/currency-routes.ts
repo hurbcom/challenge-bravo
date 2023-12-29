@@ -1,25 +1,27 @@
 import { Router } from "express";
-import ShowTopTenCurrency from "../../domain/use-cases/show-top-ten-currency.use-case";
-import ShowCurrencyUseCase from "../../domain/use-cases/show-currency-history.use-case";
+import ShowApiAllCurrenciesUseCase from "../../domain/use-cases/show-api-all-currencies.use-case";
 import CurrencyController from "../controllers/currency.controller";
 import { Connection } from "mongoose";
-import CurrencyRepositoryImpl from "../data/repositories/currency.respository.impl";
+import CurrencyRepositoryImpl from "../data/repositories/currency.repository.impl";
 import UpdateCurrencyUseCase from "../../domain/use-cases/update-currency.use-case";
 import RegisterNewCurrencyCurrencyCase from "../../domain/use-cases/register-new-currency.use-case";
-import ShowCurrencyHistoryUseCase from "../../domain/use-cases/show-currency-history.use-case";
+import ShowAllCurrenciesUseCase from "../../domain/use-cases/show-all-currencies.use-case";
+import ShowCurrencyUseCase from "../../domain/use-cases/show-currency.use-case";
+import ShowApiCurrencyUseCase from "../../domain/use-cases/show-api-currency.use-case";
 
 
 const currencyRoutes = (router: Router, connection: Connection) => {
   const CURRENCY_API_PREFIX = '/currencies';
 
   const currencyRepository = new CurrencyRepositoryImpl(connection);
-  const updateCurrencyUseCase = new UpdateCurrencyUseCase(currencyRepository)
   const registerNewCurrency = new RegisterNewCurrencyCurrencyCase(currencyRepository);
-  const showCurrency = new ShowCurrencyUseCase();
-  const showTopTenCurrency = new ShowTopTenCurrency();
-  const showCurrencyHistoryUseCase = new ShowCurrencyHistoryUseCase();
-  const currencyController = new CurrencyController(registerNewCurrency, updateCurrencyUseCase, showCurrency, showTopTenCurrency, showCurrencyHistoryUseCase);    
-
+  const updateCurrencyUseCase = new UpdateCurrencyUseCase(currencyRepository)
+  const showCurrencyUseCase = new ShowCurrencyUseCase(currencyRepository);
+  const showApiCurrencyUseCase = new ShowApiCurrencyUseCase();
+  const showAllCurrenciesUseCase = new ShowAllCurrenciesUseCase(currencyRepository);
+  const showApiAllCurrenciesUseCase = new ShowApiAllCurrenciesUseCase();
+  const currencyController = new CurrencyController(registerNewCurrency, updateCurrencyUseCase, showCurrencyUseCase, showApiCurrencyUseCase, showAllCurrenciesUseCase, showApiAllCurrenciesUseCase);  
+  
   router.post(`${CURRENCY_API_PREFIX}/currency`, (request, response) =>
       currencyController.postCurrency(request, response)
   );
