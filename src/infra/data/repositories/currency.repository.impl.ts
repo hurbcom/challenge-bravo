@@ -4,13 +4,14 @@ import CurrencyEntity, { CurrencyEntityProps } from '../../../domain/entities/cu
 import PersistenceError from '../../../domain/errors/persistence.error';
 import CurrencyRepository from '../../../domain/repositories/currency.repository';
 import CurrencySchema from '../models/currency.schema';
-
+import { CurrencyResponse } from '../../../domain/entities/dto/currency-response.dto';
+import { arrayToHashString } from '../../../utils/arrayToHashString';
 export default class CurrencyRepositoryImpl implements CurrencyRepository {
     private readonly conn: Connection;
     private readonly CurrencyModel: Model<CurrencyEntityProps>;
 
     constructor(conn?: Connection) {
-        this.conn = conn || connection();
+        this.conn = conn ?? connection();
         this.CurrencyModel = this.conn.model<CurrencyEntityProps>('currencies', CurrencySchema);
     }
 
@@ -77,4 +78,101 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
             );
         }
     }
+
+    async findAllApi(): Promise<CurrencyResponse[] | null> {
+        let codes: Array<string> = [];
+        try {
+            const currenciesDB = await this.CurrencyModel.find()
+
+            if (currenciesDB.length < 1) {
+                throw new PersistenceError(`not found`);
+            }
+            
+            currenciesDB.forEach(currency => {
+                if(!currency.isFictitious && currency.code !== 'BRL'){
+                    codes.push(`${currency.code}-BRL`)
+                }
+            });
+
+            const hashStringResult = arrayToHashString(codes);
+
+            if(!hashStringResult){
+                throw new Error()
+            }
+
+            const result = await getAllCurrenciesInApi(hashStringResult);
+
+            return result
+        } catch (e) {
+            throw new PersistenceError(
+                `Error on CurrencyRepository.update: ${JSON.stringify(e, null, 4)}`
+            );
+        }
+    }      
+}
+
+import axios from "axios";
+
+const API_URL = "https://economia.awesomeapi.com.br/json";
+
+const getCurrencyInApi = async (query: {from: string, to: string, amount: number}) => {
+  const {from, to, amount} = query;
+  const ballast = "USD";
+
+  const getFromCurrencyValue = await getCurrencyValueInBallast(
+    from,
+    ballast,
+  );
+
+  const getToCurrencyValue = await getCurrencyValueInBallast(
+    to,
+    ballast,
+  );
+
+  const fromToConversion = getFromCurrencyValue / getToCurrencyValue;
+
+  const response = {
+    from,
+    to,
+    bid: fromToConversion,
+    ballast,
+    amountFrom: amount,
+    resultTo: fromToConversion * amount,
+    retrieveDate: new Date(),
+  };
+
+  return response;
+}
+
+const getAllCurrenciesInApi = async (hash: string) => {
+  const finalURL = `${API_URL}/last/${hash}`
+  console.log("finalURL", finalURL)
+  const response = await axios.get(finalURL)
+  return response.data
+}
+
+const getCurrencyValueInBallast = async (from: string, to: string) => {
+  const ballast = "USD";
+
+  const { data: usdToBRL } = await axios.get(
+    `${API_URL}/all/${ballast}-BRL`,
+  );
+
+  const usdToBRLResponse = usdToBRL[ballast];
+  
+  if (from === 'BRL') {
+    return 1 / Number(usdToBRLResponse.bid);
+  }
+
+  const { data: fromToBRL } = await axios.get(
+    `${API_URL}/all/${from}-BRL`,
+  );
+  
+  const fromToBRLResponse = fromToBRL[from];
+
+  if (!Number(fromToBRLResponse.bid)) {
+    throw new Error();
+  }
+
+  return Number(fromToBRLResponse.bid) / Number(usdToBRLResponse.bid);
 }
