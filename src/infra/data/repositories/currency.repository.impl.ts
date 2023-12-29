@@ -7,6 +7,7 @@ import CurrencySchema from '../models/currency.schema';
 import { CurrencyResponse } from '../../../domain/entities/dto/currency-response.dto';
 import { arrayToHashString } from '../../../utils/arrayToHashString';
 import axios from "axios";
+import { CurrencyApi } from '../../../domain/entities/dto/currency-api-response.dto';
 
 const API_URL = "https://economia.awesomeapi.com.br/json";
 export default class CurrencyRepositoryImpl implements CurrencyRepository {
@@ -112,36 +113,33 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
 
     async findByApi(code: string): Promise<CurrencyResponse | null> {
         return await findOneInApi(code)
-    }      
-}
+    }   
 
-const getCurrencyInApi = async (query: {from: string, to: string, amount: number}) => {
-  const {from, to, amount} = query;
-  const ballast = "USD";
-
-  const getFromCurrencyValue = await getCurrencyValueInBallast(
-    from,
-    ballast,
-  );
-
-  const getToCurrencyValue = await getCurrencyValueInBallast(
-    to,
-    ballast,
-  );
-
-  const fromToConversion = getFromCurrencyValue / getToCurrencyValue;
-
-  const response = {
-    from,
-    to,
-    bid: fromToConversion,
-    ballast,
-    amountFrom: amount,
-    resultTo: fromToConversion * amount,
-    retrieveDate: new Date(),
-  };
-
-  return response;
+    async convertCurrency(from: string, to: string, amount: number): Promise<CurrencyApi | null> {
+        console.log("cheguei no convertCurrency ", from, to, amount)
+        const ballast = "USD";
+        const getFromCurrencyValue = await getCurrencyValueInBallast(
+            from,
+            ballast,
+        );
+        
+        const getToCurrencyValue = await getCurrencyValueInBallast(
+            to,
+            ballast,
+        );
+        
+        const fromToConversion = getFromCurrencyValue / getToCurrencyValue;
+        
+        return {
+            from,
+            to,
+            bid: fromToConversion,
+            ballast,
+            amountFrom: amount,
+            resultTo: fromToConversion * amount,
+            retrieveDate: new Date(),
+        } as unknown as CurrencyApi;  
+    }   
 }
 
 const getAllCurrenciesInApi = async (hash: string) => {

@@ -1,4 +1,5 @@
 import CurrencyEntity, { CurrencyEntityProps } from '../entities/currency.entity';
+import { CurrencyApi } from '../entities/dto/currency-api-response.dto';
 import { CurrencyResponse } from '../entities/dto/currency-response.dto';
 
 export default interface CurrencyRepository {
@@ -8,4 +9,5 @@ export default interface CurrencyRepository {
     insert(currencyEntity: CurrencyEntity): Promise<CurrencyEntity>;
     update(currencyId: string, currencyEntity: CurrencyEntity): Promise<void>;
     findByApi(code: string): Promise<CurrencyResponse | null>;
+    convertCurrency(from: string, to: string, amount: number): Promise<CurrencyApi | null>;
 }

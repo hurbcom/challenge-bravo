@@ -8,6 +8,7 @@ import RegisterNewCurrencyCurrencyCase from "../../domain/use-cases/register-new
 import ShowAllCurrenciesUseCase from "../../domain/use-cases/show-all-currencies.use-case";
 import ShowCurrencyUseCase from "../../domain/use-cases/show-currency.use-case";
 import ShowApiCurrencyUseCase from "../../domain/use-cases/show-api-currency.use-case";
+import ConvertCurrencyUseCase from "../../domain/use-cases/convert-currency.use-case";
 
 
 const currencyRoutes = (router: Router, connection: Connection) => {
@@ -20,7 +21,8 @@ const currencyRoutes = (router: Router, connection: Connection) => {
   const showApiCurrencyUseCase = new ShowApiCurrencyUseCase(currencyRepository);
   const showAllCurrenciesUseCase = new ShowAllCurrenciesUseCase(currencyRepository);
   const showApiAllCurrenciesUseCase = new ShowApiAllCurrenciesUseCase(currencyRepository);
-  const currencyController = new CurrencyController(registerNewCurrency, updateCurrencyUseCase, showCurrencyUseCase, showApiCurrencyUseCase, showAllCurrenciesUseCase, showApiAllCurrenciesUseCase);  
+  const convertCurrencyUseCase = new ConvertCurrencyUseCase(currencyRepository);
+  const currencyController = new CurrencyController(registerNewCurrency, updateCurrencyUseCase, showCurrencyUseCase, showApiCurrencyUseCase, showAllCurrenciesUseCase, showApiAllCurrenciesUseCase, convertCurrencyUseCase);  
   
   router.post(`${CURRENCY_API_PREFIX}/currency`, (request, response) =>
       currencyController.postCurrency(request, response)
@@ -39,14 +41,17 @@ const currencyRoutes = (router: Router, connection: Connection) => {
     currencyController.getAllCurrency(request, response)
   );
 
-  router.get(`${CURRENCY_API_PREFIX}/api/currency/:code`, (request, response) =>
+  router.get(`${CURRENCY_API_PREFIX}/api/currency/:params`, (request, response) =>
     currencyController.getApiCurrency(request, response)
   );
 
   router.get(`${CURRENCY_API_PREFIX}/api`, (request, response) =>
   currencyController.getAllApiCurrency(request, response)
   );
-  
+
+  router.get(`${CURRENCY_API_PREFIX}/convert`, (request, response) =>
+  currencyController.convert(request, response)
+  );
 };
 
 export default currencyRoutes;
