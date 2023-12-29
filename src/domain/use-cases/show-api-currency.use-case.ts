@@ -1,9 +1,9 @@
-import currencyService from '../../services/currency-services'
+import { CurrencyResponse } from '../entities/dto/currency-response.dto';
+import CurrencyRepository from '../repositories/currency.repository';
 
 export default class ShowApiCurrencyUseCase {
-  async execute(): Promise<any> {
-    const currency: any = await currencyService.getTopTenCurrency();
-
-    return currency;
+  constructor(private readonly currencyRepository: CurrencyRepository) { }
+  async execute(code: string): Promise<CurrencyResponse | null> {
+    return await this.currencyRepository.findByApi(code);
   }
 }

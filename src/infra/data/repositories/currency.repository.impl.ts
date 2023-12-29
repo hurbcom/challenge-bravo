@@ -6,6 +6,9 @@ import CurrencyRepository from '../../../domain/repositories/currency.repository
 import CurrencySchema from '../models/currency.schema';
 import { CurrencyResponse } from '../../../domain/entities/dto/currency-response.dto';
 import { arrayToHashString } from '../../../utils/arrayToHashString';
+import axios from "axios";
+
+const API_URL = "https://economia.awesomeapi.com.br/json";
 export default class CurrencyRepositoryImpl implements CurrencyRepository {
     private readonly conn: Connection;
     private readonly CurrencyModel: Model<CurrencyEntityProps>;
@@ -105,12 +108,12 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
                 `Error on CurrencyRepository.update: ${JSON.stringify(e, null, 4)}`
             );
         }
+    } 
+
+    async findByApi(code: string): Promise<CurrencyResponse | null> {
+        return await findOneInApi(code)
     }      
 }
-
-import axios from "axios";
-
-const API_URL = "https://economia.awesomeapi.com.br/json";
 
 const getCurrencyInApi = async (query: {from: string, to: string, amount: number}) => {
   const {from, to, amount} = query;
@@ -143,7 +146,13 @@ const getCurrencyInApi = async (query: {from: string, to: string, amount: number
 
 const getAllCurrenciesInApi = async (hash: string) => {
   const finalURL = `${API_URL}/last/${hash}`
-  console.log("finalURL", finalURL)
+  const response = await axios.get(finalURL)
+  return response.data
+}
+
+const findOneInApi = async (hash: string) => {
+
+const finalURL = `${API_URL}/daily/${hash}/1`
   const response = await axios.get(finalURL)
   return response.data
 }

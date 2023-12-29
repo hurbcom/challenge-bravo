@@ -86,11 +86,30 @@ export default class CurrencyController {
         }
     }
 
+    async getAllCurrency(
+        request: Request,
+        response: Response
+    ): Promise<void> {
+        try {
+            const topTenCurrency = await this.showAllCurrenciesUseCase.execute();
+            response.status(200).json(topTenCurrency);
+        } catch (e) {
+            let statusCode: number;
+
+            if (e instanceof ValidationError) {
+                statusCode = 400;
+            } else {
+                statusCode = 500;
+            }
+
+            response.status(statusCode).json(e);
+        }
+    }
+
     async getAllApiCurrency(
         request: Request,
         response: Response
     ): Promise<void> {
-        const { body } = request;
         const { code } = request.params;
         try {
             const currencyHistory: any = await this.showApiAllCurrenciesUseCase.execute(code);
@@ -112,30 +131,10 @@ export default class CurrencyController {
         request: Request,
         response: Response
     ): Promise<void> {
+        const {code} = request.params
         try {
-            const currencyHistory: any = await this.showApiCurrencyUseCase.execute();
+            const currencyHistory: any = await this.showApiCurrencyUseCase.execute(code);
             response.status(200).json(currencyHistory);
-        } catch (e) {
-            let statusCode: number;
-
-            if (e instanceof ValidationError) {
-                statusCode = 400;
-            } else {
-                statusCode = 500;
-            }
-
-            response.status(statusCode).json(e);
-        }
-    }
-
-    async getAllCurrency(
-        request: Request,
-        response: Response
-    ): Promise<void> {
-        const { body } = request;
-        try {
-            const topTenCurrency = await this.showAllCurrenciesUseCase.execute();
-            response.status(200).json(topTenCurrency);
         } catch (e) {
             let statusCode: number;
 

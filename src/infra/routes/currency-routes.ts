@@ -17,7 +17,7 @@ const currencyRoutes = (router: Router, connection: Connection) => {
   const registerNewCurrency = new RegisterNewCurrencyCurrencyCase(currencyRepository);
   const updateCurrencyUseCase = new UpdateCurrencyUseCase(currencyRepository)
   const showCurrencyUseCase = new ShowCurrencyUseCase(currencyRepository);
-  const showApiCurrencyUseCase = new ShowApiCurrencyUseCase();
+  const showApiCurrencyUseCase = new ShowApiCurrencyUseCase(currencyRepository);
   const showAllCurrenciesUseCase = new ShowAllCurrenciesUseCase(currencyRepository);
   const showApiAllCurrenciesUseCase = new ShowApiAllCurrenciesUseCase(currencyRepository);
   const currencyController = new CurrencyController(registerNewCurrency, updateCurrencyUseCase, showCurrencyUseCase, showApiCurrencyUseCase, showAllCurrenciesUseCase, showApiAllCurrenciesUseCase);  
@@ -39,7 +39,7 @@ const currencyRoutes = (router: Router, connection: Connection) => {
     currencyController.getAllCurrency(request, response)
   );
 
-  router.get(`${CURRENCY_API_PREFIX}/api/currency`, (request, response) =>
+  router.get(`${CURRENCY_API_PREFIX}/api/currency/:code`, (request, response) =>
     currencyController.getApiCurrency(request, response)
   );
 
