@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  server:
+    build: .
+    container_name: api-currency-quotation
+    env_file:
+      - .env
+    ports:
+      - 3003:3003
+    restart: always
+    volumes:
+      - ./:/home/node/app
