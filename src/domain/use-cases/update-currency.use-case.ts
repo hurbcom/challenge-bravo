@@ -7,12 +7,18 @@ export default class UpdateCurrencyUseCase {
   async execute(body: any): Promise<CurrencyEntityProps | null> {
     const currencyResponse = await this.currencyRepository.findBy({
       code: body.code,
-    });    
+    }); 
       if(currencyResponse){
-        const currency = currencyResponse[0]; 
-        const updatedCurrency = await this.currencyRepository.update(currency);
-  
-        return updatedCurrency.props;
+        const currencyId = currencyResponse[0].props._id; 
+        await this.currencyRepository.update(currencyId, body);
+        return {
+          _id: body._id,
+          name: body.name,
+          code: body.code,
+          codeIn: body.codeIn,
+          basePrice: body.basePrice,
+          isFictitious: body.isFictitious
+      };
       }
     return null
   }

@@ -6,5 +6,5 @@ export default interface CurrencyRepository {
     findAll(currencyEntityProps: Partial<CurrencyEntityProps>): Promise<CurrencyEntity[] | null>;
     findAllApi(currencyEntityProps: Partial<CurrencyEntityProps>): Promise<CurrencyResponse[] | null>;
     insert(currencyEntity: CurrencyEntity): Promise<CurrencyEntity>;
-    update(currencyEntity: CurrencyEntity): Promise<CurrencyEntity>;
+    update(currencyId: string, currencyEntity: CurrencyEntity): Promise<void>;
 }

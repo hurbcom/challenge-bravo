@@ -43,19 +43,16 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
         }
     }
 
-    async update(currencyEntity: CurrencyEntity): Promise<CurrencyEntity> {
+    async update(currencyId: string, body: any): Promise<void> {
         try {
-            const { props } = currencyEntity;
-            const updatedCurrency = await this.CurrencyModel.findOneAndUpdate(
-                { _id: props._id },
-                { $set: props },
-                { new: true }
+            const updatedCurrency = await this.CurrencyModel.updateOne(
+                { _id: currencyId },
+                body,
             );
 
             if (!updatedCurrency)
-                throw new PersistenceError(`Currency with id ${props._id as string} not found`);
-
-            return new CurrencyEntity(updatedCurrency.toObject());
+                throw new PersistenceError(`Currency with id ${currencyId} not found`);
+            return
         } catch (e) {
             throw new PersistenceError(
                 `Error on CurrencyRepository.update: ${JSON.stringify(e, null, 4)}`
