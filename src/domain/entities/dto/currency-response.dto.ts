@@ -1,11 +1,11 @@
 export interface CurrencyResponse {
   [key : string]: {
-    code: String,
-    codein: String,
-    name: String,
-    high: String,
-    low: String,
-    timestamp: String,
-    create_date: String,
+    name: string,
+    code: string,
+    codeIn: string,
+    basePrice: number,
+    isFictitious: string,
+    timestamp: string,
+    create_date: string,
   }
 }

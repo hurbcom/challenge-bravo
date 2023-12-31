@@ -5,7 +5,7 @@ export default class ShowApiAllCurrenciesUseCase {
   constructor(private readonly currencyRepository: CurrencyRepository) { }
   async execute(code: string): Promise<CurrencyResponse[] | null> {
     try {
-      const currencyResponse = await this.currencyRepository.findAllApi({});
+      const currencyResponse = await this.currencyRepository.findAllApi();
 
       return currencyResponse ?? null
 

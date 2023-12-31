@@ -6,7 +6,7 @@ export default class ShowAllCurrenciesUseCase {
 
   async execute(): Promise<CurrencyEntity[] | null> {
     try {
-      const currencyResponse = await this.currencyRepository.findAll({});
+      const currencyResponse = await this.currencyRepository.findAll();
 
       return currencyResponse ?? null
 

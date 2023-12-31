@@ -9,8 +9,7 @@
         "test:coverage": "./node_modules/.bin/jest --coverage",
         "build": "./node_modules/.bin/tsc",
         "start:dev": "./node_modules/.bin/nodemon ./src/index.ts",
-        "start:docker": "./node_modules/.bin/ts-node ./src/index.ts",
-        "heroku-postbuild": "npm run build"
+        "start:docker": "./node_modules/.bin/ts-node ./src/index.ts"
     },
     "keywords": [],
     "author": "",
@@ -50,6 +49,7 @@
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^6.0.14",
+        "redis": "^4.6.12",
         "serve": "^13.0.2"
     }
 }

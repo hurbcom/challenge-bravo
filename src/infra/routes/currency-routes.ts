@@ -41,7 +41,7 @@ const currencyRoutes = (router: Router, connection: Connection) => {
     currencyController.getAllCurrency(request, response)
   );
 
-  router.get(`${CURRENCY_API_PREFIX}/api/currency/:params`, (request, response) =>
+  router.get(`${CURRENCY_API_PREFIX}/api/currency/:code`, (request, response) =>
     currencyController.getApiCurrency(request, response)
   );
 
