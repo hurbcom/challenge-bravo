@@ -8,6 +8,7 @@ import { CurrencyResponse } from '../../../domain/entities/dto/currency-response
 import { arrayToHashString } from '../../../utils/arrayToHashString';
 import axios from "axios";
 import { CurrencyApi } from '../../../domain/entities/dto/currency-api-response.dto';
+import { createClient } from 'redis';
 
 const API_URL = "https://economia.awesomeapi.com.br/json";
 export default class CurrencyRepositoryImpl implements CurrencyRepository {
@@ -88,7 +89,7 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
             if (currenciesDB.length < 1) {
                 throw new PersistenceError(`not found`);
             }
-            
+
             currenciesDB.forEach(currency => {
                 if(!currency.isFictitious && currency.code !== 'BRL'){
                     codes.push(`${currency.code}-BRL`)
@@ -101,9 +102,11 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
                 throw new Error()
             }
 
-            const result = await getAllCurrenciesInApi(hashStringResult);
+            const currenciesApiResult = await getAllCurrenciesInApi(hashStringResult);
 
-            return result
+            setRedisData(currenciesApiResult);
+
+            return currenciesApiResult
         } catch (e) {
             throw new PersistenceError(
                 `Error on CurrencyRepository.update: ${JSON.stringify(e, null, 4)}`
@@ -116,18 +119,28 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
     }   
 
     async convertCurrency(from: string, to: string, amount: number): Promise<CurrencyApi | null> {
-        console.log("cheguei no convertCurrency ", from, to, amount)
         const ballast = "USD";
-        const getFromCurrencyValue = await getCurrencyValueInBallast(
-            from,
-            ballast,
-        );
+        const isGetRedisData = await getRedisData();
+
+        const currenciesData = JSON.parse(isGetRedisData.value);
         
-        const getToCurrencyValue = await getCurrencyValueInBallast(
-            to,
-            ballast,
-        );
+        let getFromCurrencyValue = Number(await getBidValues(currenciesData, from));
+        let getToCurrencyValue = Number(await getBidValues(currenciesData, to));
+
+        if(!getFromCurrencyValue) {
+            getFromCurrencyValue = await getCurrencyValueInBallast(
+                from,
+                ballast,
+            );
+        }
         
+        if(!getToCurrencyValue){
+            getToCurrencyValue = await getCurrencyValueInBallast(
+                to,
+                ballast,
+            );
+        }
+
         const fromToConversion = getFromCurrencyValue / getToCurrencyValue;
         
         return {
@@ -138,8 +151,8 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
             amountFrom: amount,
             resultTo: fromToConversion * amount,
             retrieveDate: new Date(),
-        } as unknown as CurrencyApi;  
-    }   
+        } as unknown as CurrencyApi; 
+    }
 }
 
 const getAllCurrenciesInApi = async (hash: string) => {
@@ -158,25 +171,53 @@ const finalURL = `${API_URL}/daily/${hash}/1`
 const getCurrencyValueInBallast = async (from: string, to: string) => {
   const ballast = "USD";
 
-  const { data: usdToBRL } = await axios.get(
+    const { data: usdToBRL } = await axios.get(
     `${API_URL}/all/${ballast}-BRL`,
-  );
+    );
 
-  const usdToBRLResponse = usdToBRL[ballast];
-  
-  if (from === 'BRL') {
+    const usdToBRLResponse = usdToBRL[ballast];
+    
+    if (from === 'BRL') {
     return 1 / Number(usdToBRLResponse.bid);
-  }
+    }
 
-  const { data: fromToBRL } = await axios.get(
+    const { data: fromToBRL } = await axios.get(
     `${API_URL}/all/${from}-BRL`,
-  );
-  
-  const fromToBRLResponse = fromToBRL[from];
+    );
+    
+    const fromToBRLResponse = fromToBRL[from];
 
-  if (!Number(fromToBRLResponse.bid)) {
+    if (!Number(fromToBRLResponse.bid)) {
     throw new Error();
+    }
+
+    return Number(fromToBRLResponse.bid) / Number(usdToBRLResponse.bid);
+}
+
+const getRedisData = async (): Promise<any> => {
+    const client = await createClient()
+    .on('error', err => console.log('Redis Client Error', err))
+    .connect();
+    const currenciesApi = await client.hGetAll('currenciesApi');
+    await client.disconnect();
+    return currenciesApi
   }
 
-  return Number(fromToBRLResponse.bid) / Number(usdToBRLResponse.bid);
+const setRedisData = async (currencies: CurrencyEntityProps[]): Promise<any> => {
+    const client = await createClient()
+    .on('error', err => console.log('Redis Client Error', err))
+    .connect();
+    await client.hSet("currenciesApi", {value: JSON.stringify(currencies)})
+    await client.disconnect();
+  }
+  
+
+const getBidValues = async (data: any, key: string) => {
+    for (const currencyKey in data) {
+        const currency = data[currencyKey];
+        if (currency.code === key) {
+            return currency.bid;
+        }
+    }
+    return undefined;
 }
