@@ -1,4 +1,4 @@
-import { CurrencyEntityProps } from '../entities/currency.entity';
+import CurrencyEntity, { CurrencyEntityProps } from '../entities/currency.entity';
 import CurrencyRepository from '../repositories/currency.repository';
 
 export default class UpdateCurrencyUseCase {
@@ -16,9 +16,9 @@ export default class UpdateCurrencyUseCase {
           name: body.name,
           code: body.code,
           codeIn: body.codeIn,
-          basePrice: body.basePrice,
+          bid: body.bid,
           isFictitious: body.isFictitious
-      };
+        };
       }
     return null
   }

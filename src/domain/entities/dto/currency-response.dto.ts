@@ -3,7 +3,7 @@ export interface CurrencyResponse {
     name: string,
     code: string,
     codeIn: string,
-    basePrice: number,
+    bid: number,
     isFictitious: string,
     timestamp: string,
     create_date: string,

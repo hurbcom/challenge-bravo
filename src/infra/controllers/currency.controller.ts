@@ -8,8 +8,8 @@ import ShowApiCurrencyUseCase from '../../domain/use-cases/show-api-currency.use
 import ShowAllCurrenciesUseCase from '../../domain/use-cases/show-all-currencies.use-case';
 import ShowCurrencyUseCase from '../../domain/use-cases/show-currency.use-case';
 import ConvertCurrencyUseCase from '../../domain/use-cases/convert-currency.use-case';
-import { ConvertInput } from '../../domain/entities/dto/convert-input.dto';
-
+import { CurrencyResponse } from '../../domain/entities/dto/currency-response.dto';
+import { CurrencyApi } from '../../domain/entities/dto/currency-api-response.dto';
 export default class CurrencyController {
     constructor(
         private readonly registerNewCurrency: RegisterNewCurrencyCurrencyCase,
@@ -115,8 +115,8 @@ export default class CurrencyController {
     ): Promise<void> {
         const { code } = request.params;
         try {
-            const currencyHistory: any = await this.showApiAllCurrenciesUseCase.execute(code);
-            response.status(200).json(currencyHistory);
+            const currencies: CurrencyResponse[] | null = await this.showApiAllCurrenciesUseCase.execute(code);
+            response.status(200).json(currencies);
         } catch (e) {
             let statusCode: number;
 
@@ -136,8 +136,8 @@ export default class CurrencyController {
     ): Promise<void> {
         const {code} = request.params
         try {
-            const currencyHistory: any = await this.showApiCurrencyUseCase.execute(code);
-            response.status(200).json(currencyHistory);
+            const currency: CurrencyResponse | null = await this.showApiCurrencyUseCase.execute(code);
+            response.status(200).json(currency);
         } catch (e) {
             let statusCode: number;
 
@@ -163,7 +163,7 @@ export default class CurrencyController {
             throw new Error('Bad request. Amount need to be a number')
         }
         try {
-            const currencyHistory: any = await this.convertCurrencyUseCase.execute(from as string, to as string, amount as number,);
+            const currencyHistory: CurrencyApi | null = await this.convertCurrencyUseCase.execute(from as string, to as string, amount as number,);
             response.status(200).json(currencyHistory);
         } catch (e) {
             let statusCode: number;

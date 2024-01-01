@@ -48,7 +48,7 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
         }
     }
 
-    async update(currencyId: string, body: any): Promise<void> {
+    async update(currencyId: string, body: CurrencyEntity): Promise<void> {
         try {
             const updatedCurrency = await this.CurrencyModel.updateOne(
                 { _id: currencyId },
@@ -65,7 +65,7 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
         }
     }
 
-    async findAll(): Promise<any> {
+    async findAll(): Promise<CurrencyEntityProps[]> {
         try {
             const currencies = await this.CurrencyModel.find()
 
@@ -120,10 +120,11 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
 
     async convertCurrency(from: string, to: string, amount: number): Promise<CurrencyApi | null> {
         const ballast = "USD";
+        await this.findAllApi();
         const isGetRedisData = await getRedisData();
 
         const currenciesData = JSON.parse(isGetRedisData.value);
-        
+
         let getFromCurrencyValue = Number(await getBidValues(currenciesData, from));
         let getToCurrencyValue = Number(await getBidValues(currenciesData, to));
 
@@ -198,16 +199,16 @@ const getRedisData = async (): Promise<any> => {
     const client = await createClient()
     .on('error', err => console.log('Redis Client Error', err))
     .connect();
-    const currenciesApi = await client.hGetAll('currenciesApi');
+    const currencies = await client.hGetAll('currencies');
     await client.disconnect();
-    return currenciesApi
+    return currencies
   }
 
-const setRedisData = async (currencies: CurrencyEntityProps[]): Promise<any> => {
+const setRedisData = async (currencies: CurrencyEntityProps[]): Promise<void> => {
     const client = await createClient()
     .on('error', err => console.log('Redis Client Error', err))
     .connect();
-    await client.hSet("currenciesApi", {value: JSON.stringify(currencies)})
+    await client.hSet("currencies", {value: JSON.stringify(currencies)})
     await client.disconnect();
   }
   

@@ -21,7 +21,7 @@ const CurrencySchema = new Schema<CurrencyEntityProps>(
             minlength: 3,
             max_length: 3,
         },
-        basePrice: {
+        bid: {
             type: Number,
             required: true,
         },

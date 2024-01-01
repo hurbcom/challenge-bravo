@@ -23,7 +23,7 @@ export default class RegisterNewCurrencyCurrencyCase {
             name: props.name,
             code: props.code,
             codeIn: props.codeIn,
-            basePrice: props.basePrice,
+            bid: props.bid,
             isFictitious: props.isFictitious
         };
 

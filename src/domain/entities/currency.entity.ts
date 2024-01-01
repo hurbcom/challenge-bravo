@@ -27,7 +27,7 @@ export class CurrencyEntityProps {
     @IsString({
         message: 'should_be_string',
     })
-    readonly code: any;
+    readonly code: string;
 
     @IsNotEmpty({
         message: 'field_required',
@@ -35,19 +35,19 @@ export class CurrencyEntityProps {
     @IsString({
         message: 'should_be_string',
     })
-    readonly codeIn: any;
+    readonly codeIn: string;
 
     @IsNotEmpty({
         message: 'field_required',
     })
     @IsNumber()
-    readonly basePrice: any;
+    readonly bid: number;
 
     @IsNotEmpty({
         message: 'field_required',
     })
     @IsBoolean()
-    readonly isFictitious: any;
+    readonly isFictitious: boolean;
 }
 
 export default class CurrencyEntity {
