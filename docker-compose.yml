@@ -1,12 +1,17 @@
 version: "3.9"
+
 services:
-  server:
-    build: .
-    container_name: api-currency-quotation
-    env_file:
-      - .env
-    ports:
-      - 3003:3003
+  mongo:
+    container_name: api-currency-convert-db
+    image: mongo:latest
     restart: always
-    volumes:
-      - ./:/home/node/app
+    ports:
+      - 27017:27017
+  redis:
+    container_name: api-currency-convert-redis
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+volumes:
+  db_data: {}

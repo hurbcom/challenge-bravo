@@ -1,1 +1,1 @@
-import 'jest-ts-auto-mock';
+import "jest-ts-auto-mock";

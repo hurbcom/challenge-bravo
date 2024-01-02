@@ -1,5 +1,5 @@
 export interface ConvertInput {
-    from:string;
+    from: string;
     to: string;
-    amount: number
+    amount: number;
 }

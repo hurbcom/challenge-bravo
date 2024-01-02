@@ -34,48 +34,184 @@ Ref:
 Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
 Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+## A API foi implementada com Typescript, mongoDB, redis.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+## Api externa utilizada para a cotação
 
-## Requisitos
+```
+https://economia.awesomeapi.com.br
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **main** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por code.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+```
 
-## Critério de avaliação
+## Instalação
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+-   Para executar o código rodar os seguintes comandos:
+    -   git clone https://github.com/luizmarques/challenge-bravo.git
+    -   cd challenge-bravo
+    -   docker-compose up --build
+    -   npm install
+    -   npm start
+-   Isso irá subir os containers necessários, já configurados com variáveis de ambiente. Caso necessário mudar, siga o .env.example e crie um .env na raiz do projeto ou altere o docker-compose.yaml.
 
-## Dúvidas
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+## Rotas
+**Converter moedas**  
 
-Boa sorte e boa viagem! ;)
+Recebe três query parametros: ``from``, ``to`` e ``amount``
+
+``GET /currencies/convert?from={from}&to={to}&amount={amount}``
+
+Retornará o seguinte objeto:
+
+```
+{
+	"from": "USD",
+	"to": "BTC",
+	"bid": 0.00002186791645073342,
+	"ballast": "USD",
+	"amountFrom": "20",
+	"resultTo": 0.00043735832901466837,
+	"retrieveDate": "2024-01-02T03:54:54.973Z"
+}
+
+```
+
+**Listar moedas cadastradas**
+
+``GET /currencies/all``
+
+Retornará uma lista de moedas cadastradas:
+
+```
+[
+	{
+		"_id": "659385c16cfa8ec809397289",
+		"name": "EUR",
+		"code": "EUR",
+		"codeIn": "EUR",
+		"bid": 1,
+		"isFictitious": false,
+		"createdAt": "2024-01-02T03:40:49.088Z",
+		"updatedAt": "2024-01-02T03:40:49.088Z",
+		"__v": 0
+	},
+	{
+		"_id": "659389576cfa8ec809397294",
+		"name": "American Dollar",
+		"code": "USD",
+		"codeIn": "USD",
+		"bid": 1,
+		"isFictitious": false,
+		"createdAt": "2024-01-02T03:56:07.149Z",
+		"updatedAt": "2024-01-02T03:56:07.149Z",
+		"__v": 0
+	}
+]
+```
+
+**Cadastrar moeda**
+
+``POST /currencies/currency``
+
+Recebe um JSON com as propriedades:
+```
+{
+	"name": "American Dollar",
+	"code": "USD",
+	"codeIn": "USD",
+	"bid": 1,
+	"isFictitious": false
+}
+```
+
+**Atualizar moeda**
+
+``PUT /currencies/currency``
+
+Recebe um JSON com as propriedades:
+```
+{
+	"name": "American Dollar",
+	"code": "USD",
+	"codeIn": "USD",
+	"bid": 1,
+	"isFictitious": false
+}
+```
+
+**Busca a cotação atual de todas moedas que estão cadastradas na API externa**
+
+``GET /currencies/api``
+
+Retornará um objeto de moedas cadastradas:
+```
+{
+	"EURBRL": {
+		"code": "EUR",
+		"codein": "BRL",
+		"name": "Euro/Real Brasileiro",
+		"high": "5.3747",
+		"low": "5.3747",
+		"varBid": "0",
+		"pctChange": "0",
+		"bid": "5.3497",
+		"ask": "5.3997",
+		"timestamp": "1704167977",
+		"create_date": "2024-01-02 00:59:37"
+	},
+	"USDBRL": {
+		"code": "USD",
+		"codein": "BRL",
+		"name": "Dólar Americano/Real Brasileiro",
+		"high": "4.8534",
+		"low": "4.8534",
+		"varBid": "0",
+		"pctChange": "0",
+		"bid": "4.8526",
+		"ask": "4.8541",
+		"timestamp": "1704146403",
+		"create_date": "2024-01-01 19:00:03"
+	}
+}
+```
+
+**Busca a cotação atual de uma unica moeda na API externa**
+
+``GET /currencies/api/currency/:code``
+
+Retornará um objeto com a  moedas cadastrada:
+```
+{
+	"code": "BTC",
+	"codein": "BRL",
+	"name": "Bitcoin/Real Brasileiro",
+	"high": "221988",
+	"low": "208852",
+	"varBid": "11456",
+	"pctChange": "5.45",
+	"bid": "221582",
+	"ask": "221582",
+	"timestamp": "1704165365",
+	"create_date": "2024-01-02 00:16:05"
+}
+```
+
+**Remover moeda**
+
+``DELETE /currencies/:_id``
+
+Remove a moeda com o ID informado.
+
+**Considerações**
+
+```
+
+Devido ao tempo que tive para fazer o projeto eu não consegui concluir todo o desafio, ainda ficou faltando o teste unitário e a função de converter moedas quando são moedas ficticias não foram concluídas.
+
+```
+
+
+
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />

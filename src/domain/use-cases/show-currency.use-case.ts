@@ -1,19 +1,22 @@
-import CurrencyEntity, { CurrencyEntityProps } from '../entities/currency.entity';
-import CurrencyRepository from '../repositories/currency.repository';
+import CurrencyEntity, {
+    CurrencyEntityProps,
+} from "../entities/currency.entity";
+import CurrencyRepository from "../repositories/currency.repository";
 
 export default class ShowCurrencyUseCase {
-  constructor(private readonly currencyRepository: CurrencyRepository) { }
+    constructor(private readonly currencyRepository: CurrencyRepository) {}
 
-  async execute(currencyEntityProps: CurrencyEntityProps): Promise<CurrencyEntity | null> {
-    try {
-      const currencyResponse = await this.currencyRepository.findBy({
-        code: currencyEntityProps.code,
-      });
+    async execute(
+        currencyEntityProps: CurrencyEntityProps
+    ): Promise<CurrencyEntity | null> {
+        try {
+            const currencyResponse = await this.currencyRepository.findBy({
+                code: currencyEntityProps.code,
+            });
 
-      return currencyResponse? currencyResponse[0] : null
-
-    } catch (e) {
-      return null
+            return currencyResponse ? currencyResponse[0] : null;
+        } catch (e) {
+            return null;
+        }
     }
-  }
 }

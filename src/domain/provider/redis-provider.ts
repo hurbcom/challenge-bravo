@@ -1,9 +1,3 @@
-
-
-
-
 export default class RedisProvider {
-    async redisConnect(): Promise<void> {
-        
-    }
-  }
+    async redisConnect(): Promise<void> {}
+}

@@ -9,7 +9,8 @@
         "test:coverage": "./node_modules/.bin/jest --coverage",
         "build": "./node_modules/.bin/tsc",
         "start:dev": "./node_modules/.bin/nodemon ./src/index.ts",
-        "start:docker": "./node_modules/.bin/ts-node ./src/index.ts"
+        "start:docker": "./node_modules/.bin/ts-node ./src/index.ts",
+        "format": "npx prettier '**/*.ts' '**/*.js' --write"
     },
     "keywords": [],
     "author": "",

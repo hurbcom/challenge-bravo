@@ -1,7 +1,7 @@
-import connection from './infra/data/connection';
-import setupApp from './setup-app';
+import connection from "./infra/data/connection";
+import setupApp from "./setup-app";
 
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 

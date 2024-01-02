@@ -3,7 +3,7 @@ export class Failure {
 }
 
 export default class ValidationError extends Error {
-    public readonly msg = 'ValidationError';
+    public readonly msg = "ValidationError";
     constructor(public readonly errors: Failure[]) {
         super();
     }
