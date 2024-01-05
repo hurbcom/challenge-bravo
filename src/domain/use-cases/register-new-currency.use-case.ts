@@ -3,7 +3,7 @@ import CurrencyEntity, {
 } from "../entities/currency.entity";
 import CurrencyRepository from "../repositories/currency.repository";
 
-export default class RegisterNewCurrencyCurrencyCase {
+export default class RegisterNewCurrencyCase {
     constructor(private readonly currencyRepository: CurrencyRepository) {}
 
     async execute(
@@ -15,7 +15,7 @@ export default class RegisterNewCurrencyCurrencyCase {
             code: currency.props.code,
         });
 
-        if (codeAlreadyInUse?.length) {
+        if (codeAlreadyInUse) {
             throw "code_already_in_use";
         }
 
@@ -28,7 +28,7 @@ export default class RegisterNewCurrencyCurrencyCase {
             _id: props._id,
             name: props.name,
             code: props.code,
-            codeIn: props.codeIn,
+            codein: props.codein,
             bid: props.bid,
             isFictitious: props.isFictitious,
         };

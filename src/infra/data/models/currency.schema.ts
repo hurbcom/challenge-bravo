@@ -15,7 +15,7 @@ const CurrencySchema = new Schema<CurrencyEntityProps>(
             minlength: 3,
             max_length: 3,
         },
-        codeIn: {
+        codein: {
             type: String,
             required: true,
             minlength: 3,

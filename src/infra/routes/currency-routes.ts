@@ -4,7 +4,7 @@ import CurrencyController from "../controllers/currency.controller";
 import { Connection } from "mongoose";
 import CurrencyRepositoryImpl from "../data/repositories/currency.repository.impl";
 import UpdateCurrencyUseCase from "../../domain/use-cases/update-currency.use-case";
-import RegisterNewCurrencyCurrencyCase from "../../domain/use-cases/register-new-currency.use-case";
+import RegisterNewCurrencyCase from "../../domain/use-cases/register-new-currency.use-case";
 import ShowAllCurrenciesUseCase from "../../domain/use-cases/show-all-currencies.use-case";
 import ShowCurrencyUseCase from "../../domain/use-cases/show-currency.use-case";
 import ShowApiCurrencyUseCase from "../../domain/use-cases/show-api-currency.use-case";
@@ -15,7 +15,7 @@ const currencyRoutes = (router: Router, connection: Connection) => {
     const CURRENCY_API_PREFIX = "/currencies";
 
     const currencyRepository = new CurrencyRepositoryImpl(connection);
-    const registerNewCurrency = new RegisterNewCurrencyCurrencyCase(
+    const registerNewCurrency = new RegisterNewCurrencyCase(
         currencyRepository
     );
     const updateCurrencyUseCase = new UpdateCurrencyUseCase(currencyRepository);

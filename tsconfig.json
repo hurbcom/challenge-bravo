@@ -10,6 +10,7 @@
         "skipLibCheck": true,
         "strictPropertyInitialization": false,
         "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "plugins": [
             {
                 "transform": "ts-auto-mock/transformer",

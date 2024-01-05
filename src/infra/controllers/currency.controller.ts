@@ -2,18 +2,18 @@ import { Request, Response } from "express";
 import { CurrencyEntityProps } from "../../domain/entities/currency.entity";
 import ValidationError from "../../domain/errors/validation.error";
 import UpdateCurrencyUseCase from "../../domain/use-cases/update-currency.use-case";
-import RegisterNewCurrencyCurrencyCase from "../../domain/use-cases/register-new-currency.use-case";
+import RegisterNewCurrencyCase from "../../domain/use-cases/register-new-currency.use-case";
 import ShowApiAllCurrenciesUseCase from "../../domain/use-cases/show-api-all-currencies.use-case";
 import ShowApiCurrencyUseCase from "../../domain/use-cases/show-api-currency.use-case";
 import ShowAllCurrenciesUseCase from "../../domain/use-cases/show-all-currencies.use-case";
 import ShowCurrencyUseCase from "../../domain/use-cases/show-currency.use-case";
 import ConvertCurrencyUseCase from "../../domain/use-cases/convert-currency.use-case";
-import { CurrencyResponse } from "../../domain/entities/dto/currency-response.dto";
-import { CurrencyApi } from "../../domain/entities/dto/currency-api-response.dto";
+import { CurrencyResponseDto } from "../../domain/entities/dto/currency-response.dto";
+import { CurrencyApiResponseDto } from "../../domain/entities/dto/currency-api-response.dto";
 import DeleteCurrencyUseCase from "../../domain/use-cases/delete-currency.use-case";
 export default class CurrencyController {
     constructor(
-        private readonly registerNewCurrency: RegisterNewCurrencyCurrencyCase,
+        private readonly registerNewCurrency: RegisterNewCurrencyCase,
         private readonly updateCurrencyUseCase: UpdateCurrencyUseCase,
         private readonly showCurrencyUseCase: ShowCurrencyUseCase,
         private readonly showApiCurrencyUseCase: ShowApiCurrencyUseCase,
@@ -127,7 +127,7 @@ export default class CurrencyController {
     ): Promise<void> {
         const { code } = request.params;
         try {
-            const currencies: CurrencyResponse[] | null =
+            const currencies: CurrencyResponseDto[] | null =
                 await this.showApiAllCurrenciesUseCase.execute(code);
             response.status(200).json(currencies);
         } catch (e) {
@@ -146,7 +146,7 @@ export default class CurrencyController {
     async getApiCurrency(request: Request, response: Response): Promise<void> {
         const { code } = request.params;
         try {
-            const currency: CurrencyResponse | null =
+            const currency: CurrencyResponseDto | null =
                 await this.showApiCurrencyUseCase.execute(code);
             response.status(200).json(currency);
         } catch (e) {
@@ -171,7 +171,7 @@ export default class CurrencyController {
             throw new Error("Bad request. Amount need to be a number");
         }
         try {
-            const currencyHistory: CurrencyApi | null =
+            const currencyHistory: CurrencyApiResponseDto | null =
                 await this.convertCurrencyUseCase.execute(
                     from as string,
                     to as string,

@@ -1,4 +1,4 @@
-import { CurrencyApi } from "../entities/dto/currency-api-response.dto";
+import { CurrencyApiResponseDto } from "../entities/dto/currency-api-response.dto";
 import CurrencyRepository from "../repositories/currency.repository";
 
 export default class ConvertCurrencyUseCase {
@@ -7,7 +7,7 @@ export default class ConvertCurrencyUseCase {
         from: string,
         to: string,
         amount: number
-    ): Promise<CurrencyApi | null> {
+    ): Promise<CurrencyApiResponseDto | null> {
         return await this.currencyRepository.convertCurrency(from, to, amount);
     }
 }

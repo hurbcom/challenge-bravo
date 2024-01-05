@@ -35,7 +35,7 @@ export class CurrencyEntityProps {
     @IsString({
         message: "should_be_string",
     })
-    readonly codeIn: string;
+    readonly codein: string;
 
     @IsNotEmpty({
         message: "field_required",

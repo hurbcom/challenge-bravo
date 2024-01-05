@@ -1,18 +1,16 @@
+import CurrencyEntity, { CurrencyEntityProps } from './../../../domain/entities/currency.entity';
 import { Connection, Model } from "mongoose";
 import connection from "../connection";
-import CurrencyEntity, {
-    CurrencyEntityProps,
-} from "../../../domain/entities/currency.entity";
 import PersistenceError from "../../../domain/errors/persistence.error";
 import CurrencyRepository from "../../../domain/repositories/currency.repository";
 import CurrencySchema from "../models/currency.schema";
-import { CurrencyResponse } from "../../../domain/entities/dto/currency-response.dto";
+import { CurrencyResponseDto } from "../../../domain/entities/dto/currency-response.dto";
 import { arrayToHashString } from "../../../utils/arrayToHashString";
 import axios from "axios";
-import { CurrencyApi } from "../../../domain/entities/dto/currency-api-response.dto";
+import { CurrencyApiResponseDto } from "../../../domain/entities/dto/currency-api-response.dto";
 import { createClient } from "redis";
 
-const API_URL = "https://economia.awesomeapi.com.br/json";
+const API_URL = process.env.API_URL;
 export default class CurrencyRepositoryImpl implements CurrencyRepository {
     private readonly conn: Connection;
     private readonly CurrencyModel: Model<CurrencyEntityProps>;
@@ -128,7 +126,7 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
         }
     }
 
-    async findAllApi(): Promise<CurrencyResponse[] | null> {
+    async findAllApi(): Promise<CurrencyResponseDto[] | null> {
         let codes: Array<string> = [];
         try {
             const currenciesDB = await this.CurrencyModel.find();
@@ -167,7 +165,7 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
         }
     }
 
-    async findByApi(code: string): Promise<CurrencyResponse | null> {
+    async findByApi(code: string): Promise<CurrencyResponseDto | null> {
         return await findOneInApi(code);
     }
 
@@ -175,7 +173,7 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
         from: string,
         to: string,
         amount: number
-    ): Promise<CurrencyApi | null> {
+    ): Promise<CurrencyApiResponseDto | null> {
         const ballast = "USD";
         await this.findAllApi();
         const isGetRedisData = await getRedisData();
@@ -208,7 +206,7 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
             amountFrom: amount,
             resultTo: fromToConversion * amount,
             retrieveDate: new Date(),
-        } as unknown as CurrencyApi;
+        } as unknown as CurrencyApiResponseDto;
     }
 }
 
