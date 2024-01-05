@@ -1,17 +1,27 @@
 version: "3.9"
 
 services:
-  mongo:
-    container_name: api-currency-convert-db
-    image: mongo:latest
-    restart: always
-    ports:
-      - 27017:27017
   redis:
-    container_name: api-currency-convert-redis
+    container_name: api-currency-converter-redis
     image: redis:latest
     restart: always
     ports:
       - '6379:6379'
+  api-currency-converter:
+    container_name: api-currency-converter
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    restart: always
+    build: .
+    image: luizmarques/api-currency-converter
+    ports:
+      - '3003:3003'
+    environment:
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
+      API_URL: ${API_URL}
+      REDIS_HOST: 'redis'
+      REDIS_PORT: '6379'
 volumes:
   db_data: {}

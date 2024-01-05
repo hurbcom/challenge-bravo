@@ -1,4 +1,4 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
+# <img src="https://avatars1.githubcurrencycontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
 [[English](README.md) | [Português](README.pt.md)]
 
@@ -49,9 +49,8 @@ https://economia.awesomeapi.com.br
     -   git clone https://github.com/luizmarques/challenge-bravo.git
     -   cd challenge-bravo
     -   docker-compose up --build
-    -   npm install
-    -   npm start
--   Isso irá subir os containers necessários, já configurados com variáveis de ambiente. Caso necessário mudar, siga o .env.example e crie um .env na raiz do projeto ou altere o docker-compose.yaml.
+-   Isso irá subir os containers necessários, já configurados com variáveis de ambiente.
+	- O acesso estará na porta ``http://localhost:3003``, siga as rotas abaixo:
 
 
 ## Rotas
@@ -88,7 +87,7 @@ Retornará uma lista de moedas cadastradas:
 		"_id": "659385c16cfa8ec809397289",
 		"name": "EUR",
 		"code": "EUR",
-		"codeIn": "EUR",
+		"codein": "EUR",
 		"bid": 1,
 		"isFictitious": false,
 		"createdAt": "2024-01-02T03:40:49.088Z",
@@ -99,7 +98,7 @@ Retornará uma lista de moedas cadastradas:
 		"_id": "659389576cfa8ec809397294",
 		"name": "American Dollar",
 		"code": "USD",
-		"codeIn": "USD",
+		"codein": "USD",
 		"bid": 1,
 		"isFictitious": false,
 		"createdAt": "2024-01-02T03:56:07.149Z",
@@ -118,7 +117,7 @@ Recebe um JSON com as propriedades:
 {
 	"name": "American Dollar",
 	"code": "USD",
-	"codeIn": "USD",
+	"codein": "USD",
 	"bid": 1,
 	"isFictitious": false
 }
@@ -133,7 +132,7 @@ Recebe um JSON com as propriedades:
 {
 	"name": "American Dollar",
 	"code": "USD",
-	"codeIn": "USD",
+	"codein": "USD",
 	"bid": 1,
 	"isFictitious": false
 }
@@ -157,7 +156,7 @@ Retornará um objeto de moedas cadastradas:
 		"bid": "5.3497",
 		"ask": "5.3997",
 		"timestamp": "1704167977",
-		"create_date": "2024-01-02 00:59:37"
+		"created_at": "2024-01-02 00:59:37"
 	},
 	"USDBRL": {
 		"code": "USD",
@@ -170,7 +169,7 @@ Retornará um objeto de moedas cadastradas:
 		"bid": "4.8526",
 		"ask": "4.8541",
 		"timestamp": "1704146403",
-		"create_date": "2024-01-01 19:00:03"
+		"created_at": "2024-01-01 19:00:03"
 	}
 }
 ```
@@ -192,7 +191,7 @@ Retornará um objeto com a  moedas cadastrada:
 	"bid": "221582",
 	"ask": "221582",
 	"timestamp": "1704165365",
-	"create_date": "2024-01-02 00:16:05"
+	"created_at": "2024-01-02 00:16:05"
 }
 ```
 
@@ -201,17 +200,6 @@ Retornará um objeto com a  moedas cadastrada:
 ``DELETE /currencies/:_id``
 
 Remove a moeda com o ID informado.
-
-**Considerações**
-
-```
-
-Devido ao tempo que tive para fazer o projeto eu não consegui concluir todo o desafio, ainda ficou faltando o teste unitário e a função de converter moedas quando são moedas ficticias não foram concluídas.
-
-```
-
-
-
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
