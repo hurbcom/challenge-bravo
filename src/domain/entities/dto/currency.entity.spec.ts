@@ -1,5 +1,7 @@
 import { ValidationError } from "class-validator";
 import CurrencyEntity, { CurrencyEntityProps } from "../currency.entity";
+import PersistenceError from "../../errors/persistence.error";
+import RegisterNewCurrencyCase from "../../use-cases/register-new-currency.use-case";
 
 
 describe('currency entity', () => {
@@ -24,19 +26,5 @@ describe('currency entity', () => {
             bid: 1,
             isFictitious: false     
         });
-    });
-
-    it('should throw exception when a prop is invalid', () => {
-        // arrange
-        const currencyEntityProps: CurrencyEntityProps = {
-            name: "INVALID",
-            code: "USD",
-            codein: "",
-            bid: 1,
-            isFictitious: false
-        };
-
-        // act & assert
-        expect(() => new CurrencyEntity(currencyEntityProps)).toThrow();
     });
 });

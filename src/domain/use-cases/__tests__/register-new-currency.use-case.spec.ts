@@ -1,8 +1,8 @@
 import { when } from 'jest-when';
 import { createMock } from 'ts-auto-mock';
-import CurrencyEntity, { CurrencyEntityProps } from '../entities/currency.entity';
-import CurrencyRepository from '../repositories/currency.repository';
-import RegisterNewCurrencyCase from './register-new-currency.use-case';
+import CurrencyEntity, { CurrencyEntityProps } from '../../entities/currency.entity';
+import CurrencyRepository from '../../repositories/currency.repository';
+import RegisterNewCurrencyCase from '../register-new-currency.use-case';
 
 describe('register new currency use case', () => {
     it('should register currency', async () => {

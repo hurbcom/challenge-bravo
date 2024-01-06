@@ -9,8 +9,8 @@ export default class UpdateCurrencyUseCase {
             code: body.code,
         });
         if (currencyResponse) {
-            const currencyId = currencyResponse._id;
-            await this.currencyRepository.update(currencyId, body);
+            const code = currencyResponse[0].props.code;
+            await this.currencyRepository.update(code, body);
             return {
                 _id: body._id,
                 name: body.name,

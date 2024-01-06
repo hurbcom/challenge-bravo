@@ -1,7 +1,7 @@
 import { createMock } from "ts-auto-mock";
-import CurrencyRepository from "../repositories/currency.repository";
-import { CurrencyApiResponseDto } from "../entities/dto/currency-api-response.dto";
-import ShowApiCurrencyUseCase from "./show-api-currency.use-case";
+import CurrencyRepository from "../../repositories/currency.repository";
+import { CurrencyApiResponseDto } from "../../entities/dto/currency-api-response.dto";
+import ShowApiCurrencyUseCase from "../show-api-currency.use-case";
 
 
 describe('Update Currency', () => {

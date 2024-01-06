@@ -9,6 +9,9 @@ import { arrayToHashString } from "../../../utils/arrayToHashString";
 import axios from "axios";
 import { CurrencyApiResponseDto } from "../../../domain/entities/dto/currency-api-response.dto";
 import { createClient } from "redis";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const API_URL = process.env.API_URL;
 export default class CurrencyRepositoryImpl implements CurrencyRepository {
@@ -28,8 +31,9 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
     ): Promise<CurrencyEntity[] | null> {
         try {
             const currenciesProps = await this.CurrencyModel.find(
-                currencyEntityProps
+                {code: currencyEntityProps.code}
             );
+
             if (!currenciesProps.length) return null;
             const currencies: CurrencyEntity[] = [];
 
@@ -49,14 +53,15 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
         }
     }
 
-    async deleteCurrency(id: string): Promise<void> {
+    async deleteCurrency(code: string): Promise<void> {
         try {
-            const currency = await this.CurrencyModel.findById(id);
+            const currency = await this.CurrencyModel.findOne({code: code});
             if (!currency) {
                 throw new PersistenceError();
             }
-            await this.CurrencyModel.remove({ _id: id });
+            await this.CurrencyModel.deleteOne({ code: currency.code });
         } catch (e) {
+            console.log("erro", e)
             throw new PersistenceError(
                 `Error on CurrencyRepository.remove: ${JSON.stringify(
                     e,
@@ -83,18 +88,21 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
         }
     }
 
-    async update(currencyId: string, body: CurrencyEntity): Promise<void> {
+    async update(code: string, body: CurrencyEntity): Promise<any> {
+        console.log(code)
         try {
             const updatedCurrency = await this.CurrencyModel.updateOne(
-                { _id: currencyId },
+                { code: code },
                 body
             );
 
+            console.log("updatedCurrency", updatedCurrency)
+
             if (!updatedCurrency)
                 throw new PersistenceError(
-                    `Currency with id ${currencyId} not found`
+                    `Currency with id ${code} not found`
                 );
-            return;
+            return
         } catch (e) {
             throw new PersistenceError(
                 `Error on CurrencyRepository.update: ${JSON.stringify(
@@ -135,11 +143,15 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
                 throw new PersistenceError(`not found`);
             }
 
+            console.log("currenciesDB", currenciesDB)
+
             currenciesDB.forEach((currency) => {
-                if (!currency.isFictitious && currency.code !== "BRL") {
+                if (!currency.isFictitious) {
                     codes.push(`${currency.code}-BRL`);
                 }
             });
+
+            console.log("codes", codes)
 
             const hashStringResult = arrayToHashString(codes);
 
@@ -175,6 +187,7 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
         amount: number
     ): Promise<CurrencyApiResponseDto | null> {
         const ballast = "USD";
+        //this function populate redis with currencies if registred in application
         await this.findAllApi();
         const isGetRedisData = await getRedisData();
 
@@ -245,20 +258,21 @@ const getCurrencyValueInBallast = async (from: string, to: string) => {
 };
 
 const getRedisData = async (): Promise<any> => {
+    console.log("client")
     const client = await createClient()
         .on("error", (err) => console.log("Redis Client Error", err))
         .connect();
-    const currencies = await client.hGetAll("currencies");
-    await client.disconnect();
-    return currencies;
-};
-
-const setRedisData = async (
-    currencies: CurrencyEntityProps[]
-): Promise<void> => {
-    const client = await createClient()
-        .on("error", (err) => console.log("Redis Client Error", err))
-        .connect();
+        const currencies = await client.hGetAll("currencies");
+        await client.disconnect();
+        return currencies;
+    };
+    
+    const setRedisData = async (
+        currencies: CurrencyEntityProps[]
+        ): Promise<void> => {
+            const client = await createClient()
+            .on("error", (err) => console.log("Redis Client Error", err))
+            .connect();
     await client.hSet("currencies", { value: JSON.stringify(currencies) });
     await client.disconnect();
 };

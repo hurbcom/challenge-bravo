@@ -86,9 +86,9 @@ export default class CurrencyController {
     }
 
     async deleteCurrency(request: Request, response: Response): Promise<void> {
-        const { _id } = request.params;
+        const { code } = request.params;
         try {
-            const currency = await this.deleteCurrencyUseCase.execute(_id);
+            const currency = await this.deleteCurrencyUseCase.execute(code);
             response.status(201).json(currency);
         } catch (e) {
             let statusCode: number;

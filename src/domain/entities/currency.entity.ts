@@ -29,13 +29,11 @@ export class CurrencyEntityProps {
     })
     readonly code: string;
 
-    @IsNotEmpty({
-        message: "field_required",
-    })
+    @IsOptional()
     @IsString({
         message: "should_be_string",
     })
-    readonly codein: string;
+    readonly codein?: string;
 
     @IsNotEmpty({
         message: "field_required",

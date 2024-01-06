@@ -48,7 +48,7 @@ const currencyRoutes = (router: Router, connection: Connection) => {
         currencyController.postCurrency(request, response)
     );
 
-    router.put(`${CURRENCY_API_PREFIX}/currency`, (request, response) =>
+    router.patch(`${CURRENCY_API_PREFIX}/currency`, (request, response) =>
         currencyController.updateCurrency(request, response)
     );
 
@@ -74,7 +74,7 @@ const currencyRoutes = (router: Router, connection: Connection) => {
         currencyController.convert(request, response)
     );
 
-    router.delete(`${CURRENCY_API_PREFIX}/:_id`, (request, response) =>
+    router.delete(`${CURRENCY_API_PREFIX}/:code`, (request, response) =>
         currencyController.deleteCurrency(request, response)
     );
 };

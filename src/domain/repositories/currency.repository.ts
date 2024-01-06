@@ -7,11 +7,11 @@ import { CurrencyResponseDto } from "../entities/dto/currency-response.dto";
 export default interface CurrencyRepository {
     findBy(
         currencyEntityProps: Partial<CurrencyEntityProps>
-    ): Promise<CurrencyResponseDto | null>;
+    ): Promise<CurrencyEntity[] | null>;
     findAll(): Promise<CurrencyEntityProps[] | null>;
     findAllApi(): Promise<CurrencyResponseDto[] | null>;
     insert(currencyEntity: CurrencyEntity): Promise<CurrencyEntity>;
-    update(currencyId: string, currencyEntity: CurrencyEntity): Promise<void>;
+    update(code: string, currencyEntity: CurrencyEntity): Promise<CurrencyResponseDto>;
     findByApi(code: string): Promise<CurrencyResponseDto | null>;
     convertCurrency(
         from: string,

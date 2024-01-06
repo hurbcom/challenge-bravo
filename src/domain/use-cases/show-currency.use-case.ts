@@ -9,13 +9,14 @@ export default class ShowCurrencyUseCase {
 
     async execute(
         currencyEntityProps: CurrencyEntityProps
-    ): Promise<CurrencyResponseDto | null> {
+    ): Promise<any> {
         try {
             const currencyResponse = await this.currencyRepository.findBy({
                 code: currencyEntityProps.code,
             });
 
-            return currencyResponse ?? null;
+            return currencyResponse? currencyResponse[0] : null
+
         } catch (e) {
             return null;
         }

@@ -1,8 +1,8 @@
 import { when } from "jest-when";
 import { createMock } from "ts-auto-mock";
-import CurrencyEntity, { CurrencyEntityProps } from "../entities/currency.entity";
-import CurrencyRepository from "../repositories/currency.repository";
-import UpdateCurrencyUseCase from "./update-currency.use-case";
+import CurrencyEntity, { CurrencyEntityProps } from "../../entities/currency.entity";
+import CurrencyRepository from "../../repositories/currency.repository";
+import UpdateCurrencyUseCase from "../update-currency.use-case";
 
 
 describe('Update Currency', () => {
