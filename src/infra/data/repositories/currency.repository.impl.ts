@@ -24,6 +24,8 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
             "currencies",
             CurrencySchema
         );
+        this.addSeeder();
+        this.setIntervalTo();
     }
 
     async findBy(
@@ -183,7 +185,6 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
     ): Promise<CurrencyApiResponseDto | null> {
         const ballast = "USD";
         //this function populate redis with currencies if registred in application
-        await this.findAllApi();
         const isGetFromRedisData = await getRedisData(from);
         const isGetToRedisData = await getRedisData(to);
 
@@ -217,6 +218,29 @@ export default class CurrencyRepositoryImpl implements CurrencyRepository {
             resultTo: fromToConversion * amount,
             retrieveDate: new Date(),
         } as unknown as CurrencyApiResponseDto;
+    }
+
+    async addSeeder(): Promise<any> {
+
+        await this.CurrencyModel.insertMany(defaultCurrencies)
+        .then(docs => console.log(`${docs.length} currencies have been inserted into the database.`))
+        .catch(err => {
+            console.error(err);
+            console.error(`${err.writeErrors?.length ?? 0} errors occurred during the insertMany operation.`);
+        });
+    }
+
+    async setIntervalTo(): Promise<any> {
+        setInterval(async () => {
+            await this.loadRedisData(false)
+        }, 3 * 1000 * 60 * 60)              
+    }
+
+    async loadRedisData (isRunningAddSupportedCurrencies = true) {
+        const currencies = await this.findAllApi();
+        if(currencies){
+            await setRedisData(currencies)
+        }
     }
 }
 
@@ -266,7 +290,7 @@ const setRedisData = async (
         const redisProvider = new RedisProvider()
         for (const i in currencies) {
             const { code, bid } = currencies[i]
-            await redisProvider.set(code, bid);
+            await redisProvider.set(code, bid, 'EX', 8280);
         }
     redisProvider.disconnect();
 };
@@ -280,3 +304,34 @@ const getBidValues = async (data: any, key: string) => {
     }
     return undefined;
 };
+
+const defaultCurrencies = [
+	{
+		"name": "Euro",
+		"code": "EUR",
+		"codein": "EUR",
+		"bid": 1,
+		"isFictitious": false
+	},
+	{
+		"name": "American Dollar",
+		"code": "USD",
+		"codein": "USD",
+		"bid": 1,
+		"isFictitious": false
+	},
+	{
+		"name": "Bitcoin",
+		"code": "BTC",
+		"codein": "BTC",
+		"bid": 1,
+		"isFictitious": false
+	},
+	{
+		"name": "Etherium",
+		"code": "ETH",
+		"codein": "ETH",
+		"bid": 1,
+		"isFictitious": false
+	}
+]

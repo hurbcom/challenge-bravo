@@ -1,3 +1,3 @@
 
-npm run start:docker
+npm run start:dev
 tail -f /dev/null

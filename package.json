@@ -10,7 +10,8 @@
         "build": "./node_modules/.bin/tsc",
         "start:dev": "./node_modules/.bin/nodemon ./src/index.ts",
         "start:docker": "./node_modules/.bin/ts-node ./src/index.ts",
-        "format": "npx prettier '**/*.ts' '**/*.js' --write"
+        "format": "npx prettier '**/*.ts' '**/*.js' --write",
+        "seed": "node ../../src/infra/data/seeds/currencies/seeder.ts"
     },
     "keywords": [],
     "author": "",
