@@ -1,13 +1,16 @@
-FROM node:16
+FROM node:18.16.0-slim
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 WORKDIR /home/node/app
-COPY package*.json ./
-RUN npm install
+
+COPY package*.json .
+
+RUN npm ci
 
 COPY . .
-COPY --chown=node:node . .
-USER node
+
+COPY --chown=root ./entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
 EXPOSE 3003
 
-CMD [ "npm", "run", "start:dev" ]
+#"seed": "seed -u mongodb://mongo:27017/test src/infra/data/seeds"

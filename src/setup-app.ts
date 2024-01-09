@@ -3,7 +3,7 @@ import { Connection } from "mongoose";
 import routes from "./infra/routes";
 import cors from "cors";
 
-const port = process.env.PORT || 3003;
+const port = process.env.PORT ?? 3003;
 
 const setupApp = (connection: Connection) => {
     const app = express();

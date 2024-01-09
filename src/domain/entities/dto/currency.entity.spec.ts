@@ -1,8 +1,4 @@
-import { ValidationError } from "class-validator";
 import CurrencyEntity, { CurrencyEntityProps } from "../currency.entity";
-import PersistenceError from "../../errors/persistence.error";
-import RegisterNewCurrencyCase from "../../use-cases/register-new-currency.use-case";
-
 
 describe('currency entity', () => {
     it('should create currency', () => {
