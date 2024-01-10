@@ -8,7 +8,10 @@ RUN npm ci
 
 COPY . .
 
-COPY --chown=root ./entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+#COPY --chown=root ./entrypoint.sh ./entrypoint.sh
+#RUN chmod +x ./entrypoint.sh
 
 EXPOSE 3003
+
+CMD [ "npm", "run", "start:dev" ]
+#CMD [ "tail", "-f", "/dev/null" ]

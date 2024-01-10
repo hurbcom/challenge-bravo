@@ -4,7 +4,7 @@ services:
     app:
         build: .
         container_name: api-currency-converter
-        command: ./entrypoint.sh
+        #command: ./entrypoint.sh
         ports:
         - 3003:3003
         env_file:
@@ -17,8 +17,8 @@ services:
         - redis
         environment:
             DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
-            REDIS_HOST: 'redis'
-            REDIS_PORT: '6379'
+            REDIS_HOST: ${REDIS_HOST}
+            REDIS_PORT: ${REDIS_PORT}
 
     mongo:
         image: mongo:6.0.5
