@@ -197,9 +197,22 @@ Retornará um objeto com a  moedas cadastrada:
 
 **Remover moeda**
 
-``DELETE /currencies/:_id``
+``DELETE /currencies/:code``
 
 Remove a moeda com o ID informado.
+
+**Considerações e melhorias**
+
+```
+
+Algumas melhorias para api:
+
+- Criar um banco de dados em memória para que o cache não fique sem receber requisições enquanto atualiza.
+- Acesso ao cache, com o redis se transformar em um micro serviço.
+- Utilizar mensageria para comunicação entre os serviços.
+- Refatoração do código.
+
+```
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
