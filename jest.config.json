@@ -1,0 +1,14 @@
+{
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": ["**/__tests__/**/*.ts?(x)", "**/?(*.)+(spec|test).ts?(x)"],
+    "transform": {
+        ".(ts|tsx)": "ts-jest"
+    },
+    "globals": {
+        "ts-jest": {
+            "compiler": "ttypescript"
+        }
+    },
+    "setupFiles": ["<rootDir>ts-auto-mock-config.ts"]
+}

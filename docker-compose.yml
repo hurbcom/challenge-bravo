@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+    app:
+        build: .
+        container_name: api-currency-converter
+        #command: ./entrypoint.sh
+        ports:
+        - 3003:3003
+        env_file:
+        - .env
+        volumes:
+        - .:/home/node/app
+        - db:/home/node/app
+        depends_on:
+        - mongo
+        - redis
+        environment:
+            DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
+            REDIS_HOST: ${REDIS_HOST}
+            REDIS_PORT: ${REDIS_PORT}
+
+    mongo:
+        image: mongo:6.0.5
+        container_name: api-currency-converter_db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
+
+    redis:
+        image: redis:latest
+        restart: always
+        ports:
+        - '6379:6379'
+
+volumes:
+    db: {}

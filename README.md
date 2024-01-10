@@ -1,10 +1,10 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# <img src="https://avatars1.githubcurrencycontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+[[English](README.md) | [Português](README.pt.md)]
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
 
-The API must convert between the following currencies:
+A API precisa converter entre as seguintes moedas:
 
 -   USD
 -   BRL
@@ -12,70 +12,207 @@ The API must convert between the following currencies:
 -   BTC
 -   ETH
 
-Other coins could be added as usage.
+Outras moedas podem ser adicionadas conforme o uso.
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
 
 Ex: `?from=BTC&to=EUR&amount=123.45`
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+A API deve suportar conversão entre moedas fiduciárias, crypto e fictícias. Exemplo: BRL->HURB, HURB->ETH
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de Dungeons & Dragons sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
 
 Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
+Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+## A API foi implementada com Typescript, mongoDB, redis.
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+## Api externa utilizada para a cotação
 
-## Requirements
+```
+https://economia.awesomeapi.com.br
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+```
 
-## Evaluation criteria
+## Instalação
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+-   Para executar o código rodar os seguintes comandos:
+    -   git clone https://github.com/luizmarques/challenge-bravo.git
+    -   cd challenge-bravo
+    -   docker-compose up --build
+-   Isso irá subir os containers necessários, já configurados com variáveis de ambiente.
+	- O acesso estará na porta ``http://localhost:3003``, siga as rotas abaixo:
 
-## Doubts
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+## Rotas
+**Converter moedas**  
 
-Godspeed! ;)
+Recebe três query parametros: ``from``, ``to`` e ``amount``
+
+``GET /currencies/convert?from={from}&to={to}&amount={amount}``
+
+Retornará o seguinte objeto:
+
+```
+{
+	"from": "USD",
+	"to": "BTC",
+	"bid": 0.00002186791645073342,
+	"ballast": "USD",
+	"amountFrom": "20",
+	"resultTo": 0.00043735832901466837,
+	"retrieveDate": "2024-01-02T03:54:54.973Z"
+}
+
+```
+
+**Listar moedas cadastradas**
+
+``GET /currencies/all``
+
+Retornará uma lista de moedas cadastradas:
+
+```
+[
+	{
+		"_id": "659385c16cfa8ec809397289",
+		"name": "EUR",
+		"code": "EUR",
+		"codein": "EUR",
+		"bid": 1,
+		"isFictitious": false,
+		"createdAt": "2024-01-02T03:40:49.088Z",
+		"updatedAt": "2024-01-02T03:40:49.088Z",
+		"__v": 0
+	},
+	{
+		"_id": "659389576cfa8ec809397294",
+		"name": "American Dollar",
+		"code": "USD",
+		"codein": "USD",
+		"bid": 1,
+		"isFictitious": false,
+		"createdAt": "2024-01-02T03:56:07.149Z",
+		"updatedAt": "2024-01-02T03:56:07.149Z",
+		"__v": 0
+	}
+]
+```
+
+**Cadastrar moeda**
+
+``POST /currencies/currency``
+
+Recebe um JSON com as propriedades:
+```
+{
+	"name": "American Dollar",
+	"code": "USD",
+	"codein": "USD",
+	"bid": 1,
+	"isFictitious": false
+}
+```
+
+**Atualizar moeda**
+
+``PUT /currencies/currency``
+
+Recebe um JSON com as propriedades:
+```
+{
+	"name": "American Dollar",
+	"code": "USD",
+	"codein": "USD",
+	"bid": 1,
+	"isFictitious": false
+}
+```
+
+**Busca a cotação atual de todas moedas que estão cadastradas na API externa**
+
+``GET /currencies/api``
+
+Retornará um objeto de moedas cadastradas:
+```
+{
+	"EURBRL": {
+		"code": "EUR",
+		"codein": "BRL",
+		"name": "Euro/Real Brasileiro",
+		"high": "5.3747",
+		"low": "5.3747",
+		"varBid": "0",
+		"pctChange": "0",
+		"bid": "5.3497",
+		"ask": "5.3997",
+		"timestamp": "1704167977",
+		"created_at": "2024-01-02 00:59:37"
+	},
+	"USDBRL": {
+		"code": "USD",
+		"codein": "BRL",
+		"name": "Dólar Americano/Real Brasileiro",
+		"high": "4.8534",
+		"low": "4.8534",
+		"varBid": "0",
+		"pctChange": "0",
+		"bid": "4.8526",
+		"ask": "4.8541",
+		"timestamp": "1704146403",
+		"created_at": "2024-01-01 19:00:03"
+	}
+}
+```
+
+**Busca a cotação atual de uma unica moeda na API externa**
+
+``GET /currencies/api/currency/:code``
+
+Retornará um objeto com a  moedas cadastrada:
+```
+{
+	"code": "BTC",
+	"codein": "BRL",
+	"name": "Bitcoin/Real Brasileiro",
+	"high": "221988",
+	"low": "208852",
+	"varBid": "11456",
+	"pctChange": "5.45",
+	"bid": "221582",
+	"ask": "221582",
+	"timestamp": "1704165365",
+	"created_at": "2024-01-02 00:16:05"
+}
+```
+
+**Remover moeda**
+
+``DELETE /currencies/:code``
+
+Remove a moeda com o ID informado.
+
+**Considerações e melhorias**
+
+```
+
+Algumas melhorias para api:
+
+- Criar um banco de dados em memória para que o cache não fique sem receber requisições enquanto atualiza.
+- Acesso ao cache, com o redis se transformar em um micro serviço.
+- Utilizar mensageria para comunicação entre os serviços.
+- Refatoração do código.
+
+```
 
 <p align="center">
   <img src="ca.jpg" alt="Challange accepted" />
