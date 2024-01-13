@@ -18,11 +18,7 @@ const port = process.env.NODE_LOCAL_PORT || 3020;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', require('./routes/getCoinsConvert'));
-
-app.use('/', require('./routes/addCoins'));
-
-app.use('/', require('./routes/deleteCoins'));
+app.use('/', require('./routes/coinsRoutes'));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
