@@ -5,29 +5,29 @@ const Coins = require('../models/coins');
 
 router.post('/insert', async (req, res) => {
     try {
-        const {name, amountCoin} = req.body;      
+        let {code, name, value} = req.body;      
         const regex = /^[0-9,.]+$/;  
 
-        if (!(name && amountCoin)) {
+        if (!(code && value)) {
             return res.status(404).json('Information is missing')
         }
-        if (!regex.test(amountCoin)){
+        if (!regex.test(value)){
             return res.status(403).json('This amount is not allowed')
         }
-        if (amountCoin.includes(',')){
-            amountCoin = amountCoin.replace(',', '.');
+        if (value.includes(',')){
+            value = value.replace(',', '.');
         }
         
-        const checkCoinOnDB = await Coins.findOne({name: name});
+        const checkCoinOnDB = await Coins.findOne({code: code});
         if (checkCoinOnDB) {
             return res.status(400).json({
                 message: 'This coin already exists',
             });
         }
 
-        const amount = parseFloat(amountCoin);        
+        const amount = parseFloat(value);        
 
-        const Coin = new Coins({name, amount});
+        const Coin = new Coins({code, name, amount});
         await Coin.save();
 
         return res.status(201).json({
@@ -38,6 +38,7 @@ router.post('/insert', async (req, res) => {
         console.log(error);
         return res.status(500).json({
             message: 'Internal Server Error',
+            error: error
         });
     }
 })

@@ -1,14 +1,8 @@
-async function formulaConversationCoins(original, comparative, amount) {
+const conversionCoins = (original, comparative, amount) => {
     let amountConversions = amount * original;
-    amountConversions = amountConversions * comparative;
-
-    return amountConversions;
-}
-
-const conversionCoins = async (original, comparative, amount) => {
-    const valueComparative = await formulaConversationCoins(original, comparative, amount)
-
-    return valueComparative;
+    const amountResult = amountConversions * comparative;
+    console.log(amountResult);
+    return amountResult;
 }
 
 module.exports = conversionCoins;

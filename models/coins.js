@@ -3,14 +3,18 @@ const {Schema} = mongoose;
 
 const coinsSchema = new Schema(
     {
-        name: {
+        code: {
             type: String,
             required: true,            
         },
-        amount: {
-            type: Number,
+        name: {
+            type: String,
             required: true,
         },  
+        value: {
+            type: Number,
+            required: true,
+        },          
     },
     {
         timestamps: true,

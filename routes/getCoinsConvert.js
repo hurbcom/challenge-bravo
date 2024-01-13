@@ -6,6 +6,9 @@ const conversionCoins = require('../controller/conversCoins')
 router.get('/', async (req, res) => {
     try {
         let {from, to, amount} = req.query;
+        from = from.toUpperCase();
+        to = to.toUpperCase();
+
         const regex = /^[0-9,.]+$/;  
 
         if (!(from && to && amount)) {
@@ -18,8 +21,10 @@ router.get('/', async (req, res) => {
             amount = amount.replace(',', '.');
         }
 
-        const originData = await Coins.findOne({name: from});
-        const comparativeData = await Coins.findOne({name: to});        
+        // REDIS
+        const originData = await Coins.findOne({code: from});
+        const comparativeData = await Coins.findOne({code: to});   
+
         const amountParse = parseFloat(amount);
 
         if (!originData) {
@@ -32,16 +37,17 @@ router.get('/', async (req, res) => {
             });
         }
 
-        const valueAmountComparative = conversionCoins(originData.amount,comparativeData.amount,amount)
+        const valueAmountComparative = conversionCoins(originData.value,comparativeData.value,amountParse);
 
         return res.status(200).json({
-            message: `VALUES CONVERSATION ${from} => ${to}`,
-            data: valueAmountComparative,
+            message: `${from}=>${to}`,
+            value: valueAmountComparative,
         });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             message: 'Internal Server Error',
+            error: error
         });
     }
 })
