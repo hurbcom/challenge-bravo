@@ -1,7 +1,7 @@
 // mongo-init.js
 
 const axios = require('axios');
-const Currency = require('../models/coins');
+const Currency = require('../src/models/coins');
 
 const populateDatabase = async () => {
   try {

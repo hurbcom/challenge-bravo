@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const url = "mongodb://mongo:27017/coins_rate_constance"
+const url = "mongodb://challenge:bravo@mongo:27017/coins_rate_constance"
 
 const connectDb = async () => {
     console.log("Entrando na conexão");

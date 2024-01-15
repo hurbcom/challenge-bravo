@@ -1,7 +1,7 @@
 const Coins = require('../models/coins');
 
 const getOriginCoin = async (coin) => {
-
+    console.log(coin)
     const response = await Coins.findOne({code: coin});
     return response
 };
@@ -18,15 +18,9 @@ const checkInsertPermission = async (coin) => {
 }
 
 const insertCoin = async (code, name, value) => {
-
-    const checkCoinOnDB = coinsRepositories.checkInsertPermission(code);
-    if (checkCoinOnDB) {
-        const response = new Coins({code, name, value});
-        await response.save();   
-        return response;         
-    }else{
-        
-    }         
+    const response = new Coins({code, name, value});
+    await response.save();   
+    return response;           
 }
 
 const updateCoin = async (code, name, value) => {
@@ -34,14 +28,22 @@ const updateCoin = async (code, name, value) => {
     const update = {
       $set: { code:code, name:name, value: value},
     };
-    const response = await Currency.updateOne(filter, update, { upsert: true });
+    const response = await Coins.updateOne(filter, update, { upsert: true });
 
     return response;    
 }
+
+const deleteCoin = async (code) => {
+    const result = await Coins.deleteOne({code: code});     
+
+    return result;
+}
+
 module.exports = {
     getOriginCoin,
     getComparativeCoin,
     checkInsertPermission,
     insertCoin,
-    updateCoin
+    updateCoin,
+    deleteCoin
 }
