@@ -7,7 +7,7 @@ dotenv.config();
 
 /**
  * @swagger
- * /coins/convert:
+ * /coins/{env}/convert:
  *   get:
  *     tags: 
  *       - Coins
@@ -16,6 +16,12 @@ dotenv.config();
  *       Retorna o valor convertido da moeda com base nos parâmetros de consulta fornecidos.
  *       Este endpoint é de acesso público.
  *     parameters:
+ *       - name: env
+ *         in: path
+ *         description: O ambiente da aplicação (por exemplo, 'prod').
+ *         required: true
+ *         schema:
+ *           type: string
  *       - name: from
  *         in: query
  *         description: O código da moeda (por exemplo, BRL) para converter.
@@ -62,15 +68,14 @@ dotenv.config();
  *               error: Internal Server Error
  */
 
-router.get('/convert', async (req, res) => {
+router.get('/:env/convert', async (req, res) => {
     const { status, data } = await coinController.ConvertCoinAmount(req, res);
-    console.log(data)
     return res.status(status).json(data);
 });
 
 /**
  * @swagger
- * /coins/insert:   
+ * /coins/{env}/insert:
  *   post:
  *     tags: 
  *       - Coins
@@ -79,8 +84,14 @@ router.get('/convert', async (req, res) => {
  *       Insere uma nova moeda na base de dados. Este endpoint requer uma chave de segurança (API Key) na URL
  *       e recebe um corpo JSON no formato especificado. A resposta incluirá uma mensagem e detalhes da moeda inserida.
  *     parameters:
- *       - name: api_key
+ *       - name: env
  *         in: path
+ *         description: O ambiente da aplicação (por exemplo, 'prod').
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: api_key
+ *         in: query
  *         description: Chave de segurança da API para autenticação.
  *         required: true
  *         schema:
@@ -99,7 +110,7 @@ router.get('/convert', async (req, res) => {
  *               value:
  *                 type: number
  *           example:
- *             code: "D&D"
+ *             code: "DD"
  *             name: "Dungeons&Dragons"
  *             value: 18000.59
  *     responses:
@@ -135,17 +146,15 @@ router.get('/convert', async (req, res) => {
  *           application/json:
  *             example:
  *               error: Internal Server Error
- *   
  */
 
-router.post('/insert', verifyToken, async (req, res) => {
+router.post('/:env/insert', verifyToken, async (req, res) => {
     const { status, data } = await coinController.InsertCoin(req, res);
     return res.status(status).json(data);
 });
-
 /**
  * @swagger
- * /coins/update:
+ * /coins/{env}/update:
  *   put:
  *     tags: 
  *       - Coins
@@ -154,8 +163,14 @@ router.post('/insert', verifyToken, async (req, res) => {
  *       Atualiza uma moeda na base de dados. Este endpoint requer uma chave de segurança (API Key) na URL
  *       e recebe um corpo JSON no formato especificado. A resposta incluirá uma mensagem indicando que a atualização foi bem-sucedida.
  *     parameters:
- *       - name: api_key
+ *       - name: env
  *         in: path
+ *         description: O ambiente da aplicação (por exemplo, 'prod').
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: api_key
+ *         in: query
  *         description: Chave de segurança da API para autenticação.
  *         required: true
  *         schema:
@@ -183,7 +198,7 @@ router.post('/insert', verifyToken, async (req, res) => {
  *             code: "D&D"
  *             name: "Dungeons&Dragons"
  *             value: 18000.59
-  *     responses:
+ *     responses:
  *       200:
  *         description: Moeda atualizada com sucesso.
  *         content:
@@ -218,15 +233,14 @@ router.post('/insert', verifyToken, async (req, res) => {
  *               error: Internal Server Error
  */
 
-router.put('/update', verifyToken, async (req, res) => {
+router.put('/:env/update', verifyToken, async (req, res) => {
     const { status, data } = await coinController.UpdateCoin(req, res);
-    console.log(status);
     return res.status(status).json(data);
 });
 
 /**
  * @swagger
- * /coins/delete/:code:
+ * /coins/{env}/delete/{code}:
  *   delete:
  *     tags: 
  *       - Coins
@@ -235,6 +249,12 @@ router.put('/update', verifyToken, async (req, res) => {
  *       Remove uma moeda da base de dados. Este endpoint requer uma chave de segurança (API Key) na URL
  *       e recebe o código da moeda a ser removida como parâmetro na URL. A resposta incluirá uma mensagem indicando que a remoção foi bem-sucedida.
  *     parameters:
+ *       - name: env
+ *         in: path
+ *         description: O ambiente da aplicação (por exemplo, 'prod').
+ *         required: true
+ *         schema:
+ *           type: string
  *       - name: api_key
  *         in: query
  *         description: Chave de segurança da API para autenticação.
@@ -268,9 +288,8 @@ router.put('/update', verifyToken, async (req, res) => {
  *               error: Internal Server Error
  */
 
-router.delete('/delete/:code', verifyToken, async (req, res) => {
+router.delete('/:env/delete/:code', verifyToken, async (req, res) => {
     const { status, data } = await coinController.DeleteCoin(req, res);
-    console.log(status);
     return res.status(status).json(data);
 });
 

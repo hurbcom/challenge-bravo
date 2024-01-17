@@ -1,3 +1,4 @@
+//Função responsavel por gerar TOKEN administrativo da api
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
@@ -20,7 +21,7 @@ const generateAutenticationToken = (req, res) => {
         return {
             status: 200,
             data: {
-                message: 'TOKEN TEMPORÁRIO ATIVADO: Tempo Limite 1H',
+                message: 'TEMPORARY TOKEN ACTIVATED: Timeout 1H',
                 api_key: token
             }
         };   

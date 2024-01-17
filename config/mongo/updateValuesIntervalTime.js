@@ -1,12 +1,11 @@
-// mongo-init.js
-
+//Função para atualização de moedas
+//Está função será executada a cada 5 minutos para manter os dados atualizados
 const axios = require('axios');
-const Currency = require('../src/models/coins');
+const Currency = require('../../src/models/coinsProd');
 
 const updateValueByInterval = async () => {
-  console.log('Iniciando atualizações de valores');    
   try {
-    // Obter todas as moedas da coleção
+
     const existingCurrencies = await Currency.find();
 
     // Obter informações sobre moedas fiduciárias
@@ -25,9 +24,12 @@ const updateValueByInterval = async () => {
     });
     const cryptoCurrencies = responseCrypto.data;
 
+    // Bloco de update (somente banco PROD)
     for (const currency of existingCurrencies) {
 
       if (exchangeRatesFiat.hasOwnProperty(currency.code)) {
+      // Validando existencia do codigo da moeda (Exemplo: BRL) dentro da api fiduciárias 
+
         const filter = { code: currency.code };
         const update = {
           $set: { value: exchangeRatesFiat[currency.code] },
@@ -35,19 +37,16 @@ const updateValueByInterval = async () => {
         await Currency.updateOne(filter, update);
         
       } else if (cryptoCurrencies.some(crypto => crypto.symbol.toUpperCase() === currency.code.toUpperCase())) {
-        // Verificar se o código da moeda existe na resposta da API de criptomoedas
+      // Validando existencia do codigo da moeda (Exemplo: BTC) dentro da api crypto
+      
         const cryptoCurrency = cryptoCurrencies.find(crypto => crypto.symbol.toUpperCase() === currency.code.toUpperCase());
         const filter = { code: currency.code };
         const update = {
           $set: { value: cryptoCurrency.current_price },
         };
         await Currency.updateOne(filter, update);
-      } else {
-        console.log(`A moeda com o código ${currency.code} não existe nas APIs. Não será atualizada.`);
       }
     }
-
-    console.log('Dados atualizados com sucesso.');
   } catch (error) {
     console.error('Erro ao obter cotações:', error.message);
   }

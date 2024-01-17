@@ -1,16 +1,22 @@
-
-const Coins = require('../models/coins');
+// Arquivo controller com funções logicas de rotas da API Conversão
+const Coins = require('../models/coinsProd');
 const conversionCoins = require('../utils/conversCoins')
 const coinsRepositories = require('../repositories/coinsRepositories');
+const redisRepositories = require("../repositories/redisRepositories");
+
 
 const ConvertCoinAmount = async (req, res) => {
+// Função resposável pela tratativa e logica dos valores a serem convertidos pela rota GET
+
     try {
         let {from, to, amount} = req.query;
+        const env = req.params.env.toUpperCase();             
         from = from.toUpperCase();
         to = to.toUpperCase();
 
         const regex = /^[0-9,.]+$/;  
 
+        //Bloco de tratativas de dados encaminhados para o endpoint
         if (!(from && to && amount)) {
             return {
                 status: 400,
@@ -31,57 +37,88 @@ const ConvertCoinAmount = async (req, res) => {
             amount = amount.replace(',', '.');
         }
 
-        // REDIS
-        const originData = await coinsRepositories.getOriginCoin(from);
-        const comparativeData = await coinsRepositories.getComparativeCoin(to);   
+        //Inicialmente verificamos se existe os dados das moedas solicitadas em nosso cache (Redis)
+        let originalAmount = await redisRepositories.getRedisDataOriginal(from);
+        let comparativeAmount =await redisRepositories.getRedisDataComparative(to);   
 
         const amountParse = parseFloat(amount);
 
-        if (!originData) {
-            return {
-                status: 400,
-                data: {
-                    message: `This ${from} currency has not yet been added!`,
-                }
-            };
-        } else if (!comparativeData){
-            return {
-                status: 400,
-                data: {
-                    message: `This ${to} currency has not yet been added!`,
-                }
-            };
+        //Bloco de validação de dados: Existe no cache ? 
+        if (!originalAmount) {
+            const dataOriginalObj = await coinsRepositories.getOriginCoin(from,env);
+
+            if (!dataOriginalObj || dataOriginalObj === null) {
+                return {
+                    status: 400,
+                    data: {
+                        message: `This ${from} currency has not yet been added!`,
+                    }
+                };
+            }else if(dataOriginalObj === 400){
+                return {
+                    status: 400,
+                    data: {
+                        message: 'Oops! Missing data in the search, check and try again',
+                    }
+                };                
+            }
+            else{
+                // Em caso de NÃO existir os dados no cache porem EXISTIR no banco
+                // Será retornado o valor encontrado no banco e salvo no cache para pesquisas futuras
+                originalAmount = dataOriginalObj.value;
+                await redisRepositories.insertRedisData(from,originalAmount);
+            }            
         }
 
-        let valueAmountComparative = conversionCoins(comparativeData.value,originData.value,amountParse);
-        valueAmountComparative = valueAmountComparative.toFixed(3)
+        if (!comparativeAmount){
+            const dataComparativeObj = await coinsRepositories.getComparativeCoin(to,env);
+
+            if (!dataComparativeObj || dataComparativeObj === null) {            
+                return {
+                    status: 400,
+                    data: {
+                        message: `This ${to} currency has not yet been added!`,
+                    }
+                };
+            }else{            
+                comparativeAmount = dataComparativeObj.value;                
+                await redisRepositories.insertRedisData(to,comparativeAmount);     
+            }
+        }
+
+        // Chamada para função - Conversão de moedas
+        const comparativeObj = {code: to, amount: comparativeAmount};
+        const originalObj = {code: from, amount: originalAmount};
+
+        let {status,data} = conversionCoins(comparativeObj,originalObj,amountParse);
         
         return {
-            status: 200,
-            data: {
-                message: `${from} => ${to}`,
-                value: valueAmountComparative,
-            }
+            status: status,
+            data: data
         };
     } catch (error) {
         console.log(error);
         return {
             status: 500,
             data: {
-                error: 'Internal Server Error',
+                error: error,
             }
         };
     }    
 }
 
-
 const InsertCoin = async (req, res) => {
+    // Função responsável pela inserção de dados no banco
+
     try {
-        let {code, name, value} = req.body;      
+        let {code, name, value} = req.body;   
+        const env = req.params.env.toUpperCase();    
+
         const regexValueTest = /^[0-9,.]+$/;  
-        const regexCodeTest = /^[A-Za-z]+$/;
+        const regexCodeTest = /^[A-Za-z,0-9]+$/;
         code = code.toUpperCase();
     
+        //Bloco de tratativas de dados encaminhados para o endpoint 
         if (!(code && name && value)) {
             return {
                 status: 404,
@@ -110,7 +147,9 @@ const InsertCoin = async (req, res) => {
             value = value.replace(',', '.');
         }
         
-        const checkOnDB = await coinsRepositories.checkInsertPermission(code);
+        // Checando existencia da moeda no banco
+        const checkOnDB = await coinsRepositories.checkInsertPermission(code,env);
+        
         if (checkOnDB) {            
             return {
                 status: 400,
@@ -118,11 +157,19 @@ const InsertCoin = async (req, res) => {
                     message: 'This coin already exists',
                 }
             };                        
+        }else if (checkOnDB === 400){
+            return {
+                status: 400,
+                data: {
+                    message: 'Environment is missing',
+                }
+            };            
         }
     
+        //Chamada para função de inserção
         const amount = parseFloat(value);        
     
-        const Coin = await coinsRepositories.insertCoin(code, name, amount);
+        const Coin = await coinsRepositories.insertCoin(code, name, amount,env);
     
         return {
             status: 200,
@@ -139,11 +186,14 @@ const InsertCoin = async (req, res) => {
 }
 
 const UpdateCoin = async (req, res) => {
+    // Função responsável pelo update de dados no banco    
     try {
-        let {code, name, value} = req.body;              
+        let {code, name, value} = req.body;   
+        const env = req.params.env.toUpperCase();                       
         const regex = /^[0-9,.]+$/;  
         code = code.toUpperCase();
     
+        //Bloco de tratativas de dados encaminhados para o endpoint 
         if (!(code && name && value)) {
             return {
                 status: 404,
@@ -160,7 +210,8 @@ const UpdateCoin = async (req, res) => {
             value = value.replace(',', '.');
         }
         
-        const checkCoinOnDB = await coinsRepositories.checkInsertPermission(code);
+        // Checando existencia da moeda no banco        
+        const checkCoinOnDB = await coinsRepositories.checkInsertPermission(code,env);
         if (!checkCoinOnDB) {
             return {
                 status: 400,
@@ -168,11 +219,19 @@ const UpdateCoin = async (req, res) => {
                     message: 'This Currency not exists',
                 }
             };                         
+        }else if (checkCoinOnDB === 400){
+            return {
+                status: 400,
+                data: {
+                    message: 'Environment is missing',
+                }
+            };            
         }
     
+        // Chamada para função de update
         const amount = parseFloat(value);        
     
-        const Coin = await coinsRepositories.updateCoin(code, name, amount);
+        const Coin = await coinsRepositories.updateCoin(code, name, amount,env);
 
         return {
             status: 200,
@@ -190,11 +249,14 @@ const UpdateCoin = async (req, res) => {
 }
 
 const DeleteCoin = async (req, res) => {
+    // Função responsável pelo delete dos items no banco
     try {
-        const code = req.params.code.toUpperCase();      
-        
-        const result = await coinsRepositories.deleteCoin(code)
+        let {env,code} = req.params;        
+        env = env.toUpperCase();      
+        code = code.toUpperCase();
+        const result = await coinsRepositories.deleteCoin(code,env)
 
+        // Verificando status da exclusão
         if (result.deletedCount > 0) {
             return {
                 status: 200,

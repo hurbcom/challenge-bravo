@@ -1,3 +1,4 @@
+//Arquivo de execução incial: criando banco e users
 db = db.getSiblingDB('coins_rate_constance');
 db.createUser({
   user: 'challenge',
@@ -8,4 +9,3 @@ db.createUser({
     { role: 'userAdmin', db: 'coins_rate_constance' }
   ]
 });
-console.log("Feito")

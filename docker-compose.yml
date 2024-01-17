@@ -1,16 +1,27 @@
 version: '3'
 services:
-  web:
+  api:
     build: .
     ports:
       - "8082:8082"
     depends_on:
       - mongo
+      - redis
+    environment:
+      NODE_LOCAL_PORT: 8082
+      REDIS_HOST: "redis"
+      REDIS_PORT: 6379
+      SECRET_KEY: HURB-asfe09199823dscHJSONLO039423
+      TOKEN_TEST: HURB-asfeEXamplevix027adsitba
   mongo:
     image: mongo
     ports:
-      - "27017:27017" 
+      - "27017:27017"
     command: ["--auth"]
     volumes:
-      - ./config/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-      
+      - ./config/mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - "6380:6379" 
