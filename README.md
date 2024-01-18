@@ -27,6 +27,25 @@ Para instalar e executar o projeto, siga estes passos:
 
 Após a execução do comando, a documentação da API estará disponível em [http://localhost:8082/api-docs/#/]. As rotas estarão operacionais após a execução do comando Docker.
 
+## Acessando o Container Docker
+
+Para acessar o container Docker criado para a API, utilize os seguintes comandos:
+
+1. Visualize os containers ativos:
+
+   ```bash
+   docker ps
+   ```
+
+2. Obtenha o ID do Container do serviço ativo chamado 'challenge-bravo-api'.
+
+3. Execute o seguinte comando, substituindo `CONTAINER_ID_` pelo ID do Container obtido:
+
+   ```bash
+   docker exec -it CONTAINER_ID_ bash
+   ```
+
+
 ## Exemplos de rotas - COINS
 
 - **GET**: http://localhost:8082/coins/prod/convert?from=MOEDA_ORIGEM&to=MOEDA_DESTINO&amount=VALOR_A_CONVERTER
@@ -51,27 +70,29 @@ Após a execução do comando, a documentação da API estará disponível em [h
 ## Rota para geração de TOKENS API
 - **AUTENTICATION**: http://localhost:8082/autentication/generate (ESSE TOKEN EXPIRA APÓS 1 HORA)
 
-## Acessando o Container Docker
+Observação: As variaveis de ambiente se encontram no arquivo "docker-compose.yml" 
 
-Para acessar o container Docker criado para a API, utilize os seguintes comandos:
-
-1. Visualize os containers ativos:
-
-   ```bash
-   docker ps
-   ```
-
-2. Obtenha o ID do Container do serviço ativo chamado 'challenge-bravo-api'.
-
-3. Execute o seguinte comando, substituindo `CONTAINER_ID_` pelo ID do Container obtido:
-
-   ```bash
-   docker exec -it CONTAINER_ID_ bash
-   ```
-## Executando teste:
+## Executando testes unitários/integração:
 Uma vez dentro do container é possivel executar os comandos de testagem
 - **UNITÁRIOS&INTEGRAÇÕES**: npm test
-- **ESTRESSE**: npm run stress (1000 requisições por segundo, duração de 1 minuto)
+
+## Executando teste de estresse:
+- **ESTRESSE**: 
+Nesta API foi utilizado a biblioteca "Artillery" para testes de estresse:
+
+1. Na pasta raiz do projeto, fora do container. Instale a biblioteca Artillery:
+
+   ```bash
+   npm install -g artillery
+   ```
+
+3. Execute o seguinte comando na raiz do projeto (Fora Container Docker), para iniciar o teste:
+
+   ```bash
+   artillery run artillery.yaml
+   ```    
+    
+Observação: O teste de estresse aplicado pela biblioteca Artillery tem como padrão a latencia de mil (1000) requisições em um segundo (1s). 
 
 ## Conclusão
 

@@ -7,10 +7,7 @@ const updateDbByInterval = require('./config/mongo/updateValuesIntervalTime');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger/swagger');
 const app = express();
-const cors = require("cors");
-
-const exec = require('child_process').exec;
-exec('ulimit -n 65536');
+const cors = require("cors");;
 
 connectDb();
 populateDb();
@@ -21,7 +18,7 @@ setInterval(() => {
 
 app.use(cors());
 
-app.use(express.json({ timeout: 5000 }));
+app.use(express.json({ timeout: 30000 }));
 
 app.use(express.urlencoded({ extended: true }));
 

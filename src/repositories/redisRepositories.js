@@ -4,6 +4,7 @@ const redis = require('../../config/redis/redis');
 dotenv.config();
 
 const insertRedisData = async (currencyCode, currencyTax) => {
+    console.log("currency Code Redis:",currencyCode);
     await redis.set(currencyCode, currencyTax, "EX", 300);
     console.log("Sucess Insert on Redis");
 };

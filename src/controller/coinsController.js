@@ -1,5 +1,4 @@
 // Arquivo controller com funções logicas de rotas da API Conversão
-const Coins = require('../models/coinsProd');
 const conversionCoins = require('../utils/conversCoins')
 const coinsRepositories = require('../repositories/coinsRepositories');
 const redisRepositories = require("../repositories/redisRepositories");
@@ -13,40 +12,39 @@ const ConvertCoinAmount = async (req, res) => {
         const env = req.params.env.toUpperCase();             
         from = from.toUpperCase();
         to = to.toUpperCase();
+        const keyRedis = `${from}-${to}`;
+        const redisResponse = await redisRepositories.getRedisDataOriginal(keyRedis);
 
-        const regex = /^[0-9,.]+$/;  
+        if (!redisResponse) {         
+            const regex = /^[0-9,.]+$/;  
 
-        //Bloco de tratativas de dados encaminhados para o endpoint
-        if (!(from && to && amount)) {
-            return {
-                status: 400,
-                data: {
-                    message: 'Oops! Missing data in the search, check and try again',
-                }
-            };
-        }
-        if (!regex.test(amount)){            
-            return {
-                status: 403,
-                data: {
-                    message: 'This amount is not allowed',
-                }
-            };            
-        }
-        if (amount.includes(',')){
-            amount = amount.replace(',', '.');
-        }
+            //Bloco de tratativas de dados encaminhados para o endpoint
+            if (!(from && to && amount)) {
+                return {
+                    status: 400,
+                    data: {
+                        message: 'Oops! Missing data in the search, check and try again',
+                    }
+                };
+            }
+            if (!regex.test(amount)){            
+                return {
+                    status: 403,
+                    data: {
+                        message: 'This amount is not allowed',
+                    }
+                };            
+            }
+            if (amount.includes(',')){
+                amount = amount.replace(',', '.');
+            }
+                
+            const dataOriginalObj = await coinsRepositories.getOriginCoin(from,env);   
+            const dataComparativeObj = await coinsRepositories.getComparativeCoin(to,env);
 
-        //Inicialmente verificamos se existe os dados das moedas solicitadas em nosso cache (Redis)
-        let originalAmount = await redisRepositories.getRedisDataOriginal(from);
-        let comparativeAmount =await redisRepositories.getRedisDataComparative(to);   
-
-        const amountParse = parseFloat(amount);
-
-        //Bloco de validação de dados: Existe no cache ? 
-        if (!originalAmount) {
-            const dataOriginalObj = await coinsRepositories.getOriginCoin(from,env);
-
+            const amountParse = parseFloat(amount);
+    
+            //Bloco de validação de dados: Existe no banco ?     
             if (!dataOriginalObj || dataOriginalObj === null) {
                 return {
                     status: 400,
@@ -66,13 +64,8 @@ const ConvertCoinAmount = async (req, res) => {
                 // Em caso de NÃO existir os dados no cache porem EXISTIR no banco
                 // Será retornado o valor encontrado no banco e salvo no cache para pesquisas futuras
                 originalAmount = dataOriginalObj.value;
-                await redisRepositories.insertRedisData(from,originalAmount);
-            }            
-        }
-
-        if (!comparativeAmount){
-            const dataComparativeObj = await coinsRepositories.getComparativeCoin(to,env);
-
+            }
+    
             if (!dataComparativeObj || dataComparativeObj === null) {            
                 return {
                     status: 400,
@@ -81,21 +74,28 @@ const ConvertCoinAmount = async (req, res) => {
                     }
                 };
             }else{            
-                comparativeAmount = dataComparativeObj.value;                
-                await redisRepositories.insertRedisData(to,comparativeAmount);     
-            }
+                comparativeAmount = dataComparativeObj.value;                     
+            }            
+    
+            // Chamada para função - Conversão de moedas
+            const comparativeObj = {code: to, amount: comparativeAmount};
+            const originalObj = {code: from, amount: originalAmount};
+    
+            let {status,data} = conversionCoins(comparativeObj,originalObj,amountParse);
+            await redisRepositories.insertRedisData(keyRedis,data.value);
+            return {
+                status: status,
+                data: data
+            };        
+        }else{
+            return {
+                status: 200,
+                data: {
+                    message: `${from} => ${to}`,
+                    value: redisResponse,
+                }
+            };     
         }
-
-        // Chamada para função - Conversão de moedas
-        const comparativeObj = {code: to, amount: comparativeAmount};
-        const originalObj = {code: from, amount: originalAmount};
-
-        let {status,data} = conversionCoins(comparativeObj,originalObj,amountParse);
-        
-        return {
-            status: status,
-            data: data
-        };
     } catch (error) {
         console.log(error);
         return {
