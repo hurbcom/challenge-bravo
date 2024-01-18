@@ -79,8 +79,8 @@ test('POST /coins/:ENV/insert', (t) => {
   
     supertest(app)
       .post('/coins/test/insert')  // Supondo que esta seja uma solicitação POST
-      .send(body)                  // Inclui os dados no corpo da solicitação
-      .set('Authorization', 'HURB-asfeEXamplevix027adsitba')  // Define o cabeçalho de Autorização
+      .send(body)
+      .set('Authorization', 'HURB-asfeEXamplevix027adsitba')
       .expect('Content-Type', /json/)
       .expect(200)
       .end((err, res) => {
@@ -99,8 +99,8 @@ test('POST /coins/:ENV/insert', (t) => {
   
     supertest(app)
       .put('/coins/test/update')  // Supondo que esta seja uma solicitação POST
-      .send(body)                  // Inclui os dados no corpo da solicitação
-      .set('Authorization', 'HURB-asfeEXamplevix027adsitba')  // Define o cabeçalho de Autorização
+      .send(body)
+      .set('Authorization', 'HURB-asfeEXamplevix027adsitba')
       .expect('Content-Type', /json/)
       .expect(200)
       .end((err, res) => {
@@ -118,9 +118,9 @@ test('POST /coins/:ENV/insert', (t) => {
     };
   
     supertest(app)
-      .delete('/coins/test/delete/CHALLENGEBRAVO')  // Supondo que esta seja uma solicitação POST
-      .send(body)                  // Inclui os dados no corpo da solicitação
-      .set('Authorization', 'HURB-asfeEXamplevix027adsitba')  // Define o cabeçalho de Autorização
+      .delete('/coins/test/delete/CHALLENGEBRAVO')
+      .send(body)
+      .set('Authorization', 'HURB-asfeEXamplevix027adsitba')
       .expect('Content-Type', /json/)
       .expect(200)
       .end((err, res) => {
@@ -129,3 +129,7 @@ test('POST /coins/:ENV/insert', (t) => {
         t.end();
       });
   });    
+
+  test.onFinish(() => {
+    process.exit(0);
+  });  
