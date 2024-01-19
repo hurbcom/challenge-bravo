@@ -50,6 +50,7 @@ Para acessar o container Docker criado para a API, utilize os seguintes comandos
 ## Exemplos de rotas - COINS
 
 - **GET**: http://localhost:8082/coins/prod/convert?from=MOEDA_ORIGEM&to=MOEDA_DESTINO&amount=VALOR_A_CONVERTER
+- 
 - **POST**: http://localhost:8082/coins/prod/insert (NECESSÁRIO API TOKEN)
 
     ```json
@@ -58,6 +59,7 @@ Para acessar o container Docker criado para a API, utilize os seguintes comandos
         "name": "Dungeons&Dragon",
         "value": "760.85"
     }
+    
 - **PUT**: http://localhost:8082/coins/prod/update (NECESSÁRIO API TOKEN)
 
     ```json
@@ -66,15 +68,19 @@ Para acessar o container Docker criado para a API, utilize os seguintes comandos
         "name": "Dungeons&Dragon-UPDATE",
         "value": "7.60"
     }
+    
 - **DELETE**: http://localhost:8082/coins/test/delete/DD (NECESSÁRIO API TOKEN)
 
-## Rota para geração de TOKENS API
+## GERANDO TOKEN API
+
 - **AUTENTICATION**: http://localhost:8082/autentication/generate (ESSE TOKEN EXPIRA APÓS 1 HORA)
+  
     ```json
     {
         "userID": "challenge",
         "passwordID": "bravo"
     }
+    
 Observação: As variaveis de ambiente se encontram no arquivo "docker-compose.yml" 
 
 ## Executando testes unitários/integração:
