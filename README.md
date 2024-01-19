@@ -70,7 +70,11 @@ Para acessar o container Docker criado para a API, utilize os seguintes comandos
 
 ## Rota para geração de TOKENS API
 - **AUTENTICATION**: http://localhost:8082/autentication/generate (ESSE TOKEN EXPIRA APÓS 1 HORA)
-
+    ```json
+    {
+        "userID": "challenge",
+        "passwordID": "bravo"
+    }
 Observação: As variaveis de ambiente se encontram no arquivo "docker-compose.yml" 
 
 ## Executando testes unitários/integração:
