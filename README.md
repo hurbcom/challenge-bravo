@@ -8,6 +8,7 @@ O Challenge Bravo é uma API desenvolvida para conversão de moedas, utilizando 
 
 - **NodeJS**: Linguagem principal para o desenvolvimento da API.
 - **Docker**: Utilizado para gerar a estrutura da API, facilitando atualizações e futuros deployments.
+- **Nginx**: Utilizado para fazer o balanceamento das requisições, dentro da estrutura de escalabilidade horizontal.
 - **MongoDB**: Escolhido como banco de dados devido à capacidade de armazenamento dinâmico de dados, atendendo à necessidade de flexibilidade ao lidar com códigos.
 - **Redis**: Empregado para controle de cache, reduzindo demandas no banco de dados e mitigando possíveis gargalos.
 - **Swagger**: Implantado para documentação de rotas da API.
