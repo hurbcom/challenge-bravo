@@ -45,14 +45,14 @@ Para acessar o container Docker criado para a API, utilize os seguintes comandos
    ```bash
    docker exec -it CONTAINER_ID_ bash
    ```
-
-
-## Exemplos de rotas - COINS
+## Link para documentação API - SWAGGER
 
 - **API-DOCS**: http://localhost:8082/api-docs/#/ (LINK SWAGGER NAVEGADOR)
   
     Observação: Acesso ao Swagger disponivel após execução do 'docker compose'
-  
+
+## Exemplos de rotas - COINS
+
 - **GET**: http://localhost:8082/coins/prod/convert?from=MOEDA_ORIGEM&to=MOEDA_DESTINO&amount=VALOR_A_CONVERTER
 - **POST**: http://localhost:8082/coins/prod/insert (NECESSÁRIO API TOKEN)
 
