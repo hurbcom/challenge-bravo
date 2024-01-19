@@ -24,7 +24,7 @@ Para instalar e executar o projeto, siga estes passos:
    docker-compose -f "docker-compose.yml" up -d --build
    ```
 
-   Observação: Certifique-se de que este comando seja executado no mesmo nível do arquivo `docker-compose.yml` ou forneça o caminho correto para o arquivo. Toda alteração feita no códiga será necessário executar o comando novamente para integração.
+   Observação: Certifique-se de que este comando seja executado no mesmo nível do arquivo `docker-compose.yml` ou forneça o caminho correto para o arquivo. Toda alteração feita no código será necessário executar o comando novamente para integração.
 
 Após a execução do comando, a documentação da API estará disponível em [http://localhost:8082/api-docs/#/]. As rotas estarão operacionais após a execução do comando Docker.
 
