@@ -78,7 +78,7 @@ test('POST /coins/:ENV/insert', (t) => {
     };
   
     supertest(app)
-      .post('/coins/test/insert')  // Supondo que esta seja uma solicitação POST
+      .post('/coins/test/insert')  
       .send(body)
       .set('Authorization', 'HURB-asfeEXamplevix027adsitba')
       .expect('Content-Type', /json/)
@@ -98,7 +98,7 @@ test('POST /coins/:ENV/insert', (t) => {
     };
   
     supertest(app)
-      .put('/coins/test/update')  // Supondo que esta seja uma solicitação POST
+      .put('/coins/test/update')
       .send(body)
       .set('Authorization', 'HURB-asfeEXamplevix027adsitba')
       .expect('Content-Type', /json/)
