@@ -48,8 +48,11 @@ Para acessar o container Docker criado para a API, utilize os seguintes comandos
 
 
 ## Exemplos de rotas - COINS
-- **API-DOCS**: http://localhost:8082/api-docs/#/ (SWAGGER com documentação das rotas, acessar pelo navegador)
+
+- **API-DOCS**: http://localhost:8082/api-docs/#/ (LINK SWAGGER NAVEGADOR)
+  
     Observação: Acesso ao Swagger disponivel após execução do 'docker compose'
+  
 - **GET**: http://localhost:8082/coins/prod/convert?from=MOEDA_ORIGEM&to=MOEDA_DESTINO&amount=VALOR_A_CONVERTER
 - **POST**: http://localhost:8082/coins/prod/insert (NECESSÁRIO API TOKEN)
 
