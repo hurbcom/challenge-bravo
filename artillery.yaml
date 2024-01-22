@@ -1,0 +1,12 @@
+config:
+  target: 'http://localhost:8082'
+  phases:
+    - duration: 1
+      arrivalRate: 1000
+  http:
+    timeout: 90      
+
+scenarios:
+  - flow:
+      - get:
+          url: '/coins/prod/convert?from=BRL&to=USD&amount=10'
