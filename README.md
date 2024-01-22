@@ -23,10 +23,10 @@ Para instalar e executar o projeto, siga estes passos:
    ```bash
    docker-compose -f "docker-compose.yml" up -d --build
    ```
-
-   Observação: Certifique-se de que este comando seja executado no mesmo nível do arquivo `docker-compose.yml` ou forneça o caminho correto para o arquivo. Toda alteração feita no códiga será necessário executar o comando novamente para integração.
-
 Após a execução do comando, a documentação da API estará disponível em [http://localhost:8082/api-docs/#/]. As rotas estarão operacionais após a execução do comando Docker.
+
+
+Observação: Certifique-se de que este comando seja executado no mesmo nível do arquivo `docker-compose.yml` ou forneça o caminho correto para o arquivo. Toda alteração feita no código será necessário executar o comando novamente para integração.
 
 ## Acessando o Container Docker
 
@@ -45,7 +45,11 @@ Para acessar o container Docker criado para a API, utilize os seguintes comandos
    ```bash
    docker exec -it CONTAINER_ID_ bash
    ```
+## Link para documentação API - SWAGGER
 
+- **API-DOCS**: http://localhost:8082/api-docs/#/ (LINK SWAGGER NAVEGADOR)
+  
+    Observação: Acesso ao Swagger disponivel após execução do 'docker compose'
 
 ## Exemplos de rotas - COINS
 
@@ -58,6 +62,7 @@ Para acessar o container Docker criado para a API, utilize os seguintes comandos
         "name": "Dungeons&Dragon",
         "value": "760.85"
     }
+    
 - **PUT**: http://localhost:8082/coins/prod/update (NECESSÁRIO API TOKEN)
 
     ```json
@@ -66,11 +71,19 @@ Para acessar o container Docker criado para a API, utilize os seguintes comandos
         "name": "Dungeons&Dragon-UPDATE",
         "value": "7.60"
     }
+    
 - **DELETE**: http://localhost:8082/coins/test/delete/DD (NECESSÁRIO API TOKEN)
 
-## Rota para geração de TOKENS API
-- **AUTENTICATION**: http://localhost:8082/autentication/generate (ESSE TOKEN EXPIRA APÓS 1 HORA)
+## GERANDO TOKEN API
 
+- **AUTENTICATION**: http://localhost:8082/autentication/generate (ESSE TOKEN EXPIRA APÓS 1 HORA)
+  
+    ```json
+    {
+        "userID": "challenge",
+        "passwordID": "bravo"
+    }
+    
 Observação: As variaveis de ambiente se encontram no arquivo "docker-compose.yml" 
 
 ## Executando testes unitários/integração:
