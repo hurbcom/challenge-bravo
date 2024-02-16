@@ -78,5 +78,5 @@ Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.
 Boa sorte e boa viagem! ;)
 
 <p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
+  <img src="images/ca.jpg" alt="Challange accepted" />
 </p>

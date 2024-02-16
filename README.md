@@ -78,5 +78,5 @@ Any questions you may have, check the [_issues_](https://github.com/HurbCom/chal
 Godspeed! ;)
 
 <p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
+  <img src="images/ca.jpg" alt="Challange accepted" />
 </p>
