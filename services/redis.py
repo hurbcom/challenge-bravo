@@ -1,22 +1,22 @@
 import redis
 
 
-r = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
+r = redis.Redis(host='localhost', port=6379, db=7, decode_responses=True)
 
 class Redis():
     def add_currency(self, currency: dict):
-        
-        r.rpush("avaliable_currencies", currency["name"])
         if currency.get("is_fictional", False):
             mounted_currency = {
-                "currency_name": currency["name"],
-                "backing": currency["backing"],
+                "currency_name": currency["currency_name"].upper(),
+                "backing": currency["backing"].upper(),
                 "backing_amount": currency["backing_amount"],
             }
 
-            r.hmset(currency["name"], mounted_currency)
+            r.hmset(currency["currency_name"].upper(), mounted_currency)
 
-        return r.hgetall("avaliable_currencies")
+        currency_name_upper = currency["currency_name"].upper()
+        r.rpush("available_currencies", currency_name_upper)
+        return r.lrange("available_currencies", 0, -1)
     
     def update_currency(self, currency_name: str, currency: dict):
     
