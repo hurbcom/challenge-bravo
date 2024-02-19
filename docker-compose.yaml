@@ -1,0 +1,30 @@
+version: "3"
+services:
+  database:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    ports:
+      - "27017:27017"
+    volumes:
+      - dbdata6:/data/db
+volumes:
+  dbdata6:
+
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - .:/app
+  #   env_file:
+  #     - ./.env
+  #   container_name: challenge_bravo
+  #   network_mode: "host"
+  #   restart: on-failure
+  #   stdin_open: true
+  #   tty: true
+  #   depends_on:
+  #     - database

@@ -11,10 +11,15 @@ class Settings(BaseSettings):
     IS_DEBUG: bool = False
     WORKERS: int = 2
 
+    # Mongo
+    MONGO_USER: str = "root"
+    MONGO_PASSWORD: str = "pass"
+    MONGO_PORT: int = 27017
+
     class Config:
         env_file = ".env"
 
 
 @lru_cache
-def default_settings() -> Settings:
+def return_default_settings() -> Settings:
     return Settings()

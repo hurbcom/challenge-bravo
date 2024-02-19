@@ -3,3 +3,7 @@ uvicorn==0.27.1
 pydantic==2.6.1
 pydantic-settings==2.2.0
 httpx==0.26.0
+
+# Mongo DB
+dnspython-2.6.1
+pymongo-4.6.1

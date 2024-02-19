@@ -6,11 +6,11 @@ from fastapi import (
 from fastapi.responses import JSONResponse
 
 from app.api.v1.currency_converter.models import (
-    DeleteCurrency,
-    NewCurrency,
+    Currency,
+    DeleteCurrencyById,
+    DeleteCurrencyByName,
 )
-from app.api.v1.currency_converter.utils import return_amount
-from app.services.awesomeapi import AwesomeApiService
+from app.api.v1.currency_converter.service import CurrencyConverterService
 
 router = APIRouter(tags=["Currency"])
 
@@ -24,38 +24,62 @@ def get_currency(
     amount: float = Query(),
 ) -> JSONResponse:
 
-    service = AwesomeApiService()
-    actual_values = service.get_currency_values(from_, to)
-    converted_value = return_amount(from_, to, amount, actual_values)
+    service = CurrencyConverterService(from_, to, amount)
+    try:
+        converted_value = service.get_currency()
+        return JSONResponse(
+            content={"converted_value": converted_value}, status_code=status.HTTP_200_OK
+        )
+    except Exception:
+        raise ValueError
 
-    return JSONResponse(
-        content={"converted_value": converted_value}, status_code=status.HTTP_200_OK
-    )
+
+@router.get(
+    path="/currency/get-by-acronym",
+    response_class=JSONResponse,
+    status_code=status.HTTP_200_OK,
+)
+def get_currency_by_acronym(acronym: str = Query()) -> JSONResponse:
+
+    service = CurrencyConverterService()
+    if response := service.get_currency_by_acronym(acronym):
+        return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+    return JSONResponse(content={}, status_code=status.HTTP_404_NOT_FOUND)
 
 
 @router.post(
     path="/currency", response_class=JSONResponse, status_code=status.HTTP_200_OK
 )
 def create_currency(
-    payload: NewCurrency,
+    payload: Currency,
 ) -> JSONResponse:
 
-    # Criar um repository para criar novos dados
-
-    return JSONResponse(
-        content={"new_currency": ""}, status_code=status.HTTP_200_OK
-    )
+    service = CurrencyConverterService()
+    id = service.create_currency(payload)
+    return JSONResponse(content={"id": id}, status_code=status.HTTP_200_OK)
 
 
 @router.delete(
     path="/currency", response_class=JSONResponse, status_code=status.HTTP_200_OK
 )
-def delete_currencys(
-    payload: DeleteCurrency,
+def delete_currency(
+    payload: DeleteCurrencyById,
 ) -> JSONResponse:
 
-    # Criar um repository para apagar dados
+    service = CurrencyConverterService()
+    id = service.delete_currency(payload)
+    return JSONResponse(content={"id": id}, status_code=status.HTTP_200_OK)
 
-    return JSONResponse(
-        content={"deleted_currency": ""}, status_code=status.HTTP_200_OK
-    )
+
+@router.delete(
+    path="/currency/by_name",
+    response_class=JSONResponse,
+    status_code=status.HTTP_200_OK,
+)
+def delete_currency_by_name(
+    payload: DeleteCurrencyByName,
+) -> JSONResponse:
+
+    service = CurrencyConverterService()
+    id = service.delete_currency_by_name(payload)
+    return JSONResponse(content={"id": id}, status_code=status.HTTP_200_OK)

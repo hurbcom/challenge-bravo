@@ -1,4 +1,6 @@
+from datetime import datetime
 from random import randint
+from uuid import uuid4
 
 from pydantic import (
     BaseModel,
@@ -6,22 +8,41 @@ from pydantic import (
 )
 
 MIN_VALUE = 1
-MAX_VALUE = 10000
+MAX_VALUE = 1000
+MAX_NAME_VALUE = 5
 
 
-class NewCurrency(BaseModel):
+def attached_value() -> float:
+    """
+    Caso o peso atrelado a moedas criadas não seja
+    passado, vai ser gerado um valor randomicamente.
+    """
+    value = randint(MIN_VALUE, MAX_VALUE)
+    return float(value)
+
+
+def created_at() -> str:
+    now = datetime.now()
+    return now.strftime("%d/%m/%Y, %H:%M:%S")
+
+
+class Currency(BaseModel):
+    id: str | None = str(uuid4())
+    acronym: str
     name: str
+    created_at: str | None = created_at()
+    quotation: float | None = attached_value()
 
-    @field_validator("name")
+    @field_validator("acronym")
     def validate_name(cls, name: str) -> str:
+        if len(name) > MAX_NAME_VALUE:
+            raise ValueError
         return name.upper()
 
-    @property
-    def attached_value(self) -> str:
-        value = randint(MIN_VALUE, MAX_VALUE)
-        return float(value)
 
-
-class DeleteCurrency(BaseModel):
-    name: str = None
+class DeleteCurrencyById(BaseModel):
     id: str = None
+
+
+class DeleteCurrencyByName(BaseModel):
+    name: str
