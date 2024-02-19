@@ -19,12 +19,24 @@ const exchangeRates = {
     }
 };
 
+exports.ExistsCurrency = (currency) => {
+    return Object.keys(exchangeRates).includes(currency.toUpperCase());
+};
+
 exports.ConvertCurrency = (from, to, amount) => {
-    from = exchangeRates[from];
-    to = exchangeRates[to];
-    const calc = (
-        (amount * from.USD) / to.USD
-    ).toFixed(4);
+    let calc = 0;
+
+    from = from.toUpperCase();
+    to = to.toUpperCase();
+
+    if(from === to) calc = amount
+    else {
+        from = exchangeRates[from];
+        to = exchangeRates[to];
+        calc = (
+            (amount * from.USD) / to.USD
+        ).toFixed(4);
+    }
 
     const formattedNumber = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'}).format(calc);
     return formattedNumber;
