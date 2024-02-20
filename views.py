@@ -2,7 +2,6 @@ import json
 from fastapi import FastAPI
 from inputs import Currency
 
-from services.awesome_api import AwesomeApiService
 from services.redis import Redis
 from services.utils import is_currency_avaliable, is_currency_fictional, has_fictional_currency_flow, not_fictional_currency_flow
 
