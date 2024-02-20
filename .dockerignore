@@ -3,3 +3,7 @@ npm-debug.log
 .DS_Store
 .git
 .gitignore
+notes.txt
+.env
+mysql_data
+sql
