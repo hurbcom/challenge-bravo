@@ -6,6 +6,11 @@ services:
     command: redis-server --requirepass Redis2024!
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 3
+      timeout: 5s
 
   db:
     image: mysql:8
@@ -21,6 +26,11 @@ services:
     volumes:
       - ./mysql_data:/var/lib/mysql
       - ./sql/currencydb.sql:/docker-entrypoint-initdb.d/currencydb.sql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h db -u user -ppassword"]
+      interval: 10s
+      timeout: 12s
+      retries: 1
 
   worker:
     container_name: worker
@@ -29,10 +39,18 @@ services:
       dockerfile: Dockerfile.worker
     environment:
       NODE_ENV: development
+      MYSQL_HOST: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: currencydb
+      REDIS_HOST_TLS: redis://redis
+      REDIS_PASSWORD_TLS: Redis2024!
     command: node workers/currencys.js
     depends_on:
-      - redis
-      - db
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   app:
     container_name: backend
@@ -43,7 +61,17 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
-    command: npm start
+      MYSQL_HOST: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: currencydb
+      REDIS_HOST_TLS: redis://redis
+      REDIS_PASSWORD_TLS: Redis2024!
+    command: bash -c "sleep 10; npm start"
     depends_on:
-      - redis
-      - db
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      worker:
+        condition: service_started
