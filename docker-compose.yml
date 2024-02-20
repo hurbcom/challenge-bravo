@@ -14,15 +14,14 @@ services:
   redis:
     container_name: redis
     image: redis
-    command: redis-server --requirepass Redis2023!
+    command: redis-server --requirepass Redis2024!
     ports:
       - "6379:6379"
 
   db:
     image: mysql:8
     container_name: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: currencydb
@@ -33,3 +32,12 @@ services:
     volumes:
       - ./mysql_data:/var/lib/mysql
       - ./sql/currencydb.sql:/docker-entrypoint-initdb.d/currencydb.sql
+
+  worker:
+    container_name: worker
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: development
+    command: node currencys.js

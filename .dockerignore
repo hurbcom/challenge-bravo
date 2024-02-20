@@ -4,6 +4,5 @@ npm-debug.log
 .git
 .gitignore
 notes.txt
-.env
 mysql_data
 sql

@@ -5,8 +5,8 @@ USE currencydb;
 -- Create a table for storing users
 CREATE TABLE IF NOT EXISTS currencys (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    currency VARCHAR(3) NOT NULL,
-    ballast FLOAT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    currency VARCHAR(10) NOT NULL,
+    ballast_usd FLOAT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
