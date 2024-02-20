@@ -22,7 +22,7 @@ COPY . .
 # Install Python dependencies
 RUN python3 -m pip install --upgrade setuptools wheel
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r requirements-dev.txt
 
 # Set the server port
 EXPOSE 8000

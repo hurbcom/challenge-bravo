@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from app.api.v1.currency_converter.exceptions import CurrencyServiceException
 from app.api.v1.currency_converter.models import Currency
@@ -6,16 +7,15 @@ from app.api.v1.currency_converter.utils import (
     amount_from_api_response,
     amount_from_bd_response,
 )
-from app.exceptions.default_exceptions import (
-    ApiInvalidResponseException,
-    CurrencyInvalidValuesException,
-)
+from app.exceptions.default_exceptions import MongoRepositoryTransactionsException
 from app.repository.mongo_repository import MongoRepository
 from app.services.awesomeapi import AwesomeApiService
+from app.utils.init_currencys import init_currency_values_in_bd
 
 logger = logging.getLogger(__name__)
 CURRENCY_DATABASE = "currency_db"
 CURRENCY_COLLECTION = "currencys"
+DATE_COLLECTION = "daily_time"
 
 
 class CurrencyConverterService:
@@ -24,12 +24,14 @@ class CurrencyConverterService:
         self.mongo_repository = MongoRepository()
 
     def get_currency(self, from_: str = "", to: str = "", amount: float = None) -> str:
-        try:
-            awesome_response = self.awesome_service.get_currency_values(from_, to)
-            actual_value = amount_from_api_response(from_, to, amount, awesome_response)
-        except (CurrencyInvalidValuesException, ApiInvalidResponseException):
-            logger.info("Erro no retorno da API, buscando valores no banco de dados!")
-            actual_value = self._get_currency_values_from_db(from_, to, amount)
+        if self._date_is_valid():
+            try:
+                return self._get_currency_values_from_db(from_, to, amount)
+            except MongoRepositoryTransactionsException:
+                logger.info("Erro no retorno do banco, buscando valores na API")
+        init_currency_values_in_bd()
+        awesome_response = self.awesome_service.get_currency_values(from_, to)
+        actual_value = amount_from_api_response(from_, to, amount, awesome_response)
         return actual_value
 
     def get_currency_by_acronym(self, acronym: str) -> dict | None:
@@ -37,6 +39,15 @@ class CurrencyConverterService:
             CURRENCY_DATABASE, CURRENCY_COLLECTION, acronym.upper()
         ):
             response = Currency.model_validate(response).model_dump()
+        return response
+
+    def get_all_currency(self) -> list[dict] | None:
+        if response := self.mongo_repository.get_all_currency(
+            CURRENCY_DATABASE, CURRENCY_COLLECTION
+        ):
+            response = [
+                Currency.model_validate(response).model_dump() for response in response
+            ]
         return response
 
     def create_currency(self, payload: Currency) -> dict | None:
@@ -70,17 +81,23 @@ class CurrencyConverterService:
         return acronym
 
     def _get_currency_values_from_db(self, from_, to, amount):
-        corrent_currency: dict = self.mongo_repository.get_by_acronym(
+        current_currency: dict = self.mongo_repository.get_by_acronym(
             CURRENCY_DATABASE, CURRENCY_COLLECTION, from_
         )
-        pass_current: dict = self.mongo_repository.get_by_acronym(
+        currency_to_exchange: dict = self.mongo_repository.get_by_acronym(
             CURRENCY_DATABASE, CURRENCY_COLLECTION, to
         )
-
         amount = amount_from_bd_response(
-            corrent_currency.get("quotation"),
-            pass_current.get("quotation"),
+            current_currency.get("dolar_price_reference"),
+            currency_to_exchange.get("dolar_price_reference"),
             amount=amount,
         )
-
         return amount
+
+    def _date_is_valid(self) -> bool:
+        date_time: dict = self.mongo_repository.get_cached_date(
+            CURRENCY_DATABASE, DATE_COLLECTION
+        )
+        past: datetime = date_time.get("date")
+        present = datetime.now()
+        return past.date() < present.date()

@@ -47,3 +47,20 @@ class AwesomeApiService:
             logger.error("Api retornou status não valido.")
             raise ApiInvalidResponseException()
         return response.json()
+
+    def get_mapped_currencys(self) -> list[dict]:
+        """ """
+        dolar = "USD"
+        brl = "BRL"
+        eur = "EUR"
+        btc = "BTC"
+        eth = "ETH"
+        url = (
+            BASE_URL
+            + f"/json/last/{brl}-{dolar},{eur}-{dolar},{btc}-{dolar},{eth}-{dolar}"
+        )
+        response: Response = self._execute(method="GET", url=url)
+        if response.status_code != status.HTTP_200_OK:
+            logger.error("Api retornou status não valido")
+            raise ApiInvalidResponseException()
+        return response.json()

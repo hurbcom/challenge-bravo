@@ -8,8 +8,8 @@ from pydantic import (
 )
 
 MIN_VALUE = 1
-MAX_VALUE = 1000
-MAX_NAME_VALUE = 5
+MAX_VALUE = 100
+MAX_ACRONYM_VALUE = 5
 
 
 def attached_value() -> float:
@@ -31,11 +31,11 @@ class Currency(BaseModel):
     acronym: str
     name: str
     created_at: str | None = created_at()
-    quotation: float | None = attached_value()
+    dolar_price_reference: float | None = attached_value()
 
     @field_validator("acronym")
     def validate_name(cls, name: str) -> str:
-        if len(name) > MAX_NAME_VALUE:
+        if len(name) > MAX_ACRONYM_VALUE:
             raise ValueError
         return name.upper()
 

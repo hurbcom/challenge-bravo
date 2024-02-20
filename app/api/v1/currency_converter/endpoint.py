@@ -67,6 +67,27 @@ def get_currency_by_acronym(acronym: str = Query()) -> JSONResponse:
         raise GenericApiException()
 
 
+@router.get(
+    path="/currency/get-all-currency",
+    response_class=JSONResponse,
+    status_code=status.HTTP_200_OK,
+)
+def get_all_currency() -> JSONResponse:
+    """
+    Returns all the currencys we created in our database
+    """
+    service = CurrencyConverterService()
+    try:
+        if response := service.get_all_currency():
+            return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+        return JSONResponse(content={}, status_code=status.HTTP_404_NOT_FOUND)
+    except DefaultApiException as error:
+        raise error
+    except Exception as error:
+        logger.error("Erro não mapeado", extra={"error": error})
+        raise GenericApiException()
+
+
 @router.post(
     path="/currency", response_class=JSONResponse, status_code=status.HTTP_200_OK
 )

@@ -3,13 +3,13 @@ def amount_from_api_response(
 ) -> str:
     """ """
     currencys_used = f"{from_}{to}"
-    bid = float(actual_values.get(currencys_used, {}).get("bid"))
-    value = bid * amount
+    quotation = float(actual_values.get(currencys_used, {}).get("bid"))
+    value = quotation * amount
     return f"{value:.2f}"
 
 
 def amount_from_bd_response(from_value: str, to_value: str, amount: float) -> str:
     """ """
-    bid = float(from_value / to_value)
-    value = bid * amount
-    return f"{value:.2f}"
+    quotation = float(from_value / to_value)
+    value = quotation * amount
+    return f"{value:.6f}"
