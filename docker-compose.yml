@@ -1,16 +1,5 @@
 version: '3.8'
 services:
-  app:
-    container_name: backend
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: development
-    command: npm start
-
   redis:
     container_name: redis
     image: redis
@@ -37,7 +26,24 @@ services:
     container_name: worker
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.worker
     environment:
       NODE_ENV: development
-    command: node currencys.js
+    command: node workers/currencys.js
+    depends_on:
+      - redis
+      - db
+
+  app:
+    container_name: backend
+    build: 
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    command: npm start
+    depends_on:
+      - redis
+      - db
