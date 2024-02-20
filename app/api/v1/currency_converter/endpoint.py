@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import (
     APIRouter,
     Query,
@@ -14,6 +16,7 @@ from app.api.v1.currency_converter.models import (
 from app.api.v1.currency_converter.service import CurrencyConverterService
 from app.exceptions.default_exceptions import DefaultApiException
 
+logger = logging.getLogger(__name__)
 router = APIRouter(tags=["Currency"])
 
 
@@ -25,7 +28,9 @@ def get_currency(
     to: str = Query(),
     amount: float = Query(),
 ) -> JSONResponse:
-
+    """
+    Return the value of the amount of a conversion between one currency and another
+    """
     # Always leaving the values ​​in upper case.
     from_, to = from_.upper(), to.upper()
     service = CurrencyConverterService()
@@ -37,6 +42,7 @@ def get_currency(
     except DefaultApiException as error:
         raise error
     except Exception as error:
+        logger.error("Erro não mapeado", extra={"error": error})
         raise GenericApiException()
 
 
@@ -46,6 +52,9 @@ def get_currency(
     status_code=status.HTTP_200_OK,
 )
 def get_currency_by_acronym(acronym: str = Query()) -> JSONResponse:
+    """
+    Returns the currency we created in our database by they name
+    """
     service = CurrencyConverterService()
     try:
         if response := service.get_currency_by_acronym(acronym):
@@ -54,6 +63,7 @@ def get_currency_by_acronym(acronym: str = Query()) -> JSONResponse:
     except DefaultApiException as error:
         raise error
     except Exception as error:
+        logger.error("Erro não mapeado", extra={"error": error})
         raise GenericApiException()
 
 
@@ -63,12 +73,16 @@ def get_currency_by_acronym(acronym: str = Query()) -> JSONResponse:
 def create_currency(
     payload: Currency,
 ) -> JSONResponse:
+    """
+    Create a currency in our database
+    """
     service = CurrencyConverterService()
     try:
         id = service.create_currency(payload)
     except DefaultApiException as error:
         raise error
     except Exception as error:
+        logger.error("Erro não mapeado", extra={"error": error})
         raise GenericApiException()
     return JSONResponse(content={"id": id}, status_code=status.HTTP_200_OK)
 
@@ -86,6 +100,7 @@ def delete_currency(
     except DefaultApiException as error:
         raise error
     except Exception as error:
+        logger.error("Erro não mapeado", extra={"error": error})
         raise GenericApiException()
     return JSONResponse(content={"id": id}, status_code=status.HTTP_200_OK)
 
@@ -105,5 +120,6 @@ def delete_currency_by_name(
     except DefaultApiException as error:
         raise error
     except Exception as error:
+        logger.error("Erro não mapeado", extra={"error": error})
         raise GenericApiException()
     return JSONResponse(content={"id": id}, status_code=status.HTTP_200_OK)

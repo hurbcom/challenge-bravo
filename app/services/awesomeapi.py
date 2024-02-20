@@ -1,12 +1,17 @@
+import logging
+
 from fastapi import status
-from httpx import Response
+from httpx import (
+    Client,
+    Response,
+)
 
 from app.exceptions.default_exceptions import (
     ApiInvalidResponseException,
     CurrencyInvalidValuesException,
 )
-from app.utils.http_client import return_client_http
 
+logger = logging.getLogger(__name__)
 BASE_URL = "https://economia.awesomeapi.com.br"
 
 
@@ -15,26 +20,30 @@ class AwesomeApiService:
         self, url: str, method: str, headers: str = None, params: str = None
     ) -> Response:
         """ """
-        http_client = return_client_http()
-        request = http_client.build_request(method, url, headers=headers, params=params)
-        response = http_client.send(request)
+        with Client(timeout=15) as http_client:
+            request = http_client.build_request(
+                method, url, headers=headers, params=params
+            )
+            response = http_client.send(request)
         return response
 
     def get_currency_values(self, first_currency: str, second_currency: str) -> dict:
         """ """
-        api_request_currencys = ["USD" "BRL" "EUR" "BTC" "ETH"]
-        invalid_values = any(
+        api_request_currencys = ["USD", "BRL", "EUR", "BTC", "ETH"]
+        valid_values = all(
             [
-                first_currency not in api_request_currencys,
-                second_currency not in api_request_currencys,
+                first_currency in api_request_currencys,
+                second_currency in api_request_currencys,
             ]
         )
-        if invalid_values:
+        if not valid_values:
+            logger.error("Valores de moeda invalidos")
             raise CurrencyInvalidValuesException()
         url = (
             BASE_URL + f"/json/last/{first_currency.upper()}-{second_currency.upper()}"
         )
         response: Response = self._execute(method="GET", url=url)
         if response.status_code != status.HTTP_200_OK:
+            logger.error("Api retornou status não valido.")
             raise ApiInvalidResponseException()
         return response.json()
