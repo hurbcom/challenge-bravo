@@ -1,5 +1,22 @@
 version: "3"
 services:
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
+    container_name: challenge_bravo
+    network_mode: "host"
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    depends_on:
+      - database
+
   database:
     image: mongo
     restart: always
@@ -9,22 +26,6 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - dbdata6:/data/db
+      - dbdata:/data/db
 volumes:
-  dbdata6:
-
-  # backend:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - .:/app
-  #   env_file:
-  #     - ./.env
-  #   container_name: challenge_bravo
-  #   network_mode: "host"
-  #   restart: on-failure
-  #   stdin_open: true
-  #   tty: true
-  #   depends_on:
-  #     - database
+  dbdata:

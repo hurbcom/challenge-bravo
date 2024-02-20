@@ -1,19 +1,14 @@
 # Pull official latest Python Docker image
-FROM python:3.12.0
+FROM python:3.12-slim
 
-# Set the working directory
-WORKDIR /usr/app
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONOPTIMIZE=1 \
+    PYTHONUNBUFFERED=1
 
-# Set up Python behaviour
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV VIRTUAL_ENV=/opt/venv
+# Set working directory
+WORKDIR /app
 
-# Switch on virtual environment
-RUN python3 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
-# Install system dependencies
+# Install dependencies with poetry
 RUN apt-get update && apt-get install -y \
     build-essential \
     gettext \
@@ -21,12 +16,13 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev
 
+# Copy all files
+COPY . .
+
 # Install Python dependencies
 RUN python3 -m pip install --upgrade setuptools wheel
 RUN pip install --upgrade pip
-
-# Copy all files
-COPY . .
+RUN pip install -r requirements.txt
 
 # Set the server port
 EXPOSE 8000
