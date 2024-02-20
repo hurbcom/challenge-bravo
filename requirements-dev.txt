@@ -1,7 +1,7 @@
 -r requirements.txt
-black==22.3.0
-flake8==4.0.1
+black==24.2.0
+flake8==7.0.0
 ipdb==0.13.11
-isort==5.10.1
-pre-commit==2.20.0
-pre-commit-hooks==4.4.0
+isort==5.13.2
+pre-commit==3.6.2
+pre-commit-hooks==4.5.0

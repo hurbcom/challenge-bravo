@@ -1,6 +1,10 @@
 from fastapi import status
 from httpx import Response
 
+from app.exceptions.default_exceptions import (
+    ApiInvalidResponseException,
+    CurrencyInvalidValuesException,
+)
 from app.utils.http_client import return_client_http
 
 BASE_URL = "https://economia.awesomeapi.com.br"
@@ -26,11 +30,11 @@ class AwesomeApiService:
             ]
         )
         if invalid_values:
-            raise ValueError("Valores invalidos para a api")
+            raise CurrencyInvalidValuesException()
         url = (
             BASE_URL + f"/json/last/{first_currency.upper()}-{second_currency.upper()}"
         )
         response: Response = self._execute(method="GET", url=url)
         if response.status_code != status.HTTP_200_OK:
-            raise IndexError("Valores invalidos para a api")
+            raise ApiInvalidResponseException()
         return response.json()

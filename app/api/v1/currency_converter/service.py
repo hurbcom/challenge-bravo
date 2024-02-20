@@ -11,25 +11,16 @@ CURRENCY_COLLECTION = "currencys"
 
 
 class CurrencyConverterService:
-    def __init__(self, from_: str = "", to: str = "", amount: float = None) -> None:
-        self.from_ = from_.upper()
-        self.to = to.upper()
-        self.amount = amount
+    def __init__(self) -> None:
         self.awesome_service = AwesomeApiService()
         self.mongo_repository = MongoRepository()
 
-    def get_currency(self) -> str:
+    def get_currency(self, from_: str = "", to: str = "", amount: float = None) -> str:
         try:
-            awesome_response = self.awesome_service.get_currency_values(
-                self.from_, self.to
-            )
-            actual_value = amount_from_api_response(
-                self.from_, self.to, self.amount, awesome_response
-            )
+            awesome_response = self.awesome_service.get_currency_values(from_, to)
+            actual_value = amount_from_api_response(from_, to, amount, awesome_response)
         except ValueError:
-            actual_value = self._get_currency_values_from_db(
-                self.from_, self.to, self.amount
-            )
+            actual_value = self._get_currency_values_from_db(from_, to, amount)
         return actual_value
 
     def get_currency_by_acronym(self, acronym: str) -> dict | None:
