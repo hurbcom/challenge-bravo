@@ -8,6 +8,7 @@ class Redis():
         if currency.get("is_fictional", False):
             mounted_currency = {
                 "currency_name": currency["currency_name"].upper(),
+                "is_fictional": "True",
                 "backing": currency["backing"].upper(),
                 "backing_amount": currency["backing_amount"],
             }
@@ -27,3 +28,7 @@ class Redis():
     def get_currency(self, currency_name: str):
 
         return r.hgetall(currency_name)
+    
+    def get_avaliable_currencies(self):
+
+        return r.lrange("available_currencies", 0, -1)
