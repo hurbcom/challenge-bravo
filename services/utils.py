@@ -12,19 +12,22 @@ def is_currency_avaliable (currency_name: str):
 def has_fictional_currency_flow(from_currency: str, to_currency: str, amount: int):
     from_currency_backing,from_currency_backing_amount = _extract_backing_and_backing_amount(from_currency)
     to_currency_backing,to_currency_backing_amount = _extract_backing_and_backing_amount(to_currency)
-    awesome_api_service = AwesomeApiService()
-    bid_value = awesome_api_service.get_bid_value_from_api(from_currency=from_currency_backing, to_currency=to_currency_backing)
+    bid_value = _get_bid_value(from_currency=from_currency_backing, to_currency=to_currency_backing)
     converted_value = ((float(bid_value) * float(from_currency_backing_amount))/float(to_currency_backing_amount)) * amount
     output = _mount_output(float(bid_value), converted_value)
     return output
 
 def not_fictional_currency_flow(from_currency: str, to_currency: str, amount: int):
-    awesome_api_service = AwesomeApiService()
-    bid_value = awesome_api_service.get_bid_value_from_api(from_currency=from_currency, to_currency=to_currency)
+    bid_value = _get_bid_value(from_currency,to_currency)
     converted_value = float(bid_value) * amount
     output = _mount_output(float(bid_value), converted_value)
     return output
     
+def _get_bid_value(from_currency: str, to_currency: str):
+    awesome_api_service = AwesomeApiService()
+    bid_value = awesome_api_service.get_bid_value_from_api(from_currency=from_currency, to_currency=to_currency)
+    return bid_value
+     
 def _extract_backing_and_backing_amount(currency_name):
     currency = Redis().get_currency(currency_name=currency_name)
 
