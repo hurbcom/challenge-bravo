@@ -26,3 +26,11 @@ def create_currency(request: Currency):
     redis_service = Redis()
     response = redis_service.add_currency(payload)
     return response, 200
+
+@app.put("/currency")
+def edit_currency(request: Currency):
+
+    payload = json.loads(request.json())
+    redis_service = Redis()
+    response = redis_service.update_currency(payload)
+    return response, 200

@@ -19,9 +19,17 @@ class Redis():
         r.rpush("available_currencies", currency_name_upper)
         return r.lrange("available_currencies", 0, -1)
     
-    def update_currency(self, currency_name: str, currency: dict):
-    
-        r.hmset(currency_name, currency)
+    def update_currency(self, currency: dict):
+        currency_name = currency.get("currency_name")
+        is_fictional = "True" if currency.get("is_fictional") else "False"
+        mounted_currency = {
+                "currency_name": currency["currency_name"].upper(),
+                "is_fictional": is_fictional,
+                "backing": currency["backing"].upper(),
+                "backing_amount": currency["backing_amount"],
+            }
+        r.hmset(currency_name.upper(), mounted_currency)
+
 
         return self.get_currency(currency_name)
 
