@@ -28,3 +28,10 @@ class TestTasks(TestCase):
         "converted_value": 1,
         }
         self.assertEqual(response[0],expected_response)
+
+    @patch("views.Redis")
+    def test_edit_currency(self,mock_redis):
+        currency = Currency(currency_name="TESTE",is_fictional="True", backing="NOT", backing_amount="1.0")
+        mock_redis.return_value.add_currency.return_value = {'currency_name': 'TESTE', 'is_fictional': 'True', 'backing': 'NOT', 'backing_amount': '1.0'}
+        response = create_currency(currency)
+        self.assertEqual(response[0],{'currency_name': 'TESTE', 'is_fictional': 'True', 'backing': 'NOT', 'backing_amount': '1.0'})
