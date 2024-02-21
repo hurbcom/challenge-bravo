@@ -4,13 +4,14 @@ const router = express.Router();
 const { query, validationResult } = require('express-validator');
 
 const { Response } = require('../utils/response');
-const { ConvertCurrency, ExistsCurrency } = require('../services/currency_exchange');
+const { ConvertCurrency, ExistsCurrency } = require('../controllers/currency_exchange');
+const { formatCurrency } = require('../utils/formatter');
 
 router.get('/', 
-    query('from').notEmpty().escape().isLength({ min: 3, max: 3 }).withMessage('Currency code \'from\' must be 3 characters long'),
-    query('to').notEmpty().escape().isLength({ min: 3, max: 3 }).withMessage('Currency code \'to\' must be 3 characters long'),
-    query('amount').notEmpty().escape().isFloat().withMessage('Amount must be a number'),
-    (req, res) => {
+    query('from').notEmpty().escape().isLength({ min: 1, max: 10 }).withMessage('Currency code \'from\' must be 3 characters long'),
+    query('to').notEmpty().escape().isLength({ min: 1, max: 10 }).withMessage('Currency code \'to\' must be 3 characters long'),
+    query('amount').notEmpty().escape().withMessage('Amount must be a number'),
+    async (req, res) => {
         const validateQuery = validationResult(req);
         if (!validateQuery.isEmpty()) {
             return Response(res, 400, validateQuery.array());
@@ -22,8 +23,8 @@ router.get('/',
         if(!ExistsCurrency(to)) return Response(res, 400, {message: `Currency code 'from' ${from} not found`});
 
         const result = {};
-        result[from] = amount;
-        result[to] = ConvertCurrency(from, to, amount);
+        result[from] = formatCurrency(amount, from);
+        result[to] = await ConvertCurrency(from, to, amount, to);
         Response(res, 200, result);
     }
 );
