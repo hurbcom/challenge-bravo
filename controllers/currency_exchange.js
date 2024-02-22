@@ -7,22 +7,27 @@ const ExistsCurrency = async currency => {
 };
 
 const ConvertCurrency = async (from, to, amount, cuurrency = 'USD') => {
-    let calc = 0;
+    try {
 
-    from = from.toUpperCase();
-    to = to.toUpperCase();
+        let calc = 0;
 
-    if(from === to) calc = amount
-    else {
-        amount = format2float(amount);
-        from = await Redis.get(from);
-        to = await Redis.get(to);
-        calc = (
-            (amount * to) / from
-        );
+        from = from.toUpperCase();
+        to = to.toUpperCase();
+
+        if (from === to) calc = amount
+        else {
+            amount = format2float(amount);
+            from = await Redis.get(from);
+            to = await Redis.get(to);
+            calc = (
+                (amount * to) / from
+            );
+        }
+
+        return formatCurrency(calc, cuurrency);
+    } catch (error) {
+        throw new Error(error);
     }
-
-    return formatCurrency(calc, cuurrency);
 };
 
 module.exports = {

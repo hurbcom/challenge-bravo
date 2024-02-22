@@ -24,8 +24,13 @@ router.get('/',
 
         const result = {};
         result[from] = formatCurrency(amount, from);
-        result[to] = await ConvertCurrency(from, to, amount, to);
-        Response(res, 200, result);
+        try {
+            result[to] = await ConvertCurrency(from, to, amount, to);
+            Response(res, 200, result);
+        } catch (error) {
+            console.error('routes/main.js ~ get ~ ERROR: ', error);
+            Response(res, 500, {message: error.message});
+        }
     }
 );
 
