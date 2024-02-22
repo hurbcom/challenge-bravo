@@ -24,9 +24,12 @@ def not_fictional_currency_flow(from_currency: str, to_currency: str, amount: in
     return output
     
 def _get_bid_value(from_currency: str, to_currency: str):
-    awesome_api_service = AwesomeApiService()
-    bid_value = awesome_api_service.get_bid_value_from_api(from_currency=from_currency, to_currency=to_currency)
-    return bid_value
+    try:
+        awesome_api_service = AwesomeApiService()
+        bid_value = awesome_api_service.get_bid_value_from_api(from_currency=from_currency, to_currency=to_currency)
+        return bid_value
+    except Exception as e:
+         raise e
      
 def _extract_backing_and_backing_amount(currency_name):
     currency = Redis().get_currency(currency_name=currency_name)
