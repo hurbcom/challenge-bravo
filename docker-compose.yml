@@ -7,7 +7,7 @@ services:
     ports:
       - "6379:6379"
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD-SHELL", "redis-cli ping"]
       interval: 10s
       retries: 3
       timeout: 5s
@@ -28,9 +28,10 @@ services:
       - ./sql/currencydb.sql:/docker-entrypoint-initdb.d/currencydb.sql
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h db -u user -ppassword"]
-      interval: 10s
-      timeout: 12s
-      retries: 1
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_interval: 30s
 
   worker:
     container_name: worker
