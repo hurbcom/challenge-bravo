@@ -165,7 +165,7 @@ class CurrencyViewsTestCase(DefaultTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.body), return_value)
 
-    @patch("app.repository.mongo_repository.MongoRepository.get_by_acronym")
+    @patch("app.repository.mongo_repository.MongoRepository.get_all_currency")
     def test_get_all_currency_and_repository_raises_unexpected_error(
         self, mock_get_by_acronym: Mock
     ):
@@ -320,8 +320,11 @@ class CurrencyViewsTestCase(DefaultTestCase):
         )
 
     @patch(
-        "app.api.v1.currency_converter.service.CurrencyConverterService.delete_currency_by_acronym"
-    ) 
+        (
+            "app.api.v1.currency_converter.service.CurrencyConverterService."
+            "delete_currency_by_acronym"
+        )
+    )
     def test_delete_currency_by_acronym_and_flow_raises_unexpected_error(
         self, mock_delete_currency_by_name: Mock
     ):
