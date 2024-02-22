@@ -81,7 +81,7 @@ const handler = async () => {
         }
 
         console.log()
-        await sleep(30 * 1000);
+        await sleep(300 * 1000);
     }
 };
 
