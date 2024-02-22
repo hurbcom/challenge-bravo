@@ -1,6 +1,6 @@
 locust = roda o locust
 
 locust -f = roda o locust com o path passado,
-ex locust -f teste/teste.py | locust -f testes_de_carga/testes_carga.py
+ex.: locust -f performance/currency_endpoint.py
 
 locust --web-port  = seta a porta da ui do locust.
