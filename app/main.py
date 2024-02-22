@@ -6,7 +6,7 @@ from uvicorn import run
 
 from app import lifespan
 from app.api.v1.api_health import router as health_check_router
-from app.api.v1.currency_converter.endpoint import router as currency_converter_router
+from app.api.v1.currency_converter.views import router as currency_converter_router
 from app.utils.config import return_default_settings
 from app.utils.logger import LogConfig
 from app.utils.middlewares import ResponseTimeMiddleware

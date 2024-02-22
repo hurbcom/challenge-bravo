@@ -31,12 +31,9 @@ def init_currency_values_in_bd() -> None:
             acronym="USD", name="dólar americano", dolar_price_reference=1
         ).model_dump()
         create_currency_in_db("USD", insert_currency)
+        create_cached_present_time()
     except Exception as error:
-        logger.error(
-            "Falha ao pegar valores padrões, iniciando mesmo assim! " f"Error: {error}"
-        )
-
-    create_cached_present_time()
+        logger.error(f"Error when try to get api values. Error: {error}")
 
 
 def create_currency_in_db(acronym: str, data: dict):

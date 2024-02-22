@@ -7,6 +7,8 @@ from pydantic import (
     field_validator,
 )
 
+from app.api.v1.currency_converter.exceptions import ValidateAcronymException
+
 MIN_VALUE = 1
 MAX_VALUE = 100
 MAX_ACRONYM_VALUE = 5
@@ -36,7 +38,7 @@ class Currency(BaseModel):
     @field_validator("acronym")
     def validate_name(cls, name: str) -> str:
         if len(name) > MAX_ACRONYM_VALUE:
-            raise ValueError
+            raise ValidateAcronymException
         return name.upper()
 
 
@@ -44,5 +46,5 @@ class DeleteCurrencyById(BaseModel):
     id: str = None
 
 
-class DeleteCurrencyByName(BaseModel):
-    name: str
+class DeleteCurrencyByAcronym(BaseModel):
+    acronym: str

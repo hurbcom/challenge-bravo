@@ -10,7 +10,7 @@ from app.api.v1.currency_converter.utils import (
 from app.exceptions.default_exceptions import MongoRepositoryTransactionsException
 from app.repository.mongo_repository import MongoRepository
 from app.services.awesomeapi import AwesomeApiService
-from app.utils.init_currencys import init_currency_values_in_bd
+from app.utils import init_currencys
 
 logger = logging.getLogger(__name__)
 CURRENCY_DATABASE = "currency_db"
@@ -28,8 +28,9 @@ class CurrencyConverterService:
             try:
                 return self._get_currency_values_from_db(from_, to, amount)
             except MongoRepositoryTransactionsException:
-                logger.info("Erro no retorno do banco, buscando valores na API")
-        init_currency_values_in_bd()
+                logger.info("Error in database, trying to get values in the api")
+
+        init_currencys.init_currency_values_in_bd()
         awesome_response = self.awesome_service.get_currency_values(from_, to)
         actual_value = amount_from_api_response(from_, to, amount, awesome_response)
         return actual_value
@@ -56,8 +57,8 @@ class CurrencyConverterService:
                 CURRENCY_DATABASE, CURRENCY_COLLECTION, payload.model_dump()
             )
         except Exception as error:
-            logger.error("Erro não mapeado", extra={"error": error})
-            raise CurrencyServiceException(detail={"error": "erro ao deletar currency"})
+            logger.error("Unmapped error", extra={"error": error})
+            raise CurrencyServiceException(detail={"error": "Error to create currency"})
         return payload.id
 
     def delete_currency(self, id: str) -> dict | None:
@@ -66,18 +67,18 @@ class CurrencyConverterService:
                 CURRENCY_DATABASE, CURRENCY_COLLECTION, id
             )
         except Exception as error:
-            logger.error("Erro não mapeado", extra={"error": error})
-            raise CurrencyServiceException(detail={"error": "erro ao deletar currency"})
+            logger.error("Unmapped error", extra={"error": error})
+            raise CurrencyServiceException(detail={"error": "Error to delete currency"})
         return id
 
-    def delete_currency_by_name(self, acronym: str) -> dict | None:
+    def delete_currency_by_acronym(self, acronym: str) -> dict | None:
         try:
             self.mongo_repository.delete_by_acronym(
                 CURRENCY_DATABASE, CURRENCY_COLLECTION, acronym
             )
         except Exception as error:
-            logger.error("Erro não mapeado", extra={"error": error})
-            raise CurrencyServiceException(detail={"error": "erro ao deletar currency"})
+            logger.error("Unmapped error", extra={"error": error})
+            raise CurrencyServiceException(detail={"error": "Error to delete currency"})
         return acronym
 
     def _get_currency_values_from_db(self, from_, to, amount):

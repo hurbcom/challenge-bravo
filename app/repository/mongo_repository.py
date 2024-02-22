@@ -41,7 +41,7 @@ class MongoRepository:
     def get_by_acronym(self, db_name: str, collection: str, acronym: str) -> dict:
         try:
             db = self._get_database(db_name)
-            response = db[collection].collection.find_one({"acronym": acronym})
+            response = db[collection].find_one({"acronym": acronym})
         except Exception as error:
             logger.error(
                 f"DB retornou erro - GetByAcr | Erro: {error}", extra={"error": error}

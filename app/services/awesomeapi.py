@@ -44,11 +44,11 @@ class AwesomeApiService:
         )
         response: Response = self._execute(method="GET", url=url)
         if response.status_code != status.HTTP_200_OK:
-            logger.error("Api retornou status não valido.")
+            logger.error("Api returned invalid status")
             raise ApiInvalidResponseException()
         return response.json()
 
-    def get_mapped_currencys(self) -> list[dict]:
+    def get_mapped_currencys(self) -> dict:
         """ """
         dolar = "USD"
         brl = "BRL"

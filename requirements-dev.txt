@@ -5,3 +5,4 @@ ipdb==0.13.11
 isort==5.13.2
 pre-commit==3.6.2
 pre-commit-hooks==4.5.0
+coverage==7.4.2

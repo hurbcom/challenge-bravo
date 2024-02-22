@@ -10,8 +10,8 @@ from fastapi.responses import JSONResponse
 from app.api.v1.currency_converter.exceptions import GenericApiException
 from app.api.v1.currency_converter.models import (
     Currency,
+    DeleteCurrencyByAcronym,
     DeleteCurrencyById,
-    DeleteCurrencyByName,
 )
 from app.api.v1.currency_converter.service import CurrencyConverterService
 from app.exceptions.default_exceptions import DefaultApiException
@@ -42,7 +42,7 @@ def get_currency(
     except DefaultApiException as error:
         raise error
     except Exception as error:
-        logger.error("Erro não mapeado", extra={"error": error})
+        logger.error("Unmapped error", extra={"error": error})
         raise GenericApiException()
 
 
@@ -60,10 +60,8 @@ def get_currency_by_acronym(acronym: str = Query()) -> JSONResponse:
         if response := service.get_currency_by_acronym(acronym):
             return JSONResponse(content=response, status_code=status.HTTP_200_OK)
         return JSONResponse(content={}, status_code=status.HTTP_404_NOT_FOUND)
-    except DefaultApiException as error:
-        raise error
     except Exception as error:
-        logger.error("Erro não mapeado", extra={"error": error})
+        logger.error("Unmapped error", extra={"error": error})
         raise GenericApiException()
 
 
@@ -80,11 +78,8 @@ def get_all_currency() -> JSONResponse:
     try:
         if response := service.get_all_currency():
             return JSONResponse(content=response, status_code=status.HTTP_200_OK)
-        return JSONResponse(content={}, status_code=status.HTTP_404_NOT_FOUND)
-    except DefaultApiException as error:
-        raise error
     except Exception as error:
-        logger.error("Erro não mapeado", extra={"error": error})
+        logger.error("Unmapped error", extra={"error": error})
         raise GenericApiException()
 
 
@@ -103,9 +98,9 @@ def create_currency(
     except DefaultApiException as error:
         raise error
     except Exception as error:
-        logger.error("Erro não mapeado", extra={"error": error})
+        logger.error("Unmapped error", extra={"error": error})
         raise GenericApiException()
-    return JSONResponse(content={"id": id}, status_code=status.HTTP_200_OK)
+    return JSONResponse(content={"id": id}, status_code=status.HTTP_201_CREATED)
 
 
 @router.delete(
@@ -117,30 +112,30 @@ def delete_currency(
 
     service = CurrencyConverterService()
     try:
-        id = service.delete_currency(payload)
+        id = service.delete_currency(payload.id)
     except DefaultApiException as error:
         raise error
     except Exception as error:
-        logger.error("Erro não mapeado", extra={"error": error})
+        logger.error("Unmapped error", extra={"error": error})
         raise GenericApiException()
     return JSONResponse(content={"id": id}, status_code=status.HTTP_200_OK)
 
 
 @router.delete(
-    path="/currency/by_name",
+    path="/currency/by_acronym",
     response_class=JSONResponse,
     status_code=status.HTTP_200_OK,
 )
-def delete_currency_by_name(
-    payload: DeleteCurrencyByName,
+def delete_currency_by_acronym(
+    payload: DeleteCurrencyByAcronym,
 ) -> JSONResponse:
 
     service = CurrencyConverterService()
     try:
-        id = service.delete_currency_by_name(payload)
+        acronym = service.delete_currency_by_acronym(payload.acronym)
     except DefaultApiException as error:
         raise error
     except Exception as error:
-        logger.error("Erro não mapeado", extra={"error": error})
+        logger.error("Unmapped error", extra={"error": error})
         raise GenericApiException()
-    return JSONResponse(content={"id": id}, status_code=status.HTTP_200_OK)
+    return JSONResponse(content={"acronym": acronym}, status_code=status.HTTP_200_OK)
