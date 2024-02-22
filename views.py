@@ -34,3 +34,9 @@ def edit_currency(request: Currency):
     redis_service = Redis()
     response = redis_service.update_currency(payload)
     return response, 200
+
+@app.delete("/currency")
+def delete_currency(currency_name: str):
+    redis_service = Redis()
+    response = redis_service.remove_currency_from_list(currency_name)
+    return response, 200

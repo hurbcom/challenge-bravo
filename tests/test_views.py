@@ -1,16 +1,16 @@
 from unittest import TestCase
 from unittest.mock import patch
 from inputs import Currency
-from views import create_currency, convert
+from views import create_currency, convert, delete_currency
 
 class TestTasks(TestCase):
 
     @patch("views.Redis")
     def test_create_currency(self,mock_redis):
         currency = Currency(currency_name="TESTE",is_fictional="True", backing="NOT", backing_amount="1.0")
-        mock_redis.return_value.add_currency.return_value = {'currency_name': 'TESTE', 'is_fictional': 'True', 'backing': 'NOT', 'backing_amount': '1.0'}
+        mock_redis.return_value.add_currency.return_value = ["TESTE"]
         response = create_currency(currency)
-        self.assertEqual(response[0],{'currency_name': 'TESTE', 'is_fictional': 'True', 'backing': 'NOT', 'backing_amount': '1.0'})
+        self.assertEqual(response[0],["TESTE"])
 
     @patch("views.is_currency_avaliable")
     @patch("views.is_currency_fictional")
@@ -35,3 +35,9 @@ class TestTasks(TestCase):
         mock_redis.return_value.add_currency.return_value = {'currency_name': 'TESTE', 'is_fictional': 'True', 'backing': 'NOT', 'backing_amount': '1.0'}
         response = create_currency(currency)
         self.assertEqual(response[0],{'currency_name': 'TESTE', 'is_fictional': 'True', 'backing': 'NOT', 'backing_amount': '1.0'})
+
+    @patch("views.Redis")
+    def test_delete_currency(self,mock_redis):
+        mock_redis.return_value.remove_currency_from_list.return_value = ["TESTE2"]
+        response = delete_currency(currency_name="TESTE")
+        self.assertEqual(response[0],["TESTE2"])

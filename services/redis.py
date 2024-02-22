@@ -40,3 +40,8 @@ class Redis():
     def get_avaliable_currencies(self):
 
         return r.lrange("available_currencies", 0, -1)
+    
+    def remove_currency_from_list(self, currency_name: str):
+        r.lrem("available_currencies", 0, currency_name.upper())
+
+        return r.lrange("available_currencies", 0, -1)
