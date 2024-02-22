@@ -1,0 +1,31 @@
+# Arquivos e pastas gerados pelo Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# Ambiente virtual
+venv/
+env/
+ENV/
+
+# Arquivos de log e saída
+*.log
+*.log.*
+logs/
+log.txt
+log/
+
+# Cache de dependências
+__pycache__/
+.cache/
+
+# Arquivos de configuração
+*.ini
+*.conf
+
+# Arquivos de ambiente
+.env
+.env.*
