@@ -10,6 +10,7 @@ from app.api.v1.currency_converter.utils import (
 from app.exceptions.default_exceptions import MongoRepositoryTransactionsException
 from app.repository.mongo_repository import MongoRepository
 from app.services.awesomeapi import AwesomeApiService
+from app.utils import init_currencys
 
 logger = logging.getLogger(__name__)
 CURRENCY_DATABASE = "currency_db"
@@ -26,6 +27,8 @@ class CurrencyConverterService:
         try:
             if self._date_is_valid():
                 return self._get_currency_values_from_db(from_, to, amount)
+            else:
+                init_currencys.init_currency_values_in_bd()
         except MongoRepositoryTransactionsException:
             logger.info("Error in database, trying to get values in the api")
         awesome_response = self.awesome_service.get_currency_values(from_, to)
