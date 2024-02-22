@@ -5,6 +5,6 @@ from app.utils.init_currencys import init_currency_values_in_bd
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI):  # pragma: no cover
     init_currency_values_in_bd()
     yield

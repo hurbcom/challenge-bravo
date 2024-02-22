@@ -49,7 +49,7 @@ class MongoRepository:
             raise MongoRepositoryTransactionsException()
         return response
 
-    def get_all_currency(self, db_name: str, collection: str) -> dict:
+    def get_all_currency(self, db_name: str, collection: str) -> list:
         try:
             db = self._get_database(db_name)
             cursor = db[collection].find({})
@@ -74,9 +74,9 @@ class MongoRepository:
             raise MongoRepositoryTransactionsException()
         return response
 
-    def create(self, db_name: str, collection: str, data: str):
-        db = self._get_database(db_name)
+    def create(self, db_name: str, collection: str, data: dict):
         try:
+            db = self._get_database(db_name)
             db[collection].insert_one(data)
         except Exception as error:
             logger.error(

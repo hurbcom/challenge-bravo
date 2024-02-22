@@ -37,7 +37,7 @@ class AwesomeApiService:
             ]
         )
         if not valid_values:
-            logger.error("Valores de moeda invalidos")
+            logger.error("Invalid currency values")
             raise CurrencyInvalidValuesException()
         url = (
             BASE_URL + f"/json/last/{first_currency.upper()}-{second_currency.upper()}"
@@ -61,6 +61,6 @@ class AwesomeApiService:
         )
         response: Response = self._execute(method="GET", url=url)
         if response.status_code != status.HTTP_200_OK:
-            logger.error("Api retornou status não valido")
+            logger.error("Api returned invalid status")
             raise ApiInvalidResponseException()
         return response.json()
