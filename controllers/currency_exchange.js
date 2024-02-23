@@ -1,5 +1,6 @@
 const Redis = require('../services/redis');
 const { format2float, formatCurrency } = require('../utils/formatter');
+const { CurrencysModel, CurrencysRaw } = require('../models/currencys');
 
 const ExistsCurrency = async currency => {
     const exists = await Redis.get(currency);
@@ -19,9 +20,9 @@ const ConvertCurrency = async (from, to, amount, cuurrency = 'USD') => {
             amount = format2float(amount);
             from = await Redis.get(from);
             to = await Redis.get(to);
-            calc = (
-                (amount * to) / from
-            );
+
+            if(from > to) calc = (amount * to) / from;
+            else calc = (amount * to) * from;
         }
 
         return formatCurrency(calc, cuurrency);
@@ -30,7 +31,41 @@ const ConvertCurrency = async (from, to, amount, cuurrency = 'USD') => {
     }
 };
 
+const NewCurrency = async (currency, ballast_usd) => {
+    const transaction = await CurrencysRaw.transaction();
+    try {
+
+        let existCurrency = await CurrencysModel.findOne({ where: { currency: currency.toUpperCase() } });
+        if (existCurrency) {
+            return {
+                status: 409,
+                message: 'Currency already exists'
+            };
+        }
+
+        await CurrencysModel.create({ 
+            currency: currency.toUpperCase(), 
+            ballast_usd: ballast_usd, 
+            createdAt: new Date(), 
+            updatedAt: new Date() 
+        }, { transaction });
+        
+        await Redis.set(currency, ballast_usd);
+        
+        await transaction.commit();
+        
+        return {
+            status: 201,
+            message: 'Currency created successfully'
+        };
+    } catch (error) {
+        await transaction.rollback();
+        throw new Error(error);
+    }
+};
+
 module.exports = {
     ExistsCurrency,
-    ConvertCurrency
+    ConvertCurrency,
+    NewCurrency
 };
