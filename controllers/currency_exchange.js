@@ -64,8 +64,25 @@ const NewCurrency = async (currency, ballast_usd) => {
     }
 };
 
+const DeleteCurrency = async currency => {
+    const transaction = await CurrencysRaw.transaction();
+    try {
+        await CurrencysModel.destroy({ where: { currency: currency.toUpperCase() }, transaction });
+        await Redis.set(currency, 0, 1);
+        await transaction.commit();
+        return {
+            status: 200,
+            message: 'Currency deleted successfully'
+        };
+    } catch (error) {
+        await transaction.rollback();
+        throw new Error(error);
+    }
+};
+
 module.exports = {
     ExistsCurrency,
     ConvertCurrency,
-    NewCurrency
+    NewCurrency,
+    DeleteCurrency
 };

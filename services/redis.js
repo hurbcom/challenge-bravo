@@ -1,7 +1,7 @@
 const redis = require("redis");
 
 module.exports = {
-    set: async (key, value) => {
+    set: async (key, value, ttl = null) => {
         try {
             const redisClient = redis.createClient({
                 url: process.env.REDIS_HOST_TLS,
@@ -10,7 +10,10 @@ module.exports = {
     
             await redisClient.connect();
             
-            await redisClient.set(key, value);
+            if(ttl)
+                await redisClient.set(key, value, { EX: ttl });
+            else
+                await redisClient.set(key, value);
     
             await redisClient.disconnect();
         } catch (error) {
