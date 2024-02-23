@@ -12,7 +12,11 @@ const format2float = (amount) => {
 
 const formatCurrency = (amount, currency = 'USD') => {
     amount = format2float(amount);
-    return amount.toLocaleString('pt-BR', { style: 'currency', currency: currency, minimumFractionDigits: 10 });
+    try {
+        return amount.toLocaleString('pt-BR', { style: 'currency', currency: currency, minimumFractionDigits: 10 });
+    } catch (error) {
+        return "$ " + amount;
+    }
 };
 
 module.exports = {
