@@ -101,7 +101,15 @@ const handler = async () => {
             const currencysInDB = await CurrencysModel.findAll();
             for (let i = 0; i < currencysInDB.length; i++) {
                 const currency = currencysInDB[i];
-                await setCurrencyRedis(currency.currency, currency.ballast_usd);
+                await setCurrencyRedis(currency.currency, 
+                    JSON.stringify(
+                        { 
+                            currency: currency.currency,
+                            ballast_usd: currency.ballast_usd,
+                            crypto: currency.crypto
+                        }
+                    )
+                );
             }
             console.log('>> UPDATE REDIS DATABASE COMPLETED');
 

@@ -2,30 +2,32 @@ const Redis = require('../services/redis');
 const { format2float, formatCurrency } = require('../utils/formatter');
 const { CurrencysModel, CurrencysRaw } = require('../models/currencys');
 
-const ExistsCurrency = async currency => {
-    const exists = await Redis.get(currency);
-    return exists ? true : false;
+const GetCurrency = async currency => {
+    try {
+        const result = await Redis.get(currency);
+        return result;
+    } catch (error) {
+        throw new Error(error);   
+    }
 };
 
-const ConvertCurrency = async (from, to, amount, cuurrency = 'USD') => {
+const ConvertCurrency = async (from, to, amount) => {
     try {
-
         let calc = 0;
+        let crypto = from.crypto || to.crypto;
 
-        from = from.toUpperCase();
-        to = to.toUpperCase();
-
-        if (from === to) calc = amount
+        if (from.currency === to.currency) calc = amount;
         else {
             amount = format2float(amount);
-            from = await Redis.get(from);
-            to = await Redis.get(to);
 
-            if(from > to) calc = (amount * to) / from;
-            else calc = (amount * to) * from;
+            if(from.ballast_usd > to.ballast_usd) calc = (amount * to.ballast_usd) / from.ballast_usd;
+            else calc = (amount * to.ballast_usd) * from.ballast_usd;
         }
 
-        return formatCurrency(calc, cuurrency);
+        return {
+            from: formatCurrency(amount, from.currency, crypto),
+            to: formatCurrency(calc, to.currency, crypto)
+        }
     } catch (error) {
         throw new Error(error);
     }
@@ -101,7 +103,7 @@ const DeleteCurrency = async currency => {
 };
 
 module.exports = {
-    ExistsCurrency,
+    GetCurrency,
     ConvertCurrency,
     NewCurrency,
     DeleteCurrency

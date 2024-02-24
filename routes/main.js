@@ -5,7 +5,7 @@ const { query, body, validationResult } = require('express-validator');
 
 const { Response } = require('../utils/response');
 const { 
-    ConvertCurrency, ExistsCurrency, NewCurrency, DeleteCurrency
+    ConvertCurrency, GetCurrency, NewCurrency, DeleteCurrency
 } = require('../controllers/currency_exchange');
 const { formatCurrency } = require('../utils/formatter');
 
@@ -20,15 +20,28 @@ router.get('/',
                 return Response(res, 400, validateQuery.array());
             }
 
-            const { from, to, amount } = req.query;
+            let from = req.query.from;
+            let to = req.query.to;
+            const amount = req.query.amount;
 
-            if(!ExistsCurrency(from.toUpperCase())) return Response(res, 400, {message: `Currency code 'from' ${from} not found`});
-            if(!ExistsCurrency(to.toUpperCase())) return Response(res, 400, {message: `Currency code 'from' ${from} not found`});
+            let f = GetCurrency(from.toUpperCase());
+            let t = GetCurrency(to.toUpperCase());
+
+            from = await f;
+            to = await t;
+
+            if(!from) return Response(res, 400, {message: `Currency code 'from' ${req.query.from} not found`});
+            if(!to) return Response(res, 400, {message: `Currency code 'to' ${req.query.to} not found`});
+            
+            from = JSON.parse(from);
+            to = JSON.parse(to);
+
+            const converted = await ConvertCurrency(from, to, amount);
 
             const result = {};
-            result[from] = formatCurrency(amount, from);
-        
-            result[to] = await ConvertCurrency(from, to, amount, to);
+            result[from.currency] = converted.from;
+            result[to.currency] = converted.to;
+
             Response(res, 200, result);
         } catch (error) {
             console.error('routes/main.js ~ get ~ ERROR: ', error);
