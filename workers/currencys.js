@@ -19,7 +19,7 @@ const getBallastDefault = async () => {
     }
 }
 
-const setCurrencyRedis = async (currency, ballast_usd) => {
+const setCurrencyRedis = async (key, value) => {
     try {
         const redisClient = redis.createClient({
             url: process.env.REDIS_HOST_TLS,
@@ -28,7 +28,7 @@ const setCurrencyRedis = async (currency, ballast_usd) => {
 
         await redisClient.connect();
         
-        await redisClient.set(currency, ballast_usd);
+        await redisClient.set(key, value);
 
         await redisClient.disconnect();
     } catch (error) {

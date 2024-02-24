@@ -30,8 +30,8 @@ router.get('/',
             from = await f;
             to = await t;
 
-            if(!from) return Response(res, 400, {message: `Currency code 'from' ${req.query.from} not found`});
-            if(!to) return Response(res, 400, {message: `Currency code 'to' ${req.query.to} not found`});
+            if(!from) return Response(res, 404, {message: `Currency code 'from' ${req.query.from} not found`});
+            if(!to) return Response(res, 404, {message: `Currency code 'to' ${req.query.to} not found`});
             
             from = JSON.parse(from);
             to = JSON.parse(to);

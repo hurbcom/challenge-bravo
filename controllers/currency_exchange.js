@@ -79,7 +79,7 @@ const DeleteCurrency = async currency => {
         });
         if(!curr) {
             return {
-                status: 400,
+                status: 404,
                 message: 'Currency not found'
             };
         }
