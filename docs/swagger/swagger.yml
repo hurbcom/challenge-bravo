@@ -123,7 +123,7 @@ paths:
           description: Currency that needs to be deleted
           required: true
           schema:
-            type: integer
+            type: string
             format: string
       responses:
         '200':
