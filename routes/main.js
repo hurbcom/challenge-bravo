@@ -92,11 +92,13 @@ router.delete('/',
 
             const { currency } = req.query;
 
-            if(!ExistsCurrency(currency.toUpperCase())) return Response(res, 400, {message: `Currency code 'from' ${from} not found`});
+            const existCurrency = await GetCurrency(currency.toUpperCase());
 
-            await DeleteCurrency(currency.toUpperCase());
+            if(!existCurrency) return Response(res, 400, {message: `Currency code not found`});
 
-            Response(res, 200, {message: 'Currency deleted successfully'});
+            const result = await DeleteCurrency(currency.toUpperCase());
+
+            Response(res, result.status, {message: result.message});
         } catch (error) {
             console.error('routes/main.js ~ delete ~ ERROR: ', error);
             return Response(res, 500, {message: error.message});
