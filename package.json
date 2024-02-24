@@ -4,7 +4,7 @@
   "description": "[[English](README.md) | [Portuguese](README.pt.md)]",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node server.js",
     "debug": "nodemon server.js"
   },
@@ -29,5 +29,8 @@
     "mysql2": "^3.9.1",
     "redis": "^4.6.13",
     "sequelize": "^6.37.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
