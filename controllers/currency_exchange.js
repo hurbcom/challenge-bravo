@@ -15,6 +15,7 @@ const ConvertCurrency = async (from, to, amount) => {
     try {
         let calc = 0;
         let crypto = from.crypto || to.crypto;
+        crypto = typeof crypto === 'boolean' ? crypto : crypto === 'true';
 
         if (from.currency === to.currency) calc = amount;
         else {

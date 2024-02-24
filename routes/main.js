@@ -53,6 +53,7 @@ router.get('/',
 router.post('/', 
     body('currency').notEmpty().trim().escape().isLength({ min: 1, max: 10 }).withMessage('Currency code must be 3 characters long'),
     body('ballast_usd').notEmpty().trim().escape().isLength({ min: 1 }).isFloat().withMessage('Ballast USD must be a number'),
+    body('crypto').optional().trim().escape().isLength({ min: 1 }).isBoolean().withMessage('Crypto must be a boolean'),
     async (req, res) => {
         try {
             const validateBody = validationResult(req);
@@ -60,8 +61,16 @@ router.post('/',
                 return Response(res, 400, validateBody.array());
             }
             
-            const { currency, ballast_usd } = req.body;
-            const result = await NewCurrency(currency, ballast_usd);
+            const currency = req.body.currency;
+            const ballast_usd = req.body.ballast_usd;
+            let crypto = req.body.crypto;
+            crypto = typeof crypto === 'undefined' ? false : crypto === 'true'; 
+
+            const result = await NewCurrency(
+                currency, 
+                ballast_usd, 
+                typeof crypto === 'undefined' ? false : crypto
+            );
 
             Response(res, result.status, {message: result.message});
         } catch (error) {
