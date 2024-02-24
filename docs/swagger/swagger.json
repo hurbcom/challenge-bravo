@@ -1,0 +1,339 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Challenge-Bravo",
+    "description": "API for currency conversion.",
+    "contact": {
+      "name": "Leonardo Neves <neves.leo@outlook.com>",
+      "email": "neves.leo@outlook.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "/"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "/"
+        ],
+        "summary": "Convert value between two currencies",
+        "description": "Convert value between two currencies",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Currency origin",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "BRL"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Currency destination",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "USD"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Amount to convert",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponseErrorArray"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Currency code not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Server internal error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "/"
+        ],
+        "summary": "Add a new currency",
+        "description": "Add a new currency",
+        "requestBody": {
+          "description": "Create a new pet in the store",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Currency"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Currency created successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponseErrorArray"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Currency already exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Server internal error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "/"
+        ],
+        "summary": "Delete currency",
+        "description": "Delete currency",
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency that needs to be deleted",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Currency deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponseErrorArray"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Not authorized delete default currencies"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Currency code not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Server internal error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Currency": {
+        "required": [
+          "currency",
+          "ballast_usd"
+        ],
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "example": "GTA"
+          },
+          "ballast_usd": {
+            "type": "number",
+            "example": 0.000013544
+          },
+          "crypto": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "ValidationResponseError": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "field"
+          },
+          "msg": {
+            "type": "string",
+            "example": "Invalid value"
+          },
+          "path": {
+            "type": "string",
+            "example": "currency"
+          },
+          "location": {
+            "type": "string",
+            "example": "query"
+          }
+        }
+      },
+      "ValidationResponseErrorArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ValidationResponseError"
+        }
+      }
+    },
+    "requestBodies": {
+      "Currency": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Currency"
+            }
+          }
+        }
+      }
+    }
+  }
+}

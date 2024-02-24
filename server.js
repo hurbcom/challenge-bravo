@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./docs/swagger/swagger.json');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,6 +27,8 @@ const limiter = rateLimit({
     message: 'You have exceeded your ~1000 requests per second limit.',
 });
 app.use(limiter);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {explorer: true}));
 
 const mainRoutes = require('./routes/main');
 app.use('/', mainRoutes);

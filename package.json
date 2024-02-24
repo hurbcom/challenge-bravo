@@ -28,7 +28,8 @@
     "helmet": "^7.1.0",
     "mysql2": "^3.9.1",
     "redis": "^4.6.13",
-    "sequelize": "^6.37.1"
+    "sequelize": "^6.37.1",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "jest": "^29.7.0"
