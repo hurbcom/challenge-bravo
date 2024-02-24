@@ -7,15 +7,23 @@ const CurrencysModel = sequelize.define('currencys', {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
-        primaryKey: true,
+        primaryKey: true
     },
     currency: {
         type: Sequelize.STRING(10),
-        allowNull: false,
+        allowNull: false
     },
     ballast_usd: {
         type: Sequelize.FLOAT,
-        allowNull: false,
+        allowNull: false
+    },
+    crypto: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+    },
+    imported: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
     },
     createdAt: { type: Sequelize.DATE },
     updatedAt: { type: Sequelize.DATE }
