@@ -55,7 +55,13 @@ const NewCurrency = async (currency, ballast_usd, crypto = false) => {
             updatedAt: new Date() 
         }, { transaction });
         
-        await Redis.set(currency, ballast_usd);
+        await Redis.set(currency, JSON.stringify(
+            { 
+                currency: currency.toUpperCase(),
+                ballast_usd,
+                crypto
+            }
+        ));
         
         await transaction.commit();
         
