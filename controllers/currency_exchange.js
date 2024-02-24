@@ -31,7 +31,7 @@ const ConvertCurrency = async (from, to, amount, cuurrency = 'USD') => {
     }
 };
 
-const NewCurrency = async (currency, ballast_usd) => {
+const NewCurrency = async (currency, ballast_usd, crypto = false) => {
     const transaction = await CurrencysRaw.transaction();
     try {
 
@@ -46,6 +46,8 @@ const NewCurrency = async (currency, ballast_usd) => {
         await CurrencysModel.create({ 
             currency: currency.toUpperCase(), 
             ballast_usd: ballast_usd, 
+            crypto,
+            imported: false,
             createdAt: new Date(), 
             updatedAt: new Date() 
         }, { transaction });
@@ -67,6 +69,24 @@ const NewCurrency = async (currency, ballast_usd) => {
 const DeleteCurrency = async currency => {
     const transaction = await CurrencysRaw.transaction();
     try {
+        const curr = await CurrencysModel.findOne({
+            where: {
+                currency: currency.toUpperCase()
+            }
+        });
+        if(!curr) {
+            return {
+                status: 404,
+                message: 'Currency not found'
+            };
+        }
+        if(curr.imported) {
+            return {
+                status: 403,
+                message: 'Not authorized delete default currencies'
+            };
+        }
+
         await CurrencysModel.destroy({ where: { currency: currency.toUpperCase() }, transaction });
         await Redis.set(currency, 0, 1);
         await transaction.commit();
