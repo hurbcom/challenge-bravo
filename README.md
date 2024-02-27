@@ -42,7 +42,7 @@ Nosso servidor backend escrito em NodeJS utilizando o framework [ExpressJS](http
 ## Executando o projeto
 
 Para execução do projeto basta executarmos o comando:
-```sh
+```shell
 docker compose up
 ```
 
@@ -53,11 +53,11 @@ A ordem de execução será a seguinte:
 4. app (com delay de 10 segundos, para que dê tempo do worker realizar as atualizações)
 
 Para encerramento dos serviços:
-```sh
+```shell
 docker compose down
 ```
 
 Se precisar alterar o fonte, envs, ou algum outro arquivo, para rebuildar os serviços, basta executar o comando abaixo:
-```sh
+```shell
 docker compose up --build
 ```
