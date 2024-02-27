@@ -46,6 +46,7 @@ services:
       MYSQL_DATABASE: currencydb
       REDIS_HOST_TLS: redis://redis
       REDIS_PASSWORD_TLS: Redis2024!
+      AWAIT_DELAY_SECONDS: 300
     command: node workers/currencys.js
     depends_on:
       db:
@@ -68,6 +69,7 @@ services:
       MYSQL_DATABASE: currencydb
       REDIS_HOST_TLS: redis://redis
       REDIS_PASSWORD_TLS: Redis2024!
+      PORT: 3000
     command: bash -c "sleep 10; npm start"
     depends_on:
       db:
