@@ -119,7 +119,7 @@ const handler = async () => {
             await transaction.rollback();
         }
 
-        await sleep(300 * 1000);
+        await sleep(process.env.AWAIT_DELAY_SECONDS * 1000);
     }
 };
 
