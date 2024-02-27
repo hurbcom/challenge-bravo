@@ -8,38 +8,38 @@ Para esse desafio foi usada a seguinte arquitetura:
 
 ## Diagramas de sequência
 
-###Worker
+### Worker
 
 <p>
     <img src="./docs/Sequence-Worker.png" alt="[UML] Sequence - Worker" />
 </p>
 
-###API
+### API
 
 <p>
     <img src="./docs/Sequence-API.png" alt="[UML] Sequence - Worker" />
 </p>
 
-##Contâiners (docker):
+## Contâiners (docker):
 
-###db
+### db
 
 Banco de dados MySQL responsável por persistir os dados em um estado sólido.
 
-###redis
+### redis
 
 Banco de dados em memória (volátil) que dará melhor desempenho e velocidade em nosso response.
 
-###worker
+### worker
 
 Serviço responsável por manter o db e o redis sempre atualizados com dados reais. O tempo de atualização default é de 5 minutos, porém esse parâmetro pode ser alterado atualizando o docker-compose.yml
 
-###app
+### app
 
 Nosso servidor backend escrito em NodeJS utilizando o framework [ExpressJS](https://expressjs.com/pt-br/).
 
 
-##Executando o projeto
+## Executando o projeto
 
 Para execução do projeto basta executarmos o comando:
 ```sh
