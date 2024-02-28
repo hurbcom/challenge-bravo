@@ -4,6 +4,8 @@ const axios = require('axios');
 const redis = require("redis");
 const { CurrencysModel, CurrencysRaw } = require('../models/currencys');
 
+const AWAIT_DELAY_SECONDS = process.env.AWAIT_DELAY_SECONDS || 300;
+
 const sleep = (ms) => {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -12,8 +14,16 @@ const sleep = (ms) => {
 
 const getBallastDefault = async () => {
     try {
-        const { data } = await axios.get(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.min.json`);
-        return data.usd;
+        const { data } = await axios.get(`https://api.coingate.com/v2/rates`);
+        const {BTC, ETH, USD} = data.merchant;
+
+        return {
+            BTC: 1 / BTC.USD,
+            ETH: 1 / ETH.USD,
+            USD: 1,
+            BRL: USD.BRL * 1,
+            EUR: USD.EUR * 1
+        }
     } catch (error) {
         throw new Error(error);
     }
@@ -50,7 +60,7 @@ const handler = async () => {
         const transaction = await CurrencysRaw.transaction();
 
         try {
-            console.log('>> CONSULTANDO DADOS E ATUALIZANDO DATABASE');
+            console.log('>> GET CURRENCYS ON PUBLIC API AND POPULATE DATABASE/REDIS');
 
             const ballastDefault = await getBallastDefault();
             const currencys = Object.keys(ballastDefault);
@@ -97,7 +107,7 @@ const handler = async () => {
                 console.log('>>> UPDATE COMPLETED');
             }
 
-            console.log('>> UPDATE REDIS DATABASE');
+            console.log('>>> UPDATE REDIS DATABASE');
             const currencysInDB = await CurrencysModel.findAll();
             for (let i = 0; i < currencysInDB.length; i++) {
                 const currency = currencysInDB[i];
@@ -111,7 +121,7 @@ const handler = async () => {
                     )
                 );
             }
-            console.log('>> UPDATE REDIS DATABASE COMPLETED');
+            console.log('>>> UPDATE REDIS DATABASE COMPLETED');
 
             await transaction.commit();
         } catch (error) {
@@ -119,7 +129,8 @@ const handler = async () => {
             await transaction.rollback();
         }
 
-        await sleep(process.env.AWAIT_DELAY_SECONDS * 1000);
+        console.log('>> AWAITING ' + AWAIT_DELAY_SECONDS + ' SECONDS TO NEXT RUN');
+        await sleep(AWAIT_DELAY_SECONDS * 1000);
     }
 };
 
