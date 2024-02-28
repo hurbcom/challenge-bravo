@@ -107,6 +107,8 @@ const handler = async () => {
                 console.log('>>> UPDATE COMPLETED');
             }
 
+            await transaction.commit();
+
             console.log('>>> UPDATE REDIS DATABASE');
             const currencysInDB = await CurrencysModel.findAll();
             for (let i = 0; i < currencysInDB.length; i++) {
@@ -122,8 +124,6 @@ const handler = async () => {
                 );
             }
             console.log('>>> UPDATE REDIS DATABASE COMPLETED');
-
-            await transaction.commit();
         } catch (error) {
             console.error('>> ERRO AO CONSULTAR DADOS', error);
             await transaction.rollback();
