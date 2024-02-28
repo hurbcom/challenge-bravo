@@ -41,7 +41,7 @@ router.get('/',
             Response(res, 200, result);
         } catch (error) {
             console.error('routes/main.js ~ get ~ ERROR: ', error);
-            Response(res, 500, {message: error.message});
+            Response(res, 500, {message: "Internal server error"});
         }
     }
 );
@@ -71,7 +71,7 @@ router.post('/',
             Response(res, result.status, {message: result.message});
         } catch (error) {
             console.error('routes/main.js ~ post ~ ERROR: ', error);
-            return Response(res, 500, {message: error.message});
+            Response(res, 500, {message: "Internal server error"});
         }
         
     }
@@ -97,7 +97,7 @@ router.delete('/',
             Response(res, result.status, {message: result.message});
         } catch (error) {
             console.error('routes/main.js ~ delete ~ ERROR: ', error);
-            return Response(res, 500, {message: error.message});
+            Response(res, 500, {message: "Internal server error"});
         }
     
     }

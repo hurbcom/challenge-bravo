@@ -4,7 +4,9 @@
   "description": "[[English](README.md) | [Portuguese](README.pt.md)]",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "jest ./tests/unit/*.test.js",
+    "test:integration": "mocha tests/integration/*.test.js",
     "start": "node server.js",
     "debug": "nodemon server.js"
   },
@@ -32,6 +34,9 @@
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
-    "jest": "^29.7.0"
+    "chai": "^5.1.0",
+    "jest": "^29.7.0",
+    "mocha": "^10.3.0",
+    "supertest": "^6.3.4"
   }
 }

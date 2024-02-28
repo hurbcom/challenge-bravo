@@ -36,3 +36,5 @@ app.use('/', mainRoutes);
 app.listen(port, () => {
     console.log(`API rodando em http://localhost:${port}`);
 });
+
+module.exports = app;

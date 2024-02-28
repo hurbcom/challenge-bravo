@@ -1,4 +1,4 @@
-const { ConvertCurrency } = require('../controllers/currency_exchange');
+const { ConvertCurrency } = require('../../controllers/currency_exchange');
 
 test('BRL: It should show the original monetary value of 100,00', async () => {
     const result = await ConvertCurrency(
