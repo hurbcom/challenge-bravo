@@ -7,7 +7,6 @@ const { Response } = require('../utils/response');
 const { 
     ConvertCurrency, GetCurrency, NewCurrency, DeleteCurrency
 } = require('../controllers/currency_exchange');
-const { formatCurrency } = require('../utils/formatter');
 
 router.get('/', 
     query('from').notEmpty().escape().isLength({ min: 1, max: 10 }).withMessage('Currency code \'from\' must be 1 characters long'),
@@ -20,15 +19,12 @@ router.get('/',
                 return Response(res, 400, validateQuery.array());
             }
 
-            let from = req.query.from;
-            let to = req.query.to;
             const amount = req.query.amount;
 
-            let f = GetCurrency(from.toUpperCase());
-            let t = GetCurrency(to.toUpperCase());
+            const fromPromise = GetCurrency(req.query.from.toUpperCase());
+            const toPromise = GetCurrency(req.query.to.toUpperCase());
 
-            from = await f;
-            to = await t;
+            let [from, to] = await Promise.all([fromPromise, toPromise]);
 
             if(!from) return Response(res, 404, {message: `Currency code 'from' ${req.query.from} not found`});
             if(!to) return Response(res, 404, {message: `Currency code 'to' ${req.query.to} not found`});
