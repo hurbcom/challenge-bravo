@@ -21,8 +21,8 @@ const ConvertCurrency = async (from, to, amount) => {
         else {
             amount = format2float(amount);
 
-            if(from.ballast_usd > to.ballast_usd) calc = (amount * to.ballast_usd) / from.ballast_usd;
-            else calc = (amount * to.ballast_usd) * from.ballast_usd;
+            const amountIdUSD = amount / from.ballast_usd;
+            calc = amountIdUSD * to.ballast_usd;
         }
 
         return {

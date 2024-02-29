@@ -20,7 +20,7 @@ test('BRL to USD: It should show the destination monetary value of 20,28', async
 
 test('GTA: It should show the original monetary value of 1.250.00,00', async () => {
     const result = await ConvertCurrency(
-        {"currency":"GTA","ballast_usd":0.000013544,"crypto":false},
+        {"currency":"GTA","ballast_usd":73833.43178,"crypto":false},
         {"currency":"USD","ballast_usd":1,"crypto":false},
         1250000
     );
@@ -29,7 +29,7 @@ test('GTA: It should show the original monetary value of 1.250.00,00', async () 
 
 test('GTA to USD: It should show the original monetary value of 16,93', async () => {
     const result = await ConvertCurrency(
-        {"currency":"GTA","ballast_usd":0.000013544,"crypto":false},
+        {"currency":"GTA","ballast_usd":73833.43178,"crypto":false},
         {"currency":"USD","ballast_usd":1,"crypto":false},
         1250000
     );
@@ -38,7 +38,7 @@ test('GTA to USD: It should show the original monetary value of 16,93', async ()
 
 test('GTA: It should show the original monetary value of 1.250.00,00', async () => {
     const result = await ConvertCurrency(
-        {"currency":"GTA","ballast_usd":0.000013544,"crypto":false},
+        {"currency":"GTA","ballast_usd":73833.43178,"crypto":false},
         {"currency":"BRL","ballast_usd":4.93119,"crypto":false},
         1250000
     );
@@ -47,7 +47,7 @@ test('GTA: It should show the original monetary value of 1.250.00,00', async () 
 
 test('GTA to BRL: It should show the original monetary value of 83,49', async () => {
     const result = await ConvertCurrency(
-        {"currency":"GTA","ballast_usd":0.000013544,"crypto":false},
+        {"currency":"GTA","ballast_usd":73833.43178,"crypto":false},
         {"currency":"BRL","ballast_usd":4.93119,"crypto":false},
         1250000
     );
