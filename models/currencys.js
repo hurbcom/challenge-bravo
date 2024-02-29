@@ -14,7 +14,7 @@ const CurrencysModel = sequelize.define('currencys', {
         allowNull: false
     },
     ballast_usd: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING(45),
         allowNull: false
     },
     crypto: {

@@ -26,12 +26,13 @@ const formatCurrency = (amount, currency = 'USD', crypto = false) => {
     }
 };
 
-const useCryptoFormat = value => {
+const useCryptoFormat = (value, crypto) => {
     if(!value.toString().includes('.')) return false;
     else {
         const dotSepareted = value.toString().split('.');
         if (dotSepareted[0] !== '0') return false;
 
+        if(!crypto) return false;
         return dotSepareted[1].length > 2;
     }
 };

@@ -1,5 +1,5 @@
 const Redis = require('../services/redis');
-const { format2float, formatCurrency } = require('../utils/formatter');
+const { format2float, formatCurrency, useCryptoFormat } = require('../utils/formatter');
 const { CurrencysModel, CurrencysRaw } = require('../models/currencys');
 
 const GetCurrency = async currency => {
@@ -19,15 +19,15 @@ const ConvertCurrency = async (from, to, amount) => {
 
         if (from.currency === to.currency) calc = amount;
         else {
-            amount = format2float(amount);
+            amount = format2float(amount, from.crypto);
 
             const amountIdUSD = amount / from.ballast_usd;
             calc = amountIdUSD * to.ballast_usd;
         }
 
         return {
-            from: formatCurrency(amount, from.currency, crypto),
-            to: formatCurrency(calc, to.currency, crypto)
+            from: formatCurrency(amount, from.currency, useCryptoFormat(amount, from.crypto)),
+            to: formatCurrency(calc, to.currency, useCryptoFormat(calc, to.crypto))
         }
     } catch (error) {
         throw new Error(error);

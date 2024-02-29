@@ -6,7 +6,7 @@ USE currencydb;
 CREATE TABLE IF NOT EXISTS currencys (
     id INT AUTO_INCREMENT PRIMARY KEY,
     currency VARCHAR(10) NOT NULL,
-    ballast_usd FLOAT NOT NULL,
+    ballast_usd VARCHAR(45) NOT NULL,
     crypto BOOLEAN NOT NULL DEFAULT 0,
     imported BOOLEAN NOT NULL DEFAULT 0,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

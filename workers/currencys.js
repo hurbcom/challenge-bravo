@@ -117,7 +117,7 @@ const handler = async () => {
                     JSON.stringify(
                         { 
                             currency: currency.currency,
-                            ballast_usd: currency.ballast_usd,
+                            ballast_usd: parseFloat(currency.ballast_usd),
                             crypto: currency.crypto
                         }
                     )
