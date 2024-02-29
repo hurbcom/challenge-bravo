@@ -1,0 +1,19 @@
+config:
+  target: 'http://192.168.1.2:3000'
+  phases:
+    # - duration: 10
+    #   arrivalRate: 10
+    #   name: Warm up
+    - duration: 20
+      arrivalRate: 100
+      maxVusers: 1000
+      name: Ramp up load
+
+scenarios:
+  - flow:
+    - loop:
+      - get:
+          url: '/?from=USD&to=BRL&amount=1'
+          headers:
+            User-Agent: 'Artillery'
+      count: 10

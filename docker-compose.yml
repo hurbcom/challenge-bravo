@@ -1,0 +1,80 @@
+version: '3.8'
+services:
+  redis:
+    container_name: redis
+    image: redis
+    command: redis-server --requirepass Redis2024!
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
+      interval: 10s
+      retries: 3
+      timeout: 5s
+
+  db:
+    image: mysql:8
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: currencydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./sql/currencydb.sql:/docker-entrypoint-initdb.d/currencydb.sql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h db -u user -ppassword"]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_interval: 30s
+
+  worker:
+    container_name: worker
+    build: 
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      NODE_ENV: development
+      MYSQL_HOST: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: currencydb
+      REDIS_HOST_TLS: redis://redis
+      REDIS_PASSWORD_TLS: Redis2024!
+      AWAIT_DELAY_SECONDS: 300
+    command: node workers/currencys.js
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  app:
+    container_name: backend
+    build: 
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      MYSQL_HOST: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: currencydb
+      REDIS_HOST_TLS: redis://redis
+      REDIS_PASSWORD_TLS: Redis2024!
+      PORT: 3000
+    command: bash -c "sleep 10; npm start"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      worker:
+        condition: service_started
