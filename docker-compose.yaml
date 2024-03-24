@@ -14,13 +14,6 @@ services:
     depends_on:
       - database
 
-  cron_job:
-    build:
-      context: .
-      dockerfile: Dockerfile-cronjob
-    container_name: challenge_bravo_job
-    command: cron -n
-
   database:
     image: mongo
     restart: always

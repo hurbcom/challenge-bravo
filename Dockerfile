@@ -27,5 +27,23 @@ RUN pip install -r requirements-dev.txt
 # Set the server port
 EXPOSE 8000
 
+################### INIT CRON JOB
+# Give execution rights on the cron scripts
+RUN chmod 0644 init_currencys_in_db.py
+
+#Install Cron
+RUN apt-get update
+RUN apt-get -y install cron
+
+# Add the cron job
+RUN crontab -l | { cat; echo "0 0 * * * python /home/$USER/init_currencys_in_db.py"; } | crontab -
+
+# # Run the command on container startup
+# CMD cron
+
+# 
+RUN echo "CRONJOB FINALIZADO!"
+################### FINISH CRON JOB
+
 # Start up the backend server
 CMD uvicorn app.main:app --reload
