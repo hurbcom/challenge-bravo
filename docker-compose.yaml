@@ -1,0 +1,59 @@
+services:
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    container_name: challenge_bravo
+    network_mode: "host"
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    depends_on:
+      - database
+
+  database:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    ports:
+      - "27017:27017"
+    volumes:
+      - dbdata:/data/db
+
+  redis:
+    image: redis:latest
+    command: redis-server
+    volumes:
+      - redis:/var/lib/redis
+      - redis-config:/usr/local/etc/redis/redis.conf
+    ports:
+      - 6379:6379
+    networks:
+      - redis-network
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=root
+      - HTTP_PASSWORD=root
+    ports:
+      - 8081:8081
+    networks:
+      - redis-network
+    depends_on:
+      - redis
+
+volumes:
+  dbdata:
+  redis:
+  redis-config:
+
+networks:
+  redis-network:
+    driver: bridge

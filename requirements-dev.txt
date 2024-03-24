@@ -1,0 +1,14 @@
+-r requirements.txt
+# Linters and Formaters
+black==24.2.0
+flake8==7.0.0
+ipdb==0.13.11
+isort==5.13.2
+pre-commit==3.6.2
+pre-commit-hooks==4.5.0
+
+
+#tests
+coverage==7.4.2
+locust==2.23.1
+robotframework==7.0
