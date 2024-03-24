@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.concurrency import asynccontextmanager
 
-from app.utils.init_currencys import init_currency_values_in_bd
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # pragma: no cover
-    init_currency_values_in_bd()
+    # Valores aqui executam antes do sistema subir
     yield
+    # E aqui quando o sistema está sendo fechado.

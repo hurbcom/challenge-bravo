@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 
 from app.api.v1.currency_converter.exceptions import CurrencyServiceException
 from app.api.v1.currency_converter.models import Currency
@@ -9,8 +8,8 @@ from app.api.v1.currency_converter.utils import (
 )
 from app.exceptions.default_exceptions import MongoRepositoryTransactionsException
 from app.repository.mongo_repository import MongoRepository
+from app.repository.redis_repository import RedisRepository
 from app.services.awesomeapi import AwesomeApiService
-from app.utils import init_currencys
 
 logger = logging.getLogger(__name__)
 CURRENCY_DATABASE = "currency_db"
@@ -22,13 +21,11 @@ class CurrencyConverterService:
     def __init__(self) -> None:
         self.awesome_service = AwesomeApiService()
         self.mongo_repository = MongoRepository(server_timeout=100)
+        self.redis = RedisRepository()
 
     def get_currency(self, from_: str = "", to: str = "", amount: float = None) -> str:
         try:
-            if self._date_is_valid():
-                return self._get_currency_values_from_db(from_, to, amount)
-            else:
-                init_currencys.init_currency_values_in_bd()
+            return self._get_currency_values_from_db(from_, to, amount)
         except MongoRepositoryTransactionsException:
             logger.info("Error in database, trying to get values in the api")
         awesome_response = self.awesome_service.get_currency_values(from_, to)
@@ -43,12 +40,16 @@ class CurrencyConverterService:
         return response
 
     def get_all_currency(self) -> list[dict] | None:
-        if response := self.mongo_repository.get_all_currency(
+        if response := self.redis.get("all_currencys"):
+            return response
+
+        response = self.mongo_repository.get_all_currency(
             CURRENCY_DATABASE, CURRENCY_COLLECTION
-        ):
-            response = [
-                Currency.model_validate(response).model_dump() for response in response
-            ]
+        )
+        response = [
+            Currency.model_validate(response).model_dump() for response in response
+        ]
+        self.redis.create("all_currencys", response)
         return response
 
     def create_currency(self, payload: Currency) -> dict | None:
@@ -82,23 +83,27 @@ class CurrencyConverterService:
         return acronym
 
     def _get_currency_values_from_db(self, from_, to, amount):
-        current_currency: dict = self.mongo_repository.get_by_acronym(
-            CURRENCY_DATABASE, CURRENCY_COLLECTION, from_
-        )
-        currency_to_exchange: dict = self.mongo_repository.get_by_acronym(
-            CURRENCY_DATABASE, CURRENCY_COLLECTION, to
-        )
+        current_currency: dict = self.redis.get(from_)
+        currency_to_exchange: dict = self.redis.get(to)
+        if not current_currency:
+            current_currency: dict = self.mongo_repository.get_by_acronym(
+                CURRENCY_DATABASE, CURRENCY_COLLECTION, from_
+            )
+            current_currency = Currency.model_validate(current_currency).model_dump()
+            self.redis.create(from_, current_currency)
+
+        if not currency_to_exchange:
+            currency_to_exchange: dict = self.mongo_repository.get_by_acronym(
+                CURRENCY_DATABASE, CURRENCY_COLLECTION, to
+            )
+            currency_to_exchange = Currency.model_validate(
+                currency_to_exchange
+            ).model_dump()
+            self.redis.create(to, currency_to_exchange)
+
         amount = amount_from_bd_response(
             current_currency.get("dolar_price_reference"),
             currency_to_exchange.get("dolar_price_reference"),
             amount=amount,
         )
         return amount
-
-    def _date_is_valid(self) -> bool:
-        date_time: dict = self.mongo_repository.get_cached_date(
-            CURRENCY_DATABASE, DATE_COLLECTION
-        )
-        past: datetime = date_time.get("date")
-        present = datetime.now()
-        return past.date() < present.date()
