@@ -10,6 +10,7 @@ def amount_from_api_response(
 
 def amount_from_bd_response(from_value: str, to_value: str, amount: float) -> str:
     """ """
-    quotation = float(from_value / to_value)
+    from_value, to_value = float(from_value), float(to_value)
+    quotation = from_value / to_value
     value = quotation * amount
     return f"{value:.6f}"

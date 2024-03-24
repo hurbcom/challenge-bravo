@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     HOST: str = "localhost"
     PORT: str = "8000"
     IS_DEBUG: bool = False
-    WORKERS: int = 2
+    WORKERS: int = 3
 
     # Mongo
     MONGO_USER: str = "root"
