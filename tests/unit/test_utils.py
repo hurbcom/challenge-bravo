@@ -3,7 +3,6 @@ from unittest.mock import (
     patch,
 )
 
-from app.utils import init_currencys
 from tests.unit import DefaultTestCase
 
 default_date_format = "%d/%m/%Y"
@@ -35,7 +34,6 @@ class UtilsTestCase(DefaultTestCase):
         mock_repository_up_create.return_value = None
         mock_repository_cache.return_value = None
 
-        init_currencys.init_currency_values_in_bd()
         awesome_api_mock.assert_called()
         mock_repository_up_create.assert_called()
         mock_repository_cache.assert_called()
@@ -45,7 +43,6 @@ class UtilsTestCase(DefaultTestCase):
         self, awesome_api_mock: Mock
     ):
         awesome_api_mock.side_effect = Exception("test error")
-        init_currencys.init_currency_values_in_bd()
         awesome_api_mock.assert_called()
 
 

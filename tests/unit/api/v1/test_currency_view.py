@@ -57,7 +57,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.body), {"converted_value": "200.000000"})
 
-    @patch("app.utils.init_currencys.init_currency_values_in_bd")
     @patch("app.services.awesomeapi.AwesomeApiService._execute")
     @patch("app.repository.mongo_repository.MongoRepository.get_cached_date")
     def test_get_currency_passing_in_the_api(
@@ -74,7 +73,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.body), {"converted_value": "200.00"})
 
-    @patch("app.utils.init_currencys.init_currency_values_in_bd")
     @patch("app.services.awesomeapi.AwesomeApiService._execute")
     @patch("app.repository.mongo_repository.MongoRepository.get_cached_date")
     def test_get_currency_passing_in_the_api_and_return_it_invalid_response(
@@ -95,7 +93,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
             context_error.exception.detail, {"error": "Invalid values for the api"}
         )
 
-    @patch("app.utils.init_currencys.init_currency_values_in_bd")
     @patch("app.repository.mongo_repository.MongoRepository.get_cached_date")
     def test_get_currency_raise_generic_error(
         self, mock_get_by_acronym: Mock, mock_get_cached_date: Mock
