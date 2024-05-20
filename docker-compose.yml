@@ -1,0 +1,41 @@
+services:
+  bravo:
+    build:
+      context: ./
+    env_file: ./.env
+    command: npm run start:prod
+    volumes:
+      - ./:/app/
+      - node_modules:/app/node_modules
+    ports:
+      - 3100:3100
+    networks:
+      - netbravo
+  redis:
+    image: redis
+    command: redis-server
+    ports:
+      - "6379:6379"
+    networks:
+      - netbravo    
+volumes:
+  node_modules:
+networks:
+  netbravo:
+    driver: bridge
+  # front:
+  #   build:
+  #       context: .
+  #       dockerfile: Dockerfile
+  #   image: front
+  #   container_name: adminback
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   ports:
+  #     - "80:8080"
+  #   volumes:
+  #     - .:/home/node/app
+  #     - node_modules:/home/node/app/node_modules
+  #   networks:
+  #     - app-network
+  #   command: ./wait-for.sh db:27017 -- /home/node/app/node_modules/.bin/nodemon app.js

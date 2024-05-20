@@ -1,82 +1,194 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Desafio Bravo
 
-[[English](README.md) | [Português](README.pt.md)]
+[[English](README.md) | [Portuguese](README.pt.md)]
 
-Construa uma API, que responda JSON, para conversão monetária. Ela deve ter uma moeda de lastro (USD) e fazer conversões entre diferentes moedas com **cotações de verdade e atuais**.
+## Install
 
-A API precisa converter entre as seguintes moedas:
+O primeiro passo para configurar a aplicação é criar um arquivo `.env` usando o `.env.example` presente aqui como um guia. Esta aplicação usa [_CoinAPI_](https://www.coinapi.io/) and também [_CoinMarketCap API_](https://coinmarketcap.com/api/) para funcionar. Caso ainda não possua as chaves necessárias solicite nas página correspondentes.
 
+Para rodar o projeto você também precisará do docker instalado na sua máquina. Assumindo que você já possui a instalação apenas rode o comando:
+
+`docker-compose up`
+
+**Warning**: Este projeto possui uma estrutura de Redis embutida para facilitar a execução, Mas em um cenário real uma configuração mais robusta com credenciais de segurança e de preferência fora do container é indicada (Redis possui maior latência ao rodar no Docker). Para mudar o caminho use a variável REDIS no arquivo de ambiente.
+
+Esta aplicação provê uma API para a conversão de valores dada um determinada moeda de origem e destino e uma quantidade. Possui as seguintes moedas como padrão no `.env.example`:
 -   USD
 -   BRL
 -   EUR
 -   BTC
 -   ETH
 
-Outras moedas podem ser adicionadas conforme o uso.
+Se desejar pode modificar esta lista usando o arquivo `.env`. As moedas principais não podem ser removidas nem editadas via API. 
 
-Ex: USD para BRL, USD para BTC, ETH para BRL, etc...
 
-A requisição deve receber como parâmetros: A moeda de origem, o valor a ser convertido e a moeda final.
+## Conversão
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+### Request
 
-Construa também um endpoint para adicionar e remover moedas suportadas pela API, usando os verbos HTTP.
+`GET /conversion`
 
-A API deve suportar conversão entre moedas fiduciárias, crypto e fictícias. Exemplo: BRL->HURB, HURB->ETH
+    curl --location 'localhost:3100/conversion?from=BTC&to=BRL&decimalPlaces=30'
 
-"Moeda é o meio pelo qual são efetuadas as transações monetárias." (Wikipedia, 2021).
+### Query    
+    | Parâmetro       | Descrição                              | Obrigatório | Tipo   |
+    | --------------- | -------------------------------------- | ----------- | ------ |
+    | `from`          | Moeda de origem                        | Yes         | string |
+    | `to`            | Desired currency rate                  | Yes         | string |
+    | `amount`        | Quantidade a converter                 | No          | number |
+    | `decimalPlaces` | Casas decimais da resposta. Padrão é 8 | No          | number |
 
-Sendo assim, é possível imaginar que novas moedas passem a existir ou deixem de existir, é possível também imaginar moedas fictícias como as de Dungeons & Dragons sendo utilizadas nestas transações, como por exemplo quanto vale uma Peça de Ouro (D&D) em Real ou quanto vale a GTA$ 1 em Real.
+### Response
 
-Vamos considerar a cotação da PSN onde GTA$ 1.250.000,00 custam R$ 83,50 claramente temos uma relação entre as moedas, logo é possível criar uma cotação. (Playstation Store, 2021).
+    Status: 200
+    Content-Type: application/json
 
-Ref:
-Wikipedia [Site Institucional]. Disponível em: <https://pt.wikipedia.org/wiki/Moeda>. Acesso em: 28 abril 2021.
-Playstation Store [Loja Virtual]. Disponível em: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Acesso em: 28 abril 2021.
+    {
+        "from": "BTC",
+        "amount": 1,
+        "to": "BRL",
+        "value": "345964.377343084448906460570000000000"
+    }
 
-Você pode usar qualquer linguagem de programação para o desafio. Abaixo a lista de linguagens que nós aqui do Hurb temos mais afinidade:
+## Autenticação 
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+O token retornado neste endpoint é necessário para adicionar e remover outras moedas. Esta versão do projeto só possui um usuário padrão que pode ser configurado no `.env`. O tempo de expiração do token é de 2 horas.
 
-## Requisitos
+### Request
 
--   Forkar esse desafio e criar o seu projeto (ou workspace) usando a sua versão desse repositório, tão logo acabe o desafio, submeta um _pull request_.
-    -   Caso você tenha algum motivo para não submeter um _pull request_, crie um repositório privado no Github, faça todo desafio na branch **main** e não se esqueça de preencher o arquivo `pull-request.txt`. Tão logo termine seu desenvolvimento, adicione como colaborador o usuário `automator-hurb` no seu repositório e o deixe disponível por pelo menos 30 dias. **Não adicione o `automator-hurb` antes do término do desenvolvimento.**
-    -   Caso você tenha algum problema para criar o repositório privado, ao término do desafio preencha o arquivo chamado `pull-request.txt`, comprima a pasta do projeto - incluindo a pasta `.git` - e nos envie por email.
--   O código precisa rodar em macOS ou Ubuntu (preferencialmente como container Docker)
--   Para executar seu código, deve ser preciso apenas rodar os seguintes comandos:
-    -   git clone \$seu-fork
-    -   cd \$seu-fork
-    -   comando para instalar dependências
-    -   comando para executar a aplicação
--   A API pode ser escrita com ou sem a ajuda de _frameworks_
-    -   Se optar por usar um _framework_ que resulte em _boilerplate code_, assinale no README qual pedaço de código foi escrito por você. Quanto mais código feito por você, mais conteúdo teremos para avaliar.
--   A API precisa suportar um volume de 1000 requisições por segundo em um teste de estresse.
--   A API precisa contemplar cotações de verdade e atuais através de integração com APIs públicas de cotação de moedas
+`POST /login`
 
-## Critério de avaliação
+    curl --location 'localhost:3100/login' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "login":"admin",
+        "password":"admin"
+    }'
 
--   **Organização do código**: Separação de módulos, view e model, back-end e front-end
--   **Clareza**: O README explica de forma resumida qual é o problema e como pode rodar a aplicação?
--   **Assertividade**: A aplicação está fazendo o que é esperado? Se tem algo faltando, o README explica o porquê?
--   **Legibilidade do código** (incluindo comentários)
--   **Segurança**: Existe alguma vulnerabilidade clara?
--   **Cobertura de testes** (Não esperamos cobertura completa)
--   **Histórico de commits** (estrutura e qualidade)
--   **UX**: A interface é de fácil uso e auto-explicativa? A API é intuitiva?
--   **Escolhas técnicas**: A escolha das bibliotecas, banco de dados, arquitetura, etc, é a melhor escolha para a aplicação?
+### Body  
+    | Campo      | Descrição | Obrigatório | Tipo   |
+    | ---------- | --------- | ----------- | ------ |
+    | `login`    | .env      | Yes         | string |
+    | `password` | .env      | Yes         | string |
 
-## Dúvidas
+### Response
 
-Quaisquer dúvidas que você venha a ter, consulte as [_issues_](https://github.com/HurbCom/challenge-bravo/issues) para ver se alguém já não a fez e caso você não ache sua resposta, abra você mesmo uma nova issue!
+    Status: 200
+    Content-Type: application/json
 
-Boa sorte e boa viagem! ;)
+    {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRldGltZSI6MTcxNjIw....."
+    }
+
+## Atualizar Token
+
+### Request
+
+`GET /refesh`
+
+    curl --location 'localhost:3100/refresh' \
+    --header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRldGltZSI6MTcxNjIwMjYxNDUyNSwiaWF0IjoxNzE2MjAyNjE0LCJleHAiOjE3MTYyMDk4MTR9.yxO-a_LBhcwUVrO4TekbT0beER5YywYBSI5kWaBy_GQ'
+
+### Headers
+    | Campo           | Descrição | Obrigatório | Tipo   |
+    | --------------- | --------- | ----------- | ------ |
+    | `Authorization` | Token     | Yes         | string |
+
+### Response
+
+    Status: 200
+    Content-Type: application/json
+
+    {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRldGltZSI6MTcxNjIw....."
+    }
+
+## Adicionar Moeda
+
+Este endpoint adiciona novas moedas à aplicação. É necessário autenticação
+
+### Request
+
+`POST /add`
+
+    curl --location 'localhost:3100/add' \
+    --header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRldGltZSI6MTcxNjE4NzE0MzA2MSwiaWF0IjoxNzE2MTg3MTQzLCJleHAiOjE3MTYxOTQzNDN9.kc862x0RNknfeGI3baiDfKatsSupwLO-MMzD-EJx50I' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "symbol":"GTA",
+        "type":"crypto"
+    }'
+
+### Body
+    | Campo                 | Descrição                                                 | Obrigatório | Tipo   |
+    | --------------------- | --------------------------------------------------------- | ----------- | ------ |
+    | `symbol`              | Simbolo da moeda                                          | Yes         | string |
+    | `type`                | Tipo da moeda                                             | Yes         | Enum   |
+    | `rate`                | Cotação. Apenas para tipo fixo                            | No          | number |
+    | `scrpprRateAsset`     | A moeda de destino para procura pelo scrapper. Padrão USD | No          | string |
+    | `scrpprUrl`           | Url de página web. Obrigatória para o scrapper            | No          | string |
+    | `scrpprAmountTag`     | Tag para procura de quantidade. Padrão de 1               | No          | string |
+    | `scrpprRateTag`       | Tag para procura de cotação. Obrigatória para scrapper    | No          | string |
+    | `scrpprDecimalSymbol` | Símbolo da casa decimal. Padrão é uma vírgula(,)          | No          | string |
+
+### CurrencyTypes Enum
+| Enum       | Descrição                       |
+| ---------- | ------------------------------- |
+| `fiat`     | Moeda Física                    |
+| `Crypto`   | Moeda Cripto                    |
+| `Fixed`    | Taxa de câmbio fixa             |
+| `Scrapper` | Carrega dados de uma página web |
+
+**Warning**: Os tipo `fixed` e `scrapper` serão ignorados se a moeda for encontrada na CoinAPI.io e/ou MarketCap API. Eles forão desenvolvidos para casos onde não se pode encontrar a moeda pelos meios convecionais. Ex: Moedas fictícias como a D&D Coin.
+
+
+### Exemplo de como usar o Scrapper 
+    curl --location 'localhost:3100/add' \
+    --header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRldGltZSI6MTcxNjIwNDA3Mzg4MiwiaWF0IjoxNzE2MjA0MDczLCJleHAiOjE3MTYyMTEyNzN9._jjuooOorYKFB4IsQ10MqDWyZTgWmJ29F5llaEA0BW0' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "symbol":"GTAOnline",
+        "type":"scrapper",
+        "scrpprRateAsset":"BRL",
+        "scrpprUrl":"https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D",
+        "scrpprAmountTag":".psw-c-t-2",
+        "scrpprRateTag":".psw-t-title-m"
+    }'
+
+### Response
+
+    Status: 200
+    Content-Type: application/json
+
+    {
+        "message": "Asset GTA6 added with success!"
+    }
+
+
+## Remover Moeda
+
+Este endpoint remove moedas da aplicação. É necessário autenticação. Moedas padrão não podem ser removidas. 
+
+### Request
+
+`DELETE /remove/:asset`
+
+    curl --location --request DELETE 'localhost:3100/remove/IOTA' \
+    --header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRldGltZSI6MTcxNjE4NzE0MzA2MSwiaWF0IjoxNzE2MTg3MTQzLCJleHAiOjE3MTYxOTQzNDN9.kc862x0RNknfeGI3baiDfKatsSupwLO-MMzD-EJx50I'
+
+
+### Response
+
+    Status: 200
+    Content-Type: application/json
+
+    {
+        "message": "Asset GTA6 removed with success!"
+    }
+
+
+Feito! ;)
 
 <p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
+  <img src="completed.jpg" alt="Feito!" />
 </p>
