@@ -1,0 +1,17 @@
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 10
+      arrivalRate: 100
+    - duration: 10
+      arrivalRate: 500
+    - duration: 10
+      arrivalRate: 1000
+scenarios:
+  - flow:
+      - get:
+          url: "/convert"
+          qs:
+            from: "USD"
+            to: "BRL"
+            amount: "5000"

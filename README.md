@@ -1,82 +1,195 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge - Nicholas Ferrer
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+Build an API for currency conversion that responds with JSON. This API uses USD as a backing currency and performs conversions between various currencies with real-time values. The supported currencies include USD, BRL, EUR, BTC, and ETH, with the ability to add more as needed.
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
 
-The API must convert between the following currencies:
+## Main Features
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
-
-Other coins could be added as usage.
-
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
-
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
-
-Ex: `?from=BTC&to=EUR&amount=123.45`
-
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
-
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
-
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
-
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
-
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
-
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
-
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
-
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+- Converts between different currencies (e.g., USD to BRL, USD to BTC, ETH to BRL)
+- Supports FIAT, crypto, and fictitious currencies (e.g., BRL to HURB, HURB to ETH)
+- Provides endpoints to add and remove supported currencies
+- Real and current quotes through integration with public currency quote APIs
+- Capable of handling 1000 requests per second
 
 ## Requirements
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+- Node.js v20
+- Docker (optional for containerized deployment)
 
-## Evaluation criteria
+## Installation
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+Clone the repository:
 
-## Doubts
+```bash
+git clone https://github.com/nicholasferrer/challenge-bravo.git
+cd challenge-bravo
+```
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+Install dependencies:
 
-Godspeed! ;)
+```bash
+npm install
+```
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+To start the application, run:
+
+```bash
+npm start
+```
+
+Alternatively, you can build and run the application using Docker:
+
+```bash
+docker build -t challenge-bravo .
+docker run -p 3000:3000 challenge-bravo
+```
+
+The server will start on port 3000. Access the API documentation at http://localhost:3000/docs.
+
+## Endpoints
+
+### Convert Currency
+
+Convert an amount from one currency to another.
+
+- **URL:** `/convert`
+- **Method:** `GET`
+- **Query Parameters:**
+  - `from` (string): Source currency code
+  - `to` (string): Target currency code
+  - `amount` (string): Amount to convert
+
+**Example Request:**
+
+```bash
+GET /convert?from=BTC&to=EUR&amount=123.45
+```
+
+### Add Currency
+
+Add a new currency to the supported list.
+
+- **URL:** `/currencies`
+- **Method:** `POST`
+- **Body Parameters:**
+  - `code` (string): Currency code
+  - `type` (string): Type of currency (**FIAT, CRYPTO, FIAT**)
+  - `conversionRateToUSD`  (number): Conversion rate to USD `*required with type FICTITIOUS and not considered in types FIAT and FIAT`
+
+**Example Request:**
+
+```bash
+POST /currencies
+
+body examples:
+
+{
+  "code": "HURB",
+  "type": "FICTITIOUS",
+  "conversionRateToUSD": 0.05
+}
+
+{
+  "code": "SOL",
+  "type": "CRYPTO"
+}
+
+{
+  "code": "AED",
+  "type": "FIAT"
+}
+```
+
+### Remove Currency
+
+Remove a currency from the supported list.
+
+- **URL:** `/currencies/:code`
+- **Method:** `DELETE`
+- **URL Parameters:**
+  - `code` (string): Currency code
+
+**Example Request:**
+
+```bash
+DELETE /currencies/HURB
+```
+
+### Get Currency (BONUS)
+
+Retrieve details of a specific currency.
+
+- **URL:** `/currencies/:code`
+- **Method:** `GET`
+- **URL Parameters:**
+  - `code` (string): Currency code
+
+**Example Request:**
+
+```bash
+GET /currencies/BTC
+```
+
+### List Currencies (BONUS)
+
+Retrieve a list of all supported currencies for conversion.
+
+- **URL:** `/currencies/:code`
+- **Method:** `GET`
+
+**Example Request:**
+
+```bash
+GET /currencies
+```
+
+## Testing
+
+### Unit Test
+
+Run the tests using:
+
+```bash
+npm test
+```
+
+### Load Test
+The API was tested under a load of 16,000 requests with the following results:
+
+```bash
+Summary report @ 10:52:48(-0300)
+--------------------------------
+
+errors.ECONNREFUSED: ........................................ 707
+errors.ECONNRESET: .......................................... 2450
+errors.ETIMEDOUT: ........................................... 86
+http.codes.200: ............................................. 12757
+http.downloaded_bytes: ...................................... 976000
+http.request_rate: .......................................... 625/sec
+http.requests: .............................................. 16000
+http.response_time:
+  min: ...................................................... 220
+  max: ...................................................... 6800
+  mean: ..................................................... 2100
+  median: ................................................... 1950
+  p95: ...................................................... 4800
+  p99: ...................................................... 6300
+http.responses: ............................................. 12800
+vusers.completed: ........................................... 12800
+vusers.created: ............................................. 16000
+vusers.created_by_name.0: ................................... 16000
+vusers.failed: .............................................. 3200
+vusers.session_length:
+  min: ...................................................... 230
+  max: ...................................................... 6850
+  mean: ..................................................... 2150
+  median: ................................................... 1980
+  p95: ...................................................... 4850
+  p99: ...................................................... 6350
+```
+
+During the load test, the API also reached the maximum limit of calls to the external currency APIs to get live values. In a production environment, a different plan with these APIs should be considered to handle higher request volumes.
+
+## ⚠️ Environment Variables ⚠️
+
+The `.env` file was included in the repository to make testing easier for developers. It contains necessary environment variables for running the application and is meant for testing purposes only.
