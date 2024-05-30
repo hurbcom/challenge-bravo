@@ -1,0 +1,22 @@
+{
+  "name": "challenge-bravo",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "https://github.com/hurbcom/challenge-bravo.git",
+  "author": "Leandro Reis <leandro.e.reis@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.4",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.4.5"
+  }
+}
