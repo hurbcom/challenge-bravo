@@ -1,4 +1,5 @@
-import Calculator from "@/module/calculator";
+async function main() {
+  // This is the entry point of the application
+}
 
-const calculator = new Calculator()
-console.log("40 + 2 =", calculator.add(40, 2));
+main().catch(console.error);
