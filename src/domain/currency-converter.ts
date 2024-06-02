@@ -10,6 +10,9 @@ export default class CurrencyConverter {
   }
 
   convert(amount: number): number {
+    if (amount < 0) {
+      throw new Error('Invalid amount');
+    }
     const amountCurrency = new Currency(amount)
     amountCurrency.multiply(this._rateTo / this._rateFrom);
     return amountCurrency.value;

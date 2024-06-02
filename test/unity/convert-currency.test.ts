@@ -61,4 +61,12 @@ describe('Currency Converter', () => {
     await expect(convertCurrency.execute(input)).rejects.toThrow(currencyNotFoundError);
   });
 
+  it('should throw an error when the amount is a negative number', async () => {
+    const input = {
+      from: 'USD',
+      to: 'BRL',
+      amount: -1,
+    }
+    await expect(convertCurrency.execute(input)).rejects.toThrow('Invalid amount');
+  });
 });
