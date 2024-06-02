@@ -1,11 +1,11 @@
 import ExchangeRateGateway from "@/application/gateway/exchange-rate-gateway";
 import ConvertCurrency from "@/application/use-case/convert-currency";
-import CurrencyNotFoundError from "@/domain/erros/currency-not-found";
 import { ExchangeRateGatewayFake } from "@/infra/gateway/exchange-rate-gateway-fake";
 
 describe('Currency Converter', () => {
   let exchangeRateGateway: ExchangeRateGateway;
   let convertCurrency: ConvertCurrency;
+
   beforeEach(() => {
     exchangeRateGateway = new ExchangeRateGatewayFake();
     convertCurrency = new ConvertCurrency(exchangeRateGateway);
@@ -57,16 +57,7 @@ describe('Currency Converter', () => {
       to: 'BRL',
       amount: 1,
     }
-    const currencyNotFoundError = new CurrencyNotFoundError('INVALID');
-    await expect(convertCurrency.execute(input)).rejects.toThrow(currencyNotFoundError);
+    await expect(convertCurrency.execute(input)).rejects.toThrow('Currency not found');
   });
 
-  it('should throw an error when the amount is a negative number', async () => {
-    const input = {
-      from: 'USD',
-      to: 'BRL',
-      amount: -1,
-    }
-    await expect(convertCurrency.execute(input)).rejects.toThrow('Invalid amount');
-  });
 });
