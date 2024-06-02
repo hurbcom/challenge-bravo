@@ -17,6 +17,11 @@ describe("Currency Converter", () => {
     expect(currencyConverter.convert(1)).toBe(1);
   });
 
+  it('should throw an error when the rate is zero or negative', () => {
+    expect(() => new CurrencyConverter(0, 1)).toThrow("Invalid rate");
+    expect(() => new CurrencyConverter(-1, 1)).toThrow("Invalid rate");
+  });
+
   it('should throw an error when the amount is a negative number', () => {
     const currencyConverter = new CurrencyConverter(1, 5.20);
     expect(() => currencyConverter.convert(-1)).toThrow("Invalid amount");

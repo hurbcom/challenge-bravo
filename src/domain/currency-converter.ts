@@ -5,6 +5,9 @@ export default class CurrencyConverter {
   private _rateTo: number;
 
   constructor(rateFrom: number, rateTo: number) {
+    if (rateFrom <= 0 || rateTo <= 0) {
+      throw new Error('Invalid rate');
+    }
     this._rateFrom = rateFrom;
     this._rateTo = rateTo;
   }
