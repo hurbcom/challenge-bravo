@@ -1,11 +1,12 @@
 import currency from "currency.js";
+import InvalidParamsError from "./errors/invalid-params.error";
 
 export default class Currency {
   private _value: currency;
 
   constructor(value: number) {
     if (typeof value !== 'number') {
-      throw new Error('Invalid value');
+      throw new InvalidParamsError('Invalid value');
     }
     this._value = currency(value);
   }

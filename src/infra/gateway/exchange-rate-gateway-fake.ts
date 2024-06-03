@@ -1,5 +1,5 @@
 import ExchangeRateGateway, { CurrencyExchange } from "@/application/gateway/exchange-rate-gateway";
-import CurrencyNotFoundError from "@/domain/erros/currency-not-found";
+import CurrencyNotFoundError from "@/domain/errors/currency-not-found.error";
 
 export class ExchangeRateGatewayFake implements ExchangeRateGateway {
   private _rates: { [key: string]: number } = {
