@@ -34,14 +34,6 @@ export default class CurrencyRateRepositoryFake implements CurrencyRateRepositor
     ];
   }
 
-  async findById(id: string) {
-    const currencyRate = this.currencyRates.find(currencyRate => currencyRate.id === id);
-    if (!currencyRate) {
-      throw new CurrencyRateNotFoundError(id);
-    }
-    return currencyRate;
-  }
-
   async findByCode(code: string) {
     const currencyRate = this.currencyRates.find(currencyRate => currencyRate.code === code);
     if (!currencyRate) {
@@ -56,13 +48,6 @@ export default class CurrencyRateRepositoryFake implements CurrencyRateRepositor
       throw new Error('Currency rate with code ' + currencyRate.code + ' already exists');
     }
     this.currencyRates.push(currencyRate);
-  }
-
-  async save(currencyRate: CurrencyRate) {
-    const index = this.currencyRates.findIndex(currencyRate => currencyRate.id === currencyRate.id);
-    if (index !== -1) {
-      this.currencyRates[index] = currencyRate;
-    }
   }
 
   async delete(id: string) {
