@@ -30,4 +30,10 @@ describe('delete-currency-rate', () => {
     await expect(deleteCurrencyRate.execute('ABC')).rejects.toThrow('Currency rate not found');
   });
 
+  it('should throw an error when trying to delete USD currency rate', async () => {
+    const currencyRateRepository = new CurrencyRateRepositoryFake();
+    const deleteCurrencyRate = new DeleteCurrencyRateByCode(currencyRateRepository);
+    await expect(deleteCurrencyRate.execute('USD')).rejects.toThrow('Cannot delete USD currency rate');
+  });
+
 });
