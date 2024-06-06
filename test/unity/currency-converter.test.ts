@@ -1,4 +1,4 @@
-import CurrencyConverter from "@/domain/currency-converter";
+import CurrencyConverter from "@/application/service/currency-converter";
 
 describe("Currency Converter", () => {
 

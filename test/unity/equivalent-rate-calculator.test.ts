@@ -1,5 +1,5 @@
+import CurrencyConverter from "@/application/service/currency-converter";
 import { EquivalentRateCalculator } from "@/application/service/equivalent-rate-calculator";
-import CurrencyConverter from "@/domain/currency-converter";
 
 describe('equivalent-rate-calculator', () => {
 

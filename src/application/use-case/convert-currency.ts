@@ -1,5 +1,5 @@
 import ExchangeRateGateway from "@/application/gateway/exchange-rate-gateway";
-import CurrencyConverter from "@/domain/currency-converter";
+import CurrencyConverter from "@/application/service/currency-converter";
 
 export default class ConvertCurrency {
   constructor(readonly exchangeRateGateway: ExchangeRateGateway) {

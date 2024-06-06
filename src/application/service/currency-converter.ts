@@ -1,5 +1,5 @@
 import Currency from '@/domain/currency';
-import InvalidParamsError from './errors/invalid-params.error';
+import InvalidParamsError from '@/domain/errors/invalid-params.error';
 
 export default class CurrencyConverter {
   private _rateFrom: number;
