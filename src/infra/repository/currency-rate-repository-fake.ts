@@ -22,6 +22,14 @@ export default class CurrencyRateRepositoryFake implements CurrencyRateRepositor
         decimalPoints: 2,
         code: 'BRL',
         rate: 5.20
+      },
+      {
+        id: '3',
+        name: 'Euro',
+        symbol: '€',
+        decimalPoints: 2,
+        code: 'EUR',
+        rate: 0.92
       }
     ];
   }

@@ -1,14 +1,13 @@
-import ExchangeRateGateway from "@/application/gateway/exchange-rate-gateway";
 import ConvertCurrency from "@/application/use-case/convert-currency";
-import { ExchangeRateGatewayFake } from "@/infra/gateway/exchange-rate-gateway-fake";
+import CurrencyRateRepositoryFake from "@/infra/repository/currency-rate-repository-fake";
 
 describe('Currency Converter', () => {
-  let exchangeRateGateway: ExchangeRateGateway;
+  let currencyRateRepository: CurrencyRateRepositoryFake;
   let convertCurrency: ConvertCurrency;
 
   beforeEach(() => {
-    exchangeRateGateway = new ExchangeRateGatewayFake();
-    convertCurrency = new ConvertCurrency(exchangeRateGateway);
+    currencyRateRepository = new CurrencyRateRepositoryFake();
+    convertCurrency = new ConvertCurrency(currencyRateRepository);
   });
 
   it('should convert USD to BRL', async () => {
@@ -57,7 +56,7 @@ describe('Currency Converter', () => {
       to: 'BRL',
       amount: 1,
     }
-    await expect(convertCurrency.execute(input)).rejects.toThrow('Currency not found');
+    await expect(convertCurrency.execute(input)).rejects.toThrow('Currency rate not found');
   });
 
 });
