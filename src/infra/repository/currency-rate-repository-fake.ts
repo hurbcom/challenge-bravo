@@ -1,6 +1,6 @@
 import CurrencyRateRepository from "@/application/repository/currency-rate-repository";
 import CurrencyRate from "@/domain/currency-rate";
-import CurrencyRateNotFoundError from "@/domain/errors/exchange-not-found.error";
+import CurrencyRateNotFoundError from "@/domain/errors/currency-rate-not-found.error";
 
 export default class CurrencyRateRepositoryFake implements CurrencyRateRepository {
   currencyRates: CurrencyRate[];
