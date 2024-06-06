@@ -7,30 +7,9 @@ export default class CurrencyRateRepositoryFake implements CurrencyRateRepositor
 
   constructor() {
     this.currencyRates = [
-      {
-        id: '1',
-        name: 'US Dollar',
-        symbol: '$',
-        decimalPoints: 2,
-        code: 'USD',
-        rate: 1.00
-      },
-      {
-        id: '2',
-        name: 'Brazilian Real',
-        symbol: 'R$',
-        decimalPoints: 2,
-        code: 'BRL',
-        rate: 5.20
-      },
-      {
-        id: '3',
-        name: 'Euro',
-        symbol: '€',
-        decimalPoints: 2,
-        code: 'EUR',
-        rate: 0.92
-      }
+      new CurrencyRate('1', 'US Dollar', 'USD', '$', 2, 1),
+      new CurrencyRate('2', 'Brazilian Real', 'BRL', 'R$', 2, 5.20),
+      new CurrencyRate('3', 'Euro', 'EUR', '€', 2, 0.92)
     ];
   }
 

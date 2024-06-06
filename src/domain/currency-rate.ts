@@ -1,5 +1,7 @@
+import currency from "currency.js";
 
 export default class CurrencyRate {
+
   constructor(
     readonly id: string,
     readonly name: string,
@@ -16,4 +18,14 @@ export default class CurrencyRate {
     const id = crypto.randomUUID();
     return new CurrencyRate(id, name, code, symbol, decimalPoints, rate);
   }
+
+  convertTo(currencyRate: CurrencyRate, amount: number): number {
+    if (amount < 0) {
+      throw new Error('Invalid amount');
+    }
+    const convertedAmount = amount * currencyRate.rate / this.rate;
+    const amountCurrency = currency(convertedAmount, { precision: currencyRate.decimalPoints });
+    return amountCurrency.value;
+  }
+
 }

@@ -59,4 +59,13 @@ describe('Currency Converter', () => {
     await expect(convertCurrency.execute(input)).rejects.toThrow('Currency rate not found');
   });
 
+  it('should throw an error when the amount is invalid', async () => {
+    const input = {
+      from: 'USD',
+      to: 'BRL',
+      amount: -1,
+    }
+    await expect(convertCurrency.execute(input)).rejects.toThrow('Invalid amount');
+  });
+
 });
