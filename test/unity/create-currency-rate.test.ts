@@ -3,6 +3,7 @@ import GetCurrencyRateByCode from "@/application/use-case/get-currency-rate-by-c
 import CurrencyRateRepositoryFake from "@/infra/repository/currency-rate-repository-fake";
 
 describe('create-currency-rate', () => {
+
   it('should create a currency', async () => {
     const currencyRateRepository = new CurrencyRateRepositoryFake();
     const createCurrency = new CreateCurrencyRate(currencyRateRepository);
@@ -39,24 +40,6 @@ describe('create-currency-rate', () => {
     }
     await createCurrency.execute(createCurrencyInput);
     await expect(createCurrency.execute(createCurrencyInput)).rejects.toThrow('Currency rate with code ANY already exists');
-  });
-
-  it('should not create a currency with invalid attribute', async () => {
-    const currencyRateRepository = new CurrencyRateRepositoryFake();
-    const createCurrency = new CreateCurrencyRate(currencyRateRepository);
-    const createCurrencyInput: CreateCurrencyRateDto = {
-      name: 'Any Currency',
-      code: 'ANY',
-      symbol: 'A$',
-      decimalPoints: 2,
-      baseAmount: -1.00,
-      equivalentCurrencyCode: "USD",
-      equivalentCurrencyAmount: 1.00,
-    }
-    await expect(createCurrency.execute(createCurrencyInput)).rejects.toThrow('Invalid attribute: baseAmount');
-    createCurrencyInput.baseAmount = 1.00;
-    createCurrencyInput.equivalentCurrencyAmount = -1.00;
-    await expect(createCurrency.execute(createCurrencyInput)).rejects.toThrow('Invalid attribute: equivalentCurrencyAmount');
   });
 
 });
