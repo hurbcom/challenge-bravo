@@ -8,10 +8,12 @@
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "dev:express": "ts-node-dev -r tsconfig-paths/register src/main/main-express.ts",
+    "dev:hapi": "ts-node-dev -r tsconfig-paths/register src/main/main-hapi.ts",
     "test": "jest",
     "test:watch": "jest --watch --detectOpenHandles"
   },
   "dependencies": {
+    "@hapi/hapi": "^21.3.9",
     "axios": "^1.7.2",
     "crypto": "^1.0.1",
     "currency.js": "^2.0.4",

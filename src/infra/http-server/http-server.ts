@@ -7,8 +7,8 @@ export type Method = 'get' | 'post' | 'put' | 'delete';
 
 export type Controller<TResponse = any> = (args: ControllerParams) => Promise<TResponse>;
 
-export type ControllerParams = {
+export type ControllerParams<T = any> = {
   query: { [key: string]: any }
   params: { [key: string]: string },
-  body: { [key: string]: any }
+  body: T
 }
