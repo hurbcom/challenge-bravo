@@ -8,7 +8,11 @@ export default class ConvertCurrency {
     const exchangeFrom = await this.currencyRateRepository.findByCode(input.from);
     const exchangeTo = await this.currencyRateRepository.findByCode(input.to);
     const convertedAmount = exchangeFrom.convertTo(exchangeTo, input.amount);
-    return { value: convertedAmount }
+    return {
+      value: convertedAmount,
+      symbol: exchangeTo.symbol,
+      decimalPoints: exchangeTo.decimalPoints
+    }
   }
 }
 
@@ -20,4 +24,6 @@ type Input = {
 
 type Output = {
   value: number;
+  symbol: string;
+  decimalPoints: number;
 }
