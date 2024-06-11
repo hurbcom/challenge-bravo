@@ -9,6 +9,7 @@
     "dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "dev:express": "ts-node-dev -r tsconfig-paths/register src/main/main-express.ts",
     "dev:hapi": "ts-node-dev -r tsconfig-paths/register src/main/main-hapi.ts",
+    "dev:express-pg": "ts-node-dev -r tsconfig-paths/register src/main/main-express-pg.ts",
     "test": "jest",
     "test:watch": "jest --watch --detectOpenHandles"
   },
@@ -17,7 +18,8 @@
     "axios": "^1.7.2",
     "crypto": "^1.0.1",
     "currency.js": "^2.0.4",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "pg-promise": "^11.8.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
