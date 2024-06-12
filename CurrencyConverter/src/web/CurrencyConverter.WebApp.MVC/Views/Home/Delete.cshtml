@@ -1,0 +1,26 @@
+@model CurrencyConverter.WebApp.MVC.Models.CurrencyDeleteViewModel
+
+@{
+    ViewData["Title"] = "Delete Currency";
+}
+
+<div class="card mx-auto" style="max-width: 380px; margin-top: 100px;">
+
+    <div class="card-body">
+        <h4 class="card-title mb-4">Select a currency to delete</h4>
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <div class="form-group">
+                <label asp-for="Code" class="form-label mt-4">From</label>
+                <select class="form-control" asp-for="Code" asp-items="ViewBag.SelectedList">
+                    <option value="">Select Currency</option>
+                </select>
+                <input type="hidden" asp-for="Code" value="" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group text-center" style="padding-top: 10px">
+                <button type="submit" class="btn btn-primary btn-block">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>

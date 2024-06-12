@@ -1,0 +1,36 @@
+@model CurrencyConverter.WebApp.MVC.Models.CurrencyViewModel
+
+@{
+    ViewData["Title"] = "New Currency";
+}
+
+<div class="card mx-auto" style="max-width: 380px; margin-top: 100px;">
+
+    <div class="card-body">
+        <h4 class="card-title mb-4">New Currency!</h4>
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+
+            <div class="form-group">
+                <label asp-for="Code" class="form-label mt-4"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="form-label mt-4"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="QuoteDollarPrice" class="form-label mt-4"></label>
+                <input asp-for="QuoteDollarPrice" class="form-control" />
+                <span asp-validation-for="QuoteDollarPrice" class="text-danger"></span>
+            </div>
+
+            <div class="form-group text-center" style="padding-top: 10px">
+                <button type="submit" class="btn btn-primary btn-block">Convert</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,127 @@
+version: '3.4'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./src/loadbalancer/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - mynet
+    depends_on:
+      - currencyconverter.api
+      - currencyconverter.api-2
+
+  currencyconverter.api:
+    image: ${DOCKER_REGISTRY-}currencyconverterapi
+    ports:
+      - "5100:5100"
+    networks:
+      - mynet
+    build:
+      context: .
+      dockerfile: src/services/CurrencyConverter.Api/Dockerfile
+    depends_on:
+      - redis
+      - mongo
+    links:
+      - redis
+      - mongo
+
+  currencyconverter.api-2:
+    image: ${DOCKER_REGISTRY-}currencyconverterapi
+    ports:
+      - "5102:5102"
+    networks:
+      - mynet
+    build:
+      context: .
+      dockerfile: src/services/CurrencyConverter.Api/Dockerfile
+    depends_on:
+      - redis
+      - mongo
+    links:
+      - redis
+      - mongo
+
+  currencyconverter.api-3:
+    image: ${DOCKER_REGISTRY-}currencyconverterapi
+    ports:
+      - "5103:5103"
+    networks:
+      - mynet
+    build:
+      context: .
+      dockerfile: src/services/CurrencyConverter.Api/Dockerfile
+    depends_on:
+      - redis
+      - mongo
+    links:
+      - redis
+      - mongo
+
+  currencyconverter.api-4:
+    image: ${DOCKER_REGISTRY-}currencyconverterapi
+    ports:
+      - "5104:5104"
+    networks:
+      - mynet
+    build:
+      context: .
+      dockerfile: src/services/CurrencyConverter.Api/Dockerfile
+    depends_on:
+      - redis
+      - mongo
+    links:
+      - redis
+      - mongo
+
+  currencyconverter.webapp.mvc:
+    image: ${DOCKER_REGISTRY-}currencyconverterwebappmvc
+    ports:
+      - "5101:5101"
+    networks:
+      - mynet
+    build:
+      context: .
+      dockerfile: src/web/CurrencyConverter.WebApp.MVC/Dockerfile
+    depends_on:
+      - currencyconverter.api
+    links:
+      - currencyconverter.api
+
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - mynet
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./volumes/redis.data:/usr/share/root/redis
+      - ./volumes/redis.conf:/usr/share/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=Teste@123
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16   
+    command: [ "redis-server", "/usr/share/redis/redis.conf"]
+    networks:
+      - mynet
+
+volumes:
+  mongodbdata:
+    
+networks:
+  mynet:
+    driver: bridge  

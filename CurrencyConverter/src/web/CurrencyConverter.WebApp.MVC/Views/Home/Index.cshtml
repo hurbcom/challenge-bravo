@@ -1,0 +1,46 @@
+@model CurrencyConverter.WebApp.MVC.Models.CurrencyConverterViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="card mx-auto" style="max-width: 380px; margin-top: 100px;">
+
+    <div class="card-body">
+        <h4 class="card-title mb-4">Welcome!</h4>
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <div class="form-group">
+                <label asp-for="From" class="form-label mt-4">From</label>
+                <select class="form-control" asp-for="From" asp-items="ViewBag.SelectedList">
+                    <option value="">Select Currency</option>
+                </select>
+                <input type="hidden" asp-for="From" value="" />
+                <span asp-validation-for="From" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="To" class="form-label mt-4">To</label>
+                <select class="form-control" asp-for="To" asp-items="ViewBag.SelectedList">
+                    <option value="">Select Currency</option>
+                </select>
+                <input type="hidden" asp-for="To" value="" />
+                <span asp-validation-for="To" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="form-label mt-4"></label>
+                <input asp-for="Amount"  class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            
+
+            <div class="form-group text-center" style="padding-top: 10px">
+                <button type="submit" class="btn btn-primary btn-block">Convert</button>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Result" class="form-label mt-4"></label>
+                <input asp-for="Result" disabled class="form-control" />
+            </div>
+        </form>
+    </div>
+    <div class="card-footer text-center">Create a fiction currency?<a asp-controller="Home" asp-action="Create"> New currency</a></div>
+</div>

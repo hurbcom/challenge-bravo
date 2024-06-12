@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "currencyconverter.api": "StartDebugging",
+        "currencyconverter.webapp.mvc": "StartDebugging"
+      }
+    }
+  }
+}
