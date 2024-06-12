@@ -10,6 +10,7 @@
     "dev:express": "ts-node-dev -r tsconfig-paths/register src/main/main-express.ts",
     "dev:hapi": "ts-node-dev -r tsconfig-paths/register src/main/main-hapi.ts",
     "dev:express-pg": "ts-node-dev -r tsconfig-paths/register src/main/main-express-pg.ts",
+    "dev:gateway": "ts-node-dev -r tsconfig-paths/register src/main/main-gateway.ts",
     "test": "jest",
     "test:watch": "jest --watch --detectOpenHandles"
   },

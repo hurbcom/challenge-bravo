@@ -5,7 +5,7 @@ export class Code {
     if (value.length < 3 || value.length > 4) {
       throw new Error('Invalid code');
     }
-    this._value = value;
+    this._value = value.toUpperCase();
   }
 
   get value() {
