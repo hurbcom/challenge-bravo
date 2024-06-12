@@ -11,6 +11,6 @@ export class DeleteCurrencyRateByCode {
     if (!currencyRate) {
       throw new Error('Currency rate not found');
     }
-    await this.currencyRateRepository.delete(currencyRate.id);
+    await this.currencyRateRepository.delete(currencyRate.code);
   }
 }

@@ -29,8 +29,8 @@ export default class CurrencyRateRepositoryFake implements CurrencyRateRepositor
     this.currencyRates.push(currencyRate);
   }
 
-  async delete(id: string) {
-    const index = this.currencyRates.findIndex(currencyRate => currencyRate.id === id);
+  async delete(code: string) {
+    const index = this.currencyRates.findIndex(currencyRate => currencyRate.code === code);
     if (index !== -1) {
       this.currencyRates.splice(index, 1);
     }
