@@ -1,4 +1,6 @@
 import { Controller, HttpServer, Method } from '@/infra/http-server';
+import swaggerDocument from '@/infra/http-server/swagger.json';
+import SwaggerUi from 'swagger-ui-express';
 
 import express, { Express } from 'express';
 
@@ -8,6 +10,11 @@ export class ExpressAdapter implements HttpServer {
   constructor() {
     this.app = express();
     this.app.use(express.json());
+    this.app.use(
+      '/api-docs',
+      SwaggerUi.serve,
+      SwaggerUi.setup(swaggerDocument)
+    );
   }
 
   register<T>(method: Method, route: string, handler: Controller<T>): void {

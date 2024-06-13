@@ -1,0 +1,245 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API de Conversão Monetária",
+    "description": "API de Conversão Monetária para o desafio Bravo da empresa hurbcom",
+    "contact": {
+      "email": "leandro.e.reis@gmail.com",
+      "url": "https://www.linkedin.com/in/leandroepr/"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/",
+      "description": "Servidor Local"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Currencies",
+      "description": "Operações com moedas"
+    }
+  ],
+  "basePath": "/api/v1",
+  "paths": {
+    "/currencies": {
+      "post": {
+        "tags": ["Currencies"],
+        "summary": "Adiciona uma nova moeda",
+        "description": "Adiciona uma nova moeda ao sistema",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "code": { "type": "string" },
+                  "symbol": { "type": "string" },
+                  "baseAmount": { "type": "number" },
+                  "equivalentCurrencyAmount": { "type": "number" },
+                  "equivalentCurrencyCode": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Moeda adicionada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currencyId": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro na requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/currencies/convert": {
+      "get": {
+        "tags": ["Currencies"],
+        "summary": "Conversor de moedas",
+        "description": "Converte uma moeda para outra",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Moeda de origem",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Moeda de destino",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Valor a ser convertido",
+            "required": true,
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversão realizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "from": { "type": "string" },
+                    "to": { "type": "string" },
+                    "givenAmount": { "type": "number" },
+                    "convertedAmount": { "type": "number" },
+                    "convertedAmountFormatted": { "type": "string" },
+                    "decimalPoints": { "type": "number" },
+                    "symbol": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro na requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/currencies/{code}": {
+      "get": {
+        "tags": ["Currencies"],
+        "summary": "Busca uma moeda",
+        "description": "Busca uma moeda pelo código",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Código da moeda",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Moeda encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Currency"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Moeda não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Currencies"],
+        "summary": "Remove uma moeda",
+        "description": "Remove uma moeda pelo código",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Código da moeda",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Moeda removida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Moeda não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Currency": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "code": { "type": "string" },
+          "symbol": { "type": "string" },
+          "decimalPoints": { "type": "number", "format": "integer" },
+          "rate": { "type": "number", "format": "double" }
+        }
+      }
+    }
+  }
+}
