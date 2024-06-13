@@ -1,6 +1,5 @@
-import CreateCurrencyRate, { CreateCurrencyRateDto } from "@/application/use-case/create-currency-rate";
-import GetCurrencyRateByCode from "@/application/use-case/get-currency-rate-by-code";
-import CurrencyRateRepositoryFake from "@/infra/repository/currency-rate-repository-fake";
+import { CreateCurrencyRate, GetCurrencyRateByCode } from "@/application/use-case/";
+import { CurrencyRateRepositoryFake } from "@/infra/repository/";
 
 describe('create-currency-rate', () => {
 
@@ -29,7 +28,7 @@ describe('create-currency-rate', () => {
   it('should not create a currency with duplicated code', async () => {
     const currencyRateRepository = new CurrencyRateRepositoryFake();
     const createCurrency = new CreateCurrencyRate(currencyRateRepository);
-    const createCurrencyInput: CreateCurrencyRateDto = {
+    const createCurrencyInput = {
       name: 'Any Currency',
       code: 'ANY',
       symbol: 'A$',

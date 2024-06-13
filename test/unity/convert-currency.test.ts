@@ -1,5 +1,5 @@
-import ConvertCurrency from "@/application/use-case/convert-currency";
-import CurrencyRateRepositoryFake from "@/infra/repository/currency-rate-repository-fake";
+import { ConvertCurrency } from "@/application/use-case";
+import { CurrencyRateRepositoryFake } from "@/infra/repository/";
 
 describe('Currency Converter', () => {
   let currencyRateRepository: CurrencyRateRepositoryFake;

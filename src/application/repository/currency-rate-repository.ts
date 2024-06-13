@@ -1,7 +1,9 @@
-import CurrencyRate from "@/domain/currency-rate";
+import { CurrencyRate } from "@/domain/entity/";
 
-export default interface CurrencyRateRepository {
+export interface CurrencyRateRepository {
   findByCode(code: string): Promise<CurrencyRate>;
   add(currencyRate: CurrencyRate): Promise<void>;
   delete(code: string): Promise<void>;
 }
+
+export default CurrencyRateRepository;

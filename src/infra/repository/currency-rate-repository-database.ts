@@ -1,7 +1,7 @@
-import CurrencyRateRepository from "@/application/repository/currency-rate-repository";
-import CurrencyRate from "@/domain/currency-rate";
-import CurrencyRateNotFoundError from "@/domain/errors/currency-rate-not-found.error";
-import { DatabaseConnection } from "@/infra/database/database-connection";
+import { CurrencyRateRepository } from "@/application/repository";
+import { CurrencyRate } from "@/domain/entity/";
+import { CurrencyRateNotFoundError } from "@/domain/errors";
+import { DatabaseConnection } from "@/infra/database";
 
 export class CurrencyRateRepositoryDatabase implements CurrencyRateRepository {
 
@@ -58,3 +58,5 @@ export class CurrencyRateRepositoryDatabase implements CurrencyRateRepository {
   }
 
 }
+
+export default CurrencyRateRepositoryDatabase;

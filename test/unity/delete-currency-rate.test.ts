@@ -1,7 +1,5 @@
-import CreateCurrencyRate from "@/application/use-case/create-currency-rate";
-import { DeleteCurrencyRateByCode } from "@/application/use-case/delete-currency-rate-by-code";
-import GetCurrencyRateByCode from "@/application/use-case/get-currency-rate-by-code";
-import CurrencyRateRepositoryFake from "@/infra/repository/currency-rate-repository-fake";
+import { CreateCurrencyRate, DeleteCurrencyRateByCode, GetCurrencyRateByCode } from "@/application/use-case/";
+import { CurrencyRateRepositoryFake } from "@/infra/repository/";
 
 describe('delete-currency-rate', () => {
 

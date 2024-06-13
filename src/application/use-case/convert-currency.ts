@@ -1,10 +1,10 @@
-import CurrencyRateRepository from "../repository/currency-rate-repository";
+import { CurrencyRateRepository } from "@/application/repository";
 
-export default class ConvertCurrency {
+export class ConvertCurrency {
   constructor(readonly currencyRateRepository: CurrencyRateRepository) {
   }
 
-  async execute(input: Input): Promise<Output> {
+  async execute(input: ConvertCurrencyDto): Promise<ConvertCurrencyResponse> {
     const exchangeFrom = await this.currencyRateRepository.findByCode(input.from);
     const exchangeTo = await this.currencyRateRepository.findByCode(input.to);
     const convertedAmount = exchangeFrom.convertTo(exchangeTo, input.amount);
@@ -16,14 +16,16 @@ export default class ConvertCurrency {
   }
 }
 
-type Input = {
+export type ConvertCurrencyDto = {
   from: string;
   to: string;
   amount: number;
 }
 
-type Output = {
+export type ConvertCurrencyResponse = {
   value: number;
   symbol: string;
   decimalPoints: number;
 }
+
+export default ConvertCurrency;

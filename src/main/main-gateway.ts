@@ -1,12 +1,13 @@
-import ConvertCurrency from "@/application/use-case/convert-currency";
-import CreateCurrencyRate from "@/application/use-case/create-currency-rate";
-import { DeleteCurrencyRateByCode } from "@/application/use-case/delete-currency-rate-by-code";
-import GetCurrencyRateByCode from "@/application/use-case/get-currency-rate-by-code";
-import { CurrenciesApiGatewayOnline } from "@/infra/gateway/currency-api-gateway-online";
-import { AxiosAdapter } from "@/infra/http-client/axios-adapter";
-import { CurrencyController } from "@/infra/http-server/currency.controller";
-import { ExpressAdapter } from "@/infra/http-server/express-adapter";
-import { CurrencyRateRepositoryApi } from "@/infra/repository/currency-rate-repository-api";
+import {
+  ConvertCurrency,
+  CreateCurrencyRate,
+  DeleteCurrencyRateByCode,
+  GetCurrencyRateByCode,
+} from "@/application/use-case/";
+import { CurrenciesApiGatewayOnline } from "@/infra/gateway";
+import { AxiosAdapter } from "@/infra/http-client";
+import { CurrencyController, ExpressAdapter } from "@/infra/http-server/";
+import { CurrencyRateRepositoryApi } from "@/infra/repository/";
 
 const httpServer = new ExpressAdapter();
 // const currencyGateway = new CurrenciesApiGatewayStatic()

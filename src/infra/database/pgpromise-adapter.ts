@@ -1,4 +1,4 @@
-import { DatabaseConnection } from "./database-connection";
+import { DatabaseConnection } from "@/infra/database";
 
 import pgp from "pg-promise";
 
@@ -18,3 +18,5 @@ export class PgPromiseAdapter implements DatabaseConnection {
   }
 
 }
+
+export default PgPromiseAdapter;

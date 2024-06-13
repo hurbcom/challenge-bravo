@@ -1,4 +1,4 @@
-import { CurrenciesResponse, CurrencyApiGateway, Filters, RateResponse } from "@/infra/gateway/currency-api-gateway";
+import { CurrenciesResponse, CurrencyApiGateway, Filters, RateResponse } from "@/infra/gateway/";
 import { readFileSync } from 'fs';
 import path from 'path';
 

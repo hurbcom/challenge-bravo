@@ -1,5 +1,5 @@
-import { CurrenciesResponse, CurrencyApiGateway, Filters, RateResponse } from "@/infra/gateway/currency-api-gateway";
-import HttpClient from "@/infra/http-client/http-client";
+import { CurrenciesResponse, CurrencyApiGateway, Filters, RateResponse } from "@/infra/gateway/";
+import { HttpClient } from "@/infra/http-client";
 
 export class CurrenciesApiGatewayOnline implements CurrencyApiGateway {
   constructor(private readonly httpClient: HttpClient) {

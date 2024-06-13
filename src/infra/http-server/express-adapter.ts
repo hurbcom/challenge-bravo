@@ -1,4 +1,4 @@
-import { Controller, HttpServer, Method } from '@/infra/http-server/http-server';
+import { Controller, HttpServer, Method } from '@/infra/http-server';
 
 import express, { Express } from 'express';
 

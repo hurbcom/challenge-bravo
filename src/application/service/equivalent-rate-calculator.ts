@@ -1,4 +1,4 @@
-import InvalidParamError from "@/domain/errors/invalid-param.error";
+import { InvalidParamError } from "@/domain/errors";
 
 export class EquivalentRateCalculator {
 

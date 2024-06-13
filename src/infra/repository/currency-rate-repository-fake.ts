@@ -1,8 +1,8 @@
-import CurrencyRateRepository from "@/application/repository/currency-rate-repository";
-import CurrencyRate from "@/domain/currency-rate";
-import CurrencyRateNotFoundError from "@/domain/errors/currency-rate-not-found.error";
+import { CurrencyRateRepository } from "@/application/repository/";
+import { CurrencyRate } from "@/domain/entity/";
+import { CurrencyRateNotFoundError } from "@/domain/errors/";
 
-export default class CurrencyRateRepositoryFake implements CurrencyRateRepository {
+export class CurrencyRateRepositoryFake implements CurrencyRateRepository {
   currencyRates: CurrencyRate[];
 
   constructor() {
@@ -40,3 +40,5 @@ export default class CurrencyRateRepositoryFake implements CurrencyRateRepositor
     return this.currencyRates.some(currencyRate => currencyRate.code === code);
   }
 }
+
+export default CurrencyRateRepositoryFake;

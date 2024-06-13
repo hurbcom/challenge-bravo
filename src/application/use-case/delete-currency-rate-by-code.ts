@@ -1,4 +1,4 @@
-import CurrencyRateRepository from "../repository/currency-rate-repository";
+import { CurrencyRateRepository } from "@/application/repository";
 
 export class DeleteCurrencyRateByCode {
   constructor(private readonly currencyRateRepository: CurrencyRateRepository) { }
@@ -14,3 +14,5 @@ export class DeleteCurrencyRateByCode {
     await this.currencyRateRepository.delete(currencyRate.code);
   }
 }
+
+export default DeleteCurrencyRateByCode;

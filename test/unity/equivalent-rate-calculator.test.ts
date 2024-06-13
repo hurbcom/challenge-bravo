@@ -1,4 +1,4 @@
-import { EquivalentRateCalculator } from "@/application/service/equivalent-rate-calculator";
+import { EquivalentRateCalculator } from "@/application/service/";
 
 describe('equivalent-rate-calculator', () => {
 

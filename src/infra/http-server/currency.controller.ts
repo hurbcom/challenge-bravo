@@ -1,8 +1,10 @@
-import ConvertCurrency from "@/application/use-case/convert-currency";
-import CreateCurrencyRate, { CreateCurrencyRateDto } from "@/application/use-case/create-currency-rate";
-import { DeleteCurrencyRateByCode } from "@/application/use-case/delete-currency-rate-by-code";
-import GetCurrencyRateByCode from "@/application/use-case/get-currency-rate-by-code";
-import { HttpServer } from "@/infra/http-server/http-server";
+import {
+  ConvertCurrency,
+  CreateCurrencyRate, CreateCurrencyRateDto,
+  DeleteCurrencyRateByCode,
+  GetCurrencyRateByCode,
+} from "@/application/use-case";
+import { HttpServer } from "@/infra/http-server";
 
 export class CurrencyController {
   constructor(
@@ -62,3 +64,5 @@ export class CurrencyController {
   }
 
 }
+
+export default CurrencyController;

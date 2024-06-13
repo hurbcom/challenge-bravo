@@ -1,4 +1,4 @@
-import CurrencyRate from "@/domain/currency-rate";
+import { CurrencyRate } from "@/domain/entity/";
 
 describe('Currency Rate', () => {
 

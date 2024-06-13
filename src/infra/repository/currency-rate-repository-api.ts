@@ -1,7 +1,7 @@
-import CurrencyRateRepository from "@/application/repository/currency-rate-repository";
-import CurrencyRate from "@/domain/currency-rate";
-import CurrencyRateNotFoundError from "@/domain/errors/currency-rate-not-found.error";
-import CurrencyApiGateway from "../gateway/currency-api-gateway";
+import { CurrencyRateRepository } from "@/application/repository/";
+import { CurrencyRate } from "@/domain/entity/";
+import { CurrencyRateNotFoundError } from "@/domain/errors/";
+import { CurrencyApiGateway } from "@/infra/gateway";
 
 export class CurrencyRateRepositoryApi implements CurrencyRateRepository {
   currencyMap: Map<string, CurrencyRate>;
@@ -47,3 +47,5 @@ export class CurrencyRateRepositoryApi implements CurrencyRateRepository {
   }
 
 }
+
+export default CurrencyRateRepositoryApi;

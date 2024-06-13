@@ -1,15 +1,15 @@
-import CurrencyRateRepository from "@/application/repository/currency-rate-repository";
-import EquivalentRateCalculator from "@/application/service/equivalent-rate-calculator";
-import CurrencyRate from "@/domain/currency-rate";
+import { CurrencyRateRepository } from "@/application/repository";
+import { EquivalentRateCalculator } from "@/application/service";
+import { CurrencyRate } from "@/domain/entity/";
 
-export default class CreateCurrencyRate {
+export class CreateCurrencyRate {
   constructor(private currencyRateRepository: CurrencyRateRepository) { }
 
-  async execute(data: CreateCurrencyRateDto): Promise<Output> {
-    const equivalentCurrencyRate = await this.currencyRateRepository.findByCode(data.equivalentCurrencyCode.toUpperCase());
+  async execute(input: CreateCurrencyRateDto): Promise<CreateCurrencyRateOutput> {
+    const equivalentCurrencyRate = await this.currencyRateRepository.findByCode(input.equivalentCurrencyCode.toUpperCase());
     const equivalentRateCalculator = new EquivalentRateCalculator(equivalentCurrencyRate.rate);
-    const rate = equivalentRateCalculator.calculateRate(data.baseAmount, data.equivalentCurrencyAmount)
-    const currencyRate = CurrencyRate.create(data.name, data.code, data.symbol, data.decimalPoints, rate);
+    const rate = equivalentRateCalculator.calculateRate(input.baseAmount, input.equivalentCurrencyAmount)
+    const currencyRate = CurrencyRate.create(input.name, input.code, input.symbol, input.decimalPoints, rate);
     await this.currencyRateRepository.add(currencyRate);
     return { currencyRateId: currencyRate.id };
   }
@@ -25,6 +25,8 @@ export type CreateCurrencyRateDto = {
   equivalentCurrencyAmount: number;
 }
 
-export type Output = {
+export type CreateCurrencyRateOutput = {
   currencyRateId: string;
 }
+
+export default CreateCurrencyRate;

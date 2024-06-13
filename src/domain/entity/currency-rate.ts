@@ -1,12 +1,8 @@
 import currency from "currency.js";
 
-import Code from "@/domain/value-object/code";
-import DecimalPoints from "@/domain/value-object/decimal-points";
-import Name from "@/domain/value-object/name";
-import Rate from "@/domain/value-object/rate";
-import Symbol from "@/domain/value-object/symbol";
+import { Code, DecimalPoints, Name, Rate, Symbol } from "@/domain/value-object";
 
-export default class CurrencyRate {
+export class CurrencyRate {
   private _name: Name;
   private _code: Code;
   private _symbol: Symbol;
@@ -63,3 +59,5 @@ export default class CurrencyRate {
   }
 
 }
+
+export default CurrencyRate;
