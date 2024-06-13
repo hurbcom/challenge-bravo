@@ -1,4 +1,4 @@
-import NotFoundError from "./not-found.error";
+import NotFoundError from './not-found.error';
 
 export class CurrencyRateNotFoundError extends NotFoundError {
   constructor(currencyRateIdOrCode: string) {

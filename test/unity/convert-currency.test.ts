@@ -1,5 +1,5 @@
-import { ConvertCurrency } from "@/application/use-case";
-import { CurrencyRateRepositoryFake } from "@/infra/repository/";
+import { ConvertCurrency } from '@/application/use-case';
+import { CurrencyRateRepositoryFake } from '@/infra/repository/';
 
 describe('Currency Converter', () => {
   let currencyRateRepository: CurrencyRateRepositoryFake;
@@ -15,19 +15,19 @@ describe('Currency Converter', () => {
       from: 'USD',
       to: 'BRL',
       amount: 1,
-    }
+    };
     const result = await convertCurrency.execute(input);
-    expect(result.value).toBe(5.20);
+    expect(result.value).toBe(5.2);
   });
 
   it('should convert BRL to USD', async () => {
     const input = {
       from: 'BRL',
       to: 'USD',
-      amount: 5.20,
-    }
+      amount: 5.2,
+    };
     const result = await convertCurrency.execute(input);
-    expect(result.value).toBe(1.00);
+    expect(result.value).toBe(1.0);
   });
 
   it('should convert USD to EUR', async () => {
@@ -35,7 +35,7 @@ describe('Currency Converter', () => {
       from: 'USD',
       to: 'EUR',
       amount: 1,
-    }
+    };
     const result = await convertCurrency.execute(input);
     expect(result.value).toBe(0.92);
   });
@@ -45,7 +45,7 @@ describe('Currency Converter', () => {
       from: 'EUR',
       to: 'BRL',
       amount: 1,
-    }
+    };
     const result = await convertCurrency.execute(input);
     expect(result.value).toBe(5.65);
   });
@@ -55,8 +55,10 @@ describe('Currency Converter', () => {
       from: 'INVALID',
       to: 'BRL',
       amount: 1,
-    }
-    await expect(convertCurrency.execute(input)).rejects.toThrow('Currency rate not found');
+    };
+    await expect(convertCurrency.execute(input)).rejects.toThrow(
+      'Currency rate not found'
+    );
   });
 
   it('should throw an error when the amount is invalid', async () => {
@@ -64,8 +66,9 @@ describe('Currency Converter', () => {
       from: 'USD',
       to: 'BRL',
       amount: -1,
-    }
-    await expect(convertCurrency.execute(input)).rejects.toThrow('Invalid amount');
+    };
+    await expect(convertCurrency.execute(input)).rejects.toThrow(
+      'Invalid amount'
+    );
   });
-
 });

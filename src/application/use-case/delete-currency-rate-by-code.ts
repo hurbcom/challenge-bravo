@@ -1,7 +1,9 @@
-import { CurrencyRateRepository } from "@/application/repository";
+import { CurrencyRateRepository } from '@/application/repository';
 
 export class DeleteCurrencyRateByCode {
-  constructor(private readonly currencyRateRepository: CurrencyRateRepository) { }
+  constructor(
+    private readonly currencyRateRepository: CurrencyRateRepository
+  ) {}
 
   async execute(code: string): Promise<void> {
     if (code === 'USD') {

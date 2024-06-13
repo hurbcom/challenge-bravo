@@ -1,10 +1,11 @@
 import {
   ConvertCurrency,
-  CreateCurrencyRate, CreateCurrencyRateDto,
+  CreateCurrencyRate,
+  CreateCurrencyRateDto,
   DeleteCurrencyRateByCode,
   GetCurrencyRateByCode,
-} from "@/application/use-case";
-import { HttpServer } from "@/infra/http-server";
+} from '@/application/use-case';
+import { HttpServer } from '@/infra/http-server';
 
 export class CurrencyController {
   constructor(
@@ -14,12 +15,11 @@ export class CurrencyController {
     readonly getCurrencyRateByCode: GetCurrencyRateByCode,
     readonly deleteCurrencyRateByCode: DeleteCurrencyRateByCode
   ) {
-
     httpServer.register('get', '/currencies/convert', async ({ query }) => {
       const input = {
         from: query.from.toUpperCase(),
         to: query.to.toUpperCase(),
-        amount: Number(query.amount)
+        amount: Number(query.amount),
       };
       const output = await this.convertCurrency.execute(input);
       return {
@@ -30,8 +30,8 @@ export class CurrencyController {
         decimalPoints: output.decimalPoints,
         symbol: output.symbol,
         convertedAmountFormatted: `${output.symbol} ${output.value.toFixed(output.decimalPoints)}`,
-      }
-    })
+      };
+    });
 
     httpServer.register('post', '/currencies', async ({ body }) => {
       try {
@@ -42,27 +42,26 @@ export class CurrencyController {
           decimalPoints: body.decimalPoints,
           baseAmount: body.baseAmount,
           equivalentCurrencyAmount: body.equivalentCurrencyAmount,
-          equivalentCurrencyCode: body.equivalentCurrencyCode
-        }
+          equivalentCurrencyCode: body.equivalentCurrencyCode,
+        };
         const output = await this.createCurrencyRate.execute(input);
-        return output
+        return output;
       } catch (error: any) {
-        console.error(error.message)
-        throw error
+        console.error(error.message);
+        throw error;
       }
-    })
+    });
     httpServer.register('get', '/currencies/{code}', async ({ params }) => {
       const { code } = params;
       const output = await this.getCurrencyRateByCode.execute(code);
-      return output
-    })
+      return output;
+    });
     httpServer.register('delete', '/currencies/{code}', async ({ params }) => {
       const { code } = params;
       await this.deleteCurrencyRateByCode.execute(code);
-      return { message: 'Currency deleted' }
-    })
+      return { message: 'Currency deleted' };
+    });
   }
-
 }
 
 export default CurrencyController;

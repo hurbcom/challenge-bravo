@@ -11,16 +11,22 @@ export class ExpressAdapter implements HttpServer {
   }
 
   register<T>(method: Method, route: string, handler: Controller<T>): void {
-    this.app[method](route.replace('}', '').replace('{', ':'), async (req, res) => {
-      try {
-        const result = await handler({ query: req.query, params: req.params, body: req.body });
-        res.json(result);
-      } catch (error: any) {
-        res.status(500).json({ message: error.message });
+    this.app[method](
+      route.replace('}', '').replace('{', ':'),
+      async (req, res) => {
+        try {
+          const result = await handler({
+            query: req.query,
+            params: req.params,
+            body: req.body,
+          });
+          res.json(result);
+        } catch (error: any) {
+          res.status(500).json({ message: error.message });
+        }
       }
-    });
+    );
   }
-
 
   listen(port: number): void {
     this.app.listen(port, () => {

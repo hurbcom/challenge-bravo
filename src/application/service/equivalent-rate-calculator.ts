@@ -1,8 +1,7 @@
-import { InvalidParamError } from "@/domain/errors";
+import { InvalidParamError } from '@/domain/errors';
 
 export class EquivalentRateCalculator {
-
-  constructor(readonly equivalentCurrencyRate: number) { }
+  constructor(readonly equivalentCurrencyRate: number) {}
 
   calculateRate(baseAmount: number, equivalentCurrencyAmount: number): number {
     if (baseAmount <= 0) {
@@ -11,10 +10,10 @@ export class EquivalentRateCalculator {
     if (equivalentCurrencyAmount <= 0) {
       throw new InvalidParamError('Invalid param: equivalentCurrencyAmount');
     }
-    const rate = baseAmount / equivalentCurrencyAmount * this.equivalentCurrencyRate;
-    return rate
+    const rate =
+      (baseAmount / equivalentCurrencyAmount) * this.equivalentCurrencyRate;
+    return rate;
   }
-
 }
 
 export default EquivalentRateCalculator;

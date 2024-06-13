@@ -5,10 +5,12 @@ export interface HttpServer {
 
 export type Method = 'get' | 'post' | 'put' | 'delete';
 
-export type Controller<TResponse = any> = (args: ControllerParams) => Promise<TResponse>;
+export type Controller<TResponse = any> = (
+  args: ControllerParams
+) => Promise<TResponse>;
 
 export type ControllerParams<T = any> = {
-  query: { [key: string]: any }
-  params: { [key: string]: string },
-  body: T
-}
+  query: { [key: string]: any };
+  params: { [key: string]: string };
+  body: T;
+};

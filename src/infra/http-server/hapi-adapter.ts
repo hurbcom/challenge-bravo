@@ -15,15 +15,18 @@ export class HapiAdapter implements HttpServer {
       path: route,
       handler: async (req, res) => {
         try {
-          const result = await handler({ query: req.query, params: req.params, body: req.payload });
+          const result = await handler({
+            query: req.query,
+            params: req.params,
+            body: req.payload,
+          });
           return result;
         } catch (error: any) {
           return res.response({ message: error.message }).code(500);
         }
       },
-    })
+    });
   }
-
 
   listen(port: number): void {
     this.server.settings.port = port;

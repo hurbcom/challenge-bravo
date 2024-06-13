@@ -1,22 +1,23 @@
-import { CurrencyRateRepository } from "@/application/repository";
-import { CurrencyRate } from "@/domain/entity/";
-import { CurrencyRateNotFoundError } from "@/domain/errors";
-import { DatabaseConnection } from "@/infra/database";
+import { CurrencyRateRepository } from '@/application/repository';
+import { CurrencyRate } from '@/domain/entity/';
+import { CurrencyRateNotFoundError } from '@/domain/errors';
+import { DatabaseConnection } from '@/infra/database';
 
 export class CurrencyRateRepositoryDatabase implements CurrencyRateRepository {
-
-  constructor(private readonly _connection: DatabaseConnection) {
-  }
+  constructor(private readonly _connection: DatabaseConnection) {}
 
   async findByCode(code: string): Promise<CurrencyRate> {
-    const [row] = await this._connection.query(`
+    const [row] = await this._connection.query(
+      `
       SELECT c.id, c.name, c.code, c.symbol, c.decimal_digits, r.rate
       FROM currency c
       JOIN rate r ON c.id = r.currency_id
       WHERE c.code = $1
       ORDER BY r.updated_at DESC
       LIMIT 1
-      `, [code]);
+      `,
+      [code]
+    );
     if (!row) {
       throw new CurrencyRateNotFoundError(code);
     }
@@ -32,31 +33,36 @@ export class CurrencyRateRepositoryDatabase implements CurrencyRateRepository {
   }
 
   async add(currencyRate: CurrencyRate): Promise<void> {
-    await this._connection.query(`
+    await this._connection.query(
+      `
       INSERT INTO currency (id, name, code, symbol, decimal_digits)
-      VALUES ($1, $2, $3, $4, $5)`, [
-      currencyRate.id,
-      currencyRate.name,
-      currencyRate.code,
-      currencyRate.symbol,
-      currencyRate.decimalPoints,
-    ]);
+      VALUES ($1, $2, $3, $4, $5)`,
+      [
+        currencyRate.id,
+        currencyRate.name,
+        currencyRate.code,
+        currencyRate.symbol,
+        currencyRate.decimalPoints,
+      ]
+    );
 
-    await this._connection.query(`
+    await this._connection.query(
+      `
       INSERT INTO rate (currency_id, rate)
-      VALUES ($1, $2)`, [
-      currencyRate.id,
-      currencyRate.rate,
-    ]);
+      VALUES ($1, $2)`,
+      [currencyRate.id, currencyRate.rate]
+    );
   }
 
   async delete(code: string): Promise<void> {
-    await this._connection.query(`
+    await this._connection.query(
+      `
       DELETE FROM currency
       WHERE code = $1
-      `, [code]);
+      `,
+      [code]
+    );
   }
-
 }
 
 export default CurrencyRateRepositoryDatabase;

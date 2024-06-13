@@ -1,27 +1,35 @@
-import { CreateCurrencyRate, GetCurrencyRateByCode } from "@/application/use-case/";
-import { CurrencyRateRepositoryFake } from "@/infra/repository/";
+import {
+  CreateCurrencyRate,
+  GetCurrencyRateByCode,
+} from '@/application/use-case/';
+import { CurrencyRateRepositoryFake } from '@/infra/repository/';
 
 describe('create-currency-rate', () => {
-
   it('should create a currency', async () => {
     const currencyRateRepository = new CurrencyRateRepositoryFake();
     const createCurrency = new CreateCurrencyRate(currencyRateRepository);
     const createCurrencyInput = {
-      name: "Grand Theft Auto Dollar",
-      symbol: "GTA$",
-      code: "GTA",
+      name: 'Grand Theft Auto Dollar',
+      symbol: 'GTA$',
+      code: 'GTA',
       decimalPoints: 2,
-      baseAmount: 1250000.00,
-      equivalentCurrencyCode: "BRL",
-      equivalentCurrencyAmount: 83.50,
-    }
+      baseAmount: 1250000.0,
+      equivalentCurrencyCode: 'BRL',
+      equivalentCurrencyAmount: 83.5,
+    };
     await createCurrency.execute(createCurrencyInput);
-    const getCurrencyRateByCode = new GetCurrencyRateByCode(currencyRateRepository);
-    const getCurrencyOutput = await getCurrencyRateByCode.execute(createCurrencyInput.code);
+    const getCurrencyRateByCode = new GetCurrencyRateByCode(
+      currencyRateRepository
+    );
+    const getCurrencyOutput = await getCurrencyRateByCode.execute(
+      createCurrencyInput.code
+    );
     expect(getCurrencyOutput.name).toBe(createCurrencyInput.name);
     expect(getCurrencyOutput.symbol).toBe(createCurrencyInput.symbol);
     expect(getCurrencyOutput.code).toBe(createCurrencyInput.code);
-    expect(getCurrencyOutput.decimalPoints).toBe(createCurrencyInput.decimalPoints);
+    expect(getCurrencyOutput.decimalPoints).toBe(
+      createCurrencyInput.decimalPoints
+    );
     expect(getCurrencyOutput.rate).toBe(77844.31137724551);
   });
 
@@ -33,12 +41,13 @@ describe('create-currency-rate', () => {
       code: 'ANY',
       symbol: 'A$',
       decimalPoints: 2,
-      baseAmount: 1.00,
-      equivalentCurrencyCode: "USD",
-      equivalentCurrencyAmount: 1.00,
-    }
+      baseAmount: 1.0,
+      equivalentCurrencyCode: 'USD',
+      equivalentCurrencyAmount: 1.0,
+    };
     await createCurrency.execute(createCurrencyInput);
-    await expect(createCurrency.execute(createCurrencyInput)).rejects.toThrow('Currency rate with code ANY already exists');
+    await expect(createCurrency.execute(createCurrencyInput)).rejects.toThrow(
+      'Currency rate with code ANY already exists'
+    );
   });
-
 });

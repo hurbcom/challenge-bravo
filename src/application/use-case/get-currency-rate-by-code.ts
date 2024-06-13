@@ -1,8 +1,7 @@
-import { CurrencyRateRepository } from "@/application/repository";
+import { CurrencyRateRepository } from '@/application/repository';
 
 export class GetCurrencyRateByCode {
-
-  constructor(readonly currencyRateRepository: CurrencyRateRepository) { }
+  constructor(readonly currencyRateRepository: CurrencyRateRepository) {}
 
   async execute(code: string): Promise<GetCurrencyRateByCodeOutput> {
     const currencyRate = await this.currencyRateRepository.findByCode(code);
@@ -15,7 +14,6 @@ export class GetCurrencyRateByCode {
       rate: currencyRate.rate,
     };
   }
-
 }
 
 export type GetCurrencyRateByCodeOutput = {
@@ -25,6 +23,6 @@ export type GetCurrencyRateByCodeOutput = {
   symbol: string;
   decimalPoints: number;
   rate: number;
-}
+};
 
 export default GetCurrencyRateByCode;
