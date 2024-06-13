@@ -4,7 +4,9 @@ export class GetCurrencyRateByCode {
   constructor(readonly currencyRateRepository: CurrencyRateRepository) {}
 
   async execute(code: string): Promise<GetCurrencyRateByCodeOutput> {
-    const currencyRate = await this.currencyRateRepository.findByCode(code);
+    const currencyRate = await this.currencyRateRepository.findByCode(
+      code.toUpperCase()
+    );
     return {
       id: currencyRate.id,
       name: currencyRate.name,
