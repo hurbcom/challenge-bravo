@@ -1,5 +1,5 @@
 import { GetCurrencyByCodeQuery } from '@/application/query';
-import { ListCurrenciesQuery } from '@/application/query/list-currencies-query';
+import { ListCurrenciesQuery } from '@/application/query/';
 import {
   ConvertCurrency,
   CreateCurrencyRate,
@@ -9,6 +9,7 @@ import { PgPromiseAdapter } from '@/infra/database/';
 import {
   ConvertCurrencyController,
   CreateCurrencyController,
+  CurrenciesRoutes,
   DeleteCurrencyController,
   ExpressAdapter,
   GetCurrencyByCodeQueryController,
@@ -40,9 +41,12 @@ const getCurrencyByCodeController = new GetCurrencyByCodeQueryController(
 const deleteCurrencyController = new DeleteCurrencyController(
   deleteCurrencyRateByCode
 );
-httpServer.register('get', '/currencies', listCurrenciesController);
-httpServer.register('post', '/currencies', createCurrencyController);
-httpServer.register('get', '/currencies/convert', convertCurrencyController);
-httpServer.register('get', '/currencies/{code}', getCurrencyByCodeController);
-httpServer.register('delete', '/currencies/{code}', deleteCurrencyController);
+const currencyRoutes = new CurrenciesRoutes({
+  listCurrenciesController,
+  createCurrencyController,
+  convertCurrencyController,
+  getCurrencyByCodeController,
+  deleteCurrencyController,
+});
+currencyRoutes.registerRoutes(httpServer);
 httpServer.listen(3000);

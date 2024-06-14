@@ -1,5 +1,6 @@
 export * from './convert-currency.controller';
 export * from './create-currency.controller';
+export * from './currencies.routes';
 export * from './delete-currency.controller';
 export * from './express-adapter';
 export * from './get-currency-by-code-query.controller';

@@ -9,6 +9,7 @@ import { CurrenciesApiGatewayStatic } from '@/infra/gateway';
 import {
   ConvertCurrencyController,
   CreateCurrencyController,
+  CurrenciesRoutes,
   DeleteCurrencyController,
   ExpressAdapter,
   GetCurrencyByCodeController,
@@ -37,8 +38,11 @@ const getCurrencyByCodeController = new GetCurrencyByCodeController(
 const deleteCurrencyController = new DeleteCurrencyController(
   deleteCurrencyRateByCode
 );
-httpServer.register('post', '/currencies', createCurrencyController);
-httpServer.register('get', '/currencies/convert', convertCurrencyController);
-httpServer.register('get', '/currencies/{code}', getCurrencyByCodeController);
-httpServer.register('delete', '/currencies/{code}', deleteCurrencyController);
+const currencyRoutes = new CurrenciesRoutes({
+  createCurrencyController,
+  convertCurrencyController,
+  getCurrencyByCodeController,
+  deleteCurrencyController,
+});
+currencyRoutes.registerRoutes(httpServer);
 httpServer.listen(3000);
