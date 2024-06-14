@@ -1,5 +1,5 @@
 import { ConvertCurrency } from '@/application/use-case';
-import { NotFoundError } from '@/domain/errors';
+import { InvalidParamError, NotFoundError } from '@/domain/errors';
 import { Controller, Request, Response } from '@/infra/http-server/controller';
 
 export class ConvertCurrencyController implements Controller {
@@ -29,6 +29,12 @@ export class ConvertCurrencyController implements Controller {
       if (error instanceof NotFoundError) {
         return {
           statusCode: 404,
+          data: { message: error.message },
+        };
+      }
+      if (error instanceof InvalidParamError) {
+        return {
+          statusCode: 400,
           data: { message: error.message },
         };
       }

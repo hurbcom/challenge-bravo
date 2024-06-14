@@ -86,7 +86,8 @@ describe('Main API', () => {
         params,
       });
     } catch (error: any) {
-      expect(error.response.data).toEqual({ message: 'Invalid amount' });
+      expect(error.response.data.message).toEqual('Invalid amount');
+      expect(error.response.status).toBe(400);
     }
   });
 });

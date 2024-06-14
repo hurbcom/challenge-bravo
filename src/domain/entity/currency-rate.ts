@@ -1,5 +1,6 @@
 import currency from 'currency.js';
 
+import { InvalidParamError } from '@/domain/errors';
 import {
   Code,
   DecimalDigits,
@@ -63,7 +64,7 @@ export class CurrencyRate {
 
   convertTo(currencyRate: CurrencyRate, amount: number): number {
     if (amount < 0) {
-      throw new Error('Invalid amount');
+      throw new InvalidParamError('Invalid amount');
     }
     const convertedAmount = (amount * currencyRate.rate) / this.rate;
     const amountCurrency = currency(convertedAmount, {
