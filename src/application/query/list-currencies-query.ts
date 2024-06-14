@@ -73,7 +73,7 @@ export class ListCurrenciesQuery {
   }
 }
 
-export type Filters = {
+type Filters = {
   currencies: string[]; // BRL, USD, EUR (default all)
   page: number; // 1 (default 1)
   perPage: number; // 10 - 100 (default 10)
@@ -81,7 +81,7 @@ export type Filters = {
   sortOrder: 'asc' | 'desc'; // asc (default asc)
 };
 
-export type Output = {
+type Output = {
   meta: {
     page: number;
     perPage: number;

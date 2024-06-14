@@ -4,22 +4,25 @@ import {
   DeleteCurrencyRateByCode,
   GetCurrencyRateByCode,
 } from '@/application/use-case/';
-import { CurrencyController, ExpressAdapter } from '@/infra/http-server/';
+import {
+  ConvertCurrencyController,
+  CreateCurrencyController,
+  DeleteCurrencyController,
+  ExpressAdapter,
+  GetCurrencyByCodeController,
+} from '@/infra/http-server/';
 import { CurrencyRateRepositoryFake } from '@/infra/repository/';
 
 const httpServer = new ExpressAdapter();
 const currencyRateRepository = new CurrencyRateRepositoryFake();
-const currencyConverter = new ConvertCurrency(currencyRateRepository);
 const createCurrencyRate = new CreateCurrencyRate(currencyRateRepository);
-const getCurrencyRateByCode = new GetCurrencyRateByCode(currencyRateRepository);
+const convertCurrency = new ConvertCurrency(currencyRateRepository);
+const getCurrencyByCode = new GetCurrencyRateByCode(currencyRateRepository);
 const deleteCurrencyRateByCode = new DeleteCurrencyRateByCode(
   currencyRateRepository
 );
-new CurrencyController(
-  httpServer,
-  currencyConverter,
-  createCurrencyRate,
-  getCurrencyRateByCode,
-  deleteCurrencyRateByCode
-);
+new CreateCurrencyController(httpServer, createCurrencyRate);
+new ConvertCurrencyController(httpServer, convertCurrency);
+new GetCurrencyByCodeController(httpServer, getCurrencyByCode);
+new DeleteCurrencyController(httpServer, deleteCurrencyRateByCode);
 httpServer.listen(3000);

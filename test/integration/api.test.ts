@@ -39,7 +39,7 @@ describe('Main API', () => {
   it('should create, get and delete a currency rate', async () => {
     const payload = {
       name: 'Any Currency',
-      code: 'ANYC',
+      code: 'ANY',
       symbol: '$',
       decimalPoints: 2,
       baseAmount: 2,

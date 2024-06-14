@@ -4,27 +4,29 @@ import {
   DeleteCurrencyRateByCode,
   GetCurrencyRateByCode,
 } from '@/application/use-case/';
-import { CurrenciesApiGatewayOnline } from '@/infra/gateway';
-import { AxiosAdapter } from '@/infra/http-client';
-import { CurrencyController, ExpressAdapter } from '@/infra/http-server/';
+// import { CurrenciesApiGatewayOnline } from '@/infra/gateway';
+import { CurrenciesApiGatewayStatic } from '@/infra/gateway';
+import {
+  ConvertCurrencyController,
+  CreateCurrencyController,
+  DeleteCurrencyController,
+  ExpressAdapter,
+  GetCurrencyByCodeController,
+} from '@/infra/http-server/';
 import { CurrencyRateRepositoryApi } from '@/infra/repository/';
 
 const httpServer = new ExpressAdapter();
-// const currencyGateway = new CurrenciesApiGatewayStatic()
-const httpClient = new AxiosAdapter();
-const currencyGateway = new CurrenciesApiGatewayOnline(httpClient);
+// const httpClient = new AxiosAdapter();
+const currencyGateway = new CurrenciesApiGatewayStatic();
 const currencyRateRepository = new CurrencyRateRepositoryApi(currencyGateway);
-const currencyConverter = new ConvertCurrency(currencyRateRepository);
 const createCurrencyRate = new CreateCurrencyRate(currencyRateRepository);
-const getCurrencyRateByCode = new GetCurrencyRateByCode(currencyRateRepository);
+const convertCurrency = new ConvertCurrency(currencyRateRepository);
+const getCurrencyByCode = new GetCurrencyRateByCode(currencyRateRepository);
 const deleteCurrencyRateByCode = new DeleteCurrencyRateByCode(
   currencyRateRepository
 );
-new CurrencyController(
-  httpServer,
-  currencyConverter,
-  createCurrencyRate,
-  getCurrencyRateByCode,
-  deleteCurrencyRateByCode
-);
+new CreateCurrencyController(httpServer, createCurrencyRate);
+new ConvertCurrencyController(httpServer, convertCurrency);
+new GetCurrencyByCodeController(httpServer, getCurrencyByCode);
+new DeleteCurrencyController(httpServer, deleteCurrencyRateByCode);
 httpServer.listen(3000);

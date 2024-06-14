@@ -1,31 +1,35 @@
+import { GetCurrencyByCodeQuery } from '@/application/query';
 import { ListCurrenciesQuery } from '@/application/query/list-currencies-query';
 import {
   ConvertCurrency,
   CreateCurrencyRate,
   DeleteCurrencyRateByCode,
-  GetCurrencyRateByCode,
 } from '@/application/use-case/';
 import { PgPromiseAdapter } from '@/infra/database/';
-import { CurrencyController, ExpressAdapter } from '@/infra/http-server/';
-import ListCurrenciesController from '@/infra/http-server/list-currencies.controller';
+import {
+  ConvertCurrencyController,
+  CreateCurrencyController,
+  DeleteCurrencyController,
+  ExpressAdapter,
+  GetCurrencyByCodeQueryController,
+  ListCurrenciesController,
+} from '@/infra/http-server/';
 import { CurrencyRateRepositoryDatabase } from '@/infra/repository/';
 
 const httpServer = new ExpressAdapter();
 const connection = new PgPromiseAdapter();
+const listCurrencies = new ListCurrenciesQuery(connection);
 const currencyRateRepository = new CurrencyRateRepositoryDatabase(connection);
-const currencyConverter = new ConvertCurrency(currencyRateRepository);
 const createCurrencyRate = new CreateCurrencyRate(currencyRateRepository);
-const getCurrencyRateByCode = new GetCurrencyRateByCode(currencyRateRepository);
+const convertCurrency = new ConvertCurrency(currencyRateRepository);
+// const getCurrencyRateByCode = new GetCurrencyRateByCode(currencyRateRepository);
+const getCurrencyByCodeQuery = new GetCurrencyByCodeQuery(connection);
 const deleteCurrencyRateByCode = new DeleteCurrencyRateByCode(
   currencyRateRepository
 );
-new CurrencyController(
-  httpServer,
-  currencyConverter,
-  createCurrencyRate,
-  getCurrencyRateByCode,
-  deleteCurrencyRateByCode
-);
-const listCurrencies = new ListCurrenciesQuery(connection);
 new ListCurrenciesController(httpServer, listCurrencies);
+new CreateCurrencyController(httpServer, createCurrencyRate);
+new ConvertCurrencyController(httpServer, convertCurrency);
+new GetCurrencyByCodeQueryController(httpServer, getCurrencyByCodeQuery);
+new DeleteCurrencyController(httpServer, deleteCurrencyRateByCode);
 httpServer.listen(3000);
