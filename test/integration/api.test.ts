@@ -72,9 +72,10 @@ describe('Main API', () => {
         params,
       });
     } catch (error: any) {
-      expect(error.response.data).toEqual({
-        message: 'Currency rate not found: INVALID',
-      });
+      expect(error.response.data.message).toBe(
+        'Currency rate not found: INVALID'
+      );
+      expect(error.response.status).toBe(404);
     }
   });
 
