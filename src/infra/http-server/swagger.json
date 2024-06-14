@@ -28,6 +28,91 @@
   "basePath": "/api/v1",
   "paths": {
     "/currencies": {
+      "get": {
+        "tags": ["Currencies"],
+        "summary": "Lista de moedas",
+        "description": "Retorna a lista de moedas cadastradas",
+        "parameters": [
+          {
+            "name": "currencies",
+            "in": "query",
+            "description": "Lista de moedas",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Ordenação",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["name", "code", "rate"],
+              "default": "name"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Ordem de ordenação",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"],
+              "default": "asc"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página",
+            "required": false,
+            "schema": { "type": "number", "minimum": 1, "default": 1 }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "Número máximo de registros por página",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 10,
+              "maximum": 100,
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de moedas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "page": { "type": "number" },
+                        "perPage": { "type": "number" },
+                        "pageCount": { "type": "number" },
+                        "totalCount": { "type": "number" }
+                      }
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Currency" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": ["Currencies"],
         "summary": "Adiciona uma nova moeda",
