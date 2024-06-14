@@ -1,20 +1,25 @@
 import { DeleteCurrencyRateByCode } from '@/application/use-case';
-import { HttpServer } from '@/infra/http-server';
+import { Controller, Request, Response } from '@/infra/http-server/controller';
 
-export class DeleteCurrencyController {
+export class DeleteCurrencyController implements Controller {
   constructor(
-    private readonly httpServer: HttpServer,
     private readonly deleteCurrencyRateByCode: DeleteCurrencyRateByCode
-  ) {
-    this.httpServer.register(
-      'delete',
-      '/currencies/{code}',
-      async ({ params }) => {
-        const { code } = params;
-        await this.deleteCurrencyRateByCode.execute(code);
-        return { message: 'Currency deleted' };
-      }
-    );
+  ) {}
+
+  async handle({ params }: Request): Promise<Response> {
+    try {
+      const code = params?.code.toUpperCase();
+      await this.deleteCurrencyRateByCode.execute(code);
+      return {
+        statusCode: 200,
+        data: {
+          message: 'Currency deleted',
+        },
+      };
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
   }
 }
 

@@ -27,9 +27,22 @@ const getCurrencyByCodeQuery = new GetCurrencyByCodeQuery(connection);
 const deleteCurrencyRateByCode = new DeleteCurrencyRateByCode(
   currencyRateRepository
 );
-new ListCurrenciesController(httpServer, listCurrencies);
-new CreateCurrencyController(httpServer, createCurrencyRate);
-new ConvertCurrencyController(httpServer, convertCurrency);
-new GetCurrencyByCodeQueryController(httpServer, getCurrencyByCodeQuery);
-new DeleteCurrencyController(httpServer, deleteCurrencyRateByCode);
+const listCurrenciesController = new ListCurrenciesController(listCurrencies);
+const createCurrencyController = new CreateCurrencyController(
+  createCurrencyRate
+);
+const convertCurrencyController = new ConvertCurrencyController(
+  convertCurrency
+);
+const getCurrencyByCodeController = new GetCurrencyByCodeQueryController(
+  getCurrencyByCodeQuery
+);
+const deleteCurrencyController = new DeleteCurrencyController(
+  deleteCurrencyRateByCode
+);
+httpServer.register('get', '/currencies', listCurrenciesController);
+httpServer.register('post', '/currencies', createCurrencyController);
+httpServer.register('get', '/currencies/convert', convertCurrencyController);
+httpServer.register('get', '/currencies/{code}', getCurrencyByCodeController);
+httpServer.register('delete', '/currencies/{code}', deleteCurrencyController);
 httpServer.listen(3000);

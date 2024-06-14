@@ -1,21 +1,21 @@
 import { GetCurrencyRateByCode } from '@/application/use-case';
-import { HttpServer } from '@/infra/http-server';
+import { Controller, Request, Response } from '@/infra/http-server/controller';
 
-export class GetCurrencyByCodeController {
-  constructor(
-    readonly httpServer: HttpServer,
-    readonly getCurrencyByCode: GetCurrencyRateByCode
-  ) {
-    httpServer.register('get', '/currencies/{code}', async ({ params }) => {
-      try {
-        const input = params.code?.toUpperCase();
-        const output = await this.getCurrencyByCode.execute(input);
-        return output;
-      } catch (error: any) {
-        console.error(error.message);
-        throw error;
-      }
-    });
+export class GetCurrencyByCodeController implements Controller {
+  constructor(readonly getCurrencyByCode: GetCurrencyRateByCode) {}
+
+  async handle({ params }: Request): Promise<Response> {
+    try {
+      const input = params.code?.toUpperCase();
+      const output = await this.getCurrencyByCode.execute(input);
+      return {
+        statusCode: 200,
+        data: output,
+      };
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
   }
 }
 

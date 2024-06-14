@@ -1,4 +1,5 @@
-import { Controller, HttpServer, Method } from '@/infra/http-server';
+import { HttpServer, Method } from '@/infra/http-server';
+import { Controller, Request } from '@/infra/http-server/controller';
 
 import Hapi from '@hapi/hapi';
 
@@ -9,20 +10,25 @@ export class HapiAdapter implements HttpServer {
     this.server = Hapi.server({});
   }
 
-  register<T>(method: Method, route: string, handler: Controller<T>): void {
+  register(method: Method, route: string, controller: Controller): void {
     this.server.route({
       method,
       path: route,
       handler: async (req, res) => {
         try {
-          const result = await handler({
+          const request: Request = {
             query: req.query,
             params: req.params,
             body: req.payload,
-          });
-          return result;
+          };
+          const result = await controller.handle(request);
+          return res.response(result.data).code(result.statusCode);
         } catch (error: any) {
-          return res.response({ message: error.message }).code(500);
+          return res
+            .response({
+              message: error.message || 'An unexpected error occurred',
+            })
+            .code(500);
         }
       },
     });

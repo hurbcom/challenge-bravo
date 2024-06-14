@@ -1,4 +1,5 @@
-import { Controller, HttpServer, Method } from '@/infra/http-server';
+import { HttpServer, Method } from '@/infra/http-server';
+import { Controller, Request } from '@/infra/http-server/controller';
 import swaggerDocument from '@/infra/http-server/swagger.json';
 import SwaggerUi from 'swagger-ui-express';
 
@@ -17,19 +18,22 @@ export class ExpressAdapter implements HttpServer {
     );
   }
 
-  register<T>(method: Method, route: string, handler: Controller<T>): void {
+  register(method: Method, route: string, controller: Controller): void {
     this.app[method](
       route.replace('}', '').replace('{', ':'),
       async (req, res) => {
         try {
-          const result = await handler({
+          const request: Request = {
             query: req.query,
             params: req.params,
             body: req.body,
-          });
-          res.json(result);
+          };
+          const response = await controller.handle(request);
+          res.status(response.statusCode).json(response.data);
         } catch (error: any) {
-          res.status(500).json({ message: error.message });
+          res
+            .status(500)
+            .json({ message: error.message || 'An unexpected error occurred' });
         }
       }
     );
