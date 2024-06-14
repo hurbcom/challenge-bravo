@@ -6,12 +6,13 @@
   "author": "Leandro Reis <leandro.e.reis@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
-    "dev:express": "ts-node-dev -r tsconfig-paths/register src/main/main-express.ts",
-    "dev:hapi": "ts-node-dev -r tsconfig-paths/register src/main/main-hapi.ts",
-    "dev:express-pg": "ts-node-dev -r tsconfig-paths/register src/main/main-express-pg.ts",
-    "dev:gateway": "ts-node-dev -r tsconfig-paths/register src/main/main-gateway.ts",
-    "test": "jest",
+    "start": "ts-node -r tsconfig-paths/register src/main/main.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register src/main/main.ts",
+    "dev:express+fake": "ts-node-dev -r tsconfig-paths/register src/main/main-express-with-fake.ts",
+    "dev:express+gw-off": "ts-node-dev -r tsconfig-paths/register src/main/main-express-gateway-offline.ts",
+    "dev:express+gw-on": "ts-node-dev -r tsconfig-paths/register src/main/main-express-gateway-online.ts",
+    "dev:hapi+fake": "ts-node-dev -r tsconfig-paths/register src/main/main-hapi-with-fake.ts",
+    "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles"
   },
   "dependencies": {

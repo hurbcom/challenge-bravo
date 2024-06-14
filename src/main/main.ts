@@ -1,44 +1,47 @@
+import { GetCurrencyByCodeQuery } from '@/application/query';
+import { ListCurrenciesQuery } from '@/application/query/';
 import {
   ConvertCurrency,
   CreateCurrencyRate,
   DeleteCurrencyRateByCode,
-  GetCurrencyRateByCode,
 } from '@/application/use-case/';
-// import { CurrenciesApiGatewayOnline } from '@/infra/gateway';
-import { CurrenciesApiGatewayStatic } from '@/infra/gateway';
+import { PgPromiseAdapter } from '@/infra/database/';
 import {
   ConvertCurrencyController,
   CreateCurrencyController,
   CurrenciesRoutes,
   DeleteCurrencyController,
   ExpressAdapter,
-  GetCurrencyByCodeController,
+  GetCurrencyByCodeQueryController,
+  ListCurrenciesController,
 } from '@/infra/http-server/';
-import { CurrencyRateRepositoryApi } from '@/infra/repository/';
+import { CurrencyRateRepositoryDatabase } from '@/infra/repository/';
 
 const httpServer = new ExpressAdapter();
-// const httpClient = new AxiosAdapter();
-const currencyGateway = new CurrenciesApiGatewayStatic();
-const currencyRateRepository = new CurrencyRateRepositoryApi(currencyGateway);
+const connection = new PgPromiseAdapter();
+const listCurrencies = new ListCurrenciesQuery(connection);
+const currencyRateRepository = new CurrencyRateRepositoryDatabase(connection);
 const createCurrencyRate = new CreateCurrencyRate(currencyRateRepository);
 const convertCurrency = new ConvertCurrency(currencyRateRepository);
-const getCurrencyByCode = new GetCurrencyRateByCode(currencyRateRepository);
+const getCurrencyByCodeQuery = new GetCurrencyByCodeQuery(connection);
 const deleteCurrencyRateByCode = new DeleteCurrencyRateByCode(
   currencyRateRepository
 );
+const listCurrenciesController = new ListCurrenciesController(listCurrencies);
 const createCurrencyController = new CreateCurrencyController(
   createCurrencyRate
 );
 const convertCurrencyController = new ConvertCurrencyController(
   convertCurrency
 );
-const getCurrencyByCodeController = new GetCurrencyByCodeController(
-  getCurrencyByCode
+const getCurrencyByCodeController = new GetCurrencyByCodeQueryController(
+  getCurrencyByCodeQuery
 );
 const deleteCurrencyController = new DeleteCurrencyController(
   deleteCurrencyRateByCode
 );
 const currencyRoutes = new CurrenciesRoutes({
+  listCurrenciesController,
   createCurrencyController,
   convertCurrencyController,
   getCurrencyByCodeController,
