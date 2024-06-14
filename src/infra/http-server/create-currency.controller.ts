@@ -10,7 +10,7 @@ export class CreateCurrencyController implements Controller {
         name: body.name,
         code: body.code,
         symbol: body.symbol,
-        decimalPoints: body.decimalPoints,
+        decimalDigits: body.decimalDigits,
         baseAmount: body.baseAmount,
         equivalentCurrencyAmount: body.equivalentCurrencyAmount,
         equivalentCurrencyCode: body.equivalentCurrencyCode,

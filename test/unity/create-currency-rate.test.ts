@@ -12,7 +12,7 @@ describe('create-currency-rate', () => {
       name: 'Grand Theft Auto Dollar',
       symbol: 'GTA$',
       code: 'GTA',
-      decimalPoints: 2,
+      decimalDigits: 2,
       baseAmount: 1250000.0,
       equivalentCurrencyCode: 'BRL',
       equivalentCurrencyAmount: 83.5,
@@ -27,8 +27,8 @@ describe('create-currency-rate', () => {
     expect(getCurrencyOutput.name).toBe(createCurrencyInput.name);
     expect(getCurrencyOutput.symbol).toBe(createCurrencyInput.symbol);
     expect(getCurrencyOutput.code).toBe(createCurrencyInput.code);
-    expect(getCurrencyOutput.decimalPoints).toBe(
-      createCurrencyInput.decimalPoints
+    expect(getCurrencyOutput.decimalDigits).toBe(
+      createCurrencyInput.decimalDigits
     );
     expect(getCurrencyOutput.rate).toBe(77844.31137724551);
   });
@@ -40,7 +40,7 @@ describe('create-currency-rate', () => {
       name: 'Any Currency',
       code: 'ANY',
       symbol: 'A$',
-      decimalPoints: 2,
+      decimalDigits: 2,
       baseAmount: 1.0,
       equivalentCurrencyCode: 'USD',
       equivalentCurrencyAmount: 1.0,

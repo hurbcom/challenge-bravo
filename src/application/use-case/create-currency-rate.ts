@@ -22,7 +22,7 @@ export class CreateCurrencyRate {
       input.name,
       input.code,
       input.symbol,
-      input.decimalPoints,
+      input.decimalDigits,
       rate
     );
     await this.currencyRateRepository.add(currencyRate);
@@ -34,7 +34,7 @@ export type CreateCurrencyRateDto = {
   name: string;
   symbol: string;
   code: string;
-  decimalPoints: number;
+  decimalDigits: number;
   baseAmount: number;
   equivalentCurrencyCode: string;
   equivalentCurrencyAmount: number;

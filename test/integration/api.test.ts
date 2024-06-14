@@ -13,7 +13,7 @@ describe('Main API', () => {
     expect(output.givenAmount).toBe(10);
     expect(output.convertedAmount).toBeGreaterThan(0);
     expect(output.convertedAmountFormatted).toContain('R$');
-    expect(output.decimalPoints).toBe(2);
+    expect(output.decimalDigits).toBe(2);
     expect(output.symbol).toBe('R$');
   });
 
@@ -34,7 +34,7 @@ describe('Main API', () => {
     expect(output.givenAmount).toBe(amount);
     expect(output.convertedAmount).toBe(2.0);
     expect(output.convertedAmountFormatted).toContain('$');
-    expect(output.decimalPoints).toBe(2);
+    expect(output.decimalDigits).toBe(2);
     expect(output.symbol).toBe('$');
   });
 
@@ -43,7 +43,7 @@ describe('Main API', () => {
       name: 'Any Currency',
       code: 'ANY',
       symbol: '$',
-      decimalPoints: 2,
+      decimalDigits: 2,
       baseAmount: 2,
       equivalentCurrencyAmount: 1,
       equivalentCurrencyCode: 'USD',
@@ -56,7 +56,7 @@ describe('Main API', () => {
     expect(getOutput.name).toEqual(payload.name);
     expect(getOutput.code).toEqual(payload.code);
     expect(getOutput.symbol).toEqual(payload.symbol);
-    expect(getOutput.decimalPoints).toEqual(payload.decimalPoints);
+    expect(getOutput.decimalDigits).toEqual(payload.decimalDigits);
     expect(getOutput.rate).toEqual(2);
     const deleteResponse = await axios.delete(
       `http://localhost:3000/api/v1/currencies/${getOutput.code}`

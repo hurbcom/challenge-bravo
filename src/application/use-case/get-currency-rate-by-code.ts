@@ -12,7 +12,7 @@ export class GetCurrencyRateByCode {
       name: currencyRate.name,
       code: currencyRate.code,
       symbol: currencyRate.symbol,
-      decimalPoints: currencyRate.decimalPoints,
+      decimalDigits: currencyRate.decimalDigits,
       rate: currencyRate.rate,
     };
   }
@@ -23,7 +23,7 @@ export type GetCurrencyRateByCodeOutput = {
   name: string;
   code: string;
   symbol: string;
-  decimalPoints: number;
+  decimalDigits: number;
   rate: number;
 };
 

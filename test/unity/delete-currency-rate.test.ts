@@ -13,7 +13,7 @@ describe('delete-currency-rate', () => {
       name: 'Any Currency',
       symbol: 'AC$',
       code: 'AYC',
-      decimalPoints: 2,
+      decimalDigits: 2,
       baseAmount: 1.0,
       equivalentCurrencyCode: 'USD',
       equivalentCurrencyAmount: 1.0,

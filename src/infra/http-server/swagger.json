@@ -205,7 +205,7 @@
                     "givenAmount": { "type": "number" },
                     "convertedAmount": { "type": "number" },
                     "convertedAmountFormatted": { "type": "string" },
-                    "decimalPoints": { "type": "number" },
+                    "decimalDigits": { "type": "number" },
                     "symbol": { "type": "string" }
                   }
                 }
@@ -321,7 +321,7 @@
           "name": { "type": "string" },
           "code": { "type": "string" },
           "symbol": { "type": "string" },
-          "decimalPoints": { "type": "number", "format": "integer" },
+          "decimalDigits": { "type": "number", "format": "integer" },
           "rate": { "type": "number", "format": "double" }
         }
       }

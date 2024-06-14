@@ -18,9 +18,9 @@ export class ConvertCurrencyController implements Controller {
         to: input.to,
         givenAmount: input.amount,
         convertedAmount: output.value,
-        decimalPoints: output.decimalPoints,
+        decimalDigits: output.decimalDigits,
         symbol: output.symbol,
-        convertedAmountFormatted: `${output.symbol} ${output.value.toFixed(output.decimalPoints)}`,
+        convertedAmountFormatted: `${output.symbol} ${output.value.toFixed(output.decimalDigits)}`,
       },
     };
   }

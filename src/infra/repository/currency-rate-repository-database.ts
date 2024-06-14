@@ -42,7 +42,7 @@ export class CurrencyRateRepositoryDatabase implements CurrencyRateRepository {
         currencyRate.name,
         currencyRate.code,
         currencyRate.symbol,
-        currencyRate.decimalPoints,
+        currencyRate.decimalDigits,
       ]
     );
 

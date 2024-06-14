@@ -12,7 +12,7 @@ export class ConvertCurrency {
     return {
       value: convertedAmount,
       symbol: exchangeTo.symbol,
-      decimalPoints: exchangeTo.decimalPoints,
+      decimalDigits: exchangeTo.decimalDigits,
     };
   }
 }
@@ -26,7 +26,7 @@ export type ConvertCurrencyDto = {
 export type ConvertCurrencyResponse = {
   value: number;
   symbol: string;
-  decimalPoints: number;
+  decimalDigits: number;
 };
 
 export default ConvertCurrency;

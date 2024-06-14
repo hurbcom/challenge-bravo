@@ -2,7 +2,7 @@ import currency from 'currency.js';
 
 import {
   Code,
-  DecimalPoints,
+  DecimalDigits,
   Symbol as MySymbol,
   Name,
   Rate,
@@ -12,7 +12,7 @@ export class CurrencyRate {
   private _name: Name;
   private _code: Code;
   private _symbol: MySymbol;
-  private _decimalPoints: DecimalPoints;
+  private _decimalPoints: DecimalDigits;
   private _rate: Rate;
 
   constructor(
@@ -20,13 +20,13 @@ export class CurrencyRate {
     name: string,
     code: string,
     symbol: string,
-    decimalPoints: number,
+    decimalDigits: number,
     rate: number
   ) {
     this._name = new Name(name);
     this._code = new Code(code);
     this._symbol = new MySymbol(symbol);
-    this._decimalPoints = new DecimalPoints(decimalPoints);
+    this._decimalPoints = new DecimalDigits(decimalDigits);
     this._rate = new Rate(rate);
   }
 
@@ -34,11 +34,11 @@ export class CurrencyRate {
     name: string,
     code: string,
     symbol: string,
-    decimalPoints: number,
+    decimalDigits: number,
     rate: number
   ): CurrencyRate {
     const id = crypto.randomUUID();
-    return new CurrencyRate(id, name, code, symbol, decimalPoints, rate);
+    return new CurrencyRate(id, name, code, symbol, decimalDigits, rate);
   }
 
   get name(): string {
@@ -53,7 +53,7 @@ export class CurrencyRate {
     return this._symbol.value;
   }
 
-  get decimalPoints(): number {
+  get decimalDigits(): number {
     return this._decimalPoints.value;
   }
 
@@ -67,7 +67,7 @@ export class CurrencyRate {
     }
     const convertedAmount = (amount * currencyRate.rate) / this.rate;
     const amountCurrency = currency(convertedAmount, {
-      precision: currencyRate.decimalPoints,
+      precision: currencyRate.decimalDigits,
     });
     return amountCurrency.value;
   }

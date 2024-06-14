@@ -1,4 +1,4 @@
-export class DecimalPoints {
+export class DecimalDigits {
   private _value: number;
 
   constructor(value: number) {
@@ -13,4 +13,4 @@ export class DecimalPoints {
   }
 }
 
-export default DecimalPoints;
+export default DecimalDigits;

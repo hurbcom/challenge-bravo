@@ -66,7 +66,7 @@ export class ListCurrenciesQuery {
         name: row.name,
         code: row.code,
         symbol: row.symbol,
-        decimalPoints: row.decimal_digits,
+        decimalDigits: row.decimal_digits,
         rate: Number(row.rate),
       })),
     };
@@ -93,7 +93,7 @@ type Output = {
     name: string;
     code: string;
     symbol: string;
-    decimalPoints: number;
+    decimalDigits: number;
     rate: number;
   }>;
 };
