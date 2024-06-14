@@ -1,9 +1,11 @@
+import { InvalidParamError } from '../errors';
+
 export class Name {
   private _value: string;
 
   constructor(value: string) {
     if (value.length < 3 || value.length > 100) {
-      throw new Error('Invalid name');
+      throw new InvalidParamError('Invalid name');
     }
     this._value = value;
   }

@@ -1,4 +1,5 @@
 import { CreateCurrencyRate } from '@/application/use-case';
+import { InvalidParamError } from '@/domain/errors';
 import { Controller, Request, Response } from '@/infra/http-server/controller';
 
 export class CreateCurrencyController implements Controller {
@@ -21,7 +22,12 @@ export class CreateCurrencyController implements Controller {
         data: output,
       };
     } catch (error: any) {
-      console.error(error.message);
+      if (error instanceof InvalidParamError) {
+        return {
+          statusCode: 400,
+          data: { message: error.message },
+        };
+      }
       throw error;
     }
   }

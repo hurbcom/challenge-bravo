@@ -1,9 +1,11 @@
+import { InvalidParamError } from '../errors';
+
 export class Rate {
   private _value: number;
 
   constructor(value: number) {
     if (value <= 0) {
-      throw new Error('Invalid rate');
+      throw new InvalidParamError('Invalid rate');
     }
     this._value = value;
   }

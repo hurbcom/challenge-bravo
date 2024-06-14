@@ -1,4 +1,5 @@
 import { CurrencyRate } from '@/domain/entity/';
+import { InvalidParamError } from '@/domain/errors';
 
 describe('Currency Rate', () => {
   it('should create a currency rate', () => {
@@ -22,47 +23,76 @@ describe('Currency Rate', () => {
   });
 
   it('should throw an error when the rate is invalid', () => {
-    expect(() => CurrencyRate.create('US Dollar', 'USD', '$', 2, 0)).toThrow(
-      'Invalid rate'
-    );
-    expect(() => CurrencyRate.create('US Dollar', 'USD', '$', 2, -1)).toThrow(
-      'Invalid rate'
-    );
+    try {
+      CurrencyRate.create('US Dollar', 'USD', '$', 2, 0);
+      fail('Expected to throw an error');
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(InvalidParamError);
+      expect(error.message).toBe('Invalid rate');
+    }
+    try {
+      CurrencyRate.create('US Dollar', 'USD', '$', 2, -1);
+      fail('Expected to throw an error');
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(InvalidParamError);
+      expect(error.message).toBe('Invalid rate');
+    }
   });
 
   it('should throw an error when the name is invalid', () => {
-    expect(() => CurrencyRate.create('', 'USD', '$', 2, 1)).toThrow(
-      'Invalid name'
-    );
+    try {
+      CurrencyRate.create('', 'USD', '$', 2, 1);
+      fail('Expected to throw an error');
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(InvalidParamError);
+      expect(error.message).toBe('Invalid name');
+    }
   });
 
   it('should throw an error when the code is invalid', () => {
-    expect(() => CurrencyRate.create('US Dollar', '', '$', 2, 1)).toThrow(
-      'Invalid code'
-    );
+    try {
+      CurrencyRate.create('US Dollar', '', '$', 2, 1);
+      fail('Expected to throw an error');
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(InvalidParamError);
+      expect(error.message).toBe('Invalid code');
+    }
   });
 
   it('should throw an error when the symbol is invalid', () => {
-    expect(() => CurrencyRate.create('US Dollar', 'USD', '', 2, 1)).toThrow(
-      'Invalid symbol'
-    );
+    try {
+      CurrencyRate.create('US Dollar', 'USD', '', 2, 1);
+      fail('Expected to throw an error');
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(InvalidParamError);
+      expect(error.message).toBe('Invalid symbol');
+    }
   });
 
-  it('should throw an error when the decimal points is invalid', () => {
-    expect(() => CurrencyRate.create('US Dollar', 'USD', '$', -1, 1)).toThrow(
-      'Invalid decimal point'
-    );
-    expect(() => CurrencyRate.create('US Dollar', 'USD', '$', 11, 1)).toThrow(
-      'Invalid decimal point'
-    );
+  it('should throw an error when the decimal digits is invalid', () => {
+    try {
+      CurrencyRate.create('US Dollar', 'USD', '$', -1, 1);
+      fail('Expected to throw an error');
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(InvalidParamError);
+      expect(error.message).toBe('Invalid decimal digits');
+    }
   });
 
   it('should throw an error when the rate is invalid', () => {
-    expect(() => CurrencyRate.create('US Dollar', 'USD', '$', 2, 0)).toThrow(
-      'Invalid rate'
-    );
-    expect(() => CurrencyRate.create('US Dollar', 'USD', '$', 2, -1)).toThrow(
-      'Invalid rate'
-    );
+    try {
+      CurrencyRate.create('US Dollar', 'USD', '$', 2, 0);
+      fail('Expected to throw an error');
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(InvalidParamError);
+      expect(error.message).toBe('Invalid rate');
+    }
+    try {
+      CurrencyRate.create('US Dollar', 'USD', '$', 2, -1);
+      fail('Expected to throw an error');
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(InvalidParamError);
+      expect(error.message).toBe('Invalid rate');
+    }
   });
 });

@@ -65,6 +65,24 @@ describe('Main API', () => {
     expect(deleteOutput).toEqual({ message: 'Currency deleted' });
   });
 
+  it('should throw an error when trying to create a currency with invalid name', async () => {
+    const payload = {
+      name: '',
+      code: 'ANY',
+      symbol: '$',
+      decimalDigits: 2,
+      baseAmount: 2,
+      equivalentCurrencyAmount: 1,
+      equivalentCurrencyCode: 'USD',
+    };
+    try {
+      await axios.post('http://localhost:3000/api/v1/currencies', payload);
+    } catch (error: any) {
+      expect(error.response.data.message).toBe('Invalid name');
+      expect(error.response.status).toBe(400);
+    }
+  });
+
   it('should throw an error when trying to convert with invalid currency', async () => {
     const params = { from: 'INVALID', to: 'BRL', amount: 10 };
     try {
