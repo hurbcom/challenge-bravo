@@ -155,7 +155,20 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": { "type": "string" }
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Moeda equivalente não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
                   }
                 }
               }
@@ -219,7 +232,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": { "type": "string" }
+                    "message": { "type": "string" }
                   }
                 }
               }
@@ -260,7 +273,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": { "type": "string" }
+                    "message": { "type": "string" }
                   }
                 }
               }
@@ -302,7 +315,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": { "type": "string" }
+                    "message": { "type": "string" }
                   }
                 }
               }
