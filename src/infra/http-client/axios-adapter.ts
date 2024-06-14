@@ -1,4 +1,4 @@
-import { HttpClient, Options, Settings } from '@/infra/http-client';
+import HttpClient, { Options, Settings } from '@/infra/http-client/http-client';
 import axios from 'axios';
 
 export class AxiosAdapter extends HttpClient {

@@ -14,26 +14,33 @@ export class CurrencyRateRepositoryApi implements CurrencyRateRepository {
     if (this.currencyMap.has(code)) {
       return this.currencyMap.get(code)!;
     }
-    const currencyResponse = await this.currencyGateway.getCurrencies({
-      currencies: [code],
-    });
-    const currencyData = currencyResponse.data[code];
-    if (!currencyResponse.data[code] || !currencyResponse.data[code]) {
-      throw new CurrencyNotFoundError(code);
+    try {
+      const currencyResponse = await this.currencyGateway.getCurrencies({
+        currencies: [code],
+      });
+      const currencyData = currencyResponse.data[code];
+      if (!currencyResponse.data[code] || !currencyResponse.data[code]) {
+        throw new CurrencyNotFoundError(code);
+      }
+      const rateResponse = await this.currencyGateway.getRates({
+        currencies: [code],
+      });
+      const rateData = rateResponse.data[code];
+      const currency = new CurrencyRate(
+        currencyData.code,
+        currencyData.name,
+        currencyData.code,
+        currencyData.symbol,
+        currencyData.decimal_digits,
+        rateData.value
+      );
+      return currency;
+    } catch (error: any) {
+      if (error?.message === 'Request failed with status code 422') {
+        throw new CurrencyNotFoundError(code);
+      }
+      throw error;
     }
-    const rateResponse = await this.currencyGateway.getRates({
-      currencies: [code],
-    });
-    const rateData = rateResponse.data[code];
-    const currency = new CurrencyRate(
-      currencyData.code,
-      currencyData.name,
-      currencyData.code,
-      currencyData.symbol,
-      currencyData.decimal_digits,
-      rateData.value
-    );
-    return currency;
   }
 
   async add(currencyRate: CurrencyRate): Promise<void> {
