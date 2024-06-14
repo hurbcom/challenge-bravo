@@ -4,7 +4,7 @@ describe('Main API', () => {
   it('should convert USD to BRL', async () => {
     const params = { from: 'USD', to: 'BRL', amount: 10 };
     const response = await axios.get(
-      'http://localhost:3000/currencies/convert',
+      'http://localhost:3000/api/v1/currencies/convert',
       { params }
     );
     const output = response.data;
@@ -18,12 +18,14 @@ describe('Main API', () => {
   });
 
   it('should convert BRL to USD', async () => {
-    const brlResponse = await axios.get('http://localhost:3000/currencies/BRL');
+    const brlResponse = await axios.get(
+      'http://localhost:3000/api/v1/currencies/BRL'
+    );
     const brlOutput = brlResponse.data;
     const amount = brlOutput.rate * 2;
     const params = { from: 'brl', to: 'usd', amount: amount };
     const response = await axios.get(
-      'http://localhost:3000/currencies/convert',
+      'http://localhost:3000/api/v1/currencies/convert',
       { params }
     );
     const output = response.data;
@@ -46,9 +48,9 @@ describe('Main API', () => {
       equivalentCurrencyAmount: 1,
       equivalentCurrencyCode: 'USD',
     };
-    await axios.post('http://localhost:3000/currencies', payload);
+    await axios.post('http://localhost:3000/api/v1/currencies', payload);
     const getResponse = await axios.get(
-      `http://localhost:3000/currencies/${payload.code}`
+      `http://localhost:3000/api/v1/currencies/${payload.code}`
     );
     const getOutput = getResponse.data;
     expect(getOutput.name).toEqual(payload.name);
@@ -57,7 +59,7 @@ describe('Main API', () => {
     expect(getOutput.decimalPoints).toEqual(payload.decimalPoints);
     expect(getOutput.rate).toEqual(2);
     const deleteResponse = await axios.delete(
-      `http://localhost:3000/currencies/${getOutput.code}`
+      `http://localhost:3000/api/v1/currencies/${getOutput.code}`
     );
     const deleteOutput = deleteResponse.data;
     expect(deleteOutput).toEqual({ message: 'Currency deleted' });
@@ -66,7 +68,9 @@ describe('Main API', () => {
   it('should throw an error when trying to convert with invalid currency', async () => {
     const params = { from: 'INVALID', to: 'BRL', amount: 10 };
     try {
-      await axios.get('http://localhost:3000/currencies/convert', { params });
+      await axios.get('http://localhost:3000/api/v1/currencies/convert', {
+        params,
+      });
     } catch (error: any) {
       expect(error.response.data).toEqual({
         message: 'Currency rate not found: INVALID',
@@ -77,7 +81,9 @@ describe('Main API', () => {
   it('should throw an error when trying to convert with invalid amount', async () => {
     const params = { from: 'USD', to: 'BRL', amount: -10 };
     try {
-      await axios.get('http://localhost:3000/currencies/convert', { params });
+      await axios.get('http://localhost:3000/api/v1/currencies/convert', {
+        params,
+      });
     } catch (error: any) {
       expect(error.response.data).toEqual({ message: 'Invalid amount' });
     }

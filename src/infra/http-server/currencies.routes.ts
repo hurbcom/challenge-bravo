@@ -18,22 +18,30 @@ export class CurrenciesRoutes {
 
   registerRoutes(httpServer: HttpServer) {
     if (this.listCurrenciesController) {
-      httpServer.register('get', '/currencies', this.listCurrenciesController);
+      httpServer.register(
+        'get',
+        '/api/v1/currencies',
+        this.listCurrenciesController
+      );
     }
-    httpServer.register('post', '/currencies', this.createCurrencyController);
+    httpServer.register(
+      'post',
+      '/api/v1/currencies',
+      this.createCurrencyController
+    );
     httpServer.register(
       'get',
-      '/currencies/convert',
+      '/api/v1/currencies/convert',
       this.convertCurrencyController
     );
     httpServer.register(
       'get',
-      '/currencies/{code}',
+      '/api/v1/currencies/{code}',
       this.getCurrencyByCodeController
     );
     httpServer.register(
       'delete',
-      '/currencies/{code}',
+      '/api/v1/currencies/{code}',
       this.deleteCurrencyController
     );
   }
