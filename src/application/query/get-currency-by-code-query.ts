@@ -1,4 +1,4 @@
-import { CurrencyRateNotFoundError } from '@/domain/errors';
+import { CurrencyNotFoundError } from '@/domain/errors';
 import { DatabaseConnection } from '@/infra/database';
 
 export class GetCurrencyByCodeQuery {
@@ -17,7 +17,7 @@ export class GetCurrencyByCodeQuery {
       [code]
     );
     if (!row) {
-      throw new CurrencyRateNotFoundError(code);
+      throw new CurrencyNotFoundError(code);
     }
     return {
       id: row.currency_id,

@@ -1,6 +1,6 @@
 import { CurrencyRateRepository } from '@/application/repository';
 import { CurrencyRate } from '@/domain/entity/';
-import { CurrencyRateNotFoundError } from '@/domain/errors';
+import { CurrencyNotFoundError } from '@/domain/errors';
 import { DatabaseConnection } from '@/infra/database';
 
 export class CurrencyRateRepositoryDatabase implements CurrencyRateRepository {
@@ -19,7 +19,7 @@ export class CurrencyRateRepositoryDatabase implements CurrencyRateRepository {
       [code]
     );
     if (!row) {
-      throw new CurrencyRateNotFoundError(code);
+      throw new CurrencyNotFoundError(code);
     }
     const currencyRate = new CurrencyRate(
       row.id,

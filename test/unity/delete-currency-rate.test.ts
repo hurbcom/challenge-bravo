@@ -28,7 +28,7 @@ describe('delete-currency-rate', () => {
     );
     await expect(
       getCurrencyRateByCode.execute(createCurrencyInput.code)
-    ).rejects.toThrow('Currency rate not found');
+    ).rejects.toThrow('Currency not found');
   });
 
   it('should throw an error when trying to delete a currency rate that does not exist', async () => {
@@ -37,7 +37,7 @@ describe('delete-currency-rate', () => {
       currencyRateRepository
     );
     await expect(deleteCurrencyRate.execute('ABC')).rejects.toThrow(
-      'Currency rate not found'
+      'Currency not found'
     );
   });
 

@@ -57,7 +57,7 @@ describe('Currency Converter', () => {
       amount: 1,
     };
     await expect(convertCurrency.execute(input)).rejects.toThrow(
-      'Currency rate not found'
+      'Currency not found'
     );
   });
 

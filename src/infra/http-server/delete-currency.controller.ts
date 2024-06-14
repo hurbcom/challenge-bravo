@@ -1,4 +1,5 @@
 import { DeleteCurrencyRateByCode } from '@/application/use-case';
+import { CurrencyNotFoundError } from '@/domain/errors';
 import { Controller, Request, Response } from '@/infra/http-server/controller';
 
 export class DeleteCurrencyController implements Controller {
@@ -17,7 +18,12 @@ export class DeleteCurrencyController implements Controller {
         },
       };
     } catch (error: any) {
-      console.error(error.message);
+      if (error instanceof CurrencyNotFoundError) {
+        return {
+          statusCode: 404,
+          data: { message: error.message },
+        };
+      }
       throw error;
     }
   }

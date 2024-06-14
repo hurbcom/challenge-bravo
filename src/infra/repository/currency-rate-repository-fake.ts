@@ -1,6 +1,6 @@
 import { CurrencyRateRepository } from '@/application/repository/';
 import { CurrencyRate } from '@/domain/entity/';
-import { CurrencyRateNotFoundError } from '@/domain/errors/';
+import { CurrencyNotFoundError } from '@/domain/errors/';
 
 export class CurrencyRateRepositoryFake implements CurrencyRateRepository {
   currencyRates: CurrencyRate[];
@@ -18,7 +18,7 @@ export class CurrencyRateRepositoryFake implements CurrencyRateRepository {
       (currencyRate) => currencyRate.code === code
     );
     if (!currencyRate) {
-      throw new CurrencyRateNotFoundError(code);
+      throw new CurrencyNotFoundError(code);
     }
     return currencyRate;
   }

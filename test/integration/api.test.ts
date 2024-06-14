@@ -72,9 +72,7 @@ describe('Main API', () => {
         params,
       });
     } catch (error: any) {
-      expect(error.response.data.message).toBe(
-        'Currency rate not found: INVALID'
-      );
+      expect(error.response.data.message).toBe('Currency not found: INVALID');
       expect(error.response.status).toBe(404);
     }
   });
@@ -88,6 +86,15 @@ describe('Main API', () => {
     } catch (error: any) {
       expect(error.response.data.message).toEqual('Invalid amount');
       expect(error.response.status).toBe(400);
+    }
+  });
+
+  it('should throw an error when trying to delete an invalid currency', async () => {
+    try {
+      await axios.delete('http://localhost:3000/api/v1/currencies/INVALID');
+    } catch (error: any) {
+      expect(error.response.data.message).toBe('Currency not found: INVALID');
+      expect(error.response.status).toBe(404);
     }
   });
 });

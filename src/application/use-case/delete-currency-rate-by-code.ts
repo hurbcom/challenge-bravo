@@ -1,4 +1,5 @@
 import { CurrencyRateRepository } from '@/application/repository';
+import { CurrencyNotFoundError } from '@/domain/errors';
 
 export class DeleteCurrencyRateByCode {
   constructor(
@@ -11,7 +12,7 @@ export class DeleteCurrencyRateByCode {
     }
     const currencyRate = await this.currencyRateRepository.findByCode(code);
     if (!currencyRate) {
-      throw new Error('Currency rate not found');
+      throw new CurrencyNotFoundError(code);
     }
     await this.currencyRateRepository.delete(currencyRate.code);
   }

@@ -1,6 +1,6 @@
 import { CurrencyRateRepository } from '@/application/repository/';
 import { CurrencyRate } from '@/domain/entity/';
-import { CurrencyRateNotFoundError } from '@/domain/errors/';
+import { CurrencyNotFoundError } from '@/domain/errors/';
 import { CurrencyApiGateway } from '@/infra/gateway';
 
 export class CurrencyRateRepositoryApi implements CurrencyRateRepository {
@@ -19,7 +19,7 @@ export class CurrencyRateRepositoryApi implements CurrencyRateRepository {
     });
     const currencyData = currencyResponse.data[code];
     if (!currencyResponse.data[code] || !currencyResponse.data[code]) {
-      throw new CurrencyRateNotFoundError(code);
+      throw new CurrencyNotFoundError(code);
     }
     const rateResponse = await this.currencyGateway.getRates({
       currencies: [code],
