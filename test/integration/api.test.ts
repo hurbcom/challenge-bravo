@@ -1,52 +1,15 @@
 import axios from 'axios';
 
 describe('Main API', () => {
-  it('should convert USD to BRL', async () => {
-    const params = { from: 'USD', to: 'BRL', amount: 10 };
-    const response = await axios.get(
-      'http://localhost:3000/api/v1/currencies/convert',
-      { params }
-    );
-    const output = response.data;
-    expect(output.from).toBe('USD');
-    expect(output.to).toBe('BRL');
-    expect(output.givenAmount).toBe(10);
-    expect(output.convertedAmount).toBeGreaterThan(0);
-    expect(output.convertedAmountFormatted).toContain('R$');
-    expect(output.decimalDigits).toBe(2);
-    expect(output.symbol).toBe('R$');
-  });
-
-  it('should convert BRL to USD', async () => {
-    const brlResponse = await axios.get(
-      'http://localhost:3000/api/v1/currencies/BRL'
-    );
-    const brlOutput = brlResponse.data;
-    const amount = brlOutput.rate * 2;
-    const params = { from: 'brl', to: 'usd', amount: amount };
-    const response = await axios.get(
-      'http://localhost:3000/api/v1/currencies/convert',
-      { params }
-    );
-    const output = response.data;
-    expect(output.from).toBe('BRL');
-    expect(output.to).toBe('USD');
-    expect(output.givenAmount).toBe(amount);
-    expect(output.convertedAmount).toBe(2.0);
-    expect(output.convertedAmountFormatted).toContain('$');
-    expect(output.decimalDigits).toBe(2);
-    expect(output.symbol).toBe('$');
-  });
-
-  it('should create, get and delete a currency rate', async () => {
+  it('should create, get, convert and delete a currency rate', async () => {
     const payload = {
-      name: 'Any Currency',
-      code: 'ANY',
-      symbol: '$',
+      name: 'Grand Theft Auto Dollar',
+      symbol: 'GTA$',
+      code: 'gta',
       decimalDigits: 2,
-      baseAmount: 2,
-      equivalentCurrencyAmount: 1,
-      equivalentCurrencyCode: 'USD',
+      baseAmount: 1250000.0,
+      equivalentCurrencyCode: 'brl',
+      equivalentCurrencyAmount: 83.5,
     };
     await axios.post('http://localhost:3000/api/v1/currencies', payload);
     const getResponse = await axios.get(
@@ -54,15 +17,27 @@ describe('Main API', () => {
     );
     const getOutput = getResponse.data;
     expect(getOutput.name).toEqual(payload.name);
-    expect(getOutput.code).toEqual(payload.code);
+    expect(getOutput.code).toEqual(payload.code.toUpperCase());
     expect(getOutput.symbol).toEqual(payload.symbol);
     expect(getOutput.decimalDigits).toEqual(payload.decimalDigits);
-    expect(getOutput.rate).toEqual(2);
+    expect(getOutput.rate).toBeDefined();
+    const convertParams = { from: 'brl', to: 'gta', amount: 83.5 };
+    const convertResponse = await axios.get(
+      'http://localhost:3000/api/v1/currencies/convert',
+      { params: convertParams }
+    );
+    const convertOutput = convertResponse.data;
+    expect(convertOutput.from).toBe('BRL');
+    expect(convertOutput.to).toBe('GTA');
+    expect(convertOutput.givenAmount).toBe(83.5);
+    expect(convertOutput.convertedAmount).toBe(1250000);
+    expect(convertOutput.convertedAmountFormatted).toContain('GTA$ 1250000.00');
     const deleteResponse = await axios.delete(
       `http://localhost:3000/api/v1/currencies/${getOutput.code}`
     );
     const deleteOutput = deleteResponse.data;
     expect(deleteOutput).toEqual({ message: 'Currency deleted' });
+    expect(deleteResponse.status).toBe(200);
   });
 
   it('should throw an error when trying to create a currency with invalid name', async () => {
