@@ -1,0 +1,7 @@
+node_modules
+dist
+coverage
+README.md
+README.pt.md
+tsconfig.json
+yarn.lock

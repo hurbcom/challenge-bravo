@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: development
+      HTTP_SERVER_PORT: 3000
+      DATABASE_URL: postgres://postgres:123456@db:5432
+      CURRENCYAPI_API_KEY: cur_live_cuO1rc3J9p5XJE9QYRgyadj3ERuP57GKFUdt9yOh
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: yarn dev
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
