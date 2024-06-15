@@ -4,6 +4,7 @@ import {
   DeleteCurrencyRateByCode,
   GetCurrencyRateByCode,
 } from '@/application/use-case/';
+import env from '@/env';
 import { CurrenciesApiGatewayOnline } from '@/infra/gateway';
 import { AxiosAdapter } from '@/infra/http-client';
 import {
@@ -45,4 +46,4 @@ const currencyRoutes = new CurrenciesRoutes({
   deleteCurrencyController,
 });
 currencyRoutes.registerRoutes(httpServer);
-httpServer.listen(3000);
+httpServer.listen(env.HTTP_SERVER_PORT);

@@ -5,6 +5,7 @@ import {
   CreateCurrencyRate,
   DeleteCurrencyRateByCode,
 } from '@/application/use-case/';
+import env from '@/env';
 import { PgPromiseAdapter } from '@/infra/database/';
 import {
   ConvertCurrencyController,
@@ -48,4 +49,4 @@ const currencyRoutes = new CurrenciesRoutes({
   deleteCurrencyController,
 });
 currencyRoutes.registerRoutes(httpServer);
-httpServer.listen(3000);
+httpServer.listen(env.HTTP_SERVER_PORT);

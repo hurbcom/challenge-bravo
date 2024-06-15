@@ -1,3 +1,4 @@
+import env from '@/env';
 import {
   CurrenciesResponse,
   CurrencyApiGateway,
@@ -11,7 +12,7 @@ export class CurrenciesApiGatewayOnline implements CurrencyApiGateway {
     httpClient.setSettings({
       baseURL: 'https://api.currencyapi.com/v3/',
       headers: {
-        apiKey: 'cur_live_cuO1rc3J9p5XJE9QYRgyadj3ERuP57GKFUdt9yOh',
+        apiKey: env.CURRENCYAPI_API_KEY,
       },
     });
   }
