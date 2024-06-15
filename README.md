@@ -1,82 +1,239 @@
 # <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
 
-[[English](README.md) | [Portuguese](README.pt.md)]
+## Descrição
 
-Build an API, which responds to JSON, for currency conversion. It must have a backing currency (USD) and make conversions between different currencies with **real and live values**.
+Esta é uma API para conversão monetária. Ela suporta conversões entre diversas moedas, incluindo moedas fiduciárias, criptomoedas e moedas fictícias. A moeda de lastro utilizada é o USD, e as cotações foram obtidas de APIs públicas para garantir que sejam reais e atuais.
 
-The API must convert between the following currencies:
+A solução foi desenvolvida utilizando, TDD, DDD, Ports & Adapters, Clean Architecture, design-patterns e outras estratégias arquiteturais. Sei que essa arquitetura pode ser considerada demasiadamente robusta para um projeto tão pequeno, mas o intuito é mostrar o que tenho em minha "caixa de ferramentas" e também dar a vocês material de análise de minha forma de codificar. No dia a dia gosto de dimensionar a solução de software para alcançar o melhor proveito no negócio.
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+## Tecnologias Utilizadas
 
-Other coins could be added as usage.
+- Node.js
+- TypeScript
+- Express
+- Hapi
+- Swagger UI
+- PostgreSQL
+- Docker
+- Jest
 
-Ex: USD to BRL, USD to BTC, ETH to BRL, etc...
+## Endpoints
 
-The request must receive as parameters: The source currency, the amount to be converted and the final currency.
+Indico fortemente a utilização do swagger para consultar a documentação da API e também para executar as requests. Essa documentação pode ser acessada no endereço `http://locahost:3000/api-docs`, mas caso queira ou precise testar utilizando uma ferramenta de requisições http como Postman, o endereço base para as requisições é o `http://localhost:3000/api/v1`.
 
-Ex: `?from=BTC&to=EUR&amount=123.45`
+### Lista Paginada de Moedas
 
-Also build an endpoint to add and remove API supported currencies using HTTP verbs.
+Este endpoint não foi solicitado no desafio mas decidi fazer para ter um bom exemplo da utilização de CQRS. Eu fiz a _query_ do _[ GET ] /currencies/{code}_ também mas ela sozinha não realça as vantagens da separação de comandos e consultas. É importante também mencionar que este endpoint apenas estará disponível se o projeto for inicializado com `yarn start` ou `yarn dev`. O único objetivo desse comportamento é mostrar que as rotas também são configuráveis sem afetar a aplicação.
 
-The API must support conversion between FIAT, crypto and fictitious. Example: BRL->HURB, HURB->ETH
+`[ GET ] /currencies`
 
-"Currency is the means by which monetary transactions are effected." (Wikipedia, 2021).
+```json
+// query
+{
+  "currencies": [],     // Código das moedas a serem filtradas
+  "page": 1,            // Página corrente
+  "perPage": 10,        // Quantidade de registros por página
+  "sortBy": "name",     // Campo pelo qual a consulta será ordenada
+  "sortOrder": "asc",   // Direção da ordenação
+}
+```
 
-Therefore, it is possible to imagine that new coins come into existence or cease to exist, it is also possible to imagine fictitious coins such as Dungeons & Dragons coins being used in these transactions, such as how much is a Gold Piece (Dungeons & Dragons) in Real or how much is the GTA$1 in Real.
+```json
+// response schema
+{
+  "meta": {
+    "page": 0,
+    "perPage": 0,
+    "pageCount": 0,
+    "totalCount": 0
+  },
+  "data": [
+    {
+      "id": "string",
+      "name": "string",
+      "code": "string",
+      "symbol": "string",
+      "decimalDigits": 0,
+      "rate": 0.1
+    }
+  ]
+}
+```
 
-Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
+### Adiciona uma nova moeda
 
-Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+O desafio não define ou esclarece quem utilizará essa API, então pensando em praticidade, ao invés de pedir o _rate_ (valor proporcional de uma moeda em relação à moeda de lastro), que resultaria em um cadastro simples, eu preferi solicitar o valor da nova moeda bem como de uma moeda equivalente. Podemos inclusive seguir o exemplo citado no desafio do cadastro de uma moeda fictícia do GTA onde \$ 1.250.000,00 no jogo custam R$ 83,50 no mundo real. Com isso calculamos o valor proporcional da moeda em dólar.
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+`[ POST ] /currencies`
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+```json
+// body
+{
+  "name": "Grand Theft Auto Dollar",
+  "code": "GTA",
+  "symbol": "GTA$",
+  "baseAmount": 1250000.00,
+  "equivalentCurrencyAmount": 83.50,
+  "equivalentCurrencyCode": "BRL"
+}
+```
 
-## Requirements
+```json
+// response schema
+{
+  "currencyId": "string"
+}
+```
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+### Converte uma moeda em outra
 
-## Evaluation criteria
+A descrição do desafio propõe a API de conversão de moeda mas não diz como deve ser seu retorno. Por isso tomei a liberdade de devolver um objeto com algumas informações que julguei serem uteis em uma API real de conversão.
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+`[ POST ] /currencies/convert`
 
-## Doubts
+```json
+// query
+{
+  "from": "string",
+  "to": "string",
+  "amount": 0.1,
+}
+```
 
-Any questions you may have, check the [_issues_](https://github.com/HurbCom/challenge-bravo/issues) to see if someone hasn't already and if you can't find your answer, open one yourself. new issue!
+```json
+// response schema
+{
+  "from": "string",
+  "to": "string",
+  "givenAmount": 0.1,
+  "convertedAmount": 0.1,
+  "convertedAmountFormatted": "string",
+  "decimalDigits": 0,
+  "symbol": "string"
+}
+```
 
-Godspeed! ;)
+### Recupera uma moeda específica
 
-<p align="center">
-  <img src="ca.jpg" alt="Challange accepted" />
-</p>
+Esse endpoint também não foi solicitado no desafio mas ele é super importante nos testes automatizado garantido que as moedas criadas na aplicação foram criadas corretamente.
+
+`[ GET ] /currencies/{code}`
+
+```json
+// param
+{
+  "code": "string",
+}
+```
+
+```json
+// response schema
+{
+  "id": "string",
+  "name": "string",
+  "code": "string",
+  "symbol": "string",
+  "decimalDigits": 0,
+  "rate": 0.1
+}
+```
+
+### Exclui uma moeda do repositório
+
+`[ DELETE ] /currencies/{code}`
+
+Todas as configurações dessa aplicação (veja mais [aqui](#ancora1)) oferecem a possibilidade de criar e remover moedas, mas no caso das configurações que utilizam o gateway externo, apenas as novas moedas podem ser removidas.
+
+```json
+// param
+{
+  "code": "string",
+}
+```
+
+```json
+// response schema
+{
+  "message": "string",
+}
+```
+
+
+## Como Executar
+
+### Pré-requisitos
+
+- Docker & Docker Compose (caso queira rodar com o banco de dados postgres)
+- Node
+- Yarn (opcional)
+
+### Preparação do repositório
+
+1. Clone o repositório:
+
+```shell
+$ git clone https://github.com/hurbcom/challenge-bravo.git
+```
+
+2. Navegue até o diretório do projeto:
+
+```shell
+$ cd challenge-bravo
+```
+
+3. Acesse a branch que criei com a solução do desafio:
+
+```shell
+$ git checkout 'leandro/challenge-implementation'
+```
+
+### Passos para rodar a aplicação no Docker
+
+1. Construa e inicie os containers Docker:
+
+```shell
+$ docker-compose build
+...
+$ docker-compose up
+```
+
+* _Para parar a aplicação execute ctrl+D no terminal_
+* _Para parar o container execute `docker-compose down`_
+
+### Passos para rodar a aplicação localmente
+
+1. Instale as dependências
+
+```sh
+$ yarn install
+```
+
+2. Inicie o banco de dados via docker-compose
+
+```sh
+$ docker-compose up db
+```
+
+1. Inicie a aplicação
+
+```sh
+$ yarn start
+```
+
+* _Para parar a aplicação execute ctrl+D no terminal_
+
+<a id="ancora1"></a>
+
+> Há ainda outros scripts de inicialização que podem ser utilizados. Cada um sobe o servidor com uma configuração diferente:
+> - `start` ou `dev`: Inicia o servidor express com swagger UI e repositório postgres que roda no docker;
+> - `dev:express+fake`: Iniciar o servidor express com swagger UI e Repositório em memória;
+> - `dev:hapi+fake`: Inicia o servidor hapi com repositório em memória;
+> - `dev:express+gw-on`: Inicia o servidor express com swagger UI e o repositório utiliza o gateway currencyapi.com para ter a contação do dia de forma online.
+> - `dev:express+gw-off`: Inicia o servidor express com swagger UI e simula a requisição para o gatewayapi.com (para fins de testes sem fazer requisições reais pois são liberadas apenas 300 requisições/mês)
+
+### Executar testes
+
+```sh
+$ yarn test
+```
+- Também pode ser utilizado o `yarn test:watch` que roda os testes com a flag `--watch`.
