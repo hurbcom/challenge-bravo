@@ -1,4 +1,4 @@
-# <img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" /> Bravo Challenge
+# `<img src="https://avatars1.githubusercontent.com/u/7063040?v=4&s=200.jpg" alt="Hurb" width="24" />` Bravo Challenge
 
 [[English](README.md) | [Portuguese](README.pt.md)]
 
@@ -6,11 +6,11 @@ Build an API, which responds to JSON, for currency conversion. It must have a ba
 
 The API must convert between the following currencies:
 
--   USD
--   BRL
--   EUR
--   BTC
--   ETH
+- USD
+- BRL
+- EUR
+- BTC
+- ETH
 
 Other coins could be added as usage.
 
@@ -31,45 +31,120 @@ Therefore, it is possible to imagine that new coins come into existence or cease
 Let's consider the PSN quote where GTA$1,250,000.00 cost R$83.50 we clearly have a relationship between the currencies, so it is possible to create a quote. (Playstation Store, 2021).
 
 Ref:
-Wikipedia [Institutional Website]. Available at: <https://pt.wikipedia.org/wiki/Currency>. Accessed on: 28 April 2021.
-Playstation Store [Virtual Store]. Available at: <https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D>. Accessed on: 28 April 2021.
+Wikipedia [Institutional Website]. Available at: [https://pt.wikipedia.org/wiki/Currency](https://pt.wikipedia.org/wiki/Currency). Accessed on: 28 April 2021.
+Playstation Store [Virtual Store]. Available at: [https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D](https://store.playstation.com/pt-br/product/UP1004-CUSA00419_00-GTAVCASHPACK000D). Accessed on: 28 April 2021.
 
-You can use any programming language for the challenge. Below is the list of languages ​​that we here at Hurb have more affinity:
+You can use any programming language for the challenge. Below is the list of languages that we here at Hurb have more affinity:
 
--   JavaScript (NodeJS)
--   Python
--   Go
--   Ruby
--   C++
--   PHP
+- JavaScript (NodeJS)
+- Python
+- Go
+- Ruby
+- C++
+- PHP
 
 ## Requirements
 
--   Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
-    -   If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
-    -   If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
--   The code needs to run on macOS or Ubuntu (preferably as a Docker container)
--   To run your code, all you need to do is run the following commands:
-    -   git clone \$your-fork
-    -   cd \$your-fork
-    -   command to install dependencies
-    -   command to run the application
--   The API can be written with or without the help of _frameworks_
-    -   If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
--   The API needs to support a volume of 1000 requests per second in a stress test.
--   The API needs to include real and current quotes through integration with public currency quote APIs
+- Fork this challenge and create your project (or workspace) using your version of that repository, as soon as you finish the challenge, submit a _pull request_.
+  - If you have any reason not to submit a _pull request_, create a private repository on Github, do every challenge on the **main** branch and don't forget to fill in the `pull-request.txt` file. As soon as you finish your development, add the user `automator-hurb` to your repository as a contributor and make it available for at least 30 days. **Do not add the `automator-hurb` until development is complete.**
+  - If you have any problem creating the private repository, at the end of the challenge fill in the file called `pull-request.txt`, compress the project folder - including the `.git` folder - and send it to us by email.
+- The code needs to run on macOS or Ubuntu (preferably as a Docker container)
+- To run your code, all you need to do is run the following commands:
+  - git clone \$your-fork
+  - cd \$your-fork
+  - command to install dependencies
+  - command to run the application
+- The API can be written with or without the help of _frameworks_
+  - If you choose to use a _framework_ that results in _boilerplate code_, mark in the README which piece of code was written by you. The more code you make, the more content we will have to rate.
+- The API needs to support a volume of 1000 requests per second in a stress test.
+- The API needs to include real and current quotes through integration with public currency quote APIs
+
+## Running Locally
+
+- To run the code locally, follow these steps:
+
+1. Clone the repository:
+
+   ```
+       git clone https://github.com/weldisson/challenge-bravo.git
+       cd challenge-brav
+   ```
+2. Install the dependencies:
+
+   ```bash
+       npm install
+   ```
+3. Copy the `.env.example` file to `.env` and set your necessary environment variables, such as API port and MongoDB settings.
+
+   ```bash
+       cp .env.example .env
+   ```
+4. Start MongoDB using Docker Compose:
+
+   ```bash
+       docker-compose up mongo
+   ```
+5. Start the application:
+
+   ```bash
+       npm run dev
+   ```
+
+- Available APIs:
+
+  - **Swagger**
+    http://localhost:3000/api-docs/
+  - **Currency Conversion:**
+
+    ```
+        GET http://localhost:3000/api/convert/?from=USD&to=BRL&amount=100
+    ```
+  - **Add Currency:**
+
+  ```
+      POST http://localhost:3000/api/currencies/
+      {
+          "code": "EUR"
+      }
+  ```
+
+  - **Remove Currency:**
+
+  ```
+      DELETE http://localhost:3000/api/currencies/
+      {
+          "code": "EUR"
+      } 
+  ```
+
+  - **Set Exchange Rate:**
+
+  ```
+      POST http://localhost:3000/api/exchange-rate/
+      {
+          "from": "USD",
+          "to": "EUR",
+          "rate": 1.2
+      }
+  ```
+
+  - **Check API Health:**
+
+  ```
+      GET http://localhost:3000/api/health
+  ```
 
 ## Evaluation criteria
 
--   **Organization of code**: Separation of modules, view and model, back-end and front-end
--   **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
--   **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
--   **Code readability** (including comments)
--   **Security**: Are there any clear vulnerabilities?
--   **Test coverage** (We don't expect full coverage)
--   **History of commits** (structure and quality)
--   **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
--   **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
+- **Organization of code**: Separation of modules, view and model, back-end and front-end
+- **Clarity**: Does the README explain briefly what the problem is and how can I run the application?
+- **Assertiveness**: Is the application doing what is expected? If something is missing, does the README explain why?
+- **Code readability** (including comments)
+- **Security**: Are there any clear vulnerabilities?
+- **Test coverage** (We don't expect full coverage)
+- **History of commits** (structure and quality)
+- **UX**: Is the interface user-friendly and self-explanatory? Is the API intuitive?
+- **Technical choices**: Is the choice of libraries, database, architecture, etc. the best choice for the application?
 
 ## Doubts
 

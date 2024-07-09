@@ -1,0 +1,21 @@
+config:
+    target: "http://localhost:3000"
+    phases:
+        - duration: 60
+          arrivalRate: 1000
+    defaults:
+        headers:
+            accept: "application/json"
+scenarios:
+    - flow:
+          - get:
+                url: "/api/convert"
+                qs:
+                    from: "USD"
+                    to: "BRL"
+                    amount: 123.45
+                validate:
+                    status: 200
+                    json:
+                        statusCode: 200
+                        content: "US$ 100,00 = R$ 547,00"
