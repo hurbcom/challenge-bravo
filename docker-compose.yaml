@@ -1,0 +1,83 @@
+version: '3.8'
+
+volumes:
+  pgdata:
+    driver: local
+  redisdata:
+    driver: local
+
+networks:
+  app:
+    driver: bridge
+
+services:
+  postgres:
+    container_name: challenge-bravo
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: challenge_bravo
+      PGDATA: /data/postgres
+    volumes:
+      - pgdata:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - app
+    restart: unless-stopped
+
+  redis:
+    container_name: redis-server
+    image: redis:latest
+    environment:
+      - REDIS_PASSWORD=root
+    command: ["redis-server", "--requirepass", "root"]
+    volumes:
+      - redisdata:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - app
+    restart: unless-stopped
+
+  app:
+    image: challenge-bravo
+    container_name: app
+    build:
+      context: ./app
+      target: dev
+    volumes:
+      - type: bind
+        source: .
+        target: /app/
+    init: true
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - app
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  job:
+    image: challenge-bravo-job
+    container_name: app-job
+    build:
+      context: ./job
+      target: dev
+    volumes:
+      - type: bind
+        source: .
+        target: /app/
+    init: true
+    depends_on:
+      - app
+      - postgres
+      - redis
+    networks:
+      - app
+    ports:
+      - "8081:8081"
+    restart: unless-stopped

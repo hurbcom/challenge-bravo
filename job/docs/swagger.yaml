@@ -1,0 +1,317 @@
+basePath: /v1
+definitions:
+  exception.BadRequestException:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: bad request
+        type: string
+    type: object
+  exception.InternalServerException:
+    properties:
+      code:
+        example: 500
+        type: integer
+      message:
+        example: internal server error
+        type: string
+    type: object
+  exception.UnauthorizedException:
+    properties:
+      code:
+        example: 401
+        type: integer
+      message:
+        example: access not authorized
+        type: string
+    type: object
+  route.AddTaskRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  route.RunTaskRequest:
+    properties:
+      name:
+        example: Currency Updater
+        type: string
+    type: object
+  route.SignInRequest:
+    properties:
+      email:
+        example: sa.bravo@bravo.com
+        type: string
+      password:
+        example: "123"
+        type: string
+    type: object
+  route.SignInResponse:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhLmJyYXZvQGJyYXZvLmNvbSIsImV4cCI6MTcyNzQ5NzU3NiwiaWQiOjEsInJvbGUiOiJhZG1pbiJ9.kqjAxXJq3P814TAc_kCMYCDeAZarg1AvNqXNOdXmNPA
+        type: string
+      user:
+        $ref: '#/definitions/route.UserResponse'
+    type: object
+  route.UserResponse:
+    properties:
+      email:
+        example: sa.bravo@bravo.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      role:
+        example: admin
+        type: string
+    type: object
+  scheduler.AvailableTask:
+    properties:
+      last_run:
+        example: "2024-09-25T14:39:09Z"
+        type: string
+      name:
+        example: Currency Updater
+        type: string
+      removed:
+        example: false
+        type: boolean
+    type: object
+  scheduler.Task:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Currency Updater
+        type: string
+      next_run:
+        example: "2024-09-26T14:39:09Z"
+        type: string
+      prev_run:
+        example: "null"
+        type: string
+    type: object
+host: localhost:8081
+info:
+  contact:
+    name: Wesley Ferreira
+    url: https://www.linkedin.com/in/wesleyfebarretos/
+  description: Currency Conversion Job API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Challenge Bravo Jobs
+  version: "1.0"
+paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: You need this admin login to access the endpoints
+      parameters:
+      - description: data
+        in: body
+        name: signInParams
+        required: true
+        schema:
+          $ref: '#/definitions/route.SignInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/route.SignInResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      summary: Sign in
+      tags:
+      - Auth
+  /available-tasks:
+    get:
+      consumes:
+      - application/json
+      description: List available tasks that you can run immediatelly or put in cron
+        scheuler.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/scheduler.AvailableTask'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: List Available Tasks
+      tags:
+      - Tasks
+  /tasks:
+    get:
+      consumes:
+      - application/json
+      description: List running tasks in cron scheduler
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/scheduler.Task'
+            - properties:
+                id:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: List Tasks
+      tags:
+      - Tasks
+    post:
+      consumes:
+      - application/json
+      description: Add a task to cron scheduler
+      parameters:
+      - description: new task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/route.AddTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: Add Task
+      tags:
+      - Tasks
+  /tasks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: remove a task from cron time scheduler.
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: Remove Task
+      tags:
+      - Tasks
+  /tasks/run:
+    post:
+      consumes:
+      - application/json
+      description: You can run a task informing tha name, get this name in "List available
+        tasks" endpoint
+      parameters:
+      - description: task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/route.RunTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: Run Task
+      tags:
+      - Tasks
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

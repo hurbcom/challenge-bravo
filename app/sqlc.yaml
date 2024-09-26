@@ -1,0 +1,52 @@
+version: "2"
+overrides:
+  go:
+    overrides:
+      - db_type: "serial"
+        engine: "postgresql"
+        go_type:
+          type: "int"
+      - db_type: "pg_catalog.timestamp"
+        engine: "postgresql"
+        go_type:
+          import: "time"
+          type: "Time"
+      - db_type: "pg_catalog.numeric"
+        engine: "postgresql"
+        go_type:
+          type: "float64"
+      - db_type: "pg_catalog.int4"
+        engine: "postgresql"
+        go_type:
+          type: "int"
+      - db_type: "pg_catalog.int4"
+        nullable: true
+        engine: "postgresql"
+        go_type:
+          type: "*int"
+
+sql:
+  - &schema
+    engine: "postgresql"
+    schema: "internal/migration/*"
+    queries: "./internal/infra/repository/query/user"
+    gen:
+      go: &default_configs
+        package: "user_connection"
+        out: "./internal/infra/repository/sqlc/user_connection"
+        sql_package: "pgx/v5"
+        emit_json_tags: true
+        emit_empty_slices: true
+        json_tags_case_style: "snake"
+        emit_pointers_for_null_types: true
+        emit_enum_valid_method: true
+        emit_all_enum_values: true
+        omit_unused_structs: true
+
+  - <<: *schema
+    queries: "./internal/infra/repository/query/currency"
+    gen:
+      go:
+        <<: *default_configs
+        package: "currency_connection"
+        out: "./internal/infra/repository/sqlc/currency_connection"

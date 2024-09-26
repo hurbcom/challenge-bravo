@@ -1,0 +1,715 @@
+basePath: /v1
+definitions:
+  enum.Role:
+    enum:
+    - user
+    - admin
+    type: string
+    x-enum-varnames:
+    - USER
+    - ADMIN
+  exception.BadRequestException:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: bad request
+        type: string
+    type: object
+  exception.InternalServerException:
+    properties:
+      code:
+        example: 500
+        type: integer
+      message:
+        example: internal server error
+        type: string
+    type: object
+  exception.UnauthorizedException:
+    properties:
+      code:
+        example: 401
+        type: integer
+      message:
+        example: access not authorized
+        type: string
+    type: object
+  handler.CreateCurrencyRequest:
+    properties:
+      code:
+        example: USD
+        type: string
+      country:
+        example: United States
+        type: string
+      country_code:
+        example: USA
+        type: string
+      fic:
+        example: false
+        type: boolean
+      name:
+        example: Dollar
+        type: string
+      number:
+        example: 840
+        type: integer
+      response_path_to_rate:
+        example: bpi;USD;rate_float
+        type: string
+      search_url:
+        example: http://usd-exchange.com
+        type: string
+      usd_exchange_rate:
+        example: 1
+        type: number
+    type: object
+  handler.CreateCurrencyResponse:
+    properties:
+      code:
+        example: USD
+        type: string
+      country:
+        example: United States
+        type: string
+      country_code:
+        example: USA
+        type: string
+      created_at:
+        example: 2024-09-05 02:28:41.425 -0300
+        type: string
+      created_by:
+        example: 1
+        type: integer
+      fic:
+        example: false
+        type: boolean
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Dollar
+        type: string
+      number:
+        example: 840
+        type: integer
+      response_path_to_rate:
+        example: bpi;USD;rate_float
+        type: string
+      search_url:
+        example: http://usd-exchange.com
+        type: string
+      updated_at:
+        example: 2024-09-05 02:28:41.425 -0300
+        type: string
+      updated_by:
+        example: 1
+        type: integer
+      usd_exchange_rate:
+        example: 1
+        type: number
+    type: object
+  handler.CreateUserRequest:
+    properties:
+      active:
+        example: true
+        type: boolean
+      email:
+        example: johndoe@gmail.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      last_name:
+        example: Doe
+        type: string
+      password:
+        example: 12$a@3$@00!
+        type: string
+    type: object
+  handler.CreateUserResponse:
+    properties:
+      active:
+        example: true
+        type: boolean
+      created_at:
+        example: "2024-08-31T14:21:38-03:00"
+        type: string
+      email:
+        example: johndoe@gmail.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      id:
+        example: 1
+        type: integer
+      last_name:
+        example: Doe
+        type: string
+      password:
+        example: AasEsF!@#$%!2
+        type: string
+      role:
+        allOf:
+        - $ref: '#/definitions/enum.Role'
+        example: user
+      updated_at:
+        example: "2024-08-31T14:21:38-03:00"
+        type: string
+    type: object
+  handler.CurrencyConversionResponse:
+    properties:
+      label:
+        example: 5.57 BRL
+        type: string
+      value:
+        example: 5.57
+        type: number
+    type: object
+  handler.FindAllCurrencyResponse:
+    properties:
+      code:
+        example: USD
+        type: string
+      country:
+        example: United States
+        type: string
+      country_code:
+        example: USA
+        type: string
+      created_at:
+        example: 2024-09-05 02:28:41.425 -0300
+        type: string
+      created_by:
+        example: 1
+        type: integer
+      fic:
+        example: false
+        type: boolean
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Dollar
+        type: string
+      number:
+        example: 840
+        type: integer
+      search_url:
+        example: http://usd-exchange.com
+        type: string
+      updated_at:
+        example: 2024-09-05 02:28:41.425 -0300
+        type: string
+      updated_by:
+        example: 1
+        type: integer
+      usd_exchange_rate:
+        example: 1
+        type: number
+    type: object
+  handler.FindCurrencyByCodeResponse:
+    properties:
+      code:
+        example: USD
+        type: string
+      country:
+        example: United States
+        type: string
+      country_code:
+        example: USA
+        type: string
+      created_at:
+        example: 2024-09-05 02:28:41.425 -0300
+        type: string
+      created_by:
+        example: 1
+        type: integer
+      fic:
+        example: false
+        type: boolean
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Dollar
+        type: string
+      number:
+        example: 840
+        type: integer
+      search_url:
+        example: http://usd-exchange.com
+        type: string
+      updated_at:
+        example: 2024-09-05 02:28:41.425 -0300
+        type: string
+      updated_by:
+        example: 1
+        type: integer
+      usd_exchange_rate:
+        example: 1
+        type: number
+    type: object
+  handler.FindCurrencyByIdResponse:
+    properties:
+      code:
+        example: USD
+        type: string
+      country:
+        example: United States
+        type: string
+      country_code:
+        example: USA
+        type: string
+      created_at:
+        example: 2024-09-05 02:28:41.425 -0300
+        type: string
+      created_by:
+        example: 1
+        type: integer
+      fic:
+        example: false
+        type: boolean
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Dollar
+        type: string
+      number:
+        example: 840
+        type: integer
+      search_url:
+        example: http://usd-exchange.com
+        type: string
+      updated_at:
+        example: 2024-09-05 02:28:41.425 -0300
+        type: string
+      updated_by:
+        example: 1
+        type: integer
+      usd_exchange_rate:
+        example: 1
+        type: number
+    type: object
+  handler.SignInRequest:
+    properties:
+      email:
+        example: johndoe@gmail.com
+        type: string
+      password:
+        example: 12$a@3$@00!
+        type: string
+    type: object
+  handler.SignInResponse:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAZ21haWwuY29tIiwiZXhwIjoxNzI3NDkzMTg4LCJpZCI6NSwicm9sZSI6InVzZXIifQ.jpvz7KPxB7dOMSREn1tc8nfJyYgSWVq3GuF71fnBsos
+        type: string
+      user:
+        $ref: '#/definitions/handler.SignInUserResponse'
+    type: object
+  handler.SignInUserResponse:
+    properties:
+      active:
+        example: true
+        type: boolean
+      created_at:
+        example: "2024-09-26T02:50:34.749998Z"
+        type: string
+      email:
+        example: johndoe@gmail.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      id:
+        example: 2
+        type: integer
+      last_name:
+        example: Doe
+        type: string
+      role:
+        allOf:
+        - $ref: '#/definitions/enum.Role'
+        example: user
+      updated_at:
+        example: "2024-09-26T02:50:34.749998Z"
+        type: string
+    type: object
+  handler.UpdateCurrencyRequest:
+    properties:
+      code:
+        example: USD
+        type: string
+      country:
+        example: United States
+        type: string
+      country_code:
+        example: USA
+        type: string
+      fic:
+        example: false
+        type: boolean
+      name:
+        example: Dollar
+        type: string
+      number:
+        example: 840
+        type: integer
+      search_url:
+        example: http://usd-exchange.com
+        type: string
+      usd_exchange_rate:
+        example: 1
+        type: number
+    type: object
+  handler.UpdateUserRequest:
+    properties:
+      active:
+        example: true
+        type: boolean
+      email:
+        example: johndoe@gmail.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      id:
+        type: integer
+      last_name:
+        example: Doe
+        type: string
+      password:
+        example: 12$a@3$@00!
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    name: Wesley Ferreira
+    url: https://www.linkedin.com/in/wesleyfebarretos/
+  description: Currency conversion API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Challenge Bravo
+  version: "1.0"
+paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: authorization
+      parameters:
+      - description: sign in data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SignInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SignInResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      summary: Sign In
+      tags:
+      - Auth
+  /currency:
+    get:
+      consumes:
+      - application/json
+      description: find all currencies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handler.FindAllCurrencyResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      summary: Find All Curriencies
+      tags:
+      - Currencies
+    post:
+      consumes:
+      - application/json
+      description: create a currency
+      parameters:
+      - description: new currency
+        in: body
+        name: currency
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CreateCurrencyRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.CreateCurrencyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: Create Currency
+      tags:
+      - Currencies
+  /currency/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a currency
+      parameters:
+      - description: currency id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: Delete Currency
+      tags:
+      - Currencies
+    get:
+      consumes:
+      - application/json
+      description: find currency by id
+      parameters:
+      - description: currency id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.FindCurrencyByIdResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: Find Currency By ID
+      tags:
+      - Currencies
+    put:
+      consumes:
+      - application/json
+      description: update currency informing the id
+      parameters:
+      - description: new currency data
+        in: body
+        name: newCurrency
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UpdateCurrencyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: Update Currency
+      tags:
+      - Currencies
+  /currency/code/{code}:
+    get:
+      consumes:
+      - application/json
+      description: find currency by code
+      parameters:
+      - description: currency code
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.FindCurrencyByCodeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: Find Currency By Code
+      tags:
+      - Currencies
+  /currency/convert:
+    get:
+      consumes:
+      - application/json
+      description: convert the value of one currency to another
+      parameters:
+      - example: 10.2
+        in: query
+        name: amount
+        type: number
+      - example: usd
+        in: query
+        name: from
+        type: string
+      - example: brl
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.CurrencyConversionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      summary: Currency Conversion
+      tags:
+      - Currencies
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: create an user
+      parameters:
+      - description: new user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.CreateUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/exception.BadRequestException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      summary: Create User
+      tags:
+      - Users
+  /user/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update user informing the id
+      parameters:
+      - description: new user data
+        in: body
+        name: newUser
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/exception.UnauthorizedException'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/exception.InternalServerException'
+      security:
+      - Bearer: []
+      summary: Update User
+      tags:
+      - Users
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
