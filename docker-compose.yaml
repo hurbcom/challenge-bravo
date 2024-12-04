@@ -1,0 +1,37 @@
+services:
+  currency-api:
+    container_name: currency-api # Sets the container name
+    build: .
+    ports:
+      - "8085:8080" # Maps container port 8085 to host port 8080
+    depends_on:
+      - database-currency # Ensures MySQL starts before the API
+    networks:
+      - app-network # Specifies a network for inter-service communication
+
+  database-currency:
+    image: mysql:8.4.3
+    container_name: database-currency # Sets the container name
+    restart: always # Ensures availability and automatic restart on rebuilds or failures
+    env_file:
+      - .env # Loads variables for use in scripts
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD} # Sets the root user password
+      MYSQL_USER: ${DB_USER} # Sets the database user
+      MYSQL_PASSWORD: ${DB_PASSWORD} # Sets the database user password
+      MYSQL_DATABASE: ${DB_SCHEMA} # Sets the database name
+    ports:
+      - "33060:3306"
+    volumes:
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf # Maps the MySQL configuration file for optimization
+      - mysql_data:/var/lib/mysql # Persists MySQL data
+      - ./docker/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d # Scripts to run on database initialization
+    networks:
+      - app-network # Specifies a network for inter-service communication
+
+networks:
+  app-network:
+    # Defines the network for the services
+
+volumes:
+  mysql_data: # Defines the volume for MySQL data persistence

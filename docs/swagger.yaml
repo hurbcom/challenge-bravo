@@ -1,0 +1,244 @@
+basePath: /
+definitions:
+  conversion.ConversionResponse:
+    description: Response from conversion
+    properties:
+      amount:
+        type: string
+      description:
+        type: string
+    type: object
+  currency.CreateData:
+    description: Request to Create a new Currency
+    properties:
+      backing_currency:
+        default: false
+        type: boolean
+      code:
+        type: string
+      currency_rate:
+        type: string
+      name:
+        type: string
+    required:
+    - code
+    - currency_rate
+    - name
+    type: object
+  currency.Currency:
+    properties:
+      backing_currency:
+        type: boolean
+      code:
+        type: string
+      created_at:
+        type: string
+      currency_rate:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  currency.UpdateData:
+    description: Request to Update a Currency
+    properties:
+      backing_currency:
+        default: false
+        type: boolean
+      code:
+        type: string
+      currency_rate:
+        type: string
+      name:
+        type: string
+    required:
+    - code
+    - currency_rate
+    - name
+    type: object
+  gin.Message:
+    description: Standard response to errors
+    properties:
+      message:
+        additionalProperties:
+          type: string
+        description: This is a json message
+        example:
+          status: message
+        type: object
+    type: object
+host: localhost:8085
+info:
+  contact: {}
+  description: API para conversão de moedas
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Conversor de Moedas
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: Current API version
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.Message'
+      summary: Returns the API version
+      tags:
+      - Version
+  /v1/conversion:
+    get:
+      consumes:
+      - application/json
+      description: Convert a specified amount from one currency to another using the
+        latest exchange rates
+      parameters:
+      - description: Currency code to convert from
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: Currency code to convert to
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: Amount to be converted
+        in: query
+        name: amount
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/conversion.ConversionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.Message'
+      summary: Convert a amount
+      tags:
+      - conversion
+  /v1/currency:
+    get:
+      description: Show all currencies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/currency.Currency'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.Message'
+      summary: List currencies
+      tags:
+      - currency
+    post:
+      consumes:
+      - application/json
+      description: Create a new Currency
+      parameters:
+      - description: Currency Payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/currency.CreateData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/currency.Currency'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.Message'
+      summary: Create Currency
+      tags:
+      - currency
+  /v1/currency/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Currency
+      parameters:
+      - description: ID of the Currency
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.Message'
+      summary: Delete Currency
+      tags:
+      - currency
+    put:
+      consumes:
+      - application/json
+      description: Update a Currency
+      parameters:
+      - description: ID of the Currency
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Currency Payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/currency.UpdateData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/currency.Currency'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.Message'
+      summary: Update Currency
+      tags:
+      - currency
+swagger: "2.0"

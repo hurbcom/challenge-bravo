@@ -1,0 +1,5 @@
+.env
+challenge-bravo*
+.vscode
+.idea
+*.session.sql
