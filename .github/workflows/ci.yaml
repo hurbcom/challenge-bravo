@@ -20,7 +20,7 @@ jobs:
                   distribution: 'temurin'
 
             - name: List files
-              run: ls -R
+              run: ls -l
 
             - name: Build with maven
               run: |
