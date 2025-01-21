@@ -1,43 +1,33 @@
 name: CI Pipeline
 
 on:
-    push:
-        branches:
-            - '**'
-    pull_request:
-        branches:
-            - '**'
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build_and_test:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-            
-            - name: Set up JDK
-              uses: actions/setup-java@v3
-              with:
-                  java-version: '17'
-                  distribution: 'temurin'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-            - name: List files
-              run: ls -l
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-            - name: Build with maven
-              run: |
-                  echo "Building projetct - Maven"
-                  # Exemplo: instale ferramentas ou dependências
-                  # npm install, pip install, etc.
-                  mvn clean install
-              working-directory: ./
+      - name: Build with Maven
+        run: |
+          echo "Building project - Maven"
+          mvn clean install
 
-            - name: Run Tests
-              run: |
-                  echo "Running tests"
-                  # Exemplo: comando para rodar testes
-                  # npm test, pytest, etc.
-                  mvn test
-              working-directory: ./
-
+      - name: Run Tests
+        run: |
+          echo "Running tests"
+          mvn test
