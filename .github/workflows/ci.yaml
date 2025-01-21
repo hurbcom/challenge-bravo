@@ -1,0 +1,39 @@
+name: CI Pipeline
+
+on:
+    push:
+        branches:
+            - *
+    pull_request:
+        branches:
+            - *
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Set up JDK
+              uses: actions/setup-java@v3
+              with:
+                  java-version: '17'
+
+            - name: Build with maven
+              run: |
+                  echo "Building projetct - Maven"
+                  # Exemplo: instale ferramentas ou dependências
+                  # npm install, pip install, etc.
+                  mvn clean install
+
+            - name: Run Tests
+              run: |
+                  echo "Running tests"
+                  # Exemplo: comando para rodar testes
+                  # npm test, pytest, etc.
+                  mvn test
+
+            - name: Lint Code
+              run: |
+                  echo "Running linter"
+                  # Exemplo: comando para rodar linter
+                  # eslint, flake8, etc.
