@@ -25,6 +25,7 @@ jobs:
                   # Exemplo: instale ferramentas ou dependências
                   # npm install, pip install, etc.
                   mvn clean install
+              working-directory: ./
 
             - name: Run Tests
               run: |
@@ -32,9 +33,5 @@ jobs:
                   # Exemplo: comando para rodar testes
                   # npm test, pytest, etc.
                   mvn test
+              working-directory: ./
 
-            - name: Lint Code
-              run: |
-                  echo "Running linter"
-                  # Exemplo: comando para rodar linter
-                  # eslint, flake8, etc.
