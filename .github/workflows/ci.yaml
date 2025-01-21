@@ -19,6 +19,9 @@ jobs:
                   java-version: '17'
                   distribution: 'temurin'
 
+            - name: List files
+              run: ls -R
+
             - name: Build with maven
               run: |
                   echo "Building projetct - Maven"
