@@ -1,0 +1,11 @@
+spring:
+    application:
+        name: challenge-resolve
+
+http:
+    awesomeapi:
+        url: https://economia.awesomeapi.com.br/last/
+
+redis:
+    host: localhost
+    port: 6379
